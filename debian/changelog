@@ -14,9 +14,11 @@ emboss (5.0.0-3) unstable; urgency=low
     - Added dialign again to the Recommends: field. It only disapperared from
       the documentation; the edialign program is still there.
     - -dev packages now depend on their corresponding libraries.
-    - Replaced occurences of $(source:Version} by ${bin:Version} to make the
-      packages binNMU safe.
+    - Replaced occurences of $(source:Version} by ${binary:Version} to make
+      the packages binNMU safe.
     - emboss-data and emboss-doc do not Suggest: emboss anymore.
+    - Changed the description of libajax5 and libnucleus5 so that they are not
+      identical.
     - Removed the XS- prefix in the Vcs fields.
     - Build-depends on autotools-dev.
   * debian/rules:
