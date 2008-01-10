@@ -1,11 +1,11 @@
-emboss (5.0.0-3) UNRELEASED; urgency=low
+emboss (5.0.0-3) unstable; urgency=low
 
   [ Nelson A. de Oliveira ]
   * Using bzip2 compression for packages. This saves about 832KB of space.
 
   [ Charles Plessy ]
-  * debian/patches/ajindex-fix-2008-01-09.patch: Fixes rare secondary index
-    problem with input files over 2Gb.
+  * debian/patches/ajindex-fix-2008-01-09.patch:
+    - Fixes rare secondary index problem with input files over 2Gb.
   * debian/control:
     - Swiched maintainership to the Debian-Med packaging team.
     - Relocated the package to the Debian-Med Subversion repository.
@@ -17,8 +17,13 @@ emboss (5.0.0-3) UNRELEASED; urgency=low
     - Replaced occurences of $(source:Version} by ${bin:Version} to make the
       packages binNMU safe.
     - emboss-data and emboss-doc do not Suggest: emboss anymore.
+    - Removed the XS- prefix in the Vcs fields.
+    - Build-depends on autotools-dev.
+  * debian/rules:
+    - Removes Makefiles ignored by make distclean in the test directory.
+    - Uses config.(sub|guess) from the autotools-dev package.
 
- -- Nelson A. de Oliveira <naoliv@debian.org>  Mon, 29 Oct 2007 21:04:11 -0200
+ -- Charles Plessy <charles-debian-nospam@plessy.org>  Thu, 10 Jan 2008 21:27:31 +0900
 
 emboss (5.0.0-2) unstable; urgency=low
 

@@ -11,6 +11,8 @@ NUCLEUS = $(CURDIR)/debian/libnucleus5
 
 config.status:
 	dh_testdir
+	ln -sf /usr/share/misc/config.sub .
+	ln -sf /usr/share/misc/config.guess .
 	./configure \
 		--prefix=/usr \
 		#--with-java=/usr/lib/j2sdk1.3/include \
@@ -56,7 +58,11 @@ clean: unpatch config.status
 	rm -rf debian/emboss_tmp
 
 	rm -rf config.status install-stamp
-	dh_clean debian/copyright
+	
+	# Temporary fix that may become unecessary in the future.
+	rm -f test/gb/Makefile test/wormpep/Makefile
+	
+	dh_clean debian/copyright config.sub config.guess
 
 install: install-stamp
 install-stamp: build-stamp
