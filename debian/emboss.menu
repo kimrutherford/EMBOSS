@@ -1,0 +1,636 @@
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="aaindexextract" \
+	description="Extract data from AAINDEX" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/aaindexextract;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="abiview" \
+	description="Reads ABI file and display the trace" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/abiview;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="antigenic" \
+	description="Finds antigenic sites in proteins" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/antigenic;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="backtranambig" \
+	description="Back translate a protein sequence to ambiguous codons" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/backtranambig;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="backtranseq" \
+	description="Back translate a protein sequence" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/backtranseq;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="banana" \
+	description="Bending and curvature plot in B-DNA" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/banana;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="biosed" \
+	description="Replace or delete sequence sections" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/biosed;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="btwisted" \
+	description="Calculates the twisting in a B-DNA sequence" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/btwisted;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="cai" \
+	description="CAI codon adaptation index" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/cai;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="chaos" \
+	description="Create a chaos game representation plot for a sequence" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/chaos;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="charge" \
+	description="Protein charge plot" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/charge;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="checktrans" \
+	description="Reports STOP codons and ORF statistics of a protein" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/checktrans;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="chips" \
+	description="Codon usage statistics" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/chips;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="cirdna" \
+	description="Draws circular maps of DNA constructs" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/cirdna;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="codcmp" \
+	description="Codon usage table comparison" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/codcmp;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="codcopy" \
+	description="Reads and writes a codon usage table" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/codcopy;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="coderet" \
+	description="Extract CDS, mRNA and translations from feature tables" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/coderet;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="compseq" \
+	description="Count composition of dimer/trimer/etc words in a sequence" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/compseq;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="cons" \
+	description="Creates a consensus from multiple alignments" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/cons;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="cpgplot" \
+	description="Plot CpG rich areas" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/cpgplot;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="cpgreport" \
+	description="Reports all CpG rich regions" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/cpgreport;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="cusp" \
+	description="Create a codon usage table" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/cusp;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="cutgextract" \
+	description="Extract data from CUTG" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/cutgextract;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="cutseq" \
+	description="Removes a specified section from a sequence" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/cutseq;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="dan" \
+	description="Calculates DNA RNA/DNA melting temperature" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/dan;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="dbiblast" \
+	description="Index a BLAST database" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/dbiblast;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="dbifasta" \
+	description="Database indexing for fasta file databases" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/dbifasta;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="dbiflat" \
+	description="Index a flat file database" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/dbiflat;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="dbigcg" \
+	description="Index a GCG formatted database" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/dbigcg;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="dbxfasta" \
+	description="Database b+tree indexing for fasta file databases" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/dbxfasta;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="dbxflat" \
+	description="Database b+tree indexing for flat file databases" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/dbxflat;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="dbxgcg" \
+	description="Database b+tree indexing for GCG formatted databases" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/dbxgcg;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="degapseq" \
+	description="Removes gap characters from sequences" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/degapseq;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="descseq" \
+	description="Alter the name or description of a sequence" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/descseq;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="diffseq" \
+	description="Find differences between nearly identical sequences" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/diffseq;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="digest" \
+	description="Protein proteolytic enzyme or reagent cleavage digest" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/digest;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="distmat" \
+	description="Creates a distance matrix from multiple alignments" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/distmat;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="dotmatcher" \
+	description="Displays a thresholded dotplot of two sequences" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/dotmatcher;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="dotpath" \
+	description="Non-overlapping wordmatch dotplot of two sequences" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/dotpath;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="dottup" \
+	description="Displays a wordmatch dotplot of two sequences" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/dottup;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="dreg" \
+	description="Regular expression search of a nucleotide sequence" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/dreg;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="einverted" \
+	description="Finds DNA inverted repeats" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/einverted;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="emma" \
+	description="Multiple alignment program - interface to ClustalW program" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/emma;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="emowse" \
+	description="Protein identification by mass spectrometry" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/emowse;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="entret" \
+	description="Reads and writes (returns) flatfile entries" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/entret;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="epestfind" \
+	description="Finds PEST motifs as potential proteolytic cleavage sites" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/epestfind;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="eprimer3" \
+	description="Picks PCR primers and hybridization oligos" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/eprimer3;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="equicktandem" \
+	description="Finds tandem repeats" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/equicktandem;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="est2genome" \
+	description="Align EST and genomic DNA sequences" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/est2genome;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="etandem" \
+	description="Looks for tandem repeats in a nucleotide sequence" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/etandem;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="extractfeat" \
+	description="Extract features from a sequence" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/extractfeat;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="extractseq" \
+	description="Extract regions from a sequence" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/extractseq;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="findkm" \
+	description="Find Km and Vmax for an enzyme reaction" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/findkm;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="freak" \
+	description="Residue/base frequency table or plot" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/freak;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="fuzznuc" \
+	description="Nucleic acid pattern search" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/fuzznuc;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="fuzzpro" \
+	description="Protein pattern search" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/fuzzpro;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="fuzztran" \
+	description="Protein pattern search after translation" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/fuzztran;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="garnier" \
+	description="Predicts protein secondary structure" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/garnier;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="geecee" \
+	description="Calculates fractional GC content of nucleic acid sequences" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/geecee;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="getorf" \
+	description="Finds and extracts open reading frames (ORFs)" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/getorf;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="helixturnhelix" \
+	description="Report nucleic acid binding motifs" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/helixturnhelix;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="hmoment" \
+	description="Hydrophobic moment calculation" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/hmoment;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="iep" \
+	description="Calculates the isoelectric point of a protein" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/iep;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="infoalign" \
+	description="Information on a multiple sequence alignment" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/infoalign;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="infoseq" \
+	description="Displays some simple information about sequences" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/infoseq;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="isochore" \
+	description="Plots isochores in large DNA sequences" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/isochore;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="lindna" \
+	description="Draws linear maps of DNA constructs" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/lindna;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="listor" \
+	description="Write a list file of the logical OR of two sets of sequences" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/listor;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="makenucseq" \
+	description="Creates random nucleotide sequences" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/makenucseq;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="makeprotseq" \
+	description="Creates random protein sequences" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/makeprotseq;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="marscan" \
+	description="Finds MAR/SAR sites in nucleic sequences" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/marscan;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="maskfeat" \
+	description="Mask off features of a sequence" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/maskfeat;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="maskseq" \
+	description="Mask off regions of a sequence" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/maskseq;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="matcher" \
+	description="Finds the best local alignments between two sequences" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/matcher;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="megamerger" \
+	description="Merge two large overlapping nucleic acid sequences" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/megamerger;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="merger" \
+	description="Merge two overlapping sequences" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/merger;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="msbar" \
+	description="Mutate sequence beyond all recognition" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/msbar;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="mwcontam" \
+	description="Shows molwts that match across a set of files" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/mwcontam;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="mwfilter" \
+	description="Filter noisy molwts from mass spec output" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/mwfilter;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="needle" \
+	description="Needleman-Wunsch global alignment" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/needle;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="newcpgreport" \
+	description="Report CpG rich areas" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/newcpgreport;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="newcpgseek" \
+	description="Reports CpG rich regions" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/newcpgseek;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="newseq" \
+	description="Type in a short new sequence" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/newseq;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="noreturn" \
+	description="Removes carriage return from ASCII files" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/noreturn;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="notseq" \
+	description="Exclude a set of sequences and write out the remaining ones" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/notseq;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="nthseq" \
+	description="Writes one sequence from a multiple set of sequences" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/nthseq;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="octanol" \
+	description="Displays protein hydropathy" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/octanol;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="oddcomp" \
+	description="Find protein sequence regions with a biased composition" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/oddcomp;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="palindrome" \
+	description="Looks for inverted repeats in a nucleotide sequence" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/palindrome;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="pasteseq" \
+	description="Insert one sequence into another" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/pasteseq;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="patmatdb" \
+	description="Search a protein sequence with a motif" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/patmatdb;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="patmatmotifs" \
+	description="Search a PROSITE motif database with a protein sequence" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/patmatmotifs;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="pepcoil" \
+	description="Predicts coiled coil regions" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/pepcoil;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="pepinfo" \
+	description="Plots simple amino acid properties in parallel" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/pepinfo;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="pepnet" \
+	description="Displays proteins as a helical net" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/pepnet;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="pepstats" \
+	description="Protein statistics" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/pepstats;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="pepwheel" \
+	description="Shows protein sequences as helices" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/pepwheel;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="pepwindow" \
+	description="Displays protein hydropathy" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/pepwindow;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="pepwindowall" \
+	description="Displays protein hydropathy of a set of sequences" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/pepwindowall;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="plotcon" \
+	description="Plot quality of conservation of a sequence alignment" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/plotcon;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="plotorf" \
+	description="Plot potential open reading frames" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/plotorf;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="polydot" \
+	description="Displays all-against-all dotplots of a set of sequences" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/polydot;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="preg" \
+	description="Regular expression search of a protein sequence" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/preg;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="prettyplot" \
+	description="Displays aligned sequences, with colouring and boxing" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/prettyplot;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="prettyseq" \
+	description="Output sequence with translated ranges" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/prettyseq;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="primersearch" \
+	description="Searches DNA sequences for matches with primer pairs" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/primersearch;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="printsextract" \
+	description="Extract data from PRINTS" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/printsextract;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="profit" \
+	description="Scan a sequence or database with a matrix or profile" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/profit;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="prophecy" \
+	description="Creates matrices/profiles from multiple alignments" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/prophecy;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="prophet" \
+	description="Gapped alignment for profiles" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/prophet;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="prosextract" \
+	description="Build the PROSITE motif database for use by patmatmotifs" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/prosextract;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="pscan" \
+	description="Scans proteins using PRINTS" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/pscan;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="psiphi" \
+	description="Phi and psi torsion angles from protein coordinates" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/psiphi;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="rebaseextract" \
+	description="Extract data from REBASE" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/rebaseextract;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="recoder" \
+	description="Remove restriction sites but maintain same translation" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/recoder;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="redata" \
+	description="Search REBASE for enzyme name, references, suppliers etc." \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/redata;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="remap" \
+	description="Display sequence with restriction sites, translation etc." \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/remap;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="restover" \
+	description="Find restriction enzymes producing specific overhang" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/restover;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="restrict" \
+	description="Finds restriction enzyme cleavage sites" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/restrict;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="revseq" \
+	description="Reverse and complement a sequence" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/revseq;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="seealso" \
+	description="Finds programs sharing group names" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/seealso;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="seqmatchall" \
+	description="All-against-all comparison of a set of sequences" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/seqmatchall;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="seqret" \
+	description="Reads and writes (returns) sequences" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/seqret;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="seqretsplit" \
+	description="Reads and writes (returns) sequences in individual files" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/seqretsplit;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="showalign" \
+	description="Displays a multiple sequence alignment" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/showalign;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="showfeat" \
+	description="Show features of a sequence" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/showfeat;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="showorf" \
+	description="Pretty output of DNA translations" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/showorf;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="showseq" \
+	description="Display a sequence with features, translation etc." \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/showseq;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="shuffleseq" \
+	description="Shuffles a set of sequences maintaining composition" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/shuffleseq;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="sigcleave" \
+	description="Reports protein signal cleavage sites" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/sigcleave;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="silent" \
+	description="Silent mutation restriction enzyme scan" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/silent;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="sirna" \
+	description="Finds siRNA duplexes in mRNA" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/sirna;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="sixpack" \
+	description="Display a DNA sequence with 6-frame translation and ORFs" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/sixpack;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="skipseq" \
+	description="Reads and writes (returns) sequences, skipping first few" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/skipseq;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="splitter" \
+	description="Split a sequence into (overlapping) smaller sequences" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/splitter;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="stretcher" \
+	description="Finds the best global alignment between two sequences" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/stretcher;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="stssearch" \
+	description="Search a DNA database for matches with a set of STS primers" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/stssearch;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="supermatcher" \
+	description="Match large sequences against one or more other sequences" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/supermatcher;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="syco" \
+	description="Synonymous codon usage Gribskov statistic plot" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/syco;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="tcode" \
+	description="Fickett TESTCODE statistic to identify protein-coding DNA" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/tcode;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="textsearch" \
+	description="Search sequence documentation. Slow, use SRS and Entrez!" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/textsearch;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="tfextract" \
+	description="Extract data from TRANSFAC" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/tfextract;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="tfm" \
+	description="Displays a program's help documentation manual" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/tfm;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="tfscan" \
+	description="Scans DNA sequences for transcription factors" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/tfscan;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="tmap" \
+	description="Displays membrane spanning regions" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/tmap;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="tranalign" \
+	description="Align nucleic coding regions given the aligned proteins" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/tranalign;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="transeq" \
+	description="Translate nucleic acid sequences" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/transeq;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="trimest" \
+	description="Trim poly-A tails off EST sequences" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/trimest;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="trimseq" \
+	description="Trim ambiguous bits off the ends of sequences" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/trimseq;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="twofeat" \
+	description="Finds neighbouring pairs of features in sequences" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/twofeat;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="union" \
+	description="Reads sequence fragments and builds one sequence" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/union;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="vectorstrip" \
+	description="Strips out DNA between a pair of vector sequences" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/vectorstrip;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="water" \
+	description="Smith-Waterman local alignment" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/water;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="whichdb" \
+	description="Search all databases for an entry" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/whichdb;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="wobble" \
+	description="Wobble base plot" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/wobble;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="wordcount" \
+	description="Counts words of a specified size in a DNA sequence" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/wordcount;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="wordmatch" \
+	description="Finds all exact matches of a given size between 2 sequences" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/wordmatch;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="wossname" \
+	description="Finds programs by keywords in their one-line documentation" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/wossname;echo press any key to continue; read\""
+?package(emboss):needs="X11" section="Apps/Science/EMBOSS" \
+	title="yank" \
+	description="Reads a sequence range, appends the full USA to a list file" \
+	command="/usr/bin/x-terminal-emulator -e /bin/sh -c \"/usr/bin/yank;echo press any key to continue; read\""

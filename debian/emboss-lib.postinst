@@ -1,0 +1,10 @@
+#!/bin/sh
+set -e
+
+case "$1" in
+    configure) if [ -x /sbin/ldconfig ]; then /sbin/ldconfig ; fi ;;
+    abort-*) exit 1 ;;
+    *) ;;
+esac
+
+#DEBHELPER#

@@ -1,0 +1,114 @@
+.\"     Title: WOSSNAME
+.\"    Author: Debian EMBOSS Packaging Team <pkg-emboss-devel@lists.alioth.debian.org>
+.\" Generator: DocBook XSL Stylesheets v1.72.0 <http://docbook.sf.net/>
+.\"      Date: 10/11/2007
+.\"    Manual: EMBOSS Manual for Debian
+.\"    Source: EMBOSS 5.0.0
+.\"
+.TH "WOSSNAME" "1e" "10/11/2007" "EMBOSS 5.0.0" "EMBOSS Manual for Debian"
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.SH "NAME"
+wossname \- Finds programs by keywords in their one\-line documentation
+.SH "SYNOPSIS"
+.HP 9
+\fBwossname\fR \fB\-search\ \fR\fB\fIstring\fR\fR [\fB\-explode\ \fR\fB\fIboolean\fR\fR] [\fB\-allmatch\ \fR\fB\fIboolean\fR\fR] [\fB\-showkeywords\ \fR\fB\fIboolean\fR\fR] \fB\-emboss\ \fR\fB\fIboolean\fR\fR \fB\-embassy\ \fR\fB\fIboolean\fR\fR \fB\-showembassy\ \fR\fB\fIstring\fR\fR \fB\-colon\ \fR\fB\fIboolean\fR\fR \fB\-gui\ \fR\fB\fIboolean\fR\fR [\fB\-outfile\ \fR\fB\fIoutfile\fR\fR] [\fB\-html\ \fR\fB\fItoggle\fR\fR] [\fB\-groups\ \fR\fB\fIboolean\fR\fR] [\fB\-alphabetic\ \fR\fB\fIboolean\fR\fR]
+.HP 9
+\fBwossname\fR \fB\-help\fR
+.SH "DESCRIPTION"
+.PP
+\fBwossname\fR
+is a command line program from EMBOSS (\(lqthe European Molecular Biology Open Software Suite\(rq). It is part of the "Information" command group(s).
+.SH "OPTIONS"
+.SS "Input section"
+.PP
+\fB\-search\fR \fIstring\fR
+.RS 4
+Enter a word or words here and a case\-independent search for it will be made in the one\-line documentation, group names and keywords of all of the EMBOSS programs. If no keyword is specified, all programs will be listed.
+.RE
+.SS "Additional section"
+.PP
+\fB\-explode\fR \fIboolean\fR
+.RS 4
+The groups that EMBOSS applications belong to have two forms, exploded and not exploded. The exploded group names are more numerous and often vaguely phrased than the non\-exploded ones. The exploded names are formed from definitions of the group names that start like NAME1:NAME2 and which are then expanded into many combinations of the names as: 'NAME1', 'NAME2', 'NAME1 NAME2', NAME2 NAME1'. The non\-expanded names are simply like: 'NAME1 NAME2'. Default value: N
+.RE
+.PP
+\fB\-allmatch\fR \fIboolean\fR
+.RS 4
+By default, all words in the search string must match. This option searches for a match to any word in a list of possibilities Default value: Y
+.RE
+.PP
+\fB\-showkeywords\fR \fIboolean\fR
+.RS 4
+Default value: N
+.RE
+.SS "Advanced section"
+.PP
+\fB\-emboss\fR \fIboolean\fR
+.RS 4
+If you use this option then EMBOSS program documentation will be searched. If this option is set to be false, then only the EMBASSY programs will be searched (if the \-embassy option is true). EMBASSY programs are not strictly part of EMBOSS, but use the same code libraries and share the same look and feel, but are generally developed by people who wish the programs to be outside of the GNU Public Licence scheme Default value: Y
+.RE
+.PP
+\fB\-embassy\fR \fIboolean\fR
+.RS 4
+If you use this option then EMBASSY program documentation will be searched. If this option is set to be false, then only the EMBOSS programs will be searched (if the \-emboss option is true). EMBASSY programs are not strictly part of EMBOSS, but use the same code libraries and share the same look and feel, but are generally developed by people who wish the programs to be outside of the GNU Public Licence scheme Default value: Y
+.RE
+.PP
+\fB\-showembassy\fR \fIstring\fR
+.RS 4
+If you use this option then this EMBASSY package program documentation will be searched. EMBASSY programs are not strictly part of EMBOSS, but use the same code libraries and share the same look and feel, but are generally developed by people who wish the programs to be outside of the GNU Public Licence scheme
+.RE
+.PP
+\fB\-colon\fR \fIboolean\fR
+.RS 4
+The groups that EMBOSS applications belong to up to two levels, for example the primary group 'ALIGNMENT' has several sub\-groups, or second\-level groups, e.g.: CONSENSUS, DIFFERENCES, DOT PLOTS, GLOBAL, LOCAL, MULTIPLE. To aid programs that parse the output of wossname that require the names of these subgroups, a colon ':' will be placed between the first and second level of the group name if this option is true. Note: This does not apply if the group names have been exploded with the 'explode' option. Default value: N
+.RE
+.PP
+\fB\-gui\fR \fIboolean\fR
+.RS 4
+This option is intended to help those who are designing Graphical User Interfaces to the EMBOSS applications. Some EMBOSS programs are inappropriate for running in a GUI, these include other menu programs and interactive editors. This option allows you to only report those programs that can be run from a GUI Default value: N
+.RE
+.SS "Output section"
+.PP
+\fB\-outfile\fR \fIoutfile\fR
+.RS 4
+Default value: stdout
+.RE
+.SS "Html section"
+.PP
+\fB\-html\fR \fItoggle\fR
+.RS 4
+If you are sending the output to a file, this will format it for displaying as a table in a WWW document. Default value: N
+.RE
+.PP
+\fB\-groups\fR \fIboolean\fR
+.RS 4
+If you use this option, then only the group names will output to the file Default value: N
+.RE
+.PP
+\fB\-alphabetic\fR \fIboolean\fR
+.RS 4
+If you use this option, then you will get a single list of the program names and descriptions instead of the programs being listed in their functional groups. Default value: N
+.RE
+.SH "BUGS"
+.PP
+Bugs can be reported to the Debian Bug Tracking system (http://bugs.debian.org/emboss), or directly to the EMBOSS developers (http://sourceforge.net/tracker/?group_id=93650&atid=605031).
+.SH "SEE ALSO"
+.PP
+wossname is fully documented via the
+\fBtfm\fR(1)
+system.
+.SH "AUTHOR"
+.PP
+\fBDebian EMBOSS Packaging Team\fR <\&pkg\-emboss\-devel@lists.alioth.debian.org\&>
+.sp -1n
+.IP "" 4
+Wrote the script used to autogenerate this manual page.
+.SH "COPYRIGHT"
+Copyright \(co 2007 Debian EMBOSS Packaging Team
+.br
+.PP
+This manual page was autogenerated from an Ajax Control Definition of the EMBOSS package. It can be redistributed under the same terms as EMBOSS itself.
+.br

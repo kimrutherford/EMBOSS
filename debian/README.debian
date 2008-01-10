@@ -1,0 +1,28 @@
+EMBOSS for Debian
+=================
+
+Some programs renamed
+---------------------
+
+Some programs in EMBOSS have a name which is also used by other programs from
+other packages. The Debian distribution does not allow two packages to conflict
+in this way. Therfore 'cons' has been renamed 'em_cons' and 'pscan has been
+renamed 'em_pscan'.
+
+There is a directory in which the program names are guaranteed to be always
+unchanged, /usr/lib/emboss. You can prepend it to your PATH, with a command
+such as 'PATH = /usr/lib/emboss:$PATH' with Bourne shells, so that when you run
+'cons' or 'pscan', it is always the EMBOSS program.  Other programs could be
+renamed in the future, so it is strongly recommended to use this path in your
+scripts.
+
+
+EMBOSS Quick Guide relicenced
+-----------------------------
+
+This packages contains a relicenced version of the EMBOSS Quick Guide. Its
+uuencoded sources (in MS Word format) are included in the Debian source package
+'emboss'.
+
+
+ -- Charles Plessy <charles-debian-nospam@plessy.org>  Wed, 10 Oct 2007 09:07:24 +0900

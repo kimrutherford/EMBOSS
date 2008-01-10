@@ -1,0 +1,147 @@
+.\"     Title: SHOWALIGN
+.\"    Author: Debian EMBOSS Packaging Team <pkg-emboss-devel@lists.alioth.debian.org>
+.\" Generator: DocBook XSL Stylesheets v1.72.0 <http://docbook.sf.net/>
+.\"      Date: 10/11/2007
+.\"    Manual: EMBOSS Manual for Debian
+.\"    Source: EMBOSS 5.0.0
+.\"
+.TH "SHOWALIGN" "1e" "10/11/2007" "EMBOSS 5.0.0" "EMBOSS Manual for Debian"
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.SH "NAME"
+showalign \- Displays a multiple sequence alignment
+.SH "SYNOPSIS"
+.HP 10
+\fBshowalign\fR \fB\-sequence\ \fR\fB\fIseqset\fR\fR [\fB\-matrix\ \fR\fB\fImatrix\fR\fR] [\fB\-refseq\ \fR\fB\fIstring\fR\fR] [\fB\-bottom\ \fR\fB\fIboolean\fR\fR] [\fB\-show\ \fR\fB\fIlist\fR\fR] [\fB\-order\ \fR\fB\fIlist\fR\fR] [\fB\-similarcase\ \fR\fB\fIboolean\fR\fR] [\fB\-consensus\ \fR\fB\fIboolean\fR\fR] \fB\-uppercase\ \fR\fB\fIrange\fR\fR \fB\-number\ \fR\fB\fIboolean\fR\fR \fB\-ruler\ \fR\fB\fIboolean\fR\fR \fB\-width\ \fR\fB\fIinteger\fR\fR \fB\-margin\ \fR\fB\fIinteger\fR\fR \fB\-html\ \fR\fB\fIboolean\fR\fR \fB\-highlight\ \fR\fB\fIrange\fR\fR \fB\-plurality\ \fR\fB\fIfloat\fR\fR \fB\-setcase\ \fR\fB\fIfloat\fR\fR \fB\-identity\ \fR\fB\fIfloat\fR\fR \fB\-gaps\ \fR\fB\fIboolean\fR\fR \fB\-outfile\ \fR\fB\fIoutfile\fR\fR
+.HP 10
+\fBshowalign\fR \fB\-help\fR
+.SH "DESCRIPTION"
+.PP
+\fBshowalign\fR
+is a command line program from EMBOSS (\(lqthe European Molecular Biology Open Software Suite\(rq). It is part of the "Alignment:Multiple,Display" command group(s).
+.SH "OPTIONS"
+.SS "Input section"
+.PP
+\fB\-sequence\fR \fIseqset\fR
+.RS 4
+The sequence alignment to be displayed.
+.RE
+.PP
+\fB\-matrix\fR \fImatrix\fR
+.RS 4
+This is the scoring matrix file used when comparing sequences. By default it is the file 'EBLOSUM62' (for proteins) or the file 'EDNAFULL' (for nucleic sequences). These files are found in the 'data' directory of the EMBOSS installation.
+.RE
+.SS "Additional section"
+.PP
+\fB\-refseq\fR \fIstring\fR
+.RS 4
+If you give the number in the alignment or the name of a sequence, it will be taken to be the reference sequence. The reference sequence is always show in full and is the one against which all the other sequences are compared. If this is set to 0 then the consensus sequence will be used as the reference sequence. By default the consensus sequence is used as the reference sequence.
+.RE
+.PP
+\fB\-bottom\fR \fIboolean\fR
+.RS 4
+If this is true then the reference sequence is displayed at the bottom of the alignment as well as at the top. Default value: Y
+.RE
+.PP
+\fB\-show\fR \fIlist\fR
+.RS 4
+Default value: N
+.RE
+.PP
+\fB\-order\fR \fIlist\fR
+.RS 4
+Default value: I
+.RE
+.PP
+\fB\-similarcase\fR \fIboolean\fR
+.RS 4
+If this is set True, then when \-show is set to 'Similarities' or 'Non\-identities' and a residue is similar but not identical to the reference sequence residue, it will be changed to lower\-case. If \-show is set to 'All' then non\-identical, non\-similar residues will be changed to lower\-case. If this is False then no change to the case of the residues is made on the basis of their similarity to the reference sequence. Default value: Y
+.RE
+.PP
+\fB\-consensus\fR \fIboolean\fR
+.RS 4
+If this is true then the consensus line is displayed. Default value: Y
+.RE
+.SS "Advanced section"
+.PP
+\fB\-uppercase\fR \fIrange\fR
+.RS 4
+Regions to put in uppercase. If this is left blank, then the sequence case is left alone. A set of regions is specified by a set of pairs of positions. The positions are integers. They are separated by any non\-digit, non\-alpha character. Examples of region specifications are: 24\-45, 56\-78 1:45, 67=99;765..888 1,5,8,10,23,45,57,99
+.RE
+.PP
+\fB\-number\fR \fIboolean\fR
+.RS 4
+If this option is true then a line giving the positions in the alignment is displayed every 10 characters above the alignment. Default value: Y
+.RE
+.PP
+\fB\-ruler\fR \fIboolean\fR
+.RS 4
+If this option is true then a ruler line marking every 5th and 10th character in the alignment is displayed. Default value: Y
+.RE
+.PP
+\fB\-width\fR \fIinteger\fR
+.RS 4
+Default value: 60
+.RE
+.PP
+\fB\-margin\fR \fIinteger\fR
+.RS 4
+This sets the length of the left\-hand margin for sequence names. If the margin is set at 0 then no margin and no names are displayed. If the margin is set to a value that is less than the length of a sequence name then the sequence name is displayed truncated to the length of the margin. If the margin is set to \-1 then the minimum margin width that will allow all the sequence names to be displayed in full plus a space at the end of the name will automatically be selected. Default value: \-1
+.RE
+.PP
+\fB\-html\fR \fIboolean\fR
+.RS 4
+Default value: N
+.RE
+.PP
+\fB\-highlight\fR \fIrange\fR
+.RS 4
+Regions to colour if formatting for HTML. If this is left blank, then the sequence is left alone. A set of regions is specified by a set of pairs of positions. The positions are integers. They are followed by any valid HTML font colour. Examples of region specifications are: 24\-45 blue 56\-78 orange 1\-100 green 120\-156 red A file of ranges to colour (one range per line) can be specified as '@filename'.
+.RE
+.PP
+\fB\-plurality\fR \fIfloat\fR
+.RS 4
+Set a cut\-off for the % of positive scoring matches below which there is no consensus. The default plurality is taken as 50% of the total weight of all the sequences in the alignment. Default value: 50.0
+.RE
+.PP
+\fB\-setcase\fR \fIfloat\fR
+.RS 4
+Sets the threshold for the scores of the positive matches above which the consensus is in upper\-case and below which the consensus is in lower\-case. By default this is set to be half of the (weight\-adjusted) number of sequences in the alignment. Default value: @( $(sequence.totweight) / 2)
+.RE
+.PP
+\fB\-identity\fR \fIfloat\fR
+.RS 4
+Provides the facility of setting the required number of identities at a position for it to give a consensus. Therefore, if this is set to 100% only columns of identities contribute to the consensus. Default value: 0.0
+.RE
+.PP
+\fB\-gaps\fR \fIboolean\fR
+.RS 4
+If this option is true then gap characters can appear in the consensus. The alternative is 'N' for nucleotide, or 'X' for protein Default value: Y
+.RE
+.SS "Output section"
+.PP
+\fB\-outfile\fR \fIoutfile\fR
+.RS 4
+.RE
+.SH "BUGS"
+.PP
+Bugs can be reported to the Debian Bug Tracking system (http://bugs.debian.org/emboss), or directly to the EMBOSS developers (http://sourceforge.net/tracker/?group_id=93650&atid=605031).
+.SH "SEE ALSO"
+.PP
+showalign is fully documented via the
+\fBtfm\fR(1)
+system.
+.SH "AUTHOR"
+.PP
+\fBDebian EMBOSS Packaging Team\fR <\&pkg\-emboss\-devel@lists.alioth.debian.org\&>
+.sp -1n
+.IP "" 4
+Wrote the script used to autogenerate this manual page.
+.SH "COPYRIGHT"
+Copyright \(co 2007 Debian EMBOSS Packaging Team
+.br
+.PP
+This manual page was autogenerated from an Ajax Control Definition of the EMBOSS package. It can be redistributed under the same terms as EMBOSS itself.
+.br

@@ -1,0 +1,198 @@
+.\"     Title: EMMA
+.\"    Author: Debian EMBOSS Packaging Team <pkg-emboss-devel@lists.alioth.debian.org>
+.\" Generator: DocBook XSL Stylesheets v1.72.0 <http://docbook.sf.net/>
+.\"      Date: 10/11/2007
+.\"    Manual: EMBOSS Manual for Debian
+.\"    Source: EMBOSS 5.0.0
+.\"
+.TH "EMMA" "1e" "10/11/2007" "EMBOSS 5.0.0" "EMBOSS Manual for Debian"
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.SH "NAME"
+emma \- Multiple alignment program \- interface to ClustalW program
+.SH "SYNOPSIS"
+.HP 5
+\fBemma\fR \fB\-sequence\ \fR\fB\fIseqall\fR\fR [\fB\-onlydend\ \fR\fB\fItoggle\fR\fR] \fB\-dend\ \fR\fB\fItoggle\fR\fR \fB\-dendfile\ \fR\fB\fIinfile\fR\fR \fB\-pwmatrix\ \fR\fB\fIlist\fR\fR \fB\-pwdnamatrix\ \fR\fB\fIlist\fR\fR \fB\-usermatrix\ \fR\fB\fIvariable\fR\fR \fB\-pairwisedatafile\ \fR\fB\fIinfile\fR\fR \fB\-matrix\ \fR\fB\fIlist\fR\fR \fB\-usermamatrix\ \fR\fB\fIvariable\fR\fR \fB\-dnamatrix\ \fR\fB\fIlist\fR\fR \fB\-umamatrix\ \fR\fB\fIvariable\fR\fR \fB\-mamatrixfile\ \fR\fB\fIinfile\fR\fR [\fB\-slow\ \fR\fB\fItoggle\fR\fR] \fB\-pwgapopen\ \fR\fB\fIfloat\fR\fR \fB\-pwgapextend\ \fR\fB\fIfloat\fR\fR \fB\-ktup\ \fR\fB\fIinteger\fR\fR \fB\-gapw\ \fR\fB\fIinteger\fR\fR \fB\-topdiags\ \fR\fB\fIinteger\fR\fR \fB\-window\ \fR\fB\fIinteger\fR\fR \fB\-nopercent\ \fR\fB\fIboolean\fR\fR [\fB\-gapopen\ \fR\fB\fIfloat\fR\fR] [\fB\-gapextend\ \fR\fB\fIfloat\fR\fR] [\fB\-endgaps\ \fR\fB\fIboolean\fR\fR] [\fB\-gapdist\ \fR\fB\fIinteger\fR\fR] \fB\-norgap\ \fR\fB\fIboolean\fR\fR \fB\-hgapres\ \fR\fB\fIstring\fR\fR \fB\-nohgap\ \fR\fB\fIboolean\fR\fR [\fB\-maxdiv\ \fR\fB\fIinteger\fR\fR] \fB\-outseq\ \fR\fB\fIseqoutset\fR\fR \fB\-dendoutfile\ \fR\fB\fIoutfile\fR\fR
+.HP 5
+\fBemma\fR \fB\-help\fR
+.SH "DESCRIPTION"
+.PP
+\fBemma\fR
+is a command line program from EMBOSS (\(lqthe European Molecular Biology Open Software Suite\(rq). It is part of the "Alignment:Multiple" command group(s).
+.SH "OPTIONS"
+.SS "Input section"
+.PP
+\fB\-sequence\fR \fIseqall\fR
+.RS 4
+.RE
+.PP
+\fB\-onlydend\fR \fItoggle\fR
+.RS 4
+Default value: N
+.RE
+.PP
+\fB\-dend\fR \fItoggle\fR
+.RS 4
+Default value: N
+.RE
+.PP
+\fB\-dendfile\fR \fIinfile\fR
+.RS 4
+.RE
+.SS "Protein align options"
+.PP
+\fB\-pwmatrix\fR \fIlist\fR
+.RS 4
+The scoring table which describes the similarity of each amino acid to each other. There are three 'in\-built' series of weight matrices offered. Each consists of several matrices which work differently at different evolutionary distances. To see the exact details, read the documentation. Crudely, we store several matrices in memory, spanning the full range of amino acid distance (from almost identical sequences to highly divergent ones). For very similar sequences, it is best to use a strict weight matrix which only gives a high score to identities and the most favoured conservative substitutions. For more divergent sequences, it is appropriate to use 'softer' matrices which give a high score to many other frequent substitutions. 1) BLOSUM (Henikoff). These matrices appear to be the best available for carrying out data base similarity (homology searches). The matrices used are: Blosum80, 62, 45 and 30. 2) PAM (Dayhoff). These have been extremely widely used since the late '70s. We use the PAM 120, 160, 250 and 350 matrices. 3) GONNET . These matrices were derived using almost the same procedure as the Dayhoff one (above) but are much more up to date and are based on a far larger data set. They appear to be more sensitive than the Dayhoff series. We use the GONNET 40, 80, 120, 160, 250 and 350 matrices. We also supply an identity matrix which gives a score of 1.0 to two identical amino acids and a score of zero otherwise. This matrix is not very useful. Default value: b
+.RE
+.PP
+\fB\-pwdnamatrix\fR \fIlist\fR
+.RS 4
+The scoring table which describes the scores assigned to matches and mismatches (including IUB ambiguity codes). Default value: i
+.RE
+.PP
+\fB\-usermatrix\fR \fIvariable\fR
+.RS 4
+.RE
+.PP
+\fB\-pairwisedatafile\fR \fIinfile\fR
+.RS 4
+.RE
+.SS "Matrix options"
+.PP
+\fB\-matrix\fR \fIlist\fR
+.RS 4
+This gives a menu where you are offered a choice of weight matrices. The default for proteins is the PAM series derived by Gonnet and colleagues. Note, a series is used! The actual matrix that is used depends on how similar the sequences to be aligned at this alignment step are. Different matrices work differently at each evolutionary distance. There are three 'in\-built' series of weight matrices offered. Each consists of several matrices which work differently at different evolutionary distances. To see the exact details, read the documentation. Crudely, we store several matrices in memory, spanning the full range of amino acid distance (from almost identical sequences to highly divergent ones). For very similar sequences, it is best to use a strict weight matrix which only gives a high score to identities and the most favoured conservative substitutions. For more divergent sequences, it is appropriate to use 'softer' matrices which give a high score to many other frequent substitutions. 1) BLOSUM (Henikoff). These matrices appear to be the best available for carrying out data base similarity (homology searches). The matrices used are: Blosum80, 62, 45 and 30. 2) PAM (Dayhoff). These have been extremely widely used since the late '70s. We use the PAM 120, 160, 250 and 350 matrices. 3) GONNET . These matrices were derived using almost the same procedure as the Dayhoff one (above) but are much more up to date and are based on a far larger data set. They appear to be more sensitive than the Dayhoff series. We use the GONNET 40, 80, 120, 160, 250 and 350 matrices. We also supply an identity matrix which gives a score of 1.0 to two identical amino acids and a score of zero otherwise. This matrix is not very useful. Alternatively, you can read in your own (just one matrix, not a series). Default value: b
+.RE
+.PP
+\fB\-usermamatrix\fR \fIvariable\fR
+.RS 4
+.RE
+.PP
+\fB\-dnamatrix\fR \fIlist\fR
+.RS 4
+This gives a menu where a single matrix (not a series) can be selected. Default value: i
+.RE
+.PP
+\fB\-umamatrix\fR \fIvariable\fR
+.RS 4
+.RE
+.PP
+\fB\-mamatrixfile\fR \fIinfile\fR
+.RS 4
+.RE
+.SS "Additional section"
+.SS "Slow align options"
+.PP
+\fB\-slow\fR \fItoggle\fR
+.RS 4
+A distance is calculated between every pair of sequences and these are used to construct the dendrogram which guides the final multiple alignment. The scores are calculated from separate pairwise alignments. These can be calculated using 2 methods: dynamic programming (slow but accurate) or by the method of Wilbur and Lipman (extremely fast but approximate). The slow\-accurate method is fine for short sequences but will be VERY SLOW for many (e.g. >100) long (e.g. >1000 residue) sequences. Default value: Y
+.RE
+.PP
+\fB\-pwgapopen\fR \fIfloat\fR
+.RS 4
+The penalty for opening a gap in the pairwise alignments. Default value: 10.0
+.RE
+.PP
+\fB\-pwgapextend\fR \fIfloat\fR
+.RS 4
+The penalty for extending a gap by 1 residue in the pairwise alignments. Default value: 0.1
+.RE
+.SS "Fast align options"
+.PP
+\fB\-ktup\fR \fIinteger\fR
+.RS 4
+This is the size of exactly matching fragment that is used. INCREASE for speed (max= 2 for proteins; 4 for DNA), DECREASE for sensitivity. For longer sequences (e.g. >1000 residues) you may need to increase the default. Default value: @($(acdprotein)?1:2)
+.RE
+.PP
+\fB\-gapw\fR \fIinteger\fR
+.RS 4
+This is a penalty for each gap in the fast alignments. It has little affect on the speed or sensitivity except for extreme values. Default value: @($(acdprotein)?3:5)
+.RE
+.PP
+\fB\-topdiags\fR \fIinteger\fR
+.RS 4
+The number of k\-tuple matches on each diagonal (in an imaginary dot\-matrix plot) is calculated. Only the best ones (with most matches) are used in the alignment. This parameter specifies how many. Decrease for speed; increase for sensitivity. Default value: @($(acdprotein)?5:4)
+.RE
+.PP
+\fB\-window\fR \fIinteger\fR
+.RS 4
+This is the number of diagonals around each of the 'best' diagonals that will be used. Decrease for speed; increase for sensitivity. Default value: @($(acdprotein)?5:4)
+.RE
+.PP
+\fB\-nopercent\fR \fIboolean\fR
+.RS 4
+Default value: N
+.RE
+.SS "Gap options"
+.PP
+\fB\-gapopen\fR \fIfloat\fR
+.RS 4
+The penalty for opening a gap in the alignment. Increasing the gap opening penalty will make gaps less frequent. Default value: 10.0
+.RE
+.PP
+\fB\-gapextend\fR \fIfloat\fR
+.RS 4
+The penalty for extending a gap by 1 residue. Increasing the gap extension penalty will make gaps shorter. Terminal gaps are not penalised. Default value: 5.0
+.RE
+.PP
+\fB\-endgaps\fR \fIboolean\fR
+.RS 4
+End gap separation: treats end gaps just like internal gaps for the purposes of avoiding gaps that are too close (set by 'gap separation distance'). If you turn this off, end gaps will be ignored for this purpose. This is useful when you wish to align fragments where the end gaps are not biologically meaningful. Default value: Y
+.RE
+.PP
+\fB\-gapdist\fR \fIinteger\fR
+.RS 4
+Gap separation distance: tries to decrease the chances of gaps being too close to each other. Gaps that are less than this distance apart are penalised more than other gaps. This does not prevent close gaps; it makes them less frequent, promoting a block\-like appearance of the alignment. Default value: 8
+.RE
+.PP
+\fB\-norgap\fR \fIboolean\fR
+.RS 4
+Residue specific penalties: amino acid specific gap penalties that reduce or increase the gap opening penalties at each position in the alignment or sequence. As an example, positions that are rich in glycine are more likely to have an adjacent gap than positions that are rich in valine. Default value: N
+.RE
+.PP
+\fB\-hgapres\fR \fIstring\fR
+.RS 4
+This is a set of the residues 'considered' to be hydrophilic. It is used when introducing Hydrophilic gap penalties. Default value: GPSNDQEKR
+.RE
+.PP
+\fB\-nohgap\fR \fIboolean\fR
+.RS 4
+Hydrophilic gap penalties: used to increase the chances of a gap within a run (5 or more residues) of hydrophilic amino acids; these are likely to be loop or random coil regions where gaps are more common. The residues that are 'considered' to be hydrophilic are set by '\-hgapres'. Default value: N
+.RE
+.PP
+\fB\-maxdiv\fR \fIinteger\fR
+.RS 4
+This switch, delays the alignment of the most distantly related sequences until after the most closely related sequences have been aligned. The setting shows the percent identity level required to delay the addition of a sequence; sequences that are less identical than this level to any other sequences will be aligned later. Default value: 30
+.RE
+.SS "Output section"
+.PP
+\fB\-outseq\fR \fIseqoutset\fR
+.RS 4
+.RE
+.PP
+\fB\-dendoutfile\fR \fIoutfile\fR
+.RS 4
+.RE
+.SH "BUGS"
+.PP
+Bugs can be reported to the Debian Bug Tracking system (http://bugs.debian.org/emboss), or directly to the EMBOSS developers (http://sourceforge.net/tracker/?group_id=93650&atid=605031).
+.SH "SEE ALSO"
+.PP
+emma is fully documented via the
+\fBtfm\fR(1)
+system.
+.SH "AUTHOR"
+.PP
+\fBDebian EMBOSS Packaging Team\fR <\&pkg\-emboss\-devel@lists.alioth.debian.org\&>
+.sp -1n
+.IP "" 4
+Wrote the script used to autogenerate this manual page.
+.SH "COPYRIGHT"
+Copyright \(co 2007 Debian EMBOSS Packaging Team
+.br
+.PP
+This manual page was autogenerated from an Ajax Control Definition of the EMBOSS package. It can be redistributed under the same terms as EMBOSS itself.
+.br

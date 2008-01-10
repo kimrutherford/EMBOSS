@@ -1,0 +1,142 @@
+#!/usr/bin/make -f
+
+#export DH_VERBOSE=1
+
+VERSION := $(shell dpkg-parsechangelog | grep Ver | cut -d' ' -f2 | cut -d- -f1)
+RENAMED := cons pscan
+
+EMBOSS-TMP = $(CURDIR)/debian/emboss_tmp
+AJAX = $(CURDIR)/debian/libajax5
+NUCLEUS = $(CURDIR)/debian/libnucleus5
+
+config.status:
+	dh_testdir
+	./configure \
+		--prefix=/usr \
+		#--with-java=/usr/lib/j2sdk1.3/include \
+		#--with-javaos=/usr/lib/j2sdk1.3/include/linux \
+		#--with-x \
+
+include /usr/share/quilt/quilt.make
+
+build: patch build-stamp debian/copyright
+build-stamp: config.status
+	dh_testdir
+	$(MAKE)
+
+# In order to use this rule you must install libemboss-acd-perl, xsltproc, docbook-xml and docbook-xsl
+manpages: debian/manpages/success
+debian/manpages/success:
+	if [ -f debian/emboss.manpages ] ; then rm debian/emboss.manpages ; fi
+	rm -f debian/manpages/*.1e debian/manpages/*.xml
+	for acd in $(shell ls emboss/acd/*acd | sed -r 's#.*/.*/(.+).acd#\1#'); \
+		do perl debian/acd2docbook.pl emboss/acd/$$acd.acd $(VERSION) > debian/manpages/$$acd.xml ;\
+		xsltproc --nonet --param man.charmap.use.subset 0 -o debian/manpages/ debian/manpages/$$acd.xml ;\
+		echo "debian/manpages/$$acd.1e" >> debian/emboss.manpages ;\
+		done
+	echo "The manpages have been sucessfully built" > debian/manpages/success
+
+debian/copyright:
+	cat debian/copyright.introduction > $@
+	cat "AUTHORS" >> $@
+	cat "THANKS" >> $@
+
+clean: unpatch config.status
+	dh_testdir
+	dh_testroot
+	$(MAKE) distclean
+
+	find jemboss/ -type f -name "*.class" | xargs -r rm -f
+
+	rm -rf ajax/.libs/*
+	rm -rf emboss/.libs/*
+	rm -rf plplot/.libs/*
+	rm -rf nucleus/.libs/*
+
+	rm -rf debian/emboss_tmp
+
+	rm -rf config.status install-stamp
+	dh_clean debian/copyright
+
+install: install-stamp
+install-stamp: build-stamp
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs
+
+	### Binaries and data go to a temporary dir before being moved to their own package ###
+	$(MAKE) -C emboss install DESTDIR=$(EMBOSS-TMP)
+
+	### Binaries will be in /usr/lib/emboss, and symlinks are provided in /usr/bin. ###
+	if [ ! -d $(EMBOSS-TMP)/usr/lib/emboss ] ; \
+		then mkdir -p $(EMBOSS-TMP)/usr/lib/emboss ; \
+		fi
+	mv $(EMBOSS-TMP)/usr/bin/* $(EMBOSS-TMP)/usr/lib/emboss
+	cd $(EMBOSS-TMP)/usr/lib/emboss/ ; \
+		for i in * ; \
+		do ln -sf ../lib/emboss/$$i ../../bin/$$i ; \
+		done
+
+	### Renaming conflicting binaries (see also in binary-arch) ###
+	for i in $(RENAMED) ; \
+		do mv $(EMBOSS-TMP)/usr/bin/$$i $(EMBOSS-TMP)/usr/bin/em_$$i ; \
+		done
+
+	### Ajax library: lib and libdevel packages. ###
+	$(MAKE) -C ajax install DESTDIR=$(AJAX)
+#	rm $(AJAX)/usr/include/pcre*	# Not very elegant way to solve the conflict with libpcre-dev
+	mv $(AJAX)/usr/include 		$(AJAX)-dev/usr/include/ajax
+	mv $(AJAX)/usr/lib/*a $(AJAX)/usr/lib/*so 	$(AJAX)-dev/usr/lib
+
+	### Nuleus library: lib and libdevel packages. ###
+	$(MAKE) -C nucleus install DESTDIR=$(NUCLEUS)
+	mv $(NUCLEUS)/usr/include 	$(NUCLEUS)-dev/usr/include/nucleus
+	mv $(NUCLEUS)/usr/lib/*a $(NUCLEUS)/usr/lib/*so	$(NUCLEUS)-dev/usr/lib
+
+	### eplplot goes in emboss-lib, but lets'hope building on plplot some day. ###
+	$(MAKE) -C plplot install DESTDIR=$(CURDIR)/debian/emboss-lib
+
+	### Documentation goes in emboss-doc. ###
+	$(MAKE) -C doc install DESTDIR=$(CURDIR)/debian/emboss-doc
+	antiword $(CURDIR)/debian/emboss-doc/usr/share/EMBOSS/doc/manuals/domainatrix.doc > $(CURDIR)/debian/emboss-doc/usr/share/EMBOSS/doc/manuals/domainatrix.txt
+	# Remove this file when the relicenced file becomes part of the upstream tarball.
+	uudecode -o $(CURDIR)/debian/emboss-doc/usr/share/EMBOSS/doc/manuals/EMBOSS_qg.pdf $(CURDIR)/debian/EMBOSS_qg_new.pdf.uu
+
+	### Java is disabled until it becomes understandable. ###
+	#$(MAKE) -C jemboss install prefix=$(CURDIR)/debian/emboss-java/usr
+	# dangling LICEN[CS]E FILE
+	#-rm -f $(CURDIR)/debian/emboss-java/usr/share/EMBOSS/jemboss/LICENSE
+
+	dh_makeshlibs	# Should it be invoked now ?
+
+	touch install-stamp
+
+binary-indep:
+
+binary-arch: build install
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs ChangeLog
+	dh_installdocs
+#	dh_installmenu
+	dh_install
+	
+	# Install the manpages and provide a symlink for the renamed binaries.
+	dh_installman -p emboss
+	for i in $(RENAMED) ; \
+		do dh_link usr/share/man/man1/$$i.1.gz usr/share/man/man1/em_$$i.1.gz ; \
+		done
+	
+	dh_strip
+	dh_compress
+	dh_fixperms
+	dh_makeshlibs
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb -- -Z bzip2
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary

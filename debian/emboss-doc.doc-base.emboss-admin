@@ -1,0 +1,24 @@
+Document: emboss-admin
+Title: The EMBOSS Administrator’s Guide
+Author: David Martin, EMBnet Norway
+ Peter Rice, LION Bioscience
+ Alan Bleasby, HGMP (EMBnet UK)
+Section: Applications/Science/Biology
+Abstract: This guide has been written to assist system administrators and developers
+ with the installation and configuration of EMBOSS. If you are reading this to
+ find out how to do bioinformatics then you are wasting your time. You are
+ referred instead to the Resources chapter below where there is a list of more
+ relevant literature and web sites. Experienced users may find this document
+ useful for configuring their own databases and customising their EMBOSS
+ experience.
+ .
+ This guide relates to EMBOSS 2.5.0
+
+Format: PostScript
+Files: /usr/share/doc/emboss-doc/doc/manuals/admin.ps
+
+Format: PDF
+Files: /usr/share/doc/emboss-doc/doc/manuals/admin.pdf
+
+Format: DVI
+Files: /usr/share/doc/emboss-doc/doc/manuals/admin.dvi

@@ -1,0 +1,120 @@
+emboss (5.0.0-3) UNRELEASED; urgency=low
+
+  [ Nelson A. de Oliveira ]
+  * Using bzip2 compression for packages. This saves about 832KB of space.
+
+  [ Charles Plessy ]
+  * debian/patches/ajindex-fix-2008-01-09.patch: Fixes rare secondary index
+    problem with input files over 2Gb.
+  * debian/control:
+    - Swiched maintainership to the Debian-Med packaging team.
+    - Relocated the package to the Debian-Med Subversion repository.
+    - Allowed upload by Debian Maintainers.
+    - Checked that the package is compliant to Policy 3.7.3
+    - Added dialign again to the Recommends: field. It only disapperared from
+      the documentation; the edialign program is still there.
+    - -dev packages now depend on their corresponding libraries.
+    - Replaced occurences of $(source:Version} by ${bin:Version} to make the
+      packages binNMU safe.
+    - emboss-data and emboss-doc do not Suggest: emboss anymore.
+
+ -- Nelson A. de Oliveira <naoliv@debian.org>  Mon, 29 Oct 2007 21:04:11 -0200
+
+emboss (5.0.0-2) unstable; urgency=low
+
+  [ Charles Plessy ]
+  * Using a emboss/psiphi.c file fixed by upstream
+    ftp://emboss.open-bio.org/pub/EMBOSS/fixes/psiphi.c
+  * Documentation:
+    - Building the manpages offline to save buildd time, therefore not
+      depending anymore on the XML toolchain.
+    - Added a "e" suffix to the manpages, to avoid conflicts.
+      (Closes: #427439)
+    - Linked /usr/share/emboss-doc/doc/ to /usr/share/EMBOSS/docs, and
+      registered documentation in doc-base. (Closes: #423941)
+  * Gave their own packages to the AJAX and NUCLEUS libraries.
+    - Header files are in /usr/include/ajax and /usr/include/nucleus.
+    - The private pcre files are kept under /usr/include/ajax. (Closes: #433316)
+  * Packaging:
+    - Removed the extra Tag field in debian/control.
+    - Removed the recommendation on dialign, as edialign disappeared.
+    - Tightened the Depends: relationship between emboss and
+      emboss-lib (Closes: #435232).
+    - Removed inactive developer from the uploaders list.
+    - Suggests: embassy.
+  * Temporarly incorporates a relicenced version of the EMBOSS Quick
+    Guide, until it becomes part of the original tarball. Its sources
+    are shipped uuencoded, therfore emboss now build-depends on sharutils.
+
+  [ Nelson A. de Oliveira ]
+  * Checked and fixed clean target. (Closes: #442554).
+
+ -- Charles Plessy <charles-debian-nospam@plessy.org>  Sat, 13 Oct 2007 15:05:53 +0900
+
+emboss (5.0.0-1) unstable; urgency=low
+
+  * New upstream version
+  * Renaming cons and pscan to em_cons and em_pscan, see README.Debian
+    for more information.
+  * Moved all the binaries to /usr/lib/emboss. /usr/bin contains only
+    symbolic links (Closes : #427439, #427440).
+  * Makes sure that there is a Makefile befor invoking the clean rule.
+  * Added /etc/emboss/embossrc.d directory for future modular
+    configuration.
+  * Swiched from dpatch to quilt (no patches for the moment).
+  * Build-depend on libemboss-acd-perl to generate manpages with
+    acd2docbook.pl, written especially for this package (Closes: #423938).
+  * Adding a placeholder file to force the includion of debian/manpages.
+  * Removing the entries in the Debian menu until we agree that we
+    want them.
+
+ -- Charles Plessy <charles-debian-nospam@plessy.org>  Thu, 19 Jul 2007 13:56:11 +0900
+
+emboss (4.1.0-1) experimental; urgency=low
+
+  * New maintainer and uploaders
+  * First official relase (Closes: #156276)
+  * Xlib transition.
+  * Using dpatch and /usr/share/dpatch/dpatch.make to manage patches.
+  * Added XS-Vcs entries in debian/changelog.
+  * Removed the pcre includes from the emboss-libs package.
+  * Fixed watch file.
+  * Emboss Recommends:dialign and Suggests:clustalw. 
+
+ -- Charles Plessy <charles-debian-nospam@plessy.org>  Mon, 12 Mar 2007 08:26:15 +0900
+
+emboss (2.8.0-2) unstable; urgency=low
+
+  * Fixed manpages being in both emboss and emboss-lib
+  * Removed circ.dep. emboss <-> emboss-lib
+
+ -- Matt Hope <dopey@debian.org>  Fri, 21 May 2004 12:47:47 +1000
+
+emboss (2.8.0-1) unstable; urgency=low
+
+  * New upstream release
+
+ -- Matt Hope <dopey@debian.org>  Fri,  5 Dec 2003 15:08:54 +1100
+
+emboss (2.7.1-1) unstable; urgency=low
+
+  * New upstream release
+  * emboss-lib
+    - Fixed the shlibs.
+
+ -- Matt Hope <matth@bioinformatics.unsw.edu.au>  Mon,  7 Jul 2003 14:36:14 +1000
+
+emboss (2.6.0-1) unstable; urgency=low
+
+  * New upstream release
+
+ -- Matt Hope <matth@bioinformatics.unsw.edu.au>  Fri,  7 Apr 2003 21:41:12 +1000
+
+emboss (2.4.1-1) unstable; urgency=low
+
+  * Initial package.
+    Thanks for the feedback from everyone.
+    (Closes: Bug#156276 ITP)
+
+ -- Matt Hope <matth@bioinformatics.unsw.edu.au>  Sat,  6 Jul 2002 01:11:17 +1000
+

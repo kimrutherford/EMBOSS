@@ -1,0 +1,25 @@
+Fixes a problem with reading more recent CCF files.
+Error traps cases where chains have no atom information.
+Index: EMBOSS-5.0.0/emboss/psiphi.c
+===================================================================
+--- EMBOSS-5.0.0.orig/emboss/psiphi.c
++++ EMBOSS-5.0.0/emboss/psiphi.c
+@@ -160,7 +160,7 @@
+     finishres = ajAcdGetInt("finishresiduenumber");
+ 
+     /* reserve memory for and read in structure */
+-    /* JISON */    pdb = ajPdbReadoldNew(pdbfile);
++    /* JISON */    pdb = ajPdbReadNew(pdbfile,0);
+     
+     /* check and set number of chain to be analysed */
+     highest = pdb->Nchn;
+@@ -440,6 +440,9 @@
+     ajint lowestres = 0;
+ 
+     AjPAtom inlist   = NULL;
++
++    if(!ajListGetLength(pdb->Chains[myindex]->Atoms))
++	ajFatal("Chain %d has no atoms",myindex+1);
+     
+     /* read first atom in list into memory, but keep it on list */
+     ajListPeek(pdb->Chains[myindex]->Atoms,

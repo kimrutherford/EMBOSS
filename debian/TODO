@@ -1,0 +1,6 @@
+- Use libpcre from Debian (needs #387557)
+- Check if external applications use the nucleus or ajax libraries (as a
+  consequence, emboss-lib would need to be separated into libnucleus4 and
+  libajax4).
+- Design an easy build system for embassy (makefile includes shipped in emboss-data?)
+- Implement tests.
