@@ -12,7 +12,7 @@ Homepage: http://www.emboss.org
 
 Package: emboss
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, emboss-data (= ${binary:Version}), csh | c-shell
+Depends: ${shlibs:Depends}, ${misc:Depends}, emboss-data (= ${source:Version}), csh | c-shell
 Recommends: primer3, dialign
 Suggests: emboss-doc, embassy, clustalw
 Description: The European Molecular Biology Open Software Suite
