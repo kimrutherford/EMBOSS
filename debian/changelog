@@ -1,10 +1,18 @@
 emboss (5.0.0-4) UNRELEASED; urgency=low
 
+  * MIME support for chromatograms:
+    - debian/emboss.mime associates application/ab1 and application/x-dna with
+      the `abiview' program and the .ab1 suffix.
+    - debian/emboss.sharedmimeinfo describes the ABIF format of the .ab1 files.
+    - debian/abiview.desktop associates `abiview' with chromatograms in ABIF
+      format via the application/ab1 and application/x-dna formats.
   * debian/patches/using-pager-in-tfm.patch:
     Patching tfm so that it uses the alternatives system `/usr/bin/pager' if
     the `PAGER' environment variable is not defined.
 
- -- Charles Plessy <charles-debian-nospam@plessy.org>  Fri, 18 Jan 2008 15:54:09 +0900
+ -- Charles Plessy <charles-debian-nospam@plessy.org>  Fri, 18 Jan 2008 14:29:05 +0900
+
+emboss (5.0.0-3) unstable; urgency=low
 
   [ Nelson A. de Oliveira ]
   * Using bzip2 compression for packages. This saves about 832KB of space.

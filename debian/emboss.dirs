@@ -1,4 +1,5 @@
 usr/bin
+usr/share/applications
 usr/lib
 etc/emboss/embossrc.d
 usr/share/man/man1
