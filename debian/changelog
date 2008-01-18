@@ -1,4 +1,10 @@
-emboss (5.0.0-3) unstable; urgency=low
+emboss (5.0.0-4) UNRELEASED; urgency=low
+
+  * debian/patches/using-pager-in-tfm.patch:
+    Patching tfm so that it uses the alternatives system `/usr/bin/pager' if
+    the `PAGER' environment variable is not defined.
+
+ -- Charles Plessy <charles-debian-nospam@plessy.org>  Fri, 18 Jan 2008 15:54:09 +0900
 
   [ Nelson A. de Oliveira ]
   * Using bzip2 compression for packages. This saves about 832KB of space.

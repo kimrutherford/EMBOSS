@@ -1,0 +1,13 @@
+By default, use /usr/bin/pager, which always exist in Debian and is managed
+through the alternatives system.
+--- a/emboss/tfm.c
++++ b/emboss/tfm.c
+@@ -87,7 +87,7 @@
+ 	    if(shellpager)
+ 		ajStrAssignC(&pager,shellpager);
+ 	    if(!ajStrGetLen(pager))
+-		ajStrAssignC(&pager,"more");
++		ajStrAssignC(&pager,"pager");
+ 	}
+ 	ajFmtPrintS(&cmd,"%S %S",pager,path);
+ 	system(ajStrGetPtr(cmd));
