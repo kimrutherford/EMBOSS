@@ -1,0 +1,56 @@
+Fix 3. EMBOSS-5.0.0/nucleus/embindex.c
+
+18 Jan 2008: Order and fill fixes to sort out potential problems
+             with kw/de/tx indexes.
+Index: EMBOSS-5.0.0/nucleus/embindex.c
+===================================================================
+--- EMBOSS-5.0.0.orig/nucleus/embindex.c
++++ EMBOSS-5.0.0/nucleus/embindex.c
+@@ -1196,13 +1196,13 @@
+     entry->txorder = (entry->pagesize - 60) / ((entry->txlen + 1) + 12);
+     entry->txfill  = (entry->pagesize - 16) / (entry->txlen + 28);
+ 
+-    entry->kwsecorder = (entry->pagesize - 60) / ((entry->idlen + 1) + 12);
+-    entry->desecorder = (entry->pagesize - 60) / ((entry->idlen + 1) + 12);
+-    entry->txsecorder = (entry->pagesize - 60) / ((entry->idlen + 1) + 12);
+-
+-    entry->kwsecfill  = (entry->pagesize - 16) / (entry->idlen + 4);
+-    entry->desecfill  = (entry->pagesize - 16) / (entry->idlen + 4);
+-    entry->txsecfill  = (entry->pagesize - 16) / (entry->idlen + 4);
++    entry->kwsecorder = (entry->pagesize - 60) / ((entry->kwlen + 1) + 12);
++    entry->desecorder = (entry->pagesize - 60) / ((entry->delen + 1) + 12);
++    entry->txsecorder = (entry->pagesize - 60) / ((entry->txlen + 1) + 12);
++
++    entry->kwsecfill  = (entry->pagesize - 16) / (entry->kwlen + 4);
++    entry->desecfill  = (entry->pagesize - 16) / (entry->delen + 4);
++    entry->txsecfill  = (entry->pagesize - 16) / (entry->txlen + 4);
+ 
+     entry->idsecorder = (entry->pagesize - 60) / 24;
+     entry->idsecfill  = (entry->pagesize - 60) / 20;
+@@ -1251,7 +1251,7 @@
+ 					     entry->cachesize,
+ 					     entry->idsecorder, slevel,
+ 					     entry->idsecfill, count,
+-					     entry->kwlen);
++					     entry->idlen);
+ 	if(!entry->idcache)
+ 	    ajFatal("Cannot open ID index");
+ 	
+@@ -1267,7 +1267,7 @@
+ 					     entry->cachesize,
+ 					     entry->acsecorder, slevel,
+ 					     entry->acsecfill, count,
+-					     entry->kwlen);
++					     entry->aclen);
+ 	if(!entry->accache)
+ 	    ajFatal("Cannot open ACC index");
+ 
+@@ -1282,7 +1282,7 @@
+ 					     entry->cachesize,
+ 					     entry->svsecorder, slevel,
+ 					     entry->svsecfill, count,
+-					     entry->kwlen);
++					     entry->svlen);
+ 	if(!entry->svcache)
+ 	    ajFatal("Cannot open SV index");
+ 
