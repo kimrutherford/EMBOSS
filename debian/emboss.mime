@@ -1,2 +1,2 @@
-application/ab1; abiview -outseq /dev/null -graph x11 '%s' ; description=ABIF Applied Biosystems Inc. chromatogram; nametemplate=%s.ab1
 application/x-dna; abiview -outseq /dev/null -graph x11 '%s' ; description=ABIF Applied Biosystems Inc. chromatogram; nametemplate=%s.ab1
+application/abi1; abiview -outseq /dev/null -graph x11 '%s' ; description=ABIF Applied Biosystems Inc. chromatogram; nametemplate=%s.ab1

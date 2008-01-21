@@ -12,5 +12,5 @@ Comment[en]=Displays ABIF Applied Biosystems Inc. chromatograms.
 Comment[fr]=Affiche les chromatogrammes au format ABIF (Applied Biosystems Inc.).
 Type=Application
 Categories=Biology;Science;Education;
-MimeType=application/ab1;application/x-dna;
+MimeType=application/x-dna;
 NoDisplay=true
