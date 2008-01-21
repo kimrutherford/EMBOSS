@@ -2,7 +2,7 @@
 Version=1.0
 Terminal=false
 #Icon=abiview
-Exec=abiview -outseq /dev/null -graph x11  %f
+Exec=abiview -outseq /dev/null -graph x11 %f
 Name=abiview
 GenericName=Chromatogram viewer
 GenericName[en]=Chromatogram viewer
@@ -12,5 +12,5 @@ Comment[en]=Displays ABIF Applied Biosystems Inc. chromatograms.
 Comment[fr]=Affiche les chromatogrammes au format ABIF (Applied Biosystems Inc.).
 Type=Application
 Categories=Biology;Science;Education;
-MimeType=application/x-dna;
+MimeType=application/vnd.appliedbiosystems.abif;
 NoDisplay=true

@@ -1,8 +1,9 @@
 emboss (5.0.0-4) UNRELEASED; urgency=low
 
   * MIME support for chromatograms:
-    - debian/emboss.mime associates application/ab1 and application/x-dna with
-      the `abiview' program and the .ab1 suffix.
+    - debian/emboss.mime: associates application/vnd.appliedbiosystems.abif,
+      application/ab1 and application/x-dna with the `abiview' and `seqret'
+      programs and the .ab1 suffix.
     - debian/emboss.sharedmimeinfo describes the ABIF format of the .ab1 files.
     - debian/abiview.desktop associates `abiview' with chromatograms in ABIF
       format via the application/ab1 and application/x-dna formats.
