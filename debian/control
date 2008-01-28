@@ -2,7 +2,7 @@ Source: emboss
 Section: science
 Priority: optional
 Maintainer: Debian-Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
-XS-DM-Upload-Allowed: Yes
+XS-DM-Upload-Allowed: yes
 Uploaders: Charles Plessy <charles-debian-nospam@plessy.org>, Nelson A. de Oliveira <naoliv@debian.org>
 Build-Depends: debhelper (>= 5), quilt, libx11-dev, x-dev, libgdchart-gd2-xpm-dev, zlib1g-dev, libpng12-dev, libpcre3-dev, antiword, sharutils, autotools-dev
 Vcs-Browser: http://svn.debian.org/wsvn/debian-med/trunk/packages/emboss/trunk
