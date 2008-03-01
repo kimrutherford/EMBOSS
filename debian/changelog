@@ -1,3 +1,19 @@
+emboss (5.0.0-5) unstable; urgency=low
+
+  * New bugfixes released upstream.
+    - Fixes changed ID format in GCG databases.
+    - Fixes reading from PIR databases.
+    - Fixes a problem with O in protein sequences for pyrrolysine.
+    - Fixes a problem in GENBANK output format.
+    - Fixes a problem in reading protein sequences from Staden
+      "spin" interface.
+    - Fixes tokens that are longer than the maximum length.
+    - debian/patches now uses the monolithic upstream patch instead of
+      file-per-file fixes. You can find longer explanations in the header
+      of debian/patches/patch-1-3.
+
+ -- Charles Plessy <charles-debian-nospam@plessy.org>  Sat, 01 Mar 2008 11:46:26 +0900
+
 emboss (5.0.0-4) unstable; urgency=low
 
   * debian/patches:
