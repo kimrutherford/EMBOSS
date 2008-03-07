@@ -1,4 +1,4 @@
-emboss (5.0.0-6) UNRELEASED; urgency=low
+emboss (5.0.0-6) unstable; urgency=low
 
   * New bugfixes released upstream:
     - Fixes failure on some databases if the PAGESIZE was set large
