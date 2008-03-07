@@ -17,6 +17,15 @@ renamed in the future, so it is strongly recommended to use this path in your
 scripts.
 
 
+tfm uses Debian's pager by default
+----------------------------------
+
+The `tfm' program will use /usr/bin/pager instead of /usr/bin/more by default.
+/usr/bin/pager is managed via the `update-alternatives' utility and can point
+to other pagers such as `less' and `most'. This can be overriden by using the
+PAGER environment variable, just as in default EMBOSS installations.
+
+
 EMBOSS Quick Guide relicenced
 -----------------------------
 
@@ -25,4 +34,4 @@ uuencoded sources (in MS Word format) are included in the Debian source package
 'emboss'.
 
 
- -- Charles Plessy <charles-debian-nospam@plessy.org>  Wed, 10 Oct 2007 09:07:24 +0900
+ -- Charles Plessy <charles-debian-nospam@plessy.org>  Fri, 07 Mar 2008 10:23:12 +0900

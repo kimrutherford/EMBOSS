@@ -1,3 +1,13 @@
+emboss (5.0.0-6) UNRELEASED; urgency=low
+
+  * New bugfixes released upstream:
+    - Fixes failure on some databases if the PAGESIZE was set large
+      and the CACHESIZE was set small.
+    - Platform-independence modifications added.
+  * debian/README.Debian: described the change of default pager for tfm.
+
+ -- Charles Plessy <charles-debian-nospam@plessy.org>  Fri, 07 Mar 2008 10:15:31 +0900
+
 emboss (5.0.0-5) unstable; urgency=low
 
   * New bugfixes released upstream.
