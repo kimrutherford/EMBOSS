@@ -7,7 +7,7 @@ Abstract: This document describes the  use  of  EMBOSS  applications  in  the  E
  and coordinated by  Jon  Ison  to  whom  enquiries  should  be  sent  (email
  jison@hgmp.mrc.ac.uk).  This software is part of  an  experimental  analysis
  pipeline and we provide it  in  the  hope  that  it  will  be  useful.
-Section: Applications/Science/Biology
+Section: Science/Biology
 
 Format: Text
 Files: /usr/share/doc/emboss-doc/doc/manuals/domainatrix.txt

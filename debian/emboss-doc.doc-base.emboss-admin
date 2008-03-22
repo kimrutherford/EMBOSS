@@ -3,7 +3,7 @@ Title: The EMBOSS Administrator’s Guide
 Author: David Martin, EMBnet Norway
  Peter Rice, LION Bioscience
  Alan Bleasby, HGMP (EMBnet UK)
-Section: Applications/Science/Biology
+Section: Science/Biology
 Abstract: This guide has been written to assist system administrators and developers
  with the installation and configuration of EMBOSS. If you are reading this to
  find out how to do bioinformatics then you are wasting your time. You are

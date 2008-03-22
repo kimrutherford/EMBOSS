@@ -1,3 +1,9 @@
+emboss (5.0.0-7) UNRELEASED; urgency=low
+
+  * Changed the doc-base section according to the new policy.
+
+ -- Charles Plessy <charles-debian-nospam@plessy.org>  Sat, 22 Mar 2008 11:32:19 +0900
+
 emboss (5.0.0-6) unstable; urgency=low
 
   * New bugfixes released upstream:
