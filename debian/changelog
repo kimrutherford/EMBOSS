@@ -1,9 +1,10 @@
-emboss (5.0.0-7) UNRELEASED; urgency=low
+emboss (5.0.0-7) unstable; urgency=low
 
   * Changed the doc-base section according to the new policy.
   * Updated my email address.
+  * Updated the contact address in the manpages.
 
- -- Charles Plessy <plessy@debian.org>  Sun, 27 Apr 2008 16:54:39 +0900
+ -- Charles Plessy <plessy@debian.org>  Fri, 16 May 2008 19:58:37 +0900
 
 emboss (5.0.0-6) unstable; urgency=low
 

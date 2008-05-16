@@ -1,11 +1,11 @@
 .\"     Title: EXTRACTFEAT
-.\"    Author: Debian EMBOSS Packaging Team <pkg-emboss-devel@lists.alioth.debian.org>
-.\" Generator: DocBook XSL Stylesheets v1.72.0 <http://docbook.sf.net/>
-.\"      Date: 10/11/2007
+.\"    Author: Debian-Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
+.\" Generator: DocBook XSL Stylesheets v1.73.2 <http://docbook.sf.net/>
+.\"      Date: 05/16/2008
 .\"    Manual: EMBOSS Manual for Debian
 .\"    Source: EMBOSS 5.0.0
 .\"
-.TH "EXTRACTFEAT" "1e" "10/11/2007" "EMBOSS 5.0.0" "EMBOSS Manual for Debian"
+.TH "EXTRACTFEAT" "1e" "05/16/2008" "EMBOSS 5.0.0" "EMBOSS Manual for Debian"
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
@@ -20,7 +20,7 @@ extractfeat \- Extract features from a sequence
 .SH "DESCRIPTION"
 .PP
 \fBextractfeat\fR
-is a command line program from EMBOSS (\(lqthe European Molecular Biology Open Software Suite\(rq). It is part of the "Edit,Feature tables" command group(s).
+is a command line program from EMBOSS (\(lqthe European Molecular Biology Open Software Suite\(rq)\&. It is part of the "Edit,Feature tables" command group(s)\&.
 .SH "OPTIONS"
 .SS "Input section"
 .PP
@@ -31,63 +31,63 @@ is a command line program from EMBOSS (\(lqthe European Molecular Biology Open S
 .PP
 \fB\-before\fR \fIinteger\fR
 .RS 4
-If this value is greater than 0 then that number of bases or residues before the feature are included in the extracted sequence. This allows you to get the context of the feature. If this value is negative then the start of the extracted sequence will be this number of bases/residues before the end of the feature. So a value of '10' will start the extraction 10 bases/residues before the start of the sequence, and a value of '\-10' will start the extraction 10 bases/residues before the end of the feature. The output sequence will be padded with 'N' or 'X' characters if the sequence starts after the required start of the extraction.
+If this value is greater than 0 then that number of bases or residues before the feature are included in the extracted sequence\&. This allows you to get the context of the feature\&. If this value is negative then the start of the extracted sequence will be this number of bases/residues before the end of the feature\&. So a value of \'10\' will start the extraction 10 bases/residues before the start of the sequence, and a value of \'\-10\' will start the extraction 10 bases/residues before the end of the feature\&. The output sequence will be padded with \'N\' or \'X\' characters if the sequence starts after the required start of the extraction\&.
 .RE
 .PP
 \fB\-after\fR \fIinteger\fR
 .RS 4
-If this value is greater than 0 then that number of bases or residues after the feature are included in the extracted sequence. This allows you to get the context of the feature. If this value is negative then the end of the extracted sequence will be this number of bases/residues after the start of the feature. So a value of '10' will end the extraction 10 bases/residues after the end of the sequence, and a value of '\-10' will end the extraction 10 bases/residues after the start of the feature. The output sequence will be padded with 'N' or 'X' characters if the sequence ends before the required end of the extraction.
+If this value is greater than 0 then that number of bases or residues after the feature are included in the extracted sequence\&. This allows you to get the context of the feature\&. If this value is negative then the end of the extracted sequence will be this number of bases/residues after the start of the feature\&. So a value of \'10\' will end the extraction 10 bases/residues after the end of the sequence, and a value of \'\-10\' will end the extraction 10 bases/residues after the start of the feature\&. The output sequence will be padded with \'N\' or \'X\' characters if the sequence ends before the required end of the extraction\&.
 .RE
 .PP
 \fB\-source\fR \fIstring\fR
 .RS 4
-By default any feature source in the feature table is shown. You can set this to match any feature source you wish to show. The source name is usually either the name of the program that detected the feature or it is the feature table (eg: EMBL) that the feature came from. The source may be wildcarded by using '*'. If you wish to show more than one source, separate their names with the character '|', eg: gene* | embl Default value: *
+By default any feature source in the feature table is shown\&. You can set this to match any feature source you wish to show\&. The source name is usually either the name of the program that detected the feature or it is the feature table (eg: EMBL) that the feature came from\&. The source may be wildcarded by using \'*\'\&. If you wish to show more than one source, separate their names with the character \'|\', eg: gene* | embl Default value: *
 .RE
 .PP
 \fB\-type\fR \fIstring\fR
 .RS 4
-By default every feature in the feature table is extracted. You can set this to be any feature type you wish to extract. See http://www3.ebi.ac.uk/Services/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www.expasy.ch/txt/userman.txt for a list of the Swissprot feature types. The type may be wildcarded by using '*'. If you wish to extract more than one type, separate their names with the character '|', eg: *UTR | intron Default value: *
+By default every feature in the feature table is extracted\&. You can set this to be any feature type you wish to extract\&. See http://www3\&.ebi\&.ac\&.uk/Services/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www\&.expasy\&.ch/txt/userman\&.txt for a list of the Swissprot feature types\&. The type may be wildcarded by using \'*\'\&. If you wish to extract more than one type, separate their names with the character \'|\', eg: *UTR | intron Default value: *
 .RE
 .PP
 \fB\-sense\fR \fIinteger\fR
 .RS 4
-By default any feature type in the feature table is extracted. You can set this to match any feature sense you wish. 0 \- any sense, 1 \- forward sense, \-1 \- reverse sense
+By default any feature type in the feature table is extracted\&. You can set this to match any feature sense you wish\&. 0 \- any sense, 1 \- forward sense, \-1 \- reverse sense
 .RE
 .PP
 \fB\-minscore\fR \fIfloat\fR
 .RS 4
-If this is greater than or equal to the maximum score, then any score is permitted Default value: 0.0
+If this is greater than or equal to the maximum score, then any score is permitted Default value: 0\&.0
 .RE
 .PP
 \fB\-maxscore\fR \fIfloat\fR
 .RS 4
-If this is less than or equal to the maximum score, then any score is permitted Default value: 0.0
+If this is less than or equal to the maximum score, then any score is permitted Default value: 0\&.0
 .RE
 .PP
 \fB\-tag\fR \fIstring\fR
 .RS 4
-Tags are the types of extra values that a feature may have. For example in the EMBL feature table, a 'CDS' type of feature may have the tags '/codon', '/codon_start', '/db_xref', '/EC_number', '/evidence', '/exception', '/function', '/gene', '/label', '/map', '/note', '/number', '/partial', '/product', '/protein_id', '/pseudo', '/standard_name', '/translation', '/transl_except', '/transl_table', or '/usedin'. Some of these tags also have values, for example '/gene' can have the value of the gene name. By default any feature tag in the feature table is extracted. You can set this to match any feature tag you wish to show. The tag may be wildcarded by using '*'. If you wish to extract more than one tag, separate their names with the character '|', eg: gene | label Default value: *
+Tags are the types of extra values that a feature may have\&. For example in the EMBL feature table, a \'CDS\' type of feature may have the tags \'/codon\', \'/codon_start\', \'/db_xref\', \'/EC_number\', \'/evidence\', \'/exception\', \'/function\', \'/gene\', \'/label\', \'/map\', \'/note\', \'/number\', \'/partial\', \'/product\', \'/protein_id\', \'/pseudo\', \'/standard_name\', \'/translation\', \'/transl_except\', \'/transl_table\', or \'/usedin\'\&. Some of these tags also have values, for example \'/gene\' can have the value of the gene name\&. By default any feature tag in the feature table is extracted\&. You can set this to match any feature tag you wish to show\&. The tag may be wildcarded by using \'*\'\&. If you wish to extract more than one tag, separate their names with the character \'|\', eg: gene | label Default value: *
 .RE
 .PP
 \fB\-value\fR \fIstring\fR
 .RS 4
-Tag values are the values associated with a feature tag. Tags are the types of extra values that a feature may have. For example in the EMBL feature table, a 'CDS' type of feature may have the tags '/codon', '/codon_start', '/db_xref', '/EC_number', '/evidence', '/exception', '/function', '/gene', '/label', '/map', '/note', '/number', '/partial', '/product', '/protein_id', '/pseudo', '/standard_name', '/translation', '/transl_except', '/transl_table', or '/usedin'. Only some of these tags can have values, for example '/gene' can have the value of the gene name. By default any feature tag value in the feature table is shown. You can set this to match any feature tag valueyou wish to show. The tag value may be wildcarded by using '*'. If you wish to show more than one tag value, separate their names with a space or the character '|', eg: pax* | 10 Default value: *
+Tag values are the values associated with a feature tag\&. Tags are the types of extra values that a feature may have\&. For example in the EMBL feature table, a \'CDS\' type of feature may have the tags \'/codon\', \'/codon_start\', \'/db_xref\', \'/EC_number\', \'/evidence\', \'/exception\', \'/function\', \'/gene\', \'/label\', \'/map\', \'/note\', \'/number\', \'/partial\', \'/product\', \'/protein_id\', \'/pseudo\', \'/standard_name\', \'/translation\', \'/transl_except\', \'/transl_table\', or \'/usedin\'\&. Only some of these tags can have values, for example \'/gene\' can have the value of the gene name\&. By default any feature tag value in the feature table is shown\&. You can set this to match any feature tag valueyou wish to show\&. The tag value may be wildcarded by using \'*\'\&. If you wish to show more than one tag value, separate their names with a space or the character \'|\', eg: pax* | 10 Default value: *
 .RE
 .SS "Output section"
 .PP
 \fB\-join\fR \fIboolean\fR
 .RS 4
-Some features, such as CDS (coding sequence) and mRNA are composed of introns concatenated together. There may be other forms of 'joined' sequence, depending on the feature table. If this option is set TRUE, then any group of these features will be output as a single sequence. If the 'before' and 'after' qualifiers have been set, then only the sequence before the first feature and after the last feature are added. Default value: N
+Some features, such as CDS (coding sequence) and mRNA are composed of introns concatenated together\&. There may be other forms of \'joined\' sequence, depending on the feature table\&. If this option is set TRUE, then any group of these features will be output as a single sequence\&. If the \'before\' and \'after\' qualifiers have been set, then only the sequence before the first feature and after the last feature are added\&. Default value: N
 .RE
 .PP
 \fB\-featinname\fR \fIboolean\fR
 .RS 4
-To aid you in identifying the type of feature that has been output, the type of feature is added to the start of the description of the output sequence. Sometimes the description of a sequence is lost in subsequent processing of the sequences file, so it is useful for the type to be a part of the sequence ID name. If you set this to be TRUE then the name is added to the ID name of the output sequence. Default value: N
+To aid you in identifying the type of feature that has been output, the type of feature is added to the start of the description of the output sequence\&. Sometimes the description of a sequence is lost in subsequent processing of the sequences file, so it is useful for the type to be a part of the sequence ID name\&. If you set this to be TRUE then the name is added to the ID name of the output sequence\&. Default value: N
 .RE
 .PP
 \fB\-describe\fR \fIstring\fR
 .RS 4
-To aid you in identifying some further properties of a feature that has been output, this lets you specify one or more tag names that should be added to the output sequence Description text, together with their values (if any). For example, if this is set to be 'gene', then if any output feature has the tag (for example) '/gene=BRCA1' associated with it, then the text '(gene=BRCA1)' will be added to the Description line. Tags are the types of extra values that a feature may have. For example in the EMBL feature table, a 'CDS' type of feature may have the tags '/codon', '/codon_start', '/db_xref', '/EC_number', '/evidence', '/exception', '/function', '/gene', '/label', '/map', '/note', '/number', '/partial', '/product', '/protein_id', '/pseudo', '/standard_name', '/translation', '/transl_except', '/transl_table', or '/usedin'. Some of these tags also have values, for example '/gene' can have the value of the gene name. By default no feature tag is displayed. You can set this to match any feature tag you wish to show. The tag may be wildcarded by using '*'. If you wish to extract more than one tag, separate their names with the character '|', eg: gene | label
+To aid you in identifying some further properties of a feature that has been output, this lets you specify one or more tag names that should be added to the output sequence Description text, together with their values (if any)\&. For example, if this is set to be \'gene\', then if any output feature has the tag (for example) \'/gene=BRCA1\' associated with it, then the text \'(gene=BRCA1)\' will be added to the Description line\&. Tags are the types of extra values that a feature may have\&. For example in the EMBL feature table, a \'CDS\' type of feature may have the tags \'/codon\', \'/codon_start\', \'/db_xref\', \'/EC_number\', \'/evidence\', \'/exception\', \'/function\', \'/gene\', \'/label\', \'/map\', \'/note\', \'/number\', \'/partial\', \'/product\', \'/protein_id\', \'/pseudo\', \'/standard_name\', \'/translation\', \'/transl_except\', \'/transl_table\', or \'/usedin\'\&. Some of these tags also have values, for example \'/gene\' can have the value of the gene name\&. By default no feature tag is displayed\&. You can set this to match any feature tag you wish to show\&. The tag may be wildcarded by using \'*\'\&. If you wish to extract more than one tag, separate their names with the character \'|\', eg: gene | label
 .RE
 .PP
 \fB\-outseq\fR \fIseqout\fR
@@ -95,21 +95,21 @@ To aid you in identifying some further properties of a feature that has been out
 .RE
 .SH "BUGS"
 .PP
-Bugs can be reported to the Debian Bug Tracking system (http://bugs.debian.org/emboss), or directly to the EMBOSS developers (http://sourceforge.net/tracker/?group_id=93650&atid=605031).
+Bugs can be reported to the Debian Bug Tracking system (http://bugs\&.debian\&.org/emboss), or directly to the EMBOSS developers (http://sourceforge\&.net/tracker/?group_id=93650&atid=605031)\&.
 .SH "SEE ALSO"
 .PP
 extractfeat is fully documented via the
 \fBtfm\fR(1)
-system.
+system\&.
 .SH "AUTHOR"
 .PP
-\fBDebian EMBOSS Packaging Team\fR <\&pkg\-emboss\-devel@lists.alioth.debian.org\&>
+\fBDebian\-Med Packaging Team\fR <\&debian\-med\-packaging@lists\&.alioth\&.debian\&.org\&>
 .sp -1n
 .IP "" 4
-Wrote the script used to autogenerate this manual page.
+Wrote the script used to autogenerate this manual page\&.
 .SH "COPYRIGHT"
-Copyright \(co 2007 Debian EMBOSS Packaging Team
+Copyright \(co 2007 Debian-Med Packaging Team
 .br
 .PP
-This manual page was autogenerated from an Ajax Control Definition of the EMBOSS package. It can be redistributed under the same terms as EMBOSS itself.
-.br
+This manual page was autogenerated from an Ajax Control Definition of the EMBOSS package\&. It can be redistributed under the same terms as EMBOSS itself\&.
+.sp

@@ -1,11 +1,11 @@
 .\"     Title: DIFFSEQ
-.\"    Author: Debian EMBOSS Packaging Team <pkg-emboss-devel@lists.alioth.debian.org>
-.\" Generator: DocBook XSL Stylesheets v1.72.0 <http://docbook.sf.net/>
-.\"      Date: 10/11/2007
+.\"    Author: Debian-Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
+.\" Generator: DocBook XSL Stylesheets v1.73.2 <http://docbook.sf.net/>
+.\"      Date: 05/16/2008
 .\"    Manual: EMBOSS Manual for Debian
 .\"    Source: EMBOSS 5.0.0
 .\"
-.TH "DIFFSEQ" "1e" "10/11/2007" "EMBOSS 5.0.0" "EMBOSS Manual for Debian"
+.TH "DIFFSEQ" "1e" "05/16/2008" "EMBOSS 5.0.0" "EMBOSS Manual for Debian"
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
@@ -20,7 +20,7 @@ diffseq \- Find differences between nearly identical sequences
 .SH "DESCRIPTION"
 .PP
 \fBdiffseq\fR
-is a command line program from EMBOSS (\(lqthe European Molecular Biology Open Software Suite\(rq). It is part of the "Alignment:Differences" command group(s).
+is a command line program from EMBOSS (\(lqthe European Molecular Biology Open Software Suite\(rq)\&. It is part of the "Alignment:Differences" command group(s)\&.
 .SH "OPTIONS"
 .SS "Input section"
 .PP
@@ -35,13 +35,13 @@ is a command line program from EMBOSS (\(lqthe European Molecular Biology Open S
 .PP
 \fB\-wordsize\fR \fIinteger\fR
 .RS 4
-The similar regions between the two sequences are found by creating a hash table of 'wordsize'd subsequences. 10 is a reasonable default. Making this value larger (20?) may speed up the program slightly, but will mean that any two differences within 'wordsize' of each other will be grouped as a single region of difference. This value may be made smaller (4?) to improve the resolution of nearby differences, but the program will go much slower. Default value: 10
+The similar regions between the two sequences are found by creating a hash table of \'wordsize\'d subsequences\&. 10 is a reasonable default\&. Making this value larger (20?) may speed up the program slightly, but will mean that any two differences within \'wordsize\' of each other will be grouped as a single region of difference\&. This value may be made smaller (4?) to improve the resolution of nearby differences, but the program will go much slower\&. Default value: 10
 .RE
 .SS "Additional section"
 .PP
 \fB\-globaldifferences\fR \fIboolean\fR
 .RS 4
-Normally this program will find regions of identity that are the length of the specified word\-size or greater and will then report the regions of difference between these matching regions. This works well and is what most people want if they are working with long overlapping nucleic acid sequences. You are usually not interested in the non\-overlapping ends of these sequences. If you have protein sequences or short RNA sequences however, you will be interested in differences at the very ends . It this option is set to be true then the differences at the ends will also be reported. Default value: N
+Normally this program will find regions of identity that are the length of the specified word\-size or greater and will then report the regions of difference between these matching regions\&. This works well and is what most people want if they are working with long overlapping nucleic acid sequences\&. You are usually not interested in the non\-overlapping ends of these sequences\&. If you have protein sequences or short RNA sequences however, you will be interested in differences at the very ends \&. It this option is set to be true then the differences at the ends will also be reported\&. Default value: N
 .RE
 .SS "Output section"
 .PP
@@ -51,30 +51,30 @@ Normally this program will find regions of identity that are the length of the s
 .PP
 \fB\-aoutfeat\fR \fIfeatout\fR
 .RS 4
-File for output of first sequence's features Default value: $(asequence.name).diffgff
+File for output of first sequence\'s features Default value: $(asequence\&.name)\&.diffgff
 .RE
 .PP
 \fB\-boutfeat\fR \fIfeatout\fR
 .RS 4
-File for output of second sequence's features Default value: $(bsequence.name).diffgff
+File for output of second sequence\'s features Default value: $(bsequence\&.name)\&.diffgff
 .RE
 .SH "BUGS"
 .PP
-Bugs can be reported to the Debian Bug Tracking system (http://bugs.debian.org/emboss), or directly to the EMBOSS developers (http://sourceforge.net/tracker/?group_id=93650&atid=605031).
+Bugs can be reported to the Debian Bug Tracking system (http://bugs\&.debian\&.org/emboss), or directly to the EMBOSS developers (http://sourceforge\&.net/tracker/?group_id=93650&atid=605031)\&.
 .SH "SEE ALSO"
 .PP
 diffseq is fully documented via the
 \fBtfm\fR(1)
-system.
+system\&.
 .SH "AUTHOR"
 .PP
-\fBDebian EMBOSS Packaging Team\fR <\&pkg\-emboss\-devel@lists.alioth.debian.org\&>
+\fBDebian\-Med Packaging Team\fR <\&debian\-med\-packaging@lists\&.alioth\&.debian\&.org\&>
 .sp -1n
 .IP "" 4
-Wrote the script used to autogenerate this manual page.
+Wrote the script used to autogenerate this manual page\&.
 .SH "COPYRIGHT"
-Copyright \(co 2007 Debian EMBOSS Packaging Team
+Copyright \(co 2007 Debian-Med Packaging Team
 .br
 .PP
-This manual page was autogenerated from an Ajax Control Definition of the EMBOSS package. It can be redistributed under the same terms as EMBOSS itself.
-.br
+This manual page was autogenerated from an Ajax Control Definition of the EMBOSS package\&. It can be redistributed under the same terms as EMBOSS itself\&.
+.sp

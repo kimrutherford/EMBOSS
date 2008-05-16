@@ -1,11 +1,11 @@
 .\"     Title: INFOALIGN
-.\"    Author: Debian EMBOSS Packaging Team <pkg-emboss-devel@lists.alioth.debian.org>
-.\" Generator: DocBook XSL Stylesheets v1.72.0 <http://docbook.sf.net/>
-.\"      Date: 10/11/2007
+.\"    Author: Debian-Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
+.\" Generator: DocBook XSL Stylesheets v1.73.2 <http://docbook.sf.net/>
+.\"      Date: 05/16/2008
 .\"    Manual: EMBOSS Manual for Debian
 .\"    Source: EMBOSS 5.0.0
 .\"
-.TH "INFOALIGN" "1e" "10/11/2007" "EMBOSS 5.0.0" "EMBOSS Manual for Debian"
+.TH "INFOALIGN" "1e" "05/16/2008" "EMBOSS 5.0.0" "EMBOSS Manual for Debian"
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
@@ -20,40 +20,40 @@ infoalign \- Information on a multiple sequence alignment
 .SH "DESCRIPTION"
 .PP
 \fBinfoalign\fR
-is a command line program from EMBOSS (\(lqthe European Molecular Biology Open Software Suite\(rq). It is part of the "Alignment:Multiple,Information" command group(s).
+is a command line program from EMBOSS (\(lqthe European Molecular Biology Open Software Suite\(rq)\&. It is part of the "Alignment:Multiple,Information" command group(s)\&.
 .SH "OPTIONS"
 .SS "Input section"
 .PP
 \fB\-sequence\fR \fIseqset\fR
 .RS 4
-The sequence alignment to be displayed.
+The sequence alignment to be displayed\&.
 .RE
 .PP
 \fB\-matrix\fR \fImatrix\fR
 .RS 4
-This is the scoring matrix file used when comparing sequences. By default it is the file 'EBLOSUM62' (for proteins) or the file 'EDNAFULL' (for nucleic sequences). These files are found in the 'data' directory of the EMBOSS installation.
+This is the scoring matrix file used when comparing sequences\&. By default it is the file \'EBLOSUM62\' (for proteins) or the file \'EDNAFULL\' (for nucleic sequences)\&. These files are found in the \'data\' directory of the EMBOSS installation\&.
 .RE
 .PP
 \fB\-refseq\fR \fIstring\fR
 .RS 4
-If you give the number in the alignment or the name of a sequence, it will be taken to be the reference sequence. The reference sequence is the one against which all the other sequences are compared. If this is set to 0 then the consensus sequence will be used as the reference sequence. By default the consensus sequence is used as the reference sequence.
+If you give the number in the alignment or the name of a sequence, it will be taken to be the reference sequence\&. The reference sequence is the one against which all the other sequences are compared\&. If this is set to 0 then the consensus sequence will be used as the reference sequence\&. By default the consensus sequence is used as the reference sequence\&.
 .RE
 .SS "Advanced section"
 .PP
 \fB\-plurality\fR \fIfloat\fR
 .RS 4
-Set a cut\-off for the % of positive scoring matches below which there is no consensus. The default plurality is taken as 50% of the total weight of all the sequences in the alignment. Default value: 50.0
+Set a cut\-off for the % of positive scoring matches below which there is no consensus\&. The default plurality is taken as 50% of the total weight of all the sequences in the alignment\&. Default value: 50\&.0
 .RE
 .PP
 \fB\-identity\fR \fIfloat\fR
 .RS 4
-Provides the facility of setting the required number of identities at a position for it to give a consensus. Therefore, if this is set to 100% only columns of identities contribute to the consensus. Default value: 0.0
+Provides the facility of setting the required number of identities at a position for it to give a consensus\&. Therefore, if this is set to 100% only columns of identities contribute to the consensus\&. Default value: 0\&.0
 .RE
 .SS "Output section"
 .PP
 \fB\-outfile\fR \fIoutfile\fR
 .RS 4
-If you enter the name of a file here then this program will write the sequence details into that file.
+If you enter the name of a file here then this program will write the sequence details into that file\&.
 .RE
 .PP
 \fB\-html\fR \fIboolean\fR
@@ -63,7 +63,7 @@ Default value: N
 .PP
 \fB\-only\fR \fIboolean\fR
 .RS 4
-This is a way of shortening the command line if you only want a few things to be displayed. Instead of specifying: '\-nohead \-nousa \-noname \-noalign \-nogaps \-nogapcount \-nosimcount \-noidcount \-nodiffcount \-noweight' to get only the sequence length output, you can specify '\-only \-seqlength' Default value: N
+This is a way of shortening the command line if you only want a few things to be displayed\&. Instead of specifying: \'\-nohead \-nousa \-noname \-noalign \-nogaps \-nogapcount \-nosimcount \-noidcount \-nodiffcount \-noweight\' to get only the sequence length output, you can specify \'\-only \-seqlength\' Default value: N
 .RE
 .PP
 \fB\-heading\fR \fIboolean\fR
@@ -132,21 +132,21 @@ Default value: @(!$(only))
 .RE
 .SH "BUGS"
 .PP
-Bugs can be reported to the Debian Bug Tracking system (http://bugs.debian.org/emboss), or directly to the EMBOSS developers (http://sourceforge.net/tracker/?group_id=93650&atid=605031).
+Bugs can be reported to the Debian Bug Tracking system (http://bugs\&.debian\&.org/emboss), or directly to the EMBOSS developers (http://sourceforge\&.net/tracker/?group_id=93650&atid=605031)\&.
 .SH "SEE ALSO"
 .PP
 infoalign is fully documented via the
 \fBtfm\fR(1)
-system.
+system\&.
 .SH "AUTHOR"
 .PP
-\fBDebian EMBOSS Packaging Team\fR <\&pkg\-emboss\-devel@lists.alioth.debian.org\&>
+\fBDebian\-Med Packaging Team\fR <\&debian\-med\-packaging@lists\&.alioth\&.debian\&.org\&>
 .sp -1n
 .IP "" 4
-Wrote the script used to autogenerate this manual page.
+Wrote the script used to autogenerate this manual page\&.
 .SH "COPYRIGHT"
-Copyright \(co 2007 Debian EMBOSS Packaging Team
+Copyright \(co 2007 Debian-Med Packaging Team
 .br
 .PP
-This manual page was autogenerated from an Ajax Control Definition of the EMBOSS package. It can be redistributed under the same terms as EMBOSS itself.
-.br
+This manual page was autogenerated from an Ajax Control Definition of the EMBOSS package\&. It can be redistributed under the same terms as EMBOSS itself\&.
+.sp

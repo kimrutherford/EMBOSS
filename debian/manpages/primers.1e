@@ -1,11 +1,11 @@
 .\"     Title: PRIMERS
-.\"    Author: Debian EMBOSS Packaging Team <pkg-emboss-devel@lists.alioth.debian.org>
-.\" Generator: DocBook XSL Stylesheets v1.72.0 <http://docbook.sf.net/>
-.\"      Date: 10/11/2007
+.\"    Author: Debian-Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
+.\" Generator: DocBook XSL Stylesheets v1.73.2 <http://docbook.sf.net/>
+.\"      Date: 05/16/2008
 .\"    Manual: EMBOSS Manual for Debian
 .\"    Source: EMBOSS 5.0.0
 .\"
-.TH "PRIMERS" "1e" "10/11/2007" "EMBOSS 5.0.0" "EMBOSS Manual for Debian"
+.TH "PRIMERS" "1e" "05/16/2008" "EMBOSS 5.0.0" "EMBOSS Manual for Debian"
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
@@ -20,45 +20,45 @@ primers \- Simple version of primer3 to pick PCR primers
 .SH "DESCRIPTION"
 .PP
 \fBprimers\fR
-is a command line program from EMBOSS (\(lqthe European Molecular Biology Open Software Suite\(rq). It is part of the "Nucleic:Primers" command group(s).
+is a command line program from EMBOSS (\(lqthe European Molecular Biology Open Software Suite\(rq)\&. It is part of the "Nucleic:Primers" command group(s)\&.
 .SH "OPTIONS"
 .SS "Input section"
 .PP
 \fB\-sequence\fR \fIseqall\fR
 .RS 4
-The sequence from which to choose primers. The sequence must be presented 5' \-> 3'
+The sequence from which to choose primers\&. The sequence must be presented 5\' \-> 3\'
 .RE
 .SS "Additional section"
 .PP
 \fB\-target\fR \fIrange\fR
 .RS 4
-If one or more Targets is specified then a legal primer pair must flank at least one of them. A Target might be a simple sequence repeat site (for example a CA repeat) or a single\-base\-pair polymorphism. The value should be a space\-separated list of <start>,<end> pairs where <start> is the index of the first base of a Target, and <end> is the last E.g. 50,51 requires primers to surround the 2 bases at positions 50 and 51.
+If one or more Targets is specified then a legal primer pair must flank at least one of them\&. A Target might be a simple sequence repeat site (for example a CA repeat) or a single\-base\-pair polymorphism\&. The value should be a space\-separated list of <start>,<end> pairs where <start> is the index of the first base of a Target, and <end> is the last E\&.g\&. 50,51 requires primers to surround the 2 bases at positions 50 and 51\&.
 .RE
 .PP
 \fB\-minsize\fR \fIinteger\fR
 .RS 4
-Minimum acceptable length of a primer. Must be greater than 0 and less than or equal to MAX\-SIZE. Default value: 18
+Minimum acceptable length of a primer\&. Must be greater than 0 and less than or equal to MAX\-SIZE\&. Default value: 18
 .RE
 .PP
 \fB\-maxsize\fR \fIinteger\fR
 .RS 4
-Maximum acceptable length (in bases) of a primer. Currently this parameter cannot be larger than 35. This limit is governed by the maximum oligo size for which Primer3's melting\-temperature is valid. Default value: 27
+Maximum acceptable length (in bases) of a primer\&. Currently this parameter cannot be larger than 35\&. This limit is governed by the maximum oligo size for which Primer3\'s melting\-temperature is valid\&. Default value: 27
 .RE
 .PP
 \fB\-maxdifftm\fR \fIfloat\fR
 .RS 4
-Maximum acceptable (unsigned) difference between the melting temperatures of the forward and reverse primers. Default value: 100.0
+Maximum acceptable (unsigned) difference between the melting temperatures of the forward and reverse primers\&. Default value: 100\&.0
 .RE
 .SS "Output section"
 .PP
 \fB\-explainflag\fR \fIboolean\fR
 .RS 4
-If this flag is non\-0, produce LEFT\-EXPLAIN and RIGHT\-EXPLAIN, output, which are intended to provide information on the number of primer pairs that Primer3 examined, and statistics on the number discarded for various reasons. Default value: N
+If this flag is non\-0, produce LEFT\-EXPLAIN and RIGHT\-EXPLAIN, output, which are intended to provide information on the number of primer pairs that Primer3 examined, and statistics on the number discarded for various reasons\&. Default value: N
 .RE
 .PP
 \fB\-numreturn\fR \fIinteger\fR
 .RS 4
-The maximum number of primer pairs to return. Primer pairs returned are sorted by their 'quality', in other words by the value of the objective function (where a lower number indicates a better primer pair). Caution: setting this parameter to a large value will increase running time. Default value: 5
+The maximum number of primer pairs to return\&. Primer pairs returned are sorted by their \'quality\', in other words by the value of the objective function (where a lower number indicates a better primer pair)\&. Caution: setting this parameter to a large value will increase running time\&. Default value: 5
 .RE
 .PP
 \fB\-outfile\fR \fIoutfile\fR
@@ -66,21 +66,21 @@ The maximum number of primer pairs to return. Primer pairs returned are sorted b
 .RE
 .SH "BUGS"
 .PP
-Bugs can be reported to the Debian Bug Tracking system (http://bugs.debian.org/emboss), or directly to the EMBOSS developers (http://sourceforge.net/tracker/?group_id=93650&atid=605031).
+Bugs can be reported to the Debian Bug Tracking system (http://bugs\&.debian\&.org/emboss), or directly to the EMBOSS developers (http://sourceforge\&.net/tracker/?group_id=93650&atid=605031)\&.
 .SH "SEE ALSO"
 .PP
 primers is fully documented via the
 \fBtfm\fR(1)
-system.
+system\&.
 .SH "AUTHOR"
 .PP
-\fBDebian EMBOSS Packaging Team\fR <\&pkg\-emboss\-devel@lists.alioth.debian.org\&>
+\fBDebian\-Med Packaging Team\fR <\&debian\-med\-packaging@lists\&.alioth\&.debian\&.org\&>
 .sp -1n
 .IP "" 4
-Wrote the script used to autogenerate this manual page.
+Wrote the script used to autogenerate this manual page\&.
 .SH "COPYRIGHT"
-Copyright \(co 2007 Debian EMBOSS Packaging Team
+Copyright \(co 2007 Debian-Med Packaging Team
 .br
 .PP
-This manual page was autogenerated from an Ajax Control Definition of the EMBOSS package. It can be redistributed under the same terms as EMBOSS itself.
-.br
+This manual page was autogenerated from an Ajax Control Definition of the EMBOSS package\&. It can be redistributed under the same terms as EMBOSS itself\&.
+.sp

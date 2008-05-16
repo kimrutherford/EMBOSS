@@ -1,11 +1,11 @@
 .\"     Title: DAN
-.\"    Author: Debian EMBOSS Packaging Team <pkg-emboss-devel@lists.alioth.debian.org>
-.\" Generator: DocBook XSL Stylesheets v1.72.0 <http://docbook.sf.net/>
-.\"      Date: 10/11/2007
+.\"    Author: Debian-Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
+.\" Generator: DocBook XSL Stylesheets v1.73.2 <http://docbook.sf.net/>
+.\"      Date: 05/16/2008
 .\"    Manual: EMBOSS Manual for Debian
 .\"    Source: EMBOSS 5.0.0
 .\"
-.TH "DAN" "1e" "10/11/2007" "EMBOSS 5.0.0" "EMBOSS Manual for Debian"
+.TH "DAN" "1e" "05/16/2008" "EMBOSS 5.0.0" "EMBOSS Manual for Debian"
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
@@ -20,7 +20,7 @@ dan \- Calculates DNA RNA/DNA melting temperature
 .SH "DESCRIPTION"
 .PP
 \fBdan\fR
-is a command line program from EMBOSS (\(lqthe European Molecular Biology Open Software Suite\(rq). It is part of the "Nucleic:Composition" command group(s).
+is a command line program from EMBOSS (\(lqthe European Molecular Biology Open Software Suite\(rq)\&. It is part of the "Nucleic:Composition" command group(s)\&.
 .SH "OPTIONS"
 .SS "Input section"
 .PP
@@ -31,72 +31,72 @@ is a command line program from EMBOSS (\(lqthe European Molecular Biology Open S
 .PP
 \fB\-windowsize\fR \fIinteger\fR
 .RS 4
-The values of melting point and other thermodynamic properties of the sequence are determined by taking a short length of sequence known as a window and determining the properties of the sequence in that window. The window is incrementally moved along the sequence with the properties being calculated at each new position. Default value: 20
+The values of melting point and other thermodynamic properties of the sequence are determined by taking a short length of sequence known as a window and determining the properties of the sequence in that window\&. The window is incrementally moved along the sequence with the properties being calculated at each new position\&. Default value: 20
 .RE
 .PP
 \fB\-shiftincrement\fR \fIinteger\fR
 .RS 4
-This is the amount by which the window is moved at each increment in order to find the melting point and other properties along the sequence. Default value: 1
+This is the amount by which the window is moved at each increment in order to find the melting point and other properties along the sequence\&. Default value: 1
 .RE
 .PP
 \fB\-dnaconc\fR \fIfloat\fR
 .RS 4
-Default value: 50.
+Default value: 50\&.
 .RE
 .PP
 \fB\-saltconc\fR \fIfloat\fR
 .RS 4
-Default value: 50.
+Default value: 50\&.
 .RE
 .SS "Additional section"
 .SS "Product options"
 .PP
 \fB\-product\fR \fItoggle\fR
 .RS 4
-This prompts for percent formamide, percent of mismatches allowed and product length.
+This prompts for percent formamide, percent of mismatches allowed and product length\&.
 .RE
 .PP
 \fB\-formamide\fR \fIfloat\fR
 .RS 4
-This specifies the percent formamide to be used in calculations (it is ignored unless \-product is used). Default value: 0.
+This specifies the percent formamide to be used in calculations (it is ignored unless \-product is used)\&. Default value: 0\&.
 .RE
 .PP
 \fB\-mismatch\fR \fIfloat\fR
 .RS 4
-This specifies the percent mismatch to be used in calculations (it is ignored unless \-product is used). Default value: 0.
+This specifies the percent mismatch to be used in calculations (it is ignored unless \-product is used)\&. Default value: 0\&.
 .RE
 .PP
 \fB\-prodlen\fR \fIinteger\fR
 .RS 4
-This specifies the product length to be used in calculations (it is ignored unless \-product is used). Default value: $(windowSize)
+This specifies the product length to be used in calculations (it is ignored unless \-product is used)\&. Default value: $(windowSize)
 .RE
 .SS "Thermodynamic options"
 .PP
 \fB\-thermo\fR \fItoggle\fR
 .RS 4
-Output the DeltaG, DeltaH and DeltaS values of the sequence windows to the output data file.
+Output the DeltaG, DeltaH and DeltaS values of the sequence windows to the output data file\&.
 .RE
 .PP
 \fB\-temperature\fR \fIfloat\fR
 .RS 4
-If \-thermo has been specified then this specifies the temperature at which to calculate the DeltaG, DeltaH and DeltaS values. Default value: 25.
+If \-thermo has been specified then this specifies the temperature at which to calculate the DeltaG, DeltaH and DeltaS values\&. Default value: 25\&.
 .RE
 .SS "Advanced section"
 .PP
 \fB\-rna\fR \fIboolean\fR
 .RS 4
-This specifies that the sequence is an RNA sequence and not a DNA sequence.
+This specifies that the sequence is an RNA sequence and not a DNA sequence\&.
 .RE
 .SS "Output section"
 .PP
 \fB\-plot\fR \fItoggle\fR
 .RS 4
-If this is not specified then the file of output data is produced, else a plot of the melting point along the sequence is produced.
+If this is not specified then the file of output data is produced, else a plot of the melting point along the sequence is produced\&.
 .RE
 .PP
 \fB\-mintemp\fR \fIfloat\fR
 .RS 4
-Enter a minimum value for the temperature scale (y\-axis) of the plot. Default value: 55.
+Enter a minimum value for the temperature scale (y\-axis) of the plot\&. Default value: 55\&.
 .RE
 .PP
 \fB\-graph\fR \fIxygraph\fR
@@ -105,25 +105,25 @@ Enter a minimum value for the temperature scale (y\-axis) of the plot. Default v
 .PP
 \fB\-outfile\fR \fIreport\fR
 .RS 4
-If a plot is not being produced then data on the melting point etc. in each window along the sequence is output to the file.
+If a plot is not being produced then data on the melting point etc\&. in each window along the sequence is output to the file\&.
 .RE
 .SH "BUGS"
 .PP
-Bugs can be reported to the Debian Bug Tracking system (http://bugs.debian.org/emboss), or directly to the EMBOSS developers (http://sourceforge.net/tracker/?group_id=93650&atid=605031).
+Bugs can be reported to the Debian Bug Tracking system (http://bugs\&.debian\&.org/emboss), or directly to the EMBOSS developers (http://sourceforge\&.net/tracker/?group_id=93650&atid=605031)\&.
 .SH "SEE ALSO"
 .PP
 dan is fully documented via the
 \fBtfm\fR(1)
-system.
+system\&.
 .SH "AUTHOR"
 .PP
-\fBDebian EMBOSS Packaging Team\fR <\&pkg\-emboss\-devel@lists.alioth.debian.org\&>
+\fBDebian\-Med Packaging Team\fR <\&debian\-med\-packaging@lists\&.alioth\&.debian\&.org\&>
 .sp -1n
 .IP "" 4
-Wrote the script used to autogenerate this manual page.
+Wrote the script used to autogenerate this manual page\&.
 .SH "COPYRIGHT"
-Copyright \(co 2007 Debian EMBOSS Packaging Team
+Copyright \(co 2007 Debian-Med Packaging Team
 .br
 .PP
-This manual page was autogenerated from an Ajax Control Definition of the EMBOSS package. It can be redistributed under the same terms as EMBOSS itself.
-.br
+This manual page was autogenerated from an Ajax Control Definition of the EMBOSS package\&. It can be redistributed under the same terms as EMBOSS itself\&.
+.sp

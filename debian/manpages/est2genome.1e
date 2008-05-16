@@ -1,11 +1,11 @@
 .\"     Title: EST2GENOME
-.\"    Author: Debian EMBOSS Packaging Team <pkg-emboss-devel@lists.alioth.debian.org>
-.\" Generator: DocBook XSL Stylesheets v1.72.0 <http://docbook.sf.net/>
-.\"      Date: 10/11/2007
+.\"    Author: Debian-Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
+.\" Generator: DocBook XSL Stylesheets v1.73.2 <http://docbook.sf.net/>
+.\"      Date: 05/16/2008
 .\"    Manual: EMBOSS Manual for Debian
 .\"    Source: EMBOSS 5.0.0
 .\"
-.TH "EST2GENOME" "1e" "10/11/2007" "EMBOSS 5.0.0" "EMBOSS Manual for Debian"
+.TH "EST2GENOME" "1e" "05/16/2008" "EMBOSS 5.0.0" "EMBOSS Manual for Debian"
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
@@ -20,7 +20,7 @@ est2genome \- Align EST and genomic DNA sequences
 .SH "DESCRIPTION"
 .PP
 \fBest2genome\fR
-is a command line program from EMBOSS (\(lqthe European Molecular Biology Open Software Suite\(rq). It is part of the "Alignment:Global" command group(s).
+is a command line program from EMBOSS (\(lqthe European Molecular Biology Open Software Suite\(rq)\&. It is part of the "Alignment:Global" command group(s)\&.
 .SH "OPTIONS"
 .SS "Input section"
 .PP
@@ -50,7 +50,7 @@ Cost for deleting a single base in either sequence, excluding introns Default va
 .PP
 \fB\-intronpenalty\fR \fIinteger\fR
 .RS 4
-Cost for an intron, independent of length. Default value: 40
+Cost for an intron, independent of length\&. Default value: 40
 .RE
 .PP
 \fB\-splicepenalty\fR \fIinteger\fR
@@ -60,7 +60,7 @@ Cost for an intron, independent of length and starting/ending on donor\-acceptor
 .PP
 \fB\-minscore\fR \fIinteger\fR
 .RS 4
-Exclude alignments with scores below this threshold score. Default value: 30
+Exclude alignments with scores below this threshold score\&. Default value: 30
 .RE
 .SS "Advanced section"
 .PP
@@ -71,22 +71,22 @@ Reverse the orientation of the EST sequence
 .PP
 \fB\-splice\fR \fIboolean\fR
 .RS 4
-Use donor and acceptor splice sites. If you want to ignore donor\-acceptor sites then set this to be false. Default value: Y
+Use donor and acceptor splice sites\&. If you want to ignore donor\-acceptor sites then set this to be false\&. Default value: Y
 .RE
 .PP
 \fB\-mode\fR \fIlist\fR
 .RS 4
-This determines the comparion mode. The default value is 'both', in which case both strands of the est are compared assuming a forward gene direction (ie GT/AG splice sites), and the best comparsion redone assuming a reversed (CT/AC) gene splicing direction. The other allowed modes are 'forward', when just the forward strand is searched, and 'reverse', ditto for the reverse strand. Default value: both
+This determines the comparion mode\&. The default value is \'both\', in which case both strands of the est are compared assuming a forward gene direction (ie GT/AG splice sites), and the best comparsion redone assuming a reversed (CT/AC) gene splicing direction\&. The other allowed modes are \'forward\', when just the forward strand is searched, and \'reverse\', ditto for the reverse strand\&. Default value: both
 .RE
 .PP
 \fB\-best\fR \fIboolean\fR
 .RS 4
-You can print out all comparisons instead of just the best one by setting this to be false. Default value: Y
+You can print out all comparisons instead of just the best one by setting this to be false\&. Default value: Y
 .RE
 .PP
 \fB\-space\fR \fIfloat\fR
 .RS 4
-For linear\-space recursion. If product of sequence lengths divided by 4 exceeds this then a divide\-and\-conquer strategy is used to control the memory requirements. In this way very long sequences can be aligned. If you have a machine with plenty of memory you can raise this parameter (but do not exceed the machine's physical RAM) Default value: 10.0
+For linear\-space recursion\&. If product of sequence lengths divided by 4 exceeds this then a divide\-and\-conquer strategy is used to control the memory requirements\&. In this way very long sequences can be aligned\&. If you have a machine with plenty of memory you can raise this parameter (but do not exceed the machine\'s physical RAM) Default value: 10\&.0
 .RE
 .PP
 \fB\-shuffle\fR \fIinteger\fR
@@ -105,7 +105,7 @@ Default value: 20825
 .PP
 \fB\-align\fR \fIboolean\fR
 .RS 4
-Show the alignment. The alignment includes the first and last 5 bases of each intron, together with the intron width. The direction of splicing is indicated by angle brackets (forward or reverse) or ???? (unknown).
+Show the alignment\&. The alignment includes the first and last 5 bases of each intron, together with the intron width\&. The direction of splicing is indicated by angle brackets (forward or reverse) or ???? (unknown)\&.
 .RE
 .PP
 \fB\-width\fR \fIinteger\fR
@@ -114,21 +114,21 @@ Default value: 50
 .RE
 .SH "BUGS"
 .PP
-Bugs can be reported to the Debian Bug Tracking system (http://bugs.debian.org/emboss), or directly to the EMBOSS developers (http://sourceforge.net/tracker/?group_id=93650&atid=605031).
+Bugs can be reported to the Debian Bug Tracking system (http://bugs\&.debian\&.org/emboss), or directly to the EMBOSS developers (http://sourceforge\&.net/tracker/?group_id=93650&atid=605031)\&.
 .SH "SEE ALSO"
 .PP
 est2genome is fully documented via the
 \fBtfm\fR(1)
-system.
+system\&.
 .SH "AUTHOR"
 .PP
-\fBDebian EMBOSS Packaging Team\fR <\&pkg\-emboss\-devel@lists.alioth.debian.org\&>
+\fBDebian\-Med Packaging Team\fR <\&debian\-med\-packaging@lists\&.alioth\&.debian\&.org\&>
 .sp -1n
 .IP "" 4
-Wrote the script used to autogenerate this manual page.
+Wrote the script used to autogenerate this manual page\&.
 .SH "COPYRIGHT"
-Copyright \(co 2007 Debian EMBOSS Packaging Team
+Copyright \(co 2007 Debian-Med Packaging Team
 .br
 .PP
-This manual page was autogenerated from an Ajax Control Definition of the EMBOSS package. It can be redistributed under the same terms as EMBOSS itself.
-.br
+This manual page was autogenerated from an Ajax Control Definition of the EMBOSS package\&. It can be redistributed under the same terms as EMBOSS itself\&.
+.sp
