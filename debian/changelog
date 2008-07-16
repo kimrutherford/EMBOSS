@@ -1,9 +1,15 @@
-emboss (5.0.0-8) UNRELEASED; urgency=low
+emboss (6.0.0-1) UNRELEASED; urgency=low
 
+  * New upstream release:
+    -
+    -
+    -
   * debian/control:
-    Replaced build dependancy on deprecated x-dev by x11proto-core-dev.
+    - Replaced build dependancy on deprecated x-dev by x11proto-core-dev.
+    - Uses debhelper 7.
+    - Incremented the soname of the AJAX and NUCLEUS libraries.
 
- -- Charles Plessy <plessy@debian.org>  Wed, 02 Jul 2008 13:36:31 +0900
+ -- Charles Plessy <plessy@debian.org>  Wed, 16 Jul 2008 13:01:53 +0900
 
 emboss (5.0.0-7) unstable; urgency=low
 

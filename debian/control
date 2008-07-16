@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Debian-Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
 DM-Upload-Allowed: yes
 Uploaders: Charles Plessy <plessy@debian.org>, Nelson A. de Oliveira <naoliv@debian.org>
-Build-Depends: debhelper (>= 5), quilt, libx11-dev, x11proto-core-dev, libgdchart-gd2-xpm-dev, zlib1g-dev, libpng12-dev, libpcre3-dev, antiword, sharutils, autotools-dev
+Build-Depends: debhelper (>= 7), quilt, libx11-dev, x11proto-core-dev, libgdchart-gd2-xpm-dev, zlib1g-dev, libpng12-dev, libpcre3-dev, antiword, sharutils, autotools-dev
 Vcs-Browser: http://svn.debian.org/wsvn/debian-med/trunk/packages/emboss/trunk/?rev=0&sc=0trunk
 Vcs-Svn: svn://svn.debian.org/svn/debian-med/trunk/packages/emboss/trunk/
 Standards-Version: 3.7.3
@@ -52,7 +52,7 @@ Description: EMBOSS Libraries
  This package is being emptied. For the moment it contains a eplplot, an EMBOSS
  fork of the plplot library.
 
-Package: libajax5
+Package: libajax6
 Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
@@ -69,15 +69,15 @@ Description: EMBOSS library for commands
  This package contains the runtime library files needed to run software
  using libajax.
 
-Package: libajax5-dev
+Package: libajax6-dev
 Section: libdevel
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libajax5 (= ${binary:Version})
+Depends: ${shlibs:Depends}, ${misc:Depends}, libajax6 (= ${binary:Version})
 Description: Development files for libajax
  This package contains the header and development files needed to build
  programs and packages using libajax.
 
-Package: libnucleus5
+Package: libnucleus6
 Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
@@ -92,10 +92,10 @@ Description: EMBOSS library for molecular sequence analysis
  This package contains the runtime library files needed to run software
  using libnucleus.
 
-Package: libnucleus5-dev
+Package: libnucleus6-dev
 Section: libdevel
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libnucleus5 (= ${binary:Version})
+Depends: ${shlibs:Depends}, ${misc:Depends}, libnucleus6 (= ${binary:Version})
 Description: Development files for libajax
  This package contains the header and development files needed to build
  programs and packages using libnucleus.

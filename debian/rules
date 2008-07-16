@@ -6,8 +6,8 @@ VERSION := $(shell dpkg-parsechangelog | grep Ver | cut -d' ' -f2 | cut -d- -f1)
 RENAMED := cons pscan
 
 EMBOSS-TMP = $(CURDIR)/debian/emboss_tmp
-AJAX = $(CURDIR)/debian/libajax5
-NUCLEUS = $(CURDIR)/debian/libnucleus5
+AJAX = $(CURDIR)/debian/libajax6
+NUCLEUS = $(CURDIR)/debian/libnucleus6
 
 config.status:
 	dh_testdir
@@ -31,8 +31,8 @@ manpages: debian/manpages/success
 debian/manpages/success:
 	if [ -f debian/emboss.manpages ] ; then rm debian/emboss.manpages ; fi
 	rm -f debian/manpages/*.1e debian/manpages/*.xml
-	for acd in $(shell ls ../emboss-5.0.0/emboss/acd/*acd | sed -r 's#.*/.*/(.+).acd#\1#'); \
-		do perl debian/acd2docbook.pl  ../emboss-5.0.0/emboss/acd/$$acd.acd $(VERSION) > debian/manpages/$$acd.xml ;\
+	for acd in $(shell ls ../emboss-6.0.0/emboss/acd/*acd | sed -r 's#.*/.*/(.+).acd#\1#'); \
+		do perl debian/acd2docbook.pl  ../emboss-6.0.0/emboss/acd/$$acd.acd $(VERSION) > debian/manpages/$$acd.xml ;\
 		xsltproc --nonet --param man.charmap.use.subset 0 -o debian/manpages/ debian/manpages/$$acd.xml ;\
 		echo "debian/manpages/$$acd.1e" >> debian/emboss.manpages ;\
 		done
