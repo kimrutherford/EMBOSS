@@ -1,17 +1,17 @@
 .\"     Title: DISTMAT
 .\"    Author: Debian-Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
 .\" Generator: DocBook XSL Stylesheets v1.73.2 <http://docbook.sf.net/>
-.\"      Date: 05/16/2008
+.\"      Date: 07/16/2008
 .\"    Manual: EMBOSS Manual for Debian
-.\"    Source: EMBOSS 5.0.0
+.\"    Source: EMBOSS 6.0.0
 .\"
-.TH "DISTMAT" "1e" "05/16/2008" "EMBOSS 5.0.0" "EMBOSS Manual for Debian"
+.TH "DISTMAT" "1e" "07/16/2008" "EMBOSS 6.0.0" "EMBOSS Manual for Debian"
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
 .ad l
 .SH "NAME"
-distmat \- Creates a distance matrix from multiple alignments
+distmat \- Create a distance matrix from a multiple sequence alignment
 .SH "SYNOPSIS"
 .HP 8
 \fBdistmat\fR \fB\-sequence\ \fR\fB\fIseqset\fR\fR \fB\-nucmethod\ \fR\fB\fIlist\fR\fR \fB\-protmethod\ \fR\fB\fIlist\fR\fR \fB\-ambiguous\ \fR\fB\fIboolean\fR\fR \fB\-gapweight\ \fR\fB\fIfloat\fR\fR \fB\-position\ \fR\fB\fIinteger\fR\fR \fB\-calculatea\ \fR\fB\fIboolean\fR\fR \fB\-parametera\ \fR\fB\fIfloat\fR\fR \fB\-outfile\ \fR\fB\fIoutfile\fR\fR

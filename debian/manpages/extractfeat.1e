@@ -1,17 +1,17 @@
 .\"     Title: EXTRACTFEAT
 .\"    Author: Debian-Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
 .\" Generator: DocBook XSL Stylesheets v1.73.2 <http://docbook.sf.net/>
-.\"      Date: 05/16/2008
+.\"      Date: 07/16/2008
 .\"    Manual: EMBOSS Manual for Debian
-.\"    Source: EMBOSS 5.0.0
+.\"    Source: EMBOSS 6.0.0
 .\"
-.TH "EXTRACTFEAT" "1e" "05/16/2008" "EMBOSS 5.0.0" "EMBOSS Manual for Debian"
+.TH "EXTRACTFEAT" "1e" "07/16/2008" "EMBOSS 6.0.0" "EMBOSS Manual for Debian"
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
 .ad l
 .SH "NAME"
-extractfeat \- Extract features from a sequence
+extractfeat \- Extract features from sequence(s)
 .SH "SYNOPSIS"
 .HP 12
 \fBextractfeat\fR \fB\-sequence\ \fR\fB\fIseqall\fR\fR [\fB\-before\ \fR\fB\fIinteger\fR\fR] [\fB\-after\ \fR\fB\fIinteger\fR\fR] [\fB\-source\ \fR\fB\fIstring\fR\fR] [\fB\-type\ \fR\fB\fIstring\fR\fR] [\fB\-sense\ \fR\fB\fIinteger\fR\fR] [\fB\-minscore\ \fR\fB\fIfloat\fR\fR] [\fB\-maxscore\ \fR\fB\fIfloat\fR\fR] [\fB\-tag\ \fR\fB\fIstring\fR\fR] [\fB\-value\ \fR\fB\fIstring\fR\fR] [\fB\-join\ \fR\fB\fIboolean\fR\fR] [\fB\-featinname\ \fR\fB\fIboolean\fR\fR] [\fB\-describe\ \fR\fB\fIstring\fR\fR] \fB\-outseq\ \fR\fB\fIseqout\fR\fR

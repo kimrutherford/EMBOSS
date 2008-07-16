@@ -1,11 +1,11 @@
 .\"     Title: EPRIMER3
 .\"    Author: Debian-Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
 .\" Generator: DocBook XSL Stylesheets v1.73.2 <http://docbook.sf.net/>
-.\"      Date: 05/16/2008
+.\"      Date: 07/16/2008
 .\"    Manual: EMBOSS Manual for Debian
-.\"    Source: EMBOSS 5.0.0
+.\"    Source: EMBOSS 6.0.0
 .\"
-.TH "EPRIMER3" "1e" "05/16/2008" "EMBOSS 5.0.0" "EMBOSS Manual for Debian"
+.TH "EPRIMER3" "1e" "07/16/2008" "EMBOSS 6.0.0" "EMBOSS Manual for Debian"
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
@@ -110,7 +110,7 @@ Maximum acceptable length (in bases) of a primer\&. Currently this parameter can
 .PP
 \fB\-otm\fR \fIfloat\fR
 .RS 4
-Optimum melting temperature(Celsius) for a primer oligo\&. EPrimer3 will try to pick primers with melting temperatures are close to this temperature\&. The oligo melting temperature formula in EPrimer3 is that given in Rychlik, Spencer and Rhoads, Nucleic Acids Research, vol 18, num 12, pp 6409\-6412 and Breslauer, Frank, Bloeker and Marky, Proc\&. Natl\&. Acad\&. Sci\&. USA, vol 83, pp 3746\-3750\&. Please refer to the former paper for background discussion\&. Default value: 60\&.0
+Optimum melting temperature(Celsius) for a primer oligo\&. EPrimer3 will try to pick primers with melting temperatures are close to this temperature\&. The oligo melting temperature formula in EPrimer3 is that given in Rychlik, Spencer and Rhoads, Nucleic Acids Research, vol 18, num 21, pp 6409\-6412 and Breslauer, Frank, Bloecker and Marky, Proc\&. Natl\&. Acad\&. Sci\&. USA, vol 83, pp 3746\-3750\&. Please refer to the former paper for background discussion\&. Default value: 60\&.0
 .RE
 .PP
 \fB\-mintm\fR \fIfloat\fR
@@ -150,7 +150,7 @@ The millimolar concentration of salt (usually KCl) in the PCR\&. EPrimer3 uses t
 .PP
 \fB\-dnaconc\fR \fIfloat\fR
 .RS 4
-The nanomolar concentration of annealing oligos in the PCR\&. EPrimer3 uses this argument to calculate oligo melting temperatures\&. The default (50nM) works well with the standard protocol used at the Whitehead/MIT Center for Genome Research\-\-0\&.5 microliters of 20 micromolar concentration for each primer oligo in a 20 microliter reaction with 10 nanograms template, 0\&.025 units/microliter Taq polymerase in 0\&.1 mM each dNTP, 1\&.5mM MgCl2, 50mM KCl, 10mM Tris\-HCL (pH 9\&.3) using 35 cycles with an annealing temperature of 56 degrees Celsius\&. This parameter corresponds to \'c\' in Rychlik, Spencer and Rhoads\' equation (ii) (Nucleic Acids Research, vol 18, num 12) where a suitable value (for a lower initial concentration of template) is \'empirically determined\'\&. The value of this parameter is less than the actual concentration of oligos in the reaction because it is the concentration of annealing oligos, which in turn depends on the amount of template (including PCR product) in a given cycle\&. This concentration increases a great deal during a PCR; fortunately PCR seems quite robust for a variety of oligo melting temperatures\&. See ADVICE FOR PICKING PRIMERS\&. Default value: 50\&.0
+The nanomolar concentration of annealing oligos in the PCR\&. EPrimer3 uses this argument to calculate oligo melting temperatures\&. The default (50nM) works well with the standard protocol used at the Whitehead/MIT Center for Genome Research\-\-0\&.5 microliters of 20 micromolar concentration for each primer oligo in a 20 microliter reaction with 10 nanograms template, 0\&.025 units/microliter Taq polymerase in 0\&.1 mM each dNTP, 1\&.5mM MgCl2, 50mM KCl, 10mM Tris\-HCL (pH 9\&.3) using 35 cycles with an annealing temperature of 56 degrees Celsius\&. This parameter corresponds to \'c\' in Rychlik, Spencer and Rhoads\' equation (ii) (Nucleic Acids Research, vol 18, num 21) where a suitable value (for a lower initial concentration of template) is \'empirically determined\'\&. The value of this parameter is less than the actual concentration of oligos in the reaction because it is the concentration of annealing oligos, which in turn depends on the amount of template (including PCR product) in a given cycle\&. This concentration increases a great deal during a PCR; fortunately PCR seems quite robust for a variety of oligo melting temperatures\&. See ADVICE FOR PICKING PRIMERS\&. Default value: 50\&.0
 .RE
 .PP
 \fB\-maxpolyx\fR \fIinteger\fR
@@ -213,7 +213,7 @@ Maximum acceptable length (in bases) of an internal oligo\&. Currently this para
 .PP
 \fB\-oligootm\fR \fIfloat\fR
 .RS 4
-Optimum melting temperature (Celsius) for an internal oligo\&. EPrimer3 will try to pick oligos with melting temperatures that are close to this temperature\&. The oligo melting temperature formula in EPrimer3 is that given in Rychlik, Spencer and Rhoads, Nucleic Acids Research, vol 18, num 12, pp 6409\-6412 and Breslauer, Frank, Bloeker and Marky, Proc\&. Natl\&. Acad\&. Sci\&. USA, vol 83, pp 3746\-3750\&. Please refer to the former paper for background discussion\&. Default value: 60\&.0
+Optimum melting temperature (Celsius) for an internal oligo\&. EPrimer3 will try to pick oligos with melting temperatures that are close to this temperature\&. The oligo melting temperature formula in EPrimer3 is that given in Rychlik, Spencer and Rhoads, Nucleic Acids Research, vol 18, num 21, pp 6409\-6412 and Breslauer, Frank, Bloecker and Marky, Proc\&. Natl\&. Acad\&. Sci\&. USA, vol 83, pp 3746\-3750\&. Please refer to the former paper for background discussion\&. Default value: 60\&.0
 .RE
 .PP
 \fB\-oligomintm\fR \fIfloat\fR
@@ -320,7 +320,7 @@ The maximum allowable 3\'\-anchored global alignment score when testing a single
 .PP
 \fB\-maxendstability\fR \fIfloat\fR
 .RS 4
-The maximum stability for the five 3\' bases of a forward or reverse primer\&. Bigger numbers mean more stable 3\' ends\&. The value is the maximum delta G for duplex disruption for the five 3\' bases as calculated using the nearest neighbor parameters published in Breslauer, Frank, Bloeker and Marky, Proc\&. Natl\&. Acad\&. Sci\&. USA, vol 83, pp 3746\-3750\&. EPrimer3 uses a completely permissive default value for backward compatibility (which we may change in the next release)\&. Rychlik recommends a maximum value of 9 (Wojciech Rychlik, \'Selection of Primers for Polymerase Chain Reaction\' in BA White, Ed\&., \'Methods in Molecular Biology, Vol\&. 15: PCR Protocols: Current Methods and Applications\', 1993, pp 31\-40, Humana Press, Totowa NJ)\&. Default value: 9\&.0
+The maximum stability for the five 3\' bases of a forward or reverse primer\&. Bigger numbers mean more stable 3\' ends\&. The value is the maximum delta G for duplex disruption for the five 3\' bases as calculated using the nearest neighbor parameters published in Breslauer, Frank, Bloecker and Marky, Proc\&. Natl\&. Acad\&. Sci\&. USA, vol 83, pp 3746\-3750\&. EPrimer3 uses a completely permissive default value for backward compatibility (which we may change in the next release)\&. Rychlik recommends a maximum value of 9 (Wojciech Rychlik, \'Selection of Primers for Polymerase Chain Reaction\' in BA White, Ed\&., \'Methods in Molecular Biology, Vol\&. 15: PCR Protocols: Current Methods and Applications\', 1993, pp 31\-40, Humana Press, Totowa NJ)\&. Default value: 9\&.0
 .RE
 .SS "Output section"
 .PP

@@ -1,17 +1,17 @@
 .\"     Title: REDATA
 .\"    Author: Debian-Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
 .\" Generator: DocBook XSL Stylesheets v1.73.2 <http://docbook.sf.net/>
-.\"      Date: 05/16/2008
+.\"      Date: 07/16/2008
 .\"    Manual: EMBOSS Manual for Debian
-.\"    Source: EMBOSS 5.0.0
+.\"    Source: EMBOSS 6.0.0
 .\"
-.TH "REDATA" "1e" "05/16/2008" "EMBOSS 5.0.0" "EMBOSS Manual for Debian"
+.TH "REDATA" "1e" "07/16/2008" "EMBOSS 6.0.0" "EMBOSS Manual for Debian"
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
 .ad l
 .SH "NAME"
-redata \- Search REBASE for enzyme name, references, suppliers etc.
+redata \- Retrieve information from REBASE restriction enzyme database
 .SH "SYNOPSIS"
 .HP 7
 \fBredata\fR \fB\-enzyme\ \fR\fB\fIstring\fR\fR \fB\-isoschizomers\ \fR\fB\fIboolean\fR\fR \fB\-references\ \fR\fB\fIboolean\fR\fR \fB\-suppliers\ \fR\fB\fIboolean\fR\fR \fB\-outfile\ \fR\fB\fIoutfile\fR\fR

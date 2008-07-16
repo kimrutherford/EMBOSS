@@ -1,17 +1,17 @@
 .\"     Title: PREG
 .\"    Author: Debian-Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
 .\" Generator: DocBook XSL Stylesheets v1.73.2 <http://docbook.sf.net/>
-.\"      Date: 05/16/2008
+.\"      Date: 07/16/2008
 .\"    Manual: EMBOSS Manual for Debian
-.\"    Source: EMBOSS 5.0.0
+.\"    Source: EMBOSS 6.0.0
 .\"
-.TH "PREG" "1e" "05/16/2008" "EMBOSS 5.0.0" "EMBOSS Manual for Debian"
+.TH "PREG" "1e" "07/16/2008" "EMBOSS 6.0.0" "EMBOSS Manual for Debian"
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
 .ad l
 .SH "NAME"
-preg \- Regular expression search of a protein sequence
+preg \- Regular expression search of protein sequence(s)
 .SH "SYNOPSIS"
 .HP 5
 \fBpreg\fR \fB\-sequence\ \fR\fB\fIseqall\fR\fR \fB\-pattern\ \fR\fB\fIregexp\fR\fR \fB\-outfile\ \fR\fB\fIreport\fR\fR

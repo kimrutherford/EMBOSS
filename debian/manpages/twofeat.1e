@@ -1,17 +1,17 @@
 .\"     Title: TWOFEAT
 .\"    Author: Debian-Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
 .\" Generator: DocBook XSL Stylesheets v1.73.2 <http://docbook.sf.net/>
-.\"      Date: 05/16/2008
+.\"      Date: 07/16/2008
 .\"    Manual: EMBOSS Manual for Debian
-.\"    Source: EMBOSS 5.0.0
+.\"    Source: EMBOSS 6.0.0
 .\"
-.TH "TWOFEAT" "1e" "05/16/2008" "EMBOSS 5.0.0" "EMBOSS Manual for Debian"
+.TH "TWOFEAT" "1e" "07/16/2008" "EMBOSS 6.0.0" "EMBOSS Manual for Debian"
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
 .ad l
 .SH "NAME"
-twofeat \- Finds neighbouring pairs of features in sequences
+twofeat \- Finds neighbouring pairs of features in sequence(s)
 .SH "SYNOPSIS"
 .HP 8
 \fBtwofeat\fR \fB\-sequence\ \fR\fB\fIseqall\fR\fR [\fB\-asource\ \fR\fB\fIstring\fR\fR] \fB\-atype\ \fR\fB\fIstring\fR\fR [\fB\-asense\ \fR\fB\fIlist\fR\fR] [\fB\-aminscore\ \fR\fB\fIfloat\fR\fR] [\fB\-amaxscore\ \fR\fB\fIfloat\fR\fR] [\fB\-atag\ \fR\fB\fIstring\fR\fR] [\fB\-avalue\ \fR\fB\fIstring\fR\fR] [\fB\-bsource\ \fR\fB\fIstring\fR\fR] \fB\-btype\ \fR\fB\fIstring\fR\fR [\fB\-bsense\ \fR\fB\fIlist\fR\fR] [\fB\-bminscore\ \fR\fB\fIfloat\fR\fR] [\fB\-bmaxscore\ \fR\fB\fIfloat\fR\fR] [\fB\-btag\ \fR\fB\fIstring\fR\fR] [\fB\-bvalue\ \fR\fB\fIstring\fR\fR] [\fB\-overlap\ \fR\fB\fIlist\fR\fR] \fB\-minrange\ \fR\fB\fIinteger\fR\fR \fB\-maxrange\ \fR\fB\fIinteger\fR\fR [\fB\-rangetype\ \fR\fB\fIlist\fR\fR] [\fB\-sense\ \fR\fB\fIlist\fR\fR] [\fB\-order\ \fR\fB\fIlist\fR\fR] [\fB\-twoout\ \fR\fB\fItoggle\fR\fR] \fB\-typeout\ \fR\fB\fIstring\fR\fR \fB\-outfile\ \fR\fB\fIreport\fR\fR

@@ -1,20 +1,20 @@
 .\"     Title: PEPSTATS
 .\"    Author: Debian-Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
 .\" Generator: DocBook XSL Stylesheets v1.73.2 <http://docbook.sf.net/>
-.\"      Date: 05/16/2008
+.\"      Date: 07/16/2008
 .\"    Manual: EMBOSS Manual for Debian
-.\"    Source: EMBOSS 5.0.0
+.\"    Source: EMBOSS 6.0.0
 .\"
-.TH "PEPSTATS" "1e" "05/16/2008" "EMBOSS 5.0.0" "EMBOSS Manual for Debian"
+.TH "PEPSTATS" "1e" "07/16/2008" "EMBOSS 6.0.0" "EMBOSS Manual for Debian"
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
 .ad l
 .SH "NAME"
-pepstats \- Protein statistics
+pepstats \- Calculates statistics of protein properties
 .SH "SYNOPSIS"
 .HP 9
-\fBpepstats\fR \fB\-sequence\ \fR\fB\fIseqall\fR\fR \fB\-aadata\ \fR\fB\fIdatafile\fR\fR \fB\-termini\ \fR\fB\fIboolean\fR\fR \fB\-outfile\ \fR\fB\fIoutfile\fR\fR
+\fBpepstats\fR \fB\-sequence\ \fR\fB\fIseqall\fR\fR \fB\-aadata\ \fR\fB\fIdatafile\fR\fR \fB\-mwdata\ \fR\fB\fIdatafile\fR\fR \fB\-termini\ \fR\fB\fIboolean\fR\fR \fB\-mono\ \fR\fB\fIboolean\fR\fR \fB\-outfile\ \fR\fB\fIoutfile\fR\fR
 .HP 9
 \fBpepstats\fR \fB\-help\fR
 .SH "DESCRIPTION"
@@ -30,13 +30,23 @@ is a command line program from EMBOSS (\(lqthe European Molecular Biology Open S
 .PP
 \fB\-aadata\fR \fIdatafile\fR
 .RS 4
-Molecular weight data for amino acids Default value: Eamino\&.dat
+Amino acid properties Default value: Eamino\&.dat
+.RE
+.PP
+\fB\-mwdata\fR \fIdatafile\fR
+.RS 4
+Molecular weight data for amino acids Default value: Emolwt\&.dat
 .RE
 .SS "Advanced section"
 .PP
 \fB\-termini\fR \fIboolean\fR
 .RS 4
 Default value: Y
+.RE
+.PP
+\fB\-mono\fR \fIboolean\fR
+.RS 4
+Default value: N
 .RE
 .SS "Output section"
 .PP

@@ -1,17 +1,17 @@
 .\"     Title: SHOWALIGN
 .\"    Author: Debian-Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
 .\" Generator: DocBook XSL Stylesheets v1.73.2 <http://docbook.sf.net/>
-.\"      Date: 05/16/2008
+.\"      Date: 07/16/2008
 .\"    Manual: EMBOSS Manual for Debian
-.\"    Source: EMBOSS 5.0.0
+.\"    Source: EMBOSS 6.0.0
 .\"
-.TH "SHOWALIGN" "1e" "05/16/2008" "EMBOSS 5.0.0" "EMBOSS Manual for Debian"
+.TH "SHOWALIGN" "1e" "07/16/2008" "EMBOSS 6.0.0" "EMBOSS Manual for Debian"
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
 .ad l
 .SH "NAME"
-showalign \- Displays a multiple sequence alignment
+showalign \- Display a multiple sequence alignment in pretty format
 .SH "SYNOPSIS"
 .HP 10
 \fBshowalign\fR \fB\-sequence\ \fR\fB\fIseqset\fR\fR [\fB\-matrix\ \fR\fB\fImatrix\fR\fR] [\fB\-refseq\ \fR\fB\fIstring\fR\fR] [\fB\-bottom\ \fR\fB\fIboolean\fR\fR] [\fB\-show\ \fR\fB\fIlist\fR\fR] [\fB\-order\ \fR\fB\fIlist\fR\fR] [\fB\-similarcase\ \fR\fB\fIboolean\fR\fR] [\fB\-consensus\ \fR\fB\fIboolean\fR\fR] \fB\-uppercase\ \fR\fB\fIrange\fR\fR \fB\-number\ \fR\fB\fIboolean\fR\fR \fB\-ruler\ \fR\fB\fIboolean\fR\fR \fB\-width\ \fR\fB\fIinteger\fR\fR \fB\-margin\ \fR\fB\fIinteger\fR\fR \fB\-html\ \fR\fB\fIboolean\fR\fR \fB\-highlight\ \fR\fB\fIrange\fR\fR \fB\-plurality\ \fR\fB\fIfloat\fR\fR \fB\-setcase\ \fR\fB\fIfloat\fR\fR \fB\-identity\ \fR\fB\fIfloat\fR\fR \fB\-gaps\ \fR\fB\fIboolean\fR\fR \fB\-outfile\ \fR\fB\fIoutfile\fR\fR

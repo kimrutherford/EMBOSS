@@ -1,17 +1,17 @@
 .\"     Title: DIFFSEQ
 .\"    Author: Debian-Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
 .\" Generator: DocBook XSL Stylesheets v1.73.2 <http://docbook.sf.net/>
-.\"      Date: 05/16/2008
+.\"      Date: 07/16/2008
 .\"    Manual: EMBOSS Manual for Debian
-.\"    Source: EMBOSS 5.0.0
+.\"    Source: EMBOSS 6.0.0
 .\"
-.TH "DIFFSEQ" "1e" "05/16/2008" "EMBOSS 5.0.0" "EMBOSS Manual for Debian"
+.TH "DIFFSEQ" "1e" "07/16/2008" "EMBOSS 6.0.0" "EMBOSS Manual for Debian"
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
 .ad l
 .SH "NAME"
-diffseq \- Find differences between nearly identical sequences
+diffseq \- Compare and report features of two similar sequences
 .SH "SYNOPSIS"
 .HP 8
 \fBdiffseq\fR \fB\-asequence\ \fR\fB\fIsequence\fR\fR \fB\-bsequence\ \fR\fB\fIsequence\fR\fR \fB\-wordsize\ \fR\fB\fIinteger\fR\fR [\fB\-globaldifferences\ \fR\fB\fIboolean\fR\fR] \fB\-outfile\ \fR\fB\fIreport\fR\fR \fB\-aoutfeat\ \fR\fB\fIfeatout\fR\fR \fB\-boutfeat\ \fR\fB\fIfeatout\fR\fR

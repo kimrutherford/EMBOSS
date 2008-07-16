@@ -1,17 +1,17 @@
 .\"     Title: DBIFASTA
 .\"    Author: Debian-Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
 .\" Generator: DocBook XSL Stylesheets v1.73.2 <http://docbook.sf.net/>
-.\"      Date: 05/16/2008
+.\"      Date: 07/16/2008
 .\"    Manual: EMBOSS Manual for Debian
-.\"    Source: EMBOSS 5.0.0
+.\"    Source: EMBOSS 6.0.0
 .\"
-.TH "DBIFASTA" "1e" "05/16/2008" "EMBOSS 5.0.0" "EMBOSS Manual for Debian"
+.TH "DBIFASTA" "1e" "07/16/2008" "EMBOSS 6.0.0" "EMBOSS Manual for Debian"
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
 .ad l
 .SH "NAME"
-dbifasta \- Database indexing for fasta file databases
+dbifasta \- Index a fasta file database
 .SH "SYNOPSIS"
 .HP 9
 \fBdbifasta\fR \fB\-dbname\ \fR\fB\fIstring\fR\fR \fB\-idformat\ \fR\fB\fIlist\fR\fR \fB\-directory\ \fR\fB\fIdirectory\fR\fR \fB\-filenames\ \fR\fB\fIstring\fR\fR \fB\-release\ \fR\fB\fIstring\fR\fR \fB\-date\ \fR\fB\fIstring\fR\fR \fB\-fields\ \fR\fB\fIlist\fR\fR \fB\-exclude\ \fR\fB\fIstring\fR\fR \fB\-maxindex\ \fR\fB\fIinteger\fR\fR \fB\-sortoptions\ \fR\fB\fIstring\fR\fR \fB\-systemsort\ \fR\fB\fIboolean\fR\fR \fB\-cleanup\ \fR\fB\fIboolean\fR\fR \fB\-outfile\ \fR\fB\fIoutfile\fR\fR \fB\-indexoutdir\ \fR\fB\fIoutdir\fR\fR

@@ -1,17 +1,17 @@
 .\"     Title: MWFILTER
 .\"    Author: Debian-Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
 .\" Generator: DocBook XSL Stylesheets v1.73.2 <http://docbook.sf.net/>
-.\"      Date: 05/16/2008
+.\"      Date: 07/16/2008
 .\"    Manual: EMBOSS Manual for Debian
-.\"    Source: EMBOSS 5.0.0
+.\"    Source: EMBOSS 6.0.0
 .\"
-.TH "MWFILTER" "1e" "05/16/2008" "EMBOSS 5.0.0" "EMBOSS Manual for Debian"
+.TH "MWFILTER" "1e" "07/16/2008" "EMBOSS 6.0.0" "EMBOSS Manual for Debian"
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
 .ad l
 .SH "NAME"
-mwfilter \- Filter noisy molwts from mass spec output
+mwfilter \- Filter noisy data from molecular weights file
 .SH "SYNOPSIS"
 .HP 9
 \fBmwfilter\fR \fB\-infile\ \fR\fB\fIinfile\fR\fR \fB\-datafile\ \fR\fB\fIdatafile\fR\fR \fB\-tolerance\ \fR\fB\fIfloat\fR\fR [\fB\-showdel\ \fR\fB\fIboolean\fR\fR] \fB\-outfile\ \fR\fB\fIoutfile\fR\fR

@@ -1,17 +1,17 @@
 .\"     Title: PROPHET
 .\"    Author: Debian-Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
 .\" Generator: DocBook XSL Stylesheets v1.73.2 <http://docbook.sf.net/>
-.\"      Date: 05/16/2008
+.\"      Date: 07/16/2008
 .\"    Manual: EMBOSS Manual for Debian
-.\"    Source: EMBOSS 5.0.0
+.\"    Source: EMBOSS 6.0.0
 .\"
-.TH "PROPHET" "1e" "05/16/2008" "EMBOSS 5.0.0" "EMBOSS Manual for Debian"
+.TH "PROPHET" "1e" "07/16/2008" "EMBOSS 6.0.0" "EMBOSS Manual for Debian"
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
 .ad l
 .SH "NAME"
-prophet \- Gapped alignment for profiles
+prophet \- Scan one or more sequences with a Gribskov or Henikoff profile
 .SH "SYNOPSIS"
 .HP 8
 \fBprophet\fR \fB\-sequence\ \fR\fB\fIseqall\fR\fR \fB\-infile\ \fR\fB\fIinfile\fR\fR \fB\-gapopen\ \fR\fB\fIfloat\fR\fR \fB\-gapextend\ \fR\fB\fIfloat\fR\fR \fB\-outfile\ \fR\fB\fIalign\fR\fR
