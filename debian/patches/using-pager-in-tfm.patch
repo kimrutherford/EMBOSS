@@ -1,5 +1,11 @@
-By default, use /usr/bin/pager, which always exist in Debian and is managed
-through the alternatives system.
+Author: Charles Plessy
+Forwarded: no
+ This patch uses a specificity of Debian.
+Description: Browse the documentation with default pager.
+ `/usr/bin/pager', always exists in Debian and is managed through the
+ alternatives system. With this patch, `tfm' will use `/usr/bin/pager' by
+ default, which points on the user's favorite pager.
+License: as if it were public domain.
 --- a/emboss/tfm.c
 +++ b/emboss/tfm.c
 @@ -87,7 +87,7 @@
