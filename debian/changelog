@@ -1,4 +1,4 @@
-emboss (6.0.1-1) UNRELEASED; urgency=low
+emboss (6.0.1-1) experimental; urgency=low
 
   * New upstream release:
     - New applications: aligncopy, aligncopypair, consambig, density,
@@ -24,7 +24,7 @@ emboss (6.0.1-1) UNRELEASED; urgency=low
     - Implemented build-time tests.
     - Updated the instructions to build manpages.
 
- -- Charles Plessy <plessy@debian.org>  Thu, 17 Jul 2008 12:57:54 +0900
+ -- Charles Plessy <plessy@debian.org>  Thu, 17 Jul 2008 14:07:40 +0900
 
 emboss (5.0.0-7) unstable; urgency=low
 

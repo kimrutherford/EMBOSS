@@ -114,7 +114,7 @@ install-stamp: build-stamp
 	cp -a test $(CURDIR)/debian/emboss-test/usr/share/EMBOSS/
 	sed -i "/SET emboss_tempdata/cSET emboss_tempdata /usr/share/EMBOSS/test" $(CURDIR)/debian/emboss-test/usr/share/EMBOSS/test/.embossrc
 	sed -i "/SET emboss_qadata/cSET emboss_qadata /usr/share/EMBOSS/test" $(CURDIR)/debian/emboss-test/usr/share/EMBOSS/test/.embossrc
-	mv $(CURDIR)/debian/emboss-test/usr/share/EMBOSS/test/.embossrc $(CURDIR)/debian/emboss-test/etc/emboss/embossrc.d/
+	mv $(CURDIR)/debian/emboss-test/usr/share/EMBOSS/test/.embossrc $(CURDIR)/debian/emboss-test/etc/emboss/embossrc.d/emboss-test
 
 	dh_makeshlibs	# Should it be invoked now ?
 
@@ -126,7 +126,7 @@ ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
 	[ ../debian/testembossrcbackup ] || cp test/.embossrc ../debian/testembossrcbackup
 	sed -i "/SET emboss_tempdata/cSET emboss_tempdata $(CURDIR)/test" test/.embossrc
 	sed -i "/SET emboss_qadata/cSET emboss_qadata $(CURDIR)/test" test/.embossrc
-	cd test/qa && PATH=$$PATH:$(CURDIR)/emboss ./qatest.csh
+	cd test/qa && PATH=$(CURDIR)/emboss:$$PATH ./qatest.csh
 endif
 
 binary-indep:
