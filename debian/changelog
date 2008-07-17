@@ -1,15 +1,30 @@
-emboss (6.0.0-1) UNRELEASED; urgency=low
+emboss (6.0.1-1) UNRELEASED; urgency=low
 
   * New upstream release:
-    -
-    -
-    -
+    - New applications: aligncopy, aligncopypair, consambig, density,
+      featcopy, featreport, infobase, inforesidue, jaspextract, jaspscan,
+      maskambignuc, maskambigprot, nohtml, nospace, notab, sizeseq,
+      skipredundant, trimspace.
+    - See `/usr/share/doc/emboss/changelog.gz' for more details.
+  * debian/patches:
+    - Removed the patches that are obsoleted by the new release.
+    - Documented the local patch on `tfm' that changes default pager.
+  * debian/README.source added to document how to patch and unpatch the
+    sources.
+  * debian/emboss-doc.doc-base.{apps/groups} corrected for new file locations.
   * debian/control:
-    - Replaced build dependancy on deprecated x-dev by x11proto-core-dev.
+    - Replaced build dependency on deprecated x-dev by x11proto-core-dev.
     - Uses debhelper 7.
-    - Incremented the soname of the AJAX and NUCLEUS libraries.
+    - Incremented the soname of the AJAX and NUCLEUS libraries (conflict and
+      replace the previous versions).
+    - Incremented Standards-Version to 3.8.0 after adding README.Sources.
+    - Added a new package, emboss-test, that contains test data.
+    - Build-Depends: tcsh | csh | c-shell to run the tests.
+  * debian/rules:
+    - Implemented build-time tests.
+    - Updated the instructions to build manpages.
 
- -- Charles Plessy <plessy@debian.org>  Wed, 16 Jul 2008 13:01:53 +0900
+ -- Charles Plessy <plessy@debian.org>  Thu, 17 Jul 2008 12:57:54 +0900
 
 emboss (5.0.0-7) unstable; urgency=low
 

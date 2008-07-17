@@ -4,18 +4,18 @@ Priority: optional
 Maintainer: Debian-Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
 DM-Upload-Allowed: yes
 Uploaders: Charles Plessy <plessy@debian.org>, Nelson A. de Oliveira <naoliv@debian.org>
-Build-Depends: debhelper (>= 7), quilt, libx11-dev, x11proto-core-dev, libgdchart-gd2-xpm-dev, zlib1g-dev, libpng12-dev, libpcre3-dev, antiword, sharutils, autotools-dev
+Build-Depends: debhelper (>= 7), quilt, libx11-dev, x11proto-core-dev, libgdchart-gd2-xpm-dev, zlib1g-dev, libpng12-dev, libpcre3-dev, antiword, sharutils, autotools-dev, tcsh | csh | c-shell
 Vcs-Browser: http://svn.debian.org/wsvn/debian-med/trunk/packages/emboss/trunk/?rev=0&sc=0trunk
 Vcs-Svn: svn://svn.debian.org/svn/debian-med/trunk/packages/emboss/trunk/
-Standards-Version: 3.7.3
+Standards-Version: 3.8.0
 Homepage: http://www.emboss.org
 
 Package: emboss
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, emboss-data (= ${source:Version}), csh | c-shell
 Recommends: primer3, dialign
-Suggests: emboss-doc, embassy, clustalw
-Description: The European Molecular Biology Open Software Suite
+Suggests: emboss-doc, emboss-test, embassy, clustalw
+Description: the european molecular biology open software suite
  EMBOSS is a free Open Source software analysis package specially developed for
  the needs of the molecular biology (e.g. EMBnet) user community. The software
  automatically copes with data in a variety of formats and even allows
@@ -32,7 +32,7 @@ Description: The European Molecular Biology Open Software Suite
 
 Package: emboss-data
 Architecture: all
-Description: Data files for the EMBOSS package
+Description: data files for the EMBOSS package
  This package includes data files needed by EMBOSS, the European Molecular
  Biology Open Software Suite.
 
@@ -40,9 +40,21 @@ Package: emboss-doc
 Section: doc
 Architecture: all
 Suggests: pdf-viewer | postscript-viewer
-Description: Documentation for EMBOSS
+Description: documentation for EMBOSS
  This package includes non-essential user documentation for EMBOSS, the
  European Molecular Biology Open Software Suite.
+
+Package: emboss-test
+Section: misc
+Architecture: all
+Recommends: tcsh | csh | c-shell
+Suggests: valgrind
+Description: test files for the EMBOSS package
+ This package includes test files for EMBOSS, the European Molecular Biology
+ Open Software Suite.
+ .
+ It is a good idea to use the data from this package for your bug reports when
+ possible.
 
 Package: emboss-lib
 Section: libs
@@ -73,7 +85,9 @@ Package: libajax6-dev
 Section: libdevel
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, libajax6 (= ${binary:Version})
-Description: Development files for libajax
+Conflicts: libajax5-dev
+Replaces: libajax5-dev
+Description: development files for libajax
  This package contains the header and development files needed to build
  programs and packages using libajax.
 
@@ -96,6 +110,8 @@ Package: libnucleus6-dev
 Section: libdevel
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, libnucleus6 (= ${binary:Version})
-Description: Development files for libajax
+Conflicts: libnucleus5-dev
+Replaces: libnucleus5-dev
+Description: development files for libajax
  This package contains the header and development files needed to build
  programs and packages using libnucleus.

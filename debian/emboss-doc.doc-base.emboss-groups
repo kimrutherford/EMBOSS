@@ -3,5 +3,5 @@ Title: EMBOSS Application Groups
 Section: Science/Biology
 
 Format: HTML
-Index: /usr/share/doc/emboss-doc/doc/html/emboss/apps/groups.html
-Files: /usr/share/doc/emboss-doc/doc/html/emboss/apps/*.html
+Index: /usr/share/doc/emboss-doc/doc/programs/html/groups.html
+Files: /usr/share/doc/emboss-doc/doc/programs/html/*.html

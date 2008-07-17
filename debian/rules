@@ -29,13 +29,7 @@ build-stamp: config.status
 # In order to use this rule you must install libemboss-acd-perl, xsltproc, docbook-xml and docbook-xsl
 manpages: debian/manpages/success
 debian/manpages/success:
-	if [ -f debian/emboss.manpages ] ; then rm debian/emboss.manpages ; fi
-	rm -f debian/manpages/*.1e debian/manpages/*.xml
-	for acd in $(shell ls ../emboss-6.0.0/emboss/acd/*acd | sed -r 's#.*/.*/(.+).acd#\1#'); \
-		do perl debian/acd2docbook.pl  ../emboss-6.0.0/emboss/acd/$$acd.acd $(VERSION) > debian/manpages/$$acd.xml ;\
-		xsltproc --nonet --param man.charmap.use.subset 0 -o debian/manpages/ debian/manpages/$$acd.xml ;\
-		echo "debian/manpages/$$acd.1e" >> debian/emboss.manpages ;\
-		done
+	debian/build-manpages.sh
 	echo "The manpages have been sucessfully built" > debian/manpages/success
 
 debian/copyright:
@@ -60,9 +54,11 @@ clean: unpatch config.status
 	rm -rf config.status install-stamp
 	
 	# Temporary fix that may become unecessary in the future.
-	rm -f test/gb/Makefile test/wormpep/Makefile
-	
-	dh_clean debian/copyright config.sub config.guess
+	# rm -f test/gb/Makefile test/wormpep/Makefile
+
+	-cp debian/testembossrcbackup test/.embossrc
+
+	dh_clean debian/copyright config.sub config.guess test-stamp
 
 install: install-stamp
 install-stamp: build-stamp
@@ -114,13 +110,28 @@ install-stamp: build-stamp
 	# dangling LICEN[CS]E FILE
 	#-rm -f $(CURDIR)/debian/emboss-java/usr/share/EMBOSS/jemboss/LICENSE
 
+	### Installation of the test suite
+	cp -a test $(CURDIR)/debian/emboss-test/usr/share/EMBOSS/
+	sed -i "/SET emboss_tempdata/cSET emboss_tempdata /usr/share/EMBOSS/test" $(CURDIR)/debian/emboss-test/usr/share/EMBOSS/test/.embossrc
+	sed -i "/SET emboss_qadata/cSET emboss_qadata /usr/share/EMBOSS/test" $(CURDIR)/debian/emboss-test/usr/share/EMBOSS/test/.embossrc
+	mv $(CURDIR)/debian/emboss-test/usr/share/EMBOSS/test/.embossrc $(CURDIR)/debian/emboss-test/etc/emboss/embossrc.d/
+
 	dh_makeshlibs	# Should it be invoked now ?
 
 	touch install-stamp
 
+test: test-stamp
+test-stamp:
+ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
+	[ ../debian/testembossrcbackup ] || cp test/.embossrc ../debian/testembossrcbackup
+	sed -i "/SET emboss_tempdata/cSET emboss_tempdata $(CURDIR)/test" test/.embossrc
+	sed -i "/SET emboss_qadata/cSET emboss_qadata $(CURDIR)/test" test/.embossrc
+	cd test/qa && PATH=$$PATH:$(CURDIR)/emboss ./qatest.csh
+endif
+
 binary-indep:
 
-binary-arch: build install
+binary-arch: build install test
 	dh_testdir
 	dh_testroot
 	dh_installchangelogs ChangeLog
