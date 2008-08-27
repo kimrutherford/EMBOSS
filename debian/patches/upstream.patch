@@ -1,0 +1,52 @@
+Author: Upstream
+Forwarded: no
+ This is an upstream patch, it does not need to be forwarded.
+Description: Official upstream patch.
+ This patch was downloaded from:
+ ftp://emboss.open-bio.org/pub/EMBOSS/fixes/patches/patch-1-1.gz
+diff -c -N --recursive EMBOSS-6.0.1old/emboss/jaspscan.c EMBOSS-6.0.1/emboss/jaspscan.c
+*** EMBOSS-6.0.1old/emboss/jaspscan.c	2008-06-26 09:39:09.000000000 +0100
+--- EMBOSS-6.0.1/emboss/jaspscan.c	2008-08-26 15:30:06.000000000 +0100
+***************
+*** 293,299 ****
+  
+  	    jaspscan_scan(substr,begin,mfname, cp, thresh, both, hits);
+  
+! 	    ajStrDel(&mfname);
+  	}
+  
+  	jaspscan_ReportHits(TabRpt,mattab,hits);
+--- 293,299 ----
+  
+  	    jaspscan_scan(substr,begin,mfname, cp, thresh, both, hits);
+  
+!             ajListPushAppend(flist, (void **)mfname);
+  	}
+  
+  	jaspscan_ReportHits(TabRpt,mattab,hits);
+***************
+*** 303,308 ****
+--- 303,312 ----
+      }
+  
+  
++     while(ajListPop(flist,(void **)&mfname))
++         ajStrDel(&mfname);
++ 
++     
+      ajStrDel(&dir);
+      ajStrDel(&menu);
+      ajStrDel(&excl);
+diff -c -N --recursive EMBOSS-6.0.1old/nucleus/embprop.c EMBOSS-6.0.1/nucleus/embprop.c
+*** EMBOSS-6.0.1old/nucleus/embprop.c	2008-07-14 23:13:33.000000000 +0100
+--- EMBOSS-6.0.1/nucleus/embprop.c	2008-08-26 15:29:44.000000000 +0100
+***************
+*** 880,885 ****
+--- 880,886 ----
+  
+      if(allpartials)
+      {
++         lim = defcnt;
+  	for(i=0;i<lim;++i)
+  	    for(j=i+1;j<lim;++j)
+  	    {

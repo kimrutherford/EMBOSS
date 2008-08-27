@@ -1,3 +1,11 @@
+emboss (6.0.1-2) experimental; urgency=low
+
+  * New upstream patch (patch-1-1).
+    - jaspscan can now scan multiple sequences.
+    - "digest -allpartials" now reports all C-term fragments.
+
+ -- Charles Plessy <plessy@debian.org>  Wed, 27 Aug 2008 22:11:45 +0900
+
 emboss (6.0.1-1) experimental; urgency=low
 
   * New upstream release:
