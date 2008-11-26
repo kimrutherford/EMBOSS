@@ -15,9 +15,8 @@ config.status:
 	ln -sf /usr/share/misc/config.guess .
 	./configure \
 		--prefix=/usr \
-		#--with-java=/usr/lib/j2sdk1.3/include \
-		#--with-javaos=/usr/lib/j2sdk1.3/include/linux \
-		#--with-x \
+		--with-java=/usr/lib/jvm/java-6-openjdk/include \
+		--with-javaos=/usr/lib/jvm/java-6-openjdk/include/linux \
 
 include /usr/share/quilt/quilt.make
 
@@ -105,8 +104,7 @@ install-stamp: build-stamp
 	# Remove this file when the relicenced file becomes part of the upstream tarball.
 	uudecode -o $(CURDIR)/debian/emboss-doc/usr/share/EMBOSS/doc/manuals/EMBOSS_qg.pdf $(CURDIR)/debian/EMBOSS_qg_new.pdf.uu
 
-	### Java is disabled until it becomes understandable. ###
-	#$(MAKE) -C jemboss install prefix=$(CURDIR)/debian/emboss-java/usr
+	$(MAKE) -C jemboss install DESTDIR=$(CURDIR)/debian/jemboss
 	# dangling LICEN[CS]E FILE
 	#-rm -f $(CURDIR)/debian/emboss-java/usr/share/EMBOSS/jemboss/LICENSE
 

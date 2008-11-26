@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Debian-Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
 DM-Upload-Allowed: yes
 Uploaders: Charles Plessy <plessy@debian.org>, Nelson A. de Oliveira <naoliv@debian.org>
-Build-Depends: debhelper (>= 7), quilt, libx11-dev, x11proto-core-dev, libgdchart-gd2-xpm-dev, zlib1g-dev, libpng12-dev, libpcre3-dev, antiword, sharutils, autotools-dev, tcsh | csh | c-shell
+Build-Depends: debhelper (>= 7), quilt, libx11-dev, x11proto-core-dev, libgdchart-gd2-xpm-dev, zlib1g-dev, libpng12-dev, libpcre3-dev, antiword, sharutils, autotools-dev, tcsh | csh | c-shell, openjdk-6-jdk
 Vcs-Browser: http://svn.debian.org/wsvn/debian-med/trunk/packages/emboss/trunk/?rev=0&sc=0trunk
 Vcs-Svn: svn://svn.debian.org/svn/debian-med/trunk/packages/emboss/trunk/
 Standards-Version: 3.8.0
@@ -63,6 +63,13 @@ Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: EMBOSS Libraries
  This package is being emptied. For the moment it contains a eplplot, an EMBOSS
  fork of the plplot library.
+
+Package: jemboss
+Section: science
+Architecture: all
+Depends: ${shlibs:Depends}, ${misc:Depends}, openjdk-6-jre
+Description: jEMBOSS
+ Preliminary description for jEMBOSS
 
 Package: libajax6
 Section: libs
