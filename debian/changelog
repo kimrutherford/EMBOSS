@@ -5,6 +5,8 @@ emboss (6.0.1-3) UNRELEASED; urgency=low
     - fixes segmentation fault in vectorscript when -auto is used with empty
       vectorsfile.
     - adds '.' trailer to the OS line in SwissProt output.
+  * debian/rules: corrected the section of the manual pages of the renamed
+    programs from 1 to 1e (Closes: #503733).
 
  -- Charles Plessy <plessy@debian.org>  Wed, 26 Nov 2008 08:57:20 +0900
 

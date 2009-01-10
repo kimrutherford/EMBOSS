@@ -142,7 +142,7 @@ binary-arch: build install test
 	# Install the manpages and provide a symlink for the renamed binaries.
 	dh_installman -p emboss
 	for i in $(RENAMED) ; \
-		do dh_link usr/share/man/man1/$$i.1.gz usr/share/man/man1/em_$$i.1.gz ; \
+		do dh_link usr/share/man/man1/$$i.1e.gz usr/share/man/man1/em_$$i.1e.gz ; \
 		done
 	
 	dh_strip
