@@ -1,6 +1,10 @@
 emboss (6.0.1-3) UNRELEASED; urgency=low
 
   * jEMBOSS 
+  * New upstream patch (patch-1-3).
+    - fixes segmentation fault in vectorscript when -auto is used with empty
+      vectorsfile.
+    - adds '.' trailer to the OS line in SwissProt output.
 
  -- Charles Plessy <plessy@debian.org>  Wed, 26 Nov 2008 08:57:20 +0900
 
