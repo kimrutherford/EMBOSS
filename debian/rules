@@ -53,7 +53,7 @@ clean: unpatch config.status
 	rm -rf config.status install-stamp
 	
 	# Temporary fix that may become unecessary in the future.
-	# rm -f test/gb/Makefile test/wormpep/Makefile
+	rm -f test/gb/Makefile test/wormpep/Makefile
 
 	-cp debian/testembossrcbackup test/.embossrc
 
@@ -106,7 +106,7 @@ install-stamp: build-stamp
 
 	$(MAKE) -C jemboss install DESTDIR=$(CURDIR)/debian/jemboss
 	# dangling LICEN[CS]E FILE
-	#-rm -f $(CURDIR)/debian/emboss-java/usr/share/EMBOSS/jemboss/LICENSE
+	rm $(CURDIR)/debian/jemboss/usr/share/EMBOSS/jemboss/LICENSE
 
 	### Installation of the test suite
 	cp -a test $(CURDIR)/debian/emboss-test/usr/share/EMBOSS/

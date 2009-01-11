@@ -67,9 +67,10 @@ Description: EMBOSS Libraries
 Package: jemboss
 Section: science
 Architecture: all
-Depends: ${shlibs:Depends}, ${misc:Depends}, openjdk-6-jre
-Description: jEMBOSS
- Preliminary description for jEMBOSS
+Depends: ${shlibs:Depends}, ${misc:Depends}, openjdk-6-jre, tcsh | csh | c-shell
+Description: graphical user interface to EMBOSS
+ Jemboss is a Graphical User Interface (GUI) to EMBOSS, the European Molecular
+ Biology Open Software Suite. It is part of the EMBOSS distribution.
 
 Package: libajax6
 Section: libs

@@ -1,1 +1,2 @@
 - Use libpcre from Debian (needs #387557).
+- Provide menu and desktop entries to jEMBOSS.

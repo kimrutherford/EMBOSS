@@ -1,12 +1,16 @@
-emboss (6.0.1-3) UNRELEASED; urgency=low
+emboss (6.0.1-3) experimental; urgency=low
 
-  * jEMBOSS 
   * New upstream patch (patch-1-3).
     - fixes segmentation fault in vectorscript when -auto is used with empty
       vectorsfile.
     - adds '.' trailer to the OS line in SwissProt output.
   * debian/rules: corrected the section of the manual pages of the renamed
     programs from 1 to 1e (Closes: #503733).
+  * Preliminary support for jEMBOSS:
+    - Build-Depend on openjdk-6-jdk (debian/control).
+    - New package "jemboss", depending on openjdk-6-jre (debian/control).
+    - The jemboss package contains everything installed by the command
+      `make -C jemboss install' (debian/rules).
 
  -- Charles Plessy <plessy@debian.org>  Wed, 26 Nov 2008 08:57:20 +0900
 
