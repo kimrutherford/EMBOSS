@@ -1,3 +1,14 @@
+emboss (6.0.1-4) UNRELEASED; urgency=low
+
+  TODO: Let's wait the end of the freeze to upload to unstable. After this, it
+  would be much safer to rebuild the embassy packages and update their
+  orig.tar.gz, that did not change name upstream but was modified.
+
+  * New upstream patch (patch-1-4), removing unnecessary whitespaces in
+    edialign.acd.
+
+ -- Charles Plessy <plessy@debian.org>  Sun, 11 Jan 2009 15:09:08 +0900
+
 emboss (6.0.1-3) experimental; urgency=low
 
   * New upstream patch (patch-1-3).
