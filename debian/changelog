@@ -6,6 +6,7 @@ emboss (6.0.1-4) UNRELEASED; urgency=low
 
   * New upstream patch (patch-1-4), removing unnecessary whitespaces in
     edialign.acd.
+  * debian/control uses the official homepage URL as confirmed by Upstream.
 
  -- Charles Plessy <plessy@debian.org>  Sun, 11 Jan 2009 15:09:08 +0900
 
