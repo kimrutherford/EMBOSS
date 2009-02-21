@@ -7,6 +7,11 @@ emboss (6.0.1-4) UNRELEASED; urgency=low
   * New upstream patch (patch-1-4), removing unnecessary whitespaces in
     edialign.acd.
   * debian/control uses the official homepage URL as confirmed by Upstream.
+  * debian/rules:
+     - Pass --bindir=/usr/lib/emboss directly instead of moving files.
+     - Hardcode AJAX_FIXED_ROOT to /usr/share/EMBOSS (Closes: #487539)
+  * debian/emboss.dir, debian/emboss.install: simplified after reworking
+    the installation of the binaries and their symbolic links.
 
  -- Charles Plessy <plessy@debian.org>  Sun, 11 Jan 2009 15:09:08 +0900
 

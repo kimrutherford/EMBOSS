@@ -5,25 +5,28 @@
 VERSION := $(shell dpkg-parsechangelog | grep Ver | cut -d' ' -f2 | cut -d- -f1)
 RENAMED := cons pscan
 
-EMBOSS-TMP = $(CURDIR)/debian/emboss_tmp
-AJAX = $(CURDIR)/debian/libajax6
-NUCLEUS = $(CURDIR)/debian/libnucleus6
+EMBOSS-TMP  = $(CURDIR)/debian/emboss_tmp
+EMBOSS      = $(CURDIR)/debian/emboss
+EMBOSS-TEST = $(CURDIR)/debian/emboss-test
+AJAX        = $(CURDIR)/debian/libajax6
+NUCLEUS     = $(CURDIR)/debian/libnucleus6
 
 config.status:
 	dh_testdir
 	ln -sf /usr/share/misc/config.sub .
 	ln -sf /usr/share/misc/config.guess .
-	./configure \
-		--prefix=/usr \
-		--with-java=/usr/lib/jvm/java-6-openjdk/include \
-		--with-javaos=/usr/lib/jvm/java-6-openjdk/include/linux \
+	./configure                                                     \
+		--prefix=/usr                                           \
+		--bindir=/usr/lib/emboss                                \
+		--with-java=/usr/lib/jvm/java-6-openjdk/include         \
+		--with-javaos=/usr/lib/jvm/java-6-openjdk/include/linux
 
 include /usr/share/quilt/quilt.make
 
 build: patch build-stamp debian/copyright
 build-stamp: config.status
 	dh_testdir
-	$(MAKE)
+	$(MAKE) AJAX_FIXED_ROOT=\\\"/usr/share/EMBOSS\\\"
 
 # In order to use this rule you must install libemboss-acd-perl, xsltproc, docbook-xml and docbook-xsl
 manpages: debian/manpages/success
@@ -43,14 +46,9 @@ clean: unpatch config.status
 
 	find jemboss/ -type f -name "*.class" | xargs -r rm -f
 
-	rm -rf ajax/.libs/*
-	rm -rf emboss/.libs/*
-	rm -rf plplot/.libs/*
-	rm -rf nucleus/.libs/*
+	$(RM) debian/emboss_tmp
 
-	rm -rf debian/emboss_tmp
-
-	rm -rf config.status install-stamp
+	$(RM) config.status install-stamp
 	
 	# Temporary fix that may become unecessary in the future.
 	rm -f test/gb/Makefile test/wormpep/Makefile
@@ -69,19 +67,15 @@ install-stamp: build-stamp
 	### Binaries and data go to a temporary dir before being moved to their own package ###
 	$(MAKE) -C emboss install DESTDIR=$(EMBOSS-TMP)
 
-	### Binaries will be in /usr/lib/emboss, and symlinks are provided in /usr/bin. ###
-	if [ ! -d $(EMBOSS-TMP)/usr/lib/emboss ] ; \
-		then mkdir -p $(EMBOSS-TMP)/usr/lib/emboss ; \
-		fi
-	mv $(EMBOSS-TMP)/usr/bin/* $(EMBOSS-TMP)/usr/lib/emboss
-	cd $(EMBOSS-TMP)/usr/lib/emboss/ ; \
-		for i in * ; \
-		do ln -sf ../lib/emboss/$$i ../../bin/$$i ; \
+	# Make symbolic links from /usr/bin to /usr/lib/emboss
+	cd $(EMBOSS)/usr/bin/ ; \
+		for i in $(EMBOSS-TMP)/usr/lib/emboss/* ; \
+		do ln -sf ../lib/emboss/`basename $$i` . ; \
 		done
 
 	### Renaming conflicting binaries (see also in binary-arch) ###
 	for i in $(RENAMED) ; \
-		do mv $(EMBOSS-TMP)/usr/bin/$$i $(EMBOSS-TMP)/usr/bin/em_$$i ; \
+		do mv $(EMBOSS)/usr/bin/$$i $(EMBOSS)/usr/bin/em_$$i ; \
 		done
 
 	### Ajax library: lib and libdevel packages. ###
@@ -104,7 +98,7 @@ install-stamp: build-stamp
 	# Remove this file when the relicenced file becomes part of the upstream tarball.
 	uudecode -o $(CURDIR)/debian/emboss-doc/usr/share/EMBOSS/doc/manuals/EMBOSS_qg.pdf $(CURDIR)/debian/EMBOSS_qg_new.pdf.uu
 
-	$(MAKE) -C jemboss install DESTDIR=$(CURDIR)/debian/jemboss
+	$(MAKE) -C jemboss install DESTDIR=$(CURDIR)/debian/jemboss bindir=/usr/bin
 	# dangling LICEN[CS]E FILE
 	rm $(CURDIR)/debian/jemboss/usr/share/EMBOSS/jemboss/LICENSE
 
