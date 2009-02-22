@@ -3,10 +3,145 @@ Forwarded: no
  This is an upstream patch, it does not need to be forwarded.
 Description: Official upstream patch.
  This patch was downloaded from:
- ftp://emboss.open-bio.org/pub/EMBOSS/fixes/patches/patch-1-4.gz
+ ftp://emboss.open-bio.org/pub/EMBOSS/fixes/patches/patch-1-5.gz
+diff -c -N --recursive EMBOSS-6.0.1old/ajax/ajseq.c EMBOSS-6.0.1/ajax/ajseq.c
+*** EMBOSS-6.0.1old/ajax/ajseq.c	2008-07-14 15:54:44.000000000 +0100
+--- EMBOSS-6.0.1/ajax/ajseq.c	2009-02-21 09:21:14.000000000 +0000
+***************
+*** 287,292 ****
+--- 287,293 ----
+      pthis->Sv   = ajStrNew();
+      pthis->Gi   = ajStrNew();
+      pthis->Tax  = ajStrNew();
++     pthis->Organelle = ajStrNew();
+      pthis->Type = ajStrNew();
+      pthis->Db   = ajStrNew();
+      pthis->Full = ajStrNew();
+***************
+*** 317,322 ****
+--- 318,326 ----
+      pthis->Acclist = ajListstrNew();
+      pthis->Keylist = ajListstrNew();
+      pthis->Taxlist = ajListstrNew();
++     pthis->Cmtlist = ajListstrNew();
++     pthis->Xreflist = ajListstrNew();
++     pthis->Reflist = ajListstrNew();
+  
+      return pthis;
+  }
+***************
+*** 344,349 ****
+--- 348,354 ----
+      pthis->Sv   = ajStrNew();
+      pthis->Gi   = ajStrNew();
+      pthis->Tax  = ajStrNew();
++     pthis->Organelle = ajStrNew();
+      pthis->Type = ajStrNew();
+      pthis->Db   = ajStrNew();
+      pthis->Full = ajStrNew();
+***************
+*** 374,379 ****
+--- 379,387 ----
+      pthis->Acclist = ajListstrNew();
+      pthis->Keylist = ajListstrNew();
+      pthis->Taxlist = ajListstrNew();
++     pthis->Cmtlist = ajListstrNew();
++     pthis->Xreflist = ajListstrNew();
++     pthis->Reflist = ajListstrNew();
+  
+      return pthis;
+  }
+***************
+*** 435,440 ****
+--- 443,449 ----
+      pthis->Sv   = ajStrNew();
+      pthis->Gi   = ajStrNew();
+      pthis->Tax  = ajStrNew();
++     pthis->Organelle = ajStrNew();
+      pthis->Type = ajStrNew();
+      pthis->Db   = ajStrNew();
+      pthis->Full = ajStrNew();
+***************
+*** 473,478 ****
+--- 482,490 ----
+      pthis->Acclist = ajListstrNew();
+      pthis->Keylist = ajListstrNew();
+      pthis->Taxlist = ajListstrNew();
++     pthis->Cmtlist = ajListstrNew();
++     pthis->Xreflist = ajListstrNew();
++     pthis->Reflist = ajListstrNew();
+  
+      ajDebug("ajSeqNewRangeC rev:%B offset:%d/%d offend:%d/%d\n",
+  	    rev, offset, pthis->Offset, offend, pthis->Offend);
+***************
+*** 552,557 ****
+--- 564,570 ----
+      pthis->Sv   = ajStrNew();
+      pthis->Gi   = ajStrNew();
+      pthis->Tax  = ajStrNew();
++     pthis->Organelle = ajStrNew();
+      pthis->Type = ajStrNew();
+      pthis->Db   = ajStrNew();
+      pthis->Full = ajStrNew();
+***************
+*** 623,628 ****
+--- 636,642 ----
+      ajStrAssignS(&pthis->Sv, seq->Sv);
+      ajStrAssignS(&pthis->Gi, seq->Gi);
+      ajStrAssignS(&pthis->Tax, seq->Tax);
++     ajStrAssignS(&pthis->Organelle, seq->Organelle);
+      ajStrAssignS(&pthis->Type, seq->Type);
+  
+      pthis->EType  = seq->EType;
+***************
+*** 662,667 ****
+--- 676,688 ----
+  
+      pthis->Taxlist = ajListstrNewList(seq->Taxlist);
+  
++     pthis->Cmtlist = ajListstrNewList(seq->Cmtlist);
++ 
++     pthis->Xreflist = ajListstrNewList(seq->Xreflist);
++ 
++     pthis->Reflist = ajListstrNew();
++     ajSeqreflistClone(seq->Reflist, pthis->Reflist);
++ 
+      ajStrAssignS(&pthis->Seq, seq->Seq);
+      if (seq->Fttable)
+  	pthis->Fttable = ajFeattableCopy(seq->Fttable);
+***************
+*** 730,735 ****
+--- 751,757 ----
+      ajStrDel(&seq->Sv);
+      ajStrDel(&seq->Gi);
+      ajStrDel(&seq->Tax);
++     ajStrDel(&seq->Organelle);
+      ajStrDel(&seq->Type);
+      ajStrDel(&seq->Molecule);
+      ajStrDel(&seq->Class);
+***************
+*** 1591,1596 ****
+--- 1613,1619 ----
+      ajStrSetClear(&seq->Sv);
+      ajStrSetClear(&seq->Gi);
+      ajStrSetClear(&seq->Tax);
++     ajStrSetClear(&seq->Organelle);
+      ajStrSetClear(&seq->Type);
+      ajStrSetClear(&seq->Molecule);
+      ajStrSetClear(&seq->Class);
 diff -c -N --recursive EMBOSS-6.0.1old/ajax/ajseqwrite.c EMBOSS-6.0.1/ajax/ajseqwrite.c
 *** EMBOSS-6.0.1old/ajax/ajseqwrite.c	2008-07-14 15:58:07.000000000 +0100
---- EMBOSS-6.0.1/ajax/ajseqwrite.c	2009-02-04 12:58:15.000000000 +0000
+--- EMBOSS-6.0.1/ajax/ajseqwrite.c	2009-02-21 09:21:21.000000000 +0000
+***************
+*** 451,456 ****
+--- 451,457 ----
+      pthis->Sv    = ajStrNew();
+      pthis->Gi    = ajStrNew();
+      pthis->Tax   = ajStrNew();
++     pthis->Organelle = ajStrNew();
+      pthis->Desc  = ajStrNew();
+      pthis->Type  = ajStrNew();
+      pthis->EType = 0;
 ***************
 *** 3743,3749 ****
   	ajFmtPrintF(outseq->File, "DE   %S\n", outseq->Desc);
@@ -16,7 +151,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/ajax/ajseqwrite.c EMBOSS-6.0.1/ajax/ajseq
       
       if(ajListGetLength(outseq->Taxlist) > 1)
       {
---- 3743,3749 ----
+--- 3744,3750 ----
   	ajFmtPrintF(outseq->File, "DE   %S\n", outseq->Desc);
       
       if(ajStrGetLen(outseq->Tax))
@@ -24,9 +159,37 @@ diff -c -N --recursive EMBOSS-6.0.1old/ajax/ajseqwrite.c EMBOSS-6.0.1/ajax/ajseq
       
       if(ajListGetLength(outseq->Taxlist) > 1)
       {
+***************
+*** 6175,6180 ****
+--- 6176,6182 ----
+  static void seqDeclone(AjPSeqout outseq)
+  {
+      AjPStr ptr = NULL;
++     AjPSeqRef  tmpref  = NULL;
+  
+      ajStrSetClear(&outseq->Db);
+      ajStrSetClear(&outseq->Setdb);
+***************
+*** 6200,6205 ****
+--- 6202,6216 ----
+      while(ajListstrPop(outseq->Taxlist,&ptr))
+  	ajStrDel(&ptr);
+  
++     while(ajListstrPop(outseq->Cmtlist,&ptr))
++ 	ajStrDel(&ptr);
++ 
++     while(ajListstrPop(outseq->Xreflist,&ptr))
++ 	ajStrDel(&ptr);
++ 
++     while(ajListPop(outseq->Reflist,(void **)&tmpref))
++ 	ajSeqrefDel(&tmpref);
++ 
+      ajStrSetClear(&outseq->Seq);
+      AJFREE(outseq->Accuracy);
+  
 diff -c -N --recursive EMBOSS-6.0.1old/emboss/acd/edialign.acd EMBOSS-6.0.1/emboss/acd/edialign.acd
 *** EMBOSS-6.0.1old/emboss/acd/edialign.acd	2008-04-04 16:54:03.000000000 +0100
---- EMBOSS-6.0.1/emboss/acd/edialign.acd	2009-02-04 13:03:14.000000000 +0000
+--- EMBOSS-6.0.1/emboss/acd/edialign.acd	2009-02-21 09:20:54.000000000 +0000
 ***************
 *** 26,32 ****
       information: "Nucleic acid sequence alignment mode"
@@ -73,7 +236,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/emboss/acd/edialign.acd EMBOSS-6.0.1/embo
   endsection: output
 diff -c -N --recursive EMBOSS-6.0.1old/emboss/acd/Makefile.am EMBOSS-6.0.1/emboss/acd/Makefile.am
 *** EMBOSS-6.0.1old/emboss/acd/Makefile.am	2008-07-14 16:46:31.000000000 +0100
---- EMBOSS-6.0.1/emboss/acd/Makefile.am	2009-02-04 12:58:15.000000000 +0000
+--- EMBOSS-6.0.1/emboss/acd/Makefile.am	2009-02-21 09:20:54.000000000 +0000
 ***************
 *** 21,27 ****
   	fuzznuc.acd fuzzpro.acd fuzztran.acd \
@@ -113,7 +276,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/emboss/acd/Makefile.am EMBOSS-6.0.1/embos
   
 diff -c -N --recursive EMBOSS-6.0.1old/emboss/acd/Makefile.in EMBOSS-6.0.1/emboss/acd/Makefile.in
 *** EMBOSS-6.0.1old/emboss/acd/Makefile.in	2008-07-16 19:33:19.000000000 +0100
---- EMBOSS-6.0.1/emboss/acd/Makefile.in	2009-02-04 12:58:15.000000000 +0000
+--- EMBOSS-6.0.1/emboss/acd/Makefile.in	2009-02-21 09:20:54.000000000 +0000
 ***************
 *** 209,215 ****
   	fuzznuc.acd fuzzpro.acd fuzztran.acd \
@@ -153,7 +316,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/emboss/acd/Makefile.in EMBOSS-6.0.1/embos
   
 diff -c -N --recursive EMBOSS-6.0.1old/emboss/data/Makefile.am EMBOSS-6.0.1/emboss/data/Makefile.am
 *** EMBOSS-6.0.1old/emboss/data/Makefile.am	2008-07-14 16:09:23.000000000 +0100
---- EMBOSS-6.0.1/emboss/data/Makefile.am	2009-02-04 12:58:15.000000000 +0000
+--- EMBOSS-6.0.1/emboss/data/Makefile.am	2009-02-21 09:20:54.000000000 +0000
 ***************
 *** 30,36 ****
                  Epprofile Eprior1.plib Eprior30.plib Erna.melt Eresidues.iub \
@@ -173,7 +336,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/emboss/data/Makefile.am EMBOSS-6.0.1/embo
                  embossre.equ Emwfilter.dat Emass.dat Emassmod.dat \
 diff -c -N --recursive EMBOSS-6.0.1old/emboss/data/Makefile.in EMBOSS-6.0.1/emboss/data/Makefile.in
 *** EMBOSS-6.0.1old/emboss/data/Makefile.in	2008-07-16 19:33:20.000000000 +0100
---- EMBOSS-6.0.1/emboss/data/Makefile.in	2009-02-04 12:58:15.000000000 +0000
+--- EMBOSS-6.0.1/emboss/data/Makefile.in	2009-02-21 09:20:54.000000000 +0000
 ***************
 *** 228,234 ****
                  Epprofile Eprior1.plib Eprior30.plib Erna.melt Eresidues.iub \
@@ -193,7 +356,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/emboss/data/Makefile.in EMBOSS-6.0.1/embo
                  embossre.equ Emwfilter.dat Emass.dat Emassmod.dat \
 diff -c -N --recursive EMBOSS-6.0.1old/emboss/jaspscan.c EMBOSS-6.0.1/emboss/jaspscan.c
 *** EMBOSS-6.0.1old/emboss/jaspscan.c	2008-06-26 09:39:09.000000000 +0100
---- EMBOSS-6.0.1/emboss/jaspscan.c	2009-02-04 12:58:15.000000000 +0000
+--- EMBOSS-6.0.1/emboss/jaspscan.c	2009-02-21 09:20:54.000000000 +0000
 ***************
 *** 293,299 ****
   
@@ -226,7 +389,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/emboss/jaspscan.c EMBOSS-6.0.1/emboss/jas
       ajStrDel(&excl);
 diff -c -N --recursive EMBOSS-6.0.1old/emboss/vectorstrip.c EMBOSS-6.0.1/emboss/vectorstrip.c
 *** EMBOSS-6.0.1old/emboss/vectorstrip.c	2008-06-26 09:39:09.000000000 +0100
---- EMBOSS-6.0.1/emboss/vectorstrip.c	2009-02-04 12:58:15.000000000 +0000
+--- EMBOSS-6.0.1/emboss/vectorstrip.c	2009-02-21 09:20:54.000000000 +0000
 ***************
 *** 174,180 ****
       vectorlist = ajListNew();
@@ -246,7 +409,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/emboss/vectorstrip.c EMBOSS-6.0.1/emboss/
       {
 diff -c -N --recursive EMBOSS-6.0.1old/nucleus/embprop.c EMBOSS-6.0.1/nucleus/embprop.c
 *** EMBOSS-6.0.1old/nucleus/embprop.c	2008-07-14 23:13:33.000000000 +0100
---- EMBOSS-6.0.1/nucleus/embprop.c	2009-02-04 12:58:15.000000000 +0000
+--- EMBOSS-6.0.1/nucleus/embprop.c	2009-02-21 09:20:54.000000000 +0000
 ***************
 *** 880,885 ****
 --- 880,886 ----

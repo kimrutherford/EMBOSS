@@ -1,11 +1,9 @@
 emboss (6.0.1-4) UNRELEASED; urgency=low
 
-  TODO: Let's wait the end of the freeze to upload to unstable. After this, it
-  would be much safer to rebuild the embassy packages and update their
-  orig.tar.gz, that did not change name upstream but was modified.
-
-  * New upstream patch (patch-1-4), removing unnecessary whitespaces in
-    edialign.acd.
+  * New upstream patch (patch-1-5):
+    - removes unnecessary whitespaces in edialign.acd.
+    - saves Citations and comments in EMBL/GenBank formats for each new
+      entry processed.
   * debian/control uses the official homepage URL as confirmed by Upstream.
   * debian/rules:
      - Pass --bindir=/usr/lib/emboss directly instead of moving files.
