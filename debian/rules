@@ -61,7 +61,7 @@ install: install-stamp
 install-stamp: build-stamp
 	dh_testdir
 	dh_testroot
-	dh_clean -k
+	dh_prep
 	dh_installdirs
 
 	### Binaries and data go to a temporary dir before being moved to their own package ###

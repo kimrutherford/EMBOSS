@@ -65,7 +65,6 @@ Description: EMBOSS Libraries
  fork of the plplot library.
 
 Package: jemboss
-Section: science
 Architecture: all
 Depends: ${shlibs:Depends}, ${misc:Depends}, openjdk-6-jre, tcsh | csh | c-shell
 Description: graphical user interface to EMBOSS
@@ -120,6 +119,6 @@ Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, libnucleus6 (= ${binary:Version})
 Conflicts: libnucleus5-dev
 Replaces: libnucleus5-dev
-Description: development files for libajax
+Description: development files for libnucleus
  This package contains the header and development files needed to build
  programs and packages using libnucleus.

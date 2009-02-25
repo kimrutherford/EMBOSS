@@ -1,17 +1,21 @@
-emboss (6.0.1-4) UNRELEASED; urgency=low
+emboss (6.0.1-4) unstable; urgency=low
 
   * New upstream patch (patch-1-5):
     - removes unnecessary whitespaces in edialign.acd.
     - saves Citations and comments in EMBL/GenBank formats for each new
       entry processed.
-  * debian/control uses the official homepage URL as confirmed by Upstream.
+  * debian/control:
+    - Uses the official homepage URL as confirmed by Upstream.
+    - Redundant section field removed for jemboss.
+    - Description corrected for libnucleus6-dev.
   * debian/rules:
      - Pass --bindir=/usr/lib/emboss directly instead of moving files.
-     - Hardcode AJAX_FIXED_ROOT to /usr/share/EMBOSS (Closes: #487539)
+     - Hardcode AJAX_FIXED_ROOT to /usr/share/EMBOSS (Closes: #487539).
+     - Replaced `dh_clean -k', deprecated, by dh_prep.
   * debian/emboss.dir, debian/emboss.install: simplified after reworking
     the installation of the binaries and their symbolic links.
 
- -- Charles Plessy <plessy@debian.org>  Sun, 11 Jan 2009 15:09:08 +0900
+ -- Charles Plessy <plessy@debian.org>  Sun, 22 Feb 2009 22:53:55 +0900
 
 emboss (6.0.1-3) experimental; urgency=low
 
