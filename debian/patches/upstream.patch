@@ -3,10 +3,10 @@ Forwarded: no
  This is an upstream patch, it does not need to be forwarded.
 Description: Official upstream patch.
  This patch was downloaded from:
- ftp://emboss.open-bio.org/pub/EMBOSS/fixes/patches/patch-1-5.gz
+ ftp://emboss.open-bio.org/pub/EMBOSS/fixes/patches/patch-1-6.gz
 diff -c -N --recursive EMBOSS-6.0.1old/ajax/ajseq.c EMBOSS-6.0.1/ajax/ajseq.c
 *** EMBOSS-6.0.1old/ajax/ajseq.c	2008-07-14 15:54:44.000000000 +0100
---- EMBOSS-6.0.1/ajax/ajseq.c	2009-02-21 09:21:14.000000000 +0000
+--- EMBOSS-6.0.1/ajax/ajseq.c	2009-03-24 16:05:14.000000000 +0000
 ***************
 *** 287,292 ****
 --- 287,293 ----
@@ -131,7 +131,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/ajax/ajseq.c EMBOSS-6.0.1/ajax/ajseq.c
       ajStrSetClear(&seq->Class);
 diff -c -N --recursive EMBOSS-6.0.1old/ajax/ajseqwrite.c EMBOSS-6.0.1/ajax/ajseqwrite.c
 *** EMBOSS-6.0.1old/ajax/ajseqwrite.c	2008-07-14 15:58:07.000000000 +0100
---- EMBOSS-6.0.1/ajax/ajseqwrite.c	2009-02-21 09:21:21.000000000 +0000
+--- EMBOSS-6.0.1/ajax/ajseqwrite.c	2009-03-24 16:05:14.000000000 +0000
 ***************
 *** 451,456 ****
 --- 451,457 ----
@@ -189,7 +189,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/ajax/ajseqwrite.c EMBOSS-6.0.1/ajax/ajseq
   
 diff -c -N --recursive EMBOSS-6.0.1old/emboss/acd/edialign.acd EMBOSS-6.0.1/emboss/acd/edialign.acd
 *** EMBOSS-6.0.1old/emboss/acd/edialign.acd	2008-04-04 16:54:03.000000000 +0100
---- EMBOSS-6.0.1/emboss/acd/edialign.acd	2009-02-21 09:20:54.000000000 +0000
+--- EMBOSS-6.0.1/emboss/acd/edialign.acd	2009-03-24 16:05:14.000000000 +0000
 ***************
 *** 26,32 ****
       information: "Nucleic acid sequence alignment mode"
@@ -236,7 +236,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/emboss/acd/edialign.acd EMBOSS-6.0.1/embo
   endsection: output
 diff -c -N --recursive EMBOSS-6.0.1old/emboss/acd/Makefile.am EMBOSS-6.0.1/emboss/acd/Makefile.am
 *** EMBOSS-6.0.1old/emboss/acd/Makefile.am	2008-07-14 16:46:31.000000000 +0100
---- EMBOSS-6.0.1/emboss/acd/Makefile.am	2009-02-21 09:20:54.000000000 +0000
+--- EMBOSS-6.0.1/emboss/acd/Makefile.am	2009-03-24 16:05:14.000000000 +0000
 ***************
 *** 21,27 ****
   	fuzznuc.acd fuzzpro.acd fuzztran.acd \
@@ -276,7 +276,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/emboss/acd/Makefile.am EMBOSS-6.0.1/embos
   
 diff -c -N --recursive EMBOSS-6.0.1old/emboss/acd/Makefile.in EMBOSS-6.0.1/emboss/acd/Makefile.in
 *** EMBOSS-6.0.1old/emboss/acd/Makefile.in	2008-07-16 19:33:19.000000000 +0100
---- EMBOSS-6.0.1/emboss/acd/Makefile.in	2009-02-21 09:20:54.000000000 +0000
+--- EMBOSS-6.0.1/emboss/acd/Makefile.in	2009-03-24 16:05:14.000000000 +0000
 ***************
 *** 209,215 ****
   	fuzznuc.acd fuzzpro.acd fuzztran.acd \
@@ -316,7 +316,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/emboss/acd/Makefile.in EMBOSS-6.0.1/embos
   
 diff -c -N --recursive EMBOSS-6.0.1old/emboss/data/Makefile.am EMBOSS-6.0.1/emboss/data/Makefile.am
 *** EMBOSS-6.0.1old/emboss/data/Makefile.am	2008-07-14 16:09:23.000000000 +0100
---- EMBOSS-6.0.1/emboss/data/Makefile.am	2009-02-21 09:20:54.000000000 +0000
+--- EMBOSS-6.0.1/emboss/data/Makefile.am	2009-03-24 16:05:14.000000000 +0000
 ***************
 *** 30,36 ****
                  Epprofile Eprior1.plib Eprior30.plib Erna.melt Eresidues.iub \
@@ -336,7 +336,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/emboss/data/Makefile.am EMBOSS-6.0.1/embo
                  embossre.equ Emwfilter.dat Emass.dat Emassmod.dat \
 diff -c -N --recursive EMBOSS-6.0.1old/emboss/data/Makefile.in EMBOSS-6.0.1/emboss/data/Makefile.in
 *** EMBOSS-6.0.1old/emboss/data/Makefile.in	2008-07-16 19:33:20.000000000 +0100
---- EMBOSS-6.0.1/emboss/data/Makefile.in	2009-02-21 09:20:54.000000000 +0000
+--- EMBOSS-6.0.1/emboss/data/Makefile.in	2009-03-24 16:05:14.000000000 +0000
 ***************
 *** 228,234 ****
                  Epprofile Eprior1.plib Eprior30.plib Erna.melt Eresidues.iub \
@@ -356,7 +356,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/emboss/data/Makefile.in EMBOSS-6.0.1/embo
                  embossre.equ Emwfilter.dat Emass.dat Emassmod.dat \
 diff -c -N --recursive EMBOSS-6.0.1old/emboss/jaspscan.c EMBOSS-6.0.1/emboss/jaspscan.c
 *** EMBOSS-6.0.1old/emboss/jaspscan.c	2008-06-26 09:39:09.000000000 +0100
---- EMBOSS-6.0.1/emboss/jaspscan.c	2009-02-21 09:20:54.000000000 +0000
+--- EMBOSS-6.0.1/emboss/jaspscan.c	2009-03-24 16:05:14.000000000 +0000
 ***************
 *** 293,299 ****
   
@@ -389,7 +389,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/emboss/jaspscan.c EMBOSS-6.0.1/emboss/jas
       ajStrDel(&excl);
 diff -c -N --recursive EMBOSS-6.0.1old/emboss/vectorstrip.c EMBOSS-6.0.1/emboss/vectorstrip.c
 *** EMBOSS-6.0.1old/emboss/vectorstrip.c	2008-06-26 09:39:09.000000000 +0100
---- EMBOSS-6.0.1/emboss/vectorstrip.c	2009-02-21 09:20:54.000000000 +0000
+--- EMBOSS-6.0.1/emboss/vectorstrip.c	2009-03-24 16:05:14.000000000 +0000
 ***************
 *** 174,180 ****
       vectorlist = ajListNew();
@@ -407,9 +407,540 @@ diff -c -N --recursive EMBOSS-6.0.1old/emboss/vectorstrip.c EMBOSS-6.0.1/emboss/
   	vectorstrip_read_vector_data(vectorfile, vectorlist);
       else
       {
+diff -c -N --recursive EMBOSS-6.0.1old/nucleus/embaln.c EMBOSS-6.0.1/nucleus/embaln.c
+*** EMBOSS-6.0.1old/nucleus/embaln.c	2008-07-15 15:41:05.000000000 +0100
+--- EMBOSS-6.0.1/nucleus/embaln.c	2009-03-24 16:06:15.000000000 +0000
+***************
+*** 69,79 ****
+      ajint i;
+      ajint j;
+  
+!     float match;
+!     float mscore;
+!     float fnew;
+!     float *maxa;
+!     float maxb;
+  
+      static AjPStr outstr = NULL;
+      char compasschar;
+--- 69,79 ----
+      ajint i;
+      ajint j;
+  
+!     double match;
+!     double mscore;
+!     double fnew;
+!     double *maxa;
+!     double maxb;
+  
+      static AjPStr outstr = NULL;
+      char compasschar;
+***************
+*** 84,90 ****
+  
+      /* Create stores for the maximum values in a row or column */
+  
+!     maxa = AJALLOC(lena*sizeof(float));
+  
+  
+      /* First initialise the first column and row */
+--- 84,90 ----
+  
+      /* Create stores for the maximum values in a row or column */
+  
+!     maxa = AJALLOC(lena*sizeof(double));
+  
+  
+      /* First initialise the first column and row */
+***************
+*** 249,262 ****
+      ajint i;
+      ajint j;
+  
+!     float match;
+!     float mscore;
+!     float result;
+!     float fnew;
+!     float *maxa;
+  
+      static AjPStr outstr = NULL;
+!     float bx;
+      char compasschar;
+  
+      ajDebug("embAlignPathCalcSW\n");
+--- 249,262 ----
+      ajint i;
+      ajint j;
+  
+!     double match;
+!     double mscore;
+!     double result;
+!     double fnew;
+!     double *maxa;
+  
+      static AjPStr outstr = NULL;
+!     double bx;
+      char compasschar;
+  
+      ajDebug("embAlignPathCalcSW\n");
+***************
+*** 265,271 ****
+  
+      /* Create stores for the maximum values in a row or column */
+  
+!     maxa = AJALLOC(lena*sizeof(float));
+  
+  
+      /* First initialise the first column and row */
+--- 265,271 ----
+  
+      /* Create stores for the maximum values in a row or column */
+  
+!     maxa = AJALLOC(lena*sizeof(double));
+  
+  
+      /* First initialise the first column and row */
+***************
+*** 426,435 ****
+      ajint i;
+      ajint j;
+      ajint k;
+!     float pmax;
+!     float score;
+!     float gapcnt;
+!     float bimble;
+  
+      ajint ix;
+      ajint iy;
+--- 426,435 ----
+      ajint i;
+      ajint j;
+      ajint k;
+!     ajint gapcnt;
+!     double pmax;
+!     double score;
+!     double bimble;
+  
+      ajint ix;
+      ajint iy;
+***************
+*** 439,451 ****
+      const char *p;
+      const char *q;
+  
+!     float ic;
+!     float errbounds;
+  
+      ajDebug("embAlignWalkSWMatrix\n");
+  
+!     errbounds = gapextend;
+!     errbounds = (float) 0.01;
+  
+      /* Get maximum path score and save position */
+      pmax = -FLT_MAX;
+--- 439,451 ----
+      const char *p;
+      const char *q;
+  
+!     ajint ic;
+!     double errbounds;
+  
+      ajDebug("embAlignWalkSWMatrix\n");
+  
+!     /* errbounds = gapextend; */
+!     errbounds = (double) 0.01;
+  
+      /* Get maximum path score and save position */
+      pmax = -FLT_MAX;
+***************
+*** 480,486 ****
+  	else if(compass[ypos*lenb+xpos]==1) /* Left, gap(s) in vertical */
+  	{
+  	    score  = path[ypos*lenb+xpos];
+! 	    gapcnt = 0.;
+  	    ix     = xpos-1;
+  	    while(1)
+  	    {
+--- 480,486 ----
+  	else if(compass[ypos*lenb+xpos]==1) /* Left, gap(s) in vertical */
+  	{
+  	    score  = path[ypos*lenb+xpos];
+! 	    gapcnt = 0;
+  	    ix     = xpos-1;
+  	    while(1)
+  	    {
+***************
+*** 504,510 ****
+  	else if(compass[ypos*lenb+xpos]==2) /* Down, gap(s) in horizontal */
+  	{
+  	    score  = path[ypos*lenb+xpos];
+! 	    gapcnt = 0.;
+  	    iy = ypos-1;
+  
+  	    while(1)
+--- 504,510 ----
+  	else if(compass[ypos*lenb+xpos]==2) /* Down, gap(s) in horizontal */
+  	{
+  	    score  = path[ypos*lenb+xpos];
+! 	    gapcnt = 0;
+  	    iy = ypos-1;
+  
+  	    while(1)
+***************
+*** 575,584 ****
+  {
+      ajint i;
+      ajint j;
+!     float pmax;
+!     float score;
+!     float gapcnt;
+!     float bimble;
+  
+      ajint ix;
+      ajint iy;
+--- 575,584 ----
+  {
+      ajint i;
+      ajint j;
+!     ajint gapcnt;
+!     double pmax;
+!     double score;
+!     double bimble;
+  
+      ajint ix;
+      ajint iy;
+***************
+*** 588,603 ****
+      const char *p;
+      const char *q;
+  
+!     float ic;
+!     float errbounds;
+  
+      ajDebug("embAlignWalkNWMatrix\n");
+  
+!     errbounds=gapextend;
+!     errbounds = (float) 0.01;
+  
+      /* Get maximum path axis score and save position */
+!     pmax = (float) (-1*INT_MAX);
+      for(i=0;i<lenb;++i)
+  	if(path[(lena-1)*lenb+i]>=pmax)
+  	{
+--- 588,603 ----
+      const char *p;
+      const char *q;
+  
+!     ajint ic;
+!     double errbounds;
+  
+      ajDebug("embAlignWalkNWMatrix\n");
+  
+!     /*errbounds=gapextend;*/
+!     errbounds = (double) 0.01;
+  
+      /* Get maximum path axis score and save position */
+!     pmax = (double) (-1*INT_MAX);
+      for(i=0;i<lenb;++i)
+  	if(path[(lena-1)*lenb+i]>=pmax)
+  	{
+***************
+*** 631,637 ****
+  	else if(compass[ypos*lenb+xpos]==1) /* Left, gap(s) in vertical */
+  	{
+  	    score  = path[ypos*lenb+xpos];
+! 	    gapcnt = 0.;
+  	    ix     = xpos-1;
+  	    while(1)
+  	    {
+--- 631,637 ----
+  	else if(compass[ypos*lenb+xpos]==1) /* Left, gap(s) in vertical */
+  	{
+  	    score  = path[ypos*lenb+xpos];
+! 	    gapcnt = 0;
+  	    ix     = xpos-1;
+  	    while(1)
+  	    {
+***************
+*** 652,658 ****
+  	else if(compass[ypos*lenb+xpos]==2) /* Down, gap(s) in horizontal */
+  	{
+  	    score  = path[ypos*lenb+xpos];
+! 	    gapcnt = 0.;
+  	    iy = ypos-1;
+  
+  	    while(1)
+--- 652,658 ----
+  	else if(compass[ypos*lenb+xpos]==2) /* Down, gap(s) in horizontal */
+  	{
+  	    score  = path[ypos*lenb+xpos];
+! 	    gapcnt = 0;
+  	    iy = ypos-1;
+  
+  	    while(1)
+***************
+*** 1271,1281 ****
+      ajint k;
+      ajint ip;                   /* position in path matrix */
+  
+!     float match;
+!     float mscore;
+!     float fnew;
+!     float maxa;
+!     float *maxb;
+  
+      ajint jlena;
+      ajint jlenb;
+--- 1271,1281 ----
+      ajint k;
+      ajint ip;                   /* position in path matrix */
+  
+!     double match;
+!     double mscore;
+!     double fnew;
+!     double maxa;
+!     double *maxb;
+  
+      ajint jlena;
+      ajint jlenb;
+***************
+*** 1288,1294 ****
+      ajint xmax;                 /* last x position for this row */
+      ajint ymax;
+  
+!     float max;
+      static AjPStr outstr = NULL;
+  
+      char compasschar;
+--- 1288,1294 ----
+      ajint xmax;                 /* last x position for this row */
+      ajint ymax;
+  
+!     double max;
+      static AjPStr outstr = NULL;
+  
+      char compasschar;
+***************
+*** 1347,1353 ****
+  
+      /* Create stores for the maximum values in a row or column */
+  
+!     maxb = AJALLOC(lenb*sizeof(float));
+  
+      /* First initialise the first column and row */
+      for(i=0;i<lena;++i)
+--- 1347,1353 ----
+  
+      /* Create stores for the maximum values in a row or column */
+  
+!     maxb = AJALLOC(lenb*sizeof(double));
+  
+      /* First initialise the first column and row */
+      for(i=0;i<lena;++i)
+***************
+*** 1379,1385 ****
+  	maxb[j] = path[j]-(gapopen);
+  
+      for(j=rightwidth;j<lenb;++j)
+! 	maxb[j] = (float) -999.9;
+  
+      /* ajDebug("2   %d %d\n",lena,lenb);*/
+  
+--- 1379,1385 ----
+  	maxb[j] = path[j]-(gapopen);
+  
+      for(j=rightwidth;j<lenb;++j)
+! 	maxb[j] = (double) -999.9;
+  
+      /* ajDebug("2   %d %d\n",lena,lenb);*/
+  
+***************
+*** 1540,1549 ****
+      ajint j;
+      ajint k;
+      ajint ip;                   /* position in path matrix */
+!     float pmax;
+!     float score;
+!     float gapcnt;
+!     float bimble;
+  
+      ajint ix;
+      ajint iy;
+--- 1540,1549 ----
+      ajint j;
+      ajint k;
+      ajint ip;                   /* position in path matrix */
+!     ajint gapcnt;
+!     double pmax;
+!     double score;
+!     double bimble;
+  
+      ajint ix;
+      ajint iy;
+***************
+*** 1554,1561 ****
+      const char *p;
+      const char *q;
+  
+!     float ic;
+!     float errbounds;
+  
+      ajint width;
+      ajint leftwidth;
+--- 1554,1561 ----
+      const char *p;
+      const char *q;
+  
+!     ajint ic;
+!     double errbounds;
+  
+      ajint width;
+      ajint leftwidth;
+***************
+*** 1567,1573 ****
+  
+      ajDebug("embAlignWalkSWMatrixFast\n");
+  
+!     errbounds = (float) 0.01;
+      width = pathwidth;
+  
+      if(lena < width)
+--- 1567,1573 ----
+  
+      ajDebug("embAlignWalkSWMatrixFast\n");
+  
+!     errbounds = (double) 0.01;
+      width = pathwidth;
+  
+      if(lena < width)
+***************
+*** 1633,1639 ****
+  	else if(compass[ip]==1) /* Left, horizontal gap(s): step through xpos */
+  	{
+  	    score  = path[ip];
+! 	    gapcnt = 0.;
+  	    ix     = xpos-1;
+  	    while(1)
+  	    {
+--- 1633,1639 ----
+  	else if(compass[ip]==1) /* Left, horizontal gap(s): step through xpos */
+  	{
+  	    score  = path[ip];
+! 	    gapcnt = 0;
+  	    ix     = xpos-1;
+  	    while(1)
+  	    {
+***************
+*** 1661,1667 ****
+  	else if(compass[ip]==2) /* Down, vertical gap(s): step through ypos */
+  	{
+  	    score  = path[ip];
+! 	    gapcnt = 0.;
+  	    iy = ypos-1;
+  
+  	    while(1)
+--- 1661,1667 ----
+  	else if(compass[ip]==2) /* Down, vertical gap(s): step through ypos */
+  	{
+  	    score  = path[ip];
+! 	    gapcnt = 0;
+  	    iy = ypos-1;
+  
+  	    while(1)
+***************
+*** 1735,1750 ****
+  
+      static AjPStr outstr = NULL;
+  
+!     float fmscore;
+!     float mscore;
+!     float fnew;
+!     float maxp;
+!     float *maxs;
+  
+      ret = -FLT_MAX;
+      ajDebug("embAlignProfilePathCalc\n");
+  
+!     maxs = AJALLOC(seqlen*sizeof(float));
+  
+      /* First initialise the first column and row */
+      for(column=0;column<seqlen;++column)
+--- 1735,1750 ----
+  
+      static AjPStr outstr = NULL;
+  
+!     double fmscore;
+!     double mscore;
+!     double fnew;
+!     double maxp;
+!     double *maxs;
+  
+      ret = -FLT_MAX;
+      ajDebug("embAlignProfilePathCalc\n");
+  
+!     maxs = AJALLOC(seqlen*sizeof(double));
+  
+      /* First initialise the first column and row */
+      for(column=0;column<seqlen;++column)
+***************
+*** 1889,1899 ****
+  			       ajint *start1, ajint *start2)
+  {
+      ajint i;
+-     float pathmax;
+-     float score;
+- 
+      ajint gapcnt;
+!     float bimble;
+  
+      ajint ix;
+      ajint iy;
+--- 1889,1899 ----
+  			       ajint *start1, ajint *start2)
+  {
+      ajint i;
+      ajint gapcnt;
+!     double pathmax;
+!     double score;
+! 
+!     double bimble;
+  
+      ajint ix;
+      ajint iy;
+***************
+*** 1909,1922 ****
+      const char *p;
+      const char *q;
+  
+!     float errbounds;
+  
+      ajDebug("embAlignWalkProfileMatrix\n");
+  
+!     errbounds = (float) 0.01;
+  
+      /* Get maximum path score and save position */
+!     pathmax = -(float) INT_MAX;
+      for(row=0;row<proflen;++row)
+  	for(column=0;column<seqlen;++column)
+  	    if(path[row*seqlen+column] > pathmax)
+--- 1909,1922 ----
+      const char *p;
+      const char *q;
+  
+!     double errbounds;
+  
+      ajDebug("embAlignWalkProfileMatrix\n");
+  
+!     errbounds = (double) 0.01;
+  
+      /* Get maximum path score and save position */
+!     pathmax = -(double) INT_MAX;
+      for(row=0;row<proflen;++row)
+  	for(column=0;column<seqlen;++column)
+  	    if(path[row*seqlen+column] > pathmax)
 diff -c -N --recursive EMBOSS-6.0.1old/nucleus/embprop.c EMBOSS-6.0.1/nucleus/embprop.c
 *** EMBOSS-6.0.1old/nucleus/embprop.c	2008-07-14 23:13:33.000000000 +0100
---- EMBOSS-6.0.1/nucleus/embprop.c	2009-02-21 09:20:54.000000000 +0000
+--- EMBOSS-6.0.1/nucleus/embprop.c	2009-03-24 16:05:14.000000000 +0000
 ***************
 *** 880,885 ****
 --- 880,886 ----

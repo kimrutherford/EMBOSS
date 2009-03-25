@@ -1,3 +1,14 @@
+emboss (6.0.1-5) unstable; urgency=low
+
+  * New upstream patch (patch-1-6): correction for large pairwise alignments.
+  * debian/control:
+    - Incremented Standards-Version to reflect conformance with Policy 3.8.1
+      (no changes needed).
+    - Moved the bibliographic reference from the description of the EMBOSS
+      package to the file debian/reference.
+
+ -- Charles Plessy <plessy@debian.org>  Wed, 25 Mar 2009 11:44:30 +0900
+
 emboss (6.0.1-4) unstable; urgency=low
 
   * New upstream patch (patch-1-5):

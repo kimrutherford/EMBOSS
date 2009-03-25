@@ -7,7 +7,7 @@ Uploaders: Charles Plessy <plessy@debian.org>, Nelson A. de Oliveira <naoliv@deb
 Build-Depends: debhelper (>= 7), quilt, libx11-dev, x11proto-core-dev, libgdchart-gd2-xpm-dev, zlib1g-dev, libpng12-dev, libpcre3-dev, antiword, sharutils, autotools-dev, tcsh | csh | c-shell, openjdk-6-jdk
 Vcs-Browser: http://svn.debian.org/wsvn/debian-med/trunk/packages/emboss/trunk/?rev=0&sc=0trunk
 Vcs-Svn: svn://svn.debian.org/svn/debian-med/trunk/packages/emboss/trunk/
-Standards-Version: 3.8.0
+Standards-Version: 3.8.1
 Homepage: http://emboss.sourceforge.net
 
 Package: emboss
@@ -25,10 +25,6 @@ Description: the european molecular biology open software suite
  also integrates a range of currently available packages and tools for sequence
  analysis into a seamless whole. EMBOSS breaks the historical trend towards
  commercial software packages.
- .
- Reference for EMBOSS: Rice,P. Longden,I. and Bleasby,A.
- "EMBOSS: The European Molecular Biology Open Software Suite"
- Trends in Genetics June 2000, vol 16, No 6. pp.276-277
 
 Package: emboss-data
 Architecture: all
