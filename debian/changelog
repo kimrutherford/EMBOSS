@@ -1,10 +1,12 @@
-emboss (6.0.1-6) UNRELEASED; urgency=low
+emboss (6.0.1-6) unstable; urgency=low
 
-  * debian/rules: build arch all packages only when binary-indep is called
-    (Closes: #521398) 
+  * debian/rules:
+    - Build arch all packages only when binary-indep is called
+      (Closes: #521398)
+    - Corrected stamping gymnastics.
   * debian/control: moved openjdk-6-jdk to Build-Depends-Indep 
 
- -- Charles Plessy <plessy@debian.org>  Sat, 28 Mar 2009 20:50:27 +0900
+ -- Charles Plessy <plessy@debian.org>  Mon, 30 Mar 2009 13:02:11 +0900
 
 emboss (6.0.1-5) unstable; urgency=low
 

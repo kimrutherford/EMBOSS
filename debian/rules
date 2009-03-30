@@ -23,10 +23,11 @@ config.status:
 
 include /usr/share/quilt/quilt.make
 
-build: patch build-stamp debian/copyright
-build-stamp: config.status
+build: build-stamp config.status patch debian/copyright
+build-stamp:
 	dh_testdir
 	$(MAKE) AJAX_FIXED_ROOT=\\\"/usr/share/EMBOSS\\\"
+	touch build-stamp
 
 # In order to use this rule you must install libemboss-acd-perl, xsltproc, docbook-xml and docbook-xsl
 manpages: debian/manpages/success
@@ -57,8 +58,8 @@ clean: unpatch config.status
 
 	dh_clean debian/copyright config.sub config.guess test-stamp
 
-install: install-stamp
-install-stamp: build-stamp
+install: build-stamp install-stamp
+install-stamp:
 	dh_testdir
 	dh_testroot
 	dh_prep
@@ -121,7 +122,7 @@ ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
 	cd test/qa && PATH=$(CURDIR)/emboss:$$PATH ./qatest.csh
 endif
 
-binary-indep:
+binary-indep: build install
 	dh binary-indep
 
 binary-arch: build install test
