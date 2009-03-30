@@ -122,32 +122,33 @@ ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
 endif
 
 binary-indep:
+	dh binary-indep
 
 binary-arch: build install test
-	dh_testdir
-	dh_testroot
-	dh_installchangelogs ChangeLog
-	dh_installdocs
-#	dh_installmenu
-#	dh_desktop
-#	dh_installmime
-	dh_install
+	dh_testdir -a
+	dh_testroot -a
+	dh_installchangelogs -a ChangeLog
+	dh_installdocs -a
+#	dh_installmenu -a
+#	dh_desktop -a
+#	dh_installmime -a
+	dh_install -a
 	
 	# Install the manpages and provide a symlink for the renamed binaries.
-	dh_installman -p emboss
+	dh_installman -a -p emboss
 	for i in $(RENAMED) ; \
 		do dh_link usr/share/man/man1/$$i.1e.gz usr/share/man/man1/em_$$i.1e.gz ; \
 		done
 	
-	dh_strip
-	dh_compress
-	dh_fixperms
-	dh_makeshlibs
-	dh_installdeb
-	dh_shlibdeps
-	dh_gencontrol
-	dh_md5sums
-	dh_builddeb -- -Z bzip2
+	dh_strip -a
+	dh_compress -a
+	dh_fixperms -a
+	dh_makeshlibs -a
+	dh_installdeb -a
+	dh_shlibdeps -a
+	dh_gencontrol -a
+	dh_md5sums -a
+	dh_builddeb -a -- -Z bzip2
 
 binary: binary-indep binary-arch
 .PHONY: build clean binary-indep binary-arch binary

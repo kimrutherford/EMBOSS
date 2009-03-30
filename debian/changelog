@@ -1,3 +1,11 @@
+emboss (6.0.1-6) UNRELEASED; urgency=low
+
+  * debian/rules: build arch all packages only when binary-indep is called
+    (Closes: #521398) 
+  * debian/control: moved openjdk-6-jdk to Build-Depends-Indep 
+
+ -- Charles Plessy <plessy@debian.org>  Sat, 28 Mar 2009 20:50:27 +0900
+
 emboss (6.0.1-5) unstable; urgency=low
 
   * New upstream patch (patch-1-6): correction for large pairwise alignments.
