@@ -2,7 +2,7 @@ emboss (6.0.1-8) unstable; urgency=low
 
   * debian/rules:
      - Do not pass java options to the configure script if openjdk is not
-       installed (Closes #521996, thanks to Peter Green).
+       installed (Closes: #521996, thanks to Peter Green).
      - Recursive removal of emboss_tmp (to build the package twice in a row).
      - Removed one `dh binary-indep` instance that strangely sneaked in after
        running `svn update`.
