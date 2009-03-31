@@ -4,8 +4,7 @@ Priority: optional
 Maintainer: Debian-Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
 DM-Upload-Allowed: yes
 Uploaders: Charles Plessy <plessy@debian.org>, Nelson A. de Oliveira <naoliv@debian.org>
-Build-Depends: debhelper (>= 7), quilt, libx11-dev, x11proto-core-dev, libgdchart-gd2-xpm-dev, zlib1g-dev, libpng12-dev, libpcre3-dev, antiword, sharutils, autotools-dev, tcsh | csh | c-shell
-Build-Depends-Indep: openjdk-6-jdk
+Build-Depends: debhelper (>= 7), quilt, libx11-dev, x11proto-core-dev, libgdchart-gd2-xpm-dev, zlib1g-dev, libpng12-dev, libpcre3-dev, antiword, sharutils, autotools-dev, tcsh | csh | c-shell, openjdk-6-jdk
 Vcs-Browser: http://svn.debian.org/wsvn/debian-med/trunk/packages/emboss/trunk/?rev=0&sc=0trunk
 Vcs-Svn: svn://svn.debian.org/svn/debian-med/trunk/packages/emboss/trunk/
 Standards-Version: 3.8.1

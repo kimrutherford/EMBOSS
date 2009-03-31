@@ -124,6 +124,7 @@ endif
 
 binary-indep: build install
 	dh binary-indep
+	dh binary-indep
 
 binary-arch: build install test
 	dh_testdir -a
