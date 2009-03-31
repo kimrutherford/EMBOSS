@@ -11,15 +11,21 @@ EMBOSS-TEST = $(CURDIR)/debian/emboss-test
 AJAX        = $(CURDIR)/debian/libajax6
 NUCLEUS     = $(CURDIR)/debian/libnucleus6
 
+CONFFLAGS   = --prefix=/usr --bindir=/usr/lib/emboss
+
+# If openjdk-6-jdk is not installed don't tell configure to use it.
+# This allows binary-arch builds to be performed without openjdk
+# installed.
+ifneq ($(wildcard /usr/lib/jvm/java-6-openjdk/include/classfile_constants.h),)
+    CONFFLAGS += --with-java=/usr/lib/jvm/java-6-openjdk/include
+    CONFFLAGS += --with-javaos=/usr/lib/jvm/java-6-openjdk/include/linux
+endif
+
 config.status:
 	dh_testdir
 	ln -sf /usr/share/misc/config.sub .
 	ln -sf /usr/share/misc/config.guess .
-	./configure                                                     \
-		--prefix=/usr                                           \
-		--bindir=/usr/lib/emboss                                \
-		--with-java=/usr/lib/jvm/java-6-openjdk/include         \
-		--with-javaos=/usr/lib/jvm/java-6-openjdk/include/linux
+	./configure $(CONFFLAGS)
 
 include /usr/share/quilt/quilt.make
 
@@ -47,7 +53,7 @@ clean: unpatch config.status
 
 	find jemboss/ -type f -name "*.class" | xargs -r rm -f
 
-	$(RM) debian/emboss_tmp
+	rm --force --recursive debian/emboss_tmp
 
 	$(RM) config.status install-stamp
 	

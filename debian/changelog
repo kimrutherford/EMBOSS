@@ -1,9 +1,17 @@
-emboss (6.0.1-8) UNRELEASED; urgency=low
+emboss (6.0.1-8) unstable; urgency=low
 
-  * debian/rules: removed one `dh binary-indep` instance that strangely 
-    sneaked in after running `svn update`.
+  * debian/rules:
+     - Do not pass java options to the configure script if openjdk is not
+       installed (Closes #521996, thanks to Peter Green).
+     - Recursive removal of emboss_tmp (to build the package twice in a row).
+     - Removed one `dh binary-indep` instance that strangely sneaked in after
+       running `svn update`.
+  * debian/control:
+    - Moved again openjdk-6-jdk to Build-Depends-Indep.
+    - Added debhelper's ${misc:Depends} substitution variable to the packages
+      that did not already depend on it.
 
- -- Charles Plessy <plessy@debian.org>  Tue, 31 Mar 2009 09:16:19 +0900
+ -- Charles Plessy <plessy@debian.org>  Tue, 31 Mar 2009 14:26:55 +0900
 
 emboss (6.0.1-7) unstable; urgency=low
 
