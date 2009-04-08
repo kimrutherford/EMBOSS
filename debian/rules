@@ -29,8 +29,8 @@ config.status:
 
 include /usr/share/quilt/quilt.make
 
-build: build-stamp
-build-stamp: config.status patch debian/copyright
+build: build-stamp config.status patch debian/copyright
+build-stamp:
 	dh_testdir
 	$(MAKE) AJAX_FIXED_ROOT=\\\"/usr/share/EMBOSS\\\"
 	touch build-stamp
@@ -64,7 +64,7 @@ clean: unpatch config.status
 
 	dh_clean debian/copyright config.sub config.guess test-stamp
 
-install: build-stamp install-stamp
+install: build install-stamp
 install-stamp:
 	dh_testdir
 	dh_testroot
@@ -119,13 +119,17 @@ install-stamp:
 
 	touch install-stamp
 
-test: test-stamp
+test: build test-stamp
 test-stamp:
 ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
-	[ ../debian/testembossrcbackup ] || cp test/.embossrc ../debian/testembossrcbackup
+	$(RM) test-stamp
+	[ debian/testembossrcbackup ] || cp test/.embossrc debian/testembossrcbackup
 	sed -i "/SET emboss_tempdata/cSET emboss_tempdata $(CURDIR)/test" test/.embossrc
 	sed -i "/SET emboss_qadata/cSET emboss_qadata $(CURDIR)/test" test/.embossrc
-	cd test/qa && PATH=$(CURDIR)/emboss:$$PATH ./qatest.csh
+	echo "SET emboss_acdroot $(CURDIR)/emboss/acd" >> test/.embossrc
+	echo "SET emboss_data $(CURDIR)/emboss/data" >> test/.embossrc
+	cd test/qa && EMBOSSRC=$(CURDIR)/test PATH=$(CURDIR)/emboss:$$PATH ./qatest.csh
+	touch test-stamp
 endif
 
 binary-indep: build install

@@ -4,6 +4,10 @@ emboss (6.0.1-9) UNRELEASED; urgency=low
     - Corrections on syntax using the master qualifier name as a suffix.
     - Better support of the --without-x (not used in this package).
     - Bug corrected for needle and water using the -nobrief option.
+  * debian/rules
+    - Corrected again the targets to avoid calling them when it is not
+      necessary.
+    - Defines emboss_acdroot and emboss_data in order to run the tests.
 
  -- Charles Plessy <plessy@debian.org>  Wed, 08 Apr 2009 14:42:58 +0900
 
