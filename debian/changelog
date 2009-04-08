@@ -7,9 +7,10 @@ emboss (6.0.1-9) UNRELEASED; urgency=low
   * debian/rules
     - Corrected again the targets to avoid calling them when it is not
       necessary.
-    - Defines emboss_acdroot and emboss_data in order to run the tests.
+    - Defines emboss_acdroot, emboss_docroot and emboss_data in order
+      to run the tests.
 
- -- Charles Plessy <plessy@debian.org>  Wed, 08 Apr 2009 14:42:58 +0900
+ -- Charles Plessy <plessy@debian.org>  Wed, 08 Apr 2009 20:16:56 +0900
 
 emboss (6.0.1-8) unstable; urgency=low
 

@@ -29,7 +29,7 @@ config.status:
 
 include /usr/share/quilt/quilt.make
 
-build: build-stamp config.status patch debian/copyright
+build: config.status patch debian/copyright build-stamp
 build-stamp:
 	dh_testdir
 	$(MAKE) AJAX_FIXED_ROOT=\\\"/usr/share/EMBOSS\\\"
@@ -128,6 +128,7 @@ ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
 	sed -i "/SET emboss_qadata/cSET emboss_qadata $(CURDIR)/test" test/.embossrc
 	echo "SET emboss_acdroot $(CURDIR)/emboss/acd" >> test/.embossrc
 	echo "SET emboss_data $(CURDIR)/emboss/data" >> test/.embossrc
+	echo "SET emboss_docroot $(CURDIR)/doc" >> test/.embossrc
 	cd test/qa && EMBOSSRC=$(CURDIR)/test PATH=$(CURDIR)/emboss:$$PATH ./qatest.csh
 	touch test-stamp
 endif
