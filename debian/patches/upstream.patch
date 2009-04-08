@@ -3,10 +3,244 @@ Forwarded: no
  This is an upstream patch, it does not need to be forwarded.
 Description: Official upstream patch.
  This patch was downloaded from:
- ftp://emboss.open-bio.org/pub/EMBOSS/fixes/patches/patch-1-6.gz
+ ftp://emboss.open-bio.org/pub/EMBOSS/fixes/patches/patch-1-7.gz
+diff -c -N --recursive EMBOSS-6.0.1old/ajax/ajacd.c EMBOSS-6.0.1/ajax/ajacd.c
+*** EMBOSS-6.0.1old/ajax/ajacd.c	2008-07-14 15:47:38.000000000 +0100
+--- EMBOSS-6.0.1/ajax/ajacd.c	2009-04-07 11:40:02.000000000 +0100
+***************
+*** 8256,8263 ****
+--- 8256,8271 ----
+  	    acdReplyInit(thys, ajStrGetPtr(gdev), &acdReplyDef);
+  	else
+  #ifndef WIN32
++ #ifndef X_DISPLAY_MISSING /* X11 is available */
+  	    acdReplyInit(thys, "x11", &acdReplyDef);
+  #else
++ #ifdef PLD_png          /* if png/gd/zlib libraries available for png driver */
++ 	    acdReplyInit(thys, "png", &acdReplyDef);
++ #else
++ 	    acdReplyInit(thys, "ps", &acdReplyDef);
++ #endif
++ #endif
++ #else
+  	    acdReplyInit(thys, "win3", &acdReplyDef);
+  #endif
+      }
+***************
+*** 8426,8433 ****
+--- 8434,8449 ----
+  	    acdReplyInit(thys, ajStrGetPtr(gdev), &acdReplyDef);
+  	else
+  #ifndef WIN32
++ #ifndef X_DISPLAY_MISSING /* X11 is available */
+  	    acdReplyInit(thys, "x11", &acdReplyDef);
+  #else
++ #ifdef PLD_png          /* if png/gd/zlib libraries available for png driver */
++ 	    acdReplyInit(thys, "png", &acdReplyDef);
++ #else
++ 	    acdReplyInit(thys, "ps", &acdReplyDef);
++ #endif
++ #endif
++ #else
+  	    acdReplyInit(thys, "win3", &acdReplyDef);
+  #endif
+      }
+***************
+*** 11433,11443 ****
+      
+      if(ajSeqIsNuc(val))
+      {
+- 	if(seqin->Rev)
+- 	{
+- 	    okrev = ajTrue;
+- 	}
+- 
+  	for(itry=acdPromptTry; itry && !okrev; itry--)
+  	{
+  	    ajStrAssignC(&acdReplyPrompt, "N");
+--- 11449,11454 ----
+***************
+*** 11631,11637 ****
+  	okend = acdQualToSeqend(thys, "send", 0,
+  				&seqin->End, &acdTmpStr);
+  	okrev = acdQualToBool(thys, "sreverse", ajFalse,
+! 			      &seqin->Rev, &acdTmpStr);
+  
+  	if(snuc)
+  	    ajSeqinSetNuc(seqin);
+--- 11642,11648 ----
+  	okend = acdQualToSeqend(thys, "send", 0,
+  				&seqin->End, &acdTmpStr);
+  	okrev = acdQualToBool(thys, "sreverse", ajFalse,
+! 			      &sreverse, &acdTmpStr);
+  
+  	if(snuc)
+  	    ajSeqinSetNuc(seqin);
+***************
+*** 11723,11734 ****
+  
+      if(ajSeqIsNuc(seq))
+      {
+- 	if(seqin->Rev)
+- 	{
+- 	    okrev = ajTrue;
+- 	    val->Rev = seq->Rev = seqin->Rev;
+- 	}
+- 
+  	for(itry=acdPromptTry; itry && !okrev; itry--)
+  	{
+  	    ajStrAssignC(&acdReplyPrompt, "N");
+--- 11734,11739 ----
+***************
+*** 11753,11759 ****
+  	}
+      }
+  
+!     /* no need to reverse - it should happen in ajSeqallNext */
+  
+      acdLog("sbegin: %d, send: %d, sreverse: %B\n",
+  	   sbegin, send, sreverse);
+--- 11758,11764 ----
+  	}
+      }
+  
+! 
+  
+      acdLog("sbegin: %d, send: %d, sreverse: %B\n",
+  	   sbegin, send, sreverse);
+***************
+*** 11906,11912 ****
+  	okend = acdQualToSeqend(thys, "send", 0,
+  				&seqin->End, &acdTmpStr);
+  	okrev = acdQualToBool(thys, "sreverse", ajFalse,
+! 			      &seqin->Rev, &acdTmpStr);
+  	
+  	if(snuc)
+  	    ajSeqinSetNuc(seqin);
+--- 11911,11917 ----
+  	okend = acdQualToSeqend(thys, "send", 0,
+  				&seqin->End, &acdTmpStr);
+  	okrev = acdQualToBool(thys, "sreverse", ajFalse,
+! 			      &sreverse, &acdTmpStr);
+  	
+  	if(snuc)
+  	    ajSeqinSetNuc(seqin);
+***************
+*** 12003,12015 ****
+  
+      if(ajSeqsetIsNuc(val[0]))
+      {
+- 	if(seqin->Rev)
+- 	{
+- 	    okrev = ajTrue;
+- 	    for(iset=0;iset<nsets;iset++)
+- 		val[iset]->Rev = seqin->Rev;
+- 	}
+- 
+  	for(itry=acdPromptTry; itry && !okrev; itry--)
+  	{
+  	    ajStrAssignC(&acdReplyPrompt, "N");
+--- 12008,12013 ----
+***************
+*** 12788,12794 ****
+  	okend = acdQualToSeqend(thys, "send", 0,
+  				&seqin->End, &acdTmpStr);
+  	okrev = acdQualToBool(thys, "sreverse", ajFalse,
+! 			      &seqin->Rev, &acdTmpStr);
+  	
+  	if(snuc)
+  	    ajSeqinSetNuc(seqin);
+--- 12786,12792 ----
+  	okend = acdQualToSeqend(thys, "send", 0,
+  				&seqin->End, &acdTmpStr);
+  	okrev = acdQualToBool(thys, "sreverse", ajFalse,
+! 			      &sreverse, &acdTmpStr);
+  	
+  	if(snuc)
+  	    ajSeqinSetNuc(seqin);
+***************
+*** 12876,12887 ****
+  
+      if(ajSeqsetGetSize(val) && ajSeqsetIsNuc(val))
+      {
+- 	if(seqin->Rev)
+- 	{
+- 	    okrev = ajTrue;
+- 	    val->Rev = seqin->Rev;
+- 	}
+- 
+  	for(itry=acdPromptTry; itry && !okrev; itry--)
+  	{
+  	    ajStrAssignC(&acdReplyPrompt, "N");
+--- 12874,12879 ----
+***************
+*** 15461,15479 ****
+  
+  static void acdHelpExpectGraph(const AcdPAcd thys, AjBool table, AjPStr* str)
+  {
+-     if(!thys) return;
+- 
+  #ifndef WIN32
+!     if(table)
+! 	ajStrAppendC(str, "<i>EMBOSS_GRAPHICS</i> value, or x11");
+!     else
+! 	ajStrAppendC(str, "$EMBOSS_GRAPHICS value, or x11");
+  #else
+      if(table)
+! 	ajStrAppendC(str, "<i>EMBOSS_GRAPHICS</i> value, or win3");
+      else
+! 	ajStrAppendC(str, "$EMBOSS_GRAPHICS value, or win3");
+! #endif
+      return;
+  }
+  
+--- 15453,15478 ----
+  
+  static void acdHelpExpectGraph(const AcdPAcd thys, AjBool table, AjPStr* str)
+  {
+  #ifndef WIN32
+! #ifndef X_DISPLAY_MISSING /* X11 is available */
+!     const char* defdev = "x11";
+! #else
+! #ifdef PLD_png          /* if png/gd/zlib libraries available for png driver */
+!     const char* defdev = "png";
+! #else
+!     const char* defdev = "ps";
+! #endif
+! #endif
+  #else
++     const char* defdev = "win3";
++ #endif
++ 
++     if(!thys) return;
++ 
+      if(table)
+! 	ajFmtPrintAppS(str, "<i>EMBOSS_GRAPHICS</i> value, or %s"), defdev;
+      else
+! 	ajFmtPrintAppS(str, "$EMBOSS_GRAPHICS value, or %s", defdev);
+      return;
+  }
+  
+***************
+*** 19171,19177 ****
+  	    acdLog("number: %d jparam: %d acd->PNum: %d acdNParam: %d\n",
+  		   number, jparam, acd->PNum, acdNParam);
+  	    
+! 	    if(!number && !jparam && acd->PNum)
+  	    {
+  		for(itestparam = acd->PNum+1; itestparam <= acdNParam;
+  		    itestparam++)
+--- 19170,19176 ----
+  	    acdLog("number: %d jparam: %d acd->PNum: %d acdNParam: %d\n",
+  		   number, jparam, acd->PNum, acdNParam);
+  	    
+! 	    if(!ajStrGetLen(master) && !number && !jparam && acd->PNum)
+  	    {
+  		for(itestparam = acd->PNum+1; itestparam <= acdNParam;
+  		    itestparam++)
 diff -c -N --recursive EMBOSS-6.0.1old/ajax/ajseq.c EMBOSS-6.0.1/ajax/ajseq.c
 *** EMBOSS-6.0.1old/ajax/ajseq.c	2008-07-14 15:54:44.000000000 +0100
---- EMBOSS-6.0.1/ajax/ajseq.c	2009-03-24 16:05:14.000000000 +0000
+--- EMBOSS-6.0.1/ajax/ajseq.c	2009-04-07 11:40:06.000000000 +0100
 ***************
 *** 287,292 ****
 --- 287,293 ----
@@ -129,9 +363,42 @@ diff -c -N --recursive EMBOSS-6.0.1old/ajax/ajseq.c EMBOSS-6.0.1/ajax/ajseq.c
       ajStrSetClear(&seq->Type);
       ajStrSetClear(&seq->Molecule);
       ajStrSetClear(&seq->Class);
+***************
+*** 5364,5370 ****
+--- 5387,5396 ----
+  	seq->Begin = -(iend);
+  
+      for(i=0; i < seq->Size; i++)
++     {
++         seq->Seq[i]->Rev = ajTrue;
+  	ajSeqReverseDo(seq->Seq[i]);
++     }
+  
+      ajDebug("  set result len: %d Begin: %d End: %d\n",
+  	    ajSeqsetGetLen(seq), seq->Begin, seq->End);
+diff -c -N --recursive EMBOSS-6.0.1old/ajax/ajseqread.c EMBOSS-6.0.1/ajax/ajseqread.c
+*** EMBOSS-6.0.1old/ajax/ajseqread.c	2008-07-14 15:52:48.000000000 +0100
+--- EMBOSS-6.0.1/ajax/ajseqread.c	2009-04-07 11:40:15.000000000 +0100
+***************
+*** 1617,1623 ****
+      ajDebug("ready to start reading format '%S' '%S' %d..%d\n",
+  	    seqin->Formatstr, seq->Formatstr, seqin->Begin, seqin->End);
+  
+!     while(ajSeqRead(seq, seqin))
+      {
+  	if (seqin->List)
+  	    ajSeqinClearPos(seqin);
+--- 1617,1623 ----
+      ajDebug("ready to start reading format '%S' '%S' %d..%d\n",
+  	    seqin->Formatstr, seq->Formatstr, seqin->Begin, seqin->End);
+  
+!     while(!seqin->multidone && ajSeqRead(seq, seqin))
+      {
+  	if (seqin->List)
+  	    ajSeqinClearPos(seqin);
 diff -c -N --recursive EMBOSS-6.0.1old/ajax/ajseqwrite.c EMBOSS-6.0.1/ajax/ajseqwrite.c
 *** EMBOSS-6.0.1old/ajax/ajseqwrite.c	2008-07-14 15:58:07.000000000 +0100
---- EMBOSS-6.0.1/ajax/ajseqwrite.c	2009-03-24 16:05:14.000000000 +0000
+--- EMBOSS-6.0.1/ajax/ajseqwrite.c	2009-04-07 11:39:40.000000000 +0100
 ***************
 *** 451,456 ****
 --- 451,457 ----
@@ -189,7 +456,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/ajax/ajseqwrite.c EMBOSS-6.0.1/ajax/ajseq
   
 diff -c -N --recursive EMBOSS-6.0.1old/emboss/acd/edialign.acd EMBOSS-6.0.1/emboss/acd/edialign.acd
 *** EMBOSS-6.0.1old/emboss/acd/edialign.acd	2008-04-04 16:54:03.000000000 +0100
---- EMBOSS-6.0.1/emboss/acd/edialign.acd	2009-03-24 16:05:14.000000000 +0000
+--- EMBOSS-6.0.1/emboss/acd/edialign.acd	2009-04-07 11:39:40.000000000 +0100
 ***************
 *** 26,32 ****
       information: "Nucleic acid sequence alignment mode"
@@ -236,7 +503,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/emboss/acd/edialign.acd EMBOSS-6.0.1/embo
   endsection: output
 diff -c -N --recursive EMBOSS-6.0.1old/emboss/acd/Makefile.am EMBOSS-6.0.1/emboss/acd/Makefile.am
 *** EMBOSS-6.0.1old/emboss/acd/Makefile.am	2008-07-14 16:46:31.000000000 +0100
---- EMBOSS-6.0.1/emboss/acd/Makefile.am	2009-03-24 16:05:14.000000000 +0000
+--- EMBOSS-6.0.1/emboss/acd/Makefile.am	2009-04-07 11:39:40.000000000 +0100
 ***************
 *** 21,27 ****
   	fuzznuc.acd fuzzpro.acd fuzztran.acd \
@@ -276,7 +543,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/emboss/acd/Makefile.am EMBOSS-6.0.1/embos
   
 diff -c -N --recursive EMBOSS-6.0.1old/emboss/acd/Makefile.in EMBOSS-6.0.1/emboss/acd/Makefile.in
 *** EMBOSS-6.0.1old/emboss/acd/Makefile.in	2008-07-16 19:33:19.000000000 +0100
---- EMBOSS-6.0.1/emboss/acd/Makefile.in	2009-03-24 16:05:14.000000000 +0000
+--- EMBOSS-6.0.1/emboss/acd/Makefile.in	2009-04-07 11:39:40.000000000 +0100
 ***************
 *** 209,215 ****
   	fuzznuc.acd fuzzpro.acd fuzztran.acd \
@@ -316,7 +583,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/emboss/acd/Makefile.in EMBOSS-6.0.1/embos
   
 diff -c -N --recursive EMBOSS-6.0.1old/emboss/data/Makefile.am EMBOSS-6.0.1/emboss/data/Makefile.am
 *** EMBOSS-6.0.1old/emboss/data/Makefile.am	2008-07-14 16:09:23.000000000 +0100
---- EMBOSS-6.0.1/emboss/data/Makefile.am	2009-03-24 16:05:14.000000000 +0000
+--- EMBOSS-6.0.1/emboss/data/Makefile.am	2009-04-07 11:39:40.000000000 +0100
 ***************
 *** 30,36 ****
                  Epprofile Eprior1.plib Eprior30.plib Erna.melt Eresidues.iub \
@@ -336,7 +603,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/emboss/data/Makefile.am EMBOSS-6.0.1/embo
                  embossre.equ Emwfilter.dat Emass.dat Emassmod.dat \
 diff -c -N --recursive EMBOSS-6.0.1old/emboss/data/Makefile.in EMBOSS-6.0.1/emboss/data/Makefile.in
 *** EMBOSS-6.0.1old/emboss/data/Makefile.in	2008-07-16 19:33:20.000000000 +0100
---- EMBOSS-6.0.1/emboss/data/Makefile.in	2009-03-24 16:05:14.000000000 +0000
+--- EMBOSS-6.0.1/emboss/data/Makefile.in	2009-04-07 11:39:40.000000000 +0100
 ***************
 *** 228,234 ****
                  Epprofile Eprior1.plib Eprior30.plib Erna.melt Eresidues.iub \
@@ -356,7 +623,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/emboss/data/Makefile.in EMBOSS-6.0.1/embo
                  embossre.equ Emwfilter.dat Emass.dat Emassmod.dat \
 diff -c -N --recursive EMBOSS-6.0.1old/emboss/jaspscan.c EMBOSS-6.0.1/emboss/jaspscan.c
 *** EMBOSS-6.0.1old/emboss/jaspscan.c	2008-06-26 09:39:09.000000000 +0100
---- EMBOSS-6.0.1/emboss/jaspscan.c	2009-03-24 16:05:14.000000000 +0000
+--- EMBOSS-6.0.1/emboss/jaspscan.c	2009-04-07 11:39:40.000000000 +0100
 ***************
 *** 293,299 ****
   
@@ -387,9 +654,29 @@ diff -c -N --recursive EMBOSS-6.0.1old/emboss/jaspscan.c EMBOSS-6.0.1/emboss/jas
       ajStrDel(&dir);
       ajStrDel(&menu);
       ajStrDel(&excl);
+diff -c -N --recursive EMBOSS-6.0.1old/emboss/needle.c EMBOSS-6.0.1/emboss/needle.c
+*** EMBOSS-6.0.1old/emboss/needle.c	2008-06-10 13:48:04.000000000 +0100
+--- EMBOSS-6.0.1/emboss/needle.c	2009-04-07 11:40:28.000000000 +0100
+***************
+*** 151,157 ****
+  	{
+  	  embAlignCalcSimilarity(m,n,sub,cvt,lena,lenb,&id,&sim,&idx,
+  				 &simx);
+! 	  ajFmtPrintAppS(&tmpstr,"Longest_Identity = %5.2f%%\n",
+  			 id);
+  	  ajFmtPrintAppS(&tmpstr,"Longest_Similarity = %5.2f%%\n",
+  			 sim);
+--- 151,157 ----
+  	{
+  	  embAlignCalcSimilarity(m,n,sub,cvt,lena,lenb,&id,&sim,&idx,
+  				 &simx);
+! 	  ajFmtPrintS(&tmpstr,"Longest_Identity = %5.2f%%\n",
+  			 id);
+  	  ajFmtPrintAppS(&tmpstr,"Longest_Similarity = %5.2f%%\n",
+  			 sim);
 diff -c -N --recursive EMBOSS-6.0.1old/emboss/vectorstrip.c EMBOSS-6.0.1/emboss/vectorstrip.c
 *** EMBOSS-6.0.1old/emboss/vectorstrip.c	2008-06-26 09:39:09.000000000 +0100
---- EMBOSS-6.0.1/emboss/vectorstrip.c	2009-03-24 16:05:14.000000000 +0000
+--- EMBOSS-6.0.1/emboss/vectorstrip.c	2009-04-07 11:39:40.000000000 +0100
 ***************
 *** 174,180 ****
       vectorlist = ajListNew();
@@ -407,9 +694,29 @@ diff -c -N --recursive EMBOSS-6.0.1old/emboss/vectorstrip.c EMBOSS-6.0.1/emboss/
   	vectorstrip_read_vector_data(vectorfile, vectorlist);
       else
       {
+diff -c -N --recursive EMBOSS-6.0.1old/emboss/water.c EMBOSS-6.0.1/emboss/water.c
+*** EMBOSS-6.0.1old/emboss/water.c	2008-06-26 09:39:09.000000000 +0100
+--- EMBOSS-6.0.1/emboss/water.c	2009-04-07 11:40:31.000000000 +0100
+***************
+*** 159,165 ****
+  	{
+  	    embAlignCalcSimilarity(m,n,sub,cvt,lena,lenb,&id,&sim,&idx,
+  				   &simx);
+! 	    ajFmtPrintAppS(&tmpstr,"Longest_Identity = %5.2f%%\n",
+  			   id);
+  	    ajFmtPrintAppS(&tmpstr,"Longest_Similarity = %5.2f%%\n",
+  			   sim);
+--- 159,165 ----
+  	{
+  	    embAlignCalcSimilarity(m,n,sub,cvt,lena,lenb,&id,&sim,&idx,
+  				   &simx);
+! 	    ajFmtPrintS(&tmpstr,"Longest_Identity = %5.2f%%\n",
+  			   id);
+  	    ajFmtPrintAppS(&tmpstr,"Longest_Similarity = %5.2f%%\n",
+  			   sim);
 diff -c -N --recursive EMBOSS-6.0.1old/nucleus/embaln.c EMBOSS-6.0.1/nucleus/embaln.c
 *** EMBOSS-6.0.1old/nucleus/embaln.c	2008-07-15 15:41:05.000000000 +0100
---- EMBOSS-6.0.1/nucleus/embaln.c	2009-03-24 16:06:15.000000000 +0000
+--- EMBOSS-6.0.1/nucleus/embaln.c	2009-04-07 11:39:40.000000000 +0100
 ***************
 *** 69,79 ****
       ajint i;
@@ -940,7 +1247,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/nucleus/embaln.c EMBOSS-6.0.1/nucleus/emb
   	    if(path[row*seqlen+column] > pathmax)
 diff -c -N --recursive EMBOSS-6.0.1old/nucleus/embprop.c EMBOSS-6.0.1/nucleus/embprop.c
 *** EMBOSS-6.0.1old/nucleus/embprop.c	2008-07-14 23:13:33.000000000 +0100
---- EMBOSS-6.0.1/nucleus/embprop.c	2009-03-24 16:05:14.000000000 +0000
+--- EMBOSS-6.0.1/nucleus/embprop.c	2009-04-07 11:39:40.000000000 +0100
 ***************
 *** 880,885 ****
 --- 880,886 ----
