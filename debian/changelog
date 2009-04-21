@@ -1,3 +1,13 @@
+emboss (6.0.1-10) unstable; urgency=low
+
+  * New upstream patch (patch-1-8):
+      Incorrect information was often given in the subsidiary table
+      listing REs that would cut a greater number of times than an
+      optional user-supplied maximum number. The main role of
+      the program was unaffected.
+
+ -- Charles Plessy <plessy@debian.org>  Tue, 21 Apr 2009 13:01:38 +0900
+
 emboss (6.0.1-9) unstable; urgency=low
 
   * New upstream patch (patch-1-7):

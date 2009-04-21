@@ -3,10 +3,10 @@ Forwarded: no
  This is an upstream patch, it does not need to be forwarded.
 Description: Official upstream patch.
  This patch was downloaded from:
- ftp://emboss.open-bio.org/pub/EMBOSS/fixes/patches/patch-1-7.gz
+ ftp://emboss.open-bio.org/pub/EMBOSS/fixes/patches/patch-1-8.gz
 diff -c -N --recursive EMBOSS-6.0.1old/ajax/ajacd.c EMBOSS-6.0.1/ajax/ajacd.c
 *** EMBOSS-6.0.1old/ajax/ajacd.c	2008-07-14 15:47:38.000000000 +0100
---- EMBOSS-6.0.1/ajax/ajacd.c	2009-04-07 11:40:02.000000000 +0100
+--- EMBOSS-6.0.1/ajax/ajacd.c	2009-04-20 14:45:27.000000000 +0100
 ***************
 *** 8256,8263 ****
 --- 8256,8271 ----
@@ -240,7 +240,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/ajax/ajacd.c EMBOSS-6.0.1/ajax/ajacd.c
   		    itestparam++)
 diff -c -N --recursive EMBOSS-6.0.1old/ajax/ajseq.c EMBOSS-6.0.1/ajax/ajseq.c
 *** EMBOSS-6.0.1old/ajax/ajseq.c	2008-07-14 15:54:44.000000000 +0100
---- EMBOSS-6.0.1/ajax/ajseq.c	2009-04-07 11:40:06.000000000 +0100
+--- EMBOSS-6.0.1/ajax/ajseq.c	2009-04-20 14:45:27.000000000 +0100
 ***************
 *** 287,292 ****
 --- 287,293 ----
@@ -378,7 +378,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/ajax/ajseq.c EMBOSS-6.0.1/ajax/ajseq.c
   	    ajSeqsetGetLen(seq), seq->Begin, seq->End);
 diff -c -N --recursive EMBOSS-6.0.1old/ajax/ajseqread.c EMBOSS-6.0.1/ajax/ajseqread.c
 *** EMBOSS-6.0.1old/ajax/ajseqread.c	2008-07-14 15:52:48.000000000 +0100
---- EMBOSS-6.0.1/ajax/ajseqread.c	2009-04-07 11:40:15.000000000 +0100
+--- EMBOSS-6.0.1/ajax/ajseqread.c	2009-04-20 14:45:27.000000000 +0100
 ***************
 *** 1617,1623 ****
       ajDebug("ready to start reading format '%S' '%S' %d..%d\n",
@@ -398,7 +398,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/ajax/ajseqread.c EMBOSS-6.0.1/ajax/ajseqr
   	    ajSeqinClearPos(seqin);
 diff -c -N --recursive EMBOSS-6.0.1old/ajax/ajseqwrite.c EMBOSS-6.0.1/ajax/ajseqwrite.c
 *** EMBOSS-6.0.1old/ajax/ajseqwrite.c	2008-07-14 15:58:07.000000000 +0100
---- EMBOSS-6.0.1/ajax/ajseqwrite.c	2009-04-07 11:39:40.000000000 +0100
+--- EMBOSS-6.0.1/ajax/ajseqwrite.c	2009-04-20 14:45:27.000000000 +0100
 ***************
 *** 451,456 ****
 --- 451,457 ----
@@ -456,7 +456,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/ajax/ajseqwrite.c EMBOSS-6.0.1/ajax/ajseq
   
 diff -c -N --recursive EMBOSS-6.0.1old/emboss/acd/edialign.acd EMBOSS-6.0.1/emboss/acd/edialign.acd
 *** EMBOSS-6.0.1old/emboss/acd/edialign.acd	2008-04-04 16:54:03.000000000 +0100
---- EMBOSS-6.0.1/emboss/acd/edialign.acd	2009-04-07 11:39:40.000000000 +0100
+--- EMBOSS-6.0.1/emboss/acd/edialign.acd	2009-04-20 14:45:27.000000000 +0100
 ***************
 *** 26,32 ****
       information: "Nucleic acid sequence alignment mode"
@@ -503,7 +503,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/emboss/acd/edialign.acd EMBOSS-6.0.1/embo
   endsection: output
 diff -c -N --recursive EMBOSS-6.0.1old/emboss/acd/Makefile.am EMBOSS-6.0.1/emboss/acd/Makefile.am
 *** EMBOSS-6.0.1old/emboss/acd/Makefile.am	2008-07-14 16:46:31.000000000 +0100
---- EMBOSS-6.0.1/emboss/acd/Makefile.am	2009-04-07 11:39:40.000000000 +0100
+--- EMBOSS-6.0.1/emboss/acd/Makefile.am	2009-04-20 14:45:27.000000000 +0100
 ***************
 *** 21,27 ****
   	fuzznuc.acd fuzzpro.acd fuzztran.acd \
@@ -543,7 +543,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/emboss/acd/Makefile.am EMBOSS-6.0.1/embos
   
 diff -c -N --recursive EMBOSS-6.0.1old/emboss/acd/Makefile.in EMBOSS-6.0.1/emboss/acd/Makefile.in
 *** EMBOSS-6.0.1old/emboss/acd/Makefile.in	2008-07-16 19:33:19.000000000 +0100
---- EMBOSS-6.0.1/emboss/acd/Makefile.in	2009-04-07 11:39:40.000000000 +0100
+--- EMBOSS-6.0.1/emboss/acd/Makefile.in	2009-04-20 14:45:27.000000000 +0100
 ***************
 *** 209,215 ****
   	fuzznuc.acd fuzzpro.acd fuzztran.acd \
@@ -583,7 +583,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/emboss/acd/Makefile.in EMBOSS-6.0.1/embos
   
 diff -c -N --recursive EMBOSS-6.0.1old/emboss/data/Makefile.am EMBOSS-6.0.1/emboss/data/Makefile.am
 *** EMBOSS-6.0.1old/emboss/data/Makefile.am	2008-07-14 16:09:23.000000000 +0100
---- EMBOSS-6.0.1/emboss/data/Makefile.am	2009-04-07 11:39:40.000000000 +0100
+--- EMBOSS-6.0.1/emboss/data/Makefile.am	2009-04-20 14:45:27.000000000 +0100
 ***************
 *** 30,36 ****
                  Epprofile Eprior1.plib Eprior30.plib Erna.melt Eresidues.iub \
@@ -603,7 +603,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/emboss/data/Makefile.am EMBOSS-6.0.1/embo
                  embossre.equ Emwfilter.dat Emass.dat Emassmod.dat \
 diff -c -N --recursive EMBOSS-6.0.1old/emboss/data/Makefile.in EMBOSS-6.0.1/emboss/data/Makefile.in
 *** EMBOSS-6.0.1old/emboss/data/Makefile.in	2008-07-16 19:33:20.000000000 +0100
---- EMBOSS-6.0.1/emboss/data/Makefile.in	2009-04-07 11:39:40.000000000 +0100
+--- EMBOSS-6.0.1/emboss/data/Makefile.in	2009-04-20 14:45:27.000000000 +0100
 ***************
 *** 228,234 ****
                  Epprofile Eprior1.plib Eprior30.plib Erna.melt Eresidues.iub \
@@ -623,7 +623,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/emboss/data/Makefile.in EMBOSS-6.0.1/embo
                  embossre.equ Emwfilter.dat Emass.dat Emassmod.dat \
 diff -c -N --recursive EMBOSS-6.0.1old/emboss/jaspscan.c EMBOSS-6.0.1/emboss/jaspscan.c
 *** EMBOSS-6.0.1old/emboss/jaspscan.c	2008-06-26 09:39:09.000000000 +0100
---- EMBOSS-6.0.1/emboss/jaspscan.c	2009-04-07 11:39:40.000000000 +0100
+--- EMBOSS-6.0.1/emboss/jaspscan.c	2009-04-20 14:45:27.000000000 +0100
 ***************
 *** 293,299 ****
   
@@ -656,7 +656,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/emboss/jaspscan.c EMBOSS-6.0.1/emboss/jas
       ajStrDel(&excl);
 diff -c -N --recursive EMBOSS-6.0.1old/emboss/needle.c EMBOSS-6.0.1/emboss/needle.c
 *** EMBOSS-6.0.1old/emboss/needle.c	2008-06-10 13:48:04.000000000 +0100
---- EMBOSS-6.0.1/emboss/needle.c	2009-04-07 11:40:28.000000000 +0100
+--- EMBOSS-6.0.1/emboss/needle.c	2009-04-20 14:45:27.000000000 +0100
 ***************
 *** 151,157 ****
   	{
@@ -674,9 +674,29 @@ diff -c -N --recursive EMBOSS-6.0.1old/emboss/needle.c EMBOSS-6.0.1/emboss/needl
   			 id);
   	  ajFmtPrintAppS(&tmpstr,"Longest_Similarity = %5.2f%%\n",
   			 sim);
+diff -c -N --recursive EMBOSS-6.0.1old/emboss/remap.c EMBOSS-6.0.1/emboss/remap.c
+*** EMBOSS-6.0.1old/emboss/remap.c	2008-06-26 09:39:09.000000000 +0100
+--- EMBOSS-6.0.1/emboss/remap.c	2009-04-20 14:45:40.000000000 +0100
+***************
+*** 618,624 ****
+  
+  	for(i = 0; keyarray[i]; i++)
+  	{
+! 	    value = (PValue) valarray[i];
+  	    if(value->count > maxcuts)
+  	    ajFmtPrintF(outfile, "%10S\t    %d\t%S\n",
+  			    (AjPStr) keyarray[i], value->count,
+--- 618,624 ----
+  
+  	for(i = 0; keyarray[i]; i++)
+  	{
+! 	    value = ajTableFetch(hittable,keyarray[i]);
+  	    if(value->count > maxcuts)
+  	    ajFmtPrintF(outfile, "%10S\t    %d\t%S\n",
+  			    (AjPStr) keyarray[i], value->count,
 diff -c -N --recursive EMBOSS-6.0.1old/emboss/vectorstrip.c EMBOSS-6.0.1/emboss/vectorstrip.c
 *** EMBOSS-6.0.1old/emboss/vectorstrip.c	2008-06-26 09:39:09.000000000 +0100
---- EMBOSS-6.0.1/emboss/vectorstrip.c	2009-04-07 11:39:40.000000000 +0100
+--- EMBOSS-6.0.1/emboss/vectorstrip.c	2009-04-20 14:45:27.000000000 +0100
 ***************
 *** 174,180 ****
       vectorlist = ajListNew();
@@ -696,7 +716,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/emboss/vectorstrip.c EMBOSS-6.0.1/emboss/
       {
 diff -c -N --recursive EMBOSS-6.0.1old/emboss/water.c EMBOSS-6.0.1/emboss/water.c
 *** EMBOSS-6.0.1old/emboss/water.c	2008-06-26 09:39:09.000000000 +0100
---- EMBOSS-6.0.1/emboss/water.c	2009-04-07 11:40:31.000000000 +0100
+--- EMBOSS-6.0.1/emboss/water.c	2009-04-20 14:45:27.000000000 +0100
 ***************
 *** 159,165 ****
   	{
@@ -716,7 +736,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/emboss/water.c EMBOSS-6.0.1/emboss/water.
   			   sim);
 diff -c -N --recursive EMBOSS-6.0.1old/nucleus/embaln.c EMBOSS-6.0.1/nucleus/embaln.c
 *** EMBOSS-6.0.1old/nucleus/embaln.c	2008-07-15 15:41:05.000000000 +0100
---- EMBOSS-6.0.1/nucleus/embaln.c	2009-04-07 11:39:40.000000000 +0100
+--- EMBOSS-6.0.1/nucleus/embaln.c	2009-04-20 14:45:27.000000000 +0100
 ***************
 *** 69,79 ****
       ajint i;
@@ -1247,7 +1267,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/nucleus/embaln.c EMBOSS-6.0.1/nucleus/emb
   	    if(path[row*seqlen+column] > pathmax)
 diff -c -N --recursive EMBOSS-6.0.1old/nucleus/embprop.c EMBOSS-6.0.1/nucleus/embprop.c
 *** EMBOSS-6.0.1old/nucleus/embprop.c	2008-07-14 23:13:33.000000000 +0100
---- EMBOSS-6.0.1/nucleus/embprop.c	2009-04-07 11:39:40.000000000 +0100
+--- EMBOSS-6.0.1/nucleus/embprop.c	2009-04-20 14:45:27.000000000 +0100
 ***************
 *** 880,885 ****
 --- 880,886 ----
