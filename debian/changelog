@@ -1,3 +1,17 @@
+emboss (6.0.1-11) unstable; urgency=low
+
+  * New upstream patch (patch-1-12):
+    - Remove the 'aligned' attribute that was added in Fix 4.
+    - Fix crash if maxfragl > 40 selected.
+    - Update Entrez retrieval to cope with an extra line added
+      in the NCBI results.
+    - For phylogenetic applications (PHYLIPNEW) reading distance matrix files
+      failed for some formats written by other applications. Distance matrix
+      input now works for multiple matrices in square, upper-triangular and
+      lower-triangular formats.
+
+ -- Charles Plessy <plessy@debian.org>  Sun, 17 May 2009 14:51:05 +0900
+
 emboss (6.0.1-10) unstable; urgency=low
 
   * New upstream patch (patch-1-8):

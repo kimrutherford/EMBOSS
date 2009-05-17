@@ -3,10 +3,10 @@ Forwarded: no
  This is an upstream patch, it does not need to be forwarded.
 Description: Official upstream patch.
  This patch was downloaded from:
- ftp://emboss.open-bio.org/pub/EMBOSS/fixes/patches/patch-1-8.gz
+ ftp://emboss.open-bio.org/pub/EMBOSS/fixes/patches/patch-1-12.gz
 diff -c -N --recursive EMBOSS-6.0.1old/ajax/ajacd.c EMBOSS-6.0.1/ajax/ajacd.c
 *** EMBOSS-6.0.1old/ajax/ajacd.c	2008-07-14 15:47:38.000000000 +0100
---- EMBOSS-6.0.1/ajax/ajacd.c	2009-04-20 14:45:27.000000000 +0100
+--- EMBOSS-6.0.1/ajax/ajacd.c	2009-05-14 15:34:27.000000000 +0100
 ***************
 *** 8256,8263 ****
 --- 8256,8271 ----
@@ -238,9 +238,353 @@ diff -c -N --recursive EMBOSS-6.0.1old/ajax/ajacd.c EMBOSS-6.0.1/ajax/ajacd.c
   	    {
   		for(itestparam = acd->PNum+1; itestparam <= acdNParam;
   		    itestparam++)
+diff -c -N --recursive EMBOSS-6.0.1old/ajax/ajphylo.c EMBOSS-6.0.1/ajax/ajphylo.c
+*** EMBOSS-6.0.1old/ajax/ajphylo.c	2008-06-26 09:38:43.000000000 +0100
+--- EMBOSS-6.0.1/ajax/ajphylo.c	2009-05-14 15:34:41.000000000 +0100
+***************
+*** 402,408 ****
+      AjPStr tmpval   = NULL;
+      AjBool lowertri = ajFalse;
+      AjBool uppertri = ajFalse;
+! 
+      if(!phyloRegDistFloat)
+  	phyloRegDistFloat =
+  	    ajRegCompC("^\\s*([0-9]+[.]?[0-9]*)\\s+(([0-9]+)[^0-9.])?");
+--- 402,412 ----
+      AjPStr tmpval   = NULL;
+      AjBool lowertri = ajFalse;
+      AjBool uppertri = ajFalse;
+!     AjPStr name = NULL;
+!     AjPStr rest = NULL;
+!     ajuint imaxlen;
+!     ajuint linenum = 0;
+!     
+      if(!phyloRegDistFloat)
+  	phyloRegDistFloat =
+  	    ajRegCompC("^\\s*([0-9]+[.]?[0-9]*)\\s+(([0-9]+)[^0-9.])?");
+***************
+*** 413,439 ****
+      if(!distfile)
+  	return NULL;
+  
+-     ajReadlineTrim(distfile, &rdline);
+-     if(!ajStrToInt(rdline, &count))
+-     {
+- 	ajErr("Distance file '%S' bad header record '%S'",
+- 	      filename, rdline);
+- 	return NULL;
+-     }
+-     ajDebug("DistRead: row count: %d\n", count);
+- 
+-     if(size && (count != size))
+-     {
+- 	ajErr("Distance file '%S' found %d expected %d rows '%S'",
+- 	      filename, count, size);
+- 	return NULL;
+-     }
+- 
+- 
+      done = ajTrue;
+      while(ajReadline(distfile, &rdline))
+      {
+  	if(done) {
+  	    irow = -1;
+  	    icol = 0;
+  
+--- 417,445 ----
+      if(!distfile)
+  	return NULL;
+  
+      done = ajTrue;
+      while(ajReadline(distfile, &rdline))
+      {
++         linenum++;
++         if(ajStrIsWhite(rdline)) continue;
+  	if(done) {
++             ajStrTrimWhite(&rdline);
++             if(!ajStrToInt(rdline, &count))
++             {
++                 ajErr("Distance file '%S' line %u bad header record '%S'",
++                       filename, linenum, rdline);
++                 return NULL;
++             }
++             ajDebug("DistRead: row count: %d\n", count);
++ 
++             if(size && (count != size))
++             {
++                 ajErr("Distance file '%S' line %u "
++                       "found %d expected %d rows '%S'",
++                       filename, linenum, count, size);
++                 return NULL;
++             }
++ 
+  	    irow = -1;
+  	    icol = 0;
+  
+***************
+*** 446,458 ****
+  	    ncells = count*count;
+  	    AJCNEW0(dist->Data,ncells);
+  	    AJCNEW0(dist->Replicates,ncells);
+  	}
+  
+  	/*ajDebug("DistRead line: %S", rdline); */
+  	if(!i || !ajRegExec(phyloRegDistFloat, rdline))
+  	{
+- 	    if(ajStrGetLen(rdline) < 11)	/* skip this line? */
+- 		continue;
+  	    if(!irow)		     /* how long was that first row */
+  	    {
+  		if(!icol)		/* empty - lower triangular */
+--- 452,463 ----
+  	    ncells = count*count;
+  	    AJCNEW0(dist->Data,ncells);
+  	    AJCNEW0(dist->Replicates,ncells);
++             continue;
+  	}
+  
+  	/*ajDebug("DistRead line: %S", rdline); */
+  	if(!i || !ajRegExec(phyloRegDistFloat, rdline))
+  	{
+  	    if(!irow)		     /* how long was that first row */
+  	    {
+  		if(!icol)		/* empty - lower triangular */
+***************
+*** 475,482 ****
+  		}
+  		else if(icol != count)	/* something wrong */
+  		{
+! 		    ajErr("Distance file %S: Row '%S' has %d values",
+! 			  filename, dist->Names[irow], icol);
+  		}
+  	    }
+  	    else if(irow > 0) /* later rows - we know what to expect */
+--- 480,487 ----
+  		}
+  		else if(icol != count)	/* something wrong */
+  		{
+! 		    ajErr("Distance file %S: line %u Row '%S' has %d values",
+! 			  filename, linenum, dist->Names[irow], icol);
+  		}
+  	    }
+  	    else if(irow > 0) /* later rows - we know what to expect */
+***************
+*** 486,523 ****
+  		    /*ajDebug("DistRead Lower irow: %d i: %d\n",
+  			    irow, i);*/
+  		    if(icol != irow)
+! 			ajErr("Distance file %S: Row '%S' has %d values"
+  			      " in lower-triangular format",
+! 			      filename, dist->Names[irow], icol);
+  		}
+  		else if(uppertri)
+  		{
+  		    /*ajDebug("DistRead Upper irow: %d i: %d\n",
+  			    irow, i);*/
+  		    if(i)
+! 			ajErr("Distance file %S: Row '%S' has %d values"
+  			      " in upper-triangular format",
+! 			      filename, dist->Names[irow], icol - irow - 1);
+  		}
+  		else
+  		{
+  		    /*ajDebug("DistRead Square irow: %d i: %d\n",
+  			    irow, i);*/
+  		    if(icol != count)
+! 			ajErr("Distance file %S: Row '%S' has %d values"
+  			      " in square format",
+! 			      filename, dist->Names[irow], icol);
+  		}
+  	    }
+  
+  	    irow++;
+  	    if(irow > count)
+  	    {
+! 		ajErr("Distances file read beyond %d rows", count);
+  		return NULL;
+  	    }
+! 	    ajStrAssignSubS(&dist->Names[irow], rdline, 0, 9);
+! 	    ajStrCutStart(&rdline, 10);
+  	    ajStrTrimWhiteEnd(&dist->Names[irow]);
+  	    ajDebug("DistRead name [%d] '%S' i: %d\n",
+  		    irow, dist->Names[irow], i);
+--- 491,536 ----
+  		    /*ajDebug("DistRead Lower irow: %d i: %d\n",
+  			    irow, i);*/
+  		    if(icol != irow)
+! 			ajErr("Distance file %S: line %u Row '%S' has %d values"
+  			      " in lower-triangular format",
+! 			      filename, linenum, dist->Names[irow], icol);
+  		}
+  		else if(uppertri)
+  		{
+  		    /*ajDebug("DistRead Upper irow: %d i: %d\n",
+  			    irow, i);*/
+  		    if(i)
+! 			ajErr("Distance file %S: line %u Row '%S' has %d values"
+  			      " in upper-triangular format",
+! 			      filename, linenum,
+!                               dist->Names[irow], icol - irow - 1);
+  		}
+  		else
+  		{
+  		    /*ajDebug("DistRead Square irow: %d i: %d\n",
+  			    irow, i);*/
+  		    if(icol != count)
+! 			ajErr("Distance file %S: line %u Row '%S' has %d values"
+  			      " in square format",
+! 			      filename, linenum, dist->Names[irow], icol);
+  		}
+  	    }
+  
+  	    irow++;
+  	    if(irow > count)
+  	    {
+! 		ajErr("Distances file line %u read beyond %d rows",
+!                       linenum, count);
+  		return NULL;
+  	    }
+!             ajStrExtractWord(rdline, &rest, &name);
+!             if(ajStrGetLen(name) >= 10)
+!                 imaxlen = 10;
+!             else
+!                 imaxlen = ajStrGetLen(name);
+! 	    ajStrAssignSubS(&dist->Names[irow], rdline, 0, imaxlen-1);
+!                     
+!             ajStrCutStart(&rdline, imaxlen);
+  	    ajStrTrimWhiteEnd(&dist->Names[irow]);
+  	    ajDebug("DistRead name [%d] '%S' i: %d\n",
+  		    irow, dist->Names[irow], i);
+***************
+*** 548,555 ****
+  		{
+  		    if(!missing)
+  		    {
+! 			ajErr("Distances file %S: Zero (%S) replicates for %S",
+! 			      filename, tmpval, dist->Names[irow]);
+  			return NULL;
+  		    }
+  		    dist->HasMissing = ajTrue;
+--- 561,569 ----
+  		{
+  		    if(!missing)
+  		    {
+! 			ajErr("Distances file %S: line %u "
+!                               "Zero (%S) replicates for %S",
+! 			      filename, linenum, tmpval, dist->Names[irow]);
+  			return NULL;
+  		    }
+  		    dist->HasMissing = ajTrue;
+***************
+*** 576,584 ****
+  	}
+  	if(irow == (count-1))
+  	{
+! 	    done = ajTrue;
+! 
+! 	    if(lowertri)			/* fill in the rest */
+  	    {
+  		for(k=0; k < count; k++)
+  		{
+--- 590,596 ----
+  	}
+  	if(irow == (count-1))
+  	{
+! 	    if(lowertri) /* fill in the rest */
+  	    {
+  		for(k=0; k < count; k++)
+  		{
+***************
+*** 596,607 ****
+  			jpos += count;
+  		    }
+  		}
+  	    }
+! 	    if(uppertri)			/* fill in the rest */
+  	    {
+  		for(k=0; k < count; k++)
+  		{
+! 		    idiag = k*count + i;	/* diagonal */
+  		    dist->Data[idiag] = 0.0;
+  		    dist->Replicates[idiag] = 1;
+  		    ipos = k*count;		/* start of row*/
+--- 608,620 ----
+  			jpos += count;
+  		    }
+  		}
++                 done = ajTrue;
+  	    }
+! 	    else if(uppertri)			/* fill in the rest */
+  	    {
+  		for(k=0; k < count; k++)
+  		{
+! 		    idiag = k*count + k;	/* diagonal */
+  		    dist->Data[idiag] = 0.0;
+  		    dist->Replicates[idiag] = 1;
+  		    ipos = k*count;		/* start of row*/
+***************
+*** 614,623 ****
+  			jpos += count;
+  		    }
+  		}
+  	    }
+! 
+! 	    ajListPushAppend(distlist, dist);
+! 	    dist = NULL;
+  	}
+      }
+  
+--- 627,643 ----
+  			jpos += count;
+  		    }
+  		}
++                 done = ajTrue;
+  	    }
+!             else if(icol == count)
+!             {
+!                 done = ajTrue;
+!             }
+!         
+! 	    if(done){
+!                 ajListPushAppend(distlist, dist);
+!                 dist = NULL;
+!             }
+  	}
+      }
+  
+***************
+*** 627,634 ****
+  	return NULL;
+      }
+  
+!     ajDebug("Distances file '%S' has %d (%d) distance matrices\n",
+! 	    filename, i, ajListGetLength(distlist));
+      ajFileClose(&distfile);
+      ajListToarray(distlist, (void***) &ret);
+      /*ret = (AjPPhyloTree*) trees;*/
+--- 647,654 ----
+  	return NULL;
+      }
+  
+!     ajDebug("Distances file '%S' has %u distance matrices\n",
+! 	    filename, ajListGetLength(distlist));
+      ajFileClose(&distfile);
+      ajListToarray(distlist, (void***) &ret);
+      /*ret = (AjPPhyloTree*) trees;*/
+***************
+*** 636,641 ****
+--- 656,663 ----
+      for(i=0; ret[i]; i++)
+  	ajPhyloDistTrace(ret[i]);
+  
++     ajStrDel(&name);
++     ajStrDel(&rest);
+      return ret;
+  }
+  
 diff -c -N --recursive EMBOSS-6.0.1old/ajax/ajseq.c EMBOSS-6.0.1/ajax/ajseq.c
 *** EMBOSS-6.0.1old/ajax/ajseq.c	2008-07-14 15:54:44.000000000 +0100
---- EMBOSS-6.0.1/ajax/ajseq.c	2009-04-20 14:45:27.000000000 +0100
+--- EMBOSS-6.0.1/ajax/ajseq.c	2009-05-14 15:34:27.000000000 +0100
 ***************
 *** 287,292 ****
 --- 287,293 ----
@@ -376,9 +720,25 @@ diff -c -N --recursive EMBOSS-6.0.1old/ajax/ajseq.c EMBOSS-6.0.1/ajax/ajseq.c
   
       ajDebug("  set result len: %d Begin: %d End: %d\n",
   	    ajSeqsetGetLen(seq), seq->Begin, seq->End);
+diff -c -N --recursive EMBOSS-6.0.1old/ajax/ajseqdb.c EMBOSS-6.0.1/ajax/ajseqdb.c
+*** EMBOSS-6.0.1old/ajax/ajseqdb.c	2008-07-14 15:52:03.000000000 +0100
+--- EMBOSS-6.0.1/ajax/ajseqdb.c	2009-05-14 15:34:27.000000000 +0100
+***************
+*** 2005,2011 ****
+--- 2005,2014 ----
+  	{
+  	    ajStrTrimWhite(&seqline);
+  	    if(!ajStrGetLen(seqline))
++             {
++                 ajBuffreadLine(seqfile, &seqline);
+  		ihead=0;
++             }
+  	}
+  	else
+  	{
 diff -c -N --recursive EMBOSS-6.0.1old/ajax/ajseqread.c EMBOSS-6.0.1/ajax/ajseqread.c
 *** EMBOSS-6.0.1old/ajax/ajseqread.c	2008-07-14 15:52:48.000000000 +0100
---- EMBOSS-6.0.1/ajax/ajseqread.c	2009-04-20 14:45:27.000000000 +0100
+--- EMBOSS-6.0.1/ajax/ajseqread.c	2009-05-14 15:34:27.000000000 +0100
 ***************
 *** 1617,1623 ****
       ajDebug("ready to start reading format '%S' '%S' %d..%d\n",
@@ -398,7 +758,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/ajax/ajseqread.c EMBOSS-6.0.1/ajax/ajseqr
   	    ajSeqinClearPos(seqin);
 diff -c -N --recursive EMBOSS-6.0.1old/ajax/ajseqwrite.c EMBOSS-6.0.1/ajax/ajseqwrite.c
 *** EMBOSS-6.0.1old/ajax/ajseqwrite.c	2008-07-14 15:58:07.000000000 +0100
---- EMBOSS-6.0.1/ajax/ajseqwrite.c	2009-04-20 14:45:27.000000000 +0100
+--- EMBOSS-6.0.1/ajax/ajseqwrite.c	2009-05-14 15:34:27.000000000 +0100
 ***************
 *** 451,456 ****
 --- 451,457 ----
@@ -456,7 +816,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/ajax/ajseqwrite.c EMBOSS-6.0.1/ajax/ajseq
   
 diff -c -N --recursive EMBOSS-6.0.1old/emboss/acd/edialign.acd EMBOSS-6.0.1/emboss/acd/edialign.acd
 *** EMBOSS-6.0.1old/emboss/acd/edialign.acd	2008-04-04 16:54:03.000000000 +0100
---- EMBOSS-6.0.1/emboss/acd/edialign.acd	2009-04-20 14:45:27.000000000 +0100
+--- EMBOSS-6.0.1/emboss/acd/edialign.acd	2009-05-14 15:34:27.000000000 +0100
 ***************
 *** 26,32 ****
       information: "Nucleic acid sequence alignment mode"
@@ -491,19 +851,9 @@ diff -c -N --recursive EMBOSS-6.0.1old/emboss/acd/edialign.acd EMBOSS-6.0.1/embo
                linkage"
       default: "UPGMA"
     ]
-***************
-*** 124,129 ****
---- 124,130 ----
-    seqoutall: outseq [
-      parameter: "Y"
-      type: "gapany"
-+     aligned: "Y"
-    ]
-  
-  endsection: output
 diff -c -N --recursive EMBOSS-6.0.1old/emboss/acd/Makefile.am EMBOSS-6.0.1/emboss/acd/Makefile.am
 *** EMBOSS-6.0.1old/emboss/acd/Makefile.am	2008-07-14 16:46:31.000000000 +0100
---- EMBOSS-6.0.1/emboss/acd/Makefile.am	2009-04-20 14:45:27.000000000 +0100
+--- EMBOSS-6.0.1/emboss/acd/Makefile.am	2009-05-14 15:34:27.000000000 +0100
 ***************
 *** 21,27 ****
   	fuzznuc.acd fuzzpro.acd fuzztran.acd \
@@ -543,7 +893,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/emboss/acd/Makefile.am EMBOSS-6.0.1/embos
   
 diff -c -N --recursive EMBOSS-6.0.1old/emboss/acd/Makefile.in EMBOSS-6.0.1/emboss/acd/Makefile.in
 *** EMBOSS-6.0.1old/emboss/acd/Makefile.in	2008-07-16 19:33:19.000000000 +0100
---- EMBOSS-6.0.1/emboss/acd/Makefile.in	2009-04-20 14:45:27.000000000 +0100
+--- EMBOSS-6.0.1/emboss/acd/Makefile.in	2009-05-14 15:34:27.000000000 +0100
 ***************
 *** 209,215 ****
   	fuzznuc.acd fuzzpro.acd fuzztran.acd \
@@ -583,7 +933,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/emboss/acd/Makefile.in EMBOSS-6.0.1/embos
   
 diff -c -N --recursive EMBOSS-6.0.1old/emboss/data/Makefile.am EMBOSS-6.0.1/emboss/data/Makefile.am
 *** EMBOSS-6.0.1old/emboss/data/Makefile.am	2008-07-14 16:09:23.000000000 +0100
---- EMBOSS-6.0.1/emboss/data/Makefile.am	2009-04-20 14:45:27.000000000 +0100
+--- EMBOSS-6.0.1/emboss/data/Makefile.am	2009-05-14 15:34:27.000000000 +0100
 ***************
 *** 30,36 ****
                  Epprofile Eprior1.plib Eprior30.plib Erna.melt Eresidues.iub \
@@ -603,7 +953,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/emboss/data/Makefile.am EMBOSS-6.0.1/embo
                  embossre.equ Emwfilter.dat Emass.dat Emassmod.dat \
 diff -c -N --recursive EMBOSS-6.0.1old/emboss/data/Makefile.in EMBOSS-6.0.1/emboss/data/Makefile.in
 *** EMBOSS-6.0.1old/emboss/data/Makefile.in	2008-07-16 19:33:20.000000000 +0100
---- EMBOSS-6.0.1/emboss/data/Makefile.in	2009-04-20 14:45:27.000000000 +0100
+--- EMBOSS-6.0.1/emboss/data/Makefile.in	2009-05-14 15:34:27.000000000 +0100
 ***************
 *** 228,234 ****
                  Epprofile Eprior1.plib Eprior30.plib Erna.melt Eresidues.iub \
@@ -621,9 +971,23 @@ diff -c -N --recursive EMBOSS-6.0.1old/emboss/data/Makefile.in EMBOSS-6.0.1/embo
                  Etags.pir Etags.protein Etags.swiss \
                  Etcode.dat Evdw.dat Ewhite-wimley.dat \
                  embossre.equ Emwfilter.dat Emass.dat Emassmod.dat \
+diff -c -N --recursive EMBOSS-6.0.1old/emboss/edialign.c EMBOSS-6.0.1/emboss/edialign.c
+*** EMBOSS-6.0.1old/emboss/edialign.c	2008-06-26 09:39:09.000000000 +0100
+--- EMBOSS-6.0.1/emboss/edialign.c	2009-05-14 15:34:27.000000000 +0100
+***************
+*** 627,632 ****
+--- 627,634 ----
+      ajSeqsetFmtUpper(seqset);
+      n = ajSeqsetGetSize(seqset);
+  
++     max_dia = lmax;
++     
+      AJCNEW0(seq,n);
+      AJCNEW0(seq_name,n);
+      AJCNEW0(full_name,n);
 diff -c -N --recursive EMBOSS-6.0.1old/emboss/jaspscan.c EMBOSS-6.0.1/emboss/jaspscan.c
 *** EMBOSS-6.0.1old/emboss/jaspscan.c	2008-06-26 09:39:09.000000000 +0100
---- EMBOSS-6.0.1/emboss/jaspscan.c	2009-04-20 14:45:27.000000000 +0100
+--- EMBOSS-6.0.1/emboss/jaspscan.c	2009-05-14 15:34:27.000000000 +0100
 ***************
 *** 293,299 ****
   
@@ -656,7 +1020,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/emboss/jaspscan.c EMBOSS-6.0.1/emboss/jas
       ajStrDel(&excl);
 diff -c -N --recursive EMBOSS-6.0.1old/emboss/needle.c EMBOSS-6.0.1/emboss/needle.c
 *** EMBOSS-6.0.1old/emboss/needle.c	2008-06-10 13:48:04.000000000 +0100
---- EMBOSS-6.0.1/emboss/needle.c	2009-04-20 14:45:27.000000000 +0100
+--- EMBOSS-6.0.1/emboss/needle.c	2009-05-14 15:34:27.000000000 +0100
 ***************
 *** 151,157 ****
   	{
@@ -676,7 +1040,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/emboss/needle.c EMBOSS-6.0.1/emboss/needl
   			 sim);
 diff -c -N --recursive EMBOSS-6.0.1old/emboss/remap.c EMBOSS-6.0.1/emboss/remap.c
 *** EMBOSS-6.0.1old/emboss/remap.c	2008-06-26 09:39:09.000000000 +0100
---- EMBOSS-6.0.1/emboss/remap.c	2009-04-20 14:45:40.000000000 +0100
+--- EMBOSS-6.0.1/emboss/remap.c	2009-05-14 15:34:27.000000000 +0100
 ***************
 *** 618,624 ****
   
@@ -696,7 +1060,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/emboss/remap.c EMBOSS-6.0.1/emboss/remap.
   			    (AjPStr) keyarray[i], value->count,
 diff -c -N --recursive EMBOSS-6.0.1old/emboss/vectorstrip.c EMBOSS-6.0.1/emboss/vectorstrip.c
 *** EMBOSS-6.0.1old/emboss/vectorstrip.c	2008-06-26 09:39:09.000000000 +0100
---- EMBOSS-6.0.1/emboss/vectorstrip.c	2009-04-20 14:45:27.000000000 +0100
+--- EMBOSS-6.0.1/emboss/vectorstrip.c	2009-05-14 15:34:27.000000000 +0100
 ***************
 *** 174,180 ****
       vectorlist = ajListNew();
@@ -716,7 +1080,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/emboss/vectorstrip.c EMBOSS-6.0.1/emboss/
       {
 diff -c -N --recursive EMBOSS-6.0.1old/emboss/water.c EMBOSS-6.0.1/emboss/water.c
 *** EMBOSS-6.0.1old/emboss/water.c	2008-06-26 09:39:09.000000000 +0100
---- EMBOSS-6.0.1/emboss/water.c	2009-04-20 14:45:27.000000000 +0100
+--- EMBOSS-6.0.1/emboss/water.c	2009-05-14 15:34:27.000000000 +0100
 ***************
 *** 159,165 ****
   	{
@@ -736,7 +1100,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/emboss/water.c EMBOSS-6.0.1/emboss/water.
   			   sim);
 diff -c -N --recursive EMBOSS-6.0.1old/nucleus/embaln.c EMBOSS-6.0.1/nucleus/embaln.c
 *** EMBOSS-6.0.1old/nucleus/embaln.c	2008-07-15 15:41:05.000000000 +0100
---- EMBOSS-6.0.1/nucleus/embaln.c	2009-04-20 14:45:27.000000000 +0100
+--- EMBOSS-6.0.1/nucleus/embaln.c	2009-05-14 15:34:27.000000000 +0100
 ***************
 *** 69,79 ****
       ajint i;
@@ -1267,7 +1631,7 @@ diff -c -N --recursive EMBOSS-6.0.1old/nucleus/embaln.c EMBOSS-6.0.1/nucleus/emb
   	    if(path[row*seqlen+column] > pathmax)
 diff -c -N --recursive EMBOSS-6.0.1old/nucleus/embprop.c EMBOSS-6.0.1/nucleus/embprop.c
 *** EMBOSS-6.0.1old/nucleus/embprop.c	2008-07-14 23:13:33.000000000 +0100
---- EMBOSS-6.0.1/nucleus/embprop.c	2009-04-20 14:45:27.000000000 +0100
+--- EMBOSS-6.0.1/nucleus/embprop.c	2009-05-14 15:34:27.000000000 +0100
 ***************
 *** 880,885 ****
 --- 880,886 ----
