@@ -1,9 +1,9 @@
-emboss (6.1.0~rc1-1) UNRELEASED; urgency=low
+emboss (6.1.0~rc2-1) UNRELEASED; urgency=low
 
-  * New upstream relase candidate.
+  * New upstream relase candidate (Closes: #530112).
   * Dropped patch against previous release.
 
- -- Charles Plessy <plessy@debian.org>  Wed, 17 Jun 2009 22:38:53 +0900
+ -- Charles Plessy <plessy@debian.org>  Wed, 08 Jul 2009 19:33:35 +0900
 
 emboss (6.0.1-11) unstable; urgency=low
 
