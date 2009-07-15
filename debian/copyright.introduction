@@ -33,10 +33,11 @@ licensing conditions. They will be bound by the Library GPL of the AJAX and
 NUCLEUS libraries, but not necessarily by the full GPL.
 ------------------------------------------------------------------------
 
-On Debian systems, the complete text of the GNU General Public License, the
-GNU Free Documentation License, and the GNU Lesser Public License can be found
-in `/usr/share/common-licenses/GPL', `/usr/share/common-licenses/GFDL' and
-`/usr/share/common-licenses/LGPL' respectively.
+On Debian systems, the complete text of the GNU General Public License version
+2, the GNU Free Documentation License version 1.2, and the GNU Library Public
+License version 2 can be found in ‘/usr/share/common-licenses/GPL-2’,
+‘/usr/share/common-licenses/GFDL-1.2’ and ‘/usr/share/common-licenses/LGPL-2’
+respectively.
 
 
 EMBOSS uses the libpcre and libplplot.

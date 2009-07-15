@@ -8,7 +8,7 @@ Build-Depends: debhelper (>= 7), quilt, libx11-dev, x11proto-core-dev, libgdchar
 Build-Depends-Indep: openjdk-6-jdk
 Vcs-Browser: http://svn.debian.org/wsvn/debian-med/trunk/packages/emboss/trunk/?rev=0&sc=0trunk
 Vcs-Svn: svn://svn.debian.org/svn/debian-med/trunk/packages/emboss/trunk/
-Standards-Version: 3.8.1
+Standards-Version: 3.8.2
 Homepage: http://emboss.sourceforge.net
 
 Package: emboss

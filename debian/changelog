@@ -1,3 +1,13 @@
+emboss (6.1.0-2) UNRELEASED; urgency=low
+
+  * debian/control:
+    - Incremented Standards-Version to reflect conformance with Policy 3.8.2
+      (no changes needed). 
+  * debian/copyright.introduction:
+    - Use symbolic links to refer to relevant versions of the GNU licenses.
+
+ -- Charles Plessy <plessy@debian.org>  Thu, 16 Jul 2009 00:04:09 +0900
+
 emboss (6.1.0-1) unstable; urgency=low
 
   * New upstream relase (Closes: #530112).
