@@ -14,7 +14,7 @@ for FILE in $(tar --list --gzip --file $ORIGTARGZ | grep \\.acd | grep -v /test/
   do
   ACD=$(basename $FILE .acd)
   tar --verbose --gzip --file $ORIGTARGZ --extract $FILE --to-stdout \
-  | ../../emboss/trunk/debian/acd2docbook.pl /dev/stdin ${VERSION} \
+  | ./debian/acd2docbook.pl /dev/stdin ${VERSION} \
   | xsltproc --nonet --param man.charmap.use.subset 0 -o debian/manpages/ -
   echo "debian/manpages/$ACD.1e" >> debian/$PACKAGE.manpages
 done
