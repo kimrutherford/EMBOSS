@@ -1,0 +1,1552 @@
+Description: Official upstream patch.
+ 29 Jul 2009: Fix feature specification problems in Jemboss.
+              Use version number to point to documentation URLs
+              Remove standalone option from server script.
+              Correct FASTQ input searching for '@' to start next sequence
+              Standardize FASTQ sequence formats with other OpenBio projects
+              Correct issues in igstrict, genpept and refseqp formats
+Origin: ftp://emboss.open-bio.org/pub/EMBOSS/fixes/patches/patch-1-1.gz
+Forwarded: not-needed
+diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajfeat.c EMBOSS-6.1.0/ajax/ajfeat.c
+*** EMBOSS-6.1.0orig/ajax/ajfeat.c	2009-07-06 16:48:46.000000000 +0100
+--- EMBOSS-6.1.0/ajax/ajfeat.c	2009-07-30 15:28:13.000000000 +0100
+***************
+*** 9517,9528 ****
+      ajint i;
+      
+      if(!featRegUfoFmt)
+! 	featRegUfoFmt = ajRegCompC("^([A-Za-z0-9]+):+(.*)$");
+      /* \1 format */
+      /* \2 remainder */
+      
+      if(!featRegUfoFile)
+! 	featRegUfoFile = ajRegCompC("^([^:]+)$");
+      
+      /*ajDebug("ajFeatUfoRead UFO '%S'\n", ufo);*/
+      
+--- 9517,9528 ----
+      ajint i;
+      
+      if(!featRegUfoFmt)
+! 	featRegUfoFmt = ajRegCompC("^([A-Za-z0-9][A-Za-z0-9]+):+(.*)$");
+      /* \1 format */
+      /* \2 remainder */
+      
+      if(!featRegUfoFile)
+! 	featRegUfoFile = ajRegCompC("^(([A-Za-z]:)?[^:]+)$");
+      
+      /*ajDebug("ajFeatUfoRead UFO '%S'\n", ufo);*/
+      
+diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajseqread.c EMBOSS-6.1.0/ajax/ajseqread.c
+*** EMBOSS-6.1.0orig/ajax/ajseqread.c	2009-07-07 00:08:26.000000000 +0100
+--- EMBOSS-6.1.0/ajax/ajseqread.c	2009-07-30 15:27:39.000000000 +0100
+***************
+*** 689,695 ****
+         AJTRUE,  AJTRUE,  seqReadSwiss, AJFALSE, 0},
+    {"nbrf",        "NBRF/PIR entry format",
+         AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
+!        AJFALSE, AJTRUE,  seqReadNbrf, AJFALSE, 0},	/* test before NCBI */
+    {"pir",         "NBRF/PIR entry format (alias)",
+         AJTRUE,  AJFALSE, AJTRUE,  AJTRUE,
+         AJTRUE,  AJTRUE,  seqReadNbrf, AJFALSE, 0},	/* alias for nbrf */
+--- 689,695 ----
+         AJTRUE,  AJTRUE,  seqReadSwiss, AJFALSE, 0},
+    {"nbrf",        "NBRF/PIR entry format",
+         AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
+!        AJTRUE,  AJTRUE,  seqReadNbrf, AJFALSE, 0},	/* test before NCBI */
+    {"pir",         "NBRF/PIR entry format (alias)",
+         AJTRUE,  AJFALSE, AJTRUE,  AJTRUE,
+         AJTRUE,  AJTRUE,  seqReadNbrf, AJFALSE, 0},	/* alias for nbrf */
+***************
+*** 712,718 ****
+    {"ncbi",        "FASTA format including NCBI-style IDs (alias)",
+         AJTRUE,  AJFALSE, AJTRUE,  AJTRUE,
+         AJFALSE, AJTRUE,  seqReadNcbi, AJFALSE, 0}, /* test before pearson */
+!   {"gifasta",     "FASTA format including NCBI-style IDs (alias)",
+         AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
+         AJFALSE, AJTRUE,  seqReadGifasta, AJFALSE, 0}, /* NCBI with GI as ID*/
+    {"pearson",     "Plain old fasta format with IDs not parsed further",
+--- 712,718 ----
+    {"ncbi",        "FASTA format including NCBI-style IDs (alias)",
+         AJTRUE,  AJFALSE, AJTRUE,  AJTRUE,
+         AJFALSE, AJTRUE,  seqReadNcbi, AJFALSE, 0}, /* test before pearson */
+!   {"gifasta",     "FASTA format including NCBI-style GIs (alias)",
+         AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
+         AJFALSE, AJTRUE,  seqReadGifasta, AJFALSE, 0}, /* NCBI with GI as ID*/
+    {"pearson",     "Plain old fasta format with IDs not parsed further",
+***************
+*** 749,759 ****
+         AJTRUE,  AJFALSE, AJTRUE,  AJFALSE,
+         AJTRUE,  AJTRUE,  seqReadRefseq, AJFALSE, 0}, /* alias for genbank */
+    {"refseqp",     "Refseq protein entry format",
+!        AJFALSE, AJFALSE, AJFALSE, AJTRUE,       /* genbank forwards proteins */
+         AJTRUE,  AJTRUE,  seqReadRefseqp, AJFALSE, 0},
+    {"genpept",     "Refseq protein entry format (alias)",
+!        AJTRUE,  AJFALSE, AJFALSE, AJTRUE,
+!        AJTRUE,  AJTRUE,  seqReadGenpept, AJFALSE, 0}, /* alias for refseqp*/
+    {"codata",      "Codata entry format",
+         AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
+         AJTRUE,  AJTRUE,  seqReadCodata, AJFALSE, 0},
+--- 749,759 ----
+         AJTRUE,  AJFALSE, AJTRUE,  AJFALSE,
+         AJTRUE,  AJTRUE,  seqReadRefseq, AJFALSE, 0}, /* alias for genbank */
+    {"refseqp",     "Refseq protein entry format",
+!        AJFALSE, AJFALSE, AJFALSE, AJTRUE,       /* genbank format proteins */
+         AJTRUE,  AJTRUE,  seqReadRefseqp, AJFALSE, 0},
+    {"genpept",     "Refseq protein entry format (alias)",
+!        AJFALSE, AJFALSE, AJFALSE, AJTRUE,
+!        AJTRUE,  AJTRUE,  seqReadGenpept, AJFALSE, 0},
+    {"codata",      "Codata entry format",
+         AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
+         AJTRUE,  AJTRUE,  seqReadCodata, AJFALSE, 0},
+***************
+*** 785,791 ****
+    {"hennig86",    "Hennig86 output format",
+         AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
+         AJFALSE, AJTRUE,  seqReadHennig86, AJFALSE, 0},
+!   {"jackknifer",  "Jackknifer output interleaved format",
+         AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
+         AJFALSE, AJTRUE,  seqReadJackknifer, AJFALSE, 0},
+    {"nexus",       "Nexus/paup interleaved format",
+--- 785,791 ----
+    {"hennig86",    "Hennig86 output format",
+         AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
+         AJFALSE, AJTRUE,  seqReadHennig86, AJFALSE, 0},
+!   {"jackknifer",  "Jackknifer interleaved and non-interleaved formats",
+         AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
+         AJFALSE, AJTRUE,  seqReadJackknifer, AJFALSE, 0},
+    {"nexus",       "Nexus/paup interleaved format",
+***************
+*** 797,803 ****
+    {"treecon",     "Treecon output format",
+         AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
+         AJFALSE, AJTRUE,  seqReadTreecon, AJFALSE, 0},
+!   {"mega",        "Mega interleaved output format",
+         AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
+         AJFALSE, AJTRUE,  seqReadMega, AJFALSE, 0},
+    {"igstrict",    "Intelligenetics sequence format strict parser",
+--- 797,803 ----
+    {"treecon",     "Treecon output format",
+         AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
+         AJFALSE, AJTRUE,  seqReadTreecon, AJFALSE, 0},
+!   {"mega",        "Mega interleaved and non-interleaved formats",
+         AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
+         AJFALSE, AJTRUE,  seqReadMega, AJFALSE, 0},
+    {"igstrict",    "Intelligenetics sequence format strict parser",
+***************
+*** 813,819 ****
+         AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
+         AJFALSE, AJTRUE,  seqReadText, AJFALSE, 0},/* can read almost anything */
+    {"plain",       "Plain text (alias)",
+!        AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
+         AJFALSE, AJTRUE,  seqReadText, AJFALSE, 0},	/* alias for text */
+    {"gff2",         "GFF feature file with sequence in the header",
+         AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
+--- 813,819 ----
+         AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
+         AJFALSE, AJTRUE,  seqReadText, AJFALSE, 0},/* can read almost anything */
+    {"plain",       "Plain text (alias)",
+!        AJTRUE,  AJFALSE, AJTRUE,  AJTRUE,
+         AJFALSE, AJTRUE,  seqReadText, AJFALSE, 0},	/* alias for text */
+    {"gff2",         "GFF feature file with sequence in the header",
+         AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
+***************
+*** 822,838 ****
+         AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
+         AJTRUE,  AJTRUE,  seqReadGff3, AJFALSE, 0},
+    {"gff",         "GFF3 feature file with sequence",
+!        AJTRUE,  AJTRUE,  AJTRUE,  AJTRUE,
+         AJTRUE,  AJTRUE,  seqReadGff3, AJFALSE, 0},
+    {"stockholm",   "Stockholm (pfam) format",
+         AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
+         AJFALSE, AJTRUE,  seqReadStockholm, AJFALSE, 0},
+-   {"selex",       "Selex format",                /* can read almost anything */
+-        AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
+-        AJFALSE, AJTRUE,  seqReadSelex, AJFALSE, 0},
+    {"pfam",        "Stockholm (pfam) format (alias)",
+         AJTRUE,  AJTRUE,  AJTRUE,  AJTRUE,
+         AJFALSE, AJTRUE,  seqReadStockholm, AJFALSE, 0},
+    {"fitch",       "Fitch program format",
+         AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
+         AJFALSE, AJTRUE,  seqReadFitch, AJFALSE, 0},
+--- 822,838 ----
+         AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
+         AJTRUE,  AJTRUE,  seqReadGff3, AJFALSE, 0},
+    {"gff",         "GFF3 feature file with sequence",
+!        AJTRUE,  AJFALSE,  AJTRUE,  AJTRUE,
+         AJTRUE,  AJTRUE,  seqReadGff3, AJFALSE, 0},
+    {"stockholm",   "Stockholm (pfam) format",
+         AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
+         AJFALSE, AJTRUE,  seqReadStockholm, AJFALSE, 0},
+    {"pfam",        "Stockholm (pfam) format (alias)",
+         AJTRUE,  AJTRUE,  AJTRUE,  AJTRUE,
+         AJFALSE, AJTRUE,  seqReadStockholm, AJFALSE, 0},
++   {"selex",       "Selex format",                /* can read almost anything */
++        AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
++        AJFALSE, AJTRUE,  seqReadSelex, AJFALSE, 0},
+    {"fitch",       "Fitch program format",
+         AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
+         AJFALSE, AJTRUE,  seqReadFitch, AJFALSE, 0},
+***************
+*** 2627,2634 ****
+  				 seqin->Text, &thys->TextPtr);
+  
+      while(ok &&
+!           (ajStrGetLen(qualstr) < seqlen) &&
+!           (!ajStrPrefixC(seqReadLine, "@")))
+      {
+          seqqualAppendWarn(&qualstr, seqReadLine);
+  
+--- 2627,2634 ----
+  				 seqin->Text, &thys->TextPtr);
+  
+      while(ok &&
+!           ((ajStrGetLen(qualstr) < seqlen) ||
+!            ajStrGetCharFirst(seqReadLine) != '@'))
+      {
+          seqqualAppendWarn(&qualstr, seqReadLine);
+  
+***************
+*** 2790,2797 ****
+  				 seqin->Text, &thys->TextPtr);
+  
+      while(ok &&
+!           (ajStrGetLen(qualstr) < seqlen) &&
+!           (!ajStrPrefixC(seqReadLine, "@")))
+      {
+          seqqualAppendWarn(&qualstr, seqReadLine);
+  
+--- 2790,2797 ----
+  				 seqin->Text, &thys->TextPtr);
+  
+      while(ok &&
+!           ((ajStrGetLen(qualstr) < seqlen) ||
+!            ajStrGetCharFirst(seqReadLine) != '@'))
+      {
+          seqqualAppendWarn(&qualstr, seqReadLine);
+  
+***************
+*** 3157,3164 ****
+  				 seqin->Text, &thys->TextPtr);
+  
+      while(ok &&
+!           (ajStrGetLen(qualstr) < seqlen) &&
+!           (!ajStrPrefixC(seqReadLine, "@")))
+      {
+          seqqualAppendWarn(&qualstr, seqReadLine);
+  
+--- 3157,3164 ----
+  				 seqin->Text, &thys->TextPtr);
+  
+      while(ok &&
+!           ((ajStrGetLen(qualstr) < seqlen) ||
+!            ajStrGetCharFirst(seqReadLine) != '@'))
+      {
+          seqqualAppendWarn(&qualstr, seqReadLine);
+  
+***************
+*** 3352,3359 ****
+  				 seqin->Text, &thys->TextPtr);
+  
+      while(ok &&
+!           (ajStrGetLen(qualstr) < seqlen) &&
+!           (!ajStrPrefixC(seqReadLine, "@")))
+      {
+          seqqualAppendWarn(&qualstr, seqReadLine);
+  
+--- 3352,3359 ----
+  				 seqin->Text, &thys->TextPtr);
+  
+      while(ok &&
+!           ((ajStrGetLen(qualstr) < seqlen) ||
+!            ajStrGetCharFirst(seqReadLine) != '@'))
+      {
+          seqqualAppendWarn(&qualstr, seqReadLine);
+  
+***************
+*** 5254,5261 ****
+  	return ajFalse;
+      }
+  
+!     ajStrAssignS(&thys->Name, seqReadLine);
+!     ajStrCutEnd(&thys->Name, 1);
+      bufflines++;
+  
+      while(ajBuffreadLineStore(buff, &seqReadLine,
+--- 5254,5260 ----
+  	return ajFalse;
+      }
+  
+!     seqSetName(&thys->Name, seqReadLine);
+      bufflines++;
+  
+      while(ajBuffreadLineStore(buff, &seqReadLine,
+***************
+*** 5330,5337 ****
+  	return ajFalse;
+      }
+  
+!     ajStrAssignS(&thys->Name, seqReadLine);
+!     ajStrCutEnd(&thys->Name, 1);
+      bufflines++;
+  
+      while(ajBuffreadLineStore(buff, &seqReadLine,
+--- 5329,5335 ----
+  	return ajFalse;
+      }
+  
+!     seqSetName(&thys->Name, seqReadLine);
+      bufflines++;
+  
+      while(ajBuffreadLineStore(buff, &seqReadLine,
+***************
+*** 6651,6656 ****
+--- 6649,6655 ----
+  	    if(ajStrIsWhite(phyitem->Name) ||
+  	       ajTableFetch(phytable, phyitem->Name))
+  	    {
++                 ajFilebuffSetBuffered(buff);
+  		ajFilebuffResetStore(buff, seqin->Text, &thys->TextPtr);
+  		ajDebug("phytable repeated name '%S'\n",
+  			phyitem->Name);
+***************
+*** 6745,6750 ****
+--- 6744,6750 ----
+  			    ajDebug("phylip format length mismatch at %d "
+  				    "(length %d)\n",
+  				    maxlen, ilen);
++                             ajFilebuffSetBuffered(buff);
+  			    ajFilebuffResetStore(buff,
+  						 seqin->Text, &thys->TextPtr);
+  			    seqMsfDataDel((SeqPMsfData*) &seqin->Data);
+***************
+*** 6771,6776 ****
+--- 6771,6777 ----
+  	    if(!done)
+  	    {
+  		ajDebug("seqReadPhylip read failed, try seqReadPhylipnon\n");
++                 ajFilebuffSetBuffered(buff);
+  		ajFilebuffResetStore(buff, seqin->Text, &thys->TextPtr);
+  		seqMsfDataDel((SeqPMsfData*) &seqin->Data);
+  
+***************
+*** 6781,6786 ****
+--- 6782,6788 ----
+  	    {
+  		ajDebug("Phylip format %d sequences partly read at end\n",
+  			iseq-jseq);
++                 ajFilebuffSetBuffered(buff);
+  		ajFilebuffResetStore(buff, seqin->Text, &thys->TextPtr);
+  		seqMsfDataDel((SeqPMsfData*) &seqin->Data);
+  
+***************
+*** 10973,10978 ****
+--- 10975,10982 ----
+      if(!ajBuffreadLine(buff, &seqReadLine))
+  	return ajFalse;
+  
++     ajDebug("++seqReadGenbank first line '%S'\n", seqReadLine);
++ 
+      bufflines++;
+  
+      ok = ajTrue;
+***************
+*** 11030,11035 ****
+--- 11034,11040 ----
+  
+      if(nfields == 9) 
+      {
++         ajFilebuffSetBuffered(buff);
+          ajFilebuffResetStore(buff, seqin->Text, &thys->TextPtr);
+  
+          return seqReadGenpept(thys,seqin);
+***************
+*** 11053,11062 ****
+--- 11058,11070 ----
+  	case 4:
+  	    if(ajStrMatchC(token, "aa"))
+              {
++                 ajFilebuffSetBuffered(buff);
+                  ajFilebuffResetStore(buff, seqin->Text, &thys->TextPtr);
+                  ajStrDel(&token);
+                  ajStrTokenDel(&handle);
+  
++                 ajDebug("first line %d aa pass to refseqp '%S'\n",
++                         buff->Pos, seqReadLine);
+                  return seqReadRefseqp(thys,seqin);
+              }
+  	    if(!ajStrMatchC(token, "bp"))
+***************
+*** 11521,11526 ****
+--- 11529,11535 ----
+  
+      if(nfields == 8) 
+      {
++         ajFilebuffSetBuffered(buff);
+          ajFilebuffResetStore(buff, seqin->Text, &thys->TextPtr);
+  
+          return seqReadRefseqp(thys,seqin);
+***************
+*** 11916,11921 ****
+--- 11925,11932 ----
+      if(!ajBuffreadLine(buff, &seqReadLine))
+  	return ajFalse;
+  
++     ajDebug("++seqReadRefseqp  %d first line '%S'\n", buff->Pos, seqReadLine);
++ 
+      bufflines++;
+  
+      ok = ajTrue;
+***************
+*** 12303,12310 ****
+  	    ok = ajBuffreadLineStore(buff,&seqReadLine,
+  				    seqin->Text, &thys->TextPtr);
+  
+- 
+      ajFilebuffClear(buff, 0);
+  
+      ajStrTokenDel(&handle);
+      ajStrDel(&token);
+--- 12314,12321 ----
+  	    ok = ajBuffreadLineStore(buff,&seqReadLine,
+  				    seqin->Text, &thys->TextPtr);
+  
+      ajFilebuffClear(buff, 0);
++     ajDebug("++last line %d '%S'\n", buff->Pos, seqReadLine);
+  
+      ajStrTokenDel(&handle);
+      ajStrDel(&token);
+diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajseqwrite.c EMBOSS-6.1.0/ajax/ajseqwrite.c
+*** EMBOSS-6.1.0orig/ajax/ajseqwrite.c	2009-07-06 16:50:31.000000000 +0100
+--- EMBOSS-6.1.0/ajax/ajseqwrite.c	2009-07-30 15:27:55.000000000 +0100
+***************
+*** 231,237 ****
+  	 AJFALSE, AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
+  	 AJFALSE, AJTRUE,  AJFALSE, seqWriteGcg},
+      {"gcg8",       "GCG old (version 8) sequence format",
+! 	 AJFALSE, AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
+  	 AJFALSE, AJTRUE,  AJFALSE, seqWriteGcg}, /* alias for gcg */
+      {"embl",       "EMBL entry format",
+  	 AJFALSE, AJFALSE, AJFALSE, AJTRUE, AJFALSE,
+--- 231,237 ----
+  	 AJFALSE, AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
+  	 AJFALSE, AJTRUE,  AJFALSE, seqWriteGcg},
+      {"gcg8",       "GCG old (version 8) sequence format",
+! 	 AJTRUE,  AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
+  	 AJFALSE, AJTRUE,  AJFALSE, seqWriteGcg}, /* alias for gcg */
+      {"embl",       "EMBL entry format",
+  	 AJFALSE, AJFALSE, AJFALSE, AJTRUE, AJFALSE,
+***************
+*** 240,246 ****
+  	 AJTRUE,  AJFALSE, AJFALSE, AJTRUE,  AJFALSE,
+  	 AJTRUE,  AJTRUE,  AJFALSE, seqWriteEmbl},
+      {"emblold",    "EMBL entry format (alias)",
+! 	 AJFALSE, AJFALSE, AJFALSE, AJTRUE,  AJFALSE,
+  	 AJTRUE,  AJTRUE,  AJFALSE, seqWriteEmbl}, /* embl pre-87 format*/
+      {"em",         "EMBL entry format (alias)",
+  	 AJTRUE,  AJFALSE, AJFALSE, AJTRUE,  AJFALSE,
+--- 240,246 ----
+  	 AJTRUE,  AJFALSE, AJFALSE, AJTRUE,  AJFALSE,
+  	 AJTRUE,  AJTRUE,  AJFALSE, seqWriteEmbl},
+      {"emblold",    "EMBL entry format (alias)",
+! 	 AJTRUE,  AJFALSE, AJFALSE, AJTRUE,  AJFALSE,
+  	 AJTRUE,  AJTRUE,  AJFALSE, seqWriteEmbl}, /* embl pre-87 format*/
+      {"em",         "EMBL entry format (alias)",
+  	 AJTRUE,  AJFALSE, AJFALSE, AJTRUE,  AJFALSE,
+***************
+*** 255,261 ****
+  	 AJTRUE,  AJFALSE, AJFALSE, AJFALSE, AJTRUE,
+  	 AJTRUE,  AJTRUE,  AJFALSE, seqWriteSwiss},
+      {"swissold",   "Swissprot entry format", /* format before 2006 release */
+! 	 AJFALSE, AJFALSE, AJFALSE, AJFALSE, AJTRUE,
+  	 AJTRUE,  AJTRUE,  AJFALSE, seqWriteSwiss},
+      {"swissprotold","Swissprot entry format",
+  	 AJTRUE,  AJFALSE, AJFALSE, AJFALSE, AJTRUE,
+--- 255,261 ----
+  	 AJTRUE,  AJFALSE, AJFALSE, AJFALSE, AJTRUE,
+  	 AJTRUE,  AJTRUE,  AJFALSE, seqWriteSwiss},
+      {"swissold",   "Swissprot entry format", /* format before 2006 release */
+! 	 AJTRUE,  AJFALSE, AJFALSE, AJFALSE, AJTRUE,
+  	 AJTRUE,  AJTRUE,  AJFALSE, seqWriteSwiss},
+      {"swissprotold","Swissprot entry format",
+  	 AJTRUE,  AJFALSE, AJFALSE, AJFALSE, AJTRUE,
+***************
+*** 347,353 ****
+      {"msf",        "GCG MSF (mutiple sequence file) file format",
+  	 AJFALSE, AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
+  	 AJFALSE, AJTRUE,  AJFALSE, seqWriteMsf},
+!     {"clustal",    "Clustalw output format",
+  	 AJFALSE, AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
+  	 AJFALSE, AJTRUE,  AJFALSE, seqWriteClustal},
+      {"aln",        "Clustalw output format (alias)",
+--- 347,353 ----
+      {"msf",        "GCG MSF (mutiple sequence file) file format",
+  	 AJFALSE, AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
+  	 AJFALSE, AJTRUE,  AJFALSE, seqWriteMsf},
+!     {"clustal",    "Clustalw multiple alignment format",
+  	 AJFALSE, AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
+  	 AJFALSE, AJTRUE,  AJFALSE, seqWriteClustal},
+      {"aln",        "Clustalw output format (alias)",
+***************
+*** 1360,1374 ****
+  
+  static void seqWriteFastqSanger(AjPSeqout outseq)
+  {
+-     ajuint i;
+      ajuint j;
+      ajuint ilen;
+-     ajuint jlen;
+      AjPStr seq = NULL;
+-     ajuint linelen     = 60;
+-     ajuint iend;
+      AjPStr db = NULL;
+!     char qchar;
+  
+      ajStrAssignS(&db, outseq->Setoutdb);
+      /* ajStrAssignEmptyS(&db, outseq->Db);*/
+--- 1360,1370 ----
+  
+  static void seqWriteFastqSanger(AjPSeqout outseq)
+  {
+      ajuint j;
+      ajuint ilen;
+      AjPStr seq = NULL;
+      AjPStr db = NULL;
+!     ajint qchar;
+  
+      ajStrAssignS(&db, outseq->Setoutdb);
+      /* ajStrAssignEmptyS(&db, outseq->Db);*/
+***************
+*** 1394,1430 ****
+      ajFmtPrintF(outseq->File, "\n");
+      ilen = ajStrGetLen(outseq->Seq);
+  
+!     for(i=0; i < ilen; i += linelen)
+!     {
+! 	iend = AJMIN(ilen-1, i+linelen-1);
+! 	ajStrAssignSubS(&seq, outseq->Seq, i, iend);
+! 	ajFmtPrintF(outseq->File, "%S\n", seq);
+!     }
+! 
+!     ajFmtPrintF(outseq->File, "+%S", outseq->Name);
+! 
+!     if(ajStrGetLen(outseq->Sv))
+! 	ajFmtPrintF(outseq->File, " %S", outseq->Sv);
+!     else if(ajStrGetLen(outseq->Acc))
+! 	ajFmtPrintF(outseq->File, " %S", outseq->Acc);
+  
+!     ajFmtPrintF(outseq->File, "\n");
+  
+      ilen = ajStrGetLen(outseq->Seq);
+  
+      if(outseq->Accuracy)
+      {
+!         for(i=0; i < ilen; i += linelen)
+          {
+!             iend = AJMIN(ilen-1, i+linelen-1);
+!             ajStrAssignClear(&seq);
+!             for(j=i;j<=iend;j++)
+!             {
+!                 qchar = 33 + (int) outseq->Accuracy[j];
+!                 ajStrAppendK(&seq, qchar);
+!             }
+!             ajFmtPrintF(outseq->File, "%S\n", seq);
+          }
+      }
+  
+      else 
+--- 1390,1416 ----
+      ajFmtPrintF(outseq->File, "\n");
+      ilen = ajStrGetLen(outseq->Seq);
+  
+!     ajFmtPrintF(outseq->File, "%S\n", outseq->Seq);
+  
+!     ajFmtPrintF(outseq->File, "+\n");
+  
+      ilen = ajStrGetLen(outseq->Seq);
+  
+      if(outseq->Accuracy)
+      {
+!         ajStrAssignClear(&seq);
+! 
+!         for(j=0;j<ilen;j++)
+          {
+!             qchar = 33 + (int) (0.5 + outseq->Accuracy[j]);
+!             if(qchar > 126)
+!                 qchar = 126;
+!             if(qchar < 33)
+!                 qchar = 33;
+!             ajStrAppendK(&seq, (char) qchar);
+          }
++ 
++         ajFmtPrintF(outseq->File, "%S\n", seq);
+      }
+  
+      else 
+***************
+*** 1433,1447 ****
+          ** default to a score of 1 (0.75 error : 1 base in 4 is right)
+          */
+  
+!         for(i=0; i < ilen; i += linelen)
+!         {
+!             iend = AJMIN(ilen-1, i+linelen-1);
+!             jlen = (iend - i + 1);
+!             ajStrAssignClear(&seq);
+!             ajStrAppendCountK(&seq,'\"', jlen); 
+!             ajFmtPrintF(outseq->File, "%S\n", seq);
+!         }
+  
+      }
+      
+      ajStrDel(&seq);
+--- 1419,1429 ----
+          ** default to a score of 1 (0.75 error : 1 base in 4 is right)
+          */
+  
+!         ajStrAssignClear(&seq);
+! 
+!         ajStrAppendCountK(&seq,'\"', ilen); 
+  
++         ajFmtPrintF(outseq->File, "%S\n", seq);
+      }
+      
+      ajStrDel(&seq);
+***************
+*** 1464,1478 ****
+  
+  static void seqWriteFastqIllumina(AjPSeqout outseq)
+  {
+-     ajuint i;
+      ajuint j;
+      ajuint ilen;
+-     ajuint jlen;
+      AjPStr seq = NULL;
+-     ajuint linelen     = 60;
+-     ajuint iend;
+      AjPStr db = NULL;
+!     char qchar;
+  
+      ajStrAssignS(&db, outseq->Setoutdb);
+      /* ajStrAssignEmptyS(&db, outseq->Db);*/
+--- 1446,1456 ----
+  
+  static void seqWriteFastqIllumina(AjPSeqout outseq)
+  {
+      ajuint j;
+      ajuint ilen;
+      AjPStr seq = NULL;
+      AjPStr db = NULL;
+!     ajint qchar;
+  
+      ajStrAssignS(&db, outseq->Setoutdb);
+      /* ajStrAssignEmptyS(&db, outseq->Db);*/
+***************
+*** 1498,1534 ****
+      ajFmtPrintF(outseq->File, "\n");
+      ilen = ajStrGetLen(outseq->Seq);
+  
+!     for(i=0; i < ilen; i += linelen)
+!     {
+! 	iend = AJMIN(ilen-1, i+linelen-1);
+! 	ajStrAssignSubS(&seq, outseq->Seq, i, iend);
+! 	ajFmtPrintF(outseq->File, "%S\n", seq);
+!     }
+! 
+!     ajFmtPrintF(outseq->File, "+%S", outseq->Name);
+! 
+!     if(ajStrGetLen(outseq->Sv))
+! 	ajFmtPrintF(outseq->File, " %S", outseq->Sv);
+!     else if(ajStrGetLen(outseq->Acc))
+! 	ajFmtPrintF(outseq->File, " %S", outseq->Acc);
+! 
+!     ajFmtPrintF(outseq->File, "\n");
+  
+      ilen = ajStrGetLen(outseq->Seq);
+  
+      if(outseq->Accuracy)
+      {
+!         for(i=0; i < ilen; i += linelen)
+          {
+!             iend = AJMIN(ilen-1, i+linelen-1);
+!             ajStrAssignClear(&seq);
+!             for(j=i;j<=iend;j++)
+!             {
+!                 qchar = 64 + (int) outseq->Accuracy[j];
+!                 ajStrAppendK(&seq, qchar);
+!             }
+!             ajFmtPrintF(outseq->File, "%S\n", seq);
+          }
+      }
+  
+      else 
+--- 1476,1501 ----
+      ajFmtPrintF(outseq->File, "\n");
+      ilen = ajStrGetLen(outseq->Seq);
+  
+!     ajFmtPrintF(outseq->File, "%S\n", outseq->Seq);
+!     ajFmtPrintF(outseq->File, "+\n");
+  
+      ilen = ajStrGetLen(outseq->Seq);
+  
+      if(outseq->Accuracy)
+      {
+!         ajStrAssignClear(&seq);
+! 
+!         for(j=0;j<ilen;j++)
+          {
+!             qchar = 64 + (int) (0.5 + outseq->Accuracy[j]);
+!             if(qchar > 126)
+!                 qchar = 126;
+!             else if(qchar < 33)
+!                 qchar = 33;
+!             ajStrAppendK(&seq, (char) qchar);
+          }
++ 
++         ajFmtPrintF(outseq->File, "%S\n", seq);
+      }
+  
+      else 
+***************
+*** 1537,1551 ****
+          ** default to a score of 1 (0.75 error : 1 base in 4 is right)
+          */
+  
+!         for(i=0; i < ilen; i += linelen)
+!         {
+!             iend = AJMIN(ilen-1, i+linelen-1);
+!             jlen = (iend - i + 1);
+!             ajStrAssignClear(&seq);
+!             ajStrAppendCountK(&seq,'A', jlen);
+!             ajFmtPrintF(outseq->File, "%S\n", seq);
+!         }
+  
+      }
+      
+      ajStrDel(&seq);
+--- 1504,1514 ----
+          ** default to a score of 1 (0.75 error : 1 base in 4 is right)
+          */
+  
+!         ajStrAssignClear(&seq);
+! 
+!         ajStrAppendCountK(&seq,'A', ilen);
+  
++         ajFmtPrintF(outseq->File, "%S\n", seq);
+      }
+      
+      ajStrDel(&seq);
+***************
+*** 1568,1582 ****
+  
+  static void seqWriteFastqSolexa(AjPSeqout outseq)
+  {
+-     ajuint i;
+      ajuint j;
+      ajuint ilen;
+-     ajuint jlen;
+      AjPStr seq = NULL;
+-     ajuint linelen     = 60;
+-     ajuint iend;
+      AjPStr db = NULL;
+!     char qchar;
+      double sval;
+      double pval;
+      double qval;
+--- 1531,1541 ----
+  
+  static void seqWriteFastqSolexa(AjPSeqout outseq)
+  {
+      ajuint j;
+      ajuint ilen;
+      AjPStr seq = NULL;
+      AjPStr db = NULL;
+!     ajint qchar;
+      double sval;
+      double pval;
+      double qval;
+***************
+*** 1605,1651 ****
+      ajFmtPrintF(outseq->File, "\n");
+      ilen = ajStrGetLen(outseq->Seq);
+  
+!     for(i=0; i < ilen; i += linelen)
+!     {
+! 	iend = AJMIN(ilen-1, i+linelen-1);
+! 	ajStrAssignSubS(&seq, outseq->Seq, i, iend);
+! 	ajFmtPrintF(outseq->File, "%S\n", seq);
+!     }
+  
+!     ajFmtPrintF(outseq->File, "+%S", outseq->Name);
+! 
+!     if(ajStrGetLen(outseq->Sv))
+! 	ajFmtPrintF(outseq->File, " %S", outseq->Sv);
+!     else if(ajStrGetLen(outseq->Acc))
+! 	ajFmtPrintF(outseq->File, " %S", outseq->Acc);
+! 
+!     ajFmtPrintF(outseq->File, "\n");
+  
+      ilen = ajStrGetLen(outseq->Seq);
+  
+      if(outseq->Accuracy)
+      {
+!         for(i=0; i < ilen; i += linelen)
+          {
+!             iend = AJMIN(ilen-1, i+linelen-1);
+!             ajStrAssignClear(&seq);
+!             for(j=i;j<=iend;j++)
+!             {
+!                 sval = outseq->Accuracy[j];
+!                 pval = 1.0 / pow(10.0, (sval/10.0));
+  
+!                 /*adjust zero phred score to 0.75 error rate */
+!                 if(pval == 1.0)
+!                     pval = 0.75;
+! 
+!                 qval = 0.5 + -10.0 * log10(pval/(1.0 - pval));
+!                 qchar = 64 + (int) qval;
+!                 ajStrAppendK(&seq, qchar);
+!                 ajDebug("[%d] aval:%.4f qval:%.4f %d '%c'\n",
+!                         j, sval, qval, (int)qval, qchar);
+!             }
+!             ajFmtPrintF(outseq->File, "%S\n", seq);
+          }
+      }
+  
+      else 
+--- 1564,1602 ----
+      ajFmtPrintF(outseq->File, "\n");
+      ilen = ajStrGetLen(outseq->Seq);
+  
+!     ajFmtPrintF(outseq->File, "%S\n", outseq->Seq);
+  
+!     ajFmtPrintF(outseq->File, "+\n");
+  
+      ilen = ajStrGetLen(outseq->Seq);
+  
+      if(outseq->Accuracy)
+      {
+!         ajStrAssignClear(&seq);
+! 
+!         for(j=0;j<ilen;j++)
+          {
+!             sval = outseq->Accuracy[j];
+!             pval = 1.0 / pow(10.0, (sval/10.0));
+  
+!             /*adjust zero phred score to 0.75 error rate */
+!             if(pval > 0.75)
+!                 pval = 0.75;
+! 
+!             qval = -10.0 * log10(pval/(1.0 - pval));
+!             if(qval >= 0.0)
+!                 qchar = 64 + (int) (qval + 0.5);
+!             else
+!                 qchar = 64 + (int) (qval - 0.5);
+!             if(qchar > 126)
+!                 qchar = 126;
+!             else if(qchar < 33)
+!                 qchar = 33;
+!             ajStrAppendK(&seq, (char) qchar);
+!             ajDebug("[%d] aval:%.4f qval:%.4f %d '%c'\n",
+!                     j, sval, qval, (int)qval, qchar);
+          }
++         ajFmtPrintF(outseq->File, "%S\n", seq);
+      }
+  
+      else 
+***************
+*** 1654,1668 ****
+          ** default to a score of -5 (0.75 error : 1 base in 4 is right)
+          */
+  
+!         for(i=0; i < ilen; i += linelen)
+!         {
+!             iend = AJMIN(ilen-1, i+linelen-1);
+!             jlen = (iend - i + 1);
+!             ajStrAssignClear(&seq);
+!             ajStrAppendCountK(&seq,';', jlen); 
+!             ajFmtPrintF(outseq->File, "%S\n", seq);
+!         }
+  
+      }
+      
+      ajStrDel(&seq);
+--- 1605,1615 ----
+          ** default to a score of -5 (0.75 error : 1 base in 4 is right)
+          */
+  
+!         ajStrAssignClear(&seq);
+!         
+!         ajStrAppendCountK(&seq,';', ilen); 
+  
++         ajFmtPrintF(outseq->File, "%S\n", seq);
+      }
+      
+      ajStrDel(&seq);
+***************
+*** 7798,7803 ****
+--- 7745,7751 ----
+  
+  
+  
++ 
+  /* @funcstatic seqSeqFormat ***************************************************
+  **
+  ** Initialises sequence output formatting parameters.
+diff -c -N --recursive EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/gui/Browser.java EMBOSS-6.1.0/jemboss/org/emboss/jemboss/gui/Browser.java
+*** EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/gui/Browser.java	2009-06-30 17:18:26.000000000 +0100
+--- EMBOSS-6.1.0/jemboss/org/emboss/jemboss/gui/Browser.java	2009-07-30 15:29:18.000000000 +0100
+***************
+*** 68,74 ****
+--- 68,77 ----
+  import javax.swing.tree.DefaultMutableTreeNode;
+  import javax.swing.tree.TreeSelectionModel;
+  
++ import org.emboss.jemboss.Jemboss;
+  import org.emboss.jemboss.JembossParams;
++ import org.emboss.jemboss.server.JembossServer;
++ import org.emboss.jemboss.soap.GetVersion;
+  
+  
+  /**
+***************
+*** 110,115 ****
+--- 113,120 ----
+    private JMenuItem fwdMenu;
+    /** Forward button option */
+    private JButton fwdBt;
++   /** version of EMBOSS programs */
++   String embossVersion = "6.1";
+  
+    /**
+    *
+***************
+*** 178,185 ****
+        URL pageURL = new URL(initialURL);
+        setURL(pageURL,initialURL);
+      }
+    }
+! 
+  
+    /**
+    *
+--- 183,193 ----
+        URL pageURL = new URL(initialURL);
+        setURL(pageURL,initialURL);
+      }
++     if (Jemboss.withSoap){
++     	embossVersion = GetVersion.getVersion(mysettings);
++     }
+    }
+!   
+  
+    /**
+    *
+***************
+*** 712,719 ****
+              loc = "http://emboss.sourceforge.net/Jemboss/";
+            else if(selectedValue.equals("Home") && category.equals("EMBOSS"))
+              loc = "http://emboss.sourceforge.net/";
+!           else if(selectedValue.equals("Apps") && category.equals("EMBOSS"))
+!             loc = "http://emboss.sourceforge.net/apps/release/6.0/emboss/apps/";
+  
+            if(loc != null) 
+            {
+--- 720,732 ----
+              loc = "http://emboss.sourceforge.net/Jemboss/";
+            else if(selectedValue.equals("Home") && category.equals("EMBOSS"))
+              loc = "http://emboss.sourceforge.net/";
+!           else if(selectedValue.equals("Apps") && category.equals("EMBOSS")){
+!         	if (!JembossParams.isJembossServer()){
+!         	  	embossVersion = new JembossServer().version();
+!         	  	embossVersion = embossVersion.split("\\.")[0]+"."+embossVersion.split("\\.")[1];
+!         	}
+!             loc = "http://emboss.sourceforge.net/apps/release/"+embossVersion+"/emboss/apps/";
+!           }
+  
+            if(loc != null) 
+            {
+diff -c -N --recursive EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/gui/BuildProgramMenu.java EMBOSS-6.1.0/jemboss/org/emboss/jemboss/gui/BuildProgramMenu.java
+*** EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/gui/BuildProgramMenu.java	2009-07-08 09:45:48.000000000 +0100
+--- EMBOSS-6.1.0/jemboss/org/emboss/jemboss/gui/BuildProgramMenu.java	2009-07-30 15:29:31.000000000 +0100
+***************
+*** 141,146 ****
+--- 141,162 ----
+            return woss;
+        }
+  
++       private synchronized void  updateConnectionSettings(){      
++ 		  splashing.doneSomething("Cannot connect!");
++ 		  ServerSetup ss = new ServerSetup(mysettings);
++ 		  splashThread.setInterval(100000);
++ 		  int sso = JOptionPane.showConfirmDialog(f,ss,
++ 				  "Check Settings",
++ 				  JOptionPane.OK_CANCEL_OPTION,
++ 				  JOptionPane.ERROR_MESSAGE,null);
++ 		  if(sso == JOptionPane.OK_OPTION){
++ 			  ss.setNewSettings();
++ 			  splashThread.setInterval(80);
++ 		  }
++ 		  else
++ 			  System.exit(0);
++ 	  }
++ 
+        private void constructWithSoap(){
+  
+            mainMenu.setEnableFileManagers(false);
+***************
+*** 157,249 ****
+              mysettings.updateJembossPropStrings(settings);
+            }
+  
+!           SwingWorker databaseworker = new SwingWorker()
+            {
+!             public Object construct()
+!             {
+!               ShowDB showdb = null;
+!               try
+!               {
+!                 showdb  = new ShowDB(mysettings);
+!               }
+!               catch (Exception ex)
+!               {
+!                 splashing.doneSomething("Cannot connect!");
+!                 ServerSetup ss = new ServerSetup(mysettings);
+!                 int sso = JOptionPane.showConfirmDialog(f,ss,
+!                            "Check Settings",
+!                            JOptionPane.OK_CANCEL_OPTION,
+!                            JOptionPane.ERROR_MESSAGE,null);
+!                 if(sso == JOptionPane.OK_OPTION)
+!                   ss.setNewSettings();
+!                 else
+!                   System.exit(0);
+  
+!                 try
+!                 {
+!                   showdb  = new ShowDB(mysettings);
+!                 }
+!                 catch (Exception exp)
+!                 {
+!                   exp.printStackTrace();
+!                 }
+!               }
+!               String showdbOut = showdb.getDBText();
+  
+!               Database d = new Database(showdbOut);
+!               db = d.getDB();
+!               mainMenu.setEnableFileManagers(true);
+!               mainMenu.setEnableShowResults(true);
+!               splashing.doneSomething("");
+!               splashThread.setInterval(0);
+! 
+!               matrices = showdb.getMatrices();  // get the available matrices
+!               codons   = showdb.getCodonUsage();
+! 
+!               /*JLabel jl = */new JLabel("<html>"); // not used but speeds first
+!                                                 // ACD form loading which
+!                                                 // uses html
+!               return null;
+!             }
+            };
+            databaseworker.start();
+-           
+            splashing.doneSomething("");
+- 
+-           try
+-           {
+-             try
+-             {
+-               Hashtable hwoss = (new JembossJarUtil("resources/wossname.jar")).getHash();
+-               if(hwoss.containsKey("wossname.out"))
+-                 woss = new String((byte[])hwoss.get("wossname.out"));
+-             }
+-             catch (Exception ex){}
+- 
+-             if(woss.equals(""))
+-             {
+-               GetWossname ewoss = new GetWossname(mysettings);
+-               woss = ewoss.getWossnameText(); 
+-               mainMenu.setEnableFileManagers(true);
+-               mainMenu.setEnableShowResults(true);
+-             }
+-             
+-             splashing.doneSomething("");
+-           } 
+-           catch(Exception e)
+-           {
+-             splashing.doneSomething("Cannot connect!");
+-             ServerSetup ss = new ServerSetup(mysettings);
+-             int sso = JOptionPane.showConfirmDialog(f,ss,
+-                            "Check Settings",
+-                            JOptionPane.OK_CANCEL_OPTION,
+-                            JOptionPane.ERROR_MESSAGE,null);
+-             if(sso == JOptionPane.OK_OPTION)
+-               ss.setNewSettings();
+-             else
+-               System.exit(0);
+-           }        
+        }
+              
+        private void constructWithoutSoap(){
+  
+--- 173,237 ----
+              mysettings.updateJembossPropStrings(settings);
+            }
+  
+!           try
+            {
+!         	  Hashtable hwoss = (new JembossJarUtil("resources/wossname.jar")).getHash();
+!         	  if(hwoss.containsKey("wossname.out"))
+!         		  woss = new String((byte[])hwoss.get("wossname.out"));
+!           }
+!           catch (Exception ex){}
+!           if(woss.equals(""))
+!           {
+!         	  boolean connectionmade = false;
+!         	  while (!connectionmade){
+!         		  try
+!         		  {
+!         			  GetWossname ewoss = new GetWossname(mysettings);
+!         			  woss = ewoss.getWossnameText(); 
+!         			  mainMenu.setEnableFileManagers(true);
+!         			  mainMenu.setEnableShowResults(true);
+!         		  }
+!         		  catch (JembossSoapException ex){
+!         			  updateConnectionSettings();
+!         			  continue;
+!         		  }
+!         		  connectionmade = true;
+!         	  }
+!           }
+  
+!           SwingWorker databaseworker = new SwingWorker()
+!           {
+  
+!         	  public Object construct() {
+!         		  boolean connectionmade = false;
+!         		  while (!connectionmade) {
+!         			  ShowDB showdb = null;
+!         			  try {
+!         				  showdb = new ShowDB(mysettings);
+!         				  String showdbOut = showdb.getDBText();
+! 
+!         				  Database d = new Database(showdbOut);
+!         				  db = d.getDB();
+!         				  mainMenu.setEnableFileManagers(true);
+!         				  mainMenu.setEnableShowResults(true);
+!         				  splashing.doneSomething("");
+!         				  splashThread.setInterval(0);
+! 
+!         				  matrices = showdb.getMatrices();
+!         				  codons = showdb.getCodonUsage();
+!         			  } catch (JembossSoapException ex) {
+!         				  updateConnectionSettings();
+!         				  continue;
+!         			  }
+!         			  connectionmade = true;
+!         		  }
+!         		  return null;
+!         	  }
+            };
+            databaseworker.start();
+            splashing.doneSomething("");
+        }
++       
+              
+        private void constructWithoutSoap(){
+  
+***************
+*** 310,316 ****
+          progs = new ProgList(woss,menuBar);
+  
+          if(withSoap)
+!           splashing.doneSomething("");
+  
+          int npG = progs.getNumPrimaryGroups();
+          menuBar.setLayout(new GridLayout(npG,1));
+--- 298,304 ----
+          progs = new ProgList(woss,menuBar);
+  
+          if(withSoap)
+!           splashing.doneEverything("");
+  
+          int npG = progs.getNumPrimaryGroups();
+          menuBar.setLayout(new GridLayout(npG,1));
+diff -c -N --recursive EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/gui/form/BuildJembossForm.java EMBOSS-6.1.0/jemboss/org/emboss/jemboss/gui/form/BuildJembossForm.java
+*** EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/gui/form/BuildJembossForm.java	2009-07-13 17:24:04.000000000 +0100
+--- EMBOSS-6.1.0/jemboss/org/emboss/jemboss/gui/form/BuildJembossForm.java	2009-07-30 15:29:52.000000000 +0100
+***************
+*** 100,107 ****
+    private boolean withSoap;
+    private JFrame f;
+    private JPanel p2;
+!   private String embossBin;
+! 
+    private int numofFields;
+    private JembossParams mysettings;
+    
+--- 100,106 ----
+    private boolean withSoap;
+    private JFrame f;
+    private JPanel p2;
+!   
+    private int numofFields;
+    private JembossParams mysettings;
+    
+***************
+*** 125,131 ****
+      this.mysettings = mysettings;
+      this.withSoap = withSoap;
+  
+-     embossBin  = mysettings.getEmbossBin();
+      this.envp = envp;
+      this.applName = applName;
+  
+--- 124,129 ----
+***************
+*** 172,181 ****
+          {
+            String urlEmbassyPrefix = parseAcd.getUrlPrefix();
+            url = mysettings.getembURL();
+            if(urlEmbassyPrefix != null)
+!             url = url + "apps/release/6.0/embassy/" +applName+ "/" ;
+            else
+!             url = url + "apps/release/6.0/emboss/apps/";
+  
+            url = url+applName+".html";
+          }
+--- 170,181 ----
+          {
+            String urlEmbassyPrefix = parseAcd.getUrlPrefix();
+            url = mysettings.getembURL();
++           String version = GetVersion.getVersion(mysettings);
+            if(urlEmbassyPrefix != null)
+!         	 // get the version from server
+!             url = url + "apps/release/"+version+"/embassy/"+urlEmbassyPrefix+"/" ;
+            else
+!             url = url + "apps/release/"+version+"/emboss/apps/";
+  
+            url = url+applName+".html";
+          }
+***************
+*** 893,900 ****
+        }
+        else if ( att.startsWith("float") )
+        {
+!         if( (textFloat[h].getText() != null) && textFloat[h].isVisible()
+!                                              && textFloat[h].isEnabled())
+          {
+            options = options.concat(" -" + val + " " + textFloat[h].getValue());
+            optionsA.add("-"+val);
+--- 893,901 ----
+        }
+        else if ( att.startsWith("float") )
+        {
+!         if( textFloat[h].getText() != null &&
+!         		textFloat[h].getText().length()>0 &&
+!         		textFloat[h].isVisible() && textFloat[h].isEnabled())
+          {
+            options = options.concat(" -" + val + " " + textFloat[h].getValue());
+            optionsA.add("-"+val);
+diff -c -N --recursive EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/gui/sequenceChooser/InputSequenceAttributes.java EMBOSS-6.1.0/jemboss/org/emboss/jemboss/gui/sequenceChooser/InputSequenceAttributes.java
+*** EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/gui/sequenceChooser/InputSequenceAttributes.java	2009-07-13 17:23:30.000000000 +0100
+--- EMBOSS-6.1.0/jemboss/org/emboss/jemboss/gui/sequenceChooser/InputSequenceAttributes.java	2009-07-30 15:30:07.000000000 +0100
+***************
+*** 281,287 ****
+  //  bx.add(Box.createHorizontalGlue());
+  
+  
+!     UFO = new JTextField();                     //sufo
+      UFO.setPreferredSize(new Dimension(100, 30));
+      UFO.setMaximumSize(new Dimension(100, 30));
+  
+--- 281,287 ----
+  //  bx.add(Box.createHorizontalGlue());
+  
+  
+!     UFO = new JTextField();                     //ufo
+      UFO.setPreferredSize(new Dimension(100, 30));
+      UFO.setMaximumSize(new Dimension(100, 30));
+  
+***************
+*** 433,440 ****
+  
+    /**
+    *
+!   * Determine if there is a default -sufo value
+!   * @return     true if -sufo is set
+    *
+    */
+    public boolean isUFODefault()
+--- 433,440 ----
+  
+    /**
+    *
+!   * Determine if there is a default -ufo value
+!   * @return     true if -ufo is set
+    *
+    */
+    public boolean isUFODefault()
+***************
+*** 508,514 ****
+  //                                     sID.getText());
+  
+      if(!isUFODefault())
+!       options = options.concat(" -sufo" + seq + " " +
+                                         UFO.getText());
+  
+      return options;
+--- 508,514 ----
+  //                                     sID.getText());
+  
+      if(!isUFODefault())
+!       options = options.concat(" -ufo" + seq + " " +
+                                         UFO.getText());
+  
+      return options;
+***************
+*** 559,565 ****
+      }
+  
+      if(!isUFODefault()){
+!       optionsA.add("-sufo"+ seq);
+        optionsA.add(UFO.getText());
+      }
+  
+--- 559,565 ----
+      }
+  
+      if(!isUFODefault()){
+!       optionsA.add("-ufo"+ seq);
+        optionsA.add(UFO.getText());
+      }
+  
+diff -c -N --recursive EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/soap/GetVersion.java EMBOSS-6.1.0/jemboss/org/emboss/jemboss/soap/GetVersion.java
+*** EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/soap/GetVersion.java	1970-01-01 01:00:00.000000000 +0100
+--- EMBOSS-6.1.0/jemboss/org/emboss/jemboss/soap/GetVersion.java	2009-07-30 15:30:24.000000000 +0100
+***************
+*** 0 ****
+--- 1,82 ----
++ /********************************************************************
++  *
++  *  This library is free software; you can redistribute it and/or
++  *  modify it under the terms of the GNU Library General Public
++  *  License as published by the Free Software Foundation; either
++  *  version 2 of the License, or (at your option) any later version.
++  *
++  *  This library is distributed in the hope that it will be useful,
++  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
++  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++  *  Library General Public License for more details.
++  *
++  *  You should have received a copy of the GNU Library General Public
++  *  License along with this library; if not, write to the
++  *  Free Software Foundation, Inc., 59 Temple Place - Suite 330,
++  *  Boston, MA  02111-1307, USA.
++  *
++  *  @author: Copyright (C) Tim Carver
++  *
++  ********************************************************************/
++ 
++ package org.emboss.jemboss.soap;
++ 
++ import javax.xml.namespace.QName;
++ 
++ import org.apache.axis.client.Call;
++ import org.emboss.jemboss.JembossParams;
++ 
++ /**
++  * 
++  * Get the version of EMBOSS programs used by the Jemboss server connected
++  * 
++  */
++ /**
++  * @author uludag
++  *
++  */
++ public class GetVersion {
++ 
++ 	private static String version = null;
++ 
++ 	/**
++ 	 * returns complete version string of EMBOSS connected Jemboss server is using
++ 	 * @param mysettings
++ 	 *            jemboss properties
++ 	 * 
++ 	 */
++ 	public static String getVersionComplete(JembossParams mysettings) {
++ 
++ 		if (version != null)
++ 			return version;
++ 
++ 		if (!JembossParams.isJembossServer())
++ 			return null;
++ 		try {
++ 			String endpoint = mysettings.getPublicSoapURL();
++ 			org.apache.axis.client.Service serv = new org.apache.axis.client.Service();
++ 
++ 			Call call = (Call) serv.createCall();
++ 			call.setTargetEndpointAddress(new java.net.URL(endpoint));
++ 			call.setOperationName(new QName(mysettings.getPublicSoapService(),
++ 					"version"));
++ 			call.setReturnType(org.apache.axis.Constants.SOAP_STRING);
++ 			version = (String) call.invoke(new Object[] {});
++ 		} catch (Exception jse) {
++ 			jse.printStackTrace();
++ 		}
++ 		return version;
++ 	}
++ 	
++ 	
++ 	/**
++ 	 * returns firt two digits of EMBOSS version connected server has
++ 	 * @param mysettings
++ 	 * @return version of EMBOSS programs such as 5.0, or 6.1
++ 	 */
++ 	public static String getVersion(JembossParams mysettings){
++ 		getVersionComplete(mysettings);
++ 		return version.split("\\.")[0]+"."+version.split("\\.")[1];        
++ 	}
++ 
++ }
+diff -c -N --recursive EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/soap/ShowDB.java EMBOSS-6.1.0/jemboss/org/emboss/jemboss/soap/ShowDB.java
+*** EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/soap/ShowDB.java	2008-06-12 09:19:07.000000000 +0100
+--- EMBOSS-6.1.0/jemboss/org/emboss/jemboss/soap/ShowDB.java	2009-07-30 15:30:32.000000000 +0100
+***************
+*** 50,64 ****
+    * @param mysettings 	jemboss properties
+    *
+    */
+!   public ShowDB(JembossParams mysettings)
+    {
+   
+      PublicRequest dbReq = null;   
+!     try
+!     {
+!       dbReq = new PublicRequest(mysettings, "show_db");
+!     }
+!     catch (JembossSoapException jse) {}
+  
+      statusmsg = dbReq.getVal("msg");
+      status = dbReq.getVal("status");
+--- 50,61 ----
+    * @param mysettings 	jemboss properties
+    *
+    */
+!   public ShowDB(JembossParams mysettings) throws JembossSoapException
+    {
+   
+      PublicRequest dbReq = null;   
+! 
+!     dbReq = new PublicRequest(mysettings, "show_db");
+  
+      statusmsg = dbReq.getVal("msg");
+      status = dbReq.getVal("status");
+diff -c -N --recursive EMBOSS-6.1.0orig/jemboss/utils/install-jemboss-server.sh EMBOSS-6.1.0/jemboss/utils/install-jemboss-server.sh
+*** EMBOSS-6.1.0orig/jemboss/utils/install-jemboss-server.sh	2009-06-30 09:31:50.000000000 +0100
+--- EMBOSS-6.1.0/jemboss/utils/install-jemboss-server.sh	2009-07-30 15:30:59.000000000 +0100
+***************
+*** 694,718 ****
+  echo "         EMBOSS and Jemboss Server installation script"
+  echo "--------------------------------------------------------------"
+  echo " "
+! echo "Note: any default values are given in square brackets []. "
+  echo " "
+! echo "There are two types of installation see details at: "
+  echo "http://emboss.sourceforge.net/Jemboss/install/setup.html"
+- echo " "
+- echo "(1) CLIENT-SERVER"
+- echo "(2) STANDALONE"
+- echo "Enter type of installation [1] :"
+- read INSTALL_TYPE
+- 
+- if (test "$INSTALL_TYPE" != "1") && (test "$INSTALL_TYPE" != "2"); then
+-   INSTALL_TYPE="1"
+- fi
+- clear
+- 
+  echo
+- echo "--------------------------------------------------------------"
+- echo "         EMBOSS and Jemboss Server installation script"
+- echo "--------------------------------------------------------------"
+  echo
+  echo "*** This script needs to be run with permissions to be able"
+  echo "*** to install EMBOSS in the required directories. This may"
+--- 694,709 ----
+  echo "         EMBOSS and Jemboss Server installation script"
+  echo "--------------------------------------------------------------"
+  echo " "
+! echo "Note: any default values are given in square brackets []."
+  echo " "
+! echo "This script installs EMBOSS as well as Jemboss."
+! echo "Jemboss is deployed as a Java web application in your tomcat server."
+! echo "A script is prepared to run Jemboss client that by default uses the"
+! echo "above Jemboss web application."
+! echo
+! echo "For detailed information on installing Jemboss see: "
+  echo "http://emboss.sourceforge.net/Jemboss/install/setup.html"
+  echo
+  echo
+  echo "*** This script needs to be run with permissions to be able"
+  echo "*** to install EMBOSS in the required directories. This may"
+***************
+*** 721,735 ****
+  echo "Before running this script you should download the latest:"
+  echo
+  echo "(1) EMBOSS release (contains Jemboss) ftp://emboss.open-bio.org/pub/EMBOSS/"
+! 
+! 
+! if [ $INSTALL_TYPE = "1" ]; then
+!   echo "(2) Tomcat release http://jakarta.apache.org/site/binindex.html"
+!   echo "(3) Apache AXIS (SOAP) release   http://xml.apache.org/axis/"
+! fi
+    
+  echo
+! echo "Has the above been downloaded (y/n)? "
+  read DOWNLOADED
+  
+  if (test "$DOWNLOADED" != "y") && (test "$DOWNLOADED" != "Y"); then
+--- 712,722 ----
+  echo "Before running this script you should download the latest:"
+  echo
+  echo "(1) EMBOSS release (contains Jemboss) ftp://emboss.open-bio.org/pub/EMBOSS/"
+! echo "(2) Tomcat 5.5 series release http://tomcat.apache.org/"
+! echo "(3) Apache AXIS (SOAP) release 1.4   http://ws.apache.org/axis/"
+    
+  echo
+! echo "Have the above been downloaded (y/n)? "
+  read DOWNLOADED
+  
+  if (test "$DOWNLOADED" != "y") && (test "$DOWNLOADED" != "Y"); then
+***************
+*** 831,836 ****
+--- 818,826 ----
+  fi
+  
+  SSL="y"
++ 
++ # keep the following variable for now so we have cvs compare for a while
++ INSTALL_TYPE="1";
+  if [ $INSTALL_TYPE = "1" ]; then
+  #
+  # localhost name
+***************
+*** 1271,1287 ****
+  #cd $EMBOSS_INSTALL/share/EMBOSS/jemboss
+  JEMBOSS=$EMBOSS_INSTALL/share/EMBOSS/jemboss
+  
+- #---------------------------------------------------------------------------------
+- # Exit for standalone installations
+- #---------------------------------------------------------------------------------
+- if [ $INSTALL_TYPE = "2" ]; then
+-   echo
+-   echo "To run Jemboss:"
+-   echo "cd $JEMBOSS"
+-   echo "./runJemboss.sh"
+-   echo
+-   exit 0
+- fi
+  
+  
+  #
+--- 1261,1266 ----

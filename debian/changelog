@@ -1,5 +1,12 @@
 emboss (6.1.0-2) UNRELEASED; urgency=low
 
+  * New upstream patch (patch-1-1):
+    - Fix feature specification problems in Jemboss.
+    - Use version number to point to documentation URLs
+    - Remove standalone option from server script.
+    - Correct FASTQ input searching for '@' to start next sequence
+    - Standardize FASTQ sequence formats with other OpenBio projects
+    - Correct issues in igstrict, genpept and refseqp formats
   * debian/control:
     - Incremented Standards-Version to reflect conformance with Policy 3.8.2
       (no changes needed). 
