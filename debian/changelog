@@ -1,6 +1,5 @@
 emboss (6.1.0-3) UNRELEASED; urgency=low
 
-  * Moved patches to debian/patch (Closes: #485330).
   * Delete /usr/share/EMBOSS/doc/programs/text/frestdist.txt, that
     should belong to embassy-phylip (PHYLIPNEW). (debian/rules)
 
