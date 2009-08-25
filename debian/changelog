@@ -1,9 +1,17 @@
-emboss (6.1.0-3) UNRELEASED; urgency=low
+emboss (6.1.0-4) unstable; urgency=low
 
+  * New upstream patch (patch-1-2):
+    - Fix string extension so that pointers in lists remain valid.
+    - This fixes a bug in processing SwissProt complex descriptions.
+    - Fix definition of AJRESIZE0 macro.
+    - Fix processing of first match in a profile alignment (prophet).
   * Delete /usr/share/EMBOSS/doc/programs/text/frestdist.txt, that
     should belong to embassy-phylip (PHYLIPNEW). (debian/rules)
+  * Incremented Standards-Version in debian/control to reflect conformance
+    with Policy 3.8.3 (no changes needed).
+  * Removed the libtool libraries from the development packages (debian/rules).
 
- -- Charles Plessy <plessy@debian.org>  Tue, 04 Aug 2009 21:56:45 +0900
+ -- Charles Plessy <plessy@debian.org>  Tue, 25 Aug 2009 23:19:10 +0900
 
 emboss (6.1.0-2) unstable; urgency=low
 

@@ -28,7 +28,6 @@ config.status:
 	./configure $(CONFFLAGS)
 
 include /usr/share/quilt/quilt.make
-QUILT_PATCH_DIR = debian/patch
 
 build: config.status patch debian/copyright build-stamp
 build-stamp:
@@ -91,11 +90,15 @@ install-stamp:
 #	rm $(AJAX)/usr/include/pcre*	# Not very elegant way to solve the conflict with libpcre-dev
 	mv $(AJAX)/usr/include 		$(AJAX)-dev/usr/include/ajax
 	mv $(AJAX)/usr/lib/*a $(AJAX)/usr/lib/*so 	$(AJAX)-dev/usr/lib
+	# Libtool .la libraries are not wanted anymore in Debian, see http://lists.debian.org/debian-devel/2009/08/msg00783.html
+	find $(AJAX)-dev/usr/lib -name '*.la' -exec rm {} \;
 
 	### Nuleus library: lib and libdevel packages. ###
 	$(MAKE) -C nucleus install DESTDIR=$(NUCLEUS)
 	mv $(NUCLEUS)/usr/include 	$(NUCLEUS)-dev/usr/include/nucleus
 	mv $(NUCLEUS)/usr/lib/*a $(NUCLEUS)/usr/lib/*so	$(NUCLEUS)-dev/usr/lib
+	# Libtool .la libraries are not wanted anymore in Debian, see http://lists.debian.org/debian-devel/2009/08/msg00783.html
+	find $(NUCLEUS)-dev/usr/lib -name '*.la' -exec rm {} \;
 
 	### eplplot goes in emboss-lib, but lets'hope building on plplot some day. ###
 	$(MAKE) -C plplot install DESTDIR=$(CURDIR)/debian/emboss-lib

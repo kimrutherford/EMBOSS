@@ -5,7 +5,11 @@ Description: Official upstream patch.
               Correct FASTQ input searching for '@' to start next sequence
               Standardize FASTQ sequence formats with other OpenBio projects
               Correct issues in igstrict, genpept and refseqp formats
-Origin: ftp://emboss.open-bio.org/pub/EMBOSS/fixes/patches/patch-1-1.gz
+ 24-Aug-2009: Fix string extension so that pointers in lists remain valid.
+              This fixes a bug in processing SwissProt complex descriptions.
+              Fix definition of AJRESIZE0 macro.
+              Fix processing of first match in a profile alignment (prophet).
+Origin: ftp://emboss.open-bio.org/pub/EMBOSS/fixes/patches/patch-1-2.gz
 Forwarded: not-needed
 diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajfeat.c EMBOSS-6.1.0/ajax/ajfeat.c
 *** EMBOSS-6.1.0orig/ajax/ajfeat.c	2009-07-06 16:48:46.000000000 +0100
@@ -37,6 +41,26 @@ diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajfeat.c EMBOSS-6.1.0/ajax/ajfeat.c
       
       /*ajDebug("ajFeatUfoRead UFO '%S'\n", ufo);*/
       
+diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajmem.h EMBOSS-6.1.0/ajax/ajmem.h
+*** EMBOSS-6.1.0orig/ajax/ajmem.h	2007-12-12 12:46:19.000000000 +0000
+--- EMBOSS-6.1.0/ajax/ajmem.h	2009-08-25 09:31:44.000000000 +0100
+***************
+*** 71,77 ****
+  #define AJFREE(ptr) ((void)(ajMemFree(ptr), (ptr) = 0))
+  #define AJRESIZE(ptr, nbytes) 	((ptr) = ajMemResize((ptr), \
+  	(nbytes), __FILE__, __LINE__, AJFALSE))
+! #define AJRESIZE0(ptr, oldbytes, nbytes)  (ptr) = ajMemResizeZero((ptr), \
+  	(oldbytes), (nbytes), __FILE__, __LINE__, AJFALSE))
+  #define AJCRESIZE(ptr, nbytes) 	((ptr) = ajMemResize((ptr), \
+  	(nbytes)*sizeof *(ptr), __FILE__, __LINE__, AJFALSE))
+--- 71,77 ----
+  #define AJFREE(ptr) ((void)(ajMemFree(ptr), (ptr) = 0))
+  #define AJRESIZE(ptr, nbytes) 	((ptr) = ajMemResize((ptr), \
+  	(nbytes), __FILE__, __LINE__, AJFALSE))
+! #define AJRESIZE0(ptr, oldbytes, nbytes)  ((ptr) = ajMemResizeZero((ptr), \
+  	(oldbytes), (nbytes), __FILE__, __LINE__, AJFALSE))
+  #define AJCRESIZE(ptr, nbytes) 	((ptr) = ajMemResize((ptr), \
+  	(nbytes)*sizeof *(ptr), __FILE__, __LINE__, AJFALSE))
 diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajseqread.c EMBOSS-6.1.0/ajax/ajseqread.c
 *** EMBOSS-6.1.0orig/ajax/ajseqread.c	2009-07-07 00:08:26.000000000 +0100
 --- EMBOSS-6.1.0/ajax/ajseqread.c	2009-07-30 15:27:39.000000000 +0100
@@ -893,6 +917,220 @@ diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajseqwrite.c EMBOSS-6.1.0/ajax/ajse
   /* @funcstatic seqSeqFormat ***************************************************
   **
   ** Initialises sequence output formatting parameters.
+diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajstr.c EMBOSS-6.1.0/ajax/ajstr.c
+*** EMBOSS-6.1.0orig/ajax/ajstr.c	2009-06-22 16:51:03.000000000 +0100
+--- EMBOSS-6.1.0/ajax/ajstr.c	2009-08-25 09:30:30.000000000 +0100
+***************
+*** 3,13 ****
+  **
+  ** AjPStr objects are reference counted strings
+  ** Any change will need a new string object if the use count
+! ** is greater than 1, so the original ajStr provided so that it can
+! ** be reallocated in any routine where string modification is possible.
+  **
+! ** In many cases
+! ** the text is always a copy, even of a constant original, so
+  ** that it can be simply freed.
+  **
+  ** @author Copyright (C) 1998 Peter Rice
+--- 3,13 ----
+  **
+  ** AjPStr objects are reference counted strings
+  ** Any change will need a new string object if the use count
+! ** is greater than 1, so the original AjPStr is provided as a pointer
+! ** so that it can be reallocated in any routine where string modification
+! ** may be needed.
+  **
+! ** In many cases the text is always a copy, even of a constant original, so
+  ** that it can be simply freed.
+  **
+  ** @author Copyright (C) 1998 Peter Rice
+***************
+*** 2042,2047 ****
+--- 2042,2048 ----
+  ** @nam4rule  NewRes   Construct with reserved size.
+  **
+  ** @argrule   C       txt [const char*] Text string
++ ** @argrule   K       ch [char] Single character
+  ** @argrule   S       str [const AjPStr] Text string
+  ** @argrule   NewRes  size [ajuint] Reserved size
+  ** @argrule   NewRef  refstr [AjPStr] Text string to be duplicated
+***************
+*** 2099,2104 ****
+--- 2100,2132 ----
+  
+  
+  
++ /* @func ajStrNewK ************************************************************
++ **
++ ** String constructor which allocates memory for a string and initialises it
++ ** with the single character provided. 
++ ** 
++ ** The string size is set just large enough to hold the supplied text.
++ **
++ ** @param [r] ch [char] Null-terminated character string to initialise
++ **                      the new string.
++ ** @return [AjPStr] Pointer to a string containing the supplied text
++ ** @@
++ ******************************************************************************/
++ 
++ AjPStr ajStrNewK(char ch)
++ {
++     char txt[2] = " ";
++     AjPStr thys;
++ 
++     txt[0] = ch;
++     thys = ajStrNewResLenC(txt, 2, 1);
++ 
++     return thys;
++ }
++ 
++ 
++ 
++ 
+  /* @func ajStrNewS ************************************************************
+  **
+  ** String constructor which allocates memory for a string and initialises it
+***************
+*** 6106,6111 ****
+--- 6134,6157 ----
+  
+  
+  
++ /* @func ajStrTrimWhiteStart **************************************************
++ **
++ ** Removes regions composed of white space characters only from the start of a 
++ ** string.
++ **
++ ** @param [u] Pstr [AjPStr*] String
++ ** @return [AjBool] ajTrue if string was reallocated
++ ** @@
++ ******************************************************************************/
++ 
++ AjBool ajStrTrimWhiteStart(AjPStr* Pstr)
++ {
++     return ajStrTrimStartC(Pstr, "\t \n\r");
++ }
++ 
++ 
++ 
++ 
+  /* @func ajStrTruncateLen *****************************************************
+  **
+  ** Removes the end from a string reducing it to a defined length.
+***************
+*** 8512,8524 ****
+  
+      thys = *Pstr;
+  
+!     if((thys->Use > 1) || (thys->Res < savesize))
+      {
+  	strCloneL(Pstr, savesize);
+  
+  	return ajTrue;
+      }
+  
+      return ajFalse;
+  }
+  
+--- 8558,8578 ----
+  
+      thys = *Pstr;
+  
+!     if(thys->Use > 1)
+      {
+  	strCloneL(Pstr, savesize);
+  
+  	return ajTrue;
+      }
+  
++     if(thys->Res < savesize)
++     {
++ 	AJRESIZE(thys->Ptr, savesize);
++ 	thys->Res = savesize;
++ 
++ 	return ajTrue;
++     }
++ 
+      return ajFalse;
+  }
+  
+***************
+*** 8565,8570 ****
+--- 8619,8631 ----
+  
+      thys = *Pstr;
+  
++     if(thys->Use > 1)
++     {
++ 	strCloneL(Pstr, size);
++ 
++ 	return ajTrue;
++     }
++ 
+      if(thys->Res < size)
+      {
+  	if(size >= LONGSTR)
+***************
+*** 8579,8592 ****
+  	else
+  	  roundsize = ajRound(size, STRSIZE);
+  
+! 	strCloneL(Pstr, roundsize);
+! 
+! 	return ajTrue;
+!     }
+! 
+!     if(thys->Use > 1)
+!     {
+! 	strCloneL(Pstr, size);
+  
+  	return ajTrue;
+      }
+--- 8640,8647 ----
+  	else
+  	  roundsize = ajRound(size, STRSIZE);
+  
+!         AJRESIZE(thys->Ptr, roundsize);
+!         thys->Res = roundsize;
+  
+  	return ajTrue;
+      }
+diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajstr.h EMBOSS-6.1.0/ajax/ajstr.h
+*** EMBOSS-6.1.0orig/ajax/ajstr.h	2009-06-22 16:51:04.000000000 +0100
+--- EMBOSS-6.1.0/ajax/ajstr.h	2009-08-25 09:30:34.000000000 +0100
+***************
+*** 65,70 ****
+--- 65,73 ----
+  **
+  ** String iterator, used to test iterator functionality.
+  **
++ ** @alias AjSStrIter
++ ** @alias AjOStrIter
++ **
+  ** @new ajStrIter Creates and initializes an iterator for a string
+  **
+  ** @delete ajStrIterFree Destructor for a string iterator
+***************
+*** 192,197 ****
+--- 195,201 ----
+  
+  AjPStr     ajStrNew (void);
+  AjPStr     ajStrNewC (const char *txt);
++ AjPStr     ajStrNewK (char ch);
+  AjPStr     ajStrNewS (const AjPStr str);
+  AjPStr     ajStrNewRef(AjPStr str);
+  AjPStr     ajStrNewRes(ajuint size);
+***************
+*** 296,301 ****
+--- 300,306 ----
+  AjBool     ajStrTrimStartC (AjPStr* Pstr, const char* txt);
+  AjBool     ajStrTrimWhite(AjPStr* Pstr);
+  AjBool     ajStrTrimWhiteEnd(AjPStr* Pstr);
++ AjBool     ajStrTrimWhiteStart(AjPStr* Pstr);
+  AjBool     ajStrTruncateLen(AjPStr* Pstr, ajuint len);
+  AjBool     ajStrTruncatePos(AjPStr* Pstr, ajint pos);
+  
 diff -c -N --recursive EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/gui/Browser.java EMBOSS-6.1.0/jemboss/org/emboss/jemboss/gui/Browser.java
 *** EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/gui/Browser.java	2009-06-30 17:18:26.000000000 +0100
 --- EMBOSS-6.1.0/jemboss/org/emboss/jemboss/gui/Browser.java	2009-07-30 15:29:18.000000000 +0100
@@ -1550,3 +1788,17 @@ diff -c -N --recursive EMBOSS-6.1.0orig/jemboss/utils/install-jemboss-server.sh 
   
   #
 --- 1261,1266 ----
+diff -c -N --recursive EMBOSS-6.1.0orig/nucleus/embaln.c EMBOSS-6.1.0/nucleus/embaln.c
+*** EMBOSS-6.1.0orig/nucleus/embaln.c	2009-06-12 19:02:30.000000000 +0100
+--- EMBOSS-6.1.0/nucleus/embaln.c	2009-08-25 09:31:28.000000000 +0100
+***************
+*** 2091,2096 ****
+--- 2091,2098 ----
+  	    ajStrAppendK(m,p[row--]);
+  	    ajStrAppendK(n,q[column--]);
+  
++             if(row < 0 || column < 0)
++                 break;
+  	    if(path[(row)*seqlen+(column)]<=0.)
+  		break;
+  
