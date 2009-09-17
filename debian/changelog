@@ -1,8 +1,9 @@
-emboss (6.1.0-5) UNRELEASED; urgency=low
+emboss (6.1.0-5~unreleased) UNRELEASED; urgency=low
 
   * debian/changelog: corrected an error on a progam name (vectorstrip).
+  * debian/patches/transient-vectorstrip.patch: keep quality scores.
 
- -- Charles Plessy <plessy@debian.org>  Wed, 16 Sep 2009 15:43:41 +0900
+ -- Charles Plessy <plessy@debian.org>  Thu, 17 Sep 2009 11:45:08 +0900
 
 emboss (6.1.0-4) unstable; urgency=low
 
