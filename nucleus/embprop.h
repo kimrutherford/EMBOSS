@@ -6,7 +6,7 @@ extern "C"
 #ifndef embprop_h
 #define embprop_h
 
-#define EMBPROPSIZE 28
+#define EMBPROPSIZE 29
 #define EMBPROPMOLWT      0
 #define EMBEMBPROPTINY    1
 #define EMBPROPSMALL      2
@@ -21,14 +21,21 @@ extern "C"
 
 #define EMBPROPHINDEX 26
 #define EMBPROPOINDEX 27
+#define EMBPROPWINDEX 28
 
-/* define monoisotopic masses for common N- and C- terminal modifications */
-#define EMBPROPMSTN_H       1.00782
-#define EMBPROPMSTN_FORMYL 29.00274
-#define EMBPROPMSTN_ACETYL 43.01839
+/* define monoisotopic masses for common N- and C- terminal modifications
+**
+**Values from Expasy
+**
+**http://www.expasy.org/tools/findmod/findmod_masses.html
+*/
+
+#define EMBPROPMSTN_H       1.00783
+#define EMBPROPMSTN_FORMYL 29.01823
+#define EMBPROPMSTN_ACETYL 43.04013
 
 #define EMBPROPMSTC_OH     17.00274
-#define EMBPROPMSTC_AMIDE  16.01872
+#define EMBPROPMSTC_AMIDE  16.01804
 
 
 
@@ -145,8 +152,10 @@ const char*   embPropCharToThree (char c);
 
 void    embPropFixF(float matrix[], float missing);
 const char*   embPropIntToThree (ajint c);
+void    embPropNormalF(float matrix[], float missing);
 AjPStr  embPropProtGaps (AjPSeq seq, ajint pad);
 AjPStr  embPropProt1to3 (AjPSeq seq, ajint pad);
+AjPStr  embPropProt1to3Rev (AjPSeq seq, ajint pad);
 AjBool  embPropPurine (char base);
 AjBool  embPropPyrimidine (char base);
 AjBool  embPropTransversion (char base1, char base2);

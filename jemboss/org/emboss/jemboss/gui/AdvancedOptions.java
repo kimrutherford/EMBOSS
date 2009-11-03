@@ -359,7 +359,7 @@ public class AdvancedOptions extends JPanel
 
           JButton ok = new JButton("Apply");
           ok
-          .setToolTipText("Apply your directory change(s) (if any) and closes this dialog");
+          .setToolTipText("Applies your directory change(s) (if any) and closes this dialog");
           JButton cancel = new JButton("Cancel");
           cancel
           .setToolTipText("Closes this dialog without applying your directory change(s)");

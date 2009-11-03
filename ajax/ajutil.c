@@ -87,6 +87,8 @@ __noreturn void ajExit(void)
 }
 
 
+
+
 /* @func ajExitAbort **********************************************************
 **
 ** Exits without flushing any files. Needed for exit from, for example,
@@ -127,6 +129,8 @@ __noreturn void  ajExitBad(void)
 }
 
 
+
+
 /* @datasection [none] Memory cleanup functions ********************************
 **
 ** @nam2rule  Reset  Resets internal memory and returns.
@@ -165,6 +169,10 @@ void ajReset(void)
     ajDebug("\nFinal Summary\n=============\n\n");
     ajUtilLoginfo();
     /*    ajBtreeExit(); */
+    ajTreeExit();
+    ajPdbExit();
+    ajDmxExit();
+    ajDomainExit();
     ajFeatExit();
     ajSeqExit();
     ajPhyloExit();
@@ -250,6 +258,7 @@ void ajByteRevInt(ajint* ival)
 	char chars[8];
 	ajint i;
     } data, revdata;
+
     char* cs;
     char* cd;
     ajuint i;
@@ -257,6 +266,7 @@ void ajByteRevInt(ajint* ival)
     data.i = *ival;
     cs     = data.chars;
     cd     = &revdata.chars[sizeof(ajint)-1];
+
     for(i=0; i < sizeof(ajint); i++)
     {
 	*cd = *cs++;
@@ -270,6 +280,7 @@ void ajByteRevInt(ajint* ival)
 
 
 
+
 /* @obsolete ajUtilRevInt
 ** @rename ajByteRevInt
 */
@@ -277,7 +288,11 @@ void ajByteRevInt(ajint* ival)
 __deprecated void ajUtilRevInt(ajint* ival)
 {
     ajByteRevInt(ival);
+
+    return;
 }
+
+
 
 
 /* @func ajByteRevLen2 ********************************************************
@@ -300,6 +315,7 @@ void ajByteRevLen2(short* sval)
 	char chars[2];
 	short s;
     } data, revdata;
+
     char* cs;
     char* cd;
     ajint i;
@@ -320,6 +336,8 @@ void ajByteRevLen2(short* sval)
 }
 
 
+
+
 /* @obsolete ajUtilRev2
 ** @rename ajByteRev2
 */
@@ -327,7 +345,12 @@ void ajByteRevLen2(short* sval)
 __deprecated void ajUtilRev2(short* sval)
 {
     ajByteRevLen2(sval);
+
+    return;
 }
+
+
+
 
 /* @func ajByteRevLen4 ********************************************************
 **
@@ -349,6 +372,7 @@ void ajByteRevLen4(ajint* ival)
 	char chars[4];
 	ajint i;
     } data, revdata;
+
     char* cs;
     char* cd;
     ajint i;
@@ -356,6 +380,7 @@ void ajByteRevLen4(ajint* ival)
     data.i = *ival;
     cs     = data.chars;
     cd     = &revdata.chars[3];
+
     for(i=0; i < 4; i++)
     {
 	*cd = *cs++;
@@ -369,6 +394,7 @@ void ajByteRevLen4(ajint* ival)
 
 
 
+
 /* @obsolete ajUtilRev4
 ** @rename ajByteRevLen4
 */
@@ -376,7 +402,11 @@ void ajByteRevLen4(ajint* ival)
 __deprecated void ajUtilRev4(ajint* ival)
 {
     ajByteRevLen4(ival);
+
+    return;
 }
+
+
 
 
 /* @func ajByteRevLen8 ********************************************************
@@ -399,6 +429,7 @@ void ajByteRevLen8(ajlong* lval)
 	char chars[8];
 	ajlong l;
     } data, revdata;
+
     char* cs;
     char* cd;
     ajint i;
@@ -406,6 +437,7 @@ void ajByteRevLen8(ajlong* lval)
     data.l = *lval;
     cs     = data.chars;
     cd     = &revdata.chars[7];
+
     for(i=0; i < 8; i++)
     {
 	*cd = *cs++;
@@ -419,6 +451,7 @@ void ajByteRevLen8(ajlong* lval)
 
 
 
+
 /* @obsolete ajUtilRev8
 ** @rename ajByteRevLen8
 */
@@ -427,6 +460,7 @@ __deprecated void ajUtilRev8(ajlong* lval)
 {
     ajByteRevLen8(lval);
 }
+
 
 
 
@@ -447,6 +481,7 @@ void ajByteRevLong(ajlong* lval)
 	char chars[8];
 	ajlong l;
     } data, revdata;
+
     char* cs;
     char* cd;
     ajuint i;
@@ -454,6 +489,7 @@ void ajByteRevLong(ajlong* lval)
     data.l = *lval;
     cs     = data.chars;
     cd     = &revdata.chars[sizeof(ajlong)-1];
+
     for(i=0; i < sizeof(ajlong); i++)
     {
 	*cd = *cs++;
@@ -467,6 +503,7 @@ void ajByteRevLong(ajlong* lval)
 
 
 
+
 /* @obsolete ajUtilRevLong
 ** @rename ajByteRevLong
 */
@@ -474,7 +511,11 @@ void ajByteRevLong(ajlong* lval)
 __deprecated void ajUtilRevLong(ajlong* lval)
 {
     ajByteRevLong(lval);
+
+    return;
 }
+
+
 
 
 /* @func ajByteRevShort ******************************************************
@@ -494,6 +535,7 @@ void ajByteRevShort(short* sval)
 	char chars[8];
 	short s;
     } data, revdata;
+
     char* cs;
     char* cd;
     ajuint i;
@@ -515,6 +557,7 @@ void ajByteRevShort(short* sval)
 
 
 
+
 /* @obsolete ajUtilRevShort
 ** @rename ajByteRevShort
 */
@@ -523,6 +566,8 @@ __deprecated void ajUtilRevShort(short* sval)
 {
     ajByteRevShort(sval);
 }
+
+
 
 
 /* @func ajByteRevUint ********************************************************
@@ -542,6 +587,7 @@ void ajByteRevUint(ajuint* ival)
 	char chars[8];
 	ajuint i;
     } data, revdata;
+
     char* cs;
     char* cd;
     ajuint i;
@@ -549,6 +595,7 @@ void ajByteRevUint(ajuint* ival)
     data.i = *ival;
     cs     = data.chars;
     cd     = &revdata.chars[sizeof(ajuint)-1];
+
     for(i=0; i < sizeof(ajuint); i++)
     {
 	*cd = *cs++;
@@ -561,6 +608,8 @@ void ajByteRevUint(ajuint* ival)
 }
 
 
+
+
 /* @obsolete ajUtilRevUint
 ** @rename ajByteRevUint
 */
@@ -569,6 +618,9 @@ __deprecated void ajUtilRevUint(ajuint* ival)
 {
     ajByteRevUint(ival);
 }
+
+
+
 
 /* @datasection [none]  Miscellaneous utility functions ***********************
 **
@@ -628,6 +680,8 @@ void ajUtilCatch(void)
 }
 
 
+
+
 /* @func ajUtilGetBigendian ***************************************************
 **
 ** Tests whether the host system uses big endian byte order.
@@ -659,6 +713,9 @@ AjBool ajUtilGetBigendian(void)
     return utilBigendian;
 }
 
+
+
+
 /* @obsolete ajUtilBigendian
 ** @rename ajUtilGetBigendian
 */
@@ -688,17 +745,21 @@ AjBool ajUtilGetUid(AjPStr* Puid)
     ajDebug("ajUtilUid\n");
 
     uid = getuid();
+
     if(!uid)
     {
 	ajStrAssignClear(Puid);
+
 	return ajFalse;
     }
 
     ajDebug("  uid: %d\n", uid);
     pwd = getpwuid(uid);
+
     if(!pwd)
     {
 	ajStrAssignClear(Puid);
+
 	return ajFalse;
     }
 
@@ -718,6 +779,7 @@ AjBool ajUtilGetUid(AjPStr* Puid)
     {
 	ajDebug("  pwd: '%s'\n", nameBuf);
 	ajStrAssignC(Puid, nameBuf);
+
 	return ajTrue;
     }
 
@@ -728,6 +790,8 @@ AjBool ajUtilGetUid(AjPStr* Puid)
 }
 
 
+
+
 /* @obsolete ajUtilUid
 ** @rename ajUtilGetUid
 */
@@ -736,6 +800,8 @@ __deprecated AjBool ajUtilUid(AjPStr* dest)
 {
     return ajUtilGetUid(dest);
 }
+
+
 
 
 /* @func ajUtilLoginfo ********************************************************
@@ -752,30 +818,42 @@ void ajUtilLoginfo(void)
     AjPStr logfname = NULL;
     AjPStr uids    = NULL;
     AjPTime today = NULL;
+    double walltime;
+    double cputime;
 
     today = ajTimeNewTodayFmt("log");
-    
+
     if(ajNamGetValueC("logfile", &logfname))
     {
 	logf = ajFileNewOutappendNameS(logfname);
+
 	if(!logf)
 	    return;
 
+        walltime = ajTimeDiff(ajTimeRefToday(),today);
+        cputime = ajClockSeconds();
+
+        if(walltime < cputime)
+            walltime = cputime; /* avoid reporting 0.0 if cpu time appears */
+
 	ajUtilGetUid(&uids),
-	ajFmtPrintF(logf, "%S\t%S\t%D\n",
+	ajFmtPrintF(logf, "%S\t%S\t%D\t%.1f\t%.1f\n",
 		    ajAcdGetProgram(),
 		    uids,
-		    today);
+		    today,
+                    cputime, walltime);
 	ajStrDel(&uids);
 	ajStrDel(&logfname);
 	ajFileClose(&logf);
     }
 
 
-    AJFREE(today);
+    ajTimeDel(&today);
 
     return;
 }
+
+
 
 
 /* @obsolete ajLogInfo
@@ -785,6 +863,6 @@ void ajUtilLoginfo(void)
 __deprecated void ajLogInfo(void)
 {
     ajUtilLoginfo();
+
     return;
 }
-

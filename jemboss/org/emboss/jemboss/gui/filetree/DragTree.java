@@ -294,6 +294,13 @@ public class DragTree extends JTree implements DragGestureListener,
   public void deleteFile(final FileNode node)
   {
     File f = node.getFile();
+    if (f.isDirectory()){
+    	File[] l = f.listFiles();
+    	for (int i=0; i<l.length; i++){
+    		l[i].delete();
+    	}
+    }
+        
     if(f.delete())
     {
       Runnable deleteFileFromTree = new Runnable()

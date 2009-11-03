@@ -87,6 +87,8 @@ AjBool ajReadline(AjPFile file, AjPStr* Pdest)
 }
 
 
+
+
 /* @obsolete ajFileGets
 ** @rename ajReadline
 */
@@ -94,6 +96,8 @@ __deprecated AjBool ajFileGets(AjPFile thys, AjPStr* pdest)
 {
     return ajReadline(thys, pdest);
 }
+
+
 
 
 /* @func ajReadlineAppend *****************************************************
@@ -120,8 +124,12 @@ AjBool ajReadlineAppend(AjPFile file, AjPStr* Pdest)
 	ajStrAppendS(Pdest, locbuff);
 
     ajStrDel(&locbuff);
+
     return ok;
 }
+
+
+
 
 /* @obsolete ajFileReadAppend
 ** @rename ajReadlineAppend
@@ -130,6 +138,9 @@ __deprecated AjBool ajFileReadAppend(AjPFile thys, AjPStr* pbuff)
 {
     return ajReadlineAppend(thys, pbuff);
 }
+
+
+
 
 /* @func ajReadlinePos ********************************************************
 **
@@ -187,6 +198,7 @@ AjBool ajReadlinePos(AjPFile file, AjPStr* Pdest, ajlong* Ppos)
 	{
 	    ajStrAssignClear(Pdest);
 	    ajDebug("at EOF: File already read to end %F\n", file);
+
 	    return ajFalse;
 	}
 	
@@ -199,9 +211,11 @@ AjBool ajReadlinePos(AjPFile file, AjPStr* Pdest, ajlong* Ppos)
                 iread = fread(file->Readblock,
                               1, file->Blocksize,
                               file->fp);
+
                 if(!iread && ferror(file->fp))
                     ajFatal("fread failed with error:%d '%s'",
                             ferror(file->fp), strerror(ferror(file->fp)));
+
                 file->Blockpos = 0;
                 file->Blocklen = iread;
                 file->Readblock[iread] = '\0';
@@ -214,10 +228,12 @@ AjBool ajReadlinePos(AjPFile file, AjPStr* Pdest, ajlong* Ppos)
                 /* we know we have something in Readblock to process */
 
                 pnewline = strchr(&file->Readblock[file->Blockpos], '\n');
+
                 if(pnewline)
                     jlen = pnewline - &file->Readblock[file->Blockpos] + 1;
                 else
                     jlen = file->Blocklen - file->Blockpos;
+
                 /*ajDebug("ipos:%d jlen:%d pnewline:%p "
                           "Readblock:%p blockpos:%d blocklen:%d\n",
                           ipos, jlen, pnewline, file->Readblock,
@@ -251,6 +267,7 @@ AjBool ajReadlinePos(AjPFile file, AjPStr* Pdest, ajlong* Ppos)
 		file->End = ajTrue;
 		ajStrAssignClear(Pdest);
 		ajDebug("EOF ajFileGetsL file %F\n", file);
+
 		return ajFalse;
 	    }
 	    else
@@ -302,6 +319,8 @@ AjBool ajReadlinePos(AjPFile file, AjPStr* Pdest, ajlong* Ppos)
 }
 
 
+
+
 /* @obsolete ajFileGetsL
 ** @rename ajReadlinePos
 */
@@ -309,6 +328,9 @@ __deprecated AjBool ajFileGetsL(AjPFile thys, AjPStr* pdest, ajlong* fpos)
 {
     return ajReadlinePos(thys, pdest, fpos);
 }
+
+
+
 
 /* @func ajReadlineTrim *******************************************************
 **
@@ -330,6 +352,8 @@ AjBool ajReadlineTrim(AjPFile file, AjPStr* Pdest)
 }
 
 
+
+
 /* @obsolete ajFileGetsTrim
 ** @rename ajReadlineTrim
 */
@@ -340,6 +364,9 @@ __deprecated AjBool ajFileGetsTrim(AjPFile thys, AjPStr* pdest)
     return ajReadlineTrimPos(thys, pdest, &fpos);
 }
 
+
+
+
 /* @obsolete ajFileReadLine
 ** @rename ajReadlineTrim
 */
@@ -349,6 +376,9 @@ __deprecated AjBool ajFileReadLine(AjPFile thys, AjPStr* pdest)
 
     return ajReadlineTrimPos(thys, pdest, &fpos);
 }
+
+
+
 
 /* @func ajReadlineTrimPos ****************************************************
 **
@@ -386,8 +416,11 @@ AjBool ajReadlineTrimPos(AjPFile file, AjPStr* Pdest, ajlong* Ppos)
 	ajStrCutEnd(&file->Buff, 1);
 
     ajStrAssignRef(Pdest, file->Buff);
+
     return ajTrue;
 }
+
+
 
 
 /* @obsolete ajFileGetsTrimL
@@ -397,6 +430,8 @@ __deprecated AjBool ajFileGetsTrimL(AjPFile thys, AjPStr* pdest, ajlong* fpos)
 {
     return ajReadlineTrimPos(thys, pdest, fpos);
 }
+
+
 
 
 /* @section file binary read operations
@@ -464,6 +499,9 @@ size_t ajReadbinBinary(AjPFile file, size_t count,size_t size,
     return fread(buffer, size, count, file->fp);
 }
 
+
+
+
 /* @obsolete ajFileRead
 ** @replace ajReadbinBinary (1,2,3,4/4,3,2,1)
 */
@@ -472,6 +510,8 @@ __deprecated size_t ajFileRead(void* ptr, size_t element_size, size_t count,
 {
     return ajReadbinBinary(file, count, element_size, ptr);
 }
+
+
 
 
 /* @func ajReadbinChar ****************************************************
@@ -519,11 +559,14 @@ size_t ajReadbinCharTrim(AjPFile file, size_t size,
 
     buffer[size] = '\0';
     sp = &buffer[strlen(buffer)];
+
     while(sp > buffer)
     {
         sp--;
+
 	if(*sp != ' ')
 	    break;
+
 	*sp = '\0';
     }
 
@@ -716,6 +759,7 @@ size_t ajReadbinInt4(AjPFile file, ajint *Pi4)
 
 
 
+
 /* @func ajReadbinInt4Endian *************************************************
 **
 ** Binary read of an unsigned integer from an input file object using
@@ -875,6 +919,8 @@ size_t ajReadbinUint(AjPFile file, ajuint *Pu)
 }
 
 
+
+
 /* @func ajReadbinUintEndian *************************************************
 **
 ** Binary read of an unsigned integer from an input file object using
@@ -961,6 +1007,8 @@ size_t ajReadbinUint2(AjPFile file, ajushort *Pu2)
 }
 
 
+
+
 /* @func ajReadbinUint2Endian ************************************************
 **
 ** Binary read of an unsigned integer from an input file object using
@@ -989,6 +1037,7 @@ size_t ajReadbinUint2Endian(AjPFile file, ajushort *Pu2)
     
     return ret;
 }
+
 
 
 
@@ -1044,6 +1093,8 @@ size_t ajReadbinUint4(AjPFile file, ajuint *Pu4)
     
     return ret;
 }
+
+
 
 
 /* @func ajReadbinUint4Endian ************************************************
@@ -1130,6 +1181,8 @@ size_t ajReadbinUint8(AjPFile file, ajulong *Pu8)
     
     return ret;
 }
+
+
 
 
 /* @func ajReadbinUint8Endian ************************************************
@@ -1269,6 +1322,8 @@ size_t ajWritebinBinary(AjPFile file, size_t count,
 }
 
 
+
+
 /* @obsolete ajFileWrite
 ** @replace ajWritebinBinary (1,2,3,4/1,4,3,2)
 */
@@ -1277,6 +1332,8 @@ __deprecated size_t ajFileWrite(AjPFile file, const void* ptr,
 {
     return ajWritebinBinary(file,count,element_size,ptr);
 }
+
+
 
 
 /* @func ajWritebinByte ******************************************************
@@ -1295,6 +1352,8 @@ size_t ajWritebinByte(AjPFile file, char ch)
 }
 
 
+
+
 /* @obsolete ajFileWriteByte
 ** @rename ajWritebinByte
 */
@@ -1302,6 +1361,8 @@ __deprecated ajint ajFileWriteByte(AjPFile thys, char ch)
 {
     return ajWritebinByte(thys, ch);
 }
+
+
 
 
 /* @func ajWritebinChar ******************************************************
@@ -1329,6 +1390,7 @@ size_t ajWritebinChar(AjPFile file, const char* txt, size_t len)
     ret = fwrite(txt, i, 1, file->fp);
 
     j = len-i;
+
     for(i=0;i<j;i++)
         fwrite("", 1, 1, file->fp);
 
@@ -1355,6 +1417,7 @@ size_t ajWritebinInt2(AjPFile file, ajshort i2)
 
     j = i2;
     ajByteRevLen2(&j);
+
     return fwrite(&j, 2, 1, file->fp);
 #else
     return fwrite(&i2, 2, 1, file->fp);
@@ -1372,6 +1435,8 @@ __deprecated ajint ajFileWriteInt2(AjPFile thys, ajshort i)
 {
     return ajWritebinInt2(thys, i);
 }
+
+
 
 
 /* @func ajWritebinInt4 ******************************************************
@@ -1400,6 +1465,8 @@ size_t ajWritebinInt4(AjPFile file, ajint i4)
 }
 
 
+
+
 /* @obsolete ajFileWriteInt4
 ** @rename ajWritebinInt4
 */
@@ -1407,6 +1474,8 @@ __deprecated ajint ajFileWriteInt4(AjPFile thys, ajint i)
 {
     return ajWritebinInt4(thys, i);
 }
+
+
 
 
 /* @func ajWritebinInt8 ******************************************************
@@ -1454,19 +1523,31 @@ size_t ajWritebinStr(AjPFile file, const AjPStr str, size_t len)
     ajuint ilen;
     ajuint i;
     ajuint j;
+    ajuint k;
 
-    ilen = ajStrGetRes(str);
+    ilen = 1+ajStrGetLen(str);
+
     if(ilen >= len)
         return fwrite(ajStrGetPtr(str), len, 1, file->fp);
 
     ret = fwrite(ajStrGetPtr(str), ilen, 1, file->fp);
 
     j = len - ilen;
-    for(i=0;i<j;i++)
-        fwrite("", 1, 1, file->fp);
+
+    k = 20;
+
+    for(i=0;i<j;i+=20)
+    {
+        if((j-i) < 20)
+            k = j-i;
+        fwrite("\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0", k, 1, file->fp);
+    }
 
     return ret;
 }
+
+
+
 
 /* @obsolete ajFileWriteStr
 ** @rename ajWritebinStr
@@ -1475,6 +1556,8 @@ __deprecated ajint ajFileWriteStr(AjPFile thys, const AjPStr str, ajuint len)
 {
     return ajWritebinStr(thys, str, len);
 }
+
+
 
 
 /* @section file line write operations
@@ -1512,6 +1595,8 @@ AjBool ajWriteline(AjPFile file, const AjPStr line)
 
     return ajFalse;
 }
+
+
 
 
 /* @datasection [AjPFilebuff] Buffered file object *****************************
@@ -1570,6 +1655,8 @@ AjBool ajBuffreadLine(AjPFilebuff buff, AjPStr* Pdest)
 }
 
 
+
+
 /* @obsolete ajFileBuffGet
 ** @rename ajBuffreadLine
 */
@@ -1577,6 +1664,8 @@ __deprecated AjBool ajFileBuffGet(AjPFilebuff thys, AjPStr* pdest)
 {
     return ajBuffreadLine(thys, pdest);
 }
+
+
 
 
 /* @func ajBuffreadLinePos *****************************************************
@@ -1640,6 +1729,7 @@ AjBool ajBuffreadLinePos(AjPFilebuff buff, AjPStr* Pdest, ajlong* Ppos)
 		    ajDebug("End of file - trying next file ok: %B "
 			    "fpos: %Ld %Ld\n",
 			    ok, *Ppos, buff->Fpos);
+
 		    return ok;
 		}
 		else
@@ -1647,6 +1737,7 @@ AjBool ajBuffreadLinePos(AjPFilebuff buff, AjPStr* Pdest, ajlong* Ppos)
 		    /* no new file, fail again */
 		    ajDebug("End of file - no new file to read - "
 			    "return ajFalse\n");
+
 		    return ajFalse;
 		}
 	    }
@@ -1660,6 +1751,7 @@ AjBool ajBuffreadLinePos(AjPFilebuff buff, AjPStr* Pdest, ajlong* Ppos)
     {
 	*Ppos = buff->Fpos;
 	/*ajDebug("ajBuffreadLinePos unbuffered fpos: %Ld\n", *Ppos);*/
+
 	return ajTrue;
     }
     
@@ -1670,6 +1762,8 @@ AjBool ajBuffreadLinePos(AjPFilebuff buff, AjPStr* Pdest, ajlong* Ppos)
 }
 
 
+
+
 /* @obsolete ajFileBuffGetL
 ** @rename ajBuffreadLinePos
 */
@@ -1678,6 +1772,8 @@ __deprecated AjBool ajFileBuffGetL(AjPFilebuff buff, AjPStr* pdest,
 {
     return ajBuffreadLinePos(buff, pdest, fpos);
 }
+
+
 
 
 /* @func ajBuffreadLinePosStore ************************************************
@@ -1717,6 +1813,8 @@ AjBool ajBuffreadLinePosStore(AjPFilebuff buff, AjPStr* Pdest, ajlong* Ppos,
 }
 
 
+
+
 /* @obsolete ajFileBuffGetStoreL
 ** @rename ajBuffreadLinePosStore
 */
@@ -1726,6 +1824,8 @@ __deprecated AjBool ajFileBuffGetStoreL(AjPFilebuff thys, AjPStr* pdest,
 {
     return ajBuffreadLinePosStore(thys, pdest, fpos, store, astr);
 }
+
+
 
 
 /* @func ajBuffreadLineStore ***************************************************
@@ -1775,6 +1875,8 @@ __deprecated AjBool ajFileBuffGetStore(AjPFilebuff thys, AjPStr* pdest,
 {
     return ajBuffreadLineStore(thys, pdest, store, astr);
 }
+
+
 
 
 /* @func ajBuffreadLineTrim ****************************************************
@@ -1827,6 +1929,7 @@ __deprecated AjBool ajFileBuffGetTrim(AjPFilebuff thys, AjPStr* pdest)
 
 
 
+
 /* @funcstatic filebuffLineAdd ************************************************
 **
 ** Appends a line to a buffer.
@@ -1851,6 +1954,7 @@ static void filebuffLineAdd(AjPFilebuff buff, const AjPStr line)
 
 	buff->Last = buff->Freelines;
 	buff->Freelines = buff->Freelines->Next;
+
 	if(!buff->Freelines)
 	{
 	    /* Free list now empty */
@@ -1876,7 +1980,3 @@ static void filebuffLineAdd(AjPFilebuff buff, const AjPStr line)
         
     return;
 }
-
-
-
-

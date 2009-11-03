@@ -59,13 +59,13 @@ static void spcrc64calctab(unsigned long long *crctab);
 ** Rounds an integer to be a multiple of a given number.
 **
 ** @param [r] i [ajint] Integer to round.
-** @param [r] round [ajint] Rounding multiple.
+** @param [r] vround [ajint] Rounding multiple.
 ** @return [ajint] Result.
 ******************************************************************************/
 
-ajint ajRound(ajint i, ajint round)
+ajint ajRound(ajint i, ajint vround)
 {
-    return round * ((ajint)(i+round-1)/round);
+    return vround * ((ajint)(i+vround-1)/vround);
 }
 
 
@@ -107,8 +107,12 @@ float ajRoundF(float a, ajint nbits)
 
     y = ldexp(x, bitsused);		/* multiply by 2**n */
     z = modf(y, &w);		        /* change to an integer + remainder */
-    if(z > 0.5) w += 1.0;		/* round up ?*/
-    if(z < -0.5) w -= 1.0;		/* round down? */
+
+    if(z > 0.5)
+        w += 1.0;		        /* round up ?*/
+
+    if(z < -0.5)
+        w -= 1.0;		        /* round down? */
 
     b = ldexp(w, -bitsused);		/* divide by 2**n */
     c = ldexp(b, i);	                /* divide by the orig. power of two */
@@ -132,6 +136,7 @@ float ajRoundF(float a, ajint nbits)
 ** @param [w] angle [float*] Angle
 ** @return [void]
 ******************************************************************************/
+
 void ajRecToPol(float x, float y, float *radius, float *angle)
 {
     *radius = (float) sqrt((double)(x*x+y*y));
@@ -251,9 +256,10 @@ ajint ajPosMod(ajint a, ajint b)
 {
     ajint t;
 
-    if(b<=0)
+    if(b <= 0)
 	ajFatal("ajPosMod given non-positive divisor");
-    t=a%b;
+
+    t = a%b;
 
     return (t<0) ? t+b : t;
 }
@@ -332,9 +338,12 @@ void ajRandomSeed(void)
     ix = (seed >= 0 ? seed : -seed) % 10000 + 1;
     iy = 2*ix+1;
     iz = 3*ix+1;
+
     for(i = -11; i < 101; ++i)
     {
-        if(i >= 0) aj_rand_poly[i] = floor(AjRandomXmod*x);
+        if(i >= 0)
+            aj_rand_poly[i] = floor(AjRandomXmod*x);
+
         ix = (171*ix) % 30269;
         iy = (172*iy) % 30307;
         iz = (170*iz) % 30323;
@@ -417,6 +426,7 @@ double ajRandomNumberD(void)
 
     if((n = aj_rand_index-64) < 0)
 	n += 101;
+
     x = aj_rand_poly[aj_rand_index]+aj_rand_poly[aj_rand_index];
     x = xmod4-aj_rand_poly[n]-aj_rand_poly[n]-x-x-aj_rand_poly[aj_rand_index];
 
@@ -424,6 +434,7 @@ double ajRandomNumberD(void)
     {
         if(x < -AjRandomXmod)
 	    x += xmod2;
+
         if(x < 0.0)
 	    x += AjRandomXmod;
     }
@@ -432,13 +443,17 @@ double ajRandomNumberD(void)
         if(x >= xmod2)
 	{
             x = x-xmod2;
+
             if(x >= AjRandomXmod)
 		x -= AjRandomXmod;
         }
+
         if(x >= AjRandomXmod)
 	    x -= AjRandomXmod;
     }
+
     aj_rand_poly[aj_rand_index] = x;
+
     if(++aj_rand_index >= 101)
 	aj_rand_index = 0;
 
@@ -525,16 +540,20 @@ ajuint ajSp32Crc(const AjPStr seq)
     cp = ajStrGetPtr(seq);
 
     crc = 0xFFFFFFFFL;
+
     while( *cp )
     {
 	c = toupper((ajint) *cp);
 	crc = ((crc >> 8) & 0x00FFFFFFL) ^ seqCrcTable[ (crc^c) & 0xFF ];
 	cp++;
     }
+
     ajDebug("CRC32 calculated %08lX\n", crc);
 
     return (ajuint) crc;
 }
+
+
 
 
 /* @funcstatic spcrc32gen *****************************************************
@@ -553,9 +572,11 @@ static void spcrc32gen(void)
     ajint   j;
 
     poly = 0xEDB88320L;
+
     for(i=0; i<256; i++)
     {
 	crc = i;
+
 	for(j=8; j>0; j--)
 	    if(crc&1)
 		crc = (crc >> 1) ^ poly;
@@ -567,6 +588,7 @@ static void spcrc32gen(void)
 
     return;
 }
+
 
 
 
@@ -608,6 +630,9 @@ unsigned long long ajSp64Crc(const AjPStr thys)
 
     return crc;
 }
+
+
+
 
 /* @func ajMathPos ************************************************************
 **
@@ -663,6 +688,8 @@ ajuint ajMathPosI(ajuint len, ajuint imin, ajint ipos)
 }
 
 
+
+
 /* @func ajNumLengthDouble ****************************************************
 **
 ** Returns the length of a number written as an integer
@@ -691,6 +718,8 @@ ajuint ajNumLengthDouble(double dnumber)
 
     return ilen;
 }
+
+
 
 
 /* @func ajNumLengthFloat ****************************************************
@@ -722,6 +751,8 @@ ajuint ajNumLengthFloat(float fnumber)
 
     return ilen;
 }
+
+
 
 
 /* @func ajNumLengthInt ****************************************************
@@ -764,6 +795,7 @@ ajuint ajNumLengthInt(ajlong inumber)
 
 
 
+
 /* @func ajNumLengthUint ****************************************************
 **
 ** Returns the length of a number written as an integer
@@ -792,5 +824,3 @@ ajuint ajNumLengthUint(ajulong inumber)
 
     return ilen;
 }
-
-

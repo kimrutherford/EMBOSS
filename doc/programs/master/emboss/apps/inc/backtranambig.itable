@@ -7,15 +7,15 @@
 
 <tr>
 <td>[-sequence]<br>(Parameter 1)</td>
-<td>(Gapped) protein sequence filename and optional format, or reference (input USA)</td>
-<td>Readable sequence</td>
+<td>(Gapped) protein sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
 <td><b>Required</b></td>
 </tr>
 
 <tr>
 <td>[-outfile]<br>(Parameter 2)</td>
-<td>(Gapped) nucleotide sequence filename and optional format (output USA)</td>
-<td>Writeable sequence</td>
+<td>(Aligned) nucleotide sequence set(s) filename and optional format (output USA)</td>
+<td>Writeable sequence(s)</td>
 <td><i>&lt;*&gt;</i>.<i>format</i></td>
 </tr>
 

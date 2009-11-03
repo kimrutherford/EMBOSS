@@ -303,6 +303,7 @@ int main(int argc, char **argv)
 	AJCNEW0(tm_segment[i], 2);
 
     tmap_present3p(tm_number, glnpos, glcpos, glposs, glnr, seqset, report);
+    ajReportSetSeqsetstats(report, seqset);
 
     for(j=1; j<=tm_number; j++)
     {

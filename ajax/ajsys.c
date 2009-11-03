@@ -36,6 +36,8 @@
 #endif
 
 
+static AjPStr sysTname = NULL;
+static AjPStr sysFname = NULL;
 static AjPStr sysTokRets = NULL;
 static AjPStr sysTokSou  = NULL;
 static const char *sysTokp = NULL;
@@ -351,51 +353,49 @@ __deprecated AjBool ajSysUnlink(const AjPStr s)
 AjBool ajSysFileWhich(AjPStr *Pfilename)
 {
     char *p;
-    static AjPStr tname = NULL;
-    static AjPStr fname = NULL;
 
     p = getenv("PATH");
     if(!p)
 	return ajFalse;
 
-    ajStrAssignS(&tname, *Pfilename);
+    ajStrAssignS(&sysTname, *Pfilename);
 
-    if(!fname)
-	fname = ajStrNew();
+    if(!sysFname)
+	sysFname = ajStrNew();
 
-    ajFilenameTrimPath(&tname);
+    ajFilenameTrimPath(&sysTname);
 
     p=ajSysFuncStrtok(p,PATH_SEPARATOR);
 
     if(p==NULL)
     {
-	ajStrDelStatic(&fname);
-	ajStrDelStatic(&tname);
+	ajStrDelStatic(&sysFname);
+	ajStrDelStatic(&sysTname);
 	return ajFalse;
     }
 
 
     while(1)
     {
-	ajFmtPrintS(&fname,"%s%s%S",p,SLASH_STRING,tname);
+	ajFmtPrintS(&sysFname,"%s%s%S",p,SLASH_STRING,sysTname);
 
-	if(ajFilenameExistsExec(fname))
+	if(ajFilenameExistsExec(sysFname))
 	{
 	    ajStrSetClear(Pfilename);
-	    ajStrAssignEmptyS(Pfilename,fname);
+	    ajStrAssignEmptyS(Pfilename,sysFname);
 	    break;
 	}
 
 	if((p = ajSysFuncStrtok(NULL,PATH_SEPARATOR))==NULL)
         {
-	    ajStrDelStatic(&fname);
-	    ajStrDelStatic(&tname);
+	    ajStrDelStatic(&sysFname);
+	    ajStrDelStatic(&sysTname);
 	    return ajFalse;
         }
     }
 
-    ajStrDelStatic(&fname);
-    ajStrDelStatic(&tname);
+    ajStrDelStatic(&sysFname);
+    ajStrDelStatic(&sysTname);
 
     return ajTrue;
 }
@@ -602,7 +602,13 @@ __deprecated AjBool ajSysWhichEnv(AjPStr *Pfilename, char * const env[])
 
 FILE* ajSysFuncFdopen(ajint filedes, const char *mode)
 {
-    return fdopen(filedes,mode);
+    FILE *ret;
+    
+    ret = fdopen(filedes,mode);
+    if(ret)
+        errno = 0;              /* set to "Illegal seek" on some systems */
+
+    return ret;
 }
 
 
@@ -1184,6 +1190,8 @@ void ajSysCanon(AjBool state)
 
 void ajSysExit(void)
 {
+    ajStrDel(&sysFname);
+    ajStrDel(&sysTname);
     ajStrDel(&sysTokSou);
     ajStrDel(&sysTokRets);
 

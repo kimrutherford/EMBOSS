@@ -21,7 +21,7 @@ section: input [
   ]
 
   datafile: mwdata [
-    information: "Molecular weight data file"
+    information: "Molecular weights data file"
     help: "Molecular weight data for amino acids"
     default: "Emolwt.dat"
     knowntype: "molecular weights"

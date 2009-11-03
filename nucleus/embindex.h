@@ -49,26 +49,38 @@ extern "C"
 ** @attr kwlen [ajuint] Undocumented
 ** @attr delen [ajuint] Undocumented
 ** @attr txlen [ajuint] Undocumented
+** @attr idpagesize [ajuint] Undocumented
+** @attr idcachesize [ajuint] Undocumented
 ** @attr idorder [ajuint] Undocumented
 ** @attr idfill [ajuint] Undocumented
 ** @attr idsecorder [ajuint] Undocumented
 ** @attr idsecfill [ajuint] Undocumented
+** @attr acpagesize [ajuint] Undocumented
+** @attr accachesize [ajuint] Undocumented
 ** @attr acorder [ajuint] Undocumented
 ** @attr acfill [ajuint] Undocumented
 ** @attr acsecorder [ajuint] Undocumented
 ** @attr acsecfill [ajuint] Undocumented
+** @attr svpagesize [ajuint] Undocumented
+** @attr svcachesize [ajuint] Undocumented
 ** @attr svorder [ajuint] Undocumented
 ** @attr svfill [ajuint] Undocumented
 ** @attr svsecorder [ajuint] Undocumented
 ** @attr svsecfill [ajuint] Undocumented
+** @attr kwpagesize [ajuint] Undocumented
+** @attr kwcachesize [ajuint] Undocumented
 ** @attr kworder [ajuint] Undocumented
 ** @attr kwfill [ajuint] Undocumented
 ** @attr kwsecorder [ajuint] Undocumented
 ** @attr kwsecfill [ajuint] Undocumented
+** @attr depagesize [ajuint] Undocumented
+** @attr decachesize [ajuint] Undocumented
 ** @attr deorder [ajuint] Undocumented
 ** @attr defill [ajuint] Undocumented
 ** @attr desecorder [ajuint] Undocumented
 ** @attr desecfill [ajuint] Undocumented
+** @attr txpagesize [ajuint] Undocumented
+** @attr txcachesize [ajuint] Undocumented
 ** @attr txorder [ajuint] Undocumented
 ** @attr txfill [ajuint] Undocumented
 ** @attr txsecorder [ajuint] Undocumented
@@ -120,27 +132,39 @@ typedef struct EmbSBtreeEntry
     ajuint delen;
     ajuint txlen;
 
+    ajuint idpagesize;
+    ajuint idcachesize;
     ajuint idorder;
     ajuint idfill;
     ajuint idsecorder;
     ajuint idsecfill;
+    ajuint acpagesize;
+    ajuint accachesize;
     ajuint acorder;
     ajuint acfill;
     ajuint acsecorder;
     ajuint acsecfill;
+    ajuint svpagesize;
+    ajuint svcachesize;
     ajuint svorder;
     ajuint svfill;
     ajuint svsecorder;
     ajuint svsecfill;
 
+    ajuint kwpagesize;
+    ajuint kwcachesize;
     ajuint kworder;
     ajuint kwfill;
     ajuint kwsecorder;
     ajuint kwsecfill;
+    ajuint depagesize;
+    ajuint decachesize;
     ajuint deorder;
     ajuint defill;
     ajuint desecorder;
     ajuint desecfill;
+    ajuint txpagesize;
+    ajuint txcachesize;
     ajuint txorder;
     ajuint txfill;
     ajuint txsecorder;

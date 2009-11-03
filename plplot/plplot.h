@@ -1,4 +1,4 @@
-/* $Id: plplot.h,v 1.7 2007/07/11 10:45:58 ajb Exp $
+/* $Id: plplot.h,v 1.8 2009/06/14 15:44:57 ajb Exp $
 
     Macros and prototypes for the PLplot package.  This header file must
     be included by all user codes.
@@ -1734,7 +1734,7 @@ plFree2dGrid(PLFLT **f, PLINT nx, PLINT ny);
 /* Find the maximum and minimum of a 2d matrix allocated with plAllc2dGrid(). */
 
 PLDLLIMPEXP void
-plMinMax2dGrid(PLFLT **f, PLINT nx, PLINT ny, PLFLT *fmax, PLFLT *fmin);
+plMinMax2dGrid(PLFLT **f, PLINT nx, PLINT ny, PLFLT *ppfmax, PLFLT *ppfmin);
 
 /* Wait for graphics input event and translate to world coordinates */
 

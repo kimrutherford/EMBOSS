@@ -801,7 +801,11 @@ public class DNADraw extends ScrollPanel
     JMenu printMenu = new JMenu("Print");
     fileMenu.add(printMenu);
 
-    JMenuItem print = new JMenuItem("Print postscript");
+    JMenuItem print = new JMenuItem("Print Postscript");
+    print.setToolTipText("Print using available printers in your computer\n" +
+    		"or export image to a postscript file (if you have " +
+    		" installed postscript printers)");
+    
     print.addActionListener(new ActionListener()
     {
       public void actionPerformed(ActionEvent e)

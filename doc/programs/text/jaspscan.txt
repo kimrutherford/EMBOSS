@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Scans DNA sequences for transcription factors
@@ -172,6 +179,7 @@ OC   Homo.
 XX
 RN   [1]
 RP   1-1933
+RX   DOI; 10.1073/pnas.86.1.114.
 RX   PUBMED; 2911561.
 RA   Seino S., Seino M., Nishi S., Bell G.I.;
 RT   "Structure of the human insulin receptor gene and characterization of its
@@ -188,7 +196,6 @@ RL   Diabetes 39(1):123-128(1990).
 XX
 DR   EMBL-JOIN; M32972.
 DR   TRANSFAC; R03068; HS$INSR_01.
-DR   UniProtKB/Swiss-Prot; P06213; INSR_HUMAN.
 XX
 CC   Draft entry and computer-readable sequence for [1] kindly submitted
 CC   by G.Bell, 14-MAR-1990.
@@ -455,24 +462,24 @@ Known bugs
 
 See also
 
-   Program name                         Description
-   tfscan       Identify transcription factor binding sites in DNA sequences
+                    Program name                         Description
+                    tfscan       Identify transcription factor binding sites in DNA sequences
 
 Author(s)
 
-   Alan Bleasby (ajb © ebi.ac.uk)
-   European Bioinformatics Institute, Wellcome Trust Genome Campus,
-   Hinxton, Cambridge CB10 1SD, UK
+   Alan             Bleasby (ajb © ebi.ac.uk)
+   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton,         Cambridge CB10 1SD, UK
 
 History
 
-   Completed 23rd July 2007
+                    Completed 23rd July 2007
 
 Target users
 
-   This program is intended to be used by everyone and everything, from
-   naive users to embedded scripts.
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
 
 Comments
 
-   None
+                    None

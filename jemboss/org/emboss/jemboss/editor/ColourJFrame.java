@@ -100,7 +100,6 @@ public class ColourJFrame extends JFrame
   {
     this.colourTable = colourTable;
     Box XBox;
-    ColourMenu cm;
     JLabel residueField;
     YBox.removeAll();
     

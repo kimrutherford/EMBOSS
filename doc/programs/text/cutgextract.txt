@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Extract codon usage tables from from CUTG database
@@ -152,16 +159,16 @@ Known bugs
 
 See also
 
-   Program name Description
-   aaindexextract Extract amino acid property data from AAINDEX
-   jaspextract Extract data from JASPAR
-   printsextract Extract data from PRINTS database for use by pscan
-   prosextract Processes the PROSITE motif database for use by
-   patmatmotifs
-   rebaseextract Process the REBASE database for use by restriction
-   enzyme applications
-   tfextract Process TRANSFAC transcription factor database for use by
-   tfscan
+   Program name     Description
+   aaindexextract   Extract amino acid property data from AAINDEX
+   jaspextract      Extract data from JASPAR
+   printsextract    Extract data from PRINTS database for use by pscan
+   prosextract      Processes the PROSITE motif database for use by
+                    patmatmotifs
+   rebaseextract    Process the REBASE database for use by restriction
+                    enzyme applications
+   tfextract        Process TRANSFAC transcription factor database for use by
+                    tfscan
 
 Author(s)
 

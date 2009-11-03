@@ -13,13 +13,124 @@ extern "C"
 
 enum AjEQryType {QRY_UNKNOWN, QRY_ENTRY, QRY_QUERY, QRY_ALL};
 
+enum AjEXrefType {
+    XREF_UNKNOWN,      /* type not defined */
+    XREF_DR,           /* DR line in EMBL, SwissProt */
+    XREF_DBXREF,       /* /db_xref in EMBL/Genbank */
+    XREF_EC,           /* EC= in SwissProt */
+    XREF_DESC,         /* Allergen= and CD_Antigen= in SwissProt DE */
+    XREF_TAX,          /* NCBI_TaxID */
+    XREF_RX,            /* RX line in EMBL or SwissProt */
+    XREF_MAX            /* to test we are within bounds */
+};
+
 typedef struct SeqSAccess SeqSAccess;
 
+/* @data AjPSeqDesc ***********************************************************
+**
+** Ajax sequence description object.
+**
+** Defines the gene fields needed to support various standard
+** sequence database entry formats, especially UniProt
+**
+** @alias AjSSeqDesc
+** @alias AjOSeqDesc
+**
+** @attr Name [AjPStr] Recommended name (only one per sequence)
+** @attr Short [AjPList] String list of short names 
+** @attr EC [AjPList] String list of EC numbers
+** @attr AltNames [AjPList] List of alternate description objects
+** @attr SubNames [AjPList] List of submitted name objects
+** @attr Includes [AjPList] List of names for included functional domains
+** @attr Contains [AjPList] List of names for post-processing components
+** @attr Precursor [AjBool] True if this is a precursor
+** @attr Fragments [ajuint] 1 to mark as a fragment, more to mark as fragments
+**
+** @@
+******************************************************************************/
+
+typedef struct AjSSeqDesc {
+    AjPStr Name;
+    AjPList Short;
+    AjPList EC;
+    AjPList AltNames;
+    AjPList SubNames;
+    AjPList Includes;
+    AjPList Contains;
+    AjBool Precursor;
+    ajuint Fragments;
+} AjOSeqDesc;
+#define AjPSeqDesc AjOSeqDesc*
+
+
+    
+/* @data AjPSeqSubdesc *********************************************************
+**
+** Ajax sequence sub-description object.
+**
+** Defines the gene fields needed to support various standard
+** sequence database entry formats, especially UniProt
+**
+** @alias AjSSeqSubdesc
+** @alias AjOSeqSubdesc
+**
+** @attr Name [AjPStr] Recommended name (only one per sequence)
+** @attr Short [AjPList] String list of short names 
+** @attr EC [AjPList] String list of EC numbers
+** @attr Allergen [AjPList] String list of Ig-E mediated atopic allergens
+** @attr Biotech [AjPList] String list of biotechnology context names
+** @attr Cdantigen [AjPList] String list of Cell Differentiation antigens
+** @attr Inn [AjPList] String list of International Non-proprietary Names
+**
+** @@
+******************************************************************************/
+
+typedef struct AjSSeqSubdesc {
+    AjPStr Name;
+    AjPList Short;
+    AjPList EC;
+    AjPList Allergen;
+    AjPList Biotech;
+    AjPList Cdantigen;
+    AjPList Inn;
+} AjOSeqSubdesc;
+#define AjPSeqSubdesc AjOSeqSubdesc*
+
+
+    
+/* @data AjPSeqGene ***********************************************************
+**
+** Ajax genes object.
+**
+** Defines the gene fields needed to support various standard
+** sequence database entry formats, especially UniProt
+**
+** @alias AjSSeqGene
+** @alias AjOSeqGene
+**
+** @attr Name [AjPStr] Gene standard name
+** @attr Synonyms [AjPStr] Accepted synonynms
+** @attr Orf [AjPStr] Recognized open reading frame (ORF) names
+**                         usually for sequencing projects in progress
+** @attr Oln [AjPStr] Ordered locus name(s) representing order on chromosome
+** @@
+******************************************************************************/
+
+typedef struct AjSSeqGene {
+  AjPStr Name;
+  AjPStr Synonyms;
+  AjPStr Orf;
+  AjPStr Oln;
+} AjOSeqGene;
+#define AjPSeqGene AjOSeqGene*
+
+
+    
 /* @data AjPSeqDate ***********************************************************
 **
-** Ajax Sequence dates object.
+** Ajax sequence dates object.
 **
-** defines the date fields needed to support various standard
+** Defines the date fields needed to support various standard
 ** sequence database entry formats
 **
 ** @alias AjSSeqDate
@@ -50,11 +161,13 @@ typedef struct AjSSeqDate {
 } AjOSeqDate;
 #define AjPSeqDate AjOSeqDate*
 
+
+    
 /* @data AjPSeqRef ***********************************************************
 **
 ** Ajax sequence citation object.
 **
-** defines the fields needed to support various standard
+** Defines the fields needed to support various standard
 ** entry citation formats
 **
 ** @alias AjSSeqRef
@@ -89,6 +202,43 @@ typedef struct AjSSeqRef {
 } AjOSeqRef;
 #define AjPSeqRef AjOSeqRef*
 
+
+    
+/* @data AjPSeqXref ***********************************************************
+**
+** Ajax sequence cross-reference object.
+**
+** Defines the fields needed to support various standard
+** entry cross-reference formats
+**
+** @alias AjSSeqXref
+** @alias AjOSeqXref
+**
+** @attr Db [AjPStr] Database name
+** @attr Id [AjPStr] Primary identifier
+** @attr Secid [AjPStr] Secondary identifier
+** @attr Terid [AjPStr] Tertiary identifier
+** @attr Quatid [AjPStr] Quaternary identifier
+** @attr Type [ajuint] Type of cross-reference
+** @attr Start [ajuint] Start position
+** @attr End [ajuint] End position
+** @@
+******************************************************************************/
+
+typedef struct AjSSeqXref {
+    AjPStr Db;
+    AjPStr Id;
+    AjPStr Secid;
+    AjPStr Terid;
+    AjPStr Quatid;
+    ajuint Type;
+    ajuint Start;
+    ajuint End;
+} AjOSeqXref;
+#define AjPSeqXref AjOSeqXref*
+
+
+    
 /* @data AjPSeqQuery **********************************************************
 **
 ** Ajax Sequence Query object.
@@ -322,16 +472,19 @@ typedef struct AjSSeqin {
 ** @attr Sv [AjPStr] SeqVersion number
 ** @attr Gi [AjPStr] GI NCBI version number
 ** @attr Tax [AjPStr] Main taxonomy (species)
+** @attr Taxid [AjPStr] Main taxonomy (species) id in NCBI taxonomy
 ** @attr Organelle [AjPStr] Organelle taxonomy
 ** @attr Type [AjPStr] Type N or P
 ** @attr Molecule [AjPStr] Molecule type
 ** @attr Class [AjPStr] Class of entry
 ** @attr Division [AjPStr] Database division
+** @attr Evidence [AjPStr] Experimental evidence (e.g. from UniProt)
 ** @attr Db [AjPStr] Database name from input
 ** @attr Setdb [AjPStr] Database name from command line
 ** @attr Full [AjPStr] Full name
 ** @attr Date [AjPSeqDate] Creation, modification and sequence mod dates
 ** @attr Desc [AjPStr] One-line description
+** @attr Fulldesc [AjPSeqDesc] Detailed description
 ** @attr Doc [AjPStr] Obsolete - see TextPtr
 ** @attr Rev [AjBool] true: to be reverse-complemented
 ** @attr Reversed [AjBool] true: has been reverse-complemented
@@ -351,12 +504,13 @@ typedef struct AjSSeqin {
 ** @attr Acclist [AjPList] Secondary accessions
 ** @attr Keylist [AjPList] Keyword list
 ** @attr Taxlist [AjPList] Taxonomy list (organelle, species, taxa)
+** @attr Genelist [AjPList] Gene names list
 ** @attr Reflist [AjPList] Reference citation list
 ** @attr Cmtlist [AjPList] Comment block list
 ** @attr Xreflist [AjPList] Cross reference list
 ** @attr Seq [AjPStr] The sequence
 ** @attr Fttable [AjPFeattable] Feature table
-** @attr Accuracy [ajuint*] Accuracy values (one per base) from base calling
+** @attr Accuracy [float*] Accuracy values (one per base) from base calling
 ** @attr Format [AjEnum] Input format enum
 ** @attr EType [AjEnum] unused, obsolete
 ** @attr Weight [float] Weight from multiple alignment
@@ -371,16 +525,19 @@ typedef struct AjSSeq {
   AjPStr Sv;
   AjPStr Gi;
   AjPStr Tax;
+  AjPStr Taxid;
   AjPStr Organelle;
   AjPStr Type;
   AjPStr Molecule;
   AjPStr Class;
   AjPStr Division;
+  AjPStr Evidence;
   AjPStr Db;
   AjPStr Setdb;
   AjPStr Full;
   AjPSeqDate Date;
   AjPStr Desc;
+  AjPSeqDesc Fulldesc;
   AjPStr Doc;
   AjBool Rev;
   AjBool Reversed;
@@ -400,12 +557,13 @@ typedef struct AjSSeq {
   AjPList Acclist;
   AjPList Keylist;
   AjPList Taxlist;
+  AjPList Genelist;
   AjPList Reflist;
   AjPList Cmtlist;
   AjPList Xreflist;
   AjPStr Seq;
   AjPFeattable Fttable;
-  ajuint* Accuracy;
+  float* Accuracy;
   AjEnum Format;
   AjEnum EType;
   float Weight;
@@ -521,6 +679,8 @@ typedef struct AjSSeqset {
 **
 ** @attr Seq [AjPSeq] Current sequence
 ** @attr Seqin [AjPSeqin] Sequence input for reading next
+** @attr Totseqs [ajlong] Count of sequences so far
+** @attr Totlength [ajlong] Count of sequence lengths so far
 ** @attr Count [ajint] Count of sequences so far
 ** @attr Begin [ajint] start position
 ** @attr End [ajint] end position
@@ -534,6 +694,8 @@ typedef struct AjSSeqset {
 typedef struct AjSSeqall {
   AjPSeq Seq;
   AjPSeqin Seqin;
+  ajlong Totseqs;
+  ajlong Totlength;
   ajint Count;
   ajint Begin;
   ajint End;

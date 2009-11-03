@@ -22,6 +22,18 @@ cons
 
 
 <H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
     Function
 </H2>
 Create a consensus sequence from a multiple alignment
@@ -29,15 +41,40 @@ Create a consensus sequence from a multiple alignment
     Description
 </H2>
 
-<p><b>cons</b> calculates a consensus sequence from a multiple sequence alignment. To obtain the consensus, the sequence weights and a scoring matrix are used to calculate a score for each amino acid residue or nucleotide at each position in the alignment.  The highest scoring residue goes into the consensus sequence if the score is higher than a user-specified "plurality" value, otherwise, there is no consensus at that position.</p>
+<p><b>cons</b> calculates a consensus sequence from a multiple
+sequence alignment. To obtain the consensus, the sequence weights and
+a scoring matrix are used to calculate a score for each amino acid
+residue or nucleotide at each position in the alignment.  The highest
+scoring residue goes into the consensus sequence if the score is
+higher than a user-specified "plurality" value, otherwise, there is no
+consensus at that position.</p>
 
 
 <H2>
     Algorithm
 </H2>
-<p>To obtain the consensus, the sequence weights and a scoring matrix are used to calculate a score at each position in the alignment as follows. The residue (or nucleotide) i in an alignment column, is compared to all other residues (j) in the same column. The score for i is the sum over all residues j (not i=j) of the score(ij)*weight(j), where score(ij) is taken from a nucleotide or protein scoring matrix (see -datafile qualifier) and the "weight(j)" is the weighting given to the sequence j, which is given in the alignment file.</p>
-<p>The highest scoring type of residue is then found in the column. If the number of "positive matches" (see below) for this residue is greater than the "plurality value" (see below), then this residue is the consensus residue.  Otherwise there is no consensus for that position and an 'n' (nucleotide sequence alignment) or an 'x' (protein sequence alignment) character is written to the consensus sequence.</p>
-<p>The positive matches for a residue i are calculated as being the sum of the corresponding sequence weights for all the residues that increase the score of residue i (i.e. that have a positive score). The "plurality" qualifier sets the cut-off for the number of positive matches (weighted) below which there is no consensus.</p>
+<p>To obtain the consensus, the sequence weights and a scoring matrix
+are used to calculate a score at each position in the alignment as
+follows. The residue (or nucleotide) i in an alignment column, is
+compared to all other residues (j) in the same column. The score for i
+is the sum over all residues j (not i=j) of the score(ij)*weight(j),
+where score(ij) is taken from a nucleotide or protein scoring matrix
+(see -datafile qualifier) and the "weight(j)" is the weighting given
+to the sequence j, which is given in the alignment file.</p>
+
+q<p>The highest scoring type of residue is then found in the column. If
+the number of "positive matches" (see below) for this residue is
+greater than the "plurality value" (see below), then this residue is
+the consensus residue.  Otherwise there is no consensus for that
+position and an 'n' (nucleotide sequence alignment) or an 'x' (protein
+sequence alignment) character is written to the consensus
+sequence.</p>
+
+<p>The positive matches for a residue i are calculated as being the
+sum of the corresponding sequence weights for all the residues that
+increase the score of residue i (i.e. that have a positive score). The
+"plurality" qualifier sets the cut-off for the number of positive
+matches (weighted) below which there is no consensus.</p>
 
 
 
@@ -287,7 +324,8 @@ ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGT
     Data files
 </H2>
 
-<p><b>cons</b> uses the standard set of scoring matrix data files in the EMBOSS data directory.</p>
+<p><b>cons</b> uses the standard set of scoring matrix data files in
+the EMBOSS data directory.</p>
 
 
 <P>
@@ -336,9 +374,16 @@ The directories are searched in the following order:
     Notes
 </H2>
 
-<p>The "identity" qualifier provides an additional constrain to "plurality" when determining a consensus residue at an alignment site. "identity" sets the required number of identities at a site for it to be included in the consensus.  If for example this is set to the number of sequences in the alignment, then only a site with the same residue in all sequences would be included in the consensus.</p>
+<p>The "identity" qualifier provides an additional constrain to
+"plurality" when determining a consensus residue at an alignment
+site. "identity" sets the required number of identities at a site for
+it to be included in the consensus.  If for example this is set to the
+number of sequences in the alignment, then only a site with the same
+residue in all sequences would be included in the consensus.</p>
 
-<p>The "setcase" qualifier sets the threshold for the positive matches above which the consensus residue is given is upper-case and below which it is in lower-case.</p>
+<p>The "setcase" qualifier sets the threshold for the positive matches
+above which the consensus residue is given is upper-case and below
+which it is in lower-case.</p>
 
 
 <H2>

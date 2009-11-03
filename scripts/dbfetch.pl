@@ -1,10 +1,10 @@
 #!/usr/bin/perl -w
 
 %databases = (
-# 	      "embl" => "embl embl embl acc [.]dat\$",
-#	      "genbank" => "genbank genbank gb acc [.]seq\$",
-#	      "swiss" => "swiss sw sw acc [.]dat\$",
-#	      "pir" => "pir pir pir id [.]ref\$",
+ 	      "embl" => "embl embl embl acc [.]dat\$",
+	      "genbank" => "genbank genbank gb acc [.]seq\$",
+	      "swiss" => "swiss sw sw acc [.]dat\$",
+	      "pir" => "pir pir pir id [.]ref\$",
 	      "swnew" => "swnew swnew sw acc [.]dat\$"
 	      );
 
@@ -20,9 +20,9 @@ foreach $d (sort( keys(%databases))) {
 	$ac=0;
 	$allok = 1;
 	$change=0;
-	system "rm newfile;touch newfile";
+	if(-e "newfile") {system "rm newfile;touch newfile";}
 	if($fmt eq "pir") {
-	    system "rm newfile2;touch newfile2";
+	    if(-e "newfile2") {system "rm newfile2;touch newfile2";}
 	}
 	while (<IN>) {
 	    $id="";

@@ -111,7 +111,7 @@ int main(int argc, char **argv)
     ajStrAssignSubS(&substr,str,begin,end);
     ajSeqAssignSeqS(sequence,substr);
 
-    cvt = ajSeqcvtNewNumberC("ACGTN");
+    cvt = ajSeqcvtNewNumberC("ACGTN"); /* 1-4=ACGT 5=N 0=other */
     ajSeqConvertNum(sequence, cvt, &tseq);
     sq = ajStrGetuniquePtr(&tseq);
 
@@ -127,7 +127,7 @@ int main(int argc, char **argv)
 	score = max = 0;
 	while(front-sq<=len)
 	{
-	    if(*front == 'Z')
+	    if(*front == 'Z')   /* 'Z' marks a repeat */
 	    {
 		if(max >= thresh)
 		{
@@ -250,7 +250,7 @@ static void equicktandem_report(AjPFeattable tab, ajint begin)
     AjPStr s = NULL;
 
     if(!rpthit)
-	ajStrAssignC(&rpthit, "repeat_region");
+	ajStrAssignC(&rpthit, "SO:0000705");
 
     /*
        ajFmtPrintF(outf, "%6d %10d %10d %2d %3d\n",

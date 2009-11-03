@@ -3,14 +3,14 @@
                                   format, or reference (input USA)
   [-graph]             xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, xterm, png, gif)
+                                  tekt, tek, none, data, das, xterm, png, gif)
 
    Additional (Optional) qualifiers:
    -datafile           datafile   [Ewhite-wimley.dat] White-Wimley data file
    -width              integer    [19] Window size (Integer from 1 to 200)
-   -octanolplot        boolean    [N] Display the octanol plot
-   -interfaceplot      boolean    [N] Display the interface plot
-   -[no]differenceplot boolean    [Y] Display the difference plot
+   -plotoctanol        boolean    [N] Display the octanol plot
+   -plotinterface      boolean    [N] Display the interface plot
+   -[no]plotdifference boolean    [Y] Display the difference plot
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:

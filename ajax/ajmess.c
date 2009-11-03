@@ -337,6 +337,7 @@ AjMessOutRoutine ajMessRegExit(AjMessOutRoutine func)
 
     old = exitRoutine;
     exitRoutine = func;
+
     return old;
 }
 
@@ -650,6 +651,7 @@ void ajErr(const char *format, ...)
 	    fprintf(stderr, "%s\n", mesg_buf);
 
 	ajMessInvokeDebugger();
+        ajUtilCatch();
     }
 
     return;
@@ -690,6 +692,7 @@ void ajVErr(const char *format, va_list args)
 	    fprintf(stderr, "%s\n", mesg_buf);
     }
     ajMessInvokeDebugger();
+
     return;
 }
 
@@ -1044,6 +1047,7 @@ char* ajMessSysErrorText(void)
     messErrMess = ajSysFuncStrdup(mess);
 
     AJFREE(mess);
+
     return messErrMess;
 }
 
@@ -1112,7 +1116,8 @@ static char* messFormat(va_list args, const char *format, const char *prefix)
 	    ajMessCrash("prefix string is too long.");
     }
 
-    /* If they supply our internal buffer as an argument, e.g. because they */
+
+    /* If they supply the internal buffer as an argument, e.g. because they */
     /* used ajFmtString as an arg, then make a copy, otherwise use internal */
     /* buffer.                                                              */
 
@@ -1178,6 +1183,7 @@ static char* messGetFilename(const char *path)
 	{				/* Last char = "/" ?? */
 	    if(path_copy != NULL)
 		AJFREE(path_copy);
+
 	    path_copy = ajSysFuncStrdup(path);
 
 	    tmp = ajSysFuncStrtok(path_copy, path_delim);
@@ -1199,8 +1205,8 @@ static char* messGetFilename(const char *path)
 
 /*
 ** When AJAX needs to crash because there has been an unrecoverable
-** error we want to output the file and line number of the code that
-** detected the error. Here are the functions to do it.
+** error the file and line number of the code that detected the error
+** need to be outputted. Here are the functions to do it.
 **
 ** Applications can optionally initialise the error handling section of the
 ** message package, currently the program name can be set (argv[0] in the
@@ -1332,14 +1338,13 @@ AjBool ajMessErrorSetFile(const char *errfile)
     FILE *fp = 0;
 
     if(errfile)
-    {
 	if((fp = fopen(errfile,"r")))
 	{
 	    messErrorFile = ajSysFuncStrdup(errfile);
 	    fclose(fp);
+
 	    return ajTrue;
 	}
-    }
 
     return ajFalse;
 }
@@ -1378,6 +1383,7 @@ static AjBool ajMessReadErrorFile(void)
 	fp = fopen(messErrorFile,"r");
     }
 
+
     if(!fp)
 	return ajFalse;
 
@@ -1387,9 +1393,11 @@ static AjBool ajMessReadErrorFile(void)
     {
 	if(sscanf(line,"%s %s",name,message)!=2)
 	    ajFatal("Library sscanf1");
+
 	cp = strchr(line,'"');
 	cp++;
 	mess = &message[0];
+
 	while(*cp != '"')
 	{
 	    *mess = *cp;
@@ -1402,6 +1410,7 @@ static AjBool ajMessReadErrorFile(void)
 	namestore = ajFmtString("%s",name);
 	messstore = ajFmtString("%s",message);
 	mess = (char *) ajTableFetch(errorTable, namestore);
+
 	if(mess)
 	    ajErr("%s is listed more than once in file %s",
 			name,messErrorFile);
@@ -1431,6 +1440,7 @@ void ajMessOutCode(const char *code)
     if(errorTable)
     {
 	mess = ajTableFetch(errorTable, code);
+
 	if(mess)
 	    ajMessOut(mess);
 	else
@@ -1441,6 +1451,7 @@ void ajMessOutCode(const char *code)
 	if(ajMessReadErrorFile())
 	{
 	    mess = ajTableFetch(errorTable, code);
+
 	    if(mess)
 		ajMessOut(mess);
 	    else
@@ -1473,6 +1484,7 @@ void ajMessErrorCode(const char *code)
     if(errorTable)
     {
 	mess = ajTableFetch(errorTable, code);
+
 	if(mess)
 	    ajErr(mess);
 	else
@@ -1483,6 +1495,7 @@ void ajMessErrorCode(const char *code)
 	if(ajMessReadErrorFile())
 	{
 	    mess = ajTableFetch(errorTable, code);
+
 	    if(mess)
 		ajErr(mess);
 	    else
@@ -1516,6 +1529,7 @@ __noreturn void  ajMessCrashCodeFL(const char *code)
     if(errorTable)
     {
 	mess = ajTableFetch(errorTable, code);
+
 	if(mess)
 	    ajMessCrashFL(mess);
 	else
@@ -1526,6 +1540,7 @@ __noreturn void  ajMessCrashCodeFL(const char *code)
 	if(ajMessReadErrorFile())
 	{
 	    mess = ajTableFetch(errorTable, code);
+
 	    if(mess)
 		ajMessCrashFL(mess);
 	    else
@@ -1565,6 +1580,7 @@ void ajMessCodesDelete(void)
 	AJFREE(keyarray[i]);
 	AJFREE(valarray[i]);
     }
+
     AJFREE(keyarray);
     AJFREE(valarray);
 
@@ -1608,29 +1624,37 @@ void ajDebug(const char* fmt, ...)
 	    ajFmtVPrintF(fileDebugFile, fmt, args);
 	    va_end(args);
 	}
+
 	return;
     }
 
     depth++;
+
     if(!debugset && acdDebugSet)
     {
 	fileDebug = acdDebug;
+
 	if(fileDebug)
 	{
 	    ajFmtPrintS(&fileDebugName, "%s.dbg", ajStrGetPtr(acdProgram));
 	    fileDebugFile = ajFileNewOutNameS(fileDebugName);
+
 	    if(!fileDebugFile)
 		ajFatal("Cannot open debug file %S",fileDebugName);
+
 	    if(ajNamGetValueC("debugbuffer", &bufstr))
 	    {
 		ajStrToBool(bufstr, &acdDebugBuffer);
 	    }
+
 	    if(!acdDebugBuffer)
 		ajFileSetUnbuffer(fileDebugFile);
+
 	    ajFmtPrintF(fileDebugFile, "Debug file %F buffered:%B\n",
 			 fileDebugFile, acdDebugBuffer);
 	    ajStrDel(&bufstr);
 	}
+
 	debugset = 1;
     }
 
@@ -1699,6 +1723,7 @@ ajint ajUserGet(AjPStr* pthis, const char* fmt, ...)
     {
 	ajUser("(Standard input in use: using default)");
 	ajStrAssignC(pthis, "");
+
 	return ajStrGetLen(*pthis);
     }
 
@@ -1745,6 +1770,7 @@ ajint ajUserGet(AjPStr* pthis, const char* fmt, ...)
 	 */
 	ajStrSetValidLen(pthis, ilen);
 	thys = *pthis;
+
 	if((jlen == (isize-1)) &&
 	   (ajStrGetCharLast(thys) != '\n'))
 	{

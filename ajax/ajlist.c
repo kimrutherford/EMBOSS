@@ -130,6 +130,7 @@ AjPList ajListNew(void)
 
 
 
+
 /* @func ajListNewListref ******************************************************
 **
 ** Copy a list.
@@ -161,6 +162,9 @@ AjPList ajListNewListref(const AjPList list)
     return newlist;
 }
 
+
+
+
 /* @obsolete ajListCopy
 ** @rename ajListNewListref
 */
@@ -173,6 +177,9 @@ __deprecated AjPList ajListCopy(const AjPList list)
 /* @obsolete ajListNewArgs
 ** @remove Use explicit ajListPush calls instead
 */
+
+
+
 
 __deprecated AjPList ajListNewArgs(void* x, ...)
 {
@@ -225,6 +232,8 @@ static AjPList listNew(AjEnum type)
 
     return list;
 }
+
+
 
 
 /* @funcstatic listInsertNode *************************************************
@@ -345,6 +354,7 @@ void ajListPush(AjPList list, void* x)
 
 
 
+
 /* @func ajListPushAppend *****************************************************
 **
 ** Add a new node at the end of the list and add the
@@ -390,6 +400,8 @@ void ajListPushAppend(AjPList list, void* x)
 }
 
 
+
+
 /* @obsolete ajListPushApp
 ** @rename ajListPushAppend
 */
@@ -399,6 +411,9 @@ __deprecated void ajListPushApp(AjPList list, void* x)
     ajListPushAppend(list, x);
     return;
 }
+
+
+
 
 /* @func ajListPushlist *******************************************************
 **
@@ -432,6 +447,7 @@ void ajListPushlist(AjPList list, AjPList* Plist)
 
         if(listFreeNext >= listFreeMax)
             listFreeSetExpand();
+
         if(listFreeNext >= listFreeMax)
             AJFREE(list->First);
         else if(list->First)
@@ -456,6 +472,7 @@ void ajListPushlist(AjPList list, AjPList* Plist)
 
 
 
+
 /* @obsolete ajListPushList
 ** @rename ajListPushlist
 */
@@ -465,6 +482,9 @@ __deprecated void ajListPushList(AjPList list, AjPList* pmore)
     ajListPushlist(list, pmore);
     return;
 }
+
+
+
 
 /* @section Modifiers **********************************************************
 **
@@ -542,6 +562,7 @@ void ajListPurge(AjPList list,
 
 
     iter = ajListIterNew(list);
+
     while((ret=ajListIterGet(iter)))
 	if(test(ret))
 	{
@@ -556,6 +577,8 @@ void ajListPurge(AjPList list,
 }
 
 
+
+
 /* @obsolete ajListGarbageCollect
 ** @replace ajListPurge (1,2,3/1,3,2)
 */
@@ -566,6 +589,9 @@ __deprecated void ajListGarbageCollect(AjPList list, void (*destruct)(void **),
     ajListPurge(list, compar, destruct);
     return;
 }
+
+
+
 
 /* @func ajListReverse ********************************************************
 **
@@ -599,6 +625,7 @@ void ajListReverse(AjPList list)
 	node->Next = head;
 	head = node;
     }
+
     list->First = head;
 
     list->First->Prev = NULL;
@@ -692,12 +719,14 @@ void ajListSortTwo(AjPList list,
 	while(!sort1(&ptrs[pos],&ptrs[pos+1]))
 	{
 	    ++pos;
+
 	    if(pos>limit)
 		break;
 	}
 	++pos;
 
 	n = pos-base;
+
 	if(n>1)
 	    qsort((void *)&ptrs[base],n,sizeof(void*),sort2);
 
@@ -705,6 +734,7 @@ void ajListSortTwo(AjPList list,
     }
 
     pos = 0;
+
     while(node->Next)
     {
 	node->Item = ptrs[pos++];
@@ -717,6 +747,7 @@ void ajListSortTwo(AjPList list,
 
 
 
+
 /* @obsolete ajListSort2
 ** @rename ajListSortTwo
 */
@@ -726,8 +757,11 @@ __deprecated void ajListSort2(AjPList list,
 			      int (*sort2) (const void*, const void*))
 {
     ajListSortTwo(list, sort1, sort2);
+
     return;
 }
+
+
 
 
 /* @func ajListSortTwoThree ****************************************************
@@ -774,18 +808,22 @@ void ajListSortTwoThree(AjPList list,
 	      !sort2(&ptrs[pos],&ptrs[pos+1]))
 	{
 	    ++pos;
+
 	    if(pos>limit)
 		break;
 	}
-	++pos;
 
+	++pos;
 	n = pos-base;
+
 	if(n>1)
 	    qsort((void *)&ptrs[base],n,sizeof(void*),sort3);
+
 	base = pos;
     }
 
     pos = 0;
+
     while(node->Next)
     {
 	node->Item = ptrs[pos++];
@@ -793,8 +831,12 @@ void ajListSortTwoThree(AjPList list,
     }
 
     AJFREE(ptrs);
+
     return;
 }
+
+
+
 
 /* @obsolete ajListSort3
 ** @rename ajListSortTwoThree
@@ -806,8 +848,12 @@ __deprecated void ajListSort3(AjPList list,
 			      int (*sort3) (const void*, const void*))
 {
     ajListSortTwoThree(list, sort1, sort2, sort3);
+
     return;
 }
+
+
+
 
 /* @func ajListSortTwoUnique ***************************************************
 **
@@ -839,9 +885,11 @@ void ajListSortTwoUnique(AjPList list,
     ajListTrace(list);
 
     iter = ajListIterNew(list);
+
     while(!ajListIterDone(iter))
     {
 	item = ajListIterGet(iter);
+
 	if(previtem && !sort1(&item, &previtem) &&
 	   !sort2(&item, &previtem))
 	{
@@ -861,6 +909,8 @@ void ajListSortTwoUnique(AjPList list,
 }
 
 
+
+
 /* @obsolete ajListUnique2
 ** @rename ajListSortTwoUnique
 */
@@ -871,8 +921,11 @@ __deprecated void ajListUnique2(AjPList list,
 				void (*nodedelete) (void** x, void* cl))
 {
     ajListSortTwoUnique(list, sort1, sort2, nodedelete);
+
     return;
 }
+
+
 
 
 /* @func ajListSortUnique ******************************************************
@@ -903,9 +956,11 @@ void ajListSortUnique(AjPList list,
     /*ajListTrace(list);*/
 
     iter = ajListIterNew(list);
+
     while(!ajListIterDone(iter))
     {
 	item = ajListIterGet(iter);
+
 	if(previtem && !sort1(&item, &previtem))
 	{
 	    nodedelete(&item, NULL);
@@ -924,6 +979,8 @@ void ajListSortUnique(AjPList list,
 }
 
 
+
+
 /* @obsolete ajListUnique
 ** @rename ajListSortUnique
 */
@@ -933,8 +990,12 @@ __deprecated void ajListUnique(AjPList list,
 		  void (*nodedelete) (void** x, void* cl))
 {
     ajListSortUnique(list, compar, nodedelete);
+
     return;
 }
+
+
+
 
 /* @section Removing data ******************************************************
 **
@@ -963,21 +1024,27 @@ __deprecated void ajListUnique(AjPList list,
 static void listFreeSetExpand (void)
 {
     ajint newsize;
+
     if(!listFreeSet)
     {
         listFreeMax = 1024;
         AJCNEW0(listFreeSet,listFreeMax);
+
         return;
     }
+
     if(listFreeMax >= 65536)
         return;
+
     newsize = listFreeMax + listFreeMax;
     AJCRESIZE0(listFreeSet, listFreeMax, newsize);
     listFreeMax = newsize;
+
     return;
 }
 
-    
+
+
     
 /* @func ajListPop ************************************************************
 **
@@ -995,6 +1062,7 @@ AjBool ajListPop(AjPList list, void** x)
     {
         if(x)
             *x = NULL;
+
 	return ajFalse;
     }
     
@@ -1005,8 +1073,8 @@ AjBool ajListPop(AjPList list, void** x)
 	return ajFalse;
 
     list->First->Prev = NULL;
-
     list->Count--;
+
     return ajTrue;
 }
 
@@ -1031,6 +1099,7 @@ AjBool ajListPopLast(AjPList list, void** x)
     {
         if(x)
             *x = NULL;
+
 	return ajFalse;
     }
     
@@ -1047,8 +1116,10 @@ AjBool ajListPopLast(AjPList list, void** x)
     if(list->Count==1)
     {
 	list->Last->Prev = NULL;
+
         if(listFreeNext >= listFreeMax)
             listFreeSetExpand();
+
         if(listFreeNext >= listFreeMax)
             AJFREE(list->First);
         else if(list->First)
@@ -1060,8 +1131,10 @@ AjBool ajListPopLast(AjPList list, void** x)
     {
 	pthis->Prev->Next = list->Last;
 	list->Last->Prev = pthis->Prev;
+
         if(listFreeNext >= listFreeMax)
             listFreeSetExpand();
+
         if(listFreeNext >= listFreeMax)
             AJFREE(pthis);
         else if(pthis)
@@ -1069,15 +1142,14 @@ AjBool ajListPopLast(AjPList list, void** x)
             listFreeSet[listFreeNext++] = pthis;
             pthis = NULL;
         }
-        
     }
-    
-
 
     --list->Count;
 
     return ajTrue;
 }
+
+
 
 
 /* @obsolete ajListPopEnd
@@ -1088,6 +1160,9 @@ __deprecated AjBool ajListPopEnd(AjPList list, void** x)
 {
     return ajListPopLast(list, x);
 }
+
+
+
 
 /* @section Element retrieval **************************************************
 **
@@ -1142,6 +1217,9 @@ ajuint ajListGetLength(const AjPList list)
     return list->Count;
 }
 
+
+
+
 /* @obsolete ajListLength
 ** @rename ajListGetLength
 */
@@ -1150,6 +1228,7 @@ __deprecated ajuint ajListLength(const AjPList list)
 {
     return ajListGetLength(list);
 }
+
 
 
 
@@ -1181,6 +1260,9 @@ AjBool ajListMapfind(const AjPList list,
     return ajFalse;
 }
 
+
+
+
 /* @obsolete ajListFind
 ** @rename ajListMapfind
 */
@@ -1190,6 +1272,8 @@ __deprecated AjBool ajListFind(const AjPList list,
 {
     return ajListMapfind(list, apply, cl);
 }
+
+
 
 
 /* @func ajListMapread ********************************************************
@@ -1217,6 +1301,9 @@ void ajListMapread(const AjPList list,
     return;
 }
 
+
+
+
 /* @obsolete ajListMapRead
 ** @rename ajListMapread
 */
@@ -1227,6 +1314,8 @@ __deprecated void ajListMapRead(const AjPList list,
     ajListMapread(list, apply, cl);
     return;
 }
+
+
 
 
 /* @func ajListPeek ***********************************************************
@@ -1281,6 +1370,8 @@ AjBool ajListPeekFirst(const AjPList list, void** x)
 }
 
 
+
+
 /* @obsolete ajListFirst
 ** @rename ajListPeekFirst
 */
@@ -1289,6 +1380,9 @@ __deprecated AjBool ajListFirst(const AjPList list, void** x)
 {
     return ajListPeekFirst(list, x);
 }
+
+
+
 
 /* @func ajListPeekLast *******************************************************
 **
@@ -1306,6 +1400,7 @@ AjBool ajListPeekLast(const AjPList list, void** x)
 
     if(!list)
 	return ajFalse;
+
     if(!list->Count)
 	return ajFalse;
 
@@ -1319,6 +1414,9 @@ AjBool ajListPeekLast(const AjPList list, void** x)
     return ajTrue;
 }
 
+
+
+
 /* @obsolete ajListLast
 ** @rename ajListPeekLast
 */
@@ -1327,6 +1425,8 @@ __deprecated AjBool ajListLast(const AjPList list, void** x)
 {
     return ajListPeekLast (list, x);
 }
+
+
 
 
 /* @func ajListPeekNumber ******************************************************
@@ -1350,6 +1450,7 @@ AjBool ajListPeekNumber(const AjPList list, ajuint ipos, void** x)
 	return ajFalse;
 
     len = ajListGetLength(list);
+
     if(ipos>=len)
 	return ajFalse;
 
@@ -1363,10 +1464,15 @@ AjBool ajListPeekNumber(const AjPList list, ajuint ipos, void** x)
 }
 
 
+
+
 AjBool ajListNth(const AjPList list, ajuint ipos, void** x)
 {
     return ajListPeekNumber(list, ipos, x);
 }
+
+
+
 
 /* @func ajListToarray ********************************************************
 **
@@ -1390,6 +1496,7 @@ ajuint ajListToarray(const AjPList list, void*** array)
     if(!n)
     {
 	*array = NULL;
+
 	return 0;
     }
 
@@ -1397,15 +1504,19 @@ ajuint ajListToarray(const AjPList list, void*** array)
 	AJFREE(*array);
 
     *array = AJALLOC((n+1)*sizeof(array));
+
     for(i = 0; i < n; i++)
     {
 	(*array)[i] = rest->Item;
 	rest = rest->Next;
     }
+
     (*array)[n] = 0;
 
     return n;
 }
+
+
 
 
 /* @obsolete ajListToArray
@@ -1416,6 +1527,9 @@ __deprecated ajuint ajListToArray(const AjPList list, void*** array)
 {
     return ajListToarray(list, array);
 }
+
+
+
 
 /* @funcstatic listArrayTrace *************************************************
 **
@@ -1548,6 +1662,8 @@ void ajListProbeData(AjPList const * Plist)
 }
 
 
+
+
 /* @func ajListTrace **********************************************************
 **
 ** Traces through a list and validates it
@@ -1622,6 +1738,7 @@ __deprecated AjPListNode ajListNodesNew(void* x, ...)
 	/*ajDebug("topnode: %x node: %x, item: %x -> %x\n",
 		topnode, node, x, node->Next);*/
     }
+
     va_end(ap);
 
     topnode->Prev = NULL;
@@ -1773,8 +1890,10 @@ void ajListFree(AjPList* Plist)
 	for( ; (*rest)->Next; *rest = next)
 	{
 	    next = (*rest)->Next;
+
             if(listFreeNext >= listFreeMax)
                 listFreeSetExpand();
+
             if(listFreeNext >= listFreeMax)
                 AJFREE(*rest);
             else if(*rest)
@@ -1786,6 +1905,7 @@ void ajListFree(AjPList* Plist)
 
     if(listFreeNext >= listFreeMax)
         listFreeSetExpand();
+
     if(listFreeNext >= listFreeMax)
         AJFREE(*rest);
     else if(*rest)
@@ -1842,8 +1962,10 @@ void ajListFreeData(AjPList* Plist)
 	{
 	    AJFREE((*rest)->Item);
 	    next = (*rest)->Next;
+
             if(listFreeNext >= listFreeMax)
                 listFreeSetExpand();
+
             if(listFreeNext >= listFreeMax)
                 AJFREE(*rest);
             else if(*rest)
@@ -1857,6 +1979,7 @@ void ajListFreeData(AjPList* Plist)
 
     if(listFreeNext >= listFreeMax)
         listFreeSetExpand();
+
     if(listFreeNext >= listFreeMax)
         AJFREE(*rest);
     else if(*rest)
@@ -1872,6 +1995,7 @@ void ajListFreeData(AjPList* Plist)
 
 
 
+
 /* @obsolete ajListDel
 ** @rename ajListFree
 */
@@ -1884,6 +2008,7 @@ __deprecated void ajListDel(AjPList* Plist)
 
     if(!Plist)
 	return;
+
     if(!*Plist)
 	return;
 
@@ -1898,8 +2023,10 @@ __deprecated void ajListDel(AjPList* Plist)
 	for( ; (*rest)->Next; *rest = next)
 	{
 	    next = (*rest)->Next;
+
             if(listFreeNext >= listFreeMax)
                 listFreeSetExpand();
+
             if(listFreeNext >= listFreeMax)
                 AJFREE(*rest);
             else if(*rest)
@@ -1911,6 +2038,7 @@ __deprecated void ajListDel(AjPList* Plist)
 
     if(listFreeNext >= listFreeMax)
         listFreeSetExpand();
+
     if(listFreeNext >= listFreeMax)
         AJFREE(*rest);
     else if(*rest)
@@ -1952,6 +2080,7 @@ static AjBool listNodeDel(AjPListNode * pnode)
 
     if(listFreeNext >= listFreeMax)
         listFreeSetExpand();
+
     if(listFreeNext >= listFreeMax)
         AJFREE(*pnode);
     else if(*pnode)
@@ -1961,6 +2090,7 @@ static AjBool listNodeDel(AjPListNode * pnode)
 
     return ajTrue;
 }
+
 
 
 
@@ -2115,6 +2245,9 @@ AjIList ajListIterNew(AjPList list)
     return iter;
 }
 
+
+
+
 /* @obsolete ajListIter
 ** @rename ajListIterNew
 */
@@ -2123,6 +2256,9 @@ __deprecated AjIList ajListIter(AjPList list)
 {
     return ajListIterNew(list);
 }
+
+
+
 
 /* @func ajListIterNewBack *****************************************************
 **
@@ -2148,6 +2284,7 @@ AjIList ajListIterNewBack(AjPList list)
 
     for(node=list->First; node->Next; node = node->Next)
 	tmp = node;
+
     list->Last->Prev = tmp;
 
     AJNEW0(iter);
@@ -2164,6 +2301,8 @@ AjIList ajListIterNewBack(AjPList list)
 }
 
 
+
+
 /* @obsolete ajListIterBack
 ** @rename ajListIterNewBack
 */
@@ -2172,6 +2311,9 @@ __deprecated AjIList ajListIterBack(AjPList list)
 {
     return ajListIterNewBack(list);
 }
+
+
+
 
 /* @func ajListIterNewread *****************************************************
 **
@@ -2204,6 +2346,9 @@ AjIList ajListIterNewread(const AjPList list)
     return iter;
 }
 
+
+
+
 /* @obsolete ajListIterRead
 ** @rename ajListIterNewread
 */
@@ -2212,6 +2357,8 @@ __deprecated AjIList ajListIterRead(const AjPList list)
 {
     return ajListIterNewread(list);
 }
+
+
 
 
 /* @func ajListIterNewreadBack *************************************************
@@ -2237,6 +2384,7 @@ AjIList ajListIterNewreadBack(const AjPList list)
 
     for(node=list->First; node->Next; node = node->Next)
 	tmp = node;
+
     list->Last->Prev = tmp;
 
     AJNEW0(iter);
@@ -2252,6 +2400,9 @@ AjIList ajListIterNewreadBack(const AjPList list)
     return iter;
 }
 
+
+
+
 /* @obsolete ajListIterBackRead
 ** @rename ajListIterNewreadBack
 */
@@ -2260,6 +2411,9 @@ __deprecated AjIList ajListIterBackRead(const AjPList list)
 {
     return ajListIterNewreadBack(list);
 }
+
+
+
 
 /* @section tests *************************************************************
 ** @fdata [AjIList]
@@ -2306,6 +2460,7 @@ AjBool ajListIterDone(const AjIList iter)
 
 
 
+
 /* @obsolete ajListIterMore
 ** @remove use ajListIterDone
 */
@@ -2314,6 +2469,8 @@ __deprecated AjBool ajListIterMore(const AjIList iter)
 {
     return (!ajListIterDone(iter));
 }
+
+
 
 
 /* @obsolete ajListIterMoreBack
@@ -2353,6 +2510,8 @@ AjBool ajListIterDoneBack(const AjIList iter)
 }
 
 
+
+
 /* @obsolete ajListIterBackDone
 ** @rename ajListIterDoneBack
 */
@@ -2361,6 +2520,7 @@ __deprecated AjBool ajListIterBackDone(const AjIList iter)
 {
     return ajListIterDoneBack(iter);
 }
+
 
 
 
@@ -2398,6 +2558,9 @@ void ajListIterDel(AjIList* iter)
     return;
 }
 
+
+
+
 /* @obsolete ajListIterFree
 ** @rename ajListIterDel
 */
@@ -2409,6 +2572,8 @@ __deprecated void ajListIterFree(AjIList* iter)
 }
 
 
+
+
 /* @obsolete ajListIterBackMore
 ** @remove use ajListIterDoneBack
 */
@@ -2417,6 +2582,8 @@ __deprecated AjBool ajListIterBackMore(const AjIList iter)
 {
     return (!ajListIterDoneBack(iter));
 }
+
+
 
 
 /* @section stepping **********************************************************
@@ -2457,6 +2624,7 @@ void* ajListIterGet(AjIList iter)
     {
 	if(!p->Next)
 	    return NULL;
+
 	ret = p->Item;
 	iter->Here = p->Next;
     }
@@ -2464,6 +2632,7 @@ void* ajListIterGet(AjIList iter)
     {
 	if(!p->Next->Next || !p->Next->Next->Next)
 	  return NULL;
+
 	iter->Back = ajFalse;
 	ret = p->Next->Item;
 	iter->Here = p->Next->Next;
@@ -2471,6 +2640,8 @@ void* ajListIterGet(AjIList iter)
 
     return ret;
 }
+
+
 
 
 /* @obsolete ajListIterNext
@@ -2481,6 +2652,9 @@ __deprecated void* ajListIterNext(AjIList iter)
 {
     return ajListIterGet(iter);
 }
+
+
+
 
 /* @func ajListIterGetBack *************************************************
 **
@@ -2504,11 +2678,11 @@ void* ajListIterGetBack(AjIList iter)
     if(!p->Prev)
       return NULL;
 
-    if(!iter->Back)
+    if(!iter->Back && p->Prev->Prev)
     {
-	ret = p->Prev->Prev->Item;
-	iter->Here = p->Prev->Prev;
-	iter->Back = ajTrue;
+        ret = p->Prev->Prev->Item;
+        iter->Here = p->Prev->Prev;
+        iter->Back = ajTrue;
     }
     else
     {
@@ -2520,6 +2694,8 @@ void* ajListIterGetBack(AjIList iter)
 }
 
 
+
+
 /* @obsolete ajListIterBackNext
 ** @rename ajListIterGetBack
 */
@@ -2528,6 +2704,9 @@ __deprecated void* ajListIterBackNext(AjIList iter)
 {
     return ajListIterGetBack(iter);
 }
+
+
+
 
 /* @section modifiers **********************************************************
 **
@@ -2579,6 +2758,7 @@ void ajListIterInsert(AjIList iter, void* x)
 	    listInsertNode(&list->First,x);
 	else
 	    listInsertNode(&p->Prev->Next,x);
+
 	iter->Here = p->Prev;
     }
     else
@@ -2606,6 +2786,7 @@ void ajListIterInsert(AjIList iter, void* x)
 
 
 
+
 /* @obsolete ajListInsert
 ** @rename ajListIterInsert
 */
@@ -2615,6 +2796,8 @@ __deprecated void ajListInsert(AjIList iter, void* x)
     ajListIterInsert(iter, x);
     return;
 }
+
+
 
 
 /* @func ajListIterRemove *****************************************************
@@ -2676,6 +2859,9 @@ __deprecated void ajListRemove(AjIList iter)
     return;
 }
 
+
+
+
 /* @func ajListIterRewind ******************************************************
 **
 ** Resets iterator to start position
@@ -2703,6 +2889,7 @@ void ajListIterRewind(AjIList iter)
     {
         for(node=list->First; node->Next; node = node->Next)
             tmp = node;
+
         iter->Here = tmp->Next;
     }
     else
@@ -2712,6 +2899,8 @@ void ajListIterRewind(AjIList iter)
     
     return;
 }
+
+
 
 
 /* @section Trace functions ***************************************************
@@ -2743,7 +2932,8 @@ void ajListIterTrace(const AjIList iter)
 {
     ajuint icount = 0;
 
-    if(!iter) {
+    if(!iter)
+    {
 	ajDebug("\nIterator NULL\n");
 	return;
     }
@@ -2805,6 +2995,7 @@ AjPList ajListstrNew(void)
 
 
 
+
 /* @func ajListstrNewList ******************************************************
 **
 ** Copy a list, with copies of all the string values.
@@ -2838,6 +3029,7 @@ AjPList ajListstrNewList(const AjPList list)
 
     return newlist;
 }
+
 
 
 
@@ -2889,6 +3081,8 @@ AjPList ajListstrNewListref(const AjPList list)
 }
 
 
+
+
 /* @obsolete ajListstrCopy
 ** @rename ajListstrNewList
 */
@@ -2897,6 +3091,9 @@ __deprecated AjPList ajListstrCopy(const AjPList list)
 {
     return ajListstrNewListref(list);
 }
+
+
+
 
 /* @section Adding values ******************************************************
 **
@@ -2953,6 +3150,9 @@ void ajListstrPushAppend(AjPList list, AjPStr x)
     return;
 }
 
+
+
+
 /* @obsolete ajListstrPushApp
 ** @rename ajListstrPushAppend
 */
@@ -2961,8 +3161,11 @@ __deprecated void ajListstrPushApp(AjPList list, AjPStr x)
 {
 
     ajListstrPushAppend(list, x);
+
     return;
 }
+
+
 
 
 /* @func ajListstrPushlist ****************************************************
@@ -2983,6 +3186,8 @@ void ajListstrPushlist(AjPList list, AjPList* Plist)
 }
 
 
+
+
 /* @obsolete ajListstrPushList
 ** @rename ajListstrPushlist
 */
@@ -2990,8 +3195,12 @@ void ajListstrPushlist(AjPList list, AjPList* Plist)
 __deprecated void ajListstrPushList(AjPList list, AjPList* Plist)
 {
     ajListstrPushlist(list, Plist);
+
     return;
 }
+
+
+
 
 /* @section Modifiers **********************************************************
 **
@@ -3033,7 +3242,6 @@ void ajListstrMap(AjPList list, void apply(AjPStr* x, void* cl), void* cl)
     for(rest=list->First; rest->Next; rest = rest->Next)
 	apply((AjPStr*) &rest->Item, cl);
 
-
     return;
 }
 
@@ -3055,6 +3263,7 @@ void ajListstrReverse(AjPList list)
 
     return;
 }
+
 
 
 
@@ -3098,8 +3307,8 @@ AjBool ajListstrPop(AjPList list, AjPStr* Pstr)
 	return ajFalse;
 
     list->First->Prev = NULL;
-
     list->Count--;
+
     return ajTrue;
 }
 
@@ -3135,8 +3344,10 @@ AjBool ajListstrPopLast(AjPList list, AjPStr *Pstr)
     if(list->Count==1)
     {
 	list->Last->Prev = NULL;
+
         if(listFreeNext >= listFreeMax)
             listFreeSetExpand();
+
         if(listFreeNext >= listFreeMax)
             AJFREE(list->First);
         else if(list->First)
@@ -3148,8 +3359,10 @@ AjBool ajListstrPopLast(AjPList list, AjPStr *Pstr)
     {
 	pthis->Prev->Next = list->Last;
 	list->Last->Prev = pthis->Prev;
+
         if(listFreeNext >= listFreeMax)
             listFreeSetExpand();
+
         if(listFreeNext >= listFreeMax)
             AJFREE(pthis);
         else if(pthis)
@@ -3159,12 +3372,11 @@ AjBool ajListstrPopLast(AjPList list, AjPStr *Pstr)
         }
     }
 
-    
-
-
     --list->Count;
     return ajTrue;
 }
+
+
 
 
 /* @obsolete ajListstrPopEnd
@@ -3175,6 +3387,8 @@ __deprecated AjBool ajListstrPopEnd(AjPList list, AjPStr *x)
 {
     return ajListstrPopLast(list, x);
 }
+
+
 
 
 /* @section Element retrieval **************************************************
@@ -3229,6 +3443,8 @@ ajuint ajListstrGetLength(const AjPList list)
 }
 
 
+
+
 /* @obsolete ajListstrLength
 ** @rename ajListstrGetLength
 */
@@ -3237,6 +3453,8 @@ __deprecated ajuint ajListstrLength(const AjPList list)
 {
     return ajListstrGetLength(list);
 }
+
+
 
 
 /* @func ajListstrMapfind **************************************************
@@ -3269,6 +3487,8 @@ AjBool ajListstrMapfind(const AjPList list,
 }
 
 
+
+
 /* @obsolete ajListstrFind
 ** @rename ajListstrMapfind
 */
@@ -3279,6 +3499,9 @@ __deprecated AjBool ajListstrFind(const AjPList list,
 {
     return ajListstrMapfind(list, apply, cl);
 }
+
+
+
 
 /* @func ajListstrMapread *****************************************************
 **
@@ -3307,6 +3530,9 @@ void ajListstrMapread(const AjPList list,
     return;
 }
 
+
+
+
 /* @obsolete ajListstrMapRead
 ** @rename ajListstrMapread
 */
@@ -3316,8 +3542,12 @@ __deprecated void ajListstrMapRead(const AjPList list,
 {
 
     ajListstrMapread(list, apply, cl);
+
     return;
 }
+
+
+
 
 /* @func ajListstrPeek ********************************************************
 **
@@ -3369,6 +3599,7 @@ ajuint ajListstrToarray(const AjPList list, AjPStr** array)
     if(!n)
     {
 	*array = NULL;
+
 	return 0;
     }
 
@@ -3379,10 +3610,13 @@ ajuint ajListstrToarray(const AjPList list, AjPStr** array)
 	(*array)[i] = (AjPStr) rest->Item;
 	rest = rest->Next;
     }
+
     (*array)[n] = 0;
 
     return n;
 }
+
+
 
 
 /* @obsolete ajListstrToArray
@@ -3393,6 +3627,9 @@ __deprecated ajuint ajListstrToArray(const AjPList list, AjPStr** array)
 {
     return ajListstrToarray(list, array);
 }
+
+
+
 
 /* @func ajListstrToarrayAppend ************************************************
 **
@@ -3428,6 +3665,7 @@ ajuint ajListstrToarrayAppend(const AjPList list, AjPStr** array)
     if(!n)
     {
 	*array = NULL;
+
 	return 0;
     }
 
@@ -3438,10 +3676,13 @@ ajuint ajListstrToarrayAppend(const AjPList list, AjPStr** array)
 	(*array)[i] = (AjPStr) rest->Item;
 	rest = rest->Next;
     }
+
     (*array)[n] = 0;
 
     return n;
 }
+
+
 
 
 /* @obsolete ajListstrToArrayApp
@@ -3452,6 +3693,9 @@ __deprecated ajuint ajListstrToArrayApp(const AjPList list, AjPStr** array)
 {
     return ajListstrToarrayAppend(list, array);
 }
+
+
+
 
 /* @section Trace functions ***************************************************
 **
@@ -3520,6 +3764,7 @@ void ajListstrTrace(const AjPList list)
 
 
 
+
 /* @obsolete ajListstrNewArgs
 ** @remove Use ajListstrNew and ajListPush
 */
@@ -3545,6 +3790,8 @@ __deprecated AjPList ajListstrNewArgs(AjPStr x, ...)
 
     return list;
 }
+
+
 
 
 /* @section Destructors *******************************************************
@@ -3586,6 +3833,8 @@ void ajListstrFree(AjPList* Plist)
 }
 
 
+
+
 /* @obsolete ajListstrDel
 ** @rename ajListstrFree
 */
@@ -3593,8 +3842,12 @@ void ajListstrFree(AjPList* Plist)
 __deprecated void ajListstrDel(AjPList* pthis)
 {
     ajListstrFree(pthis);
+
     return;
 }
+
+
+
 
 /* @func ajListstrFreeData *****************************************************
 **
@@ -3633,8 +3886,10 @@ void ajListstrFreeData(AjPList* Plist)
 	{
 	    next = (*rest)->Next;
 	    ajStrDel((AjPStr*) &(*rest)->Item);
+
             if(listFreeNext >= listFreeMax)
                 listFreeSetExpand();
+
             if(listFreeNext >= listFreeMax)
                 AJFREE(*rest);
             else if(*rest)
@@ -3643,12 +3898,14 @@ void ajListstrFreeData(AjPList* Plist)
                 *rest=NULL;
             }
 	}
+
 	ajStrDel((AjPStr*) &(*rest)->Item);
     }
 
 
     if(listFreeNext >= listFreeMax)
         listFreeSetExpand();
+
     if(listFreeNext >= listFreeMax)
         AJFREE(*rest);
     else if(*rest)
@@ -3716,6 +3973,7 @@ AjPStr ajListstrIterGet(AjIList iter)
     {
 	if(!p->Next)
 	    return NULL;
+
 	ret = p->Item;
 	iter->Here = p->Next;
     }
@@ -3723,6 +3981,7 @@ AjPStr ajListstrIterGet(AjIList iter)
     {
 	if(!p->Next->Next || !p->Next->Next->Next)
 	  return NULL;
+
 	iter->Back = ajFalse;
 	ret = p->Next->Item;
 	iter->Here = p->Next->Next;
@@ -3730,6 +3989,9 @@ AjPStr ajListstrIterGet(AjIList iter)
 
     return (AjPStr) ret;
 }
+
+
+
 
 /* @func ajListstrIterGetBack *************************************************
 **
@@ -3767,6 +4029,8 @@ AjPStr ajListstrIterGetBack(AjIList iter)
 
     return (AjPStr) ret;
 }
+
+
 
 
 /* @section modifiers **********************************************************
@@ -3851,6 +4115,7 @@ void ajListstrIterInsert(AjIList iter, AjPStr str)
 
 
 
+
 /* @obsolete ajListstrInsert
 ** @rename ajListstrIterInsert
 */
@@ -3858,8 +4123,12 @@ void ajListstrIterInsert(AjIList iter, AjPStr str)
 __deprecated void ajListstrInsert(AjIList iter, AjPStr str)
 {
     ajListstrIterInsert(iter, str);
+
     return;
 }
+
+
+
 
 /* @func ajListstrIterRemove **************************************************
 **
@@ -3909,12 +4178,12 @@ void ajListstrIterRemove(AjIList iter)
 	listNodeDel(&p->Prev->Prev->Next);
     }
 
-
-
     iter->Head->Count--;
 
     return;
 }
+
+
 
 
 /* @obsolete ajListstrRemove
@@ -3924,8 +4193,11 @@ void ajListstrIterRemove(AjIList iter)
 __deprecated void ajListstrRemove(AjIList iter)
 {
     ajListstrIterRemove(iter);
+
     return;
 }
+
+
 
 
 /* @section Trace functions ***************************************************

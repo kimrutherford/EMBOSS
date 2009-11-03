@@ -31,15 +31,19 @@
 #include <sys/types.h>
 #include <string.h>
 
+
 #ifndef HAVE_MEMMOVE
-/* @header memmove ************************************************************
+
+/* @header memmove ***********************************************************
 **
 ******************************************************************************/
+
 static void* memmove (void *dst, const void* src, size_t len)
 {
     return (void *)bcopy (src, dst, len);
 }
 #endif
+
 
 #define RESERVED_SIZE 32
 
@@ -83,6 +87,7 @@ static AjBool arrLong3dResize(AjPLong3d *thys, ajuint elem);
 static AjBool arrUintResize(AjPUint *thys, ajuint elem);
 static AjBool arrUint2dResize(AjPUint2d *thys, ajuint elem);
 static AjBool arrUint3dResize(AjPUint3d *thys, ajuint elem);
+
 
 
 
@@ -231,6 +236,7 @@ AjBool ajChararrPut(AjPChar *thys, ajuint elem, char v)
 	    (*thys)->Len = elem+1;
 
 	(*thys)->Ptr[elem] = v;
+
 	return ajFalse;
     }
 
@@ -319,6 +325,7 @@ AjPInt ajIntNewL(ajuint size)
 
     /*ajDebug("ajIntNewL size %d*%d %d\n",
 	    size, sizeof(ajint), size*sizeof(ajint));*/
+
     return thys;
 }
 
@@ -471,7 +478,6 @@ void ajIntDec(AjPInt *thys, ajuint elem)
     if(!thys || !*thys || elem>(*thys)->Len)
 	ajErr("Attempt to write to illegal array value %d\n",elem);
 
-
     --(*thys)->Ptr[elem];
 
     return;
@@ -534,6 +540,7 @@ AjPUint ajUintNewL(ajuint size)
 
     /*ajDebug("ajUintNewL size %d*%d %d\n",
 	    size, sizeof(ajuint), size*sizeof(ajuint));*/
+
     return thys;
 }
 
@@ -686,7 +693,6 @@ void ajUintDec(AjPUint *thys, ajuint elem)
     if(!thys || !*thys || elem>(*thys)->Len)
 	ajErr("Attempt to write to illegal array value %d\n",elem);
 
-
     --(*thys)->Ptr[elem];
 
     return;
@@ -722,6 +728,7 @@ static AjBool arrChararrResize(AjPChar *thys, ajuint size)
 
     clen = ajRound((*thys)->Len-1,RESERVED_SIZE);
     s = ajRound(size+1,RESERVED_SIZE);
+
     if(s <= clen)
 	return ajFalse;
 
@@ -779,6 +786,7 @@ static AjBool arrIntResize(AjPInt *thys, ajuint size)
 
     clen = ajRound((*thys)->Len-1,RESERVED_SIZE);
     s    = ajRound(size+1,RESERVED_SIZE);
+
     if(s <= clen)
 	return ajFalse;
 
@@ -875,6 +883,7 @@ static AjBool arrUintResize(AjPUint *thys, ajuint size)
 
     clen = ajRound((*thys)->Len-1,RESERVED_SIZE);
     s    = ajRound(size+1,RESERVED_SIZE);
+
     if(s <= clen)
 	return ajFalse;
 
@@ -1086,6 +1095,7 @@ AjBool ajFloatPut(AjPFloat *thys, ajuint elem, float v)
     {
 	if(elem>=(*thys)->Len)
 	    (*thys)->Len = elem+1;
+
 	(*thys)->Ptr[elem] = v;
 	return ajFalse;
     }
@@ -1128,6 +1138,7 @@ static AjBool arrFloatResize(AjPFloat *thys, ajuint size)
 
     clen = ajRound((*thys)->Len-1,RESERVED_SIZE);
     s = ajRound(size+1,RESERVED_SIZE);
+
     if(s <= clen)
 	return ajFalse;
 
@@ -1340,6 +1351,7 @@ AjBool ajDoublePut(AjPDouble *thys, ajuint elem, double v)
     {
 	if(elem>=(*thys)->Len)
 	    (*thys)->Len = elem+1;
+
 	(*thys)->Ptr[elem] = v;
 	return ajFalse;
     }
@@ -1381,6 +1393,7 @@ static AjBool arrDoubleResize(AjPDouble *thys, ajuint size)
 
     clen = ajRound((*thys)->Len-1,RESERVED_SIZE);
     s = ajRound(size+1,RESERVED_SIZE);
+
     if(s <= clen)
 	return ajFalse;
 
@@ -1592,6 +1605,7 @@ AjBool ajShortPut(AjPShort *thys, ajuint elem, short v)
     {
 	if(elem>=(*thys)->Len)
 	    (*thys)->Len = elem+1;
+
 	(*thys)->Ptr[elem] = v;
 	return ajFalse;
     }
@@ -1633,6 +1647,7 @@ static AjBool arrShortResize(AjPShort *thys, ajuint size)
 
     clen = ajRound((*thys)->Len-1,RESERVED_SIZE);
     s = ajRound(size+1,RESERVED_SIZE);
+
     if(s <= clen)
 	return ajFalse;
 
@@ -1844,7 +1859,9 @@ AjBool ajLongPut(AjPLong *thys, ajuint elem, ajlong v)
     {
 	if(elem>=(*thys)->Len)
 	    (*thys)->Len = elem+1;
+
 	(*thys)->Ptr[elem] = v;
+
 	return ajFalse;
     }
 
@@ -1885,6 +1902,7 @@ static AjBool arrLongResize(AjPLong *thys, ajuint size)
 
     clen = ajRound((*thys)->Len-1,RESERVED_SIZE);
     s = ajRound(size+1,RESERVED_SIZE);
+
     if(s <= clen)
 	return ajFalse;
 
@@ -1994,7 +2012,7 @@ AjBool ajFloatParse (const AjPStr str, AjPFloat* array)
     ajStrDel(&tmpstr);
     ajStrDel(&tmpstr2);
 
-    if (!i)
+    if(!i)
 	return ajFalse;
 
     return ajTrue;
@@ -2022,8 +2040,10 @@ void ajFloatStr (const AjPFloat array, ajint precision, AjPStr* str)
     {
 	if (i)
 	    ajStrAppendK(str, ' ');
+
 	ajFmtPrintAppS (str, "%.*f", precision, ajFloatGet(array,i));
     }
+
     return;
 }
 
@@ -2046,6 +2066,7 @@ void ajFloatTrace (const AjPFloat array, ajint precision, const char* text)
     ajuint i;
 
     ajDebug ("%s\n", text);
+
     for (i=0; i < array->Len; i++)
 	ajDebug ("%3d: %.*f\n", i, precision, ajFloatGet(array,i));
 
@@ -2076,6 +2097,7 @@ ajuint ajArrCommaList(const AjPStr s, AjPStr **a)
 
 
     n = ajStrParseCountC(s,",\n");
+
     if(!n)
 	return 0;
 
@@ -2361,6 +2383,7 @@ AjPInt2d ajInt2dNewLL(ajuint size, ajuint size2)
     /*ajDebug("ajInt2dNewLL %d*%d %d; %d*%d*%d %d\n",
 	    size, sizeof(AjPInt*), size*sizeof(AjPInt*),
 	    size, size2, sizeof(ajint), size*size2*sizeof(ajint));*/
+
     return thys;
 }
 
@@ -2431,6 +2454,7 @@ ajint ajInt2dGet(const AjPInt2d thys, ajuint elem1, ajuint elem2)
 	      elem2);
 
     t = thys->Ptr[elem1];
+
     if(!t)
 	ajErr("Attempt to access bad 1st dimension [%d][]\n",elem1);
 
@@ -2470,8 +2494,10 @@ AjBool ajInt2dPut(AjPInt2d *thys, ajuint elem1, ajuint elem2, ajint v)
 		elem1, elem2, v, (*thys)->Len, (*thys)->Ptr[elem1]);*/
 	if(elem1>=(*thys)->Len)
 	    (*thys)->Len = elem1+1;
+
 	if(!(*thys)->Ptr[elem1])
 	    (*thys)->Ptr[elem1] = ajIntNew();
+
 	return ajIntPut(&(*thys)->Ptr[elem1],elem2,v);
     }
 
@@ -2517,6 +2543,7 @@ static AjBool arrInt2dResize(AjPInt2d *thys, ajuint size)
 
     clen = ajRound((*thys)->Len-1,RESERVED_SIZE);
     s    = ajRound(size+1,RESERVED_SIZE);
+
     if(s <= clen)
 	return ajFalse;
 
@@ -2576,6 +2603,7 @@ void ajInt2dLen(const AjPInt2d thys, ajuint* len1, ajuint* len2)
 
     *len1 = thys->Len;
     *len2 = 0;
+
     for(i=0;i<*len1;++i)
 	if((t=thys->Ptr[i]))
 	    *len2 = (*len2 > t->Len) ? *len2 : t->Len;
@@ -2608,9 +2636,11 @@ ajint** ajInt2dInt(const AjPInt2d thys)
     ajInt2dLen(thys,&d1,&d2);
 
     AJCNEW(array,d1);
+
     for(i=0;i<d1;++i)
     {
 	AJCNEW0(array[i],d2);
+
 	if((t=thys->Ptr[i]))
 	    memmove(array[i],t->Ptr,t->Len*sizeof(ajint));
     }
@@ -2747,6 +2777,7 @@ ajint ajInt3dGet(const AjPInt3d thys, ajuint elem1, ajuint elem2, ajuint elem3)
 	      elem2,elem3);
 
     t = thys->Ptr[elem1];
+
     if(!t)
 	ajErr("Attempt to access bad 1st dimension [%d][][]\n",elem1);
 
@@ -2786,8 +2817,10 @@ AjBool ajInt3dPut(AjPInt3d *thys,
     {
 	if(elem1>=(*thys)->Len)
 	    (*thys)->Len = elem1+1;
+
 	if(!(*thys)->Ptr[elem1])
 	    (*thys)->Ptr[elem1] = ajInt2dNew();
+
 	return ajInt2dPut(&(*thys)->Ptr[elem1],elem2,elem3,v);
     }
 
@@ -2833,6 +2866,7 @@ static AjBool arrInt3dResize(AjPInt3d *thys, ajuint size)
 
     clen = ajRound((*thys)->Len-1,RESERVED_SIZE);
     s = ajRound(size+1,RESERVED_SIZE);
+
     if(s <= clen)
 	return ajFalse;
 
@@ -2896,10 +2930,13 @@ void ajInt3dLen(const AjPInt3d thys, ajuint* len1, ajuint* len2, ajuint* len3)
 
     *len1 = thys->Len;
     *len2 = 0;
+
     for(i=0;i<*len1;++i)
 	if((t2=thys->Ptr[i]))
 	    *len2 = (*len2 > t2->Len) ? *len2 : t2->Len;
+
     *len3=0;
+
     for(i=0;i<*len1;++i)
 	if((t2=thys->Ptr[i]))
 	{
@@ -2944,6 +2981,7 @@ ajint*** ajInt3dInt(const AjPInt3d thys)
     {
 	AJCNEW0(array[i],d2);
 	t2 = thys->Ptr[i];
+
 	for(j=0;j<d2;++j)
 	{
 	    AJCNEW0(array[i][j],d3);
@@ -3128,6 +3166,7 @@ ajuint ajUint2dGet(const AjPUint2d thys, ajuint elem1, ajuint elem2)
 	      elem2);
 
     t = thys->Ptr[elem1];
+
     if(!t)
 	ajErr("Attempt to access bad 1st dimension [%d][]\n",elem1);
 
@@ -3165,8 +3204,10 @@ AjBool ajUint2dPut(AjPUint2d *thys, ajuint elem1, ajuint elem2, ajuint v)
     {
 	if(elem1>=(*thys)->Len)
 	    (*thys)->Len = elem1+1;
+
 	if(!(*thys)->Ptr[elem1])
 	    (*thys)->Ptr[elem1] = ajUintNew();
+
 	return ajUintPut(&(*thys)->Ptr[elem1],elem2,v);
     }
 
@@ -3212,6 +3253,7 @@ static AjBool arrUint2dResize(AjPUint2d *thys, ajuint size)
 
     clen = ajRound((*thys)->Len-1,RESERVED_SIZE);
     s    = ajRound(size+1,RESERVED_SIZE);
+
     if(s <= clen)
 	return ajFalse;
 
@@ -3271,6 +3313,7 @@ void ajUint2dLen(const AjPUint2d thys, ajuint* len1, ajuint* len2)
 
     *len1 = thys->Len;
     *len2 = 0;
+
     for(i=0;i<*len1;++i)
 	if((t=thys->Ptr[i]))
 	    *len2 = (*len2 > t->Len) ? *len2 : t->Len;
@@ -3303,9 +3346,11 @@ ajuint** ajUint2dUint(const AjPUint2d thys)
     ajUint2dLen(thys,&d1,&d2);
 
     AJCNEW(array,d1);
+
     for(i=0;i<d1;++i)
     {
 	AJCNEW0(array[i],d2);
+
 	if((t=thys->Ptr[i]))
 	    memmove(array[i],t->Ptr,t->Len*sizeof(ajuint));
     }
@@ -3440,6 +3485,7 @@ ajuint ajUint3dGet(const AjPUint3d thys,
 	      elem2,elem3);
 
     t = thys->Ptr[elem1];
+
     if(!t)
 	ajErr("Attempt to access bad 1st dimension [%d][][]\n",elem1);
 
@@ -3479,8 +3525,10 @@ AjBool ajUint3dPut(AjPUint3d *thys,
     {
 	if(elem1>=(*thys)->Len)
 	    (*thys)->Len = elem1+1;
+
 	if(!(*thys)->Ptr[elem1])
 	    (*thys)->Ptr[elem1] = ajUint2dNew();
+
 	return ajUint2dPut(&(*thys)->Ptr[elem1],elem2,elem3,v);
     }
 
@@ -3525,6 +3573,7 @@ static AjBool arrUint3dResize(AjPUint3d *thys, ajuint size)
 
     clen = ajRound((*thys)->Len-1,RESERVED_SIZE);
     s = ajRound(size+1,RESERVED_SIZE);
+
     if(s <= clen)
 	return ajFalse;
 
@@ -3589,10 +3638,13 @@ void ajUint3dLen(const AjPUint3d thys,
 
     *len1 = thys->Len;
     *len2 = 0;
+
     for(i=0;i<*len1;++i)
 	if((t2=thys->Ptr[i]))
 	    *len2 = (*len2 > t2->Len) ? *len2 : t2->Len;
+
     *len3=0;
+
     for(i=0;i<*len1;++i)
 	if((t2=thys->Ptr[i]))
 	{
@@ -3633,16 +3685,20 @@ ajuint*** ajUint3dUint(const AjPUint3d thys)
     ajUint3dLen(thys,&d1,&d2,&d3);
 
     AJCNEW0(array,d1);
+
     for(i=0;i<d1;++i)
     {
 	AJCNEW0(array[i],d2);
 	t2 = thys->Ptr[i];
+
 	for(j=0;j<d2;++j)
 	{
 	    AJCNEW0(array[i][j],d3);
 	    if(t2)
 	    {
-		if(j>=t2->Len) continue;
+		if(j>=t2->Len)
+                    continue;
+
 		if((t1=t2->Ptr[j]))
 		    memmove(array[i][j],t1->Ptr,
 				   t1->Len*sizeof(ajuint));
@@ -3778,6 +3834,7 @@ float ajFloat2dGet(const AjPFloat2d thys, ajuint elem1, ajuint elem2)
 	      elem2);
 
     t = thys->Ptr[elem1];
+
     if(!t)
 	ajErr("Attempt to access bad 1st dimension [%d][]\n",elem1);
 
@@ -3862,6 +3919,7 @@ static AjBool arrFloat2dResize(AjPFloat2d *thys, ajuint size)
 
     clen = ajRound((*thys)->Len-1,RESERVED_SIZE);
     s    = ajRound(size+1,RESERVED_SIZE);
+
     if(s <= clen)
 	return ajFalse;
 
@@ -3920,6 +3978,7 @@ void ajFloat2dLen(const AjPFloat2d thys, ajuint* len1, ajuint* len2)
 
     *len1 = thys->Len;
     *len2 = 0;
+
     for(i=0;i<*len1;++i)
 	if((t=thys->Ptr[i]))
 	    *len2 = (*len2 > t->Len) ? *len2 : t->Len;
@@ -3952,9 +4011,11 @@ float** ajFloat2dFloat(const AjPFloat2d thys)
     ajFloat2dLen(thys,&d1,&d2);
 
     AJCNEW(array,d1);
+
     for(i=0;i<d1;++i)
     {
 	AJCNEW0(array[i],d2);
+
 	if((t=thys->Ptr[i]))
 	    memmove(array[i],t->Ptr,t->Len*sizeof(float));
     }
@@ -4089,6 +4150,7 @@ float ajFloat3dGet(const AjPFloat3d thys,
 	      elem2,elem3);
 
     t = thys->Ptr[elem1];
+
     if(!t)
 	ajErr("Attempt to access bad 1st dimension [%d][][]\n",elem1);
 
@@ -4175,6 +4237,7 @@ static AjBool arrFloat3dResize(AjPFloat3d *thys, ajuint size)
 
     clen = ajRound((*thys)->Len-1,RESERVED_SIZE);
     s = ajRound(size+1,RESERVED_SIZE);
+
     if(s <= clen)
 	return ajFalse;
 
@@ -4238,14 +4301,17 @@ void ajFloat3dLen(const AjPFloat3d thys,
 
     *len1 = thys->Len;
     *len2 = 0;
+
     for(i=0;i<*len1;++i)
 	if((t2=thys->Ptr[i]))
 	    *len2 = (*len2 > t2->Len) ? *len2 : t2->Len;
     *len3 = 0;
+
     for(i=0;i<*len1;++i)
 	if((t2=thys->Ptr[i]))
 	{
 	    v = t2->Len;
+
 	    for(j=0;j<v;++j)
 		if((t1=t2->Ptr[j]))
 		    *len3 = (*len3 > t1->Len) ? *len3 : t1->Len;
@@ -4286,12 +4352,16 @@ float*** ajFloat3dFloat(const AjPFloat3d thys)
     {
 	AJCNEW0(array[i],d2);
 	t2 = thys->Ptr[i];
+
 	for(j=0;j<d2;++j)
 	{
 	    AJCNEW0(array[i][j],d3);
+
 	    if(t2)
 	    {
-		if(j>=t2->Len) continue;
+		if(j>=t2->Len)
+                    continue;
+
 		if((t1=t2->Ptr[j]))
 		    memmove(array[i][j],t1->Ptr,
 				   t1->Len*sizeof(float));
@@ -4427,6 +4497,7 @@ double ajDouble2dGet(const AjPDouble2d thys, ajuint elem1, ajuint elem2)
 	      elem2);
 
     t = thys->Ptr[elem1];
+
     if(!t)
 	ajErr("Attempt to access bad 1st dimension [%d][]\n",elem1);
 
@@ -4464,8 +4535,10 @@ AjBool ajDouble2dPut(AjPDouble2d *thys, ajuint elem1, ajuint elem2, double v)
     {
 	if(elem1>=(*thys)->Len)
 	    (*thys)->Len = elem1+1;
+
 	if(!(*thys)->Ptr[elem1])
 	    (*thys)->Ptr[elem1] = ajDoubleNew();
+
 	return ajDoublePut(&(*thys)->Ptr[elem1],elem2,v);
     }
 
@@ -4511,6 +4584,7 @@ static AjBool arrDouble2dResize(AjPDouble2d *thys, ajuint size)
 
     clen = ajRound((*thys)->Len-1,RESERVED_SIZE);
     s = ajRound(size+1,RESERVED_SIZE);
+
     if(s <= clen)
 	return ajFalse;
 
@@ -4569,6 +4643,7 @@ void ajDouble2dLen(const AjPDouble2d thys, ajuint* len1, ajuint* len2)
 
     *len1 = thys->Len;
     *len2 = 0;
+
     for(i=0;i<*len1;++i)
 	if((t=thys->Ptr[i]))
 	    *len2 = (*len2 > t->Len) ? *len2 : t->Len;
@@ -4604,6 +4679,7 @@ double** ajDouble2dDouble(const AjPDouble2d thys)
     for(i=0;i<d1;++i)
     {
 	AJCNEW0(array[i],d2);
+
 	if((t=thys->Ptr[i]))
 	    memmove(array[i],t->Ptr,t->Len*sizeof(double));
     }
@@ -4737,6 +4813,7 @@ double ajDouble3dGet(const AjPDouble3d thys, ajuint elem1, ajuint elem2, ajuint 
 	      elem2,elem3);
 
     t = thys->Ptr[elem1];
+
     if(!t)
 	ajErr("Attempt to access bad 1st dimension [%d][][]\n",elem1);
 
@@ -4776,8 +4853,10 @@ AjBool ajDouble3dPut(AjPDouble3d *thys,
     {
 	if(elem1>=(*thys)->Len)
 	    (*thys)->Len = elem1+1;
+
 	if(!(*thys)->Ptr[elem1])
 	    (*thys)->Ptr[elem1] = ajDouble2dNew();
+
 	return ajDouble2dPut(&(*thys)->Ptr[elem1],elem2,elem3,v);
     }
 
@@ -4823,6 +4902,7 @@ static AjBool arrDouble3dResize(AjPDouble3d *thys, ajuint size)
 
     clen = ajRound((*thys)->Len-1,RESERVED_SIZE);
     s = ajRound(size+1,RESERVED_SIZE);
+
     if(s <= clen)
 	return ajFalse;
 
@@ -4886,14 +4966,18 @@ void ajDouble3dLen(const AjPDouble3d thys,
 
     *len1 = thys->Len;
     *len2 = 0;
+
     for(i=0;i<*len1;++i)
 	if((t2=thys->Ptr[i]))
 	    *len2 = (*len2 > t2->Len) ? *len2 : t2->Len;
+
     *len3 = 0;
+
     for(i=0;i<*len1;++i)
 	if((t2=thys->Ptr[i]))
 	{
 	    v = t2->Len;
+
 	    for(j=0;j<v;++j)
 		if((t1=t2->Ptr[j]))
 		    *len3 = (*len3 > t1->Len) ? *len3 : t1->Len;
@@ -4930,16 +5014,21 @@ double*** ajDouble3dDouble(const AjPDouble3d thys)
     ajDouble3dLen(thys,&d1,&d2,&d3);
 
     AJCNEW0(array,d1);
+
     for(i=0;i<d1;++i)
     {
 	AJCNEW0(array[i],d2);
 	t2 = thys->Ptr[i];
+
 	for(j=0;j<d2;++j)
 	{
 	    AJCNEW0(array[i][j],d3);
+
 	    if(t2)
 	    {
-		if(j>=t2->Len) continue;
+		if(j>=t2->Len)
+                    continue;
+
 		if((t1=t2->Ptr[j]))
 		    memmove(array[i][j],t1->Ptr,
 				   t1->Len*sizeof(double));
@@ -5075,6 +5164,7 @@ short ajShort2dGet(const AjPShort2d thys, ajuint elem1, ajuint elem2)
 	      elem2);
 
     t = thys->Ptr[elem1];
+
     if(!t)
 	ajErr("Attempt to access bad 1st dimension [%d][]\n",elem1);
 
@@ -5112,8 +5202,10 @@ AjBool ajShort2dPut(AjPShort2d *thys, ajuint elem1, ajuint elem2, short v)
     {
 	if(elem1>=(*thys)->Len)
 	    (*thys)->Len = elem1+1;
+
 	if(!(*thys)->Ptr[elem1])
 	    (*thys)->Ptr[elem1] = ajShortNew();
+
 	return ajShortPut(&(*thys)->Ptr[elem1],elem2,v);
     }
 
@@ -5159,6 +5251,7 @@ static AjBool arrShort2dResize(AjPShort2d *thys, ajuint size)
 
     clen = ajRound((*thys)->Len-1,RESERVED_SIZE);
     s = ajRound(size+1,RESERVED_SIZE);
+
     if(s <= clen)
 	return ajFalse;
 
@@ -5217,6 +5310,7 @@ void ajShort2dLen(const AjPShort2d thys, ajuint* len1, ajuint* len2)
 
     *len1 = thys->Len;
     *len2 = 0;
+
     for(i=0;i<*len1;++i)
 	if((t=thys->Ptr[i]))
 	    *len2 = (*len2 > t->Len) ? *len2 : t->Len;
@@ -5249,9 +5343,11 @@ short** ajShort2dShort(const AjPShort2d thys)
     ajShort2dLen(thys,&d1,&d2);
 
     AJCNEW(array,d1);
+
     for(i=0;i<d1;++i)
     {
 	AJCNEW0(array[i],d2);
+
 	if((t=thys->Ptr[i]))
 	    memmove(array[i],t->Ptr,t->Len*sizeof(short));
     }
@@ -5386,6 +5482,7 @@ short ajShort3dGet(const AjPShort3d thys,
 	      elem2,elem3);
 
     t = thys->Ptr[elem1];
+
     if(!t)
 	ajErr("Attempt to access bad 1st dimension [%d][][]\n",elem1);
 
@@ -5425,8 +5522,10 @@ AjBool ajShort3dPut(AjPShort3d *thys,
     {
 	if(elem1>=(*thys)->Len)
 	    (*thys)->Len = elem1+1;
+
 	if(!(*thys)->Ptr[elem1])
 	    (*thys)->Ptr[elem1] = ajShort2dNew();
+
 	return ajShort2dPut(&(*thys)->Ptr[elem1],elem2,elem3,v);
     }
 
@@ -5472,6 +5571,7 @@ static AjBool arrShort3dResize(AjPShort3d *thys, ajuint size)
 
     clen = ajRound((*thys)->Len-1,RESERVED_SIZE);
     s = ajRound(size+1,RESERVED_SIZE);
+
     if(s <= clen)
 	return ajFalse;
 
@@ -5535,14 +5635,18 @@ void ajShort3dLen(const AjPShort3d thys,
 
     *len1 = thys->Len;
     *len2 = 0;
+
     for(i=0;i<*len1;++i)
 	if((t2=thys->Ptr[i]))
 	    *len2 = (*len2 > t2->Len) ? *len2 : t2->Len;
+
     *len3 = 0;
+
     for(i=0;i<*len1;++i)
 	if((t2=thys->Ptr[i]))
 	{
 	    v = t2->Len;
+
 	    for(j=0;j<v;++j)
 		if((t1=t2->Ptr[j]))
 		    *len3 = (*len3 > t1->Len) ? *len3 : t1->Len;
@@ -5579,16 +5683,21 @@ short*** ajShort3dShort(const AjPShort3d thys)
     ajShort3dLen(thys,&d1,&d2,&d3);
 
     AJCNEW0(array,d1);
+
     for(i=0;i<d1;++i)
     {
 	AJCNEW0(array[i],d2);
 	t2 = thys->Ptr[i];
+
 	for(j=0;j<d2;++j)
 	{
 	    AJCNEW0(array[i][j],d3);
+
 	    if(t2)
 	    {
-		if(j>=t2->Len) continue;
+		if(j>=t2->Len)
+                    continue;
+
 		if((t1=t2->Ptr[j]))
 		    memmove(array[i][j],t1->Ptr,
 				   t1->Len*sizeof(short));
@@ -5724,6 +5833,7 @@ ajlong ajLong2dGet(const AjPLong2d thys, ajuint elem1, ajuint elem2)
 	      elem2);
 
     t = thys->Ptr[elem1];
+
     if(!t)
 	ajErr("Attempt to access bad 1st dimension [%d][]\n",elem1);
 
@@ -5761,8 +5871,10 @@ AjBool ajLong2dPut(AjPLong2d *thys, ajuint elem1, ajuint elem2, ajlong v)
     {
 	if(elem1>=(*thys)->Len)
 	    (*thys)->Len = elem1+1;
+
 	if(!(*thys)->Ptr[elem1])
 	    (*thys)->Ptr[elem1] = ajLongNew();
+
 	return ajLongPut(&(*thys)->Ptr[elem1],elem2,v);
     }
 
@@ -5808,6 +5920,7 @@ static AjBool arrLong2dResize(AjPLong2d *thys, ajuint size)
 
     clen = ajRound((*thys)->Len-1,RESERVED_SIZE);
     s = ajRound(size+1,RESERVED_SIZE);
+
     if(s <= clen)
 	return ajFalse;
 
@@ -5866,6 +5979,7 @@ void ajLong2dLen(const AjPLong2d thys, ajuint* len1, ajuint* len2)
 
     *len1 = thys->Len;
     *len2 = 0;
+
     for(i=0;i<*len1;++i)
 	if((t=thys->Ptr[i]))
 	    *len2 = (*len2 > t->Len) ? *len2 : t->Len;
@@ -5898,9 +6012,11 @@ ajlong** ajLong2dLong(const AjPLong2d thys)
     ajLong2dLen(thys,&d1,&d2);
 
     AJCNEW(array,d1);
+
     for(i=0;i<d1;++i)
     {
 	AJCNEW0(array[i],d2);
+
 	if((t=thys->Ptr[i]))
 	    memmove(array[i],t->Ptr,t->Len*sizeof(ajlong));
     }
@@ -6035,6 +6151,7 @@ ajlong ajLong3dGet(const AjPLong3d thys,
 	      elem2,elem3);
 
     t = thys->Ptr[elem1];
+
     if(!t)
 	ajErr("Attempt to access bad 1st dimension [%d][][]\n",elem1);
 
@@ -6074,8 +6191,10 @@ AjBool ajLong3dPut(AjPLong3d *thys,
     {
 	if(elem1>=(*thys)->Len)
 	    (*thys)->Len = elem1+1;
+
 	if(!(*thys)->Ptr[elem1])
 	    (*thys)->Ptr[elem1] = ajLong2dNew();
+
 	return ajLong2dPut(&(*thys)->Ptr[elem1],elem2,elem3,v);
     }
 
@@ -6121,6 +6240,7 @@ static AjBool arrLong3dResize(AjPLong3d *thys, ajuint size)
 
     clen = ajRound((*thys)->Len-1,RESERVED_SIZE);
     s = ajRound(size+1,RESERVED_SIZE);
+
     if(s <= clen)
 	return ajFalse;
 
@@ -6184,10 +6304,13 @@ void ajLong3dLen(const AjPLong3d thys,
 
     *len1 = thys->Len;
     *len2 = 0;
+
     for(i=0;i<*len1;++i)
 	if((t2=thys->Ptr[i]))
 	    *len2 = (*len2 > t2->Len) ? *len2 : t2->Len;
+
     *len3 = 0;
+
     for(i=0;i<*len1;++i)
 	if((t2=thys->Ptr[i]))
 	{
@@ -6231,12 +6354,16 @@ ajlong*** ajLong3dLong(const AjPLong3d thys)
     {
 	AJCNEW0(array[i],d2);
 	t2 = thys->Ptr[i];
+
 	for(j=0;j<d2;++j)
 	{
 	    AJCNEW0(array[i][j],d3);
+
 	    if(t2)
 	    {
-		if(j>=t2->Len) continue;
+		if(j>=t2->Len)
+                    continue;
+
 		if((t1=t2->Ptr[j]))
 		    memmove(array[i][j],t1->Ptr,
 				   t1->Len*sizeof(ajlong));
@@ -6246,6 +6373,7 @@ ajlong*** ajLong3dLong(const AjPLong3d thys)
 
     return array;
 }
+
 
 
 
@@ -6264,19 +6392,22 @@ void ajArrExit(void)
     ajDebug("Array usage (bytes): %Ld allocated, %Ld freed, %Ld in use\n",
             arrAlloc, arrFree,
             (arrAlloc - arrFree));
-    ajDebug("Array usage (number): %Ld allocated, %Ld freed, %Ld resized, %Ld in use\n",
+    ajDebug("Array usage (number): %Ld allocated, %Ld freed, %Ld resized,"
+            " %Ld in use\n",
             arrTotal, arrFreeCount, arrResize, arrCount);
 
     ajDebug("Array usage 2D (bytes): %Ld allocated, %Ld freed, %Ld in use\n",
             arr2dAlloc, arr2dFree,
             (arr2dAlloc - arr2dFree));
-    ajDebug("Array usage 2D (number): %Ld allocated, %Ld freed, %Ld resized, %Ld in use\n",
+    ajDebug("Array usage 2D (number): %Ld allocated, %Ld freed, %Ld resized,"
+            " %Ld in use\n",
             arr2dTotal, arr2dFreeCount, arr2dResize, arr2dCount);
 
     ajDebug("Array usage 3D (bytes): %Ld allocated, %Ld freed, %Ld in use\n",
             arr3dAlloc, arr3dFree,
             (arr3dAlloc - arr3dFree));
-    ajDebug("Array usage 3D (number): %Ld allocated, %Ld freed, %Ld resized, %Ld in use\n",
+    ajDebug("Array usage 3D (number): %Ld allocated, %Ld freed, %Ld resized,"
+            " %Ld in use\n",
             arr3dTotal, arr3dFreeCount, arr3dResize, arr3dCount);
 
 

@@ -484,13 +484,18 @@ FEATURES             Location/Qualifiers
      exon            complement(3855..3977)
                      /number=1
                      /gene="hsp82"
-     mRNA            join(complement(1130..3295),complement(3855..3977))
+     mRNA            join(complement(3855..3977),complement(1130..3295))
+                     /partial
+                     /gene="hsp82"
+     mRNA            complement(join(1130..3295,3855..3977))
                      /partial
                      /gene="hsp82"
      mRNA            join(4904..5028,5260..>7425)
                      /gene="hsp82"
      misc_feature    754^755
                      /note="putative nicking site"
+     misc_feature    32987^1
+                     /note="circular sequence join"
      rep_origin      755
      enhancer        order(220..225,230..236)
                      /note="putative"

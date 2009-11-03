@@ -20,6 +20,18 @@ extractfeat
 <p>
 
 <H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
     Function
 </H2>
 Extract features from sequence(s)
@@ -27,9 +39,21 @@ Extract features from sequence(s)
     Description
 </H2>
 
-<p><b>extractfeat</b> is a simple utility for extracting regions of a sequence that are annotated as being a specified type of feature. It reads one or more sequences, and writes out the sequences and features of interest to an output sequence file.  'joined' features can either be extracted as individual sequences, or as a single concatenated sequence if the <tt>-join</tt> qualifier is used. If the feature is annotated as being in the reverse sense of a nucleic acid sequence, then that feature's sub-sequence is reverse-complemented before it is written.</p>
+<p><b>extractfeat</b> is a simple utility for extracting regions of a
+sequence that are annotated as being a specified type of feature. It
+reads one or more sequences, and writes out the sequences and features
+of interest to an output sequence file.  'joined' features can either
+be extracted as individual sequences, or as a single concatenated
+sequence if the <tt>-join</tt> qualifier is used. If the feature is
+annotated as being in the reverse sense of a nucleic acid sequence,
+then that feature's sub-sequence is reverse-complemented before it is
+written.</p>
 
-<p>There are many options control exactly what parts of the feature table are given in the output file.  In addition, it is often useful to have contextual information about a feature.  There are options to specify a number of positions before and/or after the specified feature which will be reported in the output file.</p>
+<p>There are many options control exactly what parts of the feature
+table are given in the output file.  In addition, it is often useful
+to have contextual information about a feature.  There are options to
+specify a number of positions before and/or after the specified
+feature which will be reported in the output file.</p>
 
 
 
@@ -47,29 +71,13 @@ To write out the exons of a sequence:
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>extractfeat tembl:x65921 -type exon stdout </b>
+% <b>extractfeat tembl:x65921 -type exon </b>
 Extract features from sequence(s)
-
->X65921_408_504 [exon] H.sapiens fau 1 gene
-cagtgacgtgacacgcagcccacggtctgtactgacgcgccctcgcttcttcctctttct
-cgactccatcttcgcggtagctgggaccgccgttcag
->X65921_774_856 [exon] H.sapiens fau 1 gene
-tcgccaatatgcagctctttgtccgcgcccaggagctacacaccttcgaggtgaccggcc
-aggaaacggtcgcccagatcaag
->X65921_951_1095 [exon] H.sapiens fau 1 gene
-gctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgctcctggcaggc
-gcgcccctggaggatgaggccactctgggccagtgcggggtggaggccctgactaccctg
-gaagtagcaggccgcatgcttggag
->X65921_1557_1612 [exon] H.sapiens fau 1 gene
-gtaaagtccatggttccctggcccgtgctggaaaagtgagaggtcagactcctaag
->X65921_1787_1912 [exon] H.sapiens fau 1 gene
-gtggccaaacaggagaagaagaagaagaagacaggtcgggctaagcggcggatgcagtac
-aaccggcgctttgtcaacgttgtgcccacctttggcaagaagaagggccccaatgccaac
-tcttaa
+output sequence [x65921.fasta]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
-<a href="#input.1">Go to the input files for this example</a><br><p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 <p>
 <b>Example 2</b>
 <p>
@@ -79,30 +87,13 @@ To write out the exons with 10 extra bases at the start and end so that you can 
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>extractfeat tembl:x65921 -type exon -before 10 -after 10 stdout </b>
+% <b>extractfeat tembl:x65921 -type exon -before 10 -after 10 </b>
 Extract features from sequence(s)
-
->X65921_408_504 [exon] H.sapiens fau 1 gene
-ggtcgctcagcagtgacgtgacacgcagcccacggtctgtactgacgcgccctcgcttct
-tcctctttctcgactccatcttcgcggtagctgggaccgccgttcaggtaagaatgg
->X65921_774_856 [exon] H.sapiens fau 1 gene
-ctttactcagtcgccaatatgcagctctttgtccgcgcccaggagctacacaccttcgag
-gtgaccggccaggaaacggtcgcccagatcaaggtaaggctgc
->X65921_951_1095 [exon] H.sapiens fau 1 gene
-ttccctgtaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgct
-cctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccct
-gactaccctggaagtagcaggccgcatgcttggaggtgagtgaga
->X65921_1557_1612 [exon] H.sapiens fau 1 gene
-cccactacaggtaaagtccatggttccctggcccgtgctggaaaagtgagaggtcagact
-cctaaggtgagtgaga
->X65921_1787_1912 [exon] H.sapiens fau 1 gene
-ccttctccaggtggccaaacaggagaagaagaagaagaagacaggtcgggctaagcggcg
-gatgcagtacaaccggcgctttgtcaacgttgtgcccacctttggcaagaagaagggccc
-caatgccaactcttaagtcttttgta
+output sequence [x65921.fasta]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
-<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
 <p>
 <b>Example 3</b>
 <p>
@@ -112,1635 +103,13 @@ To write out the 10 bases around the start of all 'exon' features in the tembl d
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>extractfeat tembl:*  -type exon -before 5 -after -5 stdout </b>
+% <b>extractfeat 'tembl:*'  -type exon -before 5 -after -5 </b>
 Extract features from sequence(s)
-
->X65921_408_504 [exon] H.sapiens fau 1 gene
-ctcagcagtg
->X65921_774_856 [exon] H.sapiens fau 1 gene
-ctcagtcgcc
->X65921_951_1095 [exon] H.sapiens fau 1 gene
-tgtaggctca
->X65921_1557_1612 [exon] H.sapiens fau 1 gene
-tacaggtaaa
->X65921_1787_1912 [exon] H.sapiens fau 1 gene
-tccaggtggc
->K00650_889_1029 [exon] Human fos proto-oncogene (c-fos), complete cds.
-ccacgatgat
->K00650_1783_2034 [exon] Human fos proto-oncogene (c-fos), complete cds.
-tctaggactt
->K00650_2466_2573 [exon] Human fos proto-oncogene (c-fos), complete cds.
-tctagttatc
->K00650_2688_3329 [exon] Human fos proto-oncogene (c-fos), complete cds.
-tacaggagac
->D00596_1001_1205 [exon] Homo sapiens gene for thymidylate synthase, exons 1, 2, 3, 4, 5, 6, 7, complete cds.
-gcgccatgcc
->D00596_2895_2968 [exon] Homo sapiens gene for thymidylate synthase, exons 1, 2, 3, 4, 5, 6, 7, complete cds.
-ttcagatgaa
->D00596_5396_5570 [exon] Homo sapiens gene for thymidylate synthase, exons 1, 2, 3, 4, 5, 6, 7, complete cds.
-tccagggatc
->D00596_11843_11944 [exon] Homo sapiens gene for thymidylate synthase, exons 1, 2, 3, 4, 5, 6, 7, complete cds.
-tacagattat
->D00596_13449_13624 [exon] Homo sapiens gene for thymidylate synthase, exons 1, 2, 3, 4, 5, 6, 7, complete cds.
-ctcagatctt
->D00596_14133_14204 [exon] Homo sapiens gene for thymidylate synthase, exons 1, 2, 3, 4, 5, 6, 7, complete cds.
-tatagccagg
->D00596_15613_15750 [exon] Homo sapiens gene for thymidylate synthase, exons 1, 2, 3, 4, 5, 6, 7, complete cds.
-tttagcttca
->AB009071_67_155 [exon] Homo sapiens HERG gene, complete cds.
-cccgcccatg
->AB009071_356_586 [exon] Homo sapiens HERG gene, complete cds.
-cctaggccgt
->AB009071_768_932 [exon] Homo sapiens HERG gene, complete cds.
-tgcagggagc
->AB009071_1137_1580 [exon] Homo sapiens HERG gene, complete cds.
-cgcaggccgc
->AB009071_1742_1953 [exon] Homo sapiens HERG gene, complete cds.
-cctaggggcc
->AB009071_2168_2596 [exon] Homo sapiens HERG gene, complete cds.
-tgcaggtcct
->AB009071_2765_3152 [exon] Homo sapiens HERG gene, complete cds.
-cccagctgat
->AB009071_3332_3531 [exon] Homo sapiens HERG gene, complete cds.
-cccagccctc
->AB009071_3716_3968 [exon] Homo sapiens HERG gene, complete cds.
-cccaggtgct
->AB009071_4174_4367 [exon] Homo sapiens HERG gene, complete cds.
-tccagggaag
->AB009071_4521_4620 [exon] Homo sapiens HERG gene, complete cds.
-tccagaccaa
->AB009071_4815_5087 [exon] Homo sapiens HERG gene, complete cds.
-cacagacacg
->AB009071_5299_5485 [exon] Homo sapiens HERG gene, complete cds.
-tgcaggcgcc
->AB009071_5703_5880 [exon] Homo sapiens HERG gene, complete cds.
-cccaggctgg
->AB009071_6117_6266 [exon] Homo sapiens HERG gene, complete cds.
-tgcaggtttc
->X03488_50_196 [exon] Human apoferritin H gene exons 2-4
-ttcagtctta
->X03488_453_578 [exon] Human apoferritin H gene exons 2-4
-ttcagaaacc
->X03488_674_999 [exon] Human apoferritin H gene exons 2-4
-tgcagttgtg
->BA000025_56_221 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ggcacctggc
->BA000025_338_449 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttacccaca
->BA000025_546_640 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ggtaccttaa
->BA000025_766_906 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacccagc
->BA000025_4546_4635 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacccaga
->BA000025_6407_6547 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccaccatct
->BA000025_7803_7941 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cgtaccttta
->BA000025_9565_9698 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctgaccctgt
->BA000025_9899_9997 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacccttt
->BA000025_10081_10254 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacggcgg
->BA000025_14896_15081 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccccca
->BA000025_15649_15858 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacgtttg
->BA000025_16015_16096 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cctacctggg
->BA000025_42497_43931 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccaaccagg
->BA000025_46858_46906 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctgagatggg
->BA000025_47005_47223 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tacagttcat
->BA000025_47313_47566 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tctaggccat
->BA000025_50170_50328 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ggcagcatac
->BA000025_50920_51006 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccacagccc
->BA000025_51098_51138 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tccagatctg
->BA000025_51270_51425 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tctagtcgga
->BA000025_54234_54368 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccagtctga
->BA000025_54494_54608 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccagagtgg
->BA000025_54766_54867 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gtcaggagtg
->BA000025_55089_55237 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ccaaggggtg
->BA000025_55330_55473 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cacagctgtc
->BA000025_55560_55795 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccagggcac
->BA000025_55875_56057 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cacagtgccc
->BA000025_56177_56259 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ggcaggcgga
->BA000025_56735_56841 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cgcagtggac
->BA000025_56939_57061 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cacaggctgg
->BA000025_57154_57255 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaggagga
->BA000025_58820_58924 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cacaggacag
->BA000025_59037_59191 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cacaggagga
->BA000025_59277_59444 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ttcaggttat
->BA000025_59886_60030 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgcagggacg
->BA000025_60397_60474 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccagcactg
->BA000025_60827_60942 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cctaggatgg
->BA000025_61051_61137 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccagggtgc
->BA000025_62744_62822 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cacaggtatg
->BA000025_62988_63163 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccaggatgg
->BA000025_63572_63752 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gacaggtttg
->BA000025_64856_64895 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gagccatggg
->BA000025_66754_66802 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcagggaag
->BA000025_67707_67780 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcagaagct
->BA000025_67906_67984 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgcagcctgg
->BA000025_68808_68907 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cacagagata
->BA000025_68990_69115 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccaggtgtg
->BA000025_69316_69376 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cacagacggt
->BA000025_72276_72363 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tccagctctg
->BA000025_72440_72523 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-aacagcggtc
->BA000025_72790_73025 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tacagtgccc
->BA000025_73135_73234 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgcagtgatc
->BA000025_74198_74324 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgcagggctg
->BA000025_74606_74680 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccagtatgt
->BA000025_77705_77958 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccaggccca
->BA000025_78047_78141 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgcagttacc
->BA000025_78230_78333 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccaggagtg
->BA000025_78443_78516 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcagatcgc
->BA000025_78751_78821 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cacagggtgg
->BA000025_78921_79015 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cacaggggtc
->BA000025_79095_79179 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tccagacctc
->BA000025_80083_80412 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcagtggaa
->BA000025_80925_81213 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gagtccggga
->BA000025_81640_81832 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gacaggtgca
->BA000025_82381_82643 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ttcaggcagc
->BA000025_83210_83392 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cacagaaaca
->BA000025_83567_83789 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcagcccta
->BA000025_83886_84628 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccaggagtg
->BA000025_104253_104468 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tctttacttt
->BA000025_106575_106774 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccatag
->BA000025_108810_109093 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacagttg
->BA000025_113753_116206 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-aagaaaaagt
->BA000025_126062_128448 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-aggcatcact
->BA000025_132036_133961 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gaaccatggc
->BA000025_137228_137263 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tcttcccggt
->BA000025_137876_137943 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-aatagctctt
->BA000025_145514_145544 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gacagcatct
->BA000025_145972_146031 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cctagtatct
->BA000025_146139_146264 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tctagttatc
->BA000025_148287_148474 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tccctgtcac
->BA000025_148770_149189 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttaggtttt
->BA000025_150900_151034 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gccaggctgt
->BA000025_151125_151263 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tccaggtcct
->BA000025_151504_151628 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tctaggcccc
->BA000025_151719_151803 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-agcagaagaa
->BA000025_152049_152149 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccagatgtc
->BA000025_152283_152410 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-atcagcgtcc
->BA000025_158284_158448 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-aacaggcacc
->BA000025_158690_158771 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tccaggaaag
->BA000025_159303_159422 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccagaaact
->BA000025_159515_159623 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tacaggtgga
->BA000025_159709_159803 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccagatagc
->BA000025_160832_160922 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccagcacct
->BA000025_161173_161297 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccaggtgct
->BA000025_161385_161488 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccagggcct
->BA000025_161575_161733 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccagccggt
->BA000025_161841_161931 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgcagggagt
->BA000025_162066_162171 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ggcaggaccc
->BA000025_162257_162327 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcagatgag
->BA000025_162412_162537 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcagtcaga
->BA000025_162895_162999 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgcaggtcta
->BA000025_163080_163148 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcagggcct
->BA000025_163235_163313 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgtagaaagc
->BA000025_163450_163577 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccaggtcgt
->BA000025_163865_164020 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ccaagcccgg
->BA000025_164204_164410 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cctaggagtg
->BA000025_164482_164593 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cacagtgctc
->BA000025_164726_165051 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ggcaggtttc
->BA000025_166356_166500 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tccagctcca
->BA000025_167239_167472 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cagccatgct
->BA000025_167776_168054 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccagggtcg
->BA000025_168589_168685 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-accaggattt
->BA000025_169392_169502 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccagtggcc
->BA000025_170581_170776 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccagggaaa
->BA000025_170895_171064 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccaggctgc
->BA000025_173905_174017 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccagggttc
->BA000025_174227_174343 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gccagctggc
->BA000025_174815_175000 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tacaggtaac
->BA000025_176263_176395 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tcaaggtgac
->BA000025_176503_176655 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccaggggtc
->BA000025_176767_176859 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccagcccag
->BA000025_177253_177554 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccaggtctt
->BA000025_177633_177772 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgcagcttag
->BA000025_177960_178162 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tccagggctc
->BA000025_178247_178278 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cacaggaccg
->BA000025_179486_179581 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-agggtttaga
->BA000025_179858_179953 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccttct
->BA000025_180462_180602 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-catacctcac
->BA000025_180849_180962 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacccaaa
->BA000025_181341_181597 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-atatctttct
->BA000025_181832_181905 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cgcacttttc
->BA000025_182062_182199 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-atcacctcct
->BA000025_182402_182545 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccaaat
->BA000025_182755_182829 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccgtgt
->BA000025_183178_183327 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ttgacctggt
->BA000025_183801_183927 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacctgtt
->BA000025_184042_184231 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttacctgcc
->BA000025_184505_184592 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccccgg
->BA000025_184840_184920 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttaccatga
->BA000025_185142_185251 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccagag
->BA000025_185397_185469 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcactctca
->BA000025_185724_185852 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcactactt
->BA000025_190400_190462 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttaccttgt
->BA000025_190590_190728 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacaggca
->BA000025_196594_196639 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacctgag
->BA000025_198719_198801 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cctaccaaag
->BA000025_199457_199492 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tttacctgta
->BA000025_199739_199848 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cctacaacat
->BA000025_200013_200134 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcactgtga
->BA000025_200868_200930 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gataccaaaa
->BA000025_201081_201161 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttaccaagc
->BA000025_202752_202875 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccacctctc
->BA000025_203425_203584 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gagacctcgg
->BA000025_203818_204038 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gttacccttt
->BA000025_207507_207763 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ccagcccggg
->BA000025_209766_209875 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ttcaggctgg
->BA000025_210068_210193 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tccaggcgga
->BA000025_210357_210463 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ttcaggtacc
->BA000025_211631_211812 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cacagatctg
->BA000025_213026_213434 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaggtggt
->BA000025_214850_215164 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gagggggagt
->BA000025_215284_215383 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctaaggtcga
->BA000025_215505_215578 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaggccgg
->BA000025_215737_215856 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cctaggactt
->BA000025_216337_216486 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tctaggcaat
->BA000025_216676_216987 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgcaggcact
->BA000025_218955_219059 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tcccttcaaa
->BA000025_219185_219264 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttaccggtt
->BA000025_219402_219442 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccaaat
->BA000025_219797_219887 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacctgtg
->BA000025_220043_220390 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cctaccatgg
->BA000025_220585_220645 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttaccccca
->BA000025_222296_222401 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-atccttgaaa
->BA000025_223826_223936 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccagctgac
->BA000025_224719_225381 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cctaggtaag
->BA000025_226111_226448 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gctgtagagt
->BA000025_228403_228525 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacggttt
->BA000025_228617_228671 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttacccaag
->BA000025_230215_230266 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tggccatggg
->BA000025_231238_231363 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-aacaggtctc
->BA000025_231486_231691 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctgagtgaaa
->BA000025_233605_233675 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gttcctcacc
->BA000025_233846_234001 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacctctg
->BA000025_235893_236156 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tttacctgcc
->BA000025_236240_236569 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacctttg
->BA000025_237069_237123 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttacctgca
->BA000025_240724_240877 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ggaagagcag
->BA000025_241897_241953 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ggcaggatac
->BA000025_242687_242753 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgcaggcttc
->BA000025_242999_243085 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccaggttac
->BA000025_246996_247081 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-accaggcatt
->BA000025_250596_250669 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgcagaggca
->BA000025_250879_251001 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaggaagg
->BA000025_252110_252224 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cacagctacc
->BA000025_252348_252449 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcagtgtaa
->BA000025_253426_253489 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cctaggtgat
->BA000025_253901_253950 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tacagctgga
->BA000025_254324_254447 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgcagggggt
->BA000025_254909_255013 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-accagccacg
->BA000025_255242_255305 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tctagggggc
->BA000025_255723_255779 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgaagatacc
->BA000025_255925_255987 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccagggttc
->BA000025_256128_256204 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cgtaggtatc
->BA000025_256288_256386 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-accagcctca
->BA000025_256484_256530 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgcaggggag
->BA000025_256733_257055 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaggctcg
->BA000025_259988_260040 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cagagatgca
->BA000025_263714_263775 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cacagcagcc
->BA000025_264760_264927 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tctaggtaag
->BA000025_266908_267344 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccaggcagc
->BA000025_271741_272164 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-actgtggaat
->BA000025_272744_273649 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tttaccataa
->BA000025_273962_274192 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcatggcct
->BA000025_274520_274709 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cctacctggg
->BA000025_274856_274931 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccaatg
->BA000025_275374_275489 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccatct
->BA000025_276058_276160 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccaggc
->BA000025_277125_277207 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacttcac
->BA000025_277820_278148 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccggct
->BA000025_279023_279187 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgattagaat
->BA000025_279451_280175 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-agcaggtctc
->BA000025_281318_281943 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgcaggtctc
->BA000025_283295_285730 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ggctccccaa
->BA000025_285819_285964 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gagatgagga
->BA000025_286305_286403 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttaccttga
->BA000025_286550_286648 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcactgtag
->BA000025_286730_286803 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ccaaccttca
->BA000025_287402_287556 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacatgcg
->BA000025_287948_288090 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-catacctcct
->BA000025_291393_291628 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ccccgggcga
->BA000025_292264_292384 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tttagagacc
->BA000025_294413_294530 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ttcagatgaa
->BA000025_294645_294841 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgcagatgtt
->BA000025_295076_295129 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccagagtga
->BA000025_295289_295363 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgtagagtga
->BA000025_296214_296449 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ttcagtgtcg
->BA000025_297518_297647 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cacagccatc
->BA000025_298437_298634 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cgcagcacga
->BA000025_298843_299095 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ttcagatcaa
->BA000025_299439_299516 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccagattct
->BA000025_299847_299959 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cacaggacag
->BA000025_300064_300151 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tccagcaggg
->BA000025_300916_301202 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tacagctcag
->BA000025_301624_301915 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gccaggcaac
->BA000025_302031_302060 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgggtgggca
->BA000025_302082_302251 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccaggattc
->BA000025_302435_302488 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cacagatggc
->BA000025_302605_302707 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcagtcctt
->BA000025_302799_302923 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cacagatagt
->BA000025_303089_303235 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcagcgtcg
->BA000025_303323_303382 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cacagccact
->BA000025_303499_303642 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccagcggga
->BA000025_303721_303828 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccaggaatg
->BA000025_304381_304527 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccagacgat
->BA000025_304801_304986 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tttagctccg
->BA000025_306276_306580 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttttattac
->BA000025_306702_306792 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ttcacctgct
->BA000025_306890_306984 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ttcaccttcc
->BA000025_307081_307293 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttacctctg
->BA000025_307418_307516 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tatacctgct
->BA000025_307607_307817 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttacctgaa
->BA000025_307977_308059 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttacctgta
->BA000025_308277_308444 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cctacctgag
->BA000025_308561_308632 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttacctcag
->BA000025_308754_308894 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cagaccttgt
->BA000025_309049_309273 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tttacctttc
->BA000025_309469_309554 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacttctg
->BA000025_309661_309790 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccagta
->BA000025_310037_310167 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttacctcct
->BA000025_310379_310647 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttaccagaa
->BA000025_311034_312887 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccaccttcg
->BA000025_313225_313435 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacctcat
->BA000025_314181_314478 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttaccagag
->BA000025_314692_314882 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ttcacctgct
->BA000025_315787_316261 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-catacctggg
->BA000025_316828_317044 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcactgggt
->BA000025_317164_317254 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcactggcc
->BA000025_317864_318006 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttacctgcc
->BA000025_318155_318234 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacctggg
->BA000025_318415_318566 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacgaaag
->BA000025_318712_318855 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcactttgg
->BA000025_319504_319576 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccatct
->BA000025_319666_319765 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ggtacctcgg
->BA000025_320117_320294 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tctacctctt
->BA000025_321120_321294 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccagcg
->BA000025_323166_323203 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacctggc
->BA000025_327096_327203 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-caatcccatc
->BA000025_327513_327675 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacatttt
->BA000025_327874_327915 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccaata
->BA000025_328283_328349 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacctttg
->BA000025_328437_328498 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tctaccttgt
->BA000025_328665_328715 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cctaccctgt
->BA000025_351040_351346 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gcctgccaca
->BA000025_353899_354243 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccaggatcc
->BA000025_354392_354499 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgcagaacat
->BA000025_354794_355129 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tccagatgcc
->BA000025_355215_355528 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gatgatgatc
->BA000025_356292_356384 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacctctt
->BA000025_356707_356825 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttaccatca
->BA000025_357218_357326 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cacacccagc
->BA000025_361601_361770 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tggttcagtc
->BA000025_362167_362212 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-accaggtaac
->BA000025_362396_362467 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tccagggttt
->BA000025_362863_363469 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cgcaggcgct
->BA000025_365691_366910 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-catgtttctt
->BA000025_367212_367259 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttacctaca
->BA000025_367447_367492 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttactgact
->BA000025_368099_368365 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacctctt
->BA000025_369705_370745 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-catttcagag
->BA000025_370993_371098 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tttaccaatg
->BA000025_371185_371292 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacctggg
->BA000025_371580_371710 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccaccaagg
->BA000025_385195_386002 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gggagtgaga
->BA000025_386174_386395 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccttca
->BA000025_395576_395852 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccatct
->BA000025_396264_396384 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgtacccggc
->BA000025_397455_397536 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cagaaatggc
->BA000025_397801_397901 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tccagggaag
->BA000025_398429_398602 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccaggccat
->BA000025_403345_403687 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tccagctctt
->BA000025_404733_404860 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tttagtccag
->BA000025_405152_405244 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctaaggtgtc
->BA000025_407324_407507 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ggcaggttgc
->BA000025_408522_408640 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgtagacatg
->BA000025_411096_411227 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccagccaat
->BA000025_412602_412711 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-aacaggtggt
->BA000025_412810_412954 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-caaaggcttt
->BA000025_413081_413228 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tccaggtggc
->BA000025_413556_413760 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcagttgaa
->BA000025_428831_429132 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgtgaaggac
->BA000025_432881_434218 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgtctattta
->BA000025_436469_436600 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacctgga
->BA000025_436700_436978 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccagag
->BA000025_437570_437857 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ggtacctgtt
->BA000025_438129_438383 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacctcct
->BA000025_444771_445168 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgcgagagag
->BA000025_445736_445810 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccagcg
->BA000025_471574_472753 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-aatataagag
->BA000025_478173_480609 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgattcatgt
->BA000025_480701_480789 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacctgcc
->BA000025_481490_482135 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctgcagcagt
->BA000025_531684_531819 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacctgga
->BA000025_531919_532197 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccagag
->BA000025_532785_533072 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ggtacctgtt
->BA000025_533347_533601 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccttct
->BA000025_539787_540196 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgagagagag
->BA000025_540442_540550 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccagca
->BA000025_559029_560369 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-agcctccaaa
->BA000025_561677_562609 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-actagggggt
->BA000025_578435_578549 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tttaaagtca
->BA000025_585888_586268 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gagggttctt
->BA000025_586995_587067 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ccgagatgct
->BA000025_587196_587465 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccaggctcc
->BA000025_587712_587987 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gccagggtct
->BA000025_588560_588835 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-atcagacccc
->BA000025_588929_589045 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccagagccg
->BA000025_589487_589519 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cacaggtgga
->BA000025_589626_589673 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tccaggcagc
->BA000025_589856_590278 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgtagcctga
->BA000025_597612_598537 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgcaatccat
->BA000025_662036_663302 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ttttttttta
->BA000025_664166_668032 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-taatgagcag
->BA000025_670111_670345 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-aaccattata
->BA000025_671525_671597 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ccgagatgcg
->BA000025_671728_671997 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccaggctcc
->BA000025_672248_672523 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gccagggtct
->BA000025_673111_673386 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gtcagaaccc
->BA000025_673511_673630 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccagagcca
->BA000025_674071_674103 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cacaggtgga
->BA000025_674211_674258 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccaggcagc
->BA000025_674423_674759 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgtagcctga
->BA000025_687877_688460 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-aaaggattcc
->BA000025_689455_690369 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gcagccccaa
->BA000025_743644_744235 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-acataaataa
->BA000025_775817_776158 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gaagagtagt
->BA000025_776392_776522 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccagggaag
->BA000025_776807_776965 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cacagatatg
->BA000025_777228_777750 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ggcaggtggt
->BA000025_778312_779619 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tggcaggttt
->BA000025_780091_780649 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttacccagt
->BA000025_782354_782968 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccttgg
->BA000025_785161_785334 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gctcggcccc
->BA000025_787281_787584 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgaaggtcct
->BA000025_790968_791131 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cgcagctgtc
->BA000025_791230_791365 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cctagcaaga
->BA000025_791525_791635 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cgcagcactt
->BA000025_791875_792024 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaggttca
->BA000025_793363_793473 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccaggtggc
->BA000025_793580_793686 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccagggcct
->BA000025_796275_796387 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tccagctctc
->BA000025_796590_796635 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tccaggcctg
->BA000025_796781_796917 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccagctgtc
->BA000025_797010_797198 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tttaggggag
->BA000025_797295_797396 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccagccctg
->BA000025_798670_798821 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgtagtggtc
->BA000025_798949_799120 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccaggccac
->BA000025_799367_799643 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccagggtcc
->BA000025_802016_802435 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gggtagcgga
->BA000025_802735_803104 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ttacggagat
->BA000025_803297_803420 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccagaa
->BA000025_803617_803646 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cctaccgaga
->BA000025_803770_804542 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tacaggcatc
->BA000025_812432_812508 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacctgtg
->BA000025_816259_816422 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cgcacctgtg
->BA000025_821667_821765 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ggaggccgtg
->BA000025_824570_827003 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cacagggacc
->BA000025_827205_827250 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccttct
->BA000025_1027992_1028283 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctgctagcta
->BA000025_1028707_1028785 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccctca
->BA000025_1028937_1028984 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tatacctgtt
->BA000025_1029636_1029766 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-aatacctgct
->BA000025_1029948_1030080 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacccgtg
->BA000025_1030327_1030410 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cataccttcc
->BA000025_1030595_1030663 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttaccttgc
->BA000025_1030825_1030936 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacctggg
->BA000025_1031153_1031241 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacctctt
->BA000025_1031333_1031429 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttacctccc
->BA000025_1032031_1032162 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-catacccacc
->BA000025_1032555_1032659 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttacttgct
->BA000025_1032921_1033060 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacctgaa
->BA000025_1033691_1033812 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccactc
->BA000025_1041935_1042933 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cagttgtgga
->BA000025_1043052_1043201 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctgacctgcc
->BA000025_1043782_1044016 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccatga
->BA000025_1044492_1044710 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ggtacctgat
->BA000025_1044948_1045075 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacctggc
->BA000025_1045224_1045468 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttacctccc
->BA000025_1046575_1046685 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttaccctgg
->BA000025_1047418_1047583 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttaccagag
->BA000025_1048666_1048817 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccaccttgc
->BA000025_1048926_1049021 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacccaag
->BA000025_1049547_1049793 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttaccagag
->BA000025_1049901_1050088 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacctgca
->BA000025_1050613_1050711 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ttacccgccc
->BA000025_1050971_1051118 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacccctc
->BA000025_1052661_1052889 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacctcct
->BA000025_1053081_1053183 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-agtacctgct
->BA000025_1053277_1053702 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccagga
->BA000025_1197633_1197871 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ccctcacttg
->BA000025_1197984_1198937 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttaggtccg
->BA000025_1199504_1199653 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gccgcagcaa
->BA000025_1199977_1200033 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tccagctcca
->BA000025_1200313_1200388 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgcagggttc
->BA000025_1200476_1200566 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cctaggatct
->BA000025_1200847_1200990 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tacaggtaaa
->BA000025_1201382_1201501 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cacaggagat
->BA000025_1201589_1201684 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cacaggacta
->BA000025_1201870_1202022 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gacaggaagc
->BA000025_1211088_1211269 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccaggtggc
->BA000025_1211461_1211506 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cacaggtccc
->BA000025_1211623_1211760 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcagatgcg
->BA000025_1212002_1212166 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gccaggtggc
->BA000025_1214043_1214459 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gccaggtgaa
->BA000025_1217791_1218848 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctgccttagg
->BA000025_1219160_1219270 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccaaat
->BA000025_1219543_1219651 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttacctgtg
->BA000025_1221625_1221681 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttaccttgg
->BA000025_1227009_1227147 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccagatcat
->BA000025_1228004_1228384 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttagatttc
->BA000025_1228470_1228539 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gacagatttt
->BA000025_1228833_1230313 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cacagtgatg
->BA000025_1230461_1230520 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-accagattct
->BA000025_1230683_1230775 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tacagcagtc
->BA000025_1233830_1234624 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tccaggtacc
->BA000025_1234733_1234803 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tctaggcctc
->BA000025_1236088_1238565 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cctagggcga
->BA000025_1238649_1238768 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaggatgt
->BA000025_1238900_1239082 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cacaggtgct
->BA000025_1239309_1239434 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttagtcccg
->BA000025_1239523_1239633 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttagggcta
->BA000025_1241539_1242363 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccagcctca
->BA000025_1244633_1245424 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-aaagagagag
->BA000025_1269193_1269538 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gggatgtcgg
->BA000025_1270899_1271137 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gacaggtacc
->BA000025_1271221_1271383 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgcaggggga
->BA000025_1271707_1271763 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tctaggctta
->BA000025_1276431_1276685 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaggtccc
->BA000025_1276890_1277093 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgtagccagc
->BA000025_1277172_1277363 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttaggagcc
->BA000025_1279143_1279253 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ttcagggtta
->BA000025_1279422_1279537 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-accaggttgg
->BA000025_1281922_1282132 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccagcgtgg
->BA000025_1282330_1282428 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tccaggctcc
->BA000025_1282540_1282692 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tccaggagga
->BA000025_1285071_1285211 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaggtggt
->BA000025_1285404_1285566 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tccaggcctc
->BA000025_1285654_1285772 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tctagggatc
->BA000025_1285898_1285965 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttagtctgg
->BA000025_1286566_1286728 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccaggtaca
->BA000025_1286827_1286988 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccagtgggc
->BA000025_1287284_1287457 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttaggccat
->BA000025_1288824_1289064 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cctaggtact
->BA000025_1306881_1308954 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gcctcagttt
->BA000025_1324964_1324971 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ggttcgttta
->BA000025_1325197_1325717 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccaggtttg
->BA000025_1332239_1332356 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-catagaaacc
->BA000025_1333031_1333117 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgcagtttga
->BA000025_1333280_1333415 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgcagattta
->BA000025_1334304_1334355 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-catagaacaa
->BA000025_1335339_1335416 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgcagagctc
->BA000025_1335554_1335727 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-aacagagaaa
->BA000025_1335952_1336057 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccaggacta
->BA000025_1336160_1336272 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gacagcaacg
->BA000025_1337101_1337201 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgtagctatg
->BA000025_1337460_1337607 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-aatagccaag
->BA000025_1337684_1337842 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tccagcctct
->BA000025_1337941_1338187 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gacagtaaat
->BA000025_1338352_1338415 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gatagtcctc
->BA000025_1338529_1338723 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ttcaggagtg
->BA000025_1338910_1338985 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cacagggtag
->BA000025_1339236_1339349 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-aacagtgcca
->BA000025_1339504_1340259 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tacaggtccc
->BA000025_1340537_1341790 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cacagacatg
->BA000025_1350883_1351661 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-acaggtcggc
->BA000025_1351818_1351890 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttaccaccc
->BA000025_1351983_1352047 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccaaga
->BA000025_1352222_1352390 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ggtaccagag
->BA000025_1352476_1352508 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttaccagcc
->BA000025_1355478_1355548 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccggtg
->BA000025_1355641_1355715 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcactcctt
->BA000025_1355884_1356055 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccatgc
->BA000025_1356198_1356310 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccgcct
->BA000025_1356507_1356631 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttactgtaa
->BA000025_1356846_1356929 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cgcacttatt
->BA000025_1357623_1357771 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccacctggc
->BA000025_1357858_1357997 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tctaccttct
->BA000025_1358299_1358384 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccctgc
->BA000025_1358481_1358581 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacccatt
->BA000025_1359001_1359123 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttaccttga
->BA000025_1361670_1361783 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cacacctgct
->BA000025_1362183_1362257 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccttag
->BA000025_1363611_1363718 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gtcaccttat
->BA000025_1363803_1363840 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttaccttgg
->BA000025_1363986_1364112 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tttaccttca
->BA000025_1364275_1364370 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgtacctgct
->BA000025_1364733_1364779 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccgttt
->BA000025_1370625_1370792 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacctgat
->BA000025_1378462_1379796 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-agggattaaa
->BA000025_1380061_1380351 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccttcc
->BA000025_1383973_1384035 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacctgac
->BA000025_1384735_1385299 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccgatg
->BA000025_1386026_1386054 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-aagcagttgc
->BA000025_1386465_1386630 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cgcagggctt
->BA000025_1386994_1387130 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttagatacc
->BA000025_1387270_1387421 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccagttctg
->BA000025_1387539_1387610 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tttagacatg
->BA000025_1388628_1388835 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cctaggttgt
->BA000025_1389006_1389101 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcagtcttg
->BA000025_1389524_1389718 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-agcagtggac
->BA000025_1394656_1394834 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaggtttc
->BA000025_1394912_1395074 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaggttct
->BA000025_1395350_1395490 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tccagcctgg
->BA000025_1395873_1396309 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccaggcacc
->BA000025_1447979_1449423 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-caaatgatgc
->BA000025_1449589_1449631 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccttta
->BA000025_1449736_1449768 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttacactca
->BA000025_1450519_1450635 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccacctgag
->BA000025_1450760_1451035 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttactccat
->BA000025_1451657_1451932 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttacccagg
->BA000025_1452177_1452446 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccggcc
->BA000025_1452577_1452640 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacccgcc
->BA000025_1455579_1456229 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cattctcaca
->BA000025_1485350_1485674 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-agaaatttct
->BA000025_1522856_1522983 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ggtagggagt
->BA000025_1525552_1525682 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ttcacctggg
->BA000025_1525799_1526069 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccagag
->BA000025_1526671_1526956 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ggtacctgtt
->BA000025_1527223_1527478 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacctcct
->BA000025_1537250_1538148 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ttgtcaagag
->BA000025_1570723_1571061 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gaaaggtagg
->BA000025_1590156_1591120 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-catggtctag
->BA000025_1624348_1624745 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gatctgggct
->BA000025_1631791_1631896 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-agccaccttg
->BA000025_1679321_1679744 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-aaaattcata
->BA000025_1679828_1679875 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccttta
->BA000025_1679995_1680027 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctaacaggca
->BA000025_1680467_1680583 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cctacctgag
->BA000025_1680691_1680966 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttaccccat
->BA000025_1681563_1681836 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ggtacccgcg
->BA000025_1682086_1682355 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccggcc
->BA000025_1682473_1682545 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccggcc
->BA000025_1737405_1737514 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccaggagtc
->BA000025_1741085_1741133 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccagcgctg
->BA000025_1743013_1743500 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ccaaggagaa
->BA000025_1743642_1743737 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cacaggaaaa
->BA000025_1745420_1745650 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgcagaagaa
->BA000025_1752118_1752140 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tctaggacac
->BA000025_1752621_1752736 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttaggtatc
->BA000025_1752955_1752987 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccagggaag
->BA000025_1755600_1757702 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cacagtgagc
->BA000025_1769446_1770308 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-taattatttt
->BA000025_1771132_1771164 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tttacctgaa
->BA000025_1771524_1771639 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tttacctgag
->BA000025_1772877_1772899 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cctacctgct
->BA000025_1773610_1773840 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacttgta
->BA000025_1774869_1774964 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgtaccagca
->BA000025_1778075_1778926 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttacccggt
->BA000025_1781274_1781702 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ccagcatggc
->BA000025_1782887_1782982 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccaggaaca
->BA000025_1783503_1783733 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcagactca
->BA000025_1784739_1784761 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cctaggacat
->BA000025_1785076_1785191 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cctagatgtg
->BA000025_1786371_1786403 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tacagaaaaa
->BA000025_1787644_1788161 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cacagctcac
->BA000025_1836492_1836977 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgagtgtaaa
->BA000025_1837978_1838043 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tttagggggc
->BA000025_1838356_1838673 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-caaaggcggc
->BA000025_1838900_1839245 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cctagtggaa
->BA000025_1866315_1866944 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-agatgaggcg
->BA000025_1868164_1868249 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ttattgcaag
->BA000025_1868458_1869003 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-agttaggagg
->BA000025_1868689_1868711 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cctaggatat
->BA000025_1868919_1869010 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgtagatttg
->BA000025_1870134_1870308 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttactcctc
->BA000025_1870476_1871897 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tccagccgac
->BA000025_1871834_1873063 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-acacattttg
->BA000025_1873469_1873577 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacatttg
->BA000025_1874688_1874955 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacgggct
->BA000025_1877258_1877494 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-acatatgtca
->BA000025_1879829_1879938 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccacttgca
->BA000025_1880145_1880245 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttaccacag
->BA000025_1880493_1880815 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccccga
->BA000025_1880973_1881412 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cgtcataatt
->BA000025_1883972_1884047 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tccagattgg
->BA000025_1884445_1885071 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gacagaatct
->BA000025_1906218_1906771 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ttcagcatgt
->BA000025_1908323_1909752 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ttttattttt
->BA000025_1910059_1910182 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-aattttaaaa
->BA000025_1929120_1930392 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-aagaccctgt
->BA000025_1932715_1933020 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tctaatttta
->BA000025_1933188_1933235 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcagcttta
->BA000025_1933378_1933410 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttacttgca
->BA000025_1933854_1933970 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccacctgag
->BA000025_1934093_1934365 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttaccccat
->BA000025_1934962_1935237 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ggtacccgcg
->BA000025_1935486_1935755 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacccgcc
->BA000025_1935886_1935957 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacccgcc
->BA000025_1936726_1937709 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ggactcacaa
->BA000025_1939283_1941551 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctgcatcatc
->BA000025_1946144_1946599 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgtccctttt
->BA000025_1967058_1967460 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tcacctctcc
->BA000025_1970096_1970350 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccagggccc
->BA000025_1970591_1970877 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ggtagccttg
->BA000025_1971482_1971758 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ccccccctcc
->BA000025_1971874_1972023 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ttcagggatg
->BA000025_1975141_1982230 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ttagattttt
->BA000025_1983622_1983836 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-caagtgaaca
->BA000025_1983992_1984039 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgtcatttta
->BA000025_1984189_1984221 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttgcatgaa
->BA000025_1984607_1984722 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cctacctggg
->BA000025_1984847_1985122 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ccttacccat
->BA000025_1985704_1985964 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ggtacctggg
->BA000025_1986926_1987354 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tttctaacct
->BA000025_1993031_1994330 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tataaggaat
->BA000025_1996801_1997105 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tctaatttta
->BA000025_1997275_1997322 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccttta
->BA000025_1997465_1997497 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttacttgca
->BA000025_1997940_1998056 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tccacctgag
->BA000025_1998159_1998434 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttaccccat
->BA000025_1999013_1999288 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ggtacccgtg
->BA000025_1999530_1999799 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccggcc
->BA000025_1999906_1999999 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ggcggtttcc
->BA000025_1999930_1999999 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacccgcc
->BA000025_2000000_2000018 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-acggccatcc
->BA000025_2000000_2000002 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-acggccatcc
->BA000025_2000754_2001643 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ggactcacaa
->BA000025_2008309_2008494 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ggtacaggtg
->BA000025_2012886_2013194 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tctaatttta
->BA000025_2013363_2013410 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccttta
->BA000025_2013551_2013577 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttacttgca
->BA000025_2014023_2014139 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttacctgag
->BA000025_2014268_2014543 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttaccccat
->BA000025_2015144_2015418 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ggtacccgtg
->BA000025_2015667_2015936 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ttcaccggcc
->BA000025_2016022_2016153 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ccctacctcc
->BA000025_2016066_2016137 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacccgcc
->BA000025_2016945_2018004 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ggactcacaa
->BA000025_2024481_2026843 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-aggttaccct
->BA000025_2031195_2032360 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-agtccctttt
->BA000025_2040024_2043637 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ttccattttt
->BA000025_2044479_2044724 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-caccaagcac
->BA000025_2044881_2044928 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gtcactttta
->BA000025_2045077_2045109 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttacttgaa
->BA000025_2045503_2045620 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tggaactcac
->BA000025_2045745_2046020 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttagcccat
->BA000025_2049013_2049599 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tcagctgctt
->BA000025_2051621_2051920 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tctaatttta
->BA000025_2052088_2052134 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacctttc
->BA000025_2052277_2052309 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttacttgca
->BA000025_2052750_2052866 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttacctgag
->BA000025_2052969_2053243 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttaccccat
->BA000025_2053829_2054104 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ggtacccgcg
->BA000025_2054347_2054616 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccgccc
->BA000025_2054686_2054829 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gcccccgccg
->BA000025_2054741_2054813 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacgcgcc
->BA000025_2055554_2056450 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ggactcacaa
->BA000025_2062932_2065584 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-aggttaccct
->BA000025_2069846_2071009 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tatccctttt
->BA000025_2084424_2084726 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tccagagcac
->BA000025_2105460_2106739 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-aagaccctgc
->BA000025_2109383_2109647 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-aatttatact
->BA000025_2110005_2110037 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttacttgca
->BA000025_2110483_2110599 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttacctgag
->BA000025_2110722_2110997 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttactccat
->BA000025_2111597_2111872 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ggtacccgcg
->BA000025_2112099_2112368 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcactggcc
->BA000025_2112441_2112586 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ccgccgggcc
->BA000025_2112498_2112575 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacccgcc
->BA000025_2113300_2114285 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ggactcacaa
->BA000025_2121819_2124168 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gttaccctgg
->BA000025_2127715_2128017 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tccagagcgc
->BA000025_2131739_2135286 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ttaaattgtc
->BA000025_2136383_2137272 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-aaataggttt
->BA000025_2137615_2137817 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-caattgaaca
->BA000025_2137984_2138031 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gtcactttta
->BA000025_2138182_2138214 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttacatgaa
->BA000025_2138627_2138743 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cctacctggg
->BA000025_2138868_2139143 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttaccccat
->BA000025_2139788_2139989 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccaccttcc
->BA000025_2140289_2142001 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-agactcacaa
->BA000025_2145969_2147083 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-aaatccctgg
->BA000025_2147079_2147272 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gatgaacctc
->BA000025_2147511_2147759 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacaggcc
->BA000025_2147891_2147962 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacctgcc
->BA000025_2148725_2149611 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ggaatcacaa
->BA000025_2167323_2169661 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gttaccctgg
->BA000025_2173913_2175082 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tgtccctttt
->BA000025_2191157_2191231 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-agtctgggcc
->BA000025_2191484_2191880 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tctcctctcc
->BA000025_2194405_2194659 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cccagagccc
->BA000025_2194898_2195182 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ggcagccttg
->BA000025_2195588_2195865 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tccaatgacc
->BA000025_2195980_2196123 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tttagagaag
->BA000025_2198277_2198579 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-tccagagcac
->BA000025_2213611_2213714 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-atatttttat
->BA000025_2213891_2213938 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gtcaccttta
->BA000025_2214074_2214106 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttacctgca
->BA000025_2214554_2214670 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cctacctgag
->BA000025_2214811_2215086 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-cttaccccat
->BA000025_2215669_2215944 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ggtacctgcg
->BA000025_2216190_2216459 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcaccagcc
->BA000025_2216590_2216653 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-ctcacccgcc
->BA000025_2217921_2218910 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-caactctcag
->BA000025_2222542_2224864 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
-gaaaccttgg
->AB000360_808_2266 [exon] Homo sapiens PIGC gene, complete cds.
-cttttagtaa
->U01317_19289_19632 [exon] Human beta globin region on chromosome 11.
-ggagccaaca
->U01317_19755_19977 [exon] Human beta globin region on chromosome 11.
-catagactcc
->U01317_20833_21080 [exon] Human beta globin region on chromosome 11.
-aacagctcct
->U01317_34478_34622 [exon] Human beta globin region on chromosome 11.
-tccacacact
->U01317_34745_34967 [exon] Human beta globin region on chromosome 11.
-cacaggctcc
->U01317_35854_36069 [exon] Human beta globin region on chromosome 11.
-aacagctcct
->U01317_39414_39558 [exon] Human beta globin region on chromosome 11.
-tccacacact
->U01317_39681_39903 [exon] Human beta globin region on chromosome 11.
-cacaggctcc
->U01317_40770_40985 [exon] Human beta globin region on chromosome 11.
-aacagctcct
->U01317_45710_45800 [exon] Human beta globin region on chromosome 11.
-acactgtagt
->U01317_45922_46145 [exon] Human beta globin region on chromosome 11.
-cacagtctcc
->U01317_46997_47124 [exon] Human beta globin region on chromosome 11.
-cccagctctt
->U01317_54740_54881 [exon] Human beta globin region on chromosome 11.
-tgcttacact
->U01317_55010_55232 [exon] Human beta globin region on chromosome 11.
-ctcagattac
->U01317_56131_56389 [exon] Human beta globin region on chromosome 11.
-cgcagctctt
->U01317_62137_62278 [exon] Human beta globin region on chromosome 11.
-tgcttacatt
->U01317_62187_62278 [exon] Human beta globin region on chromosome 11.
-acaccatggt
->U01317_62390_62408 [exon] Human beta globin region on chromosome 11.
-attggtctat
->U01317_62409_62631 [exon] Human beta globin region on chromosome 11.
-cttaggctgc
->U01317_63482_63742 [exon] Human beta globin region on chromosome 11.
-cacagctcct
->M23100_1541_1923 [exon] Human insulin receptor (INSR) gene, exon 1, clones lambda-hINSR-(1-13).
-ctccgggccc
->M23100_1542_1923 [exon] Human insulin receptor (INSR) gene, exon 1, clones lambda-hINSR-(1-13).
-tccgggcccc
->M23100_1548_1923 [exon] Human insulin receptor (INSR) gene, exon 1, clones lambda-hINSR-(1-13).
-ccccgagatc
->V00451_363_460 [exon] Glycine max leghemoglobin gene or pseudogene (no mRNA detected).
-gaaatatggg
->V00451_555_663 [exon] Glycine max leghemoglobin gene or pseudogene (no mRNA detected).
-aataggatat
->V00451_2182_2286 [exon] Glycine max leghemoglobin gene or pseudogene (no mRNA detected).
-tgtaggtgcg
->V00451_3065_3208 [exon] Glycine max leghemoglobin gene or pseudogene (no mRNA detected).
-cgtaggtggt
->M11903_351_499 [exon] Rattus norvegicus androgen-responsive protein precursor (Svf) gene, exons 1 and 1A, alternatively spliced.
-cctgtaggca
->M11903_401_499 [exon] Rattus norvegicus androgen-responsive protein precursor (Svf) gene, exons 1 and 1A, alternatively spliced.
-gctctcagtc
->M11904_109_445 [exon] Rattus norvegicus androgen-responsive protein precursor (Svf) gene, exon 2 and complete cds.
-aacagaaaaa
->M11905_233_420 [exon] Rattus norvegicus androgen-responsive protein precursor (Svf) gene, exon 3.
-cacaggttgt
+output sequence [h45989.fasta]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
-<p>
+<a href="#output.3">Go to the output files for this example</a><p><p>
 <p>
 <b>Example 4</b>
 <p>
@@ -1750,21 +119,13 @@ To extract the CDS region with the exons joined into one sequence:
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>extractfeat tembl:x65921 -type CDS -join stdout </b>
+% <b>extractfeat tembl:x65921 -type CDS -join </b>
 Extract features from sequence(s)
-
->X65921_782_1912 [CDS] H.sapiens fau 1 gene
-atgcagctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacg
-gtcgcccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtc
-gtgctcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggag
-gccctgactaccctggaagtagcaggccgcatgcttggaggtaaagtccatggttccctg
-gcccgtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaag
-aagaagacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtg
-cccacctttggcaagaagaagggccccaatgccaactcttaa
+output sequence [x65921.fasta]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
-<p>
+<a href="#output.4">Go to the output files for this example</a><p><p>
 <p>
 <b>Example 5</b>
 <p>
@@ -1774,25 +135,13 @@ To write out the 7 residues around all phosphorylated serine residues
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>extractfeat tsw:*  -type mod_res -value phosphoserine* -before 3 -after -4 stdout </b>
+% <b>extractfeat 'tsw:*' -type MOD_RES -value 'phosphoserine*' -before 3 -after -4 </b>
 Extract features from sequence(s)
-
->OPSD_HUMAN_334_334 [mod_res] Rhodopsin (Opsin-2).
-DEASATV
->OPSD_HUMAN_338_338 [mod_res] Rhodopsin (Opsin-2).
-ATVSKTE
->OPSD_HUMAN_343_343 [mod_res] Rhodopsin (Opsin-2).
-TETSQVA
->PAXI_HUMAN_106_106 [mod_res] Paxillin.
-SVGSPCS
->PAXI_HUMAN_109_109 [mod_res] Paxillin.
-SPCSRVG
->PAXI_HUMAN_303_303 [mod_res] Paxillin.
-GRSSPGG
+output sequence [12s1_arath.fasta]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
-<a href="#input.5">Go to the input files for this example</a><br><p>
+<a href="#output.5">Go to the output files for this example</a><p><p>
 
 <H2>
     Command line arguments
@@ -1853,11 +202,11 @@ GRSSPGG
    -type               string     [*] By default every feature in the feature
                                   table is extracted. You can set this to be
                                   any feature type you wish to extract.
-                                  See http://www3.ebi.ac.uk/Services/WebFeat/
+                                  See http://www.ebi.ac.uk/Services/WebFeat/
                                   for a list of the EMBL feature types and see
-                                  Appendix A of the Swissprot user manual in
-                                  http://www.expasy.ch/txt/userman.txt for a
-                                  list of the Swissprot feature types.
+                                  the Uniprot user manual in
+                                  http://www.uniprot.org/manual/sequence_annotation
+                                  for a list of the Uniprot feature types.
                                   The type may be wildcarded by using '*'.
                                   If you wish to extract more than one type,
                                   separate their names with the character '|',
@@ -1869,12 +218,12 @@ GRSSPGG
                                   set this to match any feature sense you
                                   wish. 0 - any sense, 1 - forward sense, -1 -
                                   reverse sense (Any integer value)
-   -minscore           float      [0.0] If this is greater than or equal to
-                                  the maximum score, then any score is
-                                  permitted (Any numeric value)
-   -maxscore           float      [0.0] If this is less than or equal to the
-                                  maximum score, then any score is permitted
-                                  (Any numeric value)
+   -minscore           float      [0.0] Minimum score of feature to extract
+                                  (see also maxscore) (Any numeric value)
+   -maxscore           float      [0.0] Maximum score of feature to extract.
+                                  If both minscore and maxscore are zero (the
+                                  default), then any score is ignored (Any
+                                  numeric value)
    -tag                string     [*] Tags are the types of extra values that
                                   a feature may have. For example in the EMBL
                                   feature table, a 'CDS' type of feature may
@@ -2076,7 +425,7 @@ gene* | embl</td>
 <tr>
 <td>-type</td>
 <td>By default every feature in the feature table is extracted. You can set this to be any feature type you wish to extract.
-See http://www3.ebi.ac.uk/Services/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www.expasy.ch/txt/userman.txt for a list of the Swissprot feature types.
+See http://www.ebi.ac.uk/Services/WebFeat/ for a list of the EMBL feature types and see the Uniprot user manual in http://www.uniprot.org/manual/sequence_annotation for a list of the Uniprot feature types.
 The type may be wildcarded by using '*'.
 If you wish to extract more than one type, separate their names with the character '|', eg:
 *UTR | intron</td>
@@ -2093,14 +442,15 @@ If you wish to extract more than one type, separate their names with the charact
 
 <tr>
 <td>-minscore</td>
-<td>If this is greater than or equal to the maximum score, then any score is permitted</td>
+<td>Minimum score of feature to extract (see also maxscore)</td>
 <td>Any numeric value</td>
 <td>0.0</td>
 </tr>
 
 <tr>
 <td>-maxscore</td>
-<td>If this is less than or equal to the maximum score, then any score is permitted</td>
+<td>Maximum score of feature to extract.
+If both minscore and maxscore are zero (the default), then any score is ignored</td>
 <td>Any numeric value</td>
 <td>0.0</td>
 </tr>
@@ -2213,7 +563,7 @@ RX   DOI; 10.1016/0006-291X(92)91286-Y.
 RX   PUBMED; 1326960.
 RA   Kas K., Michiels L., Merregaert J.;
 RT   "Genomic structure and expression of the human fau gene: encoding the
-RT   ribosomal protein S30 fused to a ubiquitin-like protein.";
+RT   ribosomal protein S30 fused to a ubiquitin-like protein";
 RL   Biochem. Biophys. Res. Commun. 187(2):927-933(1992).
 XX
 DR   GDB; 191789.
@@ -2291,17 +641,231 @@ SQ   Sequence 2016 BP; 421 A; 562 C; 538 G; 495 T; 0 other;
 </pre>
 </td></tr></table><p>
 
-<a name="input.5"></a>
-<h3>Input files for usage example 5</h3>
-
-'tsw:*' is a sequence entry in the example protein database 'tsw'
-<p>
-
 
 <H2>
     Output file format
 </H2>
 
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: x65921.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;X65921_408_504 [exon] H.sapiens fau 1 gene
+cagtgacgtgacacgcagcccacggtctgtactgacgcgccctcgcttcttcctctttct
+cgactccatcttcgcggtagctgggaccgccgttcag
+&gt;X65921_774_856 [exon] H.sapiens fau 1 gene
+tcgccaatatgcagctctttgtccgcgcccaggagctacacaccttcgaggtgaccggcc
+aggaaacggtcgcccagatcaag
+&gt;X65921_951_1095 [exon] H.sapiens fau 1 gene
+gctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgctcctggcaggc
+gcgcccctggaggatgaggccactctgggccagtgcggggtggaggccctgactaccctg
+gaagtagcaggccgcatgcttggag
+&gt;X65921_1557_1612 [exon] H.sapiens fau 1 gene
+gtaaagtccatggttccctggcccgtgctggaaaagtgagaggtcagactcctaag
+&gt;X65921_1787_1912 [exon] H.sapiens fau 1 gene
+gtggccaaacaggagaagaagaagaagaagacaggtcgggctaagcggcggatgcagtac
+aaccggcgctttgtcaacgttgtgcccacctttggcaagaagaagggccccaatgccaac
+tcttaa
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: x65921.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;X65921_408_504 [exon] H.sapiens fau 1 gene
+ggtcgctcagcagtgacgtgacacgcagcccacggtctgtactgacgcgccctcgcttct
+tcctctttctcgactccatcttcgcggtagctgggaccgccgttcaggtaagaatgg
+&gt;X65921_774_856 [exon] H.sapiens fau 1 gene
+ctttactcagtcgccaatatgcagctctttgtccgcgcccaggagctacacaccttcgag
+gtgaccggccaggaaacggtcgcccagatcaaggtaaggctgc
+&gt;X65921_951_1095 [exon] H.sapiens fau 1 gene
+ttccctgtaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgct
+cctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccct
+gactaccctggaagtagcaggccgcatgcttggaggtgagtgaga
+&gt;X65921_1557_1612 [exon] H.sapiens fau 1 gene
+cccactacaggtaaagtccatggttccctggcccgtgctggaaaagtgagaggtcagact
+cctaaggtgagtgaga
+&gt;X65921_1787_1912 [exon] H.sapiens fau 1 gene
+ccttctccaggtggccaaacaggagaagaagaagaagaagacaggtcgggctaagcggcg
+gatgcagtacaaccggcgctttgtcaacgttgtgcccacctttggcaagaagaagggccc
+caatgccaactcttaagtcttttgta
+</pre>
+</td></tr></table><p>
+
+<a name="output.3"></a>
+<h3>Output files for usage example 3</h3>
+<p><h3>File: h45989.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;X65921_408_504 [exon] H.sapiens fau 1 gene
+ctcagcagtg
+&gt;X65921_774_856 [exon] H.sapiens fau 1 gene
+ctcagtcgcc
+&gt;X65921_951_1095 [exon] H.sapiens fau 1 gene
+tgtaggctca
+&gt;X65921_1557_1612 [exon] H.sapiens fau 1 gene
+tacaggtaaa
+&gt;X65921_1787_1912 [exon] H.sapiens fau 1 gene
+tccaggtggc
+&gt;K00650_889_1029 [exon] Human fos proto-oncogene (c-fos), complete cds.
+ccacgatgat
+&gt;K00650_1783_2034 [exon] Human fos proto-oncogene (c-fos), complete cds.
+tctaggactt
+&gt;K00650_2466_2573 [exon] Human fos proto-oncogene (c-fos), complete cds.
+tctagttatc
+&gt;K00650_2688_3329 [exon] Human fos proto-oncogene (c-fos), complete cds.
+tacaggagac
+&gt;D00596_1001_1205 [exon] Homo sapiens gene for thymidylate synthase, complete cds.
+gcgccatgcc
+&gt;D00596_2895_2968 [exon] Homo sapiens gene for thymidylate synthase, complete cds.
+ttcagatgaa
+&gt;D00596_5396_5570 [exon] Homo sapiens gene for thymidylate synthase, complete cds.
+tccagggatc
+&gt;D00596_11843_11944 [exon] Homo sapiens gene for thymidylate synthase, complete cds.
+tacagattat
+&gt;D00596_13449_13624 [exon] Homo sapiens gene for thymidylate synthase, complete cds.
+ctcagatctt
+&gt;D00596_14133_14204 [exon] Homo sapiens gene for thymidylate synthase, complete cds.
+tatagccagg
+&gt;D00596_15613_15750 [exon] Homo sapiens gene for thymidylate synthase, complete cds.
+tttagcttca
+&gt;AB009071_67_155 [exon] Homo sapiens HERG gene, complete cds.
+cccgcccatg
+&gt;AB009071_356_586 [exon] Homo sapiens HERG gene, complete cds.
+cctaggccgt
+&gt;AB009071_768_932 [exon] Homo sapiens HERG gene, complete cds.
+tgcagggagc
+&gt;AB009071_1137_1580 [exon] Homo sapiens HERG gene, complete cds.
+cgcaggccgc
+&gt;AB009071_1742_1953 [exon] Homo sapiens HERG gene, complete cds.
+cctaggggcc
+&gt;AB009071_2168_2596 [exon] Homo sapiens HERG gene, complete cds.
+tgcaggtcct
+&gt;AB009071_2765_3152 [exon] Homo sapiens HERG gene, complete cds.
+cccagctgat
+&gt;AB009071_3332_3531 [exon] Homo sapiens HERG gene, complete cds.
+cccagccctc
+&gt;AB009071_3716_3968 [exon] Homo sapiens HERG gene, complete cds.
+cccaggtgct
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+aacagctcct
+&gt;U01317_39414_39558 [exon] Human beta globin region on chromosome 11.
+tccacacact
+&gt;U01317_39681_39903 [exon] Human beta globin region on chromosome 11.
+cacaggctcc
+&gt;U01317_40770_40985 [exon] Human beta globin region on chromosome 11.
+aacagctcct
+&gt;U01317_45710_45800 [exon] Human beta globin region on chromosome 11.
+acactgtagt
+&gt;U01317_45922_46145 [exon] Human beta globin region on chromosome 11.
+cacagtctcc
+&gt;U01317_46997_47124 [exon] Human beta globin region on chromosome 11.
+cccagctctt
+&gt;U01317_54740_54881 [exon] Human beta globin region on chromosome 11.
+tgcttacact
+&gt;U01317_55010_55232 [exon] Human beta globin region on chromosome 11.
+ctcagattac
+&gt;U01317_56131_56389 [exon] Human beta globin region on chromosome 11.
+cgcagctctt
+&gt;U01317_62137_62278 [exon] Human beta globin region on chromosome 11.
+tgcttacatt
+&gt;U01317_62187_62278 [exon] Human beta globin region on chromosome 11.
+acaccatggt
+&gt;U01317_62390_62408 [exon] Human beta globin region on chromosome 11.
+attggtctat
+&gt;U01317_62409_62631 [exon] Human beta globin region on chromosome 11.
+cttaggctgc
+&gt;U01317_63482_63742 [exon] Human beta globin region on chromosome 11.
+cacagctcct
+&gt;M23100_1541_1923 [exon] Human insulin receptor (INSR) gene, exon 1, clones lambda-hINSR-(1-13).
+ctccgggccc
+&gt;M23100_1542_1923 [exon] Human insulin receptor (INSR) gene, exon 1, clones lambda-hINSR-(1-13).
+tccgggcccc
+&gt;M23100_1548_1923 [exon] Human insulin receptor (INSR) gene, exon 1, clones lambda-hINSR-(1-13).
+ccccgagatc
+&gt;V00451_363_460 [exon] Glycine max leghemoglobin gene or pseudogene (no mRNA detected).
+gaaatatggg
+&gt;V00451_555_663 [exon] Glycine max leghemoglobin gene or pseudogene (no mRNA detected).
+aataggatat
+&gt;V00451_2182_2286 [exon] Glycine max leghemoglobin gene or pseudogene (no mRNA detected).
+tgtaggtgcg
+&gt;V00451_3065_3208 [exon] Glycine max leghemoglobin gene or pseudogene (no mRNA detected).
+cgtaggtggt
+&gt;M11903_351_499 [exon] Rattus norvegicus androgen-responsive protein precursor (Svf) gene, exons 1 and 1A, alternatively spliced.
+cctgtaggca
+&gt;M11903_401_499 [exon] Rattus norvegicus androgen-responsive protein precursor (Svf) gene, exons 1 and 1A, alternatively spliced.
+gctctcagtc
+&gt;M11904_109_445 [exon] Rattus norvegicus androgen-responsive protein precursor (Svf) gene, exon 2 and complete cds.
+aacagaaaaa
+&gt;M11905_233_420 [exon] Rattus norvegicus androgen-responsive protein precursor (Svf) gene, exon 3.
+cacaggttgt
+</pre>
+</td></tr></table><p>
+
+<a name="output.4"></a>
+<h3>Output files for usage example 4</h3>
+<p><h3>File: x65921.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;X65921_782_1912 [CDS] H.sapiens fau 1 gene
+atgcagctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacg
+gtcgcccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtc
+gtgctcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggag
+gccctgactaccctggaagtagcaggccgcatgcttggaggtaaagtccatggttccctg
+gcccgtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaag
+aagaagacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtg
+cccacctttggcaagaagaagggccccaatgccaactcttaa
+</pre>
+</td></tr></table><p>
+
+<a name="output.5"></a>
+<h3>Output files for usage example 5</h3>
+<p><h3>File: 12s1_arath.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;AQP1_HUMAN_247_247 [protein_modification_categorized_by_chemical_process] Aquaporin-1 (AQP-1) (Aquaporin-CHIP) (Water channel protein for red blood cells and kidney proximal tubule) (Urine water channel)
+VWTSGQV
+&gt;AQP1_HUMAN_262_262 [protein_modification_categorized_by_chemical_process] Aquaporin-1 (AQP-1) (Aquaporin-CHIP) (Water channel protein for red blood cells and kidney proximal tubule) (Urine water channel)
+DINSRVE
+&gt;GCN4_YEAST_17_17 [protein_modification_categorized_by_chemical_process] General control protein GCN4 (Amino acid biosynthesis regulatory protein)
+MGFSPLD
+&gt;GCN4_YEAST_218_218 [protein_modification_categorized_by_chemical_process] General control protein GCN4 (Amino acid biosynthesis regulatory protein)
+IPLSPIV
+&gt;OPSD_HUMAN_334_334 [protein_modification_categorized_by_chemical_process] Rhodopsin (Opsin-2)
+DEASATV
+&gt;OPSD_HUMAN_338_338 [protein_modification_categorized_by_chemical_process] Rhodopsin (Opsin-2)
+ATVSKTE
+&gt;OPSD_HUMAN_343_343 [protein_modification_categorized_by_chemical_process] Rhodopsin (Opsin-2)
+TETSQVA
+&gt;PAXI_HUMAN_83_83 [protein_modification_categorized_by_chemical_process] Paxillin
+QPQSSSP
+&gt;PAXI_HUMAN_85_85 [protein_modification_categorized_by_chemical_process] Paxillin
+QSSSPVY
+&gt;PAXI_HUMAN_106_106 [protein_modification_categorized_by_chemical_process] Paxillin
+SVGSPCS
+&gt;PAXI_HUMAN_109_109 [protein_modification_categorized_by_chemical_process] Paxillin
+SPCSRVG
+&gt;PAXI_HUMAN_126_126 [protein_modification_categorized_by_chemical_process] Paxillin
+KQKSAEP
+&gt;PAXI_HUMAN_130_130 [protein_modification_categorized_by_chemical_process] Paxillin
+AEPSPTV
+&gt;PAXI_HUMAN_137_137 [protein_modification_categorized_by_chemical_process] Paxillin
+MSTSLGS
+&gt;PAXI_HUMAN_303_303 [protein_modification_categorized_by_chemical_process] Paxillin
+GRSSPGG
+&gt;UBR5_RAT_193_193 [protein_modification_categorized_by_chemical_process] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog) (100 kDa protein) (Fragment)
+GRPSQGL
+&gt;UBR5_RAT_607_607 [protein_modification_categorized_by_chemical_process] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog) (100 kDa protein) (Fragment)
+SSRSVVD
+</pre>
+</td></tr></table><p>
 <p>
 
 The sequences of the specified features are written out.
@@ -2338,28 +902,84 @@ None.
     Notes
 </H2>
 
+<p>Bear in mind that database annotation cannot always be trusted to
+be reliable.  If you rely upon annotation written by other people or
+another program and do not independently verify such annotation, then
+there is a chance that some of the reported features will be
+erreneous.</p>
+
 <h3>Controlling the output</h3>
-<p>There are many options to control exactly what parts of the feature table are written to file.</p>
 
-<p>By default every feature in the feature table is extracted. <tt>-type</tt> will set the specific feature type to extract. See <a href="http://www3.ebi.ac.uk/Services/WebFeat/">http://www3.ebi.ac.uk/Services/WebFeat/</a> for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in <a href="http://www.expasy.ch/txt/userman.txt">http://www.expasy.ch/txt/userman.txt</a> for a list of the Swissprot feature types.</p>
+<p>There are many options to control exactly what parts of the feature
+table are written to file.</p>
 
-<p>By default any feature tag in the feature table is extracted. <tt>-tag</tt> specifies the feature tag to show. Tags are the types of extra values that a feature may have. For example in the EMBL feature table, a 'CDS' type of feature may have the tags <tt>/codon</tt>, <tt>/codon_start</tt>, <tt>/db_xref</tt>, <tt>/EC_number</tt>, <tt>/evidence</tt>, <tt>/exception</tt>, <tt>/function</tt>, <tt>/gene</tt>, <tt>/label</tt>, <tt>/map</tt>, <tt>/note</tt>, <tt>/number</tt>, <tt>/partial</tt>, <tt>/product</tt>, <tt>/protein_id</tt>,<tt>/pseudo</tt>, <tt>/standard_name</tt>, <tt>/translation</tt>, <tt>/transl_except</tt>, <tt>/transl_table</tt>, or <tt>/usedin</tt>. Some of these tags also have values, for example <tt>/gene</tt> can have the value of the gene name.</p>
+<p>By default every feature in the feature table is
+extracted. <tt>-type</tt> will set the specific feature type to
+extract. See <a href="http://www.ebi.ac.uk/Services/WebFeat/">
+http://www.ebi.ac.uk/Services/WebFeat/</a> for a list of the EMBL
+feature types and see Appendix A of the Swissprot user manual
+in <a href="http://www.uniprot.org/manual/sequence_annotation">
+http://www.uniprot.org/manual/sequence_annotation</a> for a list of
+the Swissprot feature types.</p>
 
-<p>By default any feature tag value in the feature table is shown. You can set this to match any feature tag value you wish to show. Tag values are the values associated with a feature tag, for example <tt>/gene</tt> can have the value of the gene name. Bear in mind only some of these tags can have values.</p>
+<p>By default any feature tag in the feature table is
+extracted. <tt>-tag</tt> specifies a feature tag reuired in any
+feature extracted. Tags are the types of extra values that a feature
+may have. For example in the EMBL feature table, a 'CDS' type of
+feature may have the
+tags <tt>/codon</tt>, <tt>/codon_start</tt>, <tt>/db_xref</tt>,
+<tt>/EC_number</tt>, <tt>/evidence</tt>, <tt>/exception</tt>,
+<tt>/function</tt>, <tt>/gene</tt>, <tt>/label</tt>, <tt>/map</tt>,
+<tt>/note</tt>, <tt>/number</tt>, <tt>/partial</tt>, <tt>/product</tt>,
+<tt>/protein_id</tt>,<tt>/pseudo</tt>, <tt>/standard_name</tt>,
+<tt>/translation</tt>, <tt>/transl_except</tt>, <tt>/transl_table</tt>,
+or <tt>/usedin</tt>. Some of these tags also have values, for
+example <tt>/gene</tt> can have the value of the gene name.</p>
 
-<p>By default any feature source in the feature table is shown. -source is used to set this to match a specific feature source.</p>
+<p>By default any feature tag value in the feature table is shown. You
+can set this using <tt>-tag</tt> to match any specific feature tag value you
+wish to show. Tag values are the values associated with a feature tag,
+for example <tt>/gene</tt> can have the value of the gene name. Bear
+in mind only some of these tags can have values.</p>
 
-<p>By default features in either sense are extracted. The -sense option specifies a particular sense.</p>
+<p>By default any feature source in the feature table is
+shown. <tt>-source</tt> is used to set this to match a specific feature
+source.</p>
 
-<p>The minimum and maximum score of features to be reported may be specified with -minimum and -maximum.</p>
+<p>By default features in either sense are extracted. The -sense
+option specifies a particular sense.</p>
 
-<p>To aid you in identifying the type of feature that has been output, the type of feature is added to the start of the description of the output sequence. Sometimes the description of a sequence is lost in subsequent processing of the sequences file, so it is useful for the type to be a part of the output sequence ID name. The -featinname option specifies this behaviour. </p>
+<p>The minimum and maximum score of features to be reported may be
+specified with -minscore and -maxscore.</p>
 
-<p>To aid you in identifying the properties of a feature that has been output, -describe specifies one or more tag names that will be added to the output sequence "Description" text, together with their values (if any). For example, if this is set to be <tt>gene</tt>, then if any output feature has the tag (for example) <tt>/gene=BRCA1</tt> associated with it, then the text <tt>(gene=BRCA1)</tt> will be added to the Description line. By default no feature tag is given in the "Description" text. You can set -describe to specify any feature tag you wish to show. </p>
+<p>To aid you in identifying the type of feature that has been output,
+the type of feature is added to the start of the description of the
+output sequence. Sometimes the description of a sequence is lost in
+subsequent processing of the sequences file, so it is useful for the
+type to be a part of the output sequence ID name. The -featinname
+option specifies this behaviour. </p>
+
+<p>To aid you in identifying the properties of a feature that has been
+output, -describe specifies one or more tag names that will be added
+to the output sequence "Description" text, together with their values
+(if any). For example, if this is set to be <tt>gene</tt>, then if any
+output feature has the tag (for example) <tt>/gene=BRCA1</tt>
+associated with it, then the text <tt>(gene=BRCA1)</tt> will be added
+to the Description line. By default no feature tag is given in the
+"Description" text. You can set -describe to specify any feature tag
+you wish to show. </p>
 
 
 <h3> "Joined" features </h3>
-<p>Some features, such as CDS (coding sequence) and mRNA are composed of introns concatenated together. There may be other forms of 'joined' sequence, depending on the feature table. By default, 'joined' features are extracted as individual sequences.  If the -join option is specified, then any group of these features will be output as a single sequence. If the <tt>-before</tt> and <tt>-after</tt> qualifiers have been set, then only the sequence before the first feature and after the last feature are added.</p>
+
+<p>Some features, such as CDS (coding sequence) and mRNA are composed
+of introns concatenated together. There may be other forms of 'joined'
+sequence, depending on the feature table. By default, 'joined'
+features are extracted as individual sequences.  If the -join option
+is specified, then any group of these features will be output as a
+single sequence. If the <tt>-before</tt> and <tt>-after</tt>
+qualifiers have been set, then only the sequence before the first
+feature and after the last feature are added.</p>
 
 
 <H2>
@@ -2371,8 +991,6 @@ None.
 <H2>
     Warnings
 </H2>
-
-<p>Bear in mind that database annotation cannot always be trusted to be reliable.  If you rely upon annotation written by other people or another program and do not independently verify such annotation, then there is a chance that some of the reported features will be erreneous.</p>
 
 
 
@@ -2538,6 +1156,11 @@ None.
 </tr>
 
 <tr>
+<td><a href="nthseqset.html">nthseqset</a></td>
+<td>Reads and writes (returns) one set of sequences from many</td>
+</tr>
+
+<tr>
 <td><a href="pasteseq.html">pasteseq</a></td>
 <td>Insert one sequence into another</td>
 </tr>
@@ -2550,6 +1173,11 @@ None.
 <tr>
 <td><a href="seqret.html">seqret</a></td>
 <td>Reads and writes (returns) sequences</td>
+</tr>
+
+<tr>
+<td><a href="seqretsetall.html">seqretsetall</a></td>
+<td>Reads and writes (returns) many sets of sequences</td>
 </tr>
 
 <tr>
@@ -2575,6 +1203,11 @@ None.
 <tr>
 <td><a href="skipseq.html">skipseq</a></td>
 <td>Reads and writes (returns) sequences, skipping first few</td>
+</tr>
+
+<tr>
+<td><a href="splitsource.html">splitsource</a></td>
+<td>Split sequence(s) into original source sequences</td>
 </tr>
 
 <tr>

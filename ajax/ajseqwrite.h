@@ -21,17 +21,20 @@ extern "C"
 ** @attr Gi [AjPStr] GI NCBI version number
 ** @attr Desc [AjPStr] One-line description
 ** @attr Tax [AjPStr] Main taxonomy (species)
+** @attr Taxid [AjPStr] Main taxonomy (species) id in NCBI taxonomy
 ** @attr Organelle [AjPStr] Organelle taxonomy
 ** @attr Type [AjPStr] Type N or P
 ** @attr Outputtype [AjPStr] Output sequence known type
 ** @attr Molecule [AjPStr] Molecule type
 ** @attr Class [AjPStr] Class of entry
 ** @attr Division [AjPStr] Database division
+** @attr Evidence [AjPStr] Experimental evidence (e.g. from UniProt)
 ** @attr Db [AjPStr] Database name from input name
 ** @attr Setdb [AjPStr] Database name from input command line
 ** @attr Setoutdb [AjPStr] Database name from command line
 ** @attr Full [AjPStr] Full name
 ** @attr Date [AjPSeqDate] Dates
+** @attr Fulldesc [AjPSeqDesc] Dates
 ** @attr Doc [AjPStr] Obsolete - see TextPtr
 ** @attr Rev [AjBool] true: to be reverse-complemented
 ** @attr Circular [AjBool] true: circular nucleotide molecule
@@ -50,7 +53,8 @@ extern "C"
 ** @attr Entryname [AjPStr] Entry name
 ** @attr Acclist [AjPList] Secondary accessions
 ** @attr Keylist [AjPList] Keyword list
-** @attr Taxlist [AjPList] Taxonomy list (just species for now)
+** @attr Taxlist [AjPList] Taxonomy list
+** @attr Genelist [AjPList] Gene list
 ** @attr Reflist [AjPList] References (citations)
 ** @attr Cmtlist [AjPList] Comment block list
 ** @attr Xreflist [AjPList] Database cross reference list
@@ -60,7 +64,7 @@ extern "C"
 ** @attr Single [AjBool] If true, single sequence in each file (-ossingle)
 ** @attr Features [AjBool] If true, save features with sequence or in file
 ** @attr Extension [AjPStr] File extension
-** @attr Accuracy [ajint*] Accuracy values (one per base) from base calling
+** @attr Accuracy [float*] Accuracy values (one per base) from base calling
 ** @attr Savelist [AjPList] Previous sequences saved for later output
 **                          (e.g. MSF format)
 ** @attr Count [ajint] Number of sequences
@@ -76,6 +80,7 @@ extern "C"
 ** @modify ajSeqsetWrite Master sequence set output routine
 ** @modify ajSeqFileNewOut Opens an output file for sequence writing.
 ** @other AjPSeq Sequences
+** @attr Cleanup [(void*)] Function to write remaining lines on closing
 ** @@
 ******************************************************************************/
 
@@ -86,17 +91,20 @@ typedef struct AjSSeqout {
   AjPStr Gi;
   AjPStr Desc;
   AjPStr Tax;
+  AjPStr Taxid;
   AjPStr Organelle;
   AjPStr Type;
   AjPStr Outputtype;
   AjPStr Molecule;
   AjPStr Class;
   AjPStr Division;
+  AjPStr Evidence;
   AjPStr Db;
   AjPStr Setdb;
   AjPStr Setoutdb;
   AjPStr Full;
   AjPSeqDate Date;
+  AjPSeqDesc Fulldesc;
   AjPStr Doc;
   AjBool Rev;
   AjBool Circular;
@@ -116,6 +124,7 @@ typedef struct AjSSeqout {
   AjPList Acclist;
   AjPList Keylist;
   AjPList Taxlist;
+  AjPList Genelist;
   AjPList Reflist;
   AjPList Cmtlist;
   AjPList Xreflist;
@@ -125,10 +134,11 @@ typedef struct AjSSeqout {
   AjBool Single;
   AjBool Features;
   AjPStr Extension;
-  ajint* Accuracy;
+  float* Accuracy;
   AjPList Savelist;
   ajint Count;
   ajint Offset;
+  void (*Cleanup) (AjPFile filethys);
 } AjOSeqout;
 
 #define AjPSeqout AjOSeqout*
@@ -143,6 +153,7 @@ typedef struct AjSSeqout {
 AjBool       ajSeqoutWriteSeq (AjPSeqout outseq, const AjPSeq seq);
 AjBool       ajSeqoutOpenFilename (AjPSeqout seqout, const AjPStr name);
 ajint        ajSeqoutGetCheckgcg (const AjPSeqout outseq);
+const AjPStr ajSeqoutGetFilename(const AjPSeqout thys);
 void         ajSeqoutClear (AjPSeqout thys);
 void         ajSeqoutGetBasecount(const AjPSeqout seqout, ajuint* bases);
 AjBool       ajSeqoutSetNameDefaultC(AjPSeqout thys,
@@ -164,8 +175,10 @@ void         ajSeqoutTrace (const AjPSeqout seq);
 void         ajSeqoutPrintFormat (AjPFile outf, AjBool full);
 void         ajSeqoutClearUsa (AjPSeqout thys, const AjPStr Usa);
 AjBool       ajSeqoutWriteSet (AjPSeqout seqout, const AjPSeqset seq);
-void         ajSeqoutClose (AjPSeqout outseq);
+void         ajSeqoutClose(AjPSeqout outseq);
+void         ajSeqoutFlush(AjPSeqout seqout);
 void         ajSeqoutExit(void);
+void         ajSeqoutReset(AjPSeqout seqout);
 
 void         ajSeqoutDumpSwisslike(AjPSeqout outseq,const AjPStr seq,
 				   const char *prefix);

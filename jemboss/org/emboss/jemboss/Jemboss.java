@@ -100,6 +100,9 @@ public class Jemboss implements ActionListener
   {
     // initialize settings
     JembossParams mysettings = new JembossParams();
+    
+    if (JembossParams.isJembossServer() == false)
+    	withSoap = false;
 
     ClassLoader cl = this.getClass().getClassLoader();
     displayFileManager = new ImageIcon(cl.getResource("images/Forward_arrow_button.gif"));
@@ -146,7 +149,8 @@ public class Jemboss implements ActionListener
       }
       catch(Exception exp){}
     }
-    f = new JFrame("Jemboss");   
+    f = new JFrame("Jemboss");
+    f.addWindowListener(new winExit());
     checkHomeDirectories(mysettings);
     initMainFrame(mysettings);
   }
@@ -262,8 +266,7 @@ public class Jemboss implements ActionListener
                          mainMenu,f);
 
     setWindowSizesAndLocation();
-    
-    f.addWindowListener(new winExit());
+
   }
 
 
@@ -366,7 +369,6 @@ public class Jemboss implements ActionListener
         myPreferences.putInt(DIVIDER2_LOCATION_KEY, pright.getDividerLocation());
         myPreferences.putBoolean(LOCAL_FILE_MAN_KEY, pright.getRightComponent()!=null);
         mainMenu.exitJemboss();
-        System.exit(0);
      }
   }
 

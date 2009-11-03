@@ -284,7 +284,8 @@ int main(int argc, char **argv)
         ajDebug("ajFeattableDel(&tabB)\n");	 
 	ajFeattableDel(&tabB);
     }
-    
+    ajReportSetSeqstats(report, seqall);
+
     ajStrDel(&seqname);
     ajSeqDel(&seq);
     ajSeqallDel(&seqall);

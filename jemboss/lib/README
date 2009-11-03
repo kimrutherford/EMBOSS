@@ -6,10 +6,6 @@ jakarta-regexp-1.2.jar 	- From Jakarta Project, Regexp 1.2
                           http://jakarta.apache.org/regexp/index.html
                           http://jakarta.apache.org/builds/jakarta-regexp/release/
 
-xerces.jar              - Xerces XML parser (1.4.4), from Apache.
-                          http://xml.apache.org/dist/
-                          http://xml.apache.org/dist/xerces-j/
-
 mail.jar                - Javamail, from Sun, v1.3.2
                           http://java.sun.com/products/javamail/
 

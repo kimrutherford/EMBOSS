@@ -24,7 +24,6 @@ import org.emboss.jemboss.gui.ScrollPanel;
 import org.emboss.jemboss.gui.sequenceChooser.CutNPasteTextArea;
 
 import javax.swing.Box;
-import javax.swing.JLabel;
 
 public class Paste extends ScrollPanel
 {

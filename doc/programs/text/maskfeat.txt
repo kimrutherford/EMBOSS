@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Write a sequence with masked features
@@ -136,7 +143,7 @@ Command line arguments
 Input file format
 
    maskfeat reads in a sequence USA. You can optionally specify a GFF
-   feature file to use with the command-line option '-gff filename'.
+   feature file to use with the command-line option '-ufo filename'.
 
   Input files for usage example
 
@@ -150,11 +157,11 @@ XX
 AC   AB000360;
 XX
 DT   27-OCT-1997 (Rel. 53, Created)
-DT   14-NOV-2006 (Rel. 89, Last updated, Version 3)
+DT   28-SEP-2008 (Rel. 97, Last updated, Version 5)
 XX
 DE   Homo sapiens PIGC gene, complete cds.
 XX
-KW   glycosylphosphatidylinositol-synthesis gene; PIGC.
+KW   .
 XX
 OS   Homo sapiens (human)
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
@@ -164,13 +171,11 @@ OC   Homo.
 XX
 RN   [1]
 RP   1-2582
-RA   Hong Y.;
+RA   Hong Y., Ohishi K., Inoue N., Endo Y., Fujita T., Takeda J., Kinoshita T.;
 RT   ;
 RL   Submitted (08-JAN-1997) to the EMBL/GenBank/DDBJ databases.
-RL   Yeongjin Hong, Research Institute for Microbial Diseases, Immunoregulation
-;
-RL   3-1 Yamada-oka, Suita, Osaka 565, Japan
-RL   (E-mail:kohishi@biken.osaka-u.ac.jp, Tel:81-6-879-8329, Fax:81-6-875-5233)
+RL   Contact:Yeongjin Hong Research Institute for Microbial Diseases,
+RL   Immunoregulation; 3-1 Yamada-oka, Suita, Osaka 565, Japan
 XX
 RN   [2]
 RX   DOI; 10.1006/geno.1997.4893.
@@ -197,6 +202,7 @@ FT                   /gene="PIGC"
 FT                   /standard_name="glycosylphosphatidylinositol-synthesis
 FT                   gene"
 FT                   /db_xref="GDB:6045444"
+FT                   /db_xref="GOA:Q92535"
 
 
   [Part of this file has been deleted for brevity]
@@ -419,9 +425,10 @@ Notes
    find gruops of feature types sharing a common part of their names.
 
    If you are unsure of the names of feature types in use, please consult
-   http://www3.ebi.ac.uk/Services/WebFeat/ (EMBL feature types) and see
+   http://www.ebi.ac.uk/Services/WebFeat/ (EMBL feature types) and see
    Appendix A of the Swissprot user manual in
-   http://www.expasy.ch/txt/userman.txt (Swissprot feature types).
+   http://www.uniprot.org/manual/sequence_annotation (Swissprot feature
+   types).
 
 References
 
@@ -445,53 +452,56 @@ Known bugs
 
 See also
 
-   Program name Description
-   aligncopy Reads and writes alignments
-   aligncopypair Reads and writes pairs from alignments
-   biosed Replace or delete sequence sections
-   codcopy Copy and reformat a codon usage table
-   coderet Extract CDS, mRNA and translations from feature tables
-   cutseq Removes a section from a sequence
-   degapseq Removes non-alphabetic (e.g. gap) characters from sequences
-   descseq Alter the name or description of a sequence
-   entret Retrieves sequence entries from flatfile databases and files
-   extractalign Extract regions from a sequence alignment
-   extractfeat Extract features from sequence(s)
-   extractseq Extract regions from a sequence
-   featcopy Reads and writes a feature table
-   featreport Reads and writes a feature table
-   listor Write a list file of the logical OR of two sets of sequences
-   makenucseq Create random nucleotide sequences
-   makeprotseq Create random protein sequences
-   maskambignuc Masks all ambiguity characters in nucleotide sequences
-   with N
-   maskambigprot Masks all ambiguity characters in protein sequences with
-   X
-   maskseq Write a sequence with masked regions
-   newseq Create a sequence file from a typed-in sequence
-   nohtml Remove mark-up (e.g. HTML tags) from an ASCII text file
-   noreturn Remove carriage return from ASCII files
-   nospace Remove all whitespace from an ASCII text file
-   notab Replace tabs with spaces in an ASCII text file
-   notseq Write to file a subset of an input stream of sequences
-   nthseq Write to file a single sequence from an input stream of
-   sequences
-   pasteseq Insert one sequence into another
-   revseq Reverse and complement a nucleotide sequence
-   seqret Reads and writes (returns) sequences
-   seqretsplit Reads sequences and writes them to individual files
-   showfeat Display features of a sequence in pretty format
-   sizeseq Sort sequences by size
-   skipredundant Remove redundant sequences from an input set
-   skipseq Reads and writes (returns) sequences, skipping first few
-   splitter Split sequence(s) into smaller sequences
-   trimest Remove poly-A tails from nucleotide sequences
-   trimseq Remove unwanted characters from start and end of sequence(s)
-   trimspace Remove extra whitespace from an ASCII text file
-   twofeat Finds neighbouring pairs of features in sequence(s)
-   union Concatenate multiple sequences into a single sequence
-   vectorstrip Removes vectors from the ends of nucleotide sequence(s)
-   yank Add a sequence reference (a full USA) to a list file
+   Program name     Description
+   aligncopy        Reads and writes alignments
+   aligncopypair    Reads and writes pairs from alignments
+   biosed           Replace or delete sequence sections
+   codcopy          Copy and reformat a codon usage table
+   coderet          Extract CDS, mRNA and translations from feature tables
+   cutseq           Removes a section from a sequence
+   degapseq         Removes non-alphabetic (e.g. gap) characters from sequences
+   descseq          Alter the name or description of a sequence
+   entret           Retrieves sequence entries from flatfile databases and files
+   extractalign     Extract regions from a sequence alignment
+   extractfeat      Extract features from sequence(s)
+   extractseq       Extract regions from a sequence
+   featcopy         Reads and writes a feature table
+   featreport       Reads and writes a feature table
+   listor           Write a list file of the logical OR of two sets of sequences
+   makenucseq       Create random nucleotide sequences
+   makeprotseq      Create random protein sequences
+   maskambignuc     Masks all ambiguity characters in nucleotide sequences
+   with             N
+   maskambigprot    Masks all ambiguity characters in protein sequences with
+                    X
+   maskseq          Write a sequence with masked regions
+   newseq           Create a sequence file from a typed-in sequence
+   nohtml           Remove mark-up (e.g. HTML tags) from an ASCII text file
+   noreturn         Remove carriage return from ASCII files
+   nospace          Remove all whitespace from an ASCII text file
+   notab            Replace tabs with spaces in an ASCII text file
+   notseq           Write to file a subset of an input stream of sequences
+   nthseq           Write to file a single sequence from an input stream of
+                    sequences
+   nthseqset        Reads and writes (returns) one set of sequences from many
+   pasteseq         Insert one sequence into another
+   revseq           Reverse and complement a nucleotide sequence
+   seqret           Reads and writes (returns) sequences
+   seqretsetall     Reads and writes (returns) many sets of sequences
+   seqretsplit      Reads sequences and writes them to individual files
+   showfeat         Display features of a sequence in pretty format
+   sizeseq          Sort sequences by size
+   skipredundant    Remove redundant sequences from an input set
+   skipseq          Reads and writes (returns) sequences, skipping first few
+   splitsource      Split sequence(s) into original source sequences
+   splitter         Split sequence(s) into smaller sequences
+   trimest          Remove poly-A tails from nucleotide sequences
+   trimseq          Remove unwanted characters from start and end of sequence(s)
+   trimspace        Remove extra whitespace from an ASCII text file
+   twofeat          Finds neighbouring pairs of features in sequence(s)
+   union            Concatenate multiple sequences into a single sequence
+   vectorstrip      Removes vectors from the ends of nucleotide sequence(s)
+   yank             Add a sequence reference (a full USA) to a list file
 
 Author(s)
 

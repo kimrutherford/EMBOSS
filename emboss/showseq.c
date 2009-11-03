@@ -29,6 +29,7 @@
 static void showseq_FormatShow(EmbPShow ss,
 			       const AjPStr format, const AjPTrn trnTable,
 			       const AjPRange translaterange,
+			       const AjPRange revtranslaterange,
 			       const AjPRange uppercase,
 			       const AjPRange highlight, AjBool threeletter,
 			       AjBool numberseq, const AjPFeattable feat,
@@ -42,7 +43,8 @@ static AjBool showseq_MatchFeature(const AjPFeature gf,
 				   AjPFeature newgf,
 				   const AjPStr matchsource,
 				   const AjPStr matchtype,
-				   ajint matchsense, float minscore,
+				   ajint matchsense, AjBool testscore,
+                                   float minscore,
 				   float maxscore, const AjPStr matchtag,
 				   const AjPStr matchvalue, AjBool *tagsmatch, 
 				   AjBool stricttags);
@@ -55,7 +57,8 @@ static void showseq_FeatureFilter(const AjPFeattable featab,
 				  AjPFeattable newfeatab,
 				  const AjPStr matchsource,
 				  const AjPStr matchtype,
-				  ajint matchsense, float minscore,
+				  ajint matchsense, AjBool testscore,
+                                  float minscore,
 				  float maxscore, const AjPStr matchtag,
 				  const AjPStr matchvalue, AjBool stricttags);
 static AjPFeature showseq_FeatCopy(const AjPFeature orig);
@@ -88,6 +91,7 @@ int main(int argc, char **argv)
     AjPStr tablename;
     ajint table = 0;
     AjPRange translaterange;
+    AjPRange revtranslaterange;
     AjPRange uppercase;
     AjPRange highlight;
     AjBool threeletter;
@@ -125,8 +129,10 @@ int main(int argc, char **argv)
     AjBool plasmid;
     AjBool commercial;
     AjBool limit;
+    AjBool methyl;
     AjPFile enzfile  = NULL;
     AjPFile equfile  = NULL;
+    AjPFile methfile = NULL;
     AjPTable retable = NULL;
     ajint hits;
     AjPList restrictlist = NULL;
@@ -139,6 +145,7 @@ int main(int argc, char **argv)
     float maxscore;
     AjPStr matchtag   = NULL;
     AjPStr matchvalue = NULL;
+    AjBool testscore = AJFALSE;
 
 
     embInit("showseq", argc, argv);
@@ -149,6 +156,7 @@ int main(int argc, char **argv)
     thinglist      = ajAcdGetList("things");
     tablename      = ajAcdGetListSingle("table");
     translaterange = ajAcdGetRange("translate");
+    revtranslaterange = ajAcdGetRange("revtranslate");
     uppercase      = ajAcdGetRange("uppercase");
     highlight      = ajAcdGetRange("highlight");
     annotation     = ajAcdGetRange("annotation");
@@ -175,18 +183,27 @@ int main(int argc, char **argv)
     plasmid    = ajAcdGetBoolean("plasmid");
     commercial = ajAcdGetBoolean("commercial");
     limit      = ajAcdGetBoolean("limit");
+    methyl     = ajAcdGetBoolean("methylation");
     enzymes    = ajAcdGetString("enzymes");
-
+    methfile   = ajAcdGetDatafile("mfile");
+    
     /* feature filter criteria */
-    matchsource = ajAcdGetString("matchsource");
-    matchtype   = ajAcdGetString("matchtype");
-    matchsense  = ajAcdGetInt("matchsense");
+    matchsource = ajAcdGetString("sourcematch");
+    matchtype   = ajAcdGetString("typematch");
+    matchsense  = ajAcdGetInt("sensematch");
     minscore    = ajAcdGetFloat("minscore");
     maxscore    = ajAcdGetFloat("maxscore");
-    matchtag    = ajAcdGetString("matchtag");
-    matchvalue  = ajAcdGetString("matchvalue");
+    matchtag    = ajAcdGetString("tagmatch");
+    matchvalue  = ajAcdGetString("valuematch");
     stricttags  = ajAcdGetBoolean("stricttags");
 
+    testscore = (minscore || maxscore);
+    if(minscore && !maxscore)
+        if(minscore > maxscore)
+            maxscore = minscore;
+    if(!minscore && maxscore)
+        if(minscore > maxscore)
+            minscore = maxscore;
 
     format = ajStrNew();
     
@@ -195,7 +212,7 @@ int main(int argc, char **argv)
     
     /* check that the translate range is ordered */
     if(!ajRangeOrdered(translaterange))
-	ajFatal("Translation ranges are not in ascending, "
+	ajWarn("Translation ranges are not in ascending, "
 		"non-overlapping order.");
     
     
@@ -232,6 +249,34 @@ int main(int argc, char **argv)
     /* create the translation table */
     trnTable = ajTrnNewI(table);
     
+    /*
+    **  most of this is lifted from the program 'restrict.c' by Alan
+    **  Bleasby
+    */
+    if(ajStrFindC(format, "R") != -1)
+    {
+        if(single)
+            maxcuts = mincuts = 1;
+        retable = ajTablestrNewLen(EQUGUESS);
+        enzfile = ajDatafileNewInNameC(ENZDATA);
+
+        if(!enzfile)
+            ajFatal("Cannot locate enzyme file. Run REBASEEXTRACT");
+
+        if(limit)
+        {
+            equfile = ajDatafileNewInNameC(EQUDATA);
+            if(!equfile)
+                limit = ajFalse;
+            else
+            {
+                showseq_read_equiv(equfile, retable);
+                ajFileClose(&equfile);
+            }
+        }
+    }
+
+
     while(ajSeqallNext(seqall, &seq))
     {
 	begin = ajSeqGetBegin(seq)-1;
@@ -278,7 +323,8 @@ int main(int argc, char **argv)
 
         /* only copy features in the table that match our criteria */
         showseq_FeatureFilter(feattab, newfeattab, matchsource, matchtype,
-			      matchsense, minscore, maxscore, matchtag,
+			      matchsense, testscore,
+                              minscore, maxscore, matchtag,
 			      matchvalue, stricttags);
 
 
@@ -288,32 +334,12 @@ int main(int argc, char **argv)
 	*/
 	if(ajStrFindC(format, "R") != -1)
 	{
-	    if(single)
-		maxcuts = mincuts = 1;
-	    retable = ajTablestrNewLen(EQUGUESS);
-	    enzfile = ajDatafileNewInNameC(ENZDATA);
-
-	    if(!enzfile)
-		ajFatal("Cannot locate enzyme file. Run REBASEEXTRACT");
-
-	    if(limit)
-	    {
-		equfile = ajDatafileNewInNameC(EQUDATA);
-		if(!equfile)
-		    limit = ajFalse;
-		else
-		{
-		    showseq_read_equiv(equfile, retable);
-		    ajFileClose(&equfile);
-		}
-	    }
-
 	    ajFileSeek(enzfile, 0L, 0);
 	    hits = embPatRestrictMatch(seq, 1, ajSeqGetLen(seq),
-				       enzfile, enzymes,
+				       enzfile, methfile, enzymes,
 				       sitelen, plasmid, ambiguity, mincuts,
 				       maxcuts, blunt, sticky, commercial,
-				       restrictlist);
+				       methyl, restrictlist);
 	    if(hits)
 	    {
 		/* this bit is lifted from printHits */
@@ -323,8 +349,6 @@ int main(int argc, char **argv)
 		    embPatRestrictPreferred(restrictlist,retable);
 	    }
 
-
-	    ajFileClose(&enzfile);
 	}
 
 
@@ -338,7 +362,8 @@ int main(int argc, char **argv)
 	if(html)
 	    ajFmtPrintF(outfile, "<PRE>");
 
-	showseq_FormatShow(ss, format, trnTable, translaterange,
+	showseq_FormatShow(ss, format, trnTable,
+                           translaterange, revtranslaterange,
 			   uppercase, highlight, threeletter,
 			   numberseq, newfeattab, orfminsize,
 			   restrictlist, plasmid, flat, annotation);
@@ -373,9 +398,12 @@ int main(int argc, char **argv)
     ajStrDel(&matchtag);
     ajStrDel(&matchvalue);
     ajRangeDel(&translaterange);
+    ajRangeDel(&revtranslaterange);
     ajRangeDel(&uppercase);
     ajRangeDel(&highlight);
     ajRangeDel(&annotation);
+    ajFileClose(&enzfile);
+    ajFileClose(&methfile);
 
     embExit();
 
@@ -394,6 +422,7 @@ int main(int argc, char **argv)
 **                       things to display
 ** @param [r] trnTable [const AjPTrn] genetic code translation table
 ** @param [r] translaterange [const AjPRange] ranges to translate
+** @param [r] revtranslaterange [const AjPRange] ranges to translate in reverse
 ** @param [r] uppercase [const AjPRange] ranges to uppercase
 ** @param [r] highlight [const AjPRange] ranges to colour in HTML
 ** @param [r] threeletter [AjBool] use 3-letter code
@@ -414,6 +443,7 @@ int main(int argc, char **argv)
 static void showseq_FormatShow(EmbPShow ss,
 			       const AjPStr format, const AjPTrn trnTable,
 			       const AjPRange translaterange,
+			       const AjPRange revtranslaterange,
 			       const AjPRange uppercase,
 			       const AjPRange highlight,  AjBool threeletter,
 			       AjBool numberseq, const AjPFeattable feat,
@@ -443,23 +473,23 @@ static void showseq_FormatShow(EmbPShow ss,
 			   AJFALSE, AJFALSE, AJFALSE, AJFALSE);
 	else if(!ajStrCmpC(code, "2"))
 	    embShowAddTran(ss, trnTable, 2, threeletter, numberseq,
-			   NULL, orfminsize,
+			   translaterange, orfminsize,
 			   AJFALSE, AJFALSE, AJFALSE, AJFALSE);
 	else if(!ajStrCmpC(code, "3"))
 	    embShowAddTran(ss, trnTable, 3, threeletter, numberseq,
-			   NULL, orfminsize,
+			   translaterange, orfminsize,
 			   AJFALSE, AJFALSE, AJFALSE, AJFALSE);
 	else if(!ajStrCmpC(code, "-1"))
 	    embShowAddTran(ss, trnTable, -1, threeletter, numberseq,
-			   NULL, orfminsize,
+			   revtranslaterange, orfminsize,
 			   AJFALSE, AJFALSE, AJFALSE, AJFALSE);
 	else if(!ajStrCmpC(code, "-2"))
 	    embShowAddTran(ss, trnTable, -2, threeletter, numberseq,
-			   NULL, orfminsize,
+			   revtranslaterange, orfminsize,
 			   AJFALSE, AJFALSE, AJFALSE, AJFALSE);
 	else if(!ajStrCmpC(code, "-3"))
 	    embShowAddTran(ss, trnTable, -3, threeletter, numberseq,
-			   NULL, orfminsize,
+			   revtranslaterange, orfminsize,
 			   AJFALSE, AJFALSE, AJFALSE, AJFALSE);
 	else if(!ajStrCmpC(code, "T"))
 	    embShowAddTicks(ss);
@@ -586,6 +616,7 @@ static void showseq_read_file_of_enzyme_names(AjPStr *enzymes)
 ** @param [r] matchtype [const AjPStr] Required Type pattern
 ** @param [r] matchsense [ajint] Required Sense pattern +1,0,-1
 **                               (or other value$
+** @param [r] testscore [AjBool] Filter by score values
 ** @param [r] minscore [float] Min required Score pattern
 ** @param [r] maxscore [float] Max required Score pattern
 ** @param [r] matchtag [const AjPStr] Required Tag pattern
@@ -600,7 +631,8 @@ static void showseq_FeatureFilter(const AjPFeattable featab,
 				  AjPFeattable newfeatab,
 				  const AjPStr matchsource,
 				  const AjPStr matchtype,
-				  ajint matchsense, float minscore,
+				  ajint matchsense, AjBool testscore,
+                                  float minscore,
 				  float maxscore, const AjPStr matchtag,
 				  const AjPStr matchvalue, AjBool stricttags)
 {
@@ -622,8 +654,8 @@ static void showseq_FeatureFilter(const AjPFeattable featab,
             newgf = showseq_FeatCopy(gf); /* copy of gf that we can add */
 	    /* required tags to */
 	    if(showseq_MatchFeature(gf, newgf, matchsource, matchtype,
-				    matchsense,
-				    minscore, maxscore, matchtag,
+				    matchsense, testscore,
+                                    minscore, maxscore, matchtag,
 				    matchvalue, &tagsmatch, stricttags))
 	    	 /* 
 		 ** There's a match, so add the copy of gf
@@ -652,6 +684,7 @@ static void showseq_FeatureFilter(const AjPFeattable featab,
 ** @param [r] source [const AjPStr] Required Source pattern
 ** @param [r] type [const AjPStr] Required Type pattern
 ** @param [r] sense [ajint] Required Sense pattern +1,0,-1 (or other value$
+** @param [r] testscore [AjBool] Filter by score values
 ** @param [r] minscore [float] Min required Score pattern
 ** @param [r] maxscore [float] Max required Score pattern
 ** @param [r] tag [const AjPStr] Required Tag pattern
@@ -666,14 +699,11 @@ static void showseq_FeatureFilter(const AjPFeattable featab,
 static AjBool showseq_MatchFeature(const AjPFeature gf, AjPFeature newgf,
 				   const AjPStr source, const AjPStr type,
 				   ajint sense,
-				   float minscore, float maxscore,
+				   AjBool testscore,
+                                   float minscore, float maxscore,
 				   const AjPStr tag, const AjPStr value,
 				   AjBool *tagsmatch, AjBool stricttags)
 {
-    AjBool scoreok;
-
-    scoreok = (minscore < maxscore);
-
      /*
      ** is this a child of a join() ?
      ** if it is a child, then we use the previous result of MatchPatternTags
@@ -696,8 +726,8 @@ static AjBool showseq_MatchFeature(const AjPFeature gf, AjPFeature newgf,
        !embMiscMatchPattern(ajFeatGetType(gf), type) ||
        (ajFeatGetStrand(gf) == '+' && sense == -1) ||
        (ajFeatGetStrand(gf) == '-' && sense == +1) ||
-       (scoreok && ajFeatGetScore(gf) < minscore) ||
-       (scoreok && ajFeatGetScore(gf) > maxscore) ||
+       (testscore && ajFeatGetScore(gf) < minscore) ||
+       (testscore && ajFeatGetScore(gf) > maxscore) ||
        !*tagsmatch)
 	return ajFalse;
 

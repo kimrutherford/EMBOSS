@@ -5,7 +5,7 @@
 # A biological feature that can be attributed to a region of biological
 # sequence.
 
-located_sequence_feature SO:0000110
+sequence_feature SO:0000110
 
 # SO:ke
 # The reverse complement of the primary transcript.
@@ -59,6 +59,12 @@ binding_site SO:0000409
 # structure resembles a lariat.
 
 branch_site SO:0000611
+
+# Genomic DNA of immunoglobulin/T-cell receptor gene including C-region
+# (and introns if present) with 5' UTR (SO:0000204) and 3' UTR
+# (SO:0000205). http://imgt.cines.fr/ligmdb/LIGMlect?query=7
+
+C_gene SO:0000478
 
 # http://seqcore.brcf.med.umich.edu/doc/educ/dnapr/mbglossary/mbgloss.html
 # A structure consisting of a 7-methylguanosine in 5'-5' triphosphate
@@ -146,6 +152,11 @@ CpG_island SO:0000307
 # A nucleotide match against a sequence from another organism.
 
 cross_genome_match SO:0000177
+
+# Germline genomic DNA including D-region with 5' UTR and 3' UTR, also
+# designated as D-segment.
+
+D_gene SO:0000458
 
 # SO:ke
 # The sequence referred to by an entry in a databank such as Genbank or
@@ -361,6 +372,17 @@ inversion SO:1000036
 
 inverted_repeat SO:0000294
 
+# Germline genomic DNA of an immunoglobulin/T-cell receptor gene
+# including J-region with 5' UTR (SO:0000204) and 3' UTR (SO:0000205),
+# also designated as J-segment.
+
+J_gene SO:0000470
+
+# Recombination signal including J-heptamer, J-spacer and J-nonamer in
+# 5' of J-region of a J-gene or J-sequence
+
+J_gene_recombination_feature SO:0000302
+
 # SO:ke
 # A junction refers to an interbase location of zero in a sequence.
 
@@ -422,6 +444,10 @@ minisatellite SO:0000643
 # Dicer pathway) such that a single miRNA molecule accumulates from one
 # arm of a hairpinprecursor molecule. miRNAs may trigger the cleavage of
 # their target molecules oract as translational repressors.
+
+minus_10_signal SO:0000175
+
+minus_35_signal SO:0000176
 
 miRNA SO:0000276
 
@@ -567,6 +593,8 @@ possible_base_call_error SO:0000701
 
 primary_transcript SO:0000185
 
+primary_transcript_region SO:0000835
+
 # http://www.ornl.gov/TechResources/Human_Genome/publicat/primer2001/glossary.html
 # A short preexisting polynucleotide chain to which new
 # deoxyribonucleotides can be added by DNA polymerase.
@@ -576,6 +604,8 @@ primer SO:0000112
 # SO:ke
 # A transcript which has undergone processing to remove parts such as
 # introns and transcribed_spacer_regions.
+
+primer_binding_site SO:0005850
 
 processed_transcript SO:0000233
 
@@ -801,10 +831,18 @@ scRNA SO:0000013
 sequence_difference SO:0000413
 sequence_conflict   SO:0001085
 
+# Describes the positions in a sequence where the authors are unsure
+# about the sequence assignment
+
+sequence_uncertainty SO:0001086
+
 # SO:ke
 # A region of sequence where variation has been observed.
 
 sequence_variant SO:0000109
+
+sequencing_information SO:0001082
+
 
 # http:www.ebi.ac.uk/embl/Documentation/FT_definitions/feature_table.html
 # The sequence for an N-terminal domain of a secreted protein; this domain
@@ -994,6 +1032,18 @@ tiling_path SO:0000472
 
 tiling_path_fragment SO:0000474
 
+# A tmRNA liberates a mRNA from a stalled ribosome. To accomplish this
+# part of the tmRNA is used as a reading frame that ends in a
+# translation stop signal. The broken mRNA is replaced in the ribosome
+# by the tmRNA and translation of the tmRNA leads to addition of a
+# proteolysis tag to the incomplete protein enabling recognition by a
+# protease. Recently a number of permuted tmRNAs genes have been found
+# encoded in two parts. TmRNAs have been identified in eubacteria and
+# some chloroplasts but are absent from archeal and eukaryote nuclear
+# genomes.
+
+tmRNA  SO:0000584
+
 # SO:ma
 # An RNA synthesized on a DNA or RNA template by an RNA polymerase.
 
@@ -1155,6 +1205,11 @@ ultracontig SO:0000719
 
 UTR SO:0000203
 
+# Germline genomic DNA including L-part1, V-intron and V-exon, with the
+# 5' UTR and 3' UTR.
+
+V_gene SO:0000466
+
 # http://www.sanger.ac.uk/cgi-bin/Rfam/getacc?RF00006
 # A family of RNAs are found as part of the enigmatic vault
 # ribonuceoprotein complex. The complex consists of a major vault protein
@@ -1163,6 +1218,14 @@ UTR SO:0000203
 # is involved in drug resistance.
 
 vault_RNA SO:0000404
+
+vertebrate_immune_system_gene_recombination_feature SO:0000301 SO:0000301_S_region
+
+# Use for EMBL N_region
+vertebrate_immune_system_gene_recombination_spacer SO:0000563
+
+# Use for EMBL V_region
+vertebrate_immunoglobulin_T_cell_receptor_rearranged_gene_cluster SO:0000938
 
 # SO:ke
 # A continous piece of sequence similar to the 'virtual contig' concept of

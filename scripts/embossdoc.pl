@@ -1005,6 +1005,7 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    }
 	    if ($isprog && $fname eq "main") {$fname = $pubout}
 	    $trest = $frest;
+	    #if($frest =~ /<(.*)>/) {print "bad HTML tag <$1>\n"}
 	    $frest =~ s/>/\&gt;/gos;
 	    $frest =~ s/</\&lt;/gos;
 	    $frest =~ s/\n\n/\n<p>\n/gos;
@@ -1092,6 +1093,7 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 		}
 	    }
 	    $trest = $frest;
+	    #if($frest =~ /<(.*)>/) {print "bad HTML tag <$1>\n"}
 	    $frest =~ s/>/\&gt;/gos;
 	    $frest =~ s/</\&lt;/gos;
 	    $frest =~ s/\n\n/\n<p>\n/gos;
@@ -1156,6 +1158,7 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    ${$ostr} .= "<hr><h4><a name=\"$name\">\n";
 	    ${$ostr} .= "Macro</a> ".srsref($name)."</h4>\n";
 	    $trest = $mrest;
+	    #if($mrest =~ /<(.*)>/) {print "bad HTML tag <$1>\n"}
 	    $mrest =~ s/>/\&gt;/gos;
 	    $mrest =~ s/</\&lt;/gos;
 	    $mrest =~ s/\n\n/\n<p>\n/gos;
@@ -1206,6 +1209,7 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    ${$ostr} .= "<hr><h4><a name=\"$name\">\n";
 	    ${$ostr} .= "Function list</a> ".srsref($name)."</h4>\n";
 	    $trest = $mrest;
+	    #if($mrest =~ /<(.*)>/) {print "bad HTML tag <$1>\n"}
 	    $mrest =~ s/>/\&gt;/gos;
 	    $mrest =~ s/</\&lt;/gos;
 	    $mrest =~ s/\n\n/\n<p>\n/gos;

@@ -24,8 +24,8 @@
 
 #define AZ 27
 
-
-
+float maxscore = 0.0;
+ajuint seqnum=0;
 
 static void profit_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
 				ajint *mlen, float *gapopen, float *gapextend,
@@ -34,17 +34,17 @@ static void profit_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
 static void profit_read_simple(AjPFile inf, AjPStr *name, ajint *mlen,
 			       ajint *maxs, ajint *thresh,AjPStr *cons);
 
-static void profit_scan_profile(const AjPStr substr, const AjPStr pname,
+static void profit_scan_profile(const AjPStr substr, const AjPStr seqname,
 				ajint mlen, float * const *fmatrix,
 				ajint thresh, float maxs, AjPFile outf);
 
 static void profit_scan_simple(const AjPStr substr,
-			       const AjPStr pname,
+			       const AjPStr seqname,
 			       ajint mlen, ajint maxs, ajint thresh,
 			       ajint * const *matrix,
 			       AjPFile outf);
 
-static void profit_printHits(const AjPStr pname, ajint pos,
+static void profit_printHits(const AjPStr seqname, ajint pos,
 			     ajint score, AjPFile outf);
 
 static ajint profit_getType(AjPFile inf);
@@ -69,7 +69,7 @@ int main(int argc, char **argv)
     AjPStr substr = NULL;
     AjPStr name   = NULL;
     AjPStr mname  = NULL;
-    AjPStr pname  = NULL;
+    AjPStr seqname  = NULL;
     AjPStr line   = NULL;
     AjPStr cons   = NULL;
 
@@ -189,10 +189,11 @@ int main(int argc, char **argv)
 
     while(ajSeqallNext(seqall, &seq))
     {
+        seqnum++;
 	begin = ajSeqallGetseqBegin(seqall);
 	end   = ajSeqallGetseqEnd(seqall);
 
-	ajStrAssignC(&pname,ajSeqGetNameC(seq));
+	ajStrAssignC(&seqname,ajSeqGetNameC(seq));
 	strand = ajSeqGetSeqCopyS(seq);
 
 	ajStrAssignSubC(&substr,ajStrGetPtr(strand),begin-1,end-1);
@@ -200,16 +201,16 @@ int main(int argc, char **argv)
 	switch(type)
 	{
 	case 1:
-	    profit_scan_simple(substr,pname,mlen,maxs,thresh,matrix,
-			       outf);
+	  profit_scan_simple(substr,seqname,mlen,maxs,
+			       thresh,matrix,outf);
 	    break;
 	case 2:
-	    profit_scan_profile(substr,pname,mlen,fmatrix,
+	    profit_scan_profile(substr,seqname,mlen,fmatrix,
 				thresh,maxfs,outf);
 	    break;
 	case 3:
-	    profit_scan_profile(substr,pname,mlen,fmatrix,thresh,
-				maxfs,outf);
+	    profit_scan_profile(substr,seqname,mlen,fmatrix,
+				thresh,maxfs,outf);
 	    break;
 	default:
 	    break;
@@ -226,7 +227,7 @@ int main(int argc, char **argv)
     ajStrDel(&name);
     ajStrDel(&substr);
     ajStrDel(&mname);
-    ajStrDel(&pname);
+    ajStrDel(&seqname);
     ajStrDel(&cons);
 
     ajSeqDel(&seq);
@@ -469,7 +470,7 @@ static void profit_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
 ** Scan sequence with a frequency matrix
 **
 ** @param [r] substr [const AjPStr] sequence
-** @param [r] pname [const AjPStr] profile name
+** @param [r] seqname [const AjPStr] profile name
 ** @param [r] mlen [ajint] mtx length
 ** @param [r] maxs [ajint] max score
 ** @param [r] thresh [ajint] threshold
@@ -479,7 +480,7 @@ static void profit_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
 ******************************************************************************/
 
 static void profit_scan_simple(const AjPStr substr,
-			       const AjPStr pname,
+			       const AjPStr seqname,
 			       ajint mlen, ajint maxs, ajint thresh,
 			       ajint * const *matrix,
 			       AjPFile outf)
@@ -505,7 +506,7 @@ static void profit_scan_simple(const AjPStr substr,
 	    sum += matrix[j][ajBasecodeToInt(*(p+i+j))];
 	score = sum * 100 / maxs;
 	if(score >= thresh)
-	    profit_printHits(pname,i,score,outf);
+	    profit_printHits(seqname,i,score,outf);
     }
 
     return;
@@ -518,7 +519,7 @@ static void profit_scan_simple(const AjPStr substr,
 **
 ** Print results for profit
 **
-** @param [r] pname [const AjPStr] profile name
+** @param [r] seqname [const AjPStr] sequence name
 ** @param [r] pos [ajint] position
 ** @param [r] score [ajint] score
 ** @param [u] outf [AjPFile] outfile
@@ -526,10 +527,10 @@ static void profit_scan_simple(const AjPStr substr,
 ******************************************************************************/
 
 
-static void profit_printHits(const AjPStr pname, ajint pos,
+static void profit_printHits(const AjPStr seqname, ajint pos,
 			     ajint score, AjPFile outf)
 {
-    ajFmtPrintF(outf,"%s %d Percentage: %d\n",ajStrGetPtr(pname),pos+1,score);
+    ajFmtPrintF(outf,"%S %d Percentage: %d\n",seqname,pos+1,score);
 
     return;
 }
@@ -542,7 +543,7 @@ static void profit_printHits(const AjPStr pname, ajint pos,
 ** Scan sequence with a profile
 **
 ** @param [r] substr [const AjPStr] sequence
-** @param [r] pname [const AjPStr] profile name
+** @param [r] seqname [const AjPStr] sequence name
 ** @param [r] mlen [ajint] profile length
 ** @param [r] fmatrix [float* const *] score matrix
 ** @param [r] thresh [ajint] threshold
@@ -553,7 +554,7 @@ static void profit_printHits(const AjPStr pname, ajint pos,
 
 
 static void profit_scan_profile (const AjPStr substr,
-				 const AjPStr pname,
+				 const AjPStr seqname,
 				 ajint mlen,
 				 float * const *fmatrix,
 				 ajint thresh, float maxs, AjPFile outf)
@@ -572,6 +573,8 @@ static void profit_scan_profile (const AjPStr substr,
     lim = len-mlen+1;
     p = ajStrGetPtr(substr);
 
+    ajUser("scan_profile mlen:%d len:%d lim:%d '%S'",
+	   mlen, len, lim, seqname);
     for(i=0;i<lim;++i)
     {
 	sum=0.0;
@@ -579,7 +582,12 @@ static void profit_scan_profile (const AjPStr substr,
 	    sum += fmatrix[j][ajBasecodeToInt(*(p+i+j))];
 	score = sum * (float)100. / maxs;
 	if((ajint)score >= thresh)
-	    profit_printHits(pname,i,(ajint)score,outf);
+	    profit_printHits(seqname,i,(ajint)score,outf);
+	if(score > maxscore) {
+	  ajUser("maxscore: %f sum: %f i:%d '%S' %u maxs:%f",
+		  score, sum, i, seqname, seqnum, maxs);
+	  maxscore = score;
+	}
     }
 
     return;

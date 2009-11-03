@@ -18,7 +18,7 @@ RN   [1]
 RP   1-3400
 RX   PUBMED; 11894962.
 RA   Wiborg O., Hyldig-Nielsen J.J., Jensen E.O., Paludan K., Marcker K.A.;
-RT   "The structure of an unusual leghemoglobin gene from soybean.";
+RT   "The structure of an unusual leghemoglobin gene from soybean";
 RL   EMBO J. 2(3):449-452(1983).
 XX
 FH   Key             Location/Qualifiers
@@ -30,10 +30,7 @@ FT                   /db_xref="taxon:3847"
 FT   CDS             join(363..460,555..663,2182..2286,3065..3208)
 FT                   /product="leghemoglobin"
 FT                   /db_xref="GOA:Q42801"
-FT                   /db_xref="HSSP:P02238"
-FT                   /db_xref="InterPro:IPR000971"
-FT                   /db_xref="InterPro:IPR001032"
-FT                   /db_xref="InterPro:IPR009050"
+FT                   /db_xref="HSSP:1FSL"
 FT                   /db_xref="InterPro:IPR012292"
 FT                   /db_xref="UniProtKB/TrEMBL:Q42801"
 FT                   /protein_id="CAA23729.1"

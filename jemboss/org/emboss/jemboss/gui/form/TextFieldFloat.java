@@ -21,7 +21,6 @@
 
 package org.emboss.jemboss.gui.form;
 
-import javax.swing.*; 
 import javax.swing.text.*; 
 
 import java.awt.Toolkit;

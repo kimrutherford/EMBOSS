@@ -528,12 +528,31 @@ static void copy_redist(char *basedir)
     char prompt[MAXNAMLEN];
     
     static char *def="/dos8/vc2008/vc/redist/x86/Microsoft.VC90.CRT";
+    static char *def2="/root/vc80";
     int len;
     
-    fprintf(stdout,"Redist file directory [%s]: ",def);
+    fprintf(stdout,"Redist 90 file directory [%s]: ",def);
     fgets(prompt,MAXNAMLEN,stdin);
     if(*prompt == '\n')
         sprintf(prompt,"%s",def);
+
+    len = strlen(prompt);
+    if(prompt[len-1] == '\n')
+        prompt[len-1] = '\0';
+
+    
+    sprintf(command,"cp %s/* %s/win32/redist",prompt,basedir);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+    fprintf(stdout,"Redist 80 file directory [%s]: ",def2);
+    fgets(prompt,MAXNAMLEN,stdin);
+    if(*prompt == '\n')
+        sprintf(prompt,"%s",def2);
 
     len = strlen(prompt);
     if(prompt[len-1] == '\n')

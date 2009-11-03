@@ -1,0 +1,49 @@
+application: nthseqset [
+  documentation: "Reads and writes (returns) one set of
+                  sequences from many"
+  groups: "Edit"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  boolean: feature [
+    information: "Use feature information"
+  ]
+
+  seqsetall: sequence [
+    parameter: "Y"
+    features: "$(feature)"
+    type: "gapany"
+    aligned: "N"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  integer: number [
+    standard: "Y"
+    minimum: "1"
+    default: "1"
+    information: "The number of the sequence set to output"
+  ]
+
+endsection: required
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  seqoutall: outseq [
+    parameter: "Y"
+    features: "$(feature)"
+  ]
+
+endsection: output

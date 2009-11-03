@@ -72,6 +72,7 @@ void ajHistDisplay(const AjPHist hist)
 	ajErr("points =%d, sets = %d, bins = %d !!! "
 	      "Must all be Greater than 1 ",
 	      hist->numofdatapoints,hist->numofsets,hist->bins);
+
 	return;
     }
 
@@ -82,14 +83,17 @@ void ajHistDisplay(const AjPHist hist)
     if(ptsperbin < 1.0)
     {
 	ajErr("You cannot more have bins than datapoints!!");
+
 	return;
     }
     /* is the ratio a whole number? */
 
     ratioint = (ajint)ptsperbin;
+
     if((ptsperbin - (float)ratioint) != 0.0)
     {
 	ajErr("number of data points needs to be a multiple of bins");
+
 	return;
     }
     /* end Sanity check */
@@ -107,13 +111,16 @@ void ajHistDisplay(const AjPHist hist)
 	    /* find the max value */
 	    max = INT_MIN;
 	    min = 0;
+
 	    for(j=0;j<hist->numofsets;j++)
 	    {
 		data = hist->hists[j]->data;
+
 		for(i=0;i<hist->numofdatapoints;i++)
 		{
 		    if(data[i] > max)
 			max = data[i];
+
 		    if(data[i] < min)
 			min = data[i];
 		}
@@ -122,13 +129,16 @@ void ajHistDisplay(const AjPHist hist)
 	else if(hist->displaytype == HIST_ONTOP)
 	{
 	    totals = AJALLOC(hist->numofdatapoints*(sizeof(PLFLT)));
+
 	    /* set all memory to 0.0 */
 	    for(i=0;i<hist->numofdatapoints;i++)
 	    {
 		totals[i] = 0.0;
 	    }
+
 	    min = 0;
 	    max = 0;
+
 	    for(j=0;j<hist->numofsets;j++)
 	    {
 		data = hist->hists[j]->data;
@@ -137,6 +147,7 @@ void ajHistDisplay(const AjPHist hist)
 		    totals[i] += data[i];
 		    if(totals[i] > max)
 			max = totals[i];
+
 		    if(totals[i] < min)
 			min = totals[i];
 		    /*	  ajDebug("%d %d\t%f",j,i,totals[i]);*/
@@ -147,15 +158,18 @@ void ajHistDisplay(const AjPHist hist)
 	{
 	    totals = AJALLOC(hist->numofsets*(sizeof(PLFLT)));
 	    totals2 = AJALLOC(hist->numofsets*(sizeof(PLFLT)));
+
 	    for(j=0;j<hist->numofsets;j++)
 	    {
 		data = hist->hists[j]->data;
 		totals[j] = 0;
 		totals2[j] = 0;
+
 		for(i=0;i<hist->numofdatapoints;i++)
 		{
 		    if(totals[j] < data[i])
 			totals[j] = data[i];
+
 		    if(totals2[j] > data[i])
 			totals2[j] = data[i];
 		}
@@ -167,21 +181,23 @@ void ajHistDisplay(const AjPHist hist)
 	data = hist->hists[0]->data;
 	max = data[0];
 	min = 0;
+
 	for(i=1;i<hist->numofdatapoints;i++)
 	{
 	    if(data[i] > max)
 		max = data[i];
+
 	    if(data[i] < min)
 		min = data[i];
 	}
+
 	if(hist->displaytype == HIST_ONTOP /*!hist->sidebyside*/)
 	{
 	    totals = AJALLOC(hist->numofdatapoints*(sizeof(PLFLT)));
+
 	    /* set all memory to 0.0 */
 	    for(i=0;i<hist->numofdatapoints;i++)
-	    {
 		totals[i] = 0.0;
-	    }
 	}
 	else if(hist->displaytype == HIST_SEPARATE)
 	{
@@ -203,6 +219,7 @@ void ajHistDisplay(const AjPHist hist)
 	    else
 		max = 1.0;
 	}
+
 	ajGraphOpenPlot(hist->graph, 1);
 	ajGraphPlenv(hist->xmin-percent5, hist->xmax+percent5, min,
 		     max*((float)1.025), aj_hist_mark);
@@ -218,6 +235,7 @@ void ajHistDisplay(const AjPHist hist)
     if(hist->displaytype == HIST_SIDEBYSIDE)
     {
 	bar_width = bin_range/hist->numofsets;
+
 	for(i=0;i<hist->numofsets;i++)
 	{
 	    offset = i*bar_width;
@@ -225,23 +243,28 @@ void ajHistDisplay(const AjPHist hist)
 	    num = 0;
 	    tot=0.0;
 	    data = hist->hists[i]->data;
+
 	    for(j=0;j<hist->numofdatapoints;j++)
 	    {
 		tot += data[j];
 		num++;
+
 		if(num >= ptsperbin)
 		{
 		    tot = tot / (float)num;
+
 		    if(hist->BaW)
 			old = ajGraphSetFillPat(hist->hists[i]->pattern);
 		    else
 			old = ajGraphSetFore(hist->hists[i]->colour);
 		    ajGraphRectFill(start+offset,0.0,
 				    start+offset+bar_width,tot);
+
 		    if(hist->BaW)
 			ajGraphSetFillPat(old);
 		    else
 			ajGraphSetFore(old);
+
 		    ajGraphRect(start+offset,0.0,start+offset+bar_width,tot);
 		    num = 0;
 		    tot = 0;
@@ -253,6 +276,7 @@ void ajHistDisplay(const AjPHist hist)
     else if(hist->displaytype == HIST_SEPARATE)
     {
 	bar_width = bin_range;
+
 	for(i=0;i<hist->numofsets;i++)
 	{	    
 	    if(totals[i] <= 0.01)
@@ -262,6 +286,7 @@ void ajHistDisplay(const AjPHist hist)
 		else
 		    totals[i] = 1.0;
 	    }
+
 	    ajGraphPlenv(hist->xmin-percent5, hist->xmax+percent5,
 			 totals2[i]*((float)1.025), totals[i]*((float)1.025),
 			 aj_hist_mark);
@@ -278,19 +303,24 @@ void ajHistDisplay(const AjPHist hist)
 	    {
 		tot += data[j];
 		num++;
+
 		if(num >= ptsperbin)
 		{
 		    tot = tot / (float)num;
+
 		    if(hist->BaW)
 			old = ajGraphSetFillPat(hist->hists[i]->pattern);
 		    else
 			old = ajGraphSetFore(hist->hists[i]->colour);
+
 		    ajGraphRectFill(start+offset,0.0,
 				    start+offset+bar_width,tot);
+
 		    if(hist->BaW)
 			ajGraphSetFillPat(old);
 		    else
 			ajGraphSetFore(old);
+
 		    ajGraphRect(start+offset,0.0,start+offset+bar_width,tot);
 		    num = 0;
 		    tot = 0;
@@ -303,6 +333,7 @@ void ajHistDisplay(const AjPHist hist)
     {
 	for(i=0;i<hist->numofdatapoints;i++)
 	    totals[i] = 0.0;
+
 	for(i=0;i<hist->numofsets;i++)
 	{
 	    data = hist->hists[i]->data;
@@ -314,19 +345,23 @@ void ajHistDisplay(const AjPHist hist)
 	    {
 		tot += data[j];
 		num++;
+
 		if(num >= ptsperbin)
 		{
 		    tot = tot / (float)num;
+
 		    if(hist->BaW)
 			old = ajGraphSetFillPat(hist->hists[i]->pattern);
 		    else
 			old = ajGraphSetFore(hist->hists[i]->colour);
+
 		    ajGraphRectFill(start,totals[j],
 				    start+bin_range,tot+totals[j]);
 		    if(hist->BaW)
 			ajGraphSetFillPat(old);
 		    else
 			ajGraphSetFore(old);
+
 		    ajGraphRect(start,totals[j],
 				start+bin_range,tot+totals[j]);
 		    totals[j] += tot;
@@ -386,7 +421,9 @@ void ajHistDelete(AjPHist* phist)
     if(!phist) return;
 
     hist = *phist;
-    if (!hist)	return;
+
+    if (!hist)
+	return;
 
     for(i=0;i<hist->numofsets; i++)
     {
@@ -399,6 +436,7 @@ void ajHistDelete(AjPHist* phist)
 	}
 	AJFREE((hist->hists[i]));
     }
+
     AJFREE(hist->hists);
 
     ajStrDel(&hist->title);
@@ -447,6 +485,7 @@ AjPHist ajHistNew(ajint numofsets, ajint numofpoints)
     ajStrAssignEmptyC(&hist->yaxisright,"");
 
     AJCNEW0(hist->hists,numofsets);
+
     for(i=0;i<numofsets; i++)
     {
 	AJNEW0((hist->hists[i]));
@@ -512,6 +551,7 @@ void ajHistSetMultiTitle(AjPHist hist, ajint indexnum, const AjPStr title)
 	      hist->numofdatapoints-1,indexnum);
 	return;
     }
+
     ajStrAssignS(&hist->hists[indexnum]->title, title);
 
     return;
@@ -537,8 +577,10 @@ void ajHistSetMultiTitleC(AjPHist hist, ajint indexnum, const char *title)
     {
 	ajErr("Histograms can only be allocated from 0 to %d. NOT %d",
 	      hist->numofdatapoints-1,indexnum);
+
 	return;
     }
+
     ajStrAssignC(&hist->hists[indexnum]->title,title);
 
     return;
@@ -566,6 +608,7 @@ void ajHistSetMultiXTitle(AjPHist hist, ajint indexnum, const AjPStr title)
 	      hist->numofdatapoints-1,indexnum);
 	return;
     }
+
     ajStrAssignS(&hist->hists[indexnum]->xaxis, title);
 
     return;
@@ -591,8 +634,10 @@ void ajHistSetMultiXTitleC(AjPHist hist, ajint indexnum, const char *title)
     {
 	ajErr("Histograms can only be allocated from 0 to %d. NOT %d",
 	      hist->numofdatapoints-1,indexnum);
+
 	return;
     }
+
     ajStrAssignC(&hist->hists[indexnum]->xaxis,title);
 
     return;
@@ -620,6 +665,7 @@ void ajHistSetMultiYTitle(AjPHist hist, ajint indexnum, const AjPStr title)
 	      hist->numofdatapoints-1,indexnum);
 	return;
     }
+
     ajStrAssignS(&hist->hists[indexnum]->yaxis, title);
 
     return;
@@ -647,6 +693,7 @@ void ajHistSetMultiYTitleC(AjPHist hist, ajint indexnum, const char *title)
 	      hist->numofdatapoints-1,indexnum);
 	return;
     }
+
     ajStrAssignC(&hist->hists[indexnum]->yaxis,title);
 
     return;
@@ -672,10 +719,13 @@ void ajHistSetPtrToData(AjPHist hist, ajint indexnum, PLFLT *data)
     {
 	ajErr("Histograms can only be allocated from 0 to %d. NOT %d",
 	      hist->numofdatapoints-1,indexnum);
+
 	return;
     }
+
     if(!hist->hists[indexnum]->data)
 	hist->numofsets++;
+
     hist->hists[indexnum]->data = data;
 
     return;
@@ -703,10 +753,12 @@ void ajHistCopyData(AjPHist hist, ajint indexnum, const PLFLT *data)
     {
 	ajErr("Histograms can only be allocated from 0 to %d. NOT %d",
 	      hist->numofdatapoints-1,indexnum);
+
 	return;
     }
 
     hist->hists[indexnum]->data = AJALLOC(hist->numofdatapoints*sizeof(PLFLT));
+
     for(i=0;i<hist->numofdatapoints;i++)
 	hist->hists[indexnum]->data[i] = data[i];
 
@@ -816,6 +868,7 @@ void ajHistSetColour(AjPHist hist, ajint indexnum, ajint colour)
     {
 	ajErr("Histograms can only be allocated from 0 to %d. NOT %d",
 	      hist->numofdatapoints-1,indexnum);
+
 	return;
     }
 
@@ -844,6 +897,7 @@ void ajHistSetPattern(AjPHist hist, ajint indexnum, ajint style)
     {
 	ajErr("Histograms can only be allocated from 0 to %d. NOT %d",
 	      hist->numofdatapoints-1,indexnum);
+
 	return;
     }
 

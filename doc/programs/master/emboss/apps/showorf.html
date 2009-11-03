@@ -23,7 +23,10 @@ showorf
 </H2>
 
 
-<p><B>showorf</B> writes an input nucleotide sequence and its protein translation to an output file in a clear format that is suitable for publication. The translation can be done in any frame or combination of frames using an (optionally) specified genetic code.</p>
+<p><B>showorf</B> writes an input nucleotide sequence and its protein
+translation to an output file in a clear format that is suitable for
+publication. The translation can be done in any frame or combination
+of frames using an (optionally) specified genetic code.</p>
 
 
 
@@ -80,36 +83,7 @@ The true ORFs are 1..109 (amiB partial) 135..1292 (amiC) 1289..1879 (amiR)
 </H2>
 
 
-Showorf uses the codon frequency files to translate the sequence. 
-
-<p>
-The codon usage table is read by default from "Ehum.cut" in the 'data/CODONS'
-directory of the EMBOSS distribution.  If the name of a codon usage file
-is specified on the command line with the '-cfile' option, then this
-file will first be searched for in the current directory and then in the
-'data/CODONS' directory of the EMBOSS distribution. 
-
-<p>
-To see the available EMBOSS codon usage files, run:
-
-
-<pre>
-
-% embossdata -showall
-
-</pre>
-
-<p>
-To fetch one of the codon usage tables (for example 'Emus.cut') into your
-current directory for you to inspect or modify, run:
-
-
-<pre>
-
-% embossdata -fetch -file Emus.cut
-
-</pre>
-
+Showorf uses a genetic code table to translate the sequence. 
 
 
 <H2>

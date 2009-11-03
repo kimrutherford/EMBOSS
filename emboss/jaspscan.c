@@ -293,7 +293,7 @@ int main(int argc, char **argv)
 
 	    jaspscan_scan(substr,begin,mfname, cp, thresh, both, hits);
 
-	    ajStrDel(&mfname);
+            ajListPushAppend(flist, (void **)mfname);
 	}
 
 	jaspscan_ReportHits(TabRpt,mattab,hits);
@@ -303,6 +303,10 @@ int main(int argc, char **argv)
     }
 
 
+    while(ajListPop(flist,(void **)&mfname))
+        ajStrDel(&mfname);
+
+    
     ajStrDel(&dir);
     ajStrDel(&menu);
     ajStrDel(&excl);

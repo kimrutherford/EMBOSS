@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Regular expression search of protein sequence(s)
@@ -23,7 +30,7 @@ Usage
 Regular expression search of protein sequence(s)
 Input protein sequence(s): tsw:*_rat
 Regular expression pattern: IA[QWF]A
-Output report [edd1_rat.preg]: 
+Output report [arf3_rat.preg]: 
 
    Go to the input files for this example
    Go to the output files for this example
@@ -101,7 +108,7 @@ Output file format
 
   Output files for usage example
 
-  File: edd1_rat.preg
+  File: arf3_rat.preg
 
 ########################################
 # Program: preg
@@ -110,23 +117,9 @@ Output file format
 #    -sequence "tsw:*_rat"
 #    -pattern "IA[QWF]A"
 # Report_format: seqtable
-# Report_file: edd1_rat.preg
+# Report_file: arf3_rat.preg
 ########################################
 
-#=======================================
-#
-# Sequence: EDD1_RAT     from: 1   to: 920
-# HitCount: 1
-#
-# Pattern: IA[QWF]A
-#
-#=======================================
-
-  Start     End Pattern_name Sequence
-    421     424 regex1       IAQA
-
-#---------------------------------------
-#---------------------------------------
 #=======================================
 #
 # Sequence: ARF3_RAT     from: 1   to: 181
@@ -140,10 +133,26 @@ Output file format
 
 #---------------------------------------
 #---------------------------------------
+#=======================================
+#
+# Sequence: UBR5_RAT     from: 1   to: 920
+# HitCount: 1
+#
+# Pattern: IA[QWF]A
+#
+#=======================================
+
+  Start     End Pattern_name Sequence
+    421     424 regex        IAQA
+
+#---------------------------------------
+#---------------------------------------
 
 #---------------------------------------
 # Total_sequences: 2
-# Total_hitcount: 1
+# Total_length: 1101
+# Reported_sequences: 2
+# Reported_hitcount: 1
 #---------------------------------------
 
 Data files
@@ -811,22 +820,22 @@ Known bugs
 
 See also
 
-   Program name Description
-   antigenic Finds antigenic sites in proteins
-   digest Reports on protein proteolytic enzyme or reagent cleavage sites
-   epestfind Finds PEST motifs as potential proteolytic cleavage sites
-   fuzzpro Search for patterns in protein sequences
-   fuzztran Search for patterns in protein sequences (translated)
-   helixturnhelix Identify nucleic acid-binding motifs in protein
-   sequences
-   oddcomp Identify proteins with specified sequence word composition
-   patmatdb Searches protein sequences with a sequence motif
-   patmatmotifs Scan a protein sequence with motifs from the PROSITE
-   database
-   pepcoil Predicts coiled coil regions in protein sequences
-   pscan Scans protein sequence(s) with fingerprints from the PRINTS
-   database
-   sigcleave Reports on signal cleavage sites in a protein sequence
+   Program name     Description
+   antigenic        Finds antigenic sites in proteins
+   digest           Reports on protein proteolytic enzyme or reagent cleavage sites
+   epestfind        Finds PEST motifs as potential proteolytic cleavage sites
+   fuzzpro          Search for patterns in protein sequences
+   fuzztran         Search for patterns in protein sequences (translated)
+   helixturnhelix   Identify nucleic acid-binding motifs in protein
+                    sequences
+   oddcomp          Identify proteins with specified sequence word composition
+   patmatdb         Searches protein sequences with a sequence motif
+   patmatmotifs     Scan a protein sequence with motifs from the PROSITE
+                    database
+   pepcoil          Predicts coiled coil regions in protein sequences
+   pscan            Scans protein sequence(s) with fingerprints from the PRINTS
+                    database
+   sigcleave        Reports on signal cleavage sites in a protein sequence
 
    Other EMBOSS programs allow you to search for simple patterns and may
    be easier for the user who has never used regular expressions before:
@@ -838,8 +847,8 @@ See also
 Author(s)
 
    Peter Rice (pmr © ebi.ac.uk)
-   Informatics Division, European Bioinformatics Institute, Wellcome
-   Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
 
 History
 

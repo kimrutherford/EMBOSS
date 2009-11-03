@@ -94,9 +94,17 @@ None.
     Notes
 </H2>
 
-<p>EST and mRNA sequences often have poly-A tails at their 3' end.  Where an EST sequences is the reverse complement of a corresponding mRNA's forward sense it may have a poly-T tail at its 5' end.  </p>
+<p>EST and mRNA sequences often have poly-A tails at their 3' end.
+Where an EST sequence is the reverse complement of a corresponding
+mRNA's forward sense it may have a poly-T tail at its 5' end.  </p>
 
-<p><b>trimest</b> is not infallible. There are often repeats of <tt>A</tt> (or <tt>T</tt>) in a sequence that just happen by chance to occur at the 3' (or 5') end of the EST sequence. <b>trimest</b> has no way of determining if the A's it finds are part of a real poly-A tail or are a part of the transcribed genomic sequence. It removes any apparent poly-A tails that match its criteria for a poly-A tail (see "Algorithm").</p>
+<p><b>trimest</b> is not infallible. There are often repeats
+of <tt>A</tt> (or <tt>T</tt>) in a sequence that just happen by chance
+to occur at the 3' (or 5') end of the EST sequence. <b>trimest</b> has
+no way of determining if the A's it finds are part of a real poly-A
+tail or are a part of the transcribed genomic sequence. It removes any
+apparent poly-A tails that match its criteria for a poly-A tail (see
+"Algorithm").</p>
 
 
 <H2>
@@ -109,8 +117,7 @@ None.
     Warnings
 </H2>
 
-<p><b>trimest</b> can make no guarantee that the tails removed have biologic significance or not.  They may in fact be part of the transcribed sequence.</p>
-
+None.
 
 <H2>
     Diagnostic Error Messages

@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Removes a section from a sequence
@@ -156,18 +163,17 @@ RP   1167-2167
 RX   DOI; 10.1016/0014-5793(89)80249-2.
 RX   PUBMED; 2495988.
 RA   Lowe N., Rice P.M., Drew R.E.;
-RT   "Nucleotide sequence of the aliphatic amidase regulator gene of Pseudomona
-s
-RT   aeruginosa";
+RT   "Nucleotide sequence of the aliphatic amidase regulator gene (amiR) of
+RT   Pseudomonas aeruginosa";
 RL   FEBS Lett. 246(1-2):39-43(1989).
 XX
 RN   [3]
 RP   1-1292
 RX   PUBMED; 1907262.
 RA   Wilson S., Drew R.;
-RT   "Cloning and DNA seqence of amiC, a new gene regulating expression of the
+RT   "Cloning and DNA sequence of amiC, a new gene regulating expression of the
 RT   Pseudomonas aeruginosa aliphatic amidase, and purification of the amiC
-RT   product.";
+RT   product";
 RL   J. Bacteriol. 173(16):4914-4921(1991).
 XX
 RN   [4]
@@ -179,8 +185,8 @@ RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG
 .
 XX
 DR   GOA; Q51417.
+DR   InterPro; IPR003211; AmiSUreI_transpt.
 DR   UniProtKB/Swiss-Prot; Q51417; AMIS_PSEAE.
-XX
 
 
   [Part of this file has been deleted for brevity]
@@ -406,50 +412,53 @@ Known bugs
 
 See also
 
-   Program name Description
-   aligncopy Reads and writes alignments
-   aligncopypair Reads and writes pairs from alignments
-   biosed Replace or delete sequence sections
-   codcopy Copy and reformat a codon usage table
-   degapseq Removes non-alphabetic (e.g. gap) characters from sequences
-   descseq Alter the name or description of a sequence
-   entret Retrieves sequence entries from flatfile databases and files
-   extractalign Extract regions from a sequence alignment
-   extractfeat Extract features from sequence(s)
-   extractseq Extract regions from a sequence
-   featcopy Reads and writes a feature table
-   featreport Reads and writes a feature table
-   listor Write a list file of the logical OR of two sets of sequences
-   makenucseq Create random nucleotide sequences
-   makeprotseq Create random protein sequences
-   maskambignuc Masks all ambiguity characters in nucleotide sequences
-   with N
-   maskambigprot Masks all ambiguity characters in protein sequences with
-   X
-   maskfeat Write a sequence with masked features
-   maskseq Write a sequence with masked regions
-   newseq Create a sequence file from a typed-in sequence
-   nohtml Remove mark-up (e.g. HTML tags) from an ASCII text file
-   noreturn Remove carriage return from ASCII files
-   nospace Remove all whitespace from an ASCII text file
-   notab Replace tabs with spaces in an ASCII text file
-   notseq Write to file a subset of an input stream of sequences
-   nthseq Write to file a single sequence from an input stream of
-   sequences
-   pasteseq Insert one sequence into another
-   revseq Reverse and complement a nucleotide sequence
-   seqret Reads and writes (returns) sequences
-   seqretsplit Reads sequences and writes them to individual files
-   sizeseq Sort sequences by size
-   skipredundant Remove redundant sequences from an input set
-   skipseq Reads and writes (returns) sequences, skipping first few
-   splitter Split sequence(s) into smaller sequences
-   trimest Remove poly-A tails from nucleotide sequences
-   trimseq Remove unwanted characters from start and end of sequence(s)
-   trimspace Remove extra whitespace from an ASCII text file
-   union Concatenate multiple sequences into a single sequence
-   vectorstrip Removes vectors from the ends of nucleotide sequence(s)
-   yank Add a sequence reference (a full USA) to a list file
+   Program name     Description
+   aligncopy        Reads and writes alignments
+   aligncopypair    Reads and writes pairs from alignments
+   biosed           Replace or delete sequence sections
+   codcopy          Copy and reformat a codon usage table
+   degapseq         Removes non-alphabetic (e.g. gap) characters from sequences
+   descseq          Alter the name or description of a sequence
+   entret           Retrieves sequence entries from flatfile databases and files
+   extractalign     Extract regions from a sequence alignment
+   extractfeat      Extract features from sequence(s)
+   extractseq       Extract regions from a sequence
+   featcopy         Reads and writes a feature table
+   featreport       Reads and writes a feature table
+   listor           Write a list file of the logical OR of two sets of sequences
+   makenucseq       Create random nucleotide sequences
+   makeprotseq      Create random protein sequences
+   maskambignuc     Masks all ambiguity characters in nucleotide sequences
+   with             N
+   maskambigprot    Masks all ambiguity characters in protein sequences with
+                    X
+   maskfeat         Write a sequence with masked features
+   maskseq          Write a sequence with masked regions
+   newseq           Create a sequence file from a typed-in sequence
+   nohtml           Remove mark-up (e.g. HTML tags) from an ASCII text file
+   noreturn         Remove carriage return from ASCII files
+   nospace          Remove all whitespace from an ASCII text file
+   notab            Replace tabs with spaces in an ASCII text file
+   notseq           Write to file a subset of an input stream of sequences
+   nthseq           Write to file a single sequence from an input stream of
+                    sequences
+   nthseqset        Reads and writes (returns) one set of sequences from many
+   pasteseq         Insert one sequence into another
+   revseq           Reverse and complement a nucleotide sequence
+   seqret           Reads and writes (returns) sequences
+   seqretsetall     Reads and writes (returns) many sets of sequences
+   seqretsplit      Reads sequences and writes them to individual files
+   sizeseq          Sort sequences by size
+   skipredundant    Remove redundant sequences from an input set
+   skipseq          Reads and writes (returns) sequences, skipping first few
+   splitsource      Split sequence(s) into original source sequences
+   splitter         Split sequence(s) into smaller sequences
+   trimest          Remove poly-A tails from nucleotide sequences
+   trimseq          Remove unwanted characters from start and end of sequence(s)
+   trimspace        Remove extra whitespace from an ASCII text file
+   union            Concatenate multiple sequences into a single sequence
+   vectorstrip      Removes vectors from the ends of nucleotide sequence(s)
+   yank             Add a sequence reference (a full USA) to a list file
 
 Author(s)
 

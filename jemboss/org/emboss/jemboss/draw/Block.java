@@ -348,11 +348,11 @@ public class Block extends JPanel
     boolean arrowTail = ((Boolean)marker.elementAt(6)).booleanValue();
 
     FontMetrics fm = g2.getFontMetrics();
-    double hgt = fm.getAscent();
+    //double hgt = fm.getAscent();
     g2.setColor(colour);
 
     double ddiameter   = current_dna.getDiameter();
-    double widthPanel  = current_dna.getWidth();
+    //double widthPanel  = current_dna.getWidth();
     double heightPanel = current_dna.getHeight();
     Point location = current_dna.getLocationPoint();
     int ymid  = (int)(heightPanel/2.);

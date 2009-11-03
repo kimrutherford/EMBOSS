@@ -12,8 +12,8 @@ endif
 endif
 
 
-check_PROGRAMS = acdlog ajtest \
-complex corbatest dbxstat \
+check_PROGRAMS = acdlog acdxsd ajtest \
+complex corbatest \
 entrails giep histogramtest intconv \
 origsplitter origunion \
 newcoils \
@@ -48,7 +48,7 @@ maskambignuc maskambigprot maskfeat maskseq \
 matcher megamerger merger msbar \
 mwcontam mwfilter \
 needle newcpgreport newcpgseek newseq \
-nohtml noreturn nospace notab notseq nthseq \
+nohtml noreturn nospace notab notseq nthseq nthseqset \
 octanol oddcomp \
 palindrome pasteseq patmatdb patmatmotifs \
 pepcoil pepinfo pepnet pepstats \
@@ -59,10 +59,10 @@ profit prophecy prophet \
 prosextract pscan psiphi \
 rebaseextract recoder redata remap  \
 restover restrict revseq \
-seealso seqmatchall seqret seqretsplit \
-showalign showdb showfeat showorf showseq \
+seealso seqmatchall seqret seqretsetall seqretsplit \
+showalign showdb showfeat showorf showpep showseq \
 shuffleseq sigcleave silent sirna sixpack sizeseq \
-skipredundant skipseq splitter stretcher \
+skipredundant skipseq splitsource splitter stretcher \
 stssearch supermatcher syco \
 tcode textsearch tfextract tfm tfscan \
 tmap tranalign transeq \
@@ -81,6 +81,7 @@ acdpretty_SOURCES = acdpretty.c
 acdtable_SOURCES = acdtable.c
 acdtrace_SOURCES = acdtrace.c
 acdvalid_SOURCES = acdvalid.c
+acdxsd_SOURCES = acdxsd.c
 aligncopy_SOURCES = aligncopy.c
 aligncopypair_SOURCES = aligncopypair.c
 antigenic_SOURCES = antigenic.c
@@ -112,7 +113,6 @@ dbiflat_SOURCES = dbiflat.c
 dbigcg_SOURCES = dbigcg.c
 dbxfasta_SOURCES = dbxfasta.c
 dbxflat_SOURCES = dbxflat.c
-dbxstat_SOURCES = dbxstat.c
 dbxgcg_SOURCES = dbxgcg.c
 degapseq_SOURCES = degapseq.c
 density_SOURCES = density.c
@@ -183,6 +183,7 @@ nospace_SOURCES = nospace.c
 notab_SOURCES = notab.c
 notseq_SOURCES = notseq.c
 nthseq_SOURCES = nthseq.c
+nthseqset_SOURCES = nthseqset.c
 octanol_SOURCES = octanol.c
 oddcomp_SOURCES = oddcomp.c
 palindrome_SOURCES = palindrome.c
@@ -220,11 +221,13 @@ revseq_SOURCES = revseq.c
 seealso_SOURCES = seealso.c
 seqmatchall_SOURCES = seqmatchall.c
 seqret_SOURCES = seqret.c
+seqretsetall_SOURCES = seqretsetall.c
 seqretsplit_SOURCES = seqretsplit.c
 showalign_SOURCES = showalign.c
 showdb_SOURCES = showdb.c
 showfeat_SOURCES = showfeat.c
 showorf_SOURCES = showorf.c
+showpep_SOURCES = showpep.c
 showseq_SOURCES = showseq.c
 shuffleseq_SOURCES = shuffleseq.c
 sigcleave_SOURCES = sigcleave.c

@@ -1,5 +1,5 @@
 application: pepwindow [
-  documentation: "Draw a Kyte-Doolittle hydropathy plot for a protein sequence"
+  documentation: "Draw a hydropathy plot for a protein sequence"
   groups: "Protein:Composition"
 ]
 
@@ -31,10 +31,17 @@ section: additional [
   integer: length [
     additional: "Y"
     information: "Window size"
-    default: "7"
+    default: "19"
     minimum: "1"
     maximum: "200"
   ]
+
+  boolean: normalize [
+    additional: "Y"
+    information: "Normalize data values"
+    default: "N"
+  ]
+  
 
 endsection: additional
 
@@ -48,7 +55,7 @@ section: output [
     multiple: "1"
     gxtitle: "$(sequence.name)"
     gytitle: "Hydropathy"
-    gtitle: "Kyte-Doolittle Plot"
+    gtitle: "Hydropathy Plot"
   ]
 
 endsection: output

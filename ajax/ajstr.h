@@ -250,8 +250,9 @@ AjBool     ajStrJoinC (AjPStr* Pstr, ajint pos1,
 		       const char* txt, ajint pos2);
 AjBool     ajStrJoinS (AjPStr* Pstr, ajint pos,
 		       const AjPStr str, ajint posb);
-AjBool     ajStrMask(AjPStr* str, ajint begin, ajint end,
-				  char maskchar);
+AjBool     ajStrMaskIdent(AjPStr* Pstr, const AjPStr str, char maskchar);
+AjBool     ajStrMaskRange(AjPStr* Pstr, ajint begin, ajint end,
+                          char maskchar);
 AjBool     ajStrPasteS( AjPStr* Pstr, ajint pos, const AjPStr str);
 AjBool     ajStrPasteCountK(AjPStr* Pstr, ajint pos, char chr,
 		      ajuint num);
@@ -279,6 +280,7 @@ AjBool     ajStrKeepSetAlphaRestC(AjPStr* Pstr, const char* txt,
 				  AjPStr* Prest);
 AjBool     ajStrKeepSetAlphaRestS(AjPStr* Pstr, const AjPStr str,
 				  AjPStr* Prest);
+AjBool     ajStrKeepSetAscii(AjPStr* Pstr, int minchar, int maxchar);
 AjBool     ajStrQuoteStrip(AjPStr *Pstr);
 AjBool     ajStrQuoteStripAll(AjPStr *Pstr);
 AjBool     ajStrRemoveGap(AjPStr* thys);
@@ -347,6 +349,9 @@ AjBool     ajStrWhole (const AjPStr str, ajint pos1, ajint pos2);
 
 /* element retrieval */
 
+char       ajStrGetAsciiCommon(const AjPStr str);
+char       ajStrGetAsciiHigh(const AjPStr str);
+char       ajStrGetAsciiLow(const AjPStr str);
 char       ajStrGetCharFirst(const AjPStr str);
 char       ajStrGetCharLast(const AjPStr str);
 char       ajStrGetCharPos(const AjPStr str, ajint pos);
@@ -470,6 +475,7 @@ ajint      ajStrFindRestS (const AjPStr str, const AjPStr str2);
 ajint      ajStrFindRestCaseC (const AjPStr str, const char* txt);
 ajint      ajStrFindRestCaseS (const AjPStr str, const AjPStr str2);
 ajint      ajStrFindlastC(const AjPStr str, const char* txt);
+ajint      ajStrFindlastK(const AjPStr str, char chr);
 ajint      ajStrFindlastS(const AjPStr str, const AjPStr str2);
 
 /* parsing */
@@ -652,6 +658,8 @@ __deprecated AjBool      ajStrKeepAlphaC (AjPStr* pthis, const char* chars);
 __deprecated AjBool      ajStrKeepC (AjPStr* pthis, const char* chars);
 __deprecated ajint        ajStrLen (const AjPStr thys);
 __deprecated ajint       ajStrListToArray(const AjPStr str, AjPStr **array);
+__deprecated AjBool      ajStrMask(AjPStr* str, ajint begin, ajint end,
+                                   char maskchar);
 __deprecated AjBool      ajStrMatchCaseCC(const char* thys, const char* text);
 __deprecated AjBool      ajStrMatchCC    (const char* thys, const char* text);
 __deprecated AjBool      ajStrMatchWildCC(const char* str, const char* text);

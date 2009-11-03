@@ -66,6 +66,8 @@ public class JembossServer
   /** acd directory */
   String acdDirToParse = jp.getAcdDirToParse();
 
+  String[] embossCommandA = null;
+  
   /** user home directory */
   private String homeDirectory = System.getProperty("user.home") + fs;
   /** user name */
@@ -619,8 +621,13 @@ public class JembossServer
     }
     catch (IOException ioe) {} 
 
-    RunEmbossApplication2 rea = new RunEmbossApplication2(embossCommand,
-                                               envp,new File(project));
+    RunEmbossApplication2 rea;
+    if (embossCommandA != null){    	    	
+    	rea = new RunEmbossApplication2(embossCommandA,
+                envp,new File(project));
+    } else {
+    	rea = new RunEmbossApplication2(embossCommand, envp,new File(project));
+    }
     
     result.add("cmd");
     result.add(appl + " " + rest);
@@ -635,9 +642,13 @@ public class JembossServer
         String stderr = "";
         try
         {
+          if (rea.getProcess() != null){
           rea.getProcess().waitFor();
           stdout = rea.getProcessStdout();
           stderr = rea.getProcessStderr();
+          }
+          else
+              System.err.println(rea.getInitialIOError());
         }
         catch(InterruptedException iexp){}    
         if(!stdout.equals(""))
@@ -1193,6 +1204,10 @@ public class JembossServer
   {
     throw new java.lang.CloneNotSupportedException();
   }
+
+public void setEmbossCommandA(String[] embossCommandA) {
+	this.embossCommandA = embossCommandA;
+}
 
 }
 

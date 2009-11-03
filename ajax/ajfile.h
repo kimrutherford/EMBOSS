@@ -27,12 +27,12 @@ extern "C"
 ** @attr Buff [AjPStr] Buffer for latest line read
 ** @attr Workbuffer [char*] Block as a buffer for fgets etc
 ** @attr Readblock [char*] Block as a buffer for fread
+** @attr Filepos [ajlong] File offset for start of latest read
 ** @attr Blocksize [ajuint] Read block maximum size
 ** @attr Blockpos [ajuint] Read block position
 ** @attr Blocklen [ajuint] Read block length used
 ** @attr Buffsize [ajuint] Buffer size (zero for default size)
 ** @attr Handle [ajint] AJAX file number 0 if unused
-** @attr Filepos [ajlong] File offset for start of latest read
 ** @attr Pid [pid_t] Process PID if any
 ** @@
 ******************************************************************************/
@@ -46,12 +46,12 @@ typedef struct AjSFile {
   AjPStr Buff;
   char *Workbuffer;
   char *Readblock;
+  ajlong Filepos;
   ajuint Blocksize;
   ajuint Blockpos;
   ajuint Blocklen;
   ajuint Buffsize;
   ajint Handle;
-  ajlong Filepos;
 #ifndef WIN32
   pid_t Pid;
 #endif
@@ -220,8 +220,10 @@ AjPDir         ajDirNewPath(const AjPStr path);
 AjPDir         ajDirNewPathExt(const AjPStr path, const AjPStr ext);
 AjPDir         ajDirNewPathPreExt(const AjPStr path, const AjPStr prefix,
                                 const AjPStr ext);
+AjBool         ajDiroutExists(AjPDirout thys);
 AjPDirout      ajDiroutNewPath(const AjPStr name);
 AjPDirout      ajDiroutNewPathExt(const AjPStr name, const AjPStr ext);
+AjBool         ajDiroutOpen(AjPDirout thys);
 ajint          ajFilelistAddPathWildRecursiveIgnore(AjPList list,
 						    const AjPStr path,
 						    const AjPStr wildname,

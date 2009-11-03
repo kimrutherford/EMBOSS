@@ -33,13 +33,18 @@
 
 __noreturn void embExit (void)
 {
+    embSigExit();
     embDbiExit();
     embGrpExit();
     embIndexExit();
     embWordExit();
+    embPatlistExit();
 
     ajExit();
 }
+
+
+
 
 /* @func embExitBad ***********************************************************
 **

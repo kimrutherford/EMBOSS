@@ -12,8 +12,8 @@
 **  i, j, and k unit vectors in the x y and z directions respectively
 **
 ** @author Copyright (C) 2003 Damian Counsell
-** @version $Revision: 1.12 $
-** @modified $Date: 2005/10/31 15:43:43 $
+** @version $Revision: 1.13 $
+** @modified $Date: 2009/05/18 10:26:31 $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -322,6 +322,7 @@ float aj3dVectorAngle(const AjP3dVector first,
 	radians   = (float)atan2((double)lenproduct, (double)dotproduct);
 	degrees   = ajRadToDeg(radians);
     }
+
     return( degrees );
 }
 
@@ -374,10 +375,7 @@ float aj3dVectorDihedralAngle(const AjP3dVector veca,
 
     /* get sign of angle of rotation */
     if( ( aj3dVectorDotProduct(vecb, torqueall) ) < 0.0 )
-    {
 	sign = -1.0;
-	
-    }
 
     aj3dVectorDel(&torque1);
     aj3dVectorDel(&torque2);

@@ -62,6 +62,7 @@ int main(int argc, char **argv)
 	(void) ajReportWrite (report,feat,seq);
 	ajFeattableDel(&feat);
     }
+    ajReportSetSeqstats(report, seqall);
 
     ajReportClose(report);
     ajReportDel(&report);

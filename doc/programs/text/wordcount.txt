@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Count and extract unique words in DNA sequence(s)
@@ -120,6 +127,10 @@ RL   Submitted (26-AUG-1996) to the EMBL/GenBank/DDBJ databases.
 RL   Biochemistry & Molecular Biology, Merck Frosst Center for Therapeutic
 RL   Research, P. O. Box 1005, Pointe Claire - Dorval, Quebec H9R 4P8, Canada
 XX
+DR   ASTD; TRAN00000010928.
+DR   Ensembl-Gn; ENSRNOG00000004094; Rattus_norvegicus.
+DR   Ensembl-Tr; ENSRNOT00000005470; Rattus_norvegicus.
+XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..1218
@@ -132,10 +143,7 @@ FT                   /codon_start=1
 FT                   /product="EP1 prostanoid receptor"
 FT                   /note="family 1 G-protein coupled receptor"
 FT                   /db_xref="GOA:P70597"
-FT                   /db_xref="InterPro:IPR000276"
-FT                   /db_xref="InterPro:IPR000708"
-FT                   /db_xref="InterPro:IPR001244"
-FT                   /db_xref="InterPro:IPR008365"
+FT                   /db_xref="InterPro:IPR017452"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P70597"
 FT                   /protein_id="AAB07735.1"
 FT                   /translation="MSPYGLNLSLVDEATTCVTPRVPNTSVVLPTGGNGTSPALPIFS
@@ -307,31 +315,31 @@ Known bugs
 
 See also
 
-   Program name Description
-   backtranambig Back-translate a protein sequence to ambiguous
-   nucleotide sequence
-   backtranseq Back-translate a protein sequence to a nucleotide sequence
-   banana Plot bending and curvature data for B-DNA
-   btwisted Calculate the twisting in a B-DNA sequence
-   chaos Draw a chaos game representation plot for a nucleotide sequence
-   charge Draw a protein charge plot
-   checktrans Reports STOP codons and ORF statistics of a protein
-   compseq Calculate the composition of unique words in sequences
-   dan Calculates nucleic acid melting temperature
-   density Draw a nucleic acid density plot
-   emowse Search protein sequences by digest fragment molecular weight
-   freak Generate residue/base frequency table or plot
-   iep Calculate the isoelectric point of proteins
-   isochore Plots isochores in DNA sequences
-   mwcontam Find weights common to multiple molecular weights files
-   mwfilter Filter noisy data from molecular weights file
-   octanol Draw a White-Wimley protein hydropathy plot
-   pepinfo Plot amino acid properties of a protein sequence in parallel
-   pepstats Calculates statistics of protein properties
-   pepwindow Draw a Kyte-Doolittle hydropathy plot for a protein sequence
-   pepwindowall Draw Kyte-Doolittle hydropathy plot for a protein
-   alignment
-   sirna Finds siRNA duplexes in mRNA
+   Program name     Description
+   backtranambig    Back-translate a protein sequence to ambiguous
+                    nucleotide sequence
+   backtranseq      Back-translate a protein sequence to a nucleotide sequence
+   banana           Plot bending and curvature data for B-DNA
+   btwisted         Calculate the twisting in a B-DNA sequence
+   chaos            Draw a chaos game representation plot for a nucleotide sequence
+   charge           Draw a protein charge plot
+   checktrans       Reports STOP codons and ORF statistics of a protein
+   compseq          Calculate the composition of unique words in sequences
+   dan              Calculates nucleic acid melting temperature
+   density          Draw a nucleic acid density plot
+   emowse           Search protein sequences by digest fragment molecular weight
+   freak            Generate residue/base frequency table or plot
+   iep              Calculate the isoelectric point of proteins
+   isochore         Plots isochores in DNA sequences
+   mwcontam         Find weights common to multiple molecular weights files
+   mwfilter         Filter noisy data from molecular weights file
+   octanol          Draw a White-Wimley protein hydropathy plot
+   pepinfo          Plot amino acid properties of a protein sequence in parallel
+   pepstats         Calculates statistics of protein properties
+   pepwindow        Draw a hydropathy plot for a protein sequence
+   pepwindowall     Draw Kyte-Doolittle hydropathy plot for a protein
+                    alignment
+   sirna            Finds siRNA duplexes in mRNA
 
 Author(s)
 

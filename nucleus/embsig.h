@@ -537,6 +537,7 @@ ajint         embHitlistMatchFold(const void *hit1,
 				  const void *hit2);
 
 
+void          embSigExit(void);
 
 /*
 ** End of prototype definitions

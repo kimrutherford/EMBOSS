@@ -141,7 +141,11 @@ static ajint trnconv[] =
     /* characters less than 64 */
     14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14,
     14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14,
+
+  /*' '  !   "   #   $   %   &   '   (   )   *   +   ,   -   .   / */
     14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14,
+
+  /* 0   1   2   3   4   5   6   7   8   9   :   ;   <   =   >   ? */
     14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14,
 
   /* @   A   B   C   D   E   F   G   H   I   J   K   L   M   N   O */
@@ -168,7 +172,11 @@ static ajint trncomp[] =
     /* characters less than 64 */
     14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14,
     14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14,
+
+  /*' '  !   "   #   $   %   &   '   (   )   *   +   ,   -   .   / */
     14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14,
+
+  /* 0   1   2   3   4   5   6   7   8   9   :   ;   <   =   >   ? */
     14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14,
 
   /* @   A   B   C   D   E   F   G   H   I   J   K   L   M   N   O*/
@@ -192,6 +200,8 @@ static void trnNoComment(AjPStr* text);
 static AjBool trnComplete(AjPTrn thys);
 
 
+
+
 /* @func ajTrnDel *************************************************************
 **
 ** Deletes a translation table object
@@ -206,10 +216,13 @@ void ajTrnDel(AjPTrn* pthis)
 {
     AjPTrn thys;
 
-    if(!pthis) return;
+    if(!pthis)
+        return;
 
     thys = *pthis;
-    if(!thys) return;
+
+    if(!thys)
+        return;
 
     ajStrDel(&thys->FileName);
     ajStrDel(&thys->Title);
@@ -308,6 +321,7 @@ AjPTrn ajTrnNew(const AjPStr trnFileName)
 
 
     trnFile = ajDatafileNewInNameS(trnFileName);
+
     if(trnFile==NULL)
 	ajFatal("Translation table file '%S' not found\n", trnFileName);
 
@@ -385,6 +399,7 @@ void ajTrnReadFile(AjPTrn trnObj, AjPFile trnFile)
     while(ajReadlineTrim(trnFile, &trnLine))
     {
 	trnNoComment(&trnLine);
+
 	if(ajStrGetLen(trnLine))
 	{
 	    if(ajStrFindC(trnLine, "Genetic Code") == -1)
@@ -400,6 +415,7 @@ void ajTrnReadFile(AjPTrn trnObj, AjPFile trnFile)
     while(ajReadlineTrim(trnFile, &trnLine))
     {
 	trnNoComment(&trnLine);
+
 	if(ajStrGetLen(trnLine))
 	{
 	    ajStrAssignS(&(trnObj->Title), trnLine);
@@ -411,6 +427,7 @@ void ajTrnReadFile(AjPTrn trnObj, AjPFile trnFile)
     while(ajReadlineTrim(trnFile, &trnLine))
     {
 	trnNoComment(&trnLine);
+
 	if(ajStrGetLen(trnLine))
 	{
 	    ajStrAppendS(&trnText, trnLine);
@@ -422,6 +439,7 @@ void ajTrnReadFile(AjPTrn trnObj, AjPFile trnFile)
     tokenhandle = ajStrTokenNewC(trnText, white);
 
     ajStrTokenNextParse(&tokenhandle, &tmpstr);
+
     if(ajStrCmpC(tmpstr, "AAs") == -1)
 	ajFatal("The file '%S' is not a valid Genetic Code file.\n"
 		"The 'AAs' line was not found.", trnObj->FileName);
@@ -430,6 +448,7 @@ void ajTrnReadFile(AjPTrn trnObj, AjPFile trnFile)
     aa = ajStrGetPtr(aaline);
 
     ajStrTokenNextParse(&tokenhandle, &tmpstr);
+
     if(ajStrCmpC(tmpstr, "Starts") == -1)
 	ajFatal("The file '%S' is not a valid Genetic Code file.\n"
 		"The 'Starts' line was not found.", trnObj->FileName);
@@ -438,6 +457,7 @@ void ajTrnReadFile(AjPTrn trnObj, AjPFile trnFile)
     starts = ajStrGetPtr(startsline);
 
     ajStrTokenNextParse(&tokenhandle, &tmpstr);
+
     if(ajStrCmpC(tmpstr, "Base1") == -1)
 	ajFatal("The file '%S' is not a valid Genetic Code file.\n"
 		"The 'Base1' line was not found.", trnObj->FileName);
@@ -446,6 +466,7 @@ void ajTrnReadFile(AjPTrn trnObj, AjPFile trnFile)
     base1 = ajStrGetPtr(base1line);
 
     ajStrTokenNextParse(&tokenhandle, &tmpstr);
+
     if(ajStrCmpC(tmpstr, "Base2") == -1)
 	ajFatal("The file '%S' is not a valid Genetic Code file.\n"
 		"The 'Base2' line was not found.", trnObj->FileName);
@@ -496,10 +517,10 @@ void ajTrnReadFile(AjPTrn trnObj, AjPFile trnFile)
     }
 
     /*
-       Check we have defined every codon
-       Calculate wobble in base3 and populate
-       For each amino acid (just once) calculate most ambiguous and populate
-     */
+    ** Check we have defined every codon
+    ** Calculate wobble in base3 and populate
+    ** For each amino acid (just once) calculate most ambiguous and populate
+    */
 
     trnComplete(trnObj);
 
@@ -540,6 +561,7 @@ static void trnNoComment(AjPStr* text)
 	return;
 
     cp = strchr(ajStrGetuniquePtr(text), '#');
+
     if(cp)
     {
 	/* comment found */
@@ -549,6 +571,7 @@ static void trnNoComment(AjPStr* text)
 
     return;
 }
+
 
 
 
@@ -605,8 +628,12 @@ AjPSeq ajTrnNewPep(const AjPSeq nucleicSeq, ajint frame)
     */
     if(frame != 0)
     {
-	if(frame < -3) frame = frame + 3;
-	if(frame < 0) frame = -frame + 3;
+	if(frame < -3)
+            frame = frame + 3;
+
+	if(frame < 0)
+            frame = -frame + 3;
+
 	ajStrAppendC(&name, "_");
 
 	ajStrFromInt(&value, frame);
@@ -890,6 +917,7 @@ void ajTrnRevC(const AjPTrn trnObj, const char *str, ajint len, AjPStr *pep)
 	  [trncomp[(ajint)*(cp-2)]];
 	cp-=3;
     }
+
     ajStrSetValidLen(&transtr, trnlen);
     ajStrAppendS(pep, transtr);
     ajStrDel(&transtr);
@@ -1158,7 +1186,8 @@ void ajTrnCFrame(const AjPTrn trnObj, const char *seq, ajint len, ajint frame,
 		 AjPStr *pep)
 {
 
-    if(frame > 3) frame = -frame + 3;
+    if(frame > 3)
+        frame = -frame + 3;
 
     if(frame >= 1 && frame <= 3)
     {
@@ -1624,6 +1653,10 @@ ajint ajTrnStartStopC(const AjPTrn trnObj, const char *codon, char *aa)
 
     return 0;
 }
+
+
+
+
 /* @func ajTrnName ************************************************************
 **
 ** Checks whether a const char * codon is a Start codon, a Stop codon or
@@ -1653,17 +1686,21 @@ const AjPStr ajTrnName(ajint trnFileNameInt)
     {
 	if(!indexfname)
 	    indexfname = ajStrNewC("EGC.index");
+
 	trnCodes = ajTablestrNewLen(20);
 
 	indexf = ajDatafileNewInNameS(indexfname);
+
 	if(!indexf)
 	    return unknown;
 
 	while(ajReadlineTrim(indexf, &line))
 	{
 	    ajStrTrimWhite(&line);
+
 	    if(ajStrGetCharFirst(line) == '#')
 		continue;
+
 	    ajStrTokenAssignC(&handle, line, " ");
 	    ajStrTokenNextParse(&handle, &tok1);
 	    ajStrTokenRestParse(&handle, &tok2);
@@ -1671,6 +1708,7 @@ const AjPStr ajTrnName(ajint trnFileNameInt)
 	    tok1 = NULL;
 	    tok2 = NULL;
 	}
+
 	ajFileClose(&indexf);
     }
 
@@ -1690,6 +1728,9 @@ const AjPStr ajTrnName(ajint trnFileNameInt)
 
     return unknown;
 }
+
+
+
 
 /* @funcstatic trnComplete ****************************************************
 **
@@ -1738,15 +1779,19 @@ static AjBool trnComplete(AjPTrn thys)
 		    ajWarn("Incomplete genetic code definition: "
 			   "no codon for '%c%c%c",
 			   bases[i], bases[j], bases[k]);
+
 		    return ajFalse;
 		}
 	    }
+
 	    kfirst = 0;
+
 	    while(kfirst < 4)
 	    {
 		codonval[2] = 0;
 		aa = thys->GC[i][j][kfirst];
 		newkfirst = 4;
+
 		for(k=kfirst;k<4;k++)
 		{
 		    if(thys->GC[i][j][k] == aa)
@@ -1759,15 +1804,16 @@ static AjBool trnComplete(AjPTrn thys)
 			    newkfirst = k;
 		    }
 		}
+
 		for(k=4;k<15;k++)
 		{
 		    kk = ambigcodes[k];
+
 		    if(((kk|codonval[2]) == codonval[2]) &&
 		       (kk & codonval[2]))
-		    {
 			thys->GC[i][j][k] = aa;
-		    }
 		}
+
 		kfirst = newkfirst;
 	    }
 	}
@@ -1776,11 +1822,13 @@ static AjBool trnComplete(AjPTrn thys)
     newaa[0] = 'X';
     ifirst = jfirst = kfirst = 0;
     jj = kk = 0;
+
     while(newaa[0])
     {
 	newaa[0] = '\0';
 	aa = thys->GC[ifirst][jfirst][kfirst];
 	codonval[0] = codonval[1] = codonval[2] = 0;
+
 	for(i=ifirst;i<4;i++)
 	{
 	    for(j=jfirst;j<4;j++)
@@ -1808,10 +1856,13 @@ static AjBool trnComplete(AjPTrn thys)
 			}
 		    }
 		}
+
 		kfirst = 0;
 	    }
+
 	    jfirst = 0;
 	}
+
 	jfirst = jj;
 	kfirst = kk;
 	thys->GC[trncodes[codonval[0]]]
@@ -1821,7 +1872,6 @@ static AjBool trnComplete(AjPTrn thys)
 
     return ajTrue;
 }
-
 
 
 

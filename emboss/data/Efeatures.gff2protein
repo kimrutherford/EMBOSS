@@ -165,7 +165,7 @@ polypeptide_structural_domain SO:0001069
 
 # HELIX -  DSSP secondary structure
 
-helix SO:0001117
+helix SO:0001117_helix
 	/note
 	/comment
 

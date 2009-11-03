@@ -41,19 +41,6 @@ section: additional [
     information: "Overlap between split sequences"
   ]
 
-  boolean: source [
-    additional: "Y"
-    default: "N"
-    information: "Split using source features with /origid
-                  qualifiers"
-  ]
-
-  boolean: multifile [
-    additional: "Y"
-    default: "N"
-    information: "Split sequence into multiple files"
-  ]
-
 endsection: additional
 
 section: advanced [
@@ -63,7 +50,7 @@ section: advanced [
 
   boolean: addoverlap [
     default: "N"
-    information: "Add overlap to size"
+    information: "Include overlap in output sequence size"
   ]
 
 endsection: advanced

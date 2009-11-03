@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Displays information on configured databases
@@ -22,7 +29,7 @@ Usage
 % showdb 
 Displays information on configured databases
 
-# Name           Type  ID  Qry All Comment
+# Name           Type ID  Qry All Comment
 # ============== ==== ==  === === =======
 twp              P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM in
 dex
@@ -100,7 +107,7 @@ Displays information on configured databases
 % showdb -database tsw 
 Displays information on configured databases
 
-# Name         Type  ID  Qry All Comment
+# Name         Type ID  Qry All Comment
 # ============ ==== ==  === === =======
 tsw            P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
 
@@ -235,7 +242,7 @@ index
 % showdb -nonucleic 
 Displays information on configured databases
 
-# Name           Type  ID  Qry All Comment
+# Name           Type ID  Qry All Comment
 # ============== ==== ==  === === =======
 twp              P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM in
 dex
@@ -458,8 +465,8 @@ tgenbank         N
 % showdb -full 
 Displays information on configured databases
 
-# Name           Type  ID  Qry All Method    Fields            Defined  Release
-  Comment
+# Name           Type ID  Qry All Method    Fields            Defined Release C
+omment
 # ============== ==== ==  === === ========= ================= ======= ======= =
 ======
 twp              P    OK  OK  OK  emblcd    des               global  16      E
@@ -640,7 +647,7 @@ Output file format
 
   File: showdb.out
 
-# Name           Type  ID  Qry All Comment
+# Name           Type ID  Qry All Comment
 # ============== ==== ==  === === =======
 twp              P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM in
 dex
@@ -785,30 +792,31 @@ Known bugs
 
 See also
 
-   Program name Description
-   abiview Display the trace in an ABI sequencer file
-   cirdna Draws circular maps of DNA constructs
-   infoalign Display basic information about a multiple sequence
-   alignment
-   infobase Return information on a given nucleotide base
-   inforesidue Return information on a given amino acid residue
-   infoseq Display basic information about sequences
-   lindna Draws linear maps of DNA constructs
-   pepnet Draw a helical net for a protein sequence
-   pepwheel Draw a helical wheel diagram for a protein sequence
-   prettyplot Draw a sequence alignment with pretty formatting
-   prettyseq Write a nucleotide sequence and its translation to file
-   remap Display restriction enzyme binding sites in a nucleotide
-   sequence
-   seealso Finds programs with similar function to a specified program
-   showalign Display a multiple sequence alignment in pretty format
-   showfeat Display features of a sequence in pretty format
-   showseq Displays sequences with features in pretty format
-   sixpack Display a DNA sequence with 6-frame translation and ORFs
-   textsearch Search the textual description of sequence(s)
-   tfm Displays full documentation for an application
-   whichdb Search all sequence databases for an entry and retrieve it
-   wossname Finds programs by keywords in their short description
+   Program name     Description
+   abiview          Display the trace in an ABI sequencer file
+   cirdna           Draws circular maps of DNA constructs
+   infoalign        Display basic information about a multiple sequence
+                    alignment
+   infobase         Return information on a given nucleotide base
+   inforesidue      Return information on a given amino acid residue
+   infoseq          Display basic information about sequences
+   lindna           Draws linear maps of DNA constructs
+   pepnet           Draw a helical net for a protein sequence
+   pepwheel         Draw a helical wheel diagram for a protein sequence
+   prettyplot       Draw a sequence alignment with pretty formatting
+   prettyseq        Write a nucleotide sequence and its translation to file
+   remap            Display restriction enzyme binding sites in a nucleotide
+                    sequence
+   seealso          Finds programs with similar function to a specified program
+   showalign        Display a multiple sequence alignment in pretty format
+   showfeat         Display features of a sequence in pretty format
+   showpep          Displays protein sequences with features in pretty format
+   showseq          Displays sequences with features in pretty format
+   sixpack          Display a DNA sequence with 6-frame translation and ORFs
+   textsearch       Search the textual description of sequence(s)
+   tfm              Displays full documentation for an application
+   whichdb          Search all sequence databases for an entry and retrieve it
+   wossname         Finds programs by keywords in their short description
 
 Author(s)
 

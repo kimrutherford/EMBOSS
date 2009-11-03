@@ -51,7 +51,7 @@ qanxflatexc:x65921
 # Trying 'testdb:x65921'
 # Failed 'testdb:x65921'
 # Trying 'genbanksrs:x65921'
-genbanksrs:x65921
+# Failed 'genbanksrs:x65921'
 # Trying 'tpir:x65921'
 # Failed 'tpir:x65921'
 # Trying 'qasrswww:x65921'

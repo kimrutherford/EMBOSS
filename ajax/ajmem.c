@@ -60,6 +60,9 @@ static ajint probeFail = 0;
 static ajint probeMaxFail = 0;
 #endif
 
+
+
+
 /* @func ajMemAlloc ***********************************************************
 **
 ** Allocates memory using malloc, and fails with an error message if
@@ -93,6 +96,7 @@ void* ajMemAlloc(size_t nbytes, const char* file, ajint line, AjBool nofail)
     }
 
     ptr = malloc(nbytes);
+
     if(ptr == NULL)
     {
 	if (nofail)
@@ -144,11 +148,14 @@ void* ajMemCalloc(size_t count, size_t nbytes,
 {
     void *ptr;
 
-    if(count <= 0) ajUtilCatch();
+    if(count <= 0)
+        ajUtilCatch();
+
     assert(count > 0);
     assert(nbytes > 0);
 
     ptr = calloc(count, nbytes);
+
     if(ptr == NULL)
     {
 	if (nofail)
@@ -208,6 +215,7 @@ void* ajMemCallocZero(size_t count, size_t nbytes,
     assert(nbytes > 0);
 
     ptr = calloc(count, nbytes);
+
     if(ptr == NULL)
     {
 	if (nofail)
@@ -235,6 +243,9 @@ void* ajMemCallocZero(size_t count, size_t nbytes,
     return ptr;
 }
 
+
+
+
 /* @obsolete ajMemCalloc0
 ** @rename ajMemCallocZero
 */
@@ -244,6 +255,8 @@ __deprecated void* ajMemCalloc0(size_t count, size_t nbytes,
 {
   return ajMemCallocZero(count, nbytes, file, line, nofail);
 }
+
+
 
 
 /* @func ajMemSetZero *********************************************************
@@ -270,6 +283,9 @@ void ajMemSetZero(void* ptr, size_t count, size_t nbytes)
 
     return;
 }
+
+
+
 
 /* @func ajMemFree ************************************************************
 **
@@ -331,6 +347,7 @@ void* ajMemResize(void* ptr, size_t nbytes,
     if(ptr == NULL)
     {
 	ptr = ajMemCallocZero(nbytes, 1, file, line, nofail);
+
 	return ptr;
     }
 
@@ -398,6 +415,7 @@ void* ajMemResizeZero(void* ptr, size_t oldbytes, size_t nbytes,
     if(ptr == NULL)
     {
 	ptr = ajMemCallocZero(nbytes, 1, file, line, nofail);
+
 	return ptr;
     }
 
@@ -529,6 +547,7 @@ void ajMemStat(const char* title)
 
     statResizeCount = memResizeCount;
 #endif
+
     return;
 }
 
@@ -556,6 +575,9 @@ void ajMemExit(void)
 
     return;
 }
+
+
+
 
 /* @func ajMemCheck ***********************************************************
 **
@@ -597,8 +619,12 @@ void ajMemCheck(int istat)
 #else
     (void) istat;
 #endif
+
     return;
 }
+
+
+
 
 /* @func ajMemCheckSetLimit ***************************************************
 **
@@ -619,8 +645,12 @@ void ajMemCheckSetLimit(ajint maxfail)
 #else
     (void) maxfail;
 #endif
+
     return;
 }
+
+
+
 
 /* @func ajMemProbe ***********************************************************
 **
@@ -640,6 +670,7 @@ void ajMemProbe(void* ptr,
     if(ptr == NULL)
     {
 	ajWarn("ajMemProbe address %x NULL in %s at line %d", ptr, file, line);
+
 	return;
     }
 
@@ -656,8 +687,6 @@ void ajMemProbe(void* ptr,
     (void) file;
     (void) line;
 #endif
+
     return;
 }
-
-
-

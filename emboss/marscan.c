@@ -300,6 +300,7 @@ int main(int argc, char **argv)
 	ajListFree(&l8rev);
 
     }
+    ajReportSetSeqstats(report, seqall);
 
     if(skipm16)
     {

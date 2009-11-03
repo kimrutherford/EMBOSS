@@ -22,6 +22,18 @@ remap
 
 
 <H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
     Function
 </H2>
 
@@ -178,6 +190,8 @@ Output file [j01636.remap]: <b></b>
                                   for restriction enzyme recognition site and
                                   cut postions that span the end of the
                                   sequence to be considered.
+   -methylation        boolean    [N] If this is set then RE recognition sites
+                                  will not match methylated bases.
    -[no]commercial     boolean    [Y] If this is set, then only those enzymes
                                   with a commercial supplier will be searched
                                   for. This qualifier is ignored if you have
@@ -244,6 +258,8 @@ Output file [j01636.remap]: <b></b>
                                   them.
 
    Advanced (Unprompted) qualifiers:
+   -mfile              datafile   [Emethylsites.dat] Restriction enzyme data
+                                  file (optional)
    -[no]translation    boolean    [Y] This displays the 6-frame translations
                                   of the sequence in the output.
    -[no]reverse        boolean    [Y] This displays the cut sites and
@@ -282,7 +298,7 @@ Output file [j01636.remap]: <b></b>
                                   24-45 blue 56-78 orange
                                   1-100 green 120-156 red
                                   A file of ranges to colour (one range per
-                                  line) can be specifed as '@filename'.
+                                  line) can be specified as '@filename'.
    -threeletter        boolean    [N] Display protein sequences in
                                   three-letter code
    -number             boolean    [N] Number the sequences
@@ -441,6 +457,13 @@ PpiI</td>
 </tr>
 
 <tr>
+<td>-methylation</td>
+<td>If this is set then RE recognition sites will not match methylated bases.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
 <td>-[no]commercial</td>
 <td>If this is set, then only those enzymes with a commercial supplier will be searched for. This qualifier is ignored if you have specified an explicit list of enzymes to search for, rather than searching through 'all' the enzymes in the REBASE database. It is assumed that, if you are asking for an explicit enzyme, then you probably know where to get it from and so all enzymes names that you have asked to be searched for, and which cut, will be reported whether or not they have a commercial supplier.</td>
 <td>Boolean value Yes/No</td>
@@ -489,6 +512,13 @@ PpiI</td>
 </tr>
 
 <tr>
+<td>-mfile</td>
+<td>Restriction enzyme data file (optional)</td>
+<td>Data file</td>
+<td>Emethylsites.dat</td>
+</tr>
+
+<tr>
 <td>-[no]translation</td>
 <td>This displays the 6-frame translations of the sequence in the output.</td>
 <td>Boolean value Yes/No</td>
@@ -534,7 +564,7 @@ They are followed by any valid HTML font colour.
 Examples of region specifications are:
 24-45 blue 56-78 orange
 1-100 green 120-156 red
-A file of ranges to colour (one range per line) can be specifed as '@filename'.</td>
+A file of ranges to colour (one range per line) can be specified as '@filename'.</td>
 <td>Sequence range</td>
 <td><i>full sequence</i></td>
 </tr>
@@ -639,6 +669,7 @@ OC   Enterobacteriaceae; Escherichia.
 XX
 RN   [1]
 RP   1243-1266
+RX   DOI; 10.1073/pnas.70.12.3581.
 RX   PUBMED; 4587255.
 RA   Gilbert W., Maxam A.;
 RT   "The nucleotide sequence of the lac operator";
@@ -646,6 +677,7 @@ RL   Proc. Natl. Acad. Sci. U.S.A. 70(12):3581-3584(1973).
 XX
 RN   [2]
 RP   1246-1308
+RX   DOI; 10.1073/pnas.70.12.3585.
 RX   PUBMED; 4587256.
 RA   Maizels N.M.;
 RT   "The nucleotide sequence of the lactose messenger ribonucleic acid
@@ -667,8 +699,6 @@ RL   Walter de Gruyter, New York (1975)
 XX
 RN   [5]
 RP   1146-1282
-RX   PUBMED; 1088926.
-RA   Dickson R.C., Abelson J.N., Barnes W.M., Reznikoff W.S.;
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
@@ -1385,6 +1415,11 @@ None.
 <tr>
 <td><a href="showorf.html">showorf</a></td>
 <td>Display a nucleotide sequence and translation in pretty format</td>
+</tr>
+
+<tr>
+<td><a href="showpep.html">showpep</a></td>
+<td>Displays protein sequences with features in pretty format</td>
 </tr>
 
 <tr>

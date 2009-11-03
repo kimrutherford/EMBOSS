@@ -22,15 +22,30 @@ newcpgseek
 </H2>
 
 
-<p><b>newcpgseek</b> identifies in a nucleotide sequence regions with higher than expected frequency of the dinucleotide <tt>CG</tt>.</p>
-Each position in the sequence is scored using a running sum calculated from all positions in the sequence.  This is a different method to that typically used for identifying CpG islands, for example by <b>newcpgreport</b> and <b>cpgplot</b>.  This method overpredicts islands but finds the smaller ones around primary exons. An output file is written with information on the CpG-rich regions that are found.  A feature table of sequence features in these regions is also written.</p>
+<p><b>newcpgseek</b> identifies in a nucleotide sequence regions with
+higher than expected frequency of the dinucleotide <tt>CG</tt>.
+Each position in the sequence is scored using a running sum calculated
+from all positions in the sequence.  This is a different method to
+that typically used for identifying CpG islands, for example
+by <b>newcpgreport</b> and <b>cpgplot</b>.  This method overpredicts
+islands but finds the smaller ones around primary exons. An output
+file is written with information on the CpG-rich regions that are
+found.  A feature table of sequence features in these regions is also
+written.</p>
 
 
 <H2>
 Algorithm
 </H2>
 
-<p><b>newcpgseek</b> scores each position in the sequence using a running sum calculated from all positions in the sequence, starting with the first and ending in the last. If there is not a CG dinucleotide at a position, the score is decremented, if there is one, the score is incremented by a constant (user-defined) value. If the score for a region in the sequence is higher than a threshold (17 at the moment) then a putative island is declared.  Sequence regions scoring above the threshold are searched for recursively.</p>
+<p><b>newcpgseek</b> scores each position in the sequence using a
+running sum calculated from all positions in the sequence, starting
+with the first and ending in the last. If there is not a CG
+dinucleotide at a position, the score is decremented, if there is one,
+the score is incremented by a constant (user-defined) value. If the
+score for a region in the sequence is higher than a threshold (17 at
+the moment) then a putative island is declared.  Sequence regions
+scoring above the threshold are searched for recursively.</p>
 
 
 <H2>
@@ -79,22 +94,57 @@ None.
     Notes
 </H2>
 
-<p>"CpG" refers to a <tt>C</tt> nucleotide immediately followed by a <tt>G</tt>. The 'p' in 'CpG' refers to the phosphate group linking the two bases.  Regions of genomic sequences rich in the CpG pattern or "CpG islands" are resistant to methylation and tend to be associated with genes which are frequently switched on. It's been estimated that about half of all mammalian genes, and, possibly all mammalian house-keeping genes, have a CpG-rich region around their 5' end.  Non-mammalian vertebrates have some CpG islands that are associated with genes, but the association gets equivocal in the farther taxonomic groups. The detection of CpG island upstream of predicted exons or genes is evidence in support of a highly expressed gene.</p>
+<p>"CpG" refers to a <tt>C</tt> nucleotide immediately followed by
+a <tt>G</tt>. The 'p' in 'CpG' refers to the phosphate group linking
+the two bases.  Regions of genomic sequences rich in the CpG pattern
+or "CpG islands" are resistant to methylation and tend to be
+associated with genes which are frequently switched on. It's been
+estimated that about half of all mammalian genes, and, possibly all
+mammalian house-keeping genes, have a CpG-rich region around their 5'
+end.  Non-mammalian vertebrates have some CpG islands that are
+associated with genes, but the association gets equivocal in the
+farther taxonomic groups. The detection of CpG island upstream of
+predicted exons or genes is evidence in support of a highly expressed
+gene.</p>
 
-<p>As there is no official definition of what is a CpG island is or how to identify where they begin and end, we work with two definitions and thus two methods. These are:</p>
+<p>As there is no official definition of what is a CpG island is or
+how to identify where they begin and end, we work with two definitions
+and thus two methods. These are:</p>
 
-<p>1. <b>cpgplot</b> and <b>newcpgreport</b> use a sliding window within which the Observed/Expected ratio of CpG is calculated. For a sequence region to reported as a CpG island, it must satisfy the following contraints:
+<p>1. <b>cpgplot</b> and <b>newcpgreport</b> use a sliding window
+within which the Observed/Expected ratio of CpG is calculated. For a
+sequence region to reported as a CpG island, it must satisfy the
+following contraints:
 <pre>
    Observed/Expected ratio > 0.6
    % C + % G > 50%
    Sequence Length > 200</pre>
 </p>
 
-<p>2. <b>newcpgseek</b> and <b>cpgreport</b> use a running sum calculated from all positions in a sequence rather than a window to produce a score.  If there is not a <tt>CG</tt> dinucleotide at a position, the score is decremented, if there is one, the score is incremented by a constant (user-defined) value. If the score for a region in the sequence is higher than a threshold (17 at the moment) then a putative island is declared.  Sequence regions scoring above the threshold are searched for recursively.</p> 
+<p>2. <b>newcpgseek</b> and <b>cpgreport</b> use a running sum
+calculated from all positions in a sequence rather than a window to
+produce a score.  If there is not a <tt>CG</tt> dinucleotide at a
+position, the score is decremented, if there is one, the score is
+incremented by a constant (user-defined) value. If the score for a
+region in the sequence is higher than a threshold (17 at the moment)
+then a putative island is declared.  Sequence regions scoring above
+the threshold are searched for recursively.</p>
 
-<p>This method overpredicts islands but finds the smaller ones around primary exons. <b>newcpgseek</b> uses the same method as <b>cpgreport</b> but the output is different and more readable. For most purposes you should probably use <b>newcpgreport</b> rather than <b>cpgreport</b>. It is used to produce the human cpgisland database you can find on the EBI's ftp server as well as on the EBI's SRS server.</p>
-<p><b>newcpgseek</b> and <b>cpgreport</b> both now display the actual CpG count, the (%C + %G) and the Observed/Expected ratio in the region where the score is above the threshold.</p>
-<p>The <b>geecee</b> program measures CG content in the entire input sequence and is not to be used to detect CpG islands. It can be useful for detecting sequences that MIGHT contain an island.</p>
+<p>This method overpredicts islands but finds the smaller ones around
+primary exons. <b>newcpgseek</b> uses the same method
+as <b>cpgreport</b> but the output is different and more readable. For
+most purposes you should probably use <b>newcpgreport</b> rather
+than <b>cpgreport</b>. It is used to produce the human cpgisland
+database you can find on the EBI's ftp server as well as on the EBI's
+SRS server.</p>
+
+<p><b>newcpgseek</b> and <b>cpgreport</b> both now display the actual
+CpG count, the (%C + %G) and the Observed/Expected ratio in the region
+where the score is above the threshold.</p>
+
+<p>The <b>geecee</b> program measures CG content in the entire input
+sequence and is not to be used to detect CpG islands. It can be useful
+for detecting sequences that MIGHT contain an island.</p>
 
 
 
@@ -133,50 +183,6 @@ None.
 
 <!--#include file="inc/newcpgseek.isee" -->
 
-<p>
-
-As there is no official definition of what is a cpg island is, and worst
-where they begin and end, we have to live with 2 definitions and thus
-two methods.  These are:
-
-<p>
-
-1.  <b>newcpgseek</b> and <b>cpgreport</b> - both declare a putative
-island if the score is higher than a threshold (17 at the moment).  They
-now also displaying the actual CpG count, the % CG and the
-observed/expected ration in the region where the score is above the
-threshold.  This scoring method based on sum/frequencies overpredicts
-islands but finds the smaller ones around primary exons.
-<b>newcpgseek</b> uses the same method as <b>cpgreport</b> but the
-output is different and more readable.
-
-<p>
-
-2.  <b>newcpgreport</b> and <b>cpgplot</b> use a sliding window within
-which the Obs/Exp ratio of CpG is calculated.  The important thing to
-note in this method is that an island, in order to be reported, is
-defined as a region that satisfies the following contraints:
-
-<p>
-<pre>
-   Obs/Exp ratio > 0.6
-   % C + % G > 50%
-   Length > 200.
-</pre>
-<p>
-
-<p>
-
-For all practical purposes you should probably use newcpgreport.  It is
-actually used to produce the human cpgisland database you can find on
-the EBI's ftp server as well as on the EBI's SRS server.
-
-<p>
-
-<b>geecee</b> measures CG content in the entire input sequence and is
-not to be used to detect CpG islands.  It can be usefull for detecting
-sequences that MIGHT contain an island.
-         
 
 
 <H2>

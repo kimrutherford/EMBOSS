@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Calculates phi and psi torsion angles from protein coordinates
@@ -80,7 +87,8 @@ Command line arguments
 
 Input file format
 
-   psiphi reads ...
+   psiphi reads a clean coordinate file (CCF) of protein structure
+   coordinates.
 
   Input files for usage example
 
@@ -358,7 +366,18 @@ OXT   34.731   46.398   -8.724    1.00   56.06    0.00    0.00    0.00    0.00
 
 Output file format
 
-   psiphi outputs ...
+   The output is a standard EMBOSS report file.
+
+   The results can be output in one of several styles by using the
+   command-line qualifier -rformat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: embl,
+   genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+   feattable, motif, regions, seqtable, simple, srs, table, tagseq
+
+   See: http://emboss.sf.net/docs/themes/ReportFormats.html for further
+   information on report formats.
+
+   By default psiphi writes a 'table' format report file.
 
   Output files for usage example
 
@@ -500,7 +519,7 @@ Known bugs
 
 See also
 
-   Program name Description
+   Program name     Description
 
 Author(s)
 

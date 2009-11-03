@@ -3,11 +3,12 @@
                                   format, or reference (input USA)
    -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, xterm, png, gif)
+                                  tekt, tek, none, data, das, xterm, png, gif)
 
    Additional (Optional) qualifiers:
    -datafile           datafile   [Enakai.dat] AAINDEX entry data file
-   -length             integer    [7] Window size (Integer from 1 to 200)
+   -length             integer    [19] Window size (Integer from 1 to 200)
+   -normalize          boolean    [N] Normalize data values
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:

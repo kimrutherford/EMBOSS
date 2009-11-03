@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Predict and plot transmembrane segments in protein sequences
@@ -39,7 +46,7 @@ Command line arguments
   [-sequences]         seqset     File containing a sequence alignment
    -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, xterm, png, gif)
+                                  tekt, tek, none, data, das, xterm, png, gif)
   [-outfile]           report     [*.tmap] Output report file name
 
    Additional (Optional) qualifiers: (none)
@@ -220,8 +227,10 @@ Output file format
 #---------------------------------------
 
 #---------------------------------------
-# Total_sequences: 3
-# Total_hitcount: 21
+# Total_sequences: 2
+# Total_length: 702
+# Reported_sequences: 3
+# Reported_hitcount: 21
 #---------------------------------------
 
   Graphics File: tmap.ps
@@ -288,14 +297,14 @@ Known bugs
 
 See also
 
-   Program name Description
-   garnier Predicts protein secondary structure using GOR method
-   helixturnhelix Identify nucleic acid-binding motifs in protein
-   sequences
-   hmoment Calculate and plot hydrophobic moment for protein sequence(s)
-   pepcoil Predicts coiled coil regions in protein sequences
-   pepnet Draw a helical net for a protein sequence
-   pepwheel Draw a helical wheel diagram for a protein sequence
+   Program name     Description
+   garnier          Predicts protein secondary structure using GOR method
+   helixturnhelix   Identify nucleic acid-binding motifs in protein
+                    sequences
+   hmoment          Calculate and plot hydrophobic moment for protein sequence(s)
+   pepcoil          Predicts coiled coil regions in protein sequences
+   pepnet           Draw a helical net for a protein sequence
+   pepwheel         Draw a helical wheel diagram for a protein sequence
 
 Author(s)
 

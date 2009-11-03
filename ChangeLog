@@ -1,10 +1,383 @@
+Version 6.1.0
+	A new data structure AjPSeqXref holds details of cross-references
+	between a sequence object and any other data resource. The
+	cross-reference attributes include a type to indicate the source
+	of the cross-reference, for example XREF_DR for a reference in a
+	DR line from EMBL or Swiss-Prot. The other attributes are the
+	database name and up to 4 identifiers (as in the Swiss-Prot DR
+	line definition) and a start and end position where the source is
+	a feature table entry.
+
+	When reading a sequence with an identifiable species, attempts are
+	made to define the NCBI taxonomy identifier for the
+	species. Possible sources include the OX line in Swiss-Prot, the
+	taxon cross-reference in the EMBL/GenBank/DDBJ feature table
+	(available only if the feature table is read) and the species name
+	which can be matched to a set of common species obtained from
+	NCBI.
+
+	Swissprot entry descriptions in FASTA output no longer have a
+	trailing '.'. Where the source entry has the new Swiss-Prot DE
+	line format the name is built from the recommended full name with
+	other names in round brackets.
+
+	Binary files now consistently have null characters after strings
+	to pad them to full length. Previous versions wrote whatever
+	followed the NULL in the string object. The resulting files now
+	look cleaner although any extra characters were always ignored
+	when reading dbi index files.
+
+	Test databases were updated on 24th June 2009.
+
+	Blank lines are ignored before any sequence input. This is to
+	support the use of seqret to read data pasted into web forms where
+	extra blank lines are often accidentally included.
+
+	FASTQ is now a valid sequence format and can be detected
+	automatically. "fastq" format ignores all quality scores as there
+	is no automatic and safe way to determine whether scores are for
+	Sanger/phred or Illumina/Solexa quality. To read the quality
+	socres we support formats "fastqsanger" and "fastqillumina". We
+	also support "fastqint" to read quality scores as integers. These
+	scores are assumed to be Sanger quality. For Illumina quality
+	scores out of range, a warning message is written once for each
+	sequence. Sanger scores do not have out of range values as they
+	allow the full set of quality characters, although high values
+	(over 40) should only appear for contig consensus seqeunces.
+
+	MEGA format has been rewritten to support the file format used by
+	MEGA 4. Title can be in mixed case. Format and Gene/domain command
+	lines are processed. Multiple gene/domain files are read by EMBOSS
+	as separate alignment sets by seqretsetall. This may change in a
+	future release as MEGA4 processes them as one alignment with
+	annotated gene regions. While EMBOSS has no annotation specific to
+	alignments this is a reasonable compromise.
+
+	embossdata will now always return directory listings alphabetically.
+
+	A new ACD function replaces an attribute value with an EMBOSS or
+	environment variable. The attribute syntax is (@value:VARNAME).
+
+	Infile datatypes in ACD have a new attribute directory: which
+	defines the default directory to be searched. If the user
+	specifies an explicit path the directory attribute is ignored.
+
+	Applications writing out multiple sets of sequences now correctly
+	reset the sequence output. This only affected one test application
+	in EMBOSS 6.0.1 (input type seqsetall and output type seqoutall).
+
+	Applications that use single letter qualifier names (for example
+	the HMMERNEW wrappers for HMMER applications) can be confused if a
+	single letter qualifier name matches uniquely an associated
+	qualifier for a preceding comand line qualifier. An additional
+	check now ensures that a unique qualifier (for example -o) is
+	correctly recognized.
+
+	Global alignments with needle in rare cases missed the optimal
+	alignment of the first 2 residues. This was a bug introduced in
+	6.0.0.
+
+	When reading data using a launched application, including the SRS
+	access method which launches "getz", closing the input without
+	reading to the end caused the file close function to loop
+	forever. Examples included nthseq and seqret -firstonly both of
+	which stop reading when they have reached the nth or first
+	sequence. File closing now only waits if the input has reached end
+	of file, and has a timeout on the wait to break out of the loop.
+
+	Intelligenetics format sequence files with more than one sequence
+	are now read correctly. Where the sequence ends with a number,
+	intelligenetics format sequences can now be automatically
+	detected.
+
+	Add -methylation option to restrict/restover/remap/showseq
+	to simulate (e.g.) dam/dcm restriction enzyme knockouts.
+
+	remap now correctly reports restriction enzymes cutting a
+	greater number of times than an optionally-supplied maximum
+	value. The primary function of the application was unaffected.
+
+	showfeat has a new option -joinfeatures to display all exons on
+	one line for a join feature location. In previous releases this
+	was one of the -sort options. It is now possible to use
+	-joinfeatures and to select a sort order.
+
+	Installing without X11 (using the --without-x option for
+	./configure) used "x11" as the default graphics device in some
+	applications. These now use "png" (if available) or "ps".
+
+	needle and water with the -nobrief option repeated report header
+	information on the longest and shortest similarity and identities
+	because the previous header content was not cleared. This only
+	affected results where there was more than one sequence as the
+	second input.
+
+	In the EMBL/GenBank feature table the group() and one_of()
+	operators are obsolete. They are automatically converted to
+	order().
+
+	The command line syntax using the master qualifier name as a
+	suffix (for example -sreverse_asequence) ignored the master
+	qualifier name and set values for all matching inputs. This syntax
+	is intended as a way for wrappers to better control the use of
+	associated qualifiers, as it is cleaner than using a numeric
+	suffix (-sreverse1 -sreverse2 etc.)
+
+	Using -sreverse on the command line could reverse protein
+	sequences for inputs that can read more than one sequence (seqall,
+	seqaset, seqsetall). -sreverse is now only set for nucleotide
+	sequence inputs. Single sequence inputs correctly ignored the
+	-sreverse value.
+
+	Multiple sequence sets can be read as input type seqsetall, but
+	when this input was used for a single sequence set input (type
+	seqset) all sequence sets were read. seqset input now stops after
+	the first set (for example a PHYLIP or MSF alignment).
+
+	Genbank test data had incorrect format. The data was extracted
+	from a set of test GCG databases and had spaces in the feature
+	locations.
+
+	extractfeat now uses the new feature fetch functions and can
+	retrieve features that include joins across entries.
+	
+	Feature parsing functions are added to fetch sequences from other
+	entries. These depend on reusing the USA of the original sequence,
+	with the identifier of the external sequence inserted in place
+	of the original. This is known to work for database references and
+	flat files.
+
+	coderet was limited to EMBL/GenBank feature tables. It now
+	processes any valid feature input including GFF files. The
+	previous parsing functions are obsolete and have been removed
+	as coderet was the only application calling them.
+
+	Very large pairwise alignments can fail to back trace through the
+	alignment because of rounding error. The alignment and traceback
+	functions now use double precision to maintain accuracy.
+
+	pepwindow and pepwindowall missed the plot value for the last
+	window in the sequence.
+
+	pepwindow and pepwindowall now process sequence ranges -sbegin and
+	-send.
+
+	pepwindow and pepwindowall now default to a window length of 19,
+	ideal for transmembrane regions. The old default of 7 was short
+	and gave noisy results.
+
+	pepwindow and pepwindowall have an extra option -normalize to
+	convert the amino acid data in the datafile to mean 0.0 and
+	standard deviation 1.0. The default Kyte-Doolittle data is not
+	normalized.
+
+	The EMBL/Genbank feature table definitions have been updated to
+	version 8.0 (October 2008). Sequence ontology terms are now
+	available for all feature types except S_region for which no
+	specific SO term exists. S_region is attached to an internal term
+	derived from SO:0000301 as a placeholder.
+
+	Programs searching with regular expressions and patterns reported
+	the pattern name with '1' added to the end. This was to support
+	pattern and regular expression files with multiple patterns. When
+	only one pattern is given on the command line the '1' is no longer
+	added.
+	
+	Programs searching with regular expressions (dreg and preg) missed
+	overlapping matches to the pattern. The algorithm now steps
+	forward one character from the start of the match and searches
+	again. Some regular expressions with wildcards may produce a large
+	number of overlapping matches especially in low-complexity regions.
+
+	Protein sequences in GFF format now use GFF3 by default. For
+	release 6.0.0 protein sequences were written in GFF2 while the
+	GFF3 protein feature definitions were redefined using the Sequence
+	Ontology. This process is now completed.
+
+	When a sequence is reversed by revseq the description is tagged
+	with "Reversed: " so that the output and any sequence derived from
+	it has a note of the history.
+
+	EMBL and GenBank formats when used to read multiple entries failed
+	to reset the list of citations. Although the first set of
+	citations was reported correctly, all other entries in the same
+	run included the citation list from the first entry.
+
+	SwissProt/UniProt entries now preserve the complete entry content
+	when read and rewritten. All feature types are preserved and
+	feature lines wrap according to the widths in UniProt 14.8. Date
+	lines are stored and written. Comments are stored in blocks.
+	Database cross-references ar stored in a list. The description
+	lines are saved in the new SwissProt structure. Tests on a set of
+	complex entries confirm that EMBOSS is able to read and write an
+	exact copy of this sample set.
+
+	Protein feature keys now use the Sequence Ontology identifiers
+	as internal names. This may change the way some feature keys are
+	converted between data formats. Protein feature keys have been
+	updated to correct some conversions, for example to distinguish
+	between "coiled coil" from pepcoil and "random coil" from garnier
+	output.
+
+	Fitch sequence format was only able to read a single
+	sequence. EMBOSS can now read 'fitch' as a multiple sequence
+	format.
+
+	Extractfeat now cleanly processes minscore and maxscore as limits
+	on the score. By default any score is allowed if these are
+	unchanged. Previous releases required minimum and maximum to be
+	equal - or minimum greater than maximum - to permit any feature
+	score.
+
+	New feature XML output format DASGFF. Feature output functions
+	have a changed interface to pass the AjPFeattabOut object so that
+	additional processing can handle the opening and cloing of an XML
+	output file.
+
+	New sequence output formats "dasdna" and "das" write DASDNA and
+	DASSEQUENCE XML outputs. Sequence output functions have a new
+	capability to define a Cleanup function to write the final lines
+	of an XML output file. The AjPSeqout data structure already has
+	the Count attribute needed to identify the first sequence so that
+	the XML header can be written.
+
+	New environment variable EMBOSS_ACDFILENAME provides an
+	alternative way to set the default output filename for EMBOSS
+	applications. If set to true, the filename is used rather than the
+	current behaviour of using the first sequence name as the default
+	filenaame. When the filename is used the case of the name is
+	preserved.
+
+	Corrected display of exon ranges in showseq. Exons now display in
+	their original frame (all were displayed in frame 1 in earlier
+	versions). Display of 3-letter amino acid names corrected (but we
+	hope nobody is using 3-letter codes any more!)
+
+	Added create attribute for outdir datatype in ACD. If true, the
+	output directory will be created if it does not already exist.
+	The default is false. output directories must already exist. This
+	is the behaviour in previous releases.
+
+	Added attribute aligned for datatype seqoutall in ACD
+	files. Applications can write multiple sequences as a seqoutset
+	(aligned or unaligned) and can also write seqoutall - writing
+	sequences one at a time without first storing them as a set.
+
+	For phylogenetic applications (PHYLIPNEW) reading distance matrix
+	files failed for some formats written by other
+	applications. Distance matrix input now works for multiple
+	matrices in square, upper-triangular and lower-triangular formats.
+
+	The PLPLOT graphics library uses 4 environment variables to allow
+	local configuration. EMBOSS uses a local copy in libeplplot. For
+	sites that have the native PLPLOT also in use we have renamed the
+	environment variables to use the prefix EPLPLOT. This protects
+	EMBOSS from any configuration set only for the local plplot.
+	The variables are: EPLPLOT_BIN EPLPLOT_LIB EPLPLOT_TCL and
+	EPLPLOT_HOME. Versions of EMBOSS up to 2.8.0 defined PLPLOT_LIB
+	but this value is now automatically set and the environment
+	variable is no longer needed.
+
+	Command line qualifiers are renamed where the first 5 characters
+	are the same. These were:
+	    est2genome -splice to -usesplace
+	    prettyplot -boxcolval to -boxuse
+            octanol -*plot to -plot*
+            showfeat -match* to -*match; -source to -origin
+            showpep -match* to -*match
+            showseq -match* to -*match; -source to -origin
+	    vectorstrip -vectorfile to -readfile; -linker* to -*linker
+	and similar changes for EMBASSY applications.
+
+	ACD processing now objects if two or more qualifiers are not
+	unique in the first 6 characters. In a future release we cwould
+	like to reduce this to a 5 character unique name. Several EMBASSY
+	applications need to be modified to comply with this requirement.
+
+	MEMENEW updated for meme/mast version 4.0.0. ememe now
+	produces fasta, html, text, xml and xsl outputs. A new variant,
+	ememetext, produces only the text and fasta outputs.
+
+	DBX index file key deletion code added for ID/ACC/SV/KW/DE/TX
+	indexes.
+
+	HTTP access now adds a User-Agent string with the EMBOSS version
+	number so that servers can count the number of EMBOSS requests.
+
+	PDB model structures failed to generate a new name for each
+	model. Duplicate sequence names are not ideal. The model number
+	(from the MODEL record) is now appebded to each sequence name in
+	"pdb" and "pdbnuc" format. The "pdbseq" and "pdbnucseq" formats
+	read a single copy of each sequence from the SEQRES records.
+
+	Added two new PDB formats to read nucleotide data. These are named
+	"pdbnuc" and "pdbnucseq". They are not available by default, to
+	avoid the problem of reading both protein and nucleotide sequence
+	data from a structure file for an oligonucleotide binding protein.
+
+	Alignment outputs now include most of the multiple sequence
+	alignment formats that EMBOSS can write. The functions for these
+	are trivial to write. New functions can be added to use any
+	existing sequence output format for alignments.
+
+	PDB entries can be read in two ways, with two named
+	formats. Sequence format "pdb" reads the ATOM records. Sequence
+	format "pdbseq" reads the SEQRES records. By default, only "pdb"
+	format was used, and could crash on entries where the ATOM records
+	were missing. Both formats now fail silently if no sequences are
+	found. By default, "pdb" format is used first, and if that fails
+	"pdbseq" will be tried.
+
+	The EMBOSS logfile (defined by variable EMBOSS_LOGFILE) now
+	reports two extra values: the number of cpu seconds and the
+	number of elapsed time seconds.
+
+	Extra stop codons in getorf for ORFs ending close to the end of
+	the input sequence no longer appear.
+
+	For optional qualifiers (defined as "nullok" in the ACD file) the
+	command line option -no(qualname) was causing output files to
+	appear by resetting the value to an empty string, which in turn
+	was converted to the default filename. Now -no(qualname) turns off
+	any output file defined with nullok, and -(qualname) "" asks for
+	an output file that is off by default and uses the default
+	filename for it.
+
+	Report output has a new tail format that reports the total
+	sequences and total sequence length read by the applications. The
+	previous "Total_sequences" report was the number of sequences
+	included in the report. This is renamed to "Reported_sequences".
+	Where the number of hits was limited by the -rmaxseq or -rmaxall
+	options, the number of unreported hits also appears. If the
+	rmaxall limit was exceeded, the report tails ends with
+	"Maxhits_stop: Y". If the -rmaxseq limit is exceeded, the sequence
+	report includes (as before) "HitLimit: max/total"
+
+	Refseq protein and Genpept now use a modified genbank format to
+	avoid warnings for "aa" replacing "bp" on the LOCUS line and to
+	provide better control over any other differences between
+	nucleotide and protein entries. Genbank format automatically calls
+	refseqp format if a LOCUS line has "aa".
+
+	Swissprot output was missing a '.' at the end of the organism line.
+
+	vectorstrip failed if the user failed to provide a filename for
+	the -vectorsfile option and failed to specify -novectorfile to
+	turn off file reading. The ACD file is changed so a vectorsfile is
+	required if -vectorfile is true and a check is put into the code
+	to catch the problem if the ACD interface changes in future.
+
+	Allow user-defined -carboxyl parameter for iep.
+
+	jaspscan now allows multiple sequences to be scanned.
+
 Version 6.0.0
-	New application aligncopy reads a set of aigned sequences and
+	New application aligncopy reads a set of aligned sequences and
 	prints a report in one of the standard alignment formats that can
 	accept the same number of sequences. Pairwise alignment formats
 	can only be used if the input has exactly two sequences.
 
-	New application aligncopypair reads a set of aigned sequences and
+	New application aligncopypair reads a set of aligned sequences and
 	prints a report or each pair of aligned sequences in one of the
 	standard alignment formats.
 

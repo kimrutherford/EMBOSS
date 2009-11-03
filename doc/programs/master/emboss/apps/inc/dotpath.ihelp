@@ -6,7 +6,7 @@
    -wordsize           integer    [4] Word size (Integer 2 or more)
    -graph              graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, xterm, png, gif)
+                                  tekt, tek, none, data, das, xterm, png, gif)
 
    Additional (Optional) qualifiers:
    -overlaps           boolean    [N] Displays the overlapping matches (in

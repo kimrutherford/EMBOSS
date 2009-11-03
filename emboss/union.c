@@ -264,9 +264,7 @@ static void union_CopyFeatures (const AjPFeattable old_feattable,
 		ajFeatGetEnd(copy) == ajFeatGetEnd (source_feature))
 	    {
 
-		AjPStr origid = ajStrNewC("origid");
-
-		if (ajFeatGetTag(gf,origid,1,&outseq_name))
+		if (ajFeatGetTagC(gf,"origid",1,&outseq_name))
 		{
 		    /* don't duplicate src features if there's one already */
 		    continue;

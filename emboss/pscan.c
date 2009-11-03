@@ -110,6 +110,9 @@ int main(int argc, char **argv)
     }
 
     ajStrDel(&substr);
+    ajStrDel(&name);
+
+    ajSeqallDel(&seqall);
     ajSeqDel(&seq);
     ajFileClose(&outf);
 

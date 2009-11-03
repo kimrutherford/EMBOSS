@@ -66,7 +66,7 @@ int main(int argc, char **argv)
 
     temp=ajStrNew();
     ajStrFmtUpper(&motif);
-    ajStrAssignC(&fthit, "hit");
+    ajStrAssignC(&fthit, "SO:0001067");
 
     /*converting the Prosite motif to a reg exps */
     regexp =embPatPrositeToRegExp(motif);
@@ -131,6 +131,7 @@ int main(int argc, char **argv)
 	embPatMatchDel(&match);
 	ajStrDel(&str);
     }
+    ajReportSetSeqstats(report, seqall);
 
     ajStrDel(&regexp);
     ajStrDel(&temp);

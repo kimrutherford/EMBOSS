@@ -1,41 +1,40 @@
 # Molecular weights of amino acids
 #
-# Value for Selenocysteine calculated from Cysteine by replacing S
-# with Se.
-#
-# J is an ambiguity code for Isoleucine or Leucine for Mass Spec data
-#
-# O is pyrrolysine in Archaea. Molecular weight from Expasy FindMod.
+# Values from Expasy
+# 
+# http://www.expasy.org/tools/findmod/findmod_masses.html
 #
 
-Mol       Average     Monoisotopic
 
-A 	   71.0786     71.0371
-B 	  114.5960    114.5349
-C 	  103.1386    103.0092
-D 	  115.0884    115.0269
-E 	  129.1152    129.0426
-F 	  147.1762    147.0684
-G 	   57.0518     57.0215
-H 	  137.1408    137.0589
-I 	  113.1590    113.0841
-J	  113.1590    113.0841
-K	  128.1736    128.0950
-L 	  113.1590    113.0841
-# If met gets oxidised to the sulphoxide replace by 147.1926
-M 	  131.1926    131.0405
-N 	  114.1036    114.0429
-O	  109.1300    109.0528
-P 	   97.1164     97.0528
-Q	  128.1304    128.0586
-R 	  156.1870    156.1011
-S	   87.0780     87.0320
-T	  101.1048    101.0479
-U         150.0326    150.9536    
-V	   99.1322     99.0684
-W	  186.2128    186.0793
-X	  144.0000    144.0000
-Y	  163.1756    163.0633
-Z 	  128.6228    128.5506
-Hydrogen    1.0079      1.0078
-Oxygen     15.9994     15.9949
+Mol        Average     Monoisotopic
+
+A 	   71.0788     71.03711
+B 	  114.5962    114.53493
+C 	  103.1388    103.00919
+D 	  115.0886    115.02694
+E 	  129.1155    129.04259
+F 	  147.1766    147.06841
+G 	   57.0519     57.02146
+H 	  137.1411    137.05891
+I 	  113.1594    113.08406
+J	  113.1594    113.08406
+K	  128.1741    128.09496
+L 	  113.1594    113.08406
+# If met gets oxidised to the sulphoxide replace by 147.1920 147.0354
+M 	  131.1926    131.04049
+N 	  114.1038    114.04293
+O	  237.3018    237.147727
+P 	   97.1167     97.05276
+Q	  128.1307    128.05858
+R 	  156.1875    156.10111
+S	   87.0782     87.03203
+T	  101.1051    101.04768
+U         150.0388    150.953636
+V	   99.1326     99.06841
+W	  186.2132    186.07931
+X	  118.8860    118.80572
+Y	  163.1760    163.06333
+Z 	  128.6231    128.55059
+Hydrogen    1.00794     1.00783
+Oxygen     15.9994     15.9949146
+Water      18.01057    18.01528

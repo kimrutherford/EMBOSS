@@ -22,16 +22,51 @@
 package org.emboss.jemboss.gui;
 
 
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.tree.*;
-import java.awt.*;
-import java.awt.geom.*;
-import java.awt.event.*;
-import java.net.*;
-import java.io.*;
+import java.awt.BasicStroke;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.geom.GeneralPath;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Vector;
-import javax.swing.border.*;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JEditorPane;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTextField;
+import javax.swing.JToolBar;
+import javax.swing.JTree;
+import javax.swing.KeyStroke;
+import javax.swing.border.Border;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.text.Document;
+import javax.swing.text.html.HTMLDocument;
+import javax.swing.text.html.HTMLEditorKit;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeSelectionModel;
 
 import org.emboss.jemboss.JembossParams;
 
@@ -88,6 +123,14 @@ public class Browser extends JFrame
   {
     this(initialURL,name,false,"",mysettings);
   }
+
+  public class HTMLEditorKit2 extends HTMLEditorKit{
+	  public Document createDefaultDocument(){
+	  HTMLDocument doc = (HTMLDocument)(super.createDefaultDocument());
+	  doc.setAsynchronousLoadPriority(-1); //do synchronous load
+	  return doc;
+	  }
+	  }
 
 
   /**
@@ -162,7 +205,14 @@ public class Browser extends JFrame
   {
     try
     {
-      htmlPane = new JEditorPane(url);
+      
+	  JEditorPane.registerEditorKitForContentType("text/html",
+	  "HTMLEditorKit2");
+	  htmlPane = new JEditorPane();
+	  htmlPane.setEditorKitForContentType("text/html", new HTMLEditorKit2());
+      
+      htmlPane.setPage(url);
+            
       htmlPane.addHyperlinkListener(this);
 
       Vector urlCache = new Vector();
@@ -395,7 +445,6 @@ public class Browser extends JFrame
   private void addToScrollPane()
   {
     htmlPane.setEditable(false);
-    htmlPane.setCaretPosition(0);
     
     Box bacross = Box.createHorizontalBox();
     bacross.add(Box.createHorizontalGlue());
@@ -557,8 +606,9 @@ public class Browser extends JFrame
         warnUser("Can't follow link to " +  
                   event.getDescription() );
       }
-      
-      setCursor(cdone);
+      finally {      
+          setCursor(cdone);
+      }
     }
     else if(event.getEventType() == HyperlinkEvent.EventType.ENTERED)
       statusField.setText(event.getDescription());

@@ -73,6 +73,7 @@ int main(int argc, char **argv)
 
     ajStrDel(&tmpstr);
 
+    ajReportSetSeqstats(report, seqall);
     ajReportClose(report);
     ajReportDel(&report);
     ajSeqallDel(&seqall);

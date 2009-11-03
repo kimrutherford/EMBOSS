@@ -1,4 +1,4 @@
-/* $Id: pdfutils.c,v 1.3 2007/05/08 09:09:37 rice Exp $
+/* $Id: pdfutils.c,v 1.4 2009/06/14 15:44:57 ajb Exp $
 
     pdf_utils.c
 
@@ -907,7 +907,7 @@ plFree2dGrid(PLFLT **f, PLINT nx, PLINT ny)
 \*--------------------------------------------------------------------------*/
 
 void
-plMinMax2dGrid(PLFLT **f, PLINT nx, PLINT ny, PLFLT *fmax, PLFLT *fmin)
+plMinMax2dGrid(PLFLT **f, PLINT nx, PLINT ny, PLFLT *ppfmax, PLFLT *ppfmin)
 {
     int i, j;
     PLFLT m, M;
@@ -920,6 +920,6 @@ plMinMax2dGrid(PLFLT **f, PLINT nx, PLINT ny, PLFLT *fmax, PLFLT *fmin)
 	    if (f[i][j] < m) m = f[i][j];
 	}
     }
-    *fmax = M;
-    *fmin = m;
+    *ppfmax = M;
+    *ppfmin = m;
 }

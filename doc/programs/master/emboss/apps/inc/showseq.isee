@@ -108,6 +108,11 @@
 </tr>
 
 <tr>
+<td><a href="showpep.html">showpep</a></td>
+<td>Displays protein sequences with features in pretty format</td>
+</tr>
+
+<tr>
 <td><a href="silent.html">silent</a></td>
 <td>Find restriction sites to insert (mutate) with no translation change</td>
 </tr>

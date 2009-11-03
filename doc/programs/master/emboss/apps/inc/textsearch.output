@@ -1,23 +1,23 @@
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: edd1_rat.textsearch</h3>
+<p><h3>File: 12s1_arath.textsearch</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 # Search for: lactose
-tsw-id:LACI_ECOLI LACI_ECOLI    P03023	Lactose operon repressor.
-tsw-id:LACY_ECOLI LACY_ECOLI    P02920	Lactose permease (Lactose-proton symport).
+tsw-id:LACI_ECOLI LACI_ECOLI    P03023	Lactose operon repressor
+tsw-id:LACY_ECOLI LACY_ECOLI    P02920	Lactose permease (Lactose-proton symport)
 </pre>
 </td></tr></table><p>
 
 <a name="output.2"></a>
 <h3>Output files for usage example 2</h3>
-<p><h3>File: laci_ecoli.textsearch</h3>
+<p><h3>File: bgal_ecoli.textsearch</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 # Search for: lactose | permease
-tsw-id:LACI_ECOLI LACI_ECOLI    P03023	Lactose operon repressor.
-tsw-id:LACY_ECOLI LACY_ECOLI    P02920	Lactose permease (Lactose-proton symport).
+tsw-id:LACI_ECOLI LACI_ECOLI    P03023	Lactose operon repressor
+tsw-id:LACY_ECOLI LACY_ECOLI    P02920	Lactose permease (Lactose-proton symport)
 </pre>
 </td></tr></table><p>
 

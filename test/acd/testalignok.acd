@@ -5,7 +5,7 @@ appl: testalignok [ doc: "testing" group: "testing" ]
 
 section: input [ info: "Input section" type: "page" ]
 
-align: test [
+align: atest [
       standard: Y
       aformat: pair
       minseq: 2

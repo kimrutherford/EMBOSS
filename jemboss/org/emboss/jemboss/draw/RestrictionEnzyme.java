@@ -28,20 +28,22 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.border.Border;
 import java.awt.event.*;
-import java.awt.print.*;
 import java.awt.*;
 import java.util.Vector;
 import java.awt.Dimension;
 
 import org.emboss.jemboss.gui.form.TextFieldInt;
-import org.emboss.jemboss.gui.form.TextFieldFloat;
-import org.emboss.jemboss.editor.ColourPanel;
 
 public class RestrictionEnzyme extends JPanel
-                           implements TableModelListener
+                           implements TableModelListener,
+                           ListSelectionListener
 {
 
   private DNADraw dna;
+  
+  private JButton deleteRE;
+  
+  private final JTable reTable = new JTable();
 
   public RestrictionEnzyme(final DNADraw dna, final Vector restrictionEnzyme)
   {
@@ -59,8 +61,9 @@ public class RestrictionEnzyme extends JPanel
 
     final RETableModel reModel = 
                new RETableModel(restrictionEnzyme,columnNames);
-    final JTable reTable = new JTable(reModel);
+    reTable.setModel(reModel);
     reTable.getModel().addTableModelListener(this);
+    reTable.getSelectionModel().addListSelectionListener(this);
     setUpColorRenderer(reTable);
     setUpColorEditor(reTable);
 
@@ -79,18 +82,19 @@ public class RestrictionEnzyme extends JPanel
     final JTextField reLabel = new JTextField("");
     reLabel.setMaximumSize(d);
     reLabel.setPreferredSize(d);
+    bacross.add(new JLabel("Label:"));
     bacross.add(reLabel);
-    bacross.add(new JLabel("Label"));
     bacross.add(Box.createHorizontalStrut(4));
 
     final TextFieldInt pos = new TextFieldInt();
     pos.setMaximumSize(d);
     pos.setPreferredSize(d);
+    bacross.add(new JLabel("Position:"));
     bacross.add(pos);
-    bacross.add(new JLabel("Position"));
     bacross.add(Box.createHorizontalStrut(4));
  
     final JButton reColour = setUpColorButton(Color.blue);
+    bacross.add(new JLabel("Colour:"));
     bacross.add(reColour);
     bacross.add(Box.createHorizontalStrut(4));
     bacross.add(Box.createHorizontalGlue());
@@ -112,6 +116,26 @@ public class RestrictionEnzyme extends JPanel
     });
     bacross.add(addRE);
     bacross.add(Box.createHorizontalGlue());
+    
+    deleteRE = new JButton("Delete RE");
+    deleteRE.setToolTipText("Deletes the restriction enzyme selected");
+    deleteRE.addActionListener(new ActionListener()
+    {
+        public void actionPerformed(ActionEvent e)
+        {
+            if(reTable.isEditing())
+                reTable.getCellEditor().stopCellEditing();
+            int i = reTable.getSelectedRow();
+            reModel.deleteRow(i);
+        }
+    });
+    deleteRE.setEnabled(false);
+    Dimension minSize = new Dimension(5, 40);
+    Dimension prefSize = new Dimension(5, 40);
+    Dimension maxSize = new Dimension(Short.MAX_VALUE, 50);
+    bacross.add(new Box.Filler(minSize, prefSize, maxSize));
+    bacross.add(deleteRE);
+    
     bdown.add(bacross);
 
     add(bdown);
@@ -432,6 +456,14 @@ public class RestrictionEnzyme extends JPanel
 
 
   }
+
+
+public void valueChanged(ListSelectionEvent e) {
+    if (e.getValueIsAdjusting()==false){
+        int i = reTable.getSelectedRow();
+        deleteRE.setEnabled(i != -1);
+    }
+}
 
 }
 

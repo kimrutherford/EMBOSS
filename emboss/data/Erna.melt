@@ -1,10 +1,14 @@
-# Breslauer et al (1986), PNAS 83:3746-3750
+# Data values for RNA melting
+#
+# Breslauer et al (1986), PNAS 83:3746-3750 (DNA)
 # Freier et al. (1986), PNAS 83:9373-9377
 #
-# 25 C
+# (note deltaS figures in cal, others in kcal)
+#
+# Temperature: 25 C (298.15K)
 #
 #             deltaH       deltaS     deltaG
-#             kcal/mol   kcal/K/mol  kcal/mol  
+#             kcal/mol   cal/K/mol  kcal/mol  
 #Bases        Enthalpy    Entropy     Energy
 #
 AA TT           6.6        18.4       1.1    

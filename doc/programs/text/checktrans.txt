@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Reports STOP codons and ORF statistics of a protein
@@ -180,11 +187,13 @@ DQPGQGVADAAPWLGRARGAPAPVAGSDEAARADPEDRSGVAGKRAVRLSDPGRPEQ
 
   File: paamir_1.gff
 
-##gff-version 2.0
-##date 2007-07-15
-##Type Protein PAAMIR_1
-PAAMIR_1        checktrans      region  278     634     0.000   +       .
-Sequence "PAAMIR_1.1"
+##gff-version 3
+##sequence-region PAAMIR_1 1 634
+#!Date 2008-07-15
+#!Type Protein
+#!Source-version EMBOSS 6.1.0
+PAAMIR_1        checktrans      polypeptide_region      278     634     0.000
++       .       ID="PAAMIR_1.1"
 
 Data files
 
@@ -230,24 +239,24 @@ Known bugs
 
 See also
 
-   Program name Description
-   backtranambig Back-translate a protein sequence to ambiguous
-   nucleotide sequence
-   backtranseq Back-translate a protein sequence to a nucleotide sequence
-   charge Draw a protein charge plot
-   compseq Calculate the composition of unique words in sequences
-   emowse Search protein sequences by digest fragment molecular weight
-   freak Generate residue/base frequency table or plot
-   iep Calculate the isoelectric point of proteins
-   mwcontam Find weights common to multiple molecular weights files
-   mwfilter Filter noisy data from molecular weights file
-   octanol Draw a White-Wimley protein hydropathy plot
-   pepinfo Plot amino acid properties of a protein sequence in parallel
-   pepstats Calculates statistics of protein properties
-   pepwindow Draw a Kyte-Doolittle hydropathy plot for a protein sequence
-   pepwindowall Draw Kyte-Doolittle hydropathy plot for a protein
-   alignment
-   wordcount Count and extract unique words in DNA sequence(s)
+   Program name     Description
+   backtranambig    Back-translate a protein sequence to ambiguous
+                    nucleotide sequence
+   backtranseq      Back-translate a protein sequence to a nucleotide sequence
+   charge           Draw a protein charge plot
+   compseq          Calculate the composition of unique words in sequences
+   emowse           Search protein sequences by digest fragment molecular weight
+   freak            Generate residue/base frequency table or plot
+   iep              Calculate the isoelectric point of proteins
+   mwcontam         Find weights common to multiple molecular weights files
+   mwfilter         Filter noisy data from molecular weights file
+   octanol          Draw a White-Wimley protein hydropathy plot
+   pepinfo          Plot amino acid properties of a protein sequence in parallel
+   pepstats         Calculates statistics of protein properties
+   pepwindow        Draw a hydropathy plot for a protein sequence
+   pepwindowall     Draw Kyte-Doolittle hydropathy plot for a protein
+                    alignment
+   wordcount        Count and extract unique words in DNA sequence(s)
 
 Author(s)
 

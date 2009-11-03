@@ -1,3 +1,4 @@
+# Feature types for SwissProt output
 
 # From the Swiss-Prot users manual
 # http://www.expasy.org/sprot/userman.html#FT_keys
@@ -49,6 +50,7 @@
 #      * UNSURE
 #      * CONFLICT
 #      * NON_CONS
+#      * NON_STD
 #      * NON_TER
 # 7. Secondary structure
 #       * HELIX, TURN, STRAND
@@ -58,13 +60,13 @@
 
 # REGION - Extent of a region of interest in the sequence
 
-REGION
+REGION  SO:0000839
 	/note
 	/comment
 
 # ACT_SITE - Amino acid(s) involved in the activity of an enzyme.
 
-ACT_SITE
+ACT_SITE SO:0001104
 	/note
 	/comment
 
@@ -72,13 +74,13 @@ ACT_SITE
 # group, etc.).
 # The chemical nature of the group is given in the description field
 
-BINDING
+BINDING SO:0000409
 	/note
 	/comment
 
 # CA_BIND - Extent of a calcium-binding region.
 
-CA_BIND
+CA_BIND SO:0001094
 	/note
 	/comment
 
@@ -99,9 +101,10 @@ CA_BIND
 # FT   CARBOHYD     10     10       O-LINKED (GALNAC...) (BY SIMILARITY).
 # FT   CARBOHYD     34     34       C-LINKED (MAN).
 
-CARBOHYD
+CARBOHYD MOD:00693
 	/note
 	/comment
+	/ftid
 
 # CHAIN - Extent of a polypeptide chain in the mature protein.
 
@@ -118,27 +121,28 @@ CARBOHYD
 # to the nucleotide sequence databases have provided this information
 # for processed proteins.
 
-CHAIN
+CHAIN   SO:0000419
 	/note
 	/comment
+	/ftid
 
 
 # COILED - Extent of a coiled-coil region
 
-COILED
+COILED  SO:0001080
 	/note
 	/comment
 
 # COMPBIAS - Extent of a compositionally biased region
 
-COMPBIAS
+COMPBIAS SO:0001066
 	/note
 	/comment
 
 # CONFLICT - Different papers report differing sequences.
 # note usually begins MISSING or SEQ -> NEW (description optional)
 
-CONFLICT
+CONFLICT SO:0001085
 	/note
 	/comment
 
@@ -149,7 +153,7 @@ CONFLICT
 # identical, the amino acid bond is an interchain one. The name of the
 # linked peptide is indicated in the description field.
  
-CROSSLNK
+CROSSLNK SO:0001087
 	/note
 	/comment
 
@@ -159,14 +163,14 @@ CROSSLNK
 # endpoints are identical, the disulfide bond is an interchain one and
 # the description field indicates the nature of the cross-link.
 
-DISULFID
+DISULFID SO:0001088
 	/note
 	/comment
 
 # DNA_BIND - Extent of a DNA-binding region.
 # The nature of the DNA-binding region is given in the description field. 
 
-DNA_BIND
+DNA_BIND SO:0100020
 	/note
 	/comment
 
@@ -177,13 +181,13 @@ DNA_BIND
 # The domain type is given in the description field. If there exist
 #   several copies of a domain, the domains are numbered.
 
-DOMAIN
+DOMAIN  SO:0000417 SO:0001081
 	/note
 	/comment
 
 # HELIX -  DSSP secondary structure
 
-HELIX
+HELIX   SO:0001117
 	/note
 	/comment
 
@@ -199,7 +203,7 @@ HELIX
 # annotation "For isoform Cytoplasmic."
 
 
-INIT_MET
+INIT_MET SO:0000691
 	/note
 	/comment
 
@@ -241,14 +245,14 @@ INIT_MET
 #CHOLESTEROL        Cholesterol group attached through an ester bond
 #                   to the C-terminal glycine of the mature form of a protein
 
-LIPID
+LIPID   MOD:01155
 	/note
 	/comment
 
 # METAL - Binding site for a metal ion.
 # The description field indicates the nature of the metal
 
-METAL
+METAL   SO:0001092
 	/note
 	/comment
 
@@ -270,20 +274,20 @@ METAL
 #                            internal cyclic lactam
 #SULFATATION                 Generally of tyrosine
 
-MOD_RES
+MOD_RES MOD:01156
 	/note
 	/comment
 
 # MOTIF - Short (up to 20 amino acids) sequence motif of biological interest
 
-MOTIF
+MOTIF   SO:0001067_motif
 	/note
 	/comment
 
 # MUTAGEN - Site which has been experimentally altered.
 # mutagen note usually SEQ ->NEW: description or "Missing: functional change"
 
-MUTAGEN
+MUTAGEN SO:0001148
 	/note
 	/comment
 
@@ -291,14 +295,20 @@ MUTAGEN
 # Indicates  that  two residues in a sequence are not consecutive  and  that
 # there  are  a  number of unsequenced residues between  them.
 
-NON_CONS
+NON_CONS SO:0001083
+	/note
+	/comment
+
+# NON_STD - Non-standard aminoacid used for pyrrolysine
+
+NON_STD  SO:0000884
 	/note
 	/comment
 
 # NON_TER  - The residue at an extremity of the sequence is not the terminal
 # residue.
 
-NON_TER
+NON_TER SO:0001084
 	/note
 	/comment
 
@@ -307,44 +317,46 @@ NON_TER
 # The nature of the nucleotide phosphate is indicated in the
 # description field.
 
-NP_BIND
+NP_BIND SO:0100018_np_bind
 	/note
 	/comment
 
 # PEPTIDE - Extent of a released active peptide.
 
-PEPTIDE
+PEPTIDE SO:0001064
 	/note
 	/comment
+	/ftid
 
 # PROPEP - Extent of a propeptide.
 
-PROPEP
+PROPEP  SO:0001062
 	/note
 	/comment
+	/ftid
 
 # REPEAT - Extent of an internal sequence repetition.
 
-REPEAT
+REPEAT  SO:0001068
 	/note
 	/comment
 
 # SE_CYS - Selenocysteine
 # This key describes the occurrence of a selenocysteine in the sequence record
 
-SE_CYS
+SE_CYS  SO:0000885 MOD:00031
 	/note
 	/comment
 
 # SIGNAL - Extent of a signal sequence (prepeptide).
 
-SIGNAL
+SIGNAL  SO:0000418
 	/note
 	/comment
 
 # SIMILAR - Extent of a similarity with another protein sequence.
 
-SIMILAR
+SIMILAR SO:0000857
 	/note
 	/comment
 
@@ -355,13 +367,13 @@ SIMILAR
 # amino acids.
 
 
-SITE
+SITE    SO:0000839_site
 	/note
 	/comment
 
 # STRAND -  DSSP secondary structure
 
-STRAND
+STRAND  SO:0001111
 	/note
 	/comment
 
@@ -369,7 +381,7 @@ STRAND
 # The  'FROM' and 'TO' endpoints represent the two residues which are linked
 # by the thioether bond.
 
-THIOETH
+THIOETH MOD:00687
 	/note
 	/comment
 
@@ -377,7 +389,7 @@ THIOETH
 # The  'FROM' and 'TO' endpoints represent the two residues which are linked
 # by the thiolester bond.
 
-THIOLEST
+THIOLEST MOD:00395
 	/note
 	/comment
 
@@ -391,23 +403,23 @@ THIOLEST
 # Annotated with cellular component where domain is normally located
 # e.g. "Cytoplasmic" or "Mitochondrial matrix (potential)"
 
-TOPO_DOM
+TOPO_DOM SO:0001072
 	/note
 	/comment
 
-TRANSIT
+TRANSIT SO:0000725
 	/note
 	/comment
 
 # TRANSMEM - Extent of a transmembrane region.
 
-TRANSMEM
+TRANSMEM SO:0001077
 	/note
 	/comment
 
 # TURN -  DSSP secondary structure
 
-TURN
+TURN    SO:0001128
 	/note
 	/comment
 
@@ -415,14 +427,14 @@ TURN
 # Used  to describe region(s) of a sequence for which the authors are unsure
 # about the sequence assignment.
 
-UNSURE
+UNSURE  SO:0001086
 	/note
 	/comment
 
 # VARIANT - Authors report that sequence variants exist.
 # replaced by VAR_SEQ, except for RNA editing recorded in the note
 
-VARIANT
+VARIANT SO:0001147_variant
 	/note
 	/comment
 	/ftid
@@ -430,23 +442,21 @@ VARIANT
 # VAR_SEQ - Description  of  sequence variants  produced  by  alternative
 # splicing, alternative promoter usage, ribosomal frameshifting
 
-VAR_SEQ
+VAR_SEQ SO:0001147_var_seq
 	/note
 	/comment
+	/ftid
 
 # VARSPLIC - Description  of  sequence variants  produced  by  alternative
 # splicing.
 
-VARSPLIC
+VARSPLIC SO:0001147_varsplic
 	/note
 	/comment
 
 # ZN_FING - Extent of a zinc finger region.
 # The zinc finger 'category' is indicated in the description field.
 
-ZN_FING
+ZN_FING  SO:0100020_zn_fing
 	/note
 	/comment
-
-
-

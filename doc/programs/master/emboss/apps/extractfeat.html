@@ -18,9 +18,21 @@ extractfeat
     Description
 </H2>
 
-<p><b>extractfeat</b> is a simple utility for extracting regions of a sequence that are annotated as being a specified type of feature. It reads one or more sequences, and writes out the sequences and features of interest to an output sequence file.  'joined' features can either be extracted as individual sequences, or as a single concatenated sequence if the <tt>-join</tt> qualifier is used. If the feature is annotated as being in the reverse sense of a nucleic acid sequence, then that feature's sub-sequence is reverse-complemented before it is written.</p>
+<p><b>extractfeat</b> is a simple utility for extracting regions of a
+sequence that are annotated as being a specified type of feature. It
+reads one or more sequences, and writes out the sequences and features
+of interest to an output sequence file.  'joined' features can either
+be extracted as individual sequences, or as a single concatenated
+sequence if the <tt>-join</tt> qualifier is used. If the feature is
+annotated as being in the reverse sense of a nucleic acid sequence,
+then that feature's sub-sequence is reverse-complemented before it is
+written.</p>
 
-<p>There are many options control exactly what parts of the feature table are given in the output file.  In addition, it is often useful to have contextual information about a feature.  There are options to specify a number of positions before and/or after the specified feature which will be reported in the output file.</p>
+<p>There are many options control exactly what parts of the feature
+table are given in the output file.  In addition, it is often useful
+to have contextual information about a feature.  There are options to
+specify a number of positions before and/or after the specified
+feature which will be reported in the output file.</p>
 
 
 
@@ -98,28 +110,84 @@ None.
     Notes
 </H2>
 
+<p>Bear in mind that database annotation cannot always be trusted to
+be reliable.  If you rely upon annotation written by other people or
+another program and do not independently verify such annotation, then
+there is a chance that some of the reported features will be
+erreneous.</p>
+
 <h3>Controlling the output</h3>
-<p>There are many options to control exactly what parts of the feature table are written to file.</p>
 
-<p>By default every feature in the feature table is extracted. <tt>-type</tt> will set the specific feature type to extract. See <a href="http://www3.ebi.ac.uk/Services/WebFeat/">http://www3.ebi.ac.uk/Services/WebFeat/</a> for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in <a href="http://www.expasy.ch/txt/userman.txt">http://www.expasy.ch/txt/userman.txt</a> for a list of the Swissprot feature types.</p>
+<p>There are many options to control exactly what parts of the feature
+table are written to file.</p>
 
-<p>By default any feature tag in the feature table is extracted. <tt>-tag</tt> specifies the feature tag to show. Tags are the types of extra values that a feature may have. For example in the EMBL feature table, a 'CDS' type of feature may have the tags <tt>/codon</tt>, <tt>/codon_start</tt>, <tt>/db_xref</tt>, <tt>/EC_number</tt>, <tt>/evidence</tt>, <tt>/exception</tt>, <tt>/function</tt>, <tt>/gene</tt>, <tt>/label</tt>, <tt>/map</tt>, <tt>/note</tt>, <tt>/number</tt>, <tt>/partial</tt>, <tt>/product</tt>, <tt>/protein_id</tt>,<tt>/pseudo</tt>, <tt>/standard_name</tt>, <tt>/translation</tt>, <tt>/transl_except</tt>, <tt>/transl_table</tt>, or <tt>/usedin</tt>. Some of these tags also have values, for example <tt>/gene</tt> can have the value of the gene name.</p>
+<p>By default every feature in the feature table is
+extracted. <tt>-type</tt> will set the specific feature type to
+extract. See <a href="http://www.ebi.ac.uk/Services/WebFeat/">
+http://www.ebi.ac.uk/Services/WebFeat/</a> for a list of the EMBL
+feature types and see Appendix A of the Swissprot user manual
+in <a href="http://www.uniprot.org/manual/sequence_annotation">
+http://www.uniprot.org/manual/sequence_annotation</a> for a list of
+the Swissprot feature types.</p>
 
-<p>By default any feature tag value in the feature table is shown. You can set this to match any feature tag value you wish to show. Tag values are the values associated with a feature tag, for example <tt>/gene</tt> can have the value of the gene name. Bear in mind only some of these tags can have values.</p>
+<p>By default any feature tag in the feature table is
+extracted. <tt>-tag</tt> specifies a feature tag reuired in any
+feature extracted. Tags are the types of extra values that a feature
+may have. For example in the EMBL feature table, a 'CDS' type of
+feature may have the
+tags <tt>/codon</tt>, <tt>/codon_start</tt>, <tt>/db_xref</tt>,
+<tt>/EC_number</tt>, <tt>/evidence</tt>, <tt>/exception</tt>,
+<tt>/function</tt>, <tt>/gene</tt>, <tt>/label</tt>, <tt>/map</tt>,
+<tt>/note</tt>, <tt>/number</tt>, <tt>/partial</tt>, <tt>/product</tt>,
+<tt>/protein_id</tt>,<tt>/pseudo</tt>, <tt>/standard_name</tt>,
+<tt>/translation</tt>, <tt>/transl_except</tt>, <tt>/transl_table</tt>,
+or <tt>/usedin</tt>. Some of these tags also have values, for
+example <tt>/gene</tt> can have the value of the gene name.</p>
 
-<p>By default any feature source in the feature table is shown. -source is used to set this to match a specific feature source.</p>
+<p>By default any feature tag value in the feature table is shown. You
+can set this using <tt>-tag</tt> to match any specific feature tag value you
+wish to show. Tag values are the values associated with a feature tag,
+for example <tt>/gene</tt> can have the value of the gene name. Bear
+in mind only some of these tags can have values.</p>
 
-<p>By default features in either sense are extracted. The -sense option specifies a particular sense.</p>
+<p>By default any feature source in the feature table is
+shown. <tt>-source</tt> is used to set this to match a specific feature
+source.</p>
 
-<p>The minimum and maximum score of features to be reported may be specified with -minimum and -maximum.</p>
+<p>By default features in either sense are extracted. The -sense
+option specifies a particular sense.</p>
 
-<p>To aid you in identifying the type of feature that has been output, the type of feature is added to the start of the description of the output sequence. Sometimes the description of a sequence is lost in subsequent processing of the sequences file, so it is useful for the type to be a part of the output sequence ID name. The -featinname option specifies this behaviour. </p>
+<p>The minimum and maximum score of features to be reported may be
+specified with -minscore and -maxscore.</p>
 
-<p>To aid you in identifying the properties of a feature that has been output, -describe specifies one or more tag names that will be added to the output sequence "Description" text, together with their values (if any). For example, if this is set to be <tt>gene</tt>, then if any output feature has the tag (for example) <tt>/gene=BRCA1</tt> associated with it, then the text <tt>(gene=BRCA1)</tt> will be added to the Description line. By default no feature tag is given in the "Description" text. You can set -describe to specify any feature tag you wish to show. </p>
+<p>To aid you in identifying the type of feature that has been output,
+the type of feature is added to the start of the description of the
+output sequence. Sometimes the description of a sequence is lost in
+subsequent processing of the sequences file, so it is useful for the
+type to be a part of the output sequence ID name. The -featinname
+option specifies this behaviour. </p>
+
+<p>To aid you in identifying the properties of a feature that has been
+output, -describe specifies one or more tag names that will be added
+to the output sequence "Description" text, together with their values
+(if any). For example, if this is set to be <tt>gene</tt>, then if any
+output feature has the tag (for example) <tt>/gene=BRCA1</tt>
+associated with it, then the text <tt>(gene=BRCA1)</tt> will be added
+to the Description line. By default no feature tag is given in the
+"Description" text. You can set -describe to specify any feature tag
+you wish to show. </p>
 
 
 <h3> "Joined" features </h3>
-<p>Some features, such as CDS (coding sequence) and mRNA are composed of introns concatenated together. There may be other forms of 'joined' sequence, depending on the feature table. By default, 'joined' features are extracted as individual sequences.  If the -join option is specified, then any group of these features will be output as a single sequence. If the <tt>-before</tt> and <tt>-after</tt> qualifiers have been set, then only the sequence before the first feature and after the last feature are added.</p>
+
+<p>Some features, such as CDS (coding sequence) and mRNA are composed
+of introns concatenated together. There may be other forms of 'joined'
+sequence, depending on the feature table. By default, 'joined'
+features are extracted as individual sequences.  If the -join option
+is specified, then any group of these features will be output as a
+single sequence. If the <tt>-before</tt> and <tt>-after</tt>
+qualifiers have been set, then only the sequence before the first
+feature and after the last feature are added.</p>
 
 
 <H2>
@@ -131,8 +199,6 @@ None.
 <H2>
     Warnings
 </H2>
-
-<p>Bear in mind that database annotation cannot always be trusted to be reliable.  If you rely upon annotation written by other people or another program and do not independently verify such annotation, then there is a chance that some of the reported features will be erreneous.</p>
 
 
 

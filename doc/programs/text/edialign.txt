@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Local multiple alignment of sequences
@@ -403,15 +410,15 @@ Known bugs
 
 See also
 
-   Program name Description
-   emma Multiple sequence alignment (ClustalW wrapper)
-   infoalign Display basic information about a multiple sequence
-   alignment
-   plotcon Plot conservation of a sequence alignment
-   prettyplot Draw a sequence alignment with pretty formatting
-   showalign Display a multiple sequence alignment in pretty format
-   tranalign Generate an aligment of nucleic coding regions from aligned
-   proteins
+   Program name     Description
+   emma             Multiple sequence alignment (ClustalW wrapper)
+   infoalign        Display basic information about a multiple sequence
+                    alignment
+   plotcon          Plot conservation of a sequence alignment
+   prettyplot       Draw a sequence alignment with pretty formatting
+   showalign        Display a multiple sequence alignment in pretty format
+   tranalign        Generate an alignment of nucleic coding regions from aligned
+                    proteins
 
 Author(s)
 

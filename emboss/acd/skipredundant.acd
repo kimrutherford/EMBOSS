@@ -167,15 +167,6 @@ section: advanced
   type: "page"
 ]
 
-toggle: keepredundant 
-[
-    information: "Retain redundant sequences."
-    help: "This option specifies whether to retain redundant
-           sequences. If this option is set a file of redundant 
-           sequences is written."
-    default: "N"
-]
-
 endsection: advanced
 
 
@@ -198,8 +189,11 @@ seqoutall: outseq
 seqoutall: redundantoutseq
 [
     parameter: "Y"
+    nullok: "Y"
+    nulldefault: "Y"
     features:  "$(feature)"
     extension: "redundant"
+    information: "Redundant sequences (optional)"
 ]
 
 endsection: output

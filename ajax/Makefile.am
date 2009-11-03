@@ -68,10 +68,10 @@ pcre_internal.h pcreposix.h
 
 if ISCYGWIN
 libajax_la_SOURCES = $(AJAXSRC) $(AJAXGSRC)
-libajax_la_LDFLAGS = -version-info 6:0:0
+libajax_la_LDFLAGS = -version-info 6:1:0
 else
 libajax_la_SOURCES = $(AJAXSRC)
-libajax_la_LDFLAGS = -version-info 6:0:0
+libajax_la_LDFLAGS = -version-info 6:1:0
 libajaxg_la_SOURCES = $(AJAXGSRC)
-libajaxg_la_LDFLAGS = -version-info 6:0:0
+libajaxg_la_LDFLAGS = -version-info 6:1:0
 endif

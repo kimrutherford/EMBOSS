@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Search DNA sequences for matches with primer pairs
@@ -304,29 +311,29 @@ Known bugs
 
 See also
 
-   Program name                         Description
-   eprimer3     Picks PCR primers and hybridization oligos
-   stssearch    Search a DNA database for matches with a set of STS primers
+                    Program name                         Description
+                    eprimer3     Picks PCR primers and hybridization oligos
+                    stssearch    Search a DNA database for matches with a set of STS primers
 
-   stssearch does something similar, but doesn't allow you to find
-   mismatches and will report any match in any orientation and doesn't
-   require you to have both primers matching.
+                    stssearch does something similar, but doesn't allow you to find
+                    mismatches and will report any match in any orientation and doesn't
+                    require you to have both primers matching.
 
 Author(s)
 
-   Val Curwen (vac © sanger.ac.uk)
-   Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
-   CB10 1SA, UK.
+   Val              Curwen (vac © sanger.ac.uk)
+   Sanger           Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
+                    CB10 1SA, UK.
 
 History
 
-   Written Aug 2000 - Val Curwen
+   Written          Aug 2000 - Val Curwen
 
 Target users
 
-   This program is intended to be used by everyone and everything, from
-   naive users to embedded scripts.
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
 
 Comments
 
-   None
+                    None

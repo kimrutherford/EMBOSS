@@ -21,6 +21,18 @@ density
 
 
 <H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
     Function
 </H2>
 Draw a nucleic acid density plot
@@ -73,7 +85,7 @@ Output report [x13776.density]: <b></b>
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>density tembl:x13776 -quad -qgraph cps </b>
+% <b>density tembl:x13776 -display quad -graph cps </b>
 Draw a nucleic acid density plot
 
 Created density.ps
@@ -88,7 +100,7 @@ Created density.ps
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>density tembl:x13776 -dual -dgraph cps </b>
+% <b>density tembl:x13776 -display dual -graph cps </b>
 Draw a nucleic acid density plot
 
 Created density.ps
@@ -108,23 +120,19 @@ Created density.ps
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-seqall]            seqall     Nucleotide sequence(s) filename and optional
                                   format, or reference (input USA)
-*  -qgraph             xygraph    [$EMBOSS_GRAPHICS value, or x11] Quad
-                                  (A+C+G+T) graph (ps, hpgl, hp7470, hp7580,
-                                  meta, cps, x11, tekt, tek, none, data,
-                                  xterm, png, gif)
-*  -dgraph             xygraph    [$EMBOSS_GRAPHICS value, or x11] Dual
-                                  (AT+GC) graph (ps, hpgl, hp7470, hp7580,
-                                  meta, cps, x11, tekt, tek, none, data,
-                                  xterm, png, gif)
+*  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Density
+                                  graph (ps, hpgl, hp7470, hp7580, meta, cps,
+                                  x11, tekt, tek, none, data, das, xterm, png,
+                                  gif)
 *  -outfile            report     [*.density] Output report file name
 
    Additional (Optional) qualifiers:
    -window             integer    [100] Window length (Integer 1 or more)
+   -display            menu       [none] Select graph type (Values: D (Dual -
+                                  graphic showing individual bases); Q (Quad -
+                                  AT vs GC graphic); none (none))
 
-   Advanced (Unprompted) qualifiers:
-   -quad               toggle     [N] Produce graphic showing individual bases
-   -dual               toggle     [N] Produce AT vs GC graphic
-
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
    "-seqall" associated qualifiers
@@ -143,17 +151,7 @@ Created density.ps
    -fformat1           string     Features format
    -fopenfile1         string     Features file name
 
-   "-qgraph" associated qualifiers
-   -gprompt            boolean    Graph prompting
-   -gdesc              string     Graph description
-   -gtitle             string     Graph title
-   -gsubtitle          string     Graph subtitle
-   -gxtitle            string     Graph x axis title
-   -gytitle            string     Graph y axis title
-   -goutfile           string     Output file for non interactive displays
-   -gdirectory         string     Output directory
-
-   "-dgraph" associated qualifiers
+   "-graph" associated qualifiers
    -gprompt            boolean    Graph prompting
    -gdesc              string     Graph description
    -gtitle             string     Graph title
@@ -210,16 +208,9 @@ Created density.ps
 </tr>
 
 <tr>
-<td>-qgraph</td>
-<td>Quad (A+C+G+T) graph</td>
-<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, xterm, png, gif</td>
-<td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
-</tr>
-
-<tr>
-<td>-dgraph</td>
-<td>Dual (AT+GC) graph</td>
-<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, xterm, png, gif</td>
+<td>-graph</td>
+<td>Density graph</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, das, xterm, png, gif</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -243,6 +234,13 @@ Created density.ps
 <td>100</td>
 </tr>
 
+<tr>
+<td>-display</td>
+<td>Select graph type</td>
+<td><table><tr><td>D</td> <td><i>(Dual - graphic showing individual bases)</i></td></tr><tr><td>Q</td> <td><i>(Quad - AT vs GC graphic)</i></td></tr><tr><td>none</td> <td><i>(none)</i></td></tr></table></td>
+<td>none</td>
+</tr>
+
 <tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
 <th align="left">Allowed values</th>
@@ -250,17 +248,7 @@ Created density.ps
 </tr>
 
 <tr>
-<td>-quad</td>
-<td>Produce graphic showing individual bases</td>
-<td>Toggle value Yes/No</td>
-<td>No</td>
-</tr>
-
-<tr>
-<td>-dual</td>
-<td>Produce AT vs GC graphic</td>
-<td>Toggle value Yes/No</td>
-<td>No</td>
+<td colspan=4>(none)</td>
 </tr>
 
 </table>
@@ -328,17 +316,17 @@ RP   1167-2167
 RX   DOI; 10.1016/0014-5793(89)80249-2.
 RX   PUBMED; 2495988.
 RA   Lowe N., Rice P.M., Drew R.E.;
-RT   "Nucleotide sequence of the aliphatic amidase regulator gene of Pseudomonas
-RT   aeruginosa";
+RT   "Nucleotide sequence of the aliphatic amidase regulator gene (amiR) of
+RT   Pseudomonas aeruginosa";
 RL   FEBS Lett. 246(1-2):39-43(1989).
 XX
 RN   [3]
 RP   1-1292
 RX   PUBMED; 1907262.
 RA   Wilson S., Drew R.;
-RT   "Cloning and DNA seqence of amiC, a new gene regulating expression of the
+RT   "Cloning and DNA sequence of amiC, a new gene regulating expression of the
 RT   Pseudomonas aeruginosa aliphatic amidase, and purification of the amiC
-RT   product.";
+RT   product";
 RL   J. Bacteriol. 173(16):4914-4921(1991).
 XX
 RN   [4]
@@ -349,8 +337,8 @@ RL   Submitted (04-SEP-1991) to the EMBL/GenBank/DDBJ databases.
 RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
 XX
 DR   GOA; Q51417.
+DR   InterPro; IPR003211; AmiSUreI_transpt.
 DR   UniProtKB/Swiss-Prot; Q51417; AMIS_PSEAE.
-XX
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
@@ -541,8 +529,8 @@ outputs a graph to the specified graphics device.
 #---------------------------------------
 
 #---------------------------------------
-# Total_sequences: 1
-# Total_hitcount: 2068
+# Reported_sequences: 1
+# Reported_hitcount: 2068
 #---------------------------------------
 </pre>
 </td></tr></table><p>

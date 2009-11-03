@@ -30,7 +30,7 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
 				 const AjPStr matchtype, const AjPStr matchtag,
 				 const AjPStr matchvalue,
 				 const AjPStr sortlist,
-				 ajint width, AjBool collapse,
+				 ajint width, AjBool joinfeat, AjBool collapse,
 				 AjBool forward, AjBool reverse,
 				 AjBool unknown, AjBool strand,
 				 AjBool source, AjBool position,
@@ -81,6 +81,7 @@ int main(int argc, char **argv)
     AjPStr matchtag = NULL;
     AjPStr matchvalue = NULL;
     AjPStr sortlist = NULL;
+    AjBool joinfeat;
     AjBool html;
     AjBool id;
     AjBool description;
@@ -108,11 +109,12 @@ int main(int argc, char **argv)
 
     seqall      = ajAcdGetSeqall("sequence");
     outfile     = ajAcdGetOutfile("outfile");
-    matchsource = ajAcdGetString("matchsource");
-    matchtype   = ajAcdGetString("matchtype");
-    matchtag    = ajAcdGetString("matchtag");
-    matchvalue  = ajAcdGetString("matchvalue");
+    matchsource = ajAcdGetString("sourcematch");
+    matchtype   = ajAcdGetString("typematch");
+    matchtag    = ajAcdGetString("tagmatch");
+    matchvalue  = ajAcdGetString("valuematch");
     sortlist    = ajAcdGetListSingle("sort");
+    joinfeat    = ajAcdGetBoolean("joinfeatures");
     html        = ajAcdGetBoolean("html");
     id          = ajAcdGetBoolean("id");
     description = ajAcdGetBoolean("description");
@@ -123,7 +125,7 @@ int main(int argc, char **argv)
     reverse     = ajAcdGetBoolean("reverse");
     unknown     = ajAcdGetBoolean("unknown");
     strand      = ajAcdGetBoolean("strand");
-    source      = ajAcdGetBoolean("source");
+    source      = ajAcdGetBoolean("origin");
     position    = ajAcdGetBoolean("position");
     type        = ajAcdGetBoolean("type");
     tags        = ajAcdGetBoolean("tags");
@@ -185,7 +187,7 @@ int main(int argc, char **argv)
 	/* show the features */
 	showfeat_ShowFeatSeq(outfile, seq, beg, end, matchsource,
 			     matchtype, matchtag, matchvalue,
-			     sortlist, width, collapse, forward,
+			     sortlist, width, joinfeat, collapse, forward,
 			     reverse, unknown, strand, source,
 			     position, type, tags, values, stricttags,
 			     annotation);
@@ -232,6 +234,7 @@ int main(int argc, char **argv)
 ** @param [r] matchvalue [const AjPStr] tag's value pattern to display
 ** @param [r] sortlist [const AjPStr] type of sorting of features to do
 ** @param [r] width [ajint] width of line of features
+** @param [r] joinfeat [AjBool] join multi-location features on one line
 ** @param [r] collapse [AjBool] show all features on separate lines
 ** @param [r] forward [AjBool] show forward sense features
 ** @param [r] reverse [AjBool] show reverse sense features
@@ -254,7 +257,7 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
 				 const AjPStr matchtype, const AjPStr matchtag,
 				 const AjPStr matchvalue,
 				 const AjPStr sortlist,
-				 ajint width, AjBool collapse,
+				 ajint width, AjBool joinfeat, AjBool collapse,
 				 AjBool forward, AjBool reverse,
 				 AjBool unknown, AjBool strand,
 				 AjBool source, AjBool position,
@@ -282,7 +285,6 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
 
     AjBool want_multiple_line = ajFalse; /* true if want a join()s line */
     AjBool in_multiple_line = ajFalse;   /* true if this is a join()s line */
-    AjBool join = ajFalse;	         /* want joins on a single line */
     AjBool child;	                 /* true if multiple's child */
 
     /* get the feature table of the sequence */
@@ -308,8 +310,6 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
 	    /* type */
 	    /* sort by: sense, type, source, start */
 	    ajListSort(feat->Features, showfeat_CompareFeatType);
-	else if(!ajStrCmpC(sortlist, "join"))
-            join = ajTrue;
 	/* else - no sort */
 
 	iter = ajListIterNewread(feat->Features) ;
@@ -323,7 +323,9 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
             if(ajFeatIsMultiple(gf))
 	    {
                 if(ajFeatIsChild(gf))
+                {
                     child = ajTrue;
+                }
 		else
 		{
 		    /* parent */
@@ -364,7 +366,7 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
 	     ** Don't start a new line if:
 	     ** collapse and source, type and sense are the same as the last gf
 	     **  or
-	     **  join and child and we are in an existing join multiple line
+	     **  joinfeat and child and we are in an existing join multiple line
 	     */
 	    if((!collapse ||
 		first ||
@@ -372,7 +374,7 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
 		(source && ajStrCmpCaseS(ajFeatGetSource(gf), sourceout)) ||
 		ajStrCmpCaseS(ajFeatGetType(gf), typeout))
 	       &&
-	       (!join ||
+	       (!joinfeat ||
 		! child ||
 		!in_multiple_line))
 	    {

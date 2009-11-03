@@ -18,14 +18,14 @@ section: input [
     type: "frame"
   ]
 
-    toggle: vectorfile [
+    toggle: readfile [
       parameter: "Y"
       default: "Y"
       information: "Are your vector sequences in a file?"
     ]
 
     infile: vectorsfile [
-      standard: "$(vectorfile)"
+      standard: "$(readfile)"
       nullok: "Y"
       default: ""
       information: "Cloning vector definition file (optional)"
@@ -54,14 +54,14 @@ section: required [
                   mismatches)?"
   ]
 
-  string: linkera [
-    standard: "@(!$(vectorfile))"
+  string: alinker [
+    standard: "@(!$(readfile))"
     information: "The 5' sequence"
     knowntype: "nucleotide sequence"
   ]
 
-  string: linkerb [
-    standard: "@(!$(vectorfile))"
+  string: blinker [
+    standard: "@(!$(readfile))"
     information: "The 3' sequence"
     knowntype: "nucleotide sequence"
   ]

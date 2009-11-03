@@ -98,7 +98,7 @@ section: output [
     default: "supermatcher.error"
     help: "Error file to be written to"
     knowntype: "supermatcher error"
-    information: "Program supermatcher errors output file"
+    information: "Program supermatcher errors output file for failed alignments"
   ]
 
 endsection: output

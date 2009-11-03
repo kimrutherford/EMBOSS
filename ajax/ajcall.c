@@ -142,6 +142,8 @@ void* ajCall(const char *name, ...)
 }
 
 
+
+
 /* @funcstatic callItemDel ****************************************************
 **
 ** Delete an entry in the call table.
@@ -171,6 +173,8 @@ static void callItemDel(void** key, void** value, void* cl)
 }
 
 
+
+
 /* @func ajCallExit ***********************************************************
 **
 ** Cleans up calls register internal memory
@@ -184,5 +188,6 @@ void ajCallExit(void)
     ajTableMapDel(callTable, callItemDel, NULL);
 
     ajTableFree(&callTable);
+
     return;
 }

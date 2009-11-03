@@ -1,4 +1,4 @@
-/* $Id: hpgl.c,v 1.3 2007/05/08 09:09:37 rice Exp $
+/* $Id: hpgl.c,v 1.5 2009/07/10 13:02:25 ajb Exp $
  *
  *  File:	hpgl.c
  *
@@ -81,6 +81,7 @@ void plD_esc_hpgl		(PLStream *, PLINT, void *);
 #define MIN_WIDTH	1		/* Minimum pen width */
 #define MAX_WIDTH	10		/* Maximum pen width */
 #define DEF_WIDTH	1		/* Default pen width */
+
 
 static void hpgl_dispatch_init_helper( PLDispatchTable *pdt,
                                        const char *menustr, const char *devnam,
@@ -347,6 +348,23 @@ plD_tidy_hpgl(PLStream *pls)
 void
 plD_state_hpgl(PLStream *pls, PLINT op)
 {
+
+    /*
+    ** Map pen [1] colours to:
+    **  1: Red
+    **  2: Yellow
+    **  3: Green
+    **  4: Blue
+    **  5: Magenta
+    **  6: Off
+    **  7: Black
+    **  8: Cyan
+    ** Given PLPLOT [0] colours are:
+    **  White, Red, Yellow, Green, Aqua, Pink, Wheat, Grey,
+    **  Brown, Blue, Violet, Cyan, Turquoise, Magenta, Salmon, Black
+    */
+    static int hcolmap[16] = { 6,1,2,3,4,5,6,7,8,4,4,8,8,5,5,7 };
+
     switch (op) {
 
     case PLSTATE_WIDTH:
@@ -355,10 +373,10 @@ plD_state_hpgl(PLStream *pls, PLINT op)
 	    (pls->width < MIN_WIDTH) ? DEF_WIDTH :
 	    (pls->width > MAX_WIDTH) ? MAX_WIDTH : pls->width;
 
-	if ( pls->icol0 < 1 || pls->icol0 > 8)
+	if ( pls->icol0 < 0 || pls->icol0 > 15)
 	    fputs( "\nInvalid pen selection.", stderr );
 	else
-	    fprintf( OF, "SP%d %d\n", pls->icol0, width );
+	    fprintf( OF, "SP%d %d\n", hcolmap[pls->icol0], width );
 
 	break;
     }

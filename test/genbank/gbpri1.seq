@@ -1,4 +1,4 @@
-LOCUS       X59796                  3170 bp    mRNA    linear   PRI 18-APR-2005
+LOCUS       X59796                  3170 bp    mRNA    linear   PRI 21-OCT-2008
 DEFINITION  H.sapiens mRNA for cadherin-5.
 ACCESSION   X59796
 VERSION     X59796.1  GI:639976
@@ -40,6 +40,9 @@ FEATURES             Location/Qualifiers
                      /db_xref="GDB:134230"
                      /db_xref="GOA:P33151"
                      /db_xref="HGNC:1764"
+                     /db_xref="HSSP:P09803"
+                     /db_xref="InterPro:IPR000233"
+                     /db_xref="InterPro:IPR002126"
                      /db_xref="UniProtKB/Swiss-Prot:P33151"
                      /translation="MMLLATSGACLGLLAVAAVAAAGANPAQRDTHSLLPTHRRQKRD
                      WIWNQMHIDEEKNTSLPHHVGKIKSSVSRKNAKYLLKGEYVGKVFRVDAETGDVFAIE
@@ -127,7 +130,6 @@ REFERENCE   1  (bases 1 to 781)
             the human acidic fibroblast growth factor (aFGF) gene: Toward the
             cloning of the ANLL/MDS tumor suppressor gene
   JOURNAL   Unpublished (1993)
-COMMENT     Original source text: Homo sapiens DNA.
 FEATURES             Location/Qualifiers
      source          1. .781
                      /organism="Homo sapiens"
@@ -760,7 +762,7 @@ ORIGIN
     3001  GTCCTGTGCG GTGTCACCAT GAGCACTCAG CTGTACTAGT GCCATTGGAA TAATAAATTT
     3061  GATAAGGTGT GAAAA
 //
-LOCUS       X07523                  1658 bp    mRNA    linear   PRI 11-MAR-2001
+LOCUS       X07523                  1658 bp    mRNA    linear   PRI 07-OCT-2008
 DEFINITION  Human mRNA for truncated form of complement factor H.
 ACCESSION   X07523
 VERSION     X07523.1  GI:32492
@@ -802,12 +804,24 @@ FEATURES             Location/Qualifiers
                      /db_xref="GOA:P08603"
                      /db_xref="HGNC:4883"
                      /db_xref="InterPro:IPR000436"
+                     /db_xref="InterPro:IPR016060"
                      /db_xref="PDB:1FHC"
                      /db_xref="PDB:1HAQ"
                      /db_xref="PDB:1HCC"
                      /db_xref="PDB:1HFH"
                      /db_xref="PDB:1HFI"
                      /db_xref="PDB:1KOV"
+                     /db_xref="PDB:2BZM"
+                     /db_xref="PDB:2G7I"
+                     /db_xref="PDB:2IC4"
+                     /db_xref="PDB:2JGW"
+                     /db_xref="PDB:2JGX"
+                     /db_xref="PDB:2QFG"
+                     /db_xref="PDB:2QFH"
+                     /db_xref="PDB:2RLP"
+                     /db_xref="PDB:2RLQ"
+                     /db_xref="PDB:2UWN"
+                     /db_xref="PDB:2V8E"
                      /db_xref="UniProtKB/Swiss-Prot:P08603"
                      /translation="MRLLAKIICLMLWAICVAEDCNELPPRRNTEILTGSWSDQTYPE
                      GTQAIYKCRPGYRSLGNVIMVCRKGEWVALNPLRKCQKRPCGHPGDTPFGTFTLTGGN
@@ -860,12 +874,11 @@ ORIGIN
     1561  ATTATTCCAG CCAGAATGGG AAATGCTAAT TCAGCTCCTC CAGGCAGCCA ATGGGGCTGG
     1621  TGGCTTTGAG ATTATTAAAC TCTTCTGGAT CCTCTACG
 //
-LOCUS       HUMTS1                 18596 bp    DNA     linear   PRI 14-APR-2000
-DEFINITION  Homo sapiens gene for thymidylate synthase, exons 1, 2, 3, 4, 5, 6,
-            7, complete cds.
+LOCUS       HUMTS1                 18596 bp    DNA     linear   PRI 07-DEC-2007
+DEFINITION  Homo sapiens gene for thymidylate synthase, complete cds.
 ACCESSION   D00596
 VERSION     D00596.1  GI:220135
-KEYWORDS    thymidylate syntase.
+KEYWORDS    .
 SOURCE      Homo sapiens (human)
   ORGANISM  Homo sapiens
             Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
@@ -883,9 +896,7 @@ COMMENT     These data kindly submitted in computer readable form by: Sumiko
             National Institute of Genetics
             1111 Yata
             Mishima 411
-            Japan
-            Phone:  +81-559-72-2732
-            Fax:    +81-559-71-3651.
+            Japan.
 FEATURES             Location/Qualifiers
      source          1. .18596
                      /organism="Homo sapiens"
@@ -894,10 +905,10 @@ FEATURES             Location/Qualifiers
                      /chromosome="18"
                      /map="18p11.32"
                      /clone="lambdaHTS-1 and lambdaHTS-3"
-     repeat_unit     1. .148
-                     /note="Alu sequence"
-     repeat_unit     202. .477
-                     /note="Alu sequence"
+     repeat_region   1. .148
+                     /rpt_family="Alu"
+     repeat_region   202. .477
+                     /rpt_family="Alu"
      prim_transcript 822. .16246
                      /note="thymidylate synthase mRNA and introns"
      prim_transcript 824. .16246
@@ -906,10 +917,11 @@ FEATURES             Location/Qualifiers
                      /note="thymidylate synthase mRNA and introns"
      prim_transcript 841. .16246
                      /note="thymidylate synthase mRNA and introns"
-     repeat_unit     862. .889
-                     /note="inverted repeat"
-     repeat_unit     904. .993
+     repeat_region   862. .889
+                     /rpt_type=inverted
+     repeat_region   904. .993
                      /note="triple tandem repeats"
+                     /rpt_type=tandem
      CDS             join(1001. .1205,2895. .2968,5396. .5570,11843. .11944,
                      13449. .13624,14133. .14204,15613. .15750)
                      /EC_number="2.1.1.45"
@@ -937,46 +949,46 @@ FEATURES             Location/Qualifiers
                      /number=2
      intron          2969. .5395
                      /number=2
-     repeat_unit     3049. .3347
-                     /note="Alu sequence"
-     repeat_unit     4953. .5245
-                     /note="Alu sequence"
+     repeat_region   3049. .3347
+                     /rpt_family="Alu"
+     repeat_region   4953. .5245
+                     /rpt_family="Alu"
      exon            5396. .5570
                      /number=3
      intron          5571. .11842
                      /number=3
-     repeat_unit     5768. .9405
+     repeat_region   5768. .9405
                      /note="L1 sequence"
-     repeat_unit     10125. .10389
+     repeat_region   10125. .10389
                      /note="reiterated motif of GGA/TGAT"
      exon            11843. .11944
                      /number=4
      intron          11945. .13448
                      /number=4
-     repeat_unit     12135. .12397
-                     /note="Alu sequence"
-     repeat_unit     12567. .12743
-                     /note="Alu sequence"
-     repeat_unit     12807. .13084
-                     /note="Alu sequence"
+     repeat_region   12135. .12397
+                     /rpt_family="Alu"
+     repeat_region   12567. .12743
+                     /rpt_family="Alu"
+     repeat_region   12807. .13084
+                     /rpt_family="Alu"
      exon            13449. .13624
                      /number=5
      intron          13625. .14132
                      /number=5
-     repeat_unit     13875. .14010
-                     /note="Alu sequence"
+     repeat_region   13875. .14010
+                     /rpt_family="Alu"
      exon            14133. .14204
                      /number=6
      intron          14205. .15612
                      /number=6
-     repeat_unit     14531. .14832
-                     /note="Alu sequence"
+     repeat_region   14531. .14832
+                     /rpt_family="Alu"
      exon            15613. .>15750
                      /number=7
      polyA_signal    15934. .15939
      polyA_signal    16228. .16233
-     repeat_unit     17262. .17553
-                     /note="Alu sequence"
+     repeat_region   17262. .17553
+                     /rpt_family="Alu"
 ORIGIN
        1  CCTGTAGTCC CAGCTACGCG AGAGGCTGAG GCAGCAGAAT TACTTGAACC CAGGAGGCGG
       61  AGGTTGCAGT GAGCCGAGAT CGCGCCACTG CACTCCAGCC TGGGTGAGAG AGCGAGACTC
@@ -1289,7 +1301,7 @@ ORIGIN
    18481  ATAGATTAAA ATCACCACAT TTTGTGATCT ATTTTTCAAG AAGCGTTTGT ATTTTTTCAT
    18541  ATGGCTGCAG CAGCTGCCAG GGGCTTGGGG TTTTTTTGGC AGGTAGGGTT GGGAGG
 //
-LOCUS       Z69719                 33760 bp    DNA     linear   PRI 18-JAN-2007
+LOCUS       Z69719                 33760 bp    DNA     linear   PRI 13-JAN-2009
 DEFINITION  Human DNA sequence from clone XX-CNFG9 on chromosome 16, complete
             sequence.
 ACCESSION   Z69719
@@ -1303,9 +1315,10 @@ SOURCE      Homo sapiens (human)
 REFERENCE   1  (bases 1 to 33760)
   AUTHORS   Kershaw,J.
   TITLE     Direct Submission
-  JOURNAL   Submitted (16-JAN-2007) Wellcome Trust Sanger Institute, Hinxton,
+  JOURNAL   Submitted (09-JAN-2009) Wellcome Trust Sanger Institute, Hinxton,
             Cambridgeshire, CB10 1SA, UK. E-mail enquiries: vega@sanger.ac.uk
-            Clone requests: clonerequest@sanger.ac.uk
+            Clone requests: Geneservice (http://www.geneservice.co.uk/) and
+            BACPAC Resources (http://bacpac.chori.org/)
 COMMENT     -------------- Genome Center
             Center: Wellcome Trust Sanger Institute
             Center code: SC
@@ -1331,15 +1344,10 @@ FEATURES             Location/Qualifiers
                      /db_xref="taxon:9606"
                      /chromosome="16"
                      /clone="XX-CNFG9"
+     misc_feature    333. .33760
+                     /note="annotated region of clone"
      gene            join(complement(904. .1015),
-                     complement(Z84723.1:15736. .15872),
-                     complement(Z84723.1:15194. .15305),
-                     complement(Z84723.1:14901. .15077),
-                     complement(Z84723.1:14209. .14354),
-                     complement(Z84723.1:13388. .13589),
-                     complement(Z84723.1:12596. .12701),
-                     complement(Z84723.1:11161. .11245),
-                     complement(Z84723.1:8698. .9294))
+                     complement(Z84723.1:8698. .15872))
                      /locus_tag="Z84723.2-001"
                      /pseudo
      CDS             join(complement(904. .1015),
@@ -1356,17 +1364,18 @@ FEATURES             Location/Qualifiers
                      /pseudo
                      /codon_start=1
                      /product="interleukin 9 receptor (IL9R) pseudogene"
-     gene            complement(join(9101. .10251,14252. .14339,16170. .16322))
+     gene            complement(join(9101. .10251,14252. .14339,16170. .>16322))
                      /gene="POLR3K"
                      /locus_tag="Z69719.1-001"
-     mRNA            complement(join(9101. .10251,14252. .14339,16170. .16322))
+     mRNA            complement(join(9101. .10251,14252. .14339,16170. .>16322))
                      /gene="POLR3K"
                      /locus_tag="Z69719.1-001"
                      /product="polymerase (RNA) III (DNA directed) polypeptide
                      K, 12.3 kDa"
-                     /note="match: ESTs: Em:AA476966.1 Em:AV735477.1
-                     Em:BF237934.1 Em:BM738459.1 Em:BM887722.1 Em:BP429682.1
-                     match: cDNAs: Em:AF051316.1 Em:AF060223.1 Em:BC011932.2"
+                     /note="match: cDNAs: Em:AF051316.1 Em:AF060223.1
+                     Em:BC011932.2;
+                     match: ESTs: Em:AA476966.1 Em:AV735477.1 Em:BF237934.1
+                     Em:BM738459.1 Em:BM887722.1 Em:BP429682.1"
      polyA_site      complement(9675)
                      /gene="POLR3K"
                      /locus_tag="Z69719.1-001"
@@ -1394,24 +1403,28 @@ FEATURES             Location/Qualifiers
                      /db_xref="GI:66350794"
                      /db_xref="GOA:Q9Y2Y1"
                      /db_xref="HGNC:14121"
+                     /db_xref="HSSP:P23193"
+                     /db_xref="InterPro:IPR001222"
+                     /db_xref="InterPro:IPR001529"
                      /db_xref="UniProtKB/Swiss-Prot:Q9Y2Y1"
                      /translation="MLLFCPGCGNGLIVEEGQRCHRFSCNTCPYVHNITRKVTNRKYP
                      KLKEVDDVLGGAAAWENVDSTAESCPKCEHPRAYFMQLQTRSADEPMTTFYKCCNAQC
                      GHRWRD"
-     gene            join(15704. .16752,18153. .18243,18471. .18576,19233. .19307,
+     gene            join(<15704. .16752,18153. .18243,18471. .18576,19233. .19307,
                      19780. .20363)
                      /gene="C16orf33"
                      /locus_tag="Z69719.2-001"
-     mRNA            join(15704. .16752,18153. .18243,18471. .18576,19233. .19307,
+     mRNA            join(<15704. .16752,18153. .18243,18471. .18576,19233. .19307,
                      19780. .20363)
                      /gene="C16orf33"
                      /locus_tag="Z69719.2-001"
                      /product="chromosome 16 open reading frame 33"
-                     /note="match: ESTs: Em:BI252475.1 Em:BM006127.1
-                     Em:BQ649836.1 Em:BQ686053.1 Em:BQ690019.1 Em:BU596584.1
-                     Em:BU846188.1 Em:BU960195.1 Em:CB137383.1 Em:CB139779.1
-                     match: cDNAs: Em:AK026593.1 Em:BC001381.1 Em:BC009179.1
-                     Em:CR590942.1 Em:CR609842.1 Em:CR613103.1 Em:Z84714.1"
+                     /note="match: cDNAs: Em:AK026593.1 Em:BC001381.1
+                     Em:BC009179.1 Em:CR590942.1 Em:CR609842.1 Em:CR613103.1
+                     Em:Z84714.1;
+                     match: ESTs: Em:BI252475.1 Em:BM006127.1 Em:BQ649836.1
+                     Em:BQ686053.1 Em:BQ690019.1 Em:BU596584.1 Em:BU846188.1
+                     Em:BU960195.1 Em:CB137383.1 Em:CB139779.1"
      gene            join(16558. .16752,18460. .18576,19233. .19307,19780. .20161)
                      /gene="C16orf33"
                      /locus_tag="Z69719.2-003"
@@ -1429,6 +1442,20 @@ FEATURES             Location/Qualifiers
                      /locus_tag="Z69719.2-004"
                      /product="chromosome 16 open reading frame 33"
                      /note="match: ESTs: Em:BU170293.1"
+     gene            join(16593. .16752,18153. .18236,18488. .18576,19233. .>19307)
+                     /gene="C16orf33"
+                     /locus_tag="Z69719.2-006"
+     mRNA            join(16593. .16752,18153. .18236,18488. .18576,19233. .>19307)
+                     /gene="C16orf33"
+                     /locus_tag="Z69719.2-006"
+                     /product="chromosome 16 open reading frame 33"
+     gene            join(16593. .16752,18153. .18243,18488. .18565)
+                     /gene="C16orf33"
+                     /locus_tag="Z69719.2-007"
+     mRNA            join(16593. .16752,18153. .18243,18488. .18565)
+                     /gene="C16orf33"
+                     /locus_tag="Z69719.2-007"
+                     /product="chromosome 16 open reading frame 33"
      CDS             join(16711. .16752,18153. .18243,18471. .18576,19233. .19307,
                      19780. .19837)
                      /gene="C16orf33"
@@ -1440,13 +1467,21 @@ FEATURES             Location/Qualifiers
                      /protein_id="CAI95606.2"
                      /db_xref="GI:123237049"
                      /db_xref="GOA:Q4TT61"
-                     /db_xref="HGNC:14161"
-                     /db_xref="HSSP:Q8VIK1"
                      /db_xref="InterPro:IPR000626"
                      /db_xref="UniProtKB/TrEMBL:Q4TT61"
                      /translation="MVVQDPLLCDLPIQVTLEEVNSQIALEYGQAMTVRVCKMDGEVM
                      PVVVVQSATVLDLKKAIQRYVQLKQEREGGIQHISWSYVWRTYHLTSAGEKLTEDRKK
                      LRDYGIRNRDEVSFIKKLRQK"
+     CDS             join(16711. .16752,18153. .18236,18488. .18576,19233. .>19307)
+                     /gene="C16orf33"
+                     /locus_tag="Z69719.2-006"
+                     /standard_name="OTTHUMP00000197536"
+                     /codon_start=1
+                     /product="chromosome 16 open reading frame 33"
+                     /protein_id="CAX15111.1"
+                     /db_xref="GI:220897509"
+                     /translation="MVVQDPLLCDLPIQVTLEEVNSQIALEYGQAMTVRVCKMDGESA
+                     TVLDLKKAIQRYVQLKQEREGGIQHISWSYVWRTYHLTSAGEKLTEDRKKLR"
      gene            join(17654. .18243,18471. .18576,19233. .19307,19780. .20138)
                      /gene="C16orf33"
                      /locus_tag="Z69719.2-002"
@@ -1507,7 +1542,7 @@ FEATURES             Location/Qualifiers
                      /note="match: ESTs: Em:BE276495.1 Em:BI914794.1
                      Em:BM764330.1 Em:BM842753.1 Em:BM842924.1 Em:BM843481.1
                      Em:BQ423894.1 Em:BQ887573.1 Em:BQ927854.1 Em:BU502716.1
-                     Em:BU552499.1 Em:CF126089.1
+                     Em:BU552499.1 Em:CF126089.1;
                      match: cDNAs: Em:AK026010.1 Em:BC014425.1"
      polyA_site      complement(20752)
                      /gene="RHBDF1"
@@ -1535,11 +1570,27 @@ FEATURES             Location/Qualifiers
                      /product="rhomboid 5 homolog 1 (Drosophila)"
                      /note="match: ESTs: Em:AL703201.1 Em:AW748055.1
                      Em:BF812198.1 Em:BF812199.1 Em:BQ718791.1 Em:CF121195.1
-                     Em:W69279.1
+                     Em:W69279.1;
                      match: cDNAs: Em:AK056708.1"
+     gene            complement(join(20755. .21452,21666. .21819,21941. .22041,
+                     22111. .22186,22424. .22518,22908. .22971,23131. .23231,
+                     23812. .23973,24077. .24151,24277. .24388,24490. .24744,
+                     25230. .25387,25467. .25589,25665. .25755,26279. .26492,
+                     27391. .27521,27591. .27731))
+                     /gene="RHBDF1"
+                     /locus_tag="Z69719.3-013"
+     mRNA            complement(join(20755. .21452,21666. .21819,21941. .22041,
+                     22111. .22186,22424. .22518,22908. .22971,23131. .23231,
+                     23812. .23973,24077. .24151,24277. .24388,24490. .24744,
+                     25230. .25387,25467. .25589,25665. .25755,26279. .26492,
+                     27391. .27521,27591. .27731))
+                     /gene="RHBDF1"
+                     /locus_tag="Z69719.3-013"
+                     /product="rhomboid 5 homolog 1 (Drosophila)"
+                     /note="match: cDNAs: Em:AK144437.1"
      polyA_signal    complement(20786. .20791)
                      /gene="RHBDF1"
-                     /locus_tag="Z69719.3-002"
+                     /locus_tag="Z69719.3-013"
      gene            complement(join(20830. .21452,21666. .21785,21991. .22041,
                      22111. .22186,22424. .>22454))
                      /gene="RHBDF1"
@@ -1556,18 +1607,17 @@ FEATURES             Location/Qualifiers
                      25230. .25387,25467. .25589,25665. .25874,26279. .26492,
                      27391. .27521,27591. .27707))
                      /gene="RHBDF1"
-                     /locus_tag="Z69719.3-002"
+                     /locus_tag="Z69719.3-013"
                      /standard_name="OTTHUMP00000067140"
                      /note="match: proteins: Tr:Q6PIX5 Tr:Q96CC6 Tr:Q9H6E1"
                      /codon_start=1
                      /product="rhomboid 5 homolog 1 (Drosophila)"
                      /protein_id="CAI95608.1"
                      /db_xref="GI:66350797"
-                     /db_xref="GOA:Q4TT59"
+                     /db_xref="GOA:Q96CC6"
                      /db_xref="HGNC:20561"
-                     /db_xref="InterPro:IPR000269"
                      /db_xref="InterPro:IPR002610"
-                     /db_xref="UniProtKB/TrEMBL:Q4TT59"
+                     /db_xref="UniProtKB/Swiss-Prot:Q96CC6"
                      /translation="MSEARRDSTSSLQRKKPPWLKLDIPSAVPLTAEEPSFLQPLRRQ
                      AFLRSVSMPAETAHISSPHHELRRPVLQRQTSITQTIRRGTADWFGVSKDSDSTQKWQ
                      RKSIRHCSQRYGKLKPQVLRELDLPSQDNVSLTSTETPPPLYVGPCQLGMQKIIDPLA
@@ -1592,6 +1642,7 @@ FEATURES             Location/Qualifiers
                      /product="rhomboid 5 homolog 1 (Drosophila)"
                      /protein_id="CAI95607.1"
                      /db_xref="GI:66350796"
+                     /db_xref="GOA:Q4TT60"
                      /db_xref="InterPro:IPR002610"
                      /db_xref="UniProtKB/TrEMBL:Q4TT60"
                      /translation="RPCCIGTKGRCEITSREYCDFMRGYFHEEATLCSQVHCMDDVCG
@@ -1667,6 +1718,7 @@ FEATURES             Location/Qualifiers
                      /product="rhomboid 5 homolog 1 (Drosophila)"
                      /protein_id="CAM26658.1"
                      /db_xref="GI:123237050"
+                     /db_xref="UniProtKB/TrEMBL:A2IDA2"
                      /translation="MSEARRDSTSSLQRKKPPWLKLDIPSAVPLTAEEPSFLQPLRRQ
                      AFLRSVSMPAETAHISSPHHELRRPVLQRQTSITQTIRRGTADWFGVSKDSDSTQKWQ
                      RKSIRHCSQRYGKLKPQVLRELDLPSQDNVSLTSTETPPPLYVGPCQLGMQKIIDPLA
@@ -1697,6 +1749,27 @@ FEATURES             Location/Qualifiers
                      AFLRSVSMPAETAHISSPHHELRRPVLQRQTSITQTIRSSRQVRFGRVHTLPLLGPRA
                      ARRAFPQRQSLSWSLLRGTADWFGVSKDSDSTQKWQRKSIRHCSQRYGKLKPQVLREL
                      DLPSQDNVSLTSTETPPPLYVGPCQLGMQK"
+     gene            complement(join(<26435. .26492,27025. .27129,27391. .27521,
+                     27591. .>27731))
+                     /gene="RHBDF1"
+                     /locus_tag="Z69719.3-012"
+     mRNA            complement(join(<26435. .26492,27025. .27129,27391. .27521,
+                     27591. .>27731))
+                     /gene="RHBDF1"
+                     /locus_tag="Z69719.3-012"
+                     /product="rhomboid 5 homolog 1 (Drosophila)"
+     CDS             complement(join(<26435. .26492,27025. .27129,27391. .27521,
+                     27591. .27707))
+                     /gene="RHBDF1"
+                     /locus_tag="Z69719.3-012"
+                     /standard_name="OTTHUMP00000197542"
+                     /codon_start=1
+                     /product="rhomboid 5 homolog 1 (Drosophila)"
+                     /protein_id="CAX15112.1"
+                     /db_xref="GI:220897510"
+                     /translation="MSEARRDSTSSLQRKKPPWLKLDIPSAVPLTAEEPSFLQPLRRQ
+                     AFLRSVSMPAETAHISSPHHELRRPVLQRQTSITQTIRSRQVRFGRVHTLPLLGPRAA
+                     RRAFPQRQSLSWSLLRGTADWFGVSKDSDSTQKWQ"
      gene            join(complement(Z69720.1:5293. .5381),
                      complement(27244. .27731))
                      /gene="RHBDF1"
@@ -3171,7 +3244,7 @@ FEATURES             Location/Qualifiers
                      /gene="HSPA1B"
      CDS             complement(114129. .116054)
                      /gene="HSPA1B"
-                     /note="alternative name: HSP70-2
+                     /note="alternative name: HSP70-2;
                      constitutive HSP70"
                      /codon_start=1
                      /product="heat shock protein"
@@ -3202,7 +3275,7 @@ FEATURES             Location/Qualifiers
                      /gene="HSPA1A"
      CDS             complement(126326. .128251)
                      /gene="HSPA1A"
-                     /note="alternative name: HSP70-1
+                     /note="alternative name: HSP70-1;
                      constitutive HSP70"
                      /codon_start=1
                      /product="heat shock protein"
@@ -3229,7 +3302,7 @@ FEATURES             Location/Qualifiers
                      /gene="HSPA1L"
      CDS             132036. .133961
                      /gene="HSPA1L"
-                     /note="alternative name: HSP70-HOM
+                     /note="alternative name: HSP70-HOM;
                      constitutive HSP70"
                      /codon_start=1
                      /product="heat shock protein"
@@ -3421,7 +3494,7 @@ FEATURES             Location/Qualifiers
                      177253. .177554,177633. .177772,177960. .178162,
                      178247. .178278)
                      /gene="G7C"
-                     /note="alternative name: NG37
+                     /note="alternative name: NG37;
                      unknown function"
                      /codon_start=1
                      /protein_id="BAB63304.1"
@@ -3721,7 +3794,7 @@ FEATURES             Location/Qualifiers
                      219402. .219442,219797. .219887,220043. .220390,
                      220585. .220645))
                      /gene="G6B"
-                     /note="alternative name: NG31
+                     /note="alternative name: NG31;
                      unknown function"
                      /codon_start=1
                      /protein_id="BAB63378.1"
@@ -3757,7 +3830,7 @@ FEATURES             Location/Qualifiers
      CDS             join(222350. .222401,223826. .223936,224719. .224933)
                      /gene="G6C"
                      /function="Leukocyte maturation"
-                     /note="Ly6 family member
+                     /note="Ly6 family member;
                      alternative name: NG24"
                      /codon_start=1
                      /protein_id="BAB63379.1"
@@ -3783,7 +3856,7 @@ FEATURES             Location/Qualifiers
                      228617. .228671))
                      /gene="G6D"
                      /function="Leukocyte maturation"
-                     /note="Ly6 family member
+                     /note="Ly6 family member;
                      alternative name: NG25, MEGT1"
                      /codon_start=1
                      /protein_id="BAB63380.1"
@@ -3838,7 +3911,7 @@ FEATURES             Location/Qualifiers
      CDS             complement(join(233605. .233675,233846. .234001,
                      235893. .236156,236240. .236569,237069. .237120))
                      /gene="G6F"
-                     /note="alternative name: NG32, MEGT1
+                     /note="alternative name: NG32, MEGT1;
                      unknown function"
                      /codon_start=1
                      /protein_id="BAB63382.1"
@@ -3877,7 +3950,7 @@ FEATURES             Location/Qualifiers
                      255925. .255987,256128. .256204,256288. .256386,
                      256484. .256530,256733. .256816)
                      /gene="BAT5"
-                     /note="alternative name: NG26
+                     /note="alternative name: NG26;
                      unknown function"
                      /codon_start=1
                      /protein_id="BAB63383.1"
@@ -3972,7 +4045,7 @@ FEATURES             Location/Qualifiers
      CDS             join(259988. .260040,263714. .263775,264760. .264927,
                      266908. .267071)
                      /gene="G5C"
-                     /note="Ly6 family member
+                     /note="Ly6 family member;
                      alternative name: NG33"
                      /codon_start=1
                      /protein_id="BAB63384.1"
@@ -4073,7 +4146,7 @@ FEATURES             Location/Qualifiers
                      /number=2
      CDS             join(279550. .280175,281318. .281762)
                      /gene="BAT4"
-                     /note="alternative name: G5
+                     /note="alternative name: G5;
                      unknown function"
                      /codon_start=1
                      /protein_id="BAB63387.1"
@@ -4099,7 +4172,7 @@ FEATURES             Location/Qualifiers
                      /number=1
      CDS             284081. .284965
                      /gene="G4"
-                     /note="alternative name: NG34
+                     /note="alternative name: NG34;
                      unknown function"
                      /codon_start=1
                      /protein_id="BAB63388.1"
@@ -4177,7 +4250,7 @@ FEATURES             Location/Qualifiers
                      303089. .303235,303323. .303382,303499. .303642,
                      303721. .303828,304381. .304527,304801. .304896)
                      /gene="BAT3"
-                     /note="alternative name: G3
+                     /note="alternative name: G3;
                      unknown function"
                      /codon_start=1
                      /protein_id="BAB63390.1"
@@ -4319,7 +4392,7 @@ FEATURES             Location/Qualifiers
                      319504. .319576,319666. .319765,320117. .320294,
                      321120. .321231))
                      /gene="BAT2"
-                     /note="alternative name: G2
+                     /note="alternative name: G2;
                      unknown function"
                      /codon_start=1
                      /protein_id="BAB63391.1"
@@ -4537,7 +4610,7 @@ FEATURES             Location/Qualifiers
      CDS             complement(join(355349. .355528,356292. .356384,
                      356707. .356709))
                      /gene="LST1"
-                     /note="Leukocyte specifictranscript-1
+                     /note="Leukocyte specifictranscript-1;
                      alternative name: B144"
                      /codon_start=1
                      /protein_id="BAB63394.1"
@@ -4885,7 +4958,7 @@ FEATURES             Location/Qualifiers
                      /gene="3.8-1.1"
      misc_RNA        complement(471574. .472753)
                      /gene="3.8-1.1"
-                     /note="Uncharacterized transcript
+                     /note="Uncharacterized transcript;
                      gene candidate"
      exon            471574. .472753
                      /gene="3.8-1.1"
@@ -4902,7 +4975,7 @@ FEATURES             Location/Qualifiers
                      /gene="P5-1"
      misc_RNA        complement(join(478173. .480609,480701. .480789))
                      /gene="P5-1"
-                     /note="Uncharacterized class I transcript
+                     /note="Uncharacterized class I transcript;
                      gene candidate"
      exon            478173. .480609
                      /gene="P5-1"
@@ -7030,7 +7103,7 @@ FEATURES             Location/Qualifiers
                      1933378. .1933410,1933854. .1933970,1934093. .1934365,
                      1934962. .1935237,1935486. .1935755,1935886. .1935957))
                      /gene="HLA-59"
-                     /note="Class I full length
+                     /note="Class I full length;
                      alternative name: HLA-J"
                      /pseudo
                      /codon_start=1
@@ -7121,7 +7194,7 @@ FEATURES             Location/Qualifiers
      CDS             join(1970096. .1970350,1970591. .1970877,1971482. .1971758,
                      1971874. .1972023)
                      /gene="MICD"
-                     /note="MICA/B homologous
+                     /note="MICA/B homologous;
                      alternative name: PERB11.4"
                      /pseudo
                      /codon_start=1
@@ -7322,7 +7395,7 @@ FEATURES             Location/Qualifiers
                      2013551. .2013577,2014023. .2014139,2014268. .2014543,
                      2015144. .2015418,2015667. .2015936,2016066. .2016137))
                      /gene="HLA-70"
-                     /note="Class I gene fragment
+                     /note="Class I gene fragment;
                      alternative name: HLA-K"
                      /pseudo
                      /codon_start=1
@@ -7371,6 +7444,7 @@ FEATURES             Location/Qualifiers
      exon            2016066. .2016137
                      /gene="HLA-70"
                      /number=1
+                     /pseudo
      gene            2016945. .2018004
                      /gene="HCGIV-06"
      mRNA            2016945. .2018004
@@ -7472,7 +7546,7 @@ FEATURES             Location/Qualifiers
                      2052277. .2052309,2052750. .2052866,2052969. .2053243,
                      2053829. .2054104,2054347. .2054616,2054741. .2054813))
                      /gene="HLA-54"
-                     /note="Class I full length
+                     /note="Class I full length;
                      alternative name: HLA-H"
                      /pseudo
                      /codon_start=1
@@ -7521,6 +7595,7 @@ FEATURES             Location/Qualifiers
      exon            2054741. .2054813
                      /gene="HLA-54"
                      /number=1
+                     /pseudo
      gene            2055554. .2056450
                      /gene="HCGIV-07"
                      /pseudo
@@ -7852,7 +7927,7 @@ FEATURES             Location/Qualifiers
      CDS             join(2191157. .2191231,2194405. .2194659,2194898. .2195182,
                      2195588. .2195865,2195980. .2196123,2198277. .2198579)
                      /gene="MICE"
-                     /note="MICA/B homologous
+                     /note="MICA/B homologous;
                      alternative name: PERB11.5"
                      /pseudo
                      /codon_start=1
@@ -49544,11 +49619,11 @@ ORIGIN
   184561  TTGTTTCCCC TCACAATGGA TGCAGTGCAT CTTCCATTCT GAATTCCAGA GGCAACAACC
   184621  TCCTGCTCCT AGAAGCTAAA CTCTCCAGAC TTAGTCTTCT GAATTC
 //
-LOCUS       AB000360                2582 bp    DNA     linear   PRI 14-APR-2000
+LOCUS       AB000360                2582 bp    DNA     linear   PRI 27-SEP-2008
 DEFINITION  Homo sapiens PIGC gene, complete cds.
 ACCESSION   AB000360
 VERSION     AB000360.1  GI:2547041
-KEYWORDS    PIGC; glycosylphosphatidylinositol-synthesis gene.
+KEYWORDS    .
 SOURCE      Homo sapiens (human)
   ORGANISM  Homo sapiens
             Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
@@ -49563,12 +49638,12 @@ REFERENCE   1
   JOURNAL   Genomics 44 (3), 347-349 (1997)
    PUBMED   9325057
 REFERENCE   2  (bases 1 to 2582)
-  AUTHORS   Hong,Y.
+  AUTHORS   Hong,Y., Ohishi,K., Inoue,N., Endo,Y., Fujita,T., Takeda,J. and
+            Kinoshita,T.
   TITLE     Direct Submission
-  JOURNAL   Submitted (08-JAN-1997) Yeongjin Hong, Research Institute for
-            Microbial Diseases, Immunoregulation; 3-1 Yamada-oka, Suita, Osaka
-            565, Japan (E-mail:kohishi@biken.osaka-u.ac.jp, Tel:81-6-879-8329,
-            Fax:81-6-875-5233)
+  JOURNAL   Submitted (08-JAN-1997) Contact:Yeongjin Hong Research Institute
+            for Microbial Diseases, Immunoregulation; 3-1 Yamada-oka, Suita,
+            Osaka 565, Japan
 FEATURES             Location/Qualifiers
      source          1. .2582
                      /organism="Homo sapiens"
@@ -49646,7 +49721,7 @@ ORIGIN
     2521  TCACAACTAA TTGCAAAGCA GAGTGTGATG TGTCACAATA AGCAGAATGC TAGGGGGAAT
     2581  TC
 //
-LOCUS       HUMHBB                 73308 bp    DNA     linear   PRI 09-FEB-2005
+LOCUS       HUMHBB                 73308 bp    DNA     linear   PRI 16-OCT-2008
 DEFINITION  Human beta globin region on chromosome 11.
 ACCESSION   U01317 J00093 J00094 J00096 J00158-J00175 J00177 J00178 J00179
             K01239 K01890 K02544 M18047 M19067 M24868 M24886
@@ -50507,13 +50582,16 @@ FEATURES             Location/Qualifiers
      repeat_region   10597. .10611
                      /note="Alu flank repeat 5' copy"
      repeat_region   10612. .10924
-                     /note="Alu family repeat"
+                     /rpt_family="Alu"
+                     /rpt_type=dispersed
      repeat_region   10925. .10939
                      /note="Alu flank repeat 3' copy"
-     repeat_unit     complement(16918. .17218)
+     repeat_region   complement(16918. .17218)
                      /rpt_family="Alu"
-     repeat_unit     17940. .18231
+                     /rpt_type=dispersed
+     repeat_region   17940. .18231
                      /rpt_family="Alu"
+                     /rpt_type=dispersed
      gene            19289. .21080
                      /gene="HBE1"
      precursor_RNA   19289. .21080
@@ -50559,7 +50637,9 @@ FEATURES             Location/Qualifiers
      repeat_region   32390. .32406
                      /note="Alu flank repeat 5' copy [31]"
      repeat_region   32407. .32711
-                     /note="Alu family repeat [31]"
+                     /note="[31]"
+                     /rpt_family="Alu"
+                     /rpt_type=dispersed
      variation       32608
                      /note="g in [29]; a in [31]"
      repeat_region   32712. .32728
@@ -50692,13 +50772,17 @@ FEATURES             Location/Qualifiers
      repeat_region   complement(50889. .50894)
                      /note="Alu flank repeat 3' copy [47],[62]"
      repeat_region   complement(50915. .51198)
-                     /note="Alu family repeat [47],[62]"
+                     /note="[47],[62]"
+                     /rpt_family="Alu"
+                     /rpt_type=dispersed
      repeat_region   complement(51199. .51204)
                      /note="Alu flank repeat 5' copy [47],[62]"
      repeat_region   51966. .51975
                      /note="Alu flank repeat 5' copy [62]"
      repeat_region   51976. .52259
-                     /note="Alu family repeat [31],[62]"
+                     /note="[31],[62]"
+                     /rpt_family="Alu"
+                     /rpt_type=dispersed
      repeat_region   52286. .52295
                      /note="Alu flank repeat 3' copy [62]"
      gene            54740. .56389
@@ -50803,6 +50887,11 @@ FEATURES             Location/Qualifiers
                      /translation="MVHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFE
                      SFGDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPE
                      NFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKYH"
+     gene            <62187. .>62408
+                     /gene="HBB thalassemia"
+     mRNA            join(<62187. .62278,62390. .>62408)
+                     /gene="HBB thalassemia"
+                     /product="beta-globin thalassemia"
      CDS             join(62187. .62278,62390. .62408)
                      /gene="HBB thalassemia"
                      /codon_start=1
@@ -50810,8 +50899,6 @@ FEATURES             Location/Qualifiers
                      /protein_id="AAA16335.1"
                      /db_xref="GI:455998"
                      /translation="MVHLTPEEKSAVTALWGKVNVDEVGGEALGSLFSHP"
-     gene            <62187. .62389
-                     /gene="HBB thalassemia"
      exon            <62187. .62278
                      /gene="HBB thalassemia"
                      /note="beta-globin thalassemia, [30],[43]"
@@ -50846,7 +50933,7 @@ FEATURES             Location/Qualifiers
                      /note="beta-globin thalassemia, [30],[43]"
                      /number=2
      variation       62394
-                     /gene="HBB"
+                     /gene="HBB thalassemia"
                      /note="t in wt; g in thalassemia [90]"
      exon            62409. .62631
                      /gene="HBB"
@@ -50891,17 +50978,23 @@ FEATURES             Location/Qualifiers
      repeat_region   65490. .65502
                      /note="Alu flank repeat 5' copy [62],[76]"
      repeat_region   65513. .65767
-                     /note="Alu family repeat [62],[76]"
+                     /note="[62],[76]"
+                     /rpt_family="Alu"
+                     /rpt_type=dispersed
      repeat_region   65768. .65780
                      /note="Alu flank repeat 3' copy [62],[76]"
      repeat_region   66765. .66775
                      /note="Alu flank repeat 5' copy [62],[76]"
      repeat_region   66776. .67042
-                     /note="Alu family repeat [62],[76]"
+                     /note="[62],[76]"
+                     /rpt_family="Alu"
+                     /rpt_type=dispersed
      repeat_region   67069. .67079
                      /note="Alu flank repeat 3' copy [62],[76]"
      repeat_region   67071. .73195
-                     /note="KpnI family repeat [83]"
+                     /note="[83]"
+                     /rpt_family="KpnI"
+                     /rpt_type=dispersed
 ORIGIN
        1  GAATTCTAAT CTCCCTCTCA ACCCTACAGT CACCCATTTG GTATATTAAA GATGTGTTGT
       61  CTACTGTCTA GTATCCCTCA AGTAGTGTCA GGAATTAGTC ATTTAAATAG TCTGCAAGCC

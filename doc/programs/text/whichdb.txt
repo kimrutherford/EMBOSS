@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Search all sequence databases for an entry and retrieve it
@@ -120,7 +127,7 @@ qanxflatexc:x65921
 # Trying 'testdb:x65921'
 # Failed 'testdb:x65921'
 # Trying 'genbanksrs:x65921'
-genbanksrs:x65921
+# Failed 'genbanksrs:x65921'
 # Trying 'tpir:x65921'
 # Failed 'tpir:x65921'
 # Trying 'qasrswww:x65921'
@@ -265,17 +272,17 @@ Known bugs
 
 See also
 
-   Program name Description
-   infoalign Display basic information about a multiple sequence
-   alignment
-   infobase Return information on a given nucleotide base
-   inforesidue Return information on a given amino acid residue
-   infoseq Display basic information about sequences
-   seealso Finds programs with similar function to a specified program
-   showdb Displays information on configured databases
-   textsearch Search the textual description of sequence(s)
-   tfm Displays full documentation for an application
-   wossname Finds programs by keywords in their short description
+   Program name     Description
+   infoalign        Display basic information about a multiple sequence
+                    alignment
+   infobase         Return information on a given nucleotide base
+   inforesidue      Return information on a given amino acid residue
+   infoseq          Display basic information about sequences
+   seealso          Finds programs with similar function to a specified program
+   showdb           Displays information on configured databases
+   textsearch       Search the textual description of sequence(s)
+   tfm              Displays full documentation for an application
+   wossname         Finds programs by keywords in their short description
 
 Author(s)
 

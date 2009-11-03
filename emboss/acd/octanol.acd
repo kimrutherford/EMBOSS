@@ -50,19 +50,19 @@ section: output [
     gtitle: "White-Wimley Plot"
   ]
 
-  boolean: octanolplot [
+  boolean: plotoctanol [
     additional: "Y"
     default: "N"
     information: "Display the octanol plot"
   ]
 
-  boolean: interfaceplot [
+  boolean: plotinterface [
     additional: "Y"
     default: "N"
     information: "Display the interface plot"
   ]
 
-  boolean: differenceplot [
+  boolean: plotdifference [
     additional: "Y"
     default: "Y"
     information: "Display the difference plot"

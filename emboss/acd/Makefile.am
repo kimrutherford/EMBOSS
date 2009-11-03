@@ -9,7 +9,8 @@ pkgdata_DATA = aaindexextract.acd abiview.acd acdc.acd acdlog.acd \
 	corbatest.acd cpgplot.acd cpgreport.acd \
 	cusp.acd cutgextract.acd cutseq.acd dan.acd dbiblast.acd \
 	dbifasta.acd dbiflat.acd dbigcg.acd dbxfasta.acd dbxflat.acd \
-	dbxgcg.acd dbxstat.acd degapseq.acd density.acd descseq.acd \
+	dbxgcg.acd dbxreport.acd dbxstat.acd \
+	degapseq.acd density.acd descseq.acd \
 	diffseq.acd digest.acd \
 	distmat.acd dotmatcher.acd dotpath.acd dottup.acd dreg.acd \
 	edialign.acd \
@@ -21,7 +22,8 @@ pkgdata_DATA = aaindexextract.acd abiview.acd acdc.acd acdlog.acd \
 	fuzznuc.acd fuzzpro.acd fuzztran.acd \
 	garnier.acd geecee.acd getorf.acd giep.acd \
 	helixturnhelix.acd histogramtest.acd \
-	hmoment.acd iep.acd infoalign.acd infoseq.acd intconv.acd \
+	hmoment.acd iep.acd infoalign.acd infobase.acd inforesidue.acd \
+        infoseq.acd intconv.acd \
 	isochore.acd jaspextract.acd jaspscan.acd lindna.acd listor.acd \
 	makenucseq.acd makeprotseq.acd marscan.acd \
 	maskambignuc.acd maskambigprot.acd maskfeat.acd maskseq.acd \
@@ -30,7 +32,7 @@ pkgdata_DATA = aaindexextract.acd abiview.acd acdc.acd acdlog.acd \
 
 pkgdata2_DATA = needle.acd newcoils.acd newcpgreport.acd newcpgseek.acd \
 	newseq.acd nohtml.acd noreturn.acd nospace.acd notab.acd \
-	notseq.acd nthseq.acd \
+	notseq.acd nthseq.acd nthseqset.acd \
 	octanol.acd oddcomp.acd origsplitter.acd origunion.acd \
 	palindrome.acd pasteseq.acd patmatdb.acd patmatmotifs.acd \
 	patmattest.acd pepcoil.acd pepinfo.acd pepnet.acd pepstats.acd \
@@ -40,16 +42,19 @@ pkgdata2_DATA = needle.acd newcoils.acd newcpgreport.acd newcpgseek.acd \
 	prophecy.acd prophet.acd prosextract.acd pscan.acd psiphi.acd \
 	rebaseextract.acd recoder.acd redata.acd remap.acd restover.acd \
 	restrict.acd revseq.acd seealso.acd seqinfo.acd seqmatchall.acd \
-	seqret.acd seqretall.acd seqretallfeat.acd seqretset.acd \
-	seqretsingle.acd seqretsplit.acd seqrettype.acd showalign.acd \
-	showdb.acd showfeat.acd showorf.acd showseq.acd shuffleseq.acd \
+	seqret.acd seqretall.acd seqretallfeat.acd \
+	seqretset.acd seqretsetall.acd seqretsingle.acd seqretsplit.acd \
+	seqrettype.acd showalign.acd \
+	showdb.acd showfeat.acd showorf.acd \
+	showpep.acd showseq.acd shuffleseq.acd \
 	sigcleave.acd silent.acd sirna.acd \
 	sixpack.acd sizeseq.acd skipredundant.acd skipseq.acd \
-	splitter.acd stretcher.acd stssearch.acd supermatcher.acd syco.acd \
+	splitsource.acd splitter.acd stretcher.acd \
+	stssearch.acd supermatcher.acd syco.acd \
 	tcode.acd testplot.acd textsearch.acd tfextract.acd tfm.acd \
 	tfscan.acd tmap.acd tranalign.acd transeq.acd treetypedisplay.acd \
-	trimest.acd trimseq.acd twofeat.acd union.acd vectorstrip.acd \
-	water.acd whichdb.acd wobble.acd \
+	trimest.acd trimseq.acd trimspace.acd twofeat.acd union.acd \
+        vectorstrip.acd water.acd whichdb.acd wobble.acd \
 	wordcount.acd wordfinder.acd wordmatch.acd \
 	wossname.acd yank.acd
 

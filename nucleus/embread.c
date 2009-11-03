@@ -53,19 +53,24 @@ AjBool embReadAminoDataDoubleC(const char *s, double **a, double fill)
     if(!inf)
     {
 	ajWarn("File [%s] not found",s);
+
 	return ajFalse;
     }
 
     *a = AJALLOC(AJREADAMINO*sizeof(double));
+
     for(i=0;i<AJREADAMINO;++i)
 	(*a)[i] = fill;
 
     line = ajStrNew();
+
     while(ajReadlineTrim(inf,&line))
     {
 	p = ajStrGetPtr(line);
+
 	if(*p=='#' || *p=='!' || !*p)
 	    continue;
+
 	p = ajSysFuncStrtok(p," \t\r");
 
 	if(!p || *(p+1))
@@ -74,8 +79,10 @@ AjBool embReadAminoDataDoubleC(const char *s, double **a, double fill)
 	    ajFileClose(&inf);
 	    ajStrDel(&line);
 	    AJFREE(*a);
+
 	    return ajFalse;
 	}
+
 	idx = ajBasecodeToInt(*p);
 	p = ajSysFuncStrtok(NULL," \t\r");
 
@@ -85,6 +92,7 @@ AjBool embReadAminoDataDoubleC(const char *s, double **a, double fill)
 	    ajFileClose(&inf);
 	    ajStrDel(&line);
 	    AJFREE(*a);
+
 	    return ajFalse;
 	}
 
@@ -94,6 +102,7 @@ AjBool embReadAminoDataDoubleC(const char *s, double **a, double fill)
 	    ajFileClose(&inf);
 	    ajStrDel(&line);
 	    AJFREE(*a);
+
 	    return ajFalse;
 	}
     }
@@ -129,32 +138,40 @@ AjBool embReadAminoDataFloatC(const char *s, float **a, float fill)
     ajint  i;
 
     inf = ajDatafileNewInNameC(s);
+
     if(!inf)
     {
 	ajWarn("File [%s] not found",s);
+
 	return ajFalse;
     }
 
     *a = AJALLOC(AJREADAMINO*sizeof(float));
+
     for(i=0;i<AJREADAMINO;++i)
 	(*a)[i] = fill;
 
     line = ajStrNew();
+
     while(ajReadlineTrim(inf,&line))
     {
 	p = ajStrGetPtr(line);
+
 	if(*p=='#' || *p=='!' || !*p)
 	    continue;
 
 	p = ajSysFuncStrtok(p," \t\r");
+
 	if(!p || *(p+1))
 	{
 	    ajWarn("First token is not a single letter");
 	    ajFileClose(&inf);
 	    ajStrDel(&line);
 	    AJFREE(*a);
+
 	    return ajFalse;
 	}
+
 	idx = ajBasecodeToInt(*p);
 	p   = ajSysFuncStrtok(NULL," \t\r");
 
@@ -164,6 +181,7 @@ AjBool embReadAminoDataFloatC(const char *s, float **a, float fill)
 	    ajFileClose(&inf);
 	    ajStrDel(&line);
 	    AJFREE(*a);
+
 	    return ajFalse;
 	}
 
@@ -173,6 +191,7 @@ AjBool embReadAminoDataFloatC(const char *s, float **a, float fill)
 	    ajFileClose(&inf);
 	    ajStrDel(&line);
 	    AJFREE(*a);
+
 	    return ajFalse;
 	}
     }
@@ -212,20 +231,25 @@ AjBool embReadAminoDataIntC(const char *s, ajint **a, ajint fill)
     if(!inf)
     {
 	ajWarn("File [%s] not found",s);
+
 	return ajFalse;
     }
 
     *a = AJALLOC(AJREADAMINO*sizeof(ajint));
+
     for(i=0;i<AJREADAMINO;++i)
 	(*a)[i] = fill;
 
 
     line = ajStrNew();
+
     while(ajReadlineTrim(inf,&line))
     {
 	p = ajStrGetPtr(line);
+
 	if(*p=='#' || *p=='!' || !*p)
 	    continue;
+
 	p = ajSysFuncStrtok(p," \t\r");
 
 	if(!p || *(p+1))
@@ -234,8 +258,10 @@ AjBool embReadAminoDataIntC(const char *s, ajint **a, ajint fill)
 	    ajFileClose(&inf);
 	    ajStrDel(&line);
 	    AJFREE(*a);
+
 	    return ajFalse;
 	}
+
 	idx = ajBasecodeToInt(*p);
 	p   = ajSysFuncStrtok(NULL," \t\r");
 
@@ -245,6 +271,7 @@ AjBool embReadAminoDataIntC(const char *s, ajint **a, ajint fill)
 	    ajFileClose(&inf);
 	    ajStrDel(&line);
 	    AJFREE(*a);
+
 	    return ajFalse;
 	}
 
@@ -254,6 +281,7 @@ AjBool embReadAminoDataIntC(const char *s, ajint **a, ajint fill)
 	    ajFileClose(&inf);
 	    ajStrDel(&line);
 	    AJFREE(*a);
+
 	    return ajFalse;
 	}
     }

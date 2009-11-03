@@ -56,9 +56,11 @@ public class FileChooser
   {
 
     SecurityManager sm = System.getSecurityManager();
+    if (sm!=null)
     System.setSecurityManager(null);
 
     fc = new JFileChooser();
+    if (sm!=null)
     System.setSecurityManager(sm);
 
     JButton openButton = new JButton("Browse files...");

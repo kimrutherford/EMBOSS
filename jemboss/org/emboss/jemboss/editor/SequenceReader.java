@@ -229,7 +229,7 @@ public class SequenceReader
 //    in = new BufferedReader(new FileReader(seqFile));
       String line;
       String name = null;
-      Sequence seq;
+      //Sequence seq;
 
       while((line = in.readLine()) != null )
       {
@@ -366,7 +366,7 @@ public class SequenceReader
     {
       String line;
       Sequence seq;
-      String type = null;
+      //String type = null;
       StringTokenizer st;
       Hashtable seqIndex = new Hashtable();
       int num = 0;

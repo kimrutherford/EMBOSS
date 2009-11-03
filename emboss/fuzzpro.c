@@ -27,7 +27,7 @@
 /* @prog fuzzpro **************************************************************
 **
 ** Protein pattern search
-*q
+**
 ******************************************************************************/
 
 int main(int argc, char **argv)
@@ -59,6 +59,7 @@ int main(int argc, char **argv)
 	    writeok = ajReportWrite(report,tab,seq);
         ajFeattableDel(&tab);
     }
+    ajReportSetSeqstats(report, seqall);
 
     ajPatlistSeqDel(&plist);
 

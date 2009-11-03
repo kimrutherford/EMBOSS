@@ -114,7 +114,15 @@ int main(int argc, char **argv)
 
     /* Memory management and exit */
     ajStrDel(&code);
+    ajStrDel(&code3);
+    ajStrDel(&propstr);
     ajFileClose(&outf);
+    ajFileClose(&mfptr);
+    ajFileClose(&wfptr);
+    ajFileClose(&outf);
+    embPropAminoDel(&aadata);
+    embPropMolwtDel(&mwdata);
+    AJFREE(dhstat);
 
     embExit();
 

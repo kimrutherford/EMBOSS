@@ -1,4 +1,5 @@
 acdcommandlinelog string "" "Log file for full commandline, used to convert QA test definitions into memory leak test command lines"
+acdfilename boolean "N" "Use filename rather than sequence name as default for file naming"
 acdlog      boolean "N" "Log ACD processing to file program.acdlog"
 acdprompts   integer "1" "Number of times to prompt for a value when interactive"
 acdroot     string "(install directory)" "EMBOSS root directory for finding files"
@@ -6,6 +7,7 @@ acdutilroot string "(source directory)" "EMBOSS source directory for finding fil
 acdwarnrange boolean "N" "Warn if a number is out of range and fixed to be within limits"
 data     string "(install directory)" "EMBOSS directory for finding data files"
 debugbuffer boolean "N" "Buffer debug output to save I/O time but risk losing output"
+embossrc    string "" "Directory to search for a .embossrc file"
 featwarn    boolean "Y" "Print warning messages when parsing feature table input"
 format      string "unknown" "Input sequence format"
 homerc	    boolean "Y" "Read the .embossrc file in the user's home directory"

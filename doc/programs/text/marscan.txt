@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Finds matrix/scaffold recognition (MRS) signatures in DNA sequences
@@ -128,7 +135,7 @@ AC   U01317; J00093-J00094; J00096; J00158-J00175; J00177-J00179; K01239;
 AC   K01890; K02544; M18047; M19067; M24868; M24886;
 XX
 DT   19-MAR-1994 (Rel. 39, Created)
-DT   14-NOV-2006 (Rel. 89, Last updated, Version 34)
+DT   08-NOV-2008 (Rel. 97, Last updated, Version 36)
 XX
 DE   Human beta globin region on chromosome 11.
 XX
@@ -145,6 +152,7 @@ OC   Homo.
 XX
 RN   [1]
 RP   62409-62631, 63482-63610
+RX   DOI; 10.1073/pnas.71.6.2300.
 RX   PUBMED; 4135409.
 RA   Marotta C.A., Forget B.G., Weissman S.M., Verma I.M., McCaffrey R.P.,
 RA   Baltimore D.;
@@ -153,6 +161,7 @@ RL   Proc. Natl. Acad. Sci. U.S.A. 71(6):2300-2304(1974).
 XX
 RN   [2]
 RP   63602-63646
+RX   DOI; 10.1073/pnas.72.9.3614.
 RX   PUBMED; 1059150.
 RA   Forget B.G., Marotta C.A., Weissman S.M., Cohen-Solal M.;
 RT   "Nucleotide sequences of the 3'-terminal untranslated region of messenger
@@ -171,8 +180,6 @@ RP   63673-63743
 RX   DOI; 10.1016/0092-8674(76)90137-9.
 RX   PUBMED; 1035137.
 RA   Proudfoot N.J., Longley J.I.;
-RT   "The 3' terminal sequences of human alpha and beta globin messenger RNAs:
-RT   comparison with rabbit globin messenger RNA";
 
 
   [Part of this file has been deleted for brevity]
@@ -302,7 +309,7 @@ Output file format
 ##sequence-region U01317 1 65963
 #!Date 2008-07-15
 #!Type DNA
-#!Source-version EMBOSS 6.0.0
+#!Source-version EMBOSS 6.1.0
 U01317  marscan regulatory_region       2242    2458    0.000   +       .
 ID="U01317.1";note="*type MAR/SAR recognition site (MRS)";note="*start8bp 2451"
 ;note="*end8bp 2458";note="*start16bp 2242";note="*end16bp 2257"
@@ -403,18 +410,18 @@ Known bugs
 
 See also
 
-   Program name Description
-   dreg Regular expression search of nucleotide sequence(s)
-   fuzznuc Search for patterns in nucleotide sequences
-   fuzztran Search for patterns in protein sequences (translated)
-   getorf Finds and extracts open reading frames (ORFs)
-   plotorf Plot potential open reading frames in a nucleotide sequence
-   showorf Display a nucleotide sequence and translation in pretty format
-   sixpack Display a DNA sequence with 6-frame translation and ORFs
-   syco Draw synonymous codon usage statictic plot for a nucleotide
-   sequence
-   tcode Identify protein-coding regions using Fickett TESTCODE statistic
-   wobble Plot third base position variability in a nucleotide sequence
+   Program name     Description
+   dreg             Regular expression search of nucleotide sequence(s)
+   fuzznuc          Search for patterns in nucleotide sequences
+   fuzztran         Search for patterns in protein sequences (translated)
+   getorf           Finds and extracts open reading frames (ORFs)
+   plotorf          Plot potential open reading frames in a nucleotide sequence
+   showorf          Display a nucleotide sequence and translation in pretty format
+   sixpack          Display a DNA sequence with 6-frame translation and ORFs
+   syco             Draw synonymous codon usage statictic plot for a nucleotide
+                    sequence
+   tcode            Identify protein-coding regions using Fickett TESTCODE statistic
+   wobble           Plot third base position variability in a nucleotide sequence
 
 Author(s)
 

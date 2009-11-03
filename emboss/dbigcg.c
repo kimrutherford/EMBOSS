@@ -860,7 +860,7 @@ static ajint dbigcg_pirgetent(const AjPStr idformat,
     ajint gcglen;
     AjPStr rline = NULL;
     AjPStr sline = NULL;
-    ajint spos = 0;
+    ajlong spos = 0;
 
     if(!called)
     {

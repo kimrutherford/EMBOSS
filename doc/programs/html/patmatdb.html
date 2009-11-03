@@ -22,6 +22,18 @@ patmatdb
 
 
 <H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
     Function
 </H2>
 Searches protein sequences with a sequence motif
@@ -52,7 +64,7 @@ Algorithm
 Searches protein sequences with a sequence motif
 Input protein sequence(s): <b>tsw:*</b>
 Protein motif to search for: <b>st[ty]s</b>
-Output report [edd1_rat.patmatdb]: <b></b>
+Output report [12s1_arath.patmatdb]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -297,7 +309,7 @@ By default <b>patmatdb</b> writes a 'dbmotif' report file.
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: edd1_rat.patmatdb </h3>
+<p><h3>File: 12s1_arath.patmatdb </h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ########################################
@@ -307,30 +319,9 @@ By default <b>patmatdb</b> writes a 'dbmotif' report file.
 #    -sequence "tsw:*"
 #    -motif "st[ty]s"
 # Report_format: dbmotif
-# Report_file: edd1_rat.patmatdb
+# Report_file: 12s1_arath.patmatdb
 ########################################
 
-#=======================================
-#
-# Sequence: HD_FUGRU     from: 1   to: 3148
-# HitCount: 1
-#
-# Motif: ST[TY]S
-#
-#=======================================
-
-Length = 4
-Start = position 1038 of sequence
-End = position 1041 of sequence
-
-
-STPASSTTSSAVDP
-     |  |
-  1038  1041
-
-
-#---------------------------------------
-#---------------------------------------
 #=======================================
 #
 # Sequence: GCN4_YEAST     from: 1   to: 281
@@ -348,6 +339,27 @@ End = position 161 of sequence
 SNLEVSTTSFLPTP
      |  |
    158  161
+
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: HD_FUGRU     from: 1   to: 3148
+# HitCount: 1
+#
+# Motif: ST[TY]S
+#
+#=======================================
+
+Length = 4
+Start = position 1038 of sequence
+End = position 1041 of sequence
+
+
+STPASSTTSSAVDP
+     |  |
+  1038  1041
 
 
 #---------------------------------------
@@ -375,8 +387,10 @@ LADLESTTSHISKR
 #---------------------------------------
 
 #---------------------------------------
-# Total_sequences: 3
-# Total_hitcount: 3
+# Total_sequences: 100
+# Total_length: 35263
+# Reported_sequences: 3
+# Reported_hitcount: 3
 #---------------------------------------
 </pre>
 </td></tr></table><p>

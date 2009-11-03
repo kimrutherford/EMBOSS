@@ -49,6 +49,7 @@ static struct binding ** tableFreeSet = NULL;
 
 static void tableStrDel(void** key, void** value, void* cl);
 static void tableStrDelKey(void** key, void** value, void* cl);
+static void tableFreeSetExpand (void);
 
 
 /* @filesection ajtable ********************************************************
@@ -131,6 +132,8 @@ static ajuint tableHashAtom(const void *key, ajuint hashsize)
 }
 
 
+
+
 /* @section Constructors ******************************************************
 **
 ** Constructors for hash tables
@@ -197,7 +200,7 @@ AjPTable ajTableNewFunctionLen(ajuint size,
     for(i = 1; primes[i] < hint; i++); /* else use default i=0 */
 
     iprime = primes[i-1];
-    ajDebug("ajTableNewFunctionLen hint %d size %d\n", hint, iprime);
+    /*ajDebug("ajTableNewFunctionLen hint %d size %d\n", hint, iprime);*/
 
     table = AJALLOC(sizeof(*table) +
 		    iprime*sizeof(table->buckets[0]));
@@ -208,6 +211,7 @@ AjPTable ajTableNewFunctionLen(ajuint size,
 
     for(i = 0; i < table->size; i++)
 	table->buckets[i] = NULL;
+
     table->length = 0;
     table->timestamp = 0;
 
@@ -223,6 +227,9 @@ AjPTable ajTableNewFunctionLen(ajuint size,
 
     return table;
 }
+
+
+
 
 /* @obsolete ajTableNewL
 ** @rename ajTableNewFunctionLen
@@ -251,6 +258,8 @@ __deprecated AjPTable ajTableNew(ajuint hint,
 }
 
 
+
+
 /* @func ajTableNewLen *********************************************************
 **
 ** creates, initialises, and returns a new, empty table that expects
@@ -271,6 +280,9 @@ AjPTable ajTableNewLen(ajuint size)
 {
     return ajTableNewFunctionLen(size, tableCmpAtom, tableHashAtom);
 }
+
+
+
 
 /* @section Retrieval **********************************************************
 **
@@ -318,16 +330,21 @@ void * ajTableFetch(const AjPTable table, const void *key)
 
     if(!table)
 	return NULL;
+
     if (!key)
 	return NULL;
 
     i = (*table->hash)(key, table->size);
+
     for(p = table->buckets[i]; p; p = p->link)
 	if((*table->cmp)(key, p->key) == 0)
 	    break;
 
     return p ? p->value : NULL;
 }
+
+
+
 
 /* @obsolete ajTableGet
 ** @rename ajTableFetch
@@ -337,6 +354,8 @@ __deprecated void * ajTableGet(const AjPTable table, const void *key)
 {
     return ajTableFetch(table, key);
 }
+
+
 
 
 /* @func ajTableFetchKey ******************************************************
@@ -360,16 +379,21 @@ const void * ajTableFetchKey(const AjPTable table, const void *key)
 
     if (!table)
 	return NULL;
+
     if (!key)
 	return NULL;
 
     i = (*table->hash)(key, table->size);
+
     for(p = table->buckets[i]; p; p = p->link)
 	if((*table->cmp)(key, p->key) == 0)
 	    break;
 
     return p ? (const void*)p->key : NULL;
 }
+
+
+
 
 /* @obsolete ajTableKey
 ** @rename ajTableGetKey
@@ -379,6 +403,9 @@ __deprecated const void * ajTableKey(const AjPTable table, const void *key)
 {
     return ajTableFetchKey(table, key);
 }
+
+
+
 
 /* @func ajTableGetLength ****************************************************
 **
@@ -399,6 +426,9 @@ ajuint ajTableGetLength(const AjPTable table)
     return table->length;
 }
 
+
+
+
 /* @obsolete ajTableLength
 ** @rename ajTableGetLength
 */
@@ -408,21 +438,21 @@ __deprecated ajint ajTableLength(const AjPTable table)
     return (ajuint) ajTableGetLength(table);
 }
 
+
+
+
 /* @func ajTableToarray *******************************************************
 **
-** creates a 2N+1 element array that holds the N key-value pairs
-** in table in an unspecified order and returns a pointer to the
-** first element. The keys appear in the even-numbered array
-** elements and the corresponding values appear in the following
-** odd-numbered elements; element 2N is end.
+** creates two N+1 element arrays that holds the N key-value pairs
+** in table in an unspecified order and returns the number of elements.
+** The final element of the array is NULL.
 **
 ** @param [r] table [const AjPTable] Table
 ** @param [w] keyarray [void***] NULL terminated array of keys.
-** @param [w] valarray [void***] NULL terminated array of s.
+** @param [w] valarray [void***] NULL terminated array of values.
 ** @return [ajuint] size of arrays returned
-** @category cast [AjPTable] Creates an array to hold each key
-**                value pair in pairs of array elements. The last
-**                element is null.
+** @category cast [AjPTable] Creates two array to hold each key
+**                value pair. The last element of each array is null.
 ** @@
 ******************************************************************************/
 
@@ -504,10 +534,10 @@ void ajTableTrace(const AjPTable table)
 	if(table->buckets[i])
 	{
 	    j = 0;
+
 	    for(p = table->buckets[i]; p; p = p->link)
-	    {
 		j++;
-	    }
+
 	    k += j;
 	}
 
@@ -515,6 +545,7 @@ void ajTableTrace(const AjPTable table)
 
     return;
 }
+
 
 
 
@@ -561,10 +592,12 @@ void * ajTablePut(AjPTable table, void *key, void *value)
 
     if(!table)
 	return NULL;
+
     if(!key)
 	return NULL;
 
     i = (*table->hash)(key, table->size);
+
     for(p = table->buckets[i]; p; p = p->link)
 	if((*table->cmp)(key, p->key) == 0)
 	    break;
@@ -575,6 +608,7 @@ void * ajTablePut(AjPTable table, void *key, void *value)
             p = tableFreeSet[--tableFreeNext];
         else
             AJNEW0(p);
+
 	p->key = key;
 	p->link = table->buckets[i];
 	table->buckets[i] = p;
@@ -591,6 +625,9 @@ void * ajTablePut(AjPTable table, void *key, void *value)
 
     return prev;
 }
+
+
+
 
 /* @func ajTableRemove ********************************************************
 **
@@ -614,22 +651,27 @@ void * ajTableRemove(AjPTable table, const void *key)
 
     if(!table)
 	return NULL;
+
     if(!key)
 	return NULL;
 
     table->timestamp++;
     i = (*table->hash)(key, table->size);
+
     for(pp = &table->buckets[i]; *pp; pp = &(*pp)->link)
 	if((*table->cmp)(key, (*pp)->key) == 0)
 	{
 	    struct binding *p = *pp;
 	    void *value = p->value;
 	    *pp = p->link;
+
             if(tableFreeNext >= tableFreeMax)
                 AJFREE(p);
             else
                 tableFreeSet[tableFreeNext++] = p;
+
 	    table->length--;
+
 	    return value;
 	}
 
@@ -662,11 +704,13 @@ void * ajTableRemoveKey(AjPTable table, const void *key, void** truekey)
 
     if(!table)
 	return NULL;
+
     if(!key)
 	return NULL;
 
     table->timestamp++;
     i = (*table->hash)(key, table->size);
+
     for(pp = &table->buckets[i]; *pp; pp = &(*pp)->link)
 	if((*table->cmp)(key, (*pp)->key) == 0)
 	{
@@ -674,11 +718,14 @@ void * ajTableRemoveKey(AjPTable table, const void *key, void** truekey)
 	    void *value = p->value;
 	    *truekey = p->key;
 	    *pp = p->link;
+
             if(tableFreeNext >= tableFreeMax)
                 AJFREE(p);
             else
                 tableFreeSet[tableFreeNext++] = p;
+
 	    table->length--;
+
 	    return value;
 	}
 
@@ -738,6 +785,7 @@ void ajTableMap(AjPTable table,
 	return;
 
     stamp = table->timestamp;
+
     for(i = 0; i < table->size; i++)
 	for(p = table->buckets[i]; p; p = p->link)
 	{
@@ -774,18 +822,31 @@ void ajTableMapDel(AjPTable table,
 {
     ajuint i;
     ajuint stamp;
-    struct binding *p;
+    struct binding *p, *q;
 
     if(!table)
 	return;
 
     stamp = table->timestamp;
+
     for(i = 0; i < table->size; i++)
-	for(p = table->buckets[i]; p; p = p->link)
+    {
+	for(p = table->buckets[i]; p; p = q)
 	{
+            q = p->link;
+
 	    apply(&p->key, &p->value, cl);
 	    assert(table->timestamp == stamp);
+            table->length--;
+            if(tableFreeNext >= tableFreeMax)
+                tableFreeSetExpand();
+            if(tableFreeNext >= tableFreeMax)
+                AJFREE(p);
+            else
+                tableFreeSet[tableFreeNext++] = p;
 	}
+        table->buckets[i] = NULL;
+    }
 
     return;
 }
@@ -820,17 +881,22 @@ void ajTableMapDel(AjPTable table,
 static void tableFreeSetExpand (void)
 {
     ajint newsize;
+
     if(!tableFreeSet)
     {
         tableFreeMax = 1024;
         AJCNEW0(tableFreeSet,tableFreeMax);
+
         return;
     }
+
     if(tableFreeMax >= 65536)
         return;
+
     newsize = tableFreeMax + tableFreeMax;
     AJCRESIZE0(tableFreeSet, tableFreeMax, newsize);
     tableFreeMax = newsize;
+
     return;
 }
 
@@ -859,10 +925,13 @@ void ajTableFree(AjPTable* Ptable)
     if((*Ptable)->length > 0)
     {
 	struct binding *p, *q;
+
 	for(i = 0; i < (*Ptable)->size; i++)
-	    for(p = (*Ptable)->buckets[i]; p; p = q)
+	{
+            for(p = (*Ptable)->buckets[i]; p; p = q)
 	    {
 		q = p->link;
+
                 if(tableFreeNext >= tableFreeMax)
                     tableFreeSetExpand();
                 if(tableFreeNext >= tableFreeMax)
@@ -870,13 +939,14 @@ void ajTableFree(AjPTable* Ptable)
                 else
                     tableFreeSet[tableFreeNext++] = p;
             }
+            (*Ptable)->buckets[i] = NULL;
+        }
     }
 
     AJFREE(*Ptable);
 
     return;
 }
-
 
 
 
@@ -931,11 +1001,14 @@ void ajTableExit(void)
 }
 
 
+
+
 /* @datasection [AjPTable] String hash tables *********************************
 **
 ** @nam2rule Tablestr String hash tables
 **
 ******************************************************************************/
+
 
 
 
@@ -995,7 +1068,6 @@ AjPTable ajTablestrNewCase(void)
 
 
 
-
 /* @func ajTablestrNewCaseLen *************************************************
 **
 ** Creates, initialises, and returns a new, empty table that can hold a
@@ -1014,6 +1086,8 @@ AjPTable ajTablestrNewCaseLen(ajuint size)
 {
     return ajTableNewFunctionLen(size, ajTablestrCmpCase, ajTablestrHashCase);
 }
+
+
 
 
 /* @func ajTablestrNewLen *****************************************************
@@ -1074,16 +1148,21 @@ const AjPStr ajTablestrFetch(const AjPTable table, const AjPStr key)
 
     if(!table)
 	return NULL;
+
     if (!key)
 	return NULL;
 
     i = (*table->hash)(key, table->size);
+
     for(p = table->buckets[i]; p; p = p->link)
 	if((*table->cmp)(key, p->key) == 0)
 	    break;
 
     return p ? (const AjPStr) p->value : NULL;
 }
+
+
+
 
 /* @section Modify ************************************************************
 **
@@ -1121,16 +1200,21 @@ AjPStr* ajTablestrFetchmod(AjPTable table, const AjPStr key)
 
     if(!table)
 	return NULL;
+
     if (!key)
 	return NULL;
 
     i = (*table->hash)(key, table->size);
+
     for(p = table->buckets[i]; p; p = p->link)
 	if((*table->cmp)(key, p->key) == 0)
 	    break;
 
     return p ? (AjPStr*) (&p->value) : NULL;
 }
+
+
+
 
 /* @section Comparison functions **********************************************
 **
@@ -1177,6 +1261,9 @@ ajint ajTablestrCmp(const void* x, const void* y)
     return (ajint)ajStrCmpS(sx, sy);
 }
 
+
+
+
 /* @obsolete ajStrTableCmp
 ** @rename ajTablestrCmp
 */
@@ -1185,6 +1272,9 @@ __deprecated ajint ajStrTableCmp(const void* x, const void* y)
 {
     return ajTablestrCmp(x, y);
 }
+
+
+
 
 /* @func ajTablestrCmpCase ****************************************************
 **
@@ -1209,6 +1299,9 @@ ajint ajTablestrCmpCase(const void* x, const void* y)
     return (ajint)ajStrCmpCaseS(sx, sy);
 }
 
+
+
+
 /* @obsolete ajStrTableCmpCase
 ** @rename ajTablestrCmpCase
 */
@@ -1217,6 +1310,8 @@ __deprecated ajint ajStrTableCmpCase(const void* x, const void* y)
 {
     return ajTablestrCmpCase(x, y);
 }
+
+
 
 
 /* @func ajTablestrHash *******************************************************
@@ -1244,6 +1339,9 @@ ajuint ajTablestrHash(const void* key, ajuint hashsize)
     return hash;
 }
 
+
+
+
 /* @obsolete ajStrTableHash
 ** @rename ajTablestrHash
 */
@@ -1252,6 +1350,8 @@ __deprecated ajuint ajStrTableHash(const void* key, ajuint hashsize)
 {
     return ajTablestrHash(key, hashsize);
 }
+
+
 
 
 /* @func ajTablestrHashCase ***************************************************
@@ -1281,6 +1381,8 @@ ajuint ajTablestrHashCase(const void* key, ajuint hashsize)
 }
 
 
+
+
 /* @obsolete ajStrTableHashCase
 ** @rename ajTablestrHashCase
 */
@@ -1289,6 +1391,9 @@ __deprecated ajuint ajStrTableHashCase(const void* key, ajuint hashsize)
 {
     return ajTablestrHashCase(key, hashsize);
 }
+
+
+
 
 /* @section Trace functions ***************************************************
 **
@@ -1322,15 +1427,16 @@ void ajTablestrPrint(const AjPTable table)
 
     if(!table)
 	return;
+
     for(i = 0; i < table->size; i++)
 	for(p = table->buckets[i]; p; p = p->link)
-	{
 	    ajUser("key '%S' value '%S'",
 		   (const AjPStr) p->key, (AjPStr) p->value);
-	}
 
     return;
 }
+
+
 
 
 /* @obsolete ajStrTablePrint
@@ -1341,6 +1447,9 @@ __deprecated void ajStrTablePrint(const AjPTable table)
 {
     ajTablestrPrint(table);
 }
+
+
+
 
 /* @func ajTablestrTrace ******************************************************
 **
@@ -1372,12 +1481,14 @@ void ajTablestrTrace(const AjPTable table)
 	{
 	    j = 0;
 	    ajDebug("buckets[%d]\n", i);
+
 	    for(p = table->buckets[i]; p; p = p->link)
 	    {
 		ajDebug("   '%S' => '%S'\n",
 			(const AjPStr) p->key, (AjPStr) p->value);
 		j++;
 	    }
+
 	    k += j;
 	}
 
@@ -1386,6 +1497,9 @@ void ajTablestrTrace(const AjPTable table)
     return;
 }
 
+
+
+
 /* @obsolete ajStrTableTrace
 ** @rename ajTablestrTrace
 */
@@ -1393,8 +1507,12 @@ void ajTablestrTrace(const AjPTable table)
 __deprecated void ajStrTableTrace(const AjPTable table)
 {
     ajTablestrTrace(table);
+
     return;
 }
+
+
+
 
 /* @section Destructors *******************************************************
 **
@@ -1439,6 +1557,8 @@ void ajTablestrFree(AjPTable* Ptable)
 }
 
 
+
+
 /* @obsolete ajStrTableFree
 ** @rename ajTablestrFree
 */
@@ -1446,8 +1566,12 @@ void ajTablestrFree(AjPTable* Ptable)
 __deprecated void ajStrTableFree(AjPTable* ptable)
 {
     ajTablestrFree(ptable);
+
     return;
 }
+
+
+
 
 /* @func ajTablestrFreeKey ****************************************************
 **
@@ -1473,6 +1597,9 @@ void ajTablestrFreeKey(AjPTable* Ptable)
     return;
 }
 
+
+
+
 /* @obsolete ajStrTableFreeKey
 ** @rename ajTablestrFreeKey
 */
@@ -1480,8 +1607,11 @@ void ajTablestrFreeKey(AjPTable* Ptable)
 __deprecated void ajStrTableFreeKey(AjPTable* ptable)
 {
     ajTablestrFreeKey(ptable);
+
     return;
 }
+
+
 
 
 /* @funcstatic tableStrDel ****************************************************
@@ -1546,6 +1676,9 @@ static void tableStrDelKey(void** key, void** value, void* cl)
     return;
 }
 
+
+
+
 /* @datasection [AjPTable] Character hash tables *******************************
 **
 ** @nam2rule Tablechar
@@ -1583,6 +1716,9 @@ AjPTable ajTablecharNew(void)
     return ajTableNewFunctionLen(100, ajTablecharCmp, ajTablecharHash);
 }
 
+
+
+
 /* @func ajTablecharNewCase ***************************************************
 **
 ** Creates a table with a character string key and case insensitive searching.
@@ -1595,6 +1731,9 @@ AjPTable ajTablecharNewCase(void)
 {
     return ajTableNewFunctionLen(100, ajTablecharCmpCase, ajTablecharHashCase);
 }
+
+
+
 
 /* @func ajTablecharNewCaseLen ************************************************
 **
@@ -1610,6 +1749,9 @@ AjPTable ajTablecharNewCaseLen(ajuint size)
     return ajTableNewFunctionLen(size, ajTablecharCmpCase, ajTablecharHashCase);
 }
 
+
+
+
 /* @obsolete ajStrTableNewCaseC
 ** @rename ajTablecharNewCaseLen
 */
@@ -1619,6 +1761,9 @@ __deprecated AjPTable ajStrTableNewCaseC(ajuint hint)
     return ajTablecharNewCaseLen(hint);
 }
 
+
+
+
 /* @obsolete ajStrTableNewCase
 ** @rename ajTablestrNewCaseLen
 */
@@ -1627,6 +1772,8 @@ __deprecated AjPTable ajStrTableNewCase(ajuint hint)
 {
     return ajTablestrNewCaseLen(hint);
 }
+
+
 
 
 /* @func ajTablecharNewLen ****************************************************
@@ -1645,6 +1792,7 @@ AjPTable ajTablecharNewLen(ajuint size)
 
 
 
+
 /* @obsolete ajStrTableNewC
 ** @rename ajTablecharNewLen
 */
@@ -1653,6 +1801,8 @@ __deprecated AjPTable ajStrTableNewC(ajuint hint)
 {
     return ajTablecharNewLen(hint);
 }
+
+
 
 
 /* @obsolete ajStrTableNew
@@ -1713,6 +1863,8 @@ ajint ajTablecharCmp(const void* x, const void* y)
 }
 
 
+
+
 /* @obsolete ajStrTableCmpC
 ** @rename ajTablecharCmp
 */
@@ -1721,6 +1873,9 @@ __deprecated ajint ajStrTableCmpC(const void* x, const void* y)
 {
     return ajTablecharCmp(x, y);
 }
+
+
+
 
 /* @func ajTablecharCmpCase ***************************************************
 **
@@ -1745,6 +1900,9 @@ ajint ajTablecharCmpCase(const void* x, const void* y)
     return (ajint)ajCharCmpCase(sx, sy);
 }
 
+
+
+
 /* @obsolete ajStrTableCmpCaseC
 ** @rename ajTablecharCmpCase
 */
@@ -1753,6 +1911,9 @@ __deprecated ajint ajStrTableCmpCaseC(const void* x, const void* y)
 {
     return ajTablecharCmpCase(x, y);
 }
+
+
+
 
 /* @func ajTablecharHash ******************************************************
 **
@@ -1778,6 +1939,8 @@ ajuint ajTablecharHash(const void* key, ajuint hashsize)
 }
 
 
+
+
 /* @obsolete ajStrTableHashC
 ** @rename ajTablecharHash
 */
@@ -1786,6 +1949,9 @@ __deprecated ajuint ajStrTableHashC(const void* key, ajuint hashsize)
 {
     return ajTablecharHash(key, hashsize);
 }
+
+
+
 
 /* @func ajTablecharHashCase **************************************************
 **
@@ -1811,6 +1977,9 @@ ajuint ajTablecharHashCase(const void* key, ajuint hashsize)
     return hash;
 }
 
+
+
+
 /* @obsolete ajStrTableHashCaseC
 ** @rename ajTablecharHashCase
 */
@@ -1819,6 +1988,8 @@ __deprecated ajuint ajStrTableHashCaseC(const void* key, ajuint hashsize)
 {
     return ajTablecharHashCase(key, hashsize);
 }
+
+
 
 
 /* @section Trace functions ***************************************************
@@ -1853,6 +2024,7 @@ void ajTablecharPrint(const AjPTable table)
 
     if(!table)
 	return;
+
     for(i = 0; i < table->size; i++)
 	for(p = table->buckets[i]; p; p = p->link)
 	{
@@ -1863,6 +2035,9 @@ void ajTablecharPrint(const AjPTable table)
     return;
 }
 
+
+
+
 /* @obsolete ajStrTablePrintC
 ** @rename ajTablecharPrint
 */
@@ -1870,6 +2045,6 @@ void ajTablecharPrint(const AjPTable table)
 __deprecated void ajStrTablePrintC(const AjPTable table)
 {
     ajTablecharPrint(table);
+
     return;
 }
-

@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Display restriction enzyme binding sites in a nucleotide sequence
@@ -155,6 +162,8 @@ Command line arguments
                                   for restriction enzyme recognition site and
                                   cut postions that span the end of the
                                   sequence to be considered.
+   -methylation        boolean    [N] If this is set then RE recognition sites
+                                  will not match methylated bases.
    -[no]commercial     boolean    [Y] If this is set, then only those enzymes
                                   with a commercial supplier will be searched
                                   for. This qualifier is ignored if you have
@@ -221,6 +230,8 @@ Command line arguments
                                   them.
 
    Advanced (Unprompted) qualifiers:
+   -mfile              datafile   [Emethylsites.dat] Restriction enzyme data
+                                  file (optional)
    -[no]translation    boolean    [Y] This displays the 6-frame translations
                                   of the sequence in the output.
    -[no]reverse        boolean    [Y] This displays the cut sites and
@@ -259,7 +270,7 @@ Command line arguments
                                   24-45 blue 56-78 orange
                                   1-100 green 120-156 red
                                   A file of ranges to colour (one range per
-                                  line) can be specifed as '@filename'.
+                                  line) can be specified as '@filename'.
    -threeletter        boolean    [N] Display protein sequences in
                                   three-letter code
    -number             boolean    [N] Number the sequences
@@ -343,6 +354,7 @@ OC   Enterobacteriaceae; Escherichia.
 XX
 RN   [1]
 RP   1243-1266
+RX   DOI; 10.1073/pnas.70.12.3581.
 RX   PUBMED; 4587255.
 RA   Gilbert W., Maxam A.;
 RT   "The nucleotide sequence of the lac operator";
@@ -350,6 +362,7 @@ RL   Proc. Natl. Acad. Sci. U.S.A. 70(12):3581-3584(1973).
 XX
 RN   [2]
 RP   1246-1308
+RX   DOI; 10.1073/pnas.70.12.3585.
 RX   PUBMED; 4587256.
 RA   Maizels N.M.;
 RT   "The nucleotide sequence of the lactose messenger ribonucleic acid
@@ -371,8 +384,6 @@ RL   Walter de Gruyter, New York (1975)
 XX
 RN   [5]
 RP   1146-1282
-RX   PUBMED; 1088926.
-RA   Dickson R.C., Abelson J.N., Barnes W.M., Reznikoff W.S.;
 
 
   [Part of this file has been deleted for brevity]
@@ -937,36 +948,37 @@ Known bugs
 
 See also
 
-   Program name Description
-   abiview Display the trace in an ABI sequencer file
-   backtranambig Back-translate a protein sequence to ambiguous
-   nucleotide sequence
-   backtranseq Back-translate a protein sequence to a nucleotide sequence
-   cirdna Draws circular maps of DNA constructs
-   coderet Extract CDS, mRNA and translations from feature tables
-   lindna Draws linear maps of DNA constructs
-   pepnet Draw a helical net for a protein sequence
-   pepwheel Draw a helical wheel diagram for a protein sequence
-   plotorf Plot potential open reading frames in a nucleotide sequence
-   prettyplot Draw a sequence alignment with pretty formatting
-   prettyseq Write a nucleotide sequence and its translation to file
-   recoder Find restriction sites to remove (mutate) with no translation
-   change
-   redata Retrieve information from REBASE restriction enzyme database
-   restover Find restriction enzymes producing a specific overhang
-   restrict Report restriction enzyme cleavage sites in a nucleotide
-   sequence
-   seealso Finds programs with similar function to a specified program
-   showalign Display a multiple sequence alignment in pretty format
-   showdb Displays information on configured databases
-   showfeat Display features of a sequence in pretty format
-   showorf Display a nucleotide sequence and translation in pretty format
-   showseq Displays sequences with features in pretty format
-   silent Find restriction sites to insert (mutate) with no translation
-   change
-   sixpack Display a DNA sequence with 6-frame translation and ORFs
-   textsearch Search the textual description of sequence(s)
-   transeq Translate nucleic acid sequences
+   Program name     Description
+   abiview          Display the trace in an ABI sequencer file
+   backtranambig    Back-translate a protein sequence to ambiguous
+                    nucleotide sequence
+   backtranseq      Back-translate a protein sequence to a nucleotide sequence
+   cirdna           Draws circular maps of DNA constructs
+   coderet          Extract CDS, mRNA and translations from feature tables
+   lindna           Draws linear maps of DNA constructs
+   pepnet           Draw a helical net for a protein sequence
+   pepwheel         Draw a helical wheel diagram for a protein sequence
+   plotorf          Plot potential open reading frames in a nucleotide sequence
+   prettyplot       Draw a sequence alignment with pretty formatting
+   prettyseq        Write a nucleotide sequence and its translation to file
+   recoder          Find restriction sites to remove (mutate) with no translation
+                    change
+   redata           Retrieve information from REBASE restriction enzyme database
+   restover         Find restriction enzymes producing a specific overhang
+   restrict         Report restriction enzyme cleavage sites in a nucleotide
+                    sequence
+   seealso          Finds programs with similar function to a specified program
+   showalign        Display a multiple sequence alignment in pretty format
+   showdb           Displays information on configured databases
+   showfeat         Display features of a sequence in pretty format
+   showorf          Display a nucleotide sequence and translation in pretty format
+   showpep          Displays protein sequences with features in pretty format
+   showseq          Displays sequences with features in pretty format
+   silent           Find restriction sites to insert (mutate) with no translation
+                    change
+   sixpack          Display a DNA sequence with 6-frame translation and ORFs
+   textsearch       Search the textual description of sequence(s)
+   transeq          Translate nucleic acid sequences
 
 Author(s)
 

@@ -20,6 +20,12 @@ section: input [
     knowntype: "restriction enzyme data"
   ]
 
+  datafile: mfile [
+    default: "Emethylsites.dat"
+    information: "Restriction enzyme data file (optional)"
+    knowntype: "restriction enzyme methylation data"
+  ]
+
 endsection: input
 
 section: required [
@@ -83,6 +89,13 @@ section: advanced [
   boolean: plasmid [
     default: "N"
     information: "Allow circular DNA"
+  ]
+
+  boolean: methylation [
+    default: "N"
+    information: "Use methylation data"
+    help: "If this is set then RE recognition sites will not match
+           methylated bases."
   ]
 
   boolean: commercial [

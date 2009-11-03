@@ -7,7 +7,7 @@
 
 <tr>
 <td>[-sequence]<br>(Parameter 1)</td>
-<td>(Gapped) sequence(s) filename and optional format, or reference (input USA)</td>
+<td>(Gapped) nucleotide sequence(s) filename and optional format, or reference (input USA)</td>
 <td>Readable sequence(s)</td>
 <td><b>Required</b></td>
 </tr>
@@ -48,10 +48,23 @@ The positions are integers.
 They are separated by any non-digit, non-alpha character.
 Examples of region specifications are:
 24-45, 56-78
-1:45, 67=99;765..888
-1,5,8,10,23,45,57,99</td>
+1:45, 67=99;765..888</td>
 <td>Sequence range</td>
 <td>If this is left blank the complete sequence is translated.</td>
+</tr>
+
+<tr>
+<td>-revtranslate</td>
+<td>Regions to translate (if translating).
+If this is left blank the complete sequence is translated.
+A set of regions is specified by a set of pairs of positions.
+The positions are integers.
+They are separated by any non-digit, non-alpha character.
+Examples of region specifications are:
+78-56, 45-24,
+888..765, 99=67; 45:1</td>
+<td>Sequence range</td>
+<td>If this is left blank the complete reverse sequence is translated.</td>
 </tr>
 
 <tr>
@@ -123,7 +136,7 @@ PpiI</td>
 </tr>
 
 <tr>
-<td>-matchsource</td>
+<td>-sourcematch</td>
 <td>By default any feature source in the feature table is shown. You can set this to match any feature source you wish to show.
 The source name is usually either the name of the program that detected the feature or it is the feature table (eg: EMBL) that the feature came from.
 The source may be wildcarded by using '*'.
@@ -134,7 +147,7 @@ gene* | embl</td>
 </tr>
 
 <tr>
-<td>-matchtype</td>
+<td>-typematch</td>
 <td>By default any feature type in the feature table is shown. You can set this to match any feature type you wish to show.
 See http://www3.ebi.ac.uk/Services/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www.expasy.ch/txt/userman.txt for a list of the Swissprot feature types.
 The type may be wildcarded by using '*'.
@@ -145,7 +158,7 @@ If you wish to show more than one type, separate their names with the character 
 </tr>
 
 <tr>
-<td>-matchsense</td>
+<td>-sensematch</td>
 <td>By default any feature type in the feature table is shown. You can set this to match any feature sense you wish to show. 0 - any sense, 1 - forward sense, -1 - reverse sense</td>
 <td>Any integer value</td>
 <td>0 - any sense, 1 - forward sense, -1 - reverse sense</td>
@@ -153,20 +166,21 @@ If you wish to show more than one type, separate their names with the character 
 
 <tr>
 <td>-minscore</td>
-<td>If this is greater than or equal to the maximum score, then any score is permitted</td>
+<td>Minimum score of feature to display (see also maxscore)</td>
 <td>Any numeric value</td>
 <td>0.0</td>
 </tr>
 
 <tr>
 <td>-maxscore</td>
-<td>If this is less than or equal to the maximum score, then any score is permitted</td>
+<td>Maximum score of feature to display.
+If both minscore and maxscore are zero (the default), then any score is ignored</td>
 <td>Any numeric value</td>
 <td>0.0</td>
 </tr>
 
 <tr>
-<td>-matchtag</td>
+<td>-tagmatch</td>
 <td>Tags are the types of extra values that a feature may have. For example in the EMBL feature table, a 'CDS' type of feature may have the tags '/codon', '/codon_start', '/db_xref', '/EC_number', '/evidence', '/exception', '/function', '/gene', '/label', '/map', '/note', '/number', '/partial', '/product', '/protein_id', '/pseudo', '/standard_name', '/translation', '/transl_except', '/transl_table', or '/usedin'. Some of these tags also have values, for example '/gene' can have the value of the gene name.
 By default any feature tag in the feature table is shown. You can set this to match any feature tag you wish to show.
 The tag may be wildcarded by using '*'.
@@ -177,7 +191,7 @@ gene | label</td>
 </tr>
 
 <tr>
-<td>-matchvalue</td>
+<td>-valuematch</td>
 <td>Tag values are the values associated with a feature tag. Tags are the types of extra values that a feature may have. For example in the EMBL feature table, a 'CDS' type of feature may have the tags '/codon', '/codon_start', '/db_xref', '/EC_number', '/evidence', '/exception', '/function', '/gene', '/label', '/map', '/note', '/number', '/partial', '/product', '/protein_id', '/pseudo', '/standard_name', '/translation', '/transl_except', '/transl_table', or '/usedin'. Only some of these tags can have values, for example '/gene' can have the value of the gene name. By default any feature tag value in the feature table is shown. You can set this to match any feature tag valueyou wish to show.
 The tag value may be wildcarded by using '*'.
 If you wish to show more than one tag value, separate their names with the character '|', eg:
@@ -197,6 +211,13 @@ pax* | 10</td>
 <th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-mfile</td>
+<td>Restriction enzyme data file (optional)</td>
+<td>Data file</td>
+<td>Emethylsites.dat</td>
 </tr>
 
 <tr>
@@ -258,6 +279,13 @@ pax* | 10</td>
 <tr>
 <td>-plasmid</td>
 <td>If this is set then this allows searches for restriction enzyme recognition site and cut postions that span the end of the sequence to be considered.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-methylation</td>
+<td>If this is set then RE recognition sites will not match methylated bases.</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>

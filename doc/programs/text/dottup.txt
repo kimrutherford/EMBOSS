@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Displays a wordmatch dotplot of two sequences
@@ -40,7 +47,7 @@ Usage
    Here is a sample session with dottup
 
 
-% dottup tembl:j01636 tembl:v00294 -wordsize=6 -gtitle="v00294 vs j01636" -grap
+% dottup tembl:j01636 tembl:v00294 -wordsize=6 -gtitle='v00294 vs j01636' -grap
 h cps 
 Displays a wordmatch dotplot of two sequences
 
@@ -59,10 +66,10 @@ Command line arguments
    -wordsize           integer    [10] Word size (Integer 2 or more)
 *  -graph              graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, xterm, png, gif)
+                                  tekt, tek, none, data, das, xterm, png, gif)
 *  -xygraph            xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, xterm, png, gif)
+                                  tekt, tek, none, data, das, xterm, png, gif)
 
    Additional (Optional) qualifiers (* if not always prompted):
 *  -[no]boxit          boolean    [Y] Draw a box around dotplot
@@ -171,6 +178,7 @@ OC   Enterobacteriaceae; Escherichia.
 XX
 RN   [1]
 RP   1243-1266
+RX   DOI; 10.1073/pnas.70.12.3581.
 RX   PUBMED; 4587255.
 RA   Gilbert W., Maxam A.;
 RT   "The nucleotide sequence of the lac operator";
@@ -178,6 +186,7 @@ RL   Proc. Natl. Acad. Sci. U.S.A. 70(12):3581-3584(1973).
 XX
 RN   [2]
 RP   1246-1308
+RX   DOI; 10.1073/pnas.70.12.3585.
 RX   PUBMED; 4587256.
 RA   Maizels N.M.;
 RT   "The nucleotide sequence of the lactose messenger ribonucleic acid
@@ -199,8 +208,6 @@ RL   Walter de Gruyter, New York (1975)
 XX
 RN   [5]
 RP   1146-1282
-RX   PUBMED; 1088926.
-RA   Dickson R.C., Abelson J.N., Barnes W.M., Reznikoff W.S.;
 
 
   [Part of this file has been deleted for brevity]
@@ -344,21 +351,8 @@ FT   CDS             31..1113
 FT                   /transl_table=11
 FT                   /note="reading frame"
 FT                   /db_xref="GOA:P03023"
-FT                   /db_xref="PDB:1CJG"
-FT                   /db_xref="PDB:1EFA"
-FT                   /db_xref="PDB:1JWL"
-FT                   /db_xref="PDB:1JYE"
-FT                   /db_xref="PDB:1JYF"
-FT                   /db_xref="PDB:1L1M"
-FT                   /db_xref="PDB:1LBG"
-FT                   /db_xref="PDB:1LBH"
-FT                   /db_xref="PDB:1LBI"
-FT                   /db_xref="PDB:1LCC"
-FT                   /db_xref="PDB:1LCD"
-FT                   /db_xref="PDB:1LQC"
-FT                   /db_xref="PDB:1LTP"
-FT                   /db_xref="PDB:1TLF"
-FT                   /db_xref="PDB:2BJC"
+FT                   /db_xref="InterPro:IPR001761"
+FT                   /db_xref="PDB:3EDC"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P03023"
 FT                   /protein_id="CAA23569.1"
 FT                   /translation="MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAE
@@ -456,31 +450,31 @@ Known bugs
 
 See also
 
-   Program name                          Description
-   dotmatcher   Draw a threshold dotplot of two sequences
-   dotpath      Draw a non-overlapping wordmatch dotplot of two sequences
-   polydot      Draw dotplots for all-against-all comparison of a sequence set
+                    Program name                          Description
+                    dotmatcher   Draw a threshold dotplot of two sequences
+                    dotpath      Draw a non-overlapping wordmatch dotplot of two sequences
+                    polydot      Draw dotplots for all-against-all comparison of a sequence set
 
-   dotmatcher, by comparison, moves a window of specified length up each
-   diagonal and displays a line over the window if the sum of the
-   comparisons (using a substitution matrix) exceeds a threshold. It is
-   slower but much more sensitive.
+                    dotmatcher, by comparison, moves a window of specified length up each
+                    diagonal and displays a line over the window if the sum of the
+                    comparisons (using a substitution matrix) exceeds a threshold. It is
+                    slower but much more sensitive.
 
 Author(s)
 
-   Ian Longden (il © sanger.ac.uk)
-   Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
-   CB10 1SA, UK.
+   Ian              Longden (il © sanger.ac.uk)
+   Sanger           Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
+                    CB10 1SA, UK.
 
 History
 
-   Completed 24th March 1999.
+                    Completed 24th March 1999.
 
 Target users
 
-   This program is intended to be used by everyone and everything, from
-   naive users to embedded scripts.
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
 
 Comments
 
-   None
+                    None

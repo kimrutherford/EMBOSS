@@ -50,6 +50,13 @@
 </tr>
 
 <tr>
+<td>-mfile</td>
+<td>Restriction enzyme data file (optional)</td>
+<td>Data file</td>
+<td>Emethylsites.dat</td>
+</tr>
+
+<tr>
 <td>-min</td>
 <td>Minimum cuts per RE</td>
 <td>Integer from 1 to 1000</td>
@@ -101,6 +108,13 @@
 <tr>
 <td>-plasmid</td>
 <td>Allow circular DNA</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-methylation</td>
+<td>If this is set then RE recognition sites will not match methylated bases.</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>

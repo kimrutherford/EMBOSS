@@ -394,19 +394,6 @@ public class PendingResults
       }
     });
     jobPanel.add(jobButton,BorderLayout.CENTER);
-    jobComboBox = new JComboBox(mysettings.modeVector());
-
-    updateMode();
-    jobComboBox.addActionListener(new ActionListener()
-    {
-      public void actionPerformed(ActionEvent e) 
-      {
-        JComboBox cb = (JComboBox)e.getSource();
-        String modeName = (String)cb.getSelectedItem();
-        mysettings.setCurrentMode(modeName);
-      }
-    });
-    jobPanel.add(jobComboBox,BorderLayout.EAST);
 
     Dimension d = jobPanel.getPreferredSize();
     d = new Dimension((int)d.getWidth(),
@@ -414,6 +401,26 @@ public class PendingResults
 
     jobPanel.setPreferredSize(d);
     return jobPanel;
+  }
+  
+  public JComboBox getExcModeComboBox(int width){
+      if (jobComboBox==null){
+      jobComboBox = new JComboBox(mysettings.modeVector());
+      jobComboBox.setMaximumSize(new Dimension(width, jobComboBox.getPreferredSize().height));
+      jobComboBox.setToolTipText("Job execution mode");
+      jobComboBox.setAlignmentX(Component.LEFT_ALIGNMENT);
+      jobComboBox.addActionListener(new ActionListener()
+      {
+        public void actionPerformed(ActionEvent e) 
+        {
+          JComboBox cb = (JComboBox)e.getSource();
+          String modeName = (String)cb.getSelectedItem();
+          mysettings.setCurrentMode(modeName);
+        }
+      });
+      }
+      updateMode();
+      return jobComboBox;
   }
 
   /**

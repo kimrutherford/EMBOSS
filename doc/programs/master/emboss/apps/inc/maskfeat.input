@@ -12,11 +12,11 @@ XX
 AC   AB000360;
 XX
 DT   27-OCT-1997 (Rel. 53, Created)
-DT   14-NOV-2006 (Rel. 89, Last updated, Version 3)
+DT   28-SEP-2008 (Rel. 97, Last updated, Version 5)
 XX
 DE   Homo sapiens PIGC gene, complete cds.
 XX
-KW   glycosylphosphatidylinositol-synthesis gene; PIGC.
+KW   .
 XX
 OS   Homo sapiens (human)
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
@@ -25,12 +25,11 @@ OC   Homo.
 XX
 RN   [1]
 RP   1-2582
-RA   Hong Y.;
+RA   Hong Y., Ohishi K., Inoue N., Endo Y., Fujita T., Takeda J., Kinoshita T.;
 RT   ;
 RL   Submitted (08-JAN-1997) to the EMBL/GenBank/DDBJ databases.
-RL   Yeongjin Hong, Research Institute for Microbial Diseases, Immunoregulation;
-RL   3-1 Yamada-oka, Suita, Osaka 565, Japan
-RL   (E-mail:kohishi@biken.osaka-u.ac.jp, Tel:81-6-879-8329, Fax:81-6-875-5233)
+RL   Contact:Yeongjin Hong Research Institute for Microbial Diseases,
+RL   Immunoregulation; 3-1 Yamada-oka, Suita, Osaka 565, Japan
 XX
 RN   [2]
 RX   DOI; 10.1006/geno.1997.4893.
@@ -57,6 +56,7 @@ FT                   /gene="PIGC"
 FT                   /standard_name="glycosylphosphatidylinositol-synthesis
 FT                   gene"
 FT                   /db_xref="GDB:6045444"
+FT                   /db_xref="GOA:Q92535"
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>

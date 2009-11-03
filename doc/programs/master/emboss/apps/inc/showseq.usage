@@ -85,22 +85,6 @@ Output file [x13776.showseq]: <b></b>
 <p>
 <b>Example 4</b>
 <p>
-Protein sequence can be displayed in three-letter codes. (The codes are displayed downwards, so the first code is 'Met'):  
-<p>
-
-<p>
-<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
-
-% <b>showseq tsw:rs24_fugru -three -format 2 </b>
-Displays sequences with features in pretty format
-Output file [rs24_fugru.showseq]: <b></b>
-
-</pre></td></tr></table><p>
-<p>
-<a href="#input.4">Go to the input files for this example</a><br><a href="#output.4">Go to the output files for this example</a><p><p>
-<p>
-<b>Example 5</b>
-<p>
 Number the sequence lines in the margin:  
 <p>
 
@@ -113,9 +97,9 @@ Output file [x13776.showseq]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
-<a href="#output.5">Go to the output files for this example</a><p><p>
+<a href="#output.4">Go to the output files for this example</a><p><p>
 <p>
-<b>Example 6</b>
+<b>Example 5</b>
 <p>
 Start the numbering at a specified value ('123' in this case): 
 <p>
@@ -129,9 +113,9 @@ Output file [x13776.showseq]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
-<a href="#output.6">Go to the output files for this example</a><p><p>
+<a href="#output.5">Go to the output files for this example</a><p><p>
 <p>
-<b>Example 7</b>
+<b>Example 6</b>
 <p>
 Make selected regions uppercase. (Use '-slower' to force the rest of the sequence to be lowercase).  
 <p>
@@ -139,7 +123,23 @@ Make selected regions uppercase. (Use '-slower' to force the rest of the sequenc
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>showseq tembl:x13776 -sbeg 1 -send 100 -format 1 -slower -upper '25-45,101-203,333-362' </b>
+% <b>showseq tembl:x13776 -sbeg 1 -send 100 -format 1 -slower -upper '8-24,65-81' </b>
+Displays sequences with features in pretty format
+Output file [x13776.showseq]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.6">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 7</b>
+<p>
+Translate selected regions:  
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showseq tembl:x13776 -sbeg 1 -send 120 -format 5 -trans 25-49,66-76 </b>
 Displays sequences with features in pretty format
 Output file [x13776.showseq]: <b></b>
 
@@ -148,22 +148,6 @@ Output file [x13776.showseq]: <b></b>
 <a href="#output.7">Go to the output files for this example</a><p><p>
 <p>
 <b>Example 8</b>
-<p>
-Translate selected regions:  
-<p>
-
-<p>
-<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
-
-% <b>showseq tembl:x13776 -sbeg 1 -send 120 -format 4 -trans 25-49,66-76 </b>
-Displays sequences with features in pretty format
-Output file [x13776.showseq]: <b></b>
-
-</pre></td></tr></table><p>
-<p>
-<a href="#output.8">Go to the output files for this example</a><p><p>
-<p>
-<b>Example 9</b>
 <p>
 Add your own annotation to the display: 
 <p>
@@ -177,4 +161,4 @@ Output file [x13776.showseq]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
-<a href="#output.9">Go to the output files for this example</a><p><p>
+<a href="#output.8">Go to the output files for this example</a><p><p>

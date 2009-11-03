@@ -24,6 +24,11 @@ Tim Carver   tjc@sanger.ac.uk
 
 Change Log:
 ---------------------------------------------------
+30-June-2009
+ 
+ * better integration with EMBOSS makefiles,
+   standalone jemboss comes out of the box when emboss installed
+
 03-July-2008
 
  * Jemboss and BuildProgramMenu classes were refactored with GUI improvements
@@ -56,12 +61,5 @@ Change Log:
     BuildProgramMenu class when launching EMBOSS applications
     
   * replaced the "Calculate sequence attributes" menu option
-    by "Get sequence lengths automatically" checkbox in SequenceList frame
-    
-  * added a new boolean property to store user preferences in the above checkbox
-  
-  * sequence lengths are not calculated if the entry is an existing file,
-    in SequenceList frame
-  
-
-     
+    by "Get sequence lengths automatically" checkbox in SequenceList frame,
+    (sequence lengths are not calculated if the entry is an existing file)

@@ -6,7 +6,7 @@
 # Timeout (TI line to set) default 60secs, diffseq needs more
 # Preprocess (PP line) command
 # Postprocess (QQ line) command - e.g. testing database builds, reusing output
-# EMBOSS_RC variable to read and extra .embossrc file (for new test dbs)
+# EMBOSS_RC variable to read an extra .embossrc file (for new test dbs)
 #
 ##########################
 # THINGS TO DO
@@ -302,13 +302,13 @@ sub runtest ($) {
   }
 
   if ($testq) {	# for "make check" apps (AQ lines) we can skip
-    if($packa eq "") {
+    if($packa eq "unknown") {
       $testpath = "../../emboss/"; #  up from the test/qa directory
     }
     else {
-      $testpath = "../../embassy/$packa/source/"; #  up from the test/qa directory
+      $testpath = "../../embassy/$packa/src/"; #  up from the test/qa directory
     }
-    if (! (-e "$testpath$testapp")) {$skipcheck++; return 0} # make check not run
+    if (! (-e "$testpath$testapp")) {$skipcheck++; print "not found '$testpath$testapp'\n";return 0} # make check not run
     if ($testappname && defined($acdname{$testapp}) && $acdname{$testapp}) {
       print STDERR "Check application $testapp installed - possible old version\n";
     }

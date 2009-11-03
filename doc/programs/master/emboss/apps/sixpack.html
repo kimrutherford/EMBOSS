@@ -29,7 +29,14 @@ IT IS DONE FOR YOU.
     Description
 </H2>
 
-<p><b>sixpack</b> reads a DNA sequence and writes an output file giving out the forward and reverse sense sequences with the three forward and (optionally) three reverse translations in a pretty display format.  A genetic code may be specified for the translation.  There are various options to control the appearance of the output file.  It also writes a file of protein sequences corresponding to any open reading frames that are larger than the specified minimum size: the default of 1 base shows all possible open reading frames.</p>
+<p><b>sixpack</b> reads a DNA sequence and writes an output file
+giving out the forward and reverse sense sequences with the three
+forward and (optionally) three reverse translations in a pretty
+display format.  A genetic code may be specified for the translation.
+There are various options to control the appearance of the output
+file.  It also writes a file of protein sequences corresponding to any
+open reading frames that are larger than the specified minimum size:
+the default of 1 base shows all possible open reading frames.</p>
 
 <H2>
     Algorithm
@@ -99,7 +106,11 @@ IT IS DONE FOR YOU.
     Notes
 </H2>
 
-<p>An open reading frame is defined in this program as any possible translation between two STOP codons. Optionally, the beginning or end of a sequence may be counted as an ORF even if it's less than the minimal ORF size or (end only) lacking a STOP codon.  See the -firstorf and -lastorf options.</p>
+<p>An open reading frame is defined in this program as any possible
+translation between two STOP codons. Optionally, the beginning or end
+of a sequence may be counted as an ORF even if it's less than the
+minimal ORF size or (end only) lacking a STOP codon.  See the
+-firstorf and -lastorf options.</p>
 
 <H2>
     References

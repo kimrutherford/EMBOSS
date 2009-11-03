@@ -1,6 +1,6 @@
 /* @source wordmatch application
 **
-** Finds matching words  words in DNA sequences
+** Finds matching words in DNA sequences
 **
 ** @author
 ** @@

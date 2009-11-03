@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Draw a nucleic acid density plot
@@ -26,7 +33,7 @@ Output report [x13776.density]:
    Example 2
 
 
-% density tembl:x13776 -quad -qgraph cps 
+% density tembl:x13776 -display quad -graph cps 
 Draw a nucleic acid density plot
 
 Created density.ps
@@ -36,7 +43,7 @@ Created density.ps
    Example 3
 
 
-% density tembl:x13776 -dual -dgraph cps 
+% density tembl:x13776 -display dual -graph cps 
 Draw a nucleic acid density plot
 
 Created density.ps
@@ -48,23 +55,19 @@ Command line arguments
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-seqall]            seqall     Nucleotide sequence(s) filename and optional
                                   format, or reference (input USA)
-*  -qgraph             xygraph    [$EMBOSS_GRAPHICS value, or x11] Quad
-                                  (A+C+G+T) graph (ps, hpgl, hp7470, hp7580,
-                                  meta, cps, x11, tekt, tek, none, data,
-                                  xterm, png, gif)
-*  -dgraph             xygraph    [$EMBOSS_GRAPHICS value, or x11] Dual
-                                  (AT+GC) graph (ps, hpgl, hp7470, hp7580,
-                                  meta, cps, x11, tekt, tek, none, data,
-                                  xterm, png, gif)
+*  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Density
+                                  graph (ps, hpgl, hp7470, hp7580, meta, cps,
+                                  x11, tekt, tek, none, data, das, xterm, png,
+                                  gif)
 *  -outfile            report     [*.density] Output report file name
 
    Additional (Optional) qualifiers:
    -window             integer    [100] Window length (Integer 1 or more)
+   -display            menu       [none] Select graph type (Values: D (Dual -
+                                  graphic showing individual bases); Q (Quad -
+                                  AT vs GC graphic); none (none))
 
-   Advanced (Unprompted) qualifiers:
-   -quad               toggle     [N] Produce graphic showing individual bases
-   -dual               toggle     [N] Produce AT vs GC graphic
-
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
    "-seqall" associated qualifiers
@@ -83,17 +86,7 @@ Command line arguments
    -fformat1           string     Features format
    -fopenfile1         string     Features file name
 
-   "-qgraph" associated qualifiers
-   -gprompt            boolean    Graph prompting
-   -gdesc              string     Graph description
-   -gtitle             string     Graph title
-   -gsubtitle          string     Graph subtitle
-   -gxtitle            string     Graph x axis title
-   -gytitle            string     Graph y axis title
-   -goutfile           string     Output file for non interactive displays
-   -gdirectory         string     Output directory
-
-   "-dgraph" associated qualifiers
+   "-graph" associated qualifiers
    -gprompt            boolean    Graph prompting
    -gdesc              string     Graph description
    -gtitle             string     Graph title
@@ -171,18 +164,17 @@ RP   1167-2167
 RX   DOI; 10.1016/0014-5793(89)80249-2.
 RX   PUBMED; 2495988.
 RA   Lowe N., Rice P.M., Drew R.E.;
-RT   "Nucleotide sequence of the aliphatic amidase regulator gene of Pseudomona
-s
-RT   aeruginosa";
+RT   "Nucleotide sequence of the aliphatic amidase regulator gene (amiR) of
+RT   Pseudomonas aeruginosa";
 RL   FEBS Lett. 246(1-2):39-43(1989).
 XX
 RN   [3]
 RP   1-1292
 RX   PUBMED; 1907262.
 RA   Wilson S., Drew R.;
-RT   "Cloning and DNA seqence of amiC, a new gene regulating expression of the
+RT   "Cloning and DNA sequence of amiC, a new gene regulating expression of the
 RT   Pseudomonas aeruginosa aliphatic amidase, and purification of the amiC
-RT   product.";
+RT   product";
 RL   J. Bacteriol. 173(16):4914-4921(1991).
 XX
 RN   [4]
@@ -194,8 +186,8 @@ RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG
 .
 XX
 DR   GOA; Q51417.
+DR   InterPro; IPR003211; AmiSUreI_transpt.
 DR   UniProtKB/Swiss-Prot; Q51417; AMIS_PSEAE.
-XX
 
 
   [Part of this file has been deleted for brevity]
@@ -400,8 +392,8 @@ Output file format
 #---------------------------------------
 
 #---------------------------------------
-# Total_sequences: 1
-# Total_hitcount: 2068
+# Reported_sequences: 1
+# Reported_hitcount: 2068
 #---------------------------------------
 
   Output files for usage example 2
@@ -446,30 +438,30 @@ Known bugs
 
 See also
 
-   Program name                           Description
-   banana       Plot bending and curvature data for B-DNA
-   btwisted     Calculate the twisting in a B-DNA sequence
-   chaos        Draw a chaos game representation plot for a nucleotide sequence
-   compseq      Calculate the composition of unique words in sequences
-   dan          Calculates nucleic acid melting temperature
-   freak        Generate residue/base frequency table or plot
-   isochore     Plots isochores in DNA sequences
-   sirna        Finds siRNA duplexes in mRNA
-   wordcount    Count and extract unique words in DNA sequence(s)
+                    Program name                           Description
+                    banana       Plot bending and curvature data for B-DNA
+                    btwisted     Calculate the twisting in a B-DNA sequence
+                    chaos        Draw a chaos game representation plot for a nucleotide sequence
+                    compseq      Calculate the composition of unique words in sequences
+                    dan          Calculates nucleic acid melting temperature
+                    freak        Generate residue/base frequency table or plot
+                    isochore     Plots isochores in DNA sequences
+                    sirna        Finds siRNA duplexes in mRNA
+                    wordcount    Count and extract unique words in DNA sequence(s)
 
 Author(s)
 
-   Alan Bleasby (ajb © ebi.ac.uk)
-   European Bioinformatics Institute, Wellcome Trust Genome Campus,
-   Hinxton, Cambridge CB10 1SD, UK
+   Alan             Bleasby (ajb © ebi.ac.uk)
+   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton,         Cambridge CB10 1SD, UK
 
 History
 
 Target users
 
-   This program is intended to be used by everyone and everything, from
-   naive users to embedded scripts.
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
 
 Comments
 
-   None
+                    None

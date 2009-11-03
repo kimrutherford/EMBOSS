@@ -21,7 +21,7 @@
 
    Advanced (Unprompted) qualifiers:
    -reverse            boolean    Reverse the orientation of the EST sequence
-   -[no]splice         boolean    [Y] Use donor and acceptor splice sites. If
+   -[no]usesplice      boolean    [Y] Use donor and acceptor splice sites. If
                                   you want to ignore donor-acceptor sites then
                                   set this to be false.
    -mode               menu       [both] This determines the comparion mode.

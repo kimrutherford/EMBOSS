@@ -23,7 +23,16 @@ iep
     Description
 </H2>
 
-<p><b>iep</b> calculates the isoelectric point of a protein from its amino acid composition assuming that no electrostatic interactions change the propensity for ionization.  Optionally, <b>iep</b> will plot the ionization curve with respect to pH and write an output file of the data, where for each pH point the number of bound electrons and charge is given.</p>
+<p><b>iep</b> calculates the isoelectric point of a protein from its
+amino acid composition assuming that no electrostatic interactions
+change the propensity for ionization.  Optionally, <b>iep</b> will
+plot the ionization curve with respect to pH and write an output file
+of the data, where for each pH point the number of bound electrons and
+charge is given.</p>
+
+<p>For peptide fragments it is possible to exclude the charges of the
+  amino and carboxy terminal residues.
+</p>
 
 <H2>
     Usage
@@ -107,7 +116,17 @@ Y		10.1
     Notes
 </H2>
 
-<p>Adjusting the pH of an aqueous protein solution to the point where the numbers of positive and negative charges on the protein are equal brings the protein to its isoelectric point. This is often the point of lowest solubility, presumably because it is the point at which there are fewest intermolecular repulsions, so that the molecules tend to form aggregates.</p>
+<p>Adjusting the pH of an aqueous protein solution to the point where
+the numbers of positive and negative charges on the protein are equal
+brings the protein to its isoelectric point. This is often the point
+of lowest solubility, presumably because it is the point at which
+there are fewest intermolecular repulsions, so that the molecules tend
+to form aggregates.</p>
+
+<p>Modified lysines and disulphide bridges affect the contributions of
+  those residues to the protein charge. A set number of each residue
+  can be excluded.
+</p>
 
 <H2>
     References

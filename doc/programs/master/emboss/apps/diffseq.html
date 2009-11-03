@@ -20,7 +20,17 @@ diffseq
     Description
 </H2>
 
-<p><b>diffseq</b> reads two sequences which typically are very similar or almost identical.  It finds regions of identity (exact matches) in the two sequences and reports on similarities and differences between the features of the two sequences within these regions.  The output is a standard EMBOSS report file.  The start and end positions of the regions of identity are reported.  Any features that are shared and any differerences in features are reported.  The original feature table of each sequence may also (optionally) be written to file.</p>
+<p><b>diffseq</b> reads two sequences which typically are very similar
+or almost identical.  It finds regions of overlap between the two
+sequences and reports on differences between the features of the two
+sequences within these regions.  The output is a standard EMBOSS
+report file.  The start and end positions of the regions of overlap
+are reported.  Any differences between the sequences, and any features
+(except the source feature) that overlap those differences, are
+included in the output report.</p>
+
+<p>The differences are also reported for each input sequence as two
+separate feature table output files.</p>
 
 
 
@@ -28,7 +38,15 @@ diffseq
 Algorithm
 </H2>
 
-<p><b>diffseq</b> searches for identical matches between all sequence words from both sequences. Identical sequence regions are found by creating a hash table of subsequences of user-defined size (-wordsize option), which is 10 by default. It then reduces the matches to a minimum set of overlapping matches by sorting them in order of size (largest size first).  For each such match it removes any smaller matches that overlap. The result is a set of the longest regions of identity between the two sequences that do not overlap with each other. The mismatched regions between these matches are reported.</p>
+<p><b>diffseq</b> searches for identical matches between all sequence
+words from both sequences. Identical sequence regions are found by
+creating a hash table of subsequences of user-defined size (-wordsize
+option), which is 10 by default. It then reduces the matches to a
+minimum set of overlapping matches by sorting them in order of size
+(largest size first).  For each such match it removes any smaller
+matches that overlap. The result is a set of the longest regions of
+identity between the two sequences that do not overlap with each
+other. The mismatched regions between these matches are reported.</p>
 
 <H2>
     Usage
@@ -144,12 +162,35 @@ None
 </H2>
 
 
-<p><b>diffseq</b> is useful when looking for SNPs, differences between strains of an organism and anything else that requires the differences between two eseentially identical sequences to be highlighted.</p>
+<p><b>diffseq</b> is useful when looking for SNPs, differences between
+strains of an organism and anything else that requires the differences
+between two eseentially identical sequences to be highlighted.</p>
 
-<p>Identical sequence regions are found by creating a hash table of subsequences of user-defined size (-wordsize option, which is 10 by default). Making this value larger (e.g. 20) may speed-up the program slightly, but will mean that any two differences within <tt>wordsize</tt> bases bases or residues of each other will be grouped as a single region of difference.  This value may be made smaller to improve the resolution of nearby differences, but the program will go much slower.</p>
+<p>Identical sequence regions are found by creating a hash table of
+subsequences of user-defined size (-wordsize option, which is 10 by
+default). Making this value larger (e.g. 20) may speed-up the program
+slightly, but will mean that any two differences
+within <tt>wordsize</tt> bases bases or residues of each other will be
+grouped as a single region of difference.  This value may be made
+smaller to improve the resolution of nearby differences, but the
+program will go much slower.</p>
 
-<p>The sequences can be very long; it should be possible to find differences between sequences that are Mega-bases long. If, however, you run out of memory, use a larger word size.  This increases the length between mismatches that will be reported as one event. Thus a word size of 50 will report two single-base differences that are with 50 bases of each other as one mismatch.</p>
+<p>The sequences can be very long; it should be possible to find
+differences between sequences that are Mega-bases long. If, however,
+you run out of memory, use a larger word size.  This increases the
+length between mismatches that will be reported as one event. Thus a
+word size of 50 will report two single-base differences that are with
+50 bases of each other as one mismatch.</p>
    
+<p>By default, <b>diffseq</b> finds regions of identity that are at
+least as long as the specified word-size. This is what is typically
+required when working with long overlapping nucleic acid sequences,
+where the non-overlapping sequence ends are less interesting. If
+however, you have protein sequences or short RNA sequences then
+you may well be interested in differences at the very ends.
+The <tt>-globaldifferences</tt> option when set means the differences
+at the ends will also be reported.</p>
+
 <H2>
     References
 </H2>
@@ -160,9 +201,7 @@ None.
     Warnings
 </H2>
 
-<p>Not all features are compared and reported.  The 'source' feature found in all EMBL/Genbank feature table entries is not reported.  This feature is uninformative; it covers the entire sequence and therefore would always be reported. The translation information of CDS features is often extremely long and does not add useful information to the report. It has therefore been removed from the output report.</p>
-
-<p>By default <b>diffseq</b> finds regions of identity that are at least as long as the specified word-size. This is what's typically required when working with long overlapping nucleic acid sequences, where the non-overlapping sequence ends are less interesting. If however, you have protein sequences or short RNA sequences however, you may well be interested in differences at the very ends.  The <tt>-globaldifferences</tt> option when set means the differences at the ends will also be reported.</p>
+None.
 
 <H2>
     Diagnostic Error Messages

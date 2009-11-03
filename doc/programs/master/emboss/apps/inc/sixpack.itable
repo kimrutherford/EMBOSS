@@ -105,7 +105,7 @@ They are followed by any valid HTML font colour.
 Examples of region specifications are:
 24-45 blue 56-78 orange
 1-100 green 120-156 red
-A file of ranges to colour (one range per line) can be specifed as '@filename'.</td>
+A file of ranges to colour (one range per line) can be specified as '@filename'.</td>
 <td>Sequence range</td>
 <td><i>full sequence</i></td>
 </tr>

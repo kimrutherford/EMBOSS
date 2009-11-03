@@ -230,6 +230,7 @@ int main(int argc, char **argv)
 	silent_fmt_hits(nshits,feat, ajFalse, ajTrue);
     }
 
+    ajReportSetStatistics(report, 1, ajSeqGetLenTrimmed(seq));
     ajReportSetTail(report, tailstr);
     (void) ajReportWrite (report,feat,seq);
     ajFeattableDel(&feat);

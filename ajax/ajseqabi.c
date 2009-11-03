@@ -54,6 +54,7 @@ AjBool ajSeqABITest(AjPFile fp)
     if (fp->End && ajFileIsStdin(fp))
     {
 	ajDebug("EOF: ajSeqABITest already at end file %F\n", fp);
+
 	return ajFalse;
     }
 
@@ -61,6 +62,7 @@ AjBool ajSeqABITest(AjPFile fp)
 	if(ajReadbinBinary(fp,1,4,(void *)pabi))
 	{
 	    ajDebug("ajSeqABITest was at '%s'\n", pabi);
+
 	    if(ajCharPrefixC(pabi,"ABIF"))
 		return ajTrue;
 	}
@@ -68,9 +70,11 @@ AjBool ajSeqABITest(AjPFile fp)
     if(ajFileSeek(fp,26,SEEK_SET) >= 0)
     {
 	ajDebug("ajSeqABITest seek to pos 26\n");
+
 	if(ajReadbinBinary(fp,1,4,(void*)pabi))
 	{
 	    ajDebug("ajSeqABITest seek to '%s'\n", pabi);
+
 	    if(ajCharPrefixC(pabi,"ABIF"))
 		return ajTrue;
 	}
@@ -103,6 +107,7 @@ AjBool ajSeqABIReadSeq(AjPFile fp,ajlong baseO,ajlong numBases,
     ajDebug("ajSeqABIReadSeq base0 %Ld numBases %Ld\n", baseO, numBases);
 
     ajFileSeek(fp,baseO,SEEK_SET);
+
     for (i=0;i<(ajint)numBases;i++)
     {
 	ajReadbinBinary(fp,1,1,&pseq);
@@ -267,6 +272,7 @@ void ajSeqABIGetBasePosition(AjPFile fp,ajlong numBases,
     {
         if (!seqABIReadInt2(fp,&bP))
 	    ajFatal("Error - in finding Base Position");
+
         ajShortPut(basePositions,i,bP);
     }
 
@@ -517,12 +523,15 @@ AjBool ajSeqABIGetTraceOffset(AjPFile fp, ajlong *Offset)
     if (!seqABIGetFlag(fp,DATAtag,TRACE_INDEX,
 		       5,&dataxO[seqABIBaseIdx((char)(fwo_>>24&BYTE[0]))]))
 	return ajFalse;
+
     if (!seqABIGetFlag(fp,DATAtag,TRACE_INDEX+1,
 		       5,&dataxO[seqABIBaseIdx((char)(fwo_>>16&BYTE[0]))]))
 	return ajFalse;
+
     if (!seqABIGetFlag(fp,DATAtag,TRACE_INDEX+2,
 		       5,&dataxO[seqABIBaseIdx((char)(fwo_>>8&BYTE[0]))]))
 	return ajFalse;
+
     if (!seqABIGetFlag(fp,DATAtag,TRACE_INDEX+3,
 		       5,&dataxO[seqABIBaseIdx((char)(fwo_&BYTE[0]))]))
 	return ajFalse;
@@ -621,6 +630,7 @@ static AjBool seqABIReadInt2(AjPFile fp, ajshort *i2)
 
     if (ajReadbinBinary(fp,1,2,(void *)buf) != 1)
 	return ajFalse;
+
     *i2 = (ajshort)
         (((ajushort)buf[1]) +
          ((ajushort)buf[0]<<8));
@@ -666,6 +676,7 @@ static AjBool seqABIGetFlag(AjPFile fp, ajlong flagLabel,
     do
     {
         flagNum++;
+
         if (ajFileSeek(fp,indexO+(flagNum*INDEX_ENTRY_LENGTH),SEEK_SET) != 0)
             return ajFalse;
 
@@ -674,13 +685,13 @@ static AjBool seqABIGetFlag(AjPFile fp, ajlong flagLabel,
 
         if (!seqABIReadInt4(fp, &Instance))
             return ajFalse;
+
     } while (!(Label == (ajlong)flagLabel &&
                Instance == (ajlong)flagInstance));
 
-    for (i=2; i<=word; i++) {
+    for (i=2; i<=word; i++)
         if (!seqABIReadInt4(fp, val))
 	    return ajFalse;
-    }
 
     return ajTrue;
 
@@ -724,6 +735,7 @@ static AjBool seqABIGetFlagF(AjPFile fp, ajlong flagLabel,
     do
     {
         flagNum++;
+
         if (ajFileSeek(fp,indexO+(flagNum*INDEX_ENTRY_LENGTH),SEEK_SET) != 0)
             return ajFalse;
 
@@ -779,8 +791,10 @@ static AjBool seqABIGetFlagW(AjPFile fp, ajlong flagLabel,
     do
     {
         flagNum++;
+
         if (ajFileSeek(fp, indexO+(flagNum*INDEX_ENTRY_LENGTH), SEEK_SET) != 0)
             return ajFalse;
+
         if (!seqABIReadInt4(fp, &Label))
             return ajFalse;
     }
@@ -811,7 +825,7 @@ static AjBool seqABIGetFlagW(AjPFile fp, ajlong flagLabel,
 
 static ajshort seqABIBaseIdx(char B)
 {
-    return ((B)=='C'?0:(B)=='A'?1:(B)=='G'?2:3);
+    return ((B)=='C' ? 0 : (B)=='A' ? 1 : (B)=='G' ? 2 : 3);
 }
 
 

@@ -38,11 +38,11 @@ section: required [
     standard: "Y"
     minimum: "1"
     default: "2"
-    maximum: "20"
+    maximum: "@($(acdprotein)? 4 : 6)"
     information: "Word size to consider (e.g. 2=dimer)"
     help: "This is the size of word (n-mer) to count. \
-           Thus if you want to count codon frequencies, you should enter 3
-           here."
+           Thus if you want to count codon frequencies for a nucleotide
+           sequence, you should enter 3 here."
   ]
 
 endsection: required

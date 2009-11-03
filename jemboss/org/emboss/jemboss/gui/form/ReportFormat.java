@@ -23,6 +23,9 @@ package org.emboss.jemboss.gui.form;
 
 import org.emboss.jemboss.parser.ParseAcd;
 import java.awt.Dimension;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.JCheckBox;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -152,9 +155,9 @@ public class ReportFormat
 
   /**
   *
-  * Return the EMBOSS command line string depending on
-  * what has been selected
-  * @return	EMBOSS command line string
+  * Returns EMBOSS command line options for report formats
+  * based on what has been selected
+  * @return	EMBOSS command line options as string
   *
   */
   public String getReportFormat()
@@ -167,6 +170,25 @@ public class ReportFormat
     if(rusashow.isSelected())
       report = report.concat(" -rusashow ");
     return report;
+  }
+
+  /**
+   * Returns EMBOSS command line options for report formats
+   * based on what has been selected
+   * @return	EMBOSS command line options as string array
+   */
+  public List getReportFormatA()
+  {
+	  List ret = new ArrayList();
+	  ret.add("-rformat");
+	  ret.add(cp.getSelectedItem());
+	  if(raccshow.isSelected())
+		  ret.add("-raccshow");
+	  if(rdesshow.isSelected())
+		  ret.add("-rdesshow");
+	  if(rusashow.isSelected())
+		  ret.add("-rusashow");
+	  return ret;
   }
 
   /**

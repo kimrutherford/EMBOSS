@@ -30,6 +30,9 @@
 ******************************************************************************/
 int main(int argc, char **argv)
 {
+    (void) argc;
+    (void) argv;
+
     fprintf(stderr,"CORBA support has not been compiled\n");
     return 0;
 }

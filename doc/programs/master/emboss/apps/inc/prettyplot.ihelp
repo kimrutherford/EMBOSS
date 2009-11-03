@@ -3,7 +3,7 @@
                                   format, or reference (input USA)
    -graph              graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, xterm, png, gif)
+                                  tekt, tek, none, data, das, xterm, png, gif)
 
    Additional (Optional) qualifiers:
    -matrixfile         matrix     [EBLOSUM62 for protein, EDNAFULL for DNA]
@@ -45,7 +45,7 @@
                                   all sequences. (Integer 0 or more)
    -[no]box            boolean    [Y] Display prettyboxes
    -boxcol             boolean    [N] Colour the background in the boxes
-   -boxcolval          string     [GREY] Colour to be used for background.
+   -boxuse             string     [GREY] Colour to be used for background.
                                   (GREY) (Any string is accepted)
    -[no]name           boolean    [Y] Display the sequence names
    -maxnamelen         integer    [10] Margin size for the sequence name. (Any

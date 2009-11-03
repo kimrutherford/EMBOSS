@@ -205,6 +205,7 @@ AjPDomNodeEntry ajDomNodeListAppend(AjPDomNodeList list,
     domAddToMap(list,child,p);
 
     p->node = child;
+
     if(!list->first)
     {
 	list->first = p;
@@ -277,6 +278,7 @@ AjPDomNode ajDomNodeAppendChild(AjPDomNode node, AjPDomNode extrachild)
 	for(n=extrachild->firstchild; n; n=next)
 	{
 	    next = n->nextsibling;
+
 	    if(!ajDomRemoveChild(extrachild,n))
 		return NULL;
 
@@ -419,6 +421,7 @@ AjPDomNode ajDomRemoveChild(AjPDomNode node, AjPDomNode child)
        child->ownerdocument != node)
     {
 	ajWarn("ajDomRemoveChild: Wrong document");
+
 	return NULL;
     }
 
@@ -510,6 +513,7 @@ AjPDomNodeEntry ajDomNodeListRemove(AjPDomNodeList list, AjPDomNode child)
     }
     
     e = domDoLookupNode(list,child);
+
     if(!e)
 	return NULL;
 
@@ -631,51 +635,51 @@ void ajDomDocumentDestroyNode(AjPDomDocument doc, AjPDomNode node)
 
     switch(node->type)
     {
-    case AJDOM_ELEMENT_NODE:
-	ajDomDocumentDestroyNodeList(doc,node->attributes,AJDOMDESTROY);
-	ajStrDel(&node->sub.Element.tagname);
-	ajStrDel(&node->name);
-	break;
-    case AJDOM_TEXT_NODE:
-    case AJDOM_COMMENT_NODE:
-    case AJDOM_CDATA_SECTION_NODE:
-	ajStrDel(&node->value);
-	break;
-    case AJDOM_ATTRIBUTE_NODE:
-	ajStrDel(&node->name);
-	ajStrDel(&node->value);
-	break;
-    case AJDOM_ENTITY_REFERENCE_NODE:
-    case AJDOM_ENTITY_NODE:
-	ajStrDel(&node->name);
-	ajStrDel(&node->value);
-	ajStrDel(&node->sub.Entity.publicid);
-	ajStrDel(&node->sub.Entity.systemid);
-	ajStrDel(&node->sub.Entity.notationname);
-	break;
-    case AJDOM_PROCESSING_INSTRUCTION_NODE:
-	ajStrDel(&node->name);
-	ajStrDel(&node->value);
-	break;
-    case AJDOM_DOCUMENT_NODE:
-	ajStrDel(&node->sub.Document.version);
-	ajStrDel(&node->sub.Document.encoding);
-	break;
-    case AJDOM_DOCUMENT_TYPE_NODE:
-	ajDomDocumentDestroyNodeList(doc,node->sub.DocumentType.entities,
-				     AJDOMKEEP);
-	ajDomDocumentDestroyNodeList(doc,node->sub.DocumentType.notations,
-				     AJDOMKEEP);
-	ajStrDel(&node->sub.DocumentType.name);
-	ajStrDel(&node->sub.DocumentType.publicid);
-	ajStrDel(&node->sub.DocumentType.systemid);
-	ajStrDel(&node->name);
-	break;
-    case AJDOM_NOTATION_NODE:
-	ajStrDel(&node->sub.Notation.publicid);
-	ajStrDel(&node->sub.Notation.systemid);
-	ajStrDel(&node->name);
-	break;
+        case AJDOM_ELEMENT_NODE:
+            ajDomDocumentDestroyNodeList(doc,node->attributes,AJDOMDESTROY);
+            ajStrDel(&node->sub.Element.tagname);
+            ajStrDel(&node->name);
+            break;
+        case AJDOM_TEXT_NODE:
+        case AJDOM_COMMENT_NODE:
+        case AJDOM_CDATA_SECTION_NODE:
+            ajStrDel(&node->value);
+            break;
+        case AJDOM_ATTRIBUTE_NODE:
+            ajStrDel(&node->name);
+            ajStrDel(&node->value);
+            break;
+        case AJDOM_ENTITY_REFERENCE_NODE:
+        case AJDOM_ENTITY_NODE:
+            ajStrDel(&node->name);
+            ajStrDel(&node->value);
+            ajStrDel(&node->sub.Entity.publicid);
+            ajStrDel(&node->sub.Entity.systemid);
+            ajStrDel(&node->sub.Entity.notationname);
+            break;
+        case AJDOM_PROCESSING_INSTRUCTION_NODE:
+            ajStrDel(&node->name);
+            ajStrDel(&node->value);
+            break;
+        case AJDOM_DOCUMENT_NODE:
+            ajStrDel(&node->sub.Document.version);
+            ajStrDel(&node->sub.Document.encoding);
+            break;
+        case AJDOM_DOCUMENT_TYPE_NODE:
+            ajDomDocumentDestroyNodeList(doc,node->sub.DocumentType.entities,
+                                         AJDOMKEEP);
+            ajDomDocumentDestroyNodeList(doc,node->sub.DocumentType.notations,
+                                         AJDOMKEEP);
+            ajStrDel(&node->sub.DocumentType.name);
+            ajStrDel(&node->sub.DocumentType.publicid);
+            ajStrDel(&node->sub.DocumentType.systemid);
+            ajStrDel(&node->name);
+            break;
+        case AJDOM_NOTATION_NODE:
+            ajStrDel(&node->sub.Notation.publicid);
+            ajStrDel(&node->sub.Notation.systemid);
+            ajStrDel(&node->name);
+            break;
     }
 
     AJFREE(node);
@@ -708,10 +712,12 @@ void ajDomDocumentDestroyNodeList(AjPDomDocument doc, AjPDomNodeList list,
 	if(list->filter)
 	{
 	    entry = list->first;
+
 	    while(entry)
 	    {
 		if(donodes)
 		    ajDomDocumentDestroyNode(doc,entry->node);
+
 		tmp = entry;
 		entry = entry->next;
 		AJFREE(tmp);
@@ -728,7 +734,6 @@ void ajDomDocumentDestroyNodeList(AjPDomDocument doc, AjPDomNodeList list,
 
     return;
 }
-
 
 
 
@@ -808,8 +813,6 @@ AjPDomNode ajDomDocumentCreateNode(AjPDomDocument doc, ajuint nodetype)
 
 
 
-
-
 /* @func ajDomImplementationCreateDocumentType *******************************
 **
 ** Creates an empty DocumentType node into which entities/notations (etc)
@@ -832,11 +835,12 @@ AjPDomDocumentType ajDomImplementationCreateDocumentType(const AjPStr qualname,
 
     if(qualname)
 	p = qualname->Ptr;
+
     if(publicid)
 	r = publicid->Ptr;
+
     if(systemid)
 	s = systemid->Ptr;
-    
 
     return ajDomImplementationCreateDocumentTypeC(p,r,s);
 }
@@ -969,6 +973,7 @@ AjPDomDocument ajDomImplementationCreateDocumentC(const char *uri,
 	    {
 		ajWarn("ajDomImplementationCreateDocumentC: element memory\n");
 		ajDomDocumentDestroyNode(doc,doc);
+
 		return NULL;
 	    }
 
@@ -1118,12 +1123,14 @@ AjPDomNode ajDomNodeMapSetItem(AjPDomNodeMap map, AjPDomNode arg)
 	if(map->filter)
 	{
 	    ajWarn("ajDomNodeMapSetItem: No mod allowed\n");
+
 	    return NULL;
 	}
 
 	if(map->ownerdocument != arg->ownerdocument)
 	{
 	    ajWarn("ajDomNodeMapSetItem: Wrong document\n");
+
 	    return NULL;
 	}
 
@@ -1132,6 +1139,7 @@ AjPDomNode ajDomNodeMapSetItem(AjPDomNodeMap map, AjPDomNode arg)
 	   arg->sub.Attr.ownerelement != map->ownerelement)
 	{
 	    ajWarn("ajDomNodeMapSetItem: In use attribute error\n");
+
 	    return NULL;
 	}
 
@@ -1206,6 +1214,7 @@ AjPDomNode ajDomNodeMapRemoveItemC(AjPDomNodeMap map, const char *name)
 	if(map->filter)
 	{
 	    ajWarn("ajDomNodeMapRemoveItemC: No mod allowed\n");
+
 	    return NULL;
 	}
 
@@ -1216,8 +1225,10 @@ AjPDomNode ajDomNodeMapRemoveItemC(AjPDomNodeMap map, const char *name)
 	    {
 		r = e->node;
 		free(e);
+
 		if(r->type == AJDOM_ATTRIBUTE_NODE)
 		    r->sub.Attr.ownerelement = NULL;
+
 		return r;
 	    }
 	}
@@ -1271,6 +1282,7 @@ static AjPDomNode domNodeListItemFiltered(const AjPDomNodeList list,
 	    {
 		if(!indexnum)
 		    return e->node;
+
 		--indexnum;
 	    }
 
@@ -1674,6 +1686,7 @@ AjPDomNodeList ajDomElementGetElementsByTagNameC(AjPDomElement element,
     {
 	for(n=element->firstchild; n; n=n->nextsibling)
 	    domTraverseC(list,n,name);
+
 	return list;
     }
 
@@ -2105,6 +2118,7 @@ AjPDomDocumentFragment ajDomDocumentCreateDocumentFragment(AjPDomDocument doc)
     AjPDomDocumentFragment frag = NULL;
 
     frag = ajDomDocumentCreateNode(doc, AJDOM_DOCUMENT_FRAGMENT_NODE);
+
     if(frag)
 	frag->name = ajStrNewC("#document-fragment");
 
@@ -2202,6 +2216,7 @@ AjPDomComment ajDomDocumentCreateCommentC(AjPDomDocument doc, const char *data)
     AjPDomComment comment = NULL;
 
     comment = ajDomDocumentCreateNode(doc, AJDOM_COMMENT_NODE);
+
     if(!comment)
 	return NULL;
 
@@ -2256,6 +2271,7 @@ AjPDomCDATASection ajDomDocumentCreateCDATASectionC(AjPDomDocument doc,
     AjPDomCDATASection cdata = NULL;
 
     cdata = ajDomDocumentCreateNode(doc, AJDOM_CDATA_SECTION_NODE);
+
     if(!cdata)
 	return NULL;
 
@@ -2288,6 +2304,7 @@ AjPDomAttr ajDomDocumentCreateAttribute(AjPDomDocument doc,
     AjPDomAttr attr = NULL;
 
     attr = ajDomDocumentCreateNode(doc, AJDOM_ATTRIBUTE_NODE);
+
     if(!attr)
 	return NULL;
 
@@ -2320,6 +2337,7 @@ AjPDomAttr ajDomDocumentCreateAttributeC(AjPDomDocument doc,
     AjPDomAttr attr = NULL;
 
     attr = ajDomDocumentCreateNode(doc, AJDOM_ATTRIBUTE_NODE);
+
     if(!attr)
 	return NULL;
 
@@ -2374,6 +2392,7 @@ AjPDomEntityReference ajDomDocumentCreateEntityReferenceC(AjPDomDocument doc,
     AjPDomEntityReference eref = NULL;
 
     eref = ajDomDocumentCreateNode(doc, AJDOM_ENTITY_REFERENCE_NODE);
+
     if(!eref)
 	return NULL;
 
@@ -2428,6 +2447,7 @@ AjPDomPi ajDomDocumentCreateProcessingInstructionC(AjPDomDocument doc,
     AjPDomPi pin = NULL;
 
     pin = ajDomDocumentCreateNode(doc,AJDOM_PROCESSING_INSTRUCTION_NODE);
+
     if(pin)
     {
 	pin->sub.ProcessingInstruction.target = ajStrNewC(target);
@@ -2493,6 +2513,7 @@ AjPDomNodeList ajDomDocumentGetElementsByTagNameC(AjPDomDocument doc,
        (list=ajDomCreateNodeList(doc)))
     {
 	domTraverseC(list,doc->sub.Document.documentelement,name);
+
 	return list;
     }
 
@@ -2570,6 +2591,7 @@ void ajDomPrintNode(const AjPDomNode node, ajint indent)
 	ajFmtPrint("    ");
 	n = ajDomNodeMapItem(node->attributes,0);
 	ajFmtPrint("%S=%S",n->name,n->value);
+
 	for(i=1;i<node->attributes->length;++i)
 	{
 	    n = ajDomNodeMapItem(node->attributes,i);
@@ -2624,6 +2646,7 @@ void ajDomNodePrintNode(const AjPDomNode node)
     if(!node)
     {
 	ajFmtPrint("Node was null\n");
+
 	return;
     }
 
@@ -2644,10 +2667,6 @@ void ajDomNodePrintNode(const AjPDomNode node)
 
     return;
 }
-
-
-
-
 
 
 
@@ -2680,12 +2699,14 @@ AjPDomNode ajDomNodeInsertBefore(AjPDomNode node, AjPDomNode newchild,
        newchild->ownerdocument != node)
     {
 	ajWarn("ajDomNodeInsertBefore: Wrong document\n");
+
 	return NULL;
     }
 
     if(refchild && refchild->parentnode != node)
     {
 	ajWarn("ajDomNodeInsertBefore: Hierarchy error\n");
+
 	return NULL;
     }
 
@@ -2695,6 +2716,7 @@ AjPDomNode ajDomNodeInsertBefore(AjPDomNode node, AjPDomNode newchild,
 	    if(AJDOM_CANTDO(node,n) || domIsAncestor(n,node))
 	    {
 		ajWarn("ajDomNodeInsertBefore: Hierarchy Request Error\n");
+
 		return NULL;
 	    }
 
@@ -2790,6 +2812,7 @@ AjPDomNodeEntry ajDomNodeListInsert(AjPDomNodeList list, AjPDomNode newchild,
     if(list->filter)
     {
 	ajWarn("ajDomNodeListInsert: Filtered list error\n");
+
 	return NULL;
     }
 
@@ -2799,6 +2822,7 @@ AjPDomNodeEntry ajDomNodeListInsert(AjPDomNodeList list, AjPDomNode newchild,
 	if(!s || s->node != refchild)
 	{
 	    ajWarn("ajDomNodeListInsert: not found error\n");
+
 	    return NULL;
 	}
     }
@@ -2865,12 +2889,14 @@ AjPDomNode ajDomNodeReplaceChild(AjPDomNode node, AjPDomNode newchild,
        newchild->ownerdocument != node)
     {
 	ajWarn("ajDomNodeReplaceChild: Wrong document\n");
+
 	return NULL;
     }
     
     if(!ajDomNodeListExists(node->childnodes,oldchild))
     {
 	ajWarn("ajDomNodeReplaceChild: Oldchild not found\n");
+
 	return NULL;
     }
 
@@ -2880,6 +2906,7 @@ AjPDomNode ajDomNodeReplaceChild(AjPDomNode node, AjPDomNode newchild,
 	    if(AJDOM_CANTDO(node,n) || domIsAncestor(n,node))
 	    {
 		ajWarn("ajDomNodeReplaceChild: Hierarchy Request Error\n");
+
 		return NULL;
 	    }
 
@@ -2892,6 +2919,7 @@ AjPDomNode ajDomNodeReplaceChild(AjPDomNode node, AjPDomNode newchild,
 	    if(!ajDomNodeInsertBefore(node,n,oldchild))
 	    {
 		ajDomDocumentDestroyNode(n->ownerdocument,n);
+
 		return NULL;
 	    }
 	}
@@ -2968,6 +2996,7 @@ AjPDomNodeEntry ajDomNodeListReplace(AjPDomNodeList list, AjPDomNode newchild,
     if(list->filter)
     {
 	ajWarn("ajDomNodeListReplace: Filtered list error\n");
+
 	return NULL;
     }
     
@@ -2975,6 +3004,7 @@ AjPDomNodeEntry ajDomNodeListReplace(AjPDomNodeList list, AjPDomNode newchild,
     if(!e)
     {
 	ajWarn("ajDomNodeListReplace: Not found error\n");
+
 	return NULL;
     }
 
@@ -3016,6 +3046,7 @@ static AjPDomNode domNodeCloneNode(AjPDomDocument ownerdocument,
     {
     case AJDOM_ELEMENT_NODE:
 	clone = ajDomDocumentCreateElement(ownerdocument,node->name);
+
 	if(clone)
 	    for(e=node->attributes->first; e; e=e->next)
 		if(!(ctmp = domNodeCloneNode(ownerdocument,e->node,deep)) ||
@@ -3031,8 +3062,10 @@ static AjPDomNode domNodeCloneNode(AjPDomDocument ownerdocument,
 	if((clone = ajDomDocumentCreateAttribute(ownerdocument,node->name)))
 	{
 	    clone->sub.Attr.specified = node->sub.Attr.specified;
+
 	    if(!node->value)
 		return NULL;
+
 	    ajStrAssignS(&clone->value,node->value);
 	    /* AJB: dirty */
 	    clone->sub.Attr.value = clone->value;
@@ -3071,6 +3104,7 @@ static AjPDomNode domNodeCloneNode(AjPDomDocument ownerdocument,
 	{
 	    clone->name  = ajStrNewS(node->name);
 	    clone->value = ajStrNewS(node->value);
+
 	    if(node->sub.Entity.publicid)
 		clone->sub.Entity.publicid = ajStrNewS(node->sub.Entity.
 							 publicid);
@@ -3090,6 +3124,7 @@ static AjPDomNode domNodeCloneNode(AjPDomDocument ownerdocument,
 					    AJDOM_NOTATION_NODE)))
 	{
 	    clone->name = ajStrNewS(node->name);
+
 	    if(node->sub.Notation.publicid)
 		clone->sub.Notation.publicid = ajStrNewS(node->sub.
 							   Notation.
@@ -3130,6 +3165,7 @@ static AjPDomNode domNodeCloneNode(AjPDomDocument ownerdocument,
 	for(ntmp=node->firstchild; ntmp; ntmp=ntmp->nextsibling)
 	{
 	    ctmp = domNodeCloneNode(ownerdocument,ntmp,ajTrue);
+
 	    if(!ctmp || !ajDomNodeAppendChild(clone,ctmp))
 	    {
 		ajDomDocumentDestroyNode(clone->ownerdocument,ctmp);
@@ -3165,6 +3201,7 @@ AjPDomNode ajDomNodeCloneNode(AjPDomNode node, AjBool deep)
     {
 	if(!(doc = ajDomImplementationCreateDocument(NULL,NULL,NULL)))
 	    return NULL;
+
 	return domNodeCloneNode(doc,node,deep);
     }
 
@@ -3206,22 +3243,22 @@ static void domWriteEncoded(const AjPStr s, AjPFile outf)
 
 	switch (*p)
 	{
-	case '\0':
-	    break;
-	case '<':
-	    ajFmtPrintF(outf,"&lt;");
-	    break;
-	case '>':
-	    ajFmtPrintF(outf,"&gt;");
-	    break;
-	case '&':
-	    ajFmtPrintF(outf,"&apos;");
-	    break;
-	case '"':
-	    ajFmtPrintF(outf,"&quot;");
-	    break;
-	default:
-	    break;
+            case '\0':
+                break;
+            case '<':
+                ajFmtPrintF(outf,"&lt;");
+                break;
+            case '>':
+                ajFmtPrintF(outf,"&gt;");
+                break;
+            case '&':
+                ajFmtPrintF(outf,"&apos;");
+                break;
+            case '"':
+                ajFmtPrintF(outf,"&quot;");
+                break;
+            default:
+                break;
 	};
 
 	if(*p)
@@ -3273,164 +3310,172 @@ ajint ajDomWrite(const AjPDomDocument node, AjPFile outf)
 
     switch(node->type)
     {
-    case AJDOM_ELEMENT_NODE:
-	ajFmtPrintF(outf,"<");
-	ajFmtPrintF(outf,"%S",node->name);
-	for(e=node->attributes->first; e; e=e->next)
-	{
-	    ajFmtPrintF(outf," %S=\"",e->node->name);
-	    domWriteEncoded(e->node->value,outf);
-	    ajFmtPrintF(outf,"\"");
-	}
+        case AJDOM_ELEMENT_NODE:
+            ajFmtPrintF(outf,"<");
+            ajFmtPrintF(outf,"%S",node->name);
+
+            for(e=node->attributes->first; e; e=e->next)
+            {
+                ajFmtPrintF(outf," %S=\"",e->node->name);
+                domWriteEncoded(e->node->value,outf);
+                ajFmtPrintF(outf,"\"");
+            }
 	
-	if(ajDomNodeHasChildNodes(node))
-	{
-	    ajFmtPrintF(outf,">");
-	    for(c=node->firstchild; c; c=c->nextsibling)
-		if(ajDomWrite(c,outf) == -1)
-		    return -1;
-	    ajFmtPrintF(outf,"</");
-	    ajFmtPrintF(outf,"%S",node->name);
-	    ajFmtPrintF(outf,">");
-	}
-	else
-	    ajFmtPrintF(outf,"/>");
+            if(ajDomNodeHasChildNodes(node))
+            {
+                ajFmtPrintF(outf,">");
 
-	break;
+                for(c=node->firstchild; c; c=c->nextsibling)
+                    if(ajDomWrite(c,outf) == -1)
+                        return -1;
 
-    case AJDOM_ATTRIBUTE_NODE:
-	break;
+                ajFmtPrintF(outf,"</");
+                ajFmtPrintF(outf,"%S",node->name);
+                ajFmtPrintF(outf,">");
+            }
+            else
+                ajFmtPrintF(outf,"/>");
 
-    case AJDOM_TEXT_NODE:
-	domWriteEncoded(node->value,outf);
-	break;
+            break;
 
-    case AJDOM_CDATA_SECTION_NODE:
-	break;
+        case AJDOM_ATTRIBUTE_NODE:
+            break;
 
-    case AJDOM_ENTITY_REFERENCE_NODE:
-	break;
+        case AJDOM_TEXT_NODE:
+            domWriteEncoded(node->value,outf);
+            break;
 
-    case AJDOM_NOTATION_NODE:
-	ajFmtPrintF(outf,"    <!NOTATION ");
-	ajFmtPrintF(outf,"%S",node->name);
-	if(node->sub.Notation.publicid)
-	{
-	    ajFmtPrintF(outf," PUBLIC \"");
-	    ajFmtPrintF(outf,"%S",node->sub.Notation.publicid);
-	    ajFmtPrintF(outf,"\" \"");
-	    ajFmtPrintF(outf,"%S",node->sub.Notation.systemid);
-	    ajFmtPrintF(outf,"\"");
-	}
-	else if(node->sub.Notation.systemid)
-	{
-	    ajFmtPrintF(outf," SYSTEM \"");
-	    ajFmtPrintF(outf,"%S",node->sub.Notation.systemid);
-	    ajFmtPrintF(outf,"\"");
-	}
+        case AJDOM_CDATA_SECTION_NODE:
+            break;
 
-	ajFmtPrintF(outf,">");
-	break;
+        case AJDOM_ENTITY_REFERENCE_NODE:
+            break;
 
-    case AJDOM_ENTITY_NODE:
-	ajFmtPrintF(outf,"    <!ENTITY ");
-	ajFmtPrintF(outf,"%S",node->name);
-	if(node->value)
-	{
-	    ajFmtPrintF(outf,"\"");
-	    ajFmtPrintF(outf,"%S",node->value);
-	    ajFmtPrintF(outf,"\"");
-	}
-	else
-	{
-	    if(node->sub.Entity.publicid)
-	    {
-		ajFmtPrintF(outf," PUBLIC \"");
-		ajFmtPrintF(outf,"%S",node->sub.Entity.publicid);
-		ajFmtPrintF(outf,"\" \"");
-		ajFmtPrintF(outf,"%S",node->sub.Entity.systemid);
-		ajFmtPrintF(outf,"\"");
-	    }
-	    else if(node->sub.Entity.systemid)
-	    {
-		ajFmtPrintF(outf," SYSTEM \"");
-		ajFmtPrintF(outf,"%S",node->sub.Entity.systemid);
-		ajFmtPrintF(outf,"\"");
-	    }
+        case AJDOM_NOTATION_NODE:
+            ajFmtPrintF(outf,"    <!NOTATION ");
+            ajFmtPrintF(outf,"%S",node->name);
 
-	    if(node->sub.Entity.notationname)
-	    {
-		ajFmtPrintF(outf," NDATA ");
-		ajFmtPrintF(outf,"%S",node->sub.Entity.notationname);
-	    }
-	}
+            if(node->sub.Notation.publicid)
+            {
+                ajFmtPrintF(outf," PUBLIC \"");
+                ajFmtPrintF(outf,"%S",node->sub.Notation.publicid);
+                ajFmtPrintF(outf,"\" \"");
+                ajFmtPrintF(outf,"%S",node->sub.Notation.systemid);
+                ajFmtPrintF(outf,"\"");
+            }
+            else if(node->sub.Notation.systemid)
+            {
+                ajFmtPrintF(outf," SYSTEM \"");
+                ajFmtPrintF(outf,"%S",node->sub.Notation.systemid);
+                ajFmtPrintF(outf,"\"");
+            }
 
-	ajFmtPrintF(outf,">");
-	break;
+            ajFmtPrintF(outf,">");
+            break;
 
-    case AJDOM_PROCESSING_INSTRUCTION_NODE:
-	ajFmtPrintF(outf,"<?");
-	ajFmtPrintF(outf,"%S ",node->sub.ProcessingInstruction.target);
-	domWriteEncoded(node->sub.ProcessingInstruction.data,outf);
-	ajFmtPrintF(outf,"?>");
-	break;
+        case AJDOM_ENTITY_NODE:
+            ajFmtPrintF(outf,"    <!ENTITY ");
+            ajFmtPrintF(outf,"%S",node->name);
 
-    case AJDOM_COMMENT_NODE:
-	ajFmtPrintF(outf,"<!--");
-	domWriteEncoded(node->value,outf);
-	ajFmtPrintF(outf,"-->");
-	break;
+            if(node->value)
+            {
+                ajFmtPrintF(outf,"\"");
+                ajFmtPrintF(outf,"%S",node->value);
+                ajFmtPrintF(outf,"\"");
+            }
+            else
+            {
+                if(node->sub.Entity.publicid)
+                {
+                    ajFmtPrintF(outf," PUBLIC \"");
+                    ajFmtPrintF(outf,"%S",node->sub.Entity.publicid);
+                    ajFmtPrintF(outf,"\" \"");
+                    ajFmtPrintF(outf,"%S",node->sub.Entity.systemid);
+                    ajFmtPrintF(outf,"\"");
+                }
+                else if(node->sub.Entity.systemid)
+                {
+                    ajFmtPrintF(outf," SYSTEM \"");
+                    ajFmtPrintF(outf,"%S",node->sub.Entity.systemid);
+                    ajFmtPrintF(outf,"\"");
+                }
 
-    case AJDOM_DOCUMENT_NODE:
-	ajFmtPrintF(outf,"<?xml");
-	ajFmtPrintF(outf," version=\"");
-	if(node->sub.Document.version)
-	    ajFmtPrintF(outf,"%S",node->sub.Document.version);
-	else
-	    ajFmtPrintF(outf,"1.0");
-	ajFmtPrintF(outf,"\"");
+                if(node->sub.Entity.notationname)
+                {
+                    ajFmtPrintF(outf," NDATA ");
+                    ajFmtPrintF(outf,"%S",node->sub.Entity.notationname);
+                }
+            }
 
-	if(node->sub.Document.standalone)
-	    ajFmtPrintF(outf," standalone=\"yes\"");
+            ajFmtPrintF(outf,">");
+            break;
 
-	ajFmtPrintF(outf,"?>\n");
+        case AJDOM_PROCESSING_INSTRUCTION_NODE:
+            ajFmtPrintF(outf,"<?");
+            ajFmtPrintF(outf,"%S ",node->sub.ProcessingInstruction.target);
+            domWriteEncoded(node->sub.ProcessingInstruction.data,outf);
+            ajFmtPrintF(outf,"?>");
+            break;
 
-	for(c=node->firstchild; c; c=c->nextsibling)
-	    if(ajDomWrite(c,outf) == -1)
-		return -1;
+        case AJDOM_COMMENT_NODE:
+            ajFmtPrintF(outf,"<!--");
+            domWriteEncoded(node->value,outf);
+            ajFmtPrintF(outf,"-->");
+            break;
 
-	ajFmtPrintF(outf,"\n");
-	break;
+        case AJDOM_DOCUMENT_NODE:
+            ajFmtPrintF(outf,"<?xml");
+            ajFmtPrintF(outf," version=\"");
 
-    case AJDOM_DOCUMENT_TYPE_NODE:
-	ajFmtPrintF(outf,"\n<!DOCTYPE ");
-	ajFmtPrintF(outf,"%S",node->sub.DocumentType.name);
-	if(node->sub.DocumentType.systemid)
-	{
-	    ajFmtPrintF(outf," SYSTEM \"");
-	    ajFmtPrintF(outf,"%S",node->sub.DocumentType.systemid);
-	    ajFmtPrintF(outf,"\"");
-	}
-	else if(node->sub.DocumentType.publicid)
-	{
-	    ajFmtPrintF(outf," PUBLIC \"");
-	    ajFmtPrintF(outf,"%S",node->sub.DocumentType.publicid);
-	    ajFmtPrintF(outf,"\"");
-	}
+            if(node->sub.Document.version)
+                ajFmtPrintF(outf,"%S",node->sub.Document.version);
+            else
+                ajFmtPrintF(outf,"1.0");
 
-	if(node->sub.DocumentType.internalsubset)
-	{
-	    ajFmtPrintF(outf," [\n");
-	    ajFmtPrintF(outf,"%S",node->sub.DocumentType.internalsubset);
-	    ajFmtPrintF(outf,"]>\n");
-	}
-	else
-	    ajFmtPrintF(outf,">\n");
+            ajFmtPrintF(outf,"\"");
 
-	break;
+            if(node->sub.Document.standalone)
+                ajFmtPrintF(outf," standalone=\"yes\"");
 
-    case AJDOM_DOCUMENT_FRAGMENT_NODE:
-	break;
+            ajFmtPrintF(outf,"?>\n");
+
+            for(c=node->firstchild; c; c=c->nextsibling)
+                if(ajDomWrite(c,outf) == -1)
+                    return -1;
+
+            ajFmtPrintF(outf,"\n");
+            break;
+
+        case AJDOM_DOCUMENT_TYPE_NODE:
+            ajFmtPrintF(outf,"\n<!DOCTYPE ");
+            ajFmtPrintF(outf,"%S",node->sub.DocumentType.name);
+
+            if(node->sub.DocumentType.systemid)
+            {
+                ajFmtPrintF(outf," SYSTEM \"");
+                ajFmtPrintF(outf,"%S",node->sub.DocumentType.systemid);
+                ajFmtPrintF(outf,"\"");
+            }
+            else if(node->sub.DocumentType.publicid)
+            {
+                ajFmtPrintF(outf," PUBLIC \"");
+                ajFmtPrintF(outf,"%S",node->sub.DocumentType.publicid);
+                ajFmtPrintF(outf,"\"");
+            }
+
+            if(node->sub.DocumentType.internalsubset)
+            {
+                ajFmtPrintF(outf," [\n");
+                ajFmtPrintF(outf,"%S",node->sub.DocumentType.internalsubset);
+                ajFmtPrintF(outf,"]>\n");
+            }
+            else
+                ajFmtPrintF(outf,">\n");
+
+            break;
+
+        case AJDOM_DOCUMENT_FRAGMENT_NODE:
+            break;
     }
 
     return 0;
@@ -3464,168 +3509,175 @@ ajint ajDomWriteIndent(const AjPDomDocument node, AjPFile outf, ajint indent)
 
     switch(node->type)
     {
-    case AJDOM_ELEMENT_NODE:
-	ajFmtPrintF(outf,"<");
-	ajFmtPrintF(outf,"%S",node->name);
-	for(e=node->attributes->first; e; e=e->next)
-	{
-	    ajFmtPrintF(outf," %S=\"",e->node->name);
-	    domWriteEncoded(e->node->value,outf);
-	    ajFmtPrintF(outf,"\"");
-	}
+        case AJDOM_ELEMENT_NODE:
+            ajFmtPrintF(outf,"<");
+            ajFmtPrintF(outf,"%S",node->name);
+
+            for(e=node->attributes->first; e; e=e->next)
+            {
+                ajFmtPrintF(outf," %S=\"",e->node->name);
+                domWriteEncoded(e->node->value,outf);
+                ajFmtPrintF(outf,"\"");
+            }
 	
-	if(ajDomNodeHasChildNodes(node))
-	{
-	    ajFmtPrintF(outf,">\n");
-	    for(c=node->firstchild; c; c=c->nextsibling)
-	      if(ajDomWriteIndent(c,outf,indent+2) == -1)
-		    return -1;
-            for(i=0;i<indent;++i)
-                ajFmtPrintF(outf," ");
+            if(ajDomNodeHasChildNodes(node))
+            {
+                ajFmtPrintF(outf,">\n");
 
+                for(c=node->firstchild; c; c=c->nextsibling)
+                    if(ajDomWriteIndent(c,outf,indent+2) == -1)
+                        return -1;
 
-	    ajFmtPrintF(outf,"</");
-	    ajFmtPrintF(outf,"%S",node->name);
-	    ajFmtPrintF(outf,">\n");
-	}
-	else
-	    ajFmtPrintF(outf,"/>\n");
+                for(i=0;i<indent;++i)
+                    ajFmtPrintF(outf," ");
 
-	break;
+                ajFmtPrintF(outf,"</");
+                ajFmtPrintF(outf,"%S",node->name);
+                ajFmtPrintF(outf,">\n");
+            }
+            else
+                ajFmtPrintF(outf,"/>\n");
 
-    case AJDOM_ATTRIBUTE_NODE:
-	break;
+            break;
 
-    case AJDOM_TEXT_NODE:
-	domWriteEncoded(node->value,outf);
-	break;
+        case AJDOM_ATTRIBUTE_NODE:
+            break;
 
-    case AJDOM_CDATA_SECTION_NODE:
-	break;
+        case AJDOM_TEXT_NODE:
+            domWriteEncoded(node->value,outf);
+            break;
 
-    case AJDOM_ENTITY_REFERENCE_NODE:
-	break;
+        case AJDOM_CDATA_SECTION_NODE:
+            break;
 
-    case AJDOM_NOTATION_NODE:
-	ajFmtPrintF(outf,"    <!NOTATION ");
-	ajFmtPrintF(outf,"%S",node->name);
-	if(node->sub.Notation.publicid)
-	{
-	    ajFmtPrintF(outf," PUBLIC \"");
-	    ajFmtPrintF(outf,"%S",node->sub.Notation.publicid);
-	    ajFmtPrintF(outf,"\" \"");
-	    ajFmtPrintF(outf,"%S",node->sub.Notation.systemid);
-	    ajFmtPrintF(outf,"\"");
-	}
-	else if(node->sub.Notation.systemid)
-	{
-	    ajFmtPrintF(outf," SYSTEM \"");
-	    ajFmtPrintF(outf,"%S",node->sub.Notation.systemid);
-	    ajFmtPrintF(outf,"\"");
-	}
+        case AJDOM_ENTITY_REFERENCE_NODE:
+            break;
 
-	ajFmtPrintF(outf,">\n");
-	break;
+        case AJDOM_NOTATION_NODE:
+            ajFmtPrintF(outf,"    <!NOTATION ");
+            ajFmtPrintF(outf,"%S",node->name);
 
-    case AJDOM_ENTITY_NODE:
-	ajFmtPrintF(outf,"    <!ENTITY ");
-	ajFmtPrintF(outf,"%S",node->name);
-	if(node->value)
-	{
-	    ajFmtPrintF(outf,"\"");
-	    ajFmtPrintF(outf,"%S",node->value);
-	    ajFmtPrintF(outf,"\"");
-	}
-	else
-	{
-	    if(node->sub.Entity.publicid)
-	    {
-		ajFmtPrintF(outf," PUBLIC \"");
-		ajFmtPrintF(outf,"%S",node->sub.Entity.publicid);
-		ajFmtPrintF(outf,"\" \"");
-		ajFmtPrintF(outf,"%S",node->sub.Entity.systemid);
-		ajFmtPrintF(outf,"\"");
-	    }
-	    else if(node->sub.Entity.systemid)
-	    {
-		ajFmtPrintF(outf," SYSTEM \"");
-		ajFmtPrintF(outf,"%S",node->sub.Entity.systemid);
-		ajFmtPrintF(outf,"\"");
-	    }
+            if(node->sub.Notation.publicid)
+            {
+                ajFmtPrintF(outf," PUBLIC \"");
+                ajFmtPrintF(outf,"%S",node->sub.Notation.publicid);
+                ajFmtPrintF(outf,"\" \"");
+                ajFmtPrintF(outf,"%S",node->sub.Notation.systemid);
+                ajFmtPrintF(outf,"\"");
+            }
+            else if(node->sub.Notation.systemid)
+            {
+                ajFmtPrintF(outf," SYSTEM \"");
+                ajFmtPrintF(outf,"%S",node->sub.Notation.systemid);
+                ajFmtPrintF(outf,"\"");
+            }
 
-	    if(node->sub.Entity.notationname)
-	    {
-		ajFmtPrintF(outf," NDATA ");
-		ajFmtPrintF(outf,"%S",node->sub.Entity.notationname);
-	    }
-	}
+            ajFmtPrintF(outf,">\n");
+            break;
 
-	ajFmtPrintF(outf,">\n");
-	break;
+        case AJDOM_ENTITY_NODE:
+            ajFmtPrintF(outf,"    <!ENTITY ");
+            ajFmtPrintF(outf,"%S",node->name);
 
-    case AJDOM_PROCESSING_INSTRUCTION_NODE:
-	ajFmtPrintF(outf,"<?");
-	ajFmtPrintF(outf,"%S ",node->sub.ProcessingInstruction.target);
-	domWriteEncoded(node->sub.ProcessingInstruction.data,outf);
-	ajFmtPrintF(outf,"?>\n");
-	break;
+            if(node->value)
+            {
+                ajFmtPrintF(outf,"\"");
+                ajFmtPrintF(outf,"%S",node->value);
+                ajFmtPrintF(outf,"\"");
+            }
+            else
+            {
+                if(node->sub.Entity.publicid)
+                {
+                    ajFmtPrintF(outf," PUBLIC \"");
+                    ajFmtPrintF(outf,"%S",node->sub.Entity.publicid);
+                    ajFmtPrintF(outf,"\" \"");
+                    ajFmtPrintF(outf,"%S",node->sub.Entity.systemid);
+                    ajFmtPrintF(outf,"\"");
+                }
+                else if(node->sub.Entity.systemid)
+                {
+                    ajFmtPrintF(outf," SYSTEM \"");
+                    ajFmtPrintF(outf,"%S",node->sub.Entity.systemid);
+                    ajFmtPrintF(outf,"\"");
+                }
 
-    case AJDOM_COMMENT_NODE:
-	ajFmtPrintF(outf,"<!--");
-	domWriteEncoded(node->value,outf);
-	ajFmtPrintF(outf,"-->\n");
-	break;
+                if(node->sub.Entity.notationname)
+                {
+                    ajFmtPrintF(outf," NDATA ");
+                    ajFmtPrintF(outf,"%S",node->sub.Entity.notationname);
+                }
+            }
 
-    case AJDOM_DOCUMENT_NODE:
-	ajFmtPrintF(outf,"<?xml");
-	ajFmtPrintF(outf," version=\"");
-	if(node->sub.Document.version)
-	    ajFmtPrintF(outf,"%S",node->sub.Document.version);
-	else
-	    ajFmtPrintF(outf,"1.0");
-	ajFmtPrintF(outf,"\"");
+            ajFmtPrintF(outf,">\n");
+            break;
 
-	if(node->sub.Document.standalone)
-	    ajFmtPrintF(outf," standalone=\"yes\"");
+        case AJDOM_PROCESSING_INSTRUCTION_NODE:
+            ajFmtPrintF(outf,"<?");
+            ajFmtPrintF(outf,"%S ",node->sub.ProcessingInstruction.target);
+            domWriteEncoded(node->sub.ProcessingInstruction.data,outf);
+            ajFmtPrintF(outf,"?>\n");
+            break;
 
-	ajFmtPrintF(outf,"?>\n");
+        case AJDOM_COMMENT_NODE:
+            ajFmtPrintF(outf,"<!--");
+            domWriteEncoded(node->value,outf);
+            ajFmtPrintF(outf,"-->\n");
+            break;
 
-	for(c=node->firstchild; c; c=c->nextsibling)
-	  if(ajDomWriteIndent(c,outf,indent+2) == -1)
-		return -1;
+        case AJDOM_DOCUMENT_NODE:
+            ajFmtPrintF(outf,"<?xml");
+            ajFmtPrintF(outf," version=\"");
 
-	ajFmtPrintF(outf,"\n");
-	break;
+            if(node->sub.Document.version)
+                ajFmtPrintF(outf,"%S",node->sub.Document.version);
+            else
+                ajFmtPrintF(outf,"1.0");
 
-    case AJDOM_DOCUMENT_TYPE_NODE:
-	ajFmtPrintF(outf,"\n<!DOCTYPE ");
-	ajFmtPrintF(outf,"%S",node->sub.DocumentType.name);
-	if(node->sub.DocumentType.systemid)
-	{
-	    ajFmtPrintF(outf," SYSTEM \"");
-	    ajFmtPrintF(outf,"%S",node->sub.DocumentType.systemid);
-	    ajFmtPrintF(outf,"\"");
-	}
-	else if(node->sub.DocumentType.publicid)
-	{
-	    ajFmtPrintF(outf," PUBLIC \"");
-	    ajFmtPrintF(outf,"%S",node->sub.DocumentType.publicid);
-	    ajFmtPrintF(outf,"\"");
-	}
+            ajFmtPrintF(outf,"\"");
 
-	if(node->sub.DocumentType.internalsubset)
-	{
-	    ajFmtPrintF(outf," [\n");
-	    ajFmtPrintF(outf,"%S",node->sub.DocumentType.internalsubset);
-	    ajFmtPrintF(outf,"]>\n");
-	}
-	else
-	    ajFmtPrintF(outf,">\n");
+            if(node->sub.Document.standalone)
+                ajFmtPrintF(outf," standalone=\"yes\"");
 
-	break;
+            ajFmtPrintF(outf,"?>\n");
 
-    case AJDOM_DOCUMENT_FRAGMENT_NODE:
-	break;
+            for(c=node->firstchild; c; c=c->nextsibling)
+                if(ajDomWriteIndent(c,outf,indent+2) == -1)
+                    return -1;
+
+            ajFmtPrintF(outf,"\n");
+            break;
+
+        case AJDOM_DOCUMENT_TYPE_NODE:
+            ajFmtPrintF(outf,"\n<!DOCTYPE ");
+            ajFmtPrintF(outf,"%S",node->sub.DocumentType.name);
+
+            if(node->sub.DocumentType.systemid)
+            {
+                ajFmtPrintF(outf," SYSTEM \"");
+                ajFmtPrintF(outf,"%S",node->sub.DocumentType.systemid);
+                ajFmtPrintF(outf,"\"");
+            }
+            else if(node->sub.DocumentType.publicid)
+            {
+                ajFmtPrintF(outf," PUBLIC \"");
+                ajFmtPrintF(outf,"%S",node->sub.DocumentType.publicid);
+                ajFmtPrintF(outf,"\"");
+            }
+
+            if(node->sub.DocumentType.internalsubset)
+            {
+                ajFmtPrintF(outf," [\n");
+                ajFmtPrintF(outf,"%S",node->sub.DocumentType.internalsubset);
+                ajFmtPrintF(outf,"]>\n");
+            }
+            else
+                ajFmtPrintF(outf,">\n");
+
+            break;
+
+        case AJDOM_DOCUMENT_FRAGMENT_NODE:
+            break;
     }
 
     return 0;

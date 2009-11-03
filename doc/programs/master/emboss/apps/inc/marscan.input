@@ -13,7 +13,7 @@ AC   U01317; J00093-J00094; J00096; J00158-J00175; J00177-J00179; K01239;
 AC   K01890; K02544; M18047; M19067; M24868; M24886;
 XX
 DT   19-MAR-1994 (Rel. 39, Created)
-DT   14-NOV-2006 (Rel. 89, Last updated, Version 34)
+DT   08-NOV-2008 (Rel. 97, Last updated, Version 36)
 XX
 DE   Human beta globin region on chromosome 11.
 XX
@@ -29,6 +29,7 @@ OC   Homo.
 XX
 RN   [1]
 RP   62409-62631, 63482-63610
+RX   DOI; 10.1073/pnas.71.6.2300.
 RX   PUBMED; 4135409.
 RA   Marotta C.A., Forget B.G., Weissman S.M., Verma I.M., McCaffrey R.P.,
 RA   Baltimore D.;
@@ -37,6 +38,7 @@ RL   Proc. Natl. Acad. Sci. U.S.A. 71(6):2300-2304(1974).
 XX
 RN   [2]
 RP   63602-63646
+RX   DOI; 10.1073/pnas.72.9.3614.
 RX   PUBMED; 1059150.
 RA   Forget B.G., Marotta C.A., Weissman S.M., Cohen-Solal M.;
 RT   "Nucleotide sequences of the 3'-terminal untranslated region of messenger
@@ -55,8 +57,6 @@ RP   63673-63743
 RX   DOI; 10.1016/0092-8674(76)90137-9.
 RX   PUBMED; 1035137.
 RA   Proudfoot N.J., Longley J.I.;
-RT   "The 3' terminal sequences of human alpha and beta globin messenger RNAs:
-RT   comparison with rabbit globin messenger RNA";
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>

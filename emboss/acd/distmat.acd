@@ -12,6 +12,7 @@ section: input [
     parameter: "Y"
     type: "gapany"
     aligned: "Y"
+    minseqs: "2"
     help: "File containing a sequence alignment."
   ]
 

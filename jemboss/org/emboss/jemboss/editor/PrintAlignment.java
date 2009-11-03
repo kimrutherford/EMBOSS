@@ -20,7 +20,6 @@
 
 package org.emboss.jemboss.editor;
 
-import java.awt.*;
 import java.awt.print.*;
 import javax.swing.*;
 
@@ -47,7 +46,6 @@ public class PrintAlignment
     int nresPerPage=  showOptions(gsc,format);
     gsc.setNumberOfResiduesPerLine(nresPerPage);
 
-//  System.out.println(format.getImageableY());
     book.append(gsc,format, 
                 gsc.getNumberPages(format,nresPerPage));
     printerJob.setPageable(book);

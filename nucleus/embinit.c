@@ -20,7 +20,7 @@
 
 
 
-/* @func  embInit *************************************************************
+/* @func embInit **************************************************************
 **
 ** Initialises everything. Reads an ACD (AJAX Command Definition) file
 ** prompts the user for any missing information, reads all sequences
@@ -48,7 +48,7 @@ void  embInit (const char *pgm, ajint argc, char * const argv[])
 
 
 
-/* @func  embInitP ************************************************************
+/* @func embInitP *************************************************************
 **
 ** Initialises everything. Reads an ACD (AJAX Command Definition) file
 ** prompts the user for any missing information, reads all sequences
@@ -68,9 +68,9 @@ void  embInit (const char *pgm, ajint argc, char * const argv[])
 void embInitP (const char *pgm, ajint argc, char * const argv[],
 		   const char *package)
 {
-  ajNamInit("emboss");
+    ajNamInit("emboss");
 
-  ajAcdInitP (pgm, argc, argv, package);
+    ajAcdInitP (pgm, argc, argv, package);
 
-  return;
+    return;
 }

@@ -185,7 +185,7 @@ int main(int argc, char **argv)
 	ajFeattableDel(&TabRpt);
 	ajStrDel(&strand);
     }
-
+    ajReportSetSeqstats(report, seqall);
 
     if(!n)
     {
@@ -506,7 +506,7 @@ static void helixturnhelix_report_hits(AjPList ajb,
     struct DNAB *dnab;
 
     if(!fthit)
-	ajStrAssignC(&fthit, "hit");
+	ajStrAssignC(&fthit, "SO:0001081");
 
     hp  = ajUintNew();
     hsd = ajFloatNew();

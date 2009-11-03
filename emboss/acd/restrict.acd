@@ -21,6 +21,13 @@ section: input [
     nullok: "Y"
   ]
 
+  datafile: mfile [
+    default: "Emethylsites.dat"
+    information: "Restriction enzyme data file (optional)"
+    knowntype: "restriction enzyme methylation data"
+    nullok: "Y"
+  ]
+
 endsection: input
 
 section: required [
@@ -135,6 +142,13 @@ section: advanced [
     help: "If this is set then this allows searches for restriction
            enzyme recognition site and cut postions that span the end of the
            sequence to be considered."
+  ]
+
+  boolean: methylation [
+    default: "N"
+    information: "Use methylation data"
+    help: "If this is set then RE recognition sites will not match
+           methylated bases."
   ]
 
   boolean: commercial [

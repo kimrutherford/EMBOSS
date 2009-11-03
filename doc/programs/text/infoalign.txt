@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Display basic information about a multiple sequence alignment
@@ -412,15 +419,20 @@ FT   CDS             <1..3072
 FT                   /transl_table=11
 FT                   /note="galactosidase"
 FT                   /db_xref="GOA:P00722"
-FT                   /db_xref="PDB:1BGL"
-FT                   /db_xref="PDB:1BGM"
-FT                   /db_xref="PDB:1DP0"
-FT                   /db_xref="PDB:1F49"
-FT                   /db_xref="PDB:1F4A"
-FT                   /db_xref="PDB:1F4H"
-FT                   /db_xref="PDB:1GHO"
-FT                   /db_xref="PDB:1HN1"
-FT                   /db_xref="PDB:1JYN"
+FT                   /db_xref="InterPro:IPR014718"
+FT                   /db_xref="PDB:3DYP"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P00722"
+FT                   /protein_id="CAA23573.1"
+FT                   /translation="TMITDSLAVVLQRRDWENPGVTQLNRLAAHPPFASWRNSEEART
+D
+FT                   RPSQQLRSLNGEWRFAWFPAPEAVPESWLECDLPEADTVVVPSNWQMHGYDAPIYTNV
+T
+FT                   YPITVNPPFVPTENPTGCYSLTFNVDESWLQEGQTRIIFDGVNSAFHLWCNGRWVGYG
+Q
+FT                   DSRLPSEFDLSAFLRAGENRLAVMVLRWSDGSYLEDQDMWRMSGIFRDVSLLHKPTTQ
+I
+FT                   SDFHVATRFNDDFSRAVLEAEVQMCGELRDYLRVTVSLWQGETQVASGTAPFGGEIID
+E
 
 
   [Part of this file has been deleted for brevity]
@@ -871,23 +883,23 @@ Known bugs
 
 See also
 
-   Program name Description
-   edialign Local multiple alignment of sequences
-   emma Multiple sequence alignment (ClustalW wrapper)
-   infobase Return information on a given nucleotide base
-   inforesidue Return information on a given amino acid residue
-   infoseq Display basic information about sequences
-   plotcon Plot conservation of a sequence alignment
-   prettyplot Draw a sequence alignment with pretty formatting
-   seealso Finds programs with similar function to a specified program
-   showalign Display a multiple sequence alignment in pretty format
-   showdb Displays information on configured databases
-   textsearch Search the textual description of sequence(s)
-   tfm Displays full documentation for an application
-   tranalign Generate an aligment of nucleic coding regions from aligned
-   proteins
-   whichdb Search all sequence databases for an entry and retrieve it
-   wossname Finds programs by keywords in their short description
+   Program name     Description
+   edialign         Local multiple alignment of sequences
+   emma             Multiple sequence alignment (ClustalW wrapper)
+   infobase         Return information on a given nucleotide base
+   inforesidue      Return information on a given amino acid residue
+   infoseq          Display basic information about sequences
+   plotcon          Plot conservation of a sequence alignment
+   prettyplot       Draw a sequence alignment with pretty formatting
+   seealso          Finds programs with similar function to a specified program
+   showalign        Display a multiple sequence alignment in pretty format
+   showdb           Displays information on configured databases
+   textsearch       Search the textual description of sequence(s)
+   tfm              Displays full documentation for an application
+   tranalign        Generate an alignment of nucleic coding regions from aligned
+                    proteins
+   whichdb          Search all sequence databases for an entry and retrieve it
+   wossname         Finds programs by keywords in their short description
 
 Author(s)
 

@@ -418,6 +418,7 @@ section: output [
   seqoutset: outseq [
     parameter: "Y"
     extension: "aln"
+    aligned: "Y"
   ]
 
   outfile: dendoutfile [

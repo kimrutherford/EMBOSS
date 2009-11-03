@@ -663,7 +663,9 @@ static void cvt_c(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 
     if(!minusflag)
 	pad(width - 1, ' ');
+
     put(ajSysCastItouc(va_arg(VA_V(ap), int)), cl);
+
     if(minusflag)
 	pad(width - 1, ' ');
 
@@ -718,6 +720,7 @@ static void cvt_f(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 	ajint i = 2;
 
 	assert(precision <= 99);
+
 	if(precision > 9)
 	    fmt[i++] = ajSysCastItoc((precision/10)%10 + '0');
 	fmt[i++] = ajSysCastItoc(precision%10 + '0');
@@ -725,6 +728,7 @@ static void cvt_f(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 	fmt[i]   = '\0';
 
 	sprintf(buf, fmt, va_arg(VA_V(ap), double));
+
 	if(code == 'g')
             precision = 0;
     }
@@ -1015,6 +1019,9 @@ static Fmt_S scvt[256] =
  /* 120-127 */ scvt_x,     0,scvt_z,     0,     0,     0,     0,     0
 };
 
+
+
+
 /* ****************************************************************************
 **
 ** Legal flag characters for conversions:
@@ -1076,6 +1083,7 @@ static ajint fmtInsert(int c, void* cl)
 	p->bp = p->buf + p->size;
 	p->size *= 2;
     }
+
     *p->bp++ = ajSysCastItoc(c);
 
     return c;
@@ -1108,6 +1116,7 @@ static ajint fmtAppend(ajint c, void* cl)
 	p->bp = p->buf + p->size;
 	p->size *= 2;
     }
+
     *p->bp++ = ajSysCastItoc(c);
 
     return c;
@@ -1160,6 +1169,7 @@ void ajFmtPuts(const char* str, ajint len, int put(int c, void* cl), void* cl,
 	pad(width - len, ' ');
     {
 	ajint i;
+
 	for(i = 0; i < len; i++)
 	    put((unsigned char)*str++, cl);
     }
@@ -1406,6 +1416,7 @@ ajint ajFmtVPrintCL(char* buf, ajint size, const char* fmt, va_list ap)
     ajint len;
 
     len = ajFmtVfmtCL(buf, size, fmt, ap);
+
     return len;
 }
 
@@ -1437,6 +1448,7 @@ ajint ajFmtPrintCL(char* buf, ajint size, const char* fmt, ...)
     va_start(ap, fmt);
     len = ajFmtVfmtCL(buf, size, fmt, ap);
     va_end(ap);
+
     return len;
 }
 
@@ -1484,6 +1496,7 @@ AjPStr ajFmtStr(const char* fmt, ...)
 #endif
 
     va_end(ap);
+
     return fnew;
 }
 
@@ -1798,6 +1811,7 @@ void ajFmtVfmt(int put(int c, void* cl), void* cl, const char* fmt,
 	    {
 		/* look for any conversion flags */
 		unsigned char cc = *fmt;
+
 		for( ; (int)cc && strchr(Fmt_flags, cc); cc = *++fmt)
 		{
 		    assert(flags[(int)cc] < 255);
@@ -1823,6 +1837,7 @@ void ajFmtVfmt(int put(int c, void* cl), void* cl, const char* fmt,
 			assert(n <= (INT_MAX - d)/10);
 			n = 10*n + d;
 		    }
+
 		width = n;
 	    }
 
@@ -1843,6 +1858,7 @@ void ajFmtVfmt(int put(int c, void* cl), void* cl, const char* fmt,
 			assert(n <= (INT_MAX - d)/10);
 			n = 10*n + d;
 		    }
+
 		precision = n;
 	    }
 
@@ -1854,6 +1870,7 @@ void ajFmtVfmt(int put(int c, void* cl), void* cl, const char* fmt,
 		flags[(int)*fmt]++;
 		fmt++;
 	    }
+
 	    /* finally, next character is the code */
 	    c = *fmt++;
 
@@ -2056,7 +2073,9 @@ void ajFmtPrintSplit(AjPFile outf, const AjPStr str,
 	{
 	    if(c++)
 		ajStrAppendC(&tmp," ");
+
 	    ajStrAppendS(&tmp,token);
+
 	    if(c!=1)
 		n = ++l;
 	    else
@@ -2270,6 +2289,7 @@ static ajint fmtVscan(const char *thys,const char *fmt,va_list ap)
 	    ++p;
 	    continue;
 	}
+
 	if(c_isin((ajint)*q,wspace))
 	{
 	    ++q;
@@ -2353,7 +2373,6 @@ static ajint fmtVscan(const char *thys,const char *fmt,va_list ap)
 	*/
 	++q;
     }
-
 
     return n;
 }
@@ -2461,7 +2480,9 @@ static void scvt_d(const char *fmt, const char **pos, VALIST ap, ajint width,
 		val = (long *) va_arg(VA_V(ap), long *);
 	    else
 		hval = (ajlong *) va_arg(VA_V(ap), ajlong *);
+
 	    ajStrAssignSubC(&t,p,0,q-p-1);
+
 	    if(flag!='L')
 		sscanf(ajStrGetPtr(t),"%ld",&n);
 
@@ -2545,12 +2566,15 @@ static void scvt_x(const char *fmt, const char **pos, VALIST ap, ajint width,
 		val = (unsigned long *) va_arg(VA_V(ap), unsigned long *);
 	    else
 		hval = (ajulong *) va_arg(VA_V(ap), ajulong *);
+
 	    ajStrAssignSubC(&t,p,0,q-p-1);
+
 	    if(flag!='L')
 	    {
 		if(sscanf(ajStrGetPtr(t),"%lx",&n)!=1)
 		{
 		    ajStrDel(&t);
+
 		    return;
 		}
 	    }
@@ -2560,11 +2584,15 @@ static void scvt_x(const char *fmt, const char **pos, VALIST ap, ajint width,
 		hn = sc_hex(ajStrGetPtr(t));
 #else
 		val = (unsigned long *) hval;
+
 		if(sscanf(ajStrGetPtr(t),"%lx",&n)!=1)
 		{
 		    ajStrDel(&t);
+
 		    return;
 		}
+
+
 		hn = n;
 		/*ajDebug("Warning: Use of %%Lx on a 32 bit model");*/
 #endif
@@ -2636,26 +2664,34 @@ static void scvt_f(const char *fmt, const char **pos, VALIST ap, ajint width,
 	if(convert)
 	{
 	    ajStrAssignSubC(&t,p,0,q-p-1);
+
 	    if(flag=='l')
 	    {
 		val = (double*) va_arg(VA_V(ap), double *);
+
 		if(sscanf(ajStrGetPtr(t),"%lf",&n)!=1)
 		{
 		    ajStrDel(&t);
+
 		    return;
 		}
+
 		*(double *)val = n;
 	    }
 	    else
 	    {
 		fval = (float*) va_arg(VA_V(ap), float *);
+
 		if(sscanf(ajStrGetPtr(t),"%f",&fn)!=1)
 		{
 		    ajStrDel(&t);
+
 		    return;
 		}
+
 		*(float *)fval = fn;
 	    }
+
 	    ajStrDel(&t);
 	}
 
@@ -2775,6 +2811,7 @@ static void scvt_o(const char *fmt, const char **pos, VALIST ap, ajint width,
 		val = (unsigned long *) va_arg(VA_V(ap), unsigned long *);
 	    else
 		hval = (ajulong *)  va_arg(VA_V(ap), ajulong *);
+
 	    ajStrAssignSubC(&t,p,0,q-p-1);
 
 	    if(flag!='L')
@@ -2782,6 +2819,7 @@ static void scvt_o(const char *fmt, const char **pos, VALIST ap, ajint width,
 		if(sscanf(ajStrGetPtr(t),"%lo",&n)!=1)
 		{
 		    ajStrDel(&t);
+
 		    return;
 		}
 	    }
@@ -2791,11 +2829,14 @@ static void scvt_o(const char *fmt, const char **pos, VALIST ap, ajint width,
 		hn = sc_octal(ajStrGetPtr(t));
 #else
 		val = (unsigned long *) hval;
+
 		if(sscanf(ajStrGetPtr(t),"%lo",&n)!=1)
 		{
 		    ajStrDel(&t);
+
 		    return;
 		}
+
 		hn = n;
 		/*ajDebug("Warning: Use of %%Lo on a 32 bit model");*/
 #endif
@@ -2814,6 +2855,7 @@ static void scvt_o(const char *fmt, const char **pos, VALIST ap, ajint width,
 	*pos = q;
 	*ok = ajTrue;
     }
+
     ajStrDel(&t);
 
     return;
@@ -2874,6 +2916,7 @@ static void scvt_u(const char *fmt, const char **pos, VALIST ap, ajint width,
 		val = (unsigned long *) va_arg(VA_V(ap), unsigned long *);
 	    else
 		hval = (ajulong *)  va_arg(VA_V(ap), ajulong *);
+
 	    ajStrAssignSubC(&t,p,0,q-p-1);
 
 	    if(flag!='L')
@@ -2881,6 +2924,7 @@ static void scvt_u(const char *fmt, const char **pos, VALIST ap, ajint width,
 		if(sscanf(ajStrGetPtr(t),"%lu",&n)!=1)
 		{
 		    ajStrDel(&t);
+
 		    return;
 		}
 	    }
@@ -2890,11 +2934,14 @@ static void scvt_u(const char *fmt, const char **pos, VALIST ap, ajint width,
 		hn = sc_ulong(ajStrGetPtr(t));
 #else
 		val = (unsigned long *) hval;
+
 		if(sscanf(ajStrGetPtr(t),"%lu",&n)!=1)
 		{
 		    ajStrDel(&t);
+
 		    return;
 		}
+
 		hn = n;
 		/*ajDebug("Warning: Use of %%Lu on a 32 bit model");*/
 #endif
@@ -2914,6 +2961,7 @@ static void scvt_u(const char *fmt, const char **pos, VALIST ap, ajint width,
 	*pos = q;
 	*ok = ajTrue;
     }
+
     ajStrDel(&t);
 
     return;
@@ -2969,14 +3017,17 @@ static void scvt_p(const char *fmt, const char **pos, VALIST ap, ajint width,
 	{
 	    val = (void **) va_arg(VA_V(ap), void **);
 	    ajStrAssignSubC(&t,p,0,q-p-1);
+
 	    if(sscanf(ajStrGetPtr(t),"%lx",&n)!=1)
 		return;
+
 	    *val = (void *)n;
 	}
 
 	*pos = q;
 	*ok = ajTrue;
     }
+
     ajStrDel(&t);
 
     return;
@@ -3024,24 +3075,30 @@ static void scvt_uB(const char *fmt, const char **pos, VALIST ap, ajint width,
     if(!strncmp(q,"Yes",3))
     {
 	*pos = q+3;
+
 	if(convert)
 	{
 	    val = (AjBool *) va_arg(VA_V(ap), AjBool *);
 	    *(AjBool*)val = ajTrue;
 	}
+
 	*ok = ajTrue;
+
 	return;
     }
 
     if(!strncmp(q,"No",2))
     {
 	*pos = q+2;
+
 	if(convert)
 	{
 	    val = (AjBool *) va_arg(VA_V(ap), AjBool *);
 	    *(AjBool*)val = ajFalse;
 	}
+
 	*ok = ajTrue;
+
 	return;
     }
 
@@ -3053,8 +3110,10 @@ static void scvt_uB(const char *fmt, const char **pos, VALIST ap, ajint width,
 	    val = (AjBool *) va_arg(VA_V(ap), AjBool *);
 	    *(AjBool*)val = ajTrue;
 	}
+
 	*pos = ++q;
 	*ok = ajTrue;
+
 	return;
     }
 
@@ -3065,8 +3124,10 @@ static void scvt_uB(const char *fmt, const char **pos, VALIST ap, ajint width,
 	    val = (AjBool *) va_arg(VA_V(ap), AjBool *);
 	    *(AjBool*)val = ajFalse;
 	}
+
 	*pos = ++q;
 	*ok = ajTrue;
+
 	return;
     }
 
@@ -3084,10 +3145,12 @@ static void scvt_uB(const char *fmt, const char **pos, VALIST ap, ajint width,
 	    val = (AjBool *) va_arg(VA_V(ap), AjBool *);
 	    ajStrAssignSubC(&t,p,0,q-p-1);
 	    sscanf(ajStrGetPtr(t),"%d",&n);
+
 	    if(n)
 		*(AjBool*)val = ajTrue;
 	    else
 		*(AjBool*)val = ajFalse;
+
 	    ajStrDel(&t);
 	}
 
@@ -3187,8 +3250,10 @@ static void scvt_b(const char *fmt, const char **pos, VALIST ap, ajint width,
 	    val = (AjBool *) va_arg(VA_V(ap), AjBool *);
 	    *(AjBool*)val = ajTrue;
 	}
+
 	*pos = ++q;
 	*ok = ajTrue;
+
 	return;
     }
 
@@ -3199,6 +3264,7 @@ static void scvt_b(const char *fmt, const char **pos, VALIST ap, ajint width,
 	    val = (AjBool *) va_arg(VA_V(ap), AjBool *);
 	    *(AjBool*)val = ajFalse;
 	}
+
 	*pos = ++q;
 	*ok = ajTrue;
     }
@@ -3250,8 +3316,10 @@ static void scvt_z(const char *fmt, const char **pos, VALIST ap, ajint width,
 	{
 	    val = (char **) va_arg(VA_V(ap), char **);
 	    ajStrAssignSubC(&t,p,0,q-p-1);
+
 	    if(!*val)
 		*val = ajCharNewRes(ajStrGetLen(t)+1);
+
 	    strcpy(*val,ajStrGetPtr(t));
 	    ajStrDel(&t);
 	}
@@ -3351,6 +3419,7 @@ static ajulong sc_hex(const char *str)
 	    d = c - '0';
 	else
 	    d = c - 'A' + 10;
+
 	v = (ajulong)16*v + (ajulong)d;
     }
 

@@ -22,10 +22,8 @@ package org.emboss.jemboss.editor;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.print.*;
 import javax.swing.*;
 import java.util.Hashtable;
-import java.util.Vector;
 
 /**
 *

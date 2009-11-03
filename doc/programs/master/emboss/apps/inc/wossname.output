@@ -104,7 +104,7 @@
 
 &lt;tr&gt;
 &lt;td&gt;&lt;a href="embossversion.html"&gt;embossversion&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;Writes the current EMBOSS version number to a file&lt;/td&gt;
+&lt;td&gt;Reports the current EMBOSS version number&lt;/td&gt;
 &lt;/tr&gt;
 
 &lt;/table&gt;

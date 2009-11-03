@@ -21,6 +21,18 @@ etandem
 <p>
 
 <H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
     Function
 </H2>
 Finds tandem repeats in a nucleotide sequence
@@ -28,16 +40,48 @@ Finds tandem repeats in a nucleotide sequence
 Description
 </H2>
 
-<p><b>etandem</b> identifies tandem repeats in a nucleotide sequence. It calculates a consensus sequence for a putative repeat region and scores potential repeats based on the number of matches and mismatches there are to the consensus. For a repeat to be identified, it must be within the specified minimum and maximum size and must score higher than the specified threshold score. The output is a standard EMBOSS report file with details of the location and score of any tandem repeats. Optionally, the output can be written in the format of the Sanger Centre quicktandem program.</p>
+<p><b>etandem</b> identifies tandem repeats in a nucleotide
+sequence. It calculates a consensus sequence for a putative repeat
+region and scores potential repeats based on the number of matches and
+mismatches there are to the consensus. For a repeat to be identified,
+it must be within the specified minimum and maximum size and must
+score higher than the specified threshold score. The output is a
+standard EMBOSS report file with details of the location and score of
+any tandem repeats. Optionally, the output can be written in the
+format of the Sanger Centre quicktandem program.</p>
 
+<p>Running <b>etandem</b> with a wide range of repeat sizes is
+inefficient. It is normally used after <b>equicktandem</b> has been
+run to identify putative sizes and locations of repeats.</p>
 
 <H2>
 Algorithm
 </H2>
 
-<p>The input sequence is first converted so that it contains the characters <tt>ACGT</tt> or <tt>N</tt> only, i.e. any ambiguity codes are converted to N.  <b>etandem</b> looks for sequence segments which match well to a consensus sequence calculated from non-overlapping windows over the sequence.  For a given start point in the sequence and repeat size, a consensus sequence is built from contiguous sequence segments of that size.</p>
-<p>The score for a segment (except the first segment which is not scored) is based on the number of matches and mismatches there are to the consensus: the score is incremented (+1) for a match and decremented (-1) for a mismatch.  By default, an "N" can never mismatch with a nucleotide but this behaviour can be changed with the <tt>-mismatch</tt> option. The highest scoring segment is kept for each start position and repeat size.</p>
-<p>Immediately adjacent segments that score higher than the specified threshold score are reported as a tandem repeat. The threshold score can be set on the command-line using the <tt>-threshold</tt> qualifier, the default is 20. For perfect repeats, the score is the equal to the length of the repeat. To allow for mismatches, the threshold score can be reduced. Each mismatch scores -1 instead of +1 so it scores 2 less than a perfect match of the same number of bases.</p>
+<p>The input sequence is first converted so that it contains the
+characters <tt>ACGT</tt> or <tt>N</tt> only, i.e. any ambiguity codes
+are converted to N.  <b>etandem</b> looks for sequence segments which
+match well to a consensus sequence calculated from non-overlapping
+windows over the sequence.  For a given start point in the sequence
+and repeat size, a consensus sequence is built from contiguous
+sequence segments of that size.</p>
+
+<p>The score for a segment (except the first segment which is not
+scored) is based on the number of matches and mismatches there are to
+the consensus: the score is incremented (+1) for a match and
+decremented (-1) for a mismatch.  By default, an "N" can never
+mismatch with a nucleotide but this behaviour can be changed with
+the <tt>-mismatch</tt> option. The highest scoring segment is kept for
+each start position and repeat size.</p>
+
+<p>Immediately adjacent segments that score higher than the specified
+threshold score are reported as a tandem repeat. The threshold score
+can be set on the command-line using the <tt>-threshold</tt>
+qualifier, the default is 20. For perfect repeats, the score is the
+equal to the length of the repeat. To allow for mismatches, the
+threshold score can be reduced. Each mismatch scores -1 instead of +1
+so it scores 2 less than a perfect match of the same number of
+bases.</p>
 
 
 <H2>
@@ -248,14 +292,14 @@ XX
 KW   telomeric repeat.
 XX
 OS   Human herpesvirus 7
-OC   Viruses; dsDNA viruses, no RNA stage; Herpesviridae; Betaherpesvirinae;
-OC   Roseolovirus.
+OC   Viruses; dsDNA viruses, no RNA stage; Herpesvirales; Herpesviridae;
+OC   Betaherpesvirinae; Roseolovirus.
 XX
 RN   [1]
 RP   1-1272
 RX   PUBMED; 7494318.
 RA   Secchiero P., Nicholas J., Deng H., Xiaopeng T., van Loon N., Ruvolo V.R.,
-RA   Berneman Z.N., Reitz M.S. Jr., Dewhurst S.;
+RA   Berneman Z.N., Reitz M.S.Jr., Dewhurst S.;
 RT   "Identification of human telomeric repeat motifs at the genome termini of
 RT   human herpesvirus 7: structural analysis and heterogeneity";
 RL   J. Virol. 69(12):8041-8045(1995).
@@ -387,7 +431,9 @@ None
     Notes
 </H2>
 
-<p>Running <b>etandem</b> with a wide range of repeat sizes is inefficient. It is normally used after <b>equicktandem</b> has been run to identify putative sizes and locations of repeats.</p>
+<p>Running <b>etandem</b> with a wide range of repeat sizes is
+inefficient. It is normally used after <b>equicktandem</b> has been
+run to identify putative sizes and locations of repeats.</p>
 
 <H2>
     References
@@ -444,7 +490,7 @@ None.
 <p>
 
 Running with a wide range of repeat sizes is inefficient. That is why
-equicktandem was written - to give a rapid estimate of the major repeat
+<b>equicktandem</b> was written - to give a rapid estimate of the major repeat
 sizes.
 
 
@@ -463,7 +509,7 @@ Cambridge, CB10 1SA, UK.
 This application was modified for inclusion in EMBOSS by 
 Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
 <br>
-Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
 <H2>
     History

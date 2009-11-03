@@ -6,8 +6,8 @@
 
 % <b>backtranambig </b>
 Back-translate a protein sequence to ambiguous nucleotide sequence
-Input (gapped) protein sequence: <b>tsw:opsd_human</b>
-(gapped) nucleotide output sequence [opsd_human.fasta]: <b></b>
+Input (gapped) protein sequence(s): <b>tsw:opsd_human</b>
+(gapped) nucleotide output sequence(s) [opsd_human.fasta]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

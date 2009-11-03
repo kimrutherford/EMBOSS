@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Identify and plot CpG islands in nucleotide sequence(s)
@@ -89,7 +96,7 @@ Command line arguments
                                   details of any CpG islands that are found.
 *  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, xterm, png, gif)
+                                  tekt, tek, none, data, das, xterm, png, gif)
   [-outfeat]           featout    [unknown.gff] File for output features
 
    Additional (Optional) qualifiers: (none)
@@ -202,6 +209,10 @@ RL   Submitted (26-AUG-1996) to the EMBL/GenBank/DDBJ databases.
 RL   Biochemistry & Molecular Biology, Merck Frosst Center for Therapeutic
 RL   Research, P. O. Box 1005, Pointe Claire - Dorval, Quebec H9R 4P8, Canada
 XX
+DR   ASTD; TRAN00000010928.
+DR   Ensembl-Gn; ENSRNOG00000004094; Rattus_norvegicus.
+DR   Ensembl-Tr; ENSRNOT00000005470; Rattus_norvegicus.
+XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..1218
@@ -214,10 +225,7 @@ FT                   /codon_start=1
 FT                   /product="EP1 prostanoid receptor"
 FT                   /note="family 1 G-protein coupled receptor"
 FT                   /db_xref="GOA:P70597"
-FT                   /db_xref="InterPro:IPR000276"
-FT                   /db_xref="InterPro:IPR000708"
-FT                   /db_xref="InterPro:IPR001244"
-FT                   /db_xref="InterPro:IPR008365"
+FT                   /db_xref="InterPro:IPR017452"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P70597"
 FT                   /protein_id="AAB07735.1"
 FT                   /translation="MSPYGLNLSLVDEATTCVTPRVPNTSVVLPTGGNGTSPALPIFS
@@ -306,11 +314,11 @@ U68037 from 1 to 1218
 ##sequence-region U68037 1 924
 #!Date 2008-07-15
 #!Type DNA
-#!Source-version EMBOSS 6.0.0
-U68037  cpgplot located_sequence_feature        104     509     0.000   +
-.       ID="U68037.1"
-U68037  cpgplot located_sequence_feature        596     924     0.000   +
-.       ID="U68037.2"
+#!Source-version EMBOSS 6.1.0
+U68037  cpgplot sequence_feature        104     509     0.000   +       .
+ID="U68037.1"
+U68037  cpgplot sequence_feature        596     924     0.000   +       .
+ID="U68037.2"
 
   Graphics File: cpgplot.ps
 
@@ -389,13 +397,13 @@ Known bugs
 
 See also
 
-   Program name Description
-   cpgreport Identify and report CpG-rich regions in nucleotide
-   sequence(s)
-   geecee Calculate fractional GC content of nucleic acid sequences
-   newcpgreport Identify CpG islands in nucleotide sequence(s)
-   newcpgseek Identify and report CpG-rich regions in nucleotide
-   sequence(s)
+   Program name     Description
+   cpgreport        Identify and report CpG-rich regions in nucleotide
+                    sequence(s)
+   geecee           Calculate fractional GC content of nucleic acid sequences
+   newcpgreport     Identify CpG islands in nucleotide sequence(s)
+   newcpgseek       Identify and report CpG-rich regions in nucleotide
+                    sequence(s)
 
    As there is no official definition of what is a cpg island is, and
    worst where they begin and end, we have to live with 2 definitions and

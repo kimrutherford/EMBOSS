@@ -230,13 +230,13 @@ int main(int argc, char **argv)
     maxprimerlen = ajAcdGetInt("maxprimerlen");
     minpmGCcont  = ajAcdGetFloat("minpmGCcont");
     maxpmGCcont  = ajAcdGetFloat("maxpmGCcont");
-    minprimerTm  = ajAcdGetFloat("minprimerTm");
-    maxprimerTm  = ajAcdGetFloat("maxprimerTm");
+    minprimerTm  = ajAcdGetFloat("mintmprimer");
+    maxprimerTm  = ajAcdGetFloat("maxtmprimer");
 
-    minprodlen    = ajAcdGetInt("minprodlen");
-    maxprodlen    = ajAcdGetInt("maxprodlen");
-    minprodGCcont = ajAcdGetFloat("minprodGCcont");
-    maxprodGCcont = ajAcdGetFloat("maxprodGCcont");
+    minprodlen    = ajAcdGetInt("minplen");
+    maxprodlen    = ajAcdGetInt("maxplen");
+    minprodGCcont = ajAcdGetFloat("minpgccont");
+    maxprodGCcont = ajAcdGetFloat("maxpgccont");
 
     saltconc = ajAcdGetFloat("saltconc");
     dnaconc  = ajAcdGetFloat("dnaconc");
@@ -682,6 +682,11 @@ static void prima_testproduct(const AjPStr seqstr,
     float primerTm   = 0.0;
     float primGCcont = 0.0;
 
+    (void) primerlen;
+    (void) minprodlen;
+    (void) maxprodlen;
+    (void) stepping_value;
+
     forpend   = startpos -1;
     revpstart = endpos +1;
 
@@ -1047,8 +1052,8 @@ static void prima_PrimerDel(AjPPrimer *p)
 
 static ajint prima_Compare(const void *a, const void *b)
 {
-    return (*(AjPPair *)a)->f->score -
-		   (*(AjPPair *)b)->f->score;
+    return (*(AjPPair const *)a)->f->score -
+		   (*(AjPPair const *)b)->f->score;
 }
 
 
@@ -1067,8 +1072,8 @@ static ajint prima_Compare(const void *a, const void *b)
 static ajint prima_PosCompare(const void *a, const void *b)
 {
 
-    return ((*(AjPPair *)a)->f->start + (*(AjPPair *)a)->f->primerlen - 1)  -
-	   ((*(AjPPair *)b)->f->start + (*(AjPPair *)b)->f->primerlen - 1);
+    return ((*(AjPPair const *)a)->f->start + (*(AjPPair const *)a)->f->primerlen - 1)  -
+	   ((*(AjPPair const *)b)->f->start + (*(AjPPair const *)b)->f->primerlen - 1);
 }
 
 
@@ -1087,8 +1092,8 @@ static ajint prima_PosCompare(const void *a, const void *b)
 static ajint prima_PosEndCompare(const void *a, const void *b)
 {
 
-    return ((*(AjPPair *)a)->r->start)  -
-	   ((*(AjPPair *)b)->r->start);
+    return ((*(AjPPair const *)a)->r->start)  -
+	   ((*(AjPPair const *)b)->r->start);
 }
 
 
@@ -1177,6 +1182,8 @@ static void prima_testtarget(const AjPStr seqstr, const AjPStr revstr,
     ajint  pcount;
     ajint  k;
 
+    (void) minprodGCcont;
+    (void) maxprodGCcont;
 
     fstr = ajStrNew();
     rstr = ajStrNew();

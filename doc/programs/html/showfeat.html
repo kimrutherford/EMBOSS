@@ -21,6 +21,18 @@ showfeat
 <p>
 
 <H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
     Function
 </H2>
 Display features of a sequence in pretty format
@@ -58,7 +70,7 @@ Display 'joined' features on one line with positions:
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>showfeat -sort join -pos </b>
+% <b>showfeat -joinfeat -pos </b>
 Display features of a sequence in pretty format
 Input sequence(s): <b>tembl:x65921</b>
 Output file [x65921.showfeat]: <b></b>
@@ -75,7 +87,7 @@ Display just positions and names of CDS features - this can be used as a regions
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>showfeat -matchtype CDS -width 0 -noid -nodesc -noscale -pos  </b>
+% <b>showfeat -typematch CDS -width 0 -noid -nodesc -noscale -pos  </b>
 Display features of a sequence in pretty format
 Input sequence(s): <b>tembl:x65921</b>
 Output file [x65921.showfeat]: <b></b>
@@ -96,7 +108,7 @@ Output file [x65921.showfeat]: <b></b>
   [-outfile]           outfile    [*.showfeat] Output file name
 
    Additional (Optional) qualifiers:
-   -matchsource        string     [*] By default any feature source in the
+   -sourcematch        string     [*] By default any feature source in the
                                   feature table is shown. You can set this to
                                   match any feature source you wish to show.
                                   The source name is usually either the name
@@ -108,7 +120,7 @@ Output file [x65921.showfeat]: <b></b>
                                   separate their names with the character '|',
                                   eg:
                                   gene* | embl (Any string is accepted)
-   -matchtype          string     [*] By default any feature type in the
+   -typematch          string     [*] By default any feature type in the
                                   feature table is shown. You can set this to
                                   match any feature type you wish to show.
                                   See http://www3.ebi.ac.uk/Services/WebFeat/
@@ -121,7 +133,7 @@ Output file [x65921.showfeat]: <b></b>
                                   separate their names with the character '|',
                                   eg:
                                   *UTR | intron (Any string is accepted)
-   -matchtag           string     [*] Tags are the types of extra values that
+   -tagmatch           string     [*] Tags are the types of extra values that
                                   a feature may have. For example in the EMBL
                                   feature table, a 'CDS' type of feature may
                                   have the tags '/codon', '/codon_start',
@@ -142,7 +154,7 @@ Output file [x65921.showfeat]: <b></b>
                                   separate their names with the character '|',
                                   eg:
                                   gene | label (Any string is accepted)
-   -matchvalue         string     [*] Tag values are the values associated
+   -valuematch         string     [*] Tag values are the values associated
                                   with a feature tag. Tags are the types of
                                   extra values that a feature may have. For
                                   example in the EMBL feature table, a 'CDS'
@@ -171,8 +183,8 @@ Output file [x65921.showfeat]: <b></b>
                                   leave other features in the input order
                                   (Values: source (Sort by Source); start
                                   (Sort by Start position); type (Sort by
-                                  Type); nosort (No sorting done); join (Join
-                                  coding regions together))
+                                  Type); nosort (No sorting done))
+   -joinfeatures       boolean    [N] Join coding regions together
    -annotation         range      [If this is left blank, then no annotation
                                   is added.] Regions to annotate by marking.
                                   If this is left blank, then no annotation is
@@ -235,8 +247,8 @@ Output file [x65921.showfeat]: <b></b>
                                   always directionless (indicated by '0'),
                                   forward is indicated by '+' and reverse is
                                   '-'.
-   -source             boolean    [N] Set this if you wish to display the
-                                  source of the features.
+   -origin             boolean    [N] Set this if you wish to display the
+                                  origin of the features.
                                   The source name is usually either the name
                                   of the program that detected the feature or
                                   it is the name of the feature table (eg:
@@ -336,7 +348,7 @@ Output file [x65921.showfeat]: <b></b>
 </tr>
 
 <tr>
-<td>-matchsource</td>
+<td>-sourcematch</td>
 <td>By default any feature source in the feature table is shown. You can set this to match any feature source you wish to show.
 The source name is usually either the name of the program that detected the feature or it is the feature table (eg: EMBL) that the feature came from.
 The source may be wildcarded by using '*'.
@@ -347,7 +359,7 @@ gene* | embl</td>
 </tr>
 
 <tr>
-<td>-matchtype</td>
+<td>-typematch</td>
 <td>By default any feature type in the feature table is shown. You can set this to match any feature type you wish to show.
 See http://www3.ebi.ac.uk/Services/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www.expasy.ch/txt/userman.txt for a list of the Swissprot feature types.
 The type may be wildcarded by using '*'.
@@ -358,7 +370,7 @@ If you wish to show more than one type, separate their names with the character 
 </tr>
 
 <tr>
-<td>-matchtag</td>
+<td>-tagmatch</td>
 <td>Tags are the types of extra values that a feature may have. For example in the EMBL feature table, a 'CDS' type of feature may have the tags '/codon', '/codon_start', '/db_xref', '/EC_number', '/evidence', '/exception', '/function', '/gene', '/label', '/map', '/note', '/number', '/partial', '/product', '/protein_id', '/pseudo', '/standard_name', '/translation', '/transl_except', '/transl_table', or '/usedin'. Some of these tags also have values, for example '/gene' can have the value of the gene name.
 By default any feature tag in the feature table is shown. You can set this to match any feature tag you wish to show.
 The tag may be wildcarded by using '*'.
@@ -369,7 +381,7 @@ gene | label</td>
 </tr>
 
 <tr>
-<td>-matchvalue</td>
+<td>-valuematch</td>
 <td>Tag values are the values associated with a feature tag. Tags are the types of extra values that a feature may have. For example in the EMBL feature table, a 'CDS' type of feature may have the tags '/codon', '/codon_start', '/db_xref', '/EC_number', '/evidence', '/exception', '/function', '/gene', '/label', '/map', '/note', '/number', '/partial', '/product', '/protein_id', '/pseudo', '/standard_name', '/translation', '/transl_except', '/transl_table', or '/usedin'. Only some of these tags can have values, for example '/gene' can have the value of the gene name. By default any feature tag value in the feature table is shown. You can set this to match any feature tag valueyou wish to show.
 The tag value may be wildcarded by using '*'.
 If you wish to show more than one tag value, separate their names with the character '|', eg:
@@ -381,8 +393,15 @@ pax* | 10</td>
 <tr>
 <td>-sort</td>
 <td>Sort features by Type, Start or Source, Nosort (don't sort - use input order) or join coding regions together and leave other features in the input order</td>
-<td><table><tr><td>source</td> <td><i>(Sort by Source)</i></td></tr><tr><td>start</td> <td><i>(Sort by Start position)</i></td></tr><tr><td>type</td> <td><i>(Sort by Type)</i></td></tr><tr><td>nosort</td> <td><i>(No sorting done)</i></td></tr><tr><td>join</td> <td><i>(Join coding regions together)</i></td></tr></table></td>
+<td><table><tr><td>source</td> <td><i>(Sort by Source)</i></td></tr><tr><td>start</td> <td><i>(Sort by Start position)</i></td></tr><tr><td>type</td> <td><i>(Sort by Type)</i></td></tr><tr><td>nosort</td> <td><i>(No sorting done)</i></td></tr></table></td>
 <td>start</td>
+</tr>
+
+<tr>
+<td>-joinfeatures</td>
+<td>Join coding regions together</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
 </tr>
 
 <tr>
@@ -480,8 +499,8 @@ If this is set to false then each feature is displayed on a separate line making
 </tr>
 
 <tr>
-<td>-source</td>
-<td>Set this if you wish to display the source of the features.
+<td>-origin</td>
+<td>Set this if you wish to display the origin of the features.
 The source name is usually either the name of the program that detected the feature or it is the name of the feature table (eg: EMBL) that the feature came from.</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
@@ -573,7 +592,7 @@ RX   DOI; 10.1016/0006-291X(92)91286-Y.
 RX   PUBMED; 1326960.
 RA   Kas K., Michiels L., Merregaert J.;
 RT   "Genomic structure and expression of the human fau gene: encoding the
-RT   ribosomal protein S30 fused to a ubiquitin-like protein.";
+RT   ribosomal protein S30 fused to a ubiquitin-like protein";
 RL   Biochem. Biophys. Res. Commun. 187(2):927-933(1992).
 XX
 DR   GDB; 191789.
@@ -702,17 +721,17 @@ X65921
 H.sapiens fau 1 gene
 |==========================================================| 2016
 |----------------------------------------------------------&gt; 1-2016 source
-           |--&gt;       |-&gt;  |---&gt;             |&gt;     |--&gt;     408-504,774-856,951-1095,1557-1612,1787-1912 mRNA
            |--&gt;                                              408-504 exon
+           |--&gt;                                              408-504 mRNA
               |-------&gt;                                      505-773 intron
-                      |-&gt;                                    774-856 exon
-                      |-&gt;  |---&gt;             |&gt;     |--&gt;     782-856,951-1095,1557-1612,1787-1912 CDS
-                        |--&gt;                                 857-950 intron
-                           |---&gt;                             951-1095 exon
-                               |-------------&gt;               1096-1556 intron
-                                             |&gt;              1557-1612 exon
-                                               |----&gt;        1613-1786 intron
-                                                    |--&gt;     1787-1912 exon
+                      |-&gt;                                    774-856,774-856 exon
+                      |-&gt;                                    782-856 CDS
+                        |--|---&gt;                             857-950,951-1095 intron
+                           |---&gt;                             951-1095,951-1095 exon
+                               |-------------|&gt;              1096-1556,1557-1612 intron
+                                             |&gt;              1557-1612,1557-1612 exon
+                                               |----|--&gt;     1613-1786,1787-1912 intron
+                                                    |--&gt;     1787-1912,1787-1912 exon
                                                         &gt;    1938-1943 polyA_signal
 
 </pre>
@@ -859,6 +878,11 @@ None.
 <tr>
 <td><a href="showdb.html">showdb</a></td>
 <td>Displays information on configured databases</td>
+</tr>
+
+<tr>
+<td><a href="showpep.html">showpep</a></td>
+<td>Displays protein sequences with features in pretty format</td>
 </tr>
 
 <tr>

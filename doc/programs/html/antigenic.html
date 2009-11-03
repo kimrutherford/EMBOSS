@@ -22,6 +22,18 @@ antigenic
 
 
 <H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
     Function
 </H2>
 Finds antigenic sites in proteins
@@ -34,14 +46,23 @@ Finds antigenic sites in proteins
 </H2>
 
 
-<p><B>Antigenic</B> predicts potentially <b>antigenic</b> regions of a protein sequence, using the method of Kolaskar and Tongaonkar. This method is based on a single parameter and thus very simple to use.</p>
+<p><B>Antigenic</B> predicts potentially <b>antigenic</b> regions of a
+protein sequence, using the method of Kolaskar and Tongaonkar. This
+method is based on a single parameter and thus very simple to use.</p>
 
 
 <H2>
     Algorithm
 </H2>
 
-<p>Analysis of data from experimentally determined <b>antigenic</b> sites on proteins has revealed that the hydrophobic residues Cys, Leu and Val, if they occur on the surface of a protein, are more likely to be a part of <b>antigenic</b> sites.  The method of Kolaskar and Tongaonkar to predict <b>antigenic</b> determinants in proteins is semi-empirical and makes use of physicochemical properties of amino acid residues and their frequencies of occurrence in experimentally known segmental epitopes.</p>
+<p>Analysis of data from experimentally determined <b>antigenic</b>
+sites on proteins has revealed that the hydrophobic residues Cys, Leu
+and Val, if they occur on the surface of a protein, are more likely to
+be a part of <b>antigenic</b> sites.  The method of Kolaskar and
+Tongaonkar to predict <b>antigenic</b> determinants in proteins is
+semi-empirical and makes use of physicochemical properties of amino
+acid residues and their frequencies of occurrence in experimentally
+known segmental epitopes.</p>
 
 
 
@@ -230,9 +251,12 @@ ID   ACTB1_FUGRU             Reviewed;         375 AA.
 AC   P68142; P53484;
 DT   25-OCT-2004, integrated into UniProtKB/Swiss-Prot.
 DT   25-OCT-2004, sequence version 1.
-DT   20-MAR-2007, entry version 16.
-DE   Actin, cytoplasmic 1 (Beta-actin A).
-GN   Name=ACTB-A;
+DT   16-JUN-2009, entry version 31.
+DE   RecName: Full=Actin, cytoplasmic 1;
+DE   AltName: Full=Beta-actin A;
+DE   Contains:
+DE     RecName: Full=Actin, cytoplasmic 1, N-terminally processed;
+GN   Name=actba;
 OS   Fugu rubripes (Japanese pufferfish) (Takifugu rubripes).
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
 OC   Actinopterygii; Neopterygii; Teleostei; Euteleostei; Neoteleostei;
@@ -252,7 +276,7 @@ CC       in all eukaryotic cells.
 CC   -!- SUBUNIT: Polymerization of globular actin (G-actin) leads to a
 CC       structural filament (F-actin) in the form of a two-stranded helix.
 CC       Each actin can bind to 4 others.
-CC   -!- SUBCELLULAR LOCATION: Cytoplasm.
+CC   -!- SUBCELLULAR LOCATION: Cytoplasm, cytoskeleton.
 CC   -!- TISSUE SPECIFICITY: Widely distributed. Not expressed in skeletal
 CC       muscle.
 CC   -!- MISCELLANEOUS: In vertebrates 3 main groups of actin isoforms,
@@ -272,9 +296,14 @@ DR   EMBL; U37499; AAC59889.1; -; Genomic_DNA.
 DR   PIR; S71124; S71124.
 DR   HSSP; P02570; 1HLU.
 DR   SMR; P68142; 4-371.
-DR   Ensembl; NEWSINFRUG00000152503; Fugu rubripes.
-DR   InterPro; IPR004001; Actin.
-DR   InterPro; IPR004000; Actin_like.
+DR   HOVERGEN; P68142; -.
+DR   OMA; P68142; EKMTQIL.
+DR   GO; GO:0005737; C:cytoplasm; IEA:UniProtKB-SubCell.
+DR   GO; GO:0005856; C:cytoskeleton; IEA:UniProtKB-SubCell.
+DR   GO; GO:0005524; F:ATP binding; IEA:UniProtKB-KW.
+DR   GO; GO:0005515; F:protein binding; IEA:InterPro.
+DR   InterPro; IPR004000; Actin-like.
+DR   InterPro; IPR004001; Actin_CS.
 DR   PANTHER; PTHR11937; Actin_like; 1.
 DR   Pfam; PF00022; Actin; 1.
 DR   PRINTS; PR00190; ACTIN.
@@ -282,14 +311,20 @@ DR   SMART; SM00268; ACTIN; 1.
 DR   PROSITE; PS00406; ACTINS_1; 1.
 DR   PROSITE; PS00432; ACTINS_2; 1.
 DR   PROSITE; PS01132; ACTINS_ACT_LIKE; 1.
-KW   Acetylation; ATP-binding; Cytoskeleton; Methylation;
-KW   Nucleotide-binding; Structural protein.
-FT   PROPEP        1      1       Removed in mature form (By similarity).
-FT                                /FTId=PRO_0000000808.
-FT   CHAIN         2    375       Actin, cytoplasmic 1.
+PE   2: Evidence at transcript level;
+KW   Acetylation; ATP-binding; Cytoplasm; Cytoskeleton; Methylation;
+KW   Nucleotide-binding.
+FT   CHAIN         1    375       Actin, cytoplasmic 1.
+FT                                /FTId=PRO_0000367094.
+FT   INIT_MET      1      1       Removed; alternate (By similarity).
+FT   CHAIN         2    375       Actin, cytoplasmic 1, N-terminally
+FT                                processed.
 FT                                /FTId=PRO_0000000809.
-FT   MOD_RES       1      1       N-acetylmethionine (By similarity).
-FT   MOD_RES       2      2       N-acetylglutamate (By similarity).
+FT   MOD_RES       1      1       N-acetylmethionine; in Actin, cytoplasmic
+FT                                1; alternate (By similarity).
+FT   MOD_RES       2      2       N-acetylglutamate; in Actin, cytoplasmic
+FT                                1, N-terminally processed (By
+FT                                similarity).
 FT   MOD_RES      73     73       Tele-methylhistidine (By similarity).
 SQ   SEQUENCE   375 AA;  41767 MW;  9C505616D33E9495 CRC64;
      MEDEIAALVV DNGSGMCKAG FAGDDAPRAV FPSIVGRPRH QGVMVGMGQK DSYVGDEAQS
@@ -452,27 +487,29 @@ Max_score_pos at "*"
 <p><h3>File: actb1_fugru.antigenic</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-##gff-version 2.0
-##date 2007-07-15
-##Type Protein ACTB1_FUGRU
-ACTB1_FUGRU	antigenic	region	214	222	1.207	+	.	Sequence "ACTB1_FUGRU.1" ; note "*pos 218"
-ACTB1_FUGRU	antigenic	region	131	145	1.187	+	.	Sequence "ACTB1_FUGRU.2" ; note "*pos 137"
-ACTB1_FUGRU	antigenic	region	5	12	1.166	+	.	Sequence "ACTB1_FUGRU.3" ; note "*pos 8"
-ACTB1_FUGRU	antigenic	region	27	38	1.164	+	.	Sequence "ACTB1_FUGRU.4" ; note "*pos 32"
-ACTB1_FUGRU	antigenic	region	160	183	1.136	+	.	Sequence "ACTB1_FUGRU.5" ; note "*pos 173"
-ACTB1_FUGRU	antigenic	region	367	372	1.135	+	.	Sequence "ACTB1_FUGRU.6" ; note "*pos 372"
-ACTB1_FUGRU	antigenic	region	93	108	1.116	+	.	Sequence "ACTB1_FUGRU.7" ; note "*pos 103"
-ACTB1_FUGRU	antigenic	region	295	301	1.113	+	.	Sequence "ACTB1_FUGRU.8" ; note "*pos 296"
-ACTB1_FUGRU	antigenic	region	256	266	1.110	+	.	Sequence "ACTB1_FUGRU.9" ; note "*pos 264"
-ACTB1_FUGRU	antigenic	region	336	352	1.107	+	.	Sequence "ACTB1_FUGRU.10" ; note "*pos 347"
-ACTB1_FUGRU	antigenic	region	62	76	1.102	+	.	Sequence "ACTB1_FUGRU.11" ; note "*pos 68"
-ACTB1_FUGRU	antigenic	region	232	250	1.086	+	.	Sequence "ACTB1_FUGRU.12" ; note "*pos 245"
-ACTB1_FUGRU	antigenic	region	327	332	1.083	+	.	Sequence "ACTB1_FUGRU.13" ; note "*pos 330"
-ACTB1_FUGRU	antigenic	region	317	323	1.074	+	.	Sequence "ACTB1_FUGRU.14" ; note "*pos 320"
-ACTB1_FUGRU	antigenic	region	186	192	1.068	+	.	Sequence "ACTB1_FUGRU.15" ; note "*pos 191"
-ACTB1_FUGRU	antigenic	region	40	46	1.066	+	.	Sequence "ACTB1_FUGRU.16" ; note "*pos 43"
-ACTB1_FUGRU	antigenic	region	269	275	1.045	+	.	Sequence "ACTB1_FUGRU.17" ; note "*pos 269"
-ACTB1_FUGRU	antigenic	region	51	57	1.034	+	.	Sequence "ACTB1_FUGRU.18" ; note "*pos 52"
+##gff-version 3
+##sequence-region ACTB1_FUGRU 1 375
+#!Date 2008-07-15
+#!Type Protein
+#!Source-version EMBOSS 6.1.0
+ACTB1_FUGRU	antigenic	epitope	214	222	1.207	+	.	ID="ACTB1_FUGRU.1";note="*pos 218"
+ACTB1_FUGRU	antigenic	epitope	131	145	1.187	+	.	ID="ACTB1_FUGRU.2";note="*pos 137"
+ACTB1_FUGRU	antigenic	epitope	5	12	1.166	+	.	ID="ACTB1_FUGRU.3";note="*pos 8"
+ACTB1_FUGRU	antigenic	epitope	27	38	1.164	+	.	ID="ACTB1_FUGRU.4";note="*pos 32"
+ACTB1_FUGRU	antigenic	epitope	160	183	1.136	+	.	ID="ACTB1_FUGRU.5";note="*pos 173"
+ACTB1_FUGRU	antigenic	epitope	367	372	1.135	+	.	ID="ACTB1_FUGRU.6";note="*pos 372"
+ACTB1_FUGRU	antigenic	epitope	93	108	1.116	+	.	ID="ACTB1_FUGRU.7";note="*pos 103"
+ACTB1_FUGRU	antigenic	epitope	295	301	1.113	+	.	ID="ACTB1_FUGRU.8";note="*pos 296"
+ACTB1_FUGRU	antigenic	epitope	256	266	1.110	+	.	ID="ACTB1_FUGRU.9";note="*pos 264"
+ACTB1_FUGRU	antigenic	epitope	336	352	1.107	+	.	ID="ACTB1_FUGRU.10";note="*pos 347"
+ACTB1_FUGRU	antigenic	epitope	62	76	1.102	+	.	ID="ACTB1_FUGRU.11";note="*pos 68"
+ACTB1_FUGRU	antigenic	epitope	232	250	1.086	+	.	ID="ACTB1_FUGRU.12";note="*pos 245"
+ACTB1_FUGRU	antigenic	epitope	327	332	1.083	+	.	ID="ACTB1_FUGRU.13";note="*pos 330"
+ACTB1_FUGRU	antigenic	epitope	317	323	1.074	+	.	ID="ACTB1_FUGRU.14";note="*pos 320"
+ACTB1_FUGRU	antigenic	epitope	186	192	1.068	+	.	ID="ACTB1_FUGRU.15";note="*pos 191"
+ACTB1_FUGRU	antigenic	epitope	40	46	1.066	+	.	ID="ACTB1_FUGRU.16";note="*pos 43"
+ACTB1_FUGRU	antigenic	epitope	269	275	1.045	+	.	ID="ACTB1_FUGRU.17";note="*pos 269"
+ACTB1_FUGRU	antigenic	epitope	51	57	1.034	+	.	ID="ACTB1_FUGRU.18";note="*pos 52"
 </pre>
 </td></tr></table><p>
 
@@ -529,11 +566,53 @@ The directories are searched in the following order:
 Here is the default <em>Eantigenic.dat</em> file:
 
 <pre>
-
+# Kolaskar AS and Tongaonkar PC (1990) FEBS Letters 276:172-174
+# "A semi-emipirical method for prediction of antigenic determinants
+# on protein antigens"
+#
+# TABLE 1: Occurrence of amino acids in epitopes, proteins and on the surface,
+#         and their antigenic propensity, A(p), values
+#
+# 169 antigenic determinants experimentally determined. Selected those 156
+# which have less than 20 amino acids per determinant (total 2066 residues).
+# Calculated f(Ag) as frequency of occurrence of each residue in antigenic
+# determinants [f(Ag) = Epitope_occurrence/2066].
+#
+# Used Hydrophilicity, Accessibility and Flexibility of Parker JMR, Guo D,
+# Hodges, RS (1986) Biochemistry 25:5425-5432. In a given protein, calculated
+# average for each 7-mer and assigned values to central residue of 7-mer.
+# Residue considered to be on the surface if any of the 7-mer values was above
+# the average for the protein. Used these results to get f(s) frequency of
+# occurrence of amino acids at the surface.
+#
+# Original table covers the 20 naturally occurring amino acids.
+# Values for B, Z, X use weighted averages from Edayhoff.dat
+# and are ignored when calculating totals
+#
+# Antigenic propensity column A(p) = f(Ag)/f(s)
+#
+# f(s) values below were back-calculated from the table in the paper
+#
+# Prediction algorithm:
+#
+# 1. calculate average propensity <A(p)> for each overlapping 7-mer, assign to
+#    central residue (i+3)
+#
+# 2. calculate average for whole protein A(p)av
+#
+# 3. (a) if average for whole protein >= 1.0 then all residues having
+#        <A(p)> >= 1.0 are potentially antigenic.
+#    (b) if average for whole protein <  1.0 then all residues having
+#        <A(p)> > average for whole protein (??? paper has a mangled
+#        formula here :-) are potentially antigenic.
+#
+# 4. Find 6-mers where all residues are selected by step 3 above
+#
 #                                               Antigenic  Surface  Antigenic
 # Amino     -- Occurrence of amino acids in --   frequency frequency propensity
 # Acid       Epitopes      Surface     Protein   f(Ag)    f(s)      A(p)
   A             135          328         524     0.065    0.061     1.064
+  B             107          334         410     0.052    0.062     0.827
   C              53           97         186     0.026    0.018     1.412
   D             118          352         414     0.057    0.066     0.866
   E             132          401         499     0.064    0.075     0.851
@@ -552,9 +631,10 @@ Here is the default <em>Eantigenic.dat</em> file:
   T             141          401         522     0.068    0.075     0.909
   V             128          239         515     0.062    0.045     1.383
   W              19           55         103     0.009    0.010     0.893
+  X             118          306         453     0.057    0.057     1.025
   Y              71          158         245     0.034    0.029     1.161
+  Z             119          342         433     0.058    0.064     0.916
 Total          2066         5340        7944
-
 </pre>
 
 <H2>
@@ -599,7 +679,7 @@ ambiguity codes.
 </H2>
 
 
-It exits with status 0, unless a region is badly constructed.
+It exits with status 0.
 
 <H2>
     Known bugs
@@ -695,7 +775,7 @@ Original program "ANTIGENIC" by Peter Rice (EGCG 1991)
 
 Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
 <br>
-Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
 <H2>
     History

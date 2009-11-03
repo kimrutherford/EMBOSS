@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Predicts protein secondary structure using GOR method
@@ -125,8 +132,8 @@ ID   AMIC_PSEAE              Reviewed;         385 AA.
 AC   P27017;
 DT   01-AUG-1992, integrated into UniProtKB/Swiss-Prot.
 DT   23-JAN-2007, sequence version 5.
-DT   20-MAR-2007, entry version 50.
-DE   Aliphatic amidase expression-regulating protein.
+DT   16-JUN-2009, entry version 68.
+DE   RecName: Full=Aliphatic amidase expression-regulating protein;
 GN   Name=amiC; OrderedLocusNames=PA3364;
 OS   Pseudomonas aeruginosa.
 OC   Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadales;
@@ -175,48 +182,48 @@ RC   STRAIN=PAC1;
 
   [Part of this file has been deleted for brevity]
 
-FT                                /FTId=PRO_0000064581.
 FT   VARIANT     106    106       T -> N (in strain: PAC181; butyramide
 FT                                inducible phenotype).
-FT   CONFLICT     27     28       QR -> HA (in Ref. 1).
-FT   CONFLICT    186    186       V -> L (in Ref. 1).
-FT   CONFLICT    263    263       A -> P (in Ref. 1).
-FT   CONFLICT    305    305       S -> N (in Ref. 1).
-FT   CONFLICT    319    319       C -> D (in Ref. 1).
-FT   CONFLICT    383    383       A -> P (in Ref. 1).
-FT   STRAND        8     12
-FT   STRAND       15     17
-FT   HELIX        20     38
-FT   TURN         39     42
-FT   STRAND       49     53
-FT   HELIX        59     71
-FT   STRAND       77     80
-FT   HELIX        84     96
-FT   STRAND      100    103
-FT   STRAND      116    118
-FT   HELIX       123    125
-FT   HELIX       127    135
-FT   TURN        136    138
-FT   STRAND      140    149
-FT   HELIX       150    165
-FT   STRAND      169    176
-FT   HELIX       182    195
-FT   STRAND      198    203
-FT   HELIX       208    220
-FT   STRAND      228    232
-FT   HELIX       235    238
-FT   HELIX       243    246
-FT   STRAND      250    254
-FT   HELIX       262    272
-FT   HELIX       283    302
-FT   HELIX       307    314
-FT   STRAND      319    321
-FT   STRAND      324    328
-FT   TURN        330    332
-FT   STRAND      335    337
-FT   STRAND      340    344
-FT   STRAND      350    355
-FT   HELIX       368    370
+FT   CONFLICT     27     28       QR -> HA (in Ref. 1; CAA32024).
+FT   CONFLICT    186    186       V -> L (in Ref. 1; CAA32024).
+FT   CONFLICT    263    263       A -> P (in Ref. 1; CAA32024).
+FT   CONFLICT    305    305       S -> N (in Ref. 1; CAA32024).
+FT   CONFLICT    319    319       C -> D (in Ref. 1; CAA32024).
+FT   CONFLICT    383    383       A -> P (in Ref. 1; CAA32024).
+FT   STRAND        9     13
+FT   STRAND       16     18
+FT   HELIX        21     39
+FT   TURN         40     43
+FT   STRAND       50     54
+FT   HELIX        60     72
+FT   STRAND       78     81
+FT   HELIX        85     97
+FT   STRAND      101    104
+FT   STRAND      117    119
+FT   HELIX       124    126
+FT   HELIX       128    136
+FT   TURN        137    139
+FT   STRAND      141    150
+FT   HELIX       151    166
+FT   STRAND      170    177
+FT   HELIX       183    196
+FT   STRAND      199    204
+FT   HELIX       209    221
+FT   STRAND      229    233
+FT   HELIX       236    239
+FT   HELIX       244    247
+FT   STRAND      251    255
+FT   HELIX       263    273
+FT   HELIX       284    303
+FT   HELIX       308    315
+FT   STRAND      320    322
+FT   STRAND      325    329
+FT   TURN        331    333
+FT   STRAND      336    338
+FT   STRAND      341    345
+FT   STRAND      351    356
+FT   HELIX       369    371
+FT   HELIX       376    378
 SQ   SEQUENCE   385 AA;  42807 MW;  33924B6C36017B79 CRC64;
      MGSHQERPLI GLLFSETGVT ADIERSQRYG ALLAVEQLNR EGGVGGRPIE TLSQDPGGDP
      DRYRLCAEDF IRNRGVRFLV GCYMSHTRKA VMPVVERADA LLCYPTPYEG FEYSPNIVYG
@@ -326,7 +333,9 @@ turns    TT    TT           TTT   TTT
 
 #---------------------------------------
 # Total_sequences: 1
-# Total_hitcount: 113
+# Total_length: 385
+# Reported_sequences: 1
+# Reported_hitcount: 113
 #---------------------------------------
 
 Data files
@@ -409,14 +418,14 @@ Known bugs
 
 See also
 
-   Program name Description
-   helixturnhelix Identify nucleic acid-binding motifs in protein
-   sequences
-   hmoment Calculate and plot hydrophobic moment for protein sequence(s)
-   pepcoil Predicts coiled coil regions in protein sequences
-   pepnet Draw a helical net for a protein sequence
-   pepwheel Draw a helical wheel diagram for a protein sequence
-   tmap Predict and plot transmembrane segments in protein sequences
+   Program name     Description
+   helixturnhelix   Identify nucleic acid-binding motifs in protein
+                    sequences
+   hmoment          Calculate and plot hydrophobic moment for protein sequence(s)
+   pepcoil          Predicts coiled coil regions in protein sequences
+   pepnet           Draw a helical net for a protein sequence
+   pepwheel         Draw a helical wheel diagram for a protein sequence
+   tmap             Predict and plot transmembrane segments in protein sequences
 
 Author(s)
 

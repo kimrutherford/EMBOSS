@@ -56,7 +56,10 @@ int main(int argc, char **argv)
 
 	/* see if both reverse and complement */
 	if(reverse && complement)
+        {
 	    ajSeqReverseForce(seq);	/* reverses and complements */
+            ajSeqTagRev(seq);
+        }
 	else if(reverse)
 	    ajSeqReverseOnly(seq);
 	else if(complement)

@@ -198,7 +198,7 @@ public class GraphicSequenceCollection extends JPanel
     {
       Sequence s = (Sequence)enumer.nextElement();
       String name = s.getName();
-      if(name.equals("Consensus"))
+      if(name.equals(Consensus.DEFAULT_SEQUENCE_NAME))
         return s;
     }
     return null;
@@ -286,7 +286,11 @@ public class GraphicSequenceCollection extends JPanel
     SequenceJPanel sj = (SequenceJPanel)graphicSequence.get(0);
     int interval = sj.getSequenceResidueWidth();
 
-    pc =  new PlotConsensus(mat,seqs,wsize,interval,this);
+    Vector seqs_ = new Vector(seqs);
+    Sequence seq = (Sequence)seqs.lastElement();
+    if (seq.getName().equals(Consensus.DEFAULT_SEQUENCE_NAME))
+       seqs_.removeElementAt(seqs.size()-1);
+    pc =  new PlotConsensus(mat,seqs_,wsize,interval,this);
     pc.setBackground(Color.white);
    
     Box XBox = new Box(BoxLayout.X_AXIS);
@@ -632,7 +636,7 @@ public class GraphicSequenceCollection extends JPanel
     while(enumer.hasMoreElements())
     {  
       String name = ((Sequence)enumer.nextElement()).getName();
-      if(!name.equals("Consensus"))
+      if(!name.equals(Consensus.DEFAULT_SEQUENCE_NAME))
         nseqs++;
     }
 
@@ -642,7 +646,7 @@ public class GraphicSequenceCollection extends JPanel
     while(enumer.hasMoreElements())
     {
       String name = ((Sequence)enumer.nextElement()).getName();
-      if(!name.equals("Consensus"))
+      if(!name.equals(Consensus.DEFAULT_SEQUENCE_NAME))
       {
         seqName[i] = new String(name);
         i++;

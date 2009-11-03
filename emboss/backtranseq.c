@@ -33,7 +33,8 @@
 
 int main(int argc, char **argv)
 {
-    AjPSeq     a;
+    AjPSeqall  seqall;
+    AjPSeq     a = NULL;
     AjPSeqout  outf;
     AjPCod     codon;
     AjPStr     substr;
@@ -44,29 +45,32 @@ int main(int argc, char **argv)
 
     embInit("backtranseq", argc, argv);
 
-    a         = ajAcdGetSeq("sequence");
+    seqall    = ajAcdGetSeqall("sequence");
     codon     = ajAcdGetCodon("cfile");
-    outf      = ajAcdGetSeqout("outfile");
+    outf      = ajAcdGetSeqoutall("outfile");
+    while(ajSeqallNext(seqall, &a))
+    {
+        substr = ajStrNew();
+        beg    = ajSeqGetBegin(a);
+        end    = ajSeqGetEnd(a);
+        ajStrAssignSubS(&substr,ajSeqGetSeqS(a),beg-1,end-1);
 
-    substr = ajStrNew();
-    beg    = ajSeqGetBegin(a);
-    end    = ajSeqGetEnd(a);
-    ajStrAssignSubS(&substr,ajSeqGetSeqS(a),beg-1,end-1);
+        back = ajStrNew();
+        ajCodSetBacktranslate(&codon);
+        ajCodBacktranslate(&back,substr,codon);
 
-    back = ajStrNew();
-    ajCodSetBacktranslate(&codon);
-    ajCodBacktranslate(&back,substr,codon);
+        ajSeqAssignSeqS (a, back);
+        ajSeqSetNuc (a);
 
-    ajSeqAssignSeqS (a, back);
-    ajSeqSetNuc (a);
-
-    ajSeqoutWriteSeq(outf,a);
+        ajSeqoutWriteSeq(outf,a);
+    }
 
     ajStrDel(&back);
     ajStrDel(&substr);
     ajSeqoutClose(outf);
     ajCodDel(&codon);
 
+    ajSeqallDel(&seqall);
     ajSeqoutDel(&outf);
     ajSeqDel(&a);
 

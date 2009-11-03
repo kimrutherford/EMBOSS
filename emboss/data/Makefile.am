@@ -25,17 +25,17 @@ pkgdata_DATA = EBLOSUM30 EBLOSUM35 EBLOSUM40 EBLOSUM45 EBLOSUM50 \
                Efeatures.gffprotein Efeatures.gff3protein \
                Efeatures.pir Efeatures.protein Efeatures.swiss \
                Efreqs.dat Ehet.dat Ehth.dat \
-               Ehth87.dat Ememe.dat Emolwt.dat Enakai.dat \
+               Ehth87.dat Ememe.dat Emethylsites.dat Emolwt.dat Enakai.dat \
                Epepcoil.dat Epk.dat \
                Epprofile Eprior1.plib Eprior30.plib Erna.melt Eresidues.iub \
                Esig.euk Esig.pro \
                Etags.embl Etags.emboss \
-               Etags.gff Etags.gff3 Etags.gffprotein \
+               Etags.gff Etags.gff3 Etags.gffprotein Etags.gff3protein \
                Etags.pir Etags.protein Etags.swiss \
                Etcode.dat Evdw.dat Ewhite-wimley.dat \
                embossre.equ Emwfilter.dat Emass.dat Emassmod.dat \
                Matrices.nucleotide Matrices.protein Matrices.proteinstructure \
-	       edialignmat tp400_dna tp400_prot tp400_trans
+               SSSUB edialignmat tp400_dna tp400_prot tp400_trans
 
 pkgdatadir=$(prefix)/share/$(PACKAGE)/data
 

@@ -9,7 +9,7 @@ Display information on the currently available databases:
 % <b>showdb </b>
 Displays information on configured databases
 
-# Name           Type  ID  Qry All Comment
+# Name           Type ID  Qry All Comment
 # ============== ==== ==  === === =======
 twp              P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM index
 qapblast         P    OK  OK  OK  BLAST swissnew
@@ -95,7 +95,7 @@ Display information on one explicit database:
 % <b>showdb -database tsw </b>
 Displays information on configured databases
 
-# Name         Type  ID  Qry All Comment
+# Name         Type ID  Qry All Comment
 # ============ ==== ==  === === =======
 tsw            P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
 
@@ -186,7 +186,7 @@ Display protein databases only:
 % <b>showdb -nonucleic </b>
 Displays information on configured databases
 
-# Name           Type  ID  Qry All Comment
+# Name           Type ID  Qry All Comment
 # ============== ==== ==  === === =======
 twp              P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM index
 qapblast         P    OK  OK  OK  BLAST swissnew
@@ -430,7 +430,7 @@ Display everything
 % <b>showdb -full </b>
 Displays information on configured databases
 
-# Name           Type  ID  Qry All Method    Fields            Defined  Release  Comment
+# Name           Type ID  Qry All Method    Fields            Defined Release Comment
 # ============== ==== ==  === === ========= ================= ======= ======= =======
 twp              P    OK  OK  OK  emblcd    des               global  16      EMBL new in native format with EMBL CD-ROM index
 qapblast         P    OK  OK  OK  blast     -                 special         BLAST swissnew

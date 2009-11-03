@@ -9,7 +9,6 @@ package org.emboss.jemboss.editor;
  * @author <a href="mailto:">Mr H. Morgan</a>
  * @version
  */
-import java.util.EventObject;
 import java.beans.PropertyChangeEvent;
 
 public class GroutAlignJFrameEvent extends PropertyChangeEvent

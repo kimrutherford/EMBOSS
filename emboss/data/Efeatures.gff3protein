@@ -17,36 +17,32 @@
 # so we can parser the details for each feature, But what to do about
 # new GFF versions of the same features with possibly bad formatting?
 
-# REGION - Extent of a region of interest in the sequence
+# SITE - Any other interesting site on the sequence.
 
-region SO:0000839_region
+polypeptide_region SO:0000839 SO:0000839_site SO:0000839_region SO:0000839_inhibitory_site
 	/note
 	/comment
 
 # ACT_SITE - Amino acid(s) involved in the activity of an enzyme.
 
-act_site SO:0001104_act_site
-	/note
-	/comment
-
-active_site_residue SO:0001104
+active_site_residue SO:0001104 SO:0001104_act_site
 	/note
 	/comment
 
 # BINDING  -  Binding  site  for any chemical group  (co-enzyme,  prosthetic
 # group, etc.).
 
-binding_site SO:0000409
+binding_site SO:0000409 SO:0100018_np_bind SO:0100020_zn_fing
+	/note
+	/comment
+
+epitope SO:0001018
 	/note
 	/comment
 
 # CA_BIND - Extent of a calcium-binding region.
 
-ca_bind SO:0001094_ca_bind
-	/note
-	/comment
-
-ca_contact_site SO:0001094
+ca_contact_site SO:0001094 SO:0001094_ca_bind
 	/note
 	/comment
 
@@ -67,25 +63,28 @@ ca_contact_site SO:0001094
 # FT   CARBOHYD     10     10       O-LINKED (GALNAC...) (BY SIMILARITY).
 # FT   CARBOHYD     34     34       C-LINKED (MAN).
 
-carbohyd
+glycosylated_residue MOD:00693
 	/note
 	/comment
 
 # CHAIN - Extent of a polypeptide chain in the mature protein.
 
-chain SO:0000419_chain
-	/note
-	/comment
+#chain SO:0000419_chain
+#	/note
+#	/comment
 
 mature_protein_region SO:0000419
 	/note
 	/comment
 
-# COILED - Extent of a coiled-coil region
+# coil: random coiled region of secondary structure e.g. predicted by
+# garnier algorithm
 
-coiled SO:0001080_coiled
+coil SO:0100012
 	/note
 	/comment
+
+# COILED - Extent of a coiled-coil region
 
 coiled_coil SO:0001080
 	/note
@@ -94,20 +93,16 @@ coiled_coil SO:0001080
 
 # COMPBIAS - Extent of a compositionally biased region
 
-compbias SO:0001066_compbias
-	/note
-	/comment
-
-computationally_biased_region SO:0001066
+computationally_biased_region SO:0001066 SO:0001066_compbias
 	/note
 	/comment
 
 # CONFLICT - Different papers report differing sequences.
 # note usually begins MISSING or SEQ -> NEW (description optional)
 
-conflict SO:0001085_conflict
-	/note
-	/comment
+#conflict SO:0001085
+#	/note
+#	/comment
 
 sequence_conflict SO:0001085
 	/note
@@ -120,9 +115,9 @@ sequence_conflict SO:0001085
 # identical, the amino acid bond is an interchain one. The name of the
 # linked peptide is indicated in the description field.
  
-crosslnk
-	/note
-	/comment
+#crosslnk SO:0001087
+#	/note
+#	/comment
 
 # DISULFID - Disulfide bond.
 # The  'FROM' and 'TO' endpoints represent the two residues which are linked
@@ -130,31 +125,23 @@ crosslnk
 # identical,  the  disulfide bond is an interchain one and  the  description
 # field  indicates  the nature of the cross-link.
 
-disulfid SO:0001088_disulfid
-	/note
-	/comment
-
-disulfide SO:0001088_disulfide
-	/note
-	/comment
-
-disulfide_bond SO:0001088
+disulfide_bond SO:0001088 SO:0001088_disulfid SO:0001088_disulfide MOD:00034
 	/note
 	/comment
 
 # DNA_BIND - Extent of a DNA-binding region.
 
-DNA_bind SO:0000417_dna_bind
+DNA_contact SO:0100020
 	/note
 	/comment
 
 # DOMAIN - Extent of a domain of interest on the sequence.
 
-domain SO:0000417_domain
-	/note
-	/comment
+#domain SO:0000417
+#	/note
+#	/comment
 
-polypeptide_domain SO:0000417
+polypeptide_domain SO:0000417 SO:0000417_dna_bind
 	/note
 	/comment
 
@@ -165,7 +152,7 @@ polypeptide_structural_domain SO:0001069
 
 # HELIX -  DSSP secondary structure
 
-helix SO:0001114
+alpha_helix SO:0001117
 	/note
 	/comment
 
@@ -173,10 +160,6 @@ helix SO:0001114
 # This feature key is mostly associated with a zero value in the 'FROM'  and
 # 'TO' fields to indicate that the initiator methionine has been cleaved off
 # and is not shown in the sequence:
-
-init_met SO:0000691_init_met
-	/note
-	/comment
 
 cleaved_initiator_methionine SO:0000691
 	/note
@@ -204,17 +187,13 @@ cleaved_initiator_methionine SO:0000691
 #                   alpha-carboxyl group of the C-terminal residue of the
 #                   mature form of a protein [5,6]
 
-lipid SO:0001090_lipid
+lipoconjugated_residue MOD:01155
 	/note
 	/comment
 
 # METAL - Binding site for a metal ion.
 
-metal SO:0001092_metal
-	/note
-	/comment
-
-metal_binding SO:0001092
+metal_binding SO:0001092 SO:0001092_metal
 	/note
 	/comment
 
@@ -236,7 +215,7 @@ metal_binding SO:0001092
 #                            internal cyclic lactam
 #SULFATATION                 Generally of tyrosine
 
-mod_res SO:0001089_mod_res
+protein_modification_categorized_by_chemical_process MOD:01156
 	/note
 	/comment
 
@@ -246,18 +225,18 @@ post_translational_modification SO:0001089
 
 # MOTIF - Short (up to 20 amino acids) sequence motif of biological interest
 
-motif SO:0001067_motif
-	/note
-	/comment
+#motif SO:0001067_motif
+#	/note
+#	/comment
 
-polypeptide_motif SO:0001067
+polypeptide_motif SO:0001067  SO:0001067_motif
 	/note
 	/comment
 
 # MUTAGEN - Site which has been experimentally altered.
 # mutagen note usually SEQ ->NEW: description
 
-mutagen
+mutated_variant_site SO:0001148
 	/note
 	/comment
 
@@ -265,98 +244,67 @@ mutagen
 # Indicates  that  two residues in a sequence are not consecutive  and  that
 # there  are  a  number of unsequenced residues between  them.
 
-non_cons SO:0001083_non_cons
+non_adjacent_residues SO:0001083 SO:0001083_non_cons
 	/note
 	/comment
 
-non_adjacent_residues SO:0001083
+# NON_STD - non standard amino acid, used for pyrrolysine
+
+stop_codon_redefined_as_pyrrolysine SO:0000884
 	/note
 	/comment
 
 # NON_TER  - The residue at an extremity of the sequence is not the terminal
 # residue.
 
-non_ter SO:0001084_non_ter
-	/note
-	/comment
-
-non_terminal_residue SO:0001084
+non_terminal_residue SO:0001084 SO:0001084_non_ter
 	/note
 	/comment
 
 # NP_BIND - Extent of a nucleotide phosphate binding region.
 
-np_bind SO:0000409_np_bind
-	/note
-	/comment
+#np_bind SO:0100018_np_bind
+#	/note
+#	/comment
 
 # PEPTIDE - Extent of a released active peptide.
 
-peptide SO:0001064_peptide
-	/note
-	/comment
-
-active_peptide SO:0001064
+active_peptide SO:0001064 SO:0001064_peptide
 	/note
 	/comment
 
 # PROPEP - Extent of a propeptide.
 
-propep SO:0001062_propep
-	/note
-	/comment
-
-propeptide SO:0001062
+propeptide SO:0001062 SO:0001062_propep
 	/note
 	/comment
 
 # REPEAT - Extent of an internal sequence repetition.
 
-repeat SO:0001068_repeat
-	/note
-	/comment
-
-polypeptide_repeat SO:0001068
+polypeptide_repeat SO:0001068 SO:0001068_repeat
 	/note
 	/comment
 
 # SE_CYS - Selenocysteine
 
-se_cys
+stop_codon_redefined_as_selenocysteine SO:0000885 MOD:00031
 	/note
 	/comment
 
 # SIGNAL - Extent of a signal sequence (prepeptide).
 
-signal SO:0000418_signal
-	/note
-	/comment
 
-signal_peptide SO:0000418
+signal_peptide SO:0000418 SO:0000418_signal
 	/note
 	/comment
 
 # SIMILAR - Extent of a similarity with another protein sequence.
 
-similar
-	/note
-	/comment
-
-# SITE - Any other interesting site on the sequence.
-
-site SO:0000839_site
-	/note
-	/comment
-
-polypeptide_region SO:0000839
+homologous SO:0000857
 	/note
 	/comment
 
 # STRAND -  DSSP secondary structure
-
-strand SO:0001111_strand
-	/note
-	/comment
 
 beta_strand SO:0001111
 	/note
@@ -366,7 +314,7 @@ beta_strand SO:0001111
 # The  'FROM' and 'TO' endpoints represent the two residues which are linked
 # by the thioether bond.
 
-thioeth
+thioether_crosslinked_residues MOD:00687
 	/note
 	/comment
 
@@ -374,7 +322,7 @@ thioeth
 # The  'FROM' and 'TO' endpoints represent the two residues which are linked
 # by the thiolester bond.
 
-thiolest
+thioester_crosslinked MOD:00395
 	/note
 	/comment
 
@@ -384,32 +332,20 @@ thiolest
 # Annotated with cellular component where domain is normally located
 # e.g. "Cytoplasmic" or "Mitochondrial matrix (potential)"
 
-topo_dom SO:0001072_topo_dom
-	/note
-	/comment
-
-extramembrane SO:0001072
+extramembrane SO:0001072 SO:0001072_topo_dom
 	/note
 	/comment
 
 # TRANSIT  -  Extent  of  a  transit peptide (mitochondrial,  chloroplastic,
 # cyanelle or for a microbody).
 
-transit SO:0000725_transit
-	/note
-	/comment
-
-transit_peptide SO:0000725
+transit_peptide SO:0000725 SO:0000725_transit
 	/note
 	/comment
 
 # TRANSMEM - Extent of a transmembrane region.
 
-transmem SO:0001077_transmem
-	/note
-	/comment
-
-transmembrane SO:0001077
+transmembrane SO:0001077 SO:0001077_transmem
 	/note
 	/comment
 
@@ -423,10 +359,6 @@ turn SO:0001128
 # Used  to describe region(s) of a sequence for which the authors are unsure
 # about the sequence assignment.
 
-unsure SO:0001086_unsure
-	/note
-	/comment
-
 sequence_uncertainty SO:0001086
 	/note
 	/comment
@@ -434,12 +366,12 @@ sequence_uncertainty SO:0001086
 # VARIANT - Authors report that sequence variants exist.
 # note usually begins MISSING or SEQ -> NEW (description optional)
 
-variant SO:0001147_variant
-	/note
-	/comment
+#variant SO:0001147_variant
+#	/note
+#	/comment
 	/ftid
 
-natural_variant SO:0001147
+natural_variant SO:0001147 SO:0001147_variant
 	/note
 	/comment
 	/ftid
@@ -447,50 +379,45 @@ natural_variant SO:0001147
 # VARSPLIC - Description of sequence variants produced by alternative
 # splicing.
 
-varsplic
-	/note
-	/comment
+#varsplic
+#	/note
+#	/comment
 
 # ZN_FING - Extent of a zinc finger region.
 
-zn_fing SO:0000409_zn_fing
-	/note
-	/comment
+#zn_fing SO:0000409_zn_fing
+#	/note
+#	/comment
 
 
 # Features from PIR feature tables with no match in SwissProt
 
 # Swissprot reports SIGNAL and PEPTIDE
 
-propeptide_cleavage_site SO:0001061
+propeptide_cleavage_site SO:0001061 SO:0001061_propeptide_cleavage_site
 	/note
 	/comment
 
-cleavage_site SO:0001061_propeptide_cleavage_site
-	/note
-	/comment
+#cleavage_site SO:0001061_propeptide_cleavage_site
+#	/note
+#	/comment
 
 # Swissprot reports MOD_RES
-
-cross-link SO:0001087_cross-link
-	/note
-	/comment
-
-crosslink SO:0001087_crosslink
-	/note
-	/comment
 
 cross_link SO:0001087
 	/note
 	/comment
 
-# Swissprot reports SITE with note INHIBITORY
-inhibitory_site
+# From PIR. Swissprot reports SITE with note INHIBITORY
+#inhibitory_site
+#	/note
+#	/comment
+
+# From PIR Swissprot reports this in the description
+#product
+#	/note
+#	/comment
+
+helix_turn_helix SO:0001081
 	/note
 	/comment
-
-# Swissprot reports this in the description
-product
-	/note
-	/comment
-

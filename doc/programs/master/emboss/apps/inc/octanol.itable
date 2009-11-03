@@ -15,7 +15,7 @@
 <tr>
 <td>[-graph]<br>(Parameter 2)</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, xterm, png, gif</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, das, xterm, png, gif</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -40,21 +40,21 @@
 </tr>
 
 <tr>
-<td>-octanolplot</td>
+<td>-plotoctanol</td>
 <td>Display the octanol plot</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
-<td>-interfaceplot</td>
+<td>-plotinterface</td>
 <td>Display the interface plot</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
-<td>-[no]differenceplot</td>
+<td>-[no]plotdifference</td>
 <td>Display the difference plot</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>

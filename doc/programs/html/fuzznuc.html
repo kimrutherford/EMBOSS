@@ -21,6 +21,18 @@ fuzznuc
 <p>
 
 <H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
     Function
 </H2>
 Search for patterns in nucleotide sequences
@@ -291,14 +303,14 @@ XX
 KW   telomeric repeat.
 XX
 OS   Human herpesvirus 7
-OC   Viruses; dsDNA viruses, no RNA stage; Herpesviridae; Betaherpesvirinae;
-OC   Roseolovirus.
+OC   Viruses; dsDNA viruses, no RNA stage; Herpesvirales; Herpesviridae;
+OC   Betaherpesvirinae; Roseolovirus.
 XX
 RN   [1]
 RP   1-1272
 RX   PUBMED; 7494318.
 RA   Secchiero P., Nicholas J., Deng H., Xiaopeng T., van Loon N., Ruvolo V.R.,
-RA   Berneman Z.N., Reitz M.S. Jr., Dewhurst S.;
+RA   Berneman Z.N., Reitz M.S.Jr., Dewhurst S.;
 RT   "Identification of human telomeric repeat motifs at the genome termini of
 RT   human herpesvirus 7: structural analysis and heterogeneity";
 RL   J. Virol. 69(12):8041-8045(1995).
@@ -506,22 +518,24 @@ By default <b>fuzznuc</b> writes a 'seqtable' report file.
 # HitCount: 2
 #
 # Pattern_name Mismatch Pattern
-# pattern1            0 AAGCTT
+# pattern             0 AAGCTT
 # 
 # Complement: No
 #
 #=======================================
 
   Start     End  Strand Pattern_name Mismatch Sequence
-      1       6       + pattern1            . aagctt
-   1267    1272       + pattern1            . aagctt
+      1       6       + pattern             . aagctt
+   1267    1272       + pattern             . aagctt
 
 #---------------------------------------
 #---------------------------------------
 
 #---------------------------------------
 # Total_sequences: 1
-# Total_hitcount: 2
+# Total_length: 1272
+# Reported_sequences: 1
+# Reported_hitcount: 2
 #---------------------------------------
 </pre>
 </td></tr></table><p>
@@ -562,7 +576,9 @@ By default <b>fuzznuc</b> writes a 'seqtable' report file.
 
 #---------------------------------------
 # Total_sequences: 1
-# Total_hitcount: 2
+# Total_length: 1272
+# Reported_sequences: 1
+# Reported_hitcount: 2
 #---------------------------------------
 </pre>
 </td></tr></table><p>
@@ -616,7 +632,9 @@ By default <b>fuzznuc</b> writes a 'seqtable' report file.
 
 #---------------------------------------
 # Total_sequences: 1
-# Total_hitcount: 13
+# Total_length: 1272
+# Reported_sequences: 1
+# Reported_hitcount: 13
 #---------------------------------------
 </pre>
 </td></tr></table><p>
@@ -676,7 +694,9 @@ By default <b>fuzznuc</b> writes a 'seqtable' report file.
 
 #---------------------------------------
 # Total_sequences: 1
-# Total_hitcount: 19
+# Total_length: 1272
+# Reported_sequences: 1
+# Reported_hitcount: 19
 #---------------------------------------
 </pre>
 </td></tr></table><p>

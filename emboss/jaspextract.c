@@ -94,6 +94,8 @@ int main(int argc, char **argv)
 
     jaspextract_copy(dlist);
 
+    ajStrDel(&directory);
+
     embExit();
 
     return 0;
@@ -300,6 +302,7 @@ static void jaspextract_jddel(JaspPDir *thys)
 
     ajStrDel(&pthis->namactual);
     ajStrDel(&pthis->namdata);
+    AJFREE(*thys);
 
     *thys = NULL;
 

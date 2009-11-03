@@ -18,7 +18,7 @@ Output report [x13776.density]: <b></b>
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>density tembl:x13776 -quad -qgraph cps </b>
+% <b>density tembl:x13776 -display quad -graph cps </b>
 Draw a nucleic acid density plot
 
 Created density.ps
@@ -33,7 +33,7 @@ Created density.ps
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>density tembl:x13776 -dual -dgraph cps </b>
+% <b>density tembl:x13776 -display dual -graph cps </b>
 Draw a nucleic acid density plot
 
 Created density.ps

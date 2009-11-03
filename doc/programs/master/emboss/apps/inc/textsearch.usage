@@ -6,13 +6,13 @@ Search for 'lactose':
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>textsearch tsw:* 'lactose' </b>
+% <b>textsearch 'tsw:*' 'lactose' </b>
 Search the textual description of sequence(s)
-Output file [edd1_rat.textsearch]: <b></b>
+Output file [12s1_arath.textsearch]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
-<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<a href="#output.1">Go to the output files for this example</a><p><p>
 <p>
 <b>Example 2</b>
 <p>
@@ -22,13 +22,13 @@ Search for 'lactose' or 'permease' in E.coli proteins:
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>textsearch tsw:*_ecoli 'lactose | permease' </b>
+% <b>textsearch 'tsw:*_ecoli' 'lactose | permease' </b>
 Search the textual description of sequence(s)
-Output file [laci_ecoli.textsearch]: <b></b>
+Output file [bgal_ecoli.textsearch]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
-<a href="#output.2">Go to the output files for this example</a><p><p>
+<a href="#input.2">Go to the input files for this example</a><br><a href="#output.2">Go to the output files for this example</a><p><p>
 <p>
 <b>Example 3</b>
 <p>
@@ -38,9 +38,9 @@ Output a search for 'lacz' formatted with HTML to a file:
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>textsearch tembl:* 'lacz' -html -outfile embl.lacz.html </b>
+% <b>textsearch 'tembl:*' 'lacz' -html -outfile embl.lacz.html </b>
 Search the textual description of sequence(s)
 
 </pre></td></tr></table><p>
 <p>
-<a href="#input.3">Go to the input files for this example</a><br><a href="#output.3">Go to the output files for this example</a><p><p>
+<a href="#output.3">Go to the output files for this example</a><p><p>

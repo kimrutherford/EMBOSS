@@ -110,6 +110,7 @@ void embGrpGetProgGroups(AjPList glist, AjPList alpha, char * const env[],
 
     ajStrAssignS(&acdpack, ajNamValuePackage());
     ajStrAssignS(&acdrootinst, ajNamValueInstalldir());
+
     if(emboss)
     {
 	if(ajNamGetValueC("acdroot", &acdroot))
@@ -233,7 +234,9 @@ AjBool embGrpGetEmbassy(const AjPStr appname, AjPStr* embassyname)
     /* normal EMBOSS ACD */
     ajFmtPrintS(&filename, "%S%S.acd", acdroot, appname);
     acdfile = ajFileNewInNameS(filename);
-    if(acdfile) {
+
+    if(acdfile)
+    {
 	grpParseEmbassy(acdfile, embassyname);
 	ajFileClose(&acdfile);
 	ok = ajTrue;
@@ -294,35 +297,42 @@ static AjBool grpGetAcdByname(const AjPStr appname, const AjPStr acddir,
 
     if(!dirp)
       return ajFalse;		/* could be no embassy installed */
+
     ajDebug("grpGetAcdbyName '%S' '%S'\n", acddir, appname);
 
     for(dp = readdir(dirp); dp != NULL; dp = readdir(dirp))
     {
 	if(dp->d_name[0] == '.')
 	    continue;			/* don't want hidden files */
-	ajFmtPrintS(&dirname, "%S%s/emboss_acd/", acddir, dp->d_name);
 
+	ajFmtPrintS(&dirname, "%S%s/emboss_acd/", acddir, dp->d_name);
 	dirpa = opendir(ajStrGetPtr(dirname));
+
 	if(dirpa)
 	{
 	    closedir(dirpa);
 	    ajFmtPrintS(&filename, "%S%S.acd", dirname, appname);
 	    acdfile = ajFileNewInNameS(filename);
-	    if(acdfile) {
+
+	    if(acdfile)
+            {
 	      grpParseEmbassy(acdfile, embassyname);
 	      ajFileClose(&acdfile);
 	      ok = ajTrue;
 	    }
 	}
+
         if(ok)
 	  break;
     }
+
     ajStrDel(&dirname);
     ajStrDel(&filename);
     closedir(dirp);
 
     return ok;
 }
+
 
 
 
@@ -368,6 +378,7 @@ static void grpGetAcdDirs(AjPList glist, AjPList alpha, char * const env[],
     {
 	if(dp->d_name[0] == '.')
 	    continue;			/* don't want hidden files */
+
 	ajFmtPrintS(&dirname, "%S%s/emboss_acd/", acddir, dp->d_name);
 
 	if((dirpa = opendir(ajStrGetPtr(dirname))))
@@ -459,6 +470,7 @@ static void grpGetAcdFiles(AjPList glist, AjPList alpha, char * const env[],
 
 			/* see if the appl is the name of a real program */
 			ajStrAssignS(&applpath, appl);
+
 			if(ajSysFileWhichEnv(&applpath, env))
 			{
 			    /*
@@ -488,6 +500,7 @@ static void grpGetAcdFiles(AjPList glist, AjPList alpha, char * const env[],
 		    }
 		}
 	    }
+
 	    ajStrDel(&progpath);
 	}
     }
@@ -498,6 +511,9 @@ static void grpGetAcdFiles(AjPList glist, AjPList alpha, char * const env[],
 
     return;
 }
+
+
+
 
 /* @funcstatic grpParse *******************************************************
 **
@@ -572,6 +588,7 @@ static void grpParse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPStr *keywords,
 
     /* if next token is '[' */
     ajStrTokenNextParseC(&tokenhandle, white, &tmpstr);
+
     if(ajStrCmpC(tmpstr, "[") == 0)
     {
 	token=ajStrNew();
@@ -604,6 +621,7 @@ static void grpParse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPStr *keywords,
 		    ajStrAssignS(&tmpvalue, value);
 		    ajStrTrimWhite(&tmpvalue);
 		    ajDebug("gui value '%S'\n", tmpvalue);
+
 		    /* test for '[Nn]*' */
 		    if(tolower((int)(ajStrGetPtr(tmpvalue))[0]) == 'n')
 			*gui = ajFalse;
@@ -617,8 +635,10 @@ static void grpParse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPStr *keywords,
 		else if(ajStrPrefixCaseC(token, "keywords"))
 		{
 		    ajStrExchangeKK(&value, ' ', '_');
+
 		    if(ajStrGetLen(*keywords))
 			ajStrAppendK(keywords, ' ');
+
 		    ajStrAppendS(keywords, value);
 		}
 		else if(ajStrPrefixCaseC(token, "embassy"))
@@ -627,6 +647,7 @@ static void grpParse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPStr *keywords,
 		    ajStrAssignS(hasembassyname, value);
 		}
 	    }
+
 	    if(done)
 		break;
 	}
@@ -657,6 +678,7 @@ static void grpParse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPStr *keywords,
 
     return;
 }
+
 
 
 
@@ -691,6 +713,7 @@ static void grpParseEmbassy(AjPFile file, AjPStr* embassyname)
     while(ajReadlineTrim(file, &line))
     {
 	grpNoComment(&line);
+
 	if(ajStrGetLen(line))
 	{
 	    ajStrAppendS(&text, line);
@@ -735,6 +758,7 @@ static void grpParseEmbassy(AjPFile file, AjPStr* embassyname)
 		    ajStrAssignS(embassyname, value);
 		}
 	    }
+
 	    if(done)
 		break;
 	}
@@ -774,6 +798,7 @@ static void grpNoComment(AjPStr* text)
 	return;
 
     cp = strchr(ajStrGetPtr(*text), '#');
+
     if(cp)
     {					/* comment found */
 	*cp = '\0';
@@ -819,6 +844,7 @@ static AjPStr grpParseValueRB(AjPStrTok* tokenhandle, const char* delim)
 	return NULL;
 
     cq = strchr(quotes, ajStrGetCharFirst(grpStr1));
+
     if(!cq)
 	return grpStr1;
 
@@ -850,6 +876,7 @@ static AjPStr grpParseValueRB(AjPStrTok* tokenhandle, const char* delim)
 	{
 	    if(ajStrGetLen(grpStr2))
 		ajStrAppendC(&grpStr2, " ");
+
 	    ajStrAppendS(&grpStr2, grpStr1);
 	}
 
@@ -909,8 +936,10 @@ static void grpSplitList(AjPList groups, const AjPStr value, AjBool explode,
 	ajStrAssignS(&keystr, tmpstr);
 	ajStrExchangeKK(&keystr, ':', '_');
 	ajStrExchangeKK(&keystr, ' ', '_');
+
 	if(ajStrGetLen(*keywords))
 	    ajStrAppendK(keywords, ' ');
+
 	ajStrAppendS(keywords, keystr);
 
 	/*
@@ -921,6 +950,7 @@ static void grpSplitList(AjPList groups, const AjPStr value, AjBool explode,
 	{
 	    subnames = ajListstrNew();
 	    colontokenhandle  = ajStrTokenNewC(tmpstr, colonstring);
+
 	    while(ajStrTokenNextParse(&colontokenhandle, &substr))
 	    {
 		copystr = ajStrNewS(substr); /* make new copy of the string
@@ -1031,10 +1061,12 @@ static void grpSubSplitList(AjPList groups, AjPList sublist)
     {
 	/* do head of list */
 	head = ajStrNew();
+
 	for(j=0; j<=i; j++)
 	{
 	    if(ajStrGetLen(head) > 0)
 		ajStrAppendC(&head, " ");
+
 	    ajStrAppendS(&head, sub[j]);
 	}
 
@@ -1047,10 +1079,12 @@ static void grpSubSplitList(AjPList groups, AjPList sublist)
 	if(i)
 	{
 	    revhead = ajStrNew();
+
 	    for(j=i; j>=0; j--)
 	    {
 		if(ajStrGetLen(revhead) > 0)
 		    ajStrAppendC(&revhead, " ");
+
 		ajStrAppendS(&revhead, sub[j]);
 	    }
 
@@ -1061,10 +1095,12 @@ static void grpSubSplitList(AjPList groups, AjPList sublist)
 	if(i < len-1)
 	{
 	    tail = ajStrNew();
+
 	    for(j=i+1; j<len; j++)
 	    {
 		if(ajStrGetLen(tail) > 0)
 		    ajStrAppendC(&tail, " ");
+
 		ajStrAppendS(&tail, sub[j]);
 	    }
 
@@ -1078,9 +1114,12 @@ static void grpSubSplitList(AjPList groups, AjPList sublist)
 	if(i < len-2)
 	{
 	    revtail = ajStrNew();
+
 	    for(j=len-1; j>i; j--)
 	    {
-		if(ajStrGetLen(revtail) > 0) ajStrAppendC(&revtail, " ");
+		if(ajStrGetLen(revtail) > 0)
+                    ajStrAppendC(&revtail, " ");
+
 		ajStrAppendS(&revtail, sub[j]);
 	    }
 
@@ -1191,15 +1230,15 @@ static void grpAddGroupsToList(const AjPList alpha, AjPList glist,
 		foundit = ajFalse;
 		nlist   = gl->progs;
 		niter   = ajListIterNewread(nlist);
+
 		while((nl = ajListIterGet(niter)) != NULL)
-		{
 		    if(!ajStrCmpCaseS(nl->name, appl))
 		    {
 			/* found the program name */
 			foundit = ajTrue;
 			break;
 		    }
-		}
+
 		ajListIterDel(&niter);
 
 		if(!foundit)
@@ -1207,6 +1246,7 @@ static void grpAddGroupsToList(const AjPList alpha, AjPList glist,
 		    ppnode = embGrpMakeNewPnode(appl, doc, keywords, package);
 		    ajListPushAppend(gl->progs, ppnode);
 		}
+
 		break;
 	    }
 	}
@@ -1219,6 +1259,7 @@ static void grpAddGroupsToList(const AjPList alpha, AjPList glist,
 	    ppnode = embGrpMakeNewPnode(appl, doc, keywords, package);
 	    ajListPushAppend(gpnode->progs, ppnode);
 	}
+
 	ajListIterDel(&giter);
     }
 
@@ -1427,10 +1468,10 @@ void embGrpOutputGroupsList(AjPFile outfile, const AjPList groupslist,
     AjIList giter;			/* 'groupslist' iterator */
 
     /* output the programs for each group */
-    giter = ajListIterNewread(groupslist);
     if(!showprogs && html)
 	ajFmtPrintF(outfile,"<ul>\n");
 
+    giter = ajListIterNewread(groupslist);
     while((gl = ajListIterGet(giter)) != NULL)
     {
 	if(html)
@@ -1451,7 +1492,9 @@ void embGrpOutputGroupsList(AjPFile outfile, const AjPList groupslist,
 	{
 	    if(html) ajFmtPrintF(outfile,"<table border cellpadding=4 "
 				 "bgcolor=\"#FFFFF0\">\n");
+
 	    embGrpOutputProgsList(outfile, gl->progs, html, showkey, package);
+
 	    if(html)
 		ajFmtPrintF(outfile,"</table>\n");
 	    else
@@ -1461,6 +1504,7 @@ void embGrpOutputGroupsList(AjPFile outfile, const AjPList groupslist,
 
     if(!showprogs && html)
 	ajFmtPrintF(outfile,"</ul>\n");
+
     ajListIterDel(&giter);
 
     return;
@@ -1488,9 +1532,24 @@ void embGrpOutputProgsList(AjPFile outfile, const AjPList progslist,
     EmbPGroupProg pl;
     AjIList piter;			/* 'progslist' iterator */
     AjPStr keystr = NULL;
+    ajint maxwidth = 6;
 
     /* output the programs for each group */
+    if(!html)
+    {
+        piter = ajListIterNewread(progslist);
+
+        while((pl = ajListIterGet(piter)) != NULL)
+        {
+            if(ajStrGetLen(pl->name) > (ajuint) maxwidth)
+                maxwidth = ajStrGetLen(pl->name);
+        }
+
+        ajListIterDel(&piter);
+    }
+
     piter = ajListIterNewread(progslist);
+
     if(html) ajFmtPrintF(outfile,
 			 "<tr><th>Program name</th>\n"
                          "<th>Description</th></tr>\n");
@@ -1522,14 +1581,16 @@ void embGrpOutputProgsList(AjPFile outfile, const AjPList progslist,
 			    pl->package, pl->name, pl->name);
 	    else
 		ajFmtPrintF(outfile,
-			    "<td><a href=\"/emboss/apps/%S.html\">%S</a></td>\n",
+			    "<td><a href=\"/emboss/apps/%S.html\">%S"
+                            "</a></td>\n",
 			    pl->name, pl->name);
 	    ajFmtPrintF(outfile,
 			"<td>%S%S</td>\n</tr>\n\n",
 			pl->doc, keystr);
 	}
 	else
-	    ajFmtPrintF(outfile, "%-16S %S%S\n", pl->name, pl->doc, keystr);
+	    ajFmtPrintF(outfile, "%-*S %S%S\n",
+                        maxwidth, pl->name, pl->doc, keystr);
     }
 
     ajListIterDel(&piter);
@@ -1557,6 +1618,7 @@ void embGrpGroupsListDel(AjPList *groupslist)
     AjIList giter;
 
     giter = ajListIterNew(*groupslist);
+
     while((gl = ajListIterGet(giter)) != NULL)
     {
 	ajStrDel(&(gl->doc));
@@ -1589,6 +1651,7 @@ void embGrpProgsListDel(AjPList *progslist)
     AjIList piter;
 
     piter = ajListIterNew(*progslist);
+
     while((gl = ajListIterGet(piter)) != NULL)
     {
 	ajStrDel(&(gl->name));
@@ -1655,6 +1718,7 @@ void embGrpKeySearchProgs(AjPList newlist,
     while((gl = ajListIterGet(giter)) != NULL)
     {
 	piter = ajListIterNewread(gl->progs);
+
 	while((pl = ajListIterGet(piter)) != NULL)
 	{
 	    ajStrAssignS(&name, pl->name);
@@ -1694,8 +1758,10 @@ void embGrpKeySearchProgs(AjPList newlist,
 	    ajStrDel(&name);
 	    ajStrDel(&doc);
 	}
+
 	ajListIterDel(&piter);
     }
+
     ajListIterDel(&giter);
 
     /* sort the results */
@@ -1773,17 +1839,21 @@ void embGrpKeySearchSeeAlso(AjPList newlist, AjPList *appgroups,
 
     /* iterate through existing applications list */
     giter = ajListIterNewread(alpha);
+
     while((gl = ajListIterGet(giter)) != NULL)
     {
 	piter = ajListIterNewread(gl->progs);
+
 	while((pl = ajListIterGet(piter)) != NULL)
 	    if(ajStrMatchCaseS(pl->name, key))
 	    {
 		*appgroups = pl->groups;
 		ajStrAssignS(package, pl->package);
 	    }
+
 	ajListIterDel(&piter);
     }
+
     ajListIterDel(&giter);
 
     /* If application not found */
@@ -1797,9 +1867,12 @@ void embGrpKeySearchSeeAlso(AjPList newlist, AjPList *appgroups,
 
     /* iterate through existing applications list */
     giter = ajListIterNewread(glist);
+
     while((gl = ajListIterGet(giter)) != NULL)
     {
-	griter = ajListIterNewread(*appgroups); /* iterate through groups found */
+        /* iterate through groups found */
+	griter = ajListIterNewread(*appgroups);
+
 	while((gr = ajListIterGet(griter)) != NULL)
 	{
 	    if(!ajStrCmpCaseS(gr->name, gl->name))
@@ -1809,6 +1882,7 @@ void embGrpKeySearchSeeAlso(AjPList newlist, AjPList *appgroups,
 		**  the applications
 		**/
 		piter = ajListIterNewread(gl->progs);
+
 		while((pl = ajListIterGet(piter)) != NULL)
 		{
 		    /* don't want to include our key program */
@@ -1821,12 +1895,14 @@ void embGrpKeySearchSeeAlso(AjPList newlist, AjPList *appgroups,
 		    ajListPushAppend(base, ppnode);
 
 		}
-		ajListIterDel(&piter);
 
+		ajListIterDel(&piter);
 	    }
 	}
+
 	ajListIterDel(&griter);
     }
+
     ajListIterDel(&giter);
 
     /* sort the results and remove duplicates */
@@ -1860,9 +1936,9 @@ void embGrpProgsMakeUnique(AjPList list)
     old = ajStrNewC("");
 
     iter = ajListIterNew(list);
+
     while((l = ajListIterGet(iter)) != NULL)
     {
-
 	if(!ajStrCmpCaseS(l->name, old))
 	{
 
@@ -1885,12 +1961,14 @@ void embGrpProgsMakeUnique(AjPList list)
 	}
 
     }
-    ajListIterDel(&iter);
 
+    ajListIterDel(&iter);
     ajStrDel(&old);
 
     return;
 }
+
+
 
 
 /* @func embGrpGroupMakeUnique ************************************************
@@ -1912,6 +1990,7 @@ void embGrpGroupMakeUnique(AjPList list)
     old = ajStrNewC("");
 
     iter = ajListIterNew(list);
+
     while((l = ajListIterGet(iter)) != NULL)
     {
 
@@ -1936,12 +2015,14 @@ void embGrpGroupMakeUnique(AjPList list)
 	}
 
     }
-    ajListIterDel(&iter);
 
+    ajListIterDel(&iter);
     ajStrDel(&old);
 
     return;
 }
+
+
 
 
 /* @func embGrpExit ***********************************************************

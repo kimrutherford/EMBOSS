@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Calculates nucleic acid melting temperature
@@ -29,10 +36,11 @@ Algorithm
    and DNA concentration. Optionally, the percent formamide, percent of
    mismatches allowed and product length may be specified.
 
-   For the Melting temperature profile, free energy values calculated
+   For the melting temperature profile, free energy values calculated
    from nearest neighbor thermodynamics are used (Breslauer et al. Proc.
-   Natl. Acad. Sci. USA 83, 3746-3750 and Baldino et al. Methods in
-   Enzymol. 168, 761-777).
+   Natl. Acad. Sci. USA 83, 3746-3750, Baldino et al. Methods in Enzymol.
+   168, 761-777, Allawi and SantaLucia (1997), Biochemistry
+   36:10581-10594).
 
 Usage
 
@@ -96,7 +104,7 @@ Command line arguments
                                   (Number from 0.000 to 150.000)
 *  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, xterm, png, gif)
+                                  tekt, tek, none, data, das, xterm, png, gif)
 *  -outfile            report     [*.dan] If a plot is not being produced then
                                   data on the melting point etc. in each
                                   window along the sequence is output to the
@@ -229,18 +237,17 @@ RP   1167-2167
 RX   DOI; 10.1016/0014-5793(89)80249-2.
 RX   PUBMED; 2495988.
 RA   Lowe N., Rice P.M., Drew R.E.;
-RT   "Nucleotide sequence of the aliphatic amidase regulator gene of Pseudomona
-s
-RT   aeruginosa";
+RT   "Nucleotide sequence of the aliphatic amidase regulator gene (amiR) of
+RT   Pseudomonas aeruginosa";
 RL   FEBS Lett. 246(1-2):39-43(1989).
 XX
 RN   [3]
 RP   1-1292
 RX   PUBMED; 1907262.
 RA   Wilson S., Drew R.;
-RT   "Cloning and DNA seqence of amiC, a new gene regulating expression of the
+RT   "Cloning and DNA sequence of amiC, a new gene regulating expression of the
 RT   Pseudomonas aeruginosa aliphatic amidase, and purification of the amiC
-RT   product.";
+RT   product";
 RL   J. Bacteriol. 173(16):4914-4921(1991).
 XX
 RN   [4]
@@ -252,8 +259,8 @@ RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG
 .
 XX
 DR   GOA; Q51417.
+DR   InterPro; IPR003211; AmiSUreI_transpt.
 DR   UniProtKB/Swiss-Prot; Q51417; AMIS_PSEAE.
-XX
 
 
   [Part of this file has been deleted for brevity]
@@ -634,6 +641,8 @@ References
     2. Baldino, M., Jr. (1989). "High Resolution In Situ Hybridization
        Histochemistry." In Methods in Enzymology, (P.M. Conn, ed.), 168,
        761-777, Academic Press, San Diego, California, USA.
+    3. Allawi H.T. and SantaLucia J. Jr. (1997), "Thermodynamics and NMR
+       of Internal G*T Mismatches in DNA" Biochemistry 36, 10581-10594.
 
 Warnings
 
@@ -655,37 +664,37 @@ Known bugs
 
 See also
 
-   Program name                           Description
-   banana       Plot bending and curvature data for B-DNA
-   btwisted     Calculate the twisting in a B-DNA sequence
-   chaos        Draw a chaos game representation plot for a nucleotide sequence
-   compseq      Calculate the composition of unique words in sequences
-   density      Draw a nucleic acid density plot
-   freak        Generate residue/base frequency table or plot
-   isochore     Plots isochores in DNA sequences
-   sirna        Finds siRNA duplexes in mRNA
-   wordcount    Count and extract unique words in DNA sequence(s)
+                    Program name                           Description
+                    banana       Plot bending and curvature data for B-DNA
+                    btwisted     Calculate the twisting in a B-DNA sequence
+                    chaos        Draw a chaos game representation plot for a nucleotide sequence
+                    compseq      Calculate the composition of unique words in sequences
+                    density      Draw a nucleic acid density plot
+                    freak        Generate residue/base frequency table or plot
+                    isochore     Plots isochores in DNA sequences
+                    sirna        Finds siRNA duplexes in mRNA
+                    wordcount    Count and extract unique words in DNA sequence(s)
 
 Author(s)
 
-   This program was originally included in EGCG under the names "MELT"
-   and "MELTPLOT", written by Rodrigo Lopez (rls © ebi.ac.uk)
-   European Bioinformatics Institute, Wellcome Trust Genome Campus,
-   Hinxton, Cambridge CB10 1SD, UK
+                    This program was originally included in EGCG under the names "MELT"
+                    and "MELTPLOT", written by Rodrigo Lopez (rls © ebi.ac.uk)
+   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton,         Cambridge CB10 1SD, UK
 
-   This application was written by Alan Bleasby (ajb © ebi.ac.uk)
-   European Bioinformatics Institute, Wellcome Trust Genome Campus,
-   Hinxton, Cambridge CB10 1SD, UK
+                    This application was written by Alan Bleasby (ajb © ebi.ac.uk)
+   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton,         Cambridge CB10 1SD, UK
 
 History
 
-   Written (1999) - Alan Bleasby
+                    Written (1999) - Alan Bleasby
 
 Target users
 
-   This program is intended to be used by everyone and everything, from
-   naive users to embedded scripts.
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
 
 Comments
 
-   None
+                    None

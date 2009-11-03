@@ -533,6 +533,7 @@ typedef struct AjSBtpage
 ** @attr cachesize [ajint] Maximum number of pages to cache
 ** @attr nperbucket [ajint] Number of entries in a primary bucket
 ** @attr replace [AjPStr] Replacement ID
+** @attr numreplace [ajlong] Replacement numeric ID
 ** @attr count [ajlong] Number of entries indexed
 ** @attr deleted [AjBool] Deletion flag
 ** @attr slevel [ajint] Depth of secondary tree
@@ -560,6 +561,7 @@ typedef struct AjSBtCache
     ajint cachesize;
     ajint nperbucket;
     AjPStr replace;
+    ajlong numreplace;
     ajlong count;
     AjBool deleted;
     ajint slevel;
@@ -729,8 +731,6 @@ void     ajBtreeReadParams(const char *fn, const char *ext,
 			   ajint *snperbucket, ajlong *count, ajint *kwlimit);
 void     ajBtreeCacheSync(AjPBtcache cache, ajlong rootpage);
 
-AjBool   ajBtreeDeleteId(AjPBtcache cache, const AjPBtId id);
-
 AjPBtWild    ajBtreeWildNew(AjPBtcache cache, const AjPStr wild);
 AjPBtKeyWild ajBtreeKeyWildNew(AjPBtcache cache, const AjPStr wild);
 void         ajBtreeWildDel(AjPBtWild *thys);
@@ -795,6 +795,9 @@ void 	    ajBtreeHybLeafList(AjPBtcache cache, ajlong rootblock,
 void        ajBtreeDumpHybKeys(AjPBtcache cache, ajint dmin, ajint dmax,
 			       AjPFile outf);
 
+AjBool ajBtreeDeleteHybId(AjPBtcache cache, const AjPBtHybrid hyb);
+AjBool ajBtreeDeletePriId(AjPBtcache cache, const AjPBtPri pri);
+    
 
 /*
 ** End of prototype definitions

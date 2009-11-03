@@ -28,14 +28,12 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.border.Border;
 import java.awt.event.*;
-import java.awt.print.*;
 import java.awt.*;
 import java.util.Vector;
 import java.awt.Dimension;
 
 import org.emboss.jemboss.gui.form.TextFieldInt;
 import org.emboss.jemboss.gui.form.TextFieldFloat;
-import org.emboss.jemboss.editor.ColourPanel;
 
 public class GeneticMarker extends JPanel
                            implements TableModelListener
@@ -90,20 +88,21 @@ public class GeneticMarker extends JPanel
     final TextFieldInt start = new TextFieldInt();
     start.setMaximumSize(d);
     start.setPreferredSize(d);
+    bacross.add(new JLabel("start:"));
     bacross.add(start);
-    bacross.add(new JLabel("start"));
     bacross.add(Box.createHorizontalStrut(4));
  
     final TextFieldInt end = new TextFieldInt();
     end.setMaximumSize(d);
     end.setPreferredSize(d);
+    bacross.add(new JLabel(" stop:"));
     bacross.add(end);
-    bacross.add(new JLabel("stop"));
     bacross.add(Box.createHorizontalStrut(4));
    
 //   final ColourPanel markerColour = new ColourPanel("Feature Colour", 
 //                                            Color.red);
     final JButton markerColour = setUpColorButton(Color.red);
+    bacross.add(new JLabel(" colour:"));
     bacross.add(markerColour);
 
     bacross.add(Box.createHorizontalStrut(4));
@@ -115,11 +114,11 @@ public class GeneticMarker extends JPanel
       lsize = draw.getLineSize();
 
     final JSlider slider = new JSlider(1,25,lsize);
-    lineSize.setPreferredSize(d);
-    lineSize.setMaximumSize(d);
+    lineSize.setColumns(3);
     lineSize.setValue((float)lsize);
+    bacross.add(new JLabel(" line width:"));
     bacross.add(lineSize);
-    bacross.add(new JLabel(" line width"));
+    bacross.add(new JLabel(" "));
     bacross.add(Box.createHorizontalStrut(4));
     // change line size on carriage return
     lineSize.addActionListener(new ActionListener()

@@ -24,6 +24,8 @@ package org.emboss.jemboss.gui.sequenceChooser;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.emboss.jemboss.gui.form.*;
 
@@ -510,6 +512,58 @@ public class InputSequenceAttributes
                                        UFO.getText());
 
     return options;
+  }
+
+  /**
+  *
+  * Get the EMBOSS command line input sequence options for the values selected
+  * @param seq	sequence number
+  * @return	command line input sequence options as string array
+  *
+  */  
+  public List getInputSeqAttrA(int seq) 
+  {
+    List optionsA= new ArrayList();
+    if(!isBeginSeqDefault()){
+      optionsA.add("-sbegin"+ seq);
+      optionsA.add(String.valueOf(sbeg.getValue()));
+    }
+
+    if(!isEndSeqDefault()){
+      optionsA.add("-send"+ seq);
+      optionsA.add(String.valueOf(send.getValue()));
+    }
+
+    if(!getFormatChoosen().equals("unspecified")){
+      optionsA.add("-sformat"+ seq);
+      optionsA.add(getFormatChoosen());
+    }
+    if(rev.isSelected()){
+      optionsA.add("-srev"+ seq);
+    }
+
+    if(nucleotide.isSelected()){
+      optionsA.add("-snucleotide"+ seq);
+    }
+
+    if(protein.isSelected()){
+      optionsA.add("-sprotein"+ seq);
+    }
+
+    if(lower.isSelected()){
+      optionsA.add("-slower"+ seq);
+    }
+
+    if(upper.isSelected()){
+      optionsA.add("-supper"+ seq);
+    }
+
+    if(!isUFODefault()){
+      optionsA.add("-sufo"+ seq);
+      optionsA.add(UFO.getText());
+    }
+
+    return optionsA;
   }
 
 }

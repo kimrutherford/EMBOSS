@@ -20,6 +20,8 @@ void   embPatternSeqSearch   (AjPFeattable ftable, const AjPSeq seq,
 			      const AjPPatternSeq pat, AjBool reverse);
 AjBool embPatternSeqCompile  (AjPPatternSeq pat);
 
+void   embPatlistExit        (void);
+
 /*
 ** End of prototype definitions
 */

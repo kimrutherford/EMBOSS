@@ -44,6 +44,8 @@ FT                   /codon_start=1
 FT                   /product="rhodopsin"
 FT                   /note="gene accession number U23808"
 FT                   /db_xref="GOA:P29403"
+FT                   /db_xref="HSSP:1F88"
+FT                   /db_xref="InterPro:IPR017452"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P29403"
 FT                   /protein_id="AAC42232.1"
 FT                   /translation="MNGTEGPNFYVPMSNKTGVVRSPFDYPQYYLAEPWQYSALAAYMF
@@ -161,6 +163,8 @@ FT                   /product="rhodopsin"
 FT                   /note="cDNA sequence deposited under GenBank Accession
 FT                   Number L07770"
 FT                   /db_xref="GOA:P29403"
+FT                   /db_xref="HSSP:1F88"
+FT                   /db_xref="InterPro:IPR017452"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P29403"
 FT                   /protein_id="AAC59901.1"
 FT                   /translation="MNGTEGPNFYVPMSNKTGVVRSPFDYPQYYLAEPWQYSALAAYMF
@@ -336,8 +340,8 @@ KW   .
 XX
 OS   Gallus gallus (chicken)
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
-OC   Archosauria; Aves; Neognathae; Galliformes; Phasianidae; Phasianinae;
-OC   Gallus.
+OC   Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves;
+OC   Neognathae; Galliformes; Phasianidae; Phasianinae; Gallus.
 XX
 RN   [1]
 RP   1-1510
@@ -394,6 +398,7 @@ FT                   /product="doublesex and mab-3 related transcription factor
 FT                   1"
 FT                   /note="cDMRT1"
 FT                   /db_xref="GOA:Q9PTQ7"
+FT                   /db_xref="HSSP:1LPV"
 FT                   /db_xref="InterPro:IPR001275"
 FT                   /db_xref="UniProtKB/Swiss-Prot:Q9PTQ7"
 FT                   /protein_id="AAF19666.1"
@@ -483,6 +488,7 @@ FT                   /codon_start=1
 FT                   /gene="ENO2"
 FT                   /product="enolase"
 FT                   /db_xref="GOA:Q9BPL7"
+FT                   /db_xref="HSSP:1PDZ"
 FT                   /db_xref="InterPro:IPR000941"
 FT                   /db_xref="UniProtKB/Swiss-Prot:Q9BPL7"
 FT                   /protein_id="AAG60329.1"

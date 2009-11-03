@@ -103,8 +103,8 @@ static void 	xml_SetCurrentScene(AjPGraphXml file, AjPXmlNode node);
 static void 	xml_ClearFile(AjPGraphXml *file);
 static void 	xml_UnrefNode(AjPXmlNode *pnode);
 
-static void     xml_clear_nodeTypes(const void **key, void **value, void *cl);
-static void     xml_deltablenode(const void **key, void **value, void *cl);
+static void     xml_clear_nodeTypes(void **key, void **value, void *cl);
+static void     xml_deltablenode(void **key, void **value, void *cl);
 
 
 
@@ -623,11 +623,13 @@ void ajXmlAddTextC(AjPGraphXml file, double x, double y, double size,
 	     &exc);
 
 	limit = gdome_nl_length(listAppearance, &exc);
+
 	for(i=0; (i<limit && tranformParent == NULL) ; ++i)
 	{
 	    tempNode = xml_SetNode(gdome_nl_item(listAppearance, i, 
 						 &exc));
 	    attributeValue = xml_GetAttributeC(tempNode, "name");
+
 	    if(ajStrMatchC(attributeValue, "children"))
 		tranformParent = xml_SetNode(gdome_nl_item(listAppearance, 
 							   i, &exc));
@@ -691,6 +693,7 @@ void ajXmlAddTextC(AjPGraphXml file, double x, double y, double size,
 
     xml_UnrefNode(&transformNode);
     xml_UnrefNode(&elText);
+
     if(elFont != NULL)
 	xml_UnrefNode(&elFont);
 
@@ -861,6 +864,7 @@ void ajXmlAddTextWithCJustify(AjPGraphXml file, double x, double y,
 ** @return [void]
 ** @@
 *********************************************************************/
+
 void ajXmlAddTextWithJustify(AjPGraphXml file, double x, double y, 
 			     double size, double angle, 
 			     const AjPStr fontFamily, const AjPStr fontStyle, 
@@ -871,7 +875,8 @@ void ajXmlAddTextWithJustify(AjPGraphXml file, double x, double y,
 {
     ajXmlAddTextWithCJustify(file,x,y,size,angle,fontFamily,fontStyle, 
 			     text,horizontal,leftToRight,topToBottom, 
-			     ajStrGetPtr(justifyMajor),ajStrGetPtr(justifyMinor));
+			     ajStrGetPtr(justifyMajor),
+                             ajStrGetPtr(justifyMinor));
     return;
 }
 
@@ -945,9 +950,11 @@ void ajXmlAddTextOnArc(AjPGraphXml file, double xCentre, double yCentre,
        */
 
     limit = ajStrGetLen(text);
+
     for(i=0; i<limit; ++i)
     {
 	ajStrAssignSubC(&letter, ajStrGetPtr(text), i, i);
+
 	if(!ajStrMatchC(letter, " "))
 	{
 	    letterAngle = ((((double)i) + lettersInFront) * 
@@ -1271,6 +1278,7 @@ void ajXmlAddHistogramEqualGapsF(AjPGraphXml file, const float *y,
 			      ((double)  0), ajTrue, &coord, &index);
 	    }
 	}	    
+
     xml_SetPoints(el, coord);
     xml_SetIndex(el, index);
 
@@ -1337,6 +1345,7 @@ void ajXmlAddRectangleSet(AjPGraphXml file,
 		xml_AddACoord(x1[point], y1[point], ajTrue, &coord, &index);
 	    }
 	}	    
+
 	xml_SetPoints(el, coord);
 	xml_SetIndex(el, index);
 
@@ -1813,6 +1822,7 @@ AjBool ajXmlAddPointLabelLinear(AjPGraphXml file, double angle,
 	ajStrReverse(&textPrinted);
 
     ajXmlAddLine(file, xPoint, yPoint, xEnd, yEnd);
+
     if(textParallelToLine)
 	ajXmlAddTextWithCJustify(file, textXStart, textYStart, size, 
 				 (textAngle - acos(0)), fontFamily, 
@@ -1952,6 +1962,7 @@ AjBool ajXmlAddSectionLabelLinear(AjPGraphXml file, double xStart,
 	    ajXmlAddLine(file, xEnd, yInner, xEndLabel, yInner);
 	    ajXmlAddLine(file, xEnd, yOuter, xEndLabel, yOuter);
 	}
+
 	if(ajStrMatchC(labelStyle, "Arrowed"))
 	{
 	    ajXmlAddLine(file, xStart, yStart, xStartLabel, yOuter);
@@ -1959,6 +1970,7 @@ AjBool ajXmlAddSectionLabelLinear(AjPGraphXml file, double xStart,
 	    ajXmlAddLine(file, xEnd, yEnd, xEndLabel, yOuter);
 	    ajXmlAddLine(file, xEnd, yEnd, xEndLabel, yInner);
 	}
+
 	if(ajStrMatchC(labelStyle, "Lined"))
 	{
 	    ajXmlAddLine(file, xStart, yOuter, xStart, yInner);
@@ -2507,56 +2519,56 @@ void ajXmlSetColourFromCode(AjPGraphXml file, ajint colour)
 {
     switch (colour)
     {
-    case 0:
-	ajXmlSetColour(file, 0.0, 0.0, 0.0);
-	break;
-    case 1:
-	ajXmlSetColour(file, 1.0, 0.0, 0.0);
- 	break;
-    case 2:
-	ajXmlSetColour(file, 1.0, 1.0, 0.0);
-	break;
-    case 3:
-	ajXmlSetColour(file, 0.0, 1.0, 0.0);
-	break;
-    case 4:
-	ajXmlSetColour(file, 0.0, 1.0, 1.0);
-	break;
-    case 5:
-	ajXmlSetColour(file, 0.8, 0.2, 0.2);
-	break;
-    case 6:
-	ajXmlSetColour(file, 0.5, 0.5, 0.1);
-	break;
-    case 7:
-	ajXmlSetColour(file, 0.5, 0.5, 0.5);
-	break;
-    case 8:
-	ajXmlSetColour(file, 0.4, 0.4, 0.4);
-	break;
-    case 9:
-	ajXmlSetColour(file, 0.0, 0.0, 1.0);
-	break;
-    case 10:
-	ajXmlSetColour(file, 1, 0, 1);
-	break;
-    case 11:
-	ajXmlSetColour(file, 0.2, 0.2, 0.8);
-	break;
-    case 12:
-	ajXmlSetColour(file, 0.2, 0.8, 0.2);
-	break;
-    case 13:
-	ajXmlSetColour(file, 0.6, 0.4, 0.2);
-	break;
-    case 14:
-	ajXmlSetColour(file, 0.5, 0.2, 0.2);
-	break;
-    case 15:
-	ajXmlSetColour(file, 1, 1, 1);
-	break;
-    default:
-	break;
+        case 0:
+            ajXmlSetColour(file, 0.0, 0.0, 0.0);
+            break;
+        case 1:
+            ajXmlSetColour(file, 1.0, 0.0, 0.0);
+            break;
+        case 2:
+            ajXmlSetColour(file, 1.0, 1.0, 0.0);
+            break;
+        case 3:
+            ajXmlSetColour(file, 0.0, 1.0, 0.0);
+            break;
+        case 4:
+            ajXmlSetColour(file, 0.0, 1.0, 1.0);
+            break;
+        case 5:
+            ajXmlSetColour(file, 0.8, 0.2, 0.2);
+            break;
+        case 6:
+            ajXmlSetColour(file, 0.5, 0.5, 0.1);
+            break;
+        case 7:
+            ajXmlSetColour(file, 0.5, 0.5, 0.5);
+            break;
+        case 8:
+            ajXmlSetColour(file, 0.4, 0.4, 0.4);
+            break;
+        case 9:
+            ajXmlSetColour(file, 0.0, 0.0, 1.0);
+            break;
+        case 10:
+            ajXmlSetColour(file, 1, 0, 1);
+            break;
+        case 11:
+            ajXmlSetColour(file, 0.2, 0.2, 0.8);
+            break;
+        case 12:
+            ajXmlSetColour(file, 0.2, 0.8, 0.2);
+            break;
+        case 13:
+            ajXmlSetColour(file, 0.6, 0.4, 0.2);
+            break;
+        case 14:
+            ajXmlSetColour(file, 0.5, 0.2, 0.2);
+            break;
+        case 15:
+            ajXmlSetColour(file, 1, 1, 1);
+            break;
+        default:
+            break;
     }    
 
     return;
@@ -2631,6 +2643,7 @@ void ajXmlAddGraphicC(AjPGraphXml file, const char *type)
 	{
 	    if(xml_FileNeedsProtoDeclareC(file, "Graph"))
 		xml_AddGraphProto(file);
+
 	    el = xml_MakeNewNodeC(file, "ProtoInstance", file->currentScene);
 	    xml_SetAttributeC(el, "name", type);
 	    xml_SetCurrentGraphic(file, el);   
@@ -2640,6 +2653,7 @@ void ajXmlAddGraphicC(AjPGraphXml file, const char *type)
 	    {
 		if(xml_FileNeedsProtoDeclareC(file, "Graph"))
 		    xml_AddGraphProto(file);
+
 		el = xml_MakeNewNodeC(file, type, file->currentScene);
 		xml_SetCurrentGraphic(file, el);   
 	    }
@@ -2649,6 +2663,7 @@ void ajXmlAddGraphicC(AjPGraphXml file, const char *type)
 		{
 		    if(xml_FileNeedsProtoDeclareC(file, "DNAPlot"))
 			xml_AddDNAPlotProto(file);
+
 		    el = xml_MakeNewNodeC(file, type, file->currentScene);
 		    xml_SetCurrentGraphic(file, el);   
 		}
@@ -2785,6 +2800,7 @@ void ajXmlAddCircle(AjPGraphXml file, double xCentre, double yCentre,
 	controlPointsDbs[i] += xCentre;
 	controlPointsDbs[i+1] += yCentre;
     }
+
     for(i=0; i<14; i+=2)
 	xml_AddACoord(controlPointsDbs[i], controlPointsDbs[i+1], 
 		      ajFalse, &controlPoints, &temp);
@@ -2860,6 +2876,7 @@ void ajXmlAddGroutOptionC(AjPGraphXml file,
 	 nodeName, &exc);
 
     limit = gdome_nl_length(listShapes, &exc);
+
     for(i=0; i<limit && headNode == NULL; ++i)
 	headNode = xml_SetNode(gdome_nl_item(listShapes, i, &exc));
 
@@ -3020,7 +3037,9 @@ static AjBool xml_StrFromDouble(AjPStr *result, double val)
 
     for(i=14; ajStrSuffixC(mantisa, "0"); --i)
 	iret = ajStrCutEnd(&mantisa,1);
+
     decimalPlaces = i-exponentInt;
+
     if(decimalPlaces<0)
 	decimalPlaces = 0;
 
@@ -3061,8 +3080,8 @@ static AjBool xml_AngleIsInSecondHalfOfCircle(double angle)
     
     if(halfHalfCount == doubleIntHalfHalfCount)
 	return ajFalse;
-    else
-	return ajTrue;
+
+    return ajTrue;
 }
 
 
@@ -3282,10 +3301,12 @@ static AjPStr xml_GetIndex(AjPXmlNode passedNode)
 	listShapes = gdome_el_getElementsByTagName
 	    (xml_GetNodeElement(passedNode), nodeName, &exc);
 	limit = gdome_nl_length(listShapes, &exc);
+
 	for(i=0; i<limit && node == NULL; ++i)
 	    node = xml_SetNode(gdome_nl_item(listShapes, i, &exc));
 
 	gdome_nl_unref(listShapes, &exc);
+
 	if(node == NULL)
 	{
 	    gdome_str_unref(nodeName);
@@ -3293,8 +3314,10 @@ static AjPStr xml_GetIndex(AjPXmlNode passedNode)
 	    listShapes = gdome_el_getElementsByTagName
 		(xml_GetNodeElement(passedNode), nodeName, &exc);
 	    limit = gdome_nl_length(listShapes, &exc);
+
 	    for(i=0; i<limit && node == NULL; ++i)
 		node = xml_SetNode(gdome_nl_item(listShapes, i, &exc));
+
 	    gdome_nl_unref(listShapes, &exc);
 	}
     }
@@ -3307,8 +3330,10 @@ static AjPStr xml_GetIndex(AjPXmlNode passedNode)
     if(ajCharMatchC("ProtoInstance", nodeName->str))
     {
 	ajAttributeValue = xml_GetAttributeC(node, "name");
+
 	if(ajStrMatchC(ajAttributeValue, "Graph"))
 	    proto = ajTrue;
+
 	ajStrDel(&ajAttributeValue);
     }
 
@@ -3323,6 +3348,7 @@ static AjPStr xml_GetIndex(AjPXmlNode passedNode)
 	listShapes = gdome_el_getElementsByTagName
 	    (xml_GetNodeElement(node), nodeName, &exc);
 	limit = gdome_nl_length(listShapes, &exc);
+
 	for(i=0; i<limit && returnNode == NULL; ++i)
 	{
 	    tempNode = xml_SetNode(gdome_nl_item(listShapes, i, &exc));
@@ -3408,10 +3434,12 @@ static void xml_SetIndex(AjPXmlNode passedNode, const AjPStr index)
 	listShapes = gdome_el_getElementsByTagName
 	    (xml_GetNodeElement(passedNode), nodeName, &exc);
 	limit = gdome_nl_length(listShapes, &exc);
+
 	for(i=0; i<limit && node == NULL; ++i)
 	    node = xml_SetNode(gdome_nl_item(listShapes, i, &exc));
 
 	gdome_nl_unref(listShapes, &exc);
+
 	if(node == NULL)
 	{
 	    gdome_str_unref(nodeName);
@@ -3419,6 +3447,7 @@ static void xml_SetIndex(AjPXmlNode passedNode, const AjPStr index)
 	    listShapes = gdome_el_getElementsByTagName
 		(xml_GetNodeElement(passedNode), nodeName, &exc);
 	    limit = gdome_nl_length(listShapes, &exc);
+
 	    for(i=0; i<limit && node == NULL; ++i)
 		node = xml_SetNode(gdome_nl_item(listShapes, i, &exc));
 
@@ -3434,6 +3463,7 @@ static void xml_SetIndex(AjPXmlNode passedNode, const AjPStr index)
     if(ajCharMatchC("ProtoInstance", nodeName->str))
     {
 	ajAttributeValue = xml_GetAttributeC(node, "name");
+
 	if(ajStrMatchC(ajAttributeValue, "Graph"))
 	    proto = ajTrue;
 
@@ -3448,6 +3478,7 @@ static void xml_SetIndex(AjPXmlNode passedNode, const AjPStr index)
 	listShapes = gdome_el_getElementsByTagName
 	    (xml_GetNodeElement(node), nodeName, &exc);
 	limit = gdome_nl_length(listShapes, &exc);
+
 	for(i=0; i<limit && returnNode == NULL; ++i)
 	{
 	    tempNode = xml_SetNode(gdome_nl_item(listShapes, i, &exc));
@@ -3456,13 +3487,12 @@ static void xml_SetIndex(AjPXmlNode passedNode, const AjPStr index)
 						 "name");
 
 	    if(ajStrMatchC(ajAttributeValue, "Graph.index"))
-	    {
 		xml_SetAttributeC(tempNode, "value", ajStrGetPtr(index));
-	    }
 
 	    ajStrDel(&ajAttributeValue);
 	    xml_UnrefNode(&tempNode);
 	}
+
 	gdome_str_unref(nodeName);
 	gdome_nl_unref(listShapes, &exc);
     }
@@ -3475,6 +3505,7 @@ static void xml_SetIndex(AjPXmlNode passedNode, const AjPStr index)
 	    listShapes = gdome_el_getElementsByTagName
 		(xml_GetNodeElement(passedNode), nodeName, &exc);
 	    limit = gdome_nl_length(listShapes, &exc);
+
 	    for(i=0; i<limit && tempNode == NULL; ++i)
 		tempNode = xml_SetNode(gdome_nl_item(listShapes, i, &exc));
 
@@ -3502,6 +3533,7 @@ static void xml_SetIndex(AjPXmlNode passedNode, const AjPStr index)
 ** @return [AjPStr] value of points
 ** @@
 *********************************************************************/
+
 static AjPStr xml_GetPoints(AjPXmlNode passedNode)
 {
     GdomeDOMString *attributeValue;
@@ -3529,10 +3561,12 @@ static AjPStr xml_GetPoints(AjPXmlNode passedNode)
 	listShapes = gdome_el_getElementsByTagName
 	    (xml_GetNodeElement(passedNode), nodeName, &exc);
 	limit = gdome_nl_length(listShapes, &exc);
+
 	for(i=0; i<limit && node == NULL; ++i)
 	    node = xml_SetNode(gdome_nl_item(listShapes, i, &exc));
 
 	gdome_nl_unref(listShapes, &exc);
+
 	if(node == NULL)
 	{
 	    gdome_str_unref(nodeName);
@@ -3540,6 +3574,7 @@ static AjPStr xml_GetPoints(AjPXmlNode passedNode)
 	    listShapes = gdome_el_getElementsByTagName
 		(xml_GetNodeElement(passedNode), nodeName, &exc);
 	    limit = gdome_nl_length(listShapes, &exc);
+
 	    for(i=0; i<limit && node == NULL; ++i)
 		node = xml_SetNode(gdome_nl_item(listShapes, i, &exc));
 
@@ -3555,8 +3590,10 @@ static AjPStr xml_GetPoints(AjPXmlNode passedNode)
     if(ajCharMatchC("ProtoInstance", nodeName->str))
     {
 	ajAttributeValue = xml_GetAttributeC(node, "name");
+
 	if(ajStrMatchC(ajAttributeValue, "Graph"))
 	    proto = ajTrue;
+
 	ajStrDel(&ajAttributeValue);
     }
 
@@ -3568,6 +3605,7 @@ static AjPStr xml_GetPoints(AjPXmlNode passedNode)
 	listShapes = gdome_el_getElementsByTagName
 	    (xml_GetNodeElement(node), nodeName, &exc);
 	limit = gdome_nl_length(listShapes, &exc);
+
 	for(i=0; i<limit && temp == NULL; ++i)
 	{
 	    tempNode = xml_SetNode(gdome_nl_item(listShapes, i, &exc));
@@ -3593,12 +3631,15 @@ static AjPStr xml_GetPoints(AjPXmlNode passedNode)
 	{
 	    ajDebug("Exception: cannot get points from a node "
 		    "that is not an IndexedSet, this is a %s", nodeName->str);
+
 	    return ajStrNewC("");
 	}
+
  	gdome_str_unref(nodeName);
 	nodeName = gdome_str_mkref("Coordinate");
 	listCoordinate = gdome_el_getElementsByTagName
 	    (xml_GetNodeElement(node), nodeName, &exc);
+
 	if(gdome_nl_length(listCoordinate, &exc)!=0)
 	    coordinateNode = xml_SetNode( gdome_nl_item 
 					 (listCoordinate, 0, &exc));
@@ -3615,6 +3656,7 @@ static AjPStr xml_GetPoints(AjPXmlNode passedNode)
 	    (xml_GetNodeElement(coordinateNode), nodeName, &exc);
 
 	xml_UnrefNode(&coordinateNode);
+
 	if(listCoordinate != NULL)
 	    gdome_nl_unref(listCoordinate, &exc);
     
@@ -3645,6 +3687,7 @@ static AjPStr xml_GetPoints(AjPXmlNode passedNode)
 ** @return [AjBool] ajTrue if points set correctly
 ** @@
 *********************************************************************/
+
 static AjBool xml_SetPoints(AjPXmlNode passedNode, const AjPStr points)
 {
     GdomeException exc;
@@ -3672,10 +3715,12 @@ static AjBool xml_SetPoints(AjPXmlNode passedNode, const AjPStr points)
 	listShapes = gdome_el_getElementsByTagName
 	    (xml_GetNodeElement(passedNode), nodeName, &exc);
 	limit = gdome_nl_length(listShapes, &exc);
+
 	for(i=0; i<limit && node == NULL; ++i)
 	    node = xml_SetNode(gdome_nl_item(listShapes, i, &exc));
 
 	gdome_nl_unref(listShapes, &exc);
+
 	if(node == NULL)
 	{
 	    gdome_str_unref(nodeName);
@@ -3683,6 +3728,7 @@ static AjBool xml_SetPoints(AjPXmlNode passedNode, const AjPStr points)
 	    listShapes = gdome_el_getElementsByTagName
 		(xml_GetNodeElement(passedNode), nodeName, &exc);
 	    limit = gdome_nl_length(listShapes, &exc);
+
 	    for(i=0; i<limit && node == NULL; ++i)
 		node = xml_SetNode(gdome_nl_item(listShapes, i, &exc));
 
@@ -3698,6 +3744,7 @@ static AjBool xml_SetPoints(AjPXmlNode passedNode, const AjPStr points)
     if(ajCharMatchC("ProtoInstance", nodeName->str))
     {
 	ajAttributeValue = xml_GetAttributeC(node, "name");
+
 	if(ajStrMatchC(ajAttributeValue, "Graph"))
 	    proto = ajTrue;
 
@@ -3712,6 +3759,7 @@ static AjBool xml_SetPoints(AjPXmlNode passedNode, const AjPStr points)
 	listShapes = gdome_el_getElementsByTagName
 	    (xml_GetNodeElement(node), nodeName, &exc);
 	limit = gdome_nl_length(listShapes, &exc);
+
 	for(i=0; i<limit && returnNode == NULL; ++i)
 	{
 	    tempNode = xml_SetNode(gdome_nl_item(listShapes, i, &exc));
@@ -3724,6 +3772,7 @@ static AjBool xml_SetPoints(AjPXmlNode passedNode, const AjPStr points)
 	    ajStrDel(&ajAttributeValue);
 	    xml_UnrefNode(&tempNode);
 	}
+
 	gdome_nl_unref(listShapes, &exc);
 	gdome_str_unref(nodeName);
     }
@@ -3737,21 +3786,26 @@ static AjBool xml_SetPoints(AjPXmlNode passedNode, const AjPStr points)
 	{
 	    ajDebug("Exception: cannot set points from a node "
 		   "that is not an IndexedSet, this is a %s", nodeName->str);
+
 	    return ajFalse;
 	}
+
 	gdome_str_unref(nodeName);
 	nodeName = gdome_str_mkref("Coordinate");
 	listCoordinate = gdome_el_getElementsByTagName
 	    ((xml_GetNodeElement(node)), nodeName, &exc);
+
 	if(gdome_nl_length(listCoordinate, &exc)!=0)
 	    coordinateNode = xml_SetNode( gdome_nl_item 
 					 (listCoordinate, 0, &exc));
 
 	gdome_nl_unref(listCoordinate, &exc);
+
 	if(xml_GetNode(coordinateNode) == NULL)
 	{
 	    ajDebug("Exception: "
 		   "IndexedLineSet does not have points");
+
 	    return ajFalse;
 	}	
     
@@ -3861,6 +3915,7 @@ static  AjPStr xml_PresentColourAsString(const AjPGraphXml file)
 	ajStrAssignClear(&temp);
 	xml_StrFromDouble(&temp, file->colour[i]);
 	ajStrAppendS(&colour, temp);
+
 	if(i<2)
 	    ajStrAppendC(&colour, " ");
     }
@@ -3904,6 +3959,7 @@ static AjBool xml_FileNeedsProtoDeclareC(const AjPGraphXml file,
 	((xml_GetNodeElement(xml_GetCurrentScene(file))), nodeName, 
 	 &exc);
     limit = gdome_nl_length(listProtos, &exc);
+
     for(i=0; i<limit; ++i)
     {
 	presentNode = xml_SetNode( gdome_nl_item (listProtos, i, 
@@ -3916,8 +3972,10 @@ static AjBool xml_FileNeedsProtoDeclareC(const AjPGraphXml file,
 	    gdome_str_unref(nodeName);
 	    ajStrDel(&presentProtoName);
 	    xml_UnrefNode(&presentNode);
+
 	    return ajFalse;
 	}
+
 	xml_UnrefNode(&presentNode);
 	ajStrDel(&presentProtoName);
     }
@@ -3952,7 +4010,6 @@ static AjBool xml_FileNeedsProtoDeclareC(const AjPGraphXml file,
 static AjBool xml_FileNeedsProtoDeclare(const AjPGraphXml file,
 					const AjPStr protoName)
 {
-
     return xml_FileNeedsProtoDeclareC(file,ajStrGetPtr(protoName));
 }
 
@@ -3996,11 +4053,13 @@ static AjBool xml_IsShapeThisColour(AjPGraphXml file, AjPXmlNode shape)
 	    ((xml_GetNodeElement(shape)), 
 	     nodeName, &exc);
 	limit = gdome_nl_length(listAppearance, &exc);
+
 	for(i=0; i<limit && presentColour == NULL; ++i)
 	{
 	    tempNode = xml_SetNode(gdome_nl_item(listAppearance, i, 
 						 &exc));
 	    attributeValue = xml_GetAttributeC(tempNode, "name");
+
 	    if(ajStrMatchC(attributeValue, "Graph.colour"))
 		colour = xml_GetAttributeC(tempNode, 
 					   "value");
@@ -4008,6 +4067,7 @@ static AjBool xml_IsShapeThisColour(AjPGraphXml file, AjPXmlNode shape)
 	    ajXmlNodeDel(&tempNode);
 	    ajStrDel(&attributeValue);
 	}
+
 	gdome_nl_unref(listAppearance, &exc);
 	gdome_str_unref(nodeName);
 
@@ -4027,6 +4087,7 @@ static AjBool xml_IsShapeThisColour(AjPGraphXml file, AjPXmlNode shape)
 
 	    return ajTrue;
 	}
+
 	presentColour = xml_PresentColourAsString(file);
     }
     else
@@ -4132,7 +4193,6 @@ static AjPXmlNode xml_MakeNewShapeNode(AjPGraphXml file,
 				       AjPXmlNode parentNode, 
 				       const AjPStr nameReqd)
 {
-
     return xml_MakeNewShapeNodeC(file,parentNode,ajStrGetPtr(nameReqd));
 }
 
@@ -4270,6 +4330,7 @@ static AjPXmlNode xml_GetNodeTypeMakeIfNot(AjPGraphXml file,
 
 
     colourTable = (AjPTable) ajTableFetch(file->nodeTypes, nameReqd);
+
     if(colourTable != NULL)
 	returnNode = (AjPXmlNode) ajTableFetch(colourTable, 
 					     xml_PresentColourAsString(file));
@@ -4303,6 +4364,7 @@ static AjPXmlNode xml_GetNodeTypeMakeIfNot(AjPGraphXml file,
 	    ((xml_GetNodeElement(xml_GetCurrentGraphic(file))), 
 	     nodeName, &exc);
 	limit = gdome_nl_length(listShapes, &exc);
+
 	for(i=0; i<limit && returnNode == NULL; ++i)
 	{
 	    tempNode = xml_SetNode(gdome_nl_item(listShapes, i, &exc));
@@ -4311,6 +4373,7 @@ static AjPXmlNode xml_GetNodeTypeMakeIfNot(AjPGraphXml file,
 
 	    if(ajStrMatchC(attributeValue, "Graph.points"))
 		hasCoord = ajTrue;
+
 	    if(ajStrMatchC(attributeValue, "Graph.index"))
 		hasCoordIndex = ajTrue;
 
@@ -4347,16 +4410,17 @@ static AjPXmlNode xml_GetNodeTypeMakeIfNot(AjPGraphXml file,
 
 
 	colourTable = (AjPTable) ajTableFetch(file->nodeTypes, nameReqd);
+
 	if(colourTable == NULL)
 	{
 	    colourTable = ajTablestrNewLen(1);
     
-	    ajTablePut(file->nodeTypes, (const void *) ajStrNewS(nameReqd),
+	    ajTablePut(file->nodeTypes, (void *) ajStrNewS(nameReqd),
 		       (void *)colourTable);
-    
 	}
+
 	ajTablePut(colourTable, 
-		   (const void *) xml_PresentColourAsString(file),
+		   (void *) xml_PresentColourAsString(file),
 		   (void *)returnNode2);
 
 	return(xml_GetCurrentGraphic(file));
@@ -4374,6 +4438,7 @@ static AjPXmlNode xml_GetNodeTypeMakeIfNot(AjPGraphXml file,
 		((xml_GetNodeElement(xml_GetCurrentGraphic(file))), 
 		 nodeName, &exc);
 	    limit = gdome_nl_length(listShapes, &exc);
+
 	    for(i=0; i<limit && returnNode == NULL; ++i)      
 	    {
 		nodeName = gdome_str_mkref("name");
@@ -4402,9 +4467,11 @@ static AjPXmlNode xml_GetNodeTypeMakeIfNot(AjPGraphXml file,
 	listShapes = gdome_el_getElementsByTagName
 	    ((xml_GetNodeElement(shapeNodeParent)), nodeName, &exc);
 	limit = gdome_nl_length(listShapes, &exc);
+
 	for(i=0; i<limit && returnNode == NULL; ++i)
 	{
 	    tempNode = xml_SetNode(gdome_nl_item(listShapes, i, &exc));
+
 	    if(xml_IsShapeThisColour(file, tempNode))
 	    {
 		gdome_str_unref(nodeName);
@@ -4413,6 +4480,7 @@ static AjPXmlNode xml_GetNodeTypeMakeIfNot(AjPGraphXml file,
 		    ((GdomeElement *)gdome_nl_item(listShapes, i, &exc), 
 		     nodeName, &exc);
 		limit2 = gdome_nl_length(listGeometrys, &exc);
+
 		for(j=0; j<limit2 && returnNode == NULL; ++j)
 		{
 		    gdome_str_unref(nodeName);
@@ -4424,10 +4492,13 @@ static AjPXmlNode xml_GetNodeTypeMakeIfNot(AjPGraphXml file,
 			returnNode = xml_SetNode( gdome_nl_item 
 						 (listIndexLineSets, 0, 
 						  &exc));
+
 		    gdome_nl_unref(listIndexLineSets, &exc);
 		}
+
 		gdome_nl_unref(listGeometrys, &exc);
 	    }
+
 	    xml_UnrefNode(&tempNode);
 	}
 
@@ -4464,14 +4535,16 @@ static AjPXmlNode xml_GetNodeTypeMakeIfNot(AjPGraphXml file,
 
 
 	colourTable = (AjPTable) ajTableFetch(file->nodeTypes, nameReqd);
+
 	if(colourTable == NULL)
 	{
 	    colourTable = ajTablestrNewLen(1);
-	    ajTablePut(file->nodeTypes, (const void *) ajStrNewS(nameReqd),
+	    ajTablePut(file->nodeTypes, (void *) ajStrNewS(nameReqd),
 		       (void *)colourTable);
 	}
+
 	ajTablePut(colourTable, 
-		   (const void *) xml_PresentColourAsString(file),
+		   (void *) xml_PresentColourAsString(file),
 		   (void *)returnNode2);
 
 	/* listShapes and nodeName unrefed just above */
@@ -4578,6 +4651,7 @@ static void xml_AddACoord(double x, double y, AjBool joined, AjPStr* coord,
     {
 	lastIndex = xml_GetLastInt(*index);
 	ajStrAppendC(index,  " ");
+
 	if(!joined)
 	    ajStrAppendC(index, "-1 ");
     }
@@ -4612,7 +4686,7 @@ static int xml_GetLastInt(const AjPStr str)
     int count;
     int i;
     int value;
-    AjPStr token = NULL;
+    const AjPStr token = NULL;
 
     count = ajStrParseCountC(str, " ");
     token = ajStrParseWhite(str);
@@ -4653,7 +4727,7 @@ static double xml_GetLastDouble(const AjPStr str)
     int count;
     int i;
     double value;
-    AjPStr token = NULL;
+    const AjPStr token = NULL;
 
     count = ajStrParseCountC(str, " ");
     token = ajStrParseWhite(str);
@@ -4692,7 +4766,7 @@ static double xml_GetDoubleNo(const AjPStr str, int index)
     int count;
     int i;
     double value;
-    AjPStr token = NULL;
+    const AjPStr token = NULL;
 
     count = ajStrParseCountC(str, " ");
     token = ajStrParseWhite(str);
@@ -5100,9 +5174,11 @@ static AjBool xml_WriteStdout(const AjPGraphXml file)
     {
 	ajDebug("DOMImplementation.saveDocToMemory: failed\n\tException #%d\n",
 		exc);
+
 	return ajFalse;
     }
     outputLength = strlen(output);
+
     for(i = 0; i < outputLength; ++i)
 	fprintf(stdout,"%c", output[i]);
 
@@ -5315,6 +5391,7 @@ static void xml_ClearFile(AjPGraphXml *pfile)
     GdomeException exc;
 
     AjPGraphXml file = *pfile;
+
     if(file->currentGraphic == file->currentScene)
 	ajXmlNodeDel(&file->currentGraphic);
     else
@@ -5394,7 +5471,7 @@ void xml_Unused()
 **
 ** Clear primary table allocation for colourtable
 **
-** @param [r] key [const void**] Standard argument, table key.
+** @param [r] key [void**] Standard argument, table key.
 ** @param [r] value [void**] Standard argument, table data item.
 ** @param [r] cl [void*] Standard argument, usually NULL
 **
@@ -5402,7 +5479,7 @@ void xml_Unused()
 ** @@
 *********************************************************************/
 
-static void xml_clear_nodeTypes(const void **key, void **value, void *cl)
+static void xml_clear_nodeTypes(void **key, void **value, void *cl)
 {
     AjPTable table = (AjPTable) *value;
     AjPStr skey = (AjPStr) *key;
@@ -5425,7 +5502,7 @@ static void xml_clear_nodeTypes(const void **key, void **value, void *cl)
 **
 ** Clear secondary (XmlNode) table allocation for colourtable subtables
 **
-** @param [r] key [const void**] Standard argument, table key.
+** @param [r] key [void**] Standard argument, table key.
 ** @param [r] value [void**] Standard argument, table data item.
 ** @param [r] cl [void*] Standard argument, usually NULL
 **
@@ -5433,7 +5510,7 @@ static void xml_clear_nodeTypes(const void **key, void **value, void *cl)
 ** @@
 *********************************************************************/
 
-static void xml_deltablenode(const void **key, void **value, void *cl)
+static void xml_deltablenode(void **key, void **value, void *cl)
 {
     AjPXmlNode node;
     AjPStr skey;

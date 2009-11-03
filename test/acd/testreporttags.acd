@@ -5,7 +5,7 @@ appl: testreporttags [ doc: "testing" group: "testing" ]
 
 section: input [ info: "Input section" type: "page" ]
 
-report: test [
+report: rtest [
       standard: Y
       taglist: "float:tm=Tm int:ival=Number str s=String"
       rformat: table

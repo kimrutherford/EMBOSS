@@ -25,6 +25,11 @@
 ******************************************************************************/
 #include "emboss.h"
 
+
+static AjPStr featMotifNuc = NULL;
+static AjPStr featMotifProt = NULL;
+
+
 /* @func embPatlistSeqSearch **************************************************
 **
 ** The main search function of patterns. It compiles the patterns and searches
@@ -46,21 +51,28 @@ void embPatlistSeqSearch (AjPFeattable ftable, const AjPSeq seq,
 
     ajDebug ("embPatlistSearchListSeq: Searching '%S' for %d patterns\n",
 	     ajSeqGetNameS(seq), ajPatlistSeqGetSize(plist));
+
     while (ajPatlistSeqGetNext(plist,&patseq))
     {
         compPat = ajPatternSeqGetCompiled(patseq);
+
 	if (!compPat && !embPatternSeqCompile(patseq))
         {
             ajPatlistSeqRemoveCurrent(plist);
             continue;
         }
+
         embPatternSeqSearch(ftable,seq,patseq,reverse);
         ajDebug("end loop\n");
     }
 
     ajPatlistSeqRewind(plist);
+
     return;
 }
+
+
+
 
 /* @func embPatlistRegexSearch ************************************************
 **
@@ -84,18 +96,22 @@ void embPatlistRegexSearch (AjPFeattable ftable, const AjPSeq seq,
 
     ajStrAssignS(&tmp,ajSeqGetNameS(seq));
     ajDebug ("embPatlistSearchSequence: Searching '%S' for patterns\n",tmp);
+
     while (ajPatlistRegexGetNext(plist,&patreg))
     {
         compPat = ajPatternRegexGetCompiled(patreg);
+
 	if (!compPat)
         {
             ajPatlistRegexRemoveCurrent(plist);
             continue;
         }
+
         embPatternRegexSearch(ftable,seq,patreg,reverse);
         ajDebug("end loop\n");
     }
-    // ajDebug ("embPatlistSearchListRegex: Done search '%S'\n",tmp);
+
+    /* ajDebug ("embPatlistSearchListRegex: Done search '%S'\n",tmp); */
 
     ajPatlistRegexRewind(plist);
 
@@ -103,6 +119,9 @@ void embPatlistRegexSearch (AjPFeattable ftable, const AjPSeq seq,
 
     return;
 }
+
+
+
 
 /* @func embPatternRegexSearch ************************************************
 **
@@ -133,11 +152,18 @@ void embPatternRegexSearch (AjPFeattable ftable, const AjPSeq seq,
     AjPSeq revseq;
     ajint seqlen;
 
+    if(!ajStrGetLen(featMotifProt))
+        ajStrAssignC(&featMotifProt, "SO:0001067");
+
+    if(!ajStrGetLen(featMotifNuc))
+        ajStrAssignC(&featMotifNuc, "SO:0000714");
+
     pos = ajSeqGetBeginTrue(seq);
     adj = ajSeqGetEndTrue(seq);
 
     seqlen = ajSeqGetLen(seq);
     isreversed = ajSeqIsReversedTrue(seq);
+
     if(isreversed)
 	seqlen += ajSeqGetOffset(seq);
 
@@ -153,6 +179,7 @@ void embPatternRegexSearch (AjPFeattable ftable, const AjPSeq seq,
         ajStrAssignSubS(&seqstr, ajSeqGetSeqS(revseq), pos-1, adj-1);
         ajSeqstrReverse(&seqstr);
     }
+
     ajStrAssignSubS(&seqstr, ajSeqGetSeqS(seq), pos-1, adj-1);
 
     ajStrFmtUpper(&seqstr);
@@ -166,24 +193,37 @@ void embPatternRegexSearch (AjPFeattable ftable, const AjPSeq seq,
 	{
 	    ajRegSubI(patexp, 0, &substr);
 	    ajRegPost(patexp, &tmp);
-	    ajStrAssignS(&seqstr, tmp);
+	    ajStrAssignS(&seqstr, substr);
+            ajStrAppendS(&seqstr, tmp);
 	    pos += off;
-	    /*ajDebug("match pos: %d adj: %d len: %d off:%d\n",
-		   pos, adj, len, off);*/
-            if (reverse)
-		sf = ajFeatNewIIRev (ftable,
-				     adj - pos + 1,
-				     adj - pos - len + 2);
-	    else
-		sf = ajFeatNewII (ftable, pos, pos + len - 1);
 
+	    /*ajDebug("match pos: %d adj: %d len: %d off:%d\n",
+                    pos, adj, len, off);*/
+            if (reverse)
+                sf = ajFeatNew(ftable, NULL, featMotifNuc,
+                                   adj - pos - len + 2,
+                                   adj - pos + 1,
+                                   0.0, '-', 0);
+	    else
+            {
+                if(ajSeqIsProt(seq) || ajFeattableIsProt(ftable))
+                    sf = ajFeatNewProt(ftable, NULL, featMotifProt,
+                                       pos, pos + len - 1,
+                                       0.0);
+                else
+                    sf = ajFeatNew(ftable, NULL, featMotifNuc,
+                                   pos, pos + len - 1,
+                                   0.0, '.', 0);
+            }
+            
 	    if(isreversed)
 		ajFeatReverse(sf, seqlen);
 
 	    ajFmtPrintS (&tmpstr,"*pat %S",
 			 ajPatternRegexGetName(pat));
 	    ajFeatTagAdd (sf,NULL,tmpstr);
-	    pos += len;
+	    pos += 1;
+	    ajStrCutStart(&seqstr, 1);
 	}
 	else
 	{
@@ -196,11 +236,15 @@ void embPatternRegexSearch (AjPFeattable ftable, const AjPSeq seq,
     ajStrDel(&tmp);
     ajStrDel(&substr);
     ajStrDel(&seqstr);
+
     if(reverse)
 	ajSeqDel(&revseq);
 
     return;
 }
+
+
+
 
 /* @func embPatternSeqSearch **************************************************
 **
@@ -213,6 +257,7 @@ void embPatternRegexSearch (AjPFeattable ftable, const AjPSeq seq,
 ** @return [void]  
 ** @@
 ******************************************************************************/
+
 void embPatternSeqSearch (AjPFeattable ftable, const AjPSeq seq,
 			  const AjPPatternSeq pat, AjBool reverse)
 {
@@ -232,6 +277,12 @@ void embPatternSeqSearch (AjPFeattable ftable, const AjPSeq seq,
     AjBool isreversed;
     ajint seqlen;
 
+    if(!ajStrGetLen(featMotifProt))
+        ajStrAssignC(&featMotifProt, "SO:0001067");
+
+    if(!ajStrGetLen(featMotifNuc))
+        ajStrAssignC(&featMotifNuc, "SO:0000714");
+
     ajStrAssignS(&seqname,ajSeqGetNameS(seq));
     pattern = ajPatternSeqGetCompiled(pat);
 
@@ -240,6 +291,7 @@ void embPatternSeqSearch (AjPFeattable ftable, const AjPSeq seq,
 
     seqlen = ajSeqGetLen(seq);
     isreversed = ajSeqIsReversedTrue(seq);
+
     if(isreversed)
 	seqlen += ajSeqGetOffset(seq);
 
@@ -267,21 +319,33 @@ void embPatternSeqSearch (AjPFeattable ftable, const AjPSeq seq,
                        ajPatternSeqGetMismatch(pat),&hits,&tidy);
 
     ajDebug ("embPatternSeqSearch: found %d hits\n",hits);
+
     if(!reverse)
 	ajListReverse(list);
 
     for(i=0;i<hits;++i)
     {
         ajListPop(list,(void **)&m);
- 	if (reverse)
-	    sf = ajFeatNewIIRev(ftable,
-				adj - m->start - m->len + begin + 1,
-				adj - m->start + begin);
-	else
-	    sf = ajFeatNewII(ftable,
-			     m->start,
-			     m->start + m->len - 1);
 
+ 	if (reverse)
+	    sf = ajFeatNew(ftable, NULL, featMotifNuc,
+                           adj - m->start - m->len + begin + 1,
+                           adj - m->start + begin,
+                           0.0, '-', 0);
+	else
+        {
+	    if(ajSeqIsProt(seq) || ajFeattableIsProt(ftable))
+                sf = ajFeatNewProt(ftable, NULL, featMotifProt,
+                                   m->start,
+                                   m->start + m->len - 1,
+                                   0.0);
+            else
+                sf = ajFeatNew(ftable, NULL, featMotifNuc,
+                               m->start,
+                               m->start + m->len - 1,
+                               0.0, '.', 0);
+        }
+        
 	if(isreversed)
 	    ajFeatReverse(sf, seqlen);
 
@@ -296,6 +360,7 @@ void embPatternSeqSearch (AjPFeattable ftable, const AjPSeq seq,
 
         ajFmtPrintS(&tmp, "*pat %S", ajPatternSeqGetName(pat));
         ajFeatTagAdd(sf,NULL,tmp);
+
         if(m->mm)
         {
             ajFmtPrintS(&tmp, "*mismatch %d", m->mm);
@@ -309,11 +374,14 @@ void embPatternSeqSearch (AjPFeattable ftable, const AjPSeq seq,
     ajStrDel(&seqstr);
     ajStrDel(&tmp);
     ajListFree(&list);
+
     if (reverse)
         ajSeqDel(&revseq);
 
     return;
 }
+
+
 
 
 /* @func embPatternSeqCompile *************************************************
@@ -336,10 +404,12 @@ AjBool embPatternSeqCompile (AjPPatternSeq pat)
             ajPatternSeqGetName(pat),pattern);
 
     embpat = ajPatCompNew();
+
     if (ajPatternSeqGetProtein(pat))
 	embType=ajTrue;
     else
 	embType=ajFalse;
+
     if (!embPatGetTypeII(embpat,pattern,
 			 ajPatternSeqGetMismatch(pat),embType))
     {
@@ -347,11 +417,31 @@ AjBool embPatternSeqCompile (AjPPatternSeq pat)
 		ajPatternSeqGetName(pat),ajPatternSeqGetPattern(pat));
 	ajPatCompDel(&embpat);
 	ajStrDel(&pattern);
+
 	return ajFalse;
     }
+
     embPatCompileII(embpat,ajPatternSeqGetMismatch(pat));
     ajPatternSeqSetCompiled(pat,embpat);
     ajStrDel(&pattern);
 
     return ajTrue;
+}
+
+
+
+
+/* @func embPatlistExit ********************************************************
+**
+** Cleanup pattern list indexing internals on exit
+**
+** @return [void]
+******************************************************************************/
+
+void embPatlistExit(void)
+{
+    ajStrDel(&featMotifNuc);
+    ajStrDel(&featMotifProt);
+
+    return;
 }

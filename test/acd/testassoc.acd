@@ -13,10 +13,10 @@ endsection: input
 
 section: output [ info: "Output section" type: "page" ]
 
-string: testa [ standard: Y info: "Asequence end $(asequence.end)" ]
+string: atest [ standard: Y info: "Asequence end $(asequence.end)" ]
 
-string: testb [ standard: Y info: "Bsequence end $(bsequence.end)" ]
+string: btest [ standard: Y info: "Bsequence end $(bsequence.end)" ]
 
-string: testc [ info: "just another test" ]
+string: ctest [ info: "just another test" ]
 
 endsection: output

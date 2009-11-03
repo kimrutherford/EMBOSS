@@ -180,18 +180,18 @@ int main(int argc, char **argv)
 **
 ** finds all orfs in the current sense and writes them out
 **
-** @param [r] seq [const AjPSeq] Undocumented
-** @param [r] len [ajint] Undocumented
-** @param [r] trnTable [const AjPTrn] Undocumented
+** @param [r] seq [const AjPSeq] Nucleotide sequence
+** @param [r] len [ajint] Sequence length
+** @param [r] trnTable [const AjPTrn] Translation table
 ** @param [r] minsize [ajuint] Minimum size ORF to find
 ** @param [r] maxsize [ajuint] Maximum size ORF to find
-** @param [u] seqout [AjPSeqout] Undocumented
-** @param [r] sense [AjBool] Undocumented
-** @param [r] circular [AjBool] Undocumented
-** @param [r] find [ajint] Undocumented
-** @param [w] orf_no [ajint*] Undocumented
-** @param [r] methionine [AjBool] Undocumented
-** @param [r] around [ajint] Undocumented
+** @param [u] seqout [AjPSeqout] Sequence output object
+** @param [r] sense [AjBool] Forward (sense) strand if true, else reverse strand
+** @param [r] circular [AjBool] True if sequence is circular
+** @param [r] find [ajint] Find code (see main program)
+** @param [w] orf_no [ajint*] ORF counter updated
+** @param [r] methionine [AjBool] If true report all start codond as 'M'
+** @param [r] around [ajint] Number of bases around start/stop codons
 ** @@
 ******************************************************************************/
 
@@ -277,7 +277,7 @@ static void getorf_FindORFs(const AjPSeq seq, ajint len, const AjPTrn trnTable,
 	
 	if(find == P_STOP2STOP || find == N_STOP2STOP ||
 	   find == AROUND_INIT_STOP || find == AROUND_END_STOP)
-	{
+	{   /* look for stop codon to begin reporting ORF */
 	    /* note that there was at least one STOP in a circular genome */
 	    if(codon == STOP)
 	    {
@@ -293,7 +293,7 @@ static void getorf_FindORFs(const AjPSeq seq, ajint len, const AjPTrn trnTable,
 		** last codon to the sequence - otherwise, ignore the STOP
 		** codon
 		*/
-		if(pos >= seqlen-5 && pos < seqlen-2)
+		if(codon != STOP)
 		    getorf_AppORF(find, &newstr[frame], chrseq, pos,
 				  aa);
 
@@ -320,7 +320,7 @@ static void getorf_FindORFs(const AjPSeq seq, ajint len, const AjPTrn trnTable,
 		}
 
 		/*
-		** if its a circular genome the STOP codon hit past
+		** if its a circular genome and the STOP codon hits past
 		** the end of the genome in all frames, then break
 		*/
 		if(circular && pos >= len)
@@ -345,7 +345,7 @@ static void getorf_FindORFs(const AjPSeq seq, ajint len, const AjPTrn trnTable,
 		/* append sequence to newstr if in an ORF */
 		getorf_AppORF(find, &newstr[frame], chrseq, pos, aa);
 	}
-	else
+	else /* Look for start: P_START2STOP N_START2STOP AROUND_START */
 	{
 
 	    if(codon == START && !ORF[frame])
@@ -368,9 +368,41 @@ static void getorf_FindORFs(const AjPSeq seq, ajint len, const AjPTrn trnTable,
 				      pos, aa);
 		}
 	    }
-	    else if(codon == STOP || pos >= seqlen-5)
-	    {
-		/* hit a STOP or the end of the sequence */
+	    else if(codon == STOP)
+            {
+		/* hit a STOP */
+
+		/* Already have a sequence to write out? */
+		if(ORF[frame])
+		{
+		    ORF[frame] = ajFalse; /* not in an ORF */
+
+		    if(ajStrGetLen(newstr[frame]) >= minsize &&
+		       ajStrGetLen(newstr[frame]) <= maxsize)
+		    {
+			/* create a new sequence */
+			getorf_WriteORF(seq, len, seqlen, sense,
+					    find, orf_no, start[frame],
+					    pos-1, newstr[frame],
+					    seqout, around);
+		    }
+		}
+
+		/*
+		** if a circular genome and hit the STOP past
+		** the end of the genome in all frames, then break
+		*/
+		if(circular && pos >= len)
+		{
+		    LASTORF[frame] = ajTrue; /* finished getting ORFs */
+		    if(LASTORF[0] && LASTORF[1] && LASTORF[2]) break;
+		}
+
+		ajStrSetClear(&newstr[frame]);
+            }
+            else if(pos >= seqlen-5)
+            {
+		/* hit the end of the sequence  without a stop */
 
 		/* Already have a sequence to write out? */
 		if(ORF[frame])
@@ -390,16 +422,10 @@ static void getorf_FindORFs(const AjPSeq seq, ajint len, const AjPTrn trnTable,
 		       ajStrGetLen(newstr[frame]) <= maxsize)
 		    {
 			/* create a new sequence */
-			if(codon == STOP)
-			    getorf_WriteORF(seq, len, seqlen, sense,
-					    find, orf_no, start[frame],
-					    pos-1, newstr[frame],
-					    seqout, around);
-			else
-			    getorf_WriteORF(seq, len, seqlen, sense,
-					    find, orf_no, start[frame],
-					    pos+2, newstr[frame],
-					    seqout, around);
+			getorf_WriteORF(seq, len, seqlen, sense,
+                                        find, orf_no, start[frame],
+                                        pos+2, newstr[frame],
+                                        seqout, around);
 		    }
 		}
 

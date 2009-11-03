@@ -31,9 +31,6 @@ static void extractfeat_FeatSeqExtract(const AjPSeq seq, AjPSeqout seqout,
 				       AjBool featinname,
 				       const AjPStr describe);
 
-static void extractfeat_GetFeatseq(const AjPSeq seq, const AjPFeature gf,
-				   AjPStr *gfstr, AjBool sense);
-
 static void extractfeat_WriteOut(AjPSeqout seqout, AjPStr *featstr,
 				 AjBool compall, AjBool sense, ajint firstpos,
 				 ajint lastpos,
@@ -54,14 +51,14 @@ static void extractfeat_GetRegionPad(const AjPSeq seq, AjPStr *featstr, ajint
 
 static void extractfeat_FeatureFilter(AjPFeattable featab,
 				      const AjPStr source, const AjPStr type,
-				      ajint sense,
+				      ajint sense, AjBool testscore,
 				      float minscore,
 				      float maxscore, const AjPStr tag,
 				      const AjPStr value);
 
 static AjBool extractfeat_MatchFeature(const AjPFeature gf,
 				       const AjPStr source, const AjPStr type,
-				       ajint sense,
+				       ajint sense, AjBool testscore,
 				       float minscore,
 				       float maxscore, const AjPStr tag,
 				       const AjPStr value, AjBool *tagsmatch);
@@ -97,12 +94,13 @@ int main(int argc, char **argv)
 
     /* feature filter criteria */
     AjPStr source = NULL;
-    AjPStr type   = NULL;
+    AjPStr feattype   = NULL;
     ajint sense;
     float minscore;
     float maxscore;
     AjPStr tag  = NULL;
     AjPStr value = NULL;
+    AjBool testscore = AJFALSE;
 
     embInit("extractfeat", argc, argv);
     
@@ -116,21 +114,29 @@ int main(int argc, char **argv)
     
     /* feature filter criteria */
     source   = ajAcdGetString("source");
-    type     = ajAcdGetString("type");
+    feattype = ajAcdGetString("type");
     sense    = ajAcdGetInt("sense");
     minscore = ajAcdGetFloat("minscore");
     maxscore = ajAcdGetFloat("maxscore");
     tag      = ajAcdGetString("tag");
     value    = ajAcdGetString("value");
     
+    testscore = (minscore || maxscore);
+    if(minscore && !maxscore)
+        if(minscore > maxscore)
+            maxscore = minscore;
+    if(!minscore && maxscore)
+        if(minscore > maxscore)
+            minscore = maxscore;
+
     while(ajSeqallNext(seqall, &seq))
     {
 	/* get the feature table of the sequence */
 	featab = ajSeqGetFeatCopy(seq);
 
         /* delete features in the table that don't match our criteria */
-        extractfeat_FeatureFilter(featab, source, type, sense,
-				  minscore, maxscore, tag, value);
+        extractfeat_FeatureFilter(featab, source, feattype, sense,
+				  testscore, minscore, maxscore, tag, value);
 
         /* extract the features */
         extractfeat_FeatSeqExtract(seq, seqout, featab, before,
@@ -148,7 +154,7 @@ int main(int argc, char **argv)
 
     ajStrDel(&describe);
     ajStrDel(&source);
-    ajStrDel(&type);
+    ajStrDel(&feattype);
     ajStrDel(&tag);
     ajStrDel(&value);
 
@@ -266,7 +272,7 @@ static void extractfeat_FeatSeqExtract(const AjPSeq seq, AjPSeqout seqout,
 	    ** If single or parent, write out any stored previous feature
 	    ** sequence
 	    */	    
-            if(single || parent)
+            if(!child)
 	    {
             	extractfeat_WriteOut(seqout, &featseq, compall, sense,
 				     firstpos, lastpos, before, after, seq,
@@ -284,17 +290,6 @@ static void extractfeat_FeatSeqExtract(const AjPSeq seq, AjPSeqout seqout,
                 firstpos = 0;
                 lastpos = 0;
             }
-
-	    /*
-	    ** Don't process Remote IDs and abort a multiple join if one
-	    ** contains a Remote ID
-	    */
-            if(! ajFeatIsLocal(gf))
-                remote = ajTrue;
-
-	    ajDebug("remote=%B\n", remote);
-            if(remote)
-            	continue;
 
 
 	    /* if parent, note if have Complemented Join */
@@ -336,21 +331,12 @@ static void extractfeat_FeatSeqExtract(const AjPSeq seq, AjPSeqout seqout,
             extractfeat_MatchPatternDescribe(gf, describe, &describeout);
 	    
 	    /* get feature sequence(complement if required) */
-            extractfeat_GetFeatseq(seq, gf, &tmpseq, sense);
-	    ajDebug("extracted feature = %d bases\n", ajStrGetLen(tmpseq));
-	    
-	    /*
-	    ** if child, append to previous sequence, otherwise
-	    ** simply assign
-	    */
-            if(child)
-	    {
-            	ajStrAppendS(&featseq, tmpseq);
-	        ajDebug("joined feature so far = %d bases\n",
-			ajStrGetLen(featseq));
-            }
-	    else
+            if(!child)
+            {
+                ajFeatGetSeq(gf, featab, seq, &tmpseq);
+                ajDebug("extracted feature = %d bases\n", ajStrGetLen(tmpseq));
             	ajStrAssignS(&featseq, tmpseq);
+	    }
 	}
 	ajListIterDel(&iter) ;
 	
@@ -369,47 +355,6 @@ static void extractfeat_FeatSeqExtract(const AjPSeq seq, AjPSeqout seqout,
         ajStrDel(&describeout);
     }
     
-    return;
-}
-
-
-
-
-/* @funcstatic extractfeat_GetFeatseq *****************************************
-**
-** Get the sequence string of a feature (complement if reverse sense)
-**
-** @param [r] seq [const AjPSeq] input sequence
-** @param [r] gf [const AjPFeature] feature
-** @param [w] gfstr [AjPStr *] the resulting feature sequence string
-** @param [r] sense [AjBool] FALSE if reverse sense, so complement the result
-** @return [void]
-** @@
-******************************************************************************/
-
-static void extractfeat_GetFeatseq(const AjPSeq seq, const AjPFeature gf, 
-				   AjPStr *gfstr, AjBool sense)
-{
-    const AjPStr str = NULL;		/* sequence string */
-    AjPStr tmp = NULL;
-
-    str = ajSeqGetSeqS(seq);
-    tmp = ajStrNew();
-
-    ajDebug("about to get sequence from %d-%d, len=%d\n",
-	    ajFeatGetStart(gf), ajFeatGetEnd(gf),
-	    ajFeatGetLength(gf));
-
-    ajStrAssignSubS(&tmp, str, ajFeatGetStart(gf)-1, ajFeatGetEnd(gf)-1);
-
-    /* if feature was in reverse sense, then get reverse complement */
-    if(!sense)
-    	ajSeqstrReverse(&tmp);
-
-    ajStrAssignS(gfstr, tmp);
-
-    ajStrDel(&tmp);
-
     return;
 }
 
@@ -796,6 +741,7 @@ static void extractfeat_GetRegionPad(const AjPSeq seq, AjPStr *featstr,
 ** @param [r] source [const AjPStr] Required Source pattern
 ** @param [r] type [const AjPStr] Required Type pattern
 ** @param [r] sense [ajint] Required Sense pattern +1,0,-1 (or other value$
+** @param [r] testscore [AjBool] Filter by score values
 ** @param [r] minscore [float] Min required Score pattern
 ** @param [r] maxscore [float] Max required Score pattern
 ** @param [r] tag [const AjPStr] Required Tag pattern
@@ -806,7 +752,7 @@ static void extractfeat_GetRegionPad(const AjPSeq seq, AjPStr *featstr,
 
 static void extractfeat_FeatureFilter(AjPFeattable featab,
 				      const AjPStr source, const AjPStr type,
-				      ajint sense,
+				      ajint sense, AjBool testscore,
 				      float minscore, float maxscore,
 				      const AjPStr tag, const AjPStr value)
 {
@@ -830,7 +776,7 @@ static void extractfeat_FeatureFilter(AjPFeattable featab,
 	while(!ajListIterDone(iter))
 	{
 	    gf = (AjPFeature)ajListIterGet(iter);
-	    if(!extractfeat_MatchFeature(gf, source, type, sense,
+	    if(!extractfeat_MatchFeature(gf, source, type, sense, testscore,
 					 minscore, maxscore, tag, value,
 					 &tagsmatch))
 	    {
@@ -856,6 +802,7 @@ static void extractfeat_FeatureFilter(AjPFeattable featab,
 ** @param [r] source [const AjPStr] Required Source pattern
 ** @param [r] type [const AjPStr] Required Type pattern
 ** @param [r] sense [ajint] Required Sense pattern +1,0,-1 (or other value)
+** @param [r] testscore [AjBool] Filter by score values
 ** @param [r] minscore [float] Min required Score pattern
 ** @param [r] maxscore [float] Max required Score pattern
 ** @param [r] tag [const AjPStr] Required Tag pattern
@@ -868,15 +815,10 @@ static void extractfeat_FeatureFilter(AjPFeattable featab,
 static AjBool extractfeat_MatchFeature(const AjPFeature gf,
 				       const AjPStr source,
 				       const AjPStr type, ajint sense,
-				       float minscore,
+				       AjBool testscore, float minscore,
 				       float maxscore, const AjPStr tag,
 				       const AjPStr value, AjBool *tagsmatch)
 {
-    AjBool scoreok;
-
-    /* if maxscore < minscore, then don't test the scores */
-    scoreok = (minscore < maxscore);
-
 
      /*
      ** is this a child of a join() ?
@@ -906,23 +848,27 @@ static AjBool extractfeat_MatchFeature(const AjPFeature gf,
 
     ajDebug("embMiscMatchPattern(ajFeatGetSource(gf), source) %B\n",
 	    embMiscMatchPattern(ajFeatGetSource(gf), source));
-    ajDebug("embMiscMatchPattern(ajFeatGetType(gf), type) %B\n",
-	    embMiscMatchPattern(ajFeatGetType(gf), type));
+    ajDebug("ajFeatTypeMatchS(gf, type) %B\n",
+	    ajFeatTypeMatchS(gf, type));
     ajDebug("ajFeatGetStrand(gf) '%x' sense %d\n", ajFeatGetStrand(gf), sense);
-    ajDebug("scoreok: %B ajFeatGetScore(gf): %f minscore:%f maxscore:%f\n",
-	    scoreok, ajFeatGetScore(gf), minscore, maxscore);
-    if(!embMiscMatchPattern(ajFeatGetSource(gf), source) ||
-       !embMiscMatchPattern(ajFeatGetType(gf), type) ||
-       (ajFeatGetStrand(gf) == '+' && sense == -1) ||
-       (ajFeatGetStrand(gf) == '-' && sense == +1) ||
-       (scoreok && ajFeatGetScore(gf) < minscore) ||
-       (scoreok && ajFeatGetScore(gf) > maxscore) ||
-       !*tagsmatch)
-    {
-	ajDebug("return ajFalse\n");
-	return ajFalse;
-    }
-    ajDebug("return ajTrue\n");
+    ajDebug("testscore: %B ajFeatGetScore(gf): %f minscore:%f maxscore:%f\n",
+	    testscore, ajFeatGetScore(gf), minscore, maxscore);
+    if(!embMiscMatchPattern(ajFeatGetSource(gf), source))
+        return ajFalse;
+    if(ajStrGetLen(type) && !ajFeatTypeMatchS(gf, type))
+        return ajFalse;
+    if(ajFeatGetStrand(gf) == '+' && sense == -1)
+        return ajFalse;
+    if(ajFeatGetStrand(gf) == '-' && sense == +1)
+        return ajFalse;
+    if(testscore && ajFeatGetScore(gf) < minscore)
+        return ajFalse;
+    if(testscore && ajFeatGetScore(gf) > maxscore)
+       return ajFalse;
+    if(!*tagsmatch)
+        return ajFalse;
+
+    ajDebug("All tests passed, return ajTrue\n");
 
     return ajTrue;
 }

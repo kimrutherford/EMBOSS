@@ -48,13 +48,13 @@ section: required [
 
   endsection: targetsection
 
-  float: minprimertm [
+  float: mintmprimer [
     standard: "Y"
     default: "53"
     information: "Minimum Primer Tm (deg Celsius)"
   ]
 
-  float: maxprimertm [
+  float: maxtmprimer [
     standard: "Y"
     default: "58"
     information: "Maximum Primer Tm (deg Celsius)"
@@ -72,19 +72,19 @@ section: additional [
     type: "frame"
   ]
 
-    integer: minprodlen [
+    integer: minplen [
       additional: "@(!$(targetrange))"
       default: "100"
       information: "Minimum product length"
     ]
 
-    integer: maxprodlen [
+    integer: maxplen [
       additional: "@(!$(targetrange))"
       default: "300"
       information: "Maximum product length"
     ]
 
-    float: minprodgccont [
+    float: minpgccont [
       additional: "@(!$(targetrange))"
       minimum: ".30"
       maximum: ".70"
@@ -92,7 +92,7 @@ section: additional [
       information: "Minimum product GC fraction"
     ]
 
-    float: maxprodgccont [
+    float: maxpgccont [
       additional: "@(!$(targetrange))"
       minimum: ".30"
       maximum: ".70"

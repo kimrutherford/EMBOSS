@@ -50,20 +50,22 @@ int main(int argc, char **argv)
 
     float step;
     ajint amino = 1;
-
+    ajint carboxyl = 1;
+    
     double H;
     double pH;
     double iep;
 
     ajint *c    = NULL;
     ajint *op   = NULL;
+    double *pK  = NULL;
     double *K   = NULL;
     double *pro = NULL;
     double sum;
     double charge;
 
     AjPGraphPlpData phGraph = NULL;
-    AjPStr tit = NULL;
+    AjPStr title = NULL;
     AjPStr tmp = NULL;
 
     float *xa = NULL;
@@ -84,6 +86,7 @@ int main(int argc, char **argv)
     step      = ajAcdGetFloat("step");
     termini   = ajAcdGetBoolean("termini");
     amino     = ajAcdGetInt("amino");
+    carboxyl  = ajAcdGetInt("carboxyl");
     sscount   = ajAcdGetInt("disulphides");
     modlysine = ajAcdGetInt("lysinemodified");
     outf      = ajAcdGetOutfile("outfile");
@@ -95,8 +98,9 @@ int main(int argc, char **argv)
     AJCNEW(op,  EMBIEPSIZE);
     AJCNEW(pro, EMBIEPSIZE);
 
-    embIepPkRead();				/* read pK's */
-    embIepCalcK(K);				/* Convert to dissoc consts */
+    pK = embIeppKNew();
+    
+    embIepCalcK(K,pK);				/* Convert to dissoc consts */
 
      /* only used if variable 'plot' is true */
 
@@ -114,14 +118,14 @@ int main(int argc, char **argv)
 	    pro[i]=0.;
 	}
 
-	embIepCompS(substr, amino, sscount, modlysine, c);
+	embIepCompS(substr, amino, carboxyl, sscount, modlysine, c);
 
 	if(dofile && outf)
 	{
 	    ajFmtPrintF(outf,"IEP of %S from %d to %d\n",
 			ajSeqGetNameS(a), be, en);
-	    if(!embIepIepS(substr, amino, sscount, modlysine,
-			  &iep, termini))
+	    if(!embIepIepS(substr, amino, carboxyl, sscount, modlysine,
+                           pK, &iep, termini))
 		ajFmtPrintF(outf,"Isoelectric Point = None\n\n");
 	    else
 		ajFmtPrintF(outf,"Isoelectric Point = %-6.4lf\n\n", iep);
@@ -162,20 +166,20 @@ int main(int argc, char **argv)
 	    }
 	    npoints = k;
 
-	    tit = ajStrNew();
+	    title = ajStrNew();
 	    tmp = ajStrNew();
-	    ajFmtPrintS(&tit,"%s %d-%d IEP=",ajSeqGetNameC(a),be,en);
+	    ajFmtPrintS(&title,"%s %d-%d IEP=",ajSeqGetNameC(a),be,en);
 
-	    if(!embIepIepS(substr, amino, sscount, modlysine,
-			   &iep,termini))
+	    if(!embIepIepS(substr, amino, carboxyl, sscount, modlysine,
+			   pK, &iep,termini))
 		ajStrAssignC(&tmp,"none");
 	    else
 		ajFmtPrintS(&tmp,"%-8.4f",iep);
-	    ajStrAppendS(&tit,tmp);
+	    ajStrAppendS(&title,tmp);
 
 
 	    phGraph = ajGraphPlpDataNewI(npoints);
-	    ajGraphSetTitle(graph,tit);
+	    ajGraphSetTitle(graph,title);
 	    ajGraphSetXTitleC(graph,"pH");
 	    ajGraphSetYTitleC(graph,"Charge");
 
@@ -195,7 +199,7 @@ int main(int argc, char **argv)
 
 	    ajGraphxyDisplay(graph,ajFalse);
 	    ajStrDel(&tmp);
-	    ajStrDel(&tit);
+	    ajStrDel(&title);
 	    AJFREE(ya);
 	    AJFREE(xa);
 	}
@@ -203,6 +207,8 @@ int main(int argc, char **argv)
     ajGraphClose();
     ajGraphxyDel(&graph);
 
+    embIeppKDel(pK);
+    
     AJFREE(K);
     AJFREE(pro);
     AJFREE(op);

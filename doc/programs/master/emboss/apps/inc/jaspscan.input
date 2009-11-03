@@ -25,6 +25,7 @@ OC   Homo.
 XX
 RN   [1]
 RP   1-1933
+RX   DOI; 10.1073/pnas.86.1.114.
 RX   PUBMED; 2911561.
 RA   Seino S., Seino M., Nishi S., Bell G.I.;
 RT   "Structure of the human insulin receptor gene and characterization of its
@@ -41,7 +42,6 @@ RL   Diabetes 39(1):123-128(1990).
 XX
 DR   EMBL-JOIN; M32972.
 DR   TRANSFAC; R03068; HS$INSR_01.
-DR   UniProtKB/Swiss-Prot; P06213; INSR_HUMAN.
 XX
 CC   Draft entry and computer-readable sequence for [1] kindly submitted
 CC   by G.Bell, 14-MAR-1990.

@@ -204,6 +204,8 @@ int main(int argc, char **argv)
         ajListFree(&difflist);
 
     }
+    ajReportSetStatistics(report, 2,
+                          ajSeqGetLenTrimmed(seq1)+ajSeqGetLenTrimmed(seq2));
 
     ajFeatWrite(seq1out, Tab1);
     ajFeatWrite(seq2out, Tab2);

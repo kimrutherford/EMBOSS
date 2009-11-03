@@ -79,11 +79,15 @@ ajuint	  ajRangeOverlaps (const AjPRange thys, ajuint pos, ajuint length);
 ajuint	  ajRangeOverlapSingle (ajuint start, ajuint end,
 				ajuint pos, ajuint length);
 AjBool    ajRangeSeqExtract (const AjPRange thys, AjPSeq seq);
+AjPSeq    ajRangeSeqExtractPep (const AjPRange thys, AjPSeq seq,
+                                const AjPTrn trntable, ajint frame);
 AjBool    ajRangeSeqExtractList (const AjPRange thys,
 				 const AjPSeq seq, AjPList outliststr);
 AjBool    ajRangeSeqMask (const AjPRange thys,
 			  const AjPStr maskchar, AjPSeq seq);
 AjBool    ajRangeSeqStuff (const AjPRange thys, AjPSeq seq);
+AjBool    ajRangeSeqStuffPep (const AjPRange thys, AjPSeq seq,
+                              ajint frame);
 AjBool    ajRangeSeqToLower (const AjPRange thys, AjPSeq seq);
 AjBool    ajRangeStrExtract (const AjPRange thys,
 			     const AjPStr instr, AjPStr *outstr);

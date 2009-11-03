@@ -36,6 +36,16 @@
     "" => ""
     );
 
+sub usage() {
+    print STDERR "Usage:
+   -testfile=filename      user-defined testfile
+   -qa                     use qatestcmd.dat
+   -list                   list of test names
+   -wild                   all tests matching wildcard testname
+   -all                    all tests in testfile
+   -block=n                set block number, tests running in blocks of 10
+";
+}
 
 sub runtest ($) {
     my ($name) = @_;
@@ -236,8 +246,8 @@ if($dowild) {
     }
 }
 
-$valgopts = "--suppressions=../../valgrind.supp --leak-check=yes --show-reachable=yes --num-callers=15 --verbose --log-fd=9 --error-limit=no --leak-resolution=high";
-## --leak-check=yes       Test for memory leaks at end
+$valgopts = "--suppressions=../../valgrind.supp --leak-check=full --show-reachable=yes --num-callers=15 --verbose --log-fd=9 --error-limit=no --leak-resolution=high --track-fds=yes";
+## --leak-check=full       Test for memory leaks at end
 ## --show-reachable=yes   Show allocated memory still reachable
 ## --num-callers=15       Backtrace 15 functions - use more if needed
 ## --verbose              

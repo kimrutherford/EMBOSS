@@ -3,9 +3,16 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
-   Generate an aligment of nucleic coding regions from aligned proteins
+   Generate an alignment of nucleic coding regions from aligned proteins
 
 Description
 
@@ -33,7 +40,7 @@ Usage
 
 
 % tranalign ../data/tranalign.pep tranalign2.seq 
-Generate an aligment of nucleic coding regions from aligned proteins
+Generate an alignment of nucleic coding regions from aligned proteins
 
    Go to the input files for this example
    Go to the output files for this example
@@ -335,14 +342,14 @@ Known bugs
 
 See also
 
-   Program name Description
-   edialign Local multiple alignment of sequences
-   emma Multiple sequence alignment (ClustalW wrapper)
-   infoalign Display basic information about a multiple sequence
-   alignment
-   plotcon Plot conservation of a sequence alignment
-   prettyplot Draw a sequence alignment with pretty formatting
-   showalign Display a multiple sequence alignment in pretty format
+   Program name     Description
+   edialign         Local multiple alignment of sequences
+   emma             Multiple sequence alignment (ClustalW wrapper)
+   infoalign        Display basic information about a multiple sequence
+                    alignment
+   plotcon          Plot conservation of a sequence alignment
+   prettyplot       Draw a sequence alignment with pretty formatting
+   showalign        Display a multiple sequence alignment in pretty format
 
 Author(s)
 

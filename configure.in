@@ -6,12 +6,15 @@ dnl Process this file with autoconf to produce a configure script.
 #CC=cc
 
 AC_INIT(ajax/ajacd.c)
-AM_INIT_AUTOMAKE(EMBOSS, 6.0.1)
+AM_INIT_AUTOMAKE(EMBOSS, 6.1.0)
 
+dnl Make sure CFLAGS is defined to stop LT_INIT adding -g
+CFLAGS="$CFLAGS "
+
+dnl Use libtool to make a shared library.
+LT_INIT
 
 AC_PROG_AWK
-dnl Make sure CFLAGS is defined to stop AC_PROC_CC adding -g
-CFLAGS="$CFLAGS "
 AC_PROG_CC
 AC_PROG_CPP
 
@@ -142,6 +145,7 @@ if test "`uname -a | grep Darwin`"; then
   else
     CFLAGS="$CFLAGS -O2"
   fi
+
 else
 CFLAGS="$CFLAGS -O2"
 fi
@@ -150,17 +154,11 @@ fi
 dnl End of Optimisation tests
 
 
-
-
-
 dnl Add extensions to Solaris for some reentrant functions
 if test "`uname`" = "SunOS"; then
 CFLAGS="$CFLAGS -D__EXTENSIONS__"
 fi
 
-
-dnl Use libtool to make a shared library.
-AC_PROG_LIBTOOL
 
 dnl endian test for indexing system
 AC_C_BIGENDIAN(CPPFLAGS="$CPPFLAGS -DBENDIAN",CPPFLAGS="$CPPFLAGS -DLENDIAN")
@@ -197,11 +195,19 @@ AC_SUBST(EMBOSS_TOP)
 EMBOSS_TOP=`pwd`
 
 dnl Program checks
-#AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
-AC_PROG_RANLIB
+
+dnl Intel MacOSX 10.6 puts X11 in a non-standard place
+if test "${with_x}" != "no" ; then
+if test "`uname -a | grep Darwin`"; then
+OSXX=`sw_vers -productVersion | sed 's/\(10\.[[0-9]]*\).*/\1/'`
+if test ${OSXX} '>' '10.4'; then
+CFLAGS="$CFLAGS -I/usr/X11/include -L/usr/X11/lib"
+fi
+fi
+fi
 
 dnl Check for header files
 AC_PATH_XTRA
@@ -247,6 +253,13 @@ CHECK_PNGDRIVER
 CHECK_AUTH
 CHECK_GROUT
 CHECK_AMD64
+
+dnl Check for 'ant' for packaging Jemboss and export result
+AC_CHECK_PROG(ant_in_path,ant,true,false)
+AM_CONDITIONAL(EHAVEANT, test "$ant_in_path" = "true")
+AC_SUBST(EHAVEANT)
+
+
 
 dnl "Export" these variables for PCRE
 

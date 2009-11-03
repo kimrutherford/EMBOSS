@@ -1,370 +1,39 @@
 # ===================================================================
 # PROTEIN FEATURES
 # ===================================================================
-
-# Note
-
-# From the Swiss-Prot users manual
-# http://www.expasy.org/sprot/userman.html#FT_keys
-# Last checked 26 May 2006
-
-# Many features are plain text with a final qualifier in brackets We
-# can represent these with /note plus a /comment for the part in
-# brackets. 
-
-
-# We could also implement specific qualifiers for each special format
-# so we can parser the details for each feature, But what to do about
-# new GFF versions of the same features with possibly bad formatting?
-
-# REGION - Extent of a region of interest in the sequence
-
-region
-	/note
-	/comment
-
-# ACT_SITE - Amino acid(s) involved in the activity of an enzyme.
-
-act_site
-	/note
-	/comment
-
-# BINDING  -  Binding  site  for any chemical group  (co-enzyme,  prosthetic
-# group, etc.).
-
-binding
-	/note
-	/comment
-
-# CA_BIND - Extent of a calcium-binding region.
-
-ca_bind
-	/note
-	/comment
-
-# CARBOHYD - Glycosylation site.
-# This key describes the occurrence of the attachment of a  glycan (mono- or
-# polysaccharide) to a residue of the protein:
-# 
-# o The type of linkage (C- N- or O-linked) to the protein is indicated.
-# o If  the nature of the reducing terminal sugar is known, its abbreviation
-#   is   shown   between   parenthesis.  If  three  dots  "..."  follow  the
-#   abbreviation this indicates extension of the carbohydrate chain.
-#   Conversely the absence of the dots indicate that a single monosaccharide
-#   is linked.
-# Examples of CARBOHYD key feature lines:
-# 
-# FT   CARBOHYD     52     52       N-LINKED (GLCNAC...) (POTENTIAL).
-# FT   CARBOHYD    162    162       O-LINKED (GLCNAC).
-# FT   CARBOHYD     10     10       O-LINKED (GALNAC...) (BY SIMILARITY).
-# FT   CARBOHYD     34     34       C-LINKED (MAN).
-
-carbohyd
-	/note
-	/comment
-
-# CHAIN - Extent of a polypeptide chain in the mature protein.
-
-chain
-	/note
-	/comment
-
-# COILED - Extent of a coiled-coil region
-
-coiled SO:0001080
-	/note
-	/comment
-
-# COMPBIAS - Extent of a compositionally biased region
-
-compbias
-	/note
-	/comment
-
-# CONFLICT - Different papers report differing sequences.
-# note usually begins MISSING or SEQ -> NEW (description optional)
-
-conflict
-	/note
-	/comment
-
-# CROSSLNK - Posttranslationally formed amino acid bonds.
-# The 'FROM' and 'TO' endpoints designate the two residues, which are
-# linked by an intrachain bond, and the description field indicates
-# the nature of the cross-link. If the 'FROM' and 'TO' endpoints are
-# identical, the amino acid bond is an interchain one. The name of the
-# linked peptide is indicated in the description field.
- 
-crosslnk
-	/note
-	/comment
-
-# DISULFID - Disulfide bond.
-# The  'FROM' and 'TO' endpoints represent the two residues which are linked
-# by  an  intra-chain disulfide bond. If the 'FROM' and 'TO'  endpoints  are
-# identical,  the  disulfide bond is an interchain one and  the  description
-# field  indicates  the nature of the cross-link.
-
-disulfid
-	/note
-	/comment
-
-# DNA_BIND - Extent of a DNA-binding region.
-
-dna_bind
-	/note
-	/comment
-
-# DOMAIN - Extent of a domain of interest on the sequence.
-
-domain
-	/note
-	/comment
-
-# HELIX -  DSSP secondary structure
-
-helix
-	/note
-	/comment
-
-# INIT_MET - Initiator methionine.
-# This feature key is mostly associated with a zero value in the 'FROM'  and
-# 'TO' fields to indicate that the initiator methionine has been cleaved off
-# and is not shown in the sequence:
-
-init_met
-	/note
-	/comment
-
-# LIPID  - Covalent binding of a lipidic moiety
-# note is attached group name (optional comment)
-# known names are:
-
-#MYRISTATE          Myristate group attached through an amide bond to the
-#                   N-terminal glycine residue of the mature form of a
-#                   protein [1,2] or to an internal lysine residue
 #
-#PALMITATE          Palmitate group attached through a thioether bond to a
-#                   cysteine residue or through an ester bond to a serine
-#                   or threonine residue [1,2]
+# Syntax:
+# output_name internal_name internal_alias
+#             /tag
+#             /tag=type
 #
-#FARNESYL           Farnesyl group attached through a thioether bond to a
-#                   cysteine residue [3,4]
+# The first type is the default used if the internal and output names
+# are not found.
 #
-#GERANYL-GERANYL    Geranyl-geranyl group attached through a thioether bond
-#                   to a cysteine residue [3,4]
+# output_name = internal_name
+#   (obsolete) defines an alias for an internal name
+#   replaced by the list of aliases above
+#   this syntax was used for gff2 nucleotide types
+#   but not for any others.
+#   If the type is '.' this becomes the new default.
 #
-#GPI-ANCHOR         Glycosyl-phosphatidylinositol (GPI) group linked to the
-#                   alpha-carboxyl group of the C-terminal residue of the
-#                   mature form of a protein [5,6]
+# '#include file' includes a file and any #includes it countains
+#
+# '#includeonly file' includes only the file and ignores any
+# '#include' and '#includeonly' lines
+#
+#
+#
+# ===================================================================
 
-lipid
-	/note
-	/comment
+# GFF 3.0 feature keys
+# ====================
 
-# METAL - Binding site for a metal ion.
-
-metal
-	/note
-	/comment
-
-# MOD_RES  Post-translational modification of a residue.
-# note usually <modification> (description)
-# Most common codes are:
-
-#ACETYLATION                 N-terminal or other
-#AMIDATION                   Generally at the C-terminal of a mature active
-#                            peptide
-#BLOCKED                     Undetermined N- or C-terminal blocking group
-#FORMYLATION                 Of the N-terminal methionine
-#GAMMA-CARBOXYGLUTAMIC ACID  Of glutamate
-#HYDROXYLATION               Of asparagine, aspartic acid, proline or lysine
-#METHYLATION                 Generally of lysine or arginine
-#PHOSPHORYLATION             Of serine, threonine, tyrosine, aspartic acid
-#                            of histidine
-#PYRROLIDONE CARBOXYLIC ACID N-terminal glutamate which has formed an
-#                            internal cyclic lactam
-#SULFATATION                 Generally of tyrosine
-
-mod_res
-	/note
-	/comment
-
-# MOTIF - Short (up to 20 amino acids) sequence motif of biological interest
-
-motif
-	/note
-	/comment
-
-# MUTAGEN - Site which has been experimentally altered.
-# mutagen note usually SEQ ->NEW: description
-
-mutagen
-	/note
-	/comment
-
-# NON_CONS - Non-consecutive residues.
-# Indicates  that  two residues in a sequence are not consecutive  and  that
-# there  are  a  number of unsequenced residues between  them.
-
-non_cons
-	/note
-	/comment
-
-# NON_TER  - The residue at an extremity of the sequence is not the terminal
-# residue.
-
-non_ter
-	/note
-	/comment
-
-# NP_BIND - Extent of a nucleotide phosphate binding region.
-
-np_bind
-	/note
-	/comment
-
-# PEPTIDE - Extent of a released active peptide.
-
-peptide
-	/note
-	/comment
-
-# PROPEP - Extent of a propeptide.
-
-propep
-	/note
-	/comment
-
-# REPEAT - Extent of an internal sequence repetition.
-
-repeat
-	/note
-	/comment
-
-# SE_CYS - Selenocysteine
-
-se_cys
-	/note
-	/comment
-
-# SIGNAL - Extent of a signal sequence (prepeptide).
-
-signal
-	/note
-	/comment
-
-# SIMILAR - Extent of a similarity with another protein sequence.
-
-similar
-	/note
-	/comment
-
-# SITE - Any other interesting site on the sequence.
-
-site
-	/note
-	/comment
-
-# STRAND -  DSSP secondary structure
-
-strand
-	/note
-	/comment
-
-# THIOETH - Thioether bond.
-# The  'FROM' and 'TO' endpoints represent the two residues which are linked
-# by the thioether bond.
-
-thioeth
-	/note
-	/comment
-
-# THIOLEST - Thiolester bond.
-# The  'FROM' and 'TO' endpoints represent the two residues which are linked
-# by the thiolester bond.
-
-thiolest
-	/note
-	/comment
-
-# TOPO_DOM - Topological domain
-# New added 26-May-06
-
-# Annotated with cellular component where domain is normally located
-# e.g. "Cytoplasmic" or "Mitochondrial matrix (potential)"
-
-topo_dom
-	/note
-	/comment
-
-# TRANSIT  -  Extent  of  a  transit peptide (mitochondrial,  chloroplastic,
-# cyanelle or for a microbody).
-
-transit
-	/note
-	/comment
-
-# TRANSMEM - Extent of a transmembrane region.
-
-transmem
-	/note
-	/comment
-
-# TURN -  DSSP secondary structure
-
-turn
-	/note
-	/comment
-
-# UNSURE - Uncertainties in the sequence
-# Used  to describe region(s) of a sequence for which the authors are unsure
-# about the sequence assignment.
-
-unsure
-	/note
-	/comment
-
-# VARIANT - Authors report that sequence variants exist.
-# replaced by VAR_SEQ, except for RNA editing recorded in the note
-
-variant
-	/note
-	/comment
-	/ftid
-
-# VAR_SEQ - Description of sequence variants produced by alternative
-# splicing.
-
-var_seq
-	/note
-	/comment
-
-# ZN_FING - Extent of a zinc finger region.
-
-zn_fing
-	/note
-	/comment
+#includeonly Efeatures.gff3protein
 
 
-# Features from PIR feature tables with no match in SwissProt
+# SwissProt/UniProt feature keys
+# ===============================
 
-# Swissprot reports SIGNAL and PEPTIDE
-cleavage_site
-	/note
-	/comment
+#includeonly Efeatures.swiss
 
-# Swissprot reports MOD_RES
-cross-link
-	/note
-	/comment
-
-# Swissprot reports SITE with note INHIBITORY
-inhibitory_site
-	/note
-	/comment
-
-# Swissprot reports this in the description
-product
-	note
-	/comment

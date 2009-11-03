@@ -20,14 +20,33 @@ dan
     Description
 </H2>
 
-<p><B>Dan</B> calculates the melting temperature (Tm) and the percentage of G+C nucleotides for windows over a nucleic acid sequence, optionally plotting them.  If a plot is not being produced, <b>dan</b> reports the sequence of each oligomer window, its melting temperature under the specified conditions and its percentage GC content.  The change in enthalpy (H), entropy (S) and Gibbs free energy (S) for dissociation of the oligomers may (optionally) be reported to file (but not plotted).</p>
+<p><B>Dan</B> calculates the melting temperature (Tm) and the
+percentage of G+C nucleotides for windows over a nucleic acid
+sequence, optionally plotting them.  If a plot is not being
+produced, <b>dan</b> reports the sequence of each oligomer window, its
+melting temperature under the specified conditions and its percentage
+GC content.  The change in enthalpy (H), entropy (S) and Gibbs free
+energy (S) for dissociation of the oligomers may (optionally) be
+reported to file (but not plotted).</p>
 
 <H2>
 Algorithm
 </H2>
 
-<p>The values of melting point and other thermodynamic properties of the sequence, namely change in enthalpy (H), entropy (S) and Gibbs free energy (S) on dissociation, are calculated for a sequence region (or "window") of a user-specified size (see "-windowsize" option).  The window is incrementally moved along the sequence with the properties being calculated at each new position.  The user must provide the salt and DNA concentration. Optionally, the percent formamide, percent of mismatches allowed and product length may be specified.
-<p>For the Melting temperature profile, free energy values calculated from nearest neighbor thermodynamics are used (Breslauer et al. Proc. Natl. Acad. Sci. USA 83, 3746-3750 and Baldino et al. Methods in Enzymol. 168, 761-777).</p>
+<p>The values of melting point and other thermodynamic properties of
+the sequence, namely change in enthalpy (H), entropy (S) and Gibbs
+free energy (S) on dissociation, are calculated for a sequence region
+(or "window") of a user-specified size (see "-windowsize" option).
+The window is incrementally moved along the sequence with the
+properties being calculated at each new position.  The user must
+provide the salt and DNA concentration. Optionally, the percent
+formamide, percent of mismatches allowed and product length may be
+specified.
+<p>For the melting temperature profile, free energy values calculated
+from nearest neighbor thermodynamics are used (Breslauer et
+al. Proc. Natl. Acad. Sci. USA 83, 3746-3750, Baldino et al. Methods
+in Enzymol. 168, 761-777, Allawi and SantaLucia (1997), Biochemistry
+36:10581-10594).</p>
 
 
 <H2>
@@ -117,7 +136,14 @@ entropy/enthalpy/energy data for DNA and RNA respectively.
     Notes
 </H2>
 
-<p>The enthalpy of a reaction equates to the "heat" of the reaction so long as temperate and pressure are constant.  Enthalpy depends upon the strength of the chemical bonds and non-bonding interactions involved.  The entropy of a reaction reflects the level of disorder or randomness of the molecules involved. The higher the entropy, the greater the disorder.  The free energy of a reaction reflects it's ability to do work.  It helps one determine whether a reaction is feasible given a set of conditions and it's quilibrium.</p>
+<p>The enthalpy of a reaction equates to the "heat" of the reaction so
+long as temperate and pressure are constant.  Enthalpy depends upon
+the strength of the chemical bonds and non-bonding interactions
+involved.  The entropy of a reaction reflects the level of disorder or
+randomness of the molecules involved. The higher the entropy, the
+greater the disorder.  The free energy of a reaction reflects it's
+ability to do work.  It helps one determine whether a reaction is
+feasible given a set of conditions and it's quilibrium.</p>
 
 
 <H2>
@@ -136,6 +162,10 @@ Baldino, M., Jr.  (1989).  "High Resolution In Situ Hybridization
 Histochemistry." In Methods in Enzymology, (P.M.  Conn, ed.), 168,
 761-777, Academic Press, San Diego, California, USA. 
 
+<li>
+Allawi H.T. and SantaLucia J. Jr. (1997),
+"Thermodynamics and NMR of Internal G*T Mismatches in DNA"
+Biochemistry 36, 10581-10594.
 </ol>
 
 <H2>

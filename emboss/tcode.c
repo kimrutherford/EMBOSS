@@ -222,6 +222,13 @@ int main(int argc, char **argv)
 	ajFeattableClear(ftable);
     }
 
+    if(report)
+    {
+        ajReportSetSeqstats(report, seqall);
+        ajReportClose(report);
+        ajReportDel(&report);
+    }
+
     tcode_del(&table1);
 
     ajFloatDel(&testcodes);
@@ -231,8 +238,6 @@ int main(int argc, char **argv)
 
     ajSeqallDel(&seqall);
     ajSeqDel(&seq);
-    ajReportClose(report);
-    ajReportDel(&report);
     ajFileClose(&datafile);
     ajFeattableDel(&ftable);
     ajGraphxyDel(&graph);

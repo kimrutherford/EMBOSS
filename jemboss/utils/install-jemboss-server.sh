@@ -444,7 +444,6 @@ deploy_axis_services()
   CLASSPATH=$AXIS/axis.jar::$AXIS/jaxrpc.jar:$AXIS/saaj.jar:$AXIS/commons-logging.jar:
   CLASSPATH=${CLASSPATH}:$AXIS/commons-discovery.jar:$AXIS/wsdl4j.jar:$AXIS/servlet.jar
 #  CLASSPATH=${CLASSPATH}:$JEMBOSS_LIB/jnet.jar:$JEMBOSS_LIB/jsse.jar:$JEMBOSS_LIB/jcert.jar
-  CLASSPATH=${CLASSPATH}:$JEMBOSS_LIB/xerces.jar
 
   PROXY_OFF="-DproxySet=false -DproxyHost= -DproxyPort= -Dhttp.proxyHost= -Dhttp.proxyPort= -Dhttps.proxyHost= -Dhttps.proxyPort= "
   SERVICE=$2
@@ -476,7 +475,7 @@ deploy_auth_services()
 {
 
   JEMBOSS_LIB=$1
-  CLASSPATH=$JEMBOSS_LIB/soap.jar:$JEMBOSS_LIB/activation.jar:$JEMBOSS_LIB/xerces.jar:$JEMBOSS_LIB/mail.jar
+  CLASSPATH=$JEMBOSS_LIB/soap.jar:$JEMBOSS_LIB/activation.jar:$JEMBOSS_LIB/mail.jar
 #  CLASSPATH=${CLASSPATH}:$JEMBOSS_LIB/jnet.jar:$JEMBOSS_LIB/jsse.jar:$JEMBOSS_LIB/jcert.jar
 
   SERVICE=$2
@@ -604,7 +603,7 @@ $DIR/lib64"
     echo "To exit use Control C or press return to continue."
     echo
     echo "--------------------------------------------------------------"
-    read
+    read REPLY
   fi
 
 # test for gd
@@ -643,7 +642,7 @@ $DIR/lib64"
     echo "To exit use Control C or press return to continue."
     echo
     echo "--------------------------------------------------------------"
-    read
+    read REPLY
   fi 
 
 # test for zlib which can be either in /usr/lib or $DIR/lib
@@ -684,7 +683,7 @@ $DIR/lib64
     echo "To exit use Control C or press return to continue."
     echo
     echo "--------------------------------------------------------------"
-    read
+    read REPLY
   fi
 }
 
@@ -1226,11 +1225,11 @@ fi
 echo
 echo "  ******** EMBOSS will be configured with this information  ******** "
 echo 
-echo "./configure --with-java=$JAVA_INCLUDE \\"
-echo "            --with-javaos=$JAVA_INCLUDE_OS \\"
-echo "            --with-thread=$PLATFORM \\"
-echo "            --prefix=$EMBOSS_INSTALL \\"
-echo "           $JEMBOSS_SERVER_AUTH $USER_CONFIG"
+printf "%s\n" "./configure --with-java=$JAVA_INCLUDE \\"
+printf "%s\n" "            --with-javaos=$JAVA_INCLUDE_OS \\"
+printf "%s\n" "            --with-thread=$PLATFORM \\"
+printf "%s\n" "            --prefix=$EMBOSS_INSTALL \\"
+printf "%s\n" "           $JEMBOSS_SERVER_AUTH $USER_CONFIG"
 echo
 
 WORK_DIR=`pwd`
@@ -1268,8 +1267,22 @@ getPrimerPath
 #
 #
 
+
 #cd $EMBOSS_INSTALL/share/EMBOSS/jemboss
 JEMBOSS=$EMBOSS_INSTALL/share/EMBOSS/jemboss
+
+#---------------------------------------------------------------------------------
+# Exit for standalone installations
+#---------------------------------------------------------------------------------
+if [ $INSTALL_TYPE = "2" ]; then
+  echo
+  echo "To run Jemboss:"
+  echo "cd $JEMBOSS"
+  echo "./runJemboss.sh"
+  echo
+  exit 0
+fi
+
 
 #
 # create wossname.jar
@@ -1286,18 +1299,6 @@ cd $EMBOSS_INSTALL/share/EMBOSS/data
 $JAVA_HOME/bin/jar cvf $JEMBOSS/resources/resources.jar EPAM* EBLOSUM* ENUC*
 
 
-#
-# Compile server code
-#
-
-if [ $AUTH = "y" ]; then
-  $JAVA_HOME/bin/javac -target 1.3 -source 1.3 -classpath $JEMBOSS $JEMBOSS/org/emboss/jemboss/server/JembossAuthServer.java
-  $JAVA_HOME/bin/javac -target 1.3 -source 1.3 -classpath $JEMBOSS $JEMBOSS/org/emboss/jemboss/server/JembossFileAuthServer.java
-else
-  $JAVA_HOME/bin/javac -target 1.3 -source 1.3 -classpath $JEMBOSS $JEMBOSS/org/emboss/jemboss/server/JembossServer.java
-  $JAVA_HOME/bin/javac -target 1.3 -source 1.3 -classpath $JEMBOSS $JEMBOSS/org/emboss/jemboss/server/JembossFileServer.java
-fi
-
 if [ "$MACOSX" = "y" ]; then
   cd $EMBOSS_INSTALL/lib/
   ln -s libajax.dylib libajax.jnilib
@@ -1312,8 +1313,6 @@ if [ "$PLATFORM" = "hpux" ]; then
 fi
 
 
-#
-# Exit if standalone compilation
 
 make_jemboss_properties $EMBOSS_INSTALL $LOCALHOST $AUTH $SSL $PORT $EMBOSS_URL $CLUSTALW $PRIMER3
 
@@ -1401,58 +1400,21 @@ chmod u+x tomstop
 #
 
 RUNFILE=$JEMBOSS/runJemboss.sh
-sed "s|^JEMBOSS_HOME=.|JEMBOSS_HOME=$JEMBOSS|" $RUNFILE > $RUNFILE.new
-mv $RUNFILE $RUNFILE.bak
-mv $RUNFILE.new $RUNFILE
 
-if [ $INSTALL_TYPE = "2" ]; then
-  if [ -f "$RUNFILE.bak" ]; then
-    rm -f $RUNFILE.bak
-  fi
-  sed "s|^#java org|$JAVA_HOME/bin/java org|" $RUNFILE > $RUNFILE.new
-  sed "s|^java org.emboss.jemboss.Jemboss &|#java org.emboss.jemboss.Jemboss &|" $RUNFILE.new  > $RUNFILE.new1
-  sed "s|^#EMBOSS_INSTALL=\(.*\)|EMBOSS_INSTALL=$EMBOSS_INSTALL/lib; export EMBOSS_INSTALL|" $RUNFILE.new1 > $RUNFILE.new2
-  sed "s|^#LD_LIBRARY_PATH|LD_LIBRARY_PATH|" $RUNFILE.new2 > $RUNFILE.new3
-  rm -f $RUNFILE.new $RUNFILE.new1 $RUNFILE.new2
-  mv $RUNFILE $RUNFILE.bak1
-  mv $RUNFILE.new3 $RUNFILE
-
-
-  if [ "$AIX" = "y" ]; then
-   sed "s|^#LIBPATH|LIBPATH|" $RUNFILE > $RUNFILE.new1
-   rm -f $RUNFILE
-   mv $RUNFILE.new1 $RUNFILE
-  fi
-
-  chmod a+x $RUNFILE
-
-  echo
-  echo "To run Jemboss:"
-  echo "cd $JEMBOSS"
-  echo "./runJemboss.sh"
-  echo
-
-  exit 0
-else
   sed "s|^java |$JAVA_HOME/bin/java |" $RUNFILE > $RUNFILE.new
   rm -f $RUNFILE
   mv $RUNFILE.new $RUNFILE
-fi
+  
 
 #
 # Add classes to Tomcat path
 #
 
-if [ -d "$TOMCAT_ROOT/shared/classes" ]; then
-#tomcat 4.1.x
   cp $JEMBOSS/lib/mail.jar $TOMCAT_ROOT/webapps/axis/WEB-INF/lib
   cp $JEMBOSS/lib/activation.jar $TOMCAT_ROOT/webapps/axis/WEB-INF/lib
 
   mv $JEMBOSS/org $TOMCAT_ROOT/webapps/axis/WEB-INF/classes/org
-  mv $JEMBOSS/resources $TOMCAT_ROOT/webapps/axis/WEB-INF/classes/resources
-
-  ln -s $TOMCAT_ROOT/webapps/axis/WEB-INF/classes/org $JEMBOSS/org
-  ln -s $TOMCAT_ROOT/webapps/axis/WEB-INF/classes/resources $JEMBOSS/resources
+  cp -R $JEMBOSS/resources $TOMCAT_ROOT/webapps/axis/WEB-INF/classes/
   
   cp -R $EMBOSS_DOWNLOAD/jemboss/lib/axis $JEMBOSS/lib
   
@@ -1460,18 +1422,30 @@ if [ -d "$TOMCAT_ROOT/shared/classes" ]; then
 # To avoid place classes that load native libraries outside of the
 # web app, and ensure that the loadLibrary() call is executed only once
 # during the lifetime of a particular JVM.
+  cd $JEMBOSS;
+  mkdir tmp;
+  cd tmp;
+  jar -xvf ../lib/client.jar org/emboss/jemboss/parser/Ajax.class org/emboss/jemboss/parser/AjaxUtil.class
+  jar -cvf ../lib/ajax.jar org
+  jar -xvf ../lib/client.jar
+  rm org/emboss/jemboss/parser/Ajax.class org/emboss/jemboss/parser/AjaxUtil.class
+  jar -cvf ../lib/jemboss.jar .
+  cd ..;
+  rm -rf tmp;
+  cp lib/jemboss.jar $TOMCAT_ROOT/webapps/axis/WEB-INF/lib/
 
-  cd $JEMBOSS
-  jar cvf Ajax.jar org/emboss/jemboss/parser/Ajax.*
-  mv Ajax.jar $TOMCAT_ROOT/shared/lib/
-  rm -f org/emboss/jemboss/parser/Ajax.class
+  if [ -d "$TOMCAT_ROOT/shared/lib" ]; then
+  #tomcat 4.1.x and 5.5.x
+    cp lib/ajax.jar $TOMCAT_ROOT/shared/lib/
+  elif [ -d "$TOMCAT_ROOT/lib" ]; then
+  #tomcat 4.1.x and 5.5.x
+    cp lib/ajax.jar $TOMCAT_ROOT/lib/
+  else
+    echo "WARNING: no $TOMCAT_ROOT/lib or $TOMCAT_ROOT/shared/lib found"
+    echo "ajax.jar not added to Tomcat shared libraries folder"
+  fi
+
   cd $WORK_DIR
-# logging jar need moving
-#  mv $TOMCAT_ROOT/webapps/axis/WEB-INF/lib/log4j-1.2.4.jar $TOMCAT_ROOT/server/lib
-else
-  echo "WARNING: no $TOMCAT_ROOT/shared/classes "
-  echo "Jemboss classpath not added to Tomcat"
-fi
 
 
 #

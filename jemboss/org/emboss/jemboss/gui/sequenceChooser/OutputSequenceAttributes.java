@@ -24,6 +24,8 @@ package org.emboss.jemboss.gui.sequenceChooser;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.*;
 
@@ -324,9 +326,6 @@ public class OutputSequenceAttributes
   {
     String options="";
 
-    //if(!isUFODefault())
-      //options = options.concat(" -oufo " + UFO.getText());
-
     if(!getFormatChoosen().equals("unspecified"))
        options = options.concat(" -osformat " + getFormatChoosen());
      
@@ -347,6 +346,43 @@ public class OutputSequenceAttributes
     
     return options;
   }
+
+  
+  public List getOuputSeqAttrA() 
+  {
+    List options= new ArrayList();
+
+    if(!getFormatChoosen().equals("unspecified")){
+    	options.add("-osformat");
+    	options.add(getFormatChoosen());
+    }
+     
+    if(osextension.isEnabled() && !isExtensionDefault()){
+    	options.add("-osextension");
+    	options.add(osextension.getText());
+    }
+
+    if(osname.isEnabled() && !isNameDefault()){
+    	options.add("-osname");
+    	options.add(osname.getText());
+    }
+
+    if(ossingle.isSelected())
+       options.add("-ossingle");
+
+    if(ofname.isEnabled() && !isFNameDefault()){
+    	options.add("-ofname");
+    	options.add(ofname.getText());
+    }
+
+    if(offormat.isEnabled() && offormat.getText() != null && !offormat.getText().equals("")){
+    	options.add("-offormat");
+    	options.add(offormat.getText());
+    }
+    
+    return options;
+  }
+
   
   private void setRigidSize(JComponent c, int width, int height){
       Dimension d = new Dimension(width, height);

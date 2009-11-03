@@ -22,6 +22,7 @@
 #include "emboss.h"
 
 
+static AjBool skipredundant_ClearList (AjPList list);
 static AjBool skipredundant_SeqsetToList (AjPList list, AjPSeqset seqset);
 
 
@@ -45,7 +46,6 @@ int main(int argc, char **argv)
     AjPSeqout  seqoutred = NULL;
     AjPStr     mode      = NULL;
     ajint      moden;
-    AjBool     keepredundant = ajFalse;
     ajuint i;
 
 
@@ -68,7 +68,6 @@ int main(int argc, char **argv)
     threshup      = ajAcdGetFloat("maxthreshold");
     gapopen       = ajAcdGetFloat("gapopen");
     gapextend     = ajAcdGetFloat("gapextend");
-    keepredundant = ajAcdGetToggle("keepredundant");
     seqout        = ajAcdGetSeqoutall("outseq");
     seqoutred     = ajAcdGetSeqoutall("redundantoutseq");
 
@@ -105,7 +104,7 @@ int main(int argc, char **argv)
 
 	if(ajUintGet(keep, i))
 	  ajSeqoutWriteSeq(seqout, seq);
-	else if(keepredundant)
+	else if(seqoutred)
 	  ajSeqoutWriteSeq(seqoutred, seq);
       }
 
@@ -116,10 +115,11 @@ int main(int argc, char **argv)
     ajSeqoutClose(seqout);
     ajSeqoutDel(&seqout);
     if(seqoutred)
-      {
+    {
 	ajSeqoutClose(seqoutred);
 	ajSeqoutDel(&seqoutred);
-      }
+    }
+    skipredundant_ClearList(list);
 
     ajListFree(&list);
     ajUintDel(&keep);
@@ -155,11 +155,41 @@ static AjBool skipredundant_SeqsetToList (AjPList list, AjPSeqset seqset)
     n = ajSeqsetGetSize(seqset);
     for(x=0; x<n; x++)
     {
-        AJNEW0(seq_tmp);
-        seq_tmp->Seq = ajSeqNewSeq(ajSeqsetGetseqSeq(seqset, x));
+        seq_tmp = embDmxNrseqNew(ajSeqsetGetseqSeq(seqset, x));
 	ajListPushAppend(list, seq_tmp);
         seq_tmp = NULL;
     }
 
+    return ajTrue;
+}
+
+
+
+
+
+/* @funcstatic skipredundant_ClearList **************************************
+**
+** Clears a list of sequences from a sequence set.
+** The sequences are copied
+**
+** @param [u] list   [AjPList] List 
+** @return [AjBool] True on success
+******************************************************************************/
+static AjBool skipredundant_ClearList (AjPList list)
+{
+    EmbPDmxNrseq seq_tmp = NULL;
+    AjIList iter;
+
+    if(!list)
+      return ajFalse;
+    
+    iter = ajListIterNew(list);
+    while(!ajListIterDone(iter))
+    {
+        seq_tmp = (EmbPDmxNrseq)ajListIterGet(iter);
+        embDmxNrseqDel(&seq_tmp);
+    }
+    ajListIterDel(&iter);
+    
     return ajTrue;
 }

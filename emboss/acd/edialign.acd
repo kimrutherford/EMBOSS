@@ -26,7 +26,7 @@ section: additional [
     information: "Nucleic acid sequence alignment mode"
     help: "Nucleic acid sequence alignment mode (simple, translated or
            mixed)"
-    values: "n : simple ; nt : translation ; ma : mixed alignments"
+    values: "n: simple; nt: translation; ma: mixed alignments"
     default: "n"
   ]
 
@@ -50,7 +50,7 @@ section: additional [
     information: "Clustering method to construct sequence tree"
     help: "Clustering method to construct sequence tree (UPGMA,
            minimum linkage or maximum linkage)"
-    values: "UPGMA : UPGMA ; max : maximum linkage ; min : minimum
+    values: "UPGMA: UPGMA; max: maximum linkage; min: minimum
              linkage"
     default: "UPGMA"
   ]
@@ -124,6 +124,7 @@ section: output [
   seqoutall: outseq [
     parameter: "Y"
     type: "gapany"
+    aligned: "Y"
   ]
 
 endsection: output

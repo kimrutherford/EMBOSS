@@ -94,6 +94,7 @@ ajulong embNmerNuc2int(const char *seq, ajint wordsize, ajint offset,
 	{
 	    
 	    *otherflag = ajTrue;
+
 	    return 0;
 	}
     }
@@ -193,6 +194,7 @@ ajulong embNmerProt2int(const char *seq, ajint wordsize, ajint offset,
     }
 
     *otherflag = ajFalse;
+
     for(i=0; i<wordsize; i++)
     {
 	c = (ajint) seq[offset+i];
@@ -202,13 +204,16 @@ ajulong embNmerProt2int(const char *seq, ajint wordsize, ajint offset,
 	if(c < 0 || c > 31)
 	{
 	    *otherflag = ajTrue;
+
 	    return 0;
 	}
 
 	aa = table[c];
+
 	if(aa == -1)
 	{
 	    *otherflag = ajTrue;
+
 	    return 0;
 	}
 

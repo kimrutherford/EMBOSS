@@ -24,7 +24,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
-import java.applet.Applet;
 import java.io.File;
 
 public class AlignApplet extends JApplet 
@@ -182,7 +181,7 @@ public class AlignApplet extends JApplet
     {
       public void actionPerformed(ActionEvent e)
       {
-        gsc.deleteSequence("Consensus");
+        gsc.deleteSequence(Consensus.DEFAULT_SEQUENCE_NAME);
         Consensus conseq = new Consensus(new File(matrix),
               gsc.getSequenceCollection(),1.f,1.f,1);
         gsc.addSequence(conseq.getConsensusSequence(),true,5, 1);

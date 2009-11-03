@@ -21,6 +21,18 @@ restrict
 
 
 <H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
     Function
 </H2>
 Report restriction enzyme cleavage sites in a nucleotide sequence
@@ -137,6 +149,8 @@ Output report [x65923.restrict]: <b></b>
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
    -datafile           datafile   Restriction enzyme data file (optional)
+   -mfile              datafile   [Emethylsites.dat] Restriction enzyme data
+                                  file (optional)
    -min                integer    [1] This sets the minimum number of cuts for
                                   any restriction enzyme that will be
                                   considered. Any enzymes that cut fewer times
@@ -170,6 +184,8 @@ Output report [x65923.restrict]: <b></b>
                                   for restriction enzyme recognition site and
                                   cut postions that span the end of the
                                   sequence to be considered.
+   -methylation        boolean    [N] If this is set then RE recognition sites
+                                  will not match methylated bases.
    -[no]commercial     boolean    [Y] If this is set, then only those enzymes
                                   with a commercial supplier will be searched
                                   for. This qualifier is ignored if you have
@@ -324,6 +340,13 @@ PpiI</td>
 </tr>
 
 <tr>
+<td>-mfile</td>
+<td>Restriction enzyme data file (optional)</td>
+<td>Data file</td>
+<td>Emethylsites.dat</td>
+</tr>
+
+<tr>
 <td>-min</td>
 <td>This sets the minimum number of cuts for any restriction enzyme that will be considered. Any enzymes that cut fewer times than this will be ignored.</td>
 <td>Integer from 1 to 1000</td>
@@ -375,6 +398,13 @@ PpiI</td>
 <tr>
 <td>-plasmid</td>
 <td>If this is set then this allows searches for restriction enzyme recognition site and cut postions that span the end of the sequence to be considered.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-methylation</td>
+<td>If this is set then RE recognition sites will not match methylated bases.</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
@@ -463,8 +493,8 @@ RN   [2]
 RP   1-518
 RX   PUBMED; 8395683.
 RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
-RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
-RT   an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma virus";
+RT   "fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
+RT   an antisense sequence in the Finkel-Biskis-Reilly murine sarcoma virus";
 RL   Oncogene 8(9):2537-2546(1993).
 XX
 DR   H-InvDB; HIT000322806.
@@ -485,11 +515,11 @@ FT                   /note="ubiquitin like part"
 FT   CDS             57..458
 FT                   /gene="fau"
 FT                   /db_xref="GDB:135476"
-FT                   /db_xref="GOA:P35544"
 FT                   /db_xref="GOA:P62861"
 FT                   /db_xref="HGNC:3597"
+FT                   /db_xref="HSSP:1GJZ"
+FT                   /db_xref="InterPro:IPR006846"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
-FT                   /db_xref="UniProtKB/Swiss-Prot:P62861"
 FT                   /protein_id="CAA46716.1"
 FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLAG
 FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKTG
@@ -638,7 +668,9 @@ By default <b>restrict</b> writes a 'table' report file.
 
 #---------------------------------------
 # Total_sequences: 1
-# Total_hitcount: 54
+# Total_length: 518
+# Reported_sequences: 1
+# Reported_hitcount: 54
 #---------------------------------------
 </pre>
 </td></tr></table><p>
@@ -702,8 +734,6 @@ By default <b>restrict</b> writes a 'table' report file.
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-#     39
-#     33
 #     29
 #     20
 #     19
@@ -751,7 +781,9 @@ By default <b>restrict</b> writes a 'table' report file.
 
 #---------------------------------------
 # Total_sequences: 1
-# Total_hitcount: 54
+# Total_length: 518
+# Reported_sequences: 1
+# Reported_hitcount: 54
 #---------------------------------------
 </pre>
 </td></tr></table><p>
@@ -815,8 +847,6 @@ By default <b>restrict</b> writes a 'table' report file.
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-# 	70	151	297
-# 
 # BssKI:
 # [CCNGG]
 # 	15	21	30	45	51	54
@@ -864,7 +894,9 @@ By default <b>restrict</b> writes a 'table' report file.
 
 #---------------------------------------
 # Total_sequences: 1
-# Total_hitcount: 54
+# Total_length: 518
+# Reported_sequences: 1
+# Reported_hitcount: 54
 #---------------------------------------
 </pre>
 </td></tr></table><p>

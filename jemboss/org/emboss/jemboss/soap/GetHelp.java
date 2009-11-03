@@ -21,10 +21,11 @@
 
 package org.emboss.jemboss.soap;
 
-import java.io.*;
 import java.util.*;
 
 import org.emboss.jemboss.JembossParams;
+import org.emboss.jemboss.gui.BuildProgramMenu;
+import org.emboss.jemboss.programs.RunEmbossApplication2;
 
 /**
 *
@@ -46,6 +47,16 @@ public class GetHelp
   */
    public GetHelp(String acdProg, JembossParams mysettings)
    {
+     // get help for current application
+     if(!JembossParams.isJembossServer()) 
+     {
+       String command = mysettings.getEmbossBin()+"tfm " + acdProg + " -html -nomore";
+       String[] envp = BuildProgramMenu.getEnvp();
+       RunEmbossApplication2 rea = new RunEmbossApplication2(command,envp,null);
+       rea.waitFor();
+       helpText = rea.getProcessStdout();
+       return;
+     }
 
      Vector params = new Vector();
 

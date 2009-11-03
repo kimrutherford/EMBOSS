@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Plot conservation of a sequence alignment
@@ -59,7 +66,7 @@ Command line arguments
                                   value)
    -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, xterm, png, gif)
+                                  tekt, tek, none, data, das, xterm, png, gif)
 
    Additional (Optional) qualifiers:
    -scorefile          matrix     [EBLOSUM62 for protein, EDNAFULL for DNA]
@@ -251,15 +258,15 @@ Known bugs
 
 See also
 
-   Program name Description
-   edialign Local multiple alignment of sequences
-   emma Multiple sequence alignment (ClustalW wrapper)
-   infoalign Display basic information about a multiple sequence
-   alignment
-   prettyplot Draw a sequence alignment with pretty formatting
-   showalign Display a multiple sequence alignment in pretty format
-   tranalign Generate an aligment of nucleic coding regions from aligned
-   proteins
+   Program name     Description
+   edialign         Local multiple alignment of sequences
+   emma             Multiple sequence alignment (ClustalW wrapper)
+   infoalign        Display basic information about a multiple sequence
+                    alignment
+   prettyplot       Draw a sequence alignment with pretty formatting
+   showalign        Display a multiple sequence alignment in pretty format
+   tranalign        Generate an alignment of nucleic coding regions from aligned
+                    proteins
 
 Author(s)
 

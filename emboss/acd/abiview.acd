@@ -11,6 +11,7 @@ section: input [
   infile: infile [
     parameter: "Y"
     default: ""
+    binary: "Y"
     knowntype: "abi trace"
     information: "ABI sequencing trace file"
   ]

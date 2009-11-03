@@ -3,9 +3,9 @@ DEFINITION  Human herpesvirus 7 (clone ED132'1.2) telomeric repeat region.
 ACCESSION   L46634 L46689
 VERSION     L46634.1  GI:1019148
 KEYWORDS    telomeric repeat.
-SOURCE      Human herpesvirus 7
+SOURCE      Human herpesvirus 7 (HHV-7)
   ORGANISM  Human herpesvirus 7
-            Viruses; dsDNA viruses, no RNA stage; Herpesviridae;
+            Viruses; dsDNA viruses, no RNA stage; Herpesvirales; Herpesviridae;
             Betaherpesvirinae; Roseolovirus.
 REFERENCE   1  (bases 1 to 1272)
   AUTHORS   Secchiero,P., Nicholas,J., Deng,H., Xiaopeng,T., van Loon,N.,

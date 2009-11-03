@@ -31,7 +31,9 @@
 
 #---------------------------------------
 # Total_sequences: 1
-# Total_hitcount: 1
+# Total_length: 518
+# Reported_sequences: 1
+# Reported_hitcount: 1
 #---------------------------------------
 </pre>
 </td></tr></table><p>
@@ -45,7 +47,7 @@
 ##sequence-region X65923 1 518
 #!Date 2008-07-15
 #!Type DNA
-#!Source-version EMBOSS 6.0.0
+#!Source-version EMBOSS 6.1.0
 X65923	EMBL	polyA_signal_sequence	484	489	0.000	+	.	ID="X65923.6"
 X65923	EMBL	polyA_site	509	509	0.000	+	.	ID="X65923.7";featflags="0x40"
 </pre>

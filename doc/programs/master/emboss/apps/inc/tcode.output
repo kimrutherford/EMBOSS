@@ -58,8 +58,6 @@
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-   1690    1889       +   0.907 No opinion
-   1693    1892       +   1.005 Coding    
    1696    1895       +   0.985 Coding    
    1699    1898       +   0.907 No opinion
    1702    1901       +   0.985 Coding    
@@ -107,7 +105,9 @@
 
 #---------------------------------------
 # Total_sequences: 1
-# Total_hitcount: 606
+# Total_length: 2016
+# Reported_sequences: 1
+# Reported_hitcount: 606
 #---------------------------------------
 </pre>
 </td></tr></table><p>

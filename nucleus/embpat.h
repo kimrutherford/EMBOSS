@@ -183,11 +183,13 @@ void            embPatRestrictDel (EmbPPatRestrict *thys);
 EmbPPatRestrict embPatRestrictNew (void);
 ajuint          embPatRestrictMatch (const AjPSeq seq,
 				     ajuint begin, ajuint end,
-				     AjPFile enzfile, const AjPStr enzymes,
+				     AjPFile enzfile, AjPFile methfile,
+                                     const AjPStr enzymes,
 				     ajuint sitelen, AjBool plasmid,
 				     AjBool ambiguity, ajuint min, ajuint max,
 				     AjBool blunt, AjBool sticky,
-				     AjBool commercial, AjPList l);
+				     AjBool commercial, AjBool methyl,
+                                     AjPList l);
 void            embPatRestrictPreferred(AjPList l, const AjPTable t);
 AjBool          embPatRestrictReadEntry (EmbPPatRestrict re, AjPFile inf);
 

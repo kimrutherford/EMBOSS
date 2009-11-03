@@ -18,6 +18,7 @@ OC   Enterobacteriaceae; Escherichia.
 XX
 RN   [1]
 RP   1243-1266
+RX   DOI; 10.1073/pnas.70.12.3581.
 RX   PUBMED; 4587255.
 RA   Gilbert W., Maxam A.;
 RT   "The nucleotide sequence of the lac operator";
@@ -25,6 +26,7 @@ RL   Proc. Natl. Acad. Sci. U.S.A. 70(12):3581-3584(1973).
 XX
 RN   [2]
 RP   1246-1308
+RX   DOI; 10.1073/pnas.70.12.3585.
 RX   PUBMED; 4587256.
 RA   Maizels N.M.;
 RT   "The nucleotide sequence of the lactose messenger ribonucleic acid
@@ -48,7 +50,7 @@ RN   [5]
 RP   1146-1282
 RX   PUBMED; 1088926.
 RA   Dickson R.C., Abelson J.N., Barnes W.M., Reznikoff W.S.;
-RT   "Genetic regulation: the Lac control region.";
+RT   "Genetic regulation: the Lac control region";
 RL   Science 187(4171):27-35(1975).
 XX
 RN   [6]
@@ -70,9 +72,9 @@ RN   [8]
 RP   1242-1268
 RX   DOI; 10.1038/263748a0.
 RX   PUBMED; 1069185.
-RA   Heyneker H.L., Shine J., Goodman H.M, Boyer H.W., Rosenberg J.,
+RA   Heyneker H.L., Shine J., Goodman H.M., Boyer H.W., Rosenberg J.,
 RA   Dickerson R.E., Narang S.A., Itakura K., Lin S., Riggs A.D.;
-RT   "Synthetic lac operator is functional in vivo";
+RT   "Synthetic lac operator DNA is functional in vivo";
 RL   Nature 263(5580):748-752(1976).
 XX
 RN   [9]
@@ -85,10 +87,11 @@ RL   J. Mol. Biol. 111(1):65-75(1977).
 XX
 RN   [10]
 RP   51-264
+RX   DOI; 10.1073/pnas.74.10.4163.
 RX   PUBMED; 337294.
 RA   Steege D.A.;
 RT   "5'-Terminal nucleotide sequence of Escherichia coli lactose repressor
-RT   mRNA: features of translational initiation and reinitiation sites.";
+RT   mRNA: features of translational initiation and reinitiation sites";
 RL   Proc. Natl. Acad. Sci. U.S.A. 74(10):4163-4167(1977).
 XX
 RN   [11]
@@ -96,8 +99,8 @@ RP   1-81
 RX   DOI; 10.1038/274762a0.
 RX   PUBMED; 355890.
 RA   Calos M.P.;
-RT   "DNA sequence for a low-level promoter of the lac repressor and an 'up'
-RT   promoter mutation";
+RT   "DNA sequence for a low-level promoter of the lac repressor gene and an
+RT   'up' promoter mutation";
 RL   Nature 274(5673):762-765(1978).
 XX
 RN   [12]
@@ -151,8 +154,8 @@ RN   [18]
 RX   DOI; 10.1016/0378-1119(81)90038-X.
 RX   PUBMED; 7016667.
 RA   Betz J.L., Sadler J.R.;
-RT   "Variants of a cloned synthetic lactose operator: I. A palindromic dimer
-RT   lactose operator derived from one strand of the cloned 40-base pair
+RT   "Variants of a cloned synthetic lactose operator. I. A palindromic dimer
+RT   lactose operator derived from one stand of the cloned 40-base pair
 RT   operator";
 RL   Gene 13(1):1-12(1981).
 XX
@@ -167,20 +170,21 @@ RN   [20]
 RX   DOI; 10.1016/0378-1119(81)90128-1.
 RX   PUBMED; 6271642.
 RA   Betz J.L., Sadler J.R.;
-RT   "Variants of a cloned synthetic lactose operator: II.
-RT   Chloramphenicol-resistant revertants retaining a lactose opeator in the CAT
-RT   gene of plasmid pBR325";
+RT   "Variants of a cloned synthetic lactose operator. II.
+RT   Chloramphenicol-resistant revertants retaining a lactose operator in the
+RT   CAT gene of plasmid pBR325";
 RL   Gene 15(2-3):187-200(1981).
 XX
 RN   [21]
 RX   DOI; 10.1007/BF00268783.
 RX   PUBMED; 7038381.
 RA   Calos M.P., Miller J.H.;
-RT   "The DNA sequence change resulting from the I-Q1 mutation, which greatly
+RT   "The DNA sequence change resulting from the IQ1 mutation, which greatly
 RT   increases promoter strength";
 RL   Mol. Gen. Genet. 183(3):559-560(1981).
 XX
 RN   [22]
+RX   DOI; 10.1073/pnas.78.12.7652.
 RX   PUBMED; 6278484.
 RA   Mieschendahl M., Buechel D.E., Bocklage H., Mueller-Hill B.;
 RT   "Mutations in the lacY gene of Escherichia coli define functional
@@ -199,23 +203,24 @@ RN   [24]
 RX   PUBMED; 6288696.
 RA   Horowitz H., Platt T.;
 RT   "A termination site for LacI transcription is between the CAP site and the
-RT   lac promoter.";
+RT   lac promoter";
 RL   J. Biol. Chem. 257(19):11740-11746(1982).
 XX
 RN   [25]
 RX   PUBMED; 6290487.
 RA   Klein R.D., Wells R.D.;
 RT   "Effects of neighboring DNA homopolymers on the biochemical and physical
-RT   properties of the Escherichia coli lactose promoter: I. Cloning and
+RT   properties of the Escherichia coli lactose promoter. I. Cloning and
 RT   characterization studies";
 RL   J. Biol. Chem. 257(21):12954-12961(1982).
 XX
 RN   [26]
 RP   1183-1291
+RX   DOI; 10.1073/pnas.79.5.1408.
 RX   PUBMED; 7041119.
 RA   Weiher H., Schaller H.;
 RT   "Segment-specific mutagenesis: extensive mutagenesis of a lac
-RT   promoter/operator element.";
+RT   promoter/operator element";
 RL   Proc. Natl. Acad. Sci. U.S.A. 79(5):1408-1412(1982).
 XX
 RN   [27]
@@ -240,16 +245,18 @@ RT   region";
 RL   J. Biol. Chem. 258(18):11296-11304(1983).
 XX
 RN   [30]
+RX   DOI; 10.1073/pnas.80.22.6785.
 RX   PUBMED; 6316325.
 RA   Sadler J.R., Sasmor H., Betz J.L.;
 RT   "A perfectly symmetric lac operator binds the lac repressor very tightly";
 RL   Proc. Natl. Acad. Sci. U.S.A. 80(22):6785-6789(1983).
 XX
 RN   [31]
+RX   DOI; 10.1073/pnas.81.2.512.
 RX   PUBMED; 6582506.
 RA   Glickman B.W., Ripley L.S.;
 RT   "Structural intermediates of deletion mutagenesis: a role for palindromic
-RT   DNA.";
+RT   DNA";
 RL   Proc. Natl. Acad. Sci. U.S.A. 81(2):512-516(1984).
 XX
 RN   [32]
@@ -280,7 +287,7 @@ RN   [35]
 RX   PUBMED; 2999082.
 RA   Mandecki W., Goldman R.A., Powell B.S., Caruthers M.H.;
 RT   "lac Up-promoter mutants with increased homology to the consensus promoter
-RT   sequence.";
+RT   sequence";
 RL   J. Bacteriol. 164(3):1353-1355(1985).
 XX
 RN   [36]
@@ -295,10 +302,11 @@ RL   J. Mol. Biol. 181(4):551-555(1985).
 XX
 RN   [37]
 RP   5646-7477
+RX   DOI; 10.1073/pnas.82.19.6414.
 RX   PUBMED; 3901000.
-RA   Hediger M.A, Johnson D.F., Nierlich D.P., Zabin I.;
+RA   Hediger M.A., Johnson D.F., Nierlich D.P., Zabin I.;
 RT   "DNA sequence of the lactose operon: the lacA gene and the transcriptional
-RT   termination region.";
+RT   termination region";
 RL   Proc. Natl. Acad. Sci. U.S.A. 82(19):6414-6418(1985).
 XX
 CC   [3]  sites; UV5 mRNA transcripts and operator mutants. [(in)
@@ -378,21 +386,8 @@ FT                   /transl_table=11
 FT                   /gene="lacI"
 FT                   /note="lac repressor protein (gtg start codon)"
 FT                   /db_xref="GOA:P03023"
-FT                   /db_xref="PDB:1CJG"
-FT                   /db_xref="PDB:1EFA"
-FT                   /db_xref="PDB:1JWL"
-FT                   /db_xref="PDB:1JYE"
-FT                   /db_xref="PDB:1JYF"
-FT                   /db_xref="PDB:1L1M"
-FT                   /db_xref="PDB:1LBG"
-FT                   /db_xref="PDB:1LBH"
-FT                   /db_xref="PDB:1LBI"
-FT                   /db_xref="PDB:1LCC"
-FT                   /db_xref="PDB:1LCD"
-FT                   /db_xref="PDB:1LQC"
-FT                   /db_xref="PDB:1LTP"
-FT                   /db_xref="PDB:1TLF"
-FT                   /db_xref="PDB:2BJC"
+FT                   /db_xref="InterPro:IPR001761"
+FT                   /db_xref="PDB:3EDC"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P03023"
 FT                   /protein_id="AAA24052.1"
 FT                   /translation="MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAEL
@@ -431,40 +426,8 @@ FT                   /transl_table=11
 FT                   /gene="lacZ"
 FT                   /note="beta-d-galactosidase"
 FT                   /db_xref="GOA:P00722"
-FT                   /db_xref="InterPro:IPR004199"
-FT                   /db_xref="InterPro:IPR006101"
-FT                   /db_xref="InterPro:IPR006102"
-FT                   /db_xref="InterPro:IPR006103"
-FT                   /db_xref="InterPro:IPR006104"
-FT                   /db_xref="InterPro:IPR008979"
-FT                   /db_xref="InterPro:IPR011013"
-FT                   /db_xref="InterPro:IPR013781"
-FT                   /db_xref="InterPro:IPR013812"
-FT                   /db_xref="PDB:1BGL"
-FT                   /db_xref="PDB:1BGM"
-FT                   /db_xref="PDB:1DP0"
-FT                   /db_xref="PDB:1F49"
-FT                   /db_xref="PDB:1F4A"
-FT                   /db_xref="PDB:1F4H"
-FT                   /db_xref="PDB:1GHO"
-FT                   /db_xref="PDB:1HN1"
-FT                   /db_xref="PDB:1JYN"
-FT                   /db_xref="PDB:1JYV"
-FT                   /db_xref="PDB:1JYW"
-FT                   /db_xref="PDB:1JYX"
-FT                   /db_xref="PDB:1JYY"
-FT                   /db_xref="PDB:1JYZ"
-FT                   /db_xref="PDB:1JZ0"
-FT                   /db_xref="PDB:1JZ1"
-FT                   /db_xref="PDB:1JZ2"
-FT                   /db_xref="PDB:1JZ3"
-FT                   /db_xref="PDB:1JZ4"
-FT                   /db_xref="PDB:1JZ5"
-FT                   /db_xref="PDB:1JZ6"
-FT                   /db_xref="PDB:1JZ7"
-FT                   /db_xref="PDB:1JZ8"
-FT                   /db_xref="PDB:1PX3"
-FT                   /db_xref="PDB:1PX4"
+FT                   /db_xref="InterPro:IPR014718"
+FT                   /db_xref="PDB:3DYP"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P00722"
 FT                   /protein_id="AAA24053.1"
 FT                   /translation="MTMITDSLAVVLQRRDWENPGVTQLNRLAAHPPFASWRNSEEART
@@ -491,13 +454,8 @@ FT                   /transl_table=11
 FT                   /gene="lacY"
 FT                   /note="lactose permease"
 FT                   /db_xref="GOA:P02920"
-FT                   /db_xref="InterPro:IPR000576"
-FT                   /db_xref="InterPro:IPR007114"
-FT                   /db_xref="PDB:1M2U"
-FT                   /db_xref="PDB:1PV6"
-FT                   /db_xref="PDB:1PV7"
-FT                   /db_xref="PDB:2CFP"
-FT                   /db_xref="PDB:2CFQ"
+FT                   /db_xref="InterPro:IPR018457"
+FT                   /db_xref="PDB:2V8N"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P02920"
 FT                   /protein_id="AAA24054.1"
 FT                   /translation="MYYLKNTNFWMFGLFFFFYFFIMGAYFPFFPIWLHDINHISKSDT
@@ -514,11 +472,7 @@ FT                   /transl_table=11
 FT                   /gene="lacA"
 FT                   /note="thiogalactoside acetyltransferase (ttg start codon)"
 FT                   /db_xref="GOA:P07464"
-FT                   /db_xref="InterPro:IPR001451"
-FT                   /db_xref="InterPro:IPR011004"
-FT                   /db_xref="PDB:1KQA"
-FT                   /db_xref="PDB:1KRR"
-FT                   /db_xref="PDB:1KRU"
+FT                   /db_xref="InterPro:IPR018357"
 FT                   /db_xref="PDB:1KRV"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P07464"
 FT                   /protein_id="AAA24055.1"
@@ -672,10 +626,11 @@ XX
 RN   [1]
 RC   (1-1832)
 RP   1-1832
+RX   DOI; 10.1073/pnas.82.19.6414.
 RX   PUBMED; 3901000.
-RA   Hediger M.A, Johnson D.F., Nierlich D.P., Zabin I.;
+RA   Hediger M.A., Johnson D.F., Nierlich D.P., Zabin I.;
 RT   "DNA sequence of the lactose operon: the lacA gene and the transcriptional
-RT   termination region.";
+RT   termination region";
 RL   Proc. Natl. Acad. Sci. U.S.A. 82(19):6414-6418(1985).
 XX
 FH   Key             Location/Qualifiers
@@ -695,11 +650,7 @@ FT                   /transl_table=11
 FT                   /gene="lacA"
 FT                   /product="thiogalactoside transacetylase"
 FT                   /db_xref="GOA:P07464"
-FT                   /db_xref="InterPro:IPR001451"
-FT                   /db_xref="InterPro:IPR011004"
-FT                   /db_xref="PDB:1KQA"
-FT                   /db_xref="PDB:1KRR"
-FT                   /db_xref="PDB:1KRU"
+FT                   /db_xref="InterPro:IPR018357"
 FT                   /db_xref="PDB:1KRV"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P07464"
 FT                   /protein_id="CAA36162.1"
@@ -776,21 +727,8 @@ FT   CDS             31..1113
 FT                   /transl_table=11
 FT                   /note="reading frame"
 FT                   /db_xref="GOA:P03023"
-FT                   /db_xref="PDB:1CJG"
-FT                   /db_xref="PDB:1EFA"
-FT                   /db_xref="PDB:1JWL"
-FT                   /db_xref="PDB:1JYE"
-FT                   /db_xref="PDB:1JYF"
-FT                   /db_xref="PDB:1L1M"
-FT                   /db_xref="PDB:1LBG"
-FT                   /db_xref="PDB:1LBH"
-FT                   /db_xref="PDB:1LBI"
-FT                   /db_xref="PDB:1LCC"
-FT                   /db_xref="PDB:1LCD"
-FT                   /db_xref="PDB:1LQC"
-FT                   /db_xref="PDB:1LTP"
-FT                   /db_xref="PDB:1TLF"
-FT                   /db_xref="PDB:2BJC"
+FT                   /db_xref="InterPro:IPR001761"
+FT                   /db_xref="PDB:3EDC"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P03023"
 FT                   /protein_id="CAA23569.1"
 FT                   /translation="MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAEL
@@ -859,31 +797,8 @@ FT                   /codon_start=1
 FT                   /transl_table=11
 FT                   /note="reading frame (lacZ)"
 FT                   /db_xref="GOA:P00722"
-FT                   /db_xref="PDB:1BGL"
-FT                   /db_xref="PDB:1BGM"
-FT                   /db_xref="PDB:1DP0"
-FT                   /db_xref="PDB:1F49"
-FT                   /db_xref="PDB:1F4A"
-FT                   /db_xref="PDB:1F4H"
-FT                   /db_xref="PDB:1GHO"
-FT                   /db_xref="PDB:1HN1"
-FT                   /db_xref="PDB:1JYN"
-FT                   /db_xref="PDB:1JYV"
-FT                   /db_xref="PDB:1JYW"
-FT                   /db_xref="PDB:1JYX"
-FT                   /db_xref="PDB:1JYY"
-FT                   /db_xref="PDB:1JYZ"
-FT                   /db_xref="PDB:1JZ0"
-FT                   /db_xref="PDB:1JZ1"
-FT                   /db_xref="PDB:1JZ2"
-FT                   /db_xref="PDB:1JZ3"
-FT                   /db_xref="PDB:1JZ4"
-FT                   /db_xref="PDB:1JZ5"
-FT                   /db_xref="PDB:1JZ6"
-FT                   /db_xref="PDB:1JZ7"
-FT                   /db_xref="PDB:1JZ8"
-FT                   /db_xref="PDB:1PX3"
-FT                   /db_xref="PDB:1PX4"
+FT                   /db_xref="InterPro:IPR014718"
+FT                   /db_xref="PDB:3DYP"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P00722"
 FT                   /protein_id="CAA23570.1"
 FT                   /translation="FQLSAGRYHYQLVWCQK"
@@ -891,13 +806,8 @@ FT   CDS             106..1359
 FT                   /transl_table=11
 FT                   /note="reading frame (lacY)"
 FT                   /db_xref="GOA:P02920"
-FT                   /db_xref="InterPro:IPR000576"
-FT                   /db_xref="InterPro:IPR007114"
-FT                   /db_xref="PDB:1M2U"
-FT                   /db_xref="PDB:1PV6"
-FT                   /db_xref="PDB:1PV7"
-FT                   /db_xref="PDB:2CFP"
-FT                   /db_xref="PDB:2CFQ"
+FT                   /db_xref="InterPro:IPR018457"
+FT                   /db_xref="PDB:2V8N"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P02920"
 FT                   /protein_id="CAA23571.1"
 FT                   /translation="MYYLKNTNFWMFGLFFFFYFFIMGAYFPFFPIWLHDINHISKSDT
@@ -912,9 +822,7 @@ FT   CDS             1423..>1500
 FT                   /transl_table=11
 FT                   /note="reading frame (lacA)"
 FT                   /db_xref="GOA:P07464"
-FT                   /db_xref="PDB:1KQA"
-FT                   /db_xref="PDB:1KRR"
-FT                   /db_xref="PDB:1KRU"
+FT                   /db_xref="InterPro:IPR018357"
 FT                   /db_xref="PDB:1KRV"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P07464"
 FT                   /protein_id="CAA23572.1"
@@ -988,31 +896,8 @@ FT   CDS             <1..3072
 FT                   /transl_table=11
 FT                   /note="galactosidase"
 FT                   /db_xref="GOA:P00722"
-FT                   /db_xref="PDB:1BGL"
-FT                   /db_xref="PDB:1BGM"
-FT                   /db_xref="PDB:1DP0"
-FT                   /db_xref="PDB:1F49"
-FT                   /db_xref="PDB:1F4A"
-FT                   /db_xref="PDB:1F4H"
-FT                   /db_xref="PDB:1GHO"
-FT                   /db_xref="PDB:1HN1"
-FT                   /db_xref="PDB:1JYN"
-FT                   /db_xref="PDB:1JYV"
-FT                   /db_xref="PDB:1JYW"
-FT                   /db_xref="PDB:1JYX"
-FT                   /db_xref="PDB:1JYY"
-FT                   /db_xref="PDB:1JYZ"
-FT                   /db_xref="PDB:1JZ0"
-FT                   /db_xref="PDB:1JZ1"
-FT                   /db_xref="PDB:1JZ2"
-FT                   /db_xref="PDB:1JZ3"
-FT                   /db_xref="PDB:1JZ4"
-FT                   /db_xref="PDB:1JZ5"
-FT                   /db_xref="PDB:1JZ6"
-FT                   /db_xref="PDB:1JZ7"
-FT                   /db_xref="PDB:1JZ8"
-FT                   /db_xref="PDB:1PX3"
-FT                   /db_xref="PDB:1PX4"
+FT                   /db_xref="InterPro:IPR014718"
+FT                   /db_xref="PDB:3DYP"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P00722"
 FT                   /protein_id="CAA23573.1"
 FT                   /translation="TMITDSLAVVLQRRDWENPGVTQLNRLAAHPPFASWRNSEEARTD
@@ -1109,18 +994,20 @@ RP   1-2271
 RX   DOI; 10.1093/nar/8.13.3011.
 RX   PUBMED; 6253901.
 RA   Beck E., Bremer E.;
-RT   "Nucleotide sequence of the gene ompA coding the outer membrane protein II*
+RT   "Nucleotide sequence of the gene ompA coding the outer membrane protein II
 RT   of Escherichia coli K-12";
 RL   Nucleic Acids Res. 8(13):3011-3027(1980).
 XX
 RN   [2]
 RP   783-1317
+RX   DOI; 10.1073/pnas.77.7.3845.
 RX   PUBMED; 7001445.
 RA   Movva N.R., Nakamura K., Inouye M.;
 RT   "Regulatory region of the gene for the ompA protein, a major outer membrane
 RT   protein of Escherichia coli";
 RL   Proc. Natl. Acad. Sci. U.S.A. 77(7):3845-3849(1980).
 XX
+DR   InterPro; IPR009390; DUF1047.
 DR   UniProtKB/Swiss-Prot; P0A8N0; YCBG_ECOLI.
 XX
 CC   KST ECO.OMPA
@@ -1135,6 +1022,7 @@ FT   CDS             172..669
 FT                   /transl_table=11
 FT                   /note="reading frame (unknown protein)"
 FT                   /db_xref="GOA:P0AFZ5"
+FT                   /db_xref="InterPro:IPR004596"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P0AFZ5"
 FT                   /protein_id="CAA23587.1"
 FT                   /translation="MYTSGYAHRSSSFSSAASKIARVSTENTTAGLISEVVYREDQPMM
@@ -1149,15 +1037,8 @@ FT                   /transl_table=11
 FT                   /gene="ompA"
 FT                   /product="ompA protein"
 FT                   /db_xref="GOA:P0A910"
-FT                   /db_xref="InterPro:IPR000498"
-FT                   /db_xref="InterPro:IPR002368"
-FT                   /db_xref="InterPro:IPR006664"
-FT                   /db_xref="InterPro:IPR006665"
-FT                   /db_xref="InterPro:IPR006690"
-FT                   /db_xref="PDB:1BXW"
-FT                   /db_xref="PDB:1G90"
-FT                   /db_xref="PDB:1QJP"
-FT                   /db_xref="PDB:2GE4"
+FT                   /db_xref="InterPro:IPR011250"
+FT                   /db_xref="PDB:2JMM"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P0A910"
 FT                   /protein_id="CAA23588.1"
 FT                   /translation="MKKTAIAIAVALAGFATVAQAAPKDNTWYTGAKLGWSQYHDTGFI
@@ -1244,7 +1125,7 @@ RX   PUBMED; 7642533.
 RA   Wilson S.A., Williams R.J., Pearl L.H., Drew R.E.;
 RT   "Identification of two new genes in the Pseudomonas aeruginosa amidase
 RT   operon, encoding an ATPase (AmiB) and a putative integral membrane protein
-RT   (AmiS).";
+RT   (AmiS)";
 RL   J. Biol. Chem. 270(32):18818-18824(1995).
 XX
 FH   Key             Location/Qualifiers
@@ -1259,6 +1140,8 @@ FT   CDS             97..1212
 FT                   /transl_table=11
 FT                   /gene="amiB"
 FT                   /db_xref="GOA:Q51416"
+FT                   /db_xref="HSSP:1G3I"
+FT                   /db_xref="InterPro:IPR013093"
 FT                   /db_xref="UniProtKB/Swiss-Prot:Q51416"
 FT                   /protein_id="CAA54405.1"
 FT                   /translation="MPFLSDMLDQSRRQQDEEQALARENLAEASLLQAHLSHRSALHSR
@@ -1329,7 +1212,8 @@ FT                   /gene="amiE"
 FT                   /product="aliphatic amidase"
 FT                   /EC_number="3.5.1.4"
 FT                   /db_xref="GOA:P11436"
-FT                   /db_xref="PDB:1K17"
+FT                   /db_xref="InterPro:IPR003010"
+FT                   /db_xref="PDB:2UXY"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P11436"
 FT                   /protein_id="AAA25697.1"
 FT                   /translation="MRHGDISSSNDTVGVAVVNYKMPRLHTAAEVLDNARKIADMIVGM
@@ -1387,17 +1271,17 @@ RP   1167-2167
 RX   DOI; 10.1016/0014-5793(89)80249-2.
 RX   PUBMED; 2495988.
 RA   Lowe N., Rice P.M., Drew R.E.;
-RT   "Nucleotide sequence of the aliphatic amidase regulator gene of Pseudomonas
-RT   aeruginosa";
+RT   "Nucleotide sequence of the aliphatic amidase regulator gene (amiR) of
+RT   Pseudomonas aeruginosa";
 RL   FEBS Lett. 246(1-2):39-43(1989).
 XX
 RN   [3]
 RP   1-1292
 RX   PUBMED; 1907262.
 RA   Wilson S., Drew R.;
-RT   "Cloning and DNA seqence of amiC, a new gene regulating expression of the
+RT   "Cloning and DNA sequence of amiC, a new gene regulating expression of the
 RT   Pseudomonas aeruginosa aliphatic amidase, and purification of the amiC
-RT   product.";
+RT   product";
 RL   J. Bacteriol. 173(16):4914-4921(1991).
 XX
 RN   [4]
@@ -1408,6 +1292,7 @@ RL   Submitted (04-SEP-1991) to the EMBL/GenBank/DDBJ databases.
 RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
 XX
 DR   GOA; Q51417.
+DR   InterPro; IPR003211; AmiSUreI_transpt.
 DR   UniProtKB/Swiss-Prot; Q51417; AMIS_PSEAE.
 XX
 CC   Data kindly reviewed (04-SEP-1991) by Rice P. M.
@@ -1427,6 +1312,7 @@ FT                   /gene="amiR"
 FT                   /note="aliphatic amidase regulator, positive  regulator of
 FT                   amiE"
 FT                   /db_xref="GOA:P10932"
+FT                   /db_xref="InterPro:IPR011991"
 FT                   /db_xref="PDB:1QO0"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P10932"
 FT                   /protein_id="CAA32023.1"
@@ -1439,8 +1325,7 @@ FT                   /transl_table=11
 FT                   /gene="amiC"
 FT                   /note="negative regulator of amiR"
 FT                   /db_xref="GOA:P27017"
-FT                   /db_xref="PDB:1PEA"
-FT                   /db_xref="PDB:1QNL"
+FT                   /db_xref="InterPro:IPR000709"
 FT                   /db_xref="PDB:1QO0"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P27017"
 FT                   /protein_id="CAA32024.1"
@@ -1546,7 +1431,7 @@ RX   PUBMED; 7642533.
 RA   Wilson S.A., Williams R.J., Pearl L.H., Drew R.E.;
 RT   "Identification of two new genes in the Pseudomonas aeruginosa amidase
 RT   operon, encoding an ATPase (AmiB) and a putative integral membrane protein
-RT   (AmiS).";
+RT   (AmiS)";
 RL   J. Biol. Chem. 270(32):18818-18824(1995).
 XX
 FH   Key             Location/Qualifiers
@@ -1561,6 +1446,7 @@ FT   CDS             61..576
 FT                   /transl_table=11
 FT                   /gene="amiS"
 FT                   /db_xref="GOA:Q51417"
+FT                   /db_xref="InterPro:IPR003211"
 FT                   /db_xref="UniProtKB/Swiss-Prot:Q51417"
 FT                   /protein_id="CAA54406.1"
 FT                   /translation="MLGLVLLYVGAVLFLNAVWLLGKISGREVAVINFLVGVLSACVAF

@@ -8,13 +8,10 @@
    -size               integer    [10000] Size to split at (Integer 1 or more)
    -overlap            integer    [0] Overlap between split sequences (Integer
                                   0 or more)
-   -source             boolean    [N] Split using source features with /origid
-                                  qualifiers
-   -multifile          boolean    [N] Split sequence into multiple files
 
    Advanced (Unprompted) qualifiers:
    -feature            boolean    [N] Use feature information
-   -addoverlap         boolean    [N] Add overlap to size
+   -addoverlap         boolean    [N] Include overlap in output sequence size
 
    Associated qualifiers:
 

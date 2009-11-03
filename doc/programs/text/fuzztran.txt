@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Search for patterns in protein sequences (translated)
@@ -222,7 +229,7 @@ RL   Submitted (20-DEC-1994) to the EMBL/GenBank/DDBJ databases.
 RL   Huber A., Universitaet Karlsruhe, Zoologie I, Kornblumenstr. 13, 76128
 RL   Karlsruhe, Germany
 XX
-DR   EMBL-ALIGN; ALIGN_000323.
+DR   ASTD; TRAN00000023010.
 XX
 FH   Key             Location/Qualifiers
 FH
@@ -241,6 +248,8 @@ FT   CDS             84..1130
 FT                   /product="rhodopsin"
 FT                   /function="phototransduction"
 FT                   /db_xref="GOA:P51489"
+FT                   /db_xref="HSSP:1EDS"
+FT                   /db_xref="InterPro:IPR017452"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P51489"
 FT                   /citation=[1]
 FT                   /protein_id="CAA87081.1"
@@ -388,7 +397,7 @@ Output file format
 # HitCount: 9
 #
 # Pattern_name Mismatch Pattern
-# pattern1            0 RA
+# pattern             0 RA
 # TransTable: 0
 # Frames: F
 #
@@ -396,23 +405,23 @@ Output file format
 
   Start     End  Strand   Score Pattern_name Mismatch  Frame PStart   PEnd Tran
 slation
-     97     102       +       2 pattern1            .      1     33     34 RA
+     97     102       +       2 pattern             .      1     33     34 RA
 
-    133     138       +       2 pattern1            .      1     45     46 RA
+    133     138       +       2 pattern             .      1     45     46 RA
 
-    421     426       +       2 pattern1            .      1    141    142 RA
+    421     426       +       2 pattern             .      1    141    142 RA
 
-    625     630       +       2 pattern1            .      1    209    210 RA
+    625     630       +       2 pattern             .      1    209    210 RA
 
-    835     840       +       2 pattern1            .      1    279    280 RA
+    835     840       +       2 pattern             .      1    279    280 RA
 
-    919     924       +       2 pattern1            .      1    307    308 RA
+    919     924       +       2 pattern             .      1    307    308 RA
 
-    227     232       +       2 pattern1            .      2     76     77 RA
+    227     232       +       2 pattern             .      2     76     77 RA
 
-    752     757       +       2 pattern1            .      2    251    252 RA
+    752     757       +       2 pattern             .      2    251    252 RA
 
-     72      77       +       2 pattern1            .      3     24     25 RA
+     72      77       +       2 pattern             .      3     24     25 RA
 
 
 #---------------------------------------
@@ -420,7 +429,9 @@ slation
 
 #---------------------------------------
 # Total_sequences: 1
-# Total_hitcount: 9
+# Total_length: 1493
+# Reported_sequences: 1
+# Reported_hitcount: 9
 #---------------------------------------
 
    The columns of data are as follows:
@@ -586,26 +597,26 @@ Known bugs
 
 See also
 
-   Program name Description
-   antigenic Finds antigenic sites in proteins
-   digest Reports on protein proteolytic enzyme or reagent cleavage sites
-   dreg Regular expression search of nucleotide sequence(s)
-   epestfind Finds PEST motifs as potential proteolytic cleavage sites
-   fuzznuc Search for patterns in nucleotide sequences
-   fuzzpro Search for patterns in protein sequences
-   helixturnhelix Identify nucleic acid-binding motifs in protein
-   sequences
-   marscan Finds matrix/scaffold recognition (MRS) signatures in DNA
-   sequences
-   oddcomp Identify proteins with specified sequence word composition
-   patmatdb Searches protein sequences with a sequence motif
-   patmatmotifs Scan a protein sequence with motifs from the PROSITE
-   database
-   pepcoil Predicts coiled coil regions in protein sequences
-   preg Regular expression search of protein sequence(s)
-   pscan Scans protein sequence(s) with fingerprints from the PRINTS
-   database
-   sigcleave Reports on signal cleavage sites in a protein sequence
+   Program name     Description
+   antigenic        Finds antigenic sites in proteins
+   digest           Reports on protein proteolytic enzyme or reagent cleavage sites
+   dreg             Regular expression search of nucleotide sequence(s)
+   epestfind        Finds PEST motifs as potential proteolytic cleavage sites
+   fuzznuc          Search for patterns in nucleotide sequences
+   fuzzpro          Search for patterns in protein sequences
+   helixturnhelix   Identify nucleic acid-binding motifs in protein
+                    sequences
+   marscan          Finds matrix/scaffold recognition (MRS) signatures in DNA
+                    sequences
+   oddcomp          Identify proteins with specified sequence word composition
+   patmatdb         Searches protein sequences with a sequence motif
+   patmatmotifs     Scan a protein sequence with motifs from the PROSITE
+                    database
+   pepcoil          Predicts coiled coil regions in protein sequences
+   preg             Regular expression search of protein sequence(s)
+   pscan            Scans protein sequence(s) with fingerprints from the PRINTS
+                    database
+   sigcleave        Reports on signal cleavage sites in a protein sequence
 
    Other EMBOSS programs allow you to search for regular expression
    patterns but may be less easy for the user who has never used regular

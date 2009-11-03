@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Identify proteins with specified sequence word composition
@@ -45,7 +52,7 @@ Identify proteins with specified sequence word composition
 Input protein sequence(s): tsw:*
 Program compseq output file: oddcomp.comp
 Window size to consider (e.g. 30 aa) [30]: 
-Output file [edd1_rat.oddcomp]: out.odd
+Output file [12s1_arath.oddcomp]: out.odd
 
    Go to the input files for this example
    Go to the output files for this example
@@ -230,22 +237,22 @@ Known bugs
 
 See also
 
-   Program name Description
-   antigenic Finds antigenic sites in proteins
-   digest Reports on protein proteolytic enzyme or reagent cleavage sites
-   epestfind Finds PEST motifs as potential proteolytic cleavage sites
-   fuzzpro Search for patterns in protein sequences
-   fuzztran Search for patterns in protein sequences (translated)
-   helixturnhelix Identify nucleic acid-binding motifs in protein
-   sequences
-   patmatdb Searches protein sequences with a sequence motif
-   patmatmotifs Scan a protein sequence with motifs from the PROSITE
-   database
-   pepcoil Predicts coiled coil regions in protein sequences
-   preg Regular expression search of protein sequence(s)
-   pscan Scans protein sequence(s) with fingerprints from the PRINTS
-   database
-   sigcleave Reports on signal cleavage sites in a protein sequence
+   Program name     Description
+   antigenic        Finds antigenic sites in proteins
+   digest           Reports on protein proteolytic enzyme or reagent cleavage sites
+   epestfind        Finds PEST motifs as potential proteolytic cleavage sites
+   fuzzpro          Search for patterns in protein sequences
+   fuzztran         Search for patterns in protein sequences (translated)
+   helixturnhelix   Identify nucleic acid-binding motifs in protein
+                    sequences
+   patmatdb         Searches protein sequences with a sequence motif
+   patmatmotifs     Scan a protein sequence with motifs from the PROSITE
+                    database
+   pepcoil          Predicts coiled coil regions in protein sequences
+   preg             Regular expression search of protein sequence(s)
+   pscan            Scans protein sequence(s) with fingerprints from the PRINTS
+                    database
+   sigcleave        Reports on signal cleavage sites in a protein sequence
 
 Author(s)
 

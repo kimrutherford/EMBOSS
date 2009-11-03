@@ -34,17 +34,17 @@ RP   1167-2167
 RX   DOI; 10.1016/0014-5793(89)80249-2.
 RX   PUBMED; 2495988.
 RA   Lowe N., Rice P.M., Drew R.E.;
-RT   "Nucleotide sequence of the aliphatic amidase regulator gene of Pseudomonas
-RT   aeruginosa";
+RT   "Nucleotide sequence of the aliphatic amidase regulator gene (amiR) of
+RT   Pseudomonas aeruginosa";
 RL   FEBS Lett. 246(1-2):39-43(1989).
 XX
 RN   [3]
 RP   1-1292
 RX   PUBMED; 1907262.
 RA   Wilson S., Drew R.;
-RT   "Cloning and DNA seqence of amiC, a new gene regulating expression of the
+RT   "Cloning and DNA sequence of amiC, a new gene regulating expression of the
 RT   Pseudomonas aeruginosa aliphatic amidase, and purification of the amiC
-RT   product.";
+RT   product";
 RL   J. Bacteriol. 173(16):4914-4921(1991).
 XX
 RN   [4]
@@ -55,8 +55,8 @@ RL   Submitted (04-SEP-1991) to the EMBL/GenBank/DDBJ databases.
 RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
 XX
 DR   GOA; Q51417.
+DR   InterPro; IPR003211; AmiSUreI_transpt.
 DR   UniProtKB/Swiss-Prot; Q51417; AMIS_PSEAE.
-XX
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
@@ -111,55 +111,6 @@ SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
      gagcgcctgc gtcgcgttct acctgatctt ttccgcagca gccgggcagg gctcgctgaa      2100
      ggccggagcg ctgaccctgc tattcgcttt tacctatctg tgggtggccg ccaaccagtt      2160
      cctcgag                                                                2167
-//
-</pre>
-</td></tr></table><p>
-
-<a name="input.4"></a>
-<h3>Input files for usage example 4</h3>
-
-'tsw:rs24_fugru' is a sequence entry in the example protein database 'tsw'
-<p>
-<p><h3>Database entry: tsw:rs24_fugru</h3>
-<table width="90%"><tr><td bgcolor="#FFCCFF">
-<pre>
-ID   RS24_FUGRU              Reviewed;         132 AA.
-AC   O42387;
-DT   15-JUL-1998, integrated into UniProtKB/Swiss-Prot.
-DT   01-JAN-1998, sequence version 1.
-DT   20-MAR-2007, entry version 25.
-DE   40S ribosomal protein S24.
-GN   Name=RPS24;
-OS   Fugu rubripes (Japanese pufferfish) (Takifugu rubripes).
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
-OC   Actinopterygii; Neopterygii; Teleostei; Euteleostei; Neoteleostei;
-OC   Acanthomorpha; Acanthopterygii; Percomorpha; Tetraodontiformes;
-OC   Tetradontoidea; Tetraodontidae; Takifugu.
-OX   NCBI_TaxID=31033;
-RN   [1]
-RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
-RA   Crosio C., Cecconi F., Giorgi M., Amaldi F., Mariottini P.;
-RL   Submitted (SEP-1997) to the EMBL/GenBank/DDBJ databases.
-CC   -!- SIMILARITY: Belongs to the ribosomal protein S24e family.
-CC   -----------------------------------------------------------------------
-CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
-CC   Distributed under the Creative Commons Attribution-NoDerivs License
-CC   -----------------------------------------------------------------------
-DR   EMBL; AJ001398; CAA04728.1; -; Genomic_DNA.
-DR   Ensembl; NEWSINFRUG00000143641; Fugu rubripes.
-DR   LinkHub; O42387; -.
-DR   InterPro; IPR001976; Ribosomal_S24E.
-DR   PANTHER; PTHR10496; Ribosomal_S24E; 1.
-DR   Pfam; PF01282; Ribosomal_S24e; 1.
-DR   ProDom; PD006052; Ribosomal_S24E; 1.
-DR   PROSITE; PS00529; RIBOSOMAL_S24E; 1.
-KW   Ribonucleoprotein; Ribosomal protein.
-FT   CHAIN         1    132       40S ribosomal protein S24.
-FT                                /FTId=PRO_0000137627.
-SQ   SEQUENCE   132 AA;  15305 MW;  DC437F60F20C14F5 CRC64;
-     MNDTVTVRTR KFMTNRLLQR KQMVVDVLHP GKATVPKTEI REKLAKMYKT TPDVVFVFGF
-     RTQFGGGKTT GFAMVYDSLD YAKKNEPKHR LARHGLFEKK KTSRKQRKER KNRMKKVRGT
-     KKASVGASKK KD
 //
 </pre>
 </td></tr></table><p>

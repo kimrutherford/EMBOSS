@@ -24,14 +24,16 @@
 #=======================================
 
   Start     End  Strand Pattern_name Sequence
-      1       6       + regex1       ggtacc
+      1       6       + regex        ggtacc
 
 #---------------------------------------
 #---------------------------------------
 
 #---------------------------------------
 # Total_sequences: 1
-# Total_hitcount: 1
+# Total_length: 2167
+# Reported_sequences: 1
+# Reported_hitcount: 1
 #---------------------------------------
 </pre>
 </td></tr></table><p>

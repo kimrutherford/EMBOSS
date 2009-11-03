@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Align EST sequences to genomic DNA sequence
@@ -121,7 +128,7 @@ Command line arguments
 
    Advanced (Unprompted) qualifiers:
    -reverse            boolean    Reverse the orientation of the EST sequence
-   -[no]splice         boolean    [Y] Use donor and acceptor splice sites. If
+   -[no]usesplice      boolean    [Y] Use donor and acceptor splice sites. If
                                   you want to ignore donor-acceptor sites then
                                   set this to be false.
    -mode               menu       [both] This determines the comparion mode.
@@ -255,7 +262,17 @@ RL   Unpublished.
 XX
 DR   GDB; 3839990.
 DR   GDB; 4193257.
-DR   RZPD; IMAGp998F03326.
+DR   ImaGenes; ENSEp780A0214D.
+DR   ImaGenes; ENSEp780A044Q.
+DR   ImaGenes; HU3_p972A0639D.
+DR   ImaGenes; HU3_p972B1110Q.
+DR   ImaGenes; HU3_p983A0639D.
+DR   ImaGenes; HU4_p940A0622D.
+DR   ImaGenes; IMAGp956A0431Q.
+DR   ImaGenes; IMAGp998F03326Q.
+DR   ImaGenes; RZPDp1096A101D.
+DR   ImaGenes; RZPDp1096A191Q.
+DR   ImaGenes; RZPDp200A0214D.
 DR   UNILIB; 555; 300.
 XX
 CC   On May 8, 1995 this sequence version replaced gi:800819.
@@ -306,7 +323,6 @@ l
 FT                   ganglia, thalamus, cerebellum, midbrain, pons and medulla.
 "
 FT                   /db_xref="taxon:9606"
-FT                   /db_xref="RZPD:IMAGp998F03326"
 FT                   /db_xref="UNILIB:555"
 XX
 SQ   Sequence 495 BP; 73 A; 135 C; 169 G; 104 T; 14 other;
@@ -337,7 +353,7 @@ XX
 AC   Z69719;
 XX
 DT   26-FEB-1996 (Rel. 46, Created)
-DT   18-JAN-2007 (Rel. 90, Last updated, Version 6)
+DT   13-JAN-2009 (Rel. 99, Last updated, Version 7)
 XX
 DE   Human DNA sequence from clone XX-CNFG9 on chromosome 16
 XX
@@ -353,11 +369,13 @@ RN   [1]
 RP   1-33760
 RA   Kershaw J.;
 RT   ;
-RL   Submitted (16-JAN-2007) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (09-JAN-2009) to the EMBL/GenBank/DDBJ databases.
 RL   Wellcome Trust Sanger Institute, Hinxton, Cambridgeshire, CB10 1SA, UK.
-RL   E-mail enquiries: vega@sanger.ac.uk Clone requests:
-RL   clonerequest@sanger.ac.uk
+RL   E-mail enquiries: vega@sanger.ac.uk Clone requests: Geneservice
+RL   (http://www.geneservice.co.uk/) and BACPAC Resources
+RL   (http://bacpac.chori.org/)
 XX
+DR   EMBL-CON; GL000124.
 DR   EMBL-JOIN; Z69720.
 DR   GDB; 11502921.
 XX
@@ -381,8 +399,6 @@ CC   numbers given in the feature table with their source databases:
 CC   Em:, EMBL; Sw:, SWISSPROT; Tr:, TREMBL; Wp:, WORMPEP;
 CC   Information on the WORMPEP database can be found at
 CC   http://www.sanger.ac.uk/Projects/C_elegans/wormpep
-XX
-FH   Key             Location/Qualifiers
 
 
   [Part of this file has been deleted for brevity]
@@ -672,36 +688,36 @@ Known bugs
 
 See also
 
-   Program name                       Description
-   needle       Needleman-Wunsch global alignment of two sequences
-   stretcher    Needleman-Wunsch rapid global alignment of two sequences
+                    Program name                       Description
+                    needle       Needleman-Wunsch global alignment of two sequences
+                    stretcher    Needleman-Wunsch rapid global alignment of two sequences
 
 Author(s)
 
-   This application was modified for inclusion in EMBOSS by Peter Rice
-   (pmr © ebi.ac.uk)
-   Informatics Division, European Bioinformatics Institute, Wellcome
-   Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+                    This application was modified for inclusion in EMBOSS by Peter Rice
+                    (pmr © ebi.ac.uk)
+   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton,         Cambridge CB10 1SD, UK
 
-   The original program was est_genome, written by Richard Mott at the
-   Sanger Centre. The original version is available from
-   ftp://ftp.sanger.ac.uk/pub/pmr/est_genome.4.tar.Z
+                    The original program was est_genome, written by Richard Mott at the
+   Sanger           Centre. The original version is available from
+                    ftp://ftp.sanger.ac.uk/pub/pmr/est_genome.4.tar.Z
 
 History
 
 Target users
 
-   This program is intended to be used by everyone and everything, from
-   naive users to embedded scripts.
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
 
 Comments
 
-  Thu, 29 Mar 2001
+                   Thu, 29 Mar 2001
 
-   I found est2genome having problems finding very short exons with the
-   default parameters.
+                    I found est2genome having problems finding very short exons with the
+                    default parameters.
 
-   With the folowing changes it detects also a 14bp exon correctly:
+                    With the folowing changes it detects also a 14bp exon correctly:
 
 mismatch 1 -> 3
 intronpenalty 40 -> 20

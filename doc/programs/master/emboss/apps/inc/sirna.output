@@ -58,8 +58,6 @@
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-    353     375       +   5.000   55.0 AGAAGAAGACAGGUCGGGCdTdT GCCCGACCUGUCUUCUUCUdTdT
-    360     382       +   5.000   65.0 GACAGGUCGGGCUAAGCGGdTdT CCGCUUAGCCCGACCUGUCdTdT
     374     396       +   5.000   55.0 AGCGGCGGAUGCAGUACAAdTdT UUGUACUGCAUCCGCCGCUdTdT
     383     405       +   5.000   55.0 UGCAGUACAACCGGCGCUUdTdT AAGCGCCGGUUGUACUGCAdTdT
     387     409       +   5.000   55.0 GUACAACCGGCGCUUUGUCdTdT GACAAAGCGCCGGUUGUACdTdT
@@ -107,7 +105,9 @@
 
 #---------------------------------------
 # Total_sequences: 1
-# Total_hitcount: 85
+# Total_length: 518
+# Reported_sequences: 1
+# Reported_hitcount: 85
 #---------------------------------------
 </pre>
 </td></tr></table><p>
@@ -281,8 +281,6 @@ taaaaaagccacttagttcagtc
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-    353     375       +   5.000   55.0 (GA)AGAAGAAGACAGGUCGGGCdTdT GCCCGACCUGUCUUCUUCUdTdT
-    360     382       +   5.000   65.0 (AA)GACAGGUCGGGCUAAGCGGdTdT CCGCUUAGCCCGACCUGUCdTdT
     374     396       +   5.000   55.0 (UA)AGCGGCGGAUGCAGUACAAdTdT UUGUACUGCAUCCGCCGCUdTdT
     383     405       +   5.000   55.0 (GA)UGCAGUACAACCGGCGCUUdTdT AAGCGCCGGUUGUACUGCAdTdT
     387     409       +   5.000   55.0 (CA)GUACAACCGGCGCUUUGUCdTdT GACAAAGCGCCGGUUGUACdTdT
@@ -330,7 +328,9 @@ taaaaaagccacttagttcagtc
 
 #---------------------------------------
 # Total_sequences: 1
-# Total_hitcount: 85
+# Total_length: 518
+# Reported_sequences: 1
+# Reported_hitcount: 85
 #---------------------------------------
 </pre>
 </td></tr></table><p>

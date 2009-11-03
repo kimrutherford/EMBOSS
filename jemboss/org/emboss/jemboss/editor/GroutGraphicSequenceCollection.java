@@ -23,13 +23,9 @@ package org.emboss.jemboss.editor;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.print.*;
 import java.util.*;
-import java.io.File;
-//import ;
 import java.awt.event.AdjustmentListener;
 
-import org.emboss.jemboss.gui.form.MultiLineToolTipUI;
 
 /**
 *  
@@ -343,7 +339,7 @@ public class GroutGraphicSequenceCollection extends
 						{
 								// System.out.println("seqP.seq.getSequence() = " + seqP.seq.getSequence());
 						
-								String seqS = seqP.seq.getSequence();
+								//String seqS = seqP.seq.getSequence();
 
 								// System.out.println("seqS = " + seqS);
 

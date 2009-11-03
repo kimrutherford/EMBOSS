@@ -307,9 +307,10 @@ public class AuthPopup extends JFrame
     });
     buttonPanel.add(exitButton);
     buttonPanel.add(okButton);
-    promptPanel.add(buttonPanel, BorderLayout.SOUTH);
-    splashp.add(promptPanel);
-
+    if (promptPanel!=null){
+      promptPanel.add(buttonPanel, BorderLayout.SOUTH);
+      splashp.add(promptPanel);
+    }
 //close login box on carriage return in passwd field
     pfield.addActionListener(new ActionListener()
     {

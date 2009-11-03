@@ -7,7 +7,7 @@
 % <b>emma </b>
 Multiple sequence alignment (ClustalW wrapper)
 Input (gapped) sequence(s): <b>globins.fasta</b>
-output sequence set [hbb_human.aln]: <b></b>
+(aligned) output sequence set [hbb_human.aln]: <b></b>
 Dendrogram (tree file) from clustalw output file [hbb_human.dnd]: <b></b>
 
 

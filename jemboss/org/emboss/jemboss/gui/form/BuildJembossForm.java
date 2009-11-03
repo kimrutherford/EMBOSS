@@ -24,34 +24,18 @@ package org.emboss.jemboss.gui.form;
 
 import java.awt.*;
 
-import javax.swing.Box;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JMenuBar;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
-import javax.swing.JTextPane;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import org.apache.regexp.*;
 
-import java.util.Hashtable;
-import java.util.Vector;
-import java.util.Arrays;
-import java.util.Comparator;
+import java.util.*;
+import java.util.List;
+import java.util.prefs.Preferences;
 
 import java.awt.event.*;
 import java.io.*;
+
 import org.emboss.jemboss.parser.ParseAcd;
 import org.emboss.jemboss.programs.*;
 import org.emboss.jemboss.*;
@@ -113,7 +97,6 @@ public class BuildJembossForm implements ActionListener
 // result files
   private String seqoutResult;
   private String outfileResult;
-  private String helptext = "";
   private boolean withSoap;
   private JFrame f;
   private JPanel p2;
@@ -122,14 +105,21 @@ public class BuildJembossForm implements ActionListener
   private int numofFields;
   private JembossParams mysettings;
   
+  final static String fs = System.getProperty("file.separator");
+
+  static Preferences prfs = Preferences.userNodeForPackage(BuildJembossForm.class);
+  // flag for "don't show this dialog again" message for asynchronous job submissions
+  protected static final String DISPLAY_JOB_SUBMITTED_MSG = "DISPLAY_JOB_SUBMITTED_MSG";
+  
+  
   public BuildJembossForm(String appDescription, String db[],
         final String applName, String[] envp, String cwd, 
-        String acdText, final boolean withSoap, JPanel p2, 
+        String acdText, final boolean withSoap, JPanel formPane, 
         final JembossParams mysettings, final JFrame f)
   {
 
     this.f = f;
-    this.p2 = p2;
+    this.p2 = formPane;
     this.db = db;
     this.cwd = cwd;
     this.mysettings = mysettings;
@@ -139,32 +129,16 @@ public class BuildJembossForm implements ActionListener
     this.envp = envp;
     this.applName = applName;
 
-    JPanel pC = new JPanel();
-//  pC.setBackground(Color.white);
-
-    p2.add(pC, applName);
-    pC.setLayout(new BorderLayout());
-
     Box fieldPane = Box.createVerticalBox();
 
     parseAcd = new ParseAcd(acdText,false);
     numofFields = parseAcd.getNumofFields();
 
-    attach(pC, fieldPane, appDescription);
+    attach(p2, fieldPane, appDescription);
 
-//  JScrollPane scroll = new JScrollPane(fieldPane);
-//  pC.add(scroll, BorderLayout.CENTER);
-    pC.add(fieldPane,BorderLayout.CENTER);
-
-// get help for current application
-    if(!withSoap) 
-    {
-      String command = embossBin.concat("tfm " + applName + " -html -nomore");
-      RunEmbossApplication2 rea = new RunEmbossApplication2(command,envp,null);
-      rea.waitFor();
-      helptext = rea.getProcessStdout(); 
-    }
-
+    p2.add(fieldPane,BorderLayout.CENTER);
+    p2.setBackground(outSection.getBackground());
+    
 // Help button
     ClassLoader cl = this.getClass().getClassLoader();
     JButton bhelp = new JButton(new ImageIcon(
@@ -179,8 +153,21 @@ public class BuildJembossForm implements ActionListener
       {
         String text = "";
         String url = null;
-        if(!withSoap)
-          text = helptext;
+        if (!withSoap) {
+            String dochome;
+            String acddir = mysettings.getAcdDirToParse();
+            dochome = ".." + fs + "doc" + fs + "programs" + fs + "html";
+            url = acddir + fs + dochome + fs + applName + ".html";
+            try {
+                File f = new File(url);
+                if (f.exists())
+                    url = f.getCanonicalFile().toURI().toString();
+                else
+                    url = null;
+            } catch (IOException e1) {
+                url = null;
+            }
+        }
         else 
         {
           String urlEmbassyPrefix = parseAcd.getUrlPrefix();
@@ -193,16 +180,7 @@ public class BuildJembossForm implements ActionListener
           url = url+applName+".html";
         }
 
-        //JEditorPane htmlPane = null;
-        if(url == null)
-        {
-          try
-          {
-            new Browser(url,applName,true,text,mysettings);
-          }
-          catch(IOException ioe1){}
-        }
-        else if(mysettings.isUseTFM())
+        if(url == null || mysettings.isUseTFM())
         {
           GetHelp thishelp = new GetHelp(applName,mysettings);
           text = thishelp.getHelpText();
@@ -242,15 +220,24 @@ public class BuildJembossForm implements ActionListener
     
     ImageIcon rfii = new ImageIcon(cl.getResource("images/Go_button.gif"));
     JButton bgo = new JButton(rfii);
+    bgo.setToolTipText("Start a new job using the selected execution mode");
     bgo.setActionCommand("GO");
     bgo.setMargin(new Insets(0,0,0,0));
     bgo.addActionListener(this);
 
-    Box tools;
-    tools = Box.createHorizontalBox();
-    tools.add(Box.createRigidArea(new Dimension(2,0)));
+    Box tools = Box.createHorizontalBox();
+    Box modeSelectionBox = Box.createVerticalBox();
+    JLabel mode = new JLabel("Execution mode:");
+    mode.setAlignmentX(Component.LEFT_ALIGNMENT);
+    modeSelectionBox.add(mode);
+    JComboBox excMode = Jemboss.resultsManager.getExcModeComboBox(mode.getPreferredSize().width);
+    modeSelectionBox.add(Box.createRigidArea(new Dimension(5,0)));
+    modeSelectionBox.add(excMode);
+    tools.add(Box.createRigidArea(new Dimension(5,0)));
+    tools.add(modeSelectionBox);
+    tools.add(Box.createRigidArea(new Dimension(10,0)));
     tools.add(bgo);
-    tools.add(Box.createRigidArea(new Dimension(4,0)));
+    tools.add(Box.createRigidArea(new Dimension(20,0)));
     tools.add(bhelp);
       
 // Advanced options
@@ -259,7 +246,7 @@ public class BuildJembossForm implements ActionListener
     {
       JButton badvanced = new JButton("Advanced Options");
       badvanced.addActionListener(this);
-      tools.add(Box.createRigidArea(new Dimension(4,0)));
+      tools.add(Box.createRigidArea(new Dimension(20,0)));
       tools.add(badvanced);
     }
 
@@ -270,6 +257,13 @@ public class BuildJembossForm implements ActionListener
     tools.add(Box.createHorizontalGlue());
     fieldPane.add(Box.createRigidArea(new Dimension(0,10)));
     fieldPane.add(tools);
+//    Box msgBox = new Box(BoxLayout.X_AXIS);
+//    msgBox.add(Box.createHorizontalStrut(5));
+//    jobSubmittedMessage.setAlignmentY(Component.LEFT_ALIGNMENT);
+//    jobSubmittedMessage.setText("");
+//    msgBox.add(jobSubmittedMessage);
+//    msgBox.add(Box.createHorizontalGlue());
+//    fieldPane.add(msgBox);
 
     fieldPane.add(Box.createVerticalStrut(10));
     bgo.setMinimumSize(new Dimension(200, 40));
@@ -291,13 +285,13 @@ public class BuildJembossForm implements ActionListener
 
     fieldPane.add(Box.createVerticalGlue());
   }
+  
+//  JLabel jobSubmittedMessage = new JLabel("");
 
 
   public void attach(JPanel p3, Box fieldPane, 
                      String appDescription)
   {
-
-    //String appN = "";
 
 // get total number of Swing components
     int ntextf = parseAcd.getNumTextf();
@@ -444,9 +438,9 @@ public class BuildJembossForm implements ActionListener
 */
   public void actionPerformed(ActionEvent ae)
   {
-
     ShowResultSet resultSetFrame = null;
-
+//    jobSubmittedMessage.setText("");
+    
     if( ae.getActionCommand().startsWith("Advanced Option"))
     {
       if(advSectionBox != null)
@@ -459,24 +453,65 @@ public class BuildJembossForm implements ActionListener
     }
     else if ( ae.getActionCommand().startsWith("GO"))
     {
+      boolean batchStart = false;
       f.setCursor(cbusy);
+      if (mysettings.getCurrentMode().equals("batch")){
+          batchStart = true;
+      }
       try{
       if(!withSoap)
       {
         Hashtable filesToMove = new Hashtable();
-        final String embossCommand = getCommand(filesToMove);
+        List commandA = new ArrayList();
+        final String embossCommand = getCommand(filesToMove, commandA);
 
         if(!embossCommand.equals("NOT OK"))
         {
-          if(mysettings.getCurrentMode().equals("batch"))
+          if(batchStart)
           {
             BatchSoapProcess bsp = new BatchSoapProcess(embossCommand,filesToMove,mysettings);
             bsp.setWithSoap(false);
             bsp.start();
+            if (prfs.getBoolean(DISPLAY_JOB_SUBMITTED_MSG, true)){
+            	final JPanel p = new JPanel(new BorderLayout(1,10));
+            	JLabel jobSubmitted = new JLabel("Your job has been submmitted");
+            	p.add(jobSubmitted, BorderLayout.PAGE_START);
+            	JLabel checkResults = new JLabel("Use Batch Job Manager");
+            	checkResults.setHorizontalTextPosition(SwingConstants.LEFT);
+            	checkResults.setFont(new java.awt.Font("Dialog", 0, 13));
+            	checkResults.setForeground(new java.awt.Color(91, 53, 53));
+            	ClassLoader cl = this.getClass().getClassLoader();
+            	ImageIcon jobIcon = new ImageIcon(cl.getResource("images/Job_manager_button.gif"));
+            	checkResults.setIcon(jobIcon);
+            	p.add(checkResults, BorderLayout.CENTER);
+            	JLabel checkResults_ = new JLabel(" to check its results");
+            	checkResults_.setFont(new java.awt.Font("Dialog", 0, 13));
+            	checkResults_.setForeground(new java.awt.Color(91, 53, 53));
+            	p.add(checkResults_, BorderLayout.AFTER_LINE_ENDS);
+            	
+            	JCheckBox dontShowAgain = new JCheckBox("don't show this dialog again");
+
+            	dontShowAgain.addItemListener(new ItemListener(){
+            	public void itemStateChanged(ItemEvent e) {
+            	    if (e.getStateChange() == ItemEvent.SELECTED) {
+            	    	prfs.putBoolean(DISPLAY_JOB_SUBMITTED_MSG, false);
+            	    } else {
+            	    	prfs.putBoolean(DISPLAY_JOB_SUBMITTED_MSG, true);
+            	    }
+            	}
+            	});
+
+            	dontShowAgain.setFont(new java.awt.Font("Dialog", 0, 10));
+            	p.add(dontShowAgain, BorderLayout.PAGE_END);
+            	JOptionPane.showMessageDialog(null,
+            			p, "Job submitted",
+            			JOptionPane.INFORMATION_MESSAGE);
+            }
           }
           else
           {
               JembossServer js = new JembossServer(mysettings.getResultsHome());
+              js.setEmbossCommandA((String[])commandA.toArray(new String[commandA.size()]));
               Vector result = js.run_prog(embossCommand, 
                       mysettings.getCurrentMode(), filesToMove);
               Hashtable r = convert(result,false);
@@ -504,7 +539,7 @@ public class BuildJembossForm implements ActionListener
 
           try
           {
-            if(mysettings.getCurrentMode().equals("batch"))
+            if(batchStart)
             {
               BatchSoapProcess bsp = new BatchSoapProcess(embossCommand,filesToMove,mysettings);
               bsp.start();
@@ -764,14 +799,9 @@ public class BuildJembossForm implements ActionListener
   }
 
   private String checkParameters(ParseAcd parseAcd, int numofFields, 
-                                 Hashtable filesToMove)
+                                 Hashtable filesToMove, List optionsA)
   {
-
-    //String params = new String("");
-    //String appN = "";
-    //String file = "";
     String options = "";
-    String fn = "";
     String sfn;
  
     seqoutResult   = "";
@@ -789,10 +819,17 @@ public class BuildJembossForm implements ActionListener
         if(graphics == null)
           System.out.println("graphics is NULL");
 
-        if(((String)graphics.getSelectedItem()).equals("PNG") ) 
+        optionsA.add("-" + val);
+
+        if(((String)graphics.getSelectedItem()).equals("PNG") )
+        { 
           options = options.concat(" -" + val + " png");
-        else
+          optionsA.add("png");          
+        }
+        else {
           options = options.concat(" -" + val + " data");
+          optionsA.add("data");                    
+        }
       }
       if ( att.startsWith("dirlist") || att.startsWith("featout") ||
            att.startsWith("string")  || att.startsWith("seqout")  ||
@@ -803,6 +840,8 @@ public class BuildJembossForm implements ActionListener
                                             && textf[h].isEnabled()) 
         {
           options = options.concat(" -" + val + " " + textf[h].getText());
+          optionsA.add("-" + val);
+          optionsA.add(textf[h].getText());
 
           if(att.startsWith("seqout"))
             seqoutResult = textf[h].getText();
@@ -811,35 +850,56 @@ public class BuildJembossForm implements ActionListener
         }
         else if(!withSoap && applName.equals("emma") && att.startsWith("seqoutset"))
         {
-          options = options.concat(" -" + val + " emma.aln "); 
+          options = options.concat(" -" + val + " emma.aln ");
+          optionsA.add("-" + val);
+          optionsA.add("emma.aln");
           seqoutResult = "emma.aln";
         }
 
-        if(att.startsWith("seqout"))
+        if(att.startsWith("seqout") && outSeqAttr.getOuputSeqAttr().length()>0)
+        {
           options = options.concat(outSeqAttr.getOuputSeqAttr());
-
+          optionsA.addAll(outSeqAttr.getOuputSeqAttrA());
+        }
       }
       else if ( att.startsWith("pattern") )
       {
         JTextField textFields[] = multiTextField[h].getJTextField();
         
         if(textFields[0].getText() != null && !textFields[0].getText().trim().equals(""))
+        {
           options = options.concat(" -" + val + " " + textFields[0].getText());
+          optionsA.add("-" + val);
+          optionsA.add(textFields[0].getText());
+        }
         
         if(textFields[1].getText() != null && !textFields[1].getText().trim().equals(""))
+        {
           options = options.concat(" -pmismatch " + textFields[1].getText());
+          optionsA.add("-pmismatch");
+          optionsA.add(textFields[1].getText());
+        }
       }
       else if ( att.startsWith("int") )
       {
-        if( (textInt[h].getText() != null) && textInt[h].isVisible()
-                                           && textInt[h].isEnabled())
+        if( textInt[h].getText() != null &&
+        		textInt[h].getText().length()>0	&&
+        		textInt[h].isVisible() && textInt[h].isEnabled())
+        {
           options = options.concat(" -" + val + " " + textInt[h].getValue());
+          optionsA.add("-"+val);
+          optionsA.add(Integer.toString(textInt[h].getValue())); 
+        }
       }
       else if ( att.startsWith("float") )
       {
         if( (textFloat[h].getText() != null) && textFloat[h].isVisible()
                                              && textFloat[h].isEnabled())
+        {
           options = options.concat(" -" + val + " " + textFloat[h].getValue());
+          optionsA.add("-"+val);
+          optionsA.add(Double.toString(textFloat[h].getValue()));           
+        }
       }
       else if ( att.startsWith("select") )   
       {
@@ -852,16 +912,27 @@ public class BuildJembossForm implements ActionListener
         {
           int sel[] = multiOption[h].getSelectedIndices();
           options = options.concat(" -" + val + " ");
+          optionsA.add("-"+val);
+          String l ="";
           for(int i=0;i<sel.length;i++)
           {
             options = options.concat(Integer.toString(sel[i]+1));
+            l+=Integer.toString(sel[i]+1);
             if(i<sel.length-1)
+            {
               options = options.concat(",");
+              l += ",";
+            }
           }
+          optionsA.add(l);
         }
         else if (fieldOption[h].isVisible() && fieldOption[h].isEnabled())
+        {
           options = options.concat(" -" + val + " " +        //single selection
                     (fieldOption[h].getSelectedIndex()+1));
+          optionsA.add("-"+val);
+          optionsA.add(Integer.toString(fieldOption[h].getSelectedIndex()+1));
+        }
       }
       else if ( att.startsWith("list") )    
       {
@@ -874,12 +945,19 @@ public class BuildJembossForm implements ActionListener
         {
           int sel[] = multiOption[h].getSelectedIndices();
           options = options.concat(" -" + val + " ");
+          optionsA.add("-"+val);
+          String lval ="";
           for(int i=0;i<sel.length;i++)
           {
             options = options.concat(parseAcd.getListLabel(j,sel[i]));
+            lval += parseAcd.getListLabel(j,sel[i]);
             if(i<sel.length-1)
+            {
               options = options.concat(",");
+              lval += ",";
+            }
           }
+          optionsA.add(lval);
         }
         else if (fieldOption[h].isVisible() 
               && fieldOption[h].isEnabled())
@@ -887,23 +965,33 @@ public class BuildJembossForm implements ActionListener
           int index = fieldOption[h].getSelectedIndex();     //single selection
           options = options.concat(" -" + val + " " +
                        parseAcd.getListLabel(j,index));
+          optionsA.add("-"+val);
+          optionsA.add(parseAcd.getListLabel(j,index));
         }
       }
       else if ( att.startsWith("report") )
       {
         options = options.concat(rf.getReportFormat());
+        optionsA.addAll(rf.getReportFormatA());
       }
       else if ( att.startsWith("align") )
       {
         options = options.concat(af.getAlignFormat());
+        optionsA.addAll(af.getAlignFormatA());
       }
       else if ( att.startsWith("bool") && checkBox[h].isVisible()
                                        && checkBox[h].isEnabled())
       {
         if( checkBox[h].isSelected() )
+        {
           options = options.concat(" -" + val + " ");
+          optionsA.add("-" + val);
+        }
         else
+        {
           options = options.concat(" -no" + val + " ");
+          optionsA.add("-no" + val);
+        }
 
       }
       else if( att.startsWith("range") && rangeField[h].isVisible()
@@ -924,6 +1012,8 @@ public class BuildJembossForm implements ActionListener
           }
           options = options.concat(" -" + val + " " + 
                          rangeText + " ");
+          optionsA.add("-" + val);
+          optionsA.add(rangeText);
         } 
       }
       else if ( att.startsWith("infile") || att.startsWith("datafile") ||
@@ -935,7 +1025,11 @@ public class BuildJembossForm implements ActionListener
           if(withSoap)
             options = filesForSoap(textf[h].getText(),options,val,filesToMove);
           else
+          {
             options = options.concat(" -" + val + " " +  textf[h].getText());
+            optionsA.add("-"+val);
+            optionsA.add(textf[h].getText());
+          }
         }
 
       }
@@ -955,6 +1049,8 @@ public class BuildJembossForm implements ActionListener
           for(int i=1;i<fl.length;i++)
             flist = flist.concat(","+fl[i]);
           options = options.concat(" -" + val + " " + flist);
+          optionsA.add("-"+val);
+          optionsA.add(flist);
         }
       }
       else if ( att.startsWith("seqset") || att.startsWith("seqall") ||
@@ -963,7 +1059,7 @@ public class BuildJembossForm implements ActionListener
         int seq = h+1;
         if(inSeq[h].isFileName())                     // file or database
         {
-          fn = new String(inSeq[h].getFileChosen());
+          String fn = new String(inSeq[h].getFileChosen());
           
           fn = fn.trim();
           if((fn.indexOf(":")>-1) && (fn.indexOf(":\\") < 0))  //remove spaces
@@ -972,12 +1068,15 @@ public class BuildJembossForm implements ActionListener
             while((n = fn.indexOf(" ")) > -1)
               fn = new String(fn.substring(0,n) + fn.substring(n+1));
           }
+          optionsA.add("-" + val);
+          optionsA.add(fn);
           fn = addQuote(fn);
           
           if(withSoap)
             options = filesForSoap(fn,options,val,filesToMove);
-          else
+          else {
             options = options.concat(" -" + val + " " +  fn);
+          }
 
           if(fn.endsWith(":") || fn.endsWith(":*"))
           {
@@ -1011,12 +1110,14 @@ public class BuildJembossForm implements ActionListener
 
             /*boolean ok = */inSeq[h].writeListFile(fna);
             options = options.concat(" -" + val + " list::" +  fna);
+            optionsA.add("-"+val);
+            optionsA.add("list::" +  fna);
           }
         } 
         else                                               // cut 'n paste
         {
           String cp = inSeq[h].getCutNPasteText();
-          fn = new String(applName + (new Integer(h)).toString());
+          String fn = new String(applName + (new Integer(h)).toString());
 
           if(withSoap)
           {
@@ -1063,10 +1164,13 @@ public class BuildJembossForm implements ActionListener
                        "Problem creating a temporary file!", JOptionPane.ERROR_MESSAGE);
             }
             options = options.concat(" -" + val + " " + fn );
+            optionsA.add("-"+val);
+            optionsA.add(fn);
           }
         }
 
         options = options.concat(inSeqAttr[h].getInputSeqAttr(seq));
+        optionsA.addAll(inSeqAttr[h].getInputSeqAttrA(seq));
 
       } 
     }
@@ -1162,21 +1266,24 @@ public class BuildJembossForm implements ActionListener
 * @return String command line to use
 *
 */
-/*  private String getCommand()
+  private String getCommand(Hashtable filesToMove, List commandA)
   {
+	  String embossBin = mysettings.getEmbossBin();
+	  String command = applName;
+	  commandA.add(embossBin +(embossBin.endsWith(File.separator)?"":File.separator)+command);
+	  int numofFields = parseAcd.getNumofFields();
 
-    String command = embossBin.concat(applName);
-    int numofFields = parseAcd.getNumofFields();
+	  String options = checkParameters(parseAcd, numofFields, filesToMove, commandA);
 
-    String options = checkParameters(parseAcd, numofFields, new Hashtable());
-         
-    if(options.equals("NOT OK"))
-      command = "NOT OK";
-    else
-      command = command.concat(options + " -stdout -auto");
+	  if(options.equals("NOT OK"))
+		  command = "NOT OK";
+	  else {
+		  command = command.concat(options + " -auto");
+		  commandA.add("-auto");
+	  }
 
-    return command;
-  }*/
+	  return command;
+  }
 
 
 /**
@@ -1188,18 +1295,18 @@ public class BuildJembossForm implements ActionListener
 */
   private String getCommand(Hashtable filesToMove)
   {
+	  String command = applName;
+	  int numofFields = parseAcd.getNumofFields();
 
-    String command = applName;
-    int numofFields = parseAcd.getNumofFields();
+	  String options = checkParameters(parseAcd, numofFields, filesToMove, new ArrayList());
 
-    String options = checkParameters(parseAcd, numofFields, filesToMove);
+	  if(options.equals("NOT OK"))
+		  command = "NOT OK";
+	  else {
+		  command = command.concat(options + " -auto");
+	  }
 
-    if(options.equals("NOT OK"))
-      command = "NOT OK";
-    else
-      command = command.concat(options + " -auto");
-
-    return command;
+	  return command;
   }
 
 
@@ -1239,29 +1346,12 @@ public class BuildJembossForm implements ActionListener
     {
       try
       {
-        JFrame fsend = new JFrame("Batch");
-        final int max = 20;
-        final JProgressBar progressBar = new JProgressBar(0,max);
+        JFrame fsend = new JFrame("job submission");
+        final JProgressBar progressBar = new JProgressBar();
         progressBar.setStringPainted(true);
-        progressBar.setString("Sending batch process now!");
+        progressBar.setString("Starting your job in asynchronous mode...");
         progressBar.setBackground(Color.white);
-
-        SwingWorker batchWorker = new SwingWorker()
-        {
-          public Object construct()
-          {
-            try
-            {
-              for(int i=0; i<max; i++)
-              {
-                sleep(500);
-                progressBar.setValue(i);
-              }
-            }
-            catch(InterruptedException intr){}
-            return null;
-          }
-        };
+        progressBar.setIndeterminate(true);
 
         fsend.getContentPane().add(progressBar);
         fsend.pack();
@@ -1269,7 +1359,6 @@ public class BuildJembossForm implements ActionListener
         fsend.setLocation( (int)(d.getWidth()-fsend.getWidth())/2,
                            (int)(d.getHeight()-fsend.getHeight())/2 );
         fsend.setVisible(true);
-        batchWorker.start();
 
         final JembossProcess er;
         if(withSoap)

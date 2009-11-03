@@ -102,6 +102,8 @@ int main(int argc, char **argv)
     while(ajSeqallNext(seqall, &seq))
 	sirna_report(report, seq, poliii, aa, tt, polybase, context, seqout);
 
+    ajReportSetSeqstats(report, seqall);
+
     ajSeqallDel(&seqall);
     ajSeqDel(&seq);
     ajReportClose(report);

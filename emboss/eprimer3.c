@@ -248,11 +248,11 @@ int main(int argc, char **argv)
        */
 
     /* Product details */
-    product_opt_size    = ajAcdGetInt("productosize");
-    product_size_range  = ajAcdGetRange("productsizerange");
-    product_opt_tm      = ajAcdGetFloat("productotm");
-    product_min_tm      = ajAcdGetFloat("productmintm");
-    product_max_tm      = ajAcdGetFloat("productmaxtm");
+    product_opt_size    = ajAcdGetInt("psizeopt");
+    product_size_range  = ajAcdGetRange("prange");
+    product_opt_tm      = ajAcdGetFloat("ptmopt");
+    product_min_tm      = ajAcdGetFloat("ptmmin");
+    product_max_tm      = ajAcdGetFloat("ptmmax");
 
     /* Objective Function Penalty Weights for Primers */
     max_end_stability   = ajAcdGetFloat("maxendstability");
@@ -266,26 +266,26 @@ int main(int argc, char **argv)
     /* these are not (yet) implemented */
 
     /* Internal Oligo "Sequence" Input Tags */
-    internal_oligo_excluded_region = ajAcdGetRange("oligoexcludedregion");
+    internal_oligo_excluded_region = ajAcdGetRange("oexcludedregion");
     internal_oligo_input           = ajAcdGetString("oligoinput");
 
     /* Internal Oligo "Global" Input Tags */
-    internal_oligo_opt_size       = ajAcdGetInt("oligoosize");
-    internal_oligo_min_size       = ajAcdGetInt("oligominsize");
-    internal_oligo_max_size       = ajAcdGetInt("oligomaxsize");
-    internal_oligo_opt_tm         = ajAcdGetFloat("oligootm");
-    internal_oligo_min_tm         = ajAcdGetFloat("oligomintm");
-    internal_oligo_max_tm         = ajAcdGetFloat("oligomaxtm");
-    internal_oligo_opt_gc_percent = ajAcdGetFloat("oligoogcpercent");
-    internal_oligo_min_gc         = ajAcdGetFloat("oligomingc");
-    internal_oligo_max_gc         = ajAcdGetFloat("oligomaxgc");
-    internal_oligo_salt_conc      = ajAcdGetFloat("oligosaltconc");
-    internal_oligo_dna_conc       = ajAcdGetFloat("oligodnaconc");
-    internal_oligo_self_any       = ajAcdGetFloat("oligoselfany");
-    internal_oligo_self_end       = ajAcdGetFloat("oligoselfend");
-    internal_oligo_max_poly_x     = ajAcdGetInt("oligomaxpolyx");
-    internal_oligo_mishyb_library = ajAcdGetInfile("oligomishyblibraryfile");
-    internal_oligo_max_mishyb     = ajAcdGetFloat("oligomaxmishyb");
+    internal_oligo_opt_size       = ajAcdGetInt("osizeopt");
+    internal_oligo_min_size       = ajAcdGetInt("ominsize");
+    internal_oligo_max_size       = ajAcdGetInt("omaxsize");
+    internal_oligo_opt_tm         = ajAcdGetFloat("otmopt");
+    internal_oligo_min_tm         = ajAcdGetFloat("otmmin");
+    internal_oligo_max_tm         = ajAcdGetFloat("otmmax");
+    internal_oligo_opt_gc_percent = ajAcdGetFloat("ogcopt");
+    internal_oligo_min_gc         = ajAcdGetFloat("ogcmin");
+    internal_oligo_max_gc         = ajAcdGetFloat("ogcmax");
+    internal_oligo_salt_conc      = ajAcdGetFloat("osaltconc");
+    internal_oligo_dna_conc       = ajAcdGetFloat("odnaconc");
+    internal_oligo_self_any       = ajAcdGetFloat("oanyself");
+    internal_oligo_self_end       = ajAcdGetFloat("oendself");
+    internal_oligo_max_poly_x     = ajAcdGetInt("opolyxmax");
+    internal_oligo_mishyb_library = ajAcdGetInfile("mishyblibraryfile");
+    internal_oligo_max_mishyb     = ajAcdGetFloat("omishybmax");
     /*
        internal_oligo_min_quality    = ajAcdGetInt("oligominquality");
     */
@@ -298,6 +298,9 @@ int main(int argc, char **argv)
     outfile = ajAcdGetOutfile("outfile");
     
     
+    ajStrRemoveWhite(&left_input);
+    ajStrRemoveWhite(&right_input);
+
     /*
     ** OK - we will now try to do a separate fork-exec for each sequence.
     */

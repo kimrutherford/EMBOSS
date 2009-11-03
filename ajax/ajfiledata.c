@@ -124,13 +124,19 @@ AjPFile ajDatafileNewInNameC(const char *name)
 }
 
 
+
+
 /* @obsolete ajFileDataNewC
 ** @remove Use ajDatafileNewNameC
 */
 __deprecated void ajFileDataNewC(const char *s, AjPFile *f)
 {
     *f = ajDatafileNewInNameC(s);
+
+    return;
 }
+
+
 
 
 /* @func ajDatafileNewInNameS ********************************************
@@ -153,10 +159,12 @@ AjPFile ajDatafileNewInNameS(const AjPStr name)
     
     ajStrAssignS(&filedataBaseTmp, name);
     ajDebug("ajDatafileNewInNameS trying '%S'\n", filedataBaseTmp);
+
     if(ajFilenameExistsRead(filedataBaseTmp))
     {
 	fnew = ajFileNewInNameS(filedataBaseTmp);
 	ajStrDelStatic(&filedataBaseTmp);
+
 	return fnew;
     }
     
@@ -164,11 +172,13 @@ AjPFile ajDatafileNewInNameS(const AjPStr name)
     ajStrAppendC(&filedataNameDataTmp, SLASH_STRING);
     ajStrAppendS(&filedataNameDataTmp, filedataBaseTmp);
     ajDebug("ajDatafileNewInNameS trying '%S'\n", filedataNameDataTmp);
+
     if(ajFilenameExistsRead(filedataNameDataTmp))
     {
 	fnew = ajFileNewInNameS(filedataNameDataTmp);
 	ajStrDelStatic(&filedataBaseTmp);
 	ajStrDelStatic(&filedataNameDataTmp);
+
 	return fnew;
     }
     
@@ -179,12 +189,14 @@ AjPFile ajDatafileNewInNameS(const AjPStr name)
 	ajStrAppendC(&filedataHomeTmp,SLASH_STRING);
 	ajStrAppendS(&filedataHomeTmp,filedataBaseTmp);
 	ajDebug("ajDatafileNewInNameS trying '%S'\n", filedataHomeTmp);
+
 	if(ajFilenameExistsRead(filedataHomeTmp))
 	{
 	    fnew = ajFileNewInNameS(filedataHomeTmp);
 	    ajStrDelStatic(&filedataHomeTmp);
 	    ajStrDelStatic(&filedataBaseTmp);
 	    ajStrDelStatic(&filedataNameDataTmp);
+
 	    return fnew;
 	}
 
@@ -193,14 +205,17 @@ AjPFile ajDatafileNewInNameS(const AjPStr name)
 	ajStrAppendC(&filedataHomeTmp, SLASH_STRING);
 	ajStrAppendS(&filedataHomeTmp,filedataBaseTmp);
 	ajDebug("ajDatafileNewInNameS trying '%S'\n", filedataHomeTmp);
+
 	if(ajFilenameExistsRead(filedataHomeTmp))
 	{
 	    fnew = ajFileNewInNameS(filedataHomeTmp);
 	    ajStrDelStatic(&filedataHomeTmp);
 	    ajStrDelStatic(&filedataBaseTmp);
 	    ajStrDelStatic(&filedataNameDataTmp);
+
 	    return fnew;
 	}
+
 	ajStrDelStatic(&filedataHomeTmp);
     }
     
@@ -209,17 +224,20 @@ AjPFile ajDatafileNewInNameS(const AjPStr name)
         ajDirnameFix(&filedataNameDataTmp);
 	ajStrAppendS(&filedataNameDataTmp,filedataBaseTmp);
 	ajDebug("ajDatafileNewInNameS trying '%S'\n", filedataNameDataTmp);
+
 	if(ajFilenameExistsRead(filedataNameDataTmp))
 	{
 	    fnew = ajFileNewInNameS(filedataNameDataTmp);
 	    ajStrDelStatic(&filedataBaseTmp);
 	    ajStrDelStatic(&filedataNameDataTmp);
+
 	    return fnew;
 	}
     }
     
     /* just EMBOSS/data under installation */
     ajStrAssignS(&filedataNameDataTmp, ajNamValueInstalldir());
+
     if(ajStrGetLen(filedataNameDataTmp))
     {
 	ajDirnameFix(&filedataNameDataTmp);
@@ -228,27 +246,32 @@ AjPFile ajDatafileNewInNameS(const AjPStr name)
 	ajStrAppendC(&filedataNameDataTmp,"/data/");
 	ajStrAppendS(&filedataNameDataTmp,filedataBaseTmp);
 	ajDebug("ajDatafileNewInNameS trying '%S'\n", filedataNameDataTmp);
+
 	if(ajFilenameExistsRead(filedataNameDataTmp))
 	{
 	    fnew = ajFileNewInNameS(filedataNameDataTmp);
 	    ajStrDelStatic(&filedataBaseTmp);
 	    ajStrDelStatic(&filedataNameDataTmp);
+
 	    return fnew;
 	}
     }
     
     /* just emboss/data under source */
     ajStrAssignS(&filedataNameDataTmp, ajNamValueRootdir());
+
     if(ajStrGetLen(filedataNameDataTmp))
     {
 	ajStrAppendC(&filedataNameDataTmp,"/data/");
 	ajStrAppendS(&filedataNameDataTmp,filedataBaseTmp);
 	ajDebug("ajDatafileNewInNameS trying '%S'\n", filedataNameDataTmp);
+
 	if(ajFilenameExistsRead(filedataNameDataTmp))
 	{
 	    fnew = ajFileNewInNameS(filedataNameDataTmp);
 	    ajStrDelStatic(&filedataBaseTmp);
 	    ajStrDelStatic(&filedataNameDataTmp);
+
 	    return fnew;
 	}
     }
@@ -262,6 +285,8 @@ AjPFile ajDatafileNewInNameS(const AjPStr name)
 }
 
 
+
+
 /* @obsolete ajFileDataNew
 ** @remove Use ajDatafileNewInNameS
 */
@@ -269,6 +294,8 @@ __deprecated void ajFileDataNew(const AjPStr name, AjPFile *fnew)
 {
     *fnew = ajDatafileNewInNameS(name);
 }
+
+
 
 
 /* @func ajDatafileNewInNamePathS **********************************************
@@ -290,23 +317,28 @@ AjPFile ajDatafileNewInNamePathS(const AjPStr name, const AjPStr path)
     if(ajNamGetValueC("DATA", &filedataNameDataTmp))
     {
         ajDirnameFix(&filedataNameDataTmp);
+
 	if(ajStrGetLen(path))
 	{
 	    ajStrAppendS(&filedataNameDataTmp,path);
 	    ajDirnameFix(&filedataNameDataTmp);
 	}
+
 	ajStrAppendS(&filedataNameDataTmp,name);
 	ajDebug("ajDatafileNewInNamePathS trying '%S'\n", filedataNameDataTmp);
+
 	if(ajFilenameExistsRead(filedataNameDataTmp))
 	{
 	    fnew = ajFileNewInNameS(filedataNameDataTmp);
 	    ajStrDelStatic(&filedataNameDataTmp);
+
 	    return fnew;
 	}
     }
     
     /* just EMBOSS/data under installation */
     ajStrAssignS(&filedataNameDataTmp, ajNamValueInstalldir());
+
     if(ajStrGetLen(filedataNameDataTmp))
     {
 	/* just EMBOSS */
@@ -314,37 +346,46 @@ AjPFile ajDatafileNewInNamePathS(const AjPStr name, const AjPStr path)
 	ajStrAppendC(&filedataNameDataTmp,"share/");
 	ajStrAppendS(&filedataNameDataTmp,ajNamValuePackage());
 	ajStrAppendC(&filedataNameDataTmp,"/data/");
+
 	if(ajStrGetLen(path))
 	{
 	    ajStrAppendS(&filedataNameDataTmp,path);
 	    ajDirnameFix(&filedataNameDataTmp);
 	}
+
 	ajStrAppendS(&filedataNameDataTmp,name);
 	ajDebug("ajDatafileNewInNamePathS trying '%S'\n", filedataNameDataTmp);
+
 	if(ajFilenameExistsRead(filedataNameDataTmp))
 	{
 	    fnew = ajFileNewInNameS(filedataNameDataTmp);
 	    ajStrDelStatic(&filedataNameDataTmp);
+
 	    return fnew;
 	}
     }
 
     /* just emboss/data under source */
     ajStrAssignS(&filedataNameDataTmp, ajNamValueRootdir());
+
     if(ajStrGetLen(filedataNameDataTmp))
     {
 	ajStrAppendC(&filedataNameDataTmp,"/data/");
+
 	if(ajStrGetLen(path))
 	{
 	    ajStrAppendS(&filedataNameDataTmp,path);
 	    ajDirnameFix(&filedataNameDataTmp);
 	}
+
 	ajStrAppendS(&filedataNameDataTmp,name);
 	ajDebug("ajDatafileNewInNamePathS trying '%S'\n", filedataNameDataTmp);
+
 	if(ajFilenameExistsRead(filedataNameDataTmp))
 	{
 	    fnew = ajFileNewInNameS(filedataNameDataTmp);
 	    ajStrDelStatic(&filedataNameDataTmp);
+
 	    return fnew;
 	}
     }
@@ -365,8 +406,12 @@ __deprecated void ajFileDataDirNew(const AjPStr name, const AjPStr dir,
                                    AjPFile *fnew)
 {
     *fnew = ajDatafileNewInNamePathS(name, dir);
+
     return;
 }
+
+
+
 
 /* @obsolete ajFileDataDirNewC
 ** @remove Use ajDatafileNewInNamePathS
@@ -380,8 +425,11 @@ __deprecated void ajFileDataDirNewC(const char *s, const char* d, AjPFile *f)
     *f = ajDatafileNewInNamePathS(filedataTmpstr,u);
     ajStrDelStatic(&filedataTmpstr);
     ajStrDel(&u);
+
     return;
 }
+
+
 
 
 /* @func ajDatafileNewOutNameS *************************************************
@@ -400,7 +448,7 @@ AjPFile ajDatafileNewOutNameS(const AjPStr name)
 
     if(!ajStrGetLen(name))
         return NULL;
-    
+
     if(ajNamGetValueC("DATA", &filedataNameDataTmp))
     {
 	/* also does ajDirnameFix */
@@ -409,9 +457,12 @@ AjPFile ajDatafileNewOutNameS(const AjPStr name)
 	    ajFatal("%S_DATA directory not found: %S\n",
 		    ajNamValuePackage(), filedataNameDataTmp);
 	}
+
 	ajStrAppendS(&filedataNameDataTmp,name);
+
 	if(!(fnew = ajFileNewOutNameS(filedataNameDataTmp)))
 	    ajFatal("Cannot write to file %S\n",filedataNameDataTmp);
+
 	ajStrDelStatic(&filedataNameDataTmp);
 
 	return fnew;
@@ -419,6 +470,7 @@ AjPFile ajDatafileNewOutNameS(const AjPStr name)
     
     /* just emboss/data under installation */
     ajStrAssignS(&filedataNameDataTmp, ajNamValueInstalldir());
+
     if(ajStrGetLen(filedataNameDataTmp))
     {
 	/* just EMBOSS */
@@ -431,25 +483,34 @@ AjPFile ajDatafileNewOutNameS(const AjPStr name)
 	if(ajDirnameFixExists(&filedataNameDataTmp))
 	{
 	    ajStrAppendS(&filedataNameDataTmp,name);
+
 	    if(!(fnew = ajFileNewOutNameS(filedataNameDataTmp)))
 		ajFatal("Cannot write to file %S\n",filedataNameDataTmp);
+
 	    ajStrDelStatic(&filedataNameDataTmp);
+
 	    return fnew;
 	}
     }
     
     /* just emboss/data under source */
     ajStrAssignS(&filedataNameDataTmp, ajNamValueRootdir());
+
     if(ajStrGetLen(filedataNameDataTmp))
     {
 	ajStrAppendC(&filedataNameDataTmp,"/data/");
+
 	if(!ajDirnameFixExists(&filedataNameDataTmp))
 	    ajFatal("Not installed, and source data directory not found: %S\n",
 		    filedataNameDataTmp);
+
 	ajStrAppendS(&filedataNameDataTmp,name);
+
 	if(!(fnew = ajFileNewOutNameS(filedataNameDataTmp)))
 	    ajFatal("Cannot write to file %S\n",filedataNameDataTmp);
+
 	ajStrDelStatic(&filedataNameDataTmp);
+
 	return fnew;
     }
 
@@ -463,13 +524,18 @@ AjPFile ajDatafileNewOutNameS(const AjPStr name)
 
 
 
+
 /* @obsolete ajFileDataNewWrite
 ** @remove Use ajDatafileNewOutNameS
 */
 __deprecated void ajFileDataNewWrite(const AjPStr name, AjPFile *fnew)
 {
     *fnew = ajDatafileNewOutNameS(name);
+
+    return;
 }
+
+
 
 
 /* @section data file values ***************************************************
@@ -509,11 +575,13 @@ const AjPStr ajDatafileValuePath(void)
     if(ajNamGetValueC("DATA", &filedataPath))
     {
 	ajDirnameFix(&filedataPath);
+
 	return filedataPath;
     }
 
 #ifndef WIN32
     ajStrAssignS(&filedataPath,ajNamValueInstalldir()); 
+
     if(ajStrGetLen(filedataPath))
     {
 	ajDirnameFix(&filedataPath);
@@ -521,16 +589,19 @@ const AjPStr ajDatafileValuePath(void)
                     filedataPath,SLASH_CHAR,ajNamValuePackage(),
 		    SLASH_CHAR,SLASH_CHAR);
 	ajStrAssignS(&filedataPath,filedataTmpstr);
+
 	if(ajDirnameFixExists(&filedataPath))
 	    return filedataPath;
     }
 
     ajStrAssignS(&filedataPath, ajNamValueRootdir());
+
     if(ajStrGetLen(filedataPath))
     {
 	ajStrAppendC(&filedataPath,SLASH_STRING);
 	ajStrAppendC(&filedataPath,"data");
 	ajStrAppendC(&filedataPath,SLASH_STRING);
+
 	return filedataPath;
     }	
 
@@ -538,6 +609,8 @@ const AjPStr ajDatafileValuePath(void)
 
     return NULL;
 }
+
+
 
 
 /* @obsolete ajFilePathData
@@ -550,6 +623,9 @@ __deprecated AjBool ajFilePathData(AjPStr *Ppath)
     if(!ajStrGetLen(*Ppath)) return ajFalse;
     return ajTrue;
 }
+
+
+
 
 /* @section file exit
 **
@@ -581,4 +657,6 @@ void ajDatafileExit(void)
     ajStrDel(&filedataNameDataTmp);
     ajStrDel(&filedataTmpstr);
     ajStrDel(&filedataPath);
+
+    return;
 }

@@ -3,9 +3,16 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
-   Writes the current EMBOSS version number to a file
+   Reports the current EMBOSS version number
 
 Description
 
@@ -18,9 +25,9 @@ Usage
 
 
 % embossversion 
-Writes the current EMBOSS version number to a file
+Reports the current EMBOSS version number
 
-6.0.0
+6.1.0
 
 Command line arguments
 
@@ -114,24 +121,24 @@ Known bugs
 
 See also
 
-   Program name             Description
-   embossdata   Find and retrieve EMBOSS data files
+                    Program name             Description
+                    embossdata   Find and retrieve EMBOSS data files
 
 Author(s)
 
-   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
-   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
-   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+   Gary             Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC              Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome           Campus, Hinxton, Cambridge, CB10 1SB, UK
 
 History
 
-   Written (23 May 2001) - Gary Williams.
+                    Written (23 May 2001) - Gary Williams.
 
 Target users
 
-   This program is intended to be used by everyone and everything, from
-   naive users to embedded scripts.
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
 
 Comments
 
-   None
+                    None

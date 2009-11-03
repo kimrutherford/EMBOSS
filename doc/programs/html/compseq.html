@@ -22,6 +22,18 @@ compseq
 
 
 <H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
     Function
 </H2>
 Calculate the composition of unique words in sequences
@@ -29,15 +41,37 @@ Calculate the composition of unique words in sequences
     Description
 </H2>
 
-<p><b>compseq</b> calculates the composition of words of a specified length (dimer, trimer etc) in the input sequence(s).  The word length is user-specified.  The unique sequences (words), their observed count, observed frequency, expected frequency and (observed / expected) frequency are written to the output file.  The (observed / expected) frequency highlights any words with unusually high (or low) occurence in the input sequences.</p>
+<p><b>compseq</b> calculates the composition of words of a specified
+length (dimer, trimer etc) in the input sequence(s).  The word length
+is user-specified.  The unique sequences (words), their observed
+count, observed frequency, expected frequency and (observed /
+expected) frequency are written to the output file.  The (observed /
+expected) frequency highlights any words with unusually high (or low)
+occurence in the input sequences.</p>
 
 
 <H2>
     Algorithm
 </H2>
-<p>By default, <b>compseq</b> makes the (false) assumption that each word is equally likely. The expected frequency therefore of any dimer is 1/16 - this is simply the inverse of the number of possible dimers (<tt>AA</tt>, <tt>AC</tt>, <tt>AG</tt>, <tt>AT</tt>, <tt>CA</tt>, <tt>CC</tt>, <tt>CG</tt>, <tt>CT</tt>, <tt>GA</tt>, <tt>GC</tt>, <tt>GG</tt>, <tt>GT</tt>, <tt>TA</tt>, <tt>TC</tt>, <tt>TG</tt>, <tt>TT</tt>).  Similarly, the expected frequency of any trimer is 1/64, etc. Clearly this is not the case in real sequences where there will be bias in favour of some monomers and words.  There are ways around this (see "Notes").</p>
+<p>By default, <b>compseq</b> makes the (false) assumption that each
+word is equally likely. The expected frequency therefore of any dimer
+is 1/16 - this is simply the inverse of the number of possible dimers
+(<tt>AA</tt>, <tt>AC</tt>, <tt>AG</tt>, <tt>AT</tt>, <tt>CA</tt>,
+<tt>CC</tt>, <tt>CG</tt>, <tt>CT</tt>, <tt>GA</tt>, <tt>GC</tt>,
+<tt>GG</tt>, <tt>GT</tt>, <tt>TA</tt>, <tt>TC</tt>, <tt>TG</tt>, <tt>TT</tt>).
+Similarly, the expected frequency of any trimer is 1/64, etc. Clearly
+this is not the case in real sequences where there will be bias in
+favour of some monomers and words.  There are ways around this (see
+"Notes").</p>
 
-<p>The normal behaviour of <b>compseq</b> is to count the frequencies of all words that occur by moving a window of length 'word' up by one each time.  The '-frame' option allows you to move the window up by the length of the word each time, skipping over the intervening words.  You can count only those words that occur in a single frame of the word by setting this value to a number other than zero.  If you set it to 1 it will only count the words in frame 1, 2 will only count the words in frame 2 and so on.</p>
+<p>The normal behaviour of <b>compseq</b> is to count the frequencies
+of all words that occur by moving a window of length 'word' up by one
+each time.  The '-frame' option allows you to move the window up by
+the length of the word each time, skipping over the intervening words.
+You can count only those words that occur in a single frame of the
+word by setting this value to a number other than zero.  If you set it
+to 1 it will only count the words in frame 1, 2 will only count the
+words in frame 2 and so on.</p>
 
 
 <H2>
@@ -99,9 +133,9 @@ Calculate the composition of unique words in sequences
                                   reference (input USA)
    -word               integer    [2] This is the size of word (n-mer) to
                                   count.
-                                  Thus if you want to count codon frequencies,
-                                  you should enter 3 here. (Integer from 1 to
-                                  20)
+                                  Thus if you want to count codon frequencies
+                                  for a nucleotide sequence, you should enter
+                                  3 here. (Integer 1 or more)
   [-outfile]           outfile    [*.compseq] This is the results file.
 
    Additional (Optional) qualifiers (* if not always prompted):
@@ -223,8 +257,8 @@ Calculate the composition of unique words in sequences
 <tr>
 <td>-word</td>
 <td>This is the size of word (n-mer) to count.
-Thus if you want to count codon frequencies, you should enter 3 here.</td>
-<td>Integer from 1 to 20</td>
+Thus if you want to count codon frequencies for a nucleotide sequence, you should enter 3 here.</td>
+<td>Integer 1 or more</td>
 <td>2</td>
 </tr>
 
@@ -306,9 +340,21 @@ Calculating the expected frequencies like this will give an approximation of the
     Input file format
 </H2>
 
-Normal sequence(s) USA.
+<b>compseq</b> reads a normal sequence(s) USA.
 
 <p>
+An optional second input file is the output from a previous compseq
+run used to set the expected word frequencies.
+
+<p>
+The optional second input data file format is exactly the same as the output
+file format. 
+<p>
+It expects to read in a previous output file of this program.
+An error is produced if the word size of the current compseq job
+and that of the output file being read in are different.
+
+
 
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
@@ -346,8 +392,8 @@ RN   [2]
 RP   1-518
 RX   PUBMED; 8395683.
 RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
-RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
-RT   an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma virus";
+RT   "fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
+RT   an antisense sequence in the Finkel-Biskis-Reilly murine sarcoma virus";
 RL   Oncogene 8(9):2537-2546(1993).
 XX
 DR   H-InvDB; HIT000322806.
@@ -368,11 +414,11 @@ FT                   /note="ubiquitin like part"
 FT   CDS             57..458
 FT                   /gene="fau"
 FT                   /db_xref="GDB:135476"
-FT                   /db_xref="GOA:P35544"
 FT                   /db_xref="GOA:P62861"
 FT                   /db_xref="HGNC:3597"
+FT                   /db_xref="HSSP:1GJZ"
+FT                   /db_xref="InterPro:IPR006846"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
-FT                   /db_xref="UniProtKB/Swiss-Prot:P62861"
 FT                   /protein_id="CAA46716.1"
 FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLAG
 FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKTG
@@ -765,26 +811,58 @@ Other	0		0.0000000	0.0000000	10000000000.0000000
     Data files
 </H2>
 
-
-The input data file is not required.
-<p>
-The input data file format is exactly the same as the output
-file format. 
-<p>
-It expects to read in a previous output file of this program.
-An error is produced if the word size of the current compseq job
-and that of the output file being read in are different.
+None.
 
 <H2>
     Notes
 </H2>
-<p>There is no way for <b>compseq</b> to guess what the true expected frequency should be for each word. It can however read in the result of a previous <b>compseq</b> analysis and use this to set the expected frequencies of the subsequences.  In this case, the input sequences under investigation should be representative of those used for the previous <b>compseq</b> analysis.  It is down to your biological expertise to ensure the sequences are genuinely "representative", for instance, you might select a group of sequences belonging to the same taxonomic rank such as genus or species.</p>
+<p>
+The maximum word size is limited to 4 for proteins, and 6 for
+nucleotide sequences.</p>
 
-<p>The file of expected frequencies is specified by name with the <tt>-infile</tt> qualifier. The word size in the current run must be the same as the one in this results file.  Obviously, you should use a file produced from protein sequences if you are counting protein sequence word frequencies, and you must use one made from nucleotide frequencies if you are analysing a nucleotide sequence.</p>
+<p>
+Large word sizes are not appropriate for the <b>compseq</b>
+algorithm. All possible words will be stored and reported. The
+algorithm is designed to generate useful information for word sizes
+expected to occur at least once in the input sequence.</p>
 
-<p>As an alternative to using <tt>-infile</tt>, the expected frequencies of words may be calculated from the observed frequency of single bases or residues in the sequences.  To do this, specify the <tt>-calcfreq</tt> qualifier.  If you are reporting a word size of 1 (single bases or residues) then there is no point in using this option because the calculated expected frequency will be equal to the observed frequency.</p>
+<p>The results are held in an array in memory before being written to
+a file. For large values of wordsize (over about 7 for nucleic, 5 for
+protein), you may run out of memory or generate a very large output
+file.</p>
 
-<p>Calculating the expected frequencies like this will give an approximation of the expected frequencies that you might get by using an input file of frequencies produced by a previous run of this program. If an input file of expected word frequencies has been specified then the values from that file will be used instead of this calculation of expected frequency from the sequence, even if 'calcfreq' is set to be true.</p>
+<p>There is no way for <b>compseq</b> to guess what the true expected
+frequency should be for each word. It can however read in the result
+of a previous <b>compseq</b> analysis and use this to set the expected
+frequencies of the subsequences.  In this case, the input sequences
+under investigation should be representative of those used for the
+previous <b>compseq</b> analysis.  It is down to your biological
+expertise to ensure the sequences are genuinely "representative", for
+instance, you might select a group of sequences belonging to the same
+taxonomic rank such as genus or species.</p>
+
+<p>The file of expected frequencies is specified by name with
+the <tt>-infile</tt> qualifier. The word size in the current run must
+be the same as the one in this results file.  Obviously, you should
+use a file produced from protein sequences if you are counting protein
+sequence word frequencies, and you must use one made from nucleotide
+frequencies if you are analysing a nucleotide sequence.</p>
+
+<p>As an alternative to using <tt>-infile</tt>, the expected
+frequencies of words may be calculated from the observed frequency of
+single bases or residues in the sequences.  To do this, specify
+the <tt>-calcfreq</tt> qualifier.  If you are reporting a word size of
+1 (single bases or residues) then there is no point in using this
+option because the calculated expected frequency will be equal to the
+observed frequency.</p>
+
+<p>Calculating the expected frequencies like this will give an
+approximation of the expected frequencies that you might get by using
+an input file of frequencies produced by a previous run of this
+program. If an input file of expected word frequencies has been
+specified then the values from that file will be used instead of this
+calculation of expected frequency from the sequence, even if
+'calcfreq' is set to be true.</p>
 
 <H2>
     References
@@ -796,7 +874,6 @@ None.
     Warnings
 </H2>
 
-<p>The results are held in an array in memory before being written to a file. For large values of wordsize (over about 7 for nucleic, 5 for protein), you may run out of memory or generate a very large output file.</p>
 
 <H2>
     Diagnostic Error Messages
@@ -833,9 +910,9 @@ is found
 </H2>
 
 
-This program can use a large amount of memory is you specify a large
-word size (7 or above).  This may impact the behaviour of other programs
-on your machine. 
+This program can use a large amount of memory is you were allowed to
+specify a large word size (7 or above).  This may impact the behaviour
+of other programs on your machine.
 
 <p>
 If you run out of memory, you may see the program crash with a generic
@@ -845,7 +922,7 @@ does not own (eg "Segmentation fault" on a Solaris machine)
 
 <p>
 This is not a bug, it is a feature of the way this program grabs large
-amounts of memory. 
+amounts of memory. The maximum word size is restricted to avoid this problem.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
@@ -943,7 +1020,7 @@ amounts of memory.
 
 <tr>
 <td><a href="pepwindow.html">pepwindow</a></td>
-<td>Draw a Kyte-Doolittle hydropathy plot for a protein sequence</td>
+<td>Draw a hydropathy plot for a protein sequence</td>
 </tr>
 
 <tr>

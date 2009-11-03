@@ -47,7 +47,7 @@ public class Wizard
                                      // option 2 - edit existing dna
     if(n == 0)
     {
-      Vector restrictionEnzyme = new Vector();
+      //Vector restrictionEnzyme = new Vector();
       EmbossCirdnaReader dnaRead = new EmbossCirdnaReader();
 
       Hashtable lineAttr = new Hashtable();

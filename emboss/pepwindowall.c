@@ -29,7 +29,8 @@
 
 
 
-static AjBool pepwindowall_getnakaidata(AjPFile file, float matrix[]);
+static AjBool pepwindowall_getnakaidata(AjPFile file, float matrix[],
+                                        AjBool normal);
 
 
 
@@ -43,6 +44,7 @@ static AjBool pepwindowall_getnakaidata(AjPFile file, float matrix[]);
 int main(int argc, char **argv)
 {
     AjPFile datafile;
+    AjBool normal;
     AjPStr aa0str = NULL;
     AjPSeqset seqset;
     AjPGraphPlpData graphdata;
@@ -66,8 +68,11 @@ int main(int argc, char **argv)
     float ymax = -64000.;
     ajint beg;
     ajint end;
-    float flen;
-    ajuint tui;
+    float fstart;
+    float fend;
+    ajuint ilen;
+    ajuint istart;
+    ajuint iend;
     
     ajGraphInit("pepwindowall", argc, argv);
 
@@ -75,24 +80,36 @@ int main(int argc, char **argv)
     mult     = ajAcdGetGraphxy("graph");
     datafile = ajAcdGetDatafile("datafile");
     llen     = ajAcdGetInt("length");
+    normal   = ajAcdGetBoolean("normalize");
 
-    if(!pepwindowall_getnakaidata(datafile,&matrix[0]))
+    if(!pepwindowall_getnakaidata(datafile,&matrix[0], normal))
 	ajExitBad();
 
+    maxsize   = ajSeqsetGetSize(seqset);
     maxlen   = ajSeqsetGetLen(seqset);
     aa0str   = ajStrNewRes(maxlen);
     midpoint = (ajint)((llen+1)/2);
-    tui      = ajSeqsetGetLen(seqset);
-    flen     = (float)tui;
-    maxsize = ajSeqsetGetSize(seqset);
 
     AJCNEW(position, maxlen);
+
+    istart = ajSeqsetGetBegin(seqset) - 1;
+
+    iend = ajSeqsetGetEnd(seqset);
+    if((iend-istart) > llen)
+        ilen = iend-istart+1-llen;
+    else
+    {
+        ilen = 1;
+        llen = iend-istart;
+    }
+
+    fstart = (float) istart;
+    fend = (float) iend;
 
     for(i=0;i<maxsize;i++)
     {
 	seq = ajSeqsetGetseqSeqC(seqset, i);
 	ajStrSetClear(&aa0str);
-
 
 	graphdata = ajGraphPlpDataNewI(maxlen);
 	ajGraphPlpDataSetTypeC(graphdata,"Overlay 2D Plot");
@@ -100,13 +117,13 @@ int main(int argc, char **argv)
 	ymax = -64000.;
 
 
-	for(k=0;k<maxlen ;k++)
+	for(k=0;k<iend ;k++)
 	    graphdata->x[k] = FLT_MIN;
 
-	s1 = seq;
+	s1 = seq + istart;
 	k = 0;
-	w = 0;
-	while(*s1 != '\0')
+	w = istart;
+	while(*s1 != '\0' && w <= iend)
 	{
 	    if(ajBasecodeToInt(*s1) != 27 )
 	    {
@@ -117,10 +134,8 @@ int main(int argc, char **argv)
 	    s1++;
 	}
 
-
-
 	s1 = ajStrGetPtr(aa0str);
-	for(j=0;j<k-llen;j++)
+	for(j=0;j<=k-llen;j++)
 	{
 	    total = 0;
 	    for(w=0;w<llen;w++)
@@ -140,7 +155,6 @@ int main(int argc, char **argv)
 	    s1++;
 	}
 
-
 	beg = 0;
 	while(graphdata->x[beg]<0.00001)
 	    ++beg;
@@ -151,6 +165,7 @@ int main(int argc, char **argv)
 	    graphdata->x[a] = graphdata->x[a+beg];
 	    graphdata->y[a] = graphdata->y[a+beg];
 	}
+
 	end = graphdata->numofpoints-1;
 
 	while(graphdata->x[end--]<0.00001)
@@ -176,7 +191,13 @@ int main(int argc, char **argv)
     ajGraphxySetGaps(mult,AJTRUE);
     ajGraphxySetOverLap(mult,AJTRUE);
 
-    ajGraphxySetMaxMin(mult,0.0,flen,min,max);
+    if(min == max)
+    {
+        min--;
+        max++;
+    }
+
+    ajGraphxySetMaxMin(mult,fstart,fend,min,max);
     ajGraphSetTitleC(mult,"Pepwindowall");
 
 
@@ -201,10 +222,12 @@ int main(int argc, char **argv)
 **
 ** @param [u] file [AjPFile] Input file
 ** @param [w] matrix [float[]] Data values for each amino acid
+** @param [r] normal [AjBool] If true, normalize data to mean 0.0 and SD 1.0
 ** @return [AjBool] ajTrue on success
 ** @@
 ******************************************************************************/
-static AjBool pepwindowall_getnakaidata(AjPFile file, float matrix[])
+static AjBool pepwindowall_getnakaidata(AjPFile file, float matrix[],
+                                        AjBool normal)
 {
     AjPStr buffer = NULL;
     AjPStr buf2   = NULL;
@@ -315,6 +338,9 @@ static AjBool pepwindowall_getnakaidata(AjPFile file, float matrix[])
 	    ajStrTokenDel(&token);
 	}
     }
+
+    if(normal)
+        embPropNormalF(matrix, FLT_MIN);
 
     embPropFixF(matrix, FLT_MIN);
 

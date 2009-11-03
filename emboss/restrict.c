@@ -88,10 +88,12 @@ int main(int argc, char **argv)
     AjBool nameit;
     AjBool limit;
     AjBool frags;
-
+    AjBool methyl;
+    
     AjPFile enzfile = NULL;
     AjPFile equfile = NULL;
-
+    AjPFile methfile = NULL;
+    
     AjPStr name = NULL;
 
     AjPTable table = NULL;
@@ -120,8 +122,10 @@ int main(int argc, char **argv)
     commercial = ajAcdGetBoolean("commercial");
     limit      = ajAcdGetBoolean("limit");
     frags      = ajAcdGetBoolean("fragments");
+    methyl     = ajAcdGetBoolean("methylation");
     nameit     = ajAcdGetBoolean("name");
-    enzfile      = ajAcdGetDatafile("datafile");
+    enzfile    = ajAcdGetDatafile("datafile");
+    methfile   = ajAcdGetDatafile("mfile");
     ifrag      = ajAcdGetBoolean("solofragment");
     
     /* obsolete. Can be uncommented in acd file and here to reuse */
@@ -182,9 +186,9 @@ int main(int argc, char **argv)
 	  ajReportSetTailC(report, "");
 
 	l = ajListNew();
-	hits = embPatRestrictMatch(seq,begin,end,enzfile,enzymes,sitelen,
-				   plasmid,ambiguity,min,max,blunt,sticky,
-				   commercial,l);
+	hits = embPatRestrictMatch(seq,begin,end,enzfile,methfile,enzymes,
+                                   sitelen,plasmid,ambiguity,min,max,blunt,
+                                   sticky,commercial,methyl,l);
 
 	ajDebug("Restrict found %d hits\n", hits);
 
@@ -213,12 +217,14 @@ int main(int argc, char **argv)
 
 	ajListFree(&l);
     }
+    ajReportSetSeqstats(report, seqall);
 
 
     ajListFree(&l);
     ajSeqDel(&seq);
     ajFileClose(&enzfile);
-    ajFileClose(&outf);
+    ajFileClose(&methfile);
+     ajFileClose(&outf);
 
     ajReportClose(report);
     ajReportDel(&report);

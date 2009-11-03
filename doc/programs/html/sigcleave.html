@@ -22,6 +22,18 @@ sigcleave
 
 
 <H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
     Function
 </H2>
 Reports on signal cleavage sites in a protein sequence
@@ -199,27 +211,21 @@ Output report [ach2_drome.sig]: <b></b>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 ID   ACH2_DROME              Reviewed;         576 AA.
-AC   P17644; Q9VC73;
+AC   P17644; Q0KI18; Q9VC73;
 DT   01-AUG-1990, integrated into UniProtKB/Swiss-Prot.
 DT   01-AUG-1990, sequence version 1.
-DT   03-APR-2007, entry version 78.
-DE   Acetylcholine receptor subunit alpha-like 2 precursor.
-GN   Name=nAcR-alpha-96Ab; Synonyms=Acr96Ab, AcrE, sad; ORFNames=CG6844;
+DT   16-JUN-2009, entry version 98.
+DE   RecName: Full=Acetylcholine receptor subunit alpha-like 2;
+DE   Flags: Precursor;
+GN   Name=nAcRalpha-96Ab; Synonyms=Acr96Ab, AcrE, sad; ORFNames=CG6844;
 OS   Drosophila melanogaster (Fruit fly).
 OC   Eukaryota; Metazoa; Arthropoda; Hexapoda; Insecta; Pterygota;
 OC   Neoptera; Endopterygota; Diptera; Brachycera; Muscomorpha;
-OC   Ephydroidea; Drosophilidae; Drosophila.
+OC   Ephydroidea; Drosophilidae; Drosophila; Sophophora.
 OX   NCBI_TaxID=7227;
 RN   [1]
-RP   NUCLEOTIDE SEQUENCE [MRNA].
-RC   TISSUE=Head;
-RX   MEDLINE=90301489; PubMed=2114015; DOI=10.1093/nar/18.12.3640;
-RA   Baumann A., Jonas P., Gundelfinger E.D.;
-RT   "Sequence of D alpha 2, a novel alpha-like subunit of Drosophila
-RT   nicotinic acetylcholine receptors.";
-RL   Nucleic Acids Res. 18:3640-3640(1990).
-RN   [2]
-RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA], TISSUE SPECIFICITY, AND
+RP   DEVELOPMENTAL STAGE.
 RC   TISSUE=Head;
 RX   MEDLINE=90353591; PubMed=2117557; DOI=10.1016/0014-5793(90)81170-S;
 RA   Jonas P., Baumann A., Merz B., Gundelfinger E.D.;
@@ -227,13 +233,22 @@ RT   "Structure and developmental expression of the D alpha 2 gene encoding
 RT   a novel nicotinic acetylcholine receptor protein of Drosophila
 RT   melanogaster.";
 RL   FEBS Lett. 269:264-268(1990).
-RN   [3]
+RN   [2]
 RP   NUCLEOTIDE SEQUENCE [MRNA].
 RX   MEDLINE=90360975; PubMed=1697262;
 RA   Sawruk E., Schloss P., Betz H., Schmitt B.;
 RT   "Heterogeneity of Drosophila nicotinic acetylcholine receptors: SAD, a
 RT   novel developmentally regulated alpha-subunit.";
 RL   EMBO J. 9:2671-2677(1990).
+RN   [3]
+RP   NUCLEOTIDE SEQUENCE [MRNA], TISSUE SPECIFICITY, AND DEVELOPMENTAL
+RP   STAGE.
+RC   TISSUE=Head;
+RX   MEDLINE=90301489; PubMed=2114015; DOI=10.1093/nar/18.12.3640;
+RA   Baumann A., Jonas P., Gundelfinger E.D.;
+RT   "Sequence of D alpha 2, a novel alpha-like subunit of Drosophila
+RT   nicotinic acetylcholine receptors.";
+RL   Nucleic Acids Res. 18:3640-3640(1990).
 RN   [4]
 RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
 RC   STRAIN=Berkeley;
@@ -245,35 +260,32 @@ RA   Sutton G.G., Wortman J.R., Yandell M.D., Zhang Q., Chen L.X.,
 RA   Brandon R.C., Rogers Y.-H.C., Blazej R.G., Champe M., Pfeiffer B.D.,
 RA   Wan K.H., Doyle C., Baxter E.G., Helt G., Nelson C.R., Miklos G.L.G.,
 RA   Abril J.F., Agbayani A., An H.-J., Andrews-Pfannkoch C., Baldwin D.,
-RA   Ballew R.M., Basu A., Baxendale J., Bayraktaroglu L., Beasley E.M.,
-RA   Beeson K.Y., Benos P.V., Berman B.P., Bhandari D., Bolshakov S.,
-RA   Borkova D., Botchan M.R., Bouck J., Brokstein P., Brottier P.,
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-DR   IntAct; P17644; -.
-DR   Ensembl; CG6844; Drosophila melanogaster.
-DR   KEGG; dme:Dmel_CG6844; -.
-DR   FlyBase; FBgn0000039; nAcR-alpha-96Ab.
-DR   BioCyc; DMEL-XXX-02:DMEL-XXX-02-013190-MONOMER; -.
-DR   BioCyc; DMEL-XXX-02:DMEL-XXX-02-013191-MONOMER; -.
-DR   GermOnline; CG6844; Drosophila melanogaster.
+DR   GO; GO:0045211; C:postsynaptic membrane; IEA:UniProtKB-SubCell.
+DR   GO; GO:0030594; F:neurotransmitter receptor activity; IEA:InterPro.
+DR   GO; GO:0004889; F:nicotinic acetylcholine-activated cation-se...; IEA:InterPro.
 DR   GO; GO:0005515; F:protein binding; IPI:IntAct.
+DR   GO; GO:0006811; P:ion transport; IEA:UniProtKB-KW.
 DR   InterPro; IPR006029; Neu_channel_TM.
 DR   InterPro; IPR006202; Neur_chan_lig_bd.
 DR   InterPro; IPR006201; Neur_channel.
-DR   InterPro; IPR002394; Nic_ach_rcpt.
-DR   Gene3D; G3DSA:3.30.1100.20; Neur_chan_lig_bd; 1.
-DR   PANTHER; PTHR18945; Neur_channel; 2.
+DR   InterPro; IPR018000; Neurotransmitter_ion_chnl_CS.
+DR   InterPro; IPR002394; Nicotinic_acetylcholine_rcpt_N.
+DR   Gene3D; G3DSA:2.70.170.10; Neur_chan_lig_bd; 1.
+DR   PANTHER; PTHR18945; Neur_channel; 1.
 DR   Pfam; PF02931; Neur_chan_LBD; 1.
 DR   Pfam; PF02932; Neur_chan_memb; 1.
 DR   PRINTS; PR00254; NICOTINICR.
 DR   PRINTS; PR00252; NRIONCHANNEL.
 DR   TIGRFAMs; TIGR00860; LIC; 1.
 DR   PROSITE; PS00236; NEUROTR_ION_CHANNEL; 1.
-KW   Complete proteome; Glycoprotein; Ion transport; Ionic channel;
-KW   Membrane; Postsynaptic membrane; Receptor; Signal; Transmembrane;
+PE   1: Evidence at protein level;
+KW   Cell junction; Cell membrane; Complete proteome; Disulfide bond;
+KW   Glycoprotein; Ion transport; Ionic channel; Membrane;
+KW   Postsynaptic cell membrane; Receptor; Signal; Synapse; Transmembrane;
 KW   Transport.
 FT   SIGNAL        1     21       Probable.
 FT   CHAIN        22    576       Acetylcholine receptor subunit alpha-like
@@ -431,7 +443,9 @@ By default <b>sigcleave</b> writes a 'motif' report file.
 
 #---------------------------------------
 # Total_sequences: 1
-# Total_hitcount: 9
+# Total_length: 576
+# Reported_sequences: 1
+# Reported_hitcount: 9
 #---------------------------------------
 </pre>
 </td></tr></table><p>
@@ -655,7 +669,7 @@ European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambri
 Original program "SIGCLEAVE" (EGCG 1989) by
 Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
 <br>
-Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
 
 <H2>

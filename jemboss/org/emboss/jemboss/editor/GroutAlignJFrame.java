@@ -25,12 +25,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import java.io.File;
-import javax.swing.border.*;
-import java.net.URL;
-
-import org.emboss.jemboss.gui.sequenceChooser.SequenceFilter;
-import org.emboss.jemboss.gui.filetree.FileEditorDisplay;
-import org.emboss.jemboss.gui.ScrollPanel;
 
 /**
 *  

@@ -51,6 +51,8 @@ static void treeTraceNode (const AjPTree thys, ajint num);
 static void treestrTraceNode (const AjPTree thys, ajint num);
 
 
+
+
 /* @func ajTreeNew ************************************************************
 **
 ** Creates a new general tree.
@@ -64,6 +66,8 @@ AjPTree ajTreeNew(void)
 {
     return treeNew(ajETreeAny);
 }
+
+
 
 
 /* @func ajTreeNewNewick *******************************************************
@@ -98,123 +102,133 @@ AjPTree ajTreeNewNewick(const AjPStr newick)
 
     while(*cp && (*cp != '('))
 	cp++;
+
     if(!*cp)
 	return NULL;
 
     ret = treeNew(ajETreeAny);
     tree = ret;
     isdone = ajFalse;
+
     while (!isdone && *cp)
     {
 	if(iscomment)
 	{
 	    if(*(cp++) == ']')
 		iscomment = ajFalse;
+
 	    continue;
 	}
 
 	switch(*cp)
 	{
-	case '(':
-	    nparam++;
-	    tree = ajTreeAddNode(tree);
-	    break;
-	case ')':
-	    if(!nparam)
-	    {
-		ajWarn("Bad Newick string '%S' too many closing parentheses",
-		       newick);
-		break;
-	    }
-	    if(islength)
-	    {
-		AJNEW0(flen);
-		ajStrToDouble(tmpstr, flen);
-		ajTreeAddData(tree, tmpname, flen);
-		ajStrAssignClear(&tmpname);
-		ajStrAssignClear(&tmpstr);
-		islength = ajFalse;
-	    }
-	    else
-	    {
-		ajTreeAddData(tree, tmpstr, NULL);
-		ajStrAssignClear(&tmpstr);
-	    }
-	    tree = ajTreeUp(tree);
-	    nparam--;
-	    break;
-	case ',':
-	    if(islength)
-	    {
-		AJNEW0(flen);
-		ajStrToDouble(tmpstr, flen);
-		ajTreeAddData(tree, tmpname, flen);
-		ajStrAssignClear(&tmpname);
-		ajStrAssignClear(&tmpstr);
-		islength = ajFalse;
-	    }
-	    else
-	    {
-		ajTreeAddData(tree, tmpstr, NULL);
-		ajStrAssignClear(&tmpstr);
-	    }
+            case '(':
+                nparam++;
+                tree = ajTreeAddNode(tree);
+                break;
+            case ')':
+                if(!nparam)
+                {
+                    ajWarn("Bad Newick string '%S' too many closing "
+                           "parentheses",
+                           newick);
+                    break;
+                }
 
-	    tree = ajTreeAddSubNode(tree);
-	    break;
-	case ';':
-	    if(nparam)
-		ajWarn("Bad Newick string '%S' too few closing parentheses",
-		       newick);
-	    if(islength)
-	    {
-		AJNEW0(flen);
-		ajStrToDouble(tmpstr, flen);
-		ajTreeAddData(tree, tmpname, flen);
-		ajStrAssignClear(&tmpname);
-		ajStrAssignClear(&tmpstr);
-		islength = ajFalse;
-	    }
-	    isdone = ajTrue;
-	    break;
-	case ':':
-	    if(islength)
-		ajWarn("Bad Newick string '%S' multiple length values",
-		       newick);
-	    islength = ajTrue;
-	    ajStrAssignS(&tmpname, tmpstr);
-	    ajStrAssignClear(&tmpstr);
-	    break;
-	case '[':
-	    ncomment++;
-	    iscomment = ajTrue;
-	    break;
-	case '\'':
-	    if(isquote)
-	    {
-		if(*(cp+1) == '\'')
-		{
-		    ajStrAppendK(&tmpstr, *cp);
-		    cp++;
-		}
-		else
-		    isquote = ajFalse;
-	    }
-	    else
-		isquote = ajTrue;
-	    break;
+                if(islength)
+                {
+                    AJNEW0(flen);
+                    ajStrToDouble(tmpstr, flen);
+                    ajTreeAddData(tree, tmpname, flen);
+                    ajStrAssignClear(&tmpname);
+                    ajStrAssignClear(&tmpstr);
+                    islength = ajFalse;
+                }
+                else
+                {
+                    ajTreeAddData(tree, tmpstr, NULL);
+                    ajStrAssignClear(&tmpstr);
+                }
+                tree = ajTreeUp(tree);
+                nparam--;
+                break;
+            case ',':
+                if(islength)
+                {
+                    AJNEW0(flen);
+                    ajStrToDouble(tmpstr, flen);
+                    ajTreeAddData(tree, tmpname, flen);
+                    ajStrAssignClear(&tmpname);
+                    ajStrAssignClear(&tmpstr);
+                    islength = ajFalse;
+                }
+                else
+                {
+                    ajTreeAddData(tree, tmpstr, NULL);
+                    ajStrAssignClear(&tmpstr);
+                }
 
-	default:
-	    if(isspace(*cp))
-	    {
-		if(!islength && (*cp == ' ') && ajStrGetCharLast(tmpstr) != '_')
-		    ajStrAppendK(&tmpstr, '_');
-	    }
-	    else
-		ajStrAppendK(&tmpstr, *cp);
-	    break;
+                tree = ajTreeAddSubNode(tree);
+                break;
+            case ';':
+                if(nparam)
+                    ajWarn("Bad Newick string '%S' too few closing parentheses",
+                           newick);
+
+                if(islength)
+                {
+                    AJNEW0(flen);
+                    ajStrToDouble(tmpstr, flen);
+                    ajTreeAddData(tree, tmpname, flen);
+                    ajStrAssignClear(&tmpname);
+                    ajStrAssignClear(&tmpstr);
+                    islength = ajFalse;
+                }
+                isdone = ajTrue;
+                break;
+            case ':':
+                if(islength)
+                    ajWarn("Bad Newick string '%S' multiple length values",
+                           newick);
+
+                islength = ajTrue;
+                ajStrAssignS(&tmpname, tmpstr);
+                ajStrAssignClear(&tmpstr);
+                break;
+            case '[':
+                ncomment++;
+                iscomment = ajTrue;
+                break;
+            case '\'':
+                if(isquote)
+                {
+                    if(*(cp+1) == '\'')
+                    {
+                        ajStrAppendK(&tmpstr, *cp);
+                        cp++;
+                    }
+                    else
+                        isquote = ajFalse;
+                }
+                else
+                    isquote = ajTrue;
+
+                break;
+
+            default:
+                if(isspace(*cp))
+                {
+                    if(!islength && (*cp == ' ') &&
+                       ajStrGetCharLast(tmpstr) != '_')
+                        ajStrAppendK(&tmpstr, '_');
+                }
+                else
+                    ajStrAppendK(&tmpstr, *cp);
+                break;
 	}
 	cp++;
     }
+
     if(iscomment)
 	ajWarn("Bad Newick string '%S' unclosed comment",
 	       newick);
@@ -339,9 +353,12 @@ ajuint ajTreeLength(const AjPTree thys)
     ajint inode=0;
 
     tree = ajTreeFollow(NULL, thys);
+
     while(tree)
     {
-	if(tree->Data) inode++;
+	if(tree->Data)
+            inode++;
+
 	tree = ajTreeFollow(tree, thys);
     }
 
@@ -408,6 +425,7 @@ void ajTreeFree(AjPTree* pthis)
 	       tree, tree->Down, tree->Right, tree->Left, tree->Up);
 	/* if we can go down, simply do so */
 	next = ajTreeDown(tree);
+
 	if(next)
 	{
 	    tree = next;
@@ -416,6 +434,7 @@ void ajTreeFree(AjPTree* pthis)
 
 	/* if we can go right, remove the node we left */
 	next = ajTreeNext(tree);
+
 	if(next)
 	{
 	    AJFREE(tree->Data);
@@ -438,6 +457,7 @@ void ajTreeFree(AjPTree* pthis)
     if(tree)
     {
 	parent = tree->Up;
+
 	if(parent)
 	{
 	    if(parent->Down == tree)
@@ -445,8 +465,10 @@ void ajTreeFree(AjPTree* pthis)
 	    if(tree->Left)
 		tree->Left->Right = tree->Right;
 	}
+
 	AJFREE(tree->Data);
     }
+
     AJFREE(*pthis);
 
     return;
@@ -490,6 +512,7 @@ void ajTreestrFree(AjPTree* pthis)
     {
 	/* if we can go down, simply do so */
 	next = ajTreeDown(tree);
+
 	if(next)
 	{
 	    tree = next;
@@ -498,6 +521,7 @@ void ajTreestrFree(AjPTree* pthis)
 
 	/* if we can go right, remove the node we left */
 	next = ajTreeNext(tree);
+
 	if(next)
 	{
 	    ajStrDel((AjPStr*)&tree->Data);
@@ -518,6 +542,7 @@ void ajTreestrFree(AjPTree* pthis)
     if(tree)
     {
 	parent = tree->Up;
+
 	if(parent)
 	{
 	    if(parent->Down == tree)
@@ -525,9 +550,11 @@ void ajTreestrFree(AjPTree* pthis)
 	    if(tree->Left)
 		tree->Left->Right = tree->Right;
 	}
+
 	ajStrDel((AjPStr*)&tree->Data);
 	AJFREE(tree);
     }
+
     AJFREE(*pthis);
 
     return;
@@ -573,6 +600,7 @@ void ajTreeDel(AjPTree* pthis)
     {
 	/* if we can go down, simply do so */
 	next = ajTreeDown(tree);
+
 	if(next)
 	{
 	    tree = next;
@@ -581,6 +609,7 @@ void ajTreeDel(AjPTree* pthis)
 
 	/* if we can go right, remove the node we left */
 	next = ajTreeNext(tree);
+
 	if(next)
 	{
 	    AJFREE(tree);
@@ -599,6 +628,7 @@ void ajTreeDel(AjPTree* pthis)
     if(tree)
     {
 	parent = tree->Up;
+
 	if(parent)
 	{
 	    if(parent->Down == tree)
@@ -606,6 +636,7 @@ void ajTreeDel(AjPTree* pthis)
 	    if(tree->Left)
 		tree->Left->Right = tree->Right;
 	}
+
 	AJFREE(tree);
     }
     AJFREE(*pthis);
@@ -660,12 +691,15 @@ void ajTreeMap(AjPTree thys, void apply(void** x, void* cl), void* cl)
     assert(apply);
 
     tree = ajTreeFollow(NULL, thys);
+
     while(tree)
     {
 	if(tree->Data)
 	    apply((void**) &tree->Data, cl);
+
 	tree = ajTreeFollow(tree, thys);
     }
+
     return;
 }
 
@@ -693,10 +727,12 @@ void ajTreestrMap(AjPTree thys, void apply(AjPStr* x, void* cl), void* cl)
     assert(apply);
 
     tree = ajTreeFollow(NULL, thys);
+
     while(tree)
     {
 	if(tree->Data)
 	    apply((AjPStr*) &tree->Data, cl);
+
 	tree = ajTreeFollow(tree, thys);
     }
 
@@ -728,6 +764,7 @@ ajuint ajTreeToArray(const AjPTree thys, void*** array)
     if(!n)
     {
 	*array = NULL;
+
 	return 0;
     }
 
@@ -737,12 +774,15 @@ ajuint ajTreeToArray(const AjPTree thys, void*** array)
     *array = AJALLOC((n+1)*sizeof(array));
 
     tree = ajTreeFollow(NULL, thys);
+
     while(tree)
     {
 	if(tree->Data)
 	    (*array)[i++] = tree->Data;
+
 	tree = ajTreeFollow(tree, thys);
     }
+
     (*array)[n] = NULL;
 
     return n;
@@ -774,6 +814,7 @@ ajuint ajTreestrToArray(const AjPTree thys, AjPStr** array)
     if(!n)
     {
 	*array = NULL;
+
 	return 0;
     }
 
@@ -783,12 +824,15 @@ ajuint ajTreestrToArray(const AjPTree thys, AjPStr** array)
     *array = AJALLOC((n+1)*sizeof(array));
 
     tree = ajTreeFollow(NULL, thys);
+
     while(tree)
     {
 	if(tree->Data)
 	    (*array)[i++] = (AjPStr) tree->Data;
+
 	tree = ajTreeFollow(tree, thys);
     }
+
     (*array)[n] = NULL;
 
     return n;
@@ -806,7 +850,6 @@ ajuint ajTreestrToArray(const AjPTree thys, AjPStr** array)
 
 void ajTreeDummyFunction(void)
 {
-
     return;
 }
 
@@ -832,9 +875,11 @@ AjBool ajTreeAddData(AjPTree thys, const AjPStr name, void* data)
 	return ajFalse;
     }
 */
+
     if (thys->Data)
     {
 	ajErr("tried to define data value for node with data");
+
 	return ajFalse;
     }
 
@@ -862,17 +907,20 @@ AjBool ajTreestrAddData(AjPTree thys, const AjPStr name, AjPStr data)
     if (thys->Down)
     {
 	ajErr("tried to define string data value for non-terminal tree node");
+
 	return ajFalse;
     }
 
     if (thys->Data)
     {
 	ajErr("tried to define string data value for tree node with data");
+
 	return ajFalse;
     }
 
     thys->Name = ajStrNewS(name);
     thys->Data = (void*) data;
+
     return ajTrue;
 }
 
@@ -896,6 +944,7 @@ AjPTree ajTreeAddNode(AjPTree thys)
     if(thys->Data)
     {
 	ajErr("tried to add child to node with data value");
+
 	return NULL;
     }
 
@@ -936,6 +985,8 @@ AjPTree ajTreeAddSubNode(AjPTree thys)
 }
 
 
+
+
 /* @func ajTreeToNewick *******************************************************
 **
 ** Prints a trace of a tree to debug output
@@ -957,6 +1008,7 @@ void ajTreeToNewick(const AjPTree thys, AjPStr* Pnewick)
 
     root = thys;
     tree = ajTreeDown(thys);
+
     if(!tree)
 	return;
 
@@ -969,11 +1021,13 @@ void ajTreeToNewick(const AjPTree thys, AjPStr* Pnewick)
 	if(ajStrGetLen(tree->Name))
 	{
 	    ajStrAppendS(Pnewick, tree->Name);
+
 	    if(tree->Data)
 		ajFmtPrintAppS(Pnewick, ":%.2f", *(double*)tree->Data);
 	}
 
 	nexttree = ajTreeDown(tree);
+
 	if(nexttree)
 	{
 	    tree = nexttree;
@@ -982,6 +1036,7 @@ void ajTreeToNewick(const AjPTree thys, AjPStr* Pnewick)
 	}
 
 	nexttree = ajTreeNext(tree);
+
 	if(nexttree)
 	{
 	    tree = nexttree;
@@ -1004,7 +1059,9 @@ void ajTreeToNewick(const AjPTree thys, AjPStr* Pnewick)
 	    if(tree->Data)
 		ajFmtPrintAppS(Pnewick, ":%.2f", *(double*)tree->Data);
 
+
 	    nexttree = ajTreeNext(tree);
+
 	    if(nexttree)
 	    {
 		tree = nexttree;
@@ -1012,22 +1069,22 @@ void ajTreeToNewick(const AjPTree thys, AjPStr* Pnewick)
 		ajDebug(" next node %8p '%S'\n", tree, tree->Name);
 		break;
 	    }
+
 	    nexttree = ajTreeUp(tree);
 	    tree = nexttree;
 	    ajStrAppendC(Pnewick, ")");
 	}
-
     }
 
     if(root->Data)
 	ajFmtPrintAppS(Pnewick, ":%.2f", *(double*)root->Data);
+
     ajStrAppendK(Pnewick, ';');
 
     ajDebug("ajTreeToNewick '%S'\n", *Pnewick);
+
     return;
 }
-
-
 
 
 
@@ -1050,6 +1107,7 @@ void ajTreeTrace(const AjPTree thys)
     treeTraceNode(thys, inode++);
 
     tree = ajTreeFollow(NULL, thys);
+
     while(tree)
     {
 	treeTraceNode(tree, inode++);
@@ -1081,6 +1139,7 @@ void ajTreestrTrace(const AjPTree thys)
 
     treestrTraceNode(thys, inode++);
     tree = ajTreeFollow(NULL, thys);
+
     while(tree)
     {
 	treestrTraceNode(tree, inode++);
@@ -1115,10 +1174,13 @@ static void treeTraceNode (const AjPTree thys, ajint num)
 
     for (p=thys;p->Up; p=p->Up)
 	iup++;
+
     for (p=thys;p->Down; p=p->Down)
 	idown++;
+
     for (p=thys;p->Left; p=p->Left)
 	ileft++;
+
     for (p=thys;p->Right; p=p->Right)
 	ileft++;
 
@@ -1181,10 +1243,13 @@ static void treestrTraceNode (const AjPTree thys, ajint num)
 
     for (p=thys;p->Up; p=p->Up)
 	iup++;
+
     for (p=thys;p->Down; p=p->Down)
 	idown++;
+
     for (p=thys;p->Left; p=p->Left)
 	ileft++;
+
     for (p=thys;p->Right; p=p->Right)
 	iright++;
 
@@ -1201,9 +1266,7 @@ static void treestrTraceNode (const AjPTree thys, ajint num)
 	    ajDebug(" End node string: '%S'\n", (AjPStr) thys->Data);
     }
     else if (!thys->Down)
-    {
 	ajDebug(" No data, no down link: ** broken node %x **\n", thys);
-    }
 
     return;
 }
@@ -1234,21 +1297,23 @@ AjPTree ajTreeFollow(const AjPTree thys, const AjPTree parent)
     AjPTree tree;
 
     if(!thys)
-    {
 	thys = parent;
-    }
 
     ret = ajTreeDown(thys);
+
     if(ret)
     {
 	ajStrAppendC(&treeFollowPath, "(");
+
 	return ret;
     }
 
     ret = ajTreeNext(thys);
+
     if(ret)
     {
 	ajStrAppendC(&treeFollowPath, ",");
+
 	return ret;
     }
 
@@ -1259,16 +1324,20 @@ AjPTree ajTreeFollow(const AjPTree thys, const AjPTree parent)
     {
 	tree = ret;
 	ret = ajTreeNext(tree);
+
 	if(ret)
 	{
 	    ajStrAppendC(&treeFollowPath, ",");
+
 	    return ret;
 	}
+
 	ret = ajTreeUp(tree);
 	ajStrAppendC(&treeFollowPath, ")");
     }
 
     ajStrAppendC(&treeFollowPath, ";");
+
     return NULL;
 }
 

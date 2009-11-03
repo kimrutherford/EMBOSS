@@ -20,7 +20,16 @@ showseq
     Description
 </H2>
 
-<p><b>showseq</b> displays one or more protein or nucleic acid sequences, with features, in a style suitable for publication. The output is sent to screen by default but can be written to file. You may pick a format from a list, alternatively, use the  many options to control what is output and in what format. Optionally, the sequence feature table can be displayed.  Where the input sequence is a nucleic acid, the sequence can be translated, using the specified genetic code tables. Also recognition sites and/or cut sites of restriction enzymes from the REBASE database may be displayed.  There are various other options for controlling how the sequence is displayed and numbered and the output can be formatted for HTML.</p>
+<p><b>showseq</b> displays one or more nucleic acid sequences, with
+features, in a style suitable for publication. The output is sent to
+screen by default but can be written to file. You may pick a format
+from a list, alternatively, use the many options to control what is
+output and in what format. Optionally, the sequence feature table can
+be displayed. The sequence can be translated, using the specified
+genetic code tables. Also recognition sites and/or cut sites of
+restriction enzymes from the REBASE database may be displayed.  There
+are various other options for controlling how the sequence is
+displayed and numbered and the output can be formatted for HTML.</p>
 
 
 <H2>
@@ -53,9 +62,9 @@ showseq
 
 <p>
 
-You can specifiy a file of ranges to display in uppercase by giving the
-'-uppercase' qualifier the value '@' followed by the name of the file
-containing the ranges.  (eg: '-upper @myfile').
+You can specify a file of ranges to display in uppercase by giving
+the '-uppercase' qualifier the value '@' followed by the name of the
+file containing the ranges.  (eg: '-upper @myfile').
 
 <p>
           
@@ -90,7 +99,7 @@ An example range file is:
 
 <p>
 
-You can specifiy a file of ranges to highlight in a different colour
+You can specify a file of ranges to highlight in a different colour
 when outputting in HTML format (using the '-html' qualifier) by giving
 the '-highlight' qualifier the value '@' followed by the name of the
 file containing the ranges.  (eg: '-highlight @myfile').
@@ -135,7 +144,7 @@ An example highlight range file is:
 
 <p>
 
-You can specifiy a file of ranges to annotate
+You can specify a file of ranges to annotate
 by giving
 the '-annotate' qualifier the value '@' followed by the name of the
 file containing the ranges.  (eg: '-annotate @myfile').
@@ -289,7 +298,9 @@ line of sequence).
     Notes
 </H2>
 
-<p>One or more things may be selected for display from a menu (<tt>-things</tt> option).  The order of specified characters (upper or lower case) determines the order in the output:</p>
+<p>One or more things may be selected for display from a menu
+(<tt>-things</tt> option).  The order of specified characters (upper
+or lower case) determines the order in the output:</p>
 <pre>
 s	Sequence
 b	Blank line
@@ -308,7 +319,9 @@ r	Restriction enzyme cut sites in the forward sense
 a	User Annotation
 </pre>
 
-<p>Alternatively, there is a selection of pre-defined formats to choose from. The codes from above used in the list of standard formats are:</p>
+<p>Alternatively, there is a selection of pre-defined formats to
+choose from. The codes from above used in the list of standard formats
+are:</p>
 <pre>
 Sequence only:                  S A
 Default sequence:               B N T S A F
@@ -321,23 +334,57 @@ Baroque:                        B 1 2 3 N T R S T C -R T -3 -2 -1 A F</pre>
 
 
 
-<p>The default standard format displays the following: for every new line that the sequence starts to write, the output display will contain first a blank line (<tt>b</tt>), then the position numbers of the ticks (<tt>n</tt>) then the ticks every 10 characters (<tt>t</tt>) then the sequence itself (<tt>s</tt>) then any user-supplied annotation (<tt>a</tt>) then the features from the feature table (<tt>f</tt>). Subsequent lines of the sequence output will repeat this format.</p>
+<p>The default standard format displays the following: for every new
+line that the sequence starts to write, the output display will
+contain first a blank line (<tt>b</tt>), then the position numbers of
+the ticks (<tt>n</tt>) then the ticks every 10 characters (<tt>t</tt>)
+then the sequence itself (<tt>s</tt>) then any user-supplied
+annotation (<tt>a</tt>) then the features from the feature table
+(<tt>f</tt>). Subsequent lines of the sequence output will repeat this
+format.</p>
 
-<p>The sequence can be translated, using the specified genetic code tables. The translation can be done in one, three or six frames. The translation can be displayed in one-letter or three-letter amino acid codes. The translation can optionally be displayed only when it is in open reading frames (ORFs) of a specified minimum size. One or more specified regions of the sequence can be individually translated.</p>
+<p>The sequence can be translated, using the specified genetic code
+tables. The translation can be done in one, three or six frames. The
+translation can be displayed in one-letter or three-letter amino acid
+codes. The translation can optionally be displayed only when it is in
+open reading frames (ORFs) of a specified minimum size. One or more
+specified regions of the sequence can be individually translated.</p>
 
-<p>The output can be formatted for HTML. If the output is being formatted for HTML, then specified regions of the sequence can be displayed in any valid HTML colours.</p>
+<p>The output can be formatted for HTML. If the output is being
+formatted for HTML, then specified regions of the sequence can be
+displayed in any valid HTML colours.</p>
 
-<p>This program can use REBASE data to find the recognition sites and/or cut sites of restriction enzymes in a nucleic acid sequence.  This program can display the cut sites on both strands.  The <tt>-flatreformat</tt> option displays not only the cut sites which many other restriction cut-site programs will show, but also shows the recognition site.</p>
+<p>This program can use REBASE data to find the recognition sites
+and/or cut sites of restriction enzymes in a nucleic acid sequence.
+This program can display the cut sites on both strands.
+The <tt>-flatreformat</tt> option displays not only the cut sites
+which many other restriction cut-site programs will show, but also
+shows the recognition site.</p>
 
-<p>The Restriction Enzyme database (REBASE) is a collection of information about restriction enzymes and related proteins. It contains published and unpublished references, recognition and cleavage sites, isoschizomers, commercial availability, methylation sensitivity, crystal and sequence data. DNA methyltransferases, homing endonucleases, nicking enzymes, specificity subunits and control proteins are also included. Most recently, putative DNA methyltransferases and restriction enzymes, as predicted from analysis of genomic sequences, are also listed. The home page of REBASE is: <a href="http://rebase.neb.com/">http://rebase.neb.com/</a></p>
+<p>The Restriction Enzyme database (REBASE) is a collection of
+information about restriction enzymes and related proteins. It
+contains published and unpublished references, recognition and
+cleavage sites, isoschizomers, commercial availability, methylation
+sensitivity, crystal and sequence data. DNA methyltransferases, homing
+endonucleases, nicking enzymes, specificity subunits and control
+proteins are also included. Most recently, putative DNA
+methyltransferases and restriction enzymes, as predicted from analysis
+of genomic sequences, are also listed. The home page of REBASE
+is: <a href="http://rebase.neb.com/">http://rebase.neb.com/</a></p>
 
-<p>If the sequence is in EMBL, Genbank or SwissProt format, the feature table of the sequence can be dispalyed with the sequence. GFF file features can also be displayed if they are included on the command line using <tt>-ufo=file</tt>.</p>
+<p>If the sequence is in EMBL, Genbank or SwissProt format, the
+feature table of the sequence can be displayed with the sequence. GFF
+file features can also be displayed if they are included on the
+command line using <tt>-ufo=file</tt>.</p>
 
 <p>
-Other display options include:
-The displayed sequence can be numbered either by numbering the start and ending positions, or by placing a ruler with ticks above or below the sequence. An initial position to start the numbering from can be set.
-The width of a line, and width of a margin around the sequence reserved for numbering can be set. 
-Specified regions of the sequence can be displayed in uppercase to highlight them.</p>
+Other display options include: The displayed sequence can be numbered
+either by numbering the start and ending positions, or by placing a
+ruler with ticks above or below the sequence. An initial position to
+start the numbering from can be set.  The width of a line, and width
+of a margin around the sequence reserved for numbering can be set.
+Specified regions of the sequence can be displayed in uppercase to
+highlight them.</p>
 
 
 <H2>
@@ -369,15 +416,7 @@ It always exits with status 0.
 </H2>
 
 None known.
-<p>
 
-If you ask for the sequence display to end at position '100', with the
-qualifier '-send 100', it will display the sequence up to the end of the
-line - position '120'.  This is a feature of this program to make the
-display of things like restriction enzyme cutting sites easier.
-<p>
-
-It is not a bug. Please don't report it.
 <!--#include file="inc/showseq.isee" -->
 
 <H2>

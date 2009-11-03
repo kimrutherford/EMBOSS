@@ -4,7 +4,7 @@
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>skipredundant -threshold 80 -keepredundant </b>
+% <b>skipredundant -threshold 80 -redundant '' </b>
 Remove redundant sequences from an input set
 Input sequence set: <b>globins.fasta</b>
 Redundancy removal options
@@ -14,7 +14,6 @@ Select number [1]: <b></b>
 Gap opening penalty [10.0]: <b></b>
 Gap extension penalty [0.5]: <b></b>
 output sequence(s) [globins.keep]: <b></b>
-Second output sequence(s) [globins.redundant]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

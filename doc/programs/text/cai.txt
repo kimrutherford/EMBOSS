@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Calculate codon adaptation index
@@ -110,8 +117,9 @@ XX
 KW   MET1 homolog.
 XX
 OS   Schizosaccharomyces pombe (fission yeast)
-OC   Eukaryota; Fungi; Ascomycota; Schizosaccharomycetes;
-OC   Schizosaccharomycetales; Schizosaccharomycetaceae; Schizosaccharomyces.
+OC   Eukaryota; Fungi; Dikarya; Ascomycota; Taphrinomycotina;
+OC   Schizosaccharomycetes; Schizosaccharomycetales; Schizosaccharomycetaceae;
+OC   Schizosaccharomyces.
 XX
 RN   [1]
 RP   1-561
@@ -141,6 +149,7 @@ FT                   /transl_table=1
 FT                   /product="MET1 homolog"
 FT                   /db_xref="GENEDB:SPCC1739.06c"
 FT                   /db_xref="GOA:O74468"
+FT                   /db_xref="InterPro:IPR016040"
 FT                   /db_xref="UniProtKB/Swiss-Prot:O74468"
 FT                   /protein_id="BAA23999.1"
 FT                   /translation="SMPKIPSFVPTQTTVFLMALHRLEILVQALIESGWPRVLPVCIA
@@ -280,12 +289,12 @@ Known bugs
 
 See also
 
-   Program name Description
-   chips Calculates Nc codon usage statistic
-   codcmp Codon usage table comparison
-   cusp Create a codon usage table from nucleotide sequence(s)
-   syco Draw synonymous codon usage statictic plot for a nucleotide
-   sequence
+   Program name     Description
+   chips            Calculates Nc codon usage statistic
+   codcmp           Codon usage table comparison
+   cusp             Create a codon usage table from nucleotide sequence(s)
+   syco             Draw synonymous codon usage statictic plot for a nucleotide
+                    sequence
 
 Author(s)
 

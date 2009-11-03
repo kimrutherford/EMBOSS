@@ -54,16 +54,20 @@ __noreturn void  ajExceptRaise(const T* e, const char* file,
     p = Except_stack;
     
     assert(e);
+
     if(p == NULL)
     {
 	ajMessOut("Uncaught exception: ");
+
 	if(e->reason)
 	    ajMessOut(" %s,", e->reason);
 	else
 	    ajMessOut(" at 0x%p,", e);
+
 	if(file && line > 0)
 	    ajMessOut(" raised at %s:%d\n", file, line);
 
+        ajUtilCatch();
 	exit(EXIT_FAILURE);
     }
 

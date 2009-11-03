@@ -103,7 +103,7 @@ int main(int argc, char **argv)
 	if(showall && outf)
 	    ajFmtPrintF(outf,"# Trying '%S'\n",idqry);
 
-	if(!ajSeqGetFromUsa(idqry,pro,&seq))
+	if(!ajSeqGetFromUsa(idqry,pro,seq))
 	{
 	    if(showall && outf)
 		ajFmtPrintF(outf,"# Failed '%S'\n",idqry);

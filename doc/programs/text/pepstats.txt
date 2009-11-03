@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Calculates statistics of protein properties
@@ -103,13 +110,13 @@ ID   LACI_ECOLI              Reviewed;         360 AA.
 AC   P03023; O09196; P71309; Q2MC79; Q47338;
 DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
 DT   19-JUL-2003, sequence version 3.
-DT   20-MAR-2007, entry version 87.
-DE   Lactose operon repressor.
+DT   16-JUN-2009, entry version 105.
+DE   RecName: Full=Lactose operon repressor;
 GN   Name=lacI; OrderedLocusNames=b0345, JW0336;
-OS   Escherichia coli.
+OS   Escherichia coli (strain K12).
 OC   Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
 OC   Enterobacteriaceae; Escherichia.
-OX   NCBI_TaxID=562;
+OX   NCBI_TaxID=83333;
 RN   [1]
 RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
 RX   MEDLINE=78246991; PubMed=355891; DOI=10.1038/274765a0;
@@ -153,13 +160,6 @@ RT   "Highly accurate genome sequences of Escherichia coli K-12 strains
 
   [Part of this file has been deleted for brevity]
 
-DR   Pfam; PF00532; Peripla_BP_1; 1.
-DR   PRINTS; PR00036; HTHLACI.
-DR   SMART; SM00354; HTH_LACI; 1.
-DR   PROSITE; PS00356; HTH_LACI_1; 1.
-DR   PROSITE; PS50932; HTH_LACI_2; 1.
-KW   3D-structure; Complete proteome; Direct protein sequencing;
-KW   DNA-binding; Repressor; Transcription; Transcription regulation.
 FT   CHAIN         1    360       Lactose operon repressor.
 FT                                /FTId=PRO_0000107963.
 FT   DOMAIN        1     58       HTH lacI-type.
@@ -168,6 +168,11 @@ FT   VARIANT     282    282       Y -> D (in T41 mutant).
 FT   MUTAGEN      17     17       Y->H: Broadening of specificity.
 FT   MUTAGEN      22     22       R->N: Recognizes an operator variant.
 FT   CONFLICT    286    286       L -> S (in Ref. 1, 4 and 7).
+FT   HELIX         6     11
+FT   TURN         12     14
+FT   HELIX        17     24
+FT   HELIX        33     45
+FT   HELIX        51     56
 FT   STRAND       63     69
 FT   HELIX        74     89
 FT   STRAND       93     98
@@ -195,6 +200,8 @@ FT   STRAND      287    290
 FT   HELIX       293    308
 FT   STRAND      314    319
 FT   STRAND      322    324
+FT   STRAND      334    338
+FT   HELIX       343    353
 FT   HELIX       354    356
 SQ   SEQUENCE   360 AA;  38590 MW;  347A8DEE92D736CB CRC64;
      MKPVTLYDVA EYAGVSYQTV SRVVNQASHV SAKTREKVEA AMAELNYIPN RVAQQLAGKQ
@@ -213,7 +220,7 @@ Output file format
 
 PEPSTATS of LACI_ECOLI from 1 to 360
 
-Molecular weight = 38590.06             Residues = 360
+Molecular weight = 38590.16             Residues = 360
 Average Residue Weight  = 107.195       Charge   = 1.5
 Isoelectric Point = 6.8820
 A280 Molar Extinction Coefficient  = 21620
@@ -336,24 +343,24 @@ Known bugs
 
 See also
 
-   Program name Description
-   backtranambig Back-translate a protein sequence to ambiguous
-   nucleotide sequence
-   backtranseq Back-translate a protein sequence to a nucleotide sequence
-   charge Draw a protein charge plot
-   checktrans Reports STOP codons and ORF statistics of a protein
-   compseq Calculate the composition of unique words in sequences
-   emowse Search protein sequences by digest fragment molecular weight
-   freak Generate residue/base frequency table or plot
-   iep Calculate the isoelectric point of proteins
-   mwcontam Find weights common to multiple molecular weights files
-   mwfilter Filter noisy data from molecular weights file
-   octanol Draw a White-Wimley protein hydropathy plot
-   pepinfo Plot amino acid properties of a protein sequence in parallel
-   pepwindow Draw a Kyte-Doolittle hydropathy plot for a protein sequence
-   pepwindowall Draw Kyte-Doolittle hydropathy plot for a protein
-   alignment
-   wordcount Count and extract unique words in DNA sequence(s)
+   Program name     Description
+   backtranambig    Back-translate a protein sequence to ambiguous
+                    nucleotide sequence
+   backtranseq      Back-translate a protein sequence to a nucleotide sequence
+   charge           Draw a protein charge plot
+   checktrans       Reports STOP codons and ORF statistics of a protein
+   compseq          Calculate the composition of unique words in sequences
+   emowse           Search protein sequences by digest fragment molecular weight
+   freak            Generate residue/base frequency table or plot
+   iep              Calculate the isoelectric point of proteins
+   mwcontam         Find weights common to multiple molecular weights files
+   mwfilter         Filter noisy data from molecular weights file
+   octanol          Draw a White-Wimley protein hydropathy plot
+   pepinfo          Plot amino acid properties of a protein sequence in parallel
+   pepwindow        Draw a hydropathy plot for a protein sequence
+   pepwindowall     Draw Kyte-Doolittle hydropathy plot for a protein
+                    alignment
+   wordcount        Count and extract unique words in DNA sequence(s)
 
 Author(s)
 

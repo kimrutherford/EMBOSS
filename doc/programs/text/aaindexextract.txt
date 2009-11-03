@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Extract amino acid property data from AAINDEX
@@ -68,7 +75,7 @@ Command line arguments
 Input file format
 
    The AAINDEX database file 'aaindex1' can be downloaded from the
-   AAINDEX site: ftp://ftp.genome.ad.jp/pub/db/genomenet/aaindex/
+   AAINDEX site: ftp://ftp.genome.ad.jp/pub/db/community/aaindex/
 
   Input files for usage example
 
@@ -276,16 +283,16 @@ Known bugs
 
 See also
 
-   Program name Description
-   cutgextract Extract codon usage tables from from CUTG database
-   jaspextract Extract data from JASPAR
-   printsextract Extract data from PRINTS database for use by pscan
-   prosextract Processes the PROSITE motif database for use by
-   patmatmotifs
-   rebaseextract Process the REBASE database for use by restriction
-   enzyme applications
-   tfextract Process TRANSFAC transcription factor database for use by
-   tfscan
+   Program name     Description
+   cutgextract      Extract codon usage tables from from CUTG database
+   jaspextract      Extract data from JASPAR
+   printsextract    Extract data from PRINTS database for use by pscan
+   prosextract      Processes the PROSITE motif database for use by
+                    patmatmotifs
+   rebaseextract    Process the REBASE database for use by restriction
+                    enzyme applications
+   tfextract        Process TRANSFAC transcription factor database for use by
+                    tfscan
 
    The programs pepwindow and pepwindowall normally use the standard
    EMBOSS data file 'Enakai.dat' by default, but you can set their
@@ -294,8 +301,8 @@ See also
 Author(s)
 
    Peter Rice (pmr © ebi.ac.uk)
-   Informatics Division, European Bioinformatics Institute, Wellcome
-   Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
 
 History
 

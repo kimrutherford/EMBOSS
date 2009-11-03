@@ -23,6 +23,18 @@ maskfeat
 
 
 <H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
     Function
 </H2>
 Write a sequence with masked features
@@ -31,7 +43,12 @@ Write a sequence with masked features
     Description
 </H2>
 
-<p><b>maskfeat</b> reads a sequence with associated features and writes the same information to file but with features of the specified type omitted (masked).  Sequence regions corresponding to the masked-out features are masked such that characters in those region are (optionally) converted to lower case and / or (optionally) replaced with the specified mask character.</p>
+<p><b>maskfeat</b> reads a sequence with associated features and
+writes the same information to file but with features of the specified
+type omitted (masked).  Sequence regions corresponding to the
+masked-out features are masked such that characters in those region
+are (optionally) converted to lower case and / or (optionally)
+replaced with the specified mask character.</p>
 
 <H2>
     Usage
@@ -236,7 +253,7 @@ If the mask character is set to be the SPACE character or a null character, then
 </H2>
 
 <b>maskfeat</b> reads in a sequence USA.  You can optionally specify a
-GFF feature file to use with the command-line option '-gff filename'. 
+GFF feature file to use with the command-line option '-ufo filename'. 
 
 <p>
 
@@ -254,11 +271,11 @@ XX
 AC   AB000360;
 XX
 DT   27-OCT-1997 (Rel. 53, Created)
-DT   14-NOV-2006 (Rel. 89, Last updated, Version 3)
+DT   28-SEP-2008 (Rel. 97, Last updated, Version 5)
 XX
 DE   Homo sapiens PIGC gene, complete cds.
 XX
-KW   glycosylphosphatidylinositol-synthesis gene; PIGC.
+KW   .
 XX
 OS   Homo sapiens (human)
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
@@ -267,12 +284,11 @@ OC   Homo.
 XX
 RN   [1]
 RP   1-2582
-RA   Hong Y.;
+RA   Hong Y., Ohishi K., Inoue N., Endo Y., Fujita T., Takeda J., Kinoshita T.;
 RT   ;
 RL   Submitted (08-JAN-1997) to the EMBL/GenBank/DDBJ databases.
-RL   Yeongjin Hong, Research Institute for Microbial Diseases, Immunoregulation;
-RL   3-1 Yamada-oka, Suita, Osaka 565, Japan
-RL   (E-mail:kohishi@biken.osaka-u.ac.jp, Tel:81-6-879-8329, Fax:81-6-875-5233)
+RL   Contact:Yeongjin Hong Research Institute for Microbial Diseases,
+RL   Immunoregulation; 3-1 Yamada-oka, Suita, Osaka 565, Japan
 XX
 RN   [2]
 RX   DOI; 10.1006/geno.1997.4893.
@@ -299,6 +315,7 @@ FT                   /gene="PIGC"
 FT                   /standard_name="glycosylphosphatidylinositol-synthesis
 FT                   gene"
 FT                   /db_xref="GDB:6045444"
+FT                   /db_xref="GOA:Q92535"
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
@@ -485,11 +502,26 @@ None.
     Notes
 </H2>
 
-<p>Formats such as EMBL or SWISSPROT include features in the sequence annotation.  Otherwise, features they may be supplied in a separate file and specified with the qualifier <tt>-ufo</tt> or <tt>-fopenfile</tt> / <tt>-fformat</tt>.</p>
+<p>Formats such as EMBL or SWISSPROT include features in the sequence
+annotation.  Otherwise, features they may be supplied in a separate
+file and specified with the qualifier <tt>-ufo</tt>
+or <tt>-fopenfile</tt> / <tt>-fformat</tt>.</p>
 
-<p>The feature type to mask is by default <tt>repeat*</tt>, i.e. any type whose name starts with <tt>repeat</tt> will be omitted from the output file. Any other type of feature(s) may be specified with the <tt>-type</tt> qualifier.  To specify more than one type of feature, separate their names with spaces or commas. The names may be wild-carded with asterisks <tt>*</tt> to find gruops of feature types sharing a common part of their names.</p>
+<p>The feature type to mask is by default <tt>repeat*</tt>, i.e. any
+type whose name starts with <tt>repeat</tt> will be omitted from the
+output file. Any other type of feature(s) may be specified with
+the <tt>-type</tt> qualifier.  To specify more than one type of
+feature, separate their names with spaces or commas. The names may be
+wild-carded with asterisks <tt>*</tt> to find gruops of feature types
+sharing a common part of their names.</p>
 
-<p>If you are unsure of the names of feature types in use, please consult <a href="http://www3.ebi.ac.uk/Services/WebFeat/">http://www3.ebi.ac.uk/Services/WebFeat/</a>  (EMBL feature types) and see Appendix A of the Swissprot user manual in <a href="http://www.expasy.ch/txt/userman.txt">http://www.expasy.ch/txt/userman.txt</a> (Swissprot feature types).</p>
+<p>If you are unsure of the names of feature types in use, please
+consult <a href="http://www.ebi.ac.uk/Services/WebFeat/">
+http://www.ebi.ac.uk/Services/WebFeat/</a> (EMBL feature types) and
+see Appendix A of the Swissprot user manual
+in <a href="http://www.uniprot.org/manual/sequence_annotation">
+http://www.uniprot.org/manual/sequence_annotation</a> (Swissprot
+feature types).</p>
 
 
 <H2>
@@ -662,6 +694,11 @@ None.
 </tr>
 
 <tr>
+<td><a href="nthseqset.html">nthseqset</a></td>
+<td>Reads and writes (returns) one set of sequences from many</td>
+</tr>
+
+<tr>
 <td><a href="pasteseq.html">pasteseq</a></td>
 <td>Insert one sequence into another</td>
 </tr>
@@ -674,6 +711,11 @@ None.
 <tr>
 <td><a href="seqret.html">seqret</a></td>
 <td>Reads and writes (returns) sequences</td>
+</tr>
+
+<tr>
+<td><a href="seqretsetall.html">seqretsetall</a></td>
+<td>Reads and writes (returns) many sets of sequences</td>
 </tr>
 
 <tr>
@@ -699,6 +741,11 @@ None.
 <tr>
 <td><a href="skipseq.html">skipseq</a></td>
 <td>Reads and writes (returns) sequences, skipping first few</td>
+</tr>
+
+<tr>
+<td><a href="splitsource.html">splitsource</a></td>
+<td>Split sequence(s) into original source sequences</td>
 </tr>
 
 <tr>

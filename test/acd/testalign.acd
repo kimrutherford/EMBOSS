@@ -5,11 +5,11 @@ appl: testalign [ doc: "testing" group: "testing" ]
 
 section: input [ info: "Input section" type: "page" ]
 
-align: test [
+align: atest [
       standard: Y
       aformat: pair
 ]
 
-integer: testnum [ min: 1 info: "Pick a number" ]
+integer: numtest [ min: 1 info: "Pick a number" ]
 
 endsection: input

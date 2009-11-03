@@ -33,8 +33,6 @@
 
 
 
-
-
 /* ======================================================================= */
 /* ================= Prototypes for private functions ==================== */
 /* ======================================================================= */
@@ -42,12 +40,9 @@
 
 
 
-
-
 /* ======================================================================= */
 /* ========================== private functions ========================== */
 /* ======================================================================= */
-
 
 
 
@@ -68,7 +63,6 @@
 
 
 
-
 /* ======================================================================= */
 /* =========================== destructors =============================== */
 /* ======================================================================= */
@@ -79,7 +73,6 @@
 ** deleted.  The original pointer is set to NULL so is ready for re-use.
 **
 ****************************************************************************/
-
 
 
 
@@ -99,7 +92,6 @@
 
 
 
-
 /* ======================================================================= */
 /* ============================= Modifiers =============================== */
 /* ======================================================================= */
@@ -109,7 +101,6 @@
 ** These functions use the contents of an instance and update them.
 **
 ****************************************************************************/
-
 
 
 
@@ -150,27 +141,28 @@ AjBool embPdbidToSp(const AjPStr pdb, AjPStr *spr, const AjPList list)
     if(!pdb || !list)
     {
 	ajWarn("Bad args passed to embPdbidToSp");
+
 	return ajFalse;
     }
     
 
     dim = ajListToarray(list, (void ***) &(arr));
+
     if(!dim)
     {
 	ajWarn("Empty list passed to embPdbidToSp");
+
 	return ajFalse;
     }
 
 
     if( (idx = ajPdbtospArrFindPdbid(arr, dim, pdb))==-1)
 	return ajFalse;
-    else
-    {
-	ajStrAssignS(spr, arr[idx]->Spr[0]);
-	return ajTrue;
-    }
-}
 
+    ajStrAssignS(spr, arr[idx]->Spr[0]);
+
+    return ajTrue;
+}
 
 
 
@@ -201,14 +193,17 @@ AjBool embPdbidToAcc(const AjPStr pdb, AjPStr *acc, const AjPList list)
     if(!pdb || !list)
     {
 	ajWarn("Bad args passed to embPdbidToAcc");
+
 	return ajFalse;
     }
     
 
     dim = ajListToarray(list, (void ***) &(arr));
+
     if(!dim)
     {
 	ajWarn("Empty list passed to embPdbidToAcc");
+
 	return ajFalse;
     }
 
@@ -217,18 +212,16 @@ AjBool embPdbidToAcc(const AjPStr pdb, AjPStr *acc, const AjPList list)
     {
         arrfree = (AjPPdbtosp*) arr;
 	AJFREE(arrfree);
+
 	return ajFalse;
     }
-    
-    else
-    {
-	ajStrAssignS(acc, arr[idx]->Acc[0]);
-        arrfree = (AjPPdbtosp*) arr;
-	AJFREE(arrfree);
-	return ajTrue;
-    }
-}
 
+    ajStrAssignS(acc, arr[idx]->Acc[0]);
+    arrfree = (AjPPdbtosp*) arr;
+    AJFREE(arrfree);
+
+    return ajTrue;
+}
 
 
 
@@ -275,6 +268,7 @@ AjBool embPdbidToScop(const AjPPdb pdb, const AjPList list_allscop,
 	    found = 1;
 	}
     }
+
     ajListIterDel(&iter);
     ajStrDel(&tmpPdbId);
     ajStrDel(&tmpDomId);
@@ -284,7 +278,6 @@ AjBool embPdbidToScop(const AjPPdb pdb, const AjPList list_allscop,
 
     return ajFalse;
 }
-
 
 
 
@@ -319,6 +312,7 @@ AjBool embAtomInContact(const AjPAtom atm1, const AjPAtom atm2, float thresh,
     if(!atm1 || !atm2 || !vdw)
     {
 	ajWarn("Bad args passed to embAtomInContact");
+
 	return ajFalse;
     }
     
@@ -401,7 +395,6 @@ float embAtomDistance(const AjPAtom atm1, const AjPAtom atm2,
 
 
 
-
 /* ======================================================================= */
 /* =========================== Reporters ==================================*/
 /* ======================================================================= */
@@ -441,7 +434,6 @@ float embVdwRad(const AjPAtom atm, const AjPVdwall vdw)
 
 
 
-
 /* @func embPdbToIdx ********************************************************
 **
 ** Reads a Pdb object and writes an integer which gives the index into the 
@@ -465,12 +457,14 @@ AjBool embPdbToIdx(ajint *idx, const AjPPdb pdb, const AjPStr res, ajint chn)
     if(!pdb || !(res) || !(idx))
     {
 	ajWarn("Bad arg's passed to embPdbToIdx");
+
 	return ajFalse;
     }
     
     if((chn > pdb->Nchn) || (!pdb->Chains) || (chn<1))
     {
 	ajWarn("Bad arg's passed to embPdbToIdx");
+
 	return ajFalse;
     }
     
@@ -500,6 +494,7 @@ AjBool embPdbToIdx(ajint *idx, const AjPPdb pdb, const AjPStr res, ajint chn)
 	{
 	    ajListIterDel(&iter);		
 	    *idx = residue->Idx;
+
 	    return ajTrue;
 	}
     }
@@ -513,7 +508,6 @@ AjBool embPdbToIdx(ajint *idx, const AjPPdb pdb, const AjPStr res, ajint chn)
 
 
 
-
 /* ======================================================================= */
 /* ========================== Input & Output ============================= */
 /* ======================================================================= */
@@ -523,7 +517,6 @@ AjBool embPdbToIdx(ajint *idx, const AjPPdb pdb, const AjPStr res, ajint chn)
 ** These functions are used for formatted input and output to file.    
 **
 ****************************************************************************/
-
 
 
 
@@ -564,100 +557,111 @@ AjBool embPdbListHeterogens(const AjPPdb pdb, AjPList *list_heterogens,
 			    AjPInt *siz_heterogens, ajint *nhet, 
 			    AjPFile logfile)
 { 
-  /*
-  ** NOTE: EVERYTHING IN THE CLEAN PDB FILES IS CURRENTLY CHAIN
-  ** ASSOCIATED!  THIS WILL BE CHANGED IN FUTURE
-  */
-  AjIList iter  = NULL;	/* Iterator for atoms in current pdb object */
-  AjPAtom hetat = NULL;		/* Pointer to current Atom object */
-  ajint i=0;			/* Counter for chains */
-  ajint prev_gpn = -10000; 	/* Group number of atom object from
+    /*
+    ** NOTE: EVERYTHING IN THE CLEAN PDB FILES IS CURRENTLY CHAIN
+    ** ASSOCIATED!  THIS WILL BE CHANGED IN FUTURE
+    */
+    AjIList iter  = NULL;	/* Iterator for atoms in current pdb object */
+    AjPAtom hetat = NULL;		/* Pointer to current Atom object */
+    ajint i=0;			/* Counter for chains */
+    ajint prev_gpn = -10000; 	/* Group number of atom object from
 				   previous iteration */
-  AjPList GrpAtmList = NULL; 	/* List to hold atoms from the current 
+    AjPList GrpAtmList = NULL; 	/* List to hold atoms from the current 
 				   group */
-  AjPAtom *AtmArray  = NULL;	/* Array of atom objects */
-  ajint n=0;			/* number of elements in AtmArray */
-  ajint grp_count = 0;		/* No. of groups */
-  ajint arr_count = 0;          /* Index for siz_heterogens */
+    AjPAtom *AtmArray  = NULL;	/* Array of atom objects */
+    ajint n=0;			/* number of elements in AtmArray */
+    ajint grp_count = 0;		/* No. of groups */
+    ajint arr_count = 0;          /* Index for siz_heterogens */
     
-  /* Check args */
-  if((pdb==NULL)||(list_heterogens==NULL)||(siz_heterogens==NULL))
-  {
-      ajWarn("Bad args passed to embPdbListHeterogens\n");
-      return ajFalse;
-  }
-  
-  if((!(*list_heterogens))||(!(*siz_heterogens)))
-  {
-      ajWarn("Bad args passed to embPdbListHeterogens\n");
-      return ajFalse;
-  }
-  
-  if(pdb->Ngp>0)
-      ajFmtPrintF(logfile, "\tNGP:%d\n", pdb->Ngp);
-  
-  if(pdb->Nchn>0)
-  {      
-      for(i=0;i<pdb->Nchn;++i) 
-      {
-	  prev_gpn=-100000;	   /* Reset prev_gpn for each chain */
-	  /* initialise iterator for pdb->Chains[i]->Atoms */
-	  iter=ajListIterNewread(pdb->Chains[i]->Atoms);
-	  /* Iterate through list of Atom objects */
-	  while((hetat=(AjPAtom)ajListIterGet(iter)))
-	  {		
-	      /* check for type  */
-	      if(hetat->Type != 'H')
-		  continue;
+    /* Check args */
+    if((pdb==NULL)||(list_heterogens==NULL)||(siz_heterogens==NULL))
+    {
+        ajWarn("Bad args passed to embPdbListHeterogens\n");
 
-	      /* TEST FOR A NEW GROUP */
-	      if(prev_gpn != hetat->Gpn) 
-	      {
-		  grp_count++;
-		  if(GrpAtmList)
-		  {
-		      n=(ajListToarray(GrpAtmList, (void ***) &AtmArray));
-		      ajListPushAppend(*list_heterogens, AtmArray);
-		      /* So that ajListToArray doesn't try and free the non-NULL pointer */
-		      AtmArray=NULL;
-		      ajIntPut(siz_heterogens, arr_count, n);
-		      (*nhet)++;
-		      ajListFree(&GrpAtmList);
-		      GrpAtmList=NULL;
-		      arr_count++;
-		  }		    		    
-		  GrpAtmList=ajListNew();
-		  prev_gpn=hetat->Gpn;
-	      } /* End of new group loop */
-	      ajListPushAppend(GrpAtmList, (AjPAtom) hetat);
-	  } /* End of list iteration loop */
+        return ajFalse;
+    }
+  
+    if((!(*list_heterogens))||(!(*siz_heterogens)))
+    {
+        ajWarn("Bad args passed to embPdbListHeterogens\n");
 
-	  /* Free list iterator */
-	  ajListIterDel(&iter);
+        return ajFalse;
+    }
+  
+    if(pdb->Ngp>0)
+        ajFmtPrintF(logfile, "\tNGP:%d\n", pdb->Ngp);
+  
+    if(pdb->Nchn>0)
+    {      
+        for(i=0;i<pdb->Nchn;++i) 
+        {
+            prev_gpn=-100000;	   /* Reset prev_gpn for each chain */
+            /* initialise iterator for pdb->Chains[i]->Atoms */
+            iter=ajListIterNewread(pdb->Chains[i]->Atoms);
+
+            /* Iterate through list of Atom objects */
+            while((hetat=(AjPAtom)ajListIterGet(iter)))
+            {		
+                /* check for type  */
+                if(hetat->Type != 'H')
+                    continue;
+
+                /* TEST FOR A NEW GROUP */
+                if(prev_gpn != hetat->Gpn) 
+                {
+                    grp_count++;
+
+                    if(GrpAtmList)
+                    {
+                        n=(ajListToarray(GrpAtmList, (void ***) &AtmArray));
+                        ajListPushAppend(*list_heterogens, AtmArray);
+                        /*
+                        ** So that ajListToArray doesn't try and free the
+                        ** non-NULL pointer
+                        */
+                        AtmArray=NULL;
+                        ajIntPut(siz_heterogens, arr_count, n);
+                        (*nhet)++;
+                        ajListFree(&GrpAtmList);
+                        GrpAtmList=NULL;
+                        arr_count++;
+                    }		    		    
+
+                    GrpAtmList=ajListNew();
+                    prev_gpn=hetat->Gpn;
+                } /* End of new group loop */
+
+                ajListPushAppend(GrpAtmList, (AjPAtom) hetat);
+            } /* End of list iteration loop */
+
+            /* Free list iterator */
+            ajListIterDel(&iter);
 	    
-      } /* End of chain for loop */
+        } /* End of chain for loop */
 
-      if(GrpAtmList)
-      {
-	  n=(ajListToarray(GrpAtmList, (void ***) &AtmArray));
-	  ajListPushAppend(*list_heterogens, AtmArray);
-	  /* So that ajListToArray doesn't try and free the non-NULL pointer */
-	  AtmArray=NULL; 
-	  ajIntPut(siz_heterogens, arr_count, n);
-	  (*nhet)++;
-	  ajListFree(&GrpAtmList);
-	  GrpAtmList=NULL;
-      }
+        if(GrpAtmList)
+        {
+            n=(ajListToarray(GrpAtmList, (void ***) &AtmArray));
+            ajListPushAppend(*list_heterogens, AtmArray);
+            /*
+            ** So that ajListToArray doesn't try and free the non-NULL
+            ** pointer
+            */
+            AtmArray=NULL; 
+            ajIntPut(siz_heterogens, arr_count, n);
+            (*nhet)++;
+            ajListFree(&GrpAtmList);
+            GrpAtmList=NULL;
+        }
 	
-      GrpAtmList = NULL;
-      prev_gpn   = -10000;  
+        GrpAtmList = NULL;
+        prev_gpn   = -10000;  
 
-  } /* End of chain loop */
+    } /* End of chain loop */
   
   
-  return ajTrue;
+    return ajTrue;
 }
-
 
 
 
@@ -689,12 +693,14 @@ AjBool embPdbResidueIndexI(const AjPPdb pdb, ajint chn, AjPInt *idx)
     if(!pdb || !(*idx))
     {
 	ajWarn("Bad arg's passed to embPdbResidueIndexI");
+
 	return ajFalse;
     }
     
     if((chn > pdb->Nchn) || (!pdb->Chains))
     {
 	ajWarn("Bad arg's passed to embPdbResidueIndexI");
+
 	return ajFalse;
     }
     
@@ -769,6 +775,7 @@ AjBool embPdbResidueIndexC(const AjPPdb pdb, char chn, AjPInt *idx)
     if(!ajPdbChnidToNum(chn, pdb, &chnn))
     {
 	ajWarn("Chain not found in embPdbResidueIndexC");
+
 	return ajFalse;
     }
     
@@ -777,7 +784,6 @@ AjBool embPdbResidueIndexC(const AjPPdb pdb, char chn, AjPInt *idx)
 
     return ajTrue;
 }
-
 
 
 
@@ -811,12 +817,14 @@ AjBool embPdbResidueIndexICA(const AjPPdb pdb,
     if(!pdb || !(*idx))
     {
 	ajWarn("Bad arg's passed to embPdbResidueIndexICA");
+
 	return ajFalse;
     }
     
     if((chn > pdb->Nchn) || (!pdb->Chains))
     {
 	ajWarn("Bad arg's passed to embPdbResidueIndexICA");
+
 	return ajFalse;
     }
     
@@ -837,11 +845,13 @@ AjBool embPdbResidueIndexICA(const AjPPdb pdb,
 	*/
 	if(atm->Mod!=1)
 	    break;
+
 	if(atm->Type!='P') 
 	    continue;
 
 	/* If we are onto a new residue */
 	this_rn=atm->Idx;
+
 	if(this_rn!=last_rn && ajStrMatchC(atm->Atm,  "CA"))
 	{
 	    ajUintPut(&(*idx), resn++, atm->Idx);
@@ -854,6 +864,7 @@ AjBool embPdbResidueIndexICA(const AjPPdb pdb,
     {
 	ajWarn("Chain not found in embPdbResidueIndexICA");
 	ajListIterDel(&iter);		
+
 	return ajFalse;
     }
     	
@@ -863,7 +874,6 @@ AjBool embPdbResidueIndexICA(const AjPPdb pdb,
 
     return ajTrue;
 }
-
 
 
 
@@ -893,6 +903,7 @@ AjBool embPdbResidueIndexCCA(const AjPPdb pdb, char chn,
     if(!ajPdbChnidToNum(chn, pdb, &chnn))
     {
 	ajWarn("Chain not found in embPdbResidueIndexCCA");
+
 	return ajFalse;
     }
     
@@ -902,6 +913,7 @@ AjBool embPdbResidueIndexCCA(const AjPPdb pdb, char chn,
 
     return ajTrue;
 }
+
 
 
 
@@ -921,11 +933,13 @@ AjBool embPdbResidueIndexCCA(const AjPPdb pdb, char chn,
 ** @return [AjBool] True on succcess
 ** @@
 ****************************************************************************/
+
 AjBool       embStrideToThree(AjPStr *to, const AjPStr from)
 {
     if(!from)
     {
 	ajWarn("Bad args passed to embStrideToThree");
+
 	return ajFalse;
     }
     else
@@ -939,7 +953,3 @@ AjBool       embStrideToThree(AjPStr *to, const AjPStr from)
 
     return ajTrue;
 }
-
-
-
-

@@ -27,6 +27,11 @@
 
 #include "ajax.h"
 
+static clock_t timeClockSave = 0;
+
+ajlong timeClockOverflow = 0L;
+ajlong timeClockMax = 0L;
+
 
 /* @datastatic TimePFormat ****************************************************
 **
@@ -78,6 +83,7 @@ static TimeOFormat timeFormat[] =  /* formats for strftime */
 
 static const char* TimeFormat(const char *timefmt, AjBool* makeupper);
 
+
 /* @filesection ajtime *******************************************************
 **
 ** @nam1rule aj Function belongs to the AJAX library.
@@ -116,9 +122,6 @@ static const char* TimeFormat(const char *timefmt, AjBool* makeupper);
 ** @fcategory new
 **
 ******************************************************************************/
-
-
-
 
 
 
@@ -167,13 +170,17 @@ AjPTime ajTimeNewDayFmt( const char *timefmt,
 
     thys->time.tm_mday  = mday ;
     thys->time.tm_mon   = mon-1;
-    if(year > 1899) year = year-1900;
+
+    if(year > 1899)
+        year = year-1900;
+
     thys->time.tm_year  = year ;
 
     mktime(&thys->time);
 
     return thys ;
 }
+
 
 
 
@@ -241,6 +248,7 @@ AjPTime ajTimeNewToday(void)
 
 
 
+
 /* @obsolete ajTimeToday
 ** @rename ajTimeNewToday
 */
@@ -249,6 +257,9 @@ __deprecated AjPTime ajTimeToday(void)
 {
     return ajTimeNewToday();
 }
+
+
+
 
 /* @func ajTimeNewTodayFmt ****************************************************
 **
@@ -280,6 +291,9 @@ AjPTime ajTimeNewTodayFmt(const char* timefmt)
     return thys;
 }
 
+
+
+
 /* @obsolete ajTimeTodayF
 ** @rename ajTimeNewTodayFmt
 */
@@ -288,6 +302,8 @@ __deprecated AjPTime ajTimeTodayF(const char* timefmt)
 {
     return ajTimeNewTodayFmt(timefmt);
 }
+
+
 
 
 /* @section destructors *******************************************************
@@ -319,6 +335,9 @@ __deprecated AjPTime ajTimeTodayF(const char* timefmt)
 void ajTimeDel(AjPTime *Ptime)
 {
     /* Check arg's */
+    if(Ptime==NULL)
+	return;
+
     if(*Ptime==NULL)
 	return;
 
@@ -327,6 +346,9 @@ void ajTimeDel(AjPTime *Ptime)
     
     return;
 }
+
+
+
 
 /* @section get time **********************************************************
 **
@@ -357,8 +379,11 @@ void ajTimeDel(AjPTime *Ptime)
 time_t ajTimeGetTimetype(const AjPTime thys)
 {
     struct tm tm = thys->time;		/* mktime resets wday and yday */
+
     return mktime(&tm);
 }
+
+
 
 
 /* @obsolete ajTimeMake
@@ -368,6 +393,8 @@ __deprecated time_t ajTimeMake(const AjPTime thys)
 {
     return ajTimeGetTimetype(thys);
 }
+
+
 
 
 /* @section get reference to internals ****************************************
@@ -399,19 +426,24 @@ __deprecated time_t ajTimeMake(const AjPTime thys)
 const AjPTime ajTimeRefToday(void)
 {
     time_t tim;
-    
-    tim = time(0);
 
     if(!timeTodaySaved)
+    {
 	AJNEW0(timeTodaySaved);
 
-    if(!ajTimeSetLocal(timeTodaySaved, tim))
-        return NULL;
+        tim = time(0);
 
-    timeTodaySaved->format = NULL;
+        if(!ajTimeSetLocal(timeTodaySaved, tim))
+            return NULL;
 
+        timeTodaySaved->format = NULL;
+    }
+    
     return timeTodaySaved;
 }
+
+
+
 
 /* @obsolete ajTimeTodayRef
 ** @rename ajTimeRefToday
@@ -421,6 +453,7 @@ __deprecated const AjPTime ajTimeTodayRef(void)
 {
     return ajTimeRefToday();
 }
+
 
 
 
@@ -454,6 +487,9 @@ const AjPTime ajTimeRefTodayFmt(const char* timefmt)
     return timeTodayData;
 }
 
+
+
+
 /* @obsolete ajTimeTodayRefF
 ** @rename ajTimeRefTodayFmt
 */
@@ -462,6 +498,9 @@ __deprecated const AjPTime ajTimeTodayRefF(const char* timefmt)
 {
     return ajTimeRefTodayFmt(timefmt);
 }
+
+
+
 
 /* @section set time ***********************************************************
 **
@@ -517,7 +556,9 @@ AjBool ajTimeSetC(AjPTime thys, const char* timestr)
 	       &year, &mon, &mday, &hour, &min, &sec))
 	return ajFalse;
 
-    if(year > 1899) year = year-1900;
+    if(year > 1899)
+        year = year-1900;
+
     thys->time.tm_year  = year ;
     thys->time.tm_mon   = mon-1;
     thys->time.tm_mday  = mday ;
@@ -530,6 +571,8 @@ AjBool ajTimeSetC(AjPTime thys, const char* timestr)
 
     return ajTrue;
 }
+
+
 
 
 /* @func ajTimeSetS ***********************************************************
@@ -563,7 +606,9 @@ AjBool ajTimeSetS(AjPTime thys, const AjPStr timestr)
 	       &year, &mon, &mday, &hour, &min, &sec))
 	return ajFalse;
 
-    if(year > 1899) year = year-1900;
+    if(year > 1899)
+        year = year-1900;
+
     thys->time.tm_year  = year ;
     thys->time.tm_mon   = mon-1;
     thys->time.tm_mday  = mday ;
@@ -576,6 +621,8 @@ AjBool ajTimeSetS(AjPTime thys, const AjPStr timestr)
 
     return ajTrue;
 }
+
+
 
 
 /* @func ajTimeSetLocal *******************************************************
@@ -599,8 +646,10 @@ AjBool ajTimeSetLocal(AjPTime thys, const time_t timer)
 	if(ajTimeSetS(thys, timestr))
 	{
 	    ajStrDel(&timestr);
+
 	    return ajTrue;
 	}
+
 	ajStrDel(&timestr);
     }
 
@@ -612,17 +661,22 @@ AjBool ajTimeSetLocal(AjPTime thys, const time_t timer)
     thys->time.tm_sec = result->tm_sec;
     thys->time.tm_min = result->tm_min;
     thys->time.tm_mday = result->tm_mday;
+    thys->time.tm_wday = result->tm_wday;
     thys->time.tm_hour = result->tm_hour;
     thys->time.tm_mon  = result->tm_mon;
     thys->time.tm_year = result->tm_year;
 #else
     result = (struct tm *)localtime_r(&timer,&thys->time);
+
     if(!result)
 	return ajFalse;
 #endif
 
     return ajTrue;
 }
+
+
+
 
 /* @obsolete ajTimeLocal
 ** @replace ajTimeSetLocal (1,2/2,1)
@@ -632,6 +686,8 @@ __deprecated AjBool ajTimeLocal(const time_t timer, AjPTime thys)
 {
     return ajTimeSetLocal(thys, timer);
 }
+
+
 
 
 /* @section comparison ********************************************************
@@ -678,6 +734,9 @@ double ajTimeDiff(const AjPTime thys, const AjPTime newtime)
   return ret;
 }
 
+
+
+
 /* @funcstatic TimeFormat *****************************************************
 **
 ** AJAX function to return the ANSI C format for an AJAX time string
@@ -718,7 +777,6 @@ static const char* TimeFormat(const char *timefmt, AjBool* makeupper)
 
 
 
-
 /* @section debug *************************************************************
 **
 ** Functions for debugging time objects.
@@ -753,6 +811,9 @@ void ajTimeTrace(const AjPTime thys)
     return;
 }
 
+
+
+
 /* @section exit
 **
 ** Functions called on exit from the program by ajExit to do
@@ -781,6 +842,210 @@ void ajTimeExit(void)
 {
     ajTimeDel(&timeTodayData);
     ajTimeDel(&timeTodaySaved);
+
+    return;
+}
+
+
+
+
+/* @datasection [none] time internals ***********************************
+**
+** Function is for processing time internals.
+**
+** @nam2rule Time Time processing
+**
+*/
+
+
+
+/* @section reset **************************************************************
+**
+** Functions for memory cleanup
+**
+** @fdata [none]
+**
+** @nam3rule Reset Reset internals
+** 
+** @valrule   *  [void] No return value
+** 
+** @fcategory misc
+**
+******************************************************************************/
+
+/* @func ajTimeReset **********************************************************
+**
+** Resets the clock time to zero
+**
+** @return [void]
+******************************************************************************/
+
+void ajTimeReset(void)
+{
+    time_t tim;
+
+    if(!timeTodaySaved)
+	AJNEW0(timeTodaySaved);
+
+    tim = time(0);
+
+    if(ajTimeSetLocal(timeTodaySaved, tim))
+        timeTodaySaved->format = NULL;
+    
+    return;
+}
+
+
+
+
+/* @datasection [none] Cpu clock object ****************************************
+**
+** @nam2rule Clock     Function is for handling CPU clock time
+**
+******************************************************************************/
+
+/* @section get cpu time *******************************************************
+**
+** Functions for retrieving CPU time
+**
+** @fdata [none]
+**
+** @nam3rule Diff Return time difference in seconds as a double
+** @nam3rule Now Return current cpu clock ticks as a long integer
+** @nam3rule Seconds Return current cpu clock time in seconds as a long integer
+**
+** @argrule Diff starttime [ajlong] start time
+** @argrule Diff nowtime [ajlong] current time
+** @valrule Diff [double] CPU time in seconds
+** @valrule Now [ajlong] CPU ticks
+** @valrule Seconds [double] CPU time in seconds
+**
+** @fcategory use
+**
+******************************************************************************/
+
+/* @func ajClockDiff ********************************************************
+**
+** Returns the cpu time in seconds between two clock values
+**
+** @param [r] starttime [ajlong] start time
+** @param [r] nowtime [ajlong] current time
+** @return [double] Total cpu clock time in seconds
+**
+******************************************************************************/
+
+double ajClockDiff(ajlong starttime, ajlong nowtime)
+{
+    double x;
+
+    x = (nowtime - starttime);
+
+    return x/(double)CLOCKS_PER_SEC;
+}
+
+
+
+
+/* @func ajClockNow ************************************************************
+**
+** Returns the clock time as a long even for systems where the clock_t type
+** is 4 bytes
+**
+** @return [ajlong] Total clock ticks
+******************************************************************************/
+
+ajlong ajClockNow(void)
+{
+    clock_t now;
+
+    now = clock();
+
+    if(now < timeClockSave)
+    {
+        /* ajUser("ajClockNow overflow now:%Ld "
+               "timeClockSave:%Ld timeClockOverflow:%Ld",
+               (ajlong)now, (ajlong)timeClockSave, timeClockOverflow); */
+        if(!timeClockMax)
+        {
+            if(sizeof(now) == 4)
+                timeClockMax = UINT_MAX;
+            else
+                timeClockMax = UINT_MAX;
+        }
+        
+        
+        timeClockOverflow += timeClockMax;
+        /* ajUser("timeClockOverflow:%Ld timeClockMax:%Ld",
+           timeClockOverflow, timeClockMax); */
+    }
+    
+    timeClockSave = now;
+
+    if(timeClockOverflow)
+        return (timeClockOverflow + now);
+    
+    return now; 
+}
+
+
+
+
+/* @func ajClockSeconds ********************************************************
+**
+** Returns the cpu time in seconds since the start
+**
+** @return [double] Total cpu clock time in seconds
+**
+******************************************************************************/
+
+double ajClockSeconds(void)
+{
+    double x;
+
+    x = ajClockNow();
+
+    return x/(double)CLOCKS_PER_SEC;
+}
+
+
+
+
+/* @datasection [none] cpu time internals ***********************************
+**
+** Function is for processing cpu time internals.
+**
+** @nam2rule Clock Cpu time processing
+**
+*/
+
+
+
+
+/* @section reset **************************************************************
+**
+** Functions for CPU time memory cleanup
+**
+** @fdata [none]
+**
+** @nam3rule Reset Reset internals
+**
+** @valrule   *  [void] No return value
+** 
+** @fcategory misc
+**
+******************************************************************************/
+
+/* @func ajClockReset **********************************************************
+**
+** Resets the clock time to zero
+**
+** @return [void]
+******************************************************************************/
+
+void ajClockReset(void)
+{
+    timeClockSave = clock();
+    timeClockOverflow = 0;
 
     return;
 }

@@ -21,6 +21,18 @@ equicktandem
 <p>
 
 <H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
     Function
 </H2>
 Finds tandem repeats in nucleotide sequences
@@ -28,14 +40,31 @@ Finds tandem repeats in nucleotide sequences
     Description
 </H2>
 
-<p><b>equicktandem</b> identifies regions in a nucleotide sequence which are likely to contain tanden repeats.  For a region to be reported, it must be no larger than a specified maximum repeat size and must score higher than a threshold score, which is also user-specified. The output is a standard EMBOSS report file with details of the location and score of any potential tandem repeats.  Optionally, the output can be written in the format of the Sanger Centre quicktandem program.</p>
+<p><b>equicktandem</b> identifies regions in a nucleotide sequence
+which are likely to contain tanden repeats.  For a region to be
+reported, it must be no larger than a specified maximum repeat size
+and must score higher than a threshold score, which is also
+user-specified. The output is a standard EMBOSS report file with
+details of the location and score of any potential tandem repeats.
+Optionally, the output can be written in the format of the Sanger
+Centre quicktandem program.</p>
 
 
 <H2>
 Algorithm
 </H2>
 
-<p><b>equicktandem</b> looks for sequence segments in which each base tends to match the base a fixed number ('repeatsize') of nucleotides back in the sequence, i.e. with an autocorrelation peak at 'repeatsize'.  The score for a segment is the sum of the scores for each position in that segment: the score is incremented (+1) for a match to the corresponding base 'repeatsize' back and decremented (-1) for a mismatch.  The algorithm allows for drift in the repeating sequence, i.e. exact matches are not required, nor is a consensus sequence for the whole repeat block used (that is what <b>etandem</b> does).  The algorithm does not account for gaps but it is much quicker than <b>etandem</b>.</p>
+<p><b>equicktandem</b> looks for sequence segments in which each base
+tends to match the base a fixed number ('repeatsize') of nucleotides
+back in the sequence, i.e. with an autocorrelation peak at
+'repeatsize'.  The score for a segment is the sum of the scores for
+each position in that segment: the score is incremented (+1) for a
+match to the corresponding base 'repeatsize' back and decremented (-1)
+for a mismatch.  The algorithm allows for drift in the repeating
+sequence, i.e. exact matches are not required, nor is a consensus
+sequence for the whole repeat block used (that is what <b>etandem</b>
+does).  The algorithm does not account for gaps but it is much quicker
+than <b>etandem</b>.</p>
 
 <H2>
     Usage
@@ -219,14 +248,14 @@ XX
 KW   telomeric repeat.
 XX
 OS   Human herpesvirus 7
-OC   Viruses; dsDNA viruses, no RNA stage; Herpesviridae; Betaherpesvirinae;
-OC   Roseolovirus.
+OC   Viruses; dsDNA viruses, no RNA stage; Herpesvirales; Herpesviridae;
+OC   Betaherpesvirinae; Roseolovirus.
 XX
 RN   [1]
 RP   1-1272
 RX   PUBMED; 7494318.
 RA   Secchiero P., Nicholas J., Deng H., Xiaopeng T., van Loon N., Ruvolo V.R.,
-RA   Berneman Z.N., Reitz M.S. Jr., Dewhurst S.;
+RA   Berneman Z.N., Reitz M.S.Jr., Dewhurst S.;
 RT   "Identification of human telomeric repeat motifs at the genome termini of
 RT   human herpesvirus 7: structural analysis and heterogeneity";
 RL   J. Virol. 69(12):8041-8045(1995).
@@ -349,9 +378,21 @@ None.
     Notes
 </H2>
 
-<p>A tandem repeat in a DNA sequence is where a sequence of two or more nucleotides is repeated without any intervening nucleotides.  For example "GATACAGATACAGATACA" is a tandem repeat of "GATACA".  A short tandem repeat is typically 2 to 10 base pairs and occur in introns.  The sequence and number of repeats at a given locus tend to be characteristic of an individual.  Where enough STR loci are examined, a unique genetic profile of an individual can be built.  Thus, tandem repeats are useful for genotyping, for example, in determining parentage and in forensic cases.</p>
+<p>A tandem repeat in a DNA sequence is where a sequence of two or
+more nucleotides is repeated without any intervening nucleotides.  For
+example "GATACAGATACAGATACA" is a tandem repeat of "GATACA".  A short
+tandem repeat is typically 2 to 10 base pairs and occur in introns.
+The sequence and number of repeats at a given locus tend to be
+characteristic of an individual.  Where enough STR loci are examined,
+a unique genetic profile of an individual can be built.  Thus, tandem
+repeats are useful for genotyping, for example, in determining
+parentage and in forensic cases.</p>
 
-<p>To identify genuine tandem repeats, the repeat sizes and / or sequence regions identified by <b>equicktandem</b> can be used as input to <b>etandem</b>.  <b>etandem</b> will confirm which regions are true tandem repeats and give an accurate specification of the repeats.</p>
+<p>To identify genuine tandem repeats, the repeat sizes and / or
+sequence regions identified by <b>equicktandem</b> can be used as
+input to <b>etandem</b>.  <b>etandem</b> will confirm which regions
+are true tandem repeats and give an accurate specification of the
+repeats.</p>
 
 
 <H2>
@@ -406,11 +447,6 @@ None.
 </table>
 <p>
 
-<b>equicktandem</b> identifies regions wich are likely to contain tanden
-repeats.  <b>tandem</b> should then be run on those regions to confirm
-them and to get an accurate specification of the repeats.  <b>tandem</b>
-runs slowly. 
-
 <H2>
     Author(s)
 </H2>
@@ -427,7 +463,7 @@ Cambridge, CB10 1SA, UK.
 This application was modified for inclusion in EMBOSS by 
 Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
 <br>
-Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
 <H2>
     History

@@ -680,7 +680,10 @@ static ajlong dbxgcg_pirgetent(EmbPBtreeEntry entry, AjPFile infs,
     /* skip to seqid first line */
     while(ajStrGetCharFirst(sline)!='>')
 	if(!ajReadline(infs, &sline))
+        {
+            ajStrDel(&sline);
 	    return 0;			/* end of file */
+        }
 
     ajDebug("dbxgcg_pirgetent .seq (%S) %Ld '%S' \n",
 	    dbtype, ajFileResetPos(infs), sline);

@@ -70,7 +70,8 @@ void ajMeltInit(AjBool isdna, ajint savesize)
     float enthalpy;
     float entropy;
     float energy;
-    
+    ajuint iline = 0;
+
     AjBool got1;
     AjBool got2;
 
@@ -89,6 +90,7 @@ void ajMeltInit(AjBool isdna, ajint savesize)
 	ajStrAssignEmptyC(&mfname,RNAMELTFILE);
 
     mfptr = ajDatafileNewInNameS(mfname);
+
     if(!mfptr)
 	ajFatal("Entropy/enthalpy/energy file '%S' not found\n",
 		mfname);
@@ -106,6 +108,7 @@ void ajMeltInit(AjBool isdna, ajint savesize)
     for(i=0,k=0;i<4;++i)
     {
 	*p = *(q+i);
+
 	for(j=0;j<4;++j)
 	{
 	    *(p+1) = *(q+j);
@@ -113,26 +116,48 @@ void ajMeltInit(AjBool isdna, ajint savesize)
 	}
     }
 
-
+    iline = 0;
     while(ajReadline(mfptr, &line))
     {
+        ajStrRemoveWhiteExcess(&line);
+        iline++;
 	p = ajStrGetuniquePtr(&line);
+
 	if(*p=='#' || *p=='!' || !*p)
 	    continue;
 
-	p = ajSysFuncStrtok(p," \t\n\r");
+	p = ajSysFuncStrtok(p," ");
+
+        if(!p)
+            ajDie("Bad melt data file '%F' line %d '%S'",
+                  mfptr, iline, line);
 	ajStrAssignC(&pair1,p);
-	p = ajSysFuncStrtok(NULL," \t\n\r");
+	p = ajSysFuncStrtok(NULL," ");
+
+        if(!p)
+            ajDie("Bad melt data file '%F' line %d '%S'",
+                  mfptr, iline, line);
 	ajStrAssignC(&pair2,p);
-	p = ajSysFuncStrtok(NULL," \t\n\r");
+	p = ajSysFuncStrtok(NULL," ");
+
+        if(!p)
+            ajDie("Bad melt data file '%F' line %d '%S'",
+                  mfptr, iline, line);
+
 	if(sscanf(p,"%f",&enthalpy)!=1)
-	    ajFatal("No enthalpy found");
-	p = ajSysFuncStrtok(NULL," \t\n\r");
+	    ajDie("Bad melt data file '%F' line %d '%S'",
+                  mfptr, iline, line);
+
+	p = ajSysFuncStrtok(NULL," ");
+
 	if(sscanf(p,"%f",&entropy)!=1)
-	    ajFatal("No entropy found");
-	p = ajSysFuncStrtok(NULL," \t\n\r");
+	    ajDie("Bad melt data file '%F' line %d '%S'",
+                  mfptr, iline, line);
+	p = ajSysFuncStrtok(NULL," ");
+
 	if(sscanf(p,"%f",&energy)!=1)
-	    ajFatal("No energy found");
+	    ajDie("Bad melt data file '%F' line %d '%S'",
+                  mfptr, iline, line);
 
 	got1 = got2 = ajFalse;
 
@@ -155,11 +180,9 @@ void ajMeltInit(AjBool isdna, ajint savesize)
 	    }
 
 	if(!got1 || !got2)
-	    ajFatal("ajMeltInit data error");
+	    ajDie("Bad melt data file '%F' line %d '%S' duplicate pair",
+                  mfptr, iline, line);
     }
-
-
-
 
     ajStrDel(&mfname);
     ajStrDel(&pair);
@@ -210,6 +233,7 @@ float ajProbScore(const AjPStr seq1, const AjPStr seq2, ajint len)
 	mlen = (mlen < len) ? mlen : len;
 
     score = 0.0;
+
     if(!mlen)
 	return score;
 
@@ -223,6 +247,7 @@ float ajProbScore(const AjPStr seq1, const AjPStr seq2, ajint len)
 	y = ajBasecodeToInt(*(q+i));
 	score *= ajBaseAlphaCompare(x,y);
     }
+
     return score;
 }
 
@@ -279,6 +304,7 @@ float ajMeltEnergy(const AjPStr strand, ajint len, ajint shift, AjBool isDNA,
 	if(!aj_melt_saveinit)
 	{
 	    ipos = 0;
+
 	    for(i=0;i<aj_melt_savesize;++i)
 		saveEnergy[i] = saveEntropy[i] = saveEnthalpy[i] = 0.0;
 	    energy = *entropy = *enthalpy = 0.0;
@@ -287,6 +313,7 @@ float ajMeltEnergy(const AjPStr strand, ajint len, ajint shift, AjBool isDNA,
 	else
 	{
 	    ipos = (len - shift) - 1;
+
 	    for(i=0;i<shift;++i)
 	    {
 		energy    -= saveEnergy[i];
@@ -401,8 +428,6 @@ float ajTm(const AjPStr strand, ajint len, ajint shift, float saltconc,
     entropy += (len-1) * (log10((double) (saltconc/1000.0))) *
 	(float) 0.368;
 
-
-
     enthalpy = -sumEnthalpy;
 
     dTm = ((enthalpy*1000.0) / (entropy+LogDNA)) - To;
@@ -410,8 +435,6 @@ float ajTm(const AjPStr strand, ajint len, ajint shift, float saltconc,
 
     return Tm;
 }
-
-
 
 
 
@@ -439,16 +462,24 @@ float ajMeltGC(const AjPStr strand, ajint len)
     for(i=0;i<len;++i)
     {
 	t = toupper((ajint) *(p+i));
-	if(strchr("GCS",t)) ++count;
-	else if(strchr("ATUW",t)) count += 0.0;
-	else if(strchr("RYMK",t)) count += 0.5;
-	else if(strchr("NX",t))   count += 0.5;
-	else if(strchr("BV",t))   count += 0.6666667;
-	else if(strchr("DH",t))   count += 0.3333333;
+
+	if(strchr("GCS",t))
+            ++count;
+	else if(strchr("ATUW",t))
+            count += 0.0;
+	else if(strchr("RYMK",t))
+            count += 0.5;
+	else if(strchr("NX",t))
+            count += 0.5;
+	else if(strchr("BV",t))
+            count += 0.6666667;
+	else if(strchr("DH",t))
+            count += 0.3333333;
     }
 
     return ((float)(count/(double)len));
 }
+
 
 
 
@@ -495,9 +526,11 @@ float ajMeltEnergy2(const char *strand, ajint pos, ajint len, AjBool isDNA,
     for(i=0;i<limit;++i)
     {
 	ajStrAssignSubC(&line,strand,i,i+1);
+
 	for(j=0;j<16;++j)
 	{
 	    ident = ajProbScore(meltTable[j].pair,line,2);
+
 	    if(ident>.9)
 	    {
 		(*saveentr)[i] += (ident * meltTable[j].entropy);
@@ -510,7 +543,6 @@ float ajMeltEnergy2(const char *strand, ajint pos, ajint len, AjBool isDNA,
     ajStrDel(&line);
 
     energy = *enthalpy = *entropy = 0.0;
-
 
     for(i=0;i<limit;++i)
     {
@@ -626,7 +658,6 @@ float ajAnneal(float tmprimer, float tmproduct)
 {
     return ((float).7*tmproduct)-(float)14.9+((float).3*tmprimer);
 }
-
 
 
 

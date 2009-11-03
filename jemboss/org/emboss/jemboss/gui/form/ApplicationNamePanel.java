@@ -72,10 +72,10 @@ public class ApplicationNamePanel extends JPanel
   public void paintComponent(Graphics g)
   {
     super.paintComponent(g);
-    int line_spacing = 4;
+    //int line_spacing = 4;
 
-    Color top_color = new Color(200,10,0);
-    Color side_color = new Color(200,10,0);
+    //Color top_color = new Color(200,10,0);
+    //Color side_color = new Color(200,10,0);
     g.setColor(Color.red);
     g.drawString(name,x,y);
   }

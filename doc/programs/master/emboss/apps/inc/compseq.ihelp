@@ -3,9 +3,9 @@
                                   reference (input USA)
    -word               integer    [2] This is the size of word (n-mer) to
                                   count.
-                                  Thus if you want to count codon frequencies,
-                                  you should enter 3 here. (Integer from 1 to
-                                  20)
+                                  Thus if you want to count codon frequencies
+                                  for a nucleotide sequence, you should enter
+                                  3 here. (Integer 1 or more)
   [-outfile]           outfile    [*.compseq] This is the results file.
 
    Additional (Optional) qualifiers (* if not always prompted):

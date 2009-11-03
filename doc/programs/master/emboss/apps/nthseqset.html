@@ -1,0 +1,150 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: nthseqset
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+nthseqset
+<!--#include file="header2.inc" -->
+<H2>
+    Function
+</H2>
+<!--#include file="inc/nthseqset.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+
+<p><b>nthseqset</b> writes to file a single sequence alignment (set)
+  from an input stream of sequence sets. The sequence set is specified by number, which is the order it appears in the input file. The output file name may be specified.</p>
+
+<H2>
+    Usage
+</H2>
+
+
+<!--#include file="inc/nthseqset.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/nthseqset.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/nthseqset.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>nthseqset</b> reads a a normal sequence USA.
+
+<p>
+
+<!--#include file="inc/nthseqset.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+
+The output is the specified ordinal sequence from the input USA.
+
+<p>
+
+In the example, the second sequence from the input file will be written
+out to the specified output file. 
+
+<p>
+
+<!--#include file="inc/nthseqset.output" -->
+
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+<p>In EMBOSS, when an application has to write out many sequences, they are typically all written to a single file.  This default behaviour can be changed by using the qualifier <tt>-ossingle</tt> which forces each sequence to be written to its own file.</p>
+
+<p>The program <b>seqretsplit</b> will take a file containing many sequences and will output many files, each containing one sequence. However you have no choice over the naming of the files - they are named after the ID name fo the sequence they contain.</p>
+
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/nthseqset.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+
+<!--#include file="inc/price.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/nthseqset.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/nthseqset.comment" -->
+
+
+</BODY>
+</HTML>
+

@@ -22,6 +22,18 @@ octanol
 
 
 <H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
     Function
 </H2>
 Draw a White-Wimley protein hydropathy plot
@@ -65,14 +77,14 @@ Created octanol.ps
                                   format, or reference (input USA)
   [-graph]             xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, xterm, png, gif)
+                                  tekt, tek, none, data, das, xterm, png, gif)
 
    Additional (Optional) qualifiers:
    -datafile           datafile   [Ewhite-wimley.dat] White-Wimley data file
    -width              integer    [19] Window size (Integer from 1 to 200)
-   -octanolplot        boolean    [N] Display the octanol plot
-   -interfaceplot      boolean    [N] Display the interface plot
-   -[no]differenceplot boolean    [Y] Display the difference plot
+   -plotoctanol        boolean    [N] Display the octanol plot
+   -plotinterface      boolean    [N] Display the interface plot
+   -[no]plotdifference boolean    [Y] Display the difference plot
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
@@ -140,7 +152,7 @@ Created octanol.ps
 <tr>
 <td>[-graph]<br>(Parameter 2)</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, xterm, png, gif</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, das, xterm, png, gif</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -165,21 +177,21 @@ Created octanol.ps
 </tr>
 
 <tr>
-<td>-octanolplot</td>
+<td>-plotoctanol</td>
 <td>Display the octanol plot</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
-<td>-interfaceplot</td>
+<td>-plotinterface</td>
 <td>Display the interface plot</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
-<td>-[no]differenceplot</td>
+<td>-[no]plotdifference</td>
 <td>Display the difference plot</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
@@ -219,8 +231,9 @@ ID   OPSD_HUMAN              Reviewed;         348 AA.
 AC   P08100; Q16414; Q2M249;
 DT   01-AUG-1988, integrated into UniProtKB/Swiss-Prot.
 DT   01-AUG-1988, sequence version 1.
-DT   20-MAR-2007, entry version 91.
-DE   Rhodopsin (Opsin-2).
+DT   16-JUN-2009, entry version 116.
+DE   RecName: Full=Rhodopsin;
+DE   AltName: Full=Opsin-2;
 GN   Name=RHO; Synonyms=OPN2;
 OS   Homo sapiens (Human).
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
@@ -229,7 +242,7 @@ OC   Catarrhini; Hominidae; Homo.
 OX   NCBI_TaxID=9606;
 RN   [1]
 RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
-RX   MEDLINE=84272729; PubMed=6589631;
+RX   MEDLINE=84272729; PubMed=6589631; DOI=10.1073/pnas.81.15.4851;
 RA   Nathans J., Hogness D.S.;
 RT   "Isolation and nucleotide sequence of the gene encoding human
 RT   rhodopsin.";
@@ -244,8 +257,13 @@ RL   Submitted (JUL-2001) to the EMBL/GenBank/DDBJ databases.
 RN   [3]
 RP   NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA].
 RC   TISSUE=Retina;
-RG   The German cDNA consortium;
-RL   Submitted (JUN-2003) to the EMBL/GenBank/DDBJ databases.
+RX   PubMed=17974005; DOI=10.1186/1471-2164-8-399;
+RA   Bechtel S., Rosenfelder H., Duda A., Schmidt C.P., Ernst U.,
+RA   Wellenreuther R., Mehrle A., Schuster C., Bahr A., Blocker H.,
+RA   Heubner D., Hoerlein A., Michel G., Wedler H., Kohrer K.,
+RA   Ottenwalder B., Poustka A., Wiemann S., Schupp I.;
+RT   "The full-ORF clone resource of the German cDNA consortium.";
+RL   BMC Genomics 8:399-399(2007).
 RN   [4]
 RP   NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA].
 RX   PubMed=15489334; DOI=10.1101/gr.2596504;
@@ -259,12 +277,6 @@ RX   PubMed=8566799; DOI=10.1016/0378-1119(95)00688-5;
 RA   Bennett J., Beller B., Sun D., Kariko K.;
 RT   "Sequence analysis of the 5.34-kb 5' flanking region of the human
 RT   rhodopsin-encoding gene.";
-RL   Gene 167:317-320(1995).
-RN   [6]
-RP   REVIEW ON RP4 VARIANTS.
-RX   MEDLINE=94004905; PubMed=8401533;
-RA   Al-Maghtheh M., Gregory C., Inglehearn C., Hardcastle A.,
-RA   Bhattacharya S.;
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
@@ -540,7 +552,7 @@ None.
 
 <tr>
 <td><a href="pepwindow.html">pepwindow</a></td>
-<td>Draw a Kyte-Doolittle hydropathy plot for a protein sequence</td>
+<td>Draw a hydropathy plot for a protein sequence</td>
 </tr>
 
 <tr>

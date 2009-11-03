@@ -57,6 +57,12 @@ AjBool        ajTimeSetS(AjPTime thys, const AjPStr timestr);
 AjPTime       ajTimeNew(void);
 AjPTime       ajTimeNewTime(const AjPTime thys);
 time_t        ajTimeGetTimetype(const AjPTime thys);
+void          ajTimeReset(void);
+
+ajlong        ajClockNow(void);
+void          ajClockReset(void);
+double        ajClockDiff(ajlong starttime, ajlong nowtime);
+double        ajClockSeconds(void);
 
 /*
 ** End of prototype definitions

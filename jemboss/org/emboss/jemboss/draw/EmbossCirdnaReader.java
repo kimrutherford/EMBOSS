@@ -24,7 +24,6 @@ import javax.swing.*;
 import java.awt.Color;
 import java.io.*;
 import java.util.Vector;
-import java.util.Hashtable;
 import java.util.StringTokenizer;
 
 /**

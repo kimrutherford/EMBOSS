@@ -70,6 +70,7 @@ domain_classification             file           Domain classification
 domain_clean_coordinates          file           Clean domain coordinates
 domain_families                   file           Domain families
 domain_hits                       file           Domain hits
+domain_hits_filter                file           Domain hits filter
 domain_pdb                        file           Domain pdb
 domainatrix_calculations_log      file           Domainatrix calculations log
 domainatrix_ligand_hits           file           Domainatrix LHF ligand hits
@@ -78,6 +79,7 @@ domainatrix_signature             file           Domainatrix signature
 domainatrix_substitution_matrix   file           Domainatrix substitution matrix
 drawgram_output                   file           Phylip drawgram output
 drawtree_output                   file           Phylip drawtree output
+email_address                     string         Email address
 embassy_package                   string         EMBASSY package name
 emboss_database_directory         directory      Database directory
 emboss_database_index             file           Index
@@ -155,6 +157,7 @@ meme_database                     file           MEME database
 meme_background_frequencies       file           MEME background frequencies file
 meme_motif_order                  string         MEME directive for ordering and spacing of motifs
 meme_output                       file           MEME program output
+meme_text_output                  file           MEME program text output
 mira_parameters                   file           MIRA program parameters
 mira_strain_data                  file           MIRA program strain data file
 mix_input                         file           Phylip mix program input
@@ -235,6 +238,7 @@ restdist_output                   file           Phylip restdist program output
 restml_input                      file           Phylip restml program input
 restml_output                     file           Phylip restml program output
 restriction_enzyme_data           file           Restriction enzyme data
+restriction_enzyme_methylation_data file         Restriction enzyme methylation data
 rna_concentration                 file           Vienna RNA concentration data
 rna_constraint                    file           Vienna RNA structure constraints
 rna_parameter                     file           Vienna RNA parameters
@@ -296,7 +300,8 @@ van_der_waals_radii               file           Van der waals radii
 vector                            file           Cloning vector definition
 vienna_alignment                  file           Vienna RNA alignment
 vienna_dotplot                    file           Vienna dotplot postscript
-vienna_structure                  file           Vienna structure postscript
+vienna_postscript_alignment       file           Vienna RNA alignment postscript
+vienna_structure                  file           Vienna RNA structure postscript
 weights                           properties     Phylip weights
 white_wimley_datafile             file           White-Wimley data
 wildcard_string                   string         String with wildcard characters

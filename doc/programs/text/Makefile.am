@@ -29,7 +29,8 @@ pkgdata2_DATA = lindna.txt listor.txt \
 	maskseq.txt matcher.txt megamerger.txt merger.txt msbar.txt \
 	mwcontam.txt mwfilter.txt \
 	needle.txt newcpgreport.txt newcpgseek.txt newseq.txt \
-	nohtml.txt noreturn.txt notseq.txt nospace.txt notab.txt nthseq.txt \
+	nohtml.txt noreturn.txt notseq.txt nospace.txt notab.txt \
+	nthseq.txt nthseqset.txt \
 	octanol.txt oddcomp.txt \
 	palindrome.txt pasteseq.txt patmatdb.txt patmatmotifs.txt \
 	pepcoil.txt pepinfo.txt pepnet.txt pepstats.txt pepwheel.txt \
@@ -39,13 +40,14 @@ pkgdata2_DATA = lindna.txt listor.txt \
 	prophet.txt prosextract.txt pscan.txt psiphi.txt \
 	rebaseextract.txt recoder.txt redata.txt remap.txt \
 	restover.txt restrict.txt revseq.txt \
-	seealso.txt seqmatchall.txt seqret.txt seqretsplit.txt \
+	seealso.txt seqmatchall.txt \
+	seqret.txt seqretsetall.txt seqretsplit.txt \
 	showalign.txt showdb.txt showfeat.txt showorf.txt \
-	showseq.txt shuffleseq.txt sigcleave.txt silent.txt \
+	showpep.txt showseq.txt shuffleseq.txt sigcleave.txt silent.txt \
 	sirna.txt \
 	SITE-DIRECTED.txt \
 	sixpack.txt sizeseq.txt skipredundant.txt \
-	skipseq.txt splitter.txt stretcher.txt \
+	skipseq.txt splitsource.txt splitter.txt stretcher.txt \
 	stssearch.txt supermatcher.txt syco.txt \
 	tcode.txt textsearch.txt tfextract.txt tfm.txt tfscan.txt \
 	tmap.txt tranalign.txt transeq.txt trimest.txt trimseq.txt \

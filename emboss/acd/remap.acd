@@ -14,6 +14,12 @@ section: input [
     type: "DNA"
   ]
 
+  datafile: mfile [
+    default: "Emethylsites.dat"
+    information: "Restriction enzyme data file (optional)"
+    knowntype: "restriction enzyme methylation data"
+  ]
+
 endsection: input
 
 section: required [
@@ -127,6 +133,14 @@ section: additional [
     help: "If this is set then this allows searches for restriction
            enzyme recognition site and cut postions that span the end of the
            sequence to be considered."
+  ]
+
+  boolean: methylation [
+    additional: "Y"
+    default: "N"
+    information: "Use methylation data"
+    help: "If this is set then RE recognition sites will not match
+           methylated bases."
   ]
 
   boolean: commercial [
@@ -283,7 +297,7 @@ section: output [
            Examples of region specifications are: \
            24-45 blue 56-78 orange \
            1-100 green 120-156 red \
-           A file of ranges to colour (one range per line) can be specifed as
+           A file of ranges to colour (one range per line) can be specified as
            '@filename'."
   ]
 

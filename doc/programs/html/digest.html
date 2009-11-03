@@ -22,6 +22,18 @@ digest
 
 
 <H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
     Function
 </H2>
 Reports on protein proteolytic enzyme or reagent cleavage sites
@@ -278,8 +290,9 @@ ID   OPSD_HUMAN              Reviewed;         348 AA.
 AC   P08100; Q16414; Q2M249;
 DT   01-AUG-1988, integrated into UniProtKB/Swiss-Prot.
 DT   01-AUG-1988, sequence version 1.
-DT   20-MAR-2007, entry version 91.
-DE   Rhodopsin (Opsin-2).
+DT   16-JUN-2009, entry version 116.
+DE   RecName: Full=Rhodopsin;
+DE   AltName: Full=Opsin-2;
 GN   Name=RHO; Synonyms=OPN2;
 OS   Homo sapiens (Human).
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
@@ -288,7 +301,7 @@ OC   Catarrhini; Hominidae; Homo.
 OX   NCBI_TaxID=9606;
 RN   [1]
 RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
-RX   MEDLINE=84272729; PubMed=6589631;
+RX   MEDLINE=84272729; PubMed=6589631; DOI=10.1073/pnas.81.15.4851;
 RA   Nathans J., Hogness D.S.;
 RT   "Isolation and nucleotide sequence of the gene encoding human
 RT   rhodopsin.";
@@ -303,8 +316,13 @@ RL   Submitted (JUL-2001) to the EMBL/GenBank/DDBJ databases.
 RN   [3]
 RP   NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA].
 RC   TISSUE=Retina;
-RG   The German cDNA consortium;
-RL   Submitted (JUN-2003) to the EMBL/GenBank/DDBJ databases.
+RX   PubMed=17974005; DOI=10.1186/1471-2164-8-399;
+RA   Bechtel S., Rosenfelder H., Duda A., Schmidt C.P., Ernst U.,
+RA   Wellenreuther R., Mehrle A., Schuster C., Bahr A., Blocker H.,
+RA   Heubner D., Hoerlein A., Michel G., Wedler H., Kohrer K.,
+RA   Ottenwalder B., Poustka A., Wiemann S., Schupp I.;
+RT   "The full-ORF clone resource of the German cDNA consortium.";
+RL   BMC Genomics 8:399-399(2007).
 RN   [4]
 RP   NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA].
 RX   PubMed=15489334; DOI=10.1101/gr.2596504;
@@ -318,12 +336,6 @@ RX   PubMed=8566799; DOI=10.1016/0378-1119(95)00688-5;
 RA   Bennett J., Beller B., Sun D., Kariko K.;
 RT   "Sequence analysis of the 5.34-kb 5' flanking region of the human
 RT   rhodopsin-encoding gene.";
-RL   Gene 167:317-320(1995).
-RN   [6]
-RP   REVIEW ON RP4 VARIANTS.
-RX   MEDLINE=94004905; PubMed=8401533;
-RA   Al-Maghtheh M., Gregory C., Inglehearn C., Hardcastle A.,
-RA   Bhattacharya S.;
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
@@ -435,20 +447,20 @@ By default <b>digest</b> writes a 'seqtable' report file.
 #=======================================
 
   Start     End Mol_Weight Cterm  Nterm  Sequence
-     70     135   7129.324 R      Y      TPLNYILLNLAVADLFMVLGGFTSTLYTSLHGYFVFGPTGCNLEGFFATLGGEIALWSLVVLAIER
-    178     231   6335.500 R      E      YIPEGLQCSCGIDYYTLKPEVNNESFVIYMFVVHFTIPMIIIFFCYGQLVFTVK
-     22      69   5788.878 R      T      SPFEYPQYYLAEPWQFSMLAAYMFLLIVLGFPINFLTLYVTVQHKKLR
-    253     296   5004.090 R      S      MVIIMVIAFLICWVPYASVAFYIFTHQGSNFGPIFMTIPAFFAK
-    136     177   4600.464 R      Y      YVVVCKPMSNFRFGENHAIMGVAFTWVMALACAAPPLAGWSR
-      1      21   2257.500 .      S      MNGTEGPNFYVPFSNATGVVR
-    297     311   1728.093 K      Q      SAAIYNPVIYIMMNK
-    232     245   1490.543 K      A      EAAAQQQESATTQK
-    326     339   1403.462 K      T      NPLGDDEASATVSK
-    315     325   1186.480 R      N      NCMLTTICCGK
-    340     348    902.954 K      .      TETSQVAPA
-    249     252    503.554 K      M      EVTR
-    312     314    449.509 K      N      QFR
-    246     248    346.383 K      E      AEK
+     70     135   7129.344 R      Y      TPLNYILLNLAVADLFMVLGGFTSTLYTSLHGYFVFGPTGCNLEGFFATLGGEIALWSLVVLAIER
+    178     231   6335.517 R      E      YIPEGLQCSCGIDYYTLKPEVNNESFVIYMFVVHFTIPMIIIFFCYGQLVFTVK
+     22      69   5788.894 R      T      SPFEYPQYYLAEPWQFSMLAAYMFLLIVLGFPINFLTLYVTVQHKKLR
+    253     296   5004.103 R      S      MVIIMVIAFLICWVPYASVAFYIFTHQGSNFGPIFMTIPAFFAK
+    136     177   4600.476 R      Y      YVVVCKPMSNFRFGENHAIMGVAFTWVMALACAAPPLAGWSR
+      1      21   2257.506 .      S      MNGTEGPNFYVPFSNATGVVR
+    297     311   1728.097 K      Q      SAAIYNPVIYIMMNK
+    232     245   1490.547 K      A      EAAAQQQESATTQK
+    326     339   1403.466 K      T      NPLGDDEASATVSK
+    315     325   1186.483 R      N      NCMLTTICCGK
+    340     348    902.957 K      .      TETSQVAPA
+    249     252    503.556 K      M      EVTR
+    312     314    449.510 K      N      QFR
+    246     248    346.384 K      E      AEK
 
 #---------------------------------------
 #---------------------------------------

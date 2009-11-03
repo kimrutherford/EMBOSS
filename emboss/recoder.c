@@ -221,6 +221,7 @@ int main(int argc, char **argv)
     recoder_fmt_muts(nmuts,feat, ajTrue);
 
     ajReportSetTail(report, tailstr);
+    ajReportSetStatistics(report, 1, ajSeqGetLenTrimmed(seq));
     (void) ajReportWrite (report,feat,seq);
     ajFeattableDel(&feat);
 

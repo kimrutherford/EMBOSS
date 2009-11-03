@@ -27,7 +27,6 @@
 
 
 
-
 /* ======================================================================= */
 /* ============================ Private data ============================= */
 /* ======================================================================= */
@@ -35,12 +34,9 @@
 
 
 
-
 /* ======================================================================= */
 /* ================= Prototypes for private functions ==================== */
 /* ======================================================================= */
-
-
 
 
 
@@ -68,7 +64,6 @@
 
 
 
-
 /* ======================================================================= */
 /* =========================== destructors =============================== */
 /* ======================================================================= */
@@ -79,7 +74,6 @@
 ** deleted.  The original pointer is set to NULL so is ready for re-use.
 **
 ****************************************************************************/
-
 
 
 
@@ -99,7 +93,6 @@
 
 
 
-
 /* ======================================================================= */
 /* ============================= Modifiers =============================== */
 /* ======================================================================= */
@@ -109,7 +102,6 @@
 ** These functions use the contents of an instance and update them.
 **
 ****************************************************************************/
-
 
 
 
@@ -146,7 +138,6 @@ AjPStr embScopToPdbid(const AjPStr scop, AjPStr *pdb)
 
 
 
-
 /* @func embScopToSp ********************************************************
 **
 ** Read a scop identifier code and writes the equivalent swissprot 
@@ -171,6 +162,7 @@ AjBool embScopToSp(const AjPStr scop, AjPStr *spr, const AjPList list)
     if(embPdbidToSp(embScopToPdbid(scop, &pdb), spr, list))
     {
 	ajStrDel(&pdb);
+
 	return ajTrue;
     }
 
@@ -178,7 +170,6 @@ AjBool embScopToSp(const AjPStr scop, AjPStr *spr, const AjPList list)
 
     return ajFalse;
 }
-
 
 
 
@@ -207,6 +198,7 @@ AjBool embScopToAcc(const AjPStr scop, AjPStr *acc, const AjPList list)
     if(embPdbidToAcc(embScopToPdbid(scop, &pdb), acc, list))
     {
 	ajStrDel(&pdb);
+
 	return ajTrue;
     }
 
@@ -214,8 +206,6 @@ AjBool embScopToAcc(const AjPStr scop, AjPStr *acc, const AjPList list)
     
     return ajFalse;
 }
-
-
 
 
 
@@ -236,7 +226,6 @@ AjBool embScopToAcc(const AjPStr scop, AjPStr *acc, const AjPList list)
 
 
 
-
 /* ======================================================================= */
 /* =========================== Reporters ==================================*/
 /* ======================================================================= */
@@ -247,7 +236,6 @@ AjBool embScopToAcc(const AjPStr scop, AjPStr *acc, const AjPList list)
 ** changes.
 **
 ****************************************************************************/
-
 
 
 

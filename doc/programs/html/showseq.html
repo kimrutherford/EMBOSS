@@ -22,6 +22,18 @@ showseq
 
 
 <H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
     Function
 </H2>
 Displays sequences with features in pretty format
@@ -29,7 +41,16 @@ Displays sequences with features in pretty format
     Description
 </H2>
 
-<p><b>showseq</b> displays one or more protein or nucleic acid sequences, with features, in a style suitable for publication. The output is sent to screen by default but can be written to file. You may pick a format from a list, alternatively, use the  many options to control what is output and in what format. Optionally, the sequence feature table can be displayed.  Where the input sequence is a nucleic acid, the sequence can be translated, using the specified genetic code tables. Also recognition sites and/or cut sites of restriction enzymes from the REBASE database may be displayed.  There are various other options for controlling how the sequence is displayed and numbered and the output can be formatted for HTML.</p>
+<p><b>showseq</b> displays one or more nucleic acid sequences, with
+features, in a style suitable for publication. The output is sent to
+screen by default but can be written to file. You may pick a format
+from a list, alternatively, use the many options to control what is
+output and in what format. Optionally, the sequence feature table can
+be displayed. The sequence can be translated, using the specified
+genetic code tables. Also recognition sites and/or cut sites of
+restriction enzymes from the REBASE database may be displayed.  There
+are various other options for controlling how the sequence is
+displayed and numbered and the output can be formatted for HTML.</p>
 
 
 <H2>
@@ -122,22 +143,6 @@ Output file [x13776.showseq]: <b></b>
 <p>
 <b>Example 4</b>
 <p>
-Protein sequence can be displayed in three-letter codes. (The codes are displayed downwards, so the first code is 'Met'):  
-<p>
-
-<p>
-<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
-
-% <b>showseq tsw:rs24_fugru -three -format 2 </b>
-Displays sequences with features in pretty format
-Output file [rs24_fugru.showseq]: <b></b>
-
-</pre></td></tr></table><p>
-<p>
-<a href="#input.4">Go to the input files for this example</a><br><a href="#output.4">Go to the output files for this example</a><p><p>
-<p>
-<b>Example 5</b>
-<p>
 Number the sequence lines in the margin:  
 <p>
 
@@ -150,9 +155,9 @@ Output file [x13776.showseq]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
-<a href="#output.5">Go to the output files for this example</a><p><p>
+<a href="#output.4">Go to the output files for this example</a><p><p>
 <p>
-<b>Example 6</b>
+<b>Example 5</b>
 <p>
 Start the numbering at a specified value ('123' in this case): 
 <p>
@@ -166,9 +171,9 @@ Output file [x13776.showseq]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
-<a href="#output.6">Go to the output files for this example</a><p><p>
+<a href="#output.5">Go to the output files for this example</a><p><p>
 <p>
-<b>Example 7</b>
+<b>Example 6</b>
 <p>
 Make selected regions uppercase. (Use '-slower' to force the rest of the sequence to be lowercase).  
 <p>
@@ -176,7 +181,23 @@ Make selected regions uppercase. (Use '-slower' to force the rest of the sequenc
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>showseq tembl:x13776 -sbeg 1 -send 100 -format 1 -slower -upper '25-45,101-203,333-362' </b>
+% <b>showseq tembl:x13776 -sbeg 1 -send 100 -format 1 -slower -upper '8-24,65-81' </b>
+Displays sequences with features in pretty format
+Output file [x13776.showseq]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.6">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 7</b>
+<p>
+Translate selected regions:  
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showseq tembl:x13776 -sbeg 1 -send 120 -format 5 -trans 25-49,66-76 </b>
 Displays sequences with features in pretty format
 Output file [x13776.showseq]: <b></b>
 
@@ -185,22 +206,6 @@ Output file [x13776.showseq]: <b></b>
 <a href="#output.7">Go to the output files for this example</a><p><p>
 <p>
 <b>Example 8</b>
-<p>
-Translate selected regions:  
-<p>
-
-<p>
-<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
-
-% <b>showseq tembl:x13776 -sbeg 1 -send 120 -format 4 -trans 25-49,66-76 </b>
-Displays sequences with features in pretty format
-Output file [x13776.showseq]: <b></b>
-
-</pre></td></tr></table><p>
-<p>
-<a href="#output.8">Go to the output files for this example</a><p><p>
-<p>
-<b>Example 9</b>
 <p>
 Add your own annotation to the display: 
 <p>
@@ -214,7 +219,7 @@ Output file [x13776.showseq]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
-<a href="#output.9">Go to the output files for this example</a><p><p>
+<a href="#output.8">Go to the output files for this example</a><p><p>
 
 <H2>
     Command line arguments
@@ -222,8 +227,8 @@ Output file [x13776.showseq]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers (* if not always prompted):
-  [-sequence]          seqall     (Gapped) sequence(s) filename and optional
-                                  format, or reference (input USA)
+  [-sequence]          seqall     (Gapped) nucleotide sequence(s) filename and
+                                  optional format, or reference (input USA)
    -format             menu       [2] Display format (Values: 0 (Enter your
                                   own list of things to display); 1 (Sequence
                                   only); 2 (Default sequence with features); 3
@@ -265,7 +270,19 @@ Output file [x13776.showseq]: <b></b>
                                   Examples of region specifications are:
                                   24-45, 56-78
                                   1:45, 67=99;765..888
-                                  1,5,8,10,23,45,57,99
+   -revtranslate       range      [If this is left blank the complete reverse
+                                  sequence is translated.] Regions to
+                                  translate (if translating).
+                                  If this is left blank the complete sequence
+                                  is translated.
+                                  A set of regions is specified by a set of
+                                  pairs of positions.
+                                  The positions are integers.
+                                  They are separated by any non-digit,
+                                  non-alpha character.
+                                  Examples of region specifications are:
+                                  78-56, 45-24,
+                                  888..765, 99=67; 45:1
    -uppercase          range      [If this is left blank, then the sequence
                                   case is left alone.] Regions to put in
                                   uppercase.
@@ -347,7 +364,7 @@ Output file [x13776.showseq]: <b></b>
                                   (Chlorophycean Mitochondrial); 21 (Trematode
                                   Mitochondrial); 22 (Scenedesmus obliquus);
                                   23 (Thraustochytrium Mitochondrial))
-   -matchsource        string     [*] By default any feature source in the
+   -sourcematch        string     [*] By default any feature source in the
                                   feature table is shown. You can set this to
                                   match any feature source you wish to show.
                                   The source name is usually either the name
@@ -359,7 +376,7 @@ Output file [x13776.showseq]: <b></b>
                                   separate their names with the character '|',
                                   eg:
                                   gene* | embl (Any string is accepted)
-   -matchtype          string     [*] By default any feature type in the
+   -typematch          string     [*] By default any feature type in the
                                   feature table is shown. You can set this to
                                   match any feature type you wish to show.
                                   See http://www3.ebi.ac.uk/Services/WebFeat/
@@ -372,19 +389,19 @@ Output file [x13776.showseq]: <b></b>
                                   separate their names with the character '|',
                                   eg:
                                   *UTR | intron (Any string is accepted)
-   -matchsense         integer    [0 - any sense, 1 - forward sense, -1 -
+   -sensematch         integer    [0 - any sense, 1 - forward sense, -1 -
                                   reverse sense] By default any feature type
                                   in the feature table is shown. You can set
                                   this to match any feature sense you wish to
                                   show. 0 - any sense, 1 - forward sense, -1 -
                                   reverse sense (Any integer value)
-   -minscore           float      [0.0] If this is greater than or equal to
-                                  the maximum score, then any score is
-                                  permitted (Any numeric value)
-   -maxscore           float      [0.0] If this is less than or equal to the
-                                  maximum score, then any score is permitted
-                                  (Any numeric value)
-   -matchtag           string     [*] Tags are the types of extra values that
+   -minscore           float      [0.0] Minimum score of feature to display
+                                  (see also maxscore) (Any numeric value)
+   -maxscore           float      [0.0] Maximum score of feature to display.
+                                  If both minscore and maxscore are zero (the
+                                  default), then any score is ignored (Any
+                                  numeric value)
+   -tagmatch           string     [*] Tags are the types of extra values that
                                   a feature may have. For example in the EMBL
                                   feature table, a 'CDS' type of feature may
                                   have the tags '/codon', '/codon_start',
@@ -405,7 +422,7 @@ Output file [x13776.showseq]: <b></b>
                                   separate their names with the character '|',
                                   eg:
                                   gene | label (Any string is accepted)
-   -matchvalue         string     [*] Tag values are the values associated
+   -valuematch         string     [*] Tag values are the values associated
                                   with a feature tag. Tags are the types of
                                   extra values that a feature may have. For
                                   example in the EMBL feature table, a 'CDS'
@@ -437,6 +454,8 @@ Output file [x13776.showseq]: <b></b>
                                   value will be displayed.
 
    Advanced (Unprompted) qualifiers:
+   -mfile              datafile   [Emethylsites.dat] Restriction enzyme data
+                                  file (optional)
    -flatreformat       boolean    [N] This changes the output format to one
                                   where the recognition site is indicated by a
                                   row of '===' characters and the cut site is
@@ -475,6 +494,8 @@ Output file [x13776.showseq]: <b></b>
                                   for restriction enzyme recognition site and
                                   cut postions that span the end of the
                                   sequence to be considered.
+   -methylation        boolean    [N] If this is set then RE recognition sites
+                                  will not match methylated bases.
    -[no]commercial     boolean    [Y] If this is set, then only those enzymes
                                   with a commercial supplier will be searched
                                   for. This qualifier is ignored if you have
@@ -574,7 +595,7 @@ Output file [x13776.showseq]: <b></b>
 
 <tr>
 <td>[-sequence]<br>(Parameter 1)</td>
-<td>(Gapped) sequence(s) filename and optional format, or reference (input USA)</td>
+<td>(Gapped) nucleotide sequence(s) filename and optional format, or reference (input USA)</td>
 <td>Readable sequence(s)</td>
 <td><b>Required</b></td>
 </tr>
@@ -615,10 +636,23 @@ The positions are integers.
 They are separated by any non-digit, non-alpha character.
 Examples of region specifications are:
 24-45, 56-78
-1:45, 67=99;765..888
-1,5,8,10,23,45,57,99</td>
+1:45, 67=99;765..888</td>
 <td>Sequence range</td>
 <td>If this is left blank the complete sequence is translated.</td>
+</tr>
+
+<tr>
+<td>-revtranslate</td>
+<td>Regions to translate (if translating).
+If this is left blank the complete sequence is translated.
+A set of regions is specified by a set of pairs of positions.
+The positions are integers.
+They are separated by any non-digit, non-alpha character.
+Examples of region specifications are:
+78-56, 45-24,
+888..765, 99=67; 45:1</td>
+<td>Sequence range</td>
+<td>If this is left blank the complete reverse sequence is translated.</td>
 </tr>
 
 <tr>
@@ -690,7 +724,7 @@ PpiI</td>
 </tr>
 
 <tr>
-<td>-matchsource</td>
+<td>-sourcematch</td>
 <td>By default any feature source in the feature table is shown. You can set this to match any feature source you wish to show.
 The source name is usually either the name of the program that detected the feature or it is the feature table (eg: EMBL) that the feature came from.
 The source may be wildcarded by using '*'.
@@ -701,7 +735,7 @@ gene* | embl</td>
 </tr>
 
 <tr>
-<td>-matchtype</td>
+<td>-typematch</td>
 <td>By default any feature type in the feature table is shown. You can set this to match any feature type you wish to show.
 See http://www3.ebi.ac.uk/Services/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www.expasy.ch/txt/userman.txt for a list of the Swissprot feature types.
 The type may be wildcarded by using '*'.
@@ -712,7 +746,7 @@ If you wish to show more than one type, separate their names with the character 
 </tr>
 
 <tr>
-<td>-matchsense</td>
+<td>-sensematch</td>
 <td>By default any feature type in the feature table is shown. You can set this to match any feature sense you wish to show. 0 - any sense, 1 - forward sense, -1 - reverse sense</td>
 <td>Any integer value</td>
 <td>0 - any sense, 1 - forward sense, -1 - reverse sense</td>
@@ -720,20 +754,21 @@ If you wish to show more than one type, separate their names with the character 
 
 <tr>
 <td>-minscore</td>
-<td>If this is greater than or equal to the maximum score, then any score is permitted</td>
+<td>Minimum score of feature to display (see also maxscore)</td>
 <td>Any numeric value</td>
 <td>0.0</td>
 </tr>
 
 <tr>
 <td>-maxscore</td>
-<td>If this is less than or equal to the maximum score, then any score is permitted</td>
+<td>Maximum score of feature to display.
+If both minscore and maxscore are zero (the default), then any score is ignored</td>
 <td>Any numeric value</td>
 <td>0.0</td>
 </tr>
 
 <tr>
-<td>-matchtag</td>
+<td>-tagmatch</td>
 <td>Tags are the types of extra values that a feature may have. For example in the EMBL feature table, a 'CDS' type of feature may have the tags '/codon', '/codon_start', '/db_xref', '/EC_number', '/evidence', '/exception', '/function', '/gene', '/label', '/map', '/note', '/number', '/partial', '/product', '/protein_id', '/pseudo', '/standard_name', '/translation', '/transl_except', '/transl_table', or '/usedin'. Some of these tags also have values, for example '/gene' can have the value of the gene name.
 By default any feature tag in the feature table is shown. You can set this to match any feature tag you wish to show.
 The tag may be wildcarded by using '*'.
@@ -744,7 +779,7 @@ gene | label</td>
 </tr>
 
 <tr>
-<td>-matchvalue</td>
+<td>-valuematch</td>
 <td>Tag values are the values associated with a feature tag. Tags are the types of extra values that a feature may have. For example in the EMBL feature table, a 'CDS' type of feature may have the tags '/codon', '/codon_start', '/db_xref', '/EC_number', '/evidence', '/exception', '/function', '/gene', '/label', '/map', '/note', '/number', '/partial', '/product', '/protein_id', '/pseudo', '/standard_name', '/translation', '/transl_except', '/transl_table', or '/usedin'. Only some of these tags can have values, for example '/gene' can have the value of the gene name. By default any feature tag value in the feature table is shown. You can set this to match any feature tag valueyou wish to show.
 The tag value may be wildcarded by using '*'.
 If you wish to show more than one tag value, separate their names with the character '|', eg:
@@ -764,6 +799,13 @@ pax* | 10</td>
 <th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-mfile</td>
+<td>Restriction enzyme data file (optional)</td>
+<td>Data file</td>
+<td>Emethylsites.dat</td>
 </tr>
 
 <tr>
@@ -825,6 +867,13 @@ pax* | 10</td>
 <tr>
 <td>-plasmid</td>
 <td>If this is set then this allows searches for restriction enzyme recognition site and cut postions that span the end of the sequence to be considered.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-methylation</td>
+<td>If this is set then RE recognition sites will not match methylated bases.</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
@@ -960,17 +1009,17 @@ RP   1167-2167
 RX   DOI; 10.1016/0014-5793(89)80249-2.
 RX   PUBMED; 2495988.
 RA   Lowe N., Rice P.M., Drew R.E.;
-RT   "Nucleotide sequence of the aliphatic amidase regulator gene of Pseudomonas
-RT   aeruginosa";
+RT   "Nucleotide sequence of the aliphatic amidase regulator gene (amiR) of
+RT   Pseudomonas aeruginosa";
 RL   FEBS Lett. 246(1-2):39-43(1989).
 XX
 RN   [3]
 RP   1-1292
 RX   PUBMED; 1907262.
 RA   Wilson S., Drew R.;
-RT   "Cloning and DNA seqence of amiC, a new gene regulating expression of the
+RT   "Cloning and DNA sequence of amiC, a new gene regulating expression of the
 RT   Pseudomonas aeruginosa aliphatic amidase, and purification of the amiC
-RT   product.";
+RT   product";
 RL   J. Bacteriol. 173(16):4914-4921(1991).
 XX
 RN   [4]
@@ -981,8 +1030,8 @@ RL   Submitted (04-SEP-1991) to the EMBL/GenBank/DDBJ databases.
 RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
 XX
 DR   GOA; Q51417.
+DR   InterPro; IPR003211; AmiSUreI_transpt.
 DR   UniProtKB/Swiss-Prot; Q51417; AMIS_PSEAE.
-XX
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
@@ -1041,60 +1090,11 @@ SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
 </pre>
 </td></tr></table><p>
 
-<a name="input.4"></a>
-<h3>Input files for usage example 4</h3>
-
-'tsw:rs24_fugru' is a sequence entry in the example protein database 'tsw'
-<p>
-<p><h3>Database entry: tsw:rs24_fugru</h3>
-<table width="90%"><tr><td bgcolor="#FFCCFF">
-<pre>
-ID   RS24_FUGRU              Reviewed;         132 AA.
-AC   O42387;
-DT   15-JUL-1998, integrated into UniProtKB/Swiss-Prot.
-DT   01-JAN-1998, sequence version 1.
-DT   20-MAR-2007, entry version 25.
-DE   40S ribosomal protein S24.
-GN   Name=RPS24;
-OS   Fugu rubripes (Japanese pufferfish) (Takifugu rubripes).
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
-OC   Actinopterygii; Neopterygii; Teleostei; Euteleostei; Neoteleostei;
-OC   Acanthomorpha; Acanthopterygii; Percomorpha; Tetraodontiformes;
-OC   Tetradontoidea; Tetraodontidae; Takifugu.
-OX   NCBI_TaxID=31033;
-RN   [1]
-RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
-RA   Crosio C., Cecconi F., Giorgi M., Amaldi F., Mariottini P.;
-RL   Submitted (SEP-1997) to the EMBL/GenBank/DDBJ databases.
-CC   -!- SIMILARITY: Belongs to the ribosomal protein S24e family.
-CC   -----------------------------------------------------------------------
-CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
-CC   Distributed under the Creative Commons Attribution-NoDerivs License
-CC   -----------------------------------------------------------------------
-DR   EMBL; AJ001398; CAA04728.1; -; Genomic_DNA.
-DR   Ensembl; NEWSINFRUG00000143641; Fugu rubripes.
-DR   LinkHub; O42387; -.
-DR   InterPro; IPR001976; Ribosomal_S24E.
-DR   PANTHER; PTHR10496; Ribosomal_S24E; 1.
-DR   Pfam; PF01282; Ribosomal_S24e; 1.
-DR   ProDom; PD006052; Ribosomal_S24E; 1.
-DR   PROSITE; PS00529; RIBOSOMAL_S24E; 1.
-KW   Ribonucleoprotein; Ribosomal protein.
-FT   CHAIN         1    132       40S ribosomal protein S24.
-FT                                /FTId=PRO_0000137627.
-SQ   SEQUENCE   132 AA;  15305 MW;  DC437F60F20C14F5 CRC64;
-     MNDTVTVRTR KFMTNRLLQR KQMVVDVLHP GKATVPKTEI REKLAKMYKT TPDVVFVFGF
-     RTQFGGGKTT GFAMVYDSLD YAKKNEPKHR LARHGLFEKK KTSRKQRKER KNRMKKVRGT
-     KKASVGASKK KD
-//
-</pre>
-</td></tr></table><p>
-
 <p>
 
-You can specifiy a file of ranges to display in uppercase by giving the
-'-uppercase' qualifier the value '@' followed by the name of the file
-containing the ranges.  (eg: '-upper @myfile').
+You can specify a file of ranges to display in uppercase by giving
+the '-uppercase' qualifier the value '@' followed by the name of the
+file containing the ranges.  (eg: '-upper @myfile').
 
 <p>
           
@@ -1129,7 +1129,7 @@ An example range file is:
 
 <p>
 
-You can specifiy a file of ranges to highlight in a different colour
+You can specify a file of ranges to highlight in a different colour
 when outputting in HTML format (using the '-html' qualifier) by giving
 the '-highlight' qualifier the value '@' followed by the name of the
 file containing the ranges.  (eg: '-highlight @myfile').
@@ -1174,7 +1174,7 @@ An example highlight range file is:
 
 <p>
 
-You can specifiy a file of ranges to annotate
+You can specify a file of ranges to annotate
 by giving
 the '-annotate' qualifier the value '@' followed by the name of the
 file containing the ranges.  (eg: '-annotate @myfile').
@@ -1235,7 +1235,7 @@ HinfI
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-Note that although we asked for the sequence display to end at position '100', it has displayed the sequence up to the end of the line - position '120'.  This is a feature of this program to make the display of things like restriction enzyme cutting sites easier.  <p><h3>File: x13776.showseq </h3>
+<p><h3>File: x13776.showseq </h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 X13776
@@ -1292,41 +1292,6 @@ regulation
 
 <a name="output.4"></a>
 <h3>Output files for usage example 4</h3>
-<p><h3>File: rs24_fugru.showseq</h3>
-<table width="90%"><tr><td bgcolor="#CCFFCC">
-<pre>
-RS24_FUGRU
-40S ribosomal protein S24.
-
-                   10        20        30        40        50        60        
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-          MAATVTVATALPMTAALLGALGMVVAVLHPGLATVPLTGIAGLLALMTLTTPAVVPVPGP
-          esshaharhryhehsreelryleaasaeirlylharyhllrlyelyeyyhhrsaahahlh
-          tnprlrlgrgsetrnguungsntllplusoysarlosruegusuastrsrroplleleye
-          |===========================================================
-          chain ftid="PRO_0000137627" note="40S ribosomal protein S24"
-
-                   70        80        90        100       110       120       
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-          ATGPGGGLTTGPAMVTASLATALLAGPLHALAAHGLPGLLLTSALGALGALAAMLLVAGT
-          rhlhlllyhhlhleayseesylyyslryirelrilehlyyyherylrylrysreyyarlh
-          grneyyysrryeatlrpruprassnuossguagsyueusssrrgsngsugsngtsslgyr
-          ============================================================
-          chain ftid="PRO_0000137627" note="40S ribosomal protein S24"
-
-                   130       
-          ----:----|--
-          LLASVGASLLLA
-          yylealleyyys
-          ssarlyarsssp
-          ===========|
-          chain ftid="PRO_0000137627" note="40S ribosomal protein S24"
-
-</pre>
-</td></tr></table><p>
-
-<a name="output.5"></a>
-<h3>Output files for usage example 5</h3>
 <p><h3>File: x13776.showseq </h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
@@ -1339,8 +1304,8 @@ regulation
 </pre>
 </td></tr></table><p>
 
-<a name="output.6"></a>
-<h3>Output files for usage example 6</h3>
+<a name="output.5"></a>
+<h3>Output files for usage example 5</h3>
 <p><h3>File: x13776.showseq </h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
@@ -1353,22 +1318,22 @@ regulation
 </pre>
 </td></tr></table><p>
 
-<a name="output.7"></a>
-<h3>Output files for usage example 7</h3>
+<a name="output.6"></a>
+<h3>Output files for usage example 6</h3>
 <p><h3>File: x13776.showseq </h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 X13776
 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
 regulation
-          ggtaccgctggccgagcatctgctCGATCACCACCAGCCGGGCGAcgggaactgcacgat
-          ctacctggcgagcctggagcacgagcgggttcgcttcgta
+          ggtaccgCTGGCCGAGCATCTGCTcgatcaccaccagccgggcgacgggaactgcacgat
+          ctacCTGGCGAGCCTGGAGCAcgagcgggttcgcttcgta
 
 </pre>
 </td></tr></table><p>
 
-<a name="output.8"></a>
-<h3>Output files for usage example 8</h3>
+<a name="output.7"></a>
+<h3>Output files for usage example 7</h3>
 <p><h3>File: x13776.showseq </h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
@@ -1381,6 +1346,8 @@ regulation
           ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat
 
                                   R  S  P  P  A  G  R  R  V           
+                                                                      
+                                                                      
                  |===============|
                  promoter note="proposed rpoN-dependent promoter"
           |
@@ -1390,15 +1357,17 @@ regulation
           ----:----|----:----|----:----|----:----|----:----|----:----|
           ctacctggcgagcctggagcacgagcgggttcgcttcgtacggcgctgagcgacagtcac
 
+                                                                      
                  A  S  L                                              
+                                                                      
               |===============|
               promoter note="proposed rpoN-dependent promoter"
 
 </pre>
 </td></tr></table><p>
 
-<a name="output.9"></a>
-<h3>Output files for usage example 9</h3>
+<a name="output.8"></a>
+<h3>Output files for usage example 8</h3>
 <p><h3>File: x13776.showseq </h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
@@ -1688,7 +1657,9 @@ is the preferred (prototype) name.
     Notes
 </H2>
 
-<p>One or more things may be selected for display from a menu (<tt>-things</tt> option).  The order of specified characters (upper or lower case) determines the order in the output:</p>
+<p>One or more things may be selected for display from a menu
+(<tt>-things</tt> option).  The order of specified characters (upper
+or lower case) determines the order in the output:</p>
 <pre>
 s	Sequence
 b	Blank line
@@ -1707,7 +1678,9 @@ r	Restriction enzyme cut sites in the forward sense
 a	User Annotation
 </pre>
 
-<p>Alternatively, there is a selection of pre-defined formats to choose from. The codes from above used in the list of standard formats are:</p>
+<p>Alternatively, there is a selection of pre-defined formats to
+choose from. The codes from above used in the list of standard formats
+are:</p>
 <pre>
 Sequence only:                  S A
 Default sequence:               B N T S A F
@@ -1720,23 +1693,57 @@ Baroque:                        B 1 2 3 N T R S T C -R T -3 -2 -1 A F</pre>
 
 
 
-<p>The default standard format displays the following: for every new line that the sequence starts to write, the output display will contain first a blank line (<tt>b</tt>), then the position numbers of the ticks (<tt>n</tt>) then the ticks every 10 characters (<tt>t</tt>) then the sequence itself (<tt>s</tt>) then any user-supplied annotation (<tt>a</tt>) then the features from the feature table (<tt>f</tt>). Subsequent lines of the sequence output will repeat this format.</p>
+<p>The default standard format displays the following: for every new
+line that the sequence starts to write, the output display will
+contain first a blank line (<tt>b</tt>), then the position numbers of
+the ticks (<tt>n</tt>) then the ticks every 10 characters (<tt>t</tt>)
+then the sequence itself (<tt>s</tt>) then any user-supplied
+annotation (<tt>a</tt>) then the features from the feature table
+(<tt>f</tt>). Subsequent lines of the sequence output will repeat this
+format.</p>
 
-<p>The sequence can be translated, using the specified genetic code tables. The translation can be done in one, three or six frames. The translation can be displayed in one-letter or three-letter amino acid codes. The translation can optionally be displayed only when it is in open reading frames (ORFs) of a specified minimum size. One or more specified regions of the sequence can be individually translated.</p>
+<p>The sequence can be translated, using the specified genetic code
+tables. The translation can be done in one, three or six frames. The
+translation can be displayed in one-letter or three-letter amino acid
+codes. The translation can optionally be displayed only when it is in
+open reading frames (ORFs) of a specified minimum size. One or more
+specified regions of the sequence can be individually translated.</p>
 
-<p>The output can be formatted for HTML. If the output is being formatted for HTML, then specified regions of the sequence can be displayed in any valid HTML colours.</p>
+<p>The output can be formatted for HTML. If the output is being
+formatted for HTML, then specified regions of the sequence can be
+displayed in any valid HTML colours.</p>
 
-<p>This program can use REBASE data to find the recognition sites and/or cut sites of restriction enzymes in a nucleic acid sequence.  This program can display the cut sites on both strands.  The <tt>-flatreformat</tt> option displays not only the cut sites which many other restriction cut-site programs will show, but also shows the recognition site.</p>
+<p>This program can use REBASE data to find the recognition sites
+and/or cut sites of restriction enzymes in a nucleic acid sequence.
+This program can display the cut sites on both strands.
+The <tt>-flatreformat</tt> option displays not only the cut sites
+which many other restriction cut-site programs will show, but also
+shows the recognition site.</p>
 
-<p>The Restriction Enzyme database (REBASE) is a collection of information about restriction enzymes and related proteins. It contains published and unpublished references, recognition and cleavage sites, isoschizomers, commercial availability, methylation sensitivity, crystal and sequence data. DNA methyltransferases, homing endonucleases, nicking enzymes, specificity subunits and control proteins are also included. Most recently, putative DNA methyltransferases and restriction enzymes, as predicted from analysis of genomic sequences, are also listed. The home page of REBASE is: <a href="http://rebase.neb.com/">http://rebase.neb.com/</a></p>
+<p>The Restriction Enzyme database (REBASE) is a collection of
+information about restriction enzymes and related proteins. It
+contains published and unpublished references, recognition and
+cleavage sites, isoschizomers, commercial availability, methylation
+sensitivity, crystal and sequence data. DNA methyltransferases, homing
+endonucleases, nicking enzymes, specificity subunits and control
+proteins are also included. Most recently, putative DNA
+methyltransferases and restriction enzymes, as predicted from analysis
+of genomic sequences, are also listed. The home page of REBASE
+is: <a href="http://rebase.neb.com/">http://rebase.neb.com/</a></p>
 
-<p>If the sequence is in EMBL, Genbank or SwissProt format, the feature table of the sequence can be dispalyed with the sequence. GFF file features can also be displayed if they are included on the command line using <tt>-ufo=file</tt>.</p>
+<p>If the sequence is in EMBL, Genbank or SwissProt format, the
+feature table of the sequence can be displayed with the sequence. GFF
+file features can also be displayed if they are included on the
+command line using <tt>-ufo=file</tt>.</p>
 
 <p>
-Other display options include:
-The displayed sequence can be numbered either by numbering the start and ending positions, or by placing a ruler with ticks above or below the sequence. An initial position to start the numbering from can be set.
-The width of a line, and width of a margin around the sequence reserved for numbering can be set. 
-Specified regions of the sequence can be displayed in uppercase to highlight them.</p>
+Other display options include: The displayed sequence can be numbered
+either by numbering the start and ending positions, or by placing a
+ruler with ticks above or below the sequence. An initial position to
+start the numbering from can be set.  The width of a line, and width
+of a margin around the sequence reserved for numbering can be set.
+Specified regions of the sequence can be displayed in uppercase to
+highlight them.</p>
 
 
 <H2>
@@ -1768,15 +1775,7 @@ It always exits with status 0.
 </H2>
 
 None known.
-<p>
 
-If you ask for the sequence display to end at position '100', with the
-qualifier '-send 100', it will display the sequence up to the end of the
-line - position '120'.  This is a feature of this program to make the
-display of things like restriction enzyme cutting sites easier.
-<p>
-
-It is not a bug. Please don't report it.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th>
@@ -1887,6 +1886,11 @@ It is not a bug. Please don't report it.
 </tr>
 
 <tr>
+<td><a href="showpep.html">showpep</a></td>
+<td>Displays protein sequences with features in pretty format</td>
+</tr>
+
+<tr>
 <td><a href="silent.html">silent</a></td>
 <td>Find restriction sites to insert (mutate) with no translation change</td>
 </tr>
@@ -1927,6 +1931,8 @@ Written 1999 - GWW
 23 Aug 2000 - features display added - GWW
 <br>
 20 Nov 2001 - feature matches and annotation display added - GWW
+<br>
+16 Dec 2008 - limited to nucleotide only. Use showpep for proteins - PMR
 
 <H2>
     Target users

@@ -15,43 +15,43 @@ features: test [ param: Y ]
 
 #string: test [ param: Y info: "String" ]
 
-string: testflength [
+string: tflength [
 	 standard: "Y"
 	 info: "FLength"
 	 default: "$(test.flength)"
 ]
 
-string: testfname [
+string: tfname [
 	 standard: "Y"
 	 info: "FName"
 	 default: "$(test.fname)"
 ]
 
-string: testfbegin [
+string: tfbegin [
 	 standard: "Y"
 	 info: "FBegin"
 	 default: "$(test.fbegin)"
 ]
 
-string: testfend [
+string: tfend [
 	 standard: "Y"
 	 info: "FEnd"
 	 default: "$(test.fend)"
 ]
 
-string: testfprotein [
+string: tfprotein [
 	 standard: "Y"
 	 info: "FProtein"
 	 default: "$(test.fprotein)"
 ]
 
-string: testfnucleic [
+string: tfnucleic [
 	 standard: "Y"
 	 info: "FNucleic"
 	 default: "$(test.fnucleic)"
 ]
 
-string: testfsize [
+string: tfsize [
 	 standard: "Y"
 	 info: "FSize"
 	 default: "$(test.fsize)"

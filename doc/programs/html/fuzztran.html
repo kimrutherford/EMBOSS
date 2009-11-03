@@ -22,6 +22,18 @@ fuzztran
 
 
 <H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
     Function
 </H2>
 Search for patterns in protein sequences (translated)
@@ -316,7 +328,7 @@ RL   Submitted (20-DEC-1994) to the EMBL/GenBank/DDBJ databases.
 RL   Huber A., Universitaet Karlsruhe, Zoologie I, Kornblumenstr. 13, 76128
 RL   Karlsruhe, Germany
 XX
-DR   EMBL-ALIGN; ALIGN_000323.
+DR   ASTD; TRAN00000023010.
 XX
 FH   Key             Location/Qualifiers
 FH
@@ -335,6 +347,8 @@ FT   CDS             84..1130
 FT                   /product="rhodopsin"
 FT                   /function="phototransduction"
 FT                   /db_xref="GOA:P51489"
+FT                   /db_xref="HSSP:1EDS"
+FT                   /db_xref="InterPro:IPR017452"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P51489"
 FT                   /citation=[1]
 FT                   /protein_id="CAA87081.1"
@@ -500,29 +514,31 @@ By default <b>fuzztran</b> writes a 'table' report file.
 # HitCount: 9
 #
 # Pattern_name Mismatch Pattern
-# pattern1            0 RA
+# pattern             0 RA
 # TransTable: 0
 # Frames: F
 #
 #=======================================
 
   Start     End  Strand   Score Pattern_name Mismatch  Frame PStart   PEnd Translation
-     97     102       +       2 pattern1            .      1     33     34 RA         
-    133     138       +       2 pattern1            .      1     45     46 RA         
-    421     426       +       2 pattern1            .      1    141    142 RA         
-    625     630       +       2 pattern1            .      1    209    210 RA         
-    835     840       +       2 pattern1            .      1    279    280 RA         
-    919     924       +       2 pattern1            .      1    307    308 RA         
-    227     232       +       2 pattern1            .      2     76     77 RA         
-    752     757       +       2 pattern1            .      2    251    252 RA         
-     72      77       +       2 pattern1            .      3     24     25 RA         
+     97     102       +       2 pattern             .      1     33     34 RA         
+    133     138       +       2 pattern             .      1     45     46 RA         
+    421     426       +       2 pattern             .      1    141    142 RA         
+    625     630       +       2 pattern             .      1    209    210 RA         
+    835     840       +       2 pattern             .      1    279    280 RA         
+    919     924       +       2 pattern             .      1    307    308 RA         
+    227     232       +       2 pattern             .      2     76     77 RA         
+    752     757       +       2 pattern             .      2    251    252 RA         
+     72      77       +       2 pattern             .      3     24     25 RA         
 
 #---------------------------------------
 #---------------------------------------
 
 #---------------------------------------
 # Total_sequences: 1
-# Total_hitcount: 9
+# Total_length: 1493
+# Reported_sequences: 1
+# Reported_hitcount: 9
 #---------------------------------------
 </pre>
 </td></tr></table><p>

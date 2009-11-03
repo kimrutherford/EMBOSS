@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Match large sequences against one or more other sequences
@@ -186,6 +193,7 @@ OC   Enterobacteriaceae; Escherichia.
 XX
 RN   [1]
 RP   1243-1266
+RX   DOI; 10.1073/pnas.70.12.3581.
 RX   PUBMED; 4587255.
 RA   Gilbert W., Maxam A.;
 RT   "The nucleotide sequence of the lac operator";
@@ -193,6 +201,7 @@ RL   Proc. Natl. Acad. Sci. U.S.A. 70(12):3581-3584(1973).
 XX
 RN   [2]
 RP   1246-1308
+RX   DOI; 10.1073/pnas.70.12.3585.
 RX   PUBMED; 4587256.
 RA   Maizels N.M.;
 RT   "The nucleotide sequence of the lactose messenger ribonucleic acid
@@ -214,8 +223,6 @@ RL   Walter de Gruyter, New York (1975)
 XX
 RN   [5]
 RP   1146-1282
-RX   PUBMED; 1088926.
-RA   Dickson R.C., Abelson J.N., Barnes W.M., Reznikoff W.S.;
 
 
   [Part of this file has been deleted for brevity]
@@ -540,13 +547,13 @@ Known bugs
 
 See also
 
-   Program name Description
-   matcher Waterman-Eggert local alignment of two sequences
-   seqmatchall All-against-all word comparison of a sequence set
-   supermatcher Calculate approximate local pair-wise alignments of
-   larger sequences
-   water Smith-Waterman local alignment of sequences
-   wordmatch Finds regions of identity (exact matches) of two sequences
+   Program name     Description
+   matcher          Waterman-Eggert local alignment of two sequences
+   seqmatchall      All-against-all word comparison of a sequence set
+   supermatcher     Calculate approximate local pair-wise alignments of
+                    larger sequences
+   water            Smith-Waterman local alignment of sequences
+   wordmatch        Finds regions of identity (exact matches) of two sequences
 
 Author(s)
 

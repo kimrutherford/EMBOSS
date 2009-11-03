@@ -9,7 +9,7 @@ section: input [
   type: "page"
 ]
 
-  sequence: sequence [
+  seqall: sequence [
     parameter: "Y"
     type: "gapstopprotein"
   ]
@@ -49,7 +49,7 @@ section: output [
   type: "page"
 ]
 
-  seqout: outfile [
+  seqoutall: outfile [
     parameter: "Y"
     type: "gapnucleotide"
   ]

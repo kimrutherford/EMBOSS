@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Scan one or more sequences with a simple frequency matrix
@@ -241,25 +248,25 @@ Known bugs
 
 See also
 
-   Program name                          Description
-   prophecy     Create frequency matrix or profile from a multiple alignment
-   prophet      Scan one or more sequences with a Gribskov or Henikoff profile
+                    Program name                          Description
+                    prophecy     Create frequency matrix or profile from a multiple alignment
+                    prophet      Scan one or more sequences with a Gribskov or Henikoff profile
 
 Author(s)
 
-   Alan Bleasby (ajb © ebi.ac.uk)
-   European Bioinformatics Institute, Wellcome Trust Genome Campus,
-   Hinxton, Cambridge CB10 1SD, UK
+   Alan             Bleasby (ajb © ebi.ac.uk)
+   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton,         Cambridge CB10 1SD, UK
 
 History
 
-   Written (1999) - Alan Bleasby
+                    Written (1999) - Alan Bleasby
 
 Target users
 
-   This program is intended to be used by everyone and everything, from
-   naive users to embedded scripts.
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
 
 Comments
 
-   None
+                    None

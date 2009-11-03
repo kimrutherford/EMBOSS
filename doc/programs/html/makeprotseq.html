@@ -21,6 +21,18 @@ makeprotseq
 
 
 <H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
     Function
 </H2>
 Create random protein sequences
@@ -36,7 +48,13 @@ IT IS DONE FOR YOU.
     Description
 </H2>
 
-<p><b>makeprotseq</b> writes an output file with a set of random protein sequences. The sequence composition is defined from reading a <b>pepstats</b> output file of protein composition: the sequences are created with amino acid frequencies matching those given in the file.  The number of sequences to create and length of each sequence is specified.  Optionally, a user-defined string may be inserted into each output sequence at a specified position</p>
+<p><b>makeprotseq</b> writes an output file with a set of random
+protein sequences. The sequence composition is defined from reading
+a <b>pepstats</b> output file of protein composition: the sequences
+are created with amino acid frequencies matching those given in the
+file.  The number of sequences to create and length of each sequence
+is specified.  Optionally, a user-defined string may be inserted into
+each output sequence at a specified position</p>
 
 
 
@@ -276,7 +294,7 @@ IT IS DONE FOR YOU.
 <pre>
 PEPSTATS of LACI_ECOLI from 1 to 360
 
-Molecular weight = 38590.06  		Residues = 360   
+Molecular weight = 38590.16  		Residues = 360   
 Average Residue Weight  = 107.195 	Charge   = 1.5   
 Isoelectric Point = 6.8820
 A280 Molar Extinction Coefficient  = 21620   
@@ -345,8 +363,7 @@ Acidic		(B+D+E+Z)		32		 8.889
    -->
 
 <b>makeprotseq</b> 
-outputs a graph to the specified graphics device. 
-outputs a report format file. The default format is ...
+writes a sequence file with the number of sequences requested.
 
 
 <p>
@@ -848,6 +865,11 @@ None.
 </tr>
 
 <tr>
+<td><a href="nthseqset.html">nthseqset</a></td>
+<td>Reads and writes (returns) one set of sequences from many</td>
+</tr>
+
+<tr>
 <td><a href="pasteseq.html">pasteseq</a></td>
 <td>Insert one sequence into another</td>
 </tr>
@@ -860,6 +882,11 @@ None.
 <tr>
 <td><a href="seqret.html">seqret</a></td>
 <td>Reads and writes (returns) sequences</td>
+</tr>
+
+<tr>
+<td><a href="seqretsetall.html">seqretsetall</a></td>
+<td>Reads and writes (returns) many sets of sequences</td>
 </tr>
 
 <tr>
@@ -880,6 +907,11 @@ None.
 <tr>
 <td><a href="skipseq.html">skipseq</a></td>
 <td>Reads and writes (returns) sequences, skipping first few</td>
+</tr>
+
+<tr>
+<td><a href="splitsource.html">splitsource</a></td>
+<td>Split sequence(s) into original source sequences</td>
 </tr>
 
 <tr>

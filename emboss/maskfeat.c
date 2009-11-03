@@ -138,9 +138,9 @@ static void maskfeat_FeatSeqMask(AjPSeq seq, const AjPStr type,
 			maskfeat_StrToLower(&str, ajFeatGetStart(gf)-1,
 					    ajFeatGetEnd(gf)-1);
 		    else
-		        ajStrMask(&str, ajFeatGetStart(gf)-1,
-				  ajFeatGetEnd(gf)-1,
-				  ajStrGetCharFirst(maskchar));
+		        ajStrMaskRange(&str, ajFeatGetStart(gf)-1,
+                                       ajFeatGetEnd(gf)-1,
+                                       ajStrGetCharFirst(maskchar));
 		}
 
 	    ajStrTokenDel( &tokens);

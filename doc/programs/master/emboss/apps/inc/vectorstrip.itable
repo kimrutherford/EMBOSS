@@ -13,7 +13,7 @@
 </tr>
 
 <tr>
-<td>[-[no]vectorfile]<br>(Parameter 2)</td>
+<td>[-[no]readfile]<br>(Parameter 2)</td>
 <td>Are your vector sequences in a file?</td>
 <td>Toggle value Yes/No</td>
 <td>Yes</td>
@@ -41,14 +41,14 @@
 </tr>
 
 <tr>
-<td>-linkera</td>
+<td>-alinker</td>
 <td>The 5' sequence</td>
 <td>Any string is accepted</td>
 <td><i>An empty string is accepted</i></td>
 </tr>
 
 <tr>
-<td>-linkerb</td>
+<td>-blinker</td>
 <td>The 3' sequence</td>
 <td>Any string is accepted</td>
 <td><i>An empty string is accepted</i></td>

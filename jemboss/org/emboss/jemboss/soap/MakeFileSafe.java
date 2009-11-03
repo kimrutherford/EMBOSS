@@ -22,7 +22,6 @@
 
 package org.emboss.jemboss.soap;
 
-import java.io.*;
 
 /**
 *

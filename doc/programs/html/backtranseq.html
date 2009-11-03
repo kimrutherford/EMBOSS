@@ -23,6 +23,18 @@ backtranseq
 
 
 <H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
     Function
 </H2>
 Back-translate a protein sequence to a nucleotide sequence
@@ -52,8 +64,8 @@ Note that this is a human protein and so the default human codon frequency file 
 
 % <b>backtranseq </b>
 Back-translate a protein sequence to a nucleotide sequence
-Input (gapped) protein sequence: <b>tsw:opsd_human</b>
-(gapped) nucleotide output sequence [opsd_human.fasta]: <b></b>
+Input (gapped) protein sequence(s): <b>tsw:opsd_human</b>
+(gapped) nucleotide output sequence(s) [opsd_human.fasta]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -69,8 +81,8 @@ This uses a drosophila sequence and codon table.
 
 % <b>backtranseq -cfile Edrome.cut </b>
 Back-translate a protein sequence to a nucleotide sequence
-Input (gapped) protein sequence: <b>tsw:ach2_drome</b>
-(gapped) nucleotide output sequence [ach2_drome.fasta]: <b></b>
+Input (gapped) protein sequence(s): <b>tsw:ach2_drome</b>
+(gapped) nucleotide output sequence(s) [ach2_drome.fasta]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -82,10 +94,10 @@ Input (gapped) protein sequence: <b>tsw:ach2_drome</b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-sequence]          sequence   (Gapped) protein sequence filename and
+  [-sequence]          seqall     (Gapped) protein sequence(s) filename and
                                   optional format, or reference (input USA)
-  [-outfile]           seqout     [<sequence>.<format>] (Gapped) nucleotide
-                                  sequence filename and optional format
+  [-outfile]           seqoutall  [<sequence>.<format>] (Aligned) nucleotide
+                                  sequence set(s) filename and optional format
                                   (output USA)
 
    Additional (Optional) qualifiers:
@@ -95,8 +107,8 @@ Input (gapped) protein sequence: <b>tsw:ach2_drome</b>
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1            integer    Start of the sequence to be used
-   -send1              integer    End of the sequence to be used
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
    -sreverse1          boolean    Reverse (if DNA)
    -sask1              boolean    Ask for begin/end/reverse
    -snucleotide1       boolean    Sequence is nucleotide
@@ -153,15 +165,15 @@ Input (gapped) protein sequence: <b>tsw:ach2_drome</b>
 
 <tr>
 <td>[-sequence]<br>(Parameter 1)</td>
-<td>(Gapped) protein sequence filename and optional format, or reference (input USA)</td>
-<td>Readable sequence</td>
+<td>(Gapped) protein sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
 <td><b>Required</b></td>
 </tr>
 
 <tr>
 <td>[-outfile]<br>(Parameter 2)</td>
-<td>(Gapped) nucleotide sequence filename and optional format (output USA)</td>
-<td>Writeable sequence</td>
+<td>(Aligned) nucleotide sequence set(s) filename and optional format (output USA)</td>
+<td>Writeable sequence(s)</td>
 <td><i>&lt;*&gt;</i>.<i>format</i></td>
 </tr>
 
@@ -211,8 +223,9 @@ ID   OPSD_HUMAN              Reviewed;         348 AA.
 AC   P08100; Q16414; Q2M249;
 DT   01-AUG-1988, integrated into UniProtKB/Swiss-Prot.
 DT   01-AUG-1988, sequence version 1.
-DT   20-MAR-2007, entry version 91.
-DE   Rhodopsin (Opsin-2).
+DT   16-JUN-2009, entry version 116.
+DE   RecName: Full=Rhodopsin;
+DE   AltName: Full=Opsin-2;
 GN   Name=RHO; Synonyms=OPN2;
 OS   Homo sapiens (Human).
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
@@ -221,7 +234,7 @@ OC   Catarrhini; Hominidae; Homo.
 OX   NCBI_TaxID=9606;
 RN   [1]
 RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
-RX   MEDLINE=84272729; PubMed=6589631;
+RX   MEDLINE=84272729; PubMed=6589631; DOI=10.1073/pnas.81.15.4851;
 RA   Nathans J., Hogness D.S.;
 RT   "Isolation and nucleotide sequence of the gene encoding human
 RT   rhodopsin.";
@@ -236,8 +249,13 @@ RL   Submitted (JUL-2001) to the EMBL/GenBank/DDBJ databases.
 RN   [3]
 RP   NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA].
 RC   TISSUE=Retina;
-RG   The German cDNA consortium;
-RL   Submitted (JUN-2003) to the EMBL/GenBank/DDBJ databases.
+RX   PubMed=17974005; DOI=10.1186/1471-2164-8-399;
+RA   Bechtel S., Rosenfelder H., Duda A., Schmidt C.P., Ernst U.,
+RA   Wellenreuther R., Mehrle A., Schuster C., Bahr A., Blocker H.,
+RA   Heubner D., Hoerlein A., Michel G., Wedler H., Kohrer K.,
+RA   Ottenwalder B., Poustka A., Wiemann S., Schupp I.;
+RT   "The full-ORF clone resource of the German cDNA consortium.";
+RL   BMC Genomics 8:399-399(2007).
 RN   [4]
 RP   NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA].
 RX   PubMed=15489334; DOI=10.1101/gr.2596504;
@@ -251,12 +269,6 @@ RX   PubMed=8566799; DOI=10.1016/0378-1119(95)00688-5;
 RA   Bennett J., Beller B., Sun D., Kariko K.;
 RT   "Sequence analysis of the 5.34-kb 5' flanking region of the human
 RT   rhodopsin-encoding gene.";
-RL   Gene 167:317-320(1995).
-RN   [6]
-RP   REVIEW ON RP4 VARIANTS.
-RX   MEDLINE=94004905; PubMed=8401533;
-RA   Al-Maghtheh M., Gregory C., Inglehearn C., Hardcastle A.,
-RA   Bhattacharya S.;
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
@@ -321,27 +333,21 @@ SQ   SEQUENCE   348 AA;  38893 MW;  6F4F6FCBA34265B2 CRC64;
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 ID   ACH2_DROME              Reviewed;         576 AA.
-AC   P17644; Q9VC73;
+AC   P17644; Q0KI18; Q9VC73;
 DT   01-AUG-1990, integrated into UniProtKB/Swiss-Prot.
 DT   01-AUG-1990, sequence version 1.
-DT   03-APR-2007, entry version 78.
-DE   Acetylcholine receptor subunit alpha-like 2 precursor.
-GN   Name=nAcR-alpha-96Ab; Synonyms=Acr96Ab, AcrE, sad; ORFNames=CG6844;
+DT   16-JUN-2009, entry version 98.
+DE   RecName: Full=Acetylcholine receptor subunit alpha-like 2;
+DE   Flags: Precursor;
+GN   Name=nAcRalpha-96Ab; Synonyms=Acr96Ab, AcrE, sad; ORFNames=CG6844;
 OS   Drosophila melanogaster (Fruit fly).
 OC   Eukaryota; Metazoa; Arthropoda; Hexapoda; Insecta; Pterygota;
 OC   Neoptera; Endopterygota; Diptera; Brachycera; Muscomorpha;
-OC   Ephydroidea; Drosophilidae; Drosophila.
+OC   Ephydroidea; Drosophilidae; Drosophila; Sophophora.
 OX   NCBI_TaxID=7227;
 RN   [1]
-RP   NUCLEOTIDE SEQUENCE [MRNA].
-RC   TISSUE=Head;
-RX   MEDLINE=90301489; PubMed=2114015; DOI=10.1093/nar/18.12.3640;
-RA   Baumann A., Jonas P., Gundelfinger E.D.;
-RT   "Sequence of D alpha 2, a novel alpha-like subunit of Drosophila
-RT   nicotinic acetylcholine receptors.";
-RL   Nucleic Acids Res. 18:3640-3640(1990).
-RN   [2]
-RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA], TISSUE SPECIFICITY, AND
+RP   DEVELOPMENTAL STAGE.
 RC   TISSUE=Head;
 RX   MEDLINE=90353591; PubMed=2117557; DOI=10.1016/0014-5793(90)81170-S;
 RA   Jonas P., Baumann A., Merz B., Gundelfinger E.D.;
@@ -349,13 +355,22 @@ RT   "Structure and developmental expression of the D alpha 2 gene encoding
 RT   a novel nicotinic acetylcholine receptor protein of Drosophila
 RT   melanogaster.";
 RL   FEBS Lett. 269:264-268(1990).
-RN   [3]
+RN   [2]
 RP   NUCLEOTIDE SEQUENCE [MRNA].
 RX   MEDLINE=90360975; PubMed=1697262;
 RA   Sawruk E., Schloss P., Betz H., Schmitt B.;
 RT   "Heterogeneity of Drosophila nicotinic acetylcholine receptors: SAD, a
 RT   novel developmentally regulated alpha-subunit.";
 RL   EMBO J. 9:2671-2677(1990).
+RN   [3]
+RP   NUCLEOTIDE SEQUENCE [MRNA], TISSUE SPECIFICITY, AND DEVELOPMENTAL
+RP   STAGE.
+RC   TISSUE=Head;
+RX   MEDLINE=90301489; PubMed=2114015; DOI=10.1093/nar/18.12.3640;
+RA   Baumann A., Jonas P., Gundelfinger E.D.;
+RT   "Sequence of D alpha 2, a novel alpha-like subunit of Drosophila
+RT   nicotinic acetylcholine receptors.";
+RL   Nucleic Acids Res. 18:3640-3640(1990).
 RN   [4]
 RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
 RC   STRAIN=Berkeley;
@@ -367,35 +382,32 @@ RA   Sutton G.G., Wortman J.R., Yandell M.D., Zhang Q., Chen L.X.,
 RA   Brandon R.C., Rogers Y.-H.C., Blazej R.G., Champe M., Pfeiffer B.D.,
 RA   Wan K.H., Doyle C., Baxter E.G., Helt G., Nelson C.R., Miklos G.L.G.,
 RA   Abril J.F., Agbayani A., An H.-J., Andrews-Pfannkoch C., Baldwin D.,
-RA   Ballew R.M., Basu A., Baxendale J., Bayraktaroglu L., Beasley E.M.,
-RA   Beeson K.Y., Benos P.V., Berman B.P., Bhandari D., Bolshakov S.,
-RA   Borkova D., Botchan M.R., Bouck J., Brokstein P., Brottier P.,
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-DR   IntAct; P17644; -.
-DR   Ensembl; CG6844; Drosophila melanogaster.
-DR   KEGG; dme:Dmel_CG6844; -.
-DR   FlyBase; FBgn0000039; nAcR-alpha-96Ab.
-DR   BioCyc; DMEL-XXX-02:DMEL-XXX-02-013190-MONOMER; -.
-DR   BioCyc; DMEL-XXX-02:DMEL-XXX-02-013191-MONOMER; -.
-DR   GermOnline; CG6844; Drosophila melanogaster.
+DR   GO; GO:0045211; C:postsynaptic membrane; IEA:UniProtKB-SubCell.
+DR   GO; GO:0030594; F:neurotransmitter receptor activity; IEA:InterPro.
+DR   GO; GO:0004889; F:nicotinic acetylcholine-activated cation-se...; IEA:InterPro.
 DR   GO; GO:0005515; F:protein binding; IPI:IntAct.
+DR   GO; GO:0006811; P:ion transport; IEA:UniProtKB-KW.
 DR   InterPro; IPR006029; Neu_channel_TM.
 DR   InterPro; IPR006202; Neur_chan_lig_bd.
 DR   InterPro; IPR006201; Neur_channel.
-DR   InterPro; IPR002394; Nic_ach_rcpt.
-DR   Gene3D; G3DSA:3.30.1100.20; Neur_chan_lig_bd; 1.
-DR   PANTHER; PTHR18945; Neur_channel; 2.
+DR   InterPro; IPR018000; Neurotransmitter_ion_chnl_CS.
+DR   InterPro; IPR002394; Nicotinic_acetylcholine_rcpt_N.
+DR   Gene3D; G3DSA:2.70.170.10; Neur_chan_lig_bd; 1.
+DR   PANTHER; PTHR18945; Neur_channel; 1.
 DR   Pfam; PF02931; Neur_chan_LBD; 1.
 DR   Pfam; PF02932; Neur_chan_memb; 1.
 DR   PRINTS; PR00254; NICOTINICR.
 DR   PRINTS; PR00252; NRIONCHANNEL.
 DR   TIGRFAMs; TIGR00860; LIC; 1.
 DR   PROSITE; PS00236; NEUROTR_ION_CHANNEL; 1.
-KW   Complete proteome; Glycoprotein; Ion transport; Ionic channel;
-KW   Membrane; Postsynaptic membrane; Receptor; Signal; Transmembrane;
+PE   1: Evidence at protein level;
+KW   Cell junction; Cell membrane; Complete proteome; Disulfide bond;
+KW   Glycoprotein; Ion transport; Ionic channel; Membrane;
+KW   Postsynaptic cell membrane; Receptor; Signal; Synapse; Transmembrane;
 KW   Transport.
 FT   SIGNAL        1     21       Probable.
 FT   CHAIN        22    576       Acetylcholine receptor subunit alpha-like
@@ -444,7 +456,7 @@ translation table (which defaults to human).
 <p><h3>File: opsd_human.fasta</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-&gt;OPSD_HUMAN P08100 Rhodopsin (Opsin-2).
+&gt;OPSD_HUMAN P08100 Rhodopsin (Opsin-2)
 ATGAACGGCACCGAGGGCCCCAACTTCTACGTGCCCTTCAGCAACGCCACCGGCGTGGTG
 AGGAGCCCCTTCGAGTACCCCCAGTACTACCTGGCCGAGCCCTGGCAGTTCAGCATGCTG
 GCCGCCTACATGTTCCTGCTGATCGTGCTGGGCTTCCCCATCAACTTCCTGACCCTGTAC
@@ -471,7 +483,7 @@ GAGACCAGCCAGGTGGCCCCCGCC
 <p><h3>File: ach2_drome.fasta</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-&gt;ACH2_DROME P17644 Acetylcholine receptor subunit alpha-like 2 precursor.
+&gt;ACH2_DROME P17644 Acetylcholine receptor subunit alpha-like 2 (Precursor)
 ATGGCCCCCGGCTGCTGCACCACCCGCCCCCGCCCCATCGCCCTGCTGGCCCACATCTGG
 CGCCACTGCAAGCCCCTGTGCCTGCTGCTGGTGCTGCTGCTGCTGTGCGAGACCGTGCAG
 GCCAACCCCGATGCCAAGCGCCTGTACGATGATCTGCTGAGCAACTACAACCGCCTGATC
@@ -670,7 +682,7 @@ None.
 
 <tr>
 <td><a href="pepwindow.html">pepwindow</a></td>
-<td>Draw a Kyte-Doolittle hydropathy plot for a protein sequence</td>
+<td>Draw a hydropathy plot for a protein sequence</td>
 </tr>
 
 <tr>

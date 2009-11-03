@@ -465,7 +465,7 @@ static void printsextract_calcMatrices(AjPFile inf, AjPFile outf,
     ajint sum;
     ajint max;
     ajint min;
-    ajint fmin;
+    ajint vfmin;
     ajlong pos;
     ajint  t;
 
@@ -501,7 +501,7 @@ static void printsextract_calcMatrices(AjPFile inf, AjPFile outf,
 
 	for(j=0,sum=0;j<c;++j)
 	{
-	    for(k=0,max=0,fmin=0;k<AZ;++k)
+	    for(k=0,max=0,vfmin=0;k<AZ;++k)
 		max = (max>mat[k][j]) ? max : mat[k][j];
 	    sum += max;
 	}
@@ -516,12 +516,12 @@ static void printsextract_calcMatrices(AjPFile inf, AjPFile outf,
 
 	for(j=0,min=INT_MAX;j<cnts[i];++j)
 	{
-	    fmin = 0;
+	    vfmin = 0;
 	    p = ajStrGetPtr(*s)+4;
 	    for(k=0;k<c;++k)
-		fmin+=mat[ajBasecodeToInt(*(p+k))][k];
+		vfmin+=mat[ajBasecodeToInt(*(p+k))][k];
 	    
-	    min = (min<fmin) ? min : fmin;
+	    min = (min<vfmin) ? min : vfmin;
 	    ajReadlineTrim(inf,s);
 	}
 

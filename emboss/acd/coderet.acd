@@ -12,7 +12,7 @@ section: input [
   seqall: seqall [
     parameter: "Y"
     type: "DNA"
-    entry: "Y"
+    features: "Y"
   ]
 
 endsection: input

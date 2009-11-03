@@ -1,6 +1,6 @@
    Standard (Mandatory) qualifiers (* if not always prompted):
-  [-sequence]          seqall     (Gapped) sequence(s) filename and optional
-                                  format, or reference (input USA)
+  [-sequence]          seqall     (Gapped) nucleotide sequence(s) filename and
+                                  optional format, or reference (input USA)
    -format             menu       [2] Display format (Values: 0 (Enter your
                                   own list of things to display); 1 (Sequence
                                   only); 2 (Default sequence with features); 3
@@ -42,7 +42,19 @@
                                   Examples of region specifications are:
                                   24-45, 56-78
                                   1:45, 67=99;765..888
-                                  1,5,8,10,23,45,57,99
+   -revtranslate       range      [If this is left blank the complete reverse
+                                  sequence is translated.] Regions to
+                                  translate (if translating).
+                                  If this is left blank the complete sequence
+                                  is translated.
+                                  A set of regions is specified by a set of
+                                  pairs of positions.
+                                  The positions are integers.
+                                  They are separated by any non-digit,
+                                  non-alpha character.
+                                  Examples of region specifications are:
+                                  78-56, 45-24,
+                                  888..765, 99=67; 45:1
    -uppercase          range      [If this is left blank, then the sequence
                                   case is left alone.] Regions to put in
                                   uppercase.
@@ -124,7 +136,7 @@
                                   (Chlorophycean Mitochondrial); 21 (Trematode
                                   Mitochondrial); 22 (Scenedesmus obliquus);
                                   23 (Thraustochytrium Mitochondrial))
-   -matchsource        string     [*] By default any feature source in the
+   -sourcematch        string     [*] By default any feature source in the
                                   feature table is shown. You can set this to
                                   match any feature source you wish to show.
                                   The source name is usually either the name
@@ -136,7 +148,7 @@
                                   separate their names with the character '|',
                                   eg:
                                   gene* | embl (Any string is accepted)
-   -matchtype          string     [*] By default any feature type in the
+   -typematch          string     [*] By default any feature type in the
                                   feature table is shown. You can set this to
                                   match any feature type you wish to show.
                                   See http://www3.ebi.ac.uk/Services/WebFeat/
@@ -149,19 +161,19 @@
                                   separate their names with the character '|',
                                   eg:
                                   *UTR | intron (Any string is accepted)
-   -matchsense         integer    [0 - any sense, 1 - forward sense, -1 -
+   -sensematch         integer    [0 - any sense, 1 - forward sense, -1 -
                                   reverse sense] By default any feature type
                                   in the feature table is shown. You can set
                                   this to match any feature sense you wish to
                                   show. 0 - any sense, 1 - forward sense, -1 -
                                   reverse sense (Any integer value)
-   -minscore           float      [0.0] If this is greater than or equal to
-                                  the maximum score, then any score is
-                                  permitted (Any numeric value)
-   -maxscore           float      [0.0] If this is less than or equal to the
-                                  maximum score, then any score is permitted
-                                  (Any numeric value)
-   -matchtag           string     [*] Tags are the types of extra values that
+   -minscore           float      [0.0] Minimum score of feature to display
+                                  (see also maxscore) (Any numeric value)
+   -maxscore           float      [0.0] Maximum score of feature to display.
+                                  If both minscore and maxscore are zero (the
+                                  default), then any score is ignored (Any
+                                  numeric value)
+   -tagmatch           string     [*] Tags are the types of extra values that
                                   a feature may have. For example in the EMBL
                                   feature table, a 'CDS' type of feature may
                                   have the tags '/codon', '/codon_start',
@@ -182,7 +194,7 @@
                                   separate their names with the character '|',
                                   eg:
                                   gene | label (Any string is accepted)
-   -matchvalue         string     [*] Tag values are the values associated
+   -valuematch         string     [*] Tag values are the values associated
                                   with a feature tag. Tags are the types of
                                   extra values that a feature may have. For
                                   example in the EMBL feature table, a 'CDS'
@@ -214,6 +226,8 @@
                                   value will be displayed.
 
    Advanced (Unprompted) qualifiers:
+   -mfile              datafile   [Emethylsites.dat] Restriction enzyme data
+                                  file (optional)
    -flatreformat       boolean    [N] This changes the output format to one
                                   where the recognition site is indicated by a
                                   row of '===' characters and the cut site is
@@ -252,6 +266,8 @@
                                   for restriction enzyme recognition site and
                                   cut postions that span the end of the
                                   sequence to be considered.
+   -methylation        boolean    [N] If this is set then RE recognition sites
+                                  will not match methylated bases.
    -[no]commercial     boolean    [Y] If this is set, then only those enzymes
                                   with a commercial supplier will be searched
                                   for. This qualifier is ignored if you have

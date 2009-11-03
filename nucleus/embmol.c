@@ -33,7 +33,6 @@ static ajint embMolFragSort(const void* a, const void* b);
 
 
 
-
 /* @func embMolGetFrags *******************************************************
 **
 ** Create a sorted list of molwt fragments
@@ -118,9 +117,12 @@ ajint embMolGetFrags(const AjPStr thys, ajint rno, EmbPPropMolwt const *mwdata,
     for(i=0;i<defcnt;++i)
     {
 	end = ajIntGet(defcut,i);
+
 	if(strchr(zyme[rno].type,(ajint)'N'))
 	    --end;
+
 	mw = embPropCalcMolwt(p,beg,end, mwdata, mono);
+
 	if(rno==7)
 	    mw -= (double)(17.0079 + 31.095);
 
@@ -135,8 +137,10 @@ ajint embMolGetFrags(const AjPStr thys, ajint rno, EmbPPropMolwt const *mwdata,
     if(defcnt)
     {
 	mw = embPropCalcMolwt(p,beg,len-1,mwdata,mono);
+
 	if(rno==7)
 	    mw -= (double)(17.0079 + 31.095);
+
 	AJNEW0(frag);
 	frag->begin = beg+1;
 	frag->end   = len;
@@ -149,6 +153,7 @@ ajint embMolGetFrags(const AjPStr thys, ajint rno, EmbPPropMolwt const *mwdata,
     {
 	ajListReverse(*l);
 	ajListToarray(*l,(void ***)&ptr);
+
 	for(i=0;i<defcnt-1;++i)
 	{
 	    beg = ptr[i]->begin;
@@ -160,6 +165,7 @@ ajint embMolGetFrags(const AjPStr thys, ajint rno, EmbPPropMolwt const *mwdata,
 	    frag->mwt = mw + EMBMOLPARDISP;
 	    ajListPush(*l,(void *)frag);
 	}
+
 	AJFREE(ptr);
     }
 

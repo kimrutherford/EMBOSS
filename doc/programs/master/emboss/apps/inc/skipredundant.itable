@@ -63,7 +63,7 @@
 
 <tr>
 <td>[-redundantoutseq]<br>(Parameter 3)</td>
-<td>Sequence set(s) filename and optional format (output USA)</td>
+<td>Redundant sequences (optional)</td>
 <td>Writeable sequence(s)</td>
 <td><i>&lt;*&gt;</i>.<i>format</i></td>
 </tr>
@@ -90,13 +90,6 @@
 <tr>
 <td>-feature</td>
 <td>Sequence feature information will be retained if this option is set.</td>
-<td>Toggle value Yes/No</td>
-<td>No</td>
-</tr>
-
-<tr>
-<td>-keepredundant</td>
-<td>This option specifies whether to retain redundant sequences. If this option is set a file of redundant sequences is written.</td>
 <td>Toggle value Yes/No</td>
 <td>No</td>
 </tr>

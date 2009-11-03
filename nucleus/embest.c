@@ -100,6 +100,7 @@ typedef struct EstSSavePair
 } EstOSavePair;
 #define EstPSavePair EstOSavePair*
 
+
 static EstPSavePair rpair  = NULL;
 static ajint rpairs        = 0;
 static ajint rpair_size    = 0;
@@ -307,6 +308,7 @@ AjPSeq embEstFindSpliceSites(const AjPSeq genome, ajint forward )
 		sitestr[pos+1]  = ajSysCastItoc((ajuint) sitestr[pos+1] |
 					    (ajuint) ACCEPTOR);
 	}
+
 	ajSeqAssignNameC(sites, "forward"); /* so that other functions know */
     }
     else
@@ -326,8 +328,10 @@ AjPSeq embEstFindSpliceSites(const AjPSeq genome, ajint forward )
 		sitestr[pos+1] = ajSysCastItoc((ajuint) sitestr[pos+1] |
 					   (ajuint) ACCEPTOR);
 	}
-	ajSeqAssignNameC(sites,"reverse");	/* so that other functions know */
+
+	ajSeqAssignNameC(sites,"reverse");  /* so that other functions know */
     }
+
     ajSeqAssignSeqC(sites, sitestr);
     AJFREE(sitestr);
 
@@ -362,8 +366,8 @@ AjPSeq embEstShuffleSeq( AjPSeq seq, ajint in_place, ajint *seed )
     shufflestr = ajSeqGetSeqCopyS(shuffled);
 
     estShuffleSeq(ajStrGetuniquePtr(&shufflestr), seed);
-
     ajSeqAssignSeqS(shuffled, shufflestr);
+
     return shuffled;
 }
 
@@ -445,13 +449,16 @@ static float estRand3(ajint *idum)
 	mj %= MBIG;
 	ma[55] = mj;
 	mk = 1;
+
 	for(i=1;i<=54;i++)
 	{
 	    ii = (21*i) % 55;
 	    ma[ii] = mk;
 	    mk     = mj-mk;
+
 	    if(mk < MZ)
 		mk += MBIG;
+
 	    mj = ma[ii];
 	}
 
@@ -459,7 +466,9 @@ static float estRand3(ajint *idum)
 	    for(i=1;i<=55;i++)
 	    {
 		ma[i] -= ma[1+(i+30) % 55];
-		if(ma[i] < MZ) ma[i] += MBIG;
+
+		if(ma[i] < MZ)
+                    ma[i] += MBIG;
 	    }
 
 	inext  = 0;
@@ -505,6 +514,7 @@ void embEstFreeAlign(EmbPEstAlign *ge)
     {
 	if( (*ge)->align_path )
 	    AJFREE( (*ge)->align_path );
+
 	AJFREE(*ge);
     }
 
@@ -555,11 +565,13 @@ void embEstPrintAlign(AjPFile ofile, const AjPSeq genome, const AjPSeq est,
     genomeseq = ajSeqGetSeqC(genome);
     estseq = ajSeqGetSeqC(est);
 
-    namelen = ajStrGetLen(ajSeqGetNameS(genome)) > ajStrGetLen(ajSeqGetNameS(est)) ?
+    namelen = ajStrGetLen(ajSeqGetNameS(genome)) >
+        ajStrGetLen(ajSeqGetNameS(est)) ?
 	ajStrGetLen(ajSeqGetNameS(genome)) : ajStrGetLen(ajSeqGetNameS(est)) ;
 
 
     sprintf(format, "%%%dS %%6d ", namelen );
+
     if(ofile)
     {
 	ajFmtPrintF(ofile, "\n");
@@ -575,9 +587,11 @@ void embEstPrintAlign(AjPFile ofile, const AjPSeq genome, const AjPSeq est,
 	gpos = ge->gstart;
 	epos = ge->estart;
 	len = 0;
+
 	for(pos=0;pos<ge->len;pos++)
 	{
 	    ajint way = ge->align_path[pos];
+
 	    if( way == DIAGONAL  )
 	    {
 		/* diagonal */
@@ -649,6 +663,7 @@ void embEstPrintAlign(AjPFile ofile, const AjPSeq genome, const AjPSeq est,
 		    ecoord[j] = epos-1;
 		    gbuf[j] = ajSysCastItoc(tolower((ajint) genomeseq[g]));
 		    ebuf[j] = '.';
+
 		    if(way == FORWARD_SPLICED_INTRON)
 			sbuf[j] = '>';
 		    else if(way == REVERSE_SPLICED_INTRON)
@@ -656,6 +671,7 @@ void embEstPrintAlign(AjPFile ofile, const AjPSeq genome, const AjPSeq est,
 		    else
 			sbuf[j] = '?';
 		}
+
 		len = j;
 
 		for(j=len;j<len+numlen;j++)
@@ -666,6 +682,7 @@ void embEstPrintAlign(AjPFile ofile, const AjPSeq genome, const AjPSeq est,
 		    ebuf[j] = '.';
 		    sbuf[j] = number[j-len];
 		}
+
 		len = j;
 		g = gpos + intron_width - half_width-1;
 
@@ -676,6 +693,7 @@ void embEstPrintAlign(AjPFile ofile, const AjPSeq genome, const AjPSeq est,
 		    ecoord[j] = epos-1;
 		    gbuf[j] = ajSysCastItoc(tolower((ajint) genomeseq[g]));
 		    ebuf[j] = '.';
+
 		    if(way == FORWARD_SPLICED_INTRON)
 			sbuf[j] = '>';
 		    else if(way == REVERSE_SPLICED_INTRON)
@@ -694,8 +712,10 @@ void embEstPrintAlign(AjPFile ofile, const AjPSeq genome, const AjPSeq est,
 	    max = ( i+width > len ? len : i+width );
 
 	    ajFmtPrintF(ofile, format, ajSeqGetNameS(genome), gcoord[i]+1 );
+
 	    for(j=i;j<max;j++)
 		ajFmtPrintF(ofile, "%c",  gbuf[j]);
+
 	    ajFmtPrintF(ofile," %6d\n", gcoord[j-1]+1 );
 
 	    for(j=0;j<namelen+8;j++)
@@ -703,11 +723,13 @@ void embEstPrintAlign(AjPFile ofile, const AjPSeq genome, const AjPSeq est,
 
 	    for(j=i;j<max;j++)
 		ajFmtPrintF(ofile,"%c", sbuf[j]);
-	    ajFmtPrintF(ofile,  "\n");
 
+	    ajFmtPrintF(ofile,  "\n");
 	    ajFmtPrintF(ofile, format, ajSeqGetNameS(est), ecoord[i]+1 );
+
 	    for(j=i;j<max;j++)
 		ajFmtPrintF(ofile, "%c", ebuf[j]);
+
 	    ajFmtPrintF(ofile," %6d\n\n", ecoord[j-1]+1 );
 	}
 
@@ -861,8 +883,10 @@ EmbPEstAlign embEstAlignNonRecursive(const AjPSeq est, const AjPSeq genome,
     if(backtrack)
     {
 	AJCNEW(ppath, glen);
+
 	for(gpos=0;gpos<glen;gpos++)
 	    AJCNEW(ppath[gpos], e_len_pack);
+
 	AJCNEW(temp_path,  glen+elen);
     }
     else
@@ -990,6 +1014,7 @@ EmbPEstAlign embEstAlignNonRecursive(const AjPSeq est, const AjPSeq genome,
 		if(max == diagonal)	/* match extension */
 		{
 		    s1[epos] = diagonal;
+
 		    if(backtrack)
 			path[epos/4] =  ajSysCastItouc((ajuint) path[epos/4] |
 				      	   (ajuint) diagonal_path[epos%4]);
@@ -1008,6 +1033,7 @@ EmbPEstAlign embEstAlignNonRecursive(const AjPSeq est, const AjPSeq genome,
 			{
 			    /* continue previous match */
 			    t1[epos] = t2[epos-1];
+
 			    if(debug && t1[epos].left == 10126)
 				sprintf(dbgmsg,
 					"t1[%d] = t2[epos-1] "
@@ -1020,6 +1046,7 @@ EmbPEstAlign embEstAlignNonRecursive(const AjPSeq est, const AjPSeq genome,
 		else if( max == delete_est ) /* (continue) gap in EST */
 		{
 		    s1[epos] = delete_est;
+
 		    if( backtrack )
 		    {			/* <mod> */
 			path[epos/4]  =  ajSysCastItouc((ajuint) path[epos/4] |
@@ -1028,6 +1055,7 @@ EmbPEstAlign embEstAlignNonRecursive(const AjPSeq est, const AjPSeq genome,
 		    else
 		    {
 			t1[epos] = t1[epos-1];
+
 			if(debug && t1[epos].left == 10126)
 			    sprintf(dbgmsg,
 				    "t1[%d] = t2[epos-1] left:%d (b)\n",
@@ -1038,6 +1066,7 @@ EmbPEstAlign embEstAlignNonRecursive(const AjPSeq est, const AjPSeq genome,
 		{
 		    /* (continue) gap in GENOME */
 		    s1[epos] = delete_genome;
+
 		    if( backtrack )
 		    {			/* <mod> */
 			path[epos/4] = ajSysCastItouc((ajuint) path[epos/4] |
@@ -1046,6 +1075,7 @@ EmbPEstAlign embEstAlignNonRecursive(const AjPSeq est, const AjPSeq genome,
 		    else
 		    {
 			t1[epos] = t2[epos];
+
 			if(debug && t1[epos].left == 10126)
 			    sprintf(dbgmsg,
 				    "t1[%d] = t2[epos] left:%d\n",
@@ -1056,6 +1086,7 @@ EmbPEstAlign embEstAlignNonRecursive(const AjPSeq est, const AjPSeq genome,
 		{
 		    /* Intron */
 		    s1[epos] = intron;
+
 		    if(!backtrack)
 			t1[epos] = best_intron_start[epos];
 		}
@@ -1064,6 +1095,7 @@ EmbPEstAlign embEstAlignNonRecursive(const AjPSeq est, const AjPSeq genome,
 	    {
 		/* not worth saving (SW with score < 0 ) */
 		s1[epos] = 0;
+
 		if(!backtrack)
 		{
 		    t1[epos].left = -1;
@@ -1098,8 +1130,10 @@ EmbPEstAlign embEstAlignNonRecursive(const AjPSeq est, const AjPSeq genome,
 			AJFREE(best_intron_score);
 			AJFREE(best_intron_coord);
 			AJFREE(temp_path);
+
 			for(gpos=0;gpos<glen;gpos++)
 			    AJFREE(ppath[gpos]);
+
 			AJFREE(ppath);
 			estPairFree();
 			AJFREE(ge);
@@ -1112,6 +1146,7 @@ EmbPEstAlign embEstAlignNonRecursive(const AjPSeq est, const AjPSeq genome,
 
 		best_intron_score[epos] = s1[epos];
 		best_intron_coord[epos] = gpos;
+
 		if(!backtrack)
 		    best_intron_start[epos] = t1[epos];
 	    }
@@ -1121,9 +1156,11 @@ EmbPEstAlign embEstAlignNonRecursive(const AjPSeq est, const AjPSeq genome,
 		max_score = s1[epos];
 		emax = epos;
 		gmax = gpos;
+
 		if(!backtrack)
 		{
 		    best_start = t1[epos];
+
 		    if(verbose)
 			ajDebug("max_score: %d best_start = t1[%d] "
 				"left:%d right:%d\n",
@@ -1180,6 +1217,7 @@ EmbPEstAlign embEstAlignNonRecursive(const AjPSeq est, const AjPSeq genome,
 	    direction = ajSysCastItouc(((ajuint)ppath[gpos][epos/4] &
 				    (ajuint)mask[epos%4] ) >> (2*(epos%4)));
 	    temp_path[pos++] = direction;
+
 	    if((ajuint) direction == INTRON ) /* intron */
 	    {
 		ajint gpos1;
@@ -1232,6 +1270,7 @@ EmbPEstAlign embEstAlignNonRecursive(const AjPSeq est, const AjPSeq genome,
 	ge->gstart = gpos;
 	ge->estart = epos;
 	ge->len    = pos;
+
 	if(debug)
 	    ajDebug("gstart = gpos (a) : %d\n", ge->gstart);
 
@@ -1257,6 +1296,7 @@ EmbPEstAlign embEstAlignNonRecursive(const AjPSeq est, const AjPSeq genome,
     {
 	ge->gstart = best_start.left;
 	ge->estart = best_start.right;
+
 	if(debug)
 	    ajDebug("gstart = best_start.left : %d\n", ge->gstart);
     }
@@ -1275,6 +1315,7 @@ EmbPEstAlign embEstAlignNonRecursive(const AjPSeq est, const AjPSeq genome,
 
 	for(gpos=0;gpos<glen;gpos++)
 	    AJFREE(ppath[gpos]);
+
 	AJFREE(ppath);
 	estPairFree();
     }
@@ -1552,6 +1593,7 @@ static EmbPEstAlign estAlignRecursive( const AjPSeq est,const  AjPSeq genome,
     ajSeqSetRange(right_genome, gright+1, ajSeqGetLen(genome));
     ajSeqTrim(left_genome);
     ajSeqTrim(right_genome);
+
     if( splice_sites )
     {
 	left_splice = ajSeqNewSeq(splice_sites);
@@ -1561,6 +1603,7 @@ static EmbPEstAlign estAlignRecursive( const AjPSeq est,const  AjPSeq genome,
 	ajSeqTrim(left_splice);
 	ajSeqTrim(right_splice);
     }
+
     /* split est */
 
     left_est = ajSeqNewSeq(est);
@@ -1607,6 +1650,7 @@ static EmbPEstAlign estAlignRecursive( const AjPSeq est,const  AjPSeq genome,
 	if(debug)
 	    ajDebug("split_on_del split at deletion at %d\n", i);
 	ge->align_path[i++] = DELETE_EST;
+
 	for(j=1;j<right_ge->len;i++,j++) /* omit first symbol on
 					    right-hand alignment */
 	    ge->align_path[i] = right_ge->align_path[j];
@@ -1619,11 +1663,13 @@ static EmbPEstAlign estAlignRecursive( const AjPSeq est,const  AjPSeq genome,
     ajSeqDel(&right_est);
     ajSeqDel(&left_genome);
     ajSeqDel(&right_genome);
-    if( splice_sites )
+
+    if(splice_sites)
     {
 	ajSeqDel(&left_splice);
 	ajSeqDel(&right_splice);
     }
+
     embEstFreeAlign(&left_ge);
     embEstFreeAlign(&right_ge );
 
@@ -1831,6 +1877,7 @@ static ajint estAlignMidpt( const AjPSeq est, const AjPSeq genome,
 	    if(max == diagonal)
 	    {
 		s1[epos] = diagonal;
+
 		if(epos == middle)
 		{
 		    m1[epos].left = gpos-1;
@@ -1842,6 +1889,7 @@ static ajint estAlignMidpt( const AjPSeq est, const AjPSeq genome,
 	    else if(max == delete_est)
 	    {
 		s1[epos] = delete_est;
+
 		if( epos == middle )
 		{
 		    m1[epos].left = gpos;
@@ -1889,8 +1937,10 @@ static ajint estAlignMidpt( const AjPSeq est, const AjPSeq genome,
     AJFREE(best_intron_midpt);
     ajSeqDel(&gdup);
     ajSeqDel(&edup);
+
     return score;
 }
+
 
 
 
@@ -1948,11 +1998,13 @@ static ajint estPairRemember( ajint col, ajint row )
 	    /* binary check for row/col */
 	    middle = (left+right)/2;
 	    d = estSavePairCmp( &rpair[middle], &rp );
+
 	    if( d < 0 )
 		left = middle;
 	    else if( d >= 0 )
 		right = middle;
 	}
+
 	if(debug)
 	    ajDebug("col %d row %d right: col %d row %d left: col %d row %d\n",
 		    col, row, rpair[right].col, rpair[right].row,
@@ -1977,6 +2029,7 @@ static ajint estPairRemember( ajint col, ajint row )
 		ajDebug("rpair[left].col %d %d\n", rpair[left].col, col);
 		ajDebug("rpair[left].row %d %d\n", rpair[left].row, row);
 	    }
+
 	    bad = 2;
 	}
     }
@@ -2104,6 +2157,7 @@ static ajint estDoNotForget( ajint col, ajint row )
 	if (!rpair)
 	{
 	    ajDie("Memory limit exceeded in allocating space for rpairs");
+
 	    return 0;		     /* failure - ran out of memory */
 	}
 
@@ -2192,6 +2246,7 @@ void embEstOutBlastStyle(AjPFile blast, const AjPSeq genome, const AjPSeq est,
     if( blast )
     {
 	tsub = 0;
+
 	for(p=0;p<ge->len;p++)
 	    if(ge->align_path[p] <= INTRON)
 	    {
@@ -2201,6 +2256,7 @@ void embEstOutBlastStyle(AjPFile blast, const AjPSeq genome, const AjPSeq est,
 		{
 		    ajDebug("Intron: path:%d gpos:%d gstart:%d\n",
 			    ge->align_path[p], gpos, ge->gstart);
+
 		    if(ge->align_path[p] == INTRON)
 		    {
 			ajFmtPrintF(blast,
@@ -2238,11 +2294,13 @@ void embEstOutBlastStyle(AjPFile blast, const AjPSeq genome, const AjPSeq est,
 		m = lsimmat[(ajint)genomestr[(ajint)gpos]]
 		    [(ajint)eststr[(ajint)epos]];
 		tsub += m;
+
 		if(m > 0)
 		{
 		    matches++;
 		    total_matches++;
 		}
+
 		len++;
 		total_len++;
 		gpos++;
@@ -2284,6 +2342,7 @@ void embEstOutBlastStyle(AjPFile blast, const AjPSeq genome, const AjPSeq est,
 		    gsub = gpos;
 		}
 	    }
+
 	estWriteMsp(blast, &matches, &len, &tsub, genome, gsub, gpos, est,
 		    esub, epos, reverse, gapped);
 
@@ -2363,13 +2422,14 @@ static void estWriteMsp(AjPFile ofile, ajint *matches,
     else
 	percent = (float) 0.0;
 
-    if( percent > 0 )
+    if(percent > 0)
     {
 	if( gapped )
 	    ajFmtPrintF( ofile, "Exon     " );
 	else
 	    ajFmtPrintF( ofile, "Segment  " );
-	if( reverse )
+
+	if(reverse)
 	    ajFmtPrintF(ofile, "%5d %5.1f %5d %5d %-12S %5d %5d %-12S  %S\n",
 			*tsub, percent, gsub+1, gpos, ajSeqGetNameS(genome),
 			eoff+ajSeqGetLen(est)-esub, 

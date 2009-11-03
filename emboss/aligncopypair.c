@@ -82,7 +82,7 @@ int main(int argc, char **argv)
     ajStrDel(&name);
     ajStrDel(&comment);
     ajStrDel(&header);
-    AJFREE(seqs);
+    ajSeqDelarray(&seqs);
 
     embExit();
 

@@ -21,7 +21,7 @@ section: additional [
   type: "page"
 ]
 
-  string: matchsource [
+  string: sourcematch [
     additional: "Y"
     default: "*"
     information: "Source of feature to display"
@@ -38,7 +38,7 @@ section: additional [
     knowntype: "feature source list"
   ]
 
-  string: matchtype [
+  string: typematch [
     additional: "Y"
     default: "*"
     information: "Type of feature to display"
@@ -55,7 +55,7 @@ section: additional [
     knowntype: "feature key list"
   ]
 
-  string: matchtag [
+  string: tagmatch [
     additional: "Y"
     default: "*"
     information: "Tag of feature to display"
@@ -77,7 +77,7 @@ section: additional [
     knowntype: "feature tag list"
   ]
 
-  string: matchvalue [
+  string: valuematch [
     additional: "Y"
     default: "*"
     information: "Value of feature tags to display"
@@ -106,8 +106,7 @@ section: additional [
     maximum: "1"
     header: "Sorting features"
     values: "source:Sort by Source, start:Sort by Start position,
-             type:Sort by Type, nosort:No sorting done, join:Join coding
-             regions together"
+             type:Sort by Type, nosort:No sorting done"
     delimiter: ","
     codedelimiter: ":"
     information: "Sort features by Type, Start or Source,
@@ -116,6 +115,12 @@ section: additional [
                   order"
   ]
 
+  boolean: joinfeatures [
+    additional: "Y"
+    default: "N"
+    information: "Join coding regions together"
+  ]
+ 
   range: annotation [
     additional: "Y"
     default: ""
@@ -230,10 +235,10 @@ section: advanced [
            forward is indicated by '+' and reverse is '-'."
   ]
 
-  boolean: source [
+  boolean: origin [
     default: "N"
     information: "Display source of features"
-    help: "Set this if you wish to display the source of the features.
+    help: "Set this if you wish to display the origin of the features.
            \
            The source name is usually either the name of the program that
            detected the feature or it is the name of the feature table (eg:

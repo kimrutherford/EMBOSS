@@ -29,7 +29,8 @@
 
 
 
-static AjBool pepwindow_getnakaidata(AjPFile file, float matrix[]);
+static AjBool pepwindow_getnakaidata(AjPFile file, float matrix[],
+                                     AjBool normal);
 
 
 
@@ -46,77 +47,89 @@ int main(int argc, char **argv)
     AjPStr aa0str = 0;
     const char *s1;
     AjPSeq seq;
-    ajint llen;
+    ajuint llen;
+    AjBool normal;
     float matrix[AZ];
     ajuint i;
-    ajint midpoint;
-    ajint j;
+    ajuint midpoint;
+    ajuint j;
+    ajuint k;
     AjPGraphPlpData graphdata;
     AjPGraph mult;
     float min = 555.5;
     float max = -555.5;
     float total;
-    float flen;
+    float fstart;
+    float fend;
     ajuint ilen;
-    ajuint tui;
-    
+    ajuint istart;
+    ajuint iend;
+
     ajGraphInit("pepwindow", argc, argv);
 
     seq  = ajAcdGetSeq("sequence");
     ilen = ajSeqGetLen(seq);
-    tui  = ajSeqGetLen(seq);
-    flen = (float) tui;
     
     mult     = ajAcdGetGraphxy("graph");
     datafile = ajAcdGetDatafile("datafile");
     llen     = ajAcdGetInt("length");
+    normal   = ajAcdGetBoolean("normalize");
 
     s1 = ajStrGetPtr(ajSeqGetSeqS(seq));
 
     aa0str = ajStrNewRes(ilen+1);
 
-    graphdata = ajGraphPlpDataNewI(ilen-llen);
-
     midpoint = (ajint)((llen+1)/2);
+
+    istart = ajSeqGetBegin(seq) - 1;
+
+    iend = ajSeqGetEnd(seq);
+    if((iend-istart) > llen)
+        ilen = iend-istart+1-llen;
+    else
+        ilen = 1;
+
+    graphdata = ajGraphPlpDataNewI(ilen);
 
     ajGraphPlpDataSetTypeC(graphdata,"2D Plot");
 
     ajGraphDataAdd(mult,graphdata);
 
-    for(i=0;i<ilen;i++)
+    for(i=0;i<iend;i++)
 	ajStrAppendK(&aa0str,(char)ajBasecodeToInt(*s1++));
 
 
-    if(!pepwindow_getnakaidata(datafile,&matrix[0]))
+    if(!pepwindow_getnakaidata(datafile,&matrix[0], normal))
 	ajExitBad();
 
-    s1 = ajStrGetPtr(aa0str);
+    s1 = ajStrGetPtr(aa0str) + istart;
 
-    for(i=0;i<ilen-llen;i++)
+    k=0;
+    for(i=istart;i<=iend-llen;i++)
     {
 	total = 0;
 	for(j=0;j<llen;j++)
 	    total += matrix[(ajint)s1[j]];
 
-
 	total /= (float)llen;
-	graphdata->x[i] = (float)i+midpoint;
-	graphdata->y[i] = total;
+	graphdata->x[k] = (float)i+midpoint;
+	graphdata->y[k] = total;
 	if(total > max)
 	    max= total;
 	if(total < min)
 	    min = total;
-
+        k++;
 	s1++;
     }
-
-    ajGraphPlpDataSetMaxima(graphdata,0.,flen,min,max);
+    fstart = (float) istart;
+    fend = (float) iend;
+    ajGraphPlpDataSetMaxima(graphdata,fstart,fend,min,max);
 
     min = min*(float)1.1;
     max = max*(float)1.1;
 
-    ajGraphPlpDataSetMaxMin(graphdata,0.0,flen,min,max);
-    ajGraphxySetMaxMin(mult,0.0,flen,min,max);
+    ajGraphPlpDataSetMaxMin(graphdata,fstart,fend,min,max);
+    ajGraphxySetMaxMin(mult,fstart,fend,min,max);
 
     ajGraphxyDisplay(mult,AJTRUE);
     ajGraphxyDel(&mult);
@@ -140,12 +153,14 @@ int main(int argc, char **argv)
 **
 ** @param [u] file [AjPFile] Input file
 ** @param [w] matrix [float[]] Data values for each amino acid
+** @param [r] normal [AjBool] If true, normalize data to mean 0.0 and SD 1.0
 ** @return [AjBool] ajTrue on success
 ** @@
 ******************************************************************************/
 
 
-static AjBool pepwindow_getnakaidata(AjPFile file, float matrix[])
+static AjBool pepwindow_getnakaidata(AjPFile file, float matrix[],
+                                     AjBool normal)
 {
     AjPStr buffer = NULL;
     AjPStr buf2   = NULL;
@@ -254,6 +269,9 @@ static AjBool pepwindow_getnakaidata(AjPFile file, float matrix[])
 	    ajStrTokenDel(&token);
 	}
     }
+
+    if(normal)
+        embPropNormalF(matrix, FLT_MIN);
 
     embPropFixF(matrix, FLT_MIN);
 

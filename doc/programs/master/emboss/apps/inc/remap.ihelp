@@ -58,6 +58,8 @@
                                   for restriction enzyme recognition site and
                                   cut postions that span the end of the
                                   sequence to be considered.
+   -methylation        boolean    [N] If this is set then RE recognition sites
+                                  will not match methylated bases.
    -[no]commercial     boolean    [Y] If this is set, then only those enzymes
                                   with a commercial supplier will be searched
                                   for. This qualifier is ignored if you have
@@ -124,6 +126,8 @@
                                   them.
 
    Advanced (Unprompted) qualifiers:
+   -mfile              datafile   [Emethylsites.dat] Restriction enzyme data
+                                  file (optional)
    -[no]translation    boolean    [Y] This displays the 6-frame translations
                                   of the sequence in the output.
    -[no]reverse        boolean    [Y] This displays the cut sites and
@@ -162,7 +166,7 @@
                                   24-45 blue 56-78 orange
                                   1-100 green 120-156 red
                                   A file of ranges to colour (one range per
-                                  line) can be specifed as '@filename'.
+                                  line) can be specified as '@filename'.
    -threeletter        boolean    [N] Display protein sequences in
                                   three-letter code
    -number             boolean    [N] Number the sequences

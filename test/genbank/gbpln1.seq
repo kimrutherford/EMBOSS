@@ -5,9 +5,9 @@ VERSION     AB009602.1  GI:2696651
 KEYWORDS    MET1 homolog.
 SOURCE      Schizosaccharomyces pombe (fission yeast)
   ORGANISM  Schizosaccharomyces pombe
-            Eukaryota; Fungi; Ascomycota; Schizosaccharomycetes;
-            Schizosaccharomycetales; Schizosaccharomycetaceae;
-            Schizosaccharomyces.
+            Eukaryota; Fungi; Dikarya; Ascomycota; Taphrinomycotina;
+            Schizosaccharomycetes; Schizosaccharomycetales;
+            Schizosaccharomycetaceae; Schizosaccharomyces.
 REFERENCE   1
   AUTHORS   Kawamukai,M.
   TITLE     S.pmbe MET1 homolog

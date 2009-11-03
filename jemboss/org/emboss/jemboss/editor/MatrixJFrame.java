@@ -94,13 +94,14 @@ public class MatrixJFrame extends JFrame
           return;
 
         setCursor(cbusy);
+        try{
         String selMat = (String)list.getSelectedValue();
-        mat = new Matrix("resources/resources.jar",
-                         selMat);
+        mat.changeMatrix(selMat);
         statusField.setText("Current matrix: "+selMat);
         setMatrix(mat);
-        alignFrame.setMatrix(mat);
+        } finally {
         setCursor(cdone);
+        }
       }
     };
     list.addMouseListener(mouseListener);
@@ -114,13 +115,14 @@ public class MatrixJFrame extends JFrame
       public void actionPerformed(ActionEvent e)
       {
         setCursor(cbusy);
+        try{
         String selMat = (String)list.getSelectedValue();
-        mat = new Matrix("resources/resources.jar",
-                         selMat);
+        mat.changeMatrix(selMat);
         statusField.setText("Current matrix: "+selMat);
         setMatrix(mat);
-        alignFrame.setMatrix(mat);
+        } finally {
         setCursor(cdone);
+        }
       }
     });
     jp.add(matButt,BorderLayout.SOUTH);

@@ -68,6 +68,10 @@ typedef struct EmbSDmxNrseq {
 ** Prototype definitions
 */
 
+void          embDmxNrseqDel(EmbPDmxNrseq* Pnrseq);
+
+EmbPDmxNrseq  embDmxNrseqNew(const AjPSeq seq);
+
 AjPList       embDmxScophitReadAllFasta(AjPFile in);
 
 AjBool        embDmxHitlistToScophits(const AjPList in, 

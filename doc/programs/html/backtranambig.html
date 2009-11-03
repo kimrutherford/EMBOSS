@@ -23,6 +23,18 @@ backtranambig
 
 
 <H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
     Function
 </H2>
 Back-translate a protein sequence to ambiguous nucleotide sequence
@@ -51,8 +63,8 @@ Back-translate a protein sequence to ambiguous nucleotide sequence
 
 % <b>backtranambig </b>
 Back-translate a protein sequence to ambiguous nucleotide sequence
-Input (gapped) protein sequence: <b>tsw:opsd_human</b>
-(gapped) nucleotide output sequence [opsd_human.fasta]: <b></b>
+Input (gapped) protein sequence(s): <b>tsw:opsd_human</b>
+(gapped) nucleotide output sequence(s) [opsd_human.fasta]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -64,10 +76,10 @@ Input (gapped) protein sequence: <b>tsw:opsd_human</b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-sequence]          sequence   (Gapped) protein sequence filename and
+  [-sequence]          seqall     (Gapped) protein sequence(s) filename and
                                   optional format, or reference (input USA)
-  [-outfile]           seqout     [<sequence>.<format>] (Gapped) nucleotide
-                                  sequence filename and optional format
+  [-outfile]           seqoutall  [<sequence>.<format>] (Aligned) nucleotide
+                                  sequence set(s) filename and optional format
                                   (output USA)
 
    Additional (Optional) qualifiers:
@@ -92,8 +104,8 @@ Input (gapped) protein sequence: <b>tsw:opsd_human</b>
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1            integer    Start of the sequence to be used
-   -send1              integer    End of the sequence to be used
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
    -sreverse1          boolean    Reverse (if DNA)
    -sask1              boolean    Ask for begin/end/reverse
    -snucleotide1       boolean    Sequence is nucleotide
@@ -147,15 +159,15 @@ Input (gapped) protein sequence: <b>tsw:opsd_human</b>
 
 <tr>
 <td>[-sequence]<br>(Parameter 1)</td>
-<td>(Gapped) protein sequence filename and optional format, or reference (input USA)</td>
-<td>Readable sequence</td>
+<td>(Gapped) protein sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
 <td><b>Required</b></td>
 </tr>
 
 <tr>
 <td>[-outfile]<br>(Parameter 2)</td>
-<td>(Gapped) nucleotide sequence filename and optional format (output USA)</td>
-<td>Writeable sequence</td>
+<td>(Aligned) nucleotide sequence set(s) filename and optional format (output USA)</td>
+<td>Writeable sequence(s)</td>
 <td><i>&lt;*&gt;</i>.<i>format</i></td>
 </tr>
 
@@ -205,8 +217,9 @@ ID   OPSD_HUMAN              Reviewed;         348 AA.
 AC   P08100; Q16414; Q2M249;
 DT   01-AUG-1988, integrated into UniProtKB/Swiss-Prot.
 DT   01-AUG-1988, sequence version 1.
-DT   20-MAR-2007, entry version 91.
-DE   Rhodopsin (Opsin-2).
+DT   16-JUN-2009, entry version 116.
+DE   RecName: Full=Rhodopsin;
+DE   AltName: Full=Opsin-2;
 GN   Name=RHO; Synonyms=OPN2;
 OS   Homo sapiens (Human).
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
@@ -215,7 +228,7 @@ OC   Catarrhini; Hominidae; Homo.
 OX   NCBI_TaxID=9606;
 RN   [1]
 RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
-RX   MEDLINE=84272729; PubMed=6589631;
+RX   MEDLINE=84272729; PubMed=6589631; DOI=10.1073/pnas.81.15.4851;
 RA   Nathans J., Hogness D.S.;
 RT   "Isolation and nucleotide sequence of the gene encoding human
 RT   rhodopsin.";
@@ -230,8 +243,13 @@ RL   Submitted (JUL-2001) to the EMBL/GenBank/DDBJ databases.
 RN   [3]
 RP   NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA].
 RC   TISSUE=Retina;
-RG   The German cDNA consortium;
-RL   Submitted (JUN-2003) to the EMBL/GenBank/DDBJ databases.
+RX   PubMed=17974005; DOI=10.1186/1471-2164-8-399;
+RA   Bechtel S., Rosenfelder H., Duda A., Schmidt C.P., Ernst U.,
+RA   Wellenreuther R., Mehrle A., Schuster C., Bahr A., Blocker H.,
+RA   Heubner D., Hoerlein A., Michel G., Wedler H., Kohrer K.,
+RA   Ottenwalder B., Poustka A., Wiemann S., Schupp I.;
+RT   "The full-ORF clone resource of the German cDNA consortium.";
+RL   BMC Genomics 8:399-399(2007).
 RN   [4]
 RP   NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA].
 RX   PubMed=15489334; DOI=10.1101/gr.2596504;
@@ -245,12 +263,6 @@ RX   PubMed=8566799; DOI=10.1016/0378-1119(95)00688-5;
 RA   Bennett J., Beller B., Sun D., Kariko K.;
 RT   "Sequence analysis of the 5.34-kb 5' flanking region of the human
 RT   rhodopsin-encoding gene.";
-RL   Gene 167:317-320(1995).
-RN   [6]
-RP   REVIEW ON RP4 VARIANTS.
-RX   MEDLINE=94004905; PubMed=8401533;
-RA   Al-Maghtheh M., Gregory C., Inglehearn C., Hardcastle A.,
-RA   Bhattacharya S.;
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
@@ -325,7 +337,7 @@ translation table (which defaults to human).
 <p><h3>File: opsd_human.fasta</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-&gt;OPSD_HUMAN P08100 Rhodopsin (Opsin-2).
+&gt;OPSD_HUMAN P08100 Rhodopsin (Opsin-2)
 ATGAAYGGNACNGARGGNCCNAAYTTYTAYGTNCCNTTYWSNAAYGCNACNGGNGTNGTN
 MGNWSNCCNTTYGARTAYCCNCARTAYTAYYTNGCNGARCCNTGGCARTTYWSNATGYTN
 GCNGCNTAYATGTTYYTNYTNATHGTNYTNGGNTTYCCNATHAAYTTYYTNACNYTNTAY
@@ -514,7 +526,7 @@ None.
 
 <tr>
 <td><a href="pepwindow.html">pepwindow</a></td>
-<td>Draw a Kyte-Doolittle hydropathy plot for a protein sequence</td>
+<td>Draw a hydropathy plot for a protein sequence</td>
 </tr>
 
 <tr>

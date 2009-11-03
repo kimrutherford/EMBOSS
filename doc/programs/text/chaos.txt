@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Draw a chaos game representation plot for a nucleotide sequence
@@ -50,7 +57,7 @@ Command line arguments
                                   format, or reference (input USA)
    -graph              graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, xterm, png, gif)
+                                  tekt, tek, none, data, das, xterm, png, gif)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -129,6 +136,7 @@ OC   Enterobacteriaceae; Escherichia.
 XX
 RN   [1]
 RP   1243-1266
+RX   DOI; 10.1073/pnas.70.12.3581.
 RX   PUBMED; 4587255.
 RA   Gilbert W., Maxam A.;
 RT   "The nucleotide sequence of the lac operator";
@@ -136,6 +144,7 @@ RL   Proc. Natl. Acad. Sci. U.S.A. 70(12):3581-3584(1973).
 XX
 RN   [2]
 RP   1246-1308
+RX   DOI; 10.1073/pnas.70.12.3585.
 RX   PUBMED; 4587256.
 RA   Maizels N.M.;
 RT   "The nucleotide sequence of the lactose messenger ribonucleic acid
@@ -157,8 +166,6 @@ RL   Walter de Gruyter, New York (1975)
 XX
 RN   [5]
 RP   1146-1282
-RX   PUBMED; 1088926.
-RA   Dickson R.C., Abelson J.N., Barnes W.M., Reznikoff W.S.;
 
 
   [Part of this file has been deleted for brevity]
@@ -315,32 +322,32 @@ Known bugs
 
 See also
 
-   Program name                      Description
-   banana       Plot bending and curvature data for B-DNA
-   btwisted     Calculate the twisting in a B-DNA sequence
-   compseq      Calculate the composition of unique words in sequences
-   dan          Calculates nucleic acid melting temperature
-   density      Draw a nucleic acid density plot
-   freak        Generate residue/base frequency table or plot
-   isochore     Plots isochores in DNA sequences
-   sirna        Finds siRNA duplexes in mRNA
-   wordcount    Count and extract unique words in DNA sequence(s)
+                    Program name                      Description
+                    banana       Plot bending and curvature data for B-DNA
+                    btwisted     Calculate the twisting in a B-DNA sequence
+                    compseq      Calculate the composition of unique words in sequences
+                    dan          Calculates nucleic acid melting temperature
+                    density      Draw a nucleic acid density plot
+                    freak        Generate residue/base frequency table or plot
+                    isochore     Plots isochores in DNA sequences
+                    sirna        Finds siRNA duplexes in mRNA
+                    wordcount    Count and extract unique words in DNA sequence(s)
 
 Author(s)
 
-   Ian Longden (il © sanger.ac.uk)
-   Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
-   CB10 1SA, UK.
+   Ian              Longden (il © sanger.ac.uk)
+   Sanger           Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
+                    CB10 1SA, UK.
 
 History
 
-   Completed 22nd March 1999.
+                    Completed 22nd March 1999.
 
 Target users
 
-   This program is intended to be used by everyone and everything, from
-   naive users to embedded scripts.
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
 
 Comments
 
-   None
+                    None

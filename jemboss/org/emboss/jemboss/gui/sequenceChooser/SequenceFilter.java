@@ -22,7 +22,6 @@
 package org.emboss.jemboss.gui.sequenceChooser; 
 
 import java.io.File;
-import javax.swing.*;
 import javax.swing.filechooser.*;
 
 /**

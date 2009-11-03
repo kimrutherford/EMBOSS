@@ -21,14 +21,27 @@ megamerger
     Description
 </H2>
 
-<p><b>megamerger</b> reads two overlapping input DNA sequences and uses a word-match algorithm to align the sequences. A merged sequence is generated from the alignment and writen to the output file. The actions <b>megamerger</b> took in generating the merged sequence are written to an output file. The sequences can be very long.</p>
+<p><b>megamerger</b> reads two overlapping input DNA sequences and
+uses a word-match algorithm to align the sequences. A merged sequence
+is generated from the alignment and writen to the output file. The
+actions <b>megamerger</b> took in generating the merged sequence are
+written to an output file. The sequences can be very long.</p>
 
 
 <H2>
 Algorithm
 </H2>
 
-<p>The program does a match of all sequence words of size 20 (by default). It then reduces this to the minimum set of overlapping matches by sorting the matches in order of size (largest size first) and then for each such match it removes any smaller matches that overlap. The result is a set of the longest ungapped alignments between the two sequences that do not overlap with each other. If the two sequences are identical in their region of overlap then there will be one region of match and no mismatches.  Where there is a mismatch, the merged sequence uses bases from the sequence whose mismatch region is furthest from the start or end of the sequence.</p>
+<p>The program does a match of all sequence words of size 20 (by
+default). It then reduces this to the minimum set of overlapping
+matches by sorting the matches in order of size (largest size first)
+and then for each such match it removes any smaller matches that
+overlap. The result is a set of the longest ungapped alignments
+between the two sequences that do not overlap with each other. If the
+two sequences are identical in their region of overlap then there will
+be one region of match and no mismatches.  Where there is a mismatch,
+the merged sequence uses bases from the sequence whose mismatch region
+is furthest from the start or end of the sequence.</p>
 
 <H2>
     Usage
@@ -64,8 +77,17 @@ Algorithm
     Output file format
 </H2>
 
-<p>The actions <b>megamerger</b> took in generating the merged sequence are written to an output file. Any actions that require a choice between using regions of the two sequences where they have a mismatch is marked with the word <tt>WARNING!</tt>. Where there was a mismatch between the two sequences, the merged sequence is written out in uppercase and the sequence whose mismatch region is furthest from the edges of the sequence is used in the merged sequence.</p>
-<p>The name and description of the first input sequence is used for the name and description of the output sequence.</p>
+<p>The actions <b>megamerger</b> took in generating the merged
+sequence are written to an output file. Any actions that require a
+choice between using regions of the two sequences where they have a
+mismatch is marked with the word <tt>WARNING!</tt>. Where there was a
+mismatch between the two sequences, the merged sequence is written out
+in uppercase and the sequence whose mismatch region is furthest from
+the end of the sequence (the one with most remaining bases or
+residues) is used in the merged sequence.</p>
+
+<p>The name and description of the first input sequence is used for
+the name and description of the output sequence.</p>
 
 
 
@@ -104,8 +126,14 @@ None.
     Notes
 </H2>
 
-<p>It should be possible to merge sequences that are Mega bytes long. Compare this with the program <b>merger</b> which does a more accurate alignment of more divergent sequences using the Needle and Wunsch algorithm but which uses much more memory.</p>
-<p><b>megamerger</b> takes two overlapping sequences and merges them into one sequence. It could thus be regarded as the opposite of what <b>splitter</b> does.</p>
+<p>It should be possible to merge sequences that are Mega bytes
+long. Compare this with the program <b>merger</b> which does a more
+accurate alignment of more divergent sequences using the Needle and
+Wunsch algorithm but which uses much more memory.</p>
+
+<p><b>megamerger</b> takes two overlapping sequences and merges them
+into one sequence. It could thus be regarded as the opposite of
+what <b>splitter</b> does.</p>
 
 <H2>
     References
@@ -117,7 +145,10 @@ None.
     Warnings
 </H2>
 
-<p>The sequences should ideally be identical in their region of overlap. If there are any mismatches between the two sequences then <b>megamerger</b> will still create a merged sequence, but you should check that this is what you required.</p>
+<p>The sequences should ideally be identical in their region of
+overlap. If there are any mismatches between the two sequences
+then <b>megamerger</b> will still create a merged sequence, but you
+should check that this is what you required.</p>
 
 <H2>
     Diagnostic Error Messages

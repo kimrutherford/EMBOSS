@@ -40,7 +40,7 @@ RL   Submitted (20-DEC-1994) to the EMBL/GenBank/DDBJ databases.
 RL   Huber A., Universitaet Karlsruhe, Zoologie I, Kornblumenstr. 13, 76128
 RL   Karlsruhe, Germany
 XX
-DR   EMBL-ALIGN; ALIGN_000323.
+DR   ASTD; TRAN00000023010.
 XX
 FH   Key             Location/Qualifiers
 FH
@@ -59,6 +59,8 @@ FT   CDS             84..1130
 FT                   /product="rhodopsin"
 FT                   /function="phototransduction"
 FT                   /db_xref="GOA:P51489"
+FT                   /db_xref="HSSP:1EDS"
+FT                   /db_xref="InterPro:IPR017452"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P51489"
 FT                   /citation=[1]
 FT                   /protein_id="CAA87081.1"

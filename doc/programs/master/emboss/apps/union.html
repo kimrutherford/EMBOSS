@@ -19,7 +19,19 @@ union
     Description
 </H2>
 
-<p><b>union</b> reads in several sequences, concatenates them and writes them out as a single sequence.  The input is typically a list file containing references to multiple sequences or subsequences (regions of a sequence). Optionally, feature information will be used.</p>
+<p>
+
+<b>union</b> reads in several sequences, concatenates them and writes
+them out as a single sequence.  The input is typically a list file
+containing references to multiple sequences or subsequences (regions
+of a sequence). Optionally, feature information will be used.</p>
+
+<p>
+The output can have source features generated which document composite
+sequences in the EMBL/GenBank feature table. The -findoverlap optin
+checks for overlaps between adjacent joined regions and reports them
+in the overlap file.
+</p>
 
 <H2>
     Usage

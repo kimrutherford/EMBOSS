@@ -159,7 +159,7 @@ int main(int argc, char **argv)
 	{
 	    embAlignCalcSimilarity(m,n,sub,cvt,lena,lenb,&id,&sim,&idx,
 				   &simx);
-	    ajFmtPrintAppS(&tmpstr,"Longest_Identity = %5.2f%%\n",
+	    ajFmtPrintS(&tmpstr,"Longest_Identity = %5.2f%%\n",
 			   id);
 	    ajFmtPrintAppS(&tmpstr,"Longest_Similarity = %5.2f%%\n",
 			   sim);

@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Sort sequences by size
@@ -132,54 +139,54 @@ Output file format
 
   File: globins.swiss
 
-ID   HBA_HUMAN      Unreviewed;        141 AA.
+ID   HBA_HUMAN               Reviewed;         141 AA.
 DE   Sw:Hba_Human => HBA_HUMAN
-SQ   SEQUENCE   141 AA;  15127 MW;  34D13618E62A33C1 CRC64;
+SQ   SEQUENCE   141 AA;  15126 MW;  34D13618E62A33C1 CRC64;
      VLSPADKTNV KAAWGKVGAH AGEYGAEALE RMFLSFPTTK TYFPHFDLSH GSAQVKGHGK
      KVADALTNAV AHVDDMPNAL SALSDLHAHK LRVDPVNFKL LSHCLLVTLA AHLPAEFTPA
      VHASLDKFLA SVSTVLTSKY R
 //
-ID   HBA_HORSE      Unreviewed;        141 AA.
+ID   HBA_HORSE               Reviewed;         141 AA.
 DE   Sw:Hba_Horse => HBA_HORSE
-SQ   SEQUENCE   141 AA;  15115 MW;  128B9100A4D8457A CRC64;
+SQ   SEQUENCE   141 AA;  15114 MW;  128B9100A4D8457A CRC64;
      VLSAADKTNV KAAWSKVGGH AGEYGAEALE RMFLGFPTTK TYFPHFDLSH GSAQVKAHGK
      KVGDALTLAV GHLDDLPGAL SNLSDLHAHK LRVDPVNFKL LSHCLLSTLA VHLPNDFTPA
      VHASLDKFLS SVSTVLTSKY R
 //
-ID   HBB_HUMAN      Unreviewed;        146 AA.
+ID   HBB_HUMAN               Reviewed;         146 AA.
 DE   Sw:Hbb_Human => HBB_HUMAN
-SQ   SEQUENCE   146 AA;  15868 MW;  EACBC707CFD466A1 CRC64;
+SQ   SEQUENCE   146 AA;  15867 MW;  EACBC707CFD466A1 CRC64;
      VHLTPEEKSA VTALWGKVNV DEVGGEALGR LLVVYPWTQR FFESFGDLST PDAVMGNPKV
      KAHGKKVLGA FSDGLAHLDN LKGTFATLSE LHCDKLHVDP ENFRLLGNVL VCVLAHHFGK
      EFTPPVQAAY QKVVAGVANA LAHKYH
 //
-ID   HBB_HORSE      Unreviewed;        146 AA.
+ID   HBB_HORSE               Reviewed;         146 AA.
 DE   Sw:Hbb_Horse => HBB_HORSE
-SQ   SEQUENCE   146 AA;  16009 MW;  734664793DA642EE CRC64;
+SQ   SEQUENCE   146 AA;  16008 MW;  734664793DA642EE CRC64;
      VQLSGEEKAA VLALWDKVNE EEVGGEALGR LLVVYPWTQR FFDSFGDLSN PGAVMGNPKV
      KAHGKKVLHS FGEGVHHLDN LKGTFAALSE LHCDKLHVDP ENFRLLGNVL VVVLARHFGK
      DFTPELQASY QKVVAGVANA LAHKYH
 //
-ID   GLB5_PETMA     Unreviewed;        149 AA.
+ID   GLB5_PETMA              Reviewed;         149 AA.
 DE   Sw:Glb5_Petma => GLB5_PETMA
 SQ   SEQUENCE   149 AA;  16270 MW;  CD2305FB92DACD59 CRC64;
      PIVDTGSVAP LSAAEKTKIR SAWAPVYSTY ETSGVDILVK FFTSTPAAQE FFPKFKGLTT
      ADQLKKSADV RWHAERIINA VNDAVASMDD TEKMSMKLRD LSGKHAKSFQ VDPQYFKVLA
      AVIADTVAAG DAGFEKLMSM ICILLRSAY
 //
-ID   MYG_PHYCA      Unreviewed;        153 AA.
+ID   LGB2_LUPLU              Reviewed;         153 AA.
+DE   Sw:Lgb2_Luplu => LGB2_LUPLU
+SQ   SEQUENCE   153 AA;  16652 MW;  FE29AB9DEF33AFC8 CRC64;
+     GALTESQAAL VKSSWEEFNA NIPKHTHRFF ILVLEIAPAA KDLFSFLKGT SEVPQNNPEL
+     QAHAGKVFKL VYEAAIQLQV TGVVVTDATL KNLGSVHVSK GVADAHFPVV KEAILKTIKE
+     VVGAKWSEEL NSAWTIAYDE LAIVIKKEMN DAA
+//
+ID   MYG_PHYCA               Reviewed;         153 AA.
 DE   Sw:Myg_Phyca => MYG_PHYCA
 SQ   SEQUENCE   153 AA;  17200 MW;  543D385C66FEE1E1 CRC64;
      VLSEGEWQLV LHVWAKVEAD VAGHGQDILI RLFKSHPETL EKFDRFKHLK TEAEMKASED
      LKKHGVTVLT ALGAILKKKG HHEAELKPLA QSHATKHKIP IKYLEFISEA IIHVLHSRHP
      GDFGADAQGA MNKALELFRK DIAAKYKELG YQG
-//
-ID   LGB2_LUPLU     Unreviewed;        153 AA.
-DE   Sw:Lgb2_Luplu => LGB2_LUPLU
-SQ   SEQUENCE   153 AA;  16653 MW;  FE29AB9DEF33AFC8 CRC64;
-     GALTESQAAL VKSSWEEFNA NIPKHTHRFF ILVLEIAPAA KDLFSFLKGT SEVPQNNPEL
-     QAHAGKVFKL VYEAAIQLQV TGVVVTDATL KNLGSVHVSK GVADAHFPVV KEAILKTIKE
-     VVGAKWSEEL NSAWTIAYDE LAIVIKKEMN DAA
 //
 
 Data files
@@ -212,50 +219,53 @@ Known bugs
 
 See also
 
-   Program name Description
-   aligncopy Reads and writes alignments
-   aligncopypair Reads and writes pairs from alignments
-   biosed Replace or delete sequence sections
-   codcopy Copy and reformat a codon usage table
-   cutseq Removes a section from a sequence
-   degapseq Removes non-alphabetic (e.g. gap) characters from sequences
-   descseq Alter the name or description of a sequence
-   entret Retrieves sequence entries from flatfile databases and files
-   extractalign Extract regions from a sequence alignment
-   extractfeat Extract features from sequence(s)
-   extractseq Extract regions from a sequence
-   featcopy Reads and writes a feature table
-   featreport Reads and writes a feature table
-   listor Write a list file of the logical OR of two sets of sequences
-   makenucseq Create random nucleotide sequences
-   makeprotseq Create random protein sequences
-   maskambignuc Masks all ambiguity characters in nucleotide sequences
-   with N
-   maskambigprot Masks all ambiguity characters in protein sequences with
-   X
-   maskfeat Write a sequence with masked features
-   maskseq Write a sequence with masked regions
-   newseq Create a sequence file from a typed-in sequence
-   nohtml Remove mark-up (e.g. HTML tags) from an ASCII text file
-   noreturn Remove carriage return from ASCII files
-   nospace Remove all whitespace from an ASCII text file
-   notab Replace tabs with spaces in an ASCII text file
-   notseq Write to file a subset of an input stream of sequences
-   nthseq Write to file a single sequence from an input stream of
-   sequences
-   pasteseq Insert one sequence into another
-   revseq Reverse and complement a nucleotide sequence
-   seqret Reads and writes (returns) sequences
-   seqretsplit Reads sequences and writes them to individual files
-   skipredundant Remove redundant sequences from an input set
-   skipseq Reads and writes (returns) sequences, skipping first few
-   splitter Split sequence(s) into smaller sequences
-   trimest Remove poly-A tails from nucleotide sequences
-   trimseq Remove unwanted characters from start and end of sequence(s)
-   trimspace Remove extra whitespace from an ASCII text file
-   union Concatenate multiple sequences into a single sequence
-   vectorstrip Removes vectors from the ends of nucleotide sequence(s)
-   yank Add a sequence reference (a full USA) to a list file
+   Program name     Description
+   aligncopy        Reads and writes alignments
+   aligncopypair    Reads and writes pairs from alignments
+   biosed           Replace or delete sequence sections
+   codcopy          Copy and reformat a codon usage table
+   cutseq           Removes a section from a sequence
+   degapseq         Removes non-alphabetic (e.g. gap) characters from sequences
+   descseq          Alter the name or description of a sequence
+   entret           Retrieves sequence entries from flatfile databases and files
+   extractalign     Extract regions from a sequence alignment
+   extractfeat      Extract features from sequence(s)
+   extractseq       Extract regions from a sequence
+   featcopy         Reads and writes a feature table
+   featreport       Reads and writes a feature table
+   listor           Write a list file of the logical OR of two sets of sequences
+   makenucseq       Create random nucleotide sequences
+   makeprotseq      Create random protein sequences
+   maskambignuc     Masks all ambiguity characters in nucleotide sequences
+   with             N
+   maskambigprot    Masks all ambiguity characters in protein sequences with
+                    X
+   maskfeat         Write a sequence with masked features
+   maskseq          Write a sequence with masked regions
+   newseq           Create a sequence file from a typed-in sequence
+   nohtml           Remove mark-up (e.g. HTML tags) from an ASCII text file
+   noreturn         Remove carriage return from ASCII files
+   nospace          Remove all whitespace from an ASCII text file
+   notab            Replace tabs with spaces in an ASCII text file
+   notseq           Write to file a subset of an input stream of sequences
+   nthseq           Write to file a single sequence from an input stream of
+                    sequences
+   nthseqset        Reads and writes (returns) one set of sequences from many
+   pasteseq         Insert one sequence into another
+   revseq           Reverse and complement a nucleotide sequence
+   seqret           Reads and writes (returns) sequences
+   seqretsetall     Reads and writes (returns) many sets of sequences
+   seqretsplit      Reads sequences and writes them to individual files
+   skipredundant    Remove redundant sequences from an input set
+   skipseq          Reads and writes (returns) sequences, skipping first few
+   splitsource      Split sequence(s) into original source sequences
+   splitter         Split sequence(s) into smaller sequences
+   trimest          Remove poly-A tails from nucleotide sequences
+   trimseq          Remove unwanted characters from start and end of sequence(s)
+   trimspace        Remove extra whitespace from an ASCII text file
+   union            Concatenate multiple sequences into a single sequence
+   vectorstrip      Removes vectors from the ends of nucleotide sequence(s)
+   yank             Add a sequence reference (a full USA) to a list file
 
 Author(s)
 

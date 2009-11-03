@@ -77,7 +77,8 @@ int main(int argc, char **argv)
 
         ajFeattableDel(&feat);
     }
-
+    ajReportSetSeqstats(report, seqall);
+    
     ajReportClose(report);
     ajReportDel(&report);
 

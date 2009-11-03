@@ -877,6 +877,8 @@ public class ParseAcd
   {
 
     int num = getNumofParams(0);
+    if (num==0)
+        return false;
     ApplicationFields aF = (ApplicationFields)vappF.get(0);
 
     for(int i=0;i<num;i++)
@@ -1348,6 +1350,8 @@ public class ParseAcd
   */ 
   public int getNumofParams(int field) 
   {
+    if (vappF.size()==0)
+        return 0;
     ApplicationFields aF = (ApplicationFields)vappF.get(field);
     return aF.getNumberOfParam();
   }

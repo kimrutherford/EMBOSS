@@ -25,6 +25,7 @@ char          ajBaseBinToAlpha(ajint c);
 
 char          ajBaseAlphacharToBin(char c);
 float         ajBaseAlphacharCompare(char c, char c2);
+AjBool        ajBaseFromDoublet(const AjPStr nuc2, char* Pc);
 
 ajint         ajBasecodeToInt(ajint c);
 ajint         ajBasecodeFromInt(ajint n);

@@ -76,11 +76,13 @@ int main(int argc, char **argv)
     AjBool html;
     AjBool limit;
     AjBool frags;
+    AjBool methyl;
     AjPFile dfile;
 
-    AjPFile enzfile = NULL;
-    AjPFile equfile = NULL;
-
+    AjPFile enzfile  = NULL;
+    AjPFile equfile  = NULL;
+    AjPFile methfile = NULL;
+    
     AjPStr name = NULL;
 
     AjPTable table = NULL;
@@ -116,7 +118,9 @@ int main(int argc, char **argv)
     commercial = ajAcdGetBoolean("commercial");
     limit      = ajAcdGetBoolean("limit");
     frags      = ajAcdGetBoolean("fragments");
+    methyl     = ajAcdGetBoolean("methylation");
     dfile      = ajAcdGetDatafile("datafile");
+    methfile   = ajAcdGetDatafile("mfile");
 
     if(single)
 	max = min = 1;
@@ -164,9 +168,9 @@ int main(int argc, char **argv)
 	ajFileSeek(enzfile,0L,0);
 	ajSeqFmtUpper(seq);
 
-	hits = embPatRestrictMatch(seq,begin,end,enzfile,enzymes,sitelen,
-				   plasmid,ambiguity,min,max,blunt,sticky,
-				   commercial,l);
+	hits = embPatRestrictMatch(seq,begin,end,enzfile,methfile,enzymes,
+                                   sitelen,plasmid,ambiguity,min,max,blunt,
+                                   sticky,commercial,methyl,l);
 	ajDebug("hits:%d listlen:%u\n", hits, ajListGetLength(l));
 	if(hits)
 	{
@@ -184,11 +188,11 @@ int main(int argc, char **argv)
 
     ajListFree(&l);
     ajSeqDel(&seq);
-    ajFileClose(&enzfile);
     ajFileClose(&outf);
     ajFileClose(&dfile);
     ajFileClose(&enzfile);
     ajFileClose(&equfile);
+    ajFileClose(&methfile);
 
     ajSeqallDel(&seqall);
     ajStrDel(&seqcmp);

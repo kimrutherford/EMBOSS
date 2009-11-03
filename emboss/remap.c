@@ -135,8 +135,10 @@ int main(int argc, char **argv)
     AjBool plasmid;
     AjBool commercial;
     AjBool limit;
+    AjBool methyl;
     AjPFile enzfile  = NULL;
     AjPFile equfile  = NULL;
+    AjPFile methfile = NULL;
     AjPTable retable = NULL;
     ajint hits;
     AjPList restrictlist = NULL;
@@ -176,7 +178,9 @@ int main(int argc, char **argv)
     commercial = ajAcdGetBoolean("commercial");
     limit      = ajAcdGetBoolean("limit");
     enzymes    = ajAcdGetString("enzymes");
-
+    methfile   = ajAcdGetDatafile("mfile");
+    methyl     = ajAcdGetBoolean("methylation");
+    
     if(!blunt  && !sticky)
 	ajFatal("Blunt/Sticky end cutters shouldn't both be disabled.");
 
@@ -249,9 +253,10 @@ int main(int argc, char **argv)
 	ajFileSeek(enzfile, 0L, 0);
 	restrictlist = ajListNew();
 	/* search for hits, but don't use mincuts and maxcuts criteria yet */
-	hits = embPatRestrictMatch(seq, begin+1, end+1, enzfile, enzymes,
-				   sitelen,plasmid, ambiguity, default_mincuts,
-				   default_maxcuts, blunt, sticky, commercial,
+	hits = embPatRestrictMatch(seq, begin+1, end+1, enzfile, methfile,
+                                   enzymes, sitelen,plasmid, ambiguity,
+                                   default_mincuts, default_maxcuts, blunt,
+                                   sticky, commercial, methyl,
 				   restrictlist);
 
 	ajDebug("Remap found %d hits\n", hits);
@@ -267,6 +272,7 @@ int main(int argc, char **argv)
 
 
 	ajFileClose(&enzfile);
+	ajFileClose(&methfile);
 
 
 	/*
@@ -618,7 +624,7 @@ static void remap_CutList(AjPFile outfile, const AjPTable hittable,
 
 	for(i = 0; keyarray[i]; i++)
 	{
-	    value = (PValue) valarray[i];
+	    value = ajTableFetch(hittable,keyarray[i]);
 	    if(value->count > maxcuts)
 	    ajFmtPrintF(outfile, "%10S\t    %d\t%S\n",
 			    (AjPStr) keyarray[i], value->count,

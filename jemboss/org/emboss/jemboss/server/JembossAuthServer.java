@@ -1123,7 +1123,10 @@ public class JembossAuthServer
     BufferedWriter bw = null;
     try 
     {
-      bw = new BufferedWriter(new FileWriter(logFileName, true));
+      File logFile = new File(logFileName);
+      if (logFile.exists())
+          logFile.mkdirs();
+      bw = new BufferedWriter(new FileWriter(logFile, true));
       bw.write(logEntry);
       bw.newLine();
       bw.flush();

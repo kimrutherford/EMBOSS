@@ -22,6 +22,18 @@ extractseq
 
 
 <H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
     Function
 </H2>
 Extract regions from a sequence
@@ -72,7 +84,7 @@ Extract the regions 782-856, 951-1095, 1557-1612 and 1787-1912:
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>extractseq tembl:x65921 -reg "782..856,951..1095,1557..1612,1787..1912" stdout </b>
+% <b>extractseq tembl:x65921 -reg '782..856,951..1095,1557..1612,1787..1912' stdout </b>
 Extract regions from a sequence
 
 >X65921 X65921.1 H.sapiens fau 1 gene
@@ -96,7 +108,7 @@ Extract the regions 782-856, 951-1095, 1557-1612 and 1787-1912 all to separate o
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>extractseq tembl:x65921 -reg "782..856,951..1095,1557..1612,1787..1912" stdout -separate </b>
+% <b>extractseq tembl:x65921 -reg '782..856,951..1095,1557..1612,1787..1912' stdout -separate </b>
 Extract regions from a sequence
 
 >X65921_782_856 H.sapiens fau 1 gene
@@ -302,8 +314,8 @@ RN   [2]
 RP   1-518
 RX   PUBMED; 8395683.
 RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
-RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
-RT   an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma virus";
+RT   "fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
+RT   an antisense sequence in the Finkel-Biskis-Reilly murine sarcoma virus";
 RL   Oncogene 8(9):2537-2546(1993).
 XX
 DR   H-InvDB; HIT000322806.
@@ -324,11 +336,11 @@ FT                   /note="ubiquitin like part"
 FT   CDS             57..458
 FT                   /gene="fau"
 FT                   /db_xref="GDB:135476"
-FT                   /db_xref="GOA:P35544"
 FT                   /db_xref="GOA:P62861"
 FT                   /db_xref="HGNC:3597"
+FT                   /db_xref="HSSP:1GJZ"
+FT                   /db_xref="InterPro:IPR006846"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
-FT                   /db_xref="UniProtKB/Swiss-Prot:P62861"
 FT                   /protein_id="CAA46716.1"
 FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLAG
 FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKTG
@@ -389,7 +401,7 @@ RX   DOI; 10.1016/0006-291X(92)91286-Y.
 RX   PUBMED; 1326960.
 RA   Kas K., Michiels L., Merregaert J.;
 RT   "Genomic structure and expression of the human fau gene: encoding the
-RT   ribosomal protein S30 fused to a ubiquitin-like protein.";
+RT   ribosomal protein S30 fused to a ubiquitin-like protein";
 RL   Biochem. Biophys. Res. Commun. 187(2):927-933(1992).
 XX
 DR   GDB; 191789.
@@ -744,6 +756,11 @@ None noted.
 </tr>
 
 <tr>
+<td><a href="nthseqset.html">nthseqset</a></td>
+<td>Reads and writes (returns) one set of sequences from many</td>
+</tr>
+
+<tr>
 <td><a href="pasteseq.html">pasteseq</a></td>
 <td>Insert one sequence into another</td>
 </tr>
@@ -756,6 +773,11 @@ None noted.
 <tr>
 <td><a href="seqret.html">seqret</a></td>
 <td>Reads and writes (returns) sequences</td>
+</tr>
+
+<tr>
+<td><a href="seqretsetall.html">seqretsetall</a></td>
+<td>Reads and writes (returns) many sets of sequences</td>
 </tr>
 
 <tr>
@@ -776,6 +798,11 @@ None noted.
 <tr>
 <td><a href="skipseq.html">skipseq</a></td>
 <td>Reads and writes (returns) sequences, skipping first few</td>
+</tr>
+
+<tr>
+<td><a href="splitsource.html">splitsource</a></td>
+<td>Split sequence(s) into original source sequences</td>
 </tr>
 
 <tr>

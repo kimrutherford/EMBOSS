@@ -129,11 +129,19 @@ int main(int argc, char **argv)
 	sprintf(temp,"y value for %d",i);
 	ajHistSetMultiYTitleC(hist,i,temp);
     }
+
     ajHistSetBlackandWhite(hist , AJFALSE);
     ajHistDisplay(hist);
 
+    for(i=0;i<sets;i++)
+        AJFREE(data[i]);
+    AJFREE(data);
+
+    ajGraphxyDel(&graph);
+
     ajHistDelete(&hist);
 
+    ajGraphClose();
 
     embExit();
 

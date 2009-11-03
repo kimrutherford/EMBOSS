@@ -52,11 +52,11 @@
    -type               string     [*] By default every feature in the feature
                                   table is extracted. You can set this to be
                                   any feature type you wish to extract.
-                                  See http://www3.ebi.ac.uk/Services/WebFeat/
+                                  See http://www.ebi.ac.uk/Services/WebFeat/
                                   for a list of the EMBL feature types and see
-                                  Appendix A of the Swissprot user manual in
-                                  http://www.expasy.ch/txt/userman.txt for a
-                                  list of the Swissprot feature types.
+                                  the Uniprot user manual in
+                                  http://www.uniprot.org/manual/sequence_annotation
+                                  for a list of the Uniprot feature types.
                                   The type may be wildcarded by using '*'.
                                   If you wish to extract more than one type,
                                   separate their names with the character '|',
@@ -68,12 +68,12 @@
                                   set this to match any feature sense you
                                   wish. 0 - any sense, 1 - forward sense, -1 -
                                   reverse sense (Any integer value)
-   -minscore           float      [0.0] If this is greater than or equal to
-                                  the maximum score, then any score is
-                                  permitted (Any numeric value)
-   -maxscore           float      [0.0] If this is less than or equal to the
-                                  maximum score, then any score is permitted
-                                  (Any numeric value)
+   -minscore           float      [0.0] Minimum score of feature to extract
+                                  (see also maxscore) (Any numeric value)
+   -maxscore           float      [0.0] Maximum score of feature to extract.
+                                  If both minscore and maxscore are zero (the
+                                  default), then any score is ignored (Any
+                                  numeric value)
    -tag                string     [*] Tags are the types of extra values that
                                   a feature may have. For example in the EMBL
                                   feature table, a 'CDS' type of feature may

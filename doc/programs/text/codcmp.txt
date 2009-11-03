@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Codon usage table comparison
@@ -230,12 +237,12 @@ Known bugs
 
 See also
 
-   Program name Description
-   cai Calculate codon adaptation index
-   chips Calculates Nc codon usage statistic
-   cusp Create a codon usage table from nucleotide sequence(s)
-   syco Draw synonymous codon usage statictic plot for a nucleotide
-   sequence
+   Program name     Description
+   cai              Calculate codon adaptation index
+   chips            Calculates Nc codon usage statistic
+   cusp             Create a codon usage table from nucleotide sequence(s)
+   syco             Draw synonymous codon usage statictic plot for a nucleotide
+                    sequence
 
 Author(s)
 

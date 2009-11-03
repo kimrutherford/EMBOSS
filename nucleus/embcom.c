@@ -138,6 +138,7 @@ void embComComplexity(const char *seq,const char *name,
 	NumOfWin = comCalcNOfWin(len,l,step);
 
     AJCNEW(ComplexOfSeq, NumOfWin);
+
     if(freq)
     {
 	for(i=0;i<4;i++)
@@ -152,6 +153,7 @@ void embComComplexity(const char *seq,const char *name,
 	}
 
 	comSortFreq(SortedFreq);
+
 	for(i=0;i<4;i++)
 	    SortedFreq[i].pc = SortedFreq[i].pc*10;
     }
@@ -182,14 +184,17 @@ void embComComplexity(const char *seq,const char *name,
 	AJCNEW(seqsim, (len+1));
 
 	AJCNEW(MedValueUj, NumOfWin);
+
 	for(i=0;i<NumOfWin;i++)
 	    AJCNEW(MedValueUj[i].Ujwin, jmax-jmin+1);
 
 	AJCNEW(SDValueUj, NumOfWin);
+
 	for(i=0;i<NumOfWin;i++)
 	    AJCNEW(SDValueUj[i].Ujwin, jmax-jmin+1);
 
 	AJCNEW(RatioUj, NumOfWin);
+
 	for(i=0;i<NumOfWin;i++)
 	    AJCNEW(RatioUj[i].Ujwin, jmax-jmin+1);
     }
@@ -203,6 +208,7 @@ void embComComplexity(const char *seq,const char *name,
 	    comSimulSeq(seqsim,len,SortedFreq,ACN,freq);
 	    strcpy(SetSeqSim[i].Sqsim,seqsim);
 	}
+
 	comElabSetSim(SetSeqSim,SetUjSim,len,sim,jmin,jmax,l,step);
 	comCalcMedValue(SetUjSim,MedValueUj,SDValueUj,sim,NumOfWin,
 			jmax-jmin+1);
@@ -223,11 +229,14 @@ void embComComplexity(const char *seq,const char *name,
     if(!omnia)
 	comWriteValue(name,len,ComplexOfSeq,NumOfWin,l,
 		      step,jmin,jmax,sim,*MedValue,fp);
+
     AJFREE(ComplexOfSeq);
+
     if(sim)
     {
 	AJFREE(seqsim);
-	for(i=0;i<NumOfWin;i++)
+
+        for(i=0;i<NumOfWin;i++)
 	{
 	    AJFREE(RatioUj[i].Ujwin);
 	    AJFREE(SDValueUj[i].Ujwin);
@@ -237,10 +246,12 @@ void embComComplexity(const char *seq,const char *name,
 	AJFREE(RatioUj);
 	AJFREE(SDValueUj);
 	AJFREE(MedValueUj);
+
 	for(i=0;i<sim;i++)
 	{
 	    for(j=0;j<NumOfWin;j++)
 		AJFREE(SetUjSim[i].Ujsim[j].Ujwin);
+
 	    AJFREE(SetUjSim[i].Ujsim);	/* was missing before pmr 25-jan-00 */
 	}
 
@@ -369,6 +380,7 @@ static void comWriteTable(AjPFile fp,const char *name,
 
     for(j=jmin;j<=jmax;j++)
 	ajFmtPrintF(fp,"%5s%-1d","R",j);
+
     ajFmtPrintF(fp,"\n");
     
     
@@ -379,15 +391,17 @@ static void comWriteTable(AjPFile fp,const char *name,
     for(i=0;i<Nwin;i++)
     {
 	ajFmtPrintF(fp,"w%-2d ",i+1);
+
 	for(k=0;k<jmax-jmin+1;k++)
 	    ajFmtPrintF(fp,"%4d  %5.2f+/-%-5.2f",
 			(ajint)(RUj[i].Ujwin[k]),MedUj[i].Ujwin[k],
 			SDUj[i].Ujwin[k]);
+
 	for(k=0;k<jmax-jmin+1;k++)
 	    ajFmtPrintF(fp,"%5.2f ",RatUj[i].Ujwin[k]);
-	ajFmtPrintF(fp,"\n");
-	ajFmtPrintF(fp,"\n");
 
+	ajFmtPrintF(fp,"\n");
+	ajFmtPrintF(fp,"\n");
     }
 
     return;
@@ -489,7 +503,6 @@ static void comCalcMedValue(const UJSim *SetUj,UJWin *MedUj,UJWin *SDUj,
 	for(k=0;k<Nword;k++)
 	    var[k] = var[k]/(float)(Nsim);
 
-
 	for(k=0;k<Nword;k++)
 	    SDUj[j].Ujwin[k] = (float)sqrt(var[k]);
 
@@ -574,16 +587,19 @@ static void comElabSeq(const char *seq,UJWin *ujwin, ajint jmin, ajint jmax,
     {
 	nwin++;
 	comReadWin(seq,bwin,ewin,wind);
+
 	for(j=jmin;j<=jmax;j++)
 	{
 	    comCalcUj(lwin,j,wind,&Uj);
 	    ujwin[nwin-1].Ujwin[k] = Uj;
 	    k++;
 	}
+
 	bwin = bwin+step;
 	ewin = bwin+(lwin-1);
 	k = 0;
     }
+
     AJFREE(wind);
 
     return;
@@ -612,6 +628,7 @@ static ajint comCalcNOfWin(ajint lseq, ajint lwin, ajint step)
     bwin = 0;
     ewin = lwin-1;
     nwin = 0;
+
     while(ewin<lseq)
     {
 	nwin++;
@@ -641,6 +658,7 @@ static void comWriteSimValue(const float *ComplexOfSim, ajint nsim,AjPFile fp)
     ajint i;
 
     ajFmtPrintF(fp,"VALUES FOR EACH SIMULATION\n\n");
+
     for(i=0;i<nsim;i++)
 	ajFmtPrintF(fp,"%4d %7.4f \n",i+1,ComplexOfSim[i]);
 
@@ -708,6 +726,7 @@ static void comWriteValue(const char *name, ajint lseq,
 
     bwin = 0;
     ewin = l-1;
+
     for(i=0;i<NumOfWin;i++)
     {
 	if(i==NumOfWin-1)
@@ -721,6 +740,7 @@ static void comWriteValue(const char *name, ajint lseq,
 	bwin = bwin+step;
 	ewin = bwin+l-1;
     }
+
     ajFmtPrintF(fp,"\n");
 
     return;
@@ -873,10 +893,12 @@ static void comSimulSeq(char *seqsim,
     }
 
     k = 0;
+
     while(k<lseq)
     {
 	x = rand();
 	x1 = fmodf((float)(x),(float)(1000));
+
 	if(x1 > 0.0 && x1 <= n1 && freq)
 	{
 	    seqsim[k] = ACN[Freq[0].ind];
@@ -925,6 +947,7 @@ static void comSimulSeq(char *seqsim,
 	    k++;
 	}
     }
+
     seqsim[k] = '\0';
 
     return;
@@ -982,11 +1005,13 @@ static void comCalcComplexMed(const float *ComplexOfSeq, ajint NumOfWin,
     float sum = 0.0;
 
     ajDebug("CalcComplexMed NumOfWin: %d\n", NumOfWin);
+
     for(i=0;i<NumOfWin;i++)
     {
 	sum += ComplexOfSeq[i];
 	ajDebug("ComplexOfSeq[%d] %.2f\n", i, ComplexOfSeq[i]);
     }
+
     *MedValue = sum/(float)(NumOfWin);
 
     return;
@@ -1013,11 +1038,13 @@ static void comReadWin(const char *seq, ajint bwin, ajint ewin,char *win)
     ajint k;
 
     k=0;
+
     for(i=bwin;i<=ewin;i++)
     {
 	win[k] = seq[i];
 	k++;
     }
+
     win[k] = '\0';
 
     return;
@@ -1050,6 +1077,7 @@ static void comRead_j_mer(const char *win, ajint lwin, ajint jlen,AjPStr *str)
 
     t = 0;
     r = 0;
+
     for(i=0;i<(lwin-jlen+1);i++)
     {
 	for(k=t;k<t+jlen;k++)
@@ -1057,6 +1085,7 @@ static void comRead_j_mer(const char *win, ajint lwin, ajint jlen,AjPStr *str)
 	    temp[r]=win[k];
 	    r ++;
 	}
+
 	temp[jlen] = '\0';
 	ajStrAssignC(&str[i],temp);
 	t++;
@@ -1140,6 +1169,7 @@ static void comWinComplex(const char *win,const char *winsim, ajint lwin,
 	    Ujvalue = 1.0;
 	else
 	    Ujvalue = Ujreal/Ujsim;
+
 	WinValue = WinValue*Ujvalue;
     }
 
@@ -1185,6 +1215,7 @@ static void comCalcUj2(ajint lwin, ajint jlen,const char *win,float *Ujvalue)
     n=(float)pow((double)4,(double)jlen);
 
     k=(ajint)(n);
+
     if(lwin > k+jlen-1)
 	z=((float)(unlikej_mer)/n);
     else
@@ -1294,43 +1325,44 @@ static void comAmbiguity(char *seq)
     char N[] = "ACGT";
 
     ch  = seq;
+
     while(*ch)
     {
 	switch(*ch)
 	{
-	case 'R':
-	    comReplace(R,ch);
-	    break;
-	case 'Y':
-	    comReplace(Y,ch);
-	    break;
-	case 'W':
-	    comReplace(W,ch);
-	    break;
-	case 'S':
-	    comReplace(S,ch);
-	    break;
-	case 'M':
-	    comReplace(M,ch);
-	    break;
-	case 'K':
-	    comReplace(K,ch);
-	    break;
-	case 'H':
-	    comReplace(H,ch);
-	    break;
-	case 'B':
-	    comReplace(B,ch);
-	    break;
-	case 'V':
-	    comReplace(V,ch);
-	    break;
-	case 'D':
-	    comReplace(D,ch);
-	    break;
-	case 'N':
-	    comReplace(N,ch);
-	    break;
+            case 'R':
+                comReplace(R,ch);
+                break;
+            case 'Y':
+                comReplace(Y,ch);
+                break;
+            case 'W':
+                comReplace(W,ch);
+                break;
+            case 'S':
+                comReplace(S,ch);
+                break;
+            case 'M':
+                comReplace(M,ch);
+                break;
+            case 'K':
+                comReplace(K,ch);
+                break;
+            case 'H':
+                comReplace(H,ch);
+                break;
+            case 'B':
+                comReplace(B,ch);
+                break;
+            case 'V':
+                comReplace(V,ch);
+                break;
+            case 'D':
+                comReplace(D,ch);
+                break;
+            case 'N':
+                comReplace(N,ch);
+                break;
 	}
 	ch++;
     }
@@ -1393,22 +1425,23 @@ static void comCalcFreqACN(const char *seq, ajint lseq,float *Freq)
     const char *ch;
 
     ch = seq;
+
     while(*ch!='\0')
     {
 	switch(*ch)
 	{
-	case 'A':
-	    countA++;
-	    break;
-	case 'C':
-	    countC++;
-	    break;
-	case 'G':
-	    countG++;
-	    break;
-	case 'T':
-	    countT++;
-	    break;
+            case 'A':
+                countA++;
+                break;
+            case 'C':
+                countC++;
+                break;
+            case 'G':
+                countG++;
+                break;
+            case 'T':
+                countT++;
+                break;
 	}
 	ch++;
     }

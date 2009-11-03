@@ -78,21 +78,28 @@ typedef struct AjSFeattabIn {
 ** @attr Basename [AjPStr] Basename for output file
 ** @attr Format [ajint] Output format index
 ** @attr Local [AjBool] Opened as a local file if ajTrue
+** @attr Count [ajuint] Number of feature tables written
+** @attr Padding [char[4]] Padding to alignment boundary
+** @attr Cleanup [(void*)] Function to write remaining lines on closing
 ** @@
 ******************************************************************************/
 
-typedef struct AjSFeattabOut {
-  AjPStr        Ufo;
-  AjPStr        Formatstr;
-  AjPStr        Filename;
-  AjPStr        Directory;
-  AjPStr        Seqid;
-  AjPStr        Type;
-  AjPFile       Handle;
-  AjPStr        Seqname;
-  AjPStr        Basename;
-  ajint         Format;
-  AjBool        Local;
+typedef struct AjSFeattabOut
+{
+    AjPStr        Ufo;
+    AjPStr        Formatstr;
+    AjPStr        Filename;
+    AjPStr        Directory;
+    AjPStr        Seqid;
+    AjPStr        Type;
+    AjPFile       Handle;
+    AjPStr        Seqname;
+    AjPStr        Basename;
+    ajint         Format;
+    AjBool        Local;
+    ajuint        Count;
+    char          Padding[4];
+    void (*Cleanup) (AjPFile filethys);
 }  AjOFeattabOut;
 
 #define AjPFeattabOut AjOFeattabOut*
@@ -123,16 +130,17 @@ typedef struct AjSFeattabOut {
 ** @@
 ******************************************************************************/
 
-typedef struct AjSFeattable {
-  AjPStr            Seqid;
-  AjPStr            Type;
-  AjPList           Features;
-  ajuint            DefFormat;
-  ajuint            Start;
-  ajuint            End;
-  ajuint            Len;
-  ajuint            Offset;
-  ajuint            Groups;
+typedef struct AjSFeattable
+{
+    AjPStr            Seqid;
+    AjPStr            Type;
+    AjPList           Features;
+    ajuint            DefFormat;
+    ajuint            Start;
+    ajuint            End;
+    ajuint            Len;
+    ajuint            Offset;
+    ajuint            Groups;
 }  AjOFeattable;
 
 #define AjPFeattable AjOFeattable*

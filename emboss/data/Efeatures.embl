@@ -6,6 +6,7 @@
 # where e.g. /citation or /compare is used for a conflict
 
 # Updated to EMBL/GenBank/DDBJ FTv6.5 by Peter Rice 30th May 2006
+# Updated to EMBL/GenBank/DDBJ FTv8.0 by Peter Rice 12th March 2008
 
 # "-" is a placeholder for no key; should be used when the need is
 # merely to mark region in order to comment on it or to use it in
@@ -22,11 +23,10 @@ misc_feature SO:0000110
 	/allele
         /citation
         /db_xref                   
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /function
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
@@ -34,14 +34,10 @@ misc_feature SO:0000110
         /note
 	/number
 	/old_locus_tag
-        # removed after FTv5.0 for new entries - use <> in location instead
-	#        /partial
         /phenotype
         /product
         /pseudo
         /standard_name
-        # Removed in FT6.5
-        #        /usedin
 
 # 1) region of DNA at which regulation of termination of transcription
 # occurs, which controls the expression of some bacterial operons; 2)
@@ -55,10 +51,9 @@ attenuator SO:0000140
         /allele
         /citation
         /db_xref
-	# Removed in FT6.5
-        #        /evidence
 	/experiment
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
@@ -66,42 +61,31 @@ attenuator SO:0000140
         /note
 	/old_locus_tag
 	/operon
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
         /phenotype
-	# Removed in FT6.5
-        #        /usedin
 
 # constant region of immunoglobulin light and heavy  chains, and T-cell
 # receptor alpha, beta, and gamma  chains; includes one or more exons
 # depending on the  particular chain
 
-# SO: undefined
-
 #org=prokaryotes
 #mol=DNA
 
-C_region SO:0000001_C_region
+C_region SO:0000478
         /allele
         /citation
         /db_xref
-	# Removed in FT6.5
-        #        /evidence
 	/experiment
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
         /map
         /note
 	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
         /product
         /pseudo
         /standard_name
-        # Removed in FT6.5
-        #        /usedin
 
 # CAAT box; part of a conserved sequence located about 75 bp up-stream
 # of the start point of eukaryotic transcription units which may be
@@ -119,20 +103,15 @@ CAAT_signal SO:0000172
 	/allele
         /citation
         /db_xref                     
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
         /map
         /note
 	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
-        # Removed in FT6.5
-        #        /usedin
 
 # coding sequence; sequence of nucleotides that corresponds with the
 # sequence of amino acids in a protein (location includes stop codon);
@@ -146,20 +125,17 @@ CAAT_signal SO:0000172
 
 CDS SO:0000316
 	#  no mandatory /translation or /pseudo in FTv 6.5
-         /translation
-         /pseudo
 	 /allele
          /citation
          /codon
          /codon_start
          /db_xref        
          /EC_number
-        # Removed in FT6.5
-        #         /evidence
          /exception
 	 /experiment
          /function
          /gene
+         /gene_synonym
 	 /inference
          /label
 	 /locus_tag
@@ -168,43 +144,37 @@ CDS SO:0000316
          /number
 	 /old_locus_tag
 	 /operon
-	 # removed in FTv5.0 for new entries - use <> in location instead
-	 #        /partial
          /product
          /protein_id
+         /pseudo
 	 /ribosomal_slippage
          /standard_name
+         /translation
          /transl_except
          /transl_table
 	 /trans_splicing
-        # Removed in FT6.5
-        #         /usedin
 
 # independent determinations of the "same" sequence differ at this site
 # or region;
 #
 # Or /compare=[accession-number.sequence-version]
 
-# SO: undefined
-
 conflict SO:0001085
        m/citation
        m/compare
+        /allele   # New in 8.0
         /db_xref
-	# Removed in FT6.5
-        #        /evidence
 	/experiment
+        /gene
+        /gene_synonym
 	/inference
         /label
+	/locus_tag
         /map
         /note
-        /gene
-	/locus_tag
 	/old_locus_tag
 # use /replace="" for a deletion
         /replace
-        # Removed in FT6.5
-        #        /usedin
 
 # displacement loop; a region within mitochondrial DNA in which a
 # short stretch of RNA is paired with one strand of DNA, displacing
@@ -223,20 +193,15 @@ D-loop SO:0000297
 	/allele
         /citation
         /db_xref
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
         /map
         /note
 	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
-        # Removed in FT6.5
-        #        /usedin
 
 # Diversity segment of immunoglobulin heavy chain, and  T-cell receptor
 # beta chain;
@@ -250,23 +215,18 @@ D_segment SO:0000458
 	/allele
         /citation
         /db_xref
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
         /map
         /note
 	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
         /product
         /pseudo
         /standard_name
-        # Removed in FT6.5
-        #        /usedin
 
 # a cis-acting sequence that increases the utilization of (some)
 # eukaryotic promoters, and can function in either orientation and in
@@ -284,21 +244,16 @@ enhancer SO:0000165
 	/bound_moiety
         /citation
         /db_xref        
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
         /map
         /note
 	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
         /standard_name
-        # Removed in FT6.5
-        #        /usedin
 
 # region of genome that codes for portion of spliced mRNA, rRNA and
 # tRNA; may contain 5'UTR, all CDSs and 3' UTR;
@@ -315,11 +270,10 @@ exon SO:0000147
         /citation
         /db_xref                    
         /EC_number
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /function
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
@@ -327,13 +281,9 @@ exon SO:0000147
         /note
         /number
 	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
         /product
         /pseudo
         /standard_name
-        # Removed in FT6.5
-        #        /usedin
 
 # gap in the sequence
 
@@ -360,20 +310,15 @@ GC_signal SO:0000173
 	/allele
         /citation
         /db_xref                    
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
         /map
         /note
 	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
-        # Removed in FT6.5
-        #        /usedin
 
 # region of biological interest identified as a gene and for which a
 # name has been assigned;
@@ -388,12 +333,11 @@ gene SO:0000704
         /allele
         /citation
         /db_xref
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /function
 	# gene added as genbank has several entries
         /gene 
+        /gene_synonym
 	/inference 
         /label
 	/locus_tag
@@ -401,15 +345,11 @@ gene SO:0000704
         /note
 	/old_locus_tag
 	/operon
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
         /product
         /pseudo
         /phenotype
         /standard_name
 	/trans_splicing
-        # Removed in FT6.5
-        #        /usedin
 
 # DNA which is eliminated through any of several kinds of recombination;
 
@@ -420,11 +360,10 @@ iDNA SO:0000723
 	/allele
         /citation
         /db_xref                    
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /function
 	/gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
@@ -432,11 +371,7 @@ iDNA SO:0000723
         /note
         /number
  	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
         /standard_name
-        # Removed in FT6.5
-        #        /usedin
 
 # a segment of DNA that is transcribed, but removed from within the
 # transcript by splicing together the sequences (exons) on either side
@@ -455,11 +390,10 @@ intron SO:0000188
         # sites does not match the GT...AG consensus
         /cons_splice
         /db_xref                    
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /function
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
@@ -467,39 +401,27 @@ intron SO:0000188
         /note
         /number
  	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
-	# New in FTv6.5
 	/pseudo
         /standard_name
-        # Removed in FT6.5
-        #        /usedin
 
 # joining segment of immunoglobulin light and heavy  chains, and T-cell
 # receptor alpha, beta, and gamma  chains;
 
-# SO: undefined
-
-J_segment SO:0000001_J_segment
+J_segment SO:0000470
 	/allele
         /citation
         /db_xref
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /gene
+        /gene_synonym
 	/inference
 	/locus_tag
         /map
         /note
  	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
         /product
         /pseudo
         /standard_name
-        # Removed in FT6.5
-        #        /usedin
 
 # long terminal repeat, a sequence directly repeated at both ends of a
 # defined sequence, of the sort typically found in retroviruses;
@@ -514,22 +436,17 @@ LTR SO:0000286
 	/allele
         /citation
         /db_xref                    
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /function
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
         /map
         /note
  	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
         /standard_name
-        # Removed in FT6.5
-        #        /usedin
 
 # mature peptide or protein coding sequence; coding sequence for the
 # mature or final peptide or protein product following
@@ -544,24 +461,19 @@ mat_peptide SO:0000419
         /citation
         /db_xref                    
         /EC_number
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /function
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
         /map
         /note
  	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
         /product
         /pseudo
         /standard_name
-        # Removed in FT6.5
-        #        /usedin
 
 # site in nucleic acid which covalently or non-covalently binds
 # another moiety that cannot be described by any other binding key
@@ -575,21 +487,16 @@ misc_binding SO:0000409
         /allele
         /citation
         /db_xref                    
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /function
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
         /map
         /note
  	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
-        # Removed in FT6.5
-        #        /usedin
 
 # feature sequence is different from that presented in the entry and
 # cannot be described by any other Difference key (conflict, unsure,
@@ -604,23 +511,18 @@ misc_difference SO:0000413
         /clone
 	/compare
         /db_xref
-        # Removed in FT6.5
-        #        /evidence
 	/experiment                   
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
         /map                    
         /note
  	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
 	/phenotype
         /replace  
         /standard_name
-        # Removed in FT6.5
-        #        /usedin
 
 # site of any generalized, site-specific or replicative recombination
 # event where there is a breakage and reunion of duplex DNA that
@@ -635,10 +537,9 @@ misc_recomb SO:0000298
 	/allele
         /citation
         /db_xref                     
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
@@ -648,11 +549,7 @@ misc_recomb SO:0000298
 	# No longer mandatory /organism from FTv5.0
 	# If omitted, assume only the SOURCE organism is involved
         /organism
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
         /standard_name
-        # Removed in FT6.5
-        #        /usedin
 
 # any transcript or RNA product that cannot be defined by other RNA
 # keys (prim_transcript, precursor_RNA, mRNA, 5'clip, 3'clip, 5'UTR,
@@ -668,11 +565,10 @@ misc_RNA SO:0000673
 	/allele
         /citation
         /db_xref                    
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /function
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
@@ -680,16 +576,10 @@ misc_RNA SO:0000673
         /note
  	/old_locus_tag
 	/operon
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
         /product
-	# New in FTv6.5
 	/pseudo
         /standard_name
-	# New in FTv6.5
 	/trans_splicing
-        # Removed in FT6.5
-        #        /usedin
 
 # any region containing a signal controlling or altering gene function
 # or expression that cannot be described by other signal keys
@@ -703,25 +593,19 @@ misc_signal SO:0005836
 	/allele
         /citation
         /db_xref                 
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /function
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
         /map
         /note
  	/old_locus_tag
-	# New in FTv6.5
 	/operon
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
         /phenotype
         /standard_name
-        # Removed in FT6.5
-        #        /usedin
 
 # any secondary or tertiary nucleotide structure or conformation that
 # cannot be described by other Structure keys (stem_loop and D-loop);
@@ -732,22 +616,17 @@ misc_structure SO:0000002
 	/allele
         /citation
         /db_xref                  
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /function
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
         /map
         /note
  	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
         /standard_name
-        # Removed in FT6.5
-        #        /usedin
 
 # the indicated nucleotide is a modified nucleotide and should be
 # substituted for by the indicated molecule (given in the mod_base
@@ -761,19 +640,16 @@ modified_base SO:0000305
         /allele
         /citation
         /db_xref                     
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /frequency
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
         /map
         /note
 	/old_locus_tag
-        # Removed in FT6.5
-        #        /usedin
 
 # messenger RNA; includes 5'untranslated region (5'UTR), coding
 # sequences (CDS, exon) and 3'untranslated region (3'UTR);
@@ -786,11 +662,10 @@ mRNA SO:0000234
 	/allele
         /citation
         /db_xref                     
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /function
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
@@ -798,90 +673,87 @@ mRNA SO:0000234
         /note
  	/old_locus_tag
 	/operon
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
         /product
         /pseudo
         /standard_name
-	# New in FTv6.5
 	/trans_splicing
-        # Removed in FT6.5
-        #        /usedin
 
-# removed in EMBL FTv3.0 Jan 2001
-#mutation
-#        /citation
-#        /db_xref
-#        /frequency
-#        /gene
-#        /label
-#	/locus_tag
-#        /map
-#        /note
-#        /phenotype
-#        /product
-#        /replace
-#        /standard_name
-#        /usedin
+# An RNA transcript that does not encode for a protein rather the RNA
+# molecule is the gene product
+# A ncRNA is a processed_transcript, so it may not contain parts such
+# as transcribed_spacer_regions that are removed in the act of
+# processing.
+# the ncRNA feature is not used for ribosomal and transfer
+# RNA annotation, for which the rRNA and tRNA feature keys
+# should be used, respectively; 
+# New in FT 7.0
 
-# extra nucleotides inserted between rearranged immunoglobulin
-# segments.
-
-# SO: undefined
-
-N_region SO:0000001_N_region
+ncRNA SO:0000655
+       m/ncRNA_class
 	/allele
         /citation
         /db_xref
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
+	/function
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
         /map
         /note
  	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
+	/operon
         /product
         /pseudo
         /standard_name
-        # Removed in FT6.5
-        #        /usedin
+	/trans_splicing
+
+# extra nucleotides inserted between rearranged immunoglobulin
+# segments.
+
+
+N_region SO:0000563
+	/allele
+        /citation
+        /db_xref
+	/experiment
+        /gene
+        /gene_synonym
+	/inference
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+        /product
+        /pseudo
+        /standard_name
 
 # the presented sequence revises a previous version of the sequence at
 # this location;
 #
 # Or /compare=[accession-number.sequence-version]
 
-# SO: undefined
-
 #up=CDS
 #org=eukaryotes
 
-old_sequence SO:0000001_old_sequence
+old_sequence  SO:0001082
        m/citation
        m/compare
         /allele
         /db_xref
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
         /map
         /note
  	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
 	#use /replace="" to annotate a deletion
         /replace
-        # Removed in FT6.5
-        #        /usedin
 
 # region containing polycistronic transcript containing genes that
 # encode enzymes that are in the same metabolic pathway and regulatory
@@ -896,8 +768,6 @@ operon SO:0000178
 	 /allele
 	 /citation
 	 /db_xref
-        # Removed in FT6.5
-        #	 /evidence
 	 /experiment
 	 /function
 	 /inference
@@ -907,8 +777,6 @@ operon SO:0000178
 	 /phenotype
 	 /pseudo
 	 /standard_name
-        # Removed in FT6.5
-        #	 /usedin
 
 # origin of transfer; region of a DNA molecule where transfer is
 # initiated during the process of conjugation or mobilization
@@ -924,10 +792,9 @@ oriT SO:0000724
 	/db_xref
 	# Only /direction=LEFT or RIGHT are valid
 	/direction
-        # Removed in FT6.5
-        #	/evidence
 	/experiment
 	/gene
+        /gene_synonym
 	/inference
 	/label
 	/locus_tag
@@ -936,15 +803,9 @@ oriT SO:0000724
 	/old_locus_tag
 	/rpt_family
 	/rpt_type
-        # Removed in FT6.5
-        #	/rpt_unit
-	# New in FTv6.5
 	/rpt_unit_range
-	# New in FTv6.5
 	/rpt_unit_seq
 	/standard_name
-        # Removed in FT6.5
-        #	/usedin
 
 # recognition region necessary for endonuclease cleavage of an RNA
 # transcript that is followed by polyadenylation; consensus=AATAAA
@@ -960,20 +821,15 @@ polyA_signal SO:0000551
 	/allele
         /citation
         /db_xref                    
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
         /map
         /note
  	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
-        # Removed in FT6.5
-        #        /usedin
 
 # site on an RNA transcript to which will be added adenine residues by
 # post-transcriptional polyadenylation;
@@ -987,18 +843,15 @@ polyA_site SO:0000553
 	/allele
         /citation
         /db_xref                    
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
         /map
         /note
  	/old_locus_tag
-        # Removed in FT6.5
-        #        /usedin
 
 # any RNA species that is not yet the mature RNA product; may include
 # 5' clipped region (5'clip), 5' untranslated region (5'UTR), coding
@@ -1017,15 +870,14 @@ polyA_site SO:0000553
 
 #org=eukaryotes,eukaryotic_viruses
 
-precursor_RNA SO:0000185_precursor_RNA
+precursor_RNA SO:0000835
 	/allele
         /citation
         /db_xref
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /function
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
@@ -1033,15 +885,9 @@ precursor_RNA SO:0000185_precursor_RNA
         /note
  	/old_locus_tag
 	/operon
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
-	# added in FTv3.0 Jan 2001
         /product        
         /standard_name
-	# New in FTv6.5
 	/trans_splicing
-        # Removed in FT6.5
-        #        /usedin
 
 #SO: The primary (initial, unprocessed) transcript; includes
 # five_prime_clip (SO:0000555), five_prime_untranslated_region
@@ -1053,24 +899,18 @@ prim_transcript SO:0000185
 	/allele
         /citation
         /db_xref                    
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /function
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
         /map
         /note
  	/old_locus_tag
-	# New in FTv6.5
 	/operon
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
         /standard_name
-        # Removed in FT6.5
-        #        /usedin
 
 # non-covalent primer binding site for initiation of replication,
 # transcription, or reverse transcription; includes site(s) for
@@ -1084,22 +924,17 @@ primer_bind SO:0005850
 	/allele
         /citation
         /db_xref                    
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
         /map
         /note
  	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
         /PCR_conditions
         /standard_name
-        # Removed in FT6.5
-        #        /usedin
 
 # region on a DNA molecule involved in RNA polymerase binding to
 # initiate transcription;
@@ -1112,11 +947,10 @@ promoter SO:0000167
 	/bound_moiety
         /citation
         /db_xref                   
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /function
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
@@ -1124,13 +958,9 @@ promoter SO:0000167
         /note
  	/old_locus_tag
 	/operon
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
         /phenotype
         /pseudo
         /standard_name
-        # Removed in FT6.5
-        #        /usedin
 
 # non-covalent protein binding site on nucleic acid;
 
@@ -1144,22 +974,18 @@ protein_bind SO:0000410
         /allele
         /citation
         /db_xref                   
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /function
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
         /map
         /note
  	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
+	/operon
         /standard_name
-        # Removed in FT6.5
-        #        /usedin
 
 # ribosome binding site;
 
@@ -1169,117 +995,84 @@ RBS SO:0000139
 	/allele
         /citation
         /db_xref                     
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
         /map
         /note
  	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	# /partial
         /standard_name
-        # Removed in FT6.5
-        #        /usedin
 
 # region of genome containing repeating units;
 
 # SO: A region of sequence containing one or more repeat units.
 
-repeat_region SO:0000657
+repeat_region SO:0000657 SO:0000705
 	/allele
         /citation
         /db_xref                     
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /function
         /gene
+        /gene_synonym
 	/inference
-	# moved from source key 1-July-2002
-	/insertion_seq
         /label
 	/locus_tag
         /map
 	/mobile_element
         /note
  	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
         /rpt_family
         /rpt_type
-	# Removed in FTv6.5
-	#        /rpt_unit
-	# New in FTv6.5
 	/rpt_unit_range
-	# New in FTv6.5
 	/rpt_unit_seq
+	/satellite
         /standard_name
-	# moved from source key 1-July-2002
-	/transposon
-        # Removed in FT6.5
-        #        /usedin
 
 # single repeat element;
 
 # SO: A single repeat element.
-
-repeat_unit SO:0000726
-	/allele
-        /citation
-        /db_xref                     
-        # Removed in FT6.5
-        #        /evidence
-	/experiment
-        /function
-        /gene
-	/inference
-        /label
-	/locus_tag
-        /map
-        /note
- 	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
-        /rpt_family
-	# preferred: annotate in repeat_region
-        /rpt_type
-	# preferred: annotate in repeat_region
-	# Removed in FTv6.5
-	#        /rpt_unit
-	# New in FTv6.5
-	/rpt_unit_range
-	# New in FTv6.5
-	/rpt_unit_seq
-        # Removed in FT6.5
-        #        /usedin
+# removed in FTv8.0
+#repeat_unit SO:0000726
+#	/allele
+#       /citation
+#       /db_xref                     
+#	/experiment
+#       /function
+#       /gene
+#       /gene_synonym
+#	/inference
+#       /label
+#	/locus_tag
+#       /map
+#       /note
+# 	/old_locus_tag
+#       /rpt_family
+#       /rpt_type
+#	/rpt_unit_range
+#	/rpt_unit_seq
 
 
 # SO: regulatory_region, equivalent to EMBL/GB misc_signal
 
-rep_origin SO:0005836_rep_origin
+rep_origin SO:0000296
 	/allele
         /citation
         /db_xref               
         /direction
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
         /map
         /note
  	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
         /standard_name
-        # Removed in FT6.5
-        #        /usedin
 
 # mature ribosomal RNA ; RNA component of the ribonucleoprotein
 # particle (ribosome) which assembles amino acids into proteins.
@@ -1291,53 +1084,41 @@ rRNA SO:0000252
 	/allele
         /citation
         /db_xref                  
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /function
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
         /map
         /note
  	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
 	# use /product for rRNA sizes
         /product
         /pseudo
         /standard_name
-        # Removed in FT6.5
-        #        /usedin
 
 # switch region of immunoglobulin heavy chains; involved in the
 # rearrangement of heavy chain DNA leading to the expression of a
 # different immunoglobulin class from the same B-cell;
 
-# SO: undefined
-
-S_region SO:0000001_S_region
+S_region SO:0000301_S_region
 	/allele
         /citation
         /db_xref
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
         /map
         /note
  	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
         /product
         /pseudo
         /standard_name
-        # Removed in FT6.5
-        #        /usedin
 
 # many tandem repeats (identical or related) of a short basic
 # repeating unit; many have a base composition or other property
@@ -1352,33 +1133,25 @@ S_region SO:0000001_S_region
 #up=misc_signal
 #org=eukaryotes
 
-satellite SO:0000005
-	/allele
-        /citation
-        /db_xref        
-        # Removed in FT6.5
-        #        /evidence
-	/experiment
-        /gene
-	/inference
-        /label
-	/locus_tag
-        /map
-        /note
- 	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
-        /rpt_type
-        /rpt_family
-	# Removed in FTv6.5
-	#        /rpt_unit
-	# New in FTv6.5
-	/rpt_unit_range
-	# New in FTv6.5
-	/rpt_unit_seq
-        /standard_name
-        # Removed in FT6.5
-        #        /usedin
+# Removed FTv8.0
+#satellite SO:0000005
+#	/allele
+#       /citation
+#       /db_xref        
+#	/experiment
+#       /gene
+#       /gene_synonym
+#	/inference
+#       /label
+#	/locus_tag
+#       /map
+#       /note
+# 	/old_locus_tag
+#       /rpt_type
+#       /rpt_family
+#	/rpt_unit_range
+#	/rpt_unit_seq
+#       /standard_name
 
 # small cytoplasmic RNA; any one of several small cytoplasmic RNA
 # molecules present in the cytoplasm and (sometimes) nucleus of a
@@ -1389,28 +1162,24 @@ satellite SO:0000005
 
 #mol=DNA
 
-scRNA SO:0000013
-	/allele
-        /citation
-        /db_xref        
-        # Removed in FT6.5
-        #        /evidence
-	/experiment
-        /function
-        /gene
-	/inference
-        /label
-	/locus_tag
-        /map
-        /note
- 	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
-        /product
-        /pseudo
-        /standard_name
-        # Removed in FT6.5
-        #        /usedin
+# removed FTv8.0
+#scRNA SO:0000013
+#	/allele
+#       /citation
+#       /db_xref        
+#	/experiment
+#       /function
+#       /gene
+#       /gene_synonym
+#	/inference
+#       /label
+#	/locus_tag
+#       /map
+#       /note
+# 	/old_locus_tag
+#       /product
+#       /pseudo
+#       /standard_name
 
 # signal peptide coding sequence; coding sequence for an N-terminal
 # domain of a secreted protein; this domain is involved in attaching
@@ -1424,24 +1193,19 @@ sig_peptide SO:0000418
 	/allele
         /citation
         /db_xref        
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /function
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
         /map
         /note
  	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
         /product
         /pseudo
         /standard_name
-        # Removed in FT6.5
-        #        /usedin
 
 # small nucleolar RNA molecules mostly involved in rRNA modification
 # and processing;
@@ -1466,54 +1230,48 @@ sig_peptide SO:0000418
 # B/C and C'/D motifs are involved in specific protein interactions
 # and are necessary for the rRNA processing functions of U3 snoRNA.
 
-snoRNA SO:0000275
-	/allele
-        /citation
-        /db_xref        
-        # Removed in FT6.5
-        #        /evidence
-	/experiment
-        /function
-        /gene
-	/inference
-        /label
-	/locus_tag
-        /map
-        /note
- 	/old_locus_tag
-        /product
-        /pseudo
-        /standard_name
-        # Removed in FT6.5
-        #        /usedin
+# replaced by ncrna FTv7.0
+#snoRNA SO:0000275
+#	/allele
+#       /citation
+#       /db_xref        
+#	/experiment
+#       /function
+#       /gene
+#       /gene_synonym
+#	/inference
+#       /label
+#	/locus_tag
+#       /map
+#       /note
+# 	/old_locus_tag
+#       /product
+#       /pseudo
+#       /standard_name
 
 # small nuclear RNA molecules involved in pre-mRNA splicing and
 # processing
 
 # SO: Small non-coding RNA in the nucleoplasm.
 
-snRNA SO:0000274
-	/allele
-        /citation
-        /db_xref        
-        # Removed in FT6.5
-        #        /evidence
-	/experiment
-        /function
-        /gene
-	/inference
-        /label
-	/locus_tag
-        /map
-        /note
- 	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#	/partial
-        /product
-        /pseudo
-        /standard_name
-        # Removed in FT6.5
-        #        /usedin
+# replaced by ncrna FTv7.0
+#snRNA SO:0000274
+#	/allele
+#       /citation
+#       /db_xref        
+#	/experiment
+#       /function
+#       /gene
+#       /gene_synonym
+#	/inference
+#       /label
+#	/locus_tag
+#       /map
+#       /note
+# 	/old_locus_tag
+#       /product
+#       /pseudo
+#       /standard_name
 
 #identifies the biological source of the specified span of the
 #sequence; this key is mandatory; more than one source key per
@@ -1532,69 +1290,51 @@ source SO:2000061
 	# New in FTv5.0
 	# mandatory from 01-July-2003
        M/mol_type
+         /bio_material
         /cell_line
         /cell_type
-	# replace by /organelle in FTv3.0 Jan 2001
-	#        /chloroplast  
-	#        /chromoplast
         /chromosome
         /citation
         /clone
         /clone_lib
-	# New in FTv6.5
 	/collected_by
-	# New in FTv6.5
 	/collection_date
         /country
         /cultivar
-	# replace by /organelle in FTv3.0 Jan 2001
-	#        /cyanelle
+	/culture_collection                # new in FTv7.0
         /db_xref                    
         /dev_stage
 	/ecotype
 	# /environmental_sample and /isolation_source should appear together
 	/environmental_sample
-	# removed in FT 6.2               
-        # /evidence
         /focus
         /frequency
         /germline
         /haplotype
-	# New in FTv6.5
+	/host			# new in FTv8.0
 	/identified_by
-	# moved to repeat_region key from 1-July-2002
-        #/insertion_seq
         /isolate
 	# /environmental_sample and /isolation_source should appear together
 	/isolation_source
-	# replace by /organelle in FTv3.0 Jan 2001
-	#        /kinetoplast
-        # removed in FT 6.2
-	# restored in FTv6.5
 	/lab_host
         /label
 	/lat_lon
         /macronuclear
         /map
-	# replace by /organelle in FTv3.0 Jan 2001
-	#        /mitochondrion
+	/mating_type		# New in FTv8.0
         /note
         /organelle
-	# New in FTv6.5
 	/PCR_primers
         /plasmid
         /pop_variant
         /proviral
         /rearranged
-	# new in FTv5.0
 	/segment
-        # Removed (to ID line) in FT 6.2
-	# /sequenced_mol
         /serotype
 	/serovar
         /sex
         /specimen_voucher
-        /specific_host
+        # /specific_host	# removed in FTv8.0
         /strain
         /sub_clone
         /sub_species
@@ -1603,12 +1343,8 @@ source SO:2000061
         /tissue_type
 	# transgenic is supposed to be only in extra source keys for an entry
 	/transgenic
-        # moved to repeat_region key from 1-July-2002
-        #/transposon
-	# Removed in FTv6.5
-	#        /usedin
         /variety
-        /virion
+        # /virion		# removed in FTv8.0
 
 # hairpin; a double-helical region formed by base-pairing between
 # adjacent (inverted) complementary sequences in a single strand of
@@ -1621,11 +1357,10 @@ stem_loop SO:0000313
 	/allele
         /citation
         /db_xref                     
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /function
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
@@ -1633,11 +1368,7 @@ stem_loop SO:0000313
         /note
  	/old_locus_tag
 	/operon
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
         /standard_name
-        # Removed in FT6.5
-        #        /usedin
 
 # short, single-copy DNA sequence that characterizes a mapping
 # landmark on the genome and can be detected by PCR; a region of the
@@ -1652,21 +1383,16 @@ STS SO:0000331
 	/allele
         /citation
         /db_xref
-        # Removed in FT6.5
-        #        /evidence                   
 	/experiment
         /gene
+        /gene_synonym
 	/inference
         /label      
 	/locus_tag
         /map
         /note
  	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
         /standard_name
-        # Removed in FT6.5
-        #        /usedin
 
 # TATA box; Goldberg-Hogness box; a conserved AT-rich septamer found
 # about 25 bp before the start point of each eukaryotic RNA polymerase
@@ -1685,20 +1411,15 @@ TATA_signal SO:0000174
 	/allele
         /citation
         /db_xref        
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
         /map
         /note
  	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
-        # Removed in FT6.5
-        #        /usedin
 
 # sequence of DNA located either at the end of the transcript that
 # causes RNA polymerase to terminate  transcription;
@@ -1713,10 +1434,9 @@ terminator SO:0000141
 	/allele
         /citation
         /db_xref                     
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
@@ -1724,11 +1444,33 @@ terminator SO:0000141
         /note
 	/old_locus_tag
 	/operon
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
         /standard_name
-        # Removed in FT6.5
-        #        /usedin
+
+# New in Fv7.0
+
+# transfer messenger RNA; tmRNA acts as a tRNA first, and then as an
+# mRNA that encodes a peptide tag; the ribosome translates this mRNA
+# region of tmRNA and attaches the encoded peptide tag to the
+# C-terminus of the unfinished protein; this attached tag targets the
+# protein for destruction or proteolysis;
+
+tmRNA SO:0000584
+	/allele
+        /citation
+        /db_xref                     
+	/experiment
+        /gene
+        /gene_synonym
+	/inference
+        /label
+	/locus_tag
+        /map
+        /note
+	/old_locus_tag
+	/product
+	/pseudo
+	/standard_name
+	/tag_peptide
 
 # transit peptide coding sequence; coding sequence for an N-terminal
 # domain of a nuclear-encoded organellar protein; this domain is
@@ -1745,24 +1487,19 @@ transit_peptide SO:0000725
 	/allele
         /citation
         /db_xref                     
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /function
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
         /map
         /note
  	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
         /product
         /pseudo
         /standard_name
-        # Removed in FT6.5
-        #        /usedin
 
 # mature transfer RNA, a small RNA molecule (75-85 bases long) that
 # mediates the translation of a nucleic acid sequence into an amino
@@ -1787,111 +1524,85 @@ tRNA SO:0000253
         /anticodon
         /citation
         /db_xref                     
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /function
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
         /map
         /note
  	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
         /product
         /pseudo
         /standard_name
-	# New in FTv6.5
-	/trans_splicing
-        # Removed in FT6.5
-        #        /usedin
+	/trans_splicing		# New in FTv6.5
 
 # author is unsure of exact sequence in this region;
 
-# SO: undefined
-
-unsure SO:0000001_unsure
+unsure  SO:0001086
 	/allele
         /citation
 	/compare
         /db_xref                     
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
         /map
         /note
  	/old_locus_tag
-	# use /replace="" for a deletion
         /replace
-        # Removed in FT6.5
-        #        /usedin
 
 # variable region of immunoglobulin light and heavy chains, and T-cell
 # receptor alpha, beta, and gamma chains; codes for the variable amino
 # terminal portion; can be composed of V_segments, D_segments,
 # N_regions, and J_segments;
 
-# SO: undefined
-
-V_region SO:0000001_V_region
+V_region SO:0000938
 	/allele
         /citation
         /db_xref
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
         /map
         /note
  	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
         /product
         /pseudo
         /standard_name
-        # Removed in FT6.5
-        #        /usedin
 
 # variable segment of immunoglobulin light and heavy chains, and
 # T-cell receptor alpha, beta, and gamma chains; codes for most of the
 # variable region (V_region) and the last few amino acids of the
 # leader peptide;
 
-# SO: undefined
-
 #up=CDS
 #org=eukaryotes
 
-V_segment SO:0000001_V_segment
+V_segment  SO:0000466
 	/allele
         /citation
         /db_xref
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
         /map
         /note
  	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
         /product
         /pseudo
         /standard_name
-        # Removed in FT6.5
-        #        /usedin
 
 # a related strain contains stable mutations from the same gene (e.g.,
 # RFLPs, polymorphisms, etc.) which differ from the presented sequence
@@ -1907,26 +1618,21 @@ variation SO:0000109
         /citation
 	/compare
         /db_xref
-        # Removed in FT6.5
-        #        /evidence                     
-	/experiment
+        /experiment
         /frequency
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
         /map
         /note
  	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
-        /phenotype
+	/phenotype
         /product
 	# Use /replace="" for deletion
         /replace
         /standard_name
-        # Removed in FT6.5
-        #        /usedin
 
 # 3'-most region of a precursor transcript that is clipped off during
 # processing;
@@ -1934,26 +1640,23 @@ variation SO:0000109
 # SO: 3'-most region of a precursor transcript that is clipped off
 # during processing.
 
-3'clip SO:0000557
-	/allele
-        /citation
-        /db_xref                   
-        # Removed in FT6.5
-        #        /evidence
-	/experiment
-        /function
-        /gene
-	/inference
-        /label
-	/locus_tag
-        /map
-        /note
- 	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
-        /standard_name
-        # Removed in FT6.5
-        #        /usedin
+# Removed in FTv7.0
+
+#3'clip SO:0000557
+#	/allele
+#       /citation
+#       /db_xref                   
+#	/experiment
+#       /function
+#       /gene
+#       /gene_synonym
+#	/inference
+#       /label
+#	/locus_tag
+#       /map
+#       /note
+# 	/old_locus_tag
+#       /standard_name
 
 # region at the 3' end of a mature transcript (following the stop
 # codon) that is not translated into a protein;
@@ -1966,24 +1669,18 @@ variation SO:0000109
 	/allele
         /citation
         /db_xref                   
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /function
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
         /map
         /note
  	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
         /standard_name
-	# New in FTv6.5
 	/trans_splicing
-        # Removed in FT6.5
-        #        /usedin
 
 # 5'-most region of a precursor transcript that is clipped off during
 # processing;
@@ -1991,26 +1688,22 @@ variation SO:0000109
 # SO: 5' most region of a precursor transcript that is clipped off
 # during processing.
 
-5'clip SO:0000555
-	/allele
-        /citation
-        /db_xref                   
-        # Removed in FT6.5
-        #        /evidence
-	/experiment
-        /function
-        /gene
-	/inference
-        /label
-	/locus_tag
-        /map
-        /note
- 	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
-        /standard_name
-        # Removed in FT6.5
-        #        /usedin
+# Removed in FTv7.0
+#5'clip SO:0000555
+#	/allele
+#       /citation
+#       /db_xref                   
+#	/experiment
+#       /function
+#       /gene
+#       /gene_synonym
+#	/inference
+#       /label
+#	/locus_tag
+#       /map
+#       /note
+# 	/old_locus_tag
+#       /standard_name
 
 # region at the 5' end of a mature transcript (preceding the
 # initiation codon) that is not translated into a protein;
@@ -2022,24 +1715,18 @@ variation SO:0000109
 	/allele
         /citation
         /db_xref                   
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /function
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
         /map
         /note
  	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
         /standard_name
-	# New in FTv6.5
 	/trans_splicing
-        # Removed in FT6.5
-        #        /usedin
 
 # Pribnow box; a conserved region about 10 bp upstream of the start
 # point of bacterial transcription units which may be involved in
@@ -2053,12 +1740,9 @@ variation SO:0000109
 	/allele
         /citation
         /db_xref                   
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
-	# Removed in FTv6.5
-	#        /function
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
@@ -2066,11 +1750,7 @@ variation SO:0000109
         /note
  	/old_locus_tag
 	/operon
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
         /standard_name
-        # Removed in FT6.5
-        #        /usedin
 
 # a conserved hexamer about 35 bp upstream of the start point of
 # bacterial transcription units; consensus=TTGACa or TGTTGACA;
@@ -2085,12 +1765,9 @@ variation SO:0000109
 	/allele
         /citation
         /db_xref                   
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
-	# Removed in FTv6.5
-	#        /function
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
@@ -2098,11 +1775,7 @@ variation SO:0000109
         /note
  	/old_locus_tag
 	/operon
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
         /standard_name
-        # Removed in FT6.5
-        #        /usedin
 
 # "-" is a placeholder for no key; should be used when the need is
 # merely to mark region in order to comment on it or to use it in
@@ -2116,13 +1789,13 @@ variation SO:0000109
 #mol=DNA
 
 - SO:0000001
+	/allele
         /citation
         /db_xref
-        # Removed in FT6.5
-        #        /evidence
 	/experiment
         /function
         /gene
+        /gene_synonym
 	/inference
         /label
 	/locus_tag
@@ -2130,11 +1803,7 @@ variation SO:0000109
         /note
         /number
  	/old_locus_tag
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
         /phenotype
         /product
         /pseudo
         /standard_name
-        # Removed in FT6.5
-        #        /usedin

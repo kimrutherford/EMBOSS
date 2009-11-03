@@ -72,8 +72,11 @@ public class LineAttribute extends JPanel
       }
     });
     group.add(jline);
-    jcirc.setSelected(true);
-    lineAttr.put("circular",new Boolean(true));
+    if (draw.isCircular())
+        jcirc.setSelected(true);
+    else
+        jline.setSelected(true);
+    lineAttr.put("circular",new Boolean(draw.isCircular()));
     bacross.add(jcirc); 
     bacross.add(jline);
     bacross.add(Box.createHorizontalGlue());
@@ -102,8 +105,8 @@ public class LineAttribute extends JPanel
 
     start.setPreferredSize(d);
     start.setMaximumSize(d);
+    bacross.add(new JLabel(" start:"));
     bacross.add(start);
-    bacross.add(new JLabel(" start"));
     bacross.add(Box.createHorizontalGlue());
     bdown.add(bacross);
  
@@ -129,8 +132,8 @@ public class LineAttribute extends JPanel
     else
       end.setValue(1000);
 
+    bacross.add(new JLabel(" stop:"));
     bacross.add(end);
-    bacross.add(new JLabel(" stop"));
     bacross.add(Box.createHorizontalGlue());
     bdown.add(bacross);
 
@@ -144,11 +147,10 @@ public class LineAttribute extends JPanel
     lineAttr.put("lsize",new Integer(lsize));
 
     final JSlider slider = new JSlider(1,20,lsize);
-    lineSize.setPreferredSize(d);
-    lineSize.setMaximumSize(d);
+    lineSize.setColumns(3);
     lineSize.setValue(lsize);
+    bacross.add(new JLabel(" line width:"));
     bacross.add(lineSize);
-    bacross.add(new JLabel(" line width"));
     bacross.add(Box.createHorizontalGlue());
     bdown.add(bacross);
     // change line size on carriage return 

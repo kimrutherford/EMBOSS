@@ -24,7 +24,6 @@
 
 package org.emboss.jemboss.soap;
 
-import java.io.*;
 import java.util.*;
 
 import org.emboss.jemboss.JembossParams;

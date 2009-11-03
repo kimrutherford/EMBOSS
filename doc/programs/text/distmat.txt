@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Create a distance matrix from a multiple sequence alignment
@@ -470,7 +477,7 @@ Known bugs
 
 See also
 
-   Program name Description
+   Program name     Description
 
 Author(s)
 

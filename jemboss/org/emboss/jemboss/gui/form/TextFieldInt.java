@@ -21,7 +21,6 @@
 
 package org.emboss.jemboss.gui.form;
 
-import javax.swing.*; 
 import javax.swing.text.*; 
 
 import java.awt.Toolkit;
@@ -95,7 +94,7 @@ public class TextFieldInt extends TextFieldSink
           if(source[i] != ',')
           {
             toolkit.beep();
-            System.err.println("insertString: " + source[i]);
+            System.err.println("invalid character entered: " + source[i]);
           }
         }
       }

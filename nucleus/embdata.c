@@ -56,11 +56,13 @@ void embDataListDel(AjPList* data)
    AjPTable table;
 
    iter = ajListIterNewread(*data);
+
    while(!ajListIterDone(iter))
    {
       table = ajListIterGet(iter);
       ajTablestrFree(&table);
    }
+
    ajListIterDel(&iter);
    ajListFree(data);
 
@@ -92,11 +94,14 @@ static AjBool dataListNextLine(AjPFile pfile, const char *commentLine,
    AjBool test;
 
    test = ajReadlineTrim(pfile, line);
+
    while(test)
    {
       i = ajStrFindC(*line, commentLine);
+
       if(i!=0)
 	  break;
+
       test = ajReadlineTrim(pfile, line);
    }
 
@@ -148,6 +153,7 @@ void embDataListRead(AjPList data, AjPFile pfile)
 	/* the first token is the key for the row */
 	key = ajStrNew();
 	ajStrTokenNextParse(&tokens, &key);
+
 	if(!ajStrGetLen(key))
 	{
 	    ajFmtError("Error, did not pick up first key");
@@ -161,6 +167,7 @@ void embDataListRead(AjPList data, AjPFile pfile)
 	     ** add (key,value)
 	     */
 	    value = NULL;
+
 	    if(ajStrTokenNextParse(&tokens, &value))
 	    {
 		table = ajTablestrNewCaseLen(350);
@@ -168,6 +175,7 @@ void embDataListRead(AjPList data, AjPFile pfile)
 		ajTablePut(table, copyKey, value);
 		ajListPushAppend(data, table);
 	    }
+
 	    else break;
 	}
 	ajStrDel(&value);
@@ -181,18 +189,25 @@ void embDataListRead(AjPList data, AjPFile pfile)
 	    ajStrTokenDel(&tokens);
 	    tokens = ajStrTokenNewC(line, whiteSpace);
 	    ajStrTokenNextParse(&tokens, &key);
+
 	    /* check for end of data block*/
 	    if(! ajStrCmpC(key, endOfData))
 		break;
+
 	    iter = ajListIterNewread(data);
+
 	    while(!ajListIterDone(iter))
 	    {
 		ptable = ajListIterGet(iter);
 		copyKey = ajStrNewRef(key);
-		if(!ajStrTokenNextParse(&tokens, &tmp)) break;
+
+		if(!ajStrTokenNextParse(&tokens, &tmp))
+                    break;
+
 		value = ajStrNewRef(tmp);
 		ajTablePut(ptable, copyKey, value);
 	    }
+
 	    ajListIterDel(&iter);
 	}
     }
@@ -239,10 +254,14 @@ void embDataListGetTables(const AjPList fullList, AjPList returnList,
    AjPTable table;
 
    iter = ajListIterNewread(fullList);
+
    while(!ajListIterDone(iter))
    {
       table = ajListIterGet(iter);
-      if(required & 1) ajListPushAppend(returnList, table);
+
+      if(required & 1)
+          ajListPushAppend(returnList, table);
+
       required >>= 1;
    }
 
@@ -281,11 +300,14 @@ AjPTable embDataListGetTable(const AjPList fullList, ajuint required)
    AjPTable returnTable = NULL;
 
    iter = ajListIterNewread(fullList);
+
    while(!ajListIterDone(iter))
    {
       returnTable = ajListIterGet(iter);
+
       if(required & 1)
 	  break;
+
       required >>= 1;
    }
 

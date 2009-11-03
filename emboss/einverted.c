@@ -141,7 +141,7 @@ int main(int argc, char **argv)
     seqout    = ajAcdGetSeqout("outseq");
     
 
-    cvt    = ajSeqcvtNewEndC("ACGT");
+    cvt    = ajSeqcvtNewEndC("ACGT"); /* 0-3=ACGT 4=other */
 
     while(ajSeqallNext(seqall, &sequence))
     {

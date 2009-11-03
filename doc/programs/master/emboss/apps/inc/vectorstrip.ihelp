@@ -1,14 +1,14 @@
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
                                   format, or reference (input USA)
-  [-[no]vectorfile]    toggle     [Y] Are your vector sequences in a file?
+  [-[no]readfile]      toggle     [Y] Are your vector sequences in a file?
 *  -vectorsfile        infile     Cloning vector definition file (optional)
    -mismatch           integer    [10] Max allowed % mismatch (Any integer
                                   value)
    -[no]besthits       boolean    [Y] Show only the best hits (minimise
                                   mismatches)?
-*  -linkera            string     The 5' sequence (Any string is accepted)
-*  -linkerb            string     The 3' sequence (Any string is accepted)
+*  -alinker            string     The 5' sequence (Any string is accepted)
+*  -blinker            string     The 3' sequence (Any string is accepted)
   [-outfile]           outfile    [*.vectorstrip] Output file name
   [-outseq]            seqoutall  [<sequence>.<format>] Sequence set(s)
                                   filename and optional format (output USA)

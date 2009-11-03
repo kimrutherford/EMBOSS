@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Generate residue/base frequency table or plot
@@ -42,7 +49,7 @@ Command line arguments
                                   accepted)
 *  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, xterm, png, gif)
+                                  tekt, tek, none, data, das, xterm, png, gif)
 *  -outfile            outfile    [*.freak] Output file name
 
    Additional (Optional) qualifiers:
@@ -139,8 +146,8 @@ RN   [2]
 RP   1-518
 RX   PUBMED; 8395683.
 RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
-RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
-RT   an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma virus";
+RT   "fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
+RT   an antisense sequence in the Finkel-Biskis-Reilly murine sarcoma virus";
 RL   Oncogene 8(9):2537-2546(1993).
 XX
 DR   H-InvDB; HIT000322806.
@@ -161,11 +168,11 @@ FT                   /note="ubiquitin like part"
 FT   CDS             57..458
 FT                   /gene="fau"
 FT                   /db_xref="GDB:135476"
-FT                   /db_xref="GOA:P35544"
 FT                   /db_xref="GOA:P62861"
 FT                   /db_xref="HGNC:3597"
+FT                   /db_xref="HSSP:1GJZ"
+FT                   /db_xref="InterPro:IPR006846"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
-FT                   /db_xref="UniProtKB/Swiss-Prot:P62861"
 FT                   /protein_id="CAA46716.1"
 FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLA
 G
@@ -347,31 +354,31 @@ Known bugs
 
 See also
 
-   Program name Description
-   backtranambig Back-translate a protein sequence to ambiguous
-   nucleotide sequence
-   backtranseq Back-translate a protein sequence to a nucleotide sequence
-   banana Plot bending and curvature data for B-DNA
-   btwisted Calculate the twisting in a B-DNA sequence
-   chaos Draw a chaos game representation plot for a nucleotide sequence
-   charge Draw a protein charge plot
-   checktrans Reports STOP codons and ORF statistics of a protein
-   compseq Calculate the composition of unique words in sequences
-   dan Calculates nucleic acid melting temperature
-   density Draw a nucleic acid density plot
-   emowse Search protein sequences by digest fragment molecular weight
-   iep Calculate the isoelectric point of proteins
-   isochore Plots isochores in DNA sequences
-   mwcontam Find weights common to multiple molecular weights files
-   mwfilter Filter noisy data from molecular weights file
-   octanol Draw a White-Wimley protein hydropathy plot
-   pepinfo Plot amino acid properties of a protein sequence in parallel
-   pepstats Calculates statistics of protein properties
-   pepwindow Draw a Kyte-Doolittle hydropathy plot for a protein sequence
-   pepwindowall Draw Kyte-Doolittle hydropathy plot for a protein
-   alignment
-   sirna Finds siRNA duplexes in mRNA
-   wordcount Count and extract unique words in DNA sequence(s)
+   Program name     Description
+   backtranambig    Back-translate a protein sequence to ambiguous
+                    nucleotide sequence
+   backtranseq      Back-translate a protein sequence to a nucleotide sequence
+   banana           Plot bending and curvature data for B-DNA
+   btwisted         Calculate the twisting in a B-DNA sequence
+   chaos            Draw a chaos game representation plot for a nucleotide sequence
+   charge           Draw a protein charge plot
+   checktrans       Reports STOP codons and ORF statistics of a protein
+   compseq          Calculate the composition of unique words in sequences
+   dan              Calculates nucleic acid melting temperature
+   density          Draw a nucleic acid density plot
+   emowse           Search protein sequences by digest fragment molecular weight
+   iep              Calculate the isoelectric point of proteins
+   isochore         Plots isochores in DNA sequences
+   mwcontam         Find weights common to multiple molecular weights files
+   mwfilter         Filter noisy data from molecular weights file
+   octanol          Draw a White-Wimley protein hydropathy plot
+   pepinfo          Plot amino acid properties of a protein sequence in parallel
+   pepstats         Calculates statistics of protein properties
+   pepwindow        Draw a hydropathy plot for a protein sequence
+   pepwindowall     Draw Kyte-Doolittle hydropathy plot for a protein
+                    alignment
+   sirna            Finds siRNA duplexes in mRNA
+   wordcount        Count and extract unique words in DNA sequence(s)
 
 Author(s)
 

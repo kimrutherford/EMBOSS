@@ -152,6 +152,7 @@ EmbPMatPrints embMatProtReadInt(AjPFile fp)
     line = ajStrNewC("#");
 
     p = ajStrGetPtr(line);
+
     while(!*p || *p=='#' || *p=='!' || *p=='\n')
     {
 	if(!ajReadlineTrim(fp,&line))
@@ -159,6 +160,7 @@ EmbPMatPrints embMatProtReadInt(AjPFile fp)
 	    ajStrDel(&line);
 	    return NULL;
 	}
+
 	p = ajStrGetPtr(line);
     }
 
@@ -195,18 +197,21 @@ EmbPMatPrints embMatProtReadInt(AjPFile fp)
 	ajStrToUint(line,&ret->max[m]);
 	ajDebug ("m: %d/%d len:%d thresh:%d max:%d\n",
 		 m, ret->n, ret->len[m], ret->thresh[m], ret->max[m]);
+
 	for(i=0;i<26;++i)
 	{
 	    AJCNEW0(ret->matrix[m][i], ret->len[m]);
 	    ajReadlineTrim(fp,&line);
 	    ajDebug ("Linec [%d][%d]: %S\n", m, i, line);
 	    p = ajStrGetPtr(line);
+
 	    for(j=0;j<ret->len[m];++j)
 	    {
 		if(!j)
 		    p = ajSysFuncStrtok(p," ");
 		else
 		    p = ajSysFuncStrtok(NULL," ");
+
 		sscanf(p,"%d",&ret->matrix[m][i][j]);
 	    }
 	}
@@ -305,8 +310,10 @@ ajuint embMatProtScanInt(const AjPStr s, const AjPStr n, const EmbPMatPrints m,
     ajStrFmtUpper(&t);
     p = q = ajStrGetuniquePtr(&t);
     slen = ajStrGetLen(t);
+
     for(i=0;i<slen;++i,++p)
 	*p = ajSysCastItoc(ajBasecodeToInt((ajint)*p));
+
     p = q;
 
     *all = *ordered = ajTrue;
@@ -323,12 +330,16 @@ ajuint embMatProtScanInt(const AjPStr s, const AjPStr n, const EmbPMatPrints m,
 	maxscore = (m)->max[elem];
 
 	limit = slen-mlen;
+
 	for(i=0;i<limit;++i)
 	{
 	    sum = 0;
+
 	    for(j=0;j<mlen;++j)
 		sum += (m)->matrix[elem][(ajint) p[i+j]][j];
+
 	    score = (sum*100)/maxscore;
+
 	    if(score>=minpc)
 	    {
 		if(elem<lastelem && *ordered)
@@ -342,10 +353,13 @@ ajuint embMatProtScanInt(const AjPStr s, const AjPStr n, const EmbPMatPrints m,
 		    {
 			lastelem = elem;
 			op = i;
+
 			if(!overlap)
 			    op += mlen;
+
 			if(op >= lastpos)
 			    *ordered = ajFalse;
+
 			lastpos = i;
 		    }
 		}
@@ -355,6 +369,7 @@ ajuint embMatProtScanInt(const AjPStr s, const AjPStr n, const EmbPMatPrints m,
 		matPushHitInt(n,m,l,i,score,elem,hpe,hpm);
 	    }
 	}
+
 	if(!hpe)
 	    *all = ajFalse;
     }
@@ -362,9 +377,11 @@ ajuint embMatProtScanInt(const AjPStr s, const AjPStr n, const EmbPMatPrints m,
     if(hpm)
     {
 	ajListPop(*l,(void **)&mm);
+
 	if(*all)
 	{
 	    mm->all = ajTrue;
+
 	    if(*ordered)
 		mm->ordered = ajTrue;
 	    else
@@ -373,11 +390,13 @@ ajuint embMatProtScanInt(const AjPStr s, const AjPStr n, const EmbPMatPrints m,
 	else
 	{
 	    mm->all = ajFalse;
+
 	    if(*ordered)
 		mm->ordered = ajTrue;
 	    else
 		mm->ordered = ajFalse;
 	}
+
 	ajListPush(*l,(void *)mm);
     }
 

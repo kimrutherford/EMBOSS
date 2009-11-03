@@ -94,6 +94,7 @@ AjPRegexp ajRegCompC(const char* exp)
     AJCNEW0(ret->ovector, AJREG_OVECSIZE);
     ret->ovecsize = AJREG_OVECSIZE/3;
     ret->pcre = pcre_compile(exp, options, &errptr, &errpos, tableptr);
+
     if(!ret->pcre)
     {
 	ajErr("Failed to compile regular expression '%s' at position %d: %s",
@@ -130,7 +131,6 @@ AjPRegexp ajRegCompCase(const AjPStr exp)
 
 
 
-
 /* @func ajRegCompCaseC *******************************************************
 **
 ** Compiles a case-insensitive regular expression.
@@ -152,11 +152,13 @@ AjPRegexp ajRegCompCaseC(const char* exp)
     AJCNEW0(ret->ovector, AJREG_OVECSIZE);
     ret->ovecsize = AJREG_OVECSIZE/3;
     ret->pcre = pcre_compile(exp, options, &errptr, &errpos, tableptr);
+
     if(!ret->pcre)
     {
 	ajErr("Failed to compile regular expression '%s' at position %d: %s",
 	      exp, errpos, errptr);
 	AJFREE(ret);
+
 	return NULL;
     }
 
@@ -194,14 +196,17 @@ AjBool ajRegExec(AjPRegexp prog, const AjPStr str)
     int options     = 0;
     int status      = 0;
 
-    status = pcre_exec(prog->pcre, prog->extra, ajStrGetPtr(str), ajStrGetLen(str),
-		       startoffset, options, prog->ovector, 3*prog->ovecsize);
+    status = pcre_exec(prog->pcre, prog->extra, ajStrGetPtr(str),
+                       ajStrGetLen(str), startoffset, options, prog->ovector,
+                       3*prog->ovecsize);
 
     if(status >= 0)
     {
 	prog->orig = ajStrGetPtr(str);
+
 	if(status == 0)
 	    ajWarn("ajRegExec too many substrings");
+
 	return ajTrue;
     }
 
@@ -246,8 +251,10 @@ AjBool ajRegExecC(AjPRegexp prog, const char* str)
     if(status >= 0)
     {
 	prog->orig = str;
+
 	if(status == 0)
 	    ajWarn("ajRegExecC too many substrings");
+
 	return ajTrue;
     }
 
@@ -365,6 +372,7 @@ AjBool ajRegPost(const AjPRegexp rp, AjPStr* post)
     if(rp->ovector[1])
     {
 	ajStrAssignC(post, &rp->orig[rp->ovector[1]]);
+
 	return ajTrue;
     }
 
@@ -394,6 +402,7 @@ AjBool ajRegPostC(const AjPRegexp rp, const char** post)
     if(rp->ovector[1])
     {
 	*post = &rp->orig[rp->ovector[1]];
+
 	return ajTrue;
     }
 
@@ -421,6 +430,7 @@ AjBool ajRegPre(const AjPRegexp rp, AjPStr* dest)
 
     ilen = rp->ovector[0];
     ajStrSetRes(dest, ilen+1);
+
     if(ilen)
     {
 	memmove((*dest)->Ptr, rp->orig, ilen);
@@ -434,7 +444,6 @@ AjBool ajRegPre(const AjPRegexp rp, AjPStr* dest)
 
     return ajFalse;
 }
-
 
 
 
@@ -464,23 +473,27 @@ AjBool ajRegSubI(const AjPRegexp rp, ajint isub, AjPStr* dest)
     if(isub < 0)
     {
 	ajStrDelStatic(dest);
+
 	return ajFalse;
     }
 
     if(isub >= rp->ovecsize)
     {
 	ajStrDelStatic(dest);
+
 	return ajFalse;
     }
 
     if(rp->ovector[istart] < 0)
     {
 	ajStrDelStatic(dest);
+
 	return ajFalse;
     }
 
     ilen = rp->ovector[iend] - rp->ovector[istart];
     ajStrSetRes(dest, ilen+1);
+
     if(ilen)
 	memmove((*dest)->Ptr, &rp->orig[rp->ovector[istart]], ilen);
     (*dest)->Len = ilen;
@@ -522,10 +535,13 @@ void ajRegFree(AjPRegexp* pexp)
 
     regFreeCount += 1;
     regFree += sizeof(*exp);
+
     if(exp->pcre)
 	regFree += sizeof(exp->pcre);
+
     if(exp->extra)
 	regFree += sizeof(exp->extra);
+
     regTotal --;
 
     AJFREE(exp->pcre);
@@ -558,6 +574,7 @@ void ajRegTrace(const AjPRegexp exp)
     static AjPStr str = NULL;
 
     ajDebug("  REGEXP trace\n");
+
     if (!exp->orig)
 	ajDebug("original string not saved - unable to trace string values\n");
 
@@ -565,19 +582,19 @@ void ajRegTrace(const AjPRegexp exp)
     {
 	istart = 2*isub;
 	iend   = istart+1;
-	if (!exp->orig) {
+
+	if (!exp->orig)
+        {
 	    if(!isub)
-	    {
 		ajDebug("original string from %d .. %d\n",
 			exp->ovector[istart], exp->ovector[iend]);
-	    }
 	    else
-	    {
 		ajDebug("substring %2d from %d .. %d\n",
 			isub, exp->ovector[istart], exp->ovector[iend]);
-	    }
+
 	    continue;
 	}
+
 	if(exp->ovector[iend] >= exp->ovector[istart])
 	{
 	    ilen = exp->ovector[iend] - exp->ovector[istart];
@@ -585,6 +602,7 @@ void ajRegTrace(const AjPRegexp exp)
 	    memmove(str->Ptr, &exp->orig[exp->ovector[istart]], ilen);
 	    str->Len = ilen;
 	    str->Ptr[ilen] = '\0';
+
 	    if(!isub)
 	    {
 		ajDebug(" original string '%s'\n", exp->orig);
@@ -597,6 +615,7 @@ void ajRegTrace(const AjPRegexp exp)
 	    }
 	}
     }
+
     ajDebug("\n");
 
     ajStrDel(&str);
@@ -617,7 +636,8 @@ void ajRegTrace(const AjPRegexp exp)
 
 void ajRegExit(void)
 {
-    ajDebug("Regexp usage (bytes): %Ld allocated, %Ld freed, %Ld in use (sizes change)\n",
+    ajDebug("Regexp usage (bytes): %Ld allocated, %Ld freed, %Ld in use "
+            "(sizes change)\n",
 	    regAlloc, regFree, (regAlloc - regFree));
     ajDebug("Regexp usage (number): %Ld allocated, %Ld freed %Ld in use\n",
 	    regCount, regFreeCount, regTotal);

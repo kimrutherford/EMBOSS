@@ -22,6 +22,18 @@ dan
 
 
 <H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
     Function
 </H2>
 Calculates nucleic acid melting temperature
@@ -29,14 +41,33 @@ Calculates nucleic acid melting temperature
     Description
 </H2>
 
-<p><B>Dan</B> calculates the melting temperature (Tm) and the percentage of G+C nucleotides for windows over a nucleic acid sequence, optionally plotting them.  If a plot is not being produced, <b>dan</b> reports the sequence of each oligomer window, its melting temperature under the specified conditions and its percentage GC content.  The change in enthalpy (H), entropy (S) and Gibbs free energy (S) for dissociation of the oligomers may (optionally) be reported to file (but not plotted).</p>
+<p><B>Dan</B> calculates the melting temperature (Tm) and the
+percentage of G+C nucleotides for windows over a nucleic acid
+sequence, optionally plotting them.  If a plot is not being
+produced, <b>dan</b> reports the sequence of each oligomer window, its
+melting temperature under the specified conditions and its percentage
+GC content.  The change in enthalpy (H), entropy (S) and Gibbs free
+energy (S) for dissociation of the oligomers may (optionally) be
+reported to file (but not plotted).</p>
 
 <H2>
 Algorithm
 </H2>
 
-<p>The values of melting point and other thermodynamic properties of the sequence, namely change in enthalpy (H), entropy (S) and Gibbs free energy (S) on dissociation, are calculated for a sequence region (or "window") of a user-specified size (see "-windowsize" option).  The window is incrementally moved along the sequence with the properties being calculated at each new position.  The user must provide the salt and DNA concentration. Optionally, the percent formamide, percent of mismatches allowed and product length may be specified.
-<p>For the Melting temperature profile, free energy values calculated from nearest neighbor thermodynamics are used (Breslauer et al. Proc. Natl. Acad. Sci. USA 83, 3746-3750 and Baldino et al. Methods in Enzymol. 168, 761-777).</p>
+<p>The values of melting point and other thermodynamic properties of
+the sequence, namely change in enthalpy (H), entropy (S) and Gibbs
+free energy (S) on dissociation, are calculated for a sequence region
+(or "window") of a user-specified size (see "-windowsize" option).
+The window is incrementally moved along the sequence with the
+properties being calculated at each new position.  The user must
+provide the salt and DNA concentration. Optionally, the percent
+formamide, percent of mismatches allowed and product length may be
+specified.
+<p>For the melting temperature profile, free energy values calculated
+from nearest neighbor thermodynamics are used (Breslauer et
+al. Proc. Natl. Acad. Sci. USA 83, 3746-3750, Baldino et al. Methods
+in Enzymol. 168, 761-777, Allawi and SantaLucia (1997), Biochemistry
+36:10581-10594).</p>
 
 
 <H2>
@@ -116,7 +147,7 @@ Created dan.ps
                                   (Number from 0.000 to 150.000)
 *  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, xterm, png, gif)
+                                  tekt, tek, none, data, das, xterm, png, gif)
 *  -outfile            report     [*.dan] If a plot is not being produced then
                                   data on the melting point etc. in each
                                   window along the sequence is output to the
@@ -265,7 +296,7 @@ Created dan.ps
 <tr>
 <td>-graph</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, xterm, png, gif</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, das, xterm, png, gif</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -389,17 +420,17 @@ RP   1167-2167
 RX   DOI; 10.1016/0014-5793(89)80249-2.
 RX   PUBMED; 2495988.
 RA   Lowe N., Rice P.M., Drew R.E.;
-RT   "Nucleotide sequence of the aliphatic amidase regulator gene of Pseudomonas
-RT   aeruginosa";
+RT   "Nucleotide sequence of the aliphatic amidase regulator gene (amiR) of
+RT   Pseudomonas aeruginosa";
 RL   FEBS Lett. 246(1-2):39-43(1989).
 XX
 RN   [3]
 RP   1-1292
 RX   PUBMED; 1907262.
 RA   Wilson S., Drew R.;
-RT   "Cloning and DNA seqence of amiC, a new gene regulating expression of the
+RT   "Cloning and DNA sequence of amiC, a new gene regulating expression of the
 RT   Pseudomonas aeruginosa aliphatic amidase, and purification of the amiC
-RT   product.";
+RT   product";
 RL   J. Bacteriol. 173(16):4914-4921(1991).
 XX
 RN   [4]
@@ -410,8 +441,8 @@ RL   Submitted (04-SEP-1991) to the EMBL/GenBank/DDBJ databases.
 RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
 XX
 DR   GOA; Q51417.
+DR   InterPro; IPR003211; AmiSUreI_transpt.
 DR   UniProtKB/Swiss-Prot; Q51417; AMIS_PSEAE.
-XX
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
@@ -704,7 +735,14 @@ The directories are searched in the following order:
     Notes
 </H2>
 
-<p>The enthalpy of a reaction equates to the "heat" of the reaction so long as temperate and pressure are constant.  Enthalpy depends upon the strength of the chemical bonds and non-bonding interactions involved.  The entropy of a reaction reflects the level of disorder or randomness of the molecules involved. The higher the entropy, the greater the disorder.  The free energy of a reaction reflects it's ability to do work.  It helps one determine whether a reaction is feasible given a set of conditions and it's quilibrium.</p>
+<p>The enthalpy of a reaction equates to the "heat" of the reaction so
+long as temperate and pressure are constant.  Enthalpy depends upon
+the strength of the chemical bonds and non-bonding interactions
+involved.  The entropy of a reaction reflects the level of disorder or
+randomness of the molecules involved. The higher the entropy, the
+greater the disorder.  The free energy of a reaction reflects it's
+ability to do work.  It helps one determine whether a reaction is
+feasible given a set of conditions and it's quilibrium.</p>
 
 
 <H2>
@@ -723,6 +761,10 @@ Baldino, M., Jr.  (1989).  "High Resolution In Situ Hybridization
 Histochemistry." In Methods in Enzymology, (P.M.  Conn, ed.), 168,
 761-777, Academic Press, San Diego, California, USA. 
 
+<li>
+Allawi H.T. and SantaLucia J. Jr. (1997),
+"Thermodynamics and NMR of Internal G*T Mismatches in DNA"
+Biochemistry 36, 10581-10594.
 </ol>
 
 <H2>

@@ -1,0 +1,38 @@
+########################################
+# Program: dbifasta
+# Rundate: Wed 15 Jul 2009 12:00:00
+# Dbname: TESTDB
+# Release: 0.0
+# Date: 15/07/09
+# CurrentDirectory: /data2/users/pmr/cvsemboss/test/testdb/
+# IndexDirectory: ./
+# IndexDirectoryPath: /data2/users/pmr/cvsemboss/test/testdb/
+# Maxindex: 0
+# Fields: 3
+#   Field 1: id
+#   Field 2: acc
+#   Field 3: des
+# Directory: ./
+# DirectoryPath: /data2/users/pmr/cvsemboss/test/testdb/
+# Filenames: testdb.fasta
+# Exclude: 
+# Files: 1
+#   File 1: ./testdb.fasta
+########################################
+# Commandline: dbifasta
+#    -fields acnum,des
+#    -dbname TESTDB
+#    -idformat idacc
+#    -filenames testdb.fasta
+#    -auto
+########################################
+
+filename: 'testdb.fasta'
+    id: 4
+   acc: 4
+   des: 28
+
+Index acc: maxlen 8 items 4
+Index des: maxlen 8 items 7
+
+Total 1 files 4 entries (0 duplicates)

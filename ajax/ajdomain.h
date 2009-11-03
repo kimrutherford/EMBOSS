@@ -413,6 +413,8 @@ AjPStr      ajDomainGetAcc(const AjPDomain obj);
 AjPStr      ajDomainGetSpr(const AjPDomain obj);
 ajint       ajDomainGetN(const AjPDomain obj);
 
+void ajDomainExit(void);
+
 /*
 ** End of prototype definitions
 */

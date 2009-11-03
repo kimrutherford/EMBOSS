@@ -1,4 +1,4 @@
-/* $Id: plplotP.h,v 1.5 2007/05/17 10:37:26 ajb Exp $
+/* $Id: plplotP.h,v 1.6 2009/01/26 14:28:59 rice Exp $
 
     Internal (private) macros and prototypes for the PLplot package.  This
     header file must be included before all others, including system header
@@ -361,10 +361,10 @@ extern PLDLLIMPEXP_DATA(PLStream *)plsc;
  * TCL_DIR.
 \*--------------------------------------------------------------------------*/
 
-#define PLPLOT_BIN_ENV          "PLPLOT_BIN"
-#define PLPLOT_LIB_ENV          "PLPLOT_LIB"
-#define PLPLOT_TCL_ENV          "PLPLOT_TCL"
-#define PLPLOT_HOME_ENV         "PLPLOT_HOME"
+#define PLPLOT_BIN_ENV          "EPLPLOT_BIN"
+#define PLPLOT_LIB_ENV          "EPLPLOT_LIB"
+#define PLPLOT_TCL_ENV          "EPLPLOT_TCL"
+#define PLPLOT_HOME_ENV         "EPLPLOT_HOME"
 
 /*
  *   Some stuff that is included (and compiled into) plsym.h

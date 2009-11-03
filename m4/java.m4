@@ -10,7 +10,7 @@ AC_DEFUN([CHECK_JAVA],
 #
 [AC_MSG_CHECKING(if java include directory given)
 AC_ARG_WITH(java,
-[  --with-java=DIR         root directory path of java  installation
+[  --with-java=DIR         root directory path of java installation
   --without-java          to disable java],
 [if test "$withval" != no ; then
   AC_MSG_RESULT(yes)
@@ -28,6 +28,9 @@ AC_ARG_WITH(java,
   echo "Error: Either JAVA not installed or 'javac' not in your PATH"
   exit 1
   fi
+  if test -f /etc/debian_release || test -f /etc/debian_version ; then
+     CFLAGS="$CFLAGS -DDEBIAN"
+  fi
   JAVA_OK=yes
   AC_SUBST(JAVA_OK)
 else
@@ -43,7 +46,7 @@ AC_MSG_RESULT(no)
 
 if test -n "${JALT_HOME}"
 then
-	CPPFLAGS="$CPPFLAGS -I${JALT_HOME}"
+	CFLAGS="$CFLAGS -I${JALT_HOME}"
 fi
 
 ])
@@ -78,7 +81,7 @@ AC_MSG_RESULT(no)
 
 if test -n "${ALT_HOMEOS}"
 then
-	CPPFLAGS="$CPPFLAGS -I${ALT_HOMEOS}"
+	CFLAGS="$CFLAGS -I${ALT_HOMEOS}"
 fi
 
 
@@ -138,9 +141,9 @@ AC_MSG_RESULT(no)
 
 if test -n "${ALT_AUTHTYPE}"
 then
-	CPPFLAGS="$CPPFLAGS ${ALT_AUTHTYPE}"
+	CFLAGS="$CFLAGS ${ALT_AUTHTYPE}"
 else
-	CPPFLAGS="$CPPFLAGS -DNO_AUTH"
+	CFLAGS="$CFLAGS -DNO_AUTH"
 fi
 
 

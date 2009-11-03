@@ -64,7 +64,7 @@
                                   24-45 blue 56-78 orange
                                   1-100 green 120-156 red
                                   A file of ranges to colour (one range per
-                                  line) can be specifed as '@filename'.
+                                  line) can be specified as '@filename'.
    -[no]number         boolean    [Y] Number the sequence at the beginning and
                                   the end of each line.
    -width              integer    [60] Number of nucleotides displayed on each

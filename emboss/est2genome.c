@@ -139,7 +139,7 @@ int main(int argc, char **argv)
     if(doreverse)
 	isreverse = 1;
 
-    splice = ajAcdGetBoolean("splice");
+    splice = ajAcdGetBoolean("usesplice");
 
     /* Print the alignment */
     align = ajAcdGetBoolean("align");

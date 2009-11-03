@@ -12,7 +12,7 @@ XX
 AC   BA000025; AP000502-AP000521;
 XX
 DT   09-DEC-2004 (Rel. 82, Created)
-DT   14-NOV-2006 (Rel. 89, Last updated, Version 4)
+DT   17-JUN-2008 (Rel. 96, Last updated, Version 5)
 XX
 DE   Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
 XX
@@ -50,13 +50,13 @@ DR   EPD; EP74389; HS_BAT1.
 DR   EPD; EP74485; HS_IER3.
 DR   GDB; 11515913.
 DR   GOA; P59942.
-DR   IMGT/HLA; HLA02629; J*01010102.
-DR   RFAM; RF00017.
-DR   RFAM; RF00019.
-DR   RFAM; RF00026.
-DR   RFAM; RF00100.
-DR   RFAM; RF00137.
-DR   RFAM; RF00276.
+DR   HGNC; 20668; MCCD1.
+DR   IMGT/HLA; HLA02802; V*01010102.
+DR   RFAM; RF00994; mir-1255.
+DR   UniProtKB/Swiss-Prot; P59942; MCCD1_HUMAN.
+XX
+CC   This sequence is conducted by Tokai University as a JST sequencing
+CC   Team.
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>

@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Replace or delete sequence sections
@@ -14,6 +21,7 @@ Description
    insert subsequence, or optionally, just deletes the target subsequence
    where found. If the target subsequence occurs more than once, then
    each instance of the target is replaced or deleted.
+
    The -position option allows a sequence position to be specified as an
    additional constraint for the match: a replacement / deletion only
    occurs if the start of a match is at the specified -position position.
@@ -157,8 +165,8 @@ RN   [2]
 RP   1-518
 RX   PUBMED; 8395683.
 RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
-RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
-RT   an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma virus";
+RT   "fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
+RT   an antisense sequence in the Finkel-Biskis-Reilly murine sarcoma virus";
 RL   Oncogene 8(9):2537-2546(1993).
 XX
 DR   H-InvDB; HIT000322806.
@@ -179,11 +187,11 @@ FT                   /note="ubiquitin like part"
 FT   CDS             57..458
 FT                   /gene="fau"
 FT                   /db_xref="GDB:135476"
-FT                   /db_xref="GOA:P35544"
 FT                   /db_xref="GOA:P62861"
 FT                   /db_xref="HGNC:3597"
+FT                   /db_xref="HSSP:1GJZ"
+FT                   /db_xref="InterPro:IPR006846"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
-FT                   /db_xref="UniProtKB/Swiss-Prot:P62861"
 FT                   /protein_id="CAA46716.1"
 FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLA
 G
@@ -229,8 +237,8 @@ ID   AMIR_PSEAE              Reviewed;         196 AA.
 AC   P10932;
 DT   01-JUL-1989, integrated into UniProtKB/Swiss-Prot.
 DT   08-DEC-2000, sequence version 2.
-DT   20-MAR-2007, entry version 55.
-DE   Aliphatic amidase regulator.
+DT   16-JUN-2009, entry version 72.
+DE   RecName: Full=Aliphatic amidase regulator;
 GN   Name=amiR; OrderedLocusNames=PA3363;
 OS   Pseudomonas aeruginosa.
 OC   Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadales;
@@ -279,36 +287,36 @@ CC       aliphatic amidase. Acts as a transcriptional antitermination
 
   [Part of this file has been deleted for brevity]
 
-CC   -!- SIMILARITY: Contains 1 ANTAR domain.
-CC   -----------------------------------------------------------------------
-CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
-CC   Distributed under the Creative Commons Attribution-NoDerivs License
-CC   -----------------------------------------------------------------------
-DR   EMBL; X13776; CAA32023.1; -; Genomic_DNA.
-DR   EMBL; AE004091; AAG06751.1; -; Genomic_DNA.
-DR   PIR; B83226; B83226.
-DR   PIR; S03884; S03884.
-DR   PDB; 1QO0; X-ray; D/E=1-196.
-DR   IntAct; P10932; -.
+DR   RefSeq; NP_252053.1; -.
+DR   PDB; 1QO0; X-ray; 2.25 A; D/E=1-196.
+DR   PDBsum; 1QO0; -.
+DR   GeneID; 880573; -.
 DR   GenomeReviews; AE004091_GR; PA3363.
 DR   KEGG; pae:PA3363; -.
-DR   BioCyc; PAER287:PA3363-MONOMER; -.
+DR   PseudoCAP; PA3363; -.
+DR   HOGENOM; P10932; -.
+DR   OMA; P10932; QLQRIGC.
+DR   BioCyc; PAER208964:PA3363-MON; -.
+DR   GO; GO:0006350; P:transcription; IEA:UniProtKB-KW.
+DR   GO; GO:0031564; P:transcription antitermination; IEA:UniProtKB-KW.
 DR   InterPro; IPR005561; AmiR_NasR_reg.
-DR   InterPro; IPR011006; CheY_like.
-DR   InterPro; IPR008327; Res_reg_antiterm.
+DR   InterPro; IPR008327; Sig_transdc_resp-reg_antiterm.
+DR   InterPro; IPR011991; Wing_hlx_DNA_bd.
+DR   Gene3D; G3DSA:1.10.10.10; Wing_hlx_DNA_bd; 1.
 DR   Pfam; PF03861; ANTAR; 1.
 DR   PIRSF; PIRSF036382; RR_antiterm; 1.
 DR   PROSITE; PS50921; ANTAR; 1.
+PE   1: Evidence at protein level;
 KW   3D-structure; Complete proteome; Transcription;
 KW   Transcription antitermination; Transcription regulation.
 FT   CHAIN         1    196       Aliphatic amidase regulator.
 FT                                /FTId=PRO_0000064582.
 FT   DOMAIN      129    190       ANTAR.
-FT   CONFLICT     48     48       S -> A (in Ref. 1).
-FT   CONFLICT     64     64       R -> G (in Ref. 1).
-FT   CONFLICT    141    141       E -> D (in Ref. 1).
-FT   CONFLICT    154    154       A -> V (in Ref. 1).
-FT   CONFLICT    170    170       Y -> H (in Ref. 1).
+FT   CONFLICT     48     48       S -> A (in Ref. 1; CAA32023).
+FT   CONFLICT     64     64       R -> G (in Ref. 1; CAA32023).
+FT   CONFLICT    141    141       E -> D (in Ref. 1; CAA32023).
+FT   CONFLICT    154    154       A -> V (in Ref. 1; CAA32023).
+FT   CONFLICT    170    170       Y -> H (in Ref. 1; CAA32023).
 FT   HELIX         3      8
 FT   HELIX         9     12
 FT   STRAND       14     19
@@ -356,7 +364,7 @@ UCUAAUAAAAAAGCCACUUAGUUCAGUCAAAAAAAAAA
 
   File: amir_pseae.pep
 
->AMIR_PSEAE P10932 Aliphatic amidase regulator.
+>AMIR_PSEAE P10932 Aliphatic amidase regulator
 MSANSLLGSLRELQVLVLNPPGEVSDALVLQLIRIGCSVRQCWXXPPPXXESFDVPVDVV
 FTSIFQNRHHDEIAALLAAGTPRTTLVALVEYESPAVLSQIIELECHGVITQPLDAHRVL
 PVLVSARRISEEMAKLKQKTEQLQERIAGQARINQAKALLMQRHGWDEREAHQYLSREAM
@@ -388,3 +396,78 @@ Diagnostic Error Messages
    None.
 
 Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name     Description
+   aligncopy        Reads and writes alignments
+   aligncopypair    Reads and writes pairs from alignments
+   codcopy          Copy and reformat a codon usage table
+   cutseq           Removes a section from a sequence
+   degapseq         Removes non-alphabetic (e.g. gap) characters from sequences
+   descseq          Alter the name or description of a sequence
+   entret           Retrieves sequence entries from flatfile databases and files
+   extractalign     Extract regions from a sequence alignment
+   extractfeat      Extract features from sequence(s)
+   extractseq       Extract regions from a sequence
+   featcopy         Reads and writes a feature table
+   featreport       Reads and writes a feature table
+   listor           Write a list file of the logical OR of two sets of sequences
+   makenucseq       Create random nucleotide sequences
+   makeprotseq      Create random protein sequences
+   maskambignuc     Masks all ambiguity characters in nucleotide sequences
+   with             N
+   maskambigprot    Masks all ambiguity characters in protein sequences with
+                    X
+   maskfeat         Write a sequence with masked features
+   maskseq          Write a sequence with masked regions
+   newseq           Create a sequence file from a typed-in sequence
+   nohtml           Remove mark-up (e.g. HTML tags) from an ASCII text file
+   noreturn         Remove carriage return from ASCII files
+   nospace          Remove all whitespace from an ASCII text file
+   notab            Replace tabs with spaces in an ASCII text file
+   notseq           Write to file a subset of an input stream of sequences
+   nthseq           Write to file a single sequence from an input stream of
+                    sequences
+   nthseqset        Reads and writes (returns) one set of sequences from many
+   pasteseq         Insert one sequence into another
+   revseq           Reverse and complement a nucleotide sequence
+   seqret           Reads and writes (returns) sequences
+   seqretsetall     Reads and writes (returns) many sets of sequences
+   seqretsplit      Reads sequences and writes them to individual files
+   sizeseq          Sort sequences by size
+   skipredundant    Remove redundant sequences from an input set
+   skipseq          Reads and writes (returns) sequences, skipping first few
+   splitsource      Split sequence(s) into original source sequences
+   splitter         Split sequence(s) into smaller sequences
+   trimest          Remove poly-A tails from nucleotide sequences
+   trimseq          Remove unwanted characters from start and end of sequence(s)
+   trimspace        Remove extra whitespace from an ASCII text file
+   union            Concatenate multiple sequences into a single sequence
+   vectorstrip      Removes vectors from the ends of nucleotide sequence(s)
+   yank             Add a sequence reference (a full USA) to a list file
+
+Author(s)
+
+   Alan Bleasby (ajb © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
+
+History
+
+   Written (Jan 2002) - Alan Bleasby
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

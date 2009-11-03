@@ -32,7 +32,7 @@
 
 
 X65923 284-284 Length: 1
-Feature: CDS 57-458 gene='fau' db_xref='GDB:135476' db_xref='GOA:P35544' db_xref='GOA:P62861' db_xref='HGNC:3597' db_xref='UniProtKB/Swiss-Prot:P35544' db_xref='UniProtKB/Swiss-Prot:P62861' protein_id='CAA46716.1'
+Feature: CDS 57-458 gene='fau' db_xref='GDB:135476' db_xref='GOA:P62861' db_xref='HGNC:3597' db_xref='HSSP:1GJZ' db_xref='InterPro:IPR006846' db_xref='UniProtKB/Swiss-Prot:P35544' protein_id='CAA46716.1'
 Feature: misc_feature 279-458 note='S30 part'
 Sequence: t
 Sequence: c
@@ -51,8 +51,10 @@ AY411291 228-228 Length: 1
 #---------------------------------------
 
 #---------------------------------------
-# Total_sequences: 1
-# Total_hitcount: 1
+# Total_sequences: 2
+# Total_length: 920
+# Reported_sequences: 1
+# Reported_hitcount: 1
 #---------------------------------------
 </pre>
 </td></tr></table><p>
@@ -63,7 +65,7 @@ AY411291 228-228 Length: 1
 ##sequence-region AY411291 1 402
 #!Date 2008-07-15
 #!Type DNA
-#!Source-version EMBOSS 6.0.0
+#!Source-version EMBOSS 6.1.0
 AY411291	diffseq	sequence_conflict	228	228	1.000	+	.	ID="AY411291.1";note="SNP in X65923";replace="t"
 </pre>
 </td></tr></table><p>
@@ -74,7 +76,7 @@ AY411291	diffseq	sequence_conflict	228	228	1.000	+	.	ID="AY411291.1";note="SNP i
 ##sequence-region X65923 1 518
 #!Date 2008-07-15
 #!Type DNA
-#!Source-version EMBOSS 6.0.0
+#!Source-version EMBOSS 6.1.0
 X65923	diffseq	sequence_conflict	284	284	1.000	+	.	ID="X65923.1";note="SNP in AY411291";replace="c"
 </pre>
 </td></tr></table><p>

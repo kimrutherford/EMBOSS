@@ -1,0 +1,43 @@
+DBX indexing internals
+
+Pagesize determines the size of each page in an index
+
+Cachesize determines the number of pages maintained in a cache when
+writing or reading.
+
+Pages are one of the following types, defined as a value in the page:
+
+Value Type      Description
+
+    1 root      Root page
+    2 internal  Internal page
+    4 leaf      Leaf node
+    8 bucket    Bucket node for string key
+   16 overflow  Overflow page (not used)
+   32 pribucket Primary key bucket
+   64 secbucket Secondary key bucket
+  128 numbucket Numeric key bucket
+
+Indexed key terms are stored in a single buckets.
+
+For the main keys (id, ac, sv) the key defined as a "hybrid key", a
+combination of the key as a string and a possible list of duplicates
+with te same key.
+
+The index data is stored in a bucket, with the
+following fields:
+
+ int      dbno: 0..n number of the database source file
+ int      dups: 0 for a unique identifier, or number of duplicates
+long    offset: file position in sequence file
+long refoffset: file position in reference file (if any - e.g. GCG)
+
+with information about duplicates (entries with the same identifier)
+stored in numbuckets
+
+long    offset: file position in sequence file
+long refoffset: file position in reference file (if any - e.g. GCG)
+ int      dbno: 0..n number of the database source file
+
+For the secondary keys (key, des, org) the keys are stored in a secbucket
+

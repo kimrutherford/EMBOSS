@@ -25,7 +25,6 @@ import javax.swing.table.TableColumn;
 import java.util.Vector;
 import java.awt.event.*;
 import java.awt.*;
-import java.io.*;
 
 
 /**
@@ -73,12 +72,12 @@ public class IDTableJFrame extends JFrame
       columnNames[i+1] = s1Name;
       rowData[i][0] = s1Name;
   
-      if(!s1Name.equals("Consensus"))
+      if(!s1Name.equals(Consensus.DEFAULT_SEQUENCE_NAME))
       {
         for(int j=i;j<nseq;j++)
         {
           Sequence s2 = (Sequence)vseq.get(j);
-          if(!s2.getName().equals("Consensus"))
+          if(!s2.getName().equals(Consensus.DEFAULT_SEQUENCE_NAME))
           {
             int id = 0;
             int len2 = s2.getLength();

@@ -430,7 +430,7 @@ int main(int argc, char **argv)
 					(posbeg + 1), (posend - 1));
 
 		    sublen = ajStrGetLen(substr);
-		    embIepCompS(substr, 1, 0, 0, aac);
+		    embIepCompS(substr, 1, 1, 0, 0, aac);
 		    /* Valid PEST motifs must contain D or E, P and S or T. */
 		    if(
                         (aac[ajBasecodeToInt ('D')] +

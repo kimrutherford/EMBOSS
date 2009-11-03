@@ -1,8 +1,8 @@
    Standard (Mandatory) qualifiers:
-  [-sequence]          sequence   (Gapped) protein sequence filename and
+  [-sequence]          seqall     (Gapped) protein sequence(s) filename and
                                   optional format, or reference (input USA)
-  [-outfile]           seqout     [<sequence>.<format>] (Gapped) nucleotide
-                                  sequence filename and optional format
+  [-outfile]           seqoutall  [<sequence>.<format>] (Aligned) nucleotide
+                                  sequence set(s) filename and optional format
                                   (output USA)
 
    Additional (Optional) qualifiers:
@@ -27,8 +27,8 @@
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1            integer    Start of the sequence to be used
-   -send1              integer    End of the sequence to be used
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
    -sreverse1          boolean    Reverse (if DNA)
    -sask1              boolean    Ask for begin/end/reverse
    -snucleotide1       boolean    Sequence is nucleotide

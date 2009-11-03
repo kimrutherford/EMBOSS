@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Identify transcription factor binding sites in DNA sequences
@@ -129,6 +136,7 @@ OC   Homo.
 XX
 RN   [1]
 RP   1-4165
+RX   DOI; 10.1073/pnas.80.11.3183.
 RX   PUBMED; 6574479.
 RA   van Straaten F., Muller R., Curran T., Van Beveren C., Verma I.M.;
 RT   "Complete nucleotide sequence of a human c-onc gene: deduced amino acid
@@ -161,7 +169,6 @@ DR   TRANSFAC; R00464; HS$CFOS_07.
 DR   TRANSFAC; R00465; HS$CFOS_08.
 DR   TRANSFAC; R00466; HS$CFOS_09.
 DR   TRANSFAC; R00467; HS$CFOS_10.
-DR   TRANSFAC; R00468; HS$CFOS_11.
 
 
   [Part of this file has been deleted for brevity]
@@ -393,28 +400,28 @@ Known bugs
 
 See also
 
-   Program name                  Description
-   jaspscan     Scans DNA sequences for transcription factors
+                    Program name                  Description
+                    jaspscan     Scans DNA sequences for transcription factors
 
-   Your EMBOSS administrator will have to run the EMBOSS program
-   tfextract in order to set up the data files from the TRANSFAC
-   distribution files.
+   Your             EMBOSS administrator will have to run the EMBOSS program
+                    tfextract in order to set up the data files from the TRANSFAC
+                    distribution files.
 
 Author(s)
 
-   Alan Bleasby (ajb © ebi.ac.uk)
-   European Bioinformatics Institute, Wellcome Trust Genome Campus,
-   Hinxton, Cambridge CB10 1SD, UK
+   Alan             Bleasby (ajb © ebi.ac.uk)
+   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton,         Cambridge CB10 1SD, UK
 
 History
 
-   Written Summer 2000 - Alan Bleasby
+   Written          Summer 2000 - Alan Bleasby
 
 Target users
 
-   This program is intended to be used by everyone and everything, from
-   naive users to embedded scripts.
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
 
 Comments
 
-   None
+                    None

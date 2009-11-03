@@ -1,4 +1,4 @@
-LOCUS       Z11115                 40699 bp    DNA     linear   INV 24-OCT-2006
+LOCUS       Z11115                 40699 bp    DNA     linear   INV 03-MAR-2009
 DEFINITION  Caenorhabditis elegans Cosmid ZK637, complete sequence.
 ACCESSION   Z11115
 VERSION     Z11115.2  GI:42734288
@@ -54,13 +54,8 @@ FEATURES             Location/Qualifiers
                      /db_xref="taxon:6239"
                      /chromosome="III"
                      /clone="ZK637"
-     gene            join(complement(1418. .1509),complement(1188. .1374),
-                     complement(787. .870),complement(660. .746),
-                     complement(486. .610),complement(238. .427),
-                     complement(Z22175.1:19292. .19791),
-                     complement(Z22175.1:19006. .19177),
-                     complement(Z22175.1:18763. .18876),
-                     complement(Z22175.1:18703. .18714))
+     gene            join(complement(238. .1509),
+                     complement(Z22175.1:18703. .19791))
                      /locus_tag="ZK637.1"
      CDS             join(complement(1418. .1509),complement(1188. .1374),
                      complement(787. .870),complement(660. .746),
@@ -71,18 +66,19 @@ FEATURES             Location/Qualifiers
                      complement(Z22175.1:18703. .18714))
                      /locus_tag="ZK637.1"
                      /standard_name="ZK637.1"
-                     /note="contains similarity to Pfam domain PF00083 (Sugar
-                     (and other) transporters)"
+                     /note="contains similarity to Pfam domain PF07690 Major
+                     Facilitator Superfamily contains similarity to Interpro
+                     domains IPR004749 (Organic cation transport protein),
+                     IPR011701 (Major facilitator superfamily MFS-1)"
                      /codon_start=1
-                     /product="Hypothetical protein ZK637.1"
+                     /product="C. elegans protein ZK637.1, partially confirmed
+                     by transcript evidence"
                      /protein_id="CAA77460.2"
                      /db_xref="GI:25005169"
                      /db_xref="GOA:P30638"
-                     /db_xref="InterPro:IPR004749"
-                     /db_xref="InterPro:IPR005829"
-                     /db_xref="InterPro:IPR007114"
                      /db_xref="InterPro:IPR011701"
                      /db_xref="UniProtKB/Swiss-Prot:P30638"
+                     /db_xref="WormBase:WBGene00014021"
                      /translation="MGDKAILTEVLEASNLTEAYVDLTAKQLIKEIRHVGDDFAVRYS
                      NLDDRTELGEPTDQRSPDSEKTFTVDEAVEALGFGRFQLKLSILTGMAWMADAMEMML
                      LSLISPALACEWGISSVQQALVTTCVFSGMMLSSTFWGKICDRFGRRKGLTFSTLVAC
@@ -93,18 +89,23 @@ FEATURES             Location/Qualifiers
                      IEWFGRKKTMALEYAVFAIFTFLLYFCLDRFTVTVLIFVARAFISGAFQCAYVYTPEV
                      YPTTLRAVGLGTCSAMARIGAIVTPFIAQVASEKSLSLPIGIYGTAAILGLIASLSLP
                      IETKGRQMMDSH"
-     gene            join(3794. .3918,4033. .4234,5883. .5987)
+     gene            join(3794. .4234,5883. .5987)
                      /locus_tag="ZK637.2"
      CDS             join(3794. .3918,4033. .4234,5883. .5987)
                      /locus_tag="ZK637.2"
                      /standard_name="ZK637.2"
-                     /note="contains similarity to Pfam domain PF05811 ()"
+                     /note="contains similarity to Pfam domain PF05811
+                     Eukaryotic protein of unknown function (DUF842) contains
+                     similarity to Interpro domain IPR008560 (Protein of
+                     unknown function DUF842, eukaryotic)"
                      /codon_start=1
-                     /product="Hypothetical protein ZK637.2"
+                     /product="C. elegans protein ZK637.2, confirmed by
+                     transcript evidence"
                      /protein_id="CAA77449.2"
                      /db_xref="GI:25005168"
                      /db_xref="InterPro:IPR008560"
                      /db_xref="UniProtKB/Swiss-Prot:P30629"
+                     /db_xref="WormBase:WBGene00014022"
                      /translation="MSNSTMEATQMKVKLAVDEMIDDLDKTYLRDMQKSMFQCSARCC
                      DNKKTTRDAVENCVESCNDGMKKAQGYLEKELGGLQDQLSRCAMTCYDKLVQQFGPDV
                      NKYSESQKLSFNEKLDSCVSVCADDHIKLIPAIKKRFAKNT"
@@ -113,21 +114,23 @@ FEATURES             Location/Qualifiers
      CDS             complement(join(4451. .4728,4825. .4974,5021. .5078))
                      /locus_tag="ZK637.14"
                      /standard_name="ZK637.14"
-                     /note="contains similarity to Pfam domain PF00097 (Zinc
-                     finger, C3HC4 type (RING finger))"
+                     /note="contains similarity to Interpro domains IPR001841
+                     (Zinc finger, RING-type), IPR013083 (Zinc finger,
+                     RING/FYVE/PHD-type)"
                      /codon_start=1
-                     /product="Hypothetical protein ZK637.14"
+                     /product="C. elegans protein ZK637.14, confirmed by
+                     transcript evidence"
                      /protein_id="CAA77447.1"
                      /db_xref="GI:3881662"
                      /db_xref="GOA:P30631"
-                     /db_xref="InterPro:IPR001841"
+                     /db_xref="InterPro:IPR017907"
                      /db_xref="UniProtKB/Swiss-Prot:P30631"
+                     /db_xref="WormBase:WBGene00014031"
                      /translation="MSERDAIRAFSHMLETIFVRMRAEGTGSQTDAMQRWLDLYNVGS
                      LPIDKKSYKALRLMDRETTDQQKEDATCAICLDNLQNNVDIPEDHVIKEELKIDPTTF
                      GTTVIVMPCKHRFHYFCLTLWLEAQQTCPTCRQKVKTDKEVEEEERQRNLEELHDSMY
                      G"
-     gene            join(6271. .6465,6523. .6642,7346. .7658,7714. .7775,
-                     7824. .8153,8767. .9252,9311. .9472,9779. .9910)
+     gene            6271. .9910
                      /gene="tag-256"
                      /locus_tag="ZK637.3"
      CDS             join(6271. .6465,6523. .6642,7346. .7658,7714. .7775,
@@ -135,13 +138,16 @@ FEATURES             Location/Qualifiers
                      /gene="tag-256"
                      /locus_tag="ZK637.3"
                      /standard_name="ZK637.3"
-                     /note="contains similarity to Pfam domain PF01839 (FG-GAP
-                     repeat)"
+                     /note="C. elegans TAG-256 protein ; contains similarity to
+                     Brugia malayi FG-GAP repeat family protein.; TR:A8P0M0"
                      /codon_start=1
-                     /product="Hypothetical protein ZK637.3"
+                     /product="C. elegans protein ZK637.3, partially confirmed
+                     by transcript evidence"
                      /protein_id="CAA77450.1"
                      /db_xref="GI:3881665"
+                     /db_xref="GOA:P30639"
                      /db_xref="UniProtKB/Swiss-Prot:P30639"
+                     /db_xref="WormBase:WBGene00014023"
                      /translation="MKKILPIIWLINLVSGSLSLEKKAPDLLGKVCAFGDFNADRNTD
                      ILVFANGTLTINYQETKLLDVLEASKFTPGTSFAISKPSLNADFVECSVGDFNGDSRL
                      DVLVSIRDKDTEIYNHTLWTSEIEDEKEIFRPFHVAMLQQHAMAIDVSDDGWTDVLGF
@@ -153,37 +159,49 @@ FEATURES             Location/Qualifiers
                      SMTGACASFSMTDGWGGSTQSVACQVPASSNRALYLPFLLYGLGRSPNFVDELNIAIP
                      KYADRKEDWKHSLKQIVPNSRIIVLPPSDQYPHWTSRLYVTPSALIVQSLAVIALVCC
                      MLLMVVVFLHYREKKEDRYERQQQSHRFHFDAM"
-     gene            join(10248. .10316,10369. .10436,10486. .10539,10595. .10691)
+     gene            join(10248. .10316,10369. .10691)
                      /locus_tag="ZK637.4"
      CDS             join(10248. .10316,10369. .10436,10486. .10539,10595. .10691)
                      /locus_tag="ZK637.4"
                      /standard_name="ZK637.4"
-                     /note="contains similarity to Synechococcus sp Putative
-                     ATP-dependent Clp protease, Hsp 100, ATP-binding
-                     subunitsClpB.; TR:Q7U3T3"
                      /codon_start=1
-                     /product="Hypothetical protein ZK637.4"
+                     /product="C. elegans protein ZK637.4, partially confirmed
+                     by transcript evidence"
                      /protein_id="CAA77451.1"
                      /db_xref="GI:3881666"
                      /db_xref="UniProtKB/Swiss-Prot:P30637"
+                     /db_xref="WormBase:WBGene00014024"
                      /translation="MKSNPKYFLMNDVERQSKYSPKYVPNNSLKERILEFLDYYIAPL
                      KLYLLSYPMPDCLWDNRKLRLKASGVQVTPSSEPVHIDDRLIHISQKQPSE"
-     gene            join(11124. .11557,11606. .11864,12073. .12282,12411. .12536)
-                     /gene="tag-205"
+     gene            10276. .10296
+                     /locus_tag="ZK637.16"
+     ncRNA           10276. .10296
+                     /locus_tag="ZK637.16"
+                     /ncRNA_class="other"
+                     /product="Hypothetical RNA transcript ZK637.16"
+                     /standard_name="ZK637.16"
+                     /note="21U RNA gene"
+     gene            11124. .12536
+                     /gene="asna-1"
                      /locus_tag="ZK637.5"
      CDS             join(11124. .11557,11606. .11864,12073. .12282,12411. .12536)
-                     /gene="tag-205"
+                     /gene="asna-1"
                      /locus_tag="ZK637.5"
                      /standard_name="ZK637.5"
-                     /note="contains similarity to Pfam domain PF02374
-                     (Anion-transporting ATPase)"
+                     /note="C. elegans ASNA-1 protein; contains similarity to
+                     Pfam domain PF02374 Anion-transporting ATPase contains
+                     similarity to Interpro domain IPR003348 (ATPase,
+                     anion-transporting)"
                      /codon_start=1
-                     /product="Hypothetical protein ZK637.5"
+                     /product="C. elegans protein ZK637.5, partially confirmed
+                     by transcript evidence"
                      /protein_id="CAA77452.1"
                      /db_xref="GI:3881667"
                      /db_xref="GOA:P30632"
+                     /db_xref="HSSP:1IHU"
                      /db_xref="InterPro:IPR003348"
                      /db_xref="UniProtKB/Swiss-Prot:P30632"
+                     /db_xref="WormBase:WBGene00014025"
                      /translation="MSDQLEASIKNILEQKTLKWIFVGGKGGVGKTTCSCSLAAQLSK
                      VRERVLLISTDPAHNISDAFSQKFTKTPTLVEGFKNLFAMEIDSNPNGEGVEMGNIEE
                      MLQNAAQNEGGSGGFSMGKDFLQSFAGGLPGIDEAMSFGEMIKLIDSLDFDVVVFDTA
@@ -191,6 +209,14 @@ FEATURES             Location/Qualifiers
                      ESVKKMNAQFKDPNCTTFVCVCIAEFLSLYETERLIQELSKQGIDTHNIIVNQLLFPD
                      TDANGTVSCRKCASRQAIQSKYLTDIDELYEDFHVVKLPLLEAEVRGGPAILQFSERM
                      VDPEANKN"
+     gene            complement(15809. .15829)
+                     /locus_tag="ZK637.17"
+     ncRNA           complement(15809. .15829)
+                     /locus_tag="ZK637.17"
+                     /ncRNA_class="other"
+                     /product="Hypothetical RNA transcript ZK637.17"
+                     /standard_name="ZK637.17"
+                     /note="21U RNA gene"
      gene            complement(join(16630. .16827,17583. .17732,17779. .17883,
                      17962. .18372,18848. .19006,19051. .19647,19694. .19826,
                      19876. .19994,20104. .20160))
@@ -208,13 +234,17 @@ FEATURES             Location/Qualifiers
                      /locus_tag="ZK637.7a"
                      /standard_name="ZK637.7a"
                      /note="C. elegans LIN-9 protein; contains similarity to
-                     Pfam domain PF06584 ()"
+                     Pfam domain PF06584 DIRP contains similarity to Interpro
+                     domain IPR010561 (DIRP)"
                      /codon_start=1
-                     /product="Hypothetical protein ZK637.7a"
+                     /product="C. elegans protein ZK637.7a, confirmed by
+                     transcript evidence"
                      /protein_id="CAA77454.2"
                      /db_xref="GI:14530698"
                      /db_xref="GOA:P30630"
+                     /db_xref="InterPro:IPR010561"
                      /db_xref="UniProtKB/Swiss-Prot:P30630"
+                     /db_xref="WormBase:WBGene00002998"
                      /translation="MSSAVRSPRKKAASDTSDPDRTSSPYSLRETSKVPSRYRNEELY
                      LSPSRSIKRTGSPKKSPAKRLNGGRDSPSVNSLTRNSSLTMLAKAALDYESSSCALEY
                      IPKEERRPPRRALALSPPPAPSNDLLAKDLEMIEMHQNLVAGLDDLDNPANMTNEAVE
@@ -234,14 +264,17 @@ FEATURES             Location/Qualifiers
                      /locus_tag="ZK637.7a"
                      /standard_name="ZK637.7b"
                      /note="C. elegans LIN-9 protein; contains similarity to
-                     Pfam domain PF06584 ()"
+                     Pfam domain PF06584 DIRP contains similarity to Interpro
+                     domain IPR010561 (DIRP)"
                      /codon_start=1
-                     /product="Hypothetical protein ZK637.7b"
+                     /product="C. elegans protein ZK637.7b, partially confirmed
+                     by transcript evidence"
                      /protein_id="CAC42391.1"
                      /db_xref="GI:14530697"
                      /db_xref="GOA:P30630"
                      /db_xref="InterPro:IPR010561"
                      /db_xref="UniProtKB/Swiss-Prot:P30630"
+                     /db_xref="WormBase:WBGene00002998"
                      /translation="MSSAVRSPRKKAASDTSDPDRTSSPYSLRETSKVPSRYRNEELY
                      LSPSRSIKRTGSPKKSPAKRLNGGRDSPSVNSLTRNSSLTMLAKAALDYESSSCALEY
                      IFQPKEERRPPRRALALSPPPAPSNDLLAKDLEMIEMHQNLVAGLDDLDNPANMTNEA
@@ -290,14 +323,19 @@ FEATURES             Location/Qualifiers
                      /gene="unc-32"
                      /locus_tag="ZK637.8d"
                      /standard_name="ZK637.8d"
-                     /note="contains similarity to Pfam domain PF01496 (V-type
-                     ATPase 116kDa subunit family)"
+                     /note="C. elegans UNC-32 protein; contains similarity to
+                     Pfam domain PF01496 V-type ATPase 116kDa subunit family
+                     contains similarity to Interpro domain IPR002490 (ATPase,
+                     V0/A0 complex, 116-kDa subunit)"
                      /codon_start=1
-                     /product="Hypothetical protein ZK637.8d"
+                     /product="C. elegans protein ZK637.8d, confirmed by
+                     transcript evidence"
                      /protein_id="CAD30451.1"
                      /db_xref="GI:20338973"
                      /db_xref="GOA:P30628"
+                     /db_xref="InterPro:IPR002490"
                      /db_xref="UniProtKB/Swiss-Prot:P30628"
+                     /db_xref="WormBase:WBGene00006768"
                      /translation="MGDYVTPGEEPPQPGIYRSEQMCLAQLYLQSDASYQCVAELGEL
                      GLVQFRDLNPDVSSFQRKYVNEVRRCDEMERKLRYLEREIKKDQIPMLDTGENPDAPL
                      PREMIDLEATFEKLENELREVNKNEETLKKNFSELTELKHILRKTQTFFEEVDHDRWR
@@ -321,15 +359,18 @@ FEATURES             Location/Qualifiers
                      /locus_tag="ZK637.8d"
                      /standard_name="ZK637.8a"
                      /note="C. elegans UNC-32 protein; contains similarity to
-                     Pfam domain PF01496 (V-type ATPase 116kDa subunit family)"
+                     Pfam domain PF01496 V-type ATPase 116kDa subunit family
+                     contains similarity to Interpro domain IPR002490 (ATPase,
+                     V0/A0 complex, 116-kDa subunit)"
                      /codon_start=1
-                     /product="Hypothetical protein ZK637.8a"
+                     /product="C. elegans protein ZK637.8a, confirmed by
+                     transcript evidence"
                      /protein_id="CAA77448.2"
                      /db_xref="GI:20338970"
                      /db_xref="GOA:P30628"
                      /db_xref="InterPro:IPR002490"
-                     /db_xref="InterPro:IPR009053"
                      /db_xref="UniProtKB/Swiss-Prot:P30628"
+                     /db_xref="WormBase:WBGene00006768"
                      /translation="MGDYVTPGEEPPQPGIYRSEQMCLAQLYLQSDASYQCVAELGEL
                      GLVQFRDLNPDVSSFQRKYVNEVRRCDEMERKLRYLEREIKKDQIPMLDTGENPDAPL
                      PREMIDLEATFEKLENELREVNKNEETLKKNFSELTELKHILRKTQTFFEEVDHDRWR
@@ -353,13 +394,18 @@ FEATURES             Location/Qualifiers
                      /locus_tag="ZK637.8d"
                      /standard_name="ZK637.8b"
                      /note="C. elegans UNC-32 protein; contains similarity to
-                     Pfam domain PF01496 (V-type ATPase 116kDa subunit family)"
+                     Pfam domain PF01496 V-type ATPase 116kDa subunit family
+                     contains similarity to Interpro domain IPR002490 (ATPase,
+                     V0/A0 complex, 116-kDa subunit)"
                      /codon_start=1
-                     /product="Hypothetical protein ZK637.8b"
+                     /product="C. elegans protein ZK637.8b, confirmed by
+                     transcript evidence"
                      /protein_id="CAA77453.2"
                      /db_xref="GI:20338971"
                      /db_xref="GOA:P30628"
+                     /db_xref="InterPro:IPR002490"
                      /db_xref="UniProtKB/Swiss-Prot:P30628"
+                     /db_xref="WormBase:WBGene00006768"
                      /translation="MGDYVTPGEEPPQPGIYRSEQMCLAQLYLQSDASYQCVAELGEL
                      GLVQFRDLNPDVSSFQRKYVNEVRRCDEMERKLRYLEREIKKDQIPMLDTGENPDAPL
                      PREMIDLEATFEKLENELREVNKNEETLKKNFSELTELKHILRKTQTFFEEAGTGEML
@@ -382,14 +428,19 @@ FEATURES             Location/Qualifiers
                      /gene="unc-32"
                      /locus_tag="ZK637.8d"
                      /standard_name="ZK637.8f"
-                     /note="contains similarity to Pfam domain PF01496 (V-type
-                     ATPase 116kDa subunit family)"
+                     /note="C. elegans UNC-32 protein; contains similarity to
+                     Pfam domain PF01496 V-type ATPase 116kDa subunit family
+                     contains similarity to Interpro domain IPR002490 (ATPase,
+                     V0/A0 complex, 116-kDa subunit)"
                      /codon_start=1
-                     /product="Hypothetical protein ZK637.8f"
+                     /product="C. elegans protein ZK637.8f, confirmed by
+                     transcript evidence"
                      /protein_id="CAD30453.1"
                      /db_xref="GI:20338975"
                      /db_xref="GOA:P30628"
+                     /db_xref="InterPro:IPR002490"
                      /db_xref="UniProtKB/Swiss-Prot:P30628"
+                     /db_xref="WormBase:WBGene00006768"
                      /translation="MGDYVTPGEEPPQPGIYRSEQMCLAQLYLQSDASYQCVAELGEL
                      GLVQFRDLNPDVSSFQRKYVNEVRRCDEMERKLRYLEREIKKDQIPMLDTGENPDAPL
                      PREMIDLEATFEKLENELREVNKNEETLKKNFSELTELKHILRKTQTFFEEAGTGEML
@@ -412,14 +463,19 @@ FEATURES             Location/Qualifiers
                      /gene="unc-32"
                      /locus_tag="ZK637.8d"
                      /standard_name="ZK637.8e"
-                     /note="contains similarity to Pfam domain PF01496 (V-type
-                     ATPase 116kDa subunit family)"
+                     /note="C. elegans UNC-32 protein; contains similarity to
+                     Pfam domain PF01496 V-type ATPase 116kDa subunit family
+                     contains similarity to Interpro domain IPR002490 (ATPase,
+                     V0/A0 complex, 116-kDa subunit)"
                      /codon_start=1
-                     /product="Hypothetical protein ZK637.8e"
+                     /product="C. elegans protein ZK637.8e, confirmed by
+                     transcript evidence"
                      /protein_id="CAD30452.1"
                      /db_xref="GI:20338974"
                      /db_xref="GOA:P30628"
+                     /db_xref="InterPro:IPR002490"
                      /db_xref="UniProtKB/Swiss-Prot:P30628"
+                     /db_xref="WormBase:WBGene00006768"
                      /translation="MGDYVTPGEEPPQPGIYRSEQMCLAQLYLQSDASYQCVAELGEL
                      GLVQFRDLNPDVSSFQRKYVNEVRRCDEMERKLRYLEREIKKDQIPMLDTGENPDAPL
                      PREMIDLEATFEKLENELREVNKNEETLKKNFSELTELKHILRKTQTFFEEHEDMIAS
@@ -442,14 +498,19 @@ FEATURES             Location/Qualifiers
                      /gene="unc-32"
                      /locus_tag="ZK637.8d"
                      /standard_name="ZK637.8c"
-                     /note="contains similarity to Pfam domain PF01496 (V-type
-                     ATPase 116kDa subunit family)"
+                     /note="C. elegans UNC-32 protein; contains similarity to
+                     Pfam domain PF01496 V-type ATPase 116kDa subunit family
+                     contains similarity to Interpro domain IPR002490 (ATPase,
+                     V0/A0 complex, 116-kDa subunit)"
                      /codon_start=1
-                     /product="Hypothetical protein ZK637.8c"
+                     /product="C. elegans protein ZK637.8c, confirmed by
+                     transcript evidence"
                      /protein_id="CAD30450.1"
                      /db_xref="GI:20338972"
                      /db_xref="GOA:P30628"
+                     /db_xref="InterPro:IPR002490"
                      /db_xref="UniProtKB/Swiss-Prot:P30628"
+                     /db_xref="WormBase:WBGene00006768"
                      /translation="MGDYVTPGEEPPQPGIYRSEQMCLAQLYLQSDASYQCVAELGEL
                      GLVQFRDLNPDVSSFQRKYVNEVRRCDEMERKLRYLEREIKKDQIPMLDTGENPDAPL
                      PREMIDLEATFEKLENELREVNKNEETLKKNFSELTELKHILRKTQTFFEEHEDMIAS
@@ -479,15 +540,22 @@ FEATURES             Location/Qualifiers
                      /gene="tpk-1"
                      /locus_tag="ZK637.9b"
                      /standard_name="ZK637.9b"
+                     /note="C. elegans TPK-1 protein; contains similarity to
+                     Pfam domain PF04263 Thiamin pyrophosphokinase, catalytic
+                     domain contains similarity to Interpro domains IPR016966
+                     (Thiamin pyrophosphokinase, eukaryotic), IPR007371
+                     (Thiamin pyrophosphokinase, catalytic region), IPR006282
+                     (Thiamin pyrophosphokinase)"
                      /codon_start=1
-                     /product="Hypothetical protein ZK637.9b"
+                     /product="C. elegans protein ZK637.9b, confirmed by
+                     transcript evidence"
                      /protein_id="CAI46594.1"
                      /db_xref="GI:58081968"
                      /db_xref="GOA:P30636"
-                     /db_xref="InterPro:IPR006282"
-                     /db_xref="InterPro:IPR007371"
-                     /db_xref="InterPro:IPR007373"
+                     /db_xref="HSSP:1IG3"
+                     /db_xref="InterPro:IPR016966"
                      /db_xref="UniProtKB/Swiss-Prot:P30636"
+                     /db_xref="WormBase:WBGene00014027"
                      /translation="MSKKLKPFEILEDSCASVCIWLNGEPTAISNRAENLWNKAKYRV
                      ATDGAVNEILKRKSFVEWPHIICGDFDSINKQIDTKNAKVVHLPDQDYTDLSKSVQWC
                      LEQKTLTSWEFENIVVLGGLNGRFDHTMSTLSSLIRFVDSQTPVIVLDSRNLVLAVPT
@@ -498,21 +566,28 @@ FEATURES             Location/Qualifiers
                      /gene="tpk-1"
                      /locus_tag="ZK637.9a"
                      /standard_name="ZK637.9a"
-                     /note="contains similarity to Pfam domain PF04263 (Thiamin
-                     pyrophosphokinase, catalytic domain)"
+                     /note="C. elegans TPK-1 protein; contains similarity to
+                     Pfam domain PF04263 Thiamin pyrophosphokinase, catalytic
+                     domain contains similarity to Interpro domains IPR016966
+                     (Thiamin pyrophosphokinase, eukaryotic), IPR007371
+                     (Thiamin pyrophosphokinase, catalytic region), IPR006282
+                     (Thiamin pyrophosphokinase)"
                      /codon_start=1
-                     /product="Hypothetical protein ZK637.9a"
+                     /product="C. elegans protein ZK637.9a, confirmed by
+                     transcript evidence"
                      /protein_id="CAA77455.3"
                      /db_xref="GI:58081967"
                      /db_xref="GOA:P30636"
+                     /db_xref="HSSP:1IG3"
+                     /db_xref="InterPro:IPR016966"
                      /db_xref="UniProtKB/Swiss-Prot:P30636"
+                     /db_xref="WormBase:WBGene00014027"
                      /translation="MSKKLKPFEILEDSCASVCIWLNGEPTAISNRAENLWNKAKYRV
                      ATDGAVNEILKRKSFVEWPHIICGDFDSINKQIDTKNAKVVHLPDQDYTDLSKSVQWC
                      LEQKTLTSWEFENIVVLGGLNGRFDHTMSTLSSLIRFVDSQTPGDSNLDVNLEMTTKM
                      CGIIPIVQKETIVSSIGLKYEMENLALEFGKLISTSNEVTTSQVFLKSSSSLIFSIEL
                      ENWVYKLDSL"
-     gene            join(29817. .30077,30126. .30262,30309. .30393,30743. .31279,
-                     31330. .31672,32242. .32390)
+     gene            29817. .32390
                      /gene="trxr-2"
                      /locus_tag="ZK637.10"
      CDS             join(29817. .30077,30126. .30262,30309. .30393,30743. .31279,
@@ -520,23 +595,27 @@ FEATURES             Location/Qualifiers
                      /gene="trxr-2"
                      /locus_tag="ZK637.10"
                      /standard_name="ZK637.10"
-                     /note="contains similarity to Pfam domains PF02852
-                     (Pyridine nucleotide-disulphide oxidoreductase,
-                     dimerisation domain), PF00070 (Pyridine
-                     nucleotide-disulphide oxidoreductases class-I)"
+                     /note="C. elegans TRXR-2 protein; contains similarity to
+                     Pfam domains PF02852 (Pyridine nucleotide-disulphide
+                     oxidoreductase, dimerisation domain) , PF07992 (Pyridine
+                     nucleotide-disulphide oxidoreductase) contains similarity
+                     to Interpro domains IPR013027 (FAD-dependent pyridine
+                     nucleotide-disulphide oxidoreductase), IPR012999 (Pyridine
+                     nucleotide-disulphide oxidoreductase, class I, active
+                     site), IPR004099 (Pyridine nucleotide-disulphide
+                     oxidoreductase, dimerisation), IPR006338 (Thioredoxin and
+                     glutathione reductase selenoprotein), IPR000815 (Mercuric
+                     reductase), IPR016040 (NAD(P)-binding)"
                      /codon_start=1
-                     /product="Hypothetical protein ZK637.10"
+                     /product="C. elegans protein ZK637.10, partially confirmed
+                     by transcript evidence"
                      /protein_id="CAA77459.1"
                      /db_xref="GI:3881674"
                      /db_xref="GOA:P30635"
-                     /db_xref="InterPro:IPR000815"
-                     /db_xref="InterPro:IPR001100"
-                     /db_xref="InterPro:IPR001327"
-                     /db_xref="InterPro:IPR004099"
-                     /db_xref="InterPro:IPR006338"
-                     /db_xref="InterPro:IPR012999"
+                     /db_xref="HSSP:1ONF"
                      /db_xref="InterPro:IPR013027"
                      /db_xref="UniProtKB/Swiss-Prot:P30635"
+                     /db_xref="WormBase:WBGene00014028"
                      /translation="MLLSTFKRHLPIRRLFSSNKFDLIVIGAGSGGLSCSKRAADLGA
                      NVALIDAVEPTPHGHSWGIGGTCANVGCIPKKLMHQAAIVGKELKHADKYGWNGIDQE
                      KIKHDWNVLSKNVNDRVKANNWIYRVQLNQKKINYFNAYAEFVDKDKIVITGTDKNKT
@@ -546,7 +625,7 @@ FEATURES             Location/Qualifiers
                      VGDIVQDRQELTPLAIQSGKLLADRLFSNSKQIVRFDGVATTVFTPLELSTVGLTEEE
                      AIQKHGEDSIEVFHSHFTPFEYVVPQNKDSGFCYVKAVCTRDESQKILGLHFVGPNAA
                      EVIQGYAVAFRVGISMSDLQNTIAIHPCSSEEFVKLHITKRSGQDPRTQGCCG"
-     gene            complement(join(32541. .33020,33415. .33784,33832. .33932))
+     gene            complement(32541. .33932)
                      /gene="cdc-25.3"
                      /locus_tag="ZK637.11"
      CDS             complement(join(32541. .33020,33415. .33784,33832. .33932))
@@ -554,77 +633,78 @@ FEATURES             Location/Qualifiers
                      /locus_tag="ZK637.11"
                      /standard_name="ZK637.11"
                      /note="C. elegans CDC-25.3 protein; contains similarity to
-                     Pfam domain PF00581 (Rhodanese-like domain)"
+                     Interpro domains IPR001763 (Rhodanese-like), IPR000751
+                     (M-phase inducer phosphatase)"
                      /codon_start=1
-                     /product="Hypothetical protein ZK637.11"
+                     /product="C. elegans protein ZK637.11, confirmed by
+                     transcript evidence"
                      /protein_id="CAA77456.1"
                      /db_xref="GI:3881671"
                      /db_xref="GOA:P30634"
-                     /db_xref="InterPro:IPR000751"
+                     /db_xref="HSSP:1C25"
                      /db_xref="InterPro:IPR001763"
                      /db_xref="UniProtKB/Swiss-Prot:P30634"
+                     /db_xref="WormBase:WBGene00000388"
                      /translation="MCVDVPCENCIVRNDGLRLKCSECAEGSSKLFPRQNRQHSSAIS
                      HISNSSPPTRKRSIDGGYTSGTDSANTSEIVIKKRLTFSKKSHSTSEIETWNAHLQVD
                      YHLETVTPSCSTVYQKITSETLIEIMQKLSQIEFMQKYILIDCRYDYEYNGGHIKGAQ
                      SLFNPETAADFFFNKDGSKKINRIPIFYCEYSQKRGPTMANNLREVDRKLNSNIYPRC
                      DYEEIYLLEGGYKNFYAFTRGLEKEQRVQLCEPDNYVIMFDDRYKAELRKHQFHKKNV
                      SKPMKKWSSTTSVISILTTSGTRISTLRQTCDPIHEHDAH"
-     gene            join(36147. .36305,36470. .36667,36719. .36841,36886. .36987,
-                     37038. .37196)
+     gene            36147. .37196
                      /locus_tag="ZK637.15"
      CDS             join(36147. .36305,36470. .36667,36719. .36841,36886. .36987,
                      37038. .37196)
                      /locus_tag="ZK637.15"
                      /standard_name="ZK637.15"
-                     /note="contains similarity to Ureaplasma parvum
-                     Hypothetical membrane lipoprotein.; TR:Q9PQR8"
                      /codon_start=1
-                     /product="Hypothetical protein ZK637.15"
+                     /product="C. elegans protein ZK637.15, partially confirmed
+                     by transcript evidence"
                      /protein_id="CAA77457.2"
                      /db_xref="GI:116635366"
                      /db_xref="UniProtKB/TrEMBL:Q23556"
+                     /db_xref="WormBase:WBGene00014032"
                      /translation="MECVNCDCTVKTMDNLDQAIRALLQRGKHVNRMMDNEKLIREAR
                      RMEDVQQLKMQIPKPVDKKPRPPPSENNLKLISCEETCMDETLKNSSKPRMIYNKQLG
                      RAESIDFDVPSLSYESSEKCAGETSPYTSASVSNSKKATSSSKFTKSEITTITELTTS
                      TFKKSNNSSGGALVLDNHYLINNDDGTVKKLPMKVYVKQRLEDGSLDVQLVFFDENSQ
                      KVMDISMLVNGKKIRNVQFCGKDGKLVN"
-     gene            complement(join(38544. .38829,39128. .39321))
+     gene            complement(38544. .39321)
+                     /gene="glb-1"
                      /locus_tag="ZK637.13"
      CDS             complement(join(38544. .38829,39128. .39321))
+                     /gene="glb-1"
                      /locus_tag="ZK637.13"
                      /standard_name="ZK637.13"
-                     /note="contains similarity to Pfam domain PF00042
-                     (Globin)"
+                     /note="C. elegans GLB-1 protein; contains similarity to
+                     Interpro domains IPR012292 (Globin), IPR012085 (Globin,
+                     nematode)"
                      /codon_start=1
-                     /product="Hypothetical protein ZK637.13"
+                     /product="C. elegans protein ZK637.13, confirmed by
+                     transcript evidence"
                      /protein_id="CAA77458.2"
                      /db_xref="GI:42734289"
                      /db_xref="GOA:P30627"
-                     /db_xref="InterPro:IPR000971"
-                     /db_xref="InterPro:IPR009050"
-                     /db_xref="InterPro:IPR012085"
+                     /db_xref="HSSP:1ASH"
                      /db_xref="InterPro:IPR012292"
                      /db_xref="UniProtKB/Swiss-Prot:P30627"
+                     /db_xref="WormBase:WBGene00014030"
                      /translation="MSMNRQEISDLCVKSLEGRMVGTEAQNIENGNAFYRYFFTNFPD
                      LRVYFKGAEKYTADDVKKSERFDKQGQRILLACHLLANVYTNEEVFKGYVRETINRHR
                      IYKMDPALWMAFFTVFTGYLESVGCLNDQQKAAWMALGKEFNAESQTHLKNSNLPHV"
-     gene            join(40328. .40486,40571. .40699,Z11126.1:5. .73,
-                     Z11126.1:120. .242,Z11126.1:288. .389,Z11126.1:440. .598)
+     gene            join(40328. .40699,Z11126.1:5. .598)
                      /locus_tag="ZK637.12"
      CDS             join(40328. .40486,40571. .40699,Z11126.1:5. .73,
                      Z11126.1:120. .242,Z11126.1:288. .389,Z11126.1:440. .598)
                      /locus_tag="ZK637.12"
                      /standard_name="ZK637.12"
-                     /note="contains similarity to Saccharomyces cerevisiae
-                     Helicase encoded by the Y' element of subtelomeric
-                     regions, highly expressed in the mutants lacking the
-                     telomerase component TLC1; potentially phosphorylated by
-                     Cdc28p; SGD:YDR545W"
                      /codon_start=1
-                     /product="Hypothetical protein ZK637.12"
+                     /product="C. elegans protein ZK637.12, confirmed by
+                     transcript evidence"
                      /protein_id="CAA77461.2"
                      /db_xref="GI:87251933"
                      /db_xref="UniProtKB/Swiss-Prot:P34658"
+                     /db_xref="WormBase:WBGene00014029"
                      /translation="MECVNCDCTVKTMDNLDQAIRALLQRGKHVNRMMDNEKLIREAR
                      RMEEVQQLKMQIPKPVDKKPRPPPSENNLKLISCEETCMDETLKNSSKPRMIYNKQLG
                      RAESIDFDVPSLSYESSEKCAGETSPYTSASVSNSKKATSSSNFTKSETTTITELTTS
@@ -1316,10 +1396,10 @@ DEFINITION  Octopus mRNA for rhodopsin.
 ACCESSION   X07797
 VERSION     X07797.1  GI:9822
 KEYWORDS    rhodopsin.
-SOURCE      Octopus dofleini
-  ORGANISM  Octopus dofleini
+SOURCE      Enteroctopus dofleini
+  ORGANISM  Enteroctopus dofleini
             Eukaryota; Metazoa; Mollusca; Cephalopoda; Coleoidea; Neocoleoidea;
-            Octopodiformes; Octopoda; Incirrata; Octopodidae; Octopus.
+            Octopodiformes; Octopoda; Incirrata; Octopodidae; Enteroctopus.
 REFERENCE   1  (bases 1 to 1675)
   AUTHORS   Ovchinnikov,Yu.A., Abdulaev,N.G., Zolotarev,A.S., Artamonov,I.D.,
             Bespalov,I.A., Dergachev,A.E. and Tsuda,M.
@@ -1333,9 +1413,9 @@ REFERENCE   2  (bases 1 to 1675)
 COMMENT     Data kindly reviewed (25-OCT-1988) by Abdulaev N.G.
 FEATURES             Location/Qualifiers
      source          1. .1675
-                     /organism="Octopus dofleini"
+                     /organism="Enteroctopus dofleini"
                      /mol_type="mRNA"
-                     /db_xref="taxon:6644"
+                     /db_xref="taxon:267067"
                      /clone="pORh462"
      CDS             75. .1442
                      /codon_start=1

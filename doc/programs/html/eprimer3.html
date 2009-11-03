@@ -20,6 +20,18 @@ eprimer3
 <p>
 
 <H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
     Function
 </H2>
 Picks PCR primers and hybridization oligos
@@ -167,7 +179,7 @@ Picks PCR primers and hybridization oligos
    -hybridprobe        toggle     [N] An 'internal oligo' is intended to be
                                   used as a hybridization probe (hyb probe) to
                                   detect the PCR product after amplification.
-*  -oligomishyblibraryfile infile     Similar to MISPRIMING-LIBRARY, except that
+*  -mishyblibraryfile  infile     Similar to MISPRIMING-LIBRARY, except that
                                   the event we seek to avoid is hybridization
                                   of the internal oligo to sequences in this
                                   library rather than priming from them.
@@ -347,10 +359,10 @@ Picks PCR primers and hybridization oligos
 *  -maxpolyx           integer    [5] The maximum allowable length of a
                                   mononucleotide repeat in a primer, for
                                   example AAAAAA. (Integer 0 or more)
-*  -productosize       integer    [200] The optimum size for the PCR product.
+*  -psizeopt           integer    [200] The optimum size for the PCR product.
                                   0 indicates that there is no optimum product
                                   size. (Integer 0 or more)
-*  -productsizerange   range      [100-300] The associated values specify the
+*  -prange             range      [100-300] The associated values specify the
                                   lengths of the product that the user wants
                                   the primers to create, and is a space
                                   separated list of elements of the form
@@ -372,15 +384,15 @@ Picks PCR primers and hybridization oligos
                                   an insufficient number of primers in the
                                   first range will EPrimer3 return primers in
                                   a subsequent range.
-*  -productotm         float      [0.0] The optimum melting temperature for
+*  -ptmopt             float      [0.0] The optimum melting temperature for
                                   the PCR product. 0 indicates that there is
                                   no optimum temperature. (Any numeric value)
-*  -productmintm       float      [-1000000.0] The minimum allowed melting
+*  -ptmmin             float      [-1000000.0] The minimum allowed melting
                                   temperature of the amplicon. Please see the
                                   documentation on the maximum melting
                                   temperature of the product for details. (Any
                                   numeric value)
-*  -productmaxtm       float      [1000000.0] The maximum allowed melting
+*  -ptmmax             float      [1000000.0] The maximum allowed melting
                                   temperature of the amplicon. Product Tm is
                                   calculated using the formula from Bolton and
                                   McCarthy, PNAS 84:1390 (1962) as presented
@@ -412,7 +424,7 @@ Picks PCR primers and hybridization oligos
                                   this behavior will not give you the Tm under
                                   hybridization conditions. (Any numeric
                                   value)
-*  -oligoexcludedregion range      [(full sequence)] Middle oligos may not
+*  -oexcludedregion    range      [(full sequence)] Middle oligos may not
                                   overlap any region specified by this tag.
                                   The associated value must be a
                                   space-separated list of
@@ -426,21 +438,21 @@ Picks PCR primers and hybridization oligos
                                   and around which to design forward and
                                   reverse primers. Must be a substring of
                                   SEQUENCE. (Any string is accepted)
-*  -oligoosize         integer    [20] Optimum length (in bases) of an
+*  -osizeopt           integer    [20] Optimum length (in bases) of an
                                   internal oligo. EPrimer3 will attempt to
                                   pick primers close to this length. (Integer
                                   0 or more)
-*  -oligominsize       integer    [18] Minimum acceptable length of an
+*  -ominsize           integer    [18] Minimum acceptable length of an
                                   internal oligo. Must be greater than 0 and
                                   less than or equal to
                                   INTERNAL-OLIGO-MAX-SIZE. (Integer 0 or more)
-*  -oligomaxsize       integer    [27] Maximum acceptable length (in bases) of
+*  -omaxsize           integer    [27] Maximum acceptable length (in bases) of
                                   an internal oligo. Currently this parameter
                                   cannot be larger than 35. This limit is
                                   governed by maximum oligo size for which
                                   EPrimer3's melting-temperature is valid.
                                   (Integer up to 35)
-*  -oligootm           float      [60.0] Optimum melting temperature (Celsius)
+*  -otmopt             float      [60.0] Optimum melting temperature (Celsius)
                                   for an internal oligo. EPrimer3 will try to
                                   pick oligos with melting temperatures that
                                   are close to this temperature. The oligo
@@ -452,29 +464,29 @@ Picks PCR primers and hybridization oligos
                                   pp 3746-3750. Please refer to the former
                                   paper for background discussion. (Any
                                   numeric value)
-*  -oligomintm         float      [57.0] Minimum acceptable melting
+*  -otmmin             float      [57.0] Minimum acceptable melting
                                   temperature(Celsius) for an internal oligo.
                                   (Any numeric value)
-*  -oligomaxtm         float      [63.0] Maximum acceptable melting
+*  -otmmax             float      [63.0] Maximum acceptable melting
                                   temperature (Celsius) for an internal oligo.
                                   (Any numeric value)
-*  -oligoogcpercent    float      [50.0] Internal oligo optimum GC percent.
+*  -ogcopt             float      [50.0] Internal oligo optimum GC percent.
                                   (Any numeric value)
-*  -oligomingc         float      [20.0] Minimum allowable percentage of Gs
+*  -ogcmin             float      [20.0] Minimum allowable percentage of Gs
                                   and Cs in an internal oligo. (Any numeric
                                   value)
-*  -oligomaxgc         float      [80.0] Maximum allowable percentage of Gs
+*  -ogcmax             float      [80.0] Maximum allowable percentage of Gs
                                   and Cs in any internal oligo generated by
                                   Primer. (Any numeric value)
-*  -oligosaltconc      float      [50.0] The millimolar concentration of salt
+*  -osaltconc          float      [50.0] The millimolar concentration of salt
                                   (usually KCl) in the hybridization. EPrimer3
                                   uses this argument to calculate internal
                                   oligo melting temperatures. (Any numeric
                                   value)
-*  -oligodnaconc       float      [50.0] The nanomolar concentration of
+*  -odnaconc           float      [50.0] The nanomolar concentration of
                                   annealing internal oligo in the
                                   hybridization. (Any numeric value)
-*  -oligoselfany       float      [12.00] The maximum allowable local
+*  -oanyself           float      [12.00] The maximum allowable local
                                   alignment score when testing an internal
                                   oligo for (local) self-complementarity.
                                   Local self-complementarity is taken to
@@ -497,7 +509,7 @@ Picks PCR primers and hybridization oligos
                                   and a score of 0.00 indicates that there is
                                   no reasonable local alignment between two
                                   oligos. (Number up to 9999.990)
-*  -oligoselfend       float      [12.00] The maximum allowable 3'-anchored
+*  -oendself           float      [12.00] The maximum allowable 3'-anchored
                                   global alignment score when testing a single
                                   oligo for self-complementarity.
                                   The scoring system is as for the Maximum
@@ -518,10 +530,10 @@ Picks PCR primers and hybridization oligos
                                   that INTERNAL-OLIGO-SELF-END be set at least
                                   as high as INTERNAL-OLIGO-SELF-ANY. (Number
                                   up to 9999.990)
-*  -oligomaxpolyx      integer    [5] The maximum allowable length of an
+*  -opolyxmax          integer    [5] The maximum allowable length of an
                                   internal oligo mononucleotide repeat, for
                                   example AAAAAA. (Integer 0 or more)
-*  -oligomaxmishyb     float      [12.0] Similar to MAX-MISPRIMING except that
+*  -omishybmax         float      [12.0] Similar to MAX-MISPRIMING except that
                                   this parameter applies to the similarity of
                                   candidate internal oligos to the library
                                   specified in INTERNAL-OLIGO-MISHYB-LIBRARY.
@@ -781,7 +793,7 @@ Picks PCR primers and hybridization oligos
 </tr>
 
 <tr>
-<td>-oligomishyblibraryfile</td>
+<td>-mishyblibraryfile</td>
 <td>Similar to MISPRIMING-LIBRARY, except that the event we seek to avoid is hybridization of the internal oligo to sequences in this library rather than priming from them.
 The file must be in (a slightly restricted) FASTA format (W. B. Pearson and D.J. Lipman, PNAS 85:8 pp 2444-2448 [1988]); we briefly discuss the organization of this file below. If this parameter is specified then EPrimer3 locally aligns each candidate oligo against each library sequence and rejects those primers for which the local alignment score times a specified weight (see below) exceeds INTERNAL-OLIGO-MAX-MISHYB. (The maximum value of the weight is arbitrarily set to 12.0.)
 Each sequence entry in the FASTA-format file must begin with an 'id line' that starts with '&gt;'. The contents of the id line is 'slightly restricted' in that EPrimer3 parses everything after any optional asterisk ('*') as a floating point number to use as the weight mentioned above. If the id line contains no asterisk then the weight defaults to 1.0. The alignment scoring system used is the same as for calculating complementarity among oligos (e.g. SELF-ANY). The remainder of an entry contains the sequence as lines following the id line up until a line starting with '&gt;' or the end of the file. Whitespace and newlines are ignored. Characters 'A', 'T', 'G', 'C', 'a', 't', 'g', 'c' are retained and any other character is converted to 'N' (with the consequence that any IUB / IUPAC codes for ambiguous bases are converted to 'N'). There are no restrictions on line length.
@@ -940,14 +952,14 @@ See ADVICE FOR PICKING PRIMERS.</td>
 </tr>
 
 <tr>
-<td>-productosize</td>
+<td>-psizeopt</td>
 <td>The optimum size for the PCR product. 0 indicates that there is no optimum product size.</td>
 <td>Integer 0 or more</td>
 <td>200</td>
 </tr>
 
 <tr>
-<td>-productsizerange</td>
+<td>-prange</td>
 <td>The associated values specify the lengths of the product that the user wants the primers to create, and is a space separated list of elements of the form
 (x)-(y)
 where an (x)-(y) pair is a legal range of lengths for the product. For example, if one wants PCR products to be between 100 to 150 bases (inclusive) then one would set this parameter to 100-150. If one desires PCR products in either the range from 100 to 150 bases or in the range from 200 to 250 bases then one would set this parameter to 100-150 200-250.
@@ -957,21 +969,21 @@ EPrimer3 favors ranges to the left side of the parameter string. EPrimer3 will r
 </tr>
 
 <tr>
-<td>-productotm</td>
+<td>-ptmopt</td>
 <td>The optimum melting temperature for the PCR product. 0 indicates that there is no optimum temperature.</td>
 <td>Any numeric value</td>
 <td>0.0</td>
 </tr>
 
 <tr>
-<td>-productmintm</td>
+<td>-ptmmin</td>
 <td>The minimum allowed melting temperature of the amplicon. Please see the documentation on the maximum melting temperature of the product for details.</td>
 <td>Any numeric value</td>
 <td>-1000000.0</td>
 </tr>
 
 <tr>
-<td>-productmaxtm</td>
+<td>-ptmmax</td>
 <td>The maximum allowed melting temperature of the amplicon. Product Tm is calculated using the formula from Bolton and McCarthy, PNAS 84:1390 (1962) as presented in Sambrook, Fritsch and Maniatis, Molecular Cloning, p 11.46 (1989, CSHL Press).
 Tm = 81.5 + 16.6(log10([Na+])) + .41*(%GC) - 600/length
 Where [Na+} is the molar sodium concentration, (%GC) is the percent of Gs and Cs in the sequence, and length is the length of the sequence.
@@ -981,7 +993,7 @@ A similar formula is used by the prime primer selection program in GCG http://ww
 </tr>
 
 <tr>
-<td>-oligoexcludedregion</td>
+<td>-oexcludedregion</td>
 <td>Middle oligos may not overlap any region specified by this tag. The associated value must be a space-separated list of
 (start),(end)
 pairs, where (start) is the index of the first base of an excluded region, and (end) is the last. Often one would make Target regions excluded regions for internal oligos.</td>
@@ -997,84 +1009,84 @@ pairs, where (start) is the index of the first base of an excluded region, and (
 </tr>
 
 <tr>
-<td>-oligoosize</td>
+<td>-osizeopt</td>
 <td>Optimum length (in bases) of an internal oligo. EPrimer3 will attempt to pick primers close to this length.</td>
 <td>Integer 0 or more</td>
 <td>20</td>
 </tr>
 
 <tr>
-<td>-oligominsize</td>
+<td>-ominsize</td>
 <td>Minimum acceptable length of an internal oligo. Must be greater than 0 and less than or equal to INTERNAL-OLIGO-MAX-SIZE.</td>
 <td>Integer 0 or more</td>
 <td>18</td>
 </tr>
 
 <tr>
-<td>-oligomaxsize</td>
+<td>-omaxsize</td>
 <td>Maximum acceptable length (in bases) of an internal oligo. Currently this parameter cannot be larger than 35. This limit is governed by maximum oligo size for which EPrimer3's melting-temperature is valid.</td>
 <td>Integer up to 35</td>
 <td>27</td>
 </tr>
 
 <tr>
-<td>-oligootm</td>
+<td>-otmopt</td>
 <td>Optimum melting temperature (Celsius) for an internal oligo. EPrimer3 will try to pick oligos with melting temperatures that are close to this temperature. The oligo melting temperature formula in EPrimer3 is that given in Rychlik, Spencer and Rhoads, Nucleic Acids Research, vol 18, num 21, pp 6409-6412 and Breslauer, Frank, Bloecker and Marky, Proc. Natl. Acad. Sci. USA, vol 83, pp 3746-3750. Please refer to the former paper for background discussion.</td>
 <td>Any numeric value</td>
 <td>60.0</td>
 </tr>
 
 <tr>
-<td>-oligomintm</td>
+<td>-otmmin</td>
 <td>Minimum acceptable melting temperature(Celsius) for an internal oligo.</td>
 <td>Any numeric value</td>
 <td>57.0</td>
 </tr>
 
 <tr>
-<td>-oligomaxtm</td>
+<td>-otmmax</td>
 <td>Maximum acceptable melting temperature (Celsius) for an internal oligo.</td>
 <td>Any numeric value</td>
 <td>63.0</td>
 </tr>
 
 <tr>
-<td>-oligoogcpercent</td>
+<td>-ogcopt</td>
 <td>Internal oligo optimum GC percent.</td>
 <td>Any numeric value</td>
 <td>50.0</td>
 </tr>
 
 <tr>
-<td>-oligomingc</td>
+<td>-ogcmin</td>
 <td>Minimum allowable percentage of Gs and Cs in an internal oligo.</td>
 <td>Any numeric value</td>
 <td>20.0</td>
 </tr>
 
 <tr>
-<td>-oligomaxgc</td>
+<td>-ogcmax</td>
 <td>Maximum allowable percentage of Gs and Cs in any internal oligo generated by Primer.</td>
 <td>Any numeric value</td>
 <td>80.0</td>
 </tr>
 
 <tr>
-<td>-oligosaltconc</td>
+<td>-osaltconc</td>
 <td>The millimolar concentration of salt (usually KCl) in the hybridization. EPrimer3 uses this argument to calculate internal oligo melting temperatures.</td>
 <td>Any numeric value</td>
 <td>50.0</td>
 </tr>
 
 <tr>
-<td>-oligodnaconc</td>
+<td>-odnaconc</td>
 <td>The nanomolar concentration of annealing internal oligo in the hybridization.</td>
 <td>Any numeric value</td>
 <td>50.0</td>
 </tr>
 
 <tr>
-<td>-oligoselfany</td>
+<td>-oanyself</td>
 <td>The maximum allowable local alignment score when testing an internal oligo for (local) self-complementarity. Local self-complementarity is taken to predict the tendency of oligos to anneal to themselves The scoring system gives 1.00 for complementary bases, -0.25 for a match of any base (or N) with an N, -1.00 for a mismatch, and -2.00 for a gap. Only single-base-pair gaps are allowed. For example, the alignment
 5' ATCGNA 3'
 || | |
@@ -1089,7 +1101,7 @@ is not considered. Scores are non-negative, and a score of 0.00 indicates that t
 </tr>
 
 <tr>
-<td>-oligoselfend</td>
+<td>-oendself</td>
 <td>The maximum allowable 3'-anchored global alignment score when testing a single oligo for self-complementarity.
 The scoring system is as for the Maximum Complementarity argument. In the examples above the scores are 7.00 and 6.00 respectively. Scores are non-negative, and a score of 0.00 indicates that there is no reasonable 3'-anchored global alignment between two oligos. In order to estimate 3'-anchored global alignments for candidate oligos, Primer assumes that the sequence from which to choose oligos is presented 5' to 3'.
 INTERNAL-OLIGO-SELF-END is meaningless when applied to internal oligos used for hybridization-based detection, since primer-dimer will not occur. We recommend that INTERNAL-OLIGO-SELF-END be set at least as high as INTERNAL-OLIGO-SELF-ANY.</td>
@@ -1098,14 +1110,14 @@ INTERNAL-OLIGO-SELF-END is meaningless when applied to internal oligos used for 
 </tr>
 
 <tr>
-<td>-oligomaxpolyx</td>
+<td>-opolyxmax</td>
 <td>The maximum allowable length of an internal oligo mononucleotide repeat, for example AAAAAA.</td>
 <td>Integer 0 or more</td>
 <td>5</td>
 </tr>
 
 <tr>
-<td>-oligomaxmishyb</td>
+<td>-omishybmax</td>
 <td>Similar to MAX-MISPRIMING except that this parameter applies to the similarity of candidate internal oligos to the library specified in INTERNAL-OLIGO-MISHYB-LIBRARY.</td>
 <td>Number up to 9999.990</td>
 <td>12.0</td>
@@ -1261,7 +1273,7 @@ RX   DOI; 10.1016/0006-291X(92)91286-Y.
 RX   PUBMED; 1326960.
 RA   Kas K., Michiels L., Merregaert J.;
 RT   "Genomic structure and expression of the human fau gene: encoding the
-RT   ribosomal protein S30 fused to a ubiquitin-like protein.";
+RT   ribosomal protein S30 fused to a ubiquitin-like protein";
 RL   Biochem. Biophys. Res. Commun. 187(2):927-933(1992).
 XX
 DR   GDB; 191789.

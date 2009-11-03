@@ -7,6 +7,8 @@
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
    -datafile           datafile   Restriction enzyme data file (optional)
+   -mfile              datafile   [Emethylsites.dat] Restriction enzyme data
+                                  file (optional)
    -min                integer    [1] Minimum cuts per RE (Integer from 1 to
                                   1000)
    -max                integer    [2000000000] Maximum cuts per RE (Integer up
@@ -19,6 +21,8 @@
    -[no]sticky         boolean    [Y] Allow sticky end cutters
    -[no]ambiguity      boolean    [Y] Allow ambiguous matches
    -plasmid            boolean    [N] Allow circular DNA
+   -methylation        boolean    [N] If this is set then RE recognition sites
+                                  will not match methylated bases.
    -[no]commercial     boolean    [Y] Only enzymes with suppliers
    -html               boolean    [N] Create HTML output
    -[no]limit          boolean    [Y] Limits reports to one isoschizomer

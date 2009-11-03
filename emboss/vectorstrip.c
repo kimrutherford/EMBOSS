@@ -164,18 +164,22 @@ int main(int argc, char **argv)
     seqall     = ajAcdGetSeqall("sequence");
     outf       = ajAcdGetOutfile("outfile");
     seqout     = ajAcdGetSeqoutall("outseq");
-    vec        = ajAcdGetToggle("vectorfile");
+    vec        = ajAcdGetToggle("readfile");
     besthits   = ajAcdGetBoolean("besthits");
-    fiveprime  = ajAcdGetString("linkerA");
-    threeprime = ajAcdGetString("linkerB");
-    vectorfile = ajAcdGetInfile("vectorsFILE");
+    fiveprime  = ajAcdGetString("alinker");
+    threeprime = ajAcdGetString("blinker");
+    vectorfile = ajAcdGetInfile("vectorsfile");
     allsequences = ajAcdGetBoolean("allsequences");
 
     vectorlist = ajListNew();
 
     /* data from command line or file? */
-    if(vec == AJTRUE)
+    if(vec)
+    {
+        if (!vectorfile)
+            ajFatal("vectors file not found");
 	vectorstrip_read_vector_data(vectorfile, vectorlist);
+    }
     else
     {
 	Vector v = NULL;

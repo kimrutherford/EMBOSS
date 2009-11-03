@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Merge two large overlapping DNA sequences
@@ -181,25 +188,17 @@ FT                   /codon_start=1
 FT                   /transl_table=11
 FT                   /note="reading frame (lacZ)"
 FT                   /db_xref="GOA:P00722"
-FT                   /db_xref="PDB:1BGL"
-FT                   /db_xref="PDB:1BGM"
-FT                   /db_xref="PDB:1DP0"
-FT                   /db_xref="PDB:1F49"
-FT                   /db_xref="PDB:1F4A"
-FT                   /db_xref="PDB:1F4H"
-FT                   /db_xref="PDB:1GHO"
-FT                   /db_xref="PDB:1HN1"
-FT                   /db_xref="PDB:1JYN"
-FT                   /db_xref="PDB:1JYV"
-FT                   /db_xref="PDB:1JYW"
-FT                   /db_xref="PDB:1JYX"
-FT                   /db_xref="PDB:1JYY"
-
-
-  [Part of this file has been deleted for brevity]
-
-FT                   /db_xref="PDB:2CFP"
-FT                   /db_xref="PDB:2CFQ"
+FT                   /db_xref="InterPro:IPR014718"
+FT                   /db_xref="PDB:3DYP"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P00722"
+FT                   /protein_id="CAA23570.1"
+FT                   /translation="FQLSAGRYHYQLVWCQK"
+FT   CDS             106..1359
+FT                   /transl_table=11
+FT                   /note="reading frame (lacY)"
+FT                   /db_xref="GOA:P02920"
+FT                   /db_xref="InterPro:IPR018457"
+FT                   /db_xref="PDB:2V8N"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P02920"
 FT                   /protein_id="CAA23571.1"
 FT                   /translation="MYYLKNTNFWMFGLFFFFYFFIMGAYFPFFPIWLHDINHISKSD
@@ -221,9 +220,7 @@ FT   CDS             1423..>1500
 FT                   /transl_table=11
 FT                   /note="reading frame (lacA)"
 FT                   /db_xref="GOA:P07464"
-FT                   /db_xref="PDB:1KQA"
-FT                   /db_xref="PDB:1KRR"
-FT                   /db_xref="PDB:1KRU"
+FT                   /db_xref="InterPro:IPR018357"
 FT                   /db_xref="PDB:1KRV"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P07464"
 FT                   /protein_id="CAA23572.1"
@@ -325,15 +322,20 @@ FT   CDS             <1..3072
 FT                   /transl_table=11
 FT                   /note="galactosidase"
 FT                   /db_xref="GOA:P00722"
-FT                   /db_xref="PDB:1BGL"
-FT                   /db_xref="PDB:1BGM"
-FT                   /db_xref="PDB:1DP0"
-FT                   /db_xref="PDB:1F49"
-FT                   /db_xref="PDB:1F4A"
-FT                   /db_xref="PDB:1F4H"
-FT                   /db_xref="PDB:1GHO"
-FT                   /db_xref="PDB:1HN1"
-FT                   /db_xref="PDB:1JYN"
+FT                   /db_xref="InterPro:IPR014718"
+FT                   /db_xref="PDB:3DYP"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P00722"
+FT                   /protein_id="CAA23573.1"
+FT                   /translation="TMITDSLAVVLQRRDWENPGVTQLNRLAAHPPFASWRNSEEART
+D
+FT                   RPSQQLRSLNGEWRFAWFPAPEAVPESWLECDLPEADTVVVPSNWQMHGYDAPIYTNV
+T
+FT                   YPITVNPPFVPTENPTGCYSLTFNVDESWLQEGQTRIIFDGVNSAFHLWCNGRWVGYG
+Q
+FT                   DSRLPSEFDLSAFLRAGENRLAVMVLRWSDGSYLEDQDMWRMSGIFRDVSLLHKPTTQ
+I
+FT                   SDFHVATRFNDDFSRAVLEAEVQMCGELRDYLRVTVSLWQGETQVASGTAPFGGEIID
+E
 
 
   [Part of this file has been deleted for brevity]
@@ -447,8 +449,9 @@ Output file format
    using regions of the two sequences where they have a mismatch is
    marked with the word WARNING!. Where there was a mismatch between the
    two sequences, the merged sequence is written out in uppercase and the
-   sequence whose mismatch region is furthest from the edges of the
-   sequence is used in the merged sequence.
+   sequence whose mismatch region is furthest from the end of the
+   sequence (the one with most remaining bases or residues) is used in
+   the merged sequence.
 
    The name and description of the first input sequence is used for the
    name and description of the output sequence.
@@ -604,11 +607,11 @@ Known bugs
 
 See also
 
-   Program name Description
-   cons Create a consensus sequence from a multiple alignment
-   consambig Create an ambiguous consensus sequence from a multiple
-   alignment
-   merger Merge two overlapping sequences
+   Program name     Description
+   cons             Create a consensus sequence from a multiple alignment
+   consambig        Create an ambiguous consensus sequence from a multiple
+                    alignment
+   merger           Merge two overlapping sequences
 
    Compare this with the program merger which does a more accurate
    alignment of more divergent sequences using the Needle and Wunsch

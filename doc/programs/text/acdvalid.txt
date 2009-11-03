@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Validate an application ACD file
@@ -124,18 +131,18 @@ Known bugs
 
 See also
 
-   Program name Description
-   acdc Test an application ACD file
-   acdpretty Correctly reformat an application ACD file
-   acdtable Generate an HTML table of parameters from an application ACD
-   file
-   acdtrace Trace processing of an application ACD file (for testing)
+   Program name     Description
+   acdc             Test an application ACD file
+   acdpretty        Correctly reformat an application ACD file
+   acdtable         Generate an HTML table of parameters from an application ACD
+                    file
+   acdtrace         Trace processing of an application ACD file (for testing)
 
 Author(s)
 
    Peter Rice (pmr © ebi.ac.uk)
-   Informatics Division, European Bioinformatics Institute, Wellcome
-   Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
 
 History
 

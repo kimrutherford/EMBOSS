@@ -98,6 +98,13 @@ PpiI</td>
 </tr>
 
 <tr>
+<td>-methylation</td>
+<td>If this is set then RE recognition sites will not match methylated bases.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
 <td>-[no]commercial</td>
 <td>If this is set, then only those enzymes with a commercial supplier will be searched for. This qualifier is ignored if you have specified an explicit list of enzymes to search for, rather than searching through 'all' the enzymes in the REBASE database. It is assumed that, if you are asking for an explicit enzyme, then you probably know where to get it from and so all enzymes names that you have asked to be searched for, and which cut, will be reported whether or not they have a commercial supplier.</td>
 <td>Boolean value Yes/No</td>
@@ -146,6 +153,13 @@ PpiI</td>
 </tr>
 
 <tr>
+<td>-mfile</td>
+<td>Restriction enzyme data file (optional)</td>
+<td>Data file</td>
+<td>Emethylsites.dat</td>
+</tr>
+
+<tr>
 <td>-[no]translation</td>
 <td>This displays the 6-frame translations of the sequence in the output.</td>
 <td>Boolean value Yes/No</td>
@@ -191,7 +205,7 @@ They are followed by any valid HTML font colour.
 Examples of region specifications are:
 24-45 blue 56-78 orange
 1-100 green 120-156 red
-A file of ranges to colour (one range per line) can be specifed as '@filename'.</td>
+A file of ranges to colour (one range per line) can be specified as '@filename'.</td>
 <td>Sequence range</td>
 <td><i>full sequence</i></td>
 </tr>

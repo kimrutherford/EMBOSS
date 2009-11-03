@@ -43,6 +43,8 @@
 void (assert)(ajint e)
 {
     assert(e);
+
+    return;
 }
 
 #endif

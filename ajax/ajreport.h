@@ -37,6 +37,8 @@ extern "C"
 ** @attr SubTail [AjPStr] Text to add to subtail with newlines
 ** @attr FileNames [AjPList] Names of extra files (see FileTypes)
 ** @attr FileTypes [AjPList] Types of extra files (see FileNames)
+** @attr Totseqs [ajlong] Total number of sequences processed
+** @attr Totlength [ajlong] Total length of sequences processed
 ** @attr Precision [ajint] Floating precision for score
 ** @attr Showacc [AjBool] Report accession number
 ** @attr Showdes [AjBool] Report sequence description
@@ -47,8 +49,10 @@ extern "C"
 ** @attr Mintags [ajint] Minimum number of tags to report
 ** @attr CountSeq [ajint] Number of sequences reported so far
 ** @attr CountHit [ajint] Number of features reported so far
+** @attr TotHits [ajint] Number of features found so far
 ** @attr MaxHitAll [ajint] Maximum number of hits to report overall
 ** @attr MaxHitSeq [ajint] Maximum number of hits to report for each sequence
+** @attr MaxLimit [AjBool] if true, maximum hits reached
 ** @attr Format [AjEnum] Report format (index number)
 ** @attr Padding [char[4]] Padding to alignment boundary
 **
@@ -75,6 +79,8 @@ typedef struct AjSReport {
   AjPStr SubTail;
   AjPList FileNames;
   AjPList FileTypes;
+  ajlong Totseqs;
+  ajlong Totlength;
   ajint Precision;
   AjBool Showacc;
   AjBool Showdes;
@@ -85,10 +91,12 @@ typedef struct AjSReport {
   ajint Mintags;
   ajint CountSeq;
   ajint CountHit;
+  ajint TotHits;
   ajint MaxHitAll;
   ajint MaxHitSeq;
+  AjBool MaxLimit;
   AjEnum Format;
-  char Padding[4];
+  char   Padding[4];
 } AjOReport;
 
 #define AjPReport AjOReport*
@@ -123,6 +131,10 @@ void         ajReportAppendSubHeader (AjPReport thys, const AjPStr header);
 void         ajReportAppendSubHeaderC (AjPReport thys, const char* header);
 void         ajReportSetSubHeader (AjPReport thys, const AjPStr header);
 void         ajReportSetSubHeaderC (AjPReport thys, const char* header);
+void         ajReportSetSeqstats(AjPReport thys, const AjPSeqall seqall);
+void         ajReportSetSeqsetstats(AjPReport thys, const AjPSeqset seqset);
+void         ajReportSetStatistics(AjPReport thys, ajlong totseqs,
+                                   ajlong totlength);
 AjBool       ajReportSetTags (AjPReport thys, const AjPStr taglist);
 void         ajReportAppendTail (AjPReport thys, const AjPStr tail);
 void         ajReportAppendTailC (AjPReport thys, const char* tail);

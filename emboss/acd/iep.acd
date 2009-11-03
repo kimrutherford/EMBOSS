@@ -27,6 +27,13 @@ section: additional [
     minimum: "0"
   ]
 
+  integer: carboxyl [
+    additional: "Y"
+    information: "Number of C-termini"
+    default: "1"
+    minimum: "0"
+  ]
+
   boolean: termini [
     additional: "Y"
     information: "Include charge at N and C terminus"

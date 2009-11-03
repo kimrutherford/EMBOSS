@@ -49,6 +49,12 @@ public class Matrix
   //private String cons = "";
   private String matrixString = null;
   private String matrixFileName = null;
+  
+  public static final String DEFAULT_MATRIX = "EBLOSUM62";
+  private String matrixFilesLocation;
+  private int locationType;
+  private static int LOCATION_JAR_ARCHIVE = 1;
+  private static int LOCATION_DATA_DIR = 2;
 
   /**
   *
@@ -67,9 +73,31 @@ public class Matrix
   * @param matrixFileName	matrix file
   *
   */
-  public Matrix(String matrixJar, String matrixFileName)
+  public Matrix(String matrixFilesLocation, String matrixFileName)
   {
     this.matrixFileName = matrixFileName;
+    this.matrixFilesLocation = matrixFilesLocation;
+    File mfl = new File(matrixFilesLocation);
+    if (mfl.isDirectory()){
+        keys = mfl.list(new FilenameFilter(){
+            public boolean accept(File dir, String name) {
+                if (name.startsWith("EPAM") ||
+                        name.startsWith("EBLOSUM") ||
+                        name.startsWith("ENUC"))
+                    return true;
+                return false;
+            }});
+        File m = new File(matrixFilesLocation+"/"+matrixFileName);
+        try {
+          matrixString = readFileAsString(m);
+          matrixReadString(matrixString);
+          locationType = LOCATION_DATA_DIR;
+          Arrays.sort(keys);
+          return;
+      } catch (IOException e) {
+      }
+    }
+    String matrixJar = matrixFilesLocation;
     try
     {
       Hashtable matrixHash = (new JembossJarUtil(matrixJar)).getHash();
@@ -79,6 +107,7 @@ public class Matrix
       {
         matrixString = new String((byte[])matrixHash.get(matrixFileName));
         matrixReadString(matrixString);
+        locationType = LOCATION_JAR_ARCHIVE;
       }
       else
         System.err.println("Matrix file "+matrixFileName+
@@ -91,12 +120,56 @@ public class Matrix
                  "\nfrom the matrix archive "+matrixJar,
                  "Missing matrix archive",
                   JOptionPane.ERROR_MESSAGE);
-
-//    System.err.println("Failed to read "+matrixFileName+
-//                       "\nfrom the matrix archive "+matrixJar);
     }
   }
 
+  
+  public void changeMatrix(String matrixFileName){
+      i = 0;
+      k = 0;
+      if (locationType == LOCATION_DATA_DIR){
+          File m = new File(matrixFilesLocation+"/"+matrixFileName);
+          try {
+            matrixString = readFileAsString(m);
+            matrixReadString(matrixString);
+        } catch (IOException e) {
+        }
+        return;
+      }
+      String matrixJar = matrixFilesLocation;
+      try
+      {
+        //TODO: shouldn't read the matrixHash each time
+        Hashtable matrixHash = (new JembossJarUtil(matrixJar)).getHash();
+        if(matrixHash.containsKey(matrixFileName))
+        {
+          matrixString = new String((byte[])matrixHash.get(matrixFileName));
+          matrixReadString(matrixString);
+        }
+        else
+          System.err.println("Matrix file "+matrixFileName+
+                      " not found in jar file "+matrixJar);
+      }
+      catch(Exception exp)
+      {
+        JOptionPane.showMessageDialog(null,
+                   "Failed to read "+matrixFileName+
+                   "\nfrom the matrix archive "+matrixJar,
+                   "Missing matrix archive",
+                    JOptionPane.ERROR_MESSAGE);
+      }    
+  }
+  
+  
+  final String readFileAsString(File source) throws IOException
+  {
+      final DataInputStream dis = new DataInputStream(new BufferedInputStream(new FileInputStream(source)));
+      final byte[] buffer = new byte[(int)source.length()];
+      dis.readFully(buffer);
+      dis.close();
+      return new String(buffer);
+  }
+  
   /**
   *
   * Get the scoring matrix as a 2 dimensional integer
@@ -231,7 +304,10 @@ public class Matrix
   public int getMatrixIndex(String s)
   {
     s = s.toUpperCase();
-
+    
+    if(residueMatrixPosition==null)
+        return -1;
+    
     if(!residueMatrixPosition.containsKey(s))
       if(s.equals(".") || s.equals("-") 
                        || s.equals("~"))

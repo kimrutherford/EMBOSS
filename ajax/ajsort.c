@@ -476,6 +476,8 @@ void ajSortIntInc(ajint *a, ajuint n)
 }
 
 
+
+
 /* @func ajSortUintInc  *******************************************************
 **
 ** Sort an unsigned ajuint array (ascending)

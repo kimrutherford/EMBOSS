@@ -162,7 +162,7 @@ int main(int argc, char **argv)
 	    writeok = ajReportWrite(report, seqtab, seq);
 	ajStrDel(&text);
     }
-
+    ajReportSetSeqstats(report, seqall);
 
     ajStrDel(&pro);
     ajStrDel(&text);

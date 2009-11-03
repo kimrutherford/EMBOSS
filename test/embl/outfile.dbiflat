@@ -1,0 +1,118 @@
+########################################
+# Program: dbiflat
+# Rundate: Wed 15 Jul 2009 12:00:00
+# Dbname: EMBL
+# Release: 0.0
+# Date: 15/07/09
+# CurrentDirectory: /data2/users/pmr/cvsemboss/test/embl/
+# IndexDirectory: ./
+# IndexDirectoryPath: /data2/users/pmr/cvsemboss/test/embl/
+# Maxindex: 0
+# Fields: 6
+#   Field 1: id
+#   Field 2: acc
+#   Field 3: sv
+#   Field 4: des
+#   Field 5: key
+#   Field 6: org
+# Directory: ./
+# DirectoryPath: /data2/users/pmr/cvsemboss/test/embl/
+# Filenames: *.dat
+# Exclude: 
+# Files: 10
+#   File 1: ./est.dat
+#   File 2: ./fun.dat
+#   File 3: ./hum1.dat
+#   File 4: ./inv.dat
+#   File 5: ./pln.dat
+#   File 6: ./pro.dat
+#   File 7: ./rod.dat
+#   File 8: ./sts.dat
+#   File 9: ./vrl.dat
+#   File 10: ./vrt.dat
+########################################
+# Commandline: dbiflat
+#    -fields acnum,seqvn,des,keyword,taxon
+#    -dbname EMBL
+#    -idformat embl
+#    -auto
+########################################
+
+filename: 'est.dat'
+    id: 1
+   acc: 1
+    sv: 1
+   des: 15
+   key: 1
+   org: 16
+filename: 'fun.dat'
+    id: 1
+   acc: 1
+    sv: 1
+   des: 8
+   key: 1
+   org: 11
+filename: 'hum1.dat'
+    id: 21
+   acc: 115
+    sv: 21
+   des: 195
+   key: 42
+   org: 336
+filename: 'inv.dat'
+    id: 3
+   acc: 3
+    sv: 3
+   des: 20
+   key: 3
+   org: 37
+filename: 'pln.dat'
+    id: 1
+   acc: 3
+    sv: 1
+   des: 9
+   key: 2
+   org: 18
+filename: 'pro.dat'
+    id: 10
+   acc: 15
+    sv: 10
+   des: 87
+   key: 29
+   org: 70
+filename: 'rod.dat'
+    id: 6
+   acc: 9
+    sv: 6
+   des: 65
+   key: 1
+   org: 108
+filename: 'sts.dat'
+    id: 1
+   acc: 1
+    sv: 1
+   des: 12
+   key: 7
+   org: 16
+filename: 'vrl.dat'
+    id: 1
+   acc: 2
+    sv: 1
+   des: 10
+   key: 1
+   org: 7
+filename: 'vrt.dat'
+    id: 4
+   acc: 4
+    sv: 4
+   des: 33
+   key: 5
+   org: 62
+
+Index acc: maxlen 8 items 152
+Index sv: maxlen 10 items 49
+Index des: maxlen 19 items 216
+Index key: maxlen 44 items 78
+Index org: maxlen 27 items 135
+
+Total 10 files 49 entries (0 duplicates)

@@ -89,6 +89,7 @@ static DbiOField fieldDef[] =
 
 static const char* dbiFieldFile(const AjPStr fieldname);
 
+
 /* @func embDbiFieldNew *******************************************************
 **
 ** Constructor for field token structures.
@@ -103,6 +104,9 @@ EmbPField embDbiFieldNew(void)
 
     return ret;
 }
+
+
+
 
 /* @func embDbiFieldDel *******************************************************
 **
@@ -146,6 +150,7 @@ void embDbiFieldDelMap(void** pthys, void* cl)
 
     if(!thys)
 	return;
+
     (void) cl;				/* make it used */
 
     thys = *pthys;
@@ -229,6 +234,7 @@ ajint embDbiCmpFieldField(const void* a, const void* b)
     bb = *(EmbPField const *) b;
 
     ret = strcmp(aa->field, bb->field);
+
     if(ret)
 	return ret;
 
@@ -275,14 +281,18 @@ void embDbiEntryDel(EmbPEntry* Pentry)
     ajuint i;
     ajuint j;
 
-    if(!*Pentry) return;
+    if(!*Pentry)
+        return;
+
     entry = *Pentry;
+
     for(i=0;i<entry->nfields;i++)
     {
 	for(j=0;j<entry->nfield[i];j++)
 	{
 	    AJFREE(entry->field[i][j]);
 	}
+
 	AJFREE(entry->field[i]);
     }
 
@@ -318,12 +328,14 @@ void embDbiEntryDelMap(void** pthys, void* cl)
     (void) cl;				/* make it used */
 
     entry = (*(EmbPEntry*)pthys);
+
     for(i=0;i<entry->nfields;i++)
     {
 	for(j=0;j<entry->nfield[i];j++)
 	{
 	    AJFREE(entry->field[i][j]);
 	}
+
 	AJFREE(entry->field[i]);
     }
 
@@ -389,6 +401,7 @@ AjPList embDbiFileList(const AjPStr dir, const AjPStr wildfile, AjBool trim)
 	ajStrAppendC(&dbiWildFname,"*");
 
     dp = opendir(ajStrGetPtr(dbiDirFix));
+
     if(!dp)
 	ajFatal("opendir failed on '%S'", dbiDirFix);
 
@@ -403,31 +416,38 @@ AjPList embDbiFileList(const AjPStr dir, const AjPStr wildfile, AjBool trim)
 	if(!de->d_ino)
 	    continue; 		/* skip deleted files with inode zero */
 #endif
+
 	if(ajCharMatchC(de->d_name, "."))
 	    continue;
+
 	if(ajCharMatchC(de->d_name, ".."))
 	    continue;
+
 	if(!ajCharMatchWildS(de->d_name, dbiWildFname))
 	    continue;
 
 	ajStrAssignC(&s,de->d_name);
 	p = q =ajStrGetuniquePtr(&s);
+
 	if(trim)
 	{
 	    p=strrchr(p,(int)'.');
+
 	    if(p)
 		*p='\0';
 	}
+
 	s2 = ajStrNewC(q);
-
 	ll=ajListGetLength(l);
-
 	d=ajFalse;
+
 	for(i=0;i<ll;++i)
 	{
 	    ajListPop(l,(void *)&t);
+
 	    if(ajStrMatchS(t,s2))
 		d=ajTrue;
+
 	    ajListPushAppend(l,(void *)t);
 	}
 
@@ -442,8 +462,10 @@ AjPList embDbiFileList(const AjPStr dir, const AjPStr wildfile, AjBool trim)
 	dirsize++;
 	name = NULL;
 	ajFmtPrintS(&name, "%S%S", dbiDirFix, s2);
+
 	if(ajFilenameGetSize(name) > (ajlong) INT_MAX)
 	  ajDie("File '%S' too large for DBI indexing", name);
+
 	ajDebug("accept '%S' (%Ld)\n", s2, ajFilenameGetSize(name));
 	ajListstrPushAppend(retlist, name);
     }
@@ -490,7 +512,8 @@ AjPList embDbiFileListExc(const AjPStr dir, const AjPStr wildfile,
     ajuint dirsize;
     AjPStr name = NULL;
 
-    ajDebug("embDbiFileListExc dir '%S' wildfile '%S' exclude '%S' maxsize %Ld\n",
+    ajDebug("embDbiFileListExc dir '%S' wildfile '%S' exclude '%S' "
+            "maxsize %Ld\n",
 	    dir, wildfile, exclude, (ajlong) INT_MAX);
 
     if(ajStrGetLen(dir))
@@ -504,11 +527,13 @@ AjPList embDbiFileListExc(const AjPStr dir, const AjPStr wildfile,
     ajDebug("dirfix '%S'\n", dbiDirFix);
 
     dp = opendir(ajStrGetPtr(dbiDirFix));
+
     if(!dp)
 	ajFatal("opendir failed on '%S'", dbiDirFix);
 
     dirsize = 0;
     retlist = ajListstrNew();
+
     while((de = readdir(dp)))
     {
 	/* skip deleted files with inode zero */	
@@ -516,8 +541,10 @@ AjPList embDbiFileListExc(const AjPStr dir, const AjPStr wildfile,
 	if(!de->d_ino)
 	    continue;
 #endif
+
 	if(ajCharMatchC(de->d_name, "."))
 	    continue;
+
 	if(ajCharMatchC(de->d_name, ".."))
 	    continue;
 
@@ -529,8 +556,10 @@ AjPList embDbiFileListExc(const AjPStr dir, const AjPStr wildfile,
 	dirsize++;
 	name = NULL;
 	ajFmtPrintS(&name, "%S%S", dbiDirFix, dbiInFname);
+
 	if(ajFilenameGetSize(name) > (ajlong) INT_MAX)
 	  ajDie("File '%S' too large for DBI indexing", name);
+
 	ajDebug("accept '%S' (%Ld)\n", dbiInFname, ajFilenameGetSize(name));
 	ajListstrPushAppend(retlist, name);
     }
@@ -567,6 +596,7 @@ AjBool embDbiFlatOpenlib(const AjPStr lname, AjPFile* libr)
     {
 	ajErr(" cannot open library flat file: %S\n",
 	      lname);
+
 	return ajFalse;
     }
 
@@ -600,6 +630,7 @@ void embDbiRmFile(const AjPStr dbname, const char* ext, ajuint nfiles,
     if(nfiles)
     {
 	ajFmtPrintS(&dbiCmdStr, "rm ");
+
 	for(i=1; i<= nfiles; i++)
 	    ajFmtPrintAppS(&dbiCmdStr, "%S%03d.%s ", dbname, i, ext);
     }
@@ -664,7 +695,7 @@ void embDbiRmFileI(const AjPStr dbname, const char* ext, ajuint ifile,
 #else
     static AjPStr filestr = NULL;
     
-    if (!cleanup)
+    if(!cleanup)
 	return;
     
     ajFmtPrintS (&filestr, "%S%03d.%s ", dbname, ifile, ext);
@@ -732,7 +763,8 @@ void embDbiSortFile(const AjPStr dbname, const char* ext1, const char* ext2,
     static const char *prog = "sort.exe";
     
     char* sortProgDir = getenv("EMBOSS_ROOT");
-    if (sortProgDir == NULL)
+
+    if(sortProgDir == NULL)
     {
 	AjPStr msg = ajStrNewC("EMBOSS_ROOT");
 	ajStrAppendC(&msg, " environment variable not defined");
@@ -750,17 +782,17 @@ void embDbiSortFile(const AjPStr dbname, const char* ext1, const char* ext2,
 	{
 	    ajFmtPrintS(&dbiInFname, "%S%03d.%s ", dbname, i, ext1);
 	    ajFmtPrintS(&dbiOutFname, "%S%03d.%s.srt", dbname, i, ext1);
+
 	    if(sortopt)
 		ajFmtPrintS(&dbiCmdStr, "%S%s -o %S %S %S",
 			    dir,prog,dbiOutFname,sortopt,dbiInFname);
 	    else
 		ajFmtPrintS(&dbiCmdStr, "%S%s -o %S %S",
 			    dir,prog,dbiOutFname,dbiInFname);
-	    embDbiSysCmd(dbiCmdStr);
 
+	    embDbiSysCmd(dbiCmdStr);
 	    embDbiRmFileI(dbname, ext1, i, cleanup);
 	}
-
 
 	td = sqrt(nfiles);
 	nsplit = (ajuint) td;
@@ -771,60 +803,55 @@ void embDbiSortFile(const AjPStr dbname, const char* ext1, const char* ext2,
 
 	if(nsplit < 2)		/* up to 3 source files */
 	{
-	  ajFmtPrintS(&dbiCmdStr, "%S%s -m -o %S.%s %S",
-		      dir,prog,dbname,ext2,sortopt);
+            ajFmtPrintS(&dbiCmdStr, "%S%s -m -o %S.%s %S",
+                        dir,prog,dbname,ext2,sortopt);
 
-	  for(i=1; i<=nfiles; i++)
-	    ajFmtPrintAppS(&dbiCmdStr, " %S%03d.%s.srt", dbname, i, ext1);
+            for(i=1; i<=nfiles; i++)
+                ajFmtPrintAppS(&dbiCmdStr, " %S%03d.%s.srt", dbname, i, ext1);
 
-	  embDbiSysCmd(dbiCmdStr);
+            embDbiSysCmd(dbiCmdStr);
+            ajFmtPrintS(&dbiSortExt, "%s.srt ", ext1);
 
-	  ajFmtPrintS(&dbiSortExt, "%s.srt ", ext1);
-	  for(i=1; i<=nfiles; i++)
-	    embDbiRmFileI(dbname, ajStrGetPtr(dbiSortExt), i, cleanup);
+            for(i=1; i<=nfiles; i++)
+                embDbiRmFileI(dbname, ajStrGetPtr(dbiSortExt), i, cleanup);
 
 	}
 	else
 	{
-	  ajFmtPrintS(&dbiCmdStr2, "%S%s -m -o %S.%s %S",
-		    dir,prog,dbname,ext2,sortopt);
+            ajFmtPrintS(&dbiCmdStr2, "%S%s -m -o %S.%s %S",
+                        dir,prog,dbname,ext2,sortopt);
+            isplit = 0;
 
-	  isplit = 0;
-	  for(i=1; i<=nfiles; i+=nsplit)
-	  {
-	    isplit++;
-	    ajFmtPrintAppS(&dbiCmdStr2, " %S%03d.%s.mrg1",
-			   dbname, isplit, ext2);
+            for(i=1; i<=nfiles; i+=nsplit)
+            {
+                isplit++;
+                ajFmtPrintAppS(&dbiCmdStr2, " %S%03d.%s.mrg1",
+                               dbname, isplit, ext2);
 
-	    /* Now we make that .mrg1 file */
+                /* Now we make that .mrg1 file */
 
-	    ajFmtPrintS(&dbiCmdStr, "%S%s -m -o %S%03d.%s.mrg1 %S",
-			dir,prog,dbname,isplit,ext2,sortopt);
+                ajFmtPrintS(&dbiCmdStr, "%S%s -m -o %S%03d.%s.mrg1 %S",
+                            dir,prog,dbname,isplit,ext2,sortopt);
 
-	    for(j=0; j<nsplit; j++)
-	    {
-	      if((i+j) <= nfiles)
-		ajFmtPrintAppS(&dbiCmdStr, " %S%03d.%s.srt",
-			       dbname, i+j, ext1);
-	    }
+                for(j=0; j<nsplit; j++)
+                    if((i+j) <= nfiles)
+                        ajFmtPrintAppS(&dbiCmdStr, " %S%03d.%s.srt",
+                                       dbname, i+j, ext1);
 
-	    embDbiSysCmd(dbiCmdStr);
+                embDbiSysCmd(dbiCmdStr);
+                ajFmtPrintS(&dbiSortExt, "%s.srt ", ext1);
 
-	    ajFmtPrintS(&dbiSortExt, "%s.srt ", ext1);
-	    for(j=0; j<nsplit; j++)
-	    {
-	      if((i+j) <= nfiles)
-		embDbiRmFileI(dbname, ajStrGetPtr(dbiSortExt), (i+j), cleanup);
-	    }
+                for(j=0; j<nsplit; j++)
+                    if((i+j) <= nfiles)
+                        embDbiRmFileI(dbname, ajStrGetPtr(dbiSortExt), (i+j),
+                                      cleanup);
+            }
 
-	  }
+            embDbiSysCmd(dbiCmdStr2);
+            ajFmtPrintS(&dbiSortExt, "%s.mrg1", ext2);
 
-	  embDbiSysCmd(dbiCmdStr2);
-	  ajFmtPrintS(&dbiSortExt, "%s.mrg1", ext2);
-	  for(j=1; j<=isplit; j++)
-	  {
-	    embDbiRmFileI(dbname, ajStrGetPtr(dbiSortExt), j, cleanup);
-	  }
+            for(j=1; j<=isplit; j++)
+                embDbiRmFileI(dbname, ajStrGetPtr(dbiSortExt), j, cleanup);
 	}
     }
     else
@@ -877,6 +904,7 @@ void embDbiSysCmd(const AjPStr cmdstr)
 	execvp(pgm, arglist);
 	ajExitAbort();			/* just in case */
     }
+
     while((retval=waitpid(pid,&status,0))!=pid)
     {
 	if(retval == -1)
@@ -961,6 +989,7 @@ void embDbiHeader(AjPFile file, ajuint filesize, ajuint recordcnt,
     {
 	for(i=0;i<256;i++)
 	    padding[i] = ' ';
+
 	firstcall = ajFalse;
     }
 
@@ -1005,6 +1034,7 @@ AjPFile embDbiFileSingle(const AjPStr dbname, const char* extension, ajuint num)
 
     ajFmtPrintS(&dbiOutFname, "%S%03d.%s", dbname, num, extension);
     ret = ajFileNewOutNameS(dbiOutFname);
+
     if(!ret)
 	ajFatal("Cannot open %S for writing", dbiOutFname);
 
@@ -1304,10 +1334,8 @@ static const char* dbiFieldFile(const AjPStr fieldname)
     ajuint i = 0;
 
     for(i=0;fieldDef[i].name;i++)
-    {
 	if(ajStrMatchCaseC(fieldname, fieldDef[i].name))
 	    return fieldDef[i].index;
-    }
 
     ajErr("Unknown query field '%S' in index filename lookup", fieldname);
     return NULL;
@@ -1362,6 +1390,7 @@ void embDbiMemEntry(AjPList idlist, AjPList* fieldList, ajuint nfields,
 
     entry->filenum = ifile+1;
     ajListPushAppend(idlist, entry);
+
     for(ifield=0; ifield < nfields; ifield++)
 	for(i=0;i<entry->nfield[ifield]; i++)
 	{
@@ -1391,8 +1420,8 @@ void embDbiMemEntry(AjPList idlist, AjPList* fieldList, ajuint nfields,
 ******************************************************************************/
 
 ajuint embDbiSortWriteEntry(AjPFile entFile, ajuint maxidlen,
-			   const AjPStr dbname, ajuint nfiles,
-			   AjBool cleanup, const AjPStr sortopt)
+                            const AjPStr dbname, ajuint nfiles,
+                            AjBool cleanup, const AjPStr sortopt)
 {
     AjPFile esortfile;
     ajint rpos;
@@ -1407,6 +1436,7 @@ ajuint embDbiSortWriteEntry(AjPFile entFile, ajuint maxidlen,
     embDbiSortFile(dbname, "list", "idsrt", nfiles, cleanup, sortopt);
     ajStrAssignC(&dbiLastId, " ");
     esortfile = embDbiFileIn(dbname, "idsrt");
+
     while(ajReadline(esortfile, &dbiRdLine))
     {
 	ajRegExec(dbiRegEntryIdSort, dbiRdLine);
@@ -1417,15 +1447,17 @@ ajuint embDbiSortWriteEntry(AjPFile entFile, ajuint maxidlen,
 	ajStrToInt(dbiTmpStr, &spos);
 	ajRegSubI(dbiRegEntryIdSort, 4, &dbiTmpStr);
 	ajStrToInt(dbiTmpStr, &filenum);
+
 	if(ajStrMatchCaseS(dbiIdStr, dbiLastId))
 	{
-	  ajDebug("Duplicate ID '%S' filenum: %d",
-		  dbiIdStr, filenum);
-	  ajWarn("Duplicate ID skipped: '%S' "
-		 "All hits will point to first ID found",
-		 dbiIdStr);
-	  continue;
+            ajDebug("Duplicate ID '%S' filenum: %d",
+                    dbiIdStr, filenum);
+            ajWarn("Duplicate ID skipped: '%S' "
+                   "All hits will point to first ID found",
+                   dbiIdStr);
+            continue;
 	}
+
 	embDbiWriteEntryRecord(entFile, maxidlen, dbiIdStr,
 			       rpos, spos, filenum);
 	ajStrAssignS(&dbiLastId, dbiIdStr);
@@ -1466,11 +1498,13 @@ ajuint embDbiMemWriteEntry(AjPFile entFile, ajuint maxidlen,
     for(i = 0; i < idCount; i++)
     {
 	entry = (EmbPEntry)(*ids)[i];
+
 	if(ajStrMatchCaseC(dbiIdStr, entry->entry))
 	{
 	    ajErr("Duplicate ID found: '%S'. ", dbiIdStr);
 	    continue;
 	}
+
 	ajStrAssignC(&dbiIdStr, entry->entry);
 	embDbiWriteEntryRecord(entFile, maxidlen, dbiIdStr,
 			       entry->rpos, entry->spos, entry->filenum);
@@ -1568,18 +1602,22 @@ ajuint embDbiSortWriteFields(const AjPStr dbname, const AjPStr release,
 	ajRegExec(dbiRegFieldTokSort, dbiRdLine);
 	ajRegSubI(dbiRegFieldTokSort, 1, &dbiIdStr);
 	ajRegSubI(dbiRegFieldTokSort, 2, &dbiFieldStr);
+
 	while(!ajStrMatchS(dbiIdStr, dbiCurrentId))
 	{
 	    ajStrAssignS(&dbiFieldId, dbiCurrentId);
+
 	    if(!ajReadline(elistfile, &dbiIdLine))
 		ajFatal("Error in embDbiSortWriteFields, "
 			"expected entry %S not found",
 			dbiIdStr);
 	    ajRegExec(dbiRegFieldIdSort, dbiIdLine);
 	    ajRegSubI(dbiRegFieldIdSort, 1, &dbiCurrentId);
+
 	    if(!ajStrMatchS(dbiFieldId, dbiCurrentId))
 		ient++;
 	}
+
 	ajFmtPrintF(blistfile, "%S %0*d\n", dbiFieldStr, idwidth, ient);
 	fieldCount++;
     }
@@ -1612,6 +1650,7 @@ ajuint embDbiSortWriteFields(const AjPStr dbname, const AjPStr release,
     lastidnum = 999999999;
     ajStrAssignC(&dbiFieldId, "");
     asrt2file = embDbiFileIn(dbname, ajStrGetPtr(dbiFieldSort2));
+
     while(ajReadline(asrt2file, &dbiRdLine))
     {
 	ajRegExec(dbiRegFieldTokIdSort, dbiRdLine);
@@ -1759,10 +1798,10 @@ ajuint embDbiMemWriteFields(const AjPStr dbname,const  AjPStr release,
 		 dbname, release, date);
 
     itoken = 0;
-    j = 0;
-    k = 1;
+    j      = 0;
+    k      = 1;
+    idup   = 0;
 
-    idup=0;
     for(i = 0; i < fieldCount; i++)
     {
 	fieldData = (EmbPField)fieldItems[i];
@@ -1883,6 +1922,9 @@ void embDbiMaxlen(AjPStr* token, ajint* maxlen)
     return;
 }
 
+
+
+
 /* @func embDbiLogHeader ******************************************************
 **
 ** Writes the header to a database indexing logfile
@@ -1920,8 +1962,12 @@ void embDbiLogHeader(AjPFile logfile, const AjPStr dbname,
 
     ajTimeDel(&today);
     ajStrDel(&dirname);
+
     return;
 }
+
+
+
 
 /* @func embDbiLogFields ******************************************************
 **
@@ -1939,11 +1985,15 @@ void embDbiLogFields(AjPFile logfile, AjPStr const * fields, ajuint nfields)
 
     ajFmtPrintF(logfile, "# Fields: %d\n", nfields+1);
     ajFmtPrintF(logfile, "#   Field 1: id\n");
-    for(i=0;i<nfields;i++) {
+
+    for(i=0;i<nfields;i++)
 	ajFmtPrintF(logfile, "#   Field %d: %S\n", i+2, fields[i]);
-    }
+
     return;
 }
+
+
+
 
 /* @func embDbiLogSource ******************************************************
 **
@@ -1972,13 +2022,17 @@ void embDbiLogSource(AjPFile logfile, const AjPStr directory,
     ajFmtPrintF(logfile, "# Filenames: %S\n", filename);
     ajFmtPrintF(logfile, "# Exclude: %S\n", exclude);
     ajFmtPrintF(logfile, "# Files: %d\n", nfiles);
-    for(i=0;i<nfiles;i++) {
+
+    for(i=0;i<nfiles;i++)
 	ajFmtPrintF(logfile, "#   File %d: %S\n", i+1, inputFiles[i]);
-    }
 
     ajStrDel(&dirname);
+
     return;
 }
+
+
+
 
 /* @func embDbiLogCmdline *****************************************************
 **
@@ -1995,24 +2049,31 @@ void embDbiLogCmdline(AjPFile logfile)
     ajFmtPrintF(logfile, "########################################\n");
     ajFmtPrintF(logfile, "# Commandline: %S\n", ajAcdGetProgram());
     ajStrAssignS(&cmdline, ajAcdGetCmdline());
-    if(ajStrGetLen(cmdline))
-    {
-	ajStrExchangeCC(&cmdline, "\n", "\1#    ");
-	ajStrExchangeCC(&cmdline, "\1", "\n");
-	ajFmtPrintF(logfile, "#    %S\n", cmdline);
-    }
-    ajStrAssignS(&cmdline, ajAcdGetInputs());
-    if(ajStrGetLen(cmdline))
-    {
-	ajStrExchangeCC(&cmdline, "\n", "\1#    ");
-	ajStrExchangeCC(&cmdline, "\1", "\n");
-	ajFmtPrintF(logfile, "#    %S\n", cmdline);
-    }
-    ajFmtPrintF(logfile, "########################################\n\n");
 
+    if(ajStrGetLen(cmdline))
+    {
+	ajStrExchangeCC(&cmdline, "\n", "\1#    ");
+	ajStrExchangeCC(&cmdline, "\1", "\n");
+	ajFmtPrintF(logfile, "#    %S\n", cmdline);
+    }
+
+    ajStrAssignS(&cmdline, ajAcdGetInputs());
+
+    if(ajStrGetLen(cmdline))
+    {
+	ajStrExchangeCC(&cmdline, "\n", "\1#    ");
+	ajStrExchangeCC(&cmdline, "\1", "\n");
+	ajFmtPrintF(logfile, "#    %S\n", cmdline);
+    }
+
+    ajFmtPrintF(logfile, "########################################\n\n");
     ajStrDel(&cmdline);
+
     return;
 }
+
+
+
 
 /* @func embDbiLogFile *****************************************************
 **
@@ -2036,12 +2097,15 @@ void embDbiLogFile(AjPFile logfile, const AjPStr curfilename,
 
     ajFmtPrintF(logfile, "filename: '%S'\n", curfilename);
     ajFmtPrintF(logfile, "    id: %d\n", idCountFile);
+
     for(i=0;i<nfields;i++)
-    {
 	ajFmtPrintF(logfile, "   %3S: %d\n", fields[i], countField[i]);
-    }
+
     return;
 }
+
+
+
 
 /* @func embDbiLogFinal *******************************************************
 **
@@ -2080,9 +2144,11 @@ void embDbiLogFinal(AjPFile logfile, ajuint maxindex,
 	    maxlen = maxindex;
 	else
 	    maxlen = maxFieldLen[i];
+
 	ajFmtPrintF(logfile, "Index %S: maxlen %d items %d\n",
 		    fields[i], maxlen, fieldTot[i]);
     }
+
     ajFmtPrintF(logfile, "\nTotal %d files %d entries (%d duplicates)\n",
 		nfiles, idCount, (idCount-idDone));
     return;

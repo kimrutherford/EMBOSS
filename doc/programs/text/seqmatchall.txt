@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    All-against-all word comparison of a sequence set
@@ -239,13 +246,13 @@ Known bugs
 
 See also
 
-   Program name Description
-   matcher Waterman-Eggert local alignment of two sequences
-   supermatcher Calculate approximate local pair-wise alignments of
-   larger sequences
-   water Smith-Waterman local alignment of sequences
-   wordfinder Match large sequences against one or more other sequences
-   wordmatch Finds regions of identity (exact matches) of two sequences
+   Program name     Description
+   matcher          Waterman-Eggert local alignment of two sequences
+   supermatcher     Calculate approximate local pair-wise alignments of
+                    larger sequences
+   water            Smith-Waterman local alignment of sequences
+   wordfinder       Match large sequences against one or more other sequences
+   wordmatch        Finds regions of identity (exact matches) of two sequences
 
    polydot will give a graphical view of the same matches.
 

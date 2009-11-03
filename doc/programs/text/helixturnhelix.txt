@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Identify nucleic acid-binding motifs in protein sequences
@@ -106,13 +113,13 @@ ID   LACI_ECOLI              Reviewed;         360 AA.
 AC   P03023; O09196; P71309; Q2MC79; Q47338;
 DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
 DT   19-JUL-2003, sequence version 3.
-DT   20-MAR-2007, entry version 87.
-DE   Lactose operon repressor.
+DT   16-JUN-2009, entry version 105.
+DE   RecName: Full=Lactose operon repressor;
 GN   Name=lacI; OrderedLocusNames=b0345, JW0336;
-OS   Escherichia coli.
+OS   Escherichia coli (strain K12).
 OC   Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
 OC   Enterobacteriaceae; Escherichia.
-OX   NCBI_TaxID=562;
+OX   NCBI_TaxID=83333;
 RN   [1]
 RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
 RX   MEDLINE=78246991; PubMed=355891; DOI=10.1038/274765a0;
@@ -156,13 +163,6 @@ RT   "Highly accurate genome sequences of Escherichia coli K-12 strains
 
   [Part of this file has been deleted for brevity]
 
-DR   Pfam; PF00532; Peripla_BP_1; 1.
-DR   PRINTS; PR00036; HTHLACI.
-DR   SMART; SM00354; HTH_LACI; 1.
-DR   PROSITE; PS00356; HTH_LACI_1; 1.
-DR   PROSITE; PS50932; HTH_LACI_2; 1.
-KW   3D-structure; Complete proteome; Direct protein sequencing;
-KW   DNA-binding; Repressor; Transcription; Transcription regulation.
 FT   CHAIN         1    360       Lactose operon repressor.
 FT                                /FTId=PRO_0000107963.
 FT   DOMAIN        1     58       HTH lacI-type.
@@ -171,6 +171,11 @@ FT   VARIANT     282    282       Y -> D (in T41 mutant).
 FT   MUTAGEN      17     17       Y->H: Broadening of specificity.
 FT   MUTAGEN      22     22       R->N: Recognizes an operator variant.
 FT   CONFLICT    286    286       L -> S (in Ref. 1, 4 and 7).
+FT   HELIX         6     11
+FT   TURN         12     14
+FT   HELIX        17     24
+FT   HELIX        33     45
+FT   HELIX        51     56
 FT   STRAND       63     69
 FT   HELIX        74     89
 FT   STRAND       93     98
@@ -198,6 +203,8 @@ FT   STRAND      287    290
 FT   HELIX       293    308
 FT   STRAND      314    319
 FT   STRAND      322    324
+FT   STRAND      334    338
+FT   HELIX       343    353
 FT   HELIX       354    356
 SQ   SEQUENCE   360 AA;  38590 MW;  347A8DEE92D736CB CRC64;
      MKPVTLYDVA EYAGVSYQTV SRVVNQASHV SAKTREKVEA AMAELNYIPN RVAQQLAGKQ
@@ -261,7 +268,9 @@ Maximum_score_at at "*"
 
 #---------------------------------------
 # Total_sequences: 1
-# Total_hitcount: 1
+# Total_length: 360
+# Reported_sequences: 1
+# Reported_hitcount: 1
 #---------------------------------------
 
 Data files
@@ -376,26 +385,26 @@ Known bugs
 
 See also
 
-   Program name Description
-   antigenic Finds antigenic sites in proteins
-   digest Reports on protein proteolytic enzyme or reagent cleavage sites
-   epestfind Finds PEST motifs as potential proteolytic cleavage sites
-   fuzzpro Search for patterns in protein sequences
-   fuzztran Search for patterns in protein sequences (translated)
-   garnier Predicts protein secondary structure using GOR method
-   hmoment Calculate and plot hydrophobic moment for protein sequence(s)
-   oddcomp Identify proteins with specified sequence word composition
-   patmatdb Searches protein sequences with a sequence motif
-   patmatmotifs Scan a protein sequence with motifs from the PROSITE
-   database
-   pepcoil Predicts coiled coil regions in protein sequences
-   pepnet Draw a helical net for a protein sequence
-   pepwheel Draw a helical wheel diagram for a protein sequence
-   preg Regular expression search of protein sequence(s)
-   pscan Scans protein sequence(s) with fingerprints from the PRINTS
-   database
-   sigcleave Reports on signal cleavage sites in a protein sequence
-   tmap Predict and plot transmembrane segments in protein sequences
+   Program name     Description
+   antigenic        Finds antigenic sites in proteins
+   digest           Reports on protein proteolytic enzyme or reagent cleavage sites
+   epestfind        Finds PEST motifs as potential proteolytic cleavage sites
+   fuzzpro          Search for patterns in protein sequences
+   fuzztran         Search for patterns in protein sequences (translated)
+   garnier          Predicts protein secondary structure using GOR method
+   hmoment          Calculate and plot hydrophobic moment for protein sequence(s)
+   oddcomp          Identify proteins with specified sequence word composition
+   patmatdb         Searches protein sequences with a sequence motif
+   patmatmotifs     Scan a protein sequence with motifs from the PROSITE
+                    database
+   pepcoil          Predicts coiled coil regions in protein sequences
+   pepnet           Draw a helical net for a protein sequence
+   pepwheel         Draw a helical wheel diagram for a protein sequence
+   preg             Regular expression search of protein sequence(s)
+   pscan            Scans protein sequence(s) with fingerprints from the PRINTS
+                    database
+   sigcleave        Reports on signal cleavage sites in a protein sequence
+   tmap             Predict and plot transmembrane segments in protein sequences
 
 Author(s)
 
@@ -405,8 +414,8 @@ Author(s)
 
    Original program "HELIXTURNHELIX" (EGCG 1990) by Peter Rice
    (pmr © ebi.ac.uk)
-   Informatics Division, European Bioinformatics Institute, Wellcome
-   Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
 
 History
 

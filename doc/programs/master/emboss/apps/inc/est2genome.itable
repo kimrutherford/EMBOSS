@@ -88,7 +88,7 @@
 </tr>
 
 <tr>
-<td>-[no]splice</td>
+<td>-[no]usesplice</td>
 <td>Use donor and acceptor splice sites. If you want to ignore donor-acceptor sites then set this to be false.</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>

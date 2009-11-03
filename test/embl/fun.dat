@@ -10,8 +10,9 @@ XX
 KW   MET1 homolog.
 XX
 OS   Schizosaccharomyces pombe (fission yeast)
-OC   Eukaryota; Fungi; Ascomycota; Schizosaccharomycetes;
-OC   Schizosaccharomycetales; Schizosaccharomycetaceae; Schizosaccharomyces.
+OC   Eukaryota; Fungi; Dikarya; Ascomycota; Taphrinomycotina;
+OC   Schizosaccharomycetes; Schizosaccharomycetales; Schizosaccharomycetaceae;
+OC   Schizosaccharomyces.
 XX
 RN   [1]
 RP   1-561
@@ -41,6 +42,7 @@ FT                   /transl_table=1
 FT                   /product="MET1 homolog"
 FT                   /db_xref="GENEDB:SPCC1739.06c"
 FT                   /db_xref="GOA:O74468"
+FT                   /db_xref="InterPro:IPR016040"
 FT                   /db_xref="UniProtKB/Swiss-Prot:O74468"
 FT                   /protein_id="BAA23999.1"
 FT                   /translation="SMPKIPSFVPTQTTVFLMALHRLEILVQALIESGWPRVLPVCIAE

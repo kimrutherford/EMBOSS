@@ -257,6 +257,7 @@ typedef struct AjSScopalg
 */
 
 void          ajDmxDummyFunction(void);
+void          ajDmxExit(void);
 AjPScophit    ajDmxScophitNew(void);
 void          ajDmxScophitDel(AjPScophit *pthis);
 void          ajDmxScophitDelWrap(void  **ptr);

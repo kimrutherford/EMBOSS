@@ -46,8 +46,8 @@ int main(int argc, char **argv)
     AjPFile outf  = NULL;
     EmbPPatMatch results = NULL;
     AjPSeq seq;
-    ajint i;
-    ajint j;
+    ajuint i;
+    ajuint j;
 
     embInit("patmattest", argc, argv);
 

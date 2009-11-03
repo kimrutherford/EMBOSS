@@ -86,7 +86,7 @@ section: advanced [
     help: "Reverse the orientation of the EST sequence"
   ]
 
-  boolean: splice [
+  boolean: usesplice [
     default: "Y"
     information: "Use donor and acceptor splice sites"
     help: "Use donor and acceptor splice sites. If you want to ignore

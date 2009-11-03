@@ -29,6 +29,7 @@
 #define IUBPFILE "Eresidues.iub"
 
 typedef struct AjIUB AjIUB;
+
 struct AjIUB
 {
     AjPStr code;
@@ -54,6 +55,15 @@ static const char *BaseAaTable[]=
     "ILE","---","LYS","LEU","MET","ASN","---","PRO",
     "GLN","ARG","SER","THR","---","VAL","TRP","XAA",
     "TYR","GLX" 
+};
+
+
+static const char *BaseNucTable[]=
+{
+    "DA","DB","DC","DD","--","--","DG","DH",
+    "--","--","DK","--","DM","DN","--","--",
+    "--","DR","DS","DT","DU","DV","DW","DX",
+    "DY","--" 
 };
 
 
@@ -113,6 +123,7 @@ static AjBool residueInit(void);
 ** @return [float] Base probability value
 ** @@
 ******************************************************************************/
+
 float  ajBaseAlphaCompare(ajint base, ajint base2)
 {
     ajint b1;
@@ -124,19 +135,29 @@ float  ajBaseAlphaCompare(ajint base, ajint base2)
     b1 = base;
     b2 = base2;
 
-    if(b1<0)b1=0;
-    if(b1>31)b1=31;
-    if(b2<0)b2=0;
-    if(b2>31)b2=31;
+    if(b1<0)
+        b1=0;
+    
+    if(b1>31)
+        b1=31;
+
+    if(b2<0)
+        b2=0;
+
+    if(b2>31)
+        b2=31;
 
     return aj_base_prob[b1][b2];
 }
+
+
 
 
 __deprecated float  ajBaseProb(ajint base1, ajint base2)
 {
     return ajBaseAlphaCompare(base1, base2);
 }
+
 
 
 
@@ -160,6 +181,8 @@ ajint ajBaseAlphaToBin(ajint base)
 }
 
 
+
+
 /* @obsolete ajAZToBin
 ** @rename ajBaseAlphaToBin
 */
@@ -168,6 +191,8 @@ __deprecated ajint ajAZToBin(ajint c)
 {
     return ajBaseAlphaToBin(c);
 }
+
+
 
 
 /* @section character conversion
@@ -237,6 +262,7 @@ float ajBaseAlphacharCompare(char c, char c2)
 
 	if(ajRegExec(rexp,b2))
 	    pmatch = ajTrue;
+
 	ajRegFree(&rexp);
 	ajStrDel(&b);
     }
@@ -273,6 +299,8 @@ char ajBaseAlphacharToBin(char c)
 }
 
 
+
+
 /* @obsolete ajAZToBinC
 ** @rename ajBaseAlphacharToBin
 */
@@ -281,6 +309,7 @@ __deprecated char ajAZToBinC(char c)
 {
     return (char)ajBaseAlphacharToBin((int)c);
 }
+
 
 
 
@@ -317,14 +346,19 @@ char ajBaseAlphacharComp(char c)
     char *cq;
 
     cp = strchr(fwd,c);
+
     if(cp)
     {
 	cq = cp - fwd + rev;
+
 	return *cq;
     }
 
     return c;
 }
+
+
+
 
 /* @obsolete ajBaseComp
 ** @rename ajBaseAlphacharComp
@@ -336,6 +370,8 @@ __deprecated char ajBaseComp(char base)
 }
 
 
+
+
 /* @obsolete ajSeqBaseComp
 ** @rename ajBaseComp
 */
@@ -343,6 +379,9 @@ __deprecated char ajSeqBaseComp(char base)
 {
     return ajBaseAlphacharComp(base);
 }
+
+
+
 
 /* @section binary conversion
 **
@@ -363,6 +402,7 @@ __deprecated char ajSeqBaseComp(char base)
 
 
 
+
 /* @func ajBaseBinToAlpha *****************************************************
 **
 ** Converts a binary OR'd representation of an IUB base where A=1, C=2,
@@ -379,11 +419,14 @@ char ajBaseBinToAlpha(ajint c)
 {
     if(c<0)
 	return 'N';
+
     if(c>15)
 	return 'N';
 
     return (iubbases[c]);
 }
+
+
 
 
 /* @obsolete ajBinToAZ
@@ -394,6 +437,8 @@ __deprecated char ajBinToAZ(ajint c)
 {
     return ajBaseBinToAlpha(c);
 }
+
+
 
 
 /* @section query *************************************************************
@@ -437,6 +482,8 @@ AjBool ajBaseExistsBin(ajint base)
 }
 
 
+
+
 /* @func ajBaseExistsChar ******************************************************
 **
 ** Tests whether a base code exists
@@ -454,15 +501,19 @@ AjBool ajBaseExistsChar(char c)
 	baseInit();
 
     itest = toupper((int)c);
+
     if(ajStrGetLen(aj_base_iubS[itest].code))
         return ajTrue;
     
     itest = tolower((int)c);
+
     if(ajStrGetLen(aj_base_iubS[itest].code))
         return ajTrue;
 
     return ajFalse;
 }
+
+
 
 
 /* @section retrieval
@@ -503,6 +554,8 @@ const AjPStr ajBaseGetCodes(ajint base)
 }
 
 
+
+
 /* @obsolete ajBaseCodes
 ** @rename ajBaseGetCodes
 */
@@ -511,6 +564,8 @@ __deprecated const AjPStr ajBaseCodes(ajint ibase)
 {
     return ajBaseGetCodes(ibase);
 }
+
+
 
 
 /* @func ajBaseGetMnemonic *****************************************************
@@ -529,6 +584,8 @@ const AjPStr ajBaseGetMnemonic(ajint base)
 
     return  aj_base_iubS[base].mnemonic;
 }
+
+
 
 
 /* @funcstatic baseInit ******************************************************
@@ -589,7 +646,9 @@ static AjBool baseInit(void)
 
     bfname = ajStrNewC(IUBFILE);
     bfptr = ajDatafileNewInNameS(bfname);
-    if(!bfptr) ajFatal("%S file not found\n", bfname);
+
+    if(!bfptr)
+        ajFatal("%S file not found\n", bfname);
 
 
     line = ajStrNew();
@@ -598,13 +657,17 @@ static AjBool baseInit(void)
     while(ajReadline(bfptr, &line))
     {
 	p = ajStrGetPtr(line);
+
 	if(*p=='#' || *p=='!' || *p=='\n')
 	    continue;
+
 	p = ajSysFuncStrtok(p," \t\r\n");
 	ajStrAssignC(&code,p);
 	p=ajSysFuncStrtok(NULL," \t\r\n");
+
 	if(sscanf(p,"%d",&n)!=1)
 	    ajFatal("Bad format IUB file");
+
 	p = ajSysFuncStrtok(NULL," \t\r\n");
 	ajStrAssignC(&list,p);
 	p = ajSysFuncStrtok(NULL," \t\r\n");
@@ -632,14 +695,17 @@ static AjBool baseInit(void)
     for(i=0;i<32;++i)
     {
 	x = ajBasecodeFromInt(i);
+
 	for(j=0;j<32;++j)
 	{
 	    y = ajBasecodeFromInt(j);
+
 	    if(!(l1=ajStrGetLen(aj_base_iubS[x].code)))
 	    {
 		aj_base_prob[i][j]=0.0;
 		continue;
 	    }
+
 	    if(l1!=1)
 		ajFatal("Bad IUB letter");
 
@@ -648,8 +714,10 @@ static AjBool baseInit(void)
 	    q = ajStrGetPtr(aj_base_iubS[y].list);
 	    l1 = strlen(p);
 	    l2 = strlen(q);
+
 	    for(k=0,c=0;k<l1;++k)
 		if(strchr(q,(ajint)*(p+k))) ++c;
+
 	    if(l2)
 		aj_base_prob[i][j] = (float)c / (float)l2;
 	    else
@@ -660,6 +728,65 @@ static AjBool baseInit(void)
     aj_base_I = ajTrue;
 
     return aj_base_I;
+}
+
+
+
+
+/* @section Doublet names
+**
+** Functions exchanging residue codes with PDB two letter codes
+**
+** @fdata      [none]
+**
+** @nam3rule From Convert some other form to a residue
+** @nam3rule To   Convert residue to another form
+** @nam4rule Doublet Convert a doublet 2-letter base name
+**
+** @argrule FromDoublet nuc2 [const AjPStr] Doublet base name
+** @argrule From Pc [char*] Doublet base name
+** @argrule To c [char] Base character code
+** @argrule ToDoublet Pnuc2 [AjPStr*] Doublet base name
+**
+** @valrule * [AjBool] True if code was recognized.
+**
+** @fcategory cast
+*/
+
+
+/* @func ajBaseFromDoublet ************************************************
+**
+** Takes a 2 character PDB base code and writes a char with the 
+** corresponding single letter code.
+**
+** @param [r] nuc2 [const AjPStr]   AjPStr object (2 letter code)
+** @param [w] Pc [char *] Resulting residue code
+**
+** @return [AjBool] True on success, false if doublet is not recognized
+** @@
+******************************************************************************/
+
+AjBool ajBaseFromDoublet(const AjPStr nuc2, char* Pc)
+{
+    ajint i;
+    
+    for(i=0; i<26; i++)
+	if(!ajStrCmpC(nuc2, BaseNucTable[i]))
+	{
+	    *Pc = (char) (i + (int) 'A');
+	    return ajTrue;
+	}
+    
+    if(!ajStrCmpC(nuc2, "UNK"))
+    {
+	*Pc = 'N';
+
+	return ajTrue;
+    }	
+    
+    *Pc='N';
+
+    return ajFalse;
 }
 
 
@@ -711,6 +838,9 @@ void ajBaseExit(void)
     return;
 }
 
+
+
+
 /* @datasection [none] Residue *******************************************
 **
 ** Function is for manipulating amino acid residue codes
@@ -720,27 +850,23 @@ void ajBaseExit(void)
 */
 
 
-
-
 /* @section character conversion
 **
-** Functions converting binary forms of base codes
+** Functions converting binary forms of amino acid residue codes
 **
 ** @fdata      [none]
 **
 ** @nam3rule Alpha Converts a character value
-** @nam4rule AlphaCompare Compares two base codes
 ** @nam4rule AlphaTo Converts to a specific type
 ** @nam5rule AlphaToBin Converts to binary code type
 **
 ** @argrule Alpha base [ajint] Alphabetic character as an integer
-** @argrule Compare base2 [ajint] Comparison alphabetic character as a character
 **
-** @valrule Compare [float] Probability bases are the same
 ** @valrule ToBin [ajint] Binary code in range 0 to 31
 **
 ** @fcategory cast
 */
+
 
 
 
@@ -802,10 +928,9 @@ char ajResidueBinToAlpha(ajint c)
 	residueInit();
 
     for(i = 0;i<256;i++)
-    {
         if(aj_residue_table[i] == c)
             return ajStrGetCharFirst(aj_residue_iubS[i].code);
-    }
+
     return 'X';
 }
 
@@ -871,10 +996,12 @@ AjBool ajResidueExistsChar(char c)
 	residueInit();
 
     itest = toupper((int)c);
+
     if(ajStrGetLen(aj_residue_iubS[itest].code))
         return ajTrue;
     
     itest = tolower((int)c);
+
     if(ajStrGetLen(aj_residue_iubS[itest].code))
         return ajTrue;
 
@@ -920,6 +1047,8 @@ const AjPStr ajResidueGetCodes(ajint base)
 }
 
 
+
+
 /* @func ajResidueGetMnemonic ***********************************************
 **
 ** Returns a string of matching amino acid residue codes
@@ -936,6 +1065,8 @@ const AjPStr ajResidueGetMnemonic(ajint base)
 
     return  aj_residue_iubS[base].mnemonic;
 }
+
+
 
 
 /* @funcstatic residueInit ****************************************************
@@ -995,19 +1126,25 @@ static AjBool residueInit(void)
 
     ajStrAssignC(&bfname,IUBPFILE);
     bfptr = ajDatafileNewInNameS(bfname);
-    if(!bfptr) ajFatal("%S file not found\n", bfname);
+
+    if(!bfptr)
+        ajFatal("%S file not found\n", bfname);
 
 
     while(ajReadline(bfptr, &line))
     {
 	p = ajStrGetPtr(line);
+
 	if(*p=='#' || *p=='!' || *p=='\n')
 	    continue;
+
 	p = ajSysFuncStrtok(p," \t\r\n");
 	ajStrAssignC(&code,p);
 	p=ajSysFuncStrtok(NULL," \t\r\n");
+
 	if(sscanf(p,"%d",&n)!=1)
 	    ajFatal("Bad format IUB file");
+
 	p = ajSysFuncStrtok(NULL," \t\r\n");
 	ajStrAssignC(&list,p);
 	p = ajSysFuncStrtok(NULL," \t\r\n");
@@ -1035,24 +1172,28 @@ static AjBool residueInit(void)
     for(i=0;i<32;++i)
     {
 	x = ajBasecodeFromInt(i);
+
 	for(j=0;j<32;++j)
 	{
 	    y = ajBasecodeFromInt(j);
+
 	    if(!(l1=ajStrGetLen(aj_residue_iubS[x].code)))
 	    {
 		aj_residue_prob[i][j]=0.0;
 		continue;
 	    }
+
 	    if(l1!=1)
 		ajFatal("Bad IUB letter");
-
 
 	    p = ajStrGetPtr(aj_residue_iubS[x].list);
 	    q = ajStrGetPtr(aj_residue_iubS[y].list);
 	    l1 = strlen(p);
 	    l2 = strlen(q);
+
 	    for(k=0,c=0;k<l1;++k)
 		if(strchr(q,(ajint)*(p+k))) ++c;
+
 	    if(l2)
 		aj_residue_prob[i][j] = (float)c / (float)l2;
 	    else
@@ -1064,6 +1205,9 @@ static AjBool residueInit(void)
 
     return aj_residue_I;
 }
+
+
+
 
 /* @section Triplet names
 **
@@ -1088,8 +1232,6 @@ static AjBool residueInit(void)
 
 
 
-
-
 /* @func ajResidueFromTriplet *************************************************
 **
 ** Takes a 3 character amino acid code and writes a char with the 
@@ -1110,6 +1252,7 @@ AjBool  ajResidueFromTriplet(const AjPStr aa3, char *Pc)
 	if(!ajStrCmpC(aa3, BaseAaTable[i]))
 	{
 	    *Pc = (char) (i + (int) 'A');
+
 	    return ajTrue;
 	}
     
@@ -1121,8 +1264,12 @@ AjBool  ajResidueFromTriplet(const AjPStr aa3, char *Pc)
     }	
     
     *Pc='X';
+
     return ajFalse;
 }
+
+
+
 
 /* @obsolete ajBaseAa3ToAa1
 ** @replace ajResidueFromTriplet (1,2/2,1)
@@ -1132,6 +1279,8 @@ __deprecated AjBool  ajBaseAa3ToAa1(char *Paa1, const AjPStr aa3)
 {
     return ajResidueFromTriplet(aa3, Paa1);
 }
+
+
 
 
 /* @func ajResidueToTriplet ***************************************************
@@ -1144,6 +1293,7 @@ __deprecated AjBool  ajBaseAa3ToAa1(char *Paa1, const AjPStr aa3)
 ** @return [AjBool] True on succcess
 ** @@
 ******************************************************************************/
+
 AjBool  ajResidueToTriplet(char c, AjPStr *Paa3)
 {
     ajint idx;
@@ -1152,8 +1302,11 @@ AjBool  ajResidueToTriplet(char c, AjPStr *Paa3)
 	return ajFalse;
 
     ajStrAssignC(Paa3, BaseAaTable[idx]);
+
     return ajTrue;
 }
+
+
 
 
 /* @obsolete ajBaseAa1ToAa3
@@ -1164,6 +1317,19 @@ __deprecated AjBool  ajBaseAa1ToAa3(char aa1, AjPStr *Paa3)
 {
     return ajResidueToTriplet(aa1, Paa3);
 }
+
+
+
+
+/* @datasection [none] Base *************************************************
+**
+** Function is for manipulating nucleotide base codes
+** 
+** @nam2rule Base 
+**
+*/
+
+
 
 /* @datasection [none] Basecode *******************************************
 **
@@ -1206,11 +1372,13 @@ ajint ajBasecodeFromInt(ajint n)
 {
     if(n>25)
 	return (ajint) '*';
+
     if(n<0)
 	return (ajint) '*';
 
     return(n+(ajint)'A');
 }
+
 
 
 
@@ -1222,6 +1390,8 @@ __deprecated ajint ajIntToAZ(ajint n)
 {
     return ajBasecodeFromInt(n);
 }
+
+
 
 
 /* @func ajBasecodeToInt *************************************************
@@ -1245,6 +1415,8 @@ ajint ajBasecodeToInt(ajint c)
 }
 
 
+
+
 /* @obsolete ajAZToInt
 ** @rename ajBasecodeToInt
 */
@@ -1254,5 +1426,3 @@ __deprecated ajint ajAZToInt(ajint c)
 
     return ajBasecodeToInt(c);
 }
-
-

@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Calculate the isoelectric point of proteins
@@ -44,11 +51,12 @@ Command line arguments
                                   format, or reference (input USA)
 *  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, xterm, png, gif)
+                                  tekt, tek, none, data, das, xterm, png, gif)
 *  -outfile            outfile    [*.iep] Output file name
 
    Additional (Optional) qualifiers:
    -amino              integer    [1] Number of N-termini (Integer 0 or more)
+   -carboxyl           integer    [1] Number of C-termini (Integer 0 or more)
    -[no]termini        boolean    [Y] Include charge at N and C terminus
    -lysinemodified     integer    [0] Number of modified lysines (Integer 0 or
                                   more)
@@ -124,13 +132,13 @@ ID   LACI_ECOLI              Reviewed;         360 AA.
 AC   P03023; O09196; P71309; Q2MC79; Q47338;
 DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
 DT   19-JUL-2003, sequence version 3.
-DT   20-MAR-2007, entry version 87.
-DE   Lactose operon repressor.
+DT   16-JUN-2009, entry version 105.
+DE   RecName: Full=Lactose operon repressor;
 GN   Name=lacI; OrderedLocusNames=b0345, JW0336;
-OS   Escherichia coli.
+OS   Escherichia coli (strain K12).
 OC   Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
 OC   Enterobacteriaceae; Escherichia.
-OX   NCBI_TaxID=562;
+OX   NCBI_TaxID=83333;
 RN   [1]
 RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
 RX   MEDLINE=78246991; PubMed=355891; DOI=10.1038/274765a0;
@@ -174,13 +182,6 @@ RT   "Highly accurate genome sequences of Escherichia coli K-12 strains
 
   [Part of this file has been deleted for brevity]
 
-DR   Pfam; PF00532; Peripla_BP_1; 1.
-DR   PRINTS; PR00036; HTHLACI.
-DR   SMART; SM00354; HTH_LACI; 1.
-DR   PROSITE; PS00356; HTH_LACI_1; 1.
-DR   PROSITE; PS50932; HTH_LACI_2; 1.
-KW   3D-structure; Complete proteome; Direct protein sequencing;
-KW   DNA-binding; Repressor; Transcription; Transcription regulation.
 FT   CHAIN         1    360       Lactose operon repressor.
 FT                                /FTId=PRO_0000107963.
 FT   DOMAIN        1     58       HTH lacI-type.
@@ -189,6 +190,11 @@ FT   VARIANT     282    282       Y -> D (in T41 mutant).
 FT   MUTAGEN      17     17       Y->H: Broadening of specificity.
 FT   MUTAGEN      22     22       R->N: Recognizes an operator variant.
 FT   CONFLICT    286    286       L -> S (in Ref. 1, 4 and 7).
+FT   HELIX         6     11
+FT   TURN         12     14
+FT   HELIX        17     24
+FT   HELIX        33     45
+FT   HELIX        51     56
 FT   STRAND       63     69
 FT   HELIX        74     89
 FT   STRAND       93     98
@@ -216,6 +222,8 @@ FT   STRAND      287    290
 FT   HELIX       293    308
 FT   STRAND      314    319
 FT   STRAND      322    324
+FT   STRAND      334    338
+FT   HELIX       343    353
 FT   HELIX       354    356
 SQ   SEQUENCE   360 AA;  38590 MW;  347A8DEE92D736CB CRC64;
      MKPVTLYDVA EYAGVSYQTV SRVVNQASHV SAKTREKVEA AMAELNYIPN RVAQQLAGKQ
@@ -234,8 +242,11 @@ ID   IFNA2_HUMAN             Reviewed;         188 AA.
 AC   P01563; P01564; Q14606; Q96KI6;
 DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
 DT   21-JUL-1986, sequence version 1.
-DT   20-FEB-2007, entry version 79.
-DE   Interferon alpha-2 precursor (Interferon alpha-A) (LeIF A).
+DT   16-JUN-2009, entry version 100.
+DE   RecName: Full=Interferon alpha-2;
+DE   AltName: Full=Interferon alpha-A;
+DE            Short=LeIF A;
+DE   Flags: Precursor;
 GN   Name=IFNA2;
 OS   Homo sapiens (Human).
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
@@ -262,12 +273,12 @@ RT   cDNAs.";
 RL   Nature 290:20-26(1981).
 RN   [3]
 RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA / MRNA].
-RX   MEDLINE=82060261; PubMed=6170983;
+RX   MEDLINE=82060261; PubMed=6170983; DOI=10.1073/pnas.78.9.5435;
 RA   Lawn R.M., Gross M., Houck C.M., Franke A.E., Gray P.V., Goeddel D.V.;
 RT   "DNA sequence of a major human leukocyte interferon gene.";
 RL   Proc. Natl. Acad. Sci. U.S.A. 78:5435-5439(1981).
 RN   [4]
-RP   NUCLEOTIDE SEQUENCE.
+RP   NUCLEOTIDE SEQUENCE [MRNA].
 RC   TISSUE=Bone marrow tumor;
 RX   MEDLINE=86069501; PubMed=3906813;
 RA   Oliver G., Balbas P., Valle F., Soberon X., Bolivar F.;
@@ -277,36 +288,28 @@ RL   Rev. Latinoam. Microbiol. 27:141-150(1985).
 RN   [5]
 RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
 RC   TISSUE=Placenta;
-RX   MEDLINE=98357449; PubMed=9694076;
-RA   Austruy E., Bagnis C., Carbuccia N., Maroc C., Birg F., Dubreuil P.,
-RA   Mannoni P., Chabannon C.;
 
 
   [Part of this file has been deleted for brevity]
 
-DR   LinkHub; P01563; -.
-DR   ArrayExpress; P01563; -.
-DR   GermOnline; ENSG00000188379; Homo sapiens.
-DR   RZPD-ProtExp; A0813; -.
-DR   RZPD-ProtExp; IOH35221; -.
-DR   RZPD-ProtExp; RZPDo834E0933; -.
-DR   GO; GO:0005132; F:interferon-alpha/beta receptor binding; TAS:ProtInc.
-DR   GO; GO:0007166; P:cell surface receptor linked signal transdu...; TAS:Prot
-Inc.
-DR   GO; GO:0007267; P:cell-cell signaling; TAS:ProtInc.
 DR   GO; GO:0006917; P:induction of apoptosis; TAS:ProtInc.
 DR   GO; GO:0006954; P:inflammatory response; TAS:ProtInc.
-DR   InterPro; IPR009079; 4_helix_cytokine.
-DR   InterPro; IPR000471; Interferon_abd.
-DR   Gene3D; G3DSA:1.20.120.210; Interferon_abd; 1.
+DR   GO; GO:0009615; P:response to virus; IEA:UniProtKB-KW.
+DR   InterPro; IPR012351; 4_helix_cytokine_core.
+DR   InterPro; IPR000471; IInterferon_alpha/beta/delta.
+DR   InterPro; IPR015589; Interferon_alpha.
+DR   Gene3D; G3DSA:1.20.1250.10; 4_helix_cytokine_core; 1.
+DR   PANTHER; PTHR11691:SF9; IFNa; 1.
 DR   PANTHER; PTHR11691; Interferon_abd; 1.
 DR   Pfam; PF00143; Interferon; 1.
 DR   PRINTS; PR00266; INTERFERONAB.
 DR   ProDom; PD000550; Interferon_abd; 1.
 DR   SMART; SM00076; IFabd; 1.
 DR   PROSITE; PS00252; INTERFERON_A_B_D; 1.
+PE   1: Evidence at protein level;
 KW   3D-structure; Antiviral defense; Cytokine; Direct protein sequencing;
-KW   Glycoprotein; Pharmaceutical; Polymorphism; Signal.
+KW   Disulfide bond; Glycoprotein; Pharmaceutical; Polymorphism; Secreted;
+KW   Signal.
 FT   SIGNAL        1     23
 FT   CHAIN        24    188       Interferon alpha-2.
 FT                                /FTId=PRO_0000016360.
@@ -314,20 +317,24 @@ FT   CARBOHYD    129    129       O-linked (GalNAc...).
 FT                                /FTId=CAR_000049.
 FT   DISULFID     24    121
 FT   DISULFID     52    161
+FT   VARIANT       6      6       A -> D (in dbSNP:rs35971916).
+FT                                /FTId=VAR_055972.
 FT   VARIANT      46     46       K -> R (in alpha-2B and alpha-2C).
 FT                                /FTId=VAR_004012.
 FT   VARIANT      57     57       H -> R (in alpha-2C).
 FT                                /FTId=VAR_013001.
+FT   VARIANT     177    177       S -> L (in a breast cancer sample;
+FT                                somatic mutation).
+FT                                /FTId=VAR_036329.
 FT   HELIX        33     44
 FT   TURN         49     54
 FT   HELIX        63     66
+FT   STRAND       67     69
+FT   STRAND       71     75
 FT   HELIX        76     91
 FT   HELIX        93     98
 FT   HELIX       101    123
-FT   TURN        126    127
-FT   TURN        133    133
 FT   HELIX       134    155
-FT   TURN        156    157
 FT   HELIX       160    178
 FT   TURN        179    182
 SQ   SEQUENCE   188 AA;  21550 MW;  101DD21D394CBF97 CRC64;
@@ -491,24 +498,24 @@ Known bugs
 
 See also
 
-   Program name Description
-   backtranambig Back-translate a protein sequence to ambiguous
-   nucleotide sequence
-   backtranseq Back-translate a protein sequence to a nucleotide sequence
-   charge Draw a protein charge plot
-   checktrans Reports STOP codons and ORF statistics of a protein
-   compseq Calculate the composition of unique words in sequences
-   emowse Search protein sequences by digest fragment molecular weight
-   freak Generate residue/base frequency table or plot
-   mwcontam Find weights common to multiple molecular weights files
-   mwfilter Filter noisy data from molecular weights file
-   octanol Draw a White-Wimley protein hydropathy plot
-   pepinfo Plot amino acid properties of a protein sequence in parallel
-   pepstats Calculates statistics of protein properties
-   pepwindow Draw a Kyte-Doolittle hydropathy plot for a protein sequence
-   pepwindowall Draw Kyte-Doolittle hydropathy plot for a protein
-   alignment
-   wordcount Count and extract unique words in DNA sequence(s)
+   Program name     Description
+   backtranambig    Back-translate a protein sequence to ambiguous
+                    nucleotide sequence
+   backtranseq      Back-translate a protein sequence to a nucleotide sequence
+   charge           Draw a protein charge plot
+   checktrans       Reports STOP codons and ORF statistics of a protein
+   compseq          Calculate the composition of unique words in sequences
+   emowse           Search protein sequences by digest fragment molecular weight
+   freak            Generate residue/base frequency table or plot
+   mwcontam         Find weights common to multiple molecular weights files
+   mwfilter         Filter noisy data from molecular weights file
+   octanol          Draw a White-Wimley protein hydropathy plot
+   pepinfo          Plot amino acid properties of a protein sequence in parallel
+   pepstats         Calculates statistics of protein properties
+   pepwindow        Draw a hydropathy plot for a protein sequence
+   pepwindowall     Draw Kyte-Doolittle hydropathy plot for a protein
+                    alignment
+   wordcount        Count and extract unique words in DNA sequence(s)
 
 Author(s)
 

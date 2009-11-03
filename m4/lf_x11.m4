@@ -22,7 +22,7 @@ dnl distribution terms that you use for the rest of that program.
  
 #-----------------------------------------------------------------------
 # This macro searches for Xlib and when it finds it it adds the 
-# appropriate flags to CXXFLAGS and export the link sequence to 
+# appropriate flags to CFLAGS and export the link sequence to 
 # the variable XLIB. 
 # In your configure.in file add:
 #   LF_PATH_XLIB
@@ -30,17 +30,44 @@ dnl distribution terms that you use for the rest of that program.
 #   program_LDADD = .... $(XLIB)
 #------------------------------------------------------------------------
 #
-# Just added EMBOSS into LF_PATH_XLIB so that on the sysytems where
-# LF_PATH_XLIB exists we do not get duplication errors!!!!!
+# Just added EMBOSS into LF_PATH_XLIB so that on the systems where
+# LF_PATH_XLIB exists there are no duplication errors.
 
 
 AC_DEFUN([LF_EMBOSS_PATH_XLIB],[
-  CXXFLAGS="$CXXFLAGS $X_CFLAGS"
+  CFLAGS="$CFLAGS $X_CFLAGS"
 if test "`uname`" != "IRIX64" && test "`uname`" != "IRIX" ; then
   XLIB="$X_LIBS -lX11 $X_EXTRA_LIBS"
 else
   XLIB="-lX11 $X_EXTRA_LIBS"
 fi
   AC_SUBST(XLIB)
+
+AC_CHECK_HEADER(X11/Xlib.h,
+[
+	AC_DEFINE(PLD_xwin)
+],
+[
+	echo ""
+	echo "X11 graphics have been selected but no X11 header files"
+        echo "have been found."
+        echo ""
+        echo "This error usually happens on Linux/MacOSX distributions"
+	echo "where the optional X11 development files have not been installed."
+        echo "On Linux RPM systems this package is usually called something"
+        echo "like xorg-x11-proto-devel whereas on Debian/Ubuntu it may"
+        echo "be called x-dev. On MacOSX installation DVDs the X11 files"
+        echo "can usually be found as an explicitly named optional"
+        echo "installation."
+        echo ""
+        echo "After installing the X11 development files you should do a"
+        echo "'make clean' and perform the configure stage again."
+        echo ""
+        echo "Alternatively, to install EMBOSS without X11 support, you can add"
+        echo "the --without-x switch to the configure command."
+	echo ""
+        exit $?
+])
+
 ])
 

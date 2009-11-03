@@ -365,7 +365,7 @@ int main(int argc, char **argv)
 {
     AjPSeqall seqall;
     AjPSeq    seq  = NULL;
-    AjPFile   outf = NULL;
+    AjPFile   outf = NULL;      /* no longer used */
     AjPReport report = NULL;
     AjPFeattable TabRpt = NULL;
     AjPStr    strand = NULL;
@@ -412,7 +412,7 @@ int main(int argc, char **argv)
 	ajReportWrite(report, TabRpt, seq);
 	ajFeattableDel(&TabRpt);
     }
-
+    ajReportSetSeqstats(report, seqall);
 
     ajSeqDel(&seq);
     ajStrDel(&substr);
@@ -668,10 +668,10 @@ static void garnier_report(AjPReport report, AjPFeattable TabRpt,
 
     if(!strHelix)
     {
-	ajStrAssignC(&strHelix, "helix");
-	ajStrAssignC(&strExtend, "strand");
-	ajStrAssignC(&strTurns, "turn");
-	ajStrAssignC(&strCoil, "coiled");
+	ajStrAssignC(&strHelix, "SO:0001117");  /* alpha_helix */
+	ajStrAssignC(&strExtend, "SO:0001111"); /* beta_strand */
+	ajStrAssignC(&strTurns, "SO:0001128");  /* turn */
+	ajStrAssignC(&strCoil, "SO:0100012");   /* coil (unstructured) */
     }
     
     idc = Idc;

@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Finds tandem repeats in a nucleotide sequence
@@ -18,6 +25,10 @@ Description
    report file with details of the location and score of any tandem
    repeats. Optionally, the output can be written in the format of the
    Sanger Centre quicktandem program.
+
+   Running etandem with a wide range of repeat sizes is inefficient. It
+   is normally used after equicktandem has been run to identify putative
+   sizes and locations of repeats.
 
 Algorithm
 
@@ -153,14 +164,14 @@ XX
 KW   telomeric repeat.
 XX
 OS   Human herpesvirus 7
-OC   Viruses; dsDNA viruses, no RNA stage; Herpesviridae; Betaherpesvirinae;
-OC   Roseolovirus.
+OC   Viruses; dsDNA viruses, no RNA stage; Herpesvirales; Herpesviridae;
+OC   Betaherpesvirinae; Roseolovirus.
 XX
 RN   [1]
 RP   1-1272
 RX   PUBMED; 7494318.
 RA   Secchiero P., Nicholas J., Deng H., Xiaopeng T., van Loon N., Ruvolo V.R.,
-RA   Berneman Z.N., Reitz M.S. Jr., Dewhurst S.;
+RA   Berneman Z.N., Reitz M.S.Jr., Dewhurst S.;
 RT   "Identification of human telomeric repeat motifs at the genome termini of
 RT   human herpesvirus 7: structural analysis and heterogeneity";
 RL   J. Virol. 69(12):8041-8045(1995).
@@ -314,14 +325,14 @@ Known bugs
 
 See also
 
-   Program name                   Description
-   einverted    Finds inverted repeats in nucleotide sequences
-   equicktandem Finds tandem repeats in nucleotide sequences
-   palindrome   Finds inverted repeats in nucleotide sequence(s)
+                    Program name                   Description
+                    einverted    Finds inverted repeats in nucleotide sequences
+   equicktandem     Finds tandem repeats in nucleotide sequences
+                    palindrome   Finds inverted repeats in nucleotide sequence(s)
 
-   Running with a wide range of repeat sizes is inefficient. That is why
-   equicktandem was written - to give a rapid estimate of the major
-   repeat sizes.
+                    Running with a wide range of repeat sizes is inefficient. That is why
+                    equicktandem was written - to give a rapid estimate of the major
+                    repeat sizes.
 
 Authors
 
@@ -332,8 +343,8 @@ Authors
 
    This application was modified for inclusion in EMBOSS by Peter Rice
    (pmr © ebi.ac.uk)
-   Informatics Division, European Bioinformatics Institute, Wellcome
-   Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
 
 History
 

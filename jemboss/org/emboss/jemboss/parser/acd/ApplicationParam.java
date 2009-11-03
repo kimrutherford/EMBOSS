@@ -156,6 +156,10 @@ public class ApplicationParam
      return false;
     }
   }
+  
+  public String toString(){
+      return attribute+"="+(isParamValueString()?svalue:String.valueOf(nvalue));
+  }
 
 }
 

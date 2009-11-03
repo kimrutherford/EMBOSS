@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Report restriction enzyme cleavage sites in a nucleotide sequence
@@ -104,6 +111,8 @@ Command line arguments
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
    -datafile           datafile   Restriction enzyme data file (optional)
+   -mfile              datafile   [Emethylsites.dat] Restriction enzyme data
+                                  file (optional)
    -min                integer    [1] This sets the minimum number of cuts for
                                   any restriction enzyme that will be
                                   considered. Any enzymes that cut fewer times
@@ -137,6 +146,8 @@ Command line arguments
                                   for restriction enzyme recognition site and
                                   cut postions that span the end of the
                                   sequence to be considered.
+   -methylation        boolean    [N] If this is set then RE recognition sites
+                                  will not match methylated bases.
    -[no]commercial     boolean    [Y] If this is set, then only those enzymes
                                   with a commercial supplier will be searched
                                   for. This qualifier is ignored if you have
@@ -259,8 +270,8 @@ RN   [2]
 RP   1-518
 RX   PUBMED; 8395683.
 RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
-RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
-RT   an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma virus";
+RT   "fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
+RT   an antisense sequence in the Finkel-Biskis-Reilly murine sarcoma virus";
 RL   Oncogene 8(9):2537-2546(1993).
 XX
 DR   H-InvDB; HIT000322806.
@@ -281,11 +292,11 @@ FT                   /note="ubiquitin like part"
 FT   CDS             57..458
 FT                   /gene="fau"
 FT                   /db_xref="GDB:135476"
-FT                   /db_xref="GOA:P35544"
 FT                   /db_xref="GOA:P62861"
 FT                   /db_xref="HGNC:3597"
+FT                   /db_xref="HSSP:1GJZ"
+FT                   /db_xref="InterPro:IPR006846"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
-FT                   /db_xref="UniProtKB/Swiss-Prot:P62861"
 FT                   /protein_id="CAA46716.1"
 FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLA
 G
@@ -479,7 +490,9 @@ rimerev
 
 #---------------------------------------
 # Total_sequences: 1
-# Total_hitcount: 54
+# Total_length: 518
+# Reported_sequences: 1
+# Reported_hitcount: 54
 #---------------------------------------
 
   Output files for usage example 2
@@ -565,8 +578,6 @@ rimerev
 
   [Part of this file has been deleted for brevity]
 
-#     39
-#     33
 #     29
 #     20
 #     19
@@ -614,7 +625,9 @@ rimerev
 
 #---------------------------------------
 # Total_sequences: 1
-# Total_hitcount: 54
+# Total_length: 518
+# Reported_sequences: 1
+# Reported_hitcount: 54
 #---------------------------------------
 
   Output files for usage example 3
@@ -700,8 +713,6 @@ rimerev
 
   [Part of this file has been deleted for brevity]
 
-#       70      151     297
-#
 # BssKI:
 # [CCNGG]
 #       15      21      30      45      51      54
@@ -749,7 +760,9 @@ rimerev
 
 #---------------------------------------
 # Total_sequences: 1
-# Total_hitcount: 54
+# Total_length: 518
+# Reported_sequences: 1
+# Reported_hitcount: 54
 #---------------------------------------
 
    The output from restrict is a simple text one. The base number,
@@ -871,16 +884,16 @@ Known bugs
 
 See also
 
-   Program name Description
-   recoder Find restriction sites to remove (mutate) with no translation
-   change
-   redata Retrieve information from REBASE restriction enzyme database
-   remap Display restriction enzyme binding sites in a nucleotide
-   sequence
-   restover Find restriction enzymes producing a specific overhang
-   showseq Displays sequences with features in pretty format
-   silent Find restriction sites to insert (mutate) with no translation
-   change
+   Program name     Description
+   recoder          Find restriction sites to remove (mutate) with no translation
+                    change
+   redata           Retrieve information from REBASE restriction enzyme database
+   remap            Display restriction enzyme binding sites in a nucleotide
+                    sequence
+   restover         Find restriction enzymes producing a specific overhang
+   showseq          Displays sequences with features in pretty format
+   silent           Find restriction sites to insert (mutate) with no translation
+                    change
 
 Author(s)
 

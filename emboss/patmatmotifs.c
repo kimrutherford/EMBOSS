@@ -70,7 +70,7 @@ int main(int argc, char **argv)
 
     embInit("patmatmotifs", argc, argv);
 
-    ajStrAssignC(&fthit, "hit");
+    ajStrAssignC(&fthit, "SO:0001067");
 
     savereg   = ajStrNew();
     str       = ajStrNew();

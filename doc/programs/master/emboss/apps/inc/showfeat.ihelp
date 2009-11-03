@@ -4,7 +4,7 @@
   [-outfile]           outfile    [*.showfeat] Output file name
 
    Additional (Optional) qualifiers:
-   -matchsource        string     [*] By default any feature source in the
+   -sourcematch        string     [*] By default any feature source in the
                                   feature table is shown. You can set this to
                                   match any feature source you wish to show.
                                   The source name is usually either the name
@@ -16,7 +16,7 @@
                                   separate their names with the character '|',
                                   eg:
                                   gene* | embl (Any string is accepted)
-   -matchtype          string     [*] By default any feature type in the
+   -typematch          string     [*] By default any feature type in the
                                   feature table is shown. You can set this to
                                   match any feature type you wish to show.
                                   See http://www3.ebi.ac.uk/Services/WebFeat/
@@ -29,7 +29,7 @@
                                   separate their names with the character '|',
                                   eg:
                                   *UTR | intron (Any string is accepted)
-   -matchtag           string     [*] Tags are the types of extra values that
+   -tagmatch           string     [*] Tags are the types of extra values that
                                   a feature may have. For example in the EMBL
                                   feature table, a 'CDS' type of feature may
                                   have the tags '/codon', '/codon_start',
@@ -50,7 +50,7 @@
                                   separate their names with the character '|',
                                   eg:
                                   gene | label (Any string is accepted)
-   -matchvalue         string     [*] Tag values are the values associated
+   -valuematch         string     [*] Tag values are the values associated
                                   with a feature tag. Tags are the types of
                                   extra values that a feature may have. For
                                   example in the EMBL feature table, a 'CDS'
@@ -79,8 +79,8 @@
                                   leave other features in the input order
                                   (Values: source (Sort by Source); start
                                   (Sort by Start position); type (Sort by
-                                  Type); nosort (No sorting done); join (Join
-                                  coding regions together))
+                                  Type); nosort (No sorting done))
+   -joinfeatures       boolean    [N] Join coding regions together
    -annotation         range      [If this is left blank, then no annotation
                                   is added.] Regions to annotate by marking.
                                   If this is left blank, then no annotation is
@@ -143,8 +143,8 @@
                                   always directionless (indicated by '0'),
                                   forward is indicated by '+' and reverse is
                                   '-'.
-   -source             boolean    [N] Set this if you wish to display the
-                                  source of the features.
+   -origin             boolean    [N] Set this if you wish to display the
+                                  origin of the features.
                                   The source name is usually either the name
                                   of the program that detected the feature or
                                   it is the name of the feature table (eg:

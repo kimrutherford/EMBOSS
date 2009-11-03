@@ -33,6 +33,7 @@
 
 int main(int argc, char **argv)
 {
+    AjPSeqall  seqall;
     AjPSeq     a;
     AjPSeqout  outf;
     AjPStr     substr;
@@ -47,25 +48,28 @@ int main(int argc, char **argv)
 
     embInit("backtranambig", argc, argv);
 
-    a         = ajAcdGetSeq("sequence");
-    outf      = ajAcdGetSeqout("outfile");
+    seqall    = ajAcdGetSeqall("sequence");
+    outf      = ajAcdGetSeqoutall("outfile");
     gctable   = ajAcdGetListSingle("table");
     ajStrToInt(gctable, &gctablenum);
 
     codon = ajCodNewCode(gctablenum);
+    while(ajSeqallNext(seqall, &a))
+    {
+        substr = ajStrNew();
+        beg    = ajSeqGetBegin(a);
+        end    = ajSeqGetEnd(a);
+        ajStrAssignSubC(&substr,ajSeqGetSeqC(a),beg-1,end-1);
 
-    substr = ajStrNew();
-    beg    = ajSeqGetBegin(a);
-    end    = ajSeqGetEnd(a);
-    ajStrAssignSubC(&substr,ajSeqGetSeqC(a),beg-1,end-1);
+        back = ajStrNew();
+        ajCodBacktranslateAmbig(&back,substr,codon);
 
-    back = ajStrNew();
-    ajCodBacktranslateAmbig(&back,substr,codon);
+        ajSeqAssignSeqS (a, back);
+        ajSeqSetNuc(a);
 
-    ajSeqAssignSeqS (a, back);
-    ajSeqSetNuc(a);
+        ajSeqoutWriteSeq(outf,a);
+    }
 
-    ajSeqoutWriteSeq(outf,a);
     ajSeqoutClose(outf);
 
     ajStrDel(&back);
@@ -73,6 +77,7 @@ int main(int argc, char **argv)
     ajSeqoutDel(&outf);
     ajCodDel(&codon);
     ajStrDel(&gctable);
+    ajSeqallDel(&seqall);
     ajSeqDel(&a);
 
     embExit();

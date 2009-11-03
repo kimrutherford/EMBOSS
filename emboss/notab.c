@@ -74,8 +74,10 @@ int main(int argc, char **argv)
     /* Memory management and exit */
     ajFileClose(&inf);
     ajFileClose(&outf);
-
+    ajRegFree(&tabexp);
     ajStrDel(&line);
+    ajStrDel(&outline);
+    ajStrDel(&tmpstr);
 
     embExit();
 

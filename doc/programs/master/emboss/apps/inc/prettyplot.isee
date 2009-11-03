@@ -78,6 +78,11 @@
 </tr>
 
 <tr>
+<td><a href="showpep.html">showpep</a></td>
+<td>Displays protein sequences with features in pretty format</td>
+</tr>
+
+<tr>
 <td><a href="showseq.html">showseq</a></td>
 <td>Displays sequences with features in pretty format</td>
 </tr>
@@ -94,7 +99,7 @@
 
 <tr>
 <td><a href="tranalign.html">tranalign</a></td>
-<td>Generate an aligment of nucleic coding regions from aligned proteins</td>
+<td>Generate an alignment of nucleic coding regions from aligned proteins</td>
 </tr>
 
 </table>

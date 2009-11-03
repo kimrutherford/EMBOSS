@@ -1819,20 +1819,20 @@ compile_branch(int *optionsptr, int *brackets, uschar **codeptr,
 		   posix_class *= 3;
 		   for (i = 0; i < 3; i++)
 		   {
-		       BOOL isblank = strncmp((const char *)ptr, "blank", 5) == 0;
+		       BOOL v_isblank = strncmp((const char *)ptr, "blank", 5) == 0;
 		       int taboffset = posix_class_maps[posix_class + i];
 		       if (taboffset < 0) break;
 		       if (local_negate)
 		       {
 			   for (c = 0; c < 32; c++)
 			       class[c] |= ~cbits[c+taboffset];
-			   if (isblank) class[1] |= 0x3c;
+			   if (v_isblank) class[1] |= 0x3c;
 		       }
 		       else
 		       {
 			   for (c = 0; c < 32; c++)
 			       class[c] |= cbits[c+taboffset];
-			   if (isblank) class[1] &= ~0x3c;
+			   if (v_isblank) class[1] &= ~0x3c;
 		       }
 		   }
 

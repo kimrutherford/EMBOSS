@@ -10,14 +10,14 @@ XX
 KW   telomeric repeat.
 XX
 OS   Human herpesvirus 7
-OC   Viruses; dsDNA viruses, no RNA stage; Herpesviridae; Betaherpesvirinae;
-OC   Roseolovirus.
+OC   Viruses; dsDNA viruses, no RNA stage; Herpesvirales; Herpesviridae;
+OC   Betaherpesvirinae; Roseolovirus.
 XX
 RN   [1]
 RP   1-1272
 RX   PUBMED; 7494318.
 RA   Secchiero P., Nicholas J., Deng H., Xiaopeng T., van Loon N., Ruvolo V.R.,
-RA   Berneman Z.N., Reitz M.S. Jr., Dewhurst S.;
+RA   Berneman Z.N., Reitz M.S.Jr., Dewhurst S.;
 RT   "Identification of human telomeric repeat motifs at the genome termini of
 RT   human herpesvirus 7: structural analysis and heterogeneity";
 RL   J. Virol. 69(12):8041-8045(1995).

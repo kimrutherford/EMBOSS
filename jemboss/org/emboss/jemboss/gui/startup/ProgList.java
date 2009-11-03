@@ -78,8 +78,7 @@ public class ProgList
      try 
      {
        BufferedReader in;
-       Vector allProgLines = new Vector();
-       //while (numProgs == 0) 
+       HashMap progDescs = new HashMap();
        {
          in = new BufferedReader(new StringReader(woss));
          while((line = in.readLine()) != null)
@@ -91,12 +90,13 @@ public class ProgList
              if(!line.equals(""))
              {
                numMenuItems++;
-               //String progN = line.substring(0,line.indexOf(" ")+1);
-               if(!allProgLines.contains(line))
-               {
-                 allProgLines.add(line);
-                 numProgs++;
-               }
+               int split = line.indexOf(" ");
+               int len   = line.length();
+               String progname = line.substring(0,split);
+               if (progDescs.containsKey(progname))
+            	   continue;
+               String progdesc = line.substring(split+1,len).trim();
+               progDescs.put(progname, progdesc);
              }
              else
                break;
@@ -105,29 +105,18 @@ public class ProgList
          in.close();
        }
 //load into string array
-       allProgs = new String[numProgs];
-       Enumeration e = allProgLines.elements();
-       for(int i=0; e.hasMoreElements() ; i++)
-         allProgs[i] =  (String)(e.nextElement());
+       numProgs = progDescs.size();
+       allProgs = (String[])progDescs.keySet().toArray(new String[numProgs]);
+       //sort alphabetically and then get program description array
+       java.util.Arrays.sort(allProgs,0,numProgs);
+       allDescription = new String[numProgs];
+       for (int i=0;i<numProgs; i++){
+    	   allDescription[i] = (String)progDescs.get(allProgs[i]);
+       }
      }
      catch (IOException e) 
      {
        System.out.println("Cannot read wossname string");
-     }
-
-
-//sort alphabetically
-     java.util.Arrays.sort(allProgs,0,numProgs);
-     allDescription = new String[numProgs];
-
-     for(int i=0;i<numProgs;i++)
-     {
-       line = allProgs[i];
-       int split = line.indexOf(" ");
-       int len   = line.length();
-       allProgs[i] = line.substring(0,split);
-       line = line.substring(split+1,len).trim();
-       allDescription[i] = new String(line);
      }
 
 

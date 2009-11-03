@@ -73,7 +73,7 @@ int main(ajint argc, char **argv)
     AjPFile outf = NULL;
     AjPSeqall seqall;
     AjPSeq ajseq = NULL;
-    ajint i;
+    ajuint i;
     ajint verb;
     ajint window;
     ajint pt;
@@ -118,7 +118,7 @@ int main(ajint argc, char **argv)
 			    h->m[pt][5],h->m[pt][6]);
 	    }
 
-	for(i=0; i<h->n; ++i)
+	for(i=0; i<(ajuint)h->n; ++i)
 	    ajFmtPrintF(outf,"Window %4d %1d %f %f %f %f %f\n",h->f[i].win,
 			h->f[i].w,h->f[i].m_cc,h->f[i].sd_cc,h->f[i].m_g,
 			h->f[i].sd_g,h->f[i].sc);
@@ -126,7 +126,7 @@ int main(ajint argc, char **argv)
 
     /* See if there is a file for the chosen window length/weight scheme */
     which = -1;
-    for(i=0; i<h->n; ++i)
+    for(i=0; i<(ajuint)h->n; ++i)
     {
 	if((h->f[i].win == window) && (h->f[i].w == weighted))
 	{				/* match */

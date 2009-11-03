@@ -1923,6 +1923,10 @@ can run without a frequencies file.
 <!-- #acdattr-infile -->
 <h5>Infile</h5>
 
+<p>The <i>binary:</i> attribute specifies that the input file is
+expected to contain binary data and is not suitable for creation in
+a text editor.</p>
+
 <p>The <i>nullok:</i> attribute specifies that a missing input file is
 acceptable to the application, and that -noxxx can be used on the
 command line to avoid reading the default input file (if any)</p>
@@ -2477,6 +2481,10 @@ default, and turned on from the command line.</p>
 full when passed to the program, although the user may provide a path
 from the current working directory.</p>
 
+<p>The <i>create:</i> attribute allows a new directory to be created
+if it does not already exist. Without this set only already existing
+directories are allowed</p>
+
 <!-- #acdattr-outdiscrete -->
 <h5>Outdiscrete</h5>
 
@@ -2786,6 +2794,9 @@ type. Although this will default to the type of the first input
 sequence, it is ercommended that a value is always defined to make the
 output sequnce type clear.</p>
 
+<p>The <i>aligned:</i> attribute, if true, specifies that all sequences in the
+output have been aligned with gaps.</p>
+
 <p>The <i>nullok:</i> attribute allows a default value to be replaced
 by an empty string or by -noxxx on the command line if the application
 can run without this sequence output. The application must be able to accept a
@@ -2827,6 +2838,9 @@ format supports it) or in a separate file (by default in GFF format).</p>
 type. Although this will default to the type of the first input
 sequence, it is ercommended that a value is always defined to make the
 output sequnce type clear.</p>
+
+<p>The <i>aligned:</i> attribute, if true, specifies that all sequences in the
+output have been aligned with gaps.</p>
 
 <p>The <i>nullok:</i> attribute allows a default value to be replaced
 by an empty string or by -noxxx on the command line if the application

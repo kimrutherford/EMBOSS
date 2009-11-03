@@ -20,22 +20,24 @@
 # HitCount: 2
 #
 # Pattern_name Mismatch Pattern
-# pattern1            0 AAGCTT
+# pattern             0 AAGCTT
 # 
 # Complement: No
 #
 #=======================================
 
   Start     End  Strand Pattern_name Mismatch Sequence
-      1       6       + pattern1            . aagctt
-   1267    1272       + pattern1            . aagctt
+      1       6       + pattern             . aagctt
+   1267    1272       + pattern             . aagctt
 
 #---------------------------------------
 #---------------------------------------
 
 #---------------------------------------
 # Total_sequences: 1
-# Total_hitcount: 2
+# Total_length: 1272
+# Reported_sequences: 1
+# Reported_hitcount: 2
 #---------------------------------------
 </pre>
 </td></tr></table><p>
@@ -76,7 +78,9 @@
 
 #---------------------------------------
 # Total_sequences: 1
-# Total_hitcount: 2
+# Total_length: 1272
+# Reported_sequences: 1
+# Reported_hitcount: 2
 #---------------------------------------
 </pre>
 </td></tr></table><p>
@@ -130,7 +134,9 @@
 
 #---------------------------------------
 # Total_sequences: 1
-# Total_hitcount: 13
+# Total_length: 1272
+# Reported_sequences: 1
+# Reported_hitcount: 13
 #---------------------------------------
 </pre>
 </td></tr></table><p>
@@ -190,7 +196,9 @@
 
 #---------------------------------------
 # Total_sequences: 1
-# Total_hitcount: 19
+# Total_length: 1272
+# Reported_sequences: 1
+# Reported_hitcount: 19
 #---------------------------------------
 </pre>
 </td></tr></table><p>

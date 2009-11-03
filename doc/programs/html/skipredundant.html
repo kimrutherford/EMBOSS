@@ -21,6 +21,18 @@ skipredundant
 
 
 <H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
     Function
 </H2>
 Remove redundant sequences from an input set
@@ -79,7 +91,7 @@ Redundancy is calculated for each pair of sequences in turn.
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>skipredundant -threshold 80 -keepredundant </b>
+% <b>skipredundant -threshold 80 -redundant '' </b>
 Remove redundant sequences from an input set
 Input sequence set: <b>globins.fasta</b>
 Redundancy removal options
@@ -89,7 +101,6 @@ Select number [1]: <b></b>
 Gap opening penalty [10.0]: <b></b>
 Gap extension penalty [0.5]: <b></b>
 output sequence(s) [globins.keep]: <b></b>
-Second output sequence(s) [globins.redundant]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -178,8 +189,8 @@ Second output sequence(s) [globins.redundant]: <b></b>
                                   point number from 0.0 to 10.0)
   [-outseq]            seqoutall  [<sequence>.<format>] Sequence set(s)
                                   filename and optional format (output USA)
-  [-redundantoutseq]   seqoutall  [<sequence>.<format>] Sequence set(s)
-                                  filename and optional format (output USA)
+  [-redundantoutseq]   seqoutall  [<sequence>.<format>] Redundant sequences
+                                  (optional)
 
    Additional (Optional) qualifiers:
    -datafile           matrixf    [EBLOSUM62 for protein, EDNAFULL for DNA]
@@ -193,9 +204,6 @@ Second output sequence(s) [globins.redundant]: <b></b>
    Advanced (Unprompted) qualifiers:
    -feature            toggle     Sequence feature information will be
                                   retained if this option is set.
-   -keepredundant      toggle     [N] This option specifies whether to retain
-                                  redundant sequences. If this option is set a
-                                  file of redundant sequences is written.
 
    Associated qualifiers:
 
@@ -323,7 +331,7 @@ Second output sequence(s) [globins.redundant]: <b></b>
 
 <tr>
 <td>[-redundantoutseq]<br>(Parameter 3)</td>
-<td>Sequence set(s) filename and optional format (output USA)</td>
+<td>Redundant sequences (optional)</td>
 <td>Writeable sequence(s)</td>
 <td><i>&lt;*&gt;</i>.<i>format</i></td>
 </tr>
@@ -350,13 +358,6 @@ Second output sequence(s) [globins.redundant]: <b></b>
 <tr>
 <td>-feature</td>
 <td>Sequence feature information will be retained if this option is set.</td>
-<td>Toggle value Yes/No</td>
-<td>No</td>
-</tr>
-
-<tr>
-<td>-keepredundant</td>
-<td>This option specifies whether to retain redundant sequences. If this option is set a file of redundant sequences is written.</td>
 <td>Toggle value Yes/No</td>
 <td>No</td>
 </tr>
@@ -809,6 +810,11 @@ None.
 </tr>
 
 <tr>
+<td><a href="nthseqset.html">nthseqset</a></td>
+<td>Reads and writes (returns) one set of sequences from many</td>
+</tr>
+
+<tr>
 <td><a href="pasteseq.html">pasteseq</a></td>
 <td>Insert one sequence into another</td>
 </tr>
@@ -824,6 +830,11 @@ None.
 </tr>
 
 <tr>
+<td><a href="seqretsetall.html">seqretsetall</a></td>
+<td>Reads and writes (returns) many sets of sequences</td>
+</tr>
+
+<tr>
 <td><a href="seqretsplit.html">seqretsplit</a></td>
 <td>Reads sequences and writes them to individual files</td>
 </tr>
@@ -836,6 +847,11 @@ None.
 <tr>
 <td><a href="skipseq.html">skipseq</a></td>
 <td>Reads and writes (returns) sequences, skipping first few</td>
+</tr>
+
+<tr>
+<td><a href="splitsource.html">splitsource</a></td>
+<td>Split sequence(s) into original source sequences</td>
 </tr>
 
 <tr>

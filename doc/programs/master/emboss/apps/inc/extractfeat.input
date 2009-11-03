@@ -37,7 +37,7 @@ RX   DOI; 10.1016/0006-291X(92)91286-Y.
 RX   PUBMED; 1326960.
 RA   Kas K., Michiels L., Merregaert J.;
 RT   "Genomic structure and expression of the human fau gene: encoding the
-RT   ribosomal protein S30 fused to a ubiquitin-like protein.";
+RT   ribosomal protein S30 fused to a ubiquitin-like protein";
 RL   Biochem. Biophys. Res. Commun. 187(2):927-933(1992).
 XX
 DR   GDB; 191789.
@@ -114,9 +114,3 @@ SQ   Sequence 2016 BP; 421 A; 562 C; 538 G; 495 T; 0 other;
 //
 </pre>
 </td></tr></table><p>
-
-<a name="input.5"></a>
-<h3>Input files for usage example 5</h3>
-
-'tsw:*' is a sequence entry in the example protein database 'tsw'
-<p>

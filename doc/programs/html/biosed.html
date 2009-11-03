@@ -21,6 +21,18 @@ biosed
 
 
 <H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
     Function
 </H2>
 Replace or delete sequence sections
@@ -28,15 +40,28 @@ Replace or delete sequence sections
     Description
 </H2>
 
-<p><b>biosed</b> is a simple sequence editing utility that searches for a target subsequence in one or more input sequences and replaces it with an insert subsequence, or optionally, just deletes the target subsequence where found.  If the target subsequence occurs more than once, then each instance of the target is replaced or deleted.</p>
+<p><b>biosed</b> is a simple sequence editing utility that searches
+for a target subsequence in one or more input sequences and replaces
+it with an insert subsequence, or optionally, just deletes the target
+subsequence where found.  If the target subsequence occurs more than
+once, then each instance of the target is replaced or deleted.</p>
 
-The <tt>-position</tt> option allows a sequence position to be specified as an additional constraint for the match: a replacement / deletion only occurs if the start of a match is at the specified <tt>-position</tt> position.
+<p>The <tt>-position</tt> option allows a sequence position to be
+specified as an additional constraint for the match: a replacement /
+deletion only occurs if the start of a match is at the
+specified <tt>-position</tt> position.</p>
 
 
 <H2>
     Algorithm
 </H2>
-<p>The target subsequence is just a short, literal sequence of characters.  <b>biosed</b> cannot interpret cannot any sort of an ambiguity pattern such as a regular expression.  A simple string match is done between the target and input sequences.  If there is an exact matches then the replacement or deletion is done. The matching is case insensitive, independent of the case of both the input sequences and target. </p>
+<p>The target subsequence is just a short, literal sequence of
+characters.  <b>biosed</b> cannot interpret cannot any sort of an
+ambiguity pattern such as a regular expression.  A simple string match
+is done between the target and input sequences.  If there is an exact
+matches then the replacement or deletion is done. The matching is case
+insensitive, independent of the case of both the input sequences and
+target. </p>
 
 
 
@@ -253,8 +278,8 @@ RN   [2]
 RP   1-518
 RX   PUBMED; 8395683.
 RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
-RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
-RT   an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma virus";
+RT   "fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
+RT   an antisense sequence in the Finkel-Biskis-Reilly murine sarcoma virus";
 RL   Oncogene 8(9):2537-2546(1993).
 XX
 DR   H-InvDB; HIT000322806.
@@ -275,11 +300,11 @@ FT                   /note="ubiquitin like part"
 FT   CDS             57..458
 FT                   /gene="fau"
 FT                   /db_xref="GDB:135476"
-FT                   /db_xref="GOA:P35544"
 FT                   /db_xref="GOA:P62861"
 FT                   /db_xref="HGNC:3597"
+FT                   /db_xref="HSSP:1GJZ"
+FT                   /db_xref="InterPro:IPR006846"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
-FT                   /db_xref="UniProtKB/Swiss-Prot:P62861"
 FT                   /protein_id="CAA46716.1"
 FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLAG
 FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKTG
@@ -317,8 +342,8 @@ ID   AMIR_PSEAE              Reviewed;         196 AA.
 AC   P10932;
 DT   01-JUL-1989, integrated into UniProtKB/Swiss-Prot.
 DT   08-DEC-2000, sequence version 2.
-DT   20-MAR-2007, entry version 55.
-DE   Aliphatic amidase regulator.
+DT   16-JUN-2009, entry version 72.
+DE   RecName: Full=Aliphatic amidase regulator;
 GN   Name=amiR; OrderedLocusNames=PA3363;
 OS   Pseudomonas aeruginosa.
 OC   Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadales;
@@ -367,36 +392,36 @@ CC       aliphatic amidase. Acts as a transcriptional antitermination
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-CC   -!- SIMILARITY: Contains 1 ANTAR domain.
-CC   -----------------------------------------------------------------------
-CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
-CC   Distributed under the Creative Commons Attribution-NoDerivs License
-CC   -----------------------------------------------------------------------
-DR   EMBL; X13776; CAA32023.1; -; Genomic_DNA.
-DR   EMBL; AE004091; AAG06751.1; -; Genomic_DNA.
-DR   PIR; B83226; B83226.
-DR   PIR; S03884; S03884.
-DR   PDB; 1QO0; X-ray; D/E=1-196.
-DR   IntAct; P10932; -.
+DR   RefSeq; NP_252053.1; -.
+DR   PDB; 1QO0; X-ray; 2.25 A; D/E=1-196.
+DR   PDBsum; 1QO0; -.
+DR   GeneID; 880573; -.
 DR   GenomeReviews; AE004091_GR; PA3363.
 DR   KEGG; pae:PA3363; -.
-DR   BioCyc; PAER287:PA3363-MONOMER; -.
+DR   PseudoCAP; PA3363; -.
+DR   HOGENOM; P10932; -.
+DR   OMA; P10932; QLQRIGC.
+DR   BioCyc; PAER208964:PA3363-MON; -.
+DR   GO; GO:0006350; P:transcription; IEA:UniProtKB-KW.
+DR   GO; GO:0031564; P:transcription antitermination; IEA:UniProtKB-KW.
 DR   InterPro; IPR005561; AmiR_NasR_reg.
-DR   InterPro; IPR011006; CheY_like.
-DR   InterPro; IPR008327; Res_reg_antiterm.
+DR   InterPro; IPR008327; Sig_transdc_resp-reg_antiterm.
+DR   InterPro; IPR011991; Wing_hlx_DNA_bd.
+DR   Gene3D; G3DSA:1.10.10.10; Wing_hlx_DNA_bd; 1.
 DR   Pfam; PF03861; ANTAR; 1.
 DR   PIRSF; PIRSF036382; RR_antiterm; 1.
 DR   PROSITE; PS50921; ANTAR; 1.
+PE   1: Evidence at protein level;
 KW   3D-structure; Complete proteome; Transcription;
 KW   Transcription antitermination; Transcription regulation.
 FT   CHAIN         1    196       Aliphatic amidase regulator.
 FT                                /FTId=PRO_0000064582.
 FT   DOMAIN      129    190       ANTAR.
-FT   CONFLICT     48     48       S -&gt; A (in Ref. 1).
-FT   CONFLICT     64     64       R -&gt; G (in Ref. 1).
-FT   CONFLICT    141    141       E -&gt; D (in Ref. 1).
-FT   CONFLICT    154    154       A -&gt; V (in Ref. 1).
-FT   CONFLICT    170    170       Y -&gt; H (in Ref. 1).
+FT   CONFLICT     48     48       S -&gt; A (in Ref. 1; CAA32023).
+FT   CONFLICT     64     64       R -&gt; G (in Ref. 1; CAA32023).
+FT   CONFLICT    141    141       E -&gt; D (in Ref. 1; CAA32023).
+FT   CONFLICT    154    154       A -&gt; V (in Ref. 1; CAA32023).
+FT   CONFLICT    170    170       Y -&gt; H (in Ref. 1; CAA32023).
 FT   HELIX         3      8
 FT   HELIX         9     12
 FT   STRAND       14     19
@@ -456,7 +481,7 @@ UCUAAUAAAAAAGCCACUUAGUUCAGUCAAAAAAAAAA
 <p><h3>File: amir_pseae.pep</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-&gt;AMIR_PSEAE P10932 Aliphatic amidase regulator.
+&gt;AMIR_PSEAE P10932 Aliphatic amidase regulator
 MSANSLLGSLRELQVLVLNPPGEVSDALVLQLIRIGCSVRQCWXXPPPXXESFDVPVDVV
 FTSIFQNRHHDEIAALLAAGTPRTTLVALVEYESPAVLSQIIELECHGVITQPLDAHRVL
 PVLVSARRISEEMAKLKQKTEQLQERIAGQARINQAKALLMQRHGWDEREAHQYLSREAM
@@ -474,7 +499,9 @@ None.
     Notes
 </H2>
 
-<p><b>biosed</b> was inspired by the useful UNIX utility sed which searches for a pattern in text and can replace or delete the found pattern.</p>
+<p><b>biosed</b> was inspired by the useful UNIX utility sed which
+searches for a pattern in text and can replace or delete the found
+pattern.</p>
 
 
 
@@ -490,7 +517,12 @@ None.
     Warnings
 </H2>
 
-<p>No check for correct type (protein, nucleic, gapped etc) is made on the replacement sequence so you must ensure it is of the type required.  Any text can be used, including characters only used in proteins (e.g. <tt>D</tt>, <tt>E</tt>, <tt>F</tt>, etc.), characters rarely used in proteins (e.g. <tt>U</tt>, <tt>J</tt>, <tt>O</tt>, etc), digits and punctuation characters.</p>
+<p>No check for correct type (protein, nucleic, gapped etc) is made on
+the replacement sequence so you must ensure it is of the type
+required.  Any text can be used, including characters only used in
+proteins (e.g. <tt>D</tt>, <tt>E</tt>, <tt>F</tt>, etc.), characters
+rarely used in proteins (e.g. <tt>U</tt>, <tt>J</tt>, <tt>O</tt>,
+etc), digits and punctuation characters.</p>
 
 <H2>
     Diagnostic Error Messages
@@ -503,7 +535,6 @@ None.
     Exit status
 </H2>
 
-<!-- 
 It always exits with status 0.
 
 
@@ -648,6 +679,11 @@ None.
 </tr>
 
 <tr>
+<td><a href="nthseqset.html">nthseqset</a></td>
+<td>Reads and writes (returns) one set of sequences from many</td>
+</tr>
+
+<tr>
 <td><a href="pasteseq.html">pasteseq</a></td>
 <td>Insert one sequence into another</td>
 </tr>
@@ -660,6 +696,11 @@ None.
 <tr>
 <td><a href="seqret.html">seqret</a></td>
 <td>Reads and writes (returns) sequences</td>
+</tr>
+
+<tr>
+<td><a href="seqretsetall.html">seqretsetall</a></td>
+<td>Reads and writes (returns) many sets of sequences</td>
 </tr>
 
 <tr>
@@ -680,6 +721,11 @@ None.
 <tr>
 <td><a href="skipseq.html">skipseq</a></td>
 <td>Reads and writes (returns) sequences, skipping first few</td>
+</tr>
+
+<tr>
+<td><a href="splitsource.html">splitsource</a></td>
+<td>Split sequence(s) into original source sequences</td>
 </tr>
 
 <tr>

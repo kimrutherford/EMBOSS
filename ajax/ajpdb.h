@@ -935,6 +935,8 @@ AjPPdbtosp   ajPdbtospReadCNew(AjPFile inf, const char *entry);
 AjPList      ajPdbtospReadAllNew(AjPFile inf);
 AjBool       ajPdbtospWrite(AjPFile outf, const AjPList list);
 
+void         ajPdbExit(void);
+
 /*
 ** End of prototype definitions
 */

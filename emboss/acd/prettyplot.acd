@@ -131,7 +131,7 @@ section: additional [
     default: "N"
   ]
 
-  string: boxcolval [
+  string: boxuse [
     additional: "Y"
     information: "Colour to be used for background. (GREY)"
     default: "GREY"

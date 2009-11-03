@@ -14,7 +14,7 @@
 # emboss_doc/master with inc subdirectory for templates (or programs/master)
 # emboss_doc/html and emboss_doc/text for the outputs
 # to be installed as /emboss/apps and /embassy/*/
-# and on sourceforge as /releaseNNN/emboss/apps etc. or /latest/
+# and on sourceforge as /apps/release/N.N/emboss/apps etc. or /apps/cvs/
 #
 # Use these as the master copy to create the ~/sfdoc versions
 #
@@ -31,6 +31,10 @@
 #     and embassy/*/ main pages (not yet checked?)
 #
 # plotorf copies plotorf.gif 3 times in 2 tests
+#
+# need to check new docs are created when new applications appear with
+# master docs
+#
 #
 # Changes needed for SourceForge version
 # ======================================
@@ -101,6 +105,7 @@ my $doctop = "$cvsdoc/master/emboss/apps";
 my $sfdoctop = "$ENV{HOME}/sfdoc/apps/cvs";
 
 my @embassylist = ("appendixd",
+		   "cbstools",
 		   "domainatrix",
 		   "domalign",
 		   "domsearch",
@@ -108,11 +113,13 @@ my @embassylist = ("appendixd",
 		   "esim4",
 		   "hmmer",
 		   "hmmernew",
+		   "iprscan",
 		   "meme",
 		   "memenew",
 		   "mira",
 		   "mse",
 		   "myemboss", # we avoid documenting these examples
+		   "myembossdemo", # we avoid documenting these examples
 		   "phylip",
 		   "phylipnew",
 		   "signature",
@@ -185,6 +192,20 @@ sub htmlsource ( $$ ) {
 	die "Cannot open HTML template file '$edir/$tfile'";
 
     while (<H>) {
+	if(/^\s*Function\s*$/) {
+	    print X "Wiki\n";
+	    print X "</H2>\n";
+	    print X "\n";
+	    print X "The master copies of EMBOSS documentation are available\n";
+	    print X "at <a href=\"http://emboss.open-bio.org/wiki/Appdocs\">\n";
+	    print X "http://emboss.open-bio.org/wiki/Appdocs</a>\n";
+	    print X "on the EMBOSS Wiki.\n";
+	    print X "\n";
+	    print X "<p>\n";
+	    print X "Please help by correcting and extending the Wiki pages.\n";
+	    print X "\n";
+	    print X "<H2>\n";
+	}
 	if (/[<][\!][-][-][\#]include file=\"([^\"]+)\" +[-][-][>]/) {
 	    $ifile = $1;
 	    if(-e "$edir/$ifile") {
@@ -226,6 +247,7 @@ sub htmlsource ( $$ ) {
 # 
 # Description: 
 #	removes unwanted acdtable output from text documentation
+#	makes sure seealso output is reasonably spaced
 # 
 # Args: 
 # 	$afile - first filename
@@ -236,12 +258,19 @@ sub htmlsource ( $$ ) {
 # 
 ######################################################################
 sub cleantext ( $ ) {
+    my $seealso = 0;
     my ($afile) = @_;
     if(-e $afile) {
 	open (X, $afile);
 	open (Z, ">z.z");
 	my $acdtable = 0;
 	while (<X>) {
+	    if(/^See also$/) {
+		    $seealso = 1;
+		}
+	    if(/^Author[\(s\)]$/) {
+		    $seealso = 0;
+		}
 	    if($acdtable) {
 		if(/^Input file format$/) {
 		    $acdtable = 0;
@@ -260,6 +289,23 @@ sub cleantext ( $ ) {
 		    $acdtable = 1;
 		}
 	    }
+	    if($seealso) {
+		if(/   Program name Description/) {
+		    $seealso = 2;
+		    s/Program name Description/Program name     Description/;
+		}
+		else {
+		    if(/^(\s+)(\S+) ([A-Z])/) {
+			$name = sprintf "%-16s", $2;
+			s/^(\s+)(\S+) ([A-Z])/$1$name $3/;
+		    }
+		    else {
+			s/^  /                   /;
+		    }
+		}
+		if(/^$/ && $seealso == 2) {$seealso = 0}
+	    }
+	
 	    if(!$acdtable) { print Z }
 	}
     }
@@ -445,7 +491,7 @@ sub indexheader (*) {
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
 <A HREF=\"http://emboss.sourceforge.net/\" ONMOUSEOVER=\"self.status='Go to the EMBOSS home page';return true\">
-<img border=0 src=\"emboss_icon.jpg\" alt=\"\" width=150 height=48></a>
+<img border=0 src=\"/emboss_icon.jpg\" alt=\"\" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size=\"+6\"> 
@@ -571,8 +617,8 @@ sub getprogramnames ( ) {
 #      print "Program in $grp = $1\n";
 	    }
 	}
+	close PROGS;
     }
-    close PROGS;
 
 }
 
@@ -974,15 +1020,15 @@ $progs{$thisprogram}
 		    system("diff -b $cvsdoc/html/$thisprogram.html $sfprogdocdir/$thisprogram.html > z.z");
 		    $s = (-s "z.z");
 		    if ($s) {
-			print LOG "** $sfprogdocdir/$thisprogram.html differences ** size:$s\n";
+			print LOG "** $sfprogdocdir/$thisprogram.html differences ** size:$s ($cvsdoc/html/$thisprogram.html)\n";
 			system "cp  $cvsdoc/html/$thisprogram.html $sfprogdocdir/$thisprogram.html";
 			chmod 0664, "$sfprogdocdir/$thisprogram.html";
-			
-			
 		    }
 		}
 		else {
-			print LOG "** $sfprogdocdir/$thisprogram.html missing\n";
+			print LOG "** $sfprogdocdir/$thisprogram.html copied\n";
+			system "cp  $cvsdoc/html/$thisprogram.html $sfprogdocdir/$thisprogram.html";
+			chmod 0664, "$sfprogdocdir/$thisprogram.html";
 		}
 	    }
 	    else {
@@ -999,16 +1045,19 @@ $progs{$thisprogram}
 	    $sfedir = "$sfdoctop/embassy/$progdir{$thisprogram}";
 	    if(-e "$edir/$thisprogram.html") {
 ###	  print "$edir/$thisprogram.html found\n";
-		if (-e "$edir/$thisprogram.html") {
+		if (-e "$sfedir/$thisprogram.html") {
 		    system("diff -b $edir/$thisprogram.html $sfedir/$thisprogram.html > z.z");
 		    $s = (-s "z.z");
 		    if ($s) {
-			print LOG "** $sfedir/$thisprogram.html differences ** size:$s\n";
+			print LOG "** $sfedir/$thisprogram.html differences ** size:$s ($edir/$thisprogram.html)\n";
 			system "cp  $edir/$thisprogram.html $sfedir/$thisprogram.html";
 			chmod 0664, "$sfedir/$thisprogram.html";
-			
-			
 		    }
+		}
+		else {
+			print LOG "** $edir/$thisprogram.html copied\n";
+			system "cp  $edir/$thisprogram.html $sfedir/$thisprogram.html";
+			chmod 0664, "$sfedir/$thisprogram.html";
 		}
 	    }
 	    else {
@@ -1128,6 +1177,7 @@ $progs{$thisprogram}
 	    print "htmlsource error $status $docmaster/$thisprogram.html";
 	}
 	else {
+# edit the HTML file
 # change ../emboss_icon.jpg and ../index.html to current directory
 	    system "perl -p -i -e 's#\.\.\/index.html#index.html#g;' x.x";
 	    system "perl -p -i -e 's#/images/emboss_icon.jpg#emboss_icon.jpg#g;' x.x";

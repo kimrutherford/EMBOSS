@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Finds tandem repeats in nucleotide sequences
@@ -135,14 +142,14 @@ XX
 KW   telomeric repeat.
 XX
 OS   Human herpesvirus 7
-OC   Viruses; dsDNA viruses, no RNA stage; Herpesviridae; Betaherpesvirinae;
-OC   Roseolovirus.
+OC   Viruses; dsDNA viruses, no RNA stage; Herpesvirales; Herpesviridae;
+OC   Betaherpesvirinae; Roseolovirus.
 XX
 RN   [1]
 RP   1-1272
 RX   PUBMED; 7494318.
 RA   Secchiero P., Nicholas J., Deng H., Xiaopeng T., van Loon N., Ruvolo V.R.,
-RA   Berneman Z.N., Reitz M.S. Jr., Dewhurst S.;
+RA   Berneman Z.N., Reitz M.S.Jr., Dewhurst S.;
 RT   "Identification of human telomeric repeat motifs at the genome termini of
 RT   human herpesvirus 7: structural analysis and heterogeneity";
 RL   J. Virol. 69(12):8041-8045(1995).
@@ -299,37 +306,32 @@ Known bugs
 
 See also
 
-   Program name                   Description
-   einverted    Finds inverted repeats in nucleotide sequences
-   etandem      Finds tandem repeats in a nucleotide sequence
-   palindrome   Finds inverted repeats in nucleotide sequence(s)
-
-   equicktandem identifies regions wich are likely to contain tanden
-   repeats. tandem should then be run on those regions to confirm them
-   and to get an accurate specification of the repeats. tandem runs
-   slowly.
+                    Program name                   Description
+                    einverted    Finds inverted repeats in nucleotide sequences
+                    etandem      Finds tandem repeats in a nucleotide sequence
+                    palindrome   Finds inverted repeats in nucleotide sequence(s)
 
 Author(s)
 
-   This program was originally written by Richard Durbin
-   (rd © sanger.ac.uk)
-   Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
-   CB10 1SA, UK.
+                    This program was originally written by Richard Durbin
+                    (rd © sanger.ac.uk)
+   Sanger           Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
+                    CB10 1SA, UK.
 
-   This application was modified for inclusion in EMBOSS by Peter Rice
-   (pmr © ebi.ac.uk)
-   Informatics Division, European Bioinformatics Institute, Wellcome
-   Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+                    This application was modified for inclusion in EMBOSS by Peter Rice
+                    (pmr © ebi.ac.uk)
+   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton,         Cambridge CB10 1SD, UK
 
 History
 
-   Completed 25 May 1999
+                    Completed 25 May 1999
 
 Target users
 
-   This program is intended to be used by everyone and everything, from
-   naive users to embedded scripts.
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
 
 Comments
 
-   None
+                    None

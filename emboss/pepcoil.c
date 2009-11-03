@@ -56,6 +56,7 @@ int main(int argc, char **argv)
     AjPStr stmp   = NULL;
     AjPStr substr = NULL;
     AjPStr tmpstr = NULL;
+    AjPStr tmpframe = NULL;
     AjPStr fthit  = NULL;
     AjPStr ftmiss = NULL;
 
@@ -105,6 +106,8 @@ int main(int argc, char **argv)
 
     AjBool iscoil;
     AjPFloat2d rdat = NULL;
+    AjPList framelist = NULL;
+    AjIList iter = NULL;
 
 
     embInit("pepcoil", argc, argv);
@@ -138,7 +141,8 @@ int main(int argc, char **argv)
 
     ajFmtPrintS(&tmpstr,"Window size: %d residues\n",window);
     ajReportSetHeader(report, tmpstr);
-
+    framelist = ajListstrNew();
+    
     while(ajSeqallNext(seqall, &seq))
     {
 	begin = ajSeqallGetseqBegin(seqall);
@@ -222,10 +226,9 @@ int main(int argc, char **argv)
 
 	for(i=0;i<len;++i)
 	{
-	    if(ajFloatGet(probs,i) >= 0.5)
+	    if(ajFloatGet(probs,i) >= 0.5) /* we are in a coil */
 	    {
-			    
-		if(iscoil)
+		if(iscoil)      /* continuing coil */
 		{
 		    if(ajFloatGet(probs,i) > maxcoil)
 		    {
@@ -241,10 +244,11 @@ int main(int argc, char **argv)
 		    {
 			if(i && frame)
 			{
-			    ajFmtPrintS(&tmpstr, "*frames %d..%d",
+			    ajFmtPrintS(&tmpframe, "*frames %d..%d",
 					coilframe,
 					ajIntGet(frames,i-1));
-			    ajFeatTagAdd(gf,  NULL, tmpstr);
+                            ajListstrPushAppend(framelist, tmpframe);
+                            tmpframe = NULL;
 			/*
 			    ajFmtPrintF(outf,"%10d..%d   frame %d..%d\n",
 					startframe+begin,i-1+begin,
@@ -256,7 +260,7 @@ int main(int argc, char **argv)
 			startframe = i;
 		    }
 		}
-		else
+		else            /* start of a new coil */
 		{
 		    endcoil = i-1;
 		    /* lencoil = endcoil-startcoil+1; */
@@ -337,6 +341,13 @@ int main(int argc, char **argv)
 			ajFmtPrintS(&tmpstr, "*pos %d",
 				    coilpos);
 			ajFeatTagAdd(gf,  NULL, tmpstr);
+                        iter = ajListIterNew(framelist);
+                        while(!ajListIterDone(iter))
+                        {
+                            tmpframe = ajListstrIterGet(iter);
+			    ajFeatTagAdd(gf,  NULL, tmpframe);
+                        }
+                        ajListIterDel(&iter);
 			/*
 			ajFmtPrintF(outf,
 			  "probable coiled-coil from %d to %d (%d residues)\n",
@@ -384,6 +395,13 @@ int main(int argc, char **argv)
 		ajFmtPrintS(&tmpstr, "*pos %d",
 			    coilpos);
 		ajFeatTagAdd(gf,  NULL, tmpstr);
+                iter = ajListIterNew(framelist);
+                while(!ajListIterDone(iter))
+                {
+                    tmpframe = ajListstrIterGet(iter);
+                    ajFeatTagAdd(gf,  NULL, tmpframe);
+                }
+                ajListIterDel(&iter);
 	    /*
 		ajFmtPrintF(outf,
 			 "Probable coiled-coil from %d to %d (%d residues)\n",
@@ -420,6 +438,7 @@ int main(int argc, char **argv)
 	ajStrDel(&strand);
     }
 
+    ajListstrFreeData(&framelist);
     ajIntDel(&frames);
     ajIntDel(&parray);
 

@@ -30,7 +30,8 @@ section: input [
   list: idtype [
     standard: "y"
     information: "Index type"
-    values: "id:ID index; ac:Accession index; sv:Version/GI Index"
+    values: "id:ID index; ac:Accession index; sv:Version/GI Index;
+             kw:Keyword index; de:Description index; tx:Taxonomy Index"
 #    values: "id:ID index; ac:Accession index; sv:Version/GI Index;
 #             kw:Keyword index; de:Description index; tx:Taxonomy Index"
     maximum: "1"

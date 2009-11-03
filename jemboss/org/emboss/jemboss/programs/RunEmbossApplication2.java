@@ -51,16 +51,18 @@ public class RunEmbossApplication2
 
 
   /**
-  *
+  * Executes the specified EMBOSS command and arguments in a separate process
+  * with the specified environment and working directory.
+  * Uses two threads to read in stdout & stderr buffers to prevent blocking.
+  * 
   * @param embossCommand        emboss command to run
   * @param envp                 environment
   * @param project              running directory
   *
   */
-  public RunEmbossApplication2(String embossCommand, 
+  public RunEmbossApplication2(String[] embossCommand, 
                        String[] envp, File project)
   {
-    //this.project = project;
     status = "0";
 
     Runtime embossRun = Runtime.getRuntime();
@@ -68,8 +70,6 @@ public class RunEmbossApplication2
     {
       p = embossRun.exec(embossCommand,envp,project);
 
-      // 2 threads to read in stdout & stderr buffers 
-      // to prevent blocking
       stdouth = new StdoutHandler(this);
       stderrh = new StderrHandler(this);
       stdouth.start();
@@ -82,6 +82,40 @@ public class RunEmbossApplication2
       initialIOError = ioe.getMessage();
       status = "1";
     }
+  }
+
+  /**
+   * Executes the specified EMBOSS command and arguments in a separate process
+   * with the specified environment and working directory.
+   * Uses two threads to read in stdout & stderr buffers to prevent blocking.
+   * 
+   * @param embossCommand        emboss command to run
+   * @param envp                 environment
+   * @param project              running directory
+   *
+   */
+  public RunEmbossApplication2(String embossCommand, 
+		  String[] envp, File project)
+  {
+	  status = "0";
+
+	  Runtime embossRun = Runtime.getRuntime();
+	  try
+	  {
+		  p = embossRun.exec(embossCommand,envp,project);
+
+		  stdouth = new StdoutHandler(this);
+		  stderrh = new StderrHandler(this);
+		  stdouth.start();
+		  stderrh.start();
+	  }
+	  catch(IOException ioe)
+	  {
+		  System.err.println("Error executing: "+
+				  embossCommand);
+		  initialIOError = ioe.getMessage();
+		  status = "1";
+	  }
   }
 
   /**

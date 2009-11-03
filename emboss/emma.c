@@ -390,7 +390,11 @@ int main(int argc, char **argv, char **env)
     ajSysSystemEnv(cmd, env);
 #else
     if(system(ajStrGetPtr(cmd)) == -1)
+    {
+        fprintf(stderr,"Command: %s\n",ajStrGetPtr(cmd));
 	ajFatal("clustalw execution failure");
+    }
+
 #endif
 
     /* produce alignment file only if one was produced */
@@ -418,7 +422,7 @@ int main(int argc, char **argv, char **env)
 	    ajStrCutStart(&tmp_aln_outfile, 5);
 	}
 	else
-	    ajFmtError("Problem writing out EMBOSS alignment file");
+	    ajFmtError("Problem writing out EMBOSS alignment file\n");
     }
 
 
@@ -427,11 +431,13 @@ int main(int argc, char **argv, char **env)
     {
 	tmp_dendfile = ajFileNewInNameS( tmp_dendfilename);
 
+	if(tmp_dendfile!=NULL){
 	while(ajReadlineTrim(tmp_dendfile, &line))
 	    ajFmtPrintF(dend_outfile, "%s\n", ajStrGetPtr( line));
 
 	ajFileClose(&tmp_dendfile);
 	ajSysFileUnlink(tmp_dendfilename);
+    }
     }
 
 

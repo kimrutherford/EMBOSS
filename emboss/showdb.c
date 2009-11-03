@@ -92,7 +92,7 @@ int main(int argc, char **argv)
     AjPStr release = NULL;
     AjPStr comment = NULL;
 
-    AjPList dbnames;
+    AjPList dbnames = NULL;
     AjIList iter = NULL;
 
     ajuint maxname = 14;
@@ -249,7 +249,6 @@ int main(int argc, char **argv)
 	}
 
 	ajListIterDel(&iter);
-	ajListFree(&dbnames);
     }
     
     /* end the HTML table */
@@ -264,6 +263,7 @@ int main(int argc, char **argv)
     ajStrDel(&defined);
     ajStrDel(&release);
     ajStrDel(&comment);
+    ajListFree(&dbnames);
 
     embExit();
 
@@ -358,14 +358,14 @@ static void showdbDBHead (AjPFile outfile, AjBool html, AjBool dotype,
 	/* start the HTML table title line and output the Name header */
 	ajFmtPrintF(outfile, "<tr><th>Name</th>");
     else
-	ajFmtPrintF(outfile, "# Name%*s ", maxname-6, " ");
+	ajFmtPrintF(outfile, "# Name%*s", maxname-5, " ");
 
     if(dotype)
     {
 	if(html)
 	    ajFmtPrintF(outfile, "<th>Type</th>");
 	else
-	    ajFmtPrintF(outfile, "Type%*s ", maxtype-4, " ");
+	    ajFmtPrintF(outfile, "Type%*s", maxtype-3, " ");
     }
 
     if(doid)
@@ -397,7 +397,7 @@ static void showdbDBHead (AjPFile outfile, AjBool html, AjBool dotype,
 	if(html)
 	    ajFmtPrintF(outfile, "<th>Method</th>");
 	else
-	    ajFmtPrintF(outfile, "Method%*s ", maxmethod-6, " ");
+	    ajFmtPrintF(outfile, "Method%*s", maxmethod-5, " ");
     }
 
     if(dofields)
@@ -405,7 +405,7 @@ static void showdbDBHead (AjPFile outfile, AjBool html, AjBool dotype,
 	if(html)
 	    ajFmtPrintF(outfile, "<th>Fields</th>");
 	else
-	    ajFmtPrintF(outfile, "Fields%*s ", maxfield-6, " ");
+	    ajFmtPrintF(outfile, "Fields%*s", maxfield-5, " ");
     }
 
     if(dodefined)
@@ -413,7 +413,7 @@ static void showdbDBHead (AjPFile outfile, AjBool html, AjBool dotype,
 	if(html)
 	    ajFmtPrintF(outfile, "<th>Defined</th>");
 	else
-	    ajFmtPrintF(outfile, "Defined%*s ", maxdefined-7, " ");
+	    ajFmtPrintF(outfile, "Defined%*s", maxdefined-6, " ");
     }
 
     if(dorelease)
@@ -421,7 +421,7 @@ static void showdbDBHead (AjPFile outfile, AjBool html, AjBool dotype,
 	if(html)
 	    ajFmtPrintF(outfile, "<th>Release</th>");
 	else
-	    ajFmtPrintF(outfile, "Release%*s ", maxrelease-7, " ");
+	    ajFmtPrintF(outfile, "Release%*s", maxrelease-6, " ");
     }
 
     if(docomment)

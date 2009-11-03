@@ -1,5 +1,3 @@
-<HTML>
-
 <HEAD>
   <TITLE>
   EMBOSS: splitter
@@ -22,6 +20,18 @@ splitter
 
 
 <H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
     Function
 </H2>
 Split sequence(s) into smaller sequences
@@ -30,7 +40,10 @@ Split sequence(s) into smaller sequences
     Description
 </H2>
 
-<p><b>splitter</b> splits one or more input sequences into smaller, optionally overlapping, subsequences. The subsequence size and overlap (if any) may be specified. Optionally, feature information will be used.</p>
+<p><b>splitter</b> splits one or more input sequences into smaller,
+optionally overlapping, subsequences. The subsequence size and overlap
+(if any) may be specified. Optionally, feature information will be
+used.</p>
 
 
 
@@ -84,13 +97,10 @@ Split sequence(s) into smaller sequences
    -size               integer    [10000] Size to split at (Integer 1 or more)
    -overlap            integer    [0] Overlap between split sequences (Integer
                                   0 or more)
-   -source             boolean    [N] Split using source features with /origid
-                                  qualifiers
-   -multifile          boolean    [N] Split sequence into multiple files
 
    Advanced (Unprompted) qualifiers:
    -feature            boolean    [N] Use feature information
-   -addoverlap         boolean    [N] Add overlap to size
+   -addoverlap         boolean    [N] Include overlap in output sequence size
 
    Associated qualifiers:
 
@@ -182,20 +192,6 @@ Split sequence(s) into smaller sequences
 <td>0</td>
 </tr>
 
-<tr>
-<td>-source</td>
-<td>Split using source features with /origid qualifiers</td>
-<td>Boolean value Yes/No</td>
-<td>No</td>
-</tr>
-
-<tr>
-<td>-multifile</td>
-<td>Split sequence into multiple files</td>
-<td>Boolean value Yes/No</td>
-<td>No</td>
-</tr>
-
 <tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
 <th align="left">Allowed values</th>
@@ -211,7 +207,7 @@ Split sequence(s) into smaller sequences
 
 <tr>
 <td>-addoverlap</td>
-<td>Add overlap to size</td>
+<td>Include overlap in output sequence size</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
@@ -242,7 +238,7 @@ XX
 AC   BA000025; AP000502-AP000521;
 XX
 DT   09-DEC-2004 (Rel. 82, Created)
-DT   14-NOV-2006 (Rel. 89, Last updated, Version 4)
+DT   17-JUN-2008 (Rel. 96, Last updated, Version 5)
 XX
 DE   Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
 XX
@@ -280,13 +276,13 @@ DR   EPD; EP74389; HS_BAT1.
 DR   EPD; EP74485; HS_IER3.
 DR   GDB; 11515913.
 DR   GOA; P59942.
-DR   IMGT/HLA; HLA02629; J*01010102.
-DR   RFAM; RF00017.
-DR   RFAM; RF00019.
-DR   RFAM; RF00026.
-DR   RFAM; RF00100.
-DR   RFAM; RF00137.
-DR   RFAM; RF00276.
+DR   HGNC; 20668; MCCD1.
+DR   IMGT/HLA; HLA02802; V*01010102.
+DR   RFAM; RF00994; mir-1255.
+DR   UniProtKB/Swiss-Prot; P59942; MCCD1_HUMAN.
+XX
+CC   This sequence is conducted by Tokai University as a JST sequencing
+CC   Team.
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
@@ -595,9 +591,16 @@ None.
     Notes
 </H2>
 
-<p>Splitting a large sequence into smaller sub-sequences for analysis might be useful in cases where a particularly memory or CPU intensive application will not run quickly enough or at all on the full sequence.  This should seldom be necessary in EMBOSS.</p>
+<p>Splitting a large sequence into smaller sub-sequences for analysis
+might be useful in cases where a particularly memory or CPU intensive
+application will not run quickly enough or at all on the full
+sequence.  This should seldom be necessary in EMBOSS.</p>
 
-<p>By default, <b>splitter</b> will write all the sub-sequences to a single file. In some cases, particularly where non-EMBOSS programs are used, it is necessary to have a single sequence per file.  To write the sub-sequences into separate files use the command-line switch <tt>-ossingle</tt>.</p>
+<p>By default, <b>splitter</b> will write all the sub-sequences to a
+single file. In some cases, particularly where non-EMBOSS programs are
+used, it is necessary to have a single sequence per file.  To write
+the sub-sequences into separate files use the command-line
+switch <tt>-ossingle</tt>.</p>
 
 
 
@@ -776,6 +779,11 @@ None.
 </tr>
 
 <tr>
+<td><a href="nthseqset.html">nthseqset</a></td>
+<td>Reads and writes (returns) one set of sequences from many</td>
+</tr>
+
+<tr>
 <td><a href="pasteseq.html">pasteseq</a></td>
 <td>Insert one sequence into another</td>
 </tr>
@@ -788,6 +796,11 @@ None.
 <tr>
 <td><a href="seqret.html">seqret</a></td>
 <td>Reads and writes (returns) sequences</td>
+</tr>
+
+<tr>
+<td><a href="seqretsetall.html">seqretsetall</a></td>
+<td>Reads and writes (returns) many sets of sequences</td>
 </tr>
 
 <tr>
@@ -808,6 +821,11 @@ None.
 <tr>
 <td><a href="skipseq.html">skipseq</a></td>
 <td>Reads and writes (returns) sequences, skipping first few</td>
+</tr>
+
+<tr>
+<td><a href="splitsource.html">splitsource</a></td>
+<td>Split sequence(s) into original source sequences</td>
 </tr>
 
 <tr>
@@ -860,6 +878,8 @@ Completed 22 March 1999
 
 <H2>
     Target users
+</H2>
+
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
 

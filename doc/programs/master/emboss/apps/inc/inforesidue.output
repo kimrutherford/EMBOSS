@@ -5,31 +5,31 @@
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 Code Short Mnemonic             Charge     MolWt Properties                     Ambiguity
-A    Ala   alanine                 0.0   71.0786 tiny,small,aliphatic,nonpolar  A
-B    Asx   aspartate/asparagine   -0.5  114.5960 small                          DN
-C    Cys   cysteine                0.0  103.1386 tiny,small,nonpolar            C
-D    Asp   aspartate              -1.0  115.0884 small,polar                    D
-E    Glu   glutamate              -1.0  129.1152 polar                          E
-F    Phe   phenylalanine           0.0  147.1762 aromatic,nonpolar              F
-G    Gly   glycine                 0.0   57.0518 tiny,small,nonpolar            G
-H    His   histidine              +0.5  137.1408 aromatic,polar                 H
-I    Ile   isoleucine              0.0  113.1590 aliphatic,nonpolar             I
-J    ---   leucine/isoleucine      0.0  113.1590 aliphatic,nonpolar             IL
-K    Lys   lysine                 +1.0  128.1736 polar                          K
-L    Leu   leucine                 0.0  113.1590 aliphatic,nonpolar             L
+A    Ala   alanine                 0.0   71.0788 tiny,small,aliphatic,nonpolar  A
+B    Asx   aspartate/asparagine   -0.5  114.5962 small                          DN
+C    Cys   cysteine                0.0  103.1388 tiny,small,nonpolar            C
+D    Asp   aspartate              -1.0  115.0886 small,polar                    D
+E    Glu   glutamate              -1.0  129.1155 polar                          E
+F    Phe   phenylalanine           0.0  147.1766 aromatic,nonpolar              F
+G    Gly   glycine                 0.0   57.0519 tiny,small,nonpolar            G
+H    His   histidine              +0.5  137.1411 aromatic,polar                 H
+I    Ile   isoleucine              0.0  113.1594 aliphatic,nonpolar             I
+J    ---   leucine/isoleucine      0.0  113.1594 aliphatic,nonpolar             IL
+K    Lys   lysine                 +1.0  128.1741 polar                          K
+L    Leu   leucine                 0.0  113.1594 aliphatic,nonpolar             L
 M    Met   methionine              0.0  131.1926 nonpolar                       M
-N    Asn   asparagine              0.0  114.1036 small,polar                    N
-O    ---   pyrrolysine            +1.0  109.1300 polar                          O
-P    Pro   proline                 0.0   97.1164 small,nonpolar                 P
-Q    Gln   glutamine               0.0  128.1304 polar                          Q
-R    Arg   arginine               +1.0  156.1870 polar                          R
-S    Ser   serine                  0.0   87.0780 tiny,small,polar               S
-T    Thr   threonine               0.0  101.1048 tiny,small,polar               T
-U    ---   selenocysteine          0.0  150.0326 tiny,small,nonpolar            U
-V    Val   valine                  0.0   99.1322 small,aliphatic,nonpolar       V
-W    Trp   tryptophan              0.0  186.2128 aromatic,nonpolar              W
-X    Xaa   unknown                 0.0  144.0000 (none)                         ACDEFGHIKLMNPQRSTVWY
-Y    Tyr   tyrosine                0.0  163.1756 aromatic,nonpolar              Y
-Z    Glx   glutamate/glutamine    -0.5  128.6228 polar                          EQ
+N    Asn   asparagine              0.0  114.1038 small,polar                    N
+O    ---   pyrrolysine            +1.0  237.3018 polar                          O
+P    Pro   proline                 0.0   97.1167 small,nonpolar                 P
+Q    Gln   glutamine               0.0  128.1307 polar                          Q
+R    Arg   arginine               +1.0  156.1875 polar                          R
+S    Ser   serine                  0.0   87.0782 tiny,small,polar               S
+T    Thr   threonine               0.0  101.1051 tiny,small,polar               T
+U    ---   selenocysteine          0.0  150.0388 tiny,small,nonpolar            U
+V    Val   valine                  0.0   99.1326 small,aliphatic,nonpolar       V
+W    Trp   tryptophan              0.0  186.2132 aromatic,nonpolar              W
+X    Xaa   unknown                 0.0  118.8860 (none)                         ACDEFGHIKLMNPQRSTVWY
+Y    Tyr   tyrosine                0.0  163.1760 aromatic,nonpolar              Y
+Z    Glx   glutamate/glutamine    -0.5  128.6231 polar                          EQ
 </pre>
 </td></tr></table><p>

@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Finds inverted repeats in nucleotide sequences
@@ -134,12 +141,11 @@ XX
 AC   D00596;
 XX
 DT   17-JUL-1991 (Rel. 28, Created)
-DT   14-NOV-2006 (Rel. 89, Last updated, Version 3)
+DT   07-DEC-2007 (Rel. 94, Last updated, Version 6)
 XX
-DE   Homo sapiens gene for thymidylate synthase, exons 1, 2, 3, 4, 5, 6, 7,
-DE   complete cds.
+DE   Homo sapiens gene for thymidylate synthase, complete cds.
 XX
-KW   thymidylate syntase.
+KW   .
 XX
 OS   Homo sapiens (human)
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
@@ -153,7 +159,7 @@ RX   PUBMED; 2243092.
 RA   Kaneda S., Nalbantoglu J., Takeishi K., Shimizu K., Gotoh O., Seno T.,
 RA   Ayusawa D.;
 RT   "Structural and functional analysis of the human thymidylate synthase
-RT   gene.";
+RT   gene";
 RL   J. Biol. Chem. 265(33):20277-20284(1990).
 XX
 DR   GDB; 163670.
@@ -165,8 +171,6 @@ CC   National Institute of Genetics
 CC   1111 Yata
 CC   Mishima 411
 CC   Japan
-CC   Phone:  +81-559-72-2732
-CC   Fax:    +81-559-71-3651
 XX
 FH   Key             Location/Qualifiers
 FH
@@ -177,9 +181,12 @@ FT                   /map="18p11.32"
 FT                   /mol_type="genomic DNA"
 FT                   /clone="lambdaHTS-1 and lambdaHTS-3"
 FT                   /db_xref="taxon:9606"
-FT   repeat_unit     1..148
-FT                   /note="Alu sequence"
-FT   repeat_unit     202..477
+FT   repeat_region   1..148
+FT                   /rpt_family="Alu"
+FT   repeat_region   202..477
+FT                   /rpt_family="Alu"
+FT   prim_transcript 822..16246
+FT                   /note="thymidylate synthase mRNA and introns"
 
 
   [Part of this file has been deleted for brevity]
@@ -441,35 +448,35 @@ Known bugs
 
 See also
 
-   Program name                   Description
-   equicktandem Finds tandem repeats in nucleotide sequences
-   etandem      Finds tandem repeats in a nucleotide sequence
-   palindrome   Finds inverted repeats in nucleotide sequence(s)
+                    Program name                   Description
+   equicktandem     Finds tandem repeats in nucleotide sequences
+                    etandem      Finds tandem repeats in a nucleotide sequence
+                    palindrome   Finds inverted repeats in nucleotide sequence(s)
 
-   palindrome also looks for inverted repeats but is much faster and less
-   sensitive, as it looks for near-perfect repeats.
+                    palindrome also looks for inverted repeats but is much faster and less
+                    sensitive, as it looks for near-perfect repeats.
 
 Author(s)
 
-   This program was originally written by Richard Durbin
-   (rd © sanger.ac.uk)
-   Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
-   CB10 1SA, UK.
+                    This program was originally written by Richard Durbin
+                    (rd © sanger.ac.uk)
+   Sanger           Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
+                    CB10 1SA, UK.
 
-   This application was modified for inclusion in EMBOSS by Peter Rice
-   (pmr © ebi.ac.uk)
-   Informatics Division, European Bioinformatics Institute, Wellcome
-   Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+                    This application was modified for inclusion in EMBOSS by Peter Rice
+                    (pmr © ebi.ac.uk)
+   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton,         Cambridge CB10 1SD, UK
 
 History
 
-   Written (1999) - Peter Rice
+                    Written (1999) - Peter Rice
 
 Target users
 
-   This program is intended to be used by everyone and everything, from
-   naive users to embedded scripts.
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
 
 Comments
 
-   None
+                    None

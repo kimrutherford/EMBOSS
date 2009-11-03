@@ -129,7 +129,7 @@ int main(int argc, char **argv)
     substr = ajStrNew();
     sstr   = ajStrNew();
     stmp   = ajStrNew();
-    ajStrAssignC(&fthit, "hit");
+    ajStrAssignC(&fthit, "SO:0001018");
 
     while(ajSeqallNext(seqall, &seq))
     {

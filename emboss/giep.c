@@ -55,17 +55,18 @@ int main(int argc, char **argv)
     double pH;
     double iep;
 
-    ajint    *c=NULL;
-    ajint    *op=NULL;
-    double *K=NULL;
-    double *pro=NULL;
+    ajint *c    =NULL;
+    ajint *op   =NULL;
+    double *pK  = NULL;
+    double *K   =NULL;
+    double *pro =NULL;
     double sum;
     double charge;
 
 #ifndef GROUT
     AjPGraphPlpData phGraph=NULL;
 #endif
-    AjPStr tit=NULL;
+    AjPStr title=NULL;
     AjPStr tmp=NULL;
 
     float *xa=NULL;
@@ -100,8 +101,9 @@ int main(int argc, char **argv)
     AJCNEW (op,  EMBIEPSIZE);
     AJCNEW (pro, EMBIEPSIZE);
 
-    embIepPkRead();				/* read pK's */
-    embIepCalcK(K);				/* Convert to dissoc consts */
+    pK = embIeppKNew();
+    
+    embIepCalcK(K,pK);				/* Convert to dissoc consts */
 
      /* only used if variable 'plot' is ajTrue */
 
@@ -125,13 +127,13 @@ int main(int argc, char **argv)
 	    pro[i]=0.;
 	}
 
-	embIepCompS(substr,amino,0,0,c); /* Get sequence composition */
+	embIepCompS(substr,amino,1,0,0,c); /* Get sequence composition */
 
 
 	if (dofile)
 	{
 	    ajFmtPrintF(outf,"IEP of %s from %d to %d\n",ajSeqGetNameC(a),be,en);
-	    if(!embIepIepS(substr,amino,0,0,&iep,termini))
+	    if(!embIepIepS(substr,amino,1,0,0,pK,&iep,termini))
 		ajFmtPrintF(outf,"Isoelectric Point = None\n\n");
 	    else
 		ajFmtPrintF(outf,"Isoelectric Point = %-6.4lf\n\n",iep);
@@ -171,20 +173,20 @@ int main(int argc, char **argv)
 	    }
 	    npoints=k;
 
-	    tit = ajStrNew();
+	    title = ajStrNew();
 	    tmp = ajStrNew();
-	    ajFmtPrintS(&tit,"%s %d-%d IEP=",ajSeqGetNameC(a),be,en);
+	    ajFmtPrintS(&title,"%s %d-%d IEP=",ajSeqGetNameC(a),be,en);
 
-	    if(!embIepIepS(substr, amino,0,0,&iep,termini))
+	    if(!embIepIepS(substr, amino,1,0,0,pK,&iep,termini))
 		ajStrAssignC(&tmp,"none");
 	    else
 		ajFmtPrintS(&tmp,"%-8.4f",iep);
-	    ajStrAppendS(&tit,tmp);
+	    ajStrAppendS(&title,tmp);
 
 
 #ifndef GROUT
 	    phGraph=ajGraphPlpDataNewI(npoints);
-	    ajGraphSetTitleC(graph,ajStrGetPtr(tit));
+	    ajGraphSetTitleC(graph,ajStrGetPtr(title));
 	    ajGraphSetXTitleC(graph,"pH");
 	    ajGraphSetYTitleC(graph,"Charge");
 
@@ -204,7 +206,7 @@ int main(int argc, char **argv)
 
 	    ajGraphxyDisplay(graph,ajFalse);
 #else
-	    ajXmlAddMainTitle(graph, tit);
+	    ajXmlAddMainTitle(graph, title);
 	    ajXmlAddXTitleC(graph, "pH");
 	    ajXmlAddYTitleC(graph, "Charge");
 
@@ -214,7 +216,7 @@ int main(int argc, char **argv)
 #endif
 
 	    ajStrDel(&tmp);
-	    ajStrDel(&tit);
+	    ajStrDel(&title);
 	    AJFREE (ya);
 	    AJFREE (xa);
 	}

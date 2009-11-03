@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Index a GCG formatted database using b+tree indices
@@ -259,27 +266,27 @@ Known bugs
 
 See also
 
-   Program name                   Description
-   dbiblast     Index a BLAST database
-   dbifasta     Index a fasta file database
-   dbiflat      Index a flat file database
-   dbigcg       Index a GCG formatted database
-   dbxfasta     Index a fasta file database using b+tree indices
-   dbxflat      Index a flat file database using b+tree indices
+                    Program name                   Description
+                    dbiblast     Index a BLAST database
+                    dbifasta     Index a fasta file database
+                    dbiflat      Index a flat file database
+                    dbigcg       Index a GCG formatted database
+                    dbxfasta     Index a fasta file database using b+tree indices
+                    dbxflat      Index a flat file database using b+tree indices
 
 Author(s)
 
-   Alan Bleasby (ajb © ebi.ac.uk)
-   European Bioinformatics Institute, Wellcome Trust Genome Campus,
-   Hinxton, Cambridge CB10 1SD, UK
+   Alan             Bleasby (ajb © ebi.ac.uk)
+   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton,         Cambridge CB10 1SD, UK
 
 History
 
 Target users
 
-   This program is intended to be used by everyone and everything, from
-   naive users to embedded scripts.
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
 
 Comments
 
-   None
+                    None

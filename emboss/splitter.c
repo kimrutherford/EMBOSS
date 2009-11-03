@@ -54,15 +54,8 @@ int main(int argc, char **argv)
     ajint len;
     ajint pos;
     AjBool addover;
-    AjBool source;
     AjBool feature;
     AjPStr outseq_name = ajStrNew();
-
-    AjIList iter = NULL;
-    AjPFeattable old_feattable = NULL;
-    AjPFeature gf = NULL;
-    const AjPStr type = NULL;
-    AjPStr origid = NULL;
 
     ajint start;
     ajint end;
@@ -74,12 +67,7 @@ int main(int argc, char **argv)
     size    = ajAcdGetInt("size");
     overlap = ajAcdGetInt("overlap");
     addover = ajAcdGetBoolean("addoverlap");
-    source  = ajAcdGetBoolean("source");
     feature = ajAcdGetBoolean("feature");
-
-    if (!feature) {
-      source = AJFALSE;
-    }
 
     while(ajSeqallNext(seqall, &seq))
     {
@@ -88,71 +76,41 @@ int main(int argc, char **argv)
 	len = ajSeqGetLen(seq);
 	pos = 0;
 
-        if (source)
-	{
-            old_feattable = ajSeqGetFeatCopy(seq);
-            iter = ajListIterNewread(old_feattable->Features);
+        ajStrAssignC(&outseq_name, "");
 
-            while(!ajListIterDone(iter))
-	    {
-		gf = ajListIterGet(iter);
-		type = ajFeatGetType(gf);
-		origid = ajStrNewC("origid");
-
-		if (ajStrMatchC(type, "source"))
-		{
-		    ajDebug("ajFeatGetTag '%S', 1\n", origid);
-		    if (ajFeatGetTag(gf,origid,1,&outseq_name)) {
-			splitter_ProcessChunk (seqout,seq,
-					       ajFeatGetStart(gf)-1,
-					       ajFeatGetEnd(gf)-1,
-					       outseq_name, feature);
-		    }
-		}
-	    }
-	    ajFeattableDel(&old_feattable);
-            ajListIterDel(&iter);
-	}
-        else
-	{
-            ajStrAssignC(&outseq_name, "");
-
-            if (!addover)
-	    {
-		while(pos+size <= len-1)
-		{
-		    start = pos;
-		    end = pos+size-1;
-		    splitter_MakeSubSeqName (&outseq_name, seq, start, end);
-		    splitter_ProcessChunk (seqout, seq, start, end,
-					   outseq_name, feature);
-		    pos += size-overlap;
-		}
-	    }
-	    else
-	    {
-		while(pos+size+overlap < len-1)
-		{
-		    start = pos;
-		    end = pos+size+overlap-1;
-		    splitter_MakeSubSeqName (&outseq_name, seq, start, end);
-		    splitter_ProcessChunk (seqout, seq, start, end,
-					   outseq_name, feature);
-		    pos += size;
-		}
+        if (!addover)
+        {
+            while(pos+size <= len-1)
+            {
+                start = pos;
+                end = pos+size-1;
+                splitter_MakeSubSeqName (&outseq_name, seq, start, end);
+                splitter_ProcessChunk (seqout, seq, start, end,
+                                       outseq_name, feature);
+                pos += size-overlap;
             }
-	    splitter_MakeSubSeqName(&outseq_name, seq, pos, len-1);
-	    splitter_ProcessChunk (seqout, seq, pos, len-1,
-				   outseq_name, feature);
-            ajStrDel (&outseq_name);
-          }
+        }
+        else
+        {
+            while(pos+size+overlap < len-1)
+            {
+                start = pos;
+                end = pos+size+overlap-1;
+                splitter_MakeSubSeqName (&outseq_name, seq, start, end);
+                splitter_ProcessChunk (seqout, seq, start, end,
+                                       outseq_name, feature);
+                pos += size;
+            }
+        }
+        splitter_MakeSubSeqName(&outseq_name, seq, pos, len-1);
+        splitter_ProcessChunk (seqout, seq, pos, len-1,
+                               outseq_name, feature);
       }
 
     ajSeqoutClose(seqout);
     ajSeqallDel(&seqall);
     ajSeqoutDel(&seqout);
     ajSeqDel(&seq);
-    ajStrDel(&origid);
     ajStrDel(&outseq_name);
 
     embExit();
@@ -286,15 +244,16 @@ static void splitter_AddSubSeqFeat(AjPFeattable ftable, ajuint start,
 
     AjPFeature copy = NULL;
 
-    copy = ajFeatCopy(gf);
 
-    if (((ajFeatGetEnd(copy) < start + 1) &&
-        (copy->End2 == 0 || copy->End2 < start + 1)) ||
-        ((ajFeatGetStart(copy) > end + 1) &&
-        (copy->Start2 == 0 || copy->Start2 > end + 1))) {
-      continue;
+    if (((ajFeatGetEnd(gf) < start + 1) &&
+        (gf->End2 == 0 || gf->End2 < start + 1)) ||
+        ((ajFeatGetStart(gf) > end + 1) &&
+        (gf->Start2 == 0 || gf->Start2 > end + 1)))
+    {
+        continue;
     }
 
+    copy = ajFeatCopy(gf);
     copy->Start = copy->Start - start;
     copy->End = copy->End - start;
 

@@ -29,8 +29,8 @@
 
 
 
-static void cirdna_ReadInput(AjPFile infile,
-			     float *Start, float *End);
+static AjBool cirdna_ReadInput(AjPFile infile,
+                               float *Start, float *End);
 static AjPStr cirdna_ReadGroup(AjPFile infile, ajint maxlabels,
 			       float* From, float *To,
 			       AjPStr *Name2, char *FromSymbol,
@@ -302,7 +302,8 @@ int main(int argc, char **argv)
 
 
     /* read the start and end positions */
-    cirdna_ReadInput(infile, &Start, &End);
+    if(!cirdna_ReadInput(infile, &Start, &End))
+        ajFatal("Error processing input file");
 
     /* compute the real length of the molecule */
     RealLength = (End - Start) + 1;
@@ -1534,28 +1535,50 @@ static float cirdna_HorTextPileLengthMax(const AjPStr Name2, ajint NumNames)
 ** @param [u] infile [AjPFile] Undocumented
 ** @param [w] Start [float*] Undocumented
 ** @param [w] End [float*] Undocumented
+** @return [AjBool] True if input file is valid
 ** @@
 ******************************************************************************/
 
-static void cirdna_ReadInput(AjPFile infile,
-			     float *Start, float *End)
+static AjBool cirdna_ReadInput(AjPFile infile,
+                               float *Start, float *End)
 {
     AjPStr line;
 
+    AjBool foundstart = ajFalse;
+    AjBool foundend   = ajFalse;
+    
     line = ajStrNew();
     while(ajReadlineTrim(infile, &line))
     {
 	/* read the start and end positions */
 	if(ajStrPrefixC(line, "Start"))
-	    sscanf(ajStrGetPtr(line), "%*s%f", Start);
+        {
+            foundstart = ajTrue;
+	    if(sscanf(ajStrGetPtr(line), "%*s%f", Start) != 1)
+                return ajFalse;
+        }
 
 	if(ajStrPrefixC(line, "End"))
-	    sscanf(ajStrGetPtr(line), "%*s%f", End);
+        {
+            foundend = ajTrue;
+	    if(sscanf(ajStrGetPtr(line), "%*s%f", End) != 1)
+            {
+                ajStrDel(&line);
+                return ajFalse;
+            }
+        }
     }
 
     ajStrDel(&line);
 
-    return;
+    if(!foundstart || !foundend)
+    {
+        ajWarn("Missing Start and/or End line(s) in input file");
+        return ajFalse;
+    }
+    
+    
+    return ajTrue;;
 }
 
 

@@ -233,7 +233,7 @@ int main(int argc, char **argv)
     s1= ajStrGetPtr(aa0str);
     s2 = ajStrGetPtr(aa1str);
     
-    for(j=0;j < len2-windowsize;j++)
+    for(j=0; (ajint)j < (ajint)len2-windowsize;j++)
     {
 	i =0;
 	total = 0;
@@ -283,7 +283,7 @@ int main(int argc, char **argv)
 				 stretch);
     }
     
-    for(i=0;i < len1-windowsize;i++)
+    for(i=0; (ajint)i < (ajint)len1-windowsize;i++)
     {
 	j = 0;
 	total = 0;

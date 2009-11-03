@@ -22,6 +22,18 @@ merger
 
 
 <H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
     Function
 </H2>
 Merge two overlapping sequences
@@ -29,7 +41,11 @@ Merge two overlapping sequences
 <H2>
     Description
 </H2>
-<p><b>merger</b> reads two overlapping input sequences of the same type (typically nucleotide) and uses a global alignment algorithm (Needleman & Wunsch) to optimally align the sequences.  A merged sequence is generated from the alignment and writen to the output file. The sequence alignment is also written.</p>
+<p><b>merger</b> reads two overlapping input sequences of the same
+type (typically nucleotide) and uses a global alignment algorithm
+(Needleman & Wunsch) to optimally align the sequences.  A merged
+sequence is generated from the alignment and writen to the output
+file. The sequence alignment is also written.</p>
 
 
 
@@ -37,20 +53,32 @@ Merge two overlapping sequences
 Algorithm
 </H2>
 
-<p>It uses a global alignment algorithm (Needleman & Wunsch) to optimally align the sequences and then creates a merged sequence from the alignment. When there is a mismatch in the alignment between the two sequences, the base included in the merged sequence is the base from the sequence which has the best local sequence quality score.</p>
+<p>It uses a global alignment algorithm (Needleman & Wunsch) to
+optimally align the sequences and then creates a merged sequence from
+the alignment. When there is a mismatch in the alignment between the
+two sequences, the base included in the merged sequence is the base
+from the sequence which has the best local sequence quality score.</p>
 
-<p>The following heuristic is used to find the sequence quality score.  If one of the bases is a 'N', then the other sequence's base is used.  Otherwise, a window size around the disputed base is used to find the local quality score. This window size is increased from 5, to 10 to 20 bases or until there is a clear decision on the best choice. If there is no best choice after using a window of 20, then the base in the first sequence is used.</p>
+<p>The following heuristic is used to find the sequence quality score.
+If one of the bases is a 'N', then the other sequence's base is used.
+Otherwise, a window size around the disputed base is used to find the
+local quality score. This window size is increased from 5, to 10 to 20
+bases or until there is a clear decision on the best choice. If there
+is no best choice after using a window of 20, then the base in the
+first sequence is used.</p>
 
 <p>To calculate the quality of a window of a sequence around a base:</p>
 
-<pre>    * quality = sequence value/length under window either side of the base
+<pre>
+    * quality = sequence value/length under window either side of the base
     * sequence value = sum of points in that window
     * unambiguous bases (ACGTU) score 2 points
     * ambiguous bases (MRWSYKVHDB) score 1 point
     * Ns score 0 points
     * off end of the sequence scores 0 points 
 </pre>
-<p>This heavily discriminates against the iffy bits at the end of sequence reads.</p>
+<p>This heavily discriminates against the iffy bits at the end of
+sequence reads.</p>
 
 
 
@@ -77,8 +105,8 @@ output sequence [v00295.fasta]: <b></b>
 
 <p>
 
-Typically, one of the sequences will need to be reverse-complemented to put it
-into the correct orientation to make it join. For example:
+Typically, one of the sequences will need to be reverse-complemented
+to put it into the correct orientation to make it join. For example:
 
 <p>
 
@@ -321,25 +349,17 @@ FT                   /codon_start=1
 FT                   /transl_table=11
 FT                   /note="reading frame (lacZ)"
 FT                   /db_xref="GOA:P00722"
-FT                   /db_xref="PDB:1BGL"
-FT                   /db_xref="PDB:1BGM"
-FT                   /db_xref="PDB:1DP0"
-FT                   /db_xref="PDB:1F49"
-FT                   /db_xref="PDB:1F4A"
-FT                   /db_xref="PDB:1F4H"
-FT                   /db_xref="PDB:1GHO"
-FT                   /db_xref="PDB:1HN1"
-FT                   /db_xref="PDB:1JYN"
-FT                   /db_xref="PDB:1JYV"
-FT                   /db_xref="PDB:1JYW"
-FT                   /db_xref="PDB:1JYX"
-FT                   /db_xref="PDB:1JYY"
-
-
-<font color=red>  [Part of this file has been deleted for brevity]</font>
-
-FT                   /db_xref="PDB:2CFP"
-FT                   /db_xref="PDB:2CFQ"
+FT                   /db_xref="InterPro:IPR014718"
+FT                   /db_xref="PDB:3DYP"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P00722"
+FT                   /protein_id="CAA23570.1"
+FT                   /translation="FQLSAGRYHYQLVWCQK"
+FT   CDS             106..1359
+FT                   /transl_table=11
+FT                   /note="reading frame (lacY)"
+FT                   /db_xref="GOA:P02920"
+FT                   /db_xref="InterPro:IPR018457"
+FT                   /db_xref="PDB:2V8N"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P02920"
 FT                   /protein_id="CAA23571.1"
 FT                   /translation="MYYLKNTNFWMFGLFFFFYFFIMGAYFPFFPIWLHDINHISKSDT
@@ -354,9 +374,7 @@ FT   CDS             1423..&gt;1500
 FT                   /transl_table=11
 FT                   /note="reading frame (lacA)"
 FT                   /db_xref="GOA:P07464"
-FT                   /db_xref="PDB:1KQA"
-FT                   /db_xref="PDB:1KRR"
-FT                   /db_xref="PDB:1KRU"
+FT                   /db_xref="InterPro:IPR018357"
 FT                   /db_xref="PDB:1KRV"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P07464"
 FT                   /protein_id="CAA23572.1"
@@ -412,10 +430,11 @@ XX
 RN   [1]
 RC   (1-1832)
 RP   1-1832
+RX   DOI; 10.1073/pnas.82.19.6414.
 RX   PUBMED; 3901000.
-RA   Hediger M.A, Johnson D.F., Nierlich D.P., Zabin I.;
+RA   Hediger M.A., Johnson D.F., Nierlich D.P., Zabin I.;
 RT   "DNA sequence of the lactose operon: the lacA gene and the transcriptional
-RT   termination region.";
+RT   termination region";
 RL   Proc. Natl. Acad. Sci. U.S.A. 82(19):6414-6418(1985).
 XX
 FH   Key             Location/Qualifiers
@@ -435,11 +454,7 @@ FT                   /transl_table=11
 FT                   /gene="lacA"
 FT                   /product="thiogalactoside transacetylase"
 FT                   /db_xref="GOA:P07464"
-FT                   /db_xref="InterPro:IPR001451"
-FT                   /db_xref="InterPro:IPR011004"
-FT                   /db_xref="PDB:1KQA"
-FT                   /db_xref="PDB:1KRR"
-FT                   /db_xref="PDB:1KRU"
+FT                   /db_xref="InterPro:IPR018357"
 FT                   /db_xref="PDB:1KRV"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P07464"
 FT                   /protein_id="CAA36162.1"
@@ -722,9 +737,15 @@ or the file 'EDNAFULL' (for nucleic sequences).
     Notes
 </H2>
 
-<p>This program was originally written to aid in the reconstruction of mRNA sequences which had been sequenced from both ends as a 5' and 3' EST (cDNA). eg. joining two reads produced by primer walking sequencing.</p>
+<p>This program was originally written to aid in the reconstruction of
+mRNA sequences which had been sequenced from both ends as a 5' and 3'
+EST (cDNA). eg. joining two reads produced by primer walking
+sequencing.</p>
 
-<p>The gap open and gap extension penalties have been set at a higher level than is usual (50 and 5). This was experimentally determined to give the best results with a set of poor quality EST test sequences.</p>
+<p>The gap open and gap extension penalties have been set at a higher
+level than is usual (50 and 5). This was experimentally determined to
+give the best results with a set of poor quality EST test
+sequences.</p>
 
 <H2>
     References

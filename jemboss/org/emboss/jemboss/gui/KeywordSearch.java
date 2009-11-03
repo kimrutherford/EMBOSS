@@ -21,32 +21,41 @@
                                                                                               
 package org.emboss.jemboss.gui;
                                                                                               
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.Arrays;
+import java.util.StringTokenizer;
+import java.util.Vector;
+
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
-import java.awt.*;
-import java.util.StringTokenizer;
-import java.util.Arrays;
-import java.util.Vector;
-import java.io.IOException;
-import java.io.BufferedReader;
-import java.io.StringReader;
+import javax.swing.text.Document;
+import javax.swing.text.html.HTMLDocument;
+import javax.swing.text.html.HTMLEditorKit;
 
 import org.emboss.jemboss.JembossParams;
 
 public class KeywordSearch implements HyperlinkListener
 {
 
-  private JTextPane searchHTML;
   private Cursor cbusy = new Cursor(Cursor.WAIT_CURSOR);
   private Cursor cdone = new Cursor(Cursor.DEFAULT_CURSOR);
-  private JFrame f;
+  static private JFrame f = null;
+  static JTabbedPane tab;
 
   public KeywordSearch(JTextField search, String woss,
                        JembossParams mysettings, boolean withSoap,
                        boolean andOperator)
   {
     String searchTxt = search.getText().trim().toLowerCase();
+    if (searchTxt.length()==0)
+    	return;
     String res = search(searchTxt,woss.toLowerCase(),
                         mysettings,withSoap,andOperator);
     showSearchResult(res,searchTxt,mysettings);
@@ -78,18 +87,20 @@ public class KeywordSearch implements HyperlinkListener
       {
         String embRoot = mysettings.getEmbossBin().trim();
         if(embRoot.endsWith("bin/"))
-          embRoot = embRoot.substring(0,embRoot.length()-4);
-        else
-          embRoot = embRoot.substring(0,embRoot.length()-3);
-          
-        stub = "file://"+embRoot+"/share/EMBOSS/doc/html/emboss/apps/";
+            embRoot = embRoot.substring(0,embRoot.length()-4);
+          else if(embRoot.endsWith("bin"))
+            embRoot = embRoot.substring(0,embRoot.length()-3);
+          if (System.getProperty("os.name").startsWith("Windows"))
+              stub = "file:/"+embRoot+"doc\\programs\\html\\";
+            else
+          stub = "file://"+embRoot+"/share/EMBOSS/doc/programs/html/";
       }
  
       String line;
       String searching = getSearchText(searchTxt,andOperator);
  
       res.append("<h2><a name=\"SEARCH EMBOSS FOR "+searching+
-                "\">EMBOSS SEARCH FOR '"+searching+"'</a></h2>");
+                "\">Search results for '"+searching+"'</a></h2>");
 
       BufferedReader in = new BufferedReader(new StringReader(woss));
       while((line = in.readLine()) != null)
@@ -215,23 +226,28 @@ public class KeywordSearch implements HyperlinkListener
   private void showSearchResult(String woss, String searchTxt,
                                 JembossParams mysettings)
   {
+	if (f==null){
     f = new JFrame("EMBOSS Keyword Search");
     Dimension d = f.getToolkit().getScreenSize();
     d = new Dimension((int)d.getWidth()/2,(int)d.getHeight()/2);
     f.setSize(d);
                                                                                             
-    JTabbedPane tab = new JTabbedPane();
-    searchHTML = new JTextPane();
+    tab = new JTabbedPane();
+    f.getContentPane().add(tab);
+    f.addWindowListener(new WinExit());
+	}
+    JEditorPane searchHTML = new JEditorPane();
     searchHTML.addHyperlinkListener(this);
     searchHTML.setEditable(false);
     searchHTML.setContentType("text/html");
+    searchHTML.setEditorKit(new HTMLEditorKit2());
     searchHTML.setText(woss);
-    searchHTML.setCaretPosition(0);
                                                                                             
     JScrollPane jsp = new JScrollPane(searchHTML);
-    jsp.setPreferredSize(d);
+    //jsp.setPreferredSize(d);
     tab.addTab("Search :: "+searchTxt,jsp);
-    f.getContentPane().add(tab);
+    tab.setSelectedComponent(jsp);
+    
     new ResultsMenuBar(f,tab,null,mysettings);
     f.setVisible(true);
   }
@@ -261,5 +277,23 @@ public class KeywordSearch implements HyperlinkListener
     }
 //  else if(event.getEventType() == HyperlinkEvent.EventType.ENTERED)
 //  else if(event.getEventType() == HyperlinkEvent.EventType.EXITED)
+  }
+  
+  
+  public class HTMLEditorKit2 extends HTMLEditorKit{
+	  public Document createDefaultDocument(){
+	  HTMLDocument doc = (HTMLDocument)(super.createDefaultDocument());
+	  doc.setAsynchronousLoadPriority(-1); //do synchronous load
+	  return doc;
+	  }
+  }
+  
+  class WinExit extends WindowAdapter
+  {
+     public void windowClosing(WindowEvent we)
+     {
+        f.dispose();
+        f = null;
+     }
   }
 }

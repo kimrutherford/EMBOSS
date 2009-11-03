@@ -106,11 +106,14 @@ void embConsCalc(const AjPSeqset seqset,const AjPMatrix cmpmatrix,
 	for(i=0;i<nseqs;i++)	      /* generate score for columns */
 	{
 	    m1 = ajSeqcvtGetCodeK(cvt,seqcharptr[i][k]);
+
 	    if(m1 || gaps)
 		identical[m1] += ajSeqsetGetseqWeight(seqset,i);
+
 	    for(j=i+1;j<nseqs;j++)
 	    {
 		m2 = ajSeqcvtGetCodeK(cvt,seqcharptr[j][k]);
+
 		if(m1 && m2)
 		{
 		    contri = (float)matrix[m1][m2]*
@@ -128,8 +131,8 @@ void embConsCalc(const AjPSeqset seqset,const AjPMatrix cmpmatrix,
 
 	highindex = -1;
 	max  = -(float)INT_MAX;
+
 	for(i=0;i<nseqs;i++)
-	{
 	    if( ajFloatGet(score,i) > max ||
 	       (ajFloatGet(score,i) == max &&
 		seqcharptr[highindex][k] == '-') )      
@@ -137,11 +140,11 @@ void embConsCalc(const AjPSeqset seqset,const AjPMatrix cmpmatrix,
 		highindex = i;
 		max       = ajFloatGet(score,i);
 	    }
-	}
 
 	for(i=0;i<nseqs;i++)	  /* find +ve matches in the column */
 	{
 	    m1 = ajSeqcvtGetCodeK(cvt, seqcharptr[i][k]);
+
 	    if(!matching[m1])
 		for(j=0;j<nseqs;j++)
 		{
@@ -154,19 +157,23 @@ void embConsCalc(const AjPSeqset seqset,const AjPMatrix cmpmatrix,
 //		    }
 */
 		    m2 = ajSeqcvtGetCodeK(cvt, seqcharptr[j][k]);
+
 		    if(m1 && m2 && matrix[m1][m2] > 0)
-		      matching[m1] += ajSeqsetGetseqWeight(seqset, j);
+                        matching[m1] += ajSeqsetGetseqWeight(seqset, j);
+
 		    if(gaps && !m1 && !m2)
-		      matching[m1] += ajSeqsetGetseqWeight(seqset, j);
+                        matching[m1] += ajSeqsetGetseqWeight(seqset, j);
 		}
 	}
 
 
 	matchingmaxindex  = 0;	  /* get max matching and identical */
 	identicalmaxindex = 0;
+
 	for(i=0;i<nseqs;i++)
 	{
 	    m1 = ajSeqcvtGetCodeK(cvt,seqcharptr[i][k]);
+
 	    if(identical[m1] > identical[identicalmaxindex])
 		identicalmaxindex = m1;
 	}
@@ -174,6 +181,7 @@ void embConsCalc(const AjPSeqset seqset,const AjPMatrix cmpmatrix,
 	for(i=0;i<nseqs;i++)
 	{
 	    m1 = ajSeqcvtGetCodeK(cvt,seqcharptr[i][k]);
+
 	    if(matching[m1] > matching[matchingmaxindex])
 		matchingmaxindex = m1;
 	    else if(matching[m1] ==  matching[matchingmaxindex])
@@ -183,9 +191,11 @@ void embConsCalc(const AjPSeqset seqset,const AjPMatrix cmpmatrix,
 
 	/* plurality check */
         m1 = ajSeqcvtGetCodeK(cvt,seqcharptr[highindex][k]);
+
 /*	if(matching[m1] >= fplural
 	   && seqcharptr[highindex][k] != '-')
 	    res = seqcharptr[highindex][k];*/
+
 	if(matching[m1] >= fplural)
 	    res = seqcharptr[highindex][k];
 
@@ -195,10 +205,10 @@ void embConsCalc(const AjPSeqset seqset,const AjPMatrix cmpmatrix,
 	if(identity)			/* if just looking for id's */
 	{
 	    j = 0;
-	    for(i=0;i<nseqs;i++) {
+
+	    for(i=0;i<nseqs;i++)
 		if(matchingmaxindex == ajSeqcvtGetCodeK(cvt,seqcharptr[i][k]))
 		    j++;
-	    }
 
 	    if(j<identity)
 		res = nocon;
@@ -215,4 +225,3 @@ void embConsCalc(const AjPSeqset seqset,const AjPMatrix cmpmatrix,
 
     return;
 }
-

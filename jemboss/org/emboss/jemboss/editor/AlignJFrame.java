@@ -21,6 +21,7 @@
 package org.emboss.jemboss.editor;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
@@ -28,9 +29,8 @@ import java.io.File;
 import javax.swing.border.*;
 import java.net.URL;
 
+import org.emboss.jemboss.JembossParams;
 import org.emboss.jemboss.gui.form.TextFieldInt;
-import org.emboss.jemboss.gui.sequenceChooser.SequenceFilter;
-import org.emboss.jemboss.gui.filetree.FileEditorDisplay;
 import org.emboss.jemboss.gui.ScrollPanel;
 import org.emboss.jemboss.gui.Browser;
 
@@ -56,6 +56,8 @@ public class AlignJFrame extends JFrame
   protected Hashtable currentColour;
   protected boolean useExitMenu = false;  // whether to use 'Exit' or 'Close'
   protected JMenuBar menuBar;
+  
+  JCheckBoxMenuItem drawColorBox;
  
   /**
   *
@@ -118,16 +120,18 @@ public class AlignJFrame extends JFrame
   */
   public AlignJFrame(boolean useExitMenu)
   {
+      this(useExitMenu, new Matrix("resources/resources.jar",
+              Matrix.DEFAULT_MATRIX));
+  }
+  
+  public AlignJFrame(boolean useExitMenu, Matrix mat_){
     super("Jemboss Alignment Editor");
 
     this.useExitMenu = useExitMenu;
 
     final Dimension dScreen = getToolkit().getScreenSize();
-    int interval = 10;
-//  Vector seqs = new Vector();
-    mat = new Matrix("resources/resources.jar",
-                     "EBLOSUM62");
-    
+  
+    mat = mat_;
     jspSequence = new JScrollPane();
     jspSequence.getViewport().setBackground(Color.white);
 
@@ -213,6 +217,9 @@ public class AlignJFrame extends JFrame
     fileMenu.add(printMenu);
 
     JMenuItem print = new JMenuItem("Print Postscript...");
+    print.setToolTipText("Print using available printers in your computer\n" +
+    		"or export alignment image to a postscript file (if you have " +
+    		" installed postscript printers)");
     print.addActionListener(new ActionListener()
     {
       public void actionPerformed(ActionEvent e)
@@ -270,7 +277,7 @@ public class AlignJFrame extends JFrame
       public void actionPerformed(ActionEvent e)
       {  
         PrintAlignmentImage pai = new PrintAlignmentImage(gsc);
-        String type = pai.showPrintPreviewOptions();
+        /*String type = */pai.showPrintPreviewOptions();
         pai.printSinglePagePreview();
       }
     });
@@ -486,14 +493,6 @@ public class AlignJFrame extends JFrame
     viewMenu.add(drawBoxes);
 
 //draw colored boxes
-    final JCheckBoxMenuItem drawColorBox = new JCheckBoxMenuItem("Colour boxes",true);
-    drawColorBox.addActionListener(new ActionListener()
-    {
-      public void actionPerformed(ActionEvent e)
-      {
-        gsc.setDrawColor(drawColorBox.isSelected());
-      }
-    });
     viewMenu.add(drawColorBox);
 
     pretty.addActionListener(new ActionListener()
@@ -521,7 +520,8 @@ public class AlignJFrame extends JFrame
       public void actionPerformed(ActionEvent e)
       {
         setCursor(cbusy);
-        gsc.deleteSequence("Consensus");
+        try{
+        gsc.deleteSequence(Consensus.DEFAULT_SEQUENCE_NAME);
 
         float wgt = getTotalWeight(gsc.getSequenceCollection());
         float plu = 0.f;
@@ -559,8 +559,10 @@ public class AlignJFrame extends JFrame
         gsc.setPreferredSize(dpane);
         gsc.setNamePanelWidth(gsc.getNameWidth());
         jspSequence.setViewportView(gsc);
-        setCursor(cdone);
         calculateCons.setText("Recalculate consensus");
+        } finally {
+            setCursor(cdone);
+        }
       }
     });
     calculateMenu.add(calculateCons);
@@ -573,7 +575,7 @@ public class AlignJFrame extends JFrame
       {
         try
         {
-          Vector vseq = gsc.getSequenceCollection();
+//          Vector vseq = gsc.getSequenceCollection();
 //        Enumeration enumer = vseq.elements();
           float wgt = getTotalWeight(gsc.getSequenceCollection());
           options.setCase(wgt/2.f);
@@ -705,7 +707,7 @@ public class AlignJFrame extends JFrame
     while(enumer.hasMoreElements())
     {
       Sequence s = (Sequence)enumer.nextElement();
-      if(!s.getName().equals("Consensus"))
+      if(!s.getName().equals(Consensus.DEFAULT_SEQUENCE_NAME))
         wgt+=s.getWeight();
     }
     return wgt;
@@ -720,7 +722,7 @@ public class AlignJFrame extends JFrame
   */
   public void setMatrix(Matrix mat)
   {
-    this.mat = mat;
+    AlignJFrame.mat = mat;
   }
 
   /**
@@ -774,6 +776,7 @@ public class AlignJFrame extends JFrame
     else
       statusField.setText(status+"              "+
                           "Colour Scheme: "+colScheme);
+    drawColorBox.setSelected(true);
   }
 
   /**
@@ -783,8 +786,29 @@ public class AlignJFrame extends JFrame
   */
   private void colourMenus(JMenu viewMenu)
   {
-    ButtonGroup group = new ButtonGroup();
-
+    final ButtonGroup group = new ButtonGroup();
+    // an invisble radio button to workaround earlier versions of java
+    // which is selected only when user deselect "Colour boxes" option
+    final JRadioButton invisibleb = new JRadioButton();
+    group.add(invisibleb);
+    drawColorBox = new JCheckBoxMenuItem("Colour boxes",true);
+    drawColorBox.addItemListener(new ItemListener()
+    {
+        ButtonModel lastSelection;
+        public void itemStateChanged(ItemEvent e) {
+            boolean selected = e.getStateChange() == ItemEvent.SELECTED;
+            gsc.setDrawColor(selected);
+            if(!selected){
+            	lastSelection = group.getSelection();
+            	//java6 has a group.clearSelection(); method that in the future
+            	//can replace the invisible button workaround 
+            	invisibleb.setSelected(true);
+            } else if (invisibleb.isSelected()){
+            	lastSelection.setSelected(true);
+            }
+        }
+    });
+    
 // property colour menus
     JMenu propertyMenu = new JMenu("Colour by Property");
     viewMenu.add(propertyMenu);
@@ -951,7 +975,6 @@ public class AlignJFrame extends JFrame
       }
     });
     viewMenu.add(new JSeparator());
-
   }
 
 
@@ -1106,7 +1129,10 @@ public class AlignJFrame extends JFrame
       File seqFile = new File(args[0]);
       if(seqFile.canRead())
       {
-        ajFrame = new AlignJFrame(true);
+        JembossParams jp = new JembossParams();
+        String ed = jp.getEmbossData();
+        Matrix m = new Matrix(ed, Matrix.DEFAULT_MATRIX);
+        ajFrame = new AlignJFrame(true, m);
         SequenceReader sr = new SequenceReader(seqFile);
         sr.getSequenceFile();
         ajFrame.openMethod(sr.getSequenceVector());

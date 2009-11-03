@@ -23,7 +23,6 @@ package org.emboss.jemboss.editor;
 
 import java.io.*;
 import java.util.Vector;
-import java.util.Hashtable;
 import java.util.Enumeration;
 import javax.swing.*;
 import java.awt.*;
@@ -158,11 +157,11 @@ public class PlotConsensus extends JPanel
     int numseq = seqs.size();
 
     int mseq = getMaxSequenceLength(seqs);
-    int matsize = mat.getIDimension();
+    //int matsize = mat.getIDimension();
     numbins = mseq;
     sumscore = new float[numbins];
-    float x[] = new float[numbins];
-    float y[] = new float[numbins];
+    //float x[] = new float[numbins];
+    //float y[] = new float[numbins];
     int bin2 = (int)(winsize/2);
     float score[][] = new float[numseq][mseq];
 

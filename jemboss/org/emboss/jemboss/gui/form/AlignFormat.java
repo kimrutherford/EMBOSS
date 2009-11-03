@@ -23,7 +23,8 @@ package org.emboss.jemboss.gui.form;
 
 import org.emboss.jemboss.parser.ParseAcd;
 import java.awt.Dimension;
-import javax.swing.JCheckBox;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
 *
@@ -149,6 +150,14 @@ public class AlignFormat
   {
     String report = " -aformat " + cp.getSelectedItem();
     return report;
+  }
+
+  public List getAlignFormatA()
+  {
+    List ret = new ArrayList();
+    ret.add("-aformat");
+    ret.add(cp.getSelectedItem());
+    return ret;
   }
 
   /**

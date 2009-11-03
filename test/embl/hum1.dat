@@ -3,7 +3,7 @@ XX
 AC   X59796;
 XX
 DT   12-FEB-1992 (Rel. 30, Created)
-DT   18-APR-2005 (Rel. 83, Last updated, Version 7)
+DT   21-OCT-2008 (Rel. 97, Last updated, Version 8)
 XX
 DE   H.sapiens mRNA for cadherin-5
 XX
@@ -38,6 +38,7 @@ RL   Submitted (24-JAN-1995) to the EMBL/GenBank/DDBJ databases.
 RL   S. Suzuki, Doheny Eye Institute, 1355 San Pablo St, Los Angeles, CA 90033,
 RL   USA
 XX
+DR   ASTD; TRAN00000085544.
 DR   H-InvDB; HIT000322346.
 XX
 FH   Key             Location/Qualifiers
@@ -53,6 +54,8 @@ FT                   /product="cadherin-5"
 FT                   /db_xref="GDB:134230"
 FT                   /db_xref="GOA:P33151"
 FT                   /db_xref="HGNC:1764"
+FT                   /db_xref="HSSP:1I7W"
+FT                   /db_xref="InterPro:IPR002126"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P33151"
 FT                   /protein_id="CAA42468.1"
 FT                   /translation="MMLLATSGACLGLLAVAAVAAAGANPAQRDTHSLLPTHRRQKRDW
@@ -229,9 +232,6 @@ FT   CDS             join(2079..2171,2294..2515,3371..3499)
 FT                   /db_xref="GDB:119299"
 FT                   /db_xref="GOA:P02100"
 FT                   /db_xref="HGNC:4830"
-FT                   /db_xref="InterPro:IPR000971"
-FT                   /db_xref="InterPro:IPR002337"
-FT                   /db_xref="InterPro:IPR009050"
 FT                   /db_xref="InterPro:IPR012292"
 FT                   /db_xref="PDB:1A9W"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P02100"
@@ -336,8 +336,8 @@ RN   [2]
 RP   1-518
 RX   PUBMED; 8395683.
 RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
-RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
-RT   an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma virus";
+RT   "fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
+RT   an antisense sequence in the Finkel-Biskis-Reilly murine sarcoma virus";
 RL   Oncogene 8(9):2537-2546(1993).
 XX
 DR   H-InvDB; HIT000322806.
@@ -358,11 +358,11 @@ FT                   /note="ubiquitin like part"
 FT   CDS             57..458
 FT                   /gene="fau"
 FT                   /db_xref="GDB:135476"
-FT                   /db_xref="GOA:P35544"
 FT                   /db_xref="GOA:P62861"
 FT                   /db_xref="HGNC:3597"
+FT                   /db_xref="HSSP:1GJZ"
+FT                   /db_xref="InterPro:IPR006846"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
-FT                   /db_xref="UniProtKB/Swiss-Prot:P62861"
 FT                   /protein_id="CAA46716.1"
 FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLAG
 FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKTG
@@ -415,7 +415,7 @@ RX   DOI; 10.1016/0006-291X(92)91286-Y.
 RX   PUBMED; 1326960.
 RA   Kas K., Michiels L., Merregaert J.;
 RT   "Genomic structure and expression of the human fau gene: encoding the
-RT   ribosomal protein S30 fused to a ubiquitin-like protein.";
+RT   ribosomal protein S30 fused to a ubiquitin-like protein";
 RL   Biochem. Biophys. Res. Commun. 187(2):927-933(1992).
 XX
 DR   GDB; 191789.
@@ -442,11 +442,11 @@ FT                   /number=2
 FT   CDS             join(782..856,951..1095,1557..1612,1787..1912)
 FT                   /gene="fau 1"
 FT                   /db_xref="GDB:135476"
-FT                   /db_xref="GOA:P35544"
 FT                   /db_xref="GOA:P62861"
 FT                   /db_xref="HGNC:3597"
+FT                   /db_xref="HSSP:1GJZ"
+FT                   /db_xref="InterPro:IPR006846"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
-FT                   /db_xref="UniProtKB/Swiss-Prot:P62861"
 FT                   /protein_id="CAA46714.1"
 FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLAG
 FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKTG
@@ -519,6 +519,7 @@ OC   Homo.
 XX
 RN   [1]
 RP   1-4165
+RX   DOI; 10.1073/pnas.80.11.3183.
 RX   PUBMED; 6574479.
 RA   van Straaten F., Muller R., Curran T., Van Beveren C., Verma I.M.;
 RT   "Complete nucleotide sequence of a human c-onc gene: deduced amino acid
@@ -597,12 +598,7 @@ FT                   /note="c-fos protein"
 FT                   /db_xref="GDB:119917"
 FT                   /db_xref="GOA:P01100"
 FT                   /db_xref="HGNC:3796"
-FT                   /db_xref="InterPro:IPR000837"
-FT                   /db_xref="InterPro:IPR004827"
-FT                   /db_xref="InterPro:IPR008917"
-FT                   /db_xref="InterPro:IPR011700"
-FT                   /db_xref="PDB:1A02"
-FT                   /db_xref="PDB:1FOS"
+FT                   /db_xref="InterPro:IPR011616"
 FT                   /db_xref="PDB:1S9K"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P01100"
 FT                   /protein_id="AAA52471.1"
@@ -765,9 +761,10 @@ RP   1-3075
 RX   PUBMED; 2610926.
 RA   Rapp G.G., Klaudiny J.J., Hagendorff G.G., Luck M.M., Scheit K.K.;
 RT   "Complete sequence of the coding region of human elongation factor 2 (EF-2)
-RT   by enzymatic amplification of cDNA from human ovarian granulosa cells.";
+RT   by enzymatic amplification of cDNA from human ovarian granulosa cells";
 RL   Biol. Chem. Hoppe-Seyler 370(10):1071-1075(1989).
 XX
+DR   ASTD; TRAN00000040123.
 DR   H-InvDB; HIT000321658.
 XX
 CC   See also  for partial elongation factor 2 mRNA.CC   
@@ -789,13 +786,8 @@ FT                   /product="elongation factor 2"
 FT                   /db_xref="GDB:119104"
 FT                   /db_xref="GOA:P13639"
 FT                   /db_xref="HGNC:3214"
-FT                   /db_xref="InterPro:IPR000640"
-FT                   /db_xref="InterPro:IPR000795"
-FT                   /db_xref="InterPro:IPR004161"
-FT                   /db_xref="InterPro:IPR005225"
-FT                   /db_xref="InterPro:IPR005517"
-FT                   /db_xref="InterPro:IPR009000"
-FT                   /db_xref="InterPro:IPR009022"
+FT                   /db_xref="HSSP:1N0U"
+FT                   /db_xref="InterPro:IPR014721"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P13639"
 FT                   /protein_id="CAA35829.1"
 FT                   /translation="MVNFTVDQIRAIMDKKANIRNMSVIAHVDHGKSTLTDSLVCKAGI
@@ -873,7 +865,7 @@ XX
 AC   X07523;
 XX
 DT   16-JUL-1988 (Rel. 16, Created)
-DT   11-MAR-2001 (Rel. 67, Last updated, Version 3)
+DT   07-OCT-2008 (Rel. 97, Last updated, Version 4)
 XX
 DE   Human mRNA for truncated form of complement factor H
 XX
@@ -898,6 +890,9 @@ RA   Ripoche J., Day A.J., Harris T.J.R., Sim R.B.;
 RT   "The complete amino acid sequence of human complement factor H";
 RL   Biochem. J. 249(2):593-602(1988).
 XX
+DR   ASTD; TRAN00000034509.
+DR   Ensembl-Gn; ENSG00000000971; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000367428; Homo_sapiens.
 DR   GDB; 733642.
 DR   H-InvDB; HIT000321262.
 XX
@@ -922,15 +917,8 @@ FT                   /product="complement factor H"
 FT                   /db_xref="GDB:120041"
 FT                   /db_xref="GOA:P08603"
 FT                   /db_xref="HGNC:4883"
-FT                   /db_xref="InterPro:IPR000436"
-FT                   /db_xref="PDB:1FHC"
-FT                   /db_xref="PDB:1HAQ"
-FT                   /db_xref="PDB:1HCC"
-FT                   /db_xref="PDB:1HFH"
-FT                   /db_xref="PDB:1HFI"
-FT                   /db_xref="PDB:1KOV"
-FT                   /db_xref="PDB:2BZM"
-FT                   /db_xref="PDB:2G7I"
+FT                   /db_xref="InterPro:IPR016060"
+FT                   /db_xref="PDB:2W81"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P08603"
 FT                   /protein_id="CAA30403.1"
 FT                   /translation="MRLLAKIICLMLWAICVAEDCNELPPRRNTEILTGSWSDQTYPEG
@@ -988,12 +976,11 @@ XX
 AC   D00596;
 XX
 DT   17-JUL-1991 (Rel. 28, Created)
-DT   14-NOV-2006 (Rel. 89, Last updated, Version 3)
+DT   07-DEC-2007 (Rel. 94, Last updated, Version 6)
 XX
-DE   Homo sapiens gene for thymidylate synthase, exons 1, 2, 3, 4, 5, 6, 7,
-DE   complete cds.
+DE   Homo sapiens gene for thymidylate synthase, complete cds.
 XX
-KW   thymidylate syntase.
+KW   .
 XX
 OS   Homo sapiens (human)
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
@@ -1006,7 +993,7 @@ RX   PUBMED; 2243092.
 RA   Kaneda S., Nalbantoglu J., Takeishi K., Shimizu K., Gotoh O., Seno T.,
 RA   Ayusawa D.;
 RT   "Structural and functional analysis of the human thymidylate synthase
-RT   gene.";
+RT   gene";
 RL   J. Biol. Chem. 265(33):20277-20284(1990).
 XX
 DR   GDB; 163670.
@@ -1018,8 +1005,6 @@ CC   National Institute of Genetics
 CC   1111 Yata
 CC   Mishima 411
 CC   Japan
-CC   Phone:  +81-559-72-2732
-CC   Fax:    +81-559-71-3651
 XX
 FH   Key             Location/Qualifiers
 FH
@@ -1030,10 +1015,10 @@ FT                   /map="18p11.32"
 FT                   /mol_type="genomic DNA"
 FT                   /clone="lambdaHTS-1 and lambdaHTS-3"
 FT                   /db_xref="taxon:9606"
-FT   repeat_unit     1..148
-FT                   /note="Alu sequence"
-FT   repeat_unit     202..477
-FT                   /note="Alu sequence"
+FT   repeat_region   1..148
+FT                   /rpt_family="Alu"
+FT   repeat_region   202..477
+FT                   /rpt_family="Alu"
 FT   prim_transcript 822..16246
 FT                   /note="thymidylate synthase mRNA and introns"
 FT   prim_transcript 824..16246
@@ -1042,9 +1027,10 @@ FT   prim_transcript 828..16246
 FT                   /note="thymidylate synthase mRNA and introns"
 FT   prim_transcript 841..16246
 FT                   /note="thymidylate synthase mRNA and introns"
-FT   repeat_unit     862..889
-FT                   /note="inverted repeat"
-FT   repeat_unit     904..993
+FT   repeat_region   862..889
+FT                   /rpt_type=INVERTED
+FT   repeat_region   904..993
+FT                   /rpt_type=TANDEM
 FT                   /note="triple tandem repeats"
 FT   CDS             join(1001..1205,2895..2968,5396..5570,11843..11944,
 FT                   13449..13624,14133..14204,15613..15750)
@@ -1054,13 +1040,7 @@ FT                   /db_xref="GDB:120465"
 FT                   /db_xref="GOA:P04818"
 FT                   /db_xref="HGNC:12441"
 FT                   /db_xref="InterPro:IPR000398"
-FT                   /db_xref="PDB:1HVY"
-FT                   /db_xref="PDB:1HW3"
-FT                   /db_xref="PDB:1HW4"
-FT                   /db_xref="PDB:1HZW"
-FT                   /db_xref="PDB:1I00"
-FT                   /db_xref="PDB:1JU6"
-FT                   /db_xref="PDB:1JUJ"
+FT                   /db_xref="PDB:2RDA"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P04818"
 FT                   /protein_id="BAA00472.1"
 FT                   /translation="MPVAGSELPRRPLPPAAQERDAEPRPPHGELQYLGQIQHILRCGV
@@ -1083,46 +1063,46 @@ FT   exon            2895..2968
 FT                   /number=2
 FT   intron          2969..5395
 FT                   /number=2
-FT   repeat_unit     3049..3347
-FT                   /note="Alu sequence"
-FT   repeat_unit     4953..5245
-FT                   /note="Alu sequence"
+FT   repeat_region   3049..3347
+FT                   /rpt_family="Alu"
+FT   repeat_region   4953..5245
+FT                   /rpt_family="Alu"
 FT   exon            5396..5570
 FT                   /number=3
 FT   intron          5571..11842
 FT                   /number=3
-FT   repeat_unit     5768..9405
+FT   repeat_region   5768..9405
 FT                   /note="L1 sequence"
-FT   repeat_unit     10125..10389
+FT   repeat_region   10125..10389
 FT                   /note="reiterated motif of GGA/TGAT"
 FT   exon            11843..11944
 FT                   /number=4
 FT   intron          11945..13448
 FT                   /number=4
-FT   repeat_unit     12135..12397
-FT                   /note="Alu sequence"
-FT   repeat_unit     12567..12743
-FT                   /note="Alu sequence"
-FT   repeat_unit     12807..13084
-FT                   /note="Alu sequence"
+FT   repeat_region   12135..12397
+FT                   /rpt_family="Alu"
+FT   repeat_region   12567..12743
+FT                   /rpt_family="Alu"
+FT   repeat_region   12807..13084
+FT                   /rpt_family="Alu"
 FT   exon            13449..13624
 FT                   /number=5
 FT   intron          13625..14132
 FT                   /number=5
-FT   repeat_unit     13875..14010
-FT                   /note="Alu sequence"
+FT   repeat_region   13875..14010
+FT                   /rpt_family="Alu"
 FT   exon            14133..14204
 FT                   /number=6
 FT   intron          14205..15612
 FT                   /number=6
-FT   repeat_unit     14531..14832
-FT                   /note="Alu sequence"
+FT   repeat_region   14531..14832
+FT                   /rpt_family="Alu"
 FT   exon            15613..>15750
 FT                   /number=7
 FT   polyA_signal    15934..15939
 FT   polyA_signal    16228..16233
-FT   repeat_unit     17262..17553
-FT                   /note="Alu sequence"
+FT   repeat_region   17262..17553
+FT                   /rpt_family="Alu"
 XX
 SQ   Sequence 18596 BP; 4521 A; 3991 C; 4479 G; 5605 T; 0 other;
      cctgtagtcc cagctacgcg agaggctgag gcagcagaat tacttgaacc caggaggcgg        60
@@ -1441,7 +1421,7 @@ XX
 AC   Z69719;
 XX
 DT   26-FEB-1996 (Rel. 46, Created)
-DT   18-JAN-2007 (Rel. 90, Last updated, Version 6)
+DT   13-JAN-2009 (Rel. 99, Last updated, Version 7)
 XX
 DE   Human DNA sequence from clone XX-CNFG9 on chromosome 16
 XX
@@ -1456,11 +1436,13 @@ RN   [1]
 RP   1-33760
 RA   Kershaw J.;
 RT   ;
-RL   Submitted (16-JAN-2007) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (09-JAN-2009) to the EMBL/GenBank/DDBJ databases.
 RL   Wellcome Trust Sanger Institute, Hinxton, Cambridgeshire, CB10 1SA, UK.
-RL   E-mail enquiries: vega@sanger.ac.uk Clone requests:
-RL   clonerequest@sanger.ac.uk
+RL   E-mail enquiries: vega@sanger.ac.uk Clone requests: Geneservice
+RL   (http://www.geneservice.co.uk/) and BACPAC Resources
+RL   (http://bacpac.chori.org/)
 XX
+DR   EMBL-CON; GL000124.
 DR   EMBL-JOIN; Z69720.
 DR   GDB; 11502921.
 XX
@@ -1493,44 +1475,21 @@ FT                   /chromosome="16"
 FT                   /mol_type="genomic DNA"
 FT                   /clone="XX-CNFG9"
 FT                   /db_xref="taxon:9606"
-FT   CDS             join(complement(904..1015),
-FT                   complement(Z84723.1:15736..15872),
-FT                   complement(Z84723.1:15194..15305),
-FT                   complement(Z84723.1:14901..15077),
-FT                   complement(Z84723.1:14209..14354),
-FT                   complement(Z84723.1:13388..13589),
-FT                   complement(Z84723.1:12596..12701),
-FT                   complement(Z84723.1:11161..11245),
-FT                   complement(Z84723.1:8698..9294))
+FT   misc_feature    333..33760
+FT                   /note="annotated region of clone"
+FT   CDS             complement(join(Z84723.1:8698..9294,Z84723.1:11161..11245,
+FT                   Z84723.1:12596..12701,Z84723.1:13388..13589,
+FT                   Z84723.1:14209..14354,Z84723.1:14901..15077,
+FT                   Z84723.1:15194..15305,Z84723.1:15736..15872,904..1015))
 FT                   /pseudo
 FT                   /locus_tag="Z84723.2-001"
 FT                   /product="interleukin 9 receptor (IL9R) pseudogene"
 FT                   /note="match: proteins: Sw:Q01113 Sw:Q01114 Tr:Q86VA3"
-FT   mRNA            join(complement(Z69720.1:1552..1634),
-FT                   complement(27624..27731),complement(27391..27521),
-FT                   complement(26279..26492),complement(25665..25874),
-FT                   complement(25467..25589),complement(25230..25387),
-FT                   complement(24490..24744),complement(24277..24388),
-FT                   complement(24077..24151),complement(23131..23973),
-FT                   complement(22424..22971),complement(21666..22186),
-FT                   complement(20753..21452))
-FT                   /gene="RHBDF1"
-FT                   /locus_tag="Z69719.3-002"
-FT                   /product="rhomboid 5 homolog 1 (Drosophila)"
-FT                   /note="match: ESTs: Em:AL703201.1 Em:AW748055.1
-FT                   Em:BF812198.1 Em:BF812199.1 Em:BQ718791.1 Em:CF121195.1
-FT                   Em:W69279.1"
-FT                   /note="match: cDNAs: Em:AK056708.1"
-FT   mRNA            join(complement(Z69720.1:1552..1670),
-FT                   complement(27591..27731),complement(27391..27521),
-FT                   complement(26279..26492),complement(25665..25874),
-FT                   complement(25467..25589),complement(25230..25387),
-FT                   complement(24490..24744),complement(24277..24388),
-FT                   complement(24077..24151),complement(23812..23973),
-FT                   complement(23131..23231),complement(22908..22971),
-FT                   complement(22424..22518),complement(22111..22186),
-FT                   complement(21941..22041),complement(21666..21819),
-FT                   complement(20752..21452))
+FT   mRNA            complement(join(20752..21452,21666..21819,21941..22041,
+FT                   22111..22186,22424..22518,22908..22971,23131..23231,
+FT                   23812..23973,24077..24151,24277..24388,24490..24744,
+FT                   25230..25387,25467..25589,25665..25874,26279..26492,
+FT                   27391..27521,27591..27731,Z69720.1:1552..1670))
 FT                   /gene="RHBDF1"
 FT                   /locus_tag="Z69719.3-001"
 FT                   /product="rhomboid 5 homolog 1 (Drosophila)"
@@ -1539,53 +1498,69 @@ FT                   Em:BM764330.1 Em:BM842753.1 Em:BM842924.1 Em:BM843481.1
 FT                   Em:BQ423894.1 Em:BQ887573.1 Em:BQ927854.1 Em:BU502716.1
 FT                   Em:BU552499.1 Em:CF126089.1"
 FT                   /note="match: cDNAs: Em:AK026010.1 Em:BC014425.1"
-FT   mRNA            join(complement(Z69720.1:1552..1660),
-FT                   complement(26279..27731),complement(25729..25874))
+FT   mRNA            complement(join(20753..21452,21666..22186,22424..22971,
+FT                   23131..23973,24077..24151,24277..24388,24490..24744,
+FT                   25230..25387,25467..25589,25665..25874,26279..26492,
+FT                   27391..27521,27624..27731,Z69720.1:1552..1634))
+FT                   /gene="RHBDF1"
+FT                   /locus_tag="Z69719.3-002"
+FT                   /product="rhomboid 5 homolog 1 (Drosophila)"
+FT                   /note="match: ESTs: Em:AL703201.1 Em:AW748055.1
+FT                   Em:BF812198.1 Em:BF812199.1 Em:BQ718791.1 Em:CF121195.1
+FT                   Em:W69279.1"
+FT                   /note="match: cDNAs: Em:AK056708.1"
+FT   mRNA            complement(join(25729..25874,26279..27731,
+FT                   Z69720.1:1552..1660))
 FT                   /gene="RHBDF1"
 FT                   /locus_tag="Z69719.3-003"
 FT                   /product="rhomboid 5 homolog 1 (Drosophila)"
 FT                   /note="match: ESTs: Em:BX439089.2 Em:BX451902.2"
-FT   mRNA            join(complement(Z69720.1:1555..1607),
-FT                   complement(27591..27731),complement(27391..27521),
-FT                   complement(27025..27132),complement(<26279..26492))
+FT   mRNA            complement(join(<26279..26492,27025..27132,27391..27521,
+FT                   27591..27731,Z69720.1:1555..1607))
 FT                   /gene="RHBDF1"
 FT                   /locus_tag="Z69719.3-004"
 FT                   /product="rhomboid 5 homolog 1 (Drosophila)"
 FT                   /note="match: ESTs: Em:BI918956.1 Em:N41804.1"
-FT   mRNA            join(complement(Z69720.1:5293..5395),
-FT                   complement(27591..27731),complement(27391..27521),
-FT                   complement(26279..26492),complement(<25849..25874))
+FT   mRNA            complement(join(<25849..25874,26279..26492,27391..27521,
+FT                   27591..27731,Z69720.1:5293..5395))
 FT                   /gene="RHBDF1"
 FT                   /locus_tag="Z69719.3-010"
 FT                   /product="rhomboid 5 homolog 1 (Drosophila)"
 FT                   /note="match: ESTs: Em:DA840157.1 Em:DA932357.1
 FT                   Em:DB229208.1 Em:DB285697.1"
-FT   mRNA            join(complement(Z69720.1:5293..5381),
-FT                   complement(27244..27731))
+FT   mRNA            complement(join(27244..27731,Z69720.1:5293..5381))
 FT                   /gene="RHBDF1"
 FT                   /locus_tag="Z69719.3-011"
 FT                   /product="rhomboid 5 homolog 1 (Drosophila)"
 FT                   /note="match: ESTs: Em:DB239975.1"
 FT   polyA_site      complement(9675)
 FT   polyA_site      complement(9743)
-FT   mRNA            join(complement(14252..14836),complement(9930..10251))
+FT   mRNA            complement(join(9930..10251,14252..14836))
 FT                   /gene="POLR3K"
 FT                   /locus_tag="Z69719.1-002"
 FT                   /product="polymerase (RNA) III (DNA directed) polypeptide
 FT                   K, 12.3 kDa"
-FT   mRNA            join(15704..16752,18153..18243,18471..18576,19233..19307,
+FT   mRNA            join(<15704..16752,18153..18243,18471..18576,19233..19307,
 FT                   19780..20363)
 FT                   /gene="C16orf33"
 FT                   /locus_tag="Z69719.2-001"
 FT                   /product="chromosome 16 open reading frame 33"
-FT                   /note="match: ESTs: Em:BI252475.1 Em:BM006127.1
-FT                   Em:BQ649836.1 Em:BQ686053.1 Em:BQ690019.1 Em:BU596584.1
-FT                   Em:BU846188.1 Em:BU960195.1 Em:CB137383.1 Em:CB139779.1"
 FT                   /note="match: cDNAs: Em:AK026593.1 Em:BC001381.1
 FT                   Em:BC009179.1 Em:CR590942.1 Em:CR609842.1 Em:CR613103.1
 FT                   Em:Z84714.1"
-FT   CDS             join(complement(16170..16280),complement(14252..14339),
-FT                   complement(10124..10251))
+FT                   /note="match: ESTs: Em:BI252475.1 Em:BM006127.1
+FT                   Em:BQ649836.1 Em:BQ686053.1 Em:BQ690019.1 Em:BU596584.1
+FT                   Em:BU846188.1 Em:BU960195.1 Em:CB137383.1 Em:CB139779.1"
+FT   mRNA            complement(join(9101..10251,14252..14339,16170..>16322))
+FT                   /gene="POLR3K"
+FT                   /locus_tag="Z69719.1-001"
+FT                   /product="polymerase (RNA) III (DNA directed) polypeptide
+FT                   K, 12.3 kDa"
+FT                   /note="match: cDNAs: Em:AF051316.1 Em:AF060223.1
+FT                   Em:BC011932.2"
+FT                   /note="match: ESTs: Em:AA476966.1 Em:AV735477.1
+FT                   Em:BF237934.1 Em:BM738459.1 Em:BM887722.1 Em:BP429682.1"
+FT   CDS             complement(join(10124..10251,14252..14339,16170..16280))
 FT                   /gene="POLR3K"
 FT                   /locus_tag="Z69719.1-001"
 FT                   /standard_name="OTTHUMP00000067145"
@@ -1595,21 +1570,13 @@ FT                   /note="match: proteins: Sw:Q9CQZ7 Sw:Q9Y2Y1 Tr:Q6DGU0
 FT                   Tr:Q8JH46"
 FT                   /db_xref="GOA:Q9Y2Y1"
 FT                   /db_xref="HGNC:14121"
+FT                   /db_xref="HSSP:1TFI"
+FT                   /db_xref="InterPro:IPR019761"
 FT                   /db_xref="UniProtKB/Swiss-Prot:Q9Y2Y1"
 FT                   /protein_id="CAI95605.1"
 FT                   /translation="MLLFCPGCGNGLIVEEGQRCHRFSCNTCPYVHNITRKVTNRKYPK
 FT                   LKEVDDVLGGAAAWENVDSTAESCPKCEHPRAYFMQLQTRSADEPMTTFYKCCNAQCGH
 FT                   RWRD"
-FT   mRNA            join(complement(16170..16322),complement(14252..14339),
-FT                   complement(9101..10251))
-FT                   /gene="POLR3K"
-FT                   /locus_tag="Z69719.1-001"
-FT                   /product="polymerase (RNA) III (DNA directed) polypeptide
-FT                   K, 12.3 kDa"
-FT                   /note="match: ESTs: Em:AA476966.1 Em:AV735477.1
-FT                   Em:BF237934.1 Em:BM738459.1 Em:BM887722.1 Em:BP429682.1"
-FT                   /note="match: cDNAs: Em:AF051316.1 Em:AF060223.1
-FT                   Em:BC011932.2"
 FT   mRNA            join(16558..16752,18460..18576,19233..19307,19780..20161)
 FT                   /gene="C16orf33"
 FT                   /locus_tag="Z69719.2-003"
@@ -1620,6 +1587,23 @@ FT                   /gene="C16orf33"
 FT                   /locus_tag="Z69719.2-004"
 FT                   /product="chromosome 16 open reading frame 33"
 FT                   /note="match: ESTs: Em:BU170293.1"
+FT   mRNA            join(16593..16752,18153..18243,18488..18565)
+FT                   /gene="C16orf33"
+FT                   /locus_tag="Z69719.2-007"
+FT                   /product="chromosome 16 open reading frame 33"
+FT   mRNA            join(16593..16752,18153..18236,18488..18576,19233..>19307)
+FT                   /gene="C16orf33"
+FT                   /locus_tag="Z69719.2-006"
+FT                   /product="chromosome 16 open reading frame 33"
+FT   CDS             join(16711..16752,18153..18236,18488..18576,19233..>19307)
+FT                   /gene="C16orf33"
+FT                   /locus_tag="Z69719.2-006"
+FT                   /standard_name="OTTHUMP00000197536"
+FT                   /product="chromosome 16 open reading frame 33"
+FT                   /db_xref="UniProtKB/TrEMBL:B8ZZ06"
+FT                   /protein_id="CAX15111.1"
+FT                   /translation="MVVQDPLLCDLPIQVTLEEVNSQIALEYGQAMTVRVCKMDGESAT
+FT                   VLDLKKAIQRYVQLKQEREGGIQHISWSYVWRTYHLTSAGEKLTEDRKKLR"
 FT   CDS             join(16711..16752,18153..18243,18471..18576,19233..19307,
 FT                   19780..19837)
 FT                   /gene="C16orf33"
@@ -1627,9 +1611,7 @@ FT                   /locus_tag="Z69719.2-001"
 FT                   /standard_name="OTTHUMP00000067143"
 FT                   /product="chromosome 16 open reading frame 33"
 FT                   /note="match: proteins: Sw:Q8VIK1 Sw:Q9BV90"
-FT                   /db_xref="GOA:Q4TT61"
-FT                   /db_xref="HGNC:14161"
-FT                   /db_xref="HSSP:Q8VIK1"
+FT                   /db_xref="InterPro:IPR000626"
 FT                   /db_xref="UniProtKB/TrEMBL:Q4TT61"
 FT                   /protein_id="CAI95606.2"
 FT                   /translation="MVVQDPLLCDLPIQVTLEEVNSQIALEYGQAMTVRVCKMDGEVMP
@@ -1653,21 +1635,20 @@ FT   polyA_signal    20334..20339
 FT   polyA_site      20363
 FT   polyA_site      complement(20752)
 FT   polyA_signal    complement(20786..20791)
-FT   mRNA            join(complement(22424..>22454),complement(22111..22186),
-FT                   complement(21991..22041),complement(21666..21785),
-FT                   complement(20830..21452))
+FT   mRNA            complement(join(20830..21452,21666..21785,21991..22041,
+FT                   22111..22186,22424..>22454))
 FT                   /gene="RHBDF1"
 FT                   /locus_tag="Z69719.3-008"
 FT                   /product="rhomboid 5 homolog 1 (Drosophila)"
 FT                   /note="match: ESTs: Em:BQ890467.1"
-FT   CDS             join(complement(22424..>22454),complement(22111..22186),
-FT                   complement(21991..22041),complement(21666..21785),
-FT                   complement(21033..21452))
+FT   CDS             complement(join(21033..21452,21666..21785,21991..22041,
+FT                   22111..22186,22424..>22454))
 FT                   /codon_start=3
 FT                   /gene="RHBDF1"
 FT                   /locus_tag="Z69719.3-008"
 FT                   /standard_name="OTTHUMP00000067142"
 FT                   /product="rhomboid 5 homolog 1 (Drosophila)"
+FT                   /db_xref="GOA:Q4TT60"
 FT                   /db_xref="InterPro:IPR002610"
 FT                   /db_xref="UniProtKB/TrEMBL:Q4TT60"
 FT                   /protein_id="CAI95607.1"
@@ -1676,42 +1657,45 @@ FT                   LPFLNPEMTVLRDLEKLAGWHRIAIIYLLSGVTGNLASAIFLPYRAEVGPAGSQFGILA
 FT                   CLFVELFQSWQILARPWRAFFKLLAVVLFLFTFGLLPWIDNFAHISGFISGLFLSFAFL
 FT                   PYISFGKFDLYRKRCQIIIFQVVFLGLLAGLVVLFYVYPVRCEWCEFLTCIPFTDKFCE
 FT                   KYELDAQLH"
-FT   mRNA            join(complement(22424..22885),complement(22111..22186),
-FT                   complement(21666..22041))
+FT   mRNA            complement(join(21666..22041,22111..22186,22424..22885))
 FT                   /gene="RHBDF1"
 FT                   /locus_tag="Z69719.3-007"
 FT                   /product="rhomboid 5 homolog 1 (Drosophila)"
 FT                   /note="match: ESTs: Em:AW751627.1 Em:BF525962.1"
-FT   mRNA            join(complement(23131..23372),complement(22908..22971),
-FT                   complement(22424..22790),complement(21925..22186))
+FT   mRNA            complement(join(21925..22186,22424..22790,22908..22971,
+FT                   23131..23372))
 FT                   /gene="RHBDF1"
 FT                   /locus_tag="Z69719.3-006"
 FT                   /product="rhomboid 5 homolog 1 (Drosophila)"
 FT                   /note="match: ESTs: Em:BQ888992.1"
-FT   mRNA            join(complement(24490..24898),complement(24277..24388),
-FT                   complement(24117..24151))
+FT   mRNA            complement(join(24117..24151,24277..24388,24490..24898))
 FT                   /gene="RHBDF1"
 FT                   /locus_tag="Z69719.3-009"
 FT                   /product="rhomboid 5 homolog 1 (Drosophila)"
 FT                   /note="match: ESTs: Em:DA399443.1"
-FT   CDS             join(complement(27591..27707),complement(27391..27521),
-FT                   complement(26279..26492),complement(25665..25874),
-FT                   complement(25467..25589),complement(25230..25387),
-FT                   complement(24490..24744),complement(24277..24388),
-FT                   complement(24077..24151),complement(23812..23973),
-FT                   complement(23131..23231),complement(22908..22971),
-FT                   complement(22424..22518),complement(22111..22186),
-FT                   complement(21941..22041),complement(21666..21819),
-FT                   complement(21033..21452))
+FT   mRNA            complement(join(20755..21452,21666..21819,21941..22041,
+FT                   22111..22186,22424..22518,22908..22971,23131..23231,
+FT                   23812..23973,24077..24151,24277..24388,24490..24744,
+FT                   25230..25387,25467..25589,25665..25755,26279..26492,
+FT                   27391..27521,27591..27731))
+FT                   /gene="RHBDF1"
+FT                   /locus_tag="Z69719.3-013"
+FT                   /product="rhomboid 5 homolog 1 (Drosophila)"
+FT                   /note="match: cDNAs: Em:AK144437.1"
+FT   CDS             complement(join(21033..21452,21666..21819,21941..22041,
+FT                   22111..22186,22424..22518,22908..22971,23131..23231,
+FT                   23812..23973,24077..24151,24277..24388,24490..24744,
+FT                   25230..25387,25467..25589,25665..25874,26279..26492,
+FT                   27391..27521,27591..27707))
 FT                   /gene="RHBDF1"
 FT                   /locus_tag="Z69719.3-001"
 FT                   /standard_name="OTTHUMP00000067140"
 FT                   /product="rhomboid 5 homolog 1 (Drosophila)"
 FT                   /note="match: proteins: Tr:Q6PIX5 Tr:Q96CC6 Tr:Q9H6E1"
+FT                   /db_xref="GOA:Q96CC6"
 FT                   /db_xref="HGNC:20561"
-FT                   /db_xref="InterPro:IPR000269"
 FT                   /db_xref="InterPro:IPR002610"
-FT                   /db_xref="UniProtKB/TrEMBL:Q4TT59"
+FT                   /db_xref="UniProtKB/Swiss-Prot:Q96CC6"
 FT                   /protein_id="CAI95608.1"
 FT                   /translation="MSEARRDSTSSLQRKKPPWLKLDIPSAVPLTAEEPSFLQPLRRQA
 FT                   FLRSVSMPAETAHISSPHHELRRPVLQRQTSITQTIRRGTADWFGVSKDSDSTQKWQRK
@@ -1728,25 +1712,26 @@ FT                   DDVCGLLPFLNPEVPDQFYRLWLSLFLHAGILHCLVSICFQMTVLRDLEKLAGWHRIAI
 FT                   IYLLSGVTGNLASAIFLPYRAEVGPAGSQFGILACLFVELFQSWQILARPWRAFFKLLA
 FT                   VVLFLFTFGLLPWIDNFAHISGFISGLFLSFAFLPYISFGKFDLYRKRCQIIIFQVVFL
 FT                   GLLAGLVVLFYVYPVRCEWCEFLTCIPFTDKFCEKYELDAQLH"
-FT   mRNA            join(complement(27591..27729),complement(27391..27521),
-FT                   complement(26279..26614),complement(25665..25874))
+FT   mRNA            complement(join(25665..25874,26279..26614,27391..27521,
+FT                   27591..27729))
 FT                   /gene="RHBDF1"
 FT                   /locus_tag="Z69719.3-005"
 FT                   /product="rhomboid 5 homolog 1 (Drosophila)"
 FT                   /note="match: ESTs: Em:BG324364.1 Em:BG425216.1"
-FT   CDS             join(complement(27591..27707),complement(27391..27521),
-FT                   complement(26279..26492),complement(<25849..25874))
+FT   CDS             complement(join(<25849..25874,26279..26492,27391..27521,
+FT                   27591..27707))
 FT                   /gene="RHBDF1"
 FT                   /locus_tag="Z69719.3-010"
 FT                   /standard_name="OTTHUMP00000194925"
 FT                   /product="rhomboid 5 homolog 1 (Drosophila)"
+FT                   /db_xref="UniProtKB/TrEMBL:A2IDA2"
 FT                   /protein_id="CAM26658.1"
 FT                   /translation="MSEARRDSTSSLQRKKPPWLKLDIPSAVPLTAEEPSFLQPLRRQA
 FT                   FLRSVSMPAETAHISSPHHELRRPVLQRQTSITQTIRRGTADWFGVSKDSDSTQKWQRK
 FT                   SIRHCSQRYGKLKPQVLRELDLPSQDNVSLTSTETPPPLYVGPCQLGMQKIIDPLARGR
 FT                   "
-FT   CDS             join(complement(27591..27707),complement(27391..27521),
-FT                   complement(27025..27132),complement(<26279..26492))
+FT   CDS             complement(join(<26279..26492,27025..27132,27391..27521,
+FT                   27591..27707))
 FT                   /gene="RHBDF1"
 FT                   /locus_tag="Z69719.3-004"
 FT                   /standard_name="OTTHUMP00000067141"
@@ -1757,6 +1742,22 @@ FT                   /translation="MSEARRDSTSSLQRKKPPWLKLDIPSAVPLTAEEPSFLQPLRRQA
 FT                   FLRSVSMPAETAHISSPHHELRRPVLQRQTSITQTIRSSRQVRFGRVHTLPLLGPRAAR
 FT                   RAFPQRQSLSWSLLRGTADWFGVSKDSDSTQKWQRKSIRHCSQRYGKLKPQVLRELDLP
 FT                   SQDNVSLTSTETPPPLYVGPCQLGMQK"
+FT   mRNA            complement(join(<26435..26492,27025..27129,27391..27521,
+FT                   27591..>27731))
+FT                   /gene="RHBDF1"
+FT                   /locus_tag="Z69719.3-012"
+FT                   /product="rhomboid 5 homolog 1 (Drosophila)"
+FT   CDS             complement(join(<26435..26492,27025..27129,27391..27521,
+FT                   27591..27707))
+FT                   /gene="RHBDF1"
+FT                   /locus_tag="Z69719.3-012"
+FT                   /standard_name="OTTHUMP00000197542"
+FT                   /product="rhomboid 5 homolog 1 (Drosophila)"
+FT                   /db_xref="UniProtKB/TrEMBL:B8ZZ07"
+FT                   /protein_id="CAX15112.1"
+FT                   /translation="MSEARRDSTSSLQRKKPPWLKLDIPSAVPLTAEEPSFLQPLRRQA
+FT                   FLRSVSMPAETAHISSPHHELRRPVLQRQTSITQTIRSRQVRFGRVHTLPLLGPRAARR
+FT                   AFPQRQSLSWSLLRGTADWFGVSKDSDSTQKWQ"
 XX
 SQ   Sequence 33760 BP; 8532 A; 9139 C; 9245 G; 6844 T; 0 other;
      gatccaccag cctcggcctc ccaaagtcct gggattacag gagtgagcca ccatgcctag        60
@@ -2328,7 +2329,7 @@ XX
 AC   AB000095;
 XX
 DT   10-MAR-1998 (Rel. 54, Created)
-DT   14-APR-2005 (Rel. 83, Last updated, Version 2)
+DT   07-OCT-2008 (Rel. 97, Last updated, Version 3)
 XX
 DE   Homo sapiens mRNA for hepatocyte growth factor activator inhibitor,
 DE   complete cds.
@@ -2358,6 +2359,9 @@ RT   "Hepatocyte growth factor activator inhibitor, a novel Kunitz-type serine
 RT   protease inhibitor";
 RL   J. Biol. Chem. 272(10):6370-6376(1997).
 XX
+DR   ASTD; TRAN00000068509.
+DR   Ensembl-Gn; ENSG00000166145; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000344051; Homo_sapiens.
 DR   H-InvDB; HIT000057890.
 XX
 FH   Key             Location/Qualifiers
@@ -2371,6 +2375,7 @@ FT                   /product="hepatocyte growth factor activator inhibitor"
 FT                   /db_xref="GDB:118879"
 FT                   /db_xref="GOA:O43278"
 FT                   /db_xref="HGNC:11246"
+FT                   /db_xref="InterPro:IPR013980"
 FT                   /db_xref="PDB:1YC0"
 FT                   /db_xref="UniProtKB/Swiss-Prot:O43278"
 FT                   /protein_id="BAA25014.1"
@@ -2482,15 +2487,7 @@ FT                   (LQT2)"
 FT                   /db_xref="GDB:138126"
 FT                   /db_xref="GOA:Q12809"
 FT                   /db_xref="HGNC:6251"
-FT                   /db_xref="InterPro:IPR000014"
-FT                   /db_xref="InterPro:IPR000595"
-FT                   /db_xref="InterPro:IPR000700"
-FT                   /db_xref="InterPro:IPR001610"
-FT                   /db_xref="InterPro:IPR003938"
-FT                   /db_xref="InterPro:IPR003967"
-FT                   /db_xref="InterPro:IPR005821"
-FT                   /db_xref="InterPro:IPR013767"
-FT                   /db_xref="PDB:1BYW"
+FT                   /db_xref="InterPro:IPR018488"
 FT                   /db_xref="PDB:1UJL"
 FT                   /db_xref="UniProtKB/Swiss-Prot:Q12809"
 FT                   /protein_id="BAA37096.1"
@@ -2718,7 +2715,7 @@ RT   "Structure of gene and pseudogenes of human apoferritin H";
 RL   Nucleic Acids Res. 14(2):721-736(1986).
 XX
 DR   EPD; EP11112; HS_FTH1.
-DR   RFAM; RF00037.
+DR   RFAM; RF00037; IRE.
 XX
 FH   Key             Location/Qualifiers
 FH
@@ -2742,13 +2739,8 @@ FT                   /product="apoferritin H subunit"
 FT                   /db_xref="GDB:120617"
 FT                   /db_xref="GOA:P02794"
 FT                   /db_xref="HGNC:3976"
-FT                   /db_xref="InterPro:IPR001519"
-FT                   /db_xref="InterPro:IPR008331"
-FT                   /db_xref="InterPro:IPR009040"
-FT                   /db_xref="InterPro:IPR009078"
-FT                   /db_xref="InterPro:IPR012347"
-FT                   /db_xref="PDB:1FHA"
-FT                   /db_xref="PDB:2FHA"
+FT                   /db_xref="InterPro:IPR014034"
+FT                   /db_xref="PDB:3ES3"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P02794"
 FT                   /protein_id="CAA27205.1"
 FT                   /translation="MTTASTSQVRQNYHQDSEAAINRQINLELYASYVYLSMSYYFDRD
@@ -2795,7 +2787,6 @@ RT   "Structure of gene and pseudogenes of human apoferritin H";
 RL   Nucleic Acids Res. 14(2):721-736(1986).
 XX
 DR   EMBL-JOIN; X03487.
-DR   UniProtKB/Swiss-Prot; P02794; FRIH_HUMAN.
 XX
 FH   Key             Location/Qualifiers
 FH
@@ -5013,7 +5004,7 @@ XX
 AC   BA000025; AP000502-AP000521;
 XX
 DT   09-DEC-2004 (Rel. 82, Created)
-DT   14-NOV-2006 (Rel. 89, Last updated, Version 4)
+DT   17-JUN-2008 (Rel. 96, Last updated, Version 5)
 XX
 DE   Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
 XX
@@ -5051,17 +5042,9 @@ DR   EPD; EP74389; HS_BAT1.
 DR   EPD; EP74485; HS_IER3.
 DR   GDB; 11515913.
 DR   GOA; P59942.
-DR   IMGT/HLA; HLA02629; J*01010102.
-DR   RFAM; RF00017.
-DR   RFAM; RF00019.
-DR   RFAM; RF00026.
-DR   RFAM; RF00100.
-DR   RFAM; RF00137.
-DR   RFAM; RF00276.
-DR   RFAM; RF00282.
-DR   RFAM; RF00428.
-DR   RFAM; RF00495.
-DR   RFAM; RF00554.
+DR   HGNC; 20668; MCCD1.
+DR   IMGT/HLA; HLA02802; V*01010102.
+DR   RFAM; RF00994; mir-1255.
 DR   UniProtKB/Swiss-Prot; P59942; MCCD1_HUMAN.
 XX
 CC   This sequence is conducted by Tokai University as a JST sequencing
@@ -5084,25 +5067,17 @@ FT                   /chromosome="6"
 FT                   /map="6p21.3"
 FT                   /mol_type="genomic DNA"
 FT                   /db_xref="taxon:9606"
-FT   CDS             join(complement(16015..16060),complement(15649..15858),
-FT                   complement(14896..15081),complement(10081..10254),
-FT                   complement(9899..9997),complement(9565..9698),
-FT                   complement(7803..7941),complement(6407..6547),
-FT                   complement(4546..4635),complement(766..906),
-FT                   complement(546..640),complement(338..449),
-FT                   complement(<56..221))
+FT   CDS             complement(join(<56..221,338..449,546..640,766..906,
+FT                   4546..4635,6407..6547,7803..7941,9565..9698,9899..9997,
+FT                   10081..10254,14896..15081,15649..15858,16015..16060))
 FT                   /codon_start=1
 FT                   /transl_table=1
 FT                   /gene="C2"
 FT                   /function="complement classical pathway serine protease"
 FT                   /db_xref="GOA:Q95IG1"
 FT                   /db_xref="HGNC:1248"
-FT                   /db_xref="HSSP:P00751"
-FT                   /db_xref="InterPro:IPR000436"
-FT                   /db_xref="InterPro:IPR001254"
-FT                   /db_xref="InterPro:IPR001314"
-FT                   /db_xref="InterPro:IPR002035"
-FT                   /db_xref="InterPro:IPR009003"
+FT                   /db_xref="HSSP:1DLE"
+FT                   /db_xref="InterPro:IPR018114"
 FT                   /db_xref="UniProtKB/TrEMBL:Q95IG1"
 FT                   /protein_id="BAB63292.1"
 FT                   /translation="MGPLMVLFCLLFLYPGLADSAPSCPQNVNISGGTFTLSHGWAPGS
@@ -5166,9 +5141,8 @@ FT                   /function="Zn finger"
 FT                   /note="alternative name: G10"
 FT                   /db_xref="GOA:Q9Y330"
 FT                   /db_xref="HGNC:19066"
-FT                   /db_xref="InterPro:IPR000210"
-FT                   /db_xref="InterPro:IPR007087"
-FT                   /db_xref="InterPro:IPR013069"
+FT                   /db_xref="HSSP:1CS3"
+FT                   /db_xref="InterPro:IPR015880"
 FT                   /db_xref="UniProtKB/Swiss-Prot:Q9Y330"
 FT                   /protein_id="BAB63293.1"
 FT                   /translation="MASGVEVLRFQLPGHEAATLRNMNQLRAEERFCDVTIVADSLKFR
@@ -5187,6 +5161,8 @@ FT                   /gene="NG36"
 FT                   /note="unknown function"
 FT                   /db_xref="GOA:Q96KQ7"
 FT                   /db_xref="HGNC:14129"
+FT                   /db_xref="InterPro:IPR007728"
+FT                   /db_xref="PDB:3DM1"
 FT                   /db_xref="UniProtKB/Swiss-Prot:Q96KQ7"
 FT                   /protein_id="BAB63294.1"
 FT                   /translation="MGALLLEKETRGATERVHGSLGDTPRSEETLPKANPDSLEPAGPS
@@ -5221,6 +5197,8 @@ FT                   /function="regulation of transcription"
 FT                   /note="ANK repeats"
 FT                   /db_xref="GOA:Q96KQ7"
 FT                   /db_xref="HGNC:14129"
+FT                   /db_xref="InterPro:IPR007728"
+FT                   /db_xref="PDB:3DM1"
 FT                   /db_xref="UniProtKB/Swiss-Prot:Q96KQ7"
 FT                   /protein_id="BAB63295.1"
 FT                   /translation="MSDDVHSLGKVTSDLAKRRKLNSGGGLSEELGSARRSGEVTLTKG
@@ -5327,6 +5305,7 @@ FT                   /note="unknown function"
 FT                   /db_xref="GDB:11504831"
 FT                   /db_xref="GOA:Q53GD3"
 FT                   /db_xref="HGNC:13941"
+FT                   /db_xref="InterPro:IPR007603"
 FT                   /db_xref="UniProtKB/Swiss-Prot:Q53GD3"
 FT                   /protein_id="BAB63296.1"
 FT                   /translation="MGGKQRDEDDEAYGKPVKYDPSFRGPIKNRSCTDVICCVLFLLFI
@@ -5418,8 +5397,7 @@ FT                   /note="alternative name: G9"
 FT                   /db_xref="GDB:120230"
 FT                   /db_xref="GOA:Q99519"
 FT                   /db_xref="HGNC:7758"
-FT                   /db_xref="InterPro:IPR002860"
-FT                   /db_xref="InterPro:IPR011040"
+FT                   /db_xref="HSSP:1EUR"
 FT                   /db_xref="UniProtKB/Swiss-Prot:Q99519"
 FT                   /protein_id="BAB63297.1"
 FT                   /translation="MTGERPSTALPDRRWGPRILGFWGGCRVWVFAAIFLLLSLAASWS
@@ -5461,7 +5439,7 @@ FT                   /number=3
 FT   STS             104325..104399
 FT                   /note="SHGC-36600;The location is between each flanking
 FT                   site of PCR primers."
-FT   CDS             join(complement(106575..106681),complement(104348..104468))
+FT   CDS             complement(join(104348..104468,106575..106681))
 FT                   /codon_start=1
 FT                   /transl_table=1
 FT                   /gene="G8"
@@ -5493,13 +5471,9 @@ FT                   /note="constitutive HSP70"
 FT                   /db_xref="GDB:120057"
 FT                   /db_xref="GDB:630649"
 FT                   /db_xref="GOA:P08107"
-FT                   /db_xref="HGNC:5232"
 FT                   /db_xref="HGNC:5233"
-FT                   /db_xref="InterPro:IPR001023"
-FT                   /db_xref="InterPro:IPR013126"
-FT                   /db_xref="PDB:1HJO"
-FT                   /db_xref="PDB:1S3X"
-FT                   /db_xref="PDB:1XQS"
+FT                   /db_xref="InterPro:IPR018181"
+FT                   /db_xref="PDB:3D2F"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P08107"
 FT                   /protein_id="BAB63299.1"
 FT                   /translation="MAKAAAIGIDLGTTYSCVGVFQHGKVEIIANDQGNRTTPSYVAFT
@@ -5530,13 +5504,9 @@ FT                   /note="constitutive HSP70"
 FT                   /db_xref="GDB:120057"
 FT                   /db_xref="GDB:630649"
 FT                   /db_xref="GOA:P08107"
-FT                   /db_xref="HGNC:5232"
 FT                   /db_xref="HGNC:5233"
-FT                   /db_xref="InterPro:IPR001023"
-FT                   /db_xref="InterPro:IPR013126"
-FT                   /db_xref="PDB:1HJO"
-FT                   /db_xref="PDB:1S3X"
-FT                   /db_xref="PDB:1XQS"
+FT                   /db_xref="InterPro:IPR018181"
+FT                   /db_xref="PDB:3D2F"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P08107"
 FT                   /protein_id="BAB63300.1"
 FT                   /translation="MAKAAAIGIDLGTTYSCVGVFQHGKVEIIANDQGNRTTPSYVAFT
@@ -5565,6 +5535,8 @@ FT                   /db_xref="GDB:120057"
 FT                   /db_xref="GDB:120058"
 FT                   /db_xref="GOA:P34931"
 FT                   /db_xref="HGNC:5234"
+FT                   /db_xref="InterPro:IPR018181"
+FT                   /db_xref="PDB:3GDQ"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P34931"
 FT                   /protein_id="BAB63301.1"
 FT                   /translation="MATAKGIAIGIDLGTTYSCVGVFQHGKVEIIANDQGNRTTPSYVA
@@ -5598,9 +5570,8 @@ FT                   /note="alternative name: G7b"
 FT                   /db_xref="GDB:11504829"
 FT                   /db_xref="GOA:Q9Y333"
 FT                   /db_xref="HGNC:13940"
-FT                   /db_xref="InterPro:IPR001163"
-FT                   /db_xref="InterPro:IPR006649"
-FT                   /db_xref="InterPro:IPR010920"
+FT                   /db_xref="HSSP:1B34"
+FT                   /db_xref="InterPro:IPR016654"
 FT                   /db_xref="UniProtKB/Swiss-Prot:Q9Y333"
 FT                   /protein_id="BAB63302.1"
 FT                   /translation="MLFYSFFKSLVGKDVVVELKNDLSICGTLHSVDQYLNIKLTDISV
@@ -5642,16 +5613,8 @@ FT                   /db_xref="GDB:120485"
 FT                   /db_xref="GDB:128120"
 FT                   /db_xref="GOA:P26640"
 FT                   /db_xref="HGNC:12651"
-FT                   /db_xref="InterPro:IPR001412"
-FT                   /db_xref="InterPro:IPR002300"
-FT                   /db_xref="InterPro:IPR002303"
-FT                   /db_xref="InterPro:IPR004045"
-FT                   /db_xref="InterPro:IPR004046"
-FT                   /db_xref="InterPro:IPR009008"
-FT                   /db_xref="InterPro:IPR009080"
-FT                   /db_xref="InterPro:IPR010978"
-FT                   /db_xref="InterPro:IPR010987"
-FT                   /db_xref="InterPro:IPR013155"
+FT                   /db_xref="HSSP:1IVS"
+FT                   /db_xref="InterPro:IPR019754"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P26640"
 FT                   /protein_id="BAB63303.1"
 FT                   /translation="MSTLYVSPHPDAFPSLRALIAARYGEAGEGPGWGGAHPRICLQPP
@@ -5773,7 +5736,6 @@ FT                   /note="alternative name: NG37"
 FT                   /note="unknown function"
 FT                   /db_xref="GOA:Q9Y334"
 FT                   /db_xref="HGNC:13939"
-FT                   /db_xref="InterPro:IPR002035"
 FT                   /db_xref="UniProtKB/Swiss-Prot:Q9Y334"
 FT                   /protein_id="BAB63304.1"
 FT                   /translation="MLPTEVPQSHPGPSALLLLQLLLPPTSAFFPNIWSLLAAPGSITH
@@ -5839,15 +5801,15 @@ FT                   /number=15
 FT   exon            178247..178278
 FT                   /gene="G7C"
 FT                   /number=16
-FT   CDS             join(complement(180849..180962),complement(180462..180602),
-FT                   complement(179858..179953),complement(179486..179581))
+FT   CDS             complement(join(179486..179581,179858..179953,
+FT                   180462..180602,180849..180962))
 FT                   /codon_start=1
 FT                   /transl_table=1
 FT                   /gene="NG23"
 FT                   /note="unknown function"
 FT                   /db_xref="GDB:11504825"
+FT                   /db_xref="GOA:Q5SSQ6"
 FT                   /db_xref="HGNC:13938"
-FT                   /db_xref="HGNC:7328"
 FT                   /db_xref="UniProtKB/Swiss-Prot:Q5SSQ6"
 FT                   /protein_id="BAB63305.1"
 FT                   /translation="MGSQGSGGVPLVQAPYTVLLLPLGTSRQDPGAQSFFLWLRRMQAL
@@ -5868,18 +5830,15 @@ FT                   /number=1
 FT   exon            181341..181597
 FT                   /gene="MSH5"
 FT                   /number=25
-FT   CDS             join(complement(203425..203571),complement(202752..202875),
-FT                   complement(201081..201161),complement(200868..200930),
-FT                   complement(200013..200134),complement(199739..199848),
-FT                   complement(199457..199492),complement(198719..198801),
-FT                   complement(196594..196639),complement(190590..190728),
-FT                   complement(190400..190462),complement(185724..185852),
-FT                   complement(185397..185469),complement(185142..185251),
-FT                   complement(184840..184920),complement(184505..184592),
-FT                   complement(184042..184231),complement(183801..183927),
-FT                   complement(183178..183327),complement(182755..182829),
-FT                   complement(182402..182545),complement(182062..182199),
-FT                   complement(181832..181905),complement(181486..181597))
+FT   CDS             complement(join(181486..181597,181832..181905,
+FT                   182062..182199,182402..182545,182755..182829,
+FT                   183178..183327,183801..183927,184042..184231,
+FT                   184505..184592,184840..184920,185142..185251,
+FT                   185397..185469,185724..185852,190400..190462,
+FT                   190590..190728,196594..196639,198719..198801,
+FT                   199457..199492,199739..199848,200013..200134,
+FT                   200868..200930,201081..201161,202752..202875,
+FT                   203425..203571))
 FT                   /codon_start=1
 FT                   /transl_table=1
 FT                   /gene="MSH5"
@@ -5888,8 +5847,7 @@ FT                   /note="alternative name: G7, MutS"
 FT                   /db_xref="GDB:9835141"
 FT                   /db_xref="GOA:O43196"
 FT                   /db_xref="HGNC:7328"
-FT                   /db_xref="InterPro:IPR000432"
-FT                   /db_xref="InterPro:IPR007696"
+FT                   /db_xref="HSSP:1EWR"
 FT                   /db_xref="InterPro:IPR007861"
 FT                   /db_xref="UniProtKB/Swiss-Prot:O43196"
 FT                   /protein_id="BAB63375.1"
@@ -5993,13 +5951,7 @@ FT                   /note="alternative name: NCC27, G6, CLCP, p64"
 FT                   /db_xref="GDB:6278990"
 FT                   /db_xref="GOA:O00299"
 FT                   /db_xref="HGNC:2062"
-FT                   /db_xref="InterPro:IPR002946"
-FT                   /db_xref="InterPro:IPR010987"
-FT                   /db_xref="InterPro:IPR012335"
-FT                   /db_xref="InterPro:IPR012336"
-FT                   /db_xref="PDB:1K0M"
-FT                   /db_xref="PDB:1K0N"
-FT                   /db_xref="PDB:1K0O"
+FT                   /db_xref="InterPro:IPR017933"
 FT                   /db_xref="PDB:1RK4"
 FT                   /db_xref="UniProtKB/Swiss-Prot:O00299"
 FT                   /protein_id="BAB63376.1"
@@ -6061,9 +6013,9 @@ FT                   /number=5
 FT   exon            216676..216987
 FT                   /gene="DDAH"
 FT                   /number=6
-FT   CDS             join(complement(220585..220645),complement(220043..220390),
-FT                   complement(219797..219887),complement(219402..219442),
-FT                   complement(219185..219264),complement(218955..219059))
+FT   CDS             complement(join(218955..219059,219185..219264,
+FT                   219402..219442,219797..219887,220043..220390,
+FT                   220585..220645))
 FT                   /codon_start=1
 FT                   /transl_table=1
 FT                   /gene="G6B"
@@ -6109,7 +6061,9 @@ FT                   /function="Leukocyte maturation"
 FT                   /note="Ly6 family member"
 FT                   /note="alternative name: NG24"
 FT                   /db_xref="GDB:11504821"
+FT                   /db_xref="GOA:O95867"
 FT                   /db_xref="HGNC:13936"
+FT                   /db_xref="InterPro:IPR018363"
 FT                   /db_xref="UniProtKB/Swiss-Prot:O95867"
 FT                   /protein_id="BAB63379.1"
 FT                   /translation="MKALMLLTLSVLLCWVSADIRCHSCYKVPVLGCVDRQSCRLEPGQ
@@ -6124,16 +6078,18 @@ FT                   /number=3
 FT   exon            226111..226448
 FT                   /gene="G6D"
 FT                   /number=3
-FT   CDS             join(complement(228617..228671),complement(228403..228525),
-FT                   complement(226225..226448))
+FT   CDS             complement(join(226225..226448,228403..228525,
+FT                   228617..228671))
 FT                   /codon_start=1
 FT                   /transl_table=1
 FT                   /gene="G6D"
 FT                   /function="Leukocyte maturation"
 FT                   /note="Ly6 family member"
 FT                   /note="alternative name: NG25, MEGT1"
+FT                   /db_xref="GOA:O95868"
 FT                   /db_xref="HGNC:13935"
-FT                   /db_xref="UniProtKB/TrEMBL:O95868"
+FT                   /db_xref="InterPro:IPR018363"
+FT                   /db_xref="UniProtKB/Swiss-Prot:O95868"
 FT                   /protein_id="BAB63380.1"
 FT                   /translation="MKPQFVGILLSSLLGAALGNRMRCYNCGGSPSSSCKEAVTTCGEG
 FT                   RPQPGLEQIKLPGNPPVTLIHQHPACVAAHHCNQVETESVGDVTYPAHRDCYLGDLCNS
@@ -6173,19 +6129,17 @@ FT                   /number=2
 FT   exon            231486..231691
 FT                   /gene="G6E"
 FT                   /number=3
-FT   CDS             join(complement(237069..237120),complement(236240..236569),
-FT                   complement(235893..236156),complement(233846..234001),
-FT                   complement(233605..233675))
+FT   CDS             complement(join(233605..233675,233846..234001,
+FT                   235893..236156,236240..236569,237069..237120))
 FT                   /codon_start=1
 FT                   /transl_table=1
 FT                   /gene="G6F"
 FT                   /note="alternative name: NG32, MEGT1"
 FT                   /note="unknown function"
+FT                   /db_xref="GOA:Q5SQ64"
 FT                   /db_xref="HGNC:13933"
-FT                   /db_xref="InterPro:IPR003599"
-FT                   /db_xref="InterPro:IPR007110"
 FT                   /db_xref="InterPro:IPR013783"
-FT                   /db_xref="UniProtKB/TrEMBL:Q96QC7"
+FT                   /db_xref="UniProtKB/Swiss-Prot:Q5SQ64"
 FT                   /protein_id="BAB63382.1"
 FT                   /translation="MAVLFLLLFLCGTPQAADNMQAIYVALGEAVELPCPSPPTLHGDE
 FT                   HLSWFCSPAAGSFTTLVAQVQVGRPAPDPGKPGRESRLRLLGNYSLWLEGSKEEDAGRY
@@ -6316,8 +6270,10 @@ FT                   /gene="G5C"
 FT                   /note="Ly6 family member"
 FT                   /note="alternative name: NG33"
 FT                   /db_xref="GDB:11504810"
+FT                   /db_xref="GOA:Q5SRR4"
 FT                   /db_xref="HGNC:13932"
-FT                   /db_xref="UniProtKB/TrEMBL:O95871"
+FT                   /db_xref="InterPro:IPR018363"
+FT                   /db_xref="UniProtKB/Swiss-Prot:Q5SRR4"
 FT                   /protein_id="BAB63384.1"
 FT                   /translation="MQTFPVAGALDPAILDTSSPQALYTVLLIVLVMMSLVFGKFVPVN
 FT                   WEPPQPLPFPKYLRCYRCLLETKELGCLLGSDICLTPAGSSCITLHKKNSSGSDVMVSD
@@ -6340,14 +6296,15 @@ FT                   /number=4
 FT   exon            271741..272164
 FT                   /gene="G5B"
 FT                   /number=2
-FT   CDS             join(complement(272744..272765),complement(271746..272164))
+FT   CDS             complement(join(271746..272164,272744..272765))
 FT                   /codon_start=1
 FT                   /transl_table=1
 FT                   /gene="G5B"
 FT                   /note="Ly6 family member"
-FT                   /db_xref="GOA:Q9UMQ0"
+FT                   /db_xref="GOA:Q8NDX9"
 FT                   /db_xref="HGNC:13931"
-FT                   /db_xref="UniProtKB/TrEMBL:Q9UMQ0"
+FT                   /db_xref="InterPro:IPR018363"
+FT                   /db_xref="UniProtKB/Swiss-Prot:Q8NDX9"
 FT                   /protein_id="BAB63385.1"
 FT                   /translation="MVITIYYDVKVRFIVRGCGQYISYRCQEKRNTYFAEYWYQAQCCQ
 FT                   YDYCNSWSSPQLQSSLPEPHDRPLALPLSDSQIQWFYQALNLSLPLPNFHAGTEPDGLD
@@ -6362,9 +6319,9 @@ FT                   /number=1
 FT   exon            273962..274192
 FT                   /gene="CSNK2B"
 FT                   /number=7
-FT   CDS             join(complement(277125..277196),complement(276058..276160),
-FT                   complement(275374..275489),complement(274856..274931),
-FT                   complement(274520..274709),complement(274102..274192))
+FT   CDS             complement(join(274102..274192,274520..274709,
+FT                   274856..274931,275374..275489,276058..276160,
+FT                   277125..277196))
 FT                   /codon_start=1
 FT                   /transl_table=1
 FT                   /gene="CSNK2B"
@@ -6373,10 +6330,8 @@ FT                   /note="alternative name: G5a, phosvitin"
 FT                   /db_xref="GDB:125235"
 FT                   /db_xref="GOA:P67870"
 FT                   /db_xref="HGNC:2460"
-FT                   /db_xref="InterPro:IPR000704"
-FT                   /db_xref="PDB:1DS5"
-FT                   /db_xref="PDB:1JWH"
-FT                   /db_xref="PDB:1QF8"
+FT                   /db_xref="InterPro:IPR016150"
+FT                   /db_xref="PDB:3EED"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P67870"
 FT                   /protein_id="BAB63386.1"
 FT                   /translation="MSSSEEVSWISWFCGLRGNEFFCEVDEDYIQDKFNLTGLNEQVPH
@@ -6415,7 +6370,6 @@ FT                   /note="alternative name: G5"
 FT                   /note="unknown function"
 FT                   /db_xref="GOA:O95872"
 FT                   /db_xref="HGNC:13920"
-FT                   /db_xref="InterPro:IPR000467"
 FT                   /db_xref="InterPro:IPR002110"
 FT                   /db_xref="UniProtKB/Swiss-Prot:O95872"
 FT                   /protein_id="BAB63387.1"
@@ -6456,9 +6410,9 @@ FT                   /number=6
 FT   STS             285833..285947
 FT                   /note="TIGR-A007I39;The location is between each flanking
 FT                   site of PCR primers."
-FT   CDS             join(complement(287948..288061),complement(287402..287556),
-FT                   complement(286730..286803),complement(286550..286648),
-FT                   complement(286305..286403),complement(285939..285964))
+FT   CDS             complement(join(285939..285964,286305..286403,
+FT                   286550..286648,286730..286803,287402..287556,
+FT                   287948..288061))
 FT                   /codon_start=1
 FT                   /transl_table=1
 FT                   /gene="APOM"
@@ -6467,8 +6421,6 @@ FT                   /note="alternative name: G3a, NG20"
 FT                   /db_xref="GDB:11509994"
 FT                   /db_xref="GOA:O95445"
 FT                   /db_xref="HGNC:13916"
-FT                   /db_xref="InterPro:IPR011038"
-FT                   /db_xref="InterPro:IPR012674"
 FT                   /db_xref="UniProtKB/Swiss-Prot:O95445"
 FT                   /protein_id="BAB63389.1"
 FT                   /translation="MFHQIWAALLYFYGIILNSIYQCPEHSQLTTLGVDGKEFPEVHLG
@@ -6511,6 +6463,8 @@ FT                   /note="alternative name: G3"
 FT                   /note="unknown function"
 FT                   /db_xref="GOA:P46379"
 FT                   /db_xref="HGNC:13919"
+FT                   /db_xref="InterPro:IPR000626"
+FT                   /db_xref="PDB:1WX9"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P46379"
 FT                   /protein_id="BAB63390.1"
 FT                   /translation="MEPNDSTSTAVEEPDSLEVLVKTLDSQTRTFIVGAQMNVKEFKEH
@@ -6611,21 +6565,17 @@ FT                   /number=25
 FT   exon            306276..306580
 FT                   /gene="BAT2"
 FT                   /number=31
-FT   CDS             join(complement(321120..321231),complement(320117..320294),
-FT                   complement(319666..319765),complement(319504..319576),
-FT                   complement(318712..318855),complement(318415..318566),
-FT                   complement(318155..318234),complement(317864..318006),
-FT                   complement(317164..317254),complement(316828..317044),
-FT                   complement(315787..316261),complement(314692..314882),
-FT                   complement(314181..314478),complement(313225..313435),
-FT                   complement(311034..312887),complement(310379..310647),
-FT                   complement(310037..310167),complement(309661..309790),
-FT                   complement(309469..309554),complement(309049..309273),
-FT                   complement(308754..308894),complement(308561..308632),
-FT                   complement(308277..308444),complement(307977..308059),
-FT                   complement(307607..307817),complement(307418..307516),
-FT                   complement(307081..307293),complement(306890..306984),
-FT                   complement(306702..306792),complement(306440..306580))
+FT   CDS             complement(join(306440..306580,306702..306792,
+FT                   306890..306984,307081..307293,307418..307516,
+FT                   307607..307817,307977..308059,308277..308444,
+FT                   308561..308632,308754..308894,309049..309273,
+FT                   309469..309554,309661..309790,310037..310167,
+FT                   310379..310647,311034..312887,313225..313435,
+FT                   314181..314478,314692..314882,315787..316261,
+FT                   316828..317044,317164..317254,317864..318006,
+FT                   318155..318234,318415..318566,318712..318855,
+FT                   319504..319576,319666..319765,320117..320294,
+FT                   321120..321231))
 FT                   /codon_start=1
 FT                   /transl_table=1
 FT                   /gene="BAT2"
@@ -6774,9 +6724,9 @@ FT                   site of PCR primers."
 FT   exon            327096..327203
 FT                   /gene="AIF1"
 FT                   /number=6
-FT   CDS             join(complement(328665..328689),complement(328437..328498),
-FT                   complement(328283..328349),complement(327874..327915),
-FT                   complement(327513..327675),complement(327119..327203))
+FT   CDS             complement(join(327119..327203,327513..327675,
+FT                   327874..327915,328283..328349,328437..328498,
+FT                   328665..328689))
 FT                   /codon_start=1
 FT                   /transl_table=1
 FT                   /gene="AIF1"
@@ -6786,8 +6736,7 @@ FT                   /note="alternative name: G1"
 FT                   /db_xref="GDB:6278877"
 FT                   /db_xref="GOA:P55008"
 FT                   /db_xref="HGNC:352"
-FT                   /db_xref="InterPro:IPR002048"
-FT                   /db_xref="InterPro:IPR011992"
+FT                   /db_xref="InterPro:IPR018249"
 FT                   /db_xref="PDB:2G2B"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P55008"
 FT                   /protein_id="BAB63392.1"
@@ -6820,6 +6769,7 @@ FT                   /gene="1C7"
 FT                   /note="putative immunoglobulin gene superfamily member"
 FT                   /db_xref="GOA:O14931"
 FT                   /db_xref="HGNC:19077"
+FT                   /db_xref="InterPro:IPR013783"
 FT                   /db_xref="UniProtKB/Swiss-Prot:O14931"
 FT                   /protein_id="BAB63393.1"
 FT                   /translation="MAWMLLLILIMVHPGSCALWVSQPPEIRTLEGSSAFLPCSFNASQ
@@ -6838,8 +6788,8 @@ FT                   /number=4
 FT   exon            355215..355528
 FT                   /gene="LST1"
 FT                   /number=4
-FT   CDS             join(complement(356707..356709),complement(356292..356384),
-FT                   complement(355349..355528))
+FT   CDS             complement(join(355349..355528,356292..356384,
+FT                   356707..356709))
 FT                   /codon_start=1
 FT                   /transl_table=1
 FT                   /gene="LST1"
@@ -6847,6 +6797,7 @@ FT                   /note="Leukocyte specifictranscript-1"
 FT                   /note="alternative name: B144"
 FT                   /db_xref="GOA:O00453"
 FT                   /db_xref="HGNC:14189"
+FT                   /db_xref="InterPro:IPR007775"
 FT                   /db_xref="UniProtKB/Swiss-Prot:O00453"
 FT                   /protein_id="BAB63394.1"
 FT                   /translation="MIYVSTGAWGWAGSCFWQWSFCPPACVGCIEEHLLSWSQAQGSSE
@@ -6880,10 +6831,7 @@ FT                   /note="alternative name: TNF-c"
 FT                   /db_xref="GDB:683333"
 FT                   /db_xref="GOA:Q06643"
 FT                   /db_xref="HGNC:6711"
-FT                   /db_xref="InterPro:IPR002961"
-FT                   /db_xref="InterPro:IPR003636"
-FT                   /db_xref="InterPro:IPR006052"
-FT                   /db_xref="InterPro:IPR006053"
+FT                   /db_xref="HSSP:1TNR"
 FT                   /db_xref="InterPro:IPR008983"
 FT                   /db_xref="UniProtKB/Swiss-Prot:Q06643"
 FT                   /protein_id="BAB63395.1"
@@ -6908,8 +6856,8 @@ FT   STS             complement(366114..366279)
 FT                   /standard_name="D6S2056"
 FT                   /note="SHGC-11076;The location is between each flanking
 FT                   site of PCR primers."
-FT   CDS             join(complement(368099..368284),complement(367447..367492),
-FT                   complement(367212..367259),complement(366489..366910))
+FT   CDS             complement(join(366489..366910,367212..367259,
+FT                   367447..367492,368099..368284))
 FT                   /codon_start=1
 FT                   /transl_table=1
 FT                   /gene="TNFA"
@@ -6920,16 +6868,7 @@ FT                   /note="alternative name: cachectin"
 FT                   /db_xref="GDB:120441"
 FT                   /db_xref="GOA:P01375"
 FT                   /db_xref="HGNC:11892"
-FT                   /db_xref="InterPro:IPR002959"
-FT                   /db_xref="InterPro:IPR003636"
-FT                   /db_xref="InterPro:IPR006052"
-FT                   /db_xref="InterPro:IPR006053"
 FT                   /db_xref="InterPro:IPR008983"
-FT                   /db_xref="PDB:1A8M"
-FT                   /db_xref="PDB:1TNF"
-FT                   /db_xref="PDB:2AZ5"
-FT                   /db_xref="PDB:2TUN"
-FT                   /db_xref="PDB:4TSV"
 FT                   /db_xref="PDB:5TSW"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P01375"
 FT                   /protein_id="BAB63396.1"
@@ -6968,8 +6907,8 @@ FT                   /number=4
 FT   STS             complement(370063..370197)
 FT                   /note="RH17367;The location is between each flanking site
 FT                   of PCR primers."
-FT   CDS             join(complement(371185..371283),complement(370993..371098),
-FT                   complement(370333..370745))
+FT   CDS             complement(join(370333..370745,370993..371098,
+FT                   371185..371283))
 FT                   /codon_start=1
 FT                   /transl_table=1
 FT                   /gene="LTA"
@@ -6980,10 +6919,6 @@ FT                   /note="alternative name: TNF-bata"
 FT                   /db_xref="GDB:120442"
 FT                   /db_xref="GOA:P01374"
 FT                   /db_xref="HGNC:6709"
-FT                   /db_xref="InterPro:IPR002960"
-FT                   /db_xref="InterPro:IPR003636"
-FT                   /db_xref="InterPro:IPR006052"
-FT                   /db_xref="InterPro:IPR006053"
 FT                   /db_xref="InterPro:IPR008983"
 FT                   /db_xref="PDB:1TNR"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P01374"
@@ -7016,8 +6951,8 @@ FT                   /number=4
 FT   STS             complement(385221..385374)
 FT                   /note="SHGC-12019;The location is between each flanking
 FT                   site of PCR primers."
-FT   CDS             join(complement(396264..396320),complement(395576..395852),
-FT                   complement(386174..386395),complement(385413..386002))
+FT   CDS             complement(join(385413..386002,386174..386395,
+FT                   395576..395852,396264..396320))
 FT                   /codon_start=1
 FT                   /transl_table=1
 FT                   /gene="NFKBIL1"
@@ -7081,15 +7016,7 @@ FT                   /gene="BAT1"
 FT                   /product="putative ATP-dependent RNA helicase"
 FT                   /db_xref="GOA:Q13838"
 FT                   /db_xref="HGNC:13917"
-FT                   /db_xref="InterPro:IPR001650"
-FT                   /db_xref="InterPro:IPR011545"
-FT                   /db_xref="InterPro:IPR014001"
-FT                   /db_xref="InterPro:IPR014014"
 FT                   /db_xref="InterPro:IPR014021"
-FT                   /db_xref="PDB:1T5I"
-FT                   /db_xref="PDB:1T6N"
-FT                   /db_xref="PDB:1XTI"
-FT                   /db_xref="PDB:1XTJ"
 FT                   /db_xref="PDB:1XTK"
 FT                   /db_xref="UniProtKB/Swiss-Prot:Q13838"
 FT                   /protein_id="BAB63306.1"
@@ -7141,9 +7068,9 @@ FT                   sequences."
 FT   exon            432881..434218
 FT                   /gene="MICB"
 FT                   /number=6
-FT   CDS             join(complement(445736..445805),complement(438129..438383),
-FT                   complement(437570..437857),complement(436700..436978),
-FT                   complement(436469..436600),complement(434091..434218))
+FT   CDS             complement(join(434091..434218,436469..436600,
+FT                   436700..436978,437570..437857,438129..438383,
+FT                   445736..445805))
 FT                   /codon_start=1
 FT                   /transl_table=1
 FT                   /gene="MICB"
@@ -7151,12 +7078,11 @@ FT                   /product="Stress inducible class I homolog"
 FT                   /function="gamma delta-TCR and NKG2D ligand"
 FT                   /note="alternative name: PERB11.2"
 FT                   /db_xref="GDB:341912"
-FT                   /db_xref="GOA:P79525"
+FT                   /db_xref="GOA:Q29980"
 FT                   /db_xref="HGNC:7091"
-FT                   /db_xref="InterPro:IPR001039"
-FT                   /db_xref="InterPro:IPR003597"
-FT                   /db_xref="InterPro:IPR007110"
-FT                   /db_xref="UniProtKB/TrEMBL:P79525"
+FT                   /db_xref="InterPro:IPR013783"
+FT                   /db_xref="PDB:1JE6"
+FT                   /db_xref="UniProtKB/Swiss-Prot:Q29980"
 FT                   /protein_id="BAB63307.1"
 FT                   /translation="MGLGRVLLFLAVAFPFAPPAAAAEPHSLRYNLMVLSQDGSVQSGF
 FT                   LAEGHLDGQPFLRYDRQKRRAKPQGQWAEDVLGAETWDTETEDLTENGQDLRRTLTHIK
@@ -7199,7 +7125,7 @@ FT   misc_feature    complement(478169..480801)
 FT                   /gene="Hs.1845"
 FT                   /note="match Hs.1845 (L06175) with account of intervene
 FT                   sequences."
-FT   misc_RNA        join(complement(480701..480789),complement(478173..480609))
+FT   misc_RNA        complement(join(478173..480609,480701..480789))
 FT                   /gene="P5-1"
 FT                   /note="Uncharacterized class I transcript"
 FT                   /note="gene candidate"
@@ -7223,9 +7149,8 @@ FT                   /number=1
 FT   exon            531684..531819
 FT                   /gene="MICA"
 FT                   /number=5
-FT   CDS             join(complement(540442..540511),complement(533347..533601),
-FT                   complement(532785..533072),complement(531919..532197),
-FT                   complement(531713..531819))
+FT   CDS             complement(join(531713..531819,531919..532197,
+FT                   532785..533072,533347..533601,540442..540511))
 FT                   /codon_start=1
 FT                   /transl_table=1
 FT                   /gene="MICA"
@@ -7234,9 +7159,8 @@ FT                   /function="gamma delta-TCR and NKG2D ligand"
 FT                   /note="alternative name: PERB11.1"
 FT                   /db_xref="GOA:Q96QC4"
 FT                   /db_xref="HGNC:7090"
-FT                   /db_xref="InterPro:IPR001039"
-FT                   /db_xref="InterPro:IPR003597"
-FT                   /db_xref="InterPro:IPR007110"
+FT                   /db_xref="HSSP:1B3J"
+FT                   /db_xref="InterPro:IPR013783"
 FT                   /db_xref="UniProtKB/TrEMBL:Q96QC4"
 FT                   /protein_id="BAB63308.1"
 FT                   /translation="MGLGPVFLLLAGIFPFAPPGAAAEPHSLRYNLTVLSWDGSVQSGF
@@ -7326,20 +7250,8 @@ FT                   /note="Classical HLA Class I gene"
 FT                   /db_xref="GDB:120048"
 FT                   /db_xref="GOA:P30460"
 FT                   /db_xref="HGNC:4932"
-FT                   /db_xref="HGNC:7090"
-FT                   /db_xref="InterPro:IPR001039"
-FT                   /db_xref="InterPro:IPR003006"
-FT                   /db_xref="InterPro:IPR003597"
-FT                   /db_xref="InterPro:IPR007110"
-FT                   /db_xref="InterPro:IPR010579"
 FT                   /db_xref="InterPro:IPR013783"
-FT                   /db_xref="PDB:1AGB"
-FT                   /db_xref="PDB:1AGC"
-FT                   /db_xref="PDB:1AGD"
-FT                   /db_xref="PDB:1AGE"
-FT                   /db_xref="PDB:1AGF"
-FT                   /db_xref="PDB:1M05"
-FT                   /db_xref="PDB:1MI5"
+FT                   /db_xref="PDB:3FFC"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P30460"
 FT                   /protein_id="BAB63309.1"
 FT                   /translation="MLVMAPRTVLLLLSAALALTETWAGSHSMRYFDTAMSRPGRGEPR
@@ -7433,11 +7345,7 @@ FT                   /gene="HLA-C"
 FT                   /note="Classical HLA Class I gene"
 FT                   /db_xref="GOA:O19617"
 FT                   /db_xref="HGNC:4933"
-FT                   /db_xref="HSSP:P17693"
-FT                   /db_xref="InterPro:IPR001039"
-FT                   /db_xref="InterPro:IPR003597"
-FT                   /db_xref="InterPro:IPR007110"
-FT                   /db_xref="InterPro:IPR010579"
+FT                   /db_xref="HSSP:1M05"
 FT                   /db_xref="InterPro:IPR013783"
 FT                   /db_xref="UniProtKB/TrEMBL:O19617"
 FT                   /protein_id="BAB63310.1"
@@ -7517,13 +7425,8 @@ FT                   /note="alternative name: POU5F1"
 FT                   /db_xref="GDB:135499"
 FT                   /db_xref="GOA:Q01860"
 FT                   /db_xref="HGNC:9221"
-FT                   /db_xref="HGNC:9224"
-FT                   /db_xref="InterPro:IPR000327"
-FT                   /db_xref="InterPro:IPR001356"
-FT                   /db_xref="InterPro:IPR009057"
-FT                   /db_xref="InterPro:IPR010982"
-FT                   /db_xref="InterPro:IPR012287"
-FT                   /db_xref="InterPro:IPR013847"
+FT                   /db_xref="HSSP:1OCP"
+FT                   /db_xref="InterPro:IPR017970"
 FT                   /db_xref="UniProtKB/Swiss-Prot:Q01860"
 FT                   /protein_id="BAB63311.1"
 FT                   /translation="MHFYRLFLGATRRFLNPEWKGEIDNWCVYVLTSLLPFKIQSQDIK
@@ -7546,8 +7449,8 @@ FT                   /number=4
 FT   exon            778312..779619
 FT                   /gene="SC1"
 FT                   /number=3
-FT   CDS             join(complement(782354..782591),complement(780091..780649),
-FT                   complement(779379..779619))
+FT   CDS             complement(join(779379..779619,780091..780649,
+FT                   782354..782591))
 FT                   /codon_start=1
 FT                   /transl_table=1
 FT                   /gene="SC1"
@@ -7556,6 +7459,7 @@ FT                   progression"
 FT                   /note="alternative name: TCF19"
 FT                   /db_xref="GOA:Q9Y242"
 FT                   /db_xref="HGNC:11629"
+FT                   /db_xref="InterPro:IPR001965"
 FT                   /db_xref="UniProtKB/Swiss-Prot:Q9Y242"
 FT                   /protein_id="BAB63312.1"
 FT                   /translation="MLPCFQLLRIGGGRGGDLYTFHPPAGAGCTYRLGHRADLCDVALR
@@ -7587,6 +7491,7 @@ FT                   /product="Tricohyalin homologue"
 FT                   /note="alternative name: PG8"
 FT                   /db_xref="GOA:Q8TD31"
 FT                   /db_xref="HGNC:13930"
+FT                   /db_xref="InterPro:IPR009800"
 FT                   /db_xref="UniProtKB/Swiss-Prot:Q8TD31"
 FT                   /protein_id="BAB63313.1"
 FT                   /translation="MAPTWLSDIPLVQPPGHQDVSERRLDTQRPQVTMWERDVSSDRQE
@@ -7654,7 +7559,7 @@ FT                   of PCR primers."
 FT   exon            802016..802435
 FT                   /gene="SEEK1"
 FT                   /number=6
-FT   CDS             join(complement(803297..803319),complement(802144..802435))
+FT   CDS             complement(join(802144..802435,803297..803319))
 FT                   /codon_start=1
 FT                   /transl_table=1
 FT                   /gene="SEEK1"
@@ -7736,13 +7641,11 @@ FT                   of PCR primers."
 FT   exon            1027992..1028283
 FT                   /gene="TFIIH"
 FT                   /number=14
-FT   CDS             join(complement(1032921..1033057),
-FT                   complement(1032555..1032659),complement(1032031..1032162),
-FT                   complement(1031333..1031429),complement(1031153..1031241),
-FT                   complement(1030825..1030936),complement(1030595..1030663),
-FT                   complement(1030327..1030410),complement(1029948..1030080),
-FT                   complement(1029636..1029766),complement(1028937..1028984),
-FT                   complement(1028707..1028785),complement(1028111..1028283))
+FT   CDS             complement(join(1028111..1028283,1028707..1028785,
+FT                   1028937..1028984,1029636..1029766,1029948..1030080,
+FT                   1030327..1030410,1030595..1030663,1030825..1030936,
+FT                   1031153..1031241,1031333..1031429,1032031..1032162,
+FT                   1032555..1032659,1032921..1033057))
 FT                   /codon_start=1
 FT                   /transl_table=1
 FT                   /gene="TFIIH"
@@ -7815,15 +7718,12 @@ FT   STS             complement(1042478..1042739)
 FT                   /standard_name="D6S1851"
 FT                   /note="SHGC-10808;The location is between each flanking
 FT                   site of PCR primers."
-FT   CDS             join(complement(1053277..1053361),
-FT                   complement(1053081..1053183),complement(1052661..1052889),
-FT                   complement(1050971..1051118),complement(1050613..1050711),
-FT                   complement(1049901..1050088),complement(1049547..1049793),
-FT                   complement(1048926..1049021),complement(1048666..1048817),
-FT                   complement(1047418..1047583),complement(1046575..1046685),
-FT                   complement(1045224..1045468),complement(1044948..1045075),
-FT                   complement(1044492..1044710),complement(1043782..1044016),
-FT                   complement(1043052..1043201),complement(1042793..1042933))
+FT   CDS             complement(join(1042793..1042933,1043052..1043201,
+FT                   1043782..1044016,1044492..1044710,1044948..1045075,
+FT                   1045224..1045468,1046575..1046685,1047418..1047583,
+FT                   1048666..1048817,1048926..1049021,1049547..1049793,
+FT                   1049901..1050088,1050613..1050711,1050971..1051118,
+FT                   1052661..1052889,1053081..1053183,1053277..1053361))
 FT                   /codon_start=1
 FT                   /transl_table=1
 FT                   /gene="DDR"
@@ -7831,13 +7731,8 @@ FT                   /product="Receptor tyrosine kinase"
 FT                   /db_xref="GDB:438201"
 FT                   /db_xref="GOA:Q08345"
 FT                   /db_xref="HGNC:2730"
-FT                   /db_xref="InterPro:IPR000421"
-FT                   /db_xref="InterPro:IPR000719"
-FT                   /db_xref="InterPro:IPR001245"
-FT                   /db_xref="InterPro:IPR002011"
-FT                   /db_xref="InterPro:IPR008266"
-FT                   /db_xref="InterPro:IPR008979"
-FT                   /db_xref="InterPro:IPR011009"
+FT                   /db_xref="HSSP:1LUF"
+FT                   /db_xref="InterPro:IPR017441"
 FT                   /db_xref="UniProtKB/Swiss-Prot:Q08345"
 FT                   /protein_id="BAB63318.1"
 FT                   /translation="MGPEALSSLLLLLLVASGDADMKGHFDPAKCRYALGMQDRTIPDS
@@ -7948,7 +7843,6 @@ FT                   /db_xref="GDB:9955693"
 FT                   /db_xref="GOA:O75955"
 FT                   /db_xref="HGNC:3757"
 FT                   /db_xref="InterPro:IPR001107"
-FT                   /db_xref="InterPro:IPR004851"
 FT                   /db_xref="UniProtKB/Swiss-Prot:O75955"
 FT                   /protein_id="BAB63320.1"
 FT                   /translation="MFFTCGPNEAMVVSGFCRSPPVMVAGGRVFVLPCIQQIQRISLNT
@@ -8009,9 +7903,8 @@ FT   STS             complement(1217711..1217835)
 FT                   /standard_name="D6S2041"
 FT                   /note="SHGC-10364;The location is between each flanking
 FT                   site of PCR primers."
-FT   CDS             join(complement(1221625..1221681),
-FT                   complement(1219543..1219651),complement(1219160..1219270),
-FT                   complement(1217791..1218848))
+FT   CDS             complement(join(1217791..1218848,1219160..1219270,
+FT                   1219543..1219651,1221625..1221681))
 FT                   /codon_start=1
 FT                   /transl_table=1
 FT                   /gene="TUBB"
@@ -8019,12 +7912,8 @@ FT                   /product="Beta-tubulin"
 FT                   /db_xref="GDB:119622"
 FT                   /db_xref="GOA:P07437"
 FT                   /db_xref="HGNC:20778"
-FT                   /db_xref="InterPro:IPR000158"
-FT                   /db_xref="InterPro:IPR000217"
-FT                   /db_xref="InterPro:IPR002453"
-FT                   /db_xref="InterPro:IPR003008"
-FT                   /db_xref="InterPro:IPR008280"
-FT                   /db_xref="InterPro:IPR013838"
+FT                   /db_xref="HSSP:1FFX"
+FT                   /db_xref="InterPro:IPR018316"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P07437"
 FT                   /protein_id="BAB63321.1"
 FT                   /translation="MREIVHIQAGQCGNQIGAKFWEVISDEHGIDPTGTYHGDSDLQLD
@@ -8066,8 +7955,7 @@ FT                   calphotin"
 FT                   /db_xref="GDB:11516095"
 FT                   /db_xref="GOA:Q14676"
 FT                   /db_xref="HGNC:21163"
-FT                   /db_xref="PDB:2ADO"
-FT                   /db_xref="PDB:2AZM"
+FT                   /db_xref="InterPro:IPR001357"
 FT                   /db_xref="PDB:2ETX"
 FT                   /db_xref="UniProtKB/Swiss-Prot:Q14676"
 FT                   /protein_id="BAB63322.1"
@@ -8184,11 +8072,6 @@ FT                   /product="RNA helicase"
 FT                   /db_xref="GDB:9955176"
 FT                   /db_xref="GOA:O60231"
 FT                   /db_xref="HGNC:2739"
-FT                   /db_xref="InterPro:IPR001650"
-FT                   /db_xref="InterPro:IPR002464"
-FT                   /db_xref="InterPro:IPR007502"
-FT                   /db_xref="InterPro:IPR011709"
-FT                   /db_xref="InterPro:IPR014001"
 FT                   /db_xref="InterPro:IPR014021"
 FT                   /db_xref="UniProtKB/Swiss-Prot:O60231"
 FT                   /protein_id="BAB63323.1"
@@ -8305,9 +8188,7 @@ FT                   /gene="FB19"
 FT                   /function="Interacts with PP1, binds ATP/GTP"
 FT                   /db_xref="GOA:Q96QC0"
 FT                   /db_xref="HGNC:9284"
-FT                   /db_xref="InterPro:IPR000571"
-FT                   /db_xref="InterPro:IPR003617"
-FT                   /db_xref="InterPro:IPR010990"
+FT                   /db_xref="InterPro:IPR017923"
 FT                   /db_xref="UniProtKB/Swiss-Prot:Q96QC0"
 FT                   /protein_id="BAB63324.1"
 FT                   /translation="MGSGPIDPKELLKGLDSFLNRDGEVKSVDGISKIFSLMKEARKMV
@@ -8390,27 +8271,23 @@ FT                   of PCR primers."
 FT   exon            1350883..1351661
 FT                   /gene="ABC50"
 FT                   /number=24
-FT   CDS             join(complement(1370625..1370697),
-FT                   complement(1364733..1364779),complement(1364275..1364370),
-FT                   complement(1363986..1364112),complement(1363803..1363840),
-FT                   complement(1363611..1363718),complement(1362183..1362257),
-FT                   complement(1361670..1361783),complement(1359001..1359123),
-FT                   complement(1358481..1358581),complement(1358299..1358384),
-FT                   complement(1357858..1357997),complement(1357623..1357771),
-FT                   complement(1356846..1356929),complement(1356507..1356631),
-FT                   complement(1356198..1356310),complement(1355884..1356055),
-FT                   complement(1355641..1355715),complement(1355478..1355548),
-FT                   complement(1352476..1352508),complement(1352222..1352390),
-FT                   complement(1351983..1352047),complement(1351818..1351890),
-FT                   complement(1351495..1351661))
+FT   CDS             complement(join(1351495..1351661,1351818..1351890,
+FT                   1351983..1352047,1352222..1352390,1352476..1352508,
+FT                   1355478..1355548,1355641..1355715,1355884..1356055,
+FT                   1356198..1356310,1356507..1356631,1356846..1356929,
+FT                   1357623..1357771,1357858..1357997,1358299..1358384,
+FT                   1358481..1358581,1359001..1359123,1361670..1361783,
+FT                   1362183..1362257,1363611..1363718,1363803..1363840,
+FT                   1363986..1364112,1364275..1364370,1364733..1364779,
+FT                   1370625..1370697))
 FT                   /codon_start=1
 FT                   /transl_table=1
 FT                   /gene="ABC50"
 FT                   /product="TNFalpha-inducible ATP-binding protein"
 FT                   /db_xref="GOA:Q8NE71"
 FT                   /db_xref="HGNC:70"
-FT                   /db_xref="InterPro:IPR003439"
-FT                   /db_xref="InterPro:IPR003593"
+FT                   /db_xref="HSSP:1II8"
+FT                   /db_xref="InterPro:IPR017871"
 FT                   /db_xref="UniProtKB/Swiss-Prot:Q8NE71"
 FT                   /protein_id="BAB63325.1"
 FT                   /translation="MPKAPKQQPPEPEWIGDGESTSPSDKVVKKGKKDKKIKKTFFEEL
@@ -8506,9 +8383,8 @@ FT                   /number=1
 FT   exon            1378462..1379796
 FT                   /gene="CAT56"
 FT                   /number=4
-FT   CDS             join(complement(1384735..1384840),
-FT                   complement(1383973..1384035),complement(1380061..1380351),
-FT                   complement(1379690..1379796))
+FT   CDS             complement(join(1379690..1379796,1380061..1380351,
+FT                   1383973..1384035,1384735..1384840))
 FT                   /codon_start=1
 FT                   /transl_table=1
 FT                   /gene="CAT56"
@@ -8558,8 +8434,6 @@ FT                   /gene="HSR1"
 FT                   /product="GTP-binding protein"
 FT                   /db_xref="GOA:Q96QB8"
 FT                   /db_xref="HGNC:4413"
-FT                   /db_xref="HSSP:P38424"
-FT                   /db_xref="InterPro:IPR002917"
 FT                   /db_xref="InterPro:IPR005289"
 FT                   /db_xref="UniProtKB/TrEMBL:Q96QB8"
 FT                   /protein_id="BAB63327.1"
@@ -8617,10 +8491,9 @@ FT                   site of PCR primers."
 FT   exon            1449589..1449631
 FT                   /gene="HLA_E"
 FT                   /number=7
-FT   CDS             join(complement(1452577..1452640),
-FT                   complement(1452177..1452446),complement(1451657..1451932),
-FT                   complement(1450760..1451035),complement(1450519..1450635),
-FT                   complement(1449736..1449768),complement(1449591..1449631))
+FT   CDS             complement(join(1449591..1449631,1449736..1449768,
+FT                   1450519..1450635,1450760..1451035,1451657..1451932,
+FT                   1452177..1452446,1452577..1452640))
 FT                   /codon_start=1
 FT                   /transl_table=1
 FT                   /gene="HLA_E"
@@ -8628,15 +8501,8 @@ FT                   /note="Class Ib gene, CD94/NKG2 ligand"
 FT                   /db_xref="GDB:120050"
 FT                   /db_xref="GOA:P13747"
 FT                   /db_xref="HGNC:4962"
-FT                   /db_xref="InterPro:IPR001039"
-FT                   /db_xref="InterPro:IPR003006"
-FT                   /db_xref="InterPro:IPR003597"
-FT                   /db_xref="InterPro:IPR007110"
 FT                   /db_xref="InterPro:IPR013783"
-FT                   /db_xref="PDB:1KPR"
-FT                   /db_xref="PDB:1KTL"
-FT                   /db_xref="PDB:1MHE"
-FT                   /db_xref="PDB:2ESV"
+FT                   /db_xref="PDB:3CII"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P13747"
 FT                   /protein_id="BAB63328.1"
 FT                   /translation="MVDGTLLLLLSEALALTQTWAGSHSLKYFHTSVSRPGRGEPRFIS
@@ -8675,9 +8541,7 @@ FT                   /note="Ras-like"
 FT                   /db_xref="GDB:11516217"
 FT                   /db_xref="GOA:Q96QB7"
 FT                   /db_xref="HGNC:21631"
-FT                   /db_xref="HSSP:Q9CZA2"
-FT                   /db_xref="InterPro:IPR001806"
-FT                   /db_xref="InterPro:IPR002041"
+FT                   /db_xref="HSSP:1HUQ"
 FT                   /db_xref="InterPro:IPR013753"
 FT                   /db_xref="UniProtKB/TrEMBL:Q96QB7"
 FT                   /protein_id="BAB63329.1"
@@ -8692,9 +8556,8 @@ FT   exon            1485350..1485674
 FT                   /pseudo
 FT                   /gene="HCGII-3"
 FT                   /number=1
-FT   CDS             join(complement(1527223..1527478),
-FT                   complement(1526671..1526956),complement(1525799..1526069),
-FT                   complement(1525552..1525682),complement(1522856..1522983))
+FT   CDS             complement(join(1522856..1522983,1525552..1525682,
+FT                   1525799..1526069,1526671..1526956,1527223..1527478))
 FT                   /pseudo
 FT                   /gene="MICC"
 FT                   /note="MICA/B homologous"
@@ -8788,11 +8651,9 @@ FT                   of PCR primers."
 FT   STS             complement(1669595..1669724)
 FT                   /note="RH17965;The location is between each flanking site
 FT                   of PCR primers."
-FT   CDS             join(complement(1682473..1682545),
-FT                   complement(1682086..1682355),complement(1681563..1681836),
-FT                   complement(1680691..1680966),complement(1680467..1680583),
-FT                   complement(1679995..1680027),complement(1679828..1679875),
-FT                   complement(1679321..1679744))
+FT   CDS             complement(join(1679321..1679744,1679828..1679875,
+FT                   1679995..1680027,1680467..1680583,1680691..1680966,
+FT                   1681563..1681836,1682086..1682355,1682473..1682545))
 FT                   /pseudo
 FT                   /gene="HLA-92"
 FT                   /note="Class I full length"
@@ -8851,12 +8712,8 @@ FT                   /note="Widely expressed acid zinc finger"
 FT                   /db_xref="GDB:595487"
 FT                   /db_xref="GOA:Q12899"
 FT                   /db_xref="HGNC:12962"
-FT                   /db_xref="InterPro:IPR000315"
-FT                   /db_xref="InterPro:IPR001841"
-FT                   /db_xref="InterPro:IPR001870"
-FT                   /db_xref="InterPro:IPR003877"
-FT                   /db_xref="InterPro:IPR003879"
-FT                   /db_xref="InterPro:IPR006574"
+FT                   /db_xref="HSSP:1FRE"
+FT                   /db_xref="InterPro:IPR018957"
 FT                   /db_xref="UniProtKB/Swiss-Prot:Q12899"
 FT                   /protein_id="BAB63330.1"
 FT                   /translation="MATSAPLRSLEEEVTCSICLDYLRDPVTIDCGHVFCRSCTTDVRP
@@ -8904,22 +8761,16 @@ FT                   of PCR primers."
 FT   exon            1769446..1770308
 FT                   /gene="ZNFB7"
 FT                   /number=7
-FT   CDS             join(complement(1778075..1778455),
-FT                   complement(1774869..1774964),complement(1773610..1773840),
-FT                   complement(1772877..1772899),complement(1771524..1771639),
-FT                   complement(1771132..1771164),complement(1769791..1770308))
+FT   CDS             complement(join(1769791..1770308,1771132..1771164,
+FT                   1771524..1771639,1772877..1772899,1773610..1773840,
+FT                   1774869..1774964,1778075..1778455))
 FT                   /codon_start=1
 FT                   /transl_table=1
 FT                   /gene="ZNFB7"
 FT                   /note="Zn-finger"
 FT                   /db_xref="GOA:Q9C019"
 FT                   /db_xref="HGNC:16284"
-FT                   /db_xref="InterPro:IPR000315"
-FT                   /db_xref="InterPro:IPR001841"
-FT                   /db_xref="InterPro:IPR001870"
-FT                   /db_xref="InterPro:IPR003877"
-FT                   /db_xref="InterPro:IPR003879"
-FT                   /db_xref="InterPro:IPR006574"
+FT                   /db_xref="InterPro:IPR018957"
 FT                   /db_xref="UniProtKB/Swiss-Prot:Q9C019"
 FT                   /protein_id="BAB63331.1"
 FT                   /translation="MPATPSLKVVHELPACTLCAGPLEDAVTIPCGHTFCRLCLPALSQ
@@ -8960,12 +8811,7 @@ FT                   proteins"
 FT                   /db_xref="GDB:9955230"
 FT                   /db_xref="GOA:Q9UDY6"
 FT                   /db_xref="HGNC:10072"
-FT                   /db_xref="InterPro:IPR000315"
-FT                   /db_xref="InterPro:IPR001841"
-FT                   /db_xref="InterPro:IPR001870"
-FT                   /db_xref="InterPro:IPR003877"
-FT                   /db_xref="InterPro:IPR003879"
-FT                   /db_xref="InterPro:IPR006574"
+FT                   /db_xref="InterPro:IPR018957"
 FT                   /db_xref="UniProtKB/Swiss-Prot:Q9UDY6"
 FT                   /protein_id="BAB63332.1"
 FT                   /translation="MASAASVTSLADEVNCPICQGTLREPVTIDCGHNFCRACLTRYCE
@@ -9027,12 +8873,8 @@ FT                   /gene="HCGV"
 FT                   /note="Testis expressed gene"
 FT                   /db_xref="GOA:Q96QB5"
 FT                   /db_xref="HGNC:18064"
-FT                   /db_xref="HSSP:Q99728"
-FT                   /db_xref="InterPro:IPR001841"
-FT                   /db_xref="InterPro:IPR001870"
-FT                   /db_xref="InterPro:IPR003877"
-FT                   /db_xref="InterPro:IPR003879"
-FT                   /db_xref="InterPro:IPR006574"
+FT                   /db_xref="HSSP:1JM7"
+FT                   /db_xref="InterPro:IPR018957"
 FT                   /db_xref="UniProtKB/TrEMBL:Q96QB5"
 FT                   /protein_id="BAB63333.1"
 FT                   /translation="MWWRDLTRLRLWLKREAIPGEGRKAAKVNAGVGEKGIYTASSRGG
@@ -9043,8 +8885,8 @@ FT                   LHRLTADLTLDPGTAHRRLLISADRRSVQLAPPGTPAPPDGPKRFDQLPAVLGAQGFGA
 FT                   GRHCWEVETADAASCRDSSGEDADDEESHYAVGAAGESVQRKGCVRLCPAGAVWAVEGR
 FT                   GGRLWALTAPEPTLLGGVEPPPRRIRVDLDWERGRVAFYDGRSLDLLYAFQAPGPLGER
 FT                   IFPLFCTCDPRAPLRIVPAES"
-FT   mRNA            join(complement(1870134..1870308),
-FT                   complement(1868458..1869003),complement(1868164..1868249))
+FT   mRNA            complement(join(1868164..1868249,1868458..1869003,
+FT                   1870134..1870308))
 FT                   /gene="HZFC2"
 FT                   /note="Testis expressed gene, Partial coding region"
 FT   exon            1868164..1868249
@@ -9074,8 +8916,8 @@ FT                   /number=3
 FT   STS             1871930..1872069
 FT                   /note="SHGC-16573;The location is between each flanking
 FT                   site of PCR primers."
-FT   CDS             join(complement(1874688..1874756),
-FT                   complement(1873469..1873577),complement(1872861..1873063))
+FT   CDS             complement(join(1872861..1873063,1873469..1873577,
+FT                   1874688..1874756))
 FT                   /codon_start=1
 FT                   /transl_table=1
 FT                   /gene="HCGV"
@@ -9095,9 +8937,8 @@ FT                   /number=2
 FT   exon            1874688..1874955
 FT                   /gene="HCGV"
 FT                   /number=1
-FT   mRNA            join(complement(1880493..1880815),
-FT                   complement(1880145..1880245),complement(1879829..1879938),
-FT                   complement(1877258..1877494))
+FT   mRNA            complement(join(1877258..1877494,1879829..1879938,
+FT                   1880145..1880245,1880493..1880815))
 FT                   /gene="HTEX6"
 FT                   /note="Testis expressed gene"
 FT   exon            1877258..1877494
@@ -9132,8 +8973,7 @@ FT                   each flanking site of PCR primers."
 FT   exon            1906218..1906771
 FT                   /gene="HTEX4"
 FT                   /number=4
-FT   mRNA            join(complement(1910059..1910182),
-FT                   complement(1908323..1909752))
+FT   mRNA            complement(join(1908323..1909752,1910059..1910182))
 FT                   /gene="HCGVII"
 FT                   /note="Homologue of yeast omnipotent supressor45"
 FT   exon            1908323..1909752
@@ -9148,11 +8988,9 @@ FT                   /number=1
 FT   mRNA            1929120..1930392
 FT                   /gene="HCGVIII-1"
 FT                   /note="Lymphoblastiod mRNA"
-FT   CDS             join(complement(1935886..1935957),
-FT                   complement(1935486..1935755),complement(1934962..1935237),
-FT                   complement(1934093..1934365),complement(1933854..1933970),
-FT                   complement(1933378..1933410),complement(1933188..1933235),
-FT                   complement(1932715..1933020))
+FT   CDS             complement(join(1932715..1933020,1933188..1933235,
+FT                   1933378..1933410,1933854..1933970,1934093..1934365,
+FT                   1934962..1935237,1935486..1935755,1935886..1935957))
 FT                   /pseudo
 FT                   /gene="HLA-59"
 FT                   /note="Class I full length"
@@ -9250,10 +9088,9 @@ FT   exon            1975141..1982230
 FT                   /pseudo
 FT                   /gene="HCGII-6"
 FT                   /number=1
-FT   CDS             join(complement(1985704..1985964),
-FT                   complement(1984847..1985122),complement(1984607..1984722),
-FT                   complement(1984189..1984221),complement(1983992..1984039),
-FT                   complement(1983622..1983836))
+FT   CDS             complement(join(1983622..1983836,1983992..1984039,
+FT                   1984189..1984221,1984607..1984722,1984847..1985122,
+FT                   1985704..1985964))
 FT                   /pseudo
 FT                   /gene="HLA-80"
 FT                   /note="Class I gene fragment"
@@ -9295,11 +9132,9 @@ FT                   /number=1
 FT   exon            1996801..1997105
 FT                   /gene="HLA-A"
 FT                   /number=8
-FT   CDS             join(complement(1999930..2000002),
-FT                   complement(1999530..1999799),complement(1999013..1999288),
-FT                   complement(1998159..1998434),complement(1997940..1998056),
-FT                   complement(1997465..1997497),complement(1997275..1997322),
-FT                   complement(1997101..1997105))
+FT   CDS             complement(join(1997101..1997105,1997275..1997322,
+FT                   1997465..1997497,1997940..1998056,1998159..1998434,
+FT                   1999013..1999288,1999530..1999799,1999930..2000002))
 FT                   /codon_start=1
 FT                   /transl_table=1
 FT                   /gene="HLA-A"
@@ -9307,11 +9142,7 @@ FT                   /note="Classical HLA Class I gene"
 FT                   /db_xref="GDB:119310"
 FT                   /db_xref="GOA:P04439"
 FT                   /db_xref="HGNC:4931"
-FT                   /db_xref="InterPro:IPR001039"
-FT                   /db_xref="InterPro:IPR003006"
-FT                   /db_xref="InterPro:IPR003597"
-FT                   /db_xref="InterPro:IPR007110"
-FT                   /db_xref="InterPro:IPR010579"
+FT                   /db_xref="HSSP:1HSB"
 FT                   /db_xref="InterPro:IPR013783"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P04439"
 FT                   /protein_id="BAB63400.1"
@@ -9374,11 +9205,9 @@ FT   exon            2008309..2008494
 FT                   /pseudo
 FT                   /gene="HLA-21"
 FT                   /number=1
-FT   CDS             join(complement(2016066..2016137),
-FT                   complement(2015667..2015936),complement(2015144..2015418),
-FT                   complement(2014268..2014543),complement(2014023..2014139),
-FT                   complement(2013551..2013577),complement(2013363..2013410),
-FT                   complement(2012886..2013194))
+FT   CDS             complement(join(2012886..2013194,2013363..2013410,
+FT                   2013551..2013577,2014023..2014139,2014268..2014543,
+FT                   2015144..2015418,2015667..2015936,2016066..2016137))
 FT                   /pseudo
 FT                   /gene="HLA-70"
 FT                   /note="Class I gene fragment"
@@ -9447,9 +9276,8 @@ FT                   /note="Expressed in duodenal mucosa"
 FT   STS             complement(2044330..2044652)
 FT                   /note="985L;The location is between each flanking site of
 FT                   PCR primers."
-FT   CDS             join(complement(2045745..2046020),
-FT                   complement(2045503..2045620),complement(2045077..2045109),
-FT                   complement(2044881..2044928),complement(2044479..2044724))
+FT   CDS             complement(join(2044479..2044724,2044881..2044928,
+FT                   2045077..2045109,2045503..2045620,2045745..2046020))
 FT                   /pseudo
 FT                   /gene="HLA-16"
 FT                   /note="Class I gene fragment"
@@ -9481,11 +9309,9 @@ FT   misc_feature    complement(2049415..2056004)
 FT                   /gene="HLA-H"
 FT                   /note="match HLA-H (M31944) with account of intervene
 FT                   sequences."
-FT   CDS             join(complement(2054741..2054813),
-FT                   complement(2054347..2054616),complement(2053829..2054104),
-FT                   complement(2052969..2053243),complement(2052750..2052866),
-FT                   complement(2052277..2052309),complement(2052088..2052134),
-FT                   complement(2051621..2051920))
+FT   CDS             complement(join(2051621..2051920,2052088..2052134,
+FT                   2052277..2052309,2052750..2052866,2052969..2053243,
+FT                   2053829..2054104,2054347..2054616,2054741..2054813))
 FT                   /pseudo
 FT                   /gene="HLA-54"
 FT                   /note="Class I full length"
@@ -9583,10 +9409,9 @@ FT                   PCR primers."
 FT   exon            2110005..2110037
 FT                   /gene="HLA-G"
 FT                   /number=6
-FT   CDS             join(complement(2112498..2112570),
-FT                   complement(2112099..2112368),complement(2111597..2111872),
-FT                   complement(2110722..2110997),complement(2110483..2110599),
-FT                   complement(2110033..2110037))
+FT   CDS             complement(join(2110033..2110037,2110483..2110599,
+FT                   2110722..2110997,2111597..2111872,2112099..2112368,
+FT                   2112498..2112570))
 FT                   /codon_start=1
 FT                   /transl_table=1
 FT                   /gene="HLA-G"
@@ -9594,14 +9419,8 @@ FT                   /note="Class Ib gene, placental expression"
 FT                   /db_xref="GDB:125675"
 FT                   /db_xref="GOA:P17693"
 FT                   /db_xref="HGNC:4964"
-FT                   /db_xref="InterPro:IPR001039"
-FT                   /db_xref="InterPro:IPR003006"
-FT                   /db_xref="InterPro:IPR003597"
-FT                   /db_xref="InterPro:IPR007110"
 FT                   /db_xref="InterPro:IPR013783"
-FT                   /db_xref="PDB:1YDP"
-FT                   /db_xref="PDB:2D31"
-FT                   /db_xref="PDB:2DYP"
+FT                   /db_xref="PDB:3CII"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P17693"
 FT                   /protein_id="BAB63336.1"
 FT                   /translation="MVVMAPRTLFLLLSGALTLTETWAGSHSMRYFSAAVSRPGRGEPR
@@ -9676,10 +9495,9 @@ FT   exon            2136383..2137272
 FT                   /pseudo
 FT                   /gene="RPL7B"
 FT                   /number=1
-FT   CDS             join(complement(2139788..2139989),
-FT                   complement(2138868..2139143),complement(2138627..2138743),
-FT                   complement(2138182..2138214),complement(2137984..2138031),
-FT                   complement(2137615..2137817))
+FT   CDS             complement(join(2137615..2137817,2137984..2138031,
+FT                   2138182..2138214,2138627..2138743,2138868..2139143,
+FT                   2139788..2139989))
 FT                   /pseudo
 FT                   /gene="HLA-90"
 FT                   /note="Class I gene fragment"
@@ -9718,8 +9536,8 @@ FT   exon            2145969..2147083
 FT                   /pseudo
 FT                   /gene="P5-13"
 FT                   /number=1
-FT   CDS             join(complement(2147891..2147962),
-FT                   complement(2147511..2147759),complement(2147079..2147272))
+FT   CDS             complement(join(2147079..2147272,2147511..2147759,
+FT                   2147891..2147962))
 FT                   /pseudo
 FT                   /gene="HLA-75"
 FT                   /note="Class I gene fragment"
@@ -9804,11 +9622,9 @@ FT                   PCR primers."
 FT   exon            2213611..2213714
 FT                   /gene="HLA-F"
 FT                   /number=8
-FT   CDS             join(complement(2216590..2216653),
-FT                   complement(2216190..2216459),complement(2215669..2215944),
-FT                   complement(2214811..2215086),complement(2214554..2214670),
-FT                   complement(2214074..2214106),complement(2213891..2213938),
-FT                   complement(2213710..2213714))
+FT   CDS             complement(join(2213710..2213714,2213891..2213938,
+FT                   2214074..2214106,2214554..2214670,2214811..2215086,
+FT                   2215669..2215944,2216190..2216459,2216590..2216653))
 FT                   /codon_start=1
 FT                   /transl_table=1
 FT                   /gene="HLA-F"
@@ -9816,11 +9632,7 @@ FT                   /note="Class Ib gene"
 FT                   /db_xref="GDB:125714"
 FT                   /db_xref="GOA:P30511"
 FT                   /db_xref="HGNC:4963"
-FT                   /db_xref="InterPro:IPR001039"
-FT                   /db_xref="InterPro:IPR003006"
-FT                   /db_xref="InterPro:IPR003597"
-FT                   /db_xref="InterPro:IPR007110"
-FT                   /db_xref="InterPro:IPR010579"
+FT                   /db_xref="HSSP:1HSA"
 FT                   /db_xref="InterPro:IPR013783"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P30511"
 FT                   /protein_id="BAB63337.1"
@@ -47097,8 +46909,7 @@ DR   GDB; 11415852.
 DR   GDB; 11415884.
 DR   GDB; 696243.
 DR   GDB; 7576967.
-DR   RFAM; RF00019.
-DR   RFAM; RF00428.
+DR   RFAM; RF00428; SNORA38.
 XX
 CC   Sequencing Methodology: high redundancy shotgun using plasmid
 CC   templates.  Interspersed Repeats were identified with RepeatMasker
@@ -47131,19 +46942,15 @@ FT   repeat_region   complement(1774..1984)
 FT                   /rpt_family="LINE2"
 FT   repeat_region   complement(2054..2346)
 FT                   /rpt_family="AluSx"
-FT   mRNA            join(complement(9848..10040),complement(9455..9614),
-FT                   complement(8782..8905),complement(7116..7196),
-FT                   complement(6903..6965),complement(6048..6169),
-FT                   complement(5774..5883),complement(5492..5527),
-FT                   complement(4757..4839),complement(<2638..2683))
+FT   mRNA            complement(join(<2638..2683,4757..4839,5492..5527,
+FT                   5774..5883,6048..6169,6903..6965,7116..7196,8782..8905,
+FT                   9455..9614,9848..10040))
 FT                   /product="MSH5"
 FT                   /note="Intron-exon boundaries defined in relation to
 FT                   AF048096."
-FT   CDS             join(complement(9455..9601),complement(8782..8905),
-FT                   complement(7116..7196),complement(6903..6965),
-FT                   complement(6048..6169),complement(5774..5883),
-FT                   complement(5492..5527),complement(4757..4839),
-FT                   complement(<2638..2683))
+FT   CDS             complement(join(<2638..2683,4757..4839,5492..5527,
+FT                   5774..5883,6048..6169,6903..6965,7116..7196,8782..8905,
+FT                   9455..9601))
 FT                   /codon_start=1
 FT                   /product="MSH5"
 FT                   /note="mismatch repair; Intron-exon boundaries defined in
@@ -47152,6 +46959,8 @@ FT                   cerevisiae MSH5 gene"
 FT                   /db_xref="GDB:9835141"
 FT                   /db_xref="GOA:O43196"
 FT                   /db_xref="HGNC:7328"
+FT                   /db_xref="HSSP:1EWR"
+FT                   /db_xref="InterPro:IPR007861"
 FT                   /db_xref="UniProtKB/Swiss-Prot:O43196"
 FT                   /protein_id="AAD18072.1"
 FT                   /translation="MASLGANPRRTPQGPRPGAASSGFPSPAPVPGPREAEEEEVEEEE
@@ -47214,13 +47023,7 @@ FT                   is also known as NCC27 and G6"
 FT                   /db_xref="GDB:6278990"
 FT                   /db_xref="GOA:O00299"
 FT                   /db_xref="HGNC:2062"
-FT                   /db_xref="InterPro:IPR002946"
-FT                   /db_xref="InterPro:IPR010987"
-FT                   /db_xref="InterPro:IPR012335"
-FT                   /db_xref="InterPro:IPR012336"
-FT                   /db_xref="PDB:1K0M"
-FT                   /db_xref="PDB:1K0N"
-FT                   /db_xref="PDB:1K0O"
+FT                   /db_xref="InterPro:IPR017933"
 FT                   /db_xref="PDB:1RK4"
 FT                   /db_xref="UniProtKB/Swiss-Prot:O00299"
 FT                   /protein_id="AAD18073.1"
@@ -47272,13 +47075,11 @@ FT                   LRPGLPGVPPFLLHRGGGDLPNSQEALQKLSDVTLVPVSCSELEKAGAGLSSLCLVLST
 FT                   RPHS"
 FT   repeat_region   24446..24741
 FT                   /rpt_family="AluY"
-FT   mRNA            join(complement(26628..>26688),complement(26086..26433),
-FT                   complement(25840..25930),complement(25445..25485),
-FT                   complement(25228..25307),complement(<24998..25102))
+FT   mRNA            complement(join(<24998..25102,25228..25307,25445..25485,
+FT                   25840..25930,26086..26433,26628..>26688))
 FT                   /product="G6b"
-FT   CDS             join(complement(26628..26688),complement(26086..26433),
-FT                   complement(25840..25930),complement(25445..25485),
-FT                   complement(25228..25307),complement(24998..25102))
+FT   CDS             complement(join(24998..25102,25228..25307,25445..25485,
+FT                   25840..25930,26086..26433,26628..26688))
 FT                   /codon_start=1
 FT                   /product="G6b"
 FT                   /note="unknown; This gene is predicted by Genscan. There
@@ -47312,7 +47113,9 @@ FT                   relation to ESTs H03135 and AA930440. The closest
 FT                   similarity found with BLAST X is to rat Ly-6 (lymphocyte
 FT                   differentiation) antigen. This gene is also known as NG24"
 FT                   /db_xref="GDB:11504821"
+FT                   /db_xref="GOA:O95867"
 FT                   /db_xref="HGNC:13936"
+FT                   /db_xref="InterPro:IPR018363"
 FT                   /db_xref="UniProtKB/Swiss-Prot:O95867"
 FT                   /protein_id="AAD18076.1"
 FT                   /translation="MKALMLLTLSVLLCWVSADIRCHSCYKVPVLGCVDRQSCRLEPGQ
@@ -47322,26 +47125,25 @@ FT   repeat_region   complement(30111..30197)
 FT                   /rpt_family="MIR"
 FT   repeat_region   30234..30532
 FT                   /rpt_family="AluSx"
-FT   mRNA            join(complement(34655..>34709),complement(34441..34563),
-FT                   complement(<32150..32488))
+FT   mRNA            complement(join(<32150..32488,34441..34563,34655..>34709))
 FT                   /product="G6d"
 FT                   /note="Intron-exon boundaries defined in part by EST
 FT                   AA535815 and AA794551."
-FT   mRNA            join(complement(34655..>34709),complement(34441..34563),
-FT                   complement(<32265..32609))
+FT   mRNA            complement(join(<32265..32609,34441..34563,34655..>34709))
 FT                   /product="G6d"
 FT                   /note="putative; contains alternative exon 3; based on
 FT                   AA535815"
-FT   CDS             join(complement(34655..34709),complement(34441..34563),
-FT                   complement(32265..32488))
+FT   CDS             complement(join(32265..32488,34441..34563,34655..34709))
 FT                   /codon_start=1
 FT                   /product="G6d"
 FT                   /note="Ly6 family member; This is the orthologue to NG25
 FT                   defined in mouse AF109905. Human EST AA535815 splices
 FT                   differently than mouse EST AA794551. No similarities to
 FT                   this gene are found using BLAST X"
+FT                   /db_xref="GOA:O95868"
 FT                   /db_xref="HGNC:13935"
-FT                   /db_xref="UniProtKB/TrEMBL:O95868"
+FT                   /db_xref="InterPro:IPR018363"
+FT                   /db_xref="UniProtKB/Swiss-Prot:O95868"
 FT                   /protein_id="AAD18077.1"
 FT                   /translation="MKPQFVGILLSSLLGAALGNRMRCYNCGGSPSSSCKEAVTTCGEG
 FT                   RPQPGLEQIKLPGNPPVTLIHQHPACVAAHHCNQVETESVGDVTYPAHRDCYLGDLCNS
@@ -47382,15 +47184,13 @@ FT   repeat_region   complement(38187..38239)
 FT                   /rpt_family="(CA)n"
 FT   repeat_region   complement(38967..39071)
 FT                   /rpt_family="(GA)n"
-FT   mRNA            join(complement(43110..43183),complement(42281..42610),
-FT                   complement(41934..42197),complement(39886..40041),
-FT                   complement(<39645..39715))
+FT   mRNA            complement(join(<39645..39715,39886..40041,41934..42197,
+FT                   42281..42610,43110..43183))
 FT                   /product="G6f"
 FT                   /note="This gene is predicted by Genscan. Only 1 EST
 FT                   (AA318501) matches part of the predicted CDS."
-FT   CDS             join(complement(43110..43161),complement(42281..42610),
-FT                   complement(41934..42197),complement(39886..40041),
-FT                   complement(39645..39715))
+FT   CDS             complement(join(39645..39715,39886..40041,41934..42197,
+FT                   42281..42610,43110..43161))
 FT                   /codon_start=1
 FT                   /product="G6f"
 FT                   /note="unknown; The closest similarity to this gene by
@@ -47398,11 +47198,10 @@ FT                   BLAST X is mouse immunoglobulin kappa chain. There is a
 FT                   mouse orthologue to this predicted gene that gives an
 FT                   in-frame translation, found in AF109905. This gene is also
 FT                   known as NG32"
+FT                   /db_xref="GOA:Q5SQ64"
 FT                   /db_xref="HGNC:13933"
-FT                   /db_xref="InterPro:IPR003599"
-FT                   /db_xref="InterPro:IPR007110"
 FT                   /db_xref="InterPro:IPR013783"
-FT                   /db_xref="UniProtKB/TrEMBL:O95869"
+FT                   /db_xref="UniProtKB/Swiss-Prot:Q5SQ64"
 FT                   /protein_id="AAD18078.1"
 FT                   /translation="MAVLFLLLFLCGTPQAADNMQAIYVALGEAVELPCPSPSTLHGDE
 FT                   HLSWFCSPAAGSFTTLVAQVQVGRPAPDPGKPGRESRLRLLGNYSLWLEGSKEEDAGRY
@@ -47547,8 +47346,10 @@ FT                   /note="unknown; There is a mouse orthologue to this
 FT                   predicted gene in AF109905. This gene is also known as
 FT                   NG33"
 FT                   /db_xref="GDB:11504810"
+FT                   /db_xref="GOA:Q5SRR4"
 FT                   /db_xref="HGNC:13932"
-FT                   /db_xref="UniProtKB/TrEMBL:O95871"
+FT                   /db_xref="InterPro:IPR018363"
+FT                   /db_xref="UniProtKB/Swiss-Prot:Q5SRR4"
 FT                   /protein_id="AAD18080.1"
 FT                   /translation="MQTFPVAGALDPAILDTSSPQALYTVLLIVLVMMSLVFGKFVPVN
 FT                   WEPPQPLPFPKYLRCYRCLLETKELGCLLGSDICLTPAGSSCITLHKKNSSGSDVMVSD
@@ -47589,42 +47390,39 @@ FT   repeat_region   complement(76798..77088)
 FT                   /rpt_family="AluSx"
 FT   repeat_region   77330..77624
 FT                   /rpt_family="AluSg"
-FT   mRNA            join(complement(78788..79693),complement(77785..78208))
+FT   mRNA            complement(join(77785..78208,78788..79693))
 FT                   /product="G5b"
 FT                   /note="This gene is identified in AJ245417"
-FT   CDS             join(complement(78788..78809),complement(77790..78208))
+FT   CDS             complement(join(77790..78208,78788..78809))
 FT                   /codon_start=1
 FT                   /product="G5b"
 FT                   /note="unknown"
 FT                   /db_xref="GDB:11504808"
+FT                   /db_xref="GOA:Q8NDX9"
 FT                   /db_xref="HGNC:13931"
-FT                   /db_xref="UniProtKB/TrEMBL:Q9UKT0"
+FT                   /db_xref="InterPro:IPR018363"
+FT                   /db_xref="UniProtKB/Swiss-Prot:Q8NDX9"
 FT                   /protein_id="AAF04397.1"
 FT                   /translation="MVITIYYDVKVRFIVRGCGQYISYRCQEKRNTYFAEYWYQAQCCQ
 FT                   YNYCNSWSSPQLQSSLPEPHDRPLALPLSDSQIQWFYQALNLSLPLPNFHAGTEPDGLD
 FT                   PMVTLSLNLGLSFAELRRMYLFLNSSGLLVLPQAGLLTPHPS"
 FT   repeat_region   complement(78389..78678)
 FT                   /rpt_family="AluJb"
-FT   mRNA            join(complement(83857..83980),complement(83162..83244),
-FT                   complement(82095..82197),complement(81418..81533),
-FT                   complement(80900..80975),complement(80564..80753),
-FT                   complement(80006..80236))
+FT   mRNA            complement(join(80006..80236,80564..80753,80900..80975,
+FT                   81418..81533,82095..82197,83162..83244,83857..83980))
 FT                   /product="casein kinase II beta subunit"
 FT                   /note="Intron-exon boundaries defined in relation to cDNA
 FT                   in X16312."
-FT   CDS             join(complement(83162..83233),complement(82095..82197),
-FT                   complement(81418..81533),complement(80900..80975),
-FT                   complement(80564..80753),complement(80146..80236))
+FT   CDS             complement(join(80146..80236,80564..80753,80900..80975,
+FT                   81418..81533,82095..82197,83162..83233))
 FT                   /codon_start=1
 FT                   /product="casein kinase II beta subunit"
 FT                   /note="CSK2B"
 FT                   /db_xref="GDB:125235"
 FT                   /db_xref="GOA:P67870"
 FT                   /db_xref="HGNC:2460"
-FT                   /db_xref="InterPro:IPR000704"
-FT                   /db_xref="PDB:1DS5"
-FT                   /db_xref="PDB:1JWH"
-FT                   /db_xref="PDB:1QF8"
+FT                   /db_xref="InterPro:IPR016150"
+FT                   /db_xref="PDB:3EED"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P67870"
 FT                   /protein_id="AAD18081.1"
 FT                   /translation="MSSSEEVSWISWFCGLRGNEFFCEVDEDYIQDKFNLTGLNEQVPH
@@ -47652,7 +47450,6 @@ FT                   translation is most similar by BLAST X to an ankyrin motif
 FT                   in C. elegans (Z46934). This gene is also known as G5."
 FT                   /db_xref="GOA:O95872"
 FT                   /db_xref="HGNC:13920"
-FT                   /db_xref="InterPro:IPR000467"
 FT                   /db_xref="InterPro:IPR002110"
 FT                   /db_xref="UniProtKB/Swiss-Prot:O95872"
 FT                   /protein_id="AAD18082.1"
@@ -47697,15 +47494,13 @@ FT                   RLEAGGASPKLRWDHVDSGGTRRPGVSPEGGLSVPGPGAPLEKPGRREKLLGWLRGEPG
 FT                   APSRYLGGPEECLQISTNLTLHLLELLASALLALCSRPLRAALDTLGLRGPLGLWLHGL
 FT                   LSFLAALHGLHAVLSLLTAHPLHFACLFGLLQALVLAVSLREPNGDEAATDWESEGLER
 FT                   EGEEQRGDPGKGL"
-FT   mRNA            join(complement(93995..94412),complement(93449..93603),
-FT                   complement(92777..92850),complement(92597..92695),
-FT                   complement(92352..92450),complement(<91986..92011))
+FT   mRNA            complement(join(<91986..92011,92352..92450,92597..92695,
+FT                   92777..92850,93449..93603,93995..94412))
 FT                   /product="Apo M"
 FT                   /note="Intron-exon boundaries defined in relation to cDNA
 FT                   in AF118393."
-FT   CDS             join(complement(93995..94108),complement(93449..93603),
-FT                   complement(92777..92850),complement(92597..92695),
-FT                   complement(92352..92450),complement(91986..92011))
+FT   CDS             complement(join(91986..92011,92352..92450,92597..92695,
+FT                   92777..92850,93449..93603,93995..94108))
 FT                   /codon_start=1
 FT                   /product="Apo M"
 FT                   /note="NG20; apolipoprotein; This gene was annotated as
@@ -47715,8 +47510,6 @@ FT                   is also known as NG20 and G3a, see AJ245434"
 FT                   /db_xref="GDB:11509994"
 FT                   /db_xref="GOA:O95445"
 FT                   /db_xref="HGNC:13916"
-FT                   /db_xref="InterPro:IPR011038"
-FT                   /db_xref="InterPro:IPR012674"
 FT                   /db_xref="UniProtKB/Swiss-Prot:O95445"
 FT                   /protein_id="AAD18084.1"
 FT                   /translation="MFHQIWAALLYFYGIILNSIYQCPEHSQLTTLGVDGKEFPEVHLG
@@ -47766,6 +47559,8 @@ FT                   /product="BAT3"
 FT                   /note="unknown; This gene is also known as G3"
 FT                   /db_xref="GOA:P46379"
 FT                   /db_xref="HGNC:13919"
+FT                   /db_xref="InterPro:IPR000626"
+FT                   /db_xref="PDB:1WX9"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P46379"
 FT                   /protein_id="AAD18085.1"
 FT                   /translation="MLKCPRIRSATHAGVVRSPGRQRWRLLGVLGSLPPRPAPARLALR
@@ -47816,46 +47611,38 @@ FT   repeat_region   complement(107670..107718)
 FT                   /rpt_family="(TGG)n"
 FT   repeat_region   complement(111164..111470)
 FT                   /rpt_family="AluSg"
-FT   mRNA            join(complement(129214..129252),complement(127171..127345),
-FT                   complement(126162..126339),complement(125711..125810),
-FT                   complement(125549..125621),complement(124757..124900),
-FT                   complement(124460..124611),complement(124200..124279),
-FT                   complement(123909..124051),complement(123209..123299),
-FT                   complement(122873..123089),complement(121832..122306),
-FT                   complement(120737..120927),complement(120226..120523),
-FT                   complement(119270..119480),complement(117079..118932),
-FT                   complement(116424..116692),complement(116082..116212),
-FT                   complement(115706..115835),complement(115514..115599),
-FT                   complement(115094..115318),complement(114799..114939),
-FT                   complement(114606..114677),complement(114322..114489),
-FT                   complement(114022..114104),complement(113652..113862),
-FT                   complement(113463..113561),complement(113126..113338),
-FT                   complement(112935..113029),complement(112747..112837),
-FT                   complement(112311..112625))
+FT   mRNA            complement(join(112311..112625,112747..112837,
+FT                   112935..113029,113126..113338,113463..113561,
+FT                   113652..113862,114022..114104,114322..114489,
+FT                   114606..114677,114799..114939,115094..115318,
+FT                   115514..115599,115706..115835,116082..116212,
+FT                   116424..116692,117079..118932,119270..119480,
+FT                   120226..120523,120737..120927,121832..122306,
+FT                   122873..123089,123209..123299,123909..124051,
+FT                   124200..124279,124460..124611,124757..124900,
+FT                   125549..125621,125711..125810,126162..126339,
+FT                   127171..127345,129214..129252))
 FT                   /product="BAT2"
 FT                   /note="Intron-exon boundaries defined in relation to cDNA
 FT                   in M33509."
-FT   CDS             join(complement(127171..127282),complement(126162..126339),
-FT                   complement(125711..125810),complement(125549..125621),
-FT                   complement(124757..124900),complement(124460..124611),
-FT                   complement(124200..124279),complement(123909..124051),
-FT                   complement(123209..123299),complement(122873..123089),
-FT                   complement(121832..122306),complement(120737..120927),
-FT                   complement(120226..120523),complement(119270..119480),
-FT                   complement(117079..118932),complement(116424..116692),
-FT                   complement(116082..116212),complement(115706..115835),
-FT                   complement(115514..115599),complement(115094..115318),
-FT                   complement(114799..114939),complement(114606..114677),
-FT                   complement(114322..114489),complement(114022..114104),
-FT                   complement(113652..113862),complement(113463..113561),
-FT                   complement(113126..113338),complement(112935..113029),
-FT                   complement(112747..112837),complement(112485..112625))
+FT   CDS             complement(join(112485..112625,112747..112837,
+FT                   112935..113029,113126..113338,113463..113561,
+FT                   113652..113862,114022..114104,114322..114489,
+FT                   114606..114677,114799..114939,115094..115318,
+FT                   115514..115599,115706..115835,116082..116212,
+FT                   116424..116692,117079..118932,119270..119480,
+FT                   120226..120523,120737..120927,121832..122306,
+FT                   122873..123089,123209..123299,123909..124051,
+FT                   124200..124279,124460..124611,124757..124900,
+FT                   125549..125621,125711..125810,126162..126339,
+FT                   127171..127282))
 FT                   /codon_start=1
 FT                   /product="BAT2"
 FT                   /note="unknown; This gene is also known as G2"
 FT                   /db_xref="GDB:6963325"
 FT                   /db_xref="GOA:P48634"
 FT                   /db_xref="HGNC:13918"
+FT                   /db_xref="InterPro:IPR009738"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P48634"
 FT                   /protein_id="AAD18086.1"
 FT                   /translation="MSDRSGPTAKGKDGKKYSSLNLFDTYKGKSLEIQKPAVAPRHGLQ
@@ -47958,15 +47745,15 @@ FT                   /rpt_family="MIR"
 FT   variation       132842
 FT                   /replace="a"
 FT                   /note="201G24: t; Y14768: a"
-FT   mRNA            join(complement(134711..134761),complement(134483..134544),
-FT                   complement(134329..134395),complement(133920..133961),
-FT                   complement(133559..133721),complement(133142..133249))
+FT   mRNA            complement(join(133142..133249,133559..133721,
+FT                   133920..133961,134329..134395,134483..134544,
+FT                   134711..134761))
 FT                   /product="AIF-1"
 FT                   /note="Intron-exon boundaries defined in relation to cDNA
 FT                   in U19713."
-FT   CDS             join(complement(134711..134735),complement(134483..134544),
-FT                   complement(134329..134395),complement(133920..133961),
-FT                   complement(133559..133721),complement(133165..133249))
+FT   CDS             complement(join(133165..133249,133559..133721,
+FT                   133920..133961,134329..134395,134483..134544,
+FT                   134711..134735))
 FT                   /codon_start=1
 FT                   /product="AIF-1"
 FT                   /note="anti-inflammatory factor; This gene is also known as
@@ -47974,6 +47761,7 @@ FT                   G1"
 FT                   /db_xref="GDB:6278877"
 FT                   /db_xref="GOA:P55008"
 FT                   /db_xref="HGNC:352"
+FT                   /db_xref="InterPro:IPR018249"
 FT                   /db_xref="PDB:2G2B"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P55008"
 FT                   /protein_id="AAD18087.1"
@@ -48220,9 +48008,6 @@ FT                   /codon_start=1
 FT                   /product="1C7"
 FT                   /db_xref="GOA:O14931"
 FT                   /db_xref="HGNC:19077"
-FT                   /db_xref="InterPro:IPR003599"
-FT                   /db_xref="InterPro:IPR007110"
-FT                   /db_xref="InterPro:IPR013106"
 FT                   /db_xref="InterPro:IPR013783"
 FT                   /db_xref="UniProtKB/Swiss-Prot:O14931"
 FT                   /protein_id="AAD18088.1"
@@ -48255,17 +48040,18 @@ FT                   /replace="cac"
 FT                   /note="201G24: cc; Y14768: cac"
 FT   repeat_region   complement(161159..161195)
 FT                   /rpt_family="AT_rich"
-FT   mRNA            join(complement(163238..163346),complement(162727..162845),
-FT                   complement(162312..162404),complement(161235..161548))
+FT   mRNA            complement(join(161235..161548,162312..162404,
+FT                   162727..162845,163238..163346))
 FT                   /product="LST-1"
 FT                   /note="Intron-exon boundaries defined in relation to cDNA
 FT                   in AF000424."
-FT   CDS             join(complement(162727..162729),complement(162312..162404),
-FT                   complement(161369..161548))
+FT   CDS             complement(join(161369..161548,162312..162404,
+FT                   162727..162729))
 FT                   /codon_start=1
 FT                   /product="LST-1"
 FT                   /db_xref="GOA:O00453"
 FT                   /db_xref="HGNC:14189"
+FT                   /db_xref="InterPro:IPR007775"
 FT                   /db_xref="UniProtKB/Swiss-Prot:O00453"
 FT                   /protein_id="AAD18090.1"
 FT                   /translation="MIYVSTGAWGWAGSCFWQWSFCPPACVGCIEEHLLSWSQAQGSSE
@@ -48327,10 +48113,7 @@ FT                   /note="LTB"
 FT                   /db_xref="GDB:683333"
 FT                   /db_xref="GOA:Q06643"
 FT                   /db_xref="HGNC:6711"
-FT                   /db_xref="InterPro:IPR002961"
-FT                   /db_xref="InterPro:IPR003636"
-FT                   /db_xref="InterPro:IPR006052"
-FT                   /db_xref="InterPro:IPR006053"
+FT                   /db_xref="HSSP:1TNR"
 FT                   /db_xref="InterPro:IPR008983"
 FT                   /db_xref="UniProtKB/Swiss-Prot:Q06643"
 FT                   /protein_id="AAD18089.1"
@@ -48345,31 +48128,22 @@ FT   repeat_region   complement(170465..170756)
 FT                   /rpt_family="AluJo"
 FT   repeat_region   complement(170919..171055)
 FT                   /rpt_family="FLAM_C"
-FT   mRNA            join(complement(174118..174455),complement(173466..173511),
-FT                   complement(173231..173278),complement(171719..172929))
+FT   mRNA            complement(join(171719..172929,173231..173278,
+FT                   173466..173511,174118..174455))
 FT                   /product="tumor necrosis factor"
 FT                   /note="Intron-exon boundaries defined in relation to cDNA
 FT                   in X01394."
 FT   repeat_region   171994..172068
 FT                   /rpt_family="(TAAA)n"
-FT   CDS             join(complement(174118..174303),complement(173466..173511),
-FT                   complement(173231..173278),complement(172508..172929))
+FT   CDS             complement(join(172508..172929,173231..173278,
+FT                   173466..173511,174118..174303))
 FT                   /codon_start=1
 FT                   /product="tumor necrosis factor"
 FT                   /note="TNF"
 FT                   /db_xref="GDB:120441"
 FT                   /db_xref="GOA:P01375"
 FT                   /db_xref="HGNC:11892"
-FT                   /db_xref="InterPro:IPR002959"
-FT                   /db_xref="InterPro:IPR003636"
-FT                   /db_xref="InterPro:IPR006052"
-FT                   /db_xref="InterPro:IPR006053"
 FT                   /db_xref="InterPro:IPR008983"
-FT                   /db_xref="PDB:1A8M"
-FT                   /db_xref="PDB:1TNF"
-FT                   /db_xref="PDB:2AZ5"
-FT                   /db_xref="PDB:2TUN"
-FT                   /db_xref="PDB:4TSV"
 FT                   /db_xref="PDB:5TSW"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P01375"
 FT                   /protein_id="AAD18091.1"
@@ -48384,25 +48158,21 @@ FT   repeat_region   complement(173870..173918)
 FT                   /rpt_family="LINE2"
 FT   repeat_region   complement(173924..174061)
 FT                   /rpt_family="(GA)n"
-FT   mRNA            join(complement(177599..177646),complement(177204..177311),
-FT                   complement(177012..177117),complement(175726..176764))
+FT   mRNA            complement(join(175726..176764,177012..177117,
+FT                   177204..177311,177599..177646))
 FT                   /product="lymphotoxin alpha"
 FT                   /note="Intron-exon boundaries defined in relation to cDNA
 FT                   in D00102."
 FT   repeat_region   175958..175981
 FT                   /rpt_family="AT_rich"
-FT   CDS             join(complement(177204..177302),complement(177012..177117),
-FT                   complement(176352..176764))
+FT   CDS             complement(join(176352..176764,177012..177117,
+FT                   177204..177302))
 FT                   /codon_start=1
 FT                   /product="lymphotoxin alpha"
 FT                   /note="LTA"
 FT                   /db_xref="GDB:120442"
 FT                   /db_xref="GOA:P01374"
 FT                   /db_xref="HGNC:6709"
-FT                   /db_xref="InterPro:IPR002960"
-FT                   /db_xref="InterPro:IPR003636"
-FT                   /db_xref="InterPro:IPR006052"
-FT                   /db_xref="InterPro:IPR006053"
 FT                   /db_xref="InterPro:IPR008983"
 FT                   /db_xref="PDB:1TNR"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P01374"
@@ -51594,11 +51364,11 @@ XX
 AC   AB000360;
 XX
 DT   27-OCT-1997 (Rel. 53, Created)
-DT   14-NOV-2006 (Rel. 89, Last updated, Version 3)
+DT   28-SEP-2008 (Rel. 97, Last updated, Version 5)
 XX
 DE   Homo sapiens PIGC gene, complete cds.
 XX
-KW   glycosylphosphatidylinositol-synthesis gene; PIGC.
+KW   .
 XX
 OS   Homo sapiens (human)
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
@@ -51607,12 +51377,11 @@ OC   Homo.
 XX
 RN   [1]
 RP   1-2582
-RA   Hong Y.;
+RA   Hong Y., Ohishi K., Inoue N., Endo Y., Fujita T., Takeda J., Kinoshita T.;
 RT   ;
 RL   Submitted (08-JAN-1997) to the EMBL/GenBank/DDBJ databases.
-RL   Yeongjin Hong, Research Institute for Microbial Diseases, Immunoregulation;
-RL   3-1 Yamada-oka, Suita, Osaka 565, Japan
-RL   (E-mail:kohishi@biken.osaka-u.ac.jp, Tel:81-6-879-8329, Fax:81-6-875-5233)
+RL   Contact:Yeongjin Hong Research Institute for Microbial Diseases,
+RL   Immunoregulation; 3-1 Yamada-oka, Suita, Osaka 565, Japan
 XX
 RN   [2]
 RX   DOI; 10.1006/geno.1997.4893.
@@ -51641,6 +51410,7 @@ FT                   gene"
 FT                   /db_xref="GDB:6045444"
 FT                   /db_xref="GOA:Q92535"
 FT                   /db_xref="HGNC:8960"
+FT                   /db_xref="InterPro:IPR009450"
 FT                   /db_xref="UniProtKB/Swiss-Prot:Q92535"
 FT                   /protein_id="BAA22866.1"
 FT                   /translation="MYAQPVTNTKEVKWQKVLYERQPFPDNYVDRRFLEELRKNIHARK
@@ -51709,7 +51479,7 @@ AC   U01317; J00093-J00094; J00096; J00158-J00175; J00177-J00179; K01239;
 AC   K01890; K02544; M18047; M19067; M24868; M24886;
 XX
 DT   19-MAR-1994 (Rel. 39, Created)
-DT   14-NOV-2006 (Rel. 89, Last updated, Version 34)
+DT   08-NOV-2008 (Rel. 97, Last updated, Version 36)
 XX
 DE   Human beta globin region on chromosome 11.
 XX
@@ -51725,6 +51495,7 @@ OC   Homo.
 XX
 RN   [1]
 RP   62409-62631, 63482-63610
+RX   DOI; 10.1073/pnas.71.6.2300.
 RX   PUBMED; 4135409.
 RA   Marotta C.A., Forget B.G., Weissman S.M., Verma I.M., McCaffrey R.P.,
 RA   Baltimore D.;
@@ -51733,6 +51504,7 @@ RL   Proc. Natl. Acad. Sci. U.S.A. 71(6):2300-2304(1974).
 XX
 RN   [2]
 RP   63602-63646
+RX   DOI; 10.1073/pnas.72.9.3614.
 RX   PUBMED; 1059150.
 RA   Forget B.G., Marotta C.A., Weissman S.M., Cohen-Solal M.;
 RT   "Nucleotide sequences of the 3'-terminal untranslated region of messenger
@@ -51805,6 +51577,7 @@ RL   J. Biol. Chem. 252(14):5040-5053(1977).
 XX
 RN   [11]
 RP   62137-62189
+RX   DOI; 10.1073/pnas.74.11.5145.
 RX   PUBMED; 270752.
 RA   Chang J.C., Temple G.F., Poon R., Neumann K.H., Kan Y.W.;
 RT   "The nucleotide sequences of the untranslated 5' regions of human alpha-
@@ -51876,6 +51649,7 @@ RL   CELLULAR AND MOLECULAR REGULATION OF HEMOGLOBIN SWITCHING:0-0;
 RL   Grune and Stratton, New York (1979)
 XX
 RN   [19]
+RX   DOI; 10.1073/pnas.76.6.2886.
 RX   PUBMED; 88735.
 RA   Chang J.C., Kan Y.W.;
 RT   "beta 0 thalassemia, a nonsense mutation in man";
@@ -51883,6 +51657,7 @@ RL   Proc. Natl. Acad. Sci. U.S.A. 76(6):2886-2889(1979).
 XX
 RN   [20]
 RP   19846-19965
+RX   DOI; 10.1073/pnas.76.11.5435.
 RX   PUBMED; 160554.
 RA   Proudfoot N.J., Baralle F.E.;
 RT   "Molecular cloning of human epsilon-globin gene";
@@ -52044,8 +51819,9 @@ RT   present in the 5' flanking region of the human epsilon-globin gene";
 RL   Nucleic Acids Res. 9(24):6709-6722(1981).
 XX
 RN   [40]
+RX   DOI; 10.1073/pnas.78.1.469.
 RX   PUBMED; 6165992.
-RA   Adams J.G. III, Steinberg M.H., Newman M.V., Morrison W.T., Benz E.J. Jr.,
+RA   Adams J.G.III., Steinberg M.H., Newman M.V., Morrison W.T., Benz E.J.Jr.,
 RA   Iyer R.;
 RT   "beta-Thalassemia present in cis to a new beta-chain structural variant, Hb
 RT   Vicksburg [beta 75 (E19)Leu leads to 0]";
@@ -52053,6 +51829,7 @@ RL   Proc. Natl. Acad. Sci. U.S.A. 78(1):469-473(1981).
 XX
 RN   [41]
 RP   61921-63824
+RX   DOI; 10.1073/pnas.78.4.2455.
 RX   PUBMED; 6264477.
 RA   Spritz R.A., Jagadeeswaran P., Choudary P.V., Biro P.A., Elder J.T.,
 RA   deRiel J.K., Manley J.L., Gefter M.L., Forget B.G., Weissman S.M.;
@@ -52061,6 +51838,7 @@ RT   globin gene";
 RL   Proc. Natl. Acad. Sci. U.S.A. 78(4):2455-2459(1981).
 XX
 RN   [42]
+RX   DOI; 10.1073/pnas.78.7.4218.
 RX   PUBMED; 6270663.
 RA   Baird M., Driscoll C., Schreiner H., Sciarratta G.V., Sansone G., Niazi G.,
 RA   Ramirez F., Bank A.;
@@ -52111,7 +51889,7 @@ XX
 RN   [48]
 RX   DOI; 10.1038/296627a0.
 RX   PUBMED; 6280057.
-RA   Orkin S.H., Kazazian H.H. Jr, Antonarakis S.E., Goff S.C., Boehm C.D.,
+RA   Orkin S.H., Kazazian H.H.Jr., Antonarakis S.E., Goff S.C., Boehm C.D.,
 RA   Sexton J.P., Waber P.G., Giardina P.J.;
 RT   "Linkage of beta-thalassaemia mutations and beta-globin gene polymorphisms
 RT   with DNA polymorphisms in human beta-globin gene cluster";
@@ -52255,6 +52033,7 @@ RL   Nucleic Acids Res. 11(22):7789-7794(1983).
 XX
 RN   [65]
 RP   50716-53976
+RX   DOI; 10.1073/pnas.80.16.5012.
 RX   PUBMED; 6308666.
 RA   Maeda N., Bliska J.B., Smithies O.;
 RT   "Recombination and balanced chromosome polymorphism suggested by DNA
@@ -52271,7 +52050,7 @@ RL   Biochem. Biophys. Res. Commun. 119(3):968-974(1984).
 XX
 RN   [67]
 RX   PUBMED; 6714226.
-RA   Kazazian H.H. Jr, Orkin S.H., Antonarakis S.E., Sexton J.P., Boehm C.D.,
+RA   Kazazian H.H.Jr., Orkin S.H., Antonarakis S.E., Sexton J.P., Boehm C.D.,
 RA   Goff S.C., Waber P.G.;
 RT   "Molecular characterization of seven beta-thalassemia mutations in Asian
 RT   Indians";
@@ -52301,7 +52080,7 @@ RL   J. Biol. Chem. 259(10):6045-6048(1984).
 XX
 RN   [71]
 RX   PUBMED; 6086605.
-RA   Orkin S.H., Antonarakis S.E., Kazazian H.H. Jr.;
+RA   Orkin S.H., Antonarakis S.E., Kazazian H.H.Jr.;
 RT   "Base substitution at position -88 in a beta-thalassemic globin gene.
 RT   Further evidence for the role of distal promoter element ACACCC";
 RL   J. Biol. Chem. 259(14):8679-8681(1984).
@@ -52326,11 +52105,12 @@ XX
 RN   [74]
 RX   DOI; 10.1093/nar/12.11.4469.
 RX   PUBMED; 6330670.
-RA   Stoeckert C.J. Jr, Collins F.S., Weissman S.M.;
+RA   Stoeckert C.J.Jr., Collins F.S., Weissman S.M.;
 RT   "Human fetal globin DNA sequences suggest novel conversion event";
 RL   Nucleic Acids Res. 12(11):4469-4479(1984).
 XX
 RN   [75]
+RX   DOI; 10.1073/pnas.81.23.7510.
 RX   PUBMED; 6095301.
 RA   Mager D.L., Henthorn P.S.;
 RT   "Identification of a retrovirus-like repetitive element in human DNA";
@@ -52401,6 +52181,7 @@ RT   beta-globin gene";
 RL   Nucleic Acids Res. 13(21):7813-7827(1985).
 XX
 RN   [84]
+RX   DOI; 10.1073/pnas.82.9.2885.
 RX   PUBMED; 3857622.
 RA   van Santen V.L., Spritz R.A.;
 RT   "mRNA precursor splicing in vivo: sequence requirements determined by
@@ -52408,9 +52189,10 @@ RT   deletion analysis of an intervening sequence";
 RL   Proc. Natl. Acad. Sci. U.S.A. 82(9):2885-2889(1985).
 XX
 RN   [85]
+RX   DOI; 10.1073/pnas.82.19.6384.
 RX   PUBMED; 3879975.
 RA   Tuan D., Solomon W., Li Q., London I.M.;
-RT   "The 'beta-like-globin' gene domain in human erythroid cells";
+RT   "The "beta-like-globin" gene domain in human erythroid cells";
 RL   Proc. Natl. Acad. Sci. U.S.A. 82(19):6384-6388(1985).
 XX
 RN   [86]
@@ -52461,6 +52243,7 @@ RT   "A silent deletion in the beta-globin gene cluster";
 RL   Nucleic Acids Res. 14(12):4743-4750(1986).
 XX
 RN   [92]
+RX   DOI; 10.1073/pnas.83.1.24.
 RX   PUBMED; 3455755.
 RA   Prchal J.T., Cashman D.P., Kan Y.W.;
 RT   "Hemoglobin Long Island is caused by a single mutation (adenine to
@@ -52493,12 +52276,13 @@ XX
 RN   [96]
 RP   55038-55052
 RX   PUBMED; 3403716.
-RA   Atweh G.F., Brickner H.E., Zhu X.X., Kazazian H.H. Jr., Forget B.G.;
+RA   Atweh G.F., Brickner H.E., Zhu X.X., Kazazian H.H.Jr., Forget B.G.;
 RT   "New amber mutation in a beta-thalassemic gene with nonmeasurable levels of
 RT   mutant messenger RNA in vivo";
 RL   J. Clin. Invest. 82(2):557-561(1988).
 XX
 RN   [97]
+RX   DOI; 10.1073/pnas.85.2.544.
 RX   PUBMED; 3267215.
 RA   Engelke D.R., Hoener P.A., Collins F.S.;
 RT   "Direct sequencing of enzymatically amplified human genomic DNA";
@@ -52533,6 +52317,7 @@ DR   EPD; EP11105; HS_HBD.
 DR   EPD; EP11107; HS_HBG2.
 DR   EPD; EP11110; HS_HBE1.
 DR   GDB; 187639.
+DR   RFAM; RF00621; CoTC_ribozyme.
 DR   TRANSFAC; R00522; HS$BG_03.
 DR   TRANSFAC; R00523; HS$BG_04.
 DR   TRANSFAC; R00524; HS$BG_05.
@@ -52829,13 +52614,16 @@ FT                   /db_xref="taxon:9606"
 FT   repeat_region   10597..10611
 FT                   /note="Alu flank repeat 5' copy"
 FT   repeat_region   10612..10924
-FT                   /note="Alu family repeat"
+FT                   /rpt_family="Alu"
+FT                   /rpt_type=DISPERSED
 FT   repeat_region   10925..10939
 FT                   /note="Alu flank repeat 3' copy"
-FT   repeat_unit     complement(16918..17218)
+FT   repeat_region   complement(16918..17218)
 FT                   /rpt_family="Alu"
-FT   repeat_unit     17940..18231
+FT                   /rpt_type=DISPERSED
+FT   repeat_region   17940..18231
 FT                   /rpt_family="Alu"
+FT                   /rpt_type=DISPERSED
 FT   gene            19289..21080
 FT                   /gene="HBE1"
 FT   precursor_RNA   19289..21080
@@ -52861,9 +52649,6 @@ FT                   /product="epsilon-globin"
 FT                   /db_xref="GDB:119299"
 FT                   /db_xref="GOA:P02100"
 FT                   /db_xref="HGNC:4830"
-FT                   /db_xref="InterPro:IPR000971"
-FT                   /db_xref="InterPro:IPR002337"
-FT                   /db_xref="InterPro:IPR009050"
 FT                   /db_xref="InterPro:IPR012292"
 FT                   /db_xref="PDB:1A9W"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P02100"
@@ -52889,7 +52674,9 @@ FT                   /note="sequenced on one strand only [76]"
 FT   repeat_region   32390..32406
 FT                   /note="Alu flank repeat 5' copy [31]"
 FT   repeat_region   32407..32711
-FT                   /note="Alu family repeat [31]"
+FT                   /rpt_family="Alu"
+FT                   /rpt_type=DISPERSED
+FT                   /note="[31]"
 FT   variation       32608
 FT                   /note="g in [29]; a in [31]"
 FT   repeat_region   32712..32728
@@ -52928,13 +52715,9 @@ FT                   /product="G-gamma globin"
 FT                   /db_xref="GDB:119300"
 FT                   /db_xref="GDB:119301"
 FT                   /db_xref="GOA:P69892"
-FT                   /db_xref="HGNC:4831"
 FT                   /db_xref="HGNC:4832"
-FT                   /db_xref="InterPro:IPR000971"
-FT                   /db_xref="InterPro:IPR001032"
-FT                   /db_xref="InterPro:IPR002337"
-FT                   /db_xref="InterPro:IPR009050"
 FT                   /db_xref="InterPro:IPR012292"
+FT                   /db_xref="PDB:1FDH"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P69892"
 FT                   /protein_id="AAA16331.1"
 FT                   /translation="MGHFTEEDKATITSLWGKVNVEDAGGETLGRLLVVYPWTQRFFDS
@@ -52981,13 +52764,7 @@ FT                   /db_xref="GDB:119300"
 FT                   /db_xref="GDB:119301"
 FT                   /db_xref="GOA:P69891"
 FT                   /db_xref="HGNC:4831"
-FT                   /db_xref="InterPro:IPR000971"
-FT                   /db_xref="InterPro:IPR001032"
-FT                   /db_xref="InterPro:IPR002337"
-FT                   /db_xref="InterPro:IPR009050"
 FT                   /db_xref="InterPro:IPR012292"
-FT                   /db_xref="PDB:1FDH"
-FT                   /db_xref="PDB:1I3D"
 FT                   /db_xref="PDB:1I3E"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P69891"
 FT                   /protein_id="AAA16332.1"
@@ -53044,13 +52821,17 @@ FT                   /note="pseudo-hbp, [72]"
 FT   repeat_region   complement(50889..50894)
 FT                   /note="Alu flank repeat 3' copy [47],[62]"
 FT   repeat_region   complement(50915..51198)
-FT                   /note="Alu family repeat [47],[62]"
+FT                   /rpt_family="Alu"
+FT                   /rpt_type=DISPERSED
+FT                   /note="[47],[62]"
 FT   repeat_region   complement(51199..51204)
 FT                   /note="Alu flank repeat 5' copy [47],[62]"
 FT   repeat_region   51966..51975
 FT                   /note="Alu flank repeat 5' copy [62]"
 FT   repeat_region   51976..52259
-FT                   /note="Alu family repeat [31],[62]"
+FT                   /rpt_family="Alu"
+FT                   /rpt_type=DISPERSED
+FT                   /note="[31],[62]"
 FT   repeat_region   52286..52295
 FT                   /note="Alu flank repeat 3' copy [62]"
 FT   gene            54740..56389
@@ -53069,11 +52850,7 @@ FT                   /product="delta-globin"
 FT                   /db_xref="GDB:119298"
 FT                   /db_xref="GOA:P02042"
 FT                   /db_xref="HGNC:4829"
-FT                   /db_xref="InterPro:IPR000971"
-FT                   /db_xref="InterPro:IPR002337"
-FT                   /db_xref="InterPro:IPR009050"
 FT                   /db_xref="InterPro:IPR012292"
-FT                   /db_xref="PDB:1SHR"
 FT                   /db_xref="PDB:1SI4"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P02042"
 FT                   /protein_id="AAA16333.1"
@@ -53162,193 +52939,24 @@ FT                   /product="beta-globin"
 FT                   /db_xref="GDB:119297"
 FT                   /db_xref="GOA:P68871"
 FT                   /db_xref="HGNC:4827"
-FT                   /db_xref="InterPro:IPR000971"
-FT                   /db_xref="InterPro:IPR002337"
-FT                   /db_xref="InterPro:IPR009050"
 FT                   /db_xref="InterPro:IPR012292"
-FT                   /db_xref="PDB:1A00"
-FT                   /db_xref="PDB:1A01"
-FT                   /db_xref="PDB:1A0U"
-FT                   /db_xref="PDB:1A0Z"
-FT                   /db_xref="PDB:1A3N"
-FT                   /db_xref="PDB:1A3O"
-FT                   /db_xref="PDB:1ABW"
-FT                   /db_xref="PDB:1ABY"
-FT                   /db_xref="PDB:1AJ9"
-FT                   /db_xref="PDB:1B86"
-FT                   /db_xref="PDB:1BAB"
-FT                   /db_xref="PDB:1BBB"
-FT                   /db_xref="PDB:1BIJ"
-FT                   /db_xref="PDB:1BUW"
-FT                   /db_xref="PDB:1BZ0"
-FT                   /db_xref="PDB:1BZ1"
-FT                   /db_xref="PDB:1BZZ"
-FT                   /db_xref="PDB:1C7B"
-FT                   /db_xref="PDB:1C7C"
-FT                   /db_xref="PDB:1C7D"
-FT                   /db_xref="PDB:1CBL"
-FT                   /db_xref="PDB:1CBM"
-FT                   /db_xref="PDB:1CH4"
-FT                   /db_xref="PDB:1CLS"
-FT                   /db_xref="PDB:1CMY"
-FT                   /db_xref="PDB:1COH"
-FT                   /db_xref="PDB:1DKE"
-FT                   /db_xref="PDB:1DXT"
-FT                   /db_xref="PDB:1DXU"
-FT                   /db_xref="PDB:1DXV"
-FT                   /db_xref="PDB:1FN3"
-FT                   /db_xref="PDB:1G9V"
-FT                   /db_xref="PDB:1GBU"
-FT                   /db_xref="PDB:1GBV"
-FT                   /db_xref="PDB:1GLI"
-FT                   /db_xref="PDB:1GZX"
-FT                   /db_xref="PDB:1HAB"
-FT                   /db_xref="PDB:1HAC"
-FT                   /db_xref="PDB:1HBA"
-FT                   /db_xref="PDB:1HBB"
-FT                   /db_xref="PDB:1HBS"
-FT                   /db_xref="PDB:1HCO"
-FT                   /db_xref="PDB:1HDB"
-FT                   /db_xref="PDB:1HGA"
-FT                   /db_xref="PDB:1HGB"
-FT                   /db_xref="PDB:1HGC"
-FT                   /db_xref="PDB:1HHO"
-FT                   /db_xref="PDB:1IRD"
-FT                   /db_xref="PDB:1J3Y"
-FT                   /db_xref="PDB:1J3Z"
-FT                   /db_xref="PDB:1J40"
-FT                   /db_xref="PDB:1J41"
-FT                   /db_xref="PDB:1J7S"
-FT                   /db_xref="PDB:1J7W"
-FT                   /db_xref="PDB:1J7Y"
-FT                   /db_xref="PDB:1JY7"
-FT                   /db_xref="PDB:1K0Y"
-FT                   /db_xref="PDB:1K1K"
-FT                   /db_xref="PDB:1KD2"
-FT                   /db_xref="PDB:1LFL"
-FT                   /db_xref="PDB:1LFQ"
-FT                   /db_xref="PDB:1LFT"
-FT                   /db_xref="PDB:1LFV"
-FT                   /db_xref="PDB:1LFY"
-FT                   /db_xref="PDB:1LFZ"
-FT                   /db_xref="PDB:1LJW"
-FT                   /db_xref="PDB:1M9P"
-FT                   /db_xref="PDB:1MKO"
-FT                   /db_xref="PDB:1NEJ"
-FT                   /db_xref="PDB:1NIH"
-FT                   /db_xref="PDB:1NQP"
-FT                   /db_xref="PDB:1O1I"
-FT                   /db_xref="PDB:1O1J"
-FT                   /db_xref="PDB:1O1K"
-FT                   /db_xref="PDB:1O1L"
-FT                   /db_xref="PDB:1O1M"
-FT                   /db_xref="PDB:1O1N"
-FT                   /db_xref="PDB:1O1O"
-FT                   /db_xref="PDB:1O1P"
-FT                   /db_xref="PDB:1QI8"
-FT                   /db_xref="PDB:1QSH"
-FT                   /db_xref="PDB:1QSI"
-FT                   /db_xref="PDB:1QXD"
-FT                   /db_xref="PDB:1QXE"
-FT                   /db_xref="PDB:1R1X"
-FT                   /db_xref="PDB:1R1Y"
-FT                   /db_xref="PDB:1RPS"
-FT                   /db_xref="PDB:1RQ3"
-FT                   /db_xref="PDB:1RQ4"
-FT                   /db_xref="PDB:1RQA"
-FT                   /db_xref="PDB:1RVW"
-FT                   /db_xref="PDB:1SDK"
-FT                   /db_xref="PDB:1SDL"
-FT                   /db_xref="PDB:1THB"
-FT                   /db_xref="PDB:1UIW"
-FT                   /db_xref="PDB:1VWT"
-FT                   /db_xref="PDB:1XXT"
-FT                   /db_xref="PDB:1XY0"
-FT                   /db_xref="PDB:1XYE"
-FT                   /db_xref="PDB:1XZ2"
-FT                   /db_xref="PDB:1XZ4"
-FT                   /db_xref="PDB:1XZ5"
-FT                   /db_xref="PDB:1XZ7"
-FT                   /db_xref="PDB:1XZU"
-FT                   /db_xref="PDB:1XZV"
-FT                   /db_xref="PDB:1Y09"
-FT                   /db_xref="PDB:1Y0A"
-FT                   /db_xref="PDB:1Y0C"
-FT                   /db_xref="PDB:1Y0D"
-FT                   /db_xref="PDB:1Y0T"
-FT                   /db_xref="PDB:1Y0W"
-FT                   /db_xref="PDB:1Y22"
-FT                   /db_xref="PDB:1Y2Z"
-FT                   /db_xref="PDB:1Y31"
-FT                   /db_xref="PDB:1Y35"
-FT                   /db_xref="PDB:1Y45"
-FT                   /db_xref="PDB:1Y46"
-FT                   /db_xref="PDB:1Y4B"
-FT                   /db_xref="PDB:1Y4F"
-FT                   /db_xref="PDB:1Y4G"
-FT                   /db_xref="PDB:1Y4P"
-FT                   /db_xref="PDB:1Y4Q"
-FT                   /db_xref="PDB:1Y4R"
-FT                   /db_xref="PDB:1Y4V"
-FT                   /db_xref="PDB:1Y5F"
-FT                   /db_xref="PDB:1Y5J"
-FT                   /db_xref="PDB:1Y5K"
-FT                   /db_xref="PDB:1Y7C"
-FT                   /db_xref="PDB:1Y7D"
-FT                   /db_xref="PDB:1Y7G"
-FT                   /db_xref="PDB:1Y7Z"
-FT                   /db_xref="PDB:1Y83"
-FT                   /db_xref="PDB:1Y85"
-FT                   /db_xref="PDB:1Y8W"
-FT                   /db_xref="PDB:1YDZ"
-FT                   /db_xref="PDB:1YE0"
-FT                   /db_xref="PDB:1YE1"
-FT                   /db_xref="PDB:1YE2"
-FT                   /db_xref="PDB:1YEN"
-FT                   /db_xref="PDB:1YEO"
-FT                   /db_xref="PDB:1YEQ"
-FT                   /db_xref="PDB:1YEU"
-FT                   /db_xref="PDB:1YEV"
-FT                   /db_xref="PDB:1YFF"
-FT                   /db_xref="PDB:1YG5"
-FT                   /db_xref="PDB:1YGD"
-FT                   /db_xref="PDB:1YGF"
-FT                   /db_xref="PDB:1YH9"
-FT                   /db_xref="PDB:1YHE"
-FT                   /db_xref="PDB:1YHR"
-FT                   /db_xref="PDB:1YIE"
-FT                   /db_xref="PDB:1YIH"
-FT                   /db_xref="PDB:1YVQ"
-FT                   /db_xref="PDB:1YVT"
-FT                   /db_xref="PDB:1YZI"
-FT                   /db_xref="PDB:2D5Z"
-FT                   /db_xref="PDB:2D60"
-FT                   /db_xref="PDB:2DN1"
-FT                   /db_xref="PDB:2DN2"
-FT                   /db_xref="PDB:2DN3"
-FT                   /db_xref="PDB:2HBC"
-FT                   /db_xref="PDB:2HBD"
-FT                   /db_xref="PDB:2HBE"
-FT                   /db_xref="PDB:2HBF"
-FT                   /db_xref="PDB:2HBS"
-FT                   /db_xref="PDB:2HCO"
-FT                   /db_xref="PDB:2HHD"
-FT                   /db_xref="PDB:2HHE"
-FT                   /db_xref="PDB:4HHB"
 FT                   /db_xref="PDB:6HBW"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P68871"
 FT                   /protein_id="AAA16334.1"
 FT                   /translation="MVHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFES
 FT                   FGDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENF
 FT                   RLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKYH"
+FT   gene            <62187..>62408
+FT                   /gene="HBB thalassemia"
+FT   mRNA            join(<62187..62278,62390..>62408)
+FT                   /gene="HBB thalassemia"
+FT                   /product="beta-globin thalassemia"
 FT   CDS             join(62187..62278,62390..62408)
 FT                   /codon_start=1
 FT                   /gene="HBB thalassemia"
 FT                   /product="beta-globin thalassemia"
 FT                   /protein_id="AAA16335.1"
 FT                   /translation="MVHLTPEEKSAVTALWGKVNVDEVGGEALGSLFSHP"
-FT   gene            <62187..62389
-FT                   /gene="HBB thalassemia"
 FT   exon            <62187..62278
 FT                   /gene="HBB thalassemia"
 FT                   /number=1
@@ -53383,7 +52991,7 @@ FT                   /gene="HBB thalassemia"
 FT                   /number=2
 FT                   /note="beta-globin thalassemia, [30],[43]"
 FT   variation       62394
-FT                   /gene="HBB"
+FT                   /gene="HBB thalassemia"
 FT                   /note="t in wt; g in thalassemia [90]"
 FT   exon            62409..62631
 FT                   /gene="HBB"
@@ -53420,23 +53028,30 @@ FT                   /note="ct in wt; cct in a form of thalassemia [45]"
 FT   variation       63918
 FT                   /note="c in [62],[76]; cc in [26]"
 FT   variation       63957..63958
-FT                   /note="aa in [45],[37],[62],[76]; tt in [26]"
+FT                   /note="tt in wt; aa in a form of thalassemia [45]"
+FT                   /note="aa in [37],[62],[76]; tt in [26]"
 FT   variation       63974
 FT                   /note="g in [37],[62],[76]; c in [26]"
 FT   repeat_region   65490..65502
 FT                   /note="Alu flank repeat 5' copy [62],[76]"
 FT   repeat_region   65513..65767
-FT                   /note="Alu family repeat [62],[76]"
+FT                   /rpt_family="Alu"
+FT                   /rpt_type=DISPERSED
+FT                   /note="[62],[76]"
 FT   repeat_region   65768..65780
 FT                   /note="Alu flank repeat 3' copy [62],[76]"
 FT   repeat_region   66765..66775
 FT                   /note="Alu flank repeat 5' copy [62],[76]"
 FT   repeat_region   66776..67042
-FT                   /note="Alu family repeat [62],[76]"
+FT                   /rpt_family="Alu"
+FT                   /rpt_type=DISPERSED
+FT                   /note="[62],[76]"
 FT   repeat_region   67069..67079
 FT                   /note="Alu flank repeat 3' copy [62],[76]"
 FT   repeat_region   67071..73195
-FT                   /note="KpnI family repeat [83]"
+FT                   /rpt_family="KpnI"
+FT                   /rpt_type=DISPERSED
+FT                   /note="[83]"
 XX
 SQ   Sequence 73308 BP; 22068 A; 14146 C; 14785 G; 22309 T; 0 other;
      gaattctaat ctccctctca accctacagt cacccatttg gtatattaaa gatgtgttgt        60
@@ -54739,6 +54354,7 @@ OC   Homo.
 XX
 RN   [1]
 RP   1-1933
+RX   DOI; 10.1073/pnas.86.1.114.
 RX   PUBMED; 2911561.
 RA   Seino S., Seino M., Nishi S., Bell G.I.;
 RT   "Structure of the human insulin receptor gene and characterization of its
@@ -54755,7 +54371,6 @@ RL   Diabetes 39(1):123-128(1990).
 XX
 DR   EMBL-JOIN; M32972.
 DR   TRANSFAC; R03068; HS$INSR_01.
-DR   UniProtKB/Swiss-Prot; P06213; INSR_HUMAN.
 XX
 CC   Draft entry and computer-readable sequence for [1] kindly submitted
 CC   by G.Bell, 14-MAR-1990.

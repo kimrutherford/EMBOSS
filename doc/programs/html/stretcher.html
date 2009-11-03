@@ -22,6 +22,18 @@ stretcher
 
 
 <H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
     Function
 </H2>
 Needleman-Wunsch rapid global alignment of two sequences
@@ -240,11 +252,13 @@ Output alignment [hba_human.stretcher]: <b></b>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 ID   HBA_HUMAN               Reviewed;         142 AA.
-AC   P69905; P01922; Q96KF1; Q9NYR7;
+AC   P69905; P01922; Q1HDT5; Q3MIF5; Q53F97; Q96KF1; Q9NYR7; Q9UCM0;
 DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
 DT   23-JAN-2007, sequence version 2.
-DT   03-APR-2007, entry version 41.
-DE   Hemoglobin subunit alpha (Hemoglobin alpha chain) (Alpha-globin).
+DT   16-JUN-2009, entry version 73.
+DE   RecName: Full=Hemoglobin subunit alpha;
+DE   AltName: Full=Hemoglobin alpha chain;
+DE   AltName: Full=Alpha-globin;
 GN   Name=HBA1;
 GN   and
 GN   Name=HBA2;
@@ -270,14 +284,14 @@ RT   messenger RNA.";
 RL   J. Biol. Chem. 255:2807-2815(1980).
 RN   [3]
 RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA] (HBA2).
-RX   MEDLINE=81175088; PubMed=6452630;
+RX   MEDLINE=81175088; PubMed=6452630; DOI=10.1073/pnas.77.12.7054;
 RA   Liebhaber S.A., Goossens M.J., Kan Y.W.;
 RT   "Cloning and complete nucleotide sequence of human 5'-alpha-globin
 RT   gene.";
 RL   Proc. Natl. Acad. Sci. U.S.A. 77:7054-7058(1980).
 RN   [4]
 RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
-RX   PubMed=6946451;
+RX   PubMed=6946451; DOI=10.1073/pnas.78.8.5041;
 RA   Orkin S.H., Goff S.C., Hechtman R.L.;
 RT   "Mutation in an intervening sequence splice junction in man.";
 RL   Proc. Natl. Acad. Sci. U.S.A. 78:5041-5045(1981).
@@ -287,16 +301,10 @@ RX   MEDLINE=21303311; PubMed=11410421;
 RA   Zhao Y., Xu X.;
 RT   "Alpha2(CD31 AGG--&gt;AAG, Arg--&gt;Lys) causing non-deletional alpha-
 RT   thalassemia in a Chinese family with HbH disease.";
-RL   Haematologica 86:541-542(2001).
-RN   [6]
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-FT                                /FTId=VAR_002840.
-FT   VARIANT     131    131       A -&gt; D (in Yuda; O(2) affinity down).
-FT                                /FTId=VAR_002842.
-FT   VARIANT     131    131       A -&gt; P (in Sun Prairie; unstable).
 FT                                /FTId=VAR_002841.
 FT   VARIANT     132    132       S -&gt; P (in Questembert; highly unstable;
 FT                                causes alpha-thalassemia).
@@ -311,13 +319,16 @@ FT                                /FTId=VAR_002846.
 FT   VARIANT     137    137       L -&gt; P (in Bibba; unstable; causes alpha-
 FT                                thalassemia).
 FT                                /FTId=VAR_002847.
+FT   VARIANT     137    137       L -&gt; R (in Toyama).
+FT                                /FTId=VAR_035242.
 FT   VARIANT     139    139       S -&gt; P (in Attleboro; O(2) affinity up).
 FT                                /FTId=VAR_002848.
 FT   VARIANT     140    140       K -&gt; E (in Hanamaki; O(2) affinity up).
 FT                                /FTId=VAR_002849.
 FT   VARIANT     140    140       K -&gt; T (in Tokoname; O(2) affinity up).
 FT                                /FTId=VAR_002850.
-FT   VARIANT     141    141       Y -&gt; H (in Rouen; O(2) affinity up).
+FT   VARIANT     141    141       Y -&gt; H (in Rouen/Ethiopia; O(2) affinity
+FT                                up).
 FT                                /FTId=VAR_002851.
 FT   VARIANT     142    142       R -&gt; C (in Nunobiki; O(2) affinity up).
 FT                                /FTId=VAR_002852.
@@ -327,18 +338,19 @@ FT   VARIANT     142    142       R -&gt; L (in Legnano; O(2) affinity up).
 FT                                /FTId=VAR_002853.
 FT   VARIANT     142    142       R -&gt; P (in Singapore).
 FT                                /FTId=VAR_002855.
-FT   HELIX         4     15
-FT   HELIX        16     20
-FT   HELIX        21     35
-FT   HELIX        37     42
-FT   HELIX        53     71
-FT   HELIX        73     75
-FT   HELIX        76     79
-FT   HELIX        81     89
-FT   HELIX        96    112
-FT   TURN        114    116
-FT   HELIX       119    136
-FT   TURN        137    139
+FT   CONFLICT     10     10       N -&gt; H (in Ref. 13; BAD97112).
+FT   HELIX         5     16
+FT   HELIX        17     21
+FT   HELIX        22     36
+FT   HELIX        38     43
+FT   HELIX        54     72
+FT   HELIX        74     76
+FT   HELIX        77     80
+FT   HELIX        82     90
+FT   HELIX        97    113
+FT   TURN        115    117
+FT   HELIX       120    137
+FT   TURN        138    140
 SQ   SEQUENCE   142 AA;  15258 MW;  15E13666573BBBAE CRC64;
      MVLSPADKTN VKAAWGKVGA HAGEYGAEAL ERMFLSFPTT KTYFPHFDLS HGSAQVKGHG
      KKVADALTNA VAHVDDMPNA LSALSDLHAH KLRVDPVNFK LLSHCLLVTL AAHLPAEFTP
@@ -350,12 +362,16 @@ SQ   SEQUENCE   142 AA;  15258 MW;  15E13666573BBBAE CRC64;
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 ID   HBB_HUMAN               Reviewed;         147 AA.
-AC   P68871; P02023; Q13852; Q14481; Q14510; Q45KT0; Q6FI08; Q8IZI1;
-AC   Q9BX96; Q9UCP8; Q9UCP9;
+AC   P68871; A4GX73; B2ZUE0; P02023; Q13852; Q14481; Q14510; Q45KT0;
+AC   Q549N7; Q6FI08; Q6R7N2; Q8IZI1; Q9BX96; Q9UCD6; Q9UCP8; Q9UCP9;
 DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
 DT   23-JAN-2007, sequence version 2.
-DT   20-MAR-2007, entry version 43.
-DE   Hemoglobin subunit beta (Hemoglobin beta chain) (Beta-globin).
+DT   16-JUN-2009, entry version 76.
+DE   RecName: Full=Hemoglobin subunit beta;
+DE   AltName: Full=Hemoglobin beta chain;
+DE   AltName: Full=Beta-globin;
+DE   Contains:
+DE     RecName: Full=LVV-hemorphin-7;
 GN   Name=HBB;
 OS   Homo sapiens (Human).
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
@@ -363,48 +379,42 @@ OC   Mammalia; Eutheria; Euarchontoglires; Primates; Haplorrhini;
 OC   Catarrhini; Hominidae; Homo.
 OX   NCBI_TaxID=9606;
 RN   [1]
-RP   NUCLEOTIDE SEQUENCE.
-RX   MEDLINE=81064667; PubMed=6254664; DOI=10.1016/0092-8674(80)90428-6;
-RA   Lawn R.M., Efstratiadis A., O'Connell C., Maniatis T.;
-RT   "The nucleotide sequence of the human beta-globin gene.";
-RL   Cell 21:647-651(1980).
-RN   [2]
-RP   NUCLEOTIDE SEQUENCE.
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
 RX   MEDLINE=77126403; PubMed=1019344;
 RA   Marotta C., Forget B., Cohen-Solal M., Weissman S.M.;
 RT   "Nucleotide sequence analysis of coding and noncoding regions of human
 RT   beta-globin mRNA.";
 RL   Prog. Nucleic Acid Res. Mol. Biol. 19:165-175(1976).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RX   MEDLINE=81064667; PubMed=6254664; DOI=10.1016/0092-8674(80)90428-6;
+RA   Lawn R.M., Efstratiadis A., O'Connell C., Maniatis T.;
+RT   "The nucleotide sequence of the human beta-globin gene.";
+RL   Cell 21:647-651(1980).
 RN   [3]
-RP   NUCLEOTIDE SEQUENCE.
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA], AND VARIANT LYS-7.
+RX   PubMed=16175509; DOI=10.1086/491748;
+RA   Wood E.T., Stover D.A., Slatkin M., Nachman M.W., Hammer M.F.;
+RT   "The beta-globin recombinational hotspot reduces the effects of strong
+RT   selection around HbC, a recently arisen mutation providing resistance
+RT   to malaria.";
+RL   Am. J. Hum. Genet. 77:637-642(2005).
+RN   [4]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
 RA   Lu L., Hu Z.H., Du C.S., Fu Y.S.;
 RT   "DNA sequence of the human beta-globin gene isolated from a healthy
 RT   Chinese.";
 RL   Submitted (JUN-1997) to the EMBL/GenBank/DDBJ databases.
-RN   [4]
-RP   NUCLEOTIDE SEQUENCE, AND VARIANT DURHAM-N.C. PRO-115.
-RC   TISSUE=Blood;
-RA   Kutlar F., Abboud M., Leithner C., Holley L., Brisco J., Kutlar A.;
-RT   "Electrophoretically silent, very unstable, thalassemic mutation at
-RT   codon 114 of beta globin (hemoglobin Durham-N.C.) detected by cDNA
-RT   sequencing of mRNA, from a Russian women.";
-RL   Submitted (AUG-1999) to the EMBL/GenBank/DDBJ databases.
 RN   [5]
-RP   NUCLEOTIDE SEQUENCE, AND VARIANT LOUISVILLE LEU-43.
-RC   TISSUE=Blood;
-RA   Kutlar F., Harbin J., Brisco J., Kutlar A.;
-RT   "Rapid detection of electrophoretically silent, unstable human
-RT   hemoglobin 'Louisville', (Beta; Phe 42 Leu/TTT to CTT) by cDNA
-RT   sequencing of mRNA.";
-RL   Submitted (JAN-1999) to the EMBL/GenBank/DDBJ databases.
-RN   [6]
-RP   NUCLEOTIDE SEQUENCE, AND VARIANT TY GARD GLN-125.
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA], AND VARIANT ARG-113.
+RA   Cabeda J.M., Correia C., Estevinho A., Cardoso C., Amorim M.L.,
+RA   Cleto E., Vale L., Coimbra E., Pinho L., Justica B.;
+RT   "Unexpected patterns of globin mutations in thalassemia patients from
+RT   north of Portugal.";
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-FT   VARIANT     141    141       A -&gt; T (in St Jacques: O(2) affinity up).
-FT                                /FTId=VAR_003081.
 FT   VARIANT     141    141       A -&gt; V (in Puttelange; polycythemia; O(2)
 FT                                affinity up).
 FT                                /FTId=VAR_003082.
@@ -435,20 +445,22 @@ FT   VARIANT     147    147       H -&gt; P (in York; O(2) affinity up).
 FT                                /FTId=VAR_003094.
 FT   VARIANT     147    147       H -&gt; Q (in Kodaira; O(2) affinity up).
 FT                                /FTId=VAR_003095.
-FT   HELIX         5     15
-FT   TURN         20     22
-FT   HELIX        23     34
-FT   HELIX        36     41
-FT   HELIX        43     45
-FT   HELIX        51     56
-FT   HELIX        58     76
-FT   TURN         77     79
-FT   HELIX        81     93
-FT   TURN         94     96
-FT   HELIX       101    118
-FT   HELIX       119    121
-FT   HELIX       124    141
-FT   HELIX       143    145
+FT   CONFLICT     26     26       Missing (in Ref. 15; ACD39349).
+FT   CONFLICT     42     42       F -&gt; L (in Ref. 13; AAR96398).
+FT   HELIX         6     16
+FT   TURN         21     23
+FT   HELIX        24     35
+FT   HELIX        37     42
+FT   HELIX        44     46
+FT   HELIX        52     57
+FT   HELIX        59     77
+FT   TURN         78     80
+FT   HELIX        82     94
+FT   TURN         95     97
+FT   HELIX       102    119
+FT   HELIX       120    122
+FT   HELIX       125    142
+FT   HELIX       144    146
 SQ   SEQUENCE   147 AA;  15998 MW;  A31F6D621C6556A1 CRC64;
      MVHLTPEEKS AVTALWGKVN VDEVGGEALG RLLVVYPWTQ RFFESFGDLS TPDAVMGNPK
      VKAHGKKVLG AFSDGLAHLD NLKGTFATLS ELHCDKLHVD PENFRLLGNV LVCVLAHHFG

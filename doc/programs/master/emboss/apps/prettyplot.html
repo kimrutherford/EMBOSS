@@ -22,7 +22,11 @@ prettyplot
 </H2>
 
 
-<p><b>prettyplot</b> draws a plot of the input sequence alignment.  The sequences are rendered in pretty formatting on the specified graphics device.  Drawing options control the appearance of the image, such as boxes, colour and shading for highlighting conserved regions.</p>
+<p><b>prettyplot</b> draws a plot of the input sequence alignment.
+The sequences are rendered in pretty formatting on the specified
+graphics device.  Drawing options control the appearance of the image,
+such as boxes, colour and shading for highlighting conserved
+regions.</p>
 
 <H2>
     Usage
@@ -81,9 +85,20 @@ For nucleotide sequence, EDNAFULL is used.
     Notes
 </H2>
 
-<p>A consesnsus sequence is calculated for the alignment and individual sequences compared to the consensus using the specified comparison matrix file. The default matrix for protein sequences is <tt>EBLOSUM62</tt> and for nucleotide sequences is <tt>EDNAFULL</tt>. The drawing options render conserved sites and regions identified from the comparisons.  For example, residues in a sequence are classed as "identical", "similar" or "other" to the consensus depending on user-specified thresholds of sequence similarity (<tt>-pair</tt> option).  Residues in each class are rendered red, green and black by default (this can be changed).</p>  
+<p>A consesnsus sequence is calculated for the alignment and
+individual sequences compared to the consensus using the specified
+comparison matrix file. The default matrix for protein sequences
+is <tt>EBLOSUM62</tt> and for nucleotide sequences
+is <tt>EDNAFULL</tt>. The drawing options render conserved sites and
+regions identified from the comparisons.  For example, residues in a
+sequence are classed as "identical", "similar" or "other" to the
+consensus depending on user-specified thresholds of sequence
+similarity (<tt>-pair</tt> option).  Residues in each class are
+rendered red, green and black by default (this can be changed).</p>
 
-<p>There are other more general drawing options, for example, controlling the number of residues displayed per line, background shading and whether to display sequence names or not.</p>
+<p>There are other more general drawing options, for example,
+controlling the number of residues displayed per line, background
+shading and whether to display sequence names or not.</p>
 
 <H2>
     References

@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Display the trace in an ABI sequencer file
@@ -38,7 +45,7 @@ Command line arguments
                                   filename and optional format (output USA)
    -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, xterm, png, gif)
+                                  tekt, tek, none, data, das, xterm, png, gif)
 
    Additional (Optional) qualifiers:
    -startbase          integer    [0] First base to report or display (Integer
@@ -187,22 +194,23 @@ Known bugs
 
 See also
 
-   Program name Description
-   cirdna Draws circular maps of DNA constructs
-   lindna Draws linear maps of DNA constructs
-   pepnet Draw a helical net for a protein sequence
-   pepwheel Draw a helical wheel diagram for a protein sequence
-   prettyplot Draw a sequence alignment with pretty formatting
-   prettyseq Write a nucleotide sequence and its translation to file
-   remap Display restriction enzyme binding sites in a nucleotide
-   sequence
-   seealso Finds programs with similar function to a specified program
-   showalign Display a multiple sequence alignment in pretty format
-   showdb Displays information on configured databases
-   showfeat Display features of a sequence in pretty format
-   showseq Displays sequences with features in pretty format
-   sixpack Display a DNA sequence with 6-frame translation and ORFs
-   textsearch Search the textual description of sequence(s)
+   Program name     Description
+   cirdna           Draws circular maps of DNA constructs
+   lindna           Draws linear maps of DNA constructs
+   pepnet           Draw a helical net for a protein sequence
+   pepwheel         Draw a helical wheel diagram for a protein sequence
+   prettyplot       Draw a sequence alignment with pretty formatting
+   prettyseq        Write a nucleotide sequence and its translation to file
+   remap            Display restriction enzyme binding sites in a nucleotide
+                    sequence
+   seealso          Finds programs with similar function to a specified program
+   showalign        Display a multiple sequence alignment in pretty format
+   showdb           Displays information on configured databases
+   showfeat         Display features of a sequence in pretty format
+   showpep          Displays protein sequences with features in pretty format
+   showseq          Displays sequences with features in pretty format
+   sixpack          Display a DNA sequence with 6-frame translation and ORFs
+   textsearch       Search the textual description of sequence(s)
 
 Author(s)
 

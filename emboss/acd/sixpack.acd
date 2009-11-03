@@ -127,7 +127,7 @@ section: output [
            Examples of region specifications are: \
            24-45 blue 56-78 orange \
            1-100 green 120-156 red \
-           A file of ranges to colour (one range per line) can be specifed as
+           A file of ranges to colour (one range per line) can be specified as
            '@filename'."
   ]
 

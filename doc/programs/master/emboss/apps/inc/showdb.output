@@ -4,7 +4,7 @@
 <p><h3>File: showdb.out</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-# Name           Type  ID  Qry All Comment
+# Name           Type ID  Qry All Comment
 # ============== ==== ==  === === =======
 twp              P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM index
 qapblast         P    OK  OK  OK  BLAST swissnew

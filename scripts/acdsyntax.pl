@@ -1073,7 +1073,7 @@ while ($line = <>) {
 open (GETVAL, "acdsyntax.getvalue") || die "Cannot open acdsyntax.getvalue";
 
 while (<GETVAL>) {
-    if (/^(\S+).*ajNamGetValueC?\s*[\(]\"([^\"]+)\"/) {
+    if (/^(\S+).*ajNamGetValue[CS]\s*[\(]\"([^\"]+)\"/) {
 	$name=uc($2);
         $file = $1;
 	$file =~ /\/([^\/.]+)[.]c:/;

@@ -65,6 +65,7 @@ void embBtreeEmblKW(const AjPStr kwline, AjPList kwlist, ajuint maxlen)
     {
 	ajStrTrimEndC(&token,".");
 	ajStrTrimWhite(&token);
+
 	if(ajStrGetLen(token))
 	{
 	    if(maxlen)
@@ -77,6 +78,7 @@ void embBtreeEmblKW(const AjPStr kwline, AjPList kwlist, ajuint maxlen)
 	    }
 	    else
 		ajStrAssignS(&str,token);
+
 	    ajStrFmtLower(&str);
 	    ajListPush(kwlist,(void *)str);
 	    str = NULL;
@@ -121,6 +123,7 @@ void embBtreeEmblTX(const AjPStr txline, AjPList txlist, ajuint maxlen)
 	ajStrTrimEndC(&token,".");
 	ajStrTrimEndC(&token," ");
 	ajStrTrimWhite(&token);
+
 	if(ajStrGetLen(token))
 	{
 	    if(maxlen)
@@ -133,6 +136,7 @@ void embBtreeEmblTX(const AjPStr txline, AjPList txlist, ajuint maxlen)
 	    }
 	    else
 		ajStrAssignS(&str,token);
+
 	    ajStrFmtLower(&str);
 	    ajListPush(txlist,(void *)str);
 	    str = NULL;
@@ -177,10 +181,13 @@ void embBtreeEmblAC(const AjPStr acline, AjPList aclist)
     while(ajStrTokenNextParse(&embindexHandle,&embindexToken))
     {
 	ajStrTrimWhite(&embindexToken);
+
 	if((p=strchr(MAJSTRGETPTR(embindexToken),(int)'-')))
 	{
 	    q = p;
+
 	    while(isdigit((int)*(--q)));
+
 	    ++q;
 	    ajStrAssignSubC(&embindexTstr,q,0,(ajuint)(p-q-1));
 	    ajStrToUint(embindexTstr,&lo);
@@ -189,8 +196,10 @@ void embBtreeEmblAC(const AjPStr acline, AjPList aclist)
 	    
 	    ++p;
 	    q = p;
+
 	    while(!isdigit((int)*q))
 		++q;
+
 	    sscanf(q,"%u",&hi);
 	    ajStrAssignSubC(&embindexPrefix,p,0,(ajuint)(q-p-1));
 	    
@@ -212,6 +221,7 @@ void embBtreeEmblAC(const AjPStr acline, AjPList aclist)
 
     return;
 }
+
 
 
 
@@ -241,8 +251,10 @@ void embBtreeEmblSV(const AjPStr idline, AjPList svlist)
 
     if(!ajStrTokenNextParse(&handle,&idstr))
 	return;
+
     if(!ajStrTokenNextParse(&handle,&token))
 	return;
+
     if(!ajStrTokenNextParse(&handle,&svstr))
 	return;
 
@@ -295,6 +307,7 @@ void embBtreeEmblDE(const AjPStr deline, AjPList delist, ajuint maxlen)
     {
 	ajStrTrimEndC(&token,".");
 	ajStrTrimWhite(&token);
+
 	if(ajStrGetLen(token))
 	{
 	    if(maxlen)
@@ -307,6 +320,7 @@ void embBtreeEmblDE(const AjPStr deline, AjPList delist, ajuint maxlen)
 	    }
 	    else
 		ajStrAssignS(&str,token);
+
 	    ajStrFmtLower(&str);
 	    ajListPush(delist,(void *)str);
 	    str = NULL;
@@ -357,10 +371,13 @@ void embBtreeGenBankAC(const AjPStr acline, AjPList aclist)
     while(ajStrTokenNextParse(&handle,&token))
     {
 	ajStrTrimWhite(&token);
+
 	if((p=strchr(MAJSTRGETPTR(token),(int)'-')))
 	{
 	    q = p;
+
 	    while(isdigit((int)*(--q)));
+
 	    ++q;
 	    ajStrAssignSubC(&tstr,q,0,(ajuint)(p-q-1));
 	    ajStrToUint(tstr,&lo);
@@ -369,8 +386,10 @@ void embBtreeGenBankAC(const AjPStr acline, AjPList aclist)
 	    
 	    ++p;
 	    q = p;
+
 	    while(!isdigit((int)*q))
 		++q;
+
 	    sscanf(q,"%u",&hi);
 	    ajStrAssignSubC(&prefix,p,0,(ajuint)(q-p-1));
 	    
@@ -429,6 +448,7 @@ void embBtreeGenBankKW(const AjPStr kwline, AjPList kwlist, ajuint maxlen)
     {
 	ajStrTrimEndC(&token,".");
 	ajStrTrimWhite(&token);
+
 	if(ajStrGetLen(token))
 	{
 	    if(maxlen)
@@ -441,6 +461,7 @@ void embBtreeGenBankKW(const AjPStr kwline, AjPList kwlist, ajuint maxlen)
 	    }
 	    else
 		ajStrAssignS(&str,token);
+
 	    ajStrFmtLower(&str);
 	    ajListPush(kwlist,(void *)str);
 	    str = NULL;
@@ -484,6 +505,7 @@ void embBtreeGenBankDE(const AjPStr kwline, AjPList kwlist, ajuint maxlen)
     {
 	ajStrTrimEndC(&token,".");
 	ajStrTrimWhite(&token);
+
 	if(ajStrGetLen(token))
 	{
 	    if(maxlen)
@@ -496,6 +518,7 @@ void embBtreeGenBankDE(const AjPStr kwline, AjPList kwlist, ajuint maxlen)
 	    }
 	    else
 		ajStrAssignS(&str,token);
+
 	    ajStrFmtLower(&str);
 	    ajListPush(kwlist,(void *)str);
 	    str = NULL;
@@ -540,6 +563,7 @@ void embBtreeGenBankTX(const AjPStr kwline, AjPList kwlist, ajuint maxlen)
 	ajStrTrimEndC(&token,".");
 	ajStrTrimEndC(&token," ");
 	ajStrTrimWhite(&token);
+
 	if(ajStrGetLen(token))
 	{
 	    if(maxlen)
@@ -552,6 +576,7 @@ void embBtreeGenBankTX(const AjPStr kwline, AjPList kwlist, ajuint maxlen)
 	    }
 	    else
 		ajStrAssignS(&str,token);
+
 	    ajStrFmtLower(&str);
 	    ajListPush(kwlist,(void *)str);
 	    str = NULL;
@@ -592,9 +617,11 @@ void embBtreeFastaDE(const AjPStr kwline, AjPList kwlist, ajuint maxlen)
     {
 	ajStrTrimEndC(&token,".");
 	ajStrTrimWhite(&token);
+
 	if(ajStrGetLen(token))
 	{
 	    str = ajStrNew();
+
 	    if(maxlen)
 	    {
 		if(ajStrGetLen(token) > maxlen)
@@ -605,6 +632,7 @@ void embBtreeFastaDE(const AjPStr kwline, AjPList kwlist, ajuint maxlen)
 	    }
 	    else
 		ajStrAssignS(&str,token);
+
 	    ajStrFmtLower(&str);
 	    ajListPush(kwlist,(void *)str);
 	    str = NULL;
@@ -644,6 +672,7 @@ void embBtreeFastaSV(const AjPStr kwline, AjPList kwlist, ajuint maxlen)
     {
 	ajStrTrimEndC(&token,".");
 	ajStrTrimWhite(&token);
+
 	if(ajStrGetLen(token))
 	{
 	    if(maxlen)
@@ -705,7 +734,9 @@ ajuint embBtreeReadDir(AjPStr **filelist, const AjPStr fdirectory,
     {
 	ajListPop(lfiles,(void **)&file);
 	ajFilenameTrimPath(&file);
+
 	for(j=0;j<nremove && ! ajStrMatchWildS(file,removelist[j]);++j);
+
 	if(j == nremove)
 	    ajListPushAppend(lfiles,(void *)file);
     }
@@ -715,6 +746,7 @@ ajuint embBtreeReadDir(AjPStr **filelist, const AjPStr fdirectory,
 
     for(i=0; i<nremove;++i)
 	ajStrDel(&removelist[i]);
+
     AJFREE(removelist);
 
     return nfiles;
@@ -750,6 +782,7 @@ static AjPFile btreeCreateFile(const AjPStr idirectory, const AjPStr dbname,
     fp =  ajFileNewOutNameS(filename);
 
     ajStrDel(&filename);
+
     return fp;
 }
 
@@ -830,10 +863,12 @@ void embBtreeEntryDel(EmbPBtreeEntry* thys)
 
     while(ajListPop(pthis->files,(void **)&tmpstr))
 	ajStrDel(&tmpstr);
+
     ajListFree(&pthis->files);
 
     while(ajListPop(pthis->reffiles,(void **)&tmpstr))
 	ajStrDel(&tmpstr);
+
     ajListFree(&pthis->reffiles);
 
     ajStrDel(&pthis->id);
@@ -869,6 +904,7 @@ ajuint embBtreeSetFields(EmbPBtreeEntry entry, AjPStr const *fields)
 
 
     nfields = 0;
+
     while(fields[nfields])
     {
 	if(ajStrMatchCaseC(fields[nfields], "id"))
@@ -970,11 +1006,14 @@ ajuint embBtreeGetFiles(EmbPBtreeEntry entry, const AjPStr fdirectory,
     nremove = ajArrCommaList(exclude,&removelist);
 
     count = 0;
+
     for(i=0;i<nfiles;++i)
     {
 	ajListPop(entry->files,(void **)&file);
 	ajFilenameTrimPath(&file);
+
 	for(j=0;j<nremove && !ajStrMatchWildS(file,removelist[j]);++j);
+
 	if(j == nremove)
 	{
 	    ajListPushAppend(entry->files,(void *)file);
@@ -988,6 +1027,7 @@ ajuint embBtreeGetFiles(EmbPBtreeEntry entry, const AjPStr fdirectory,
 
     for(i=0; i<nremove;++i)
 	ajStrDel(&removelist[i]);
+
     AJFREE(removelist);
 
     return count;
@@ -1025,14 +1065,15 @@ AjBool embBtreeWriteEntryFile(const EmbPBtreeEntry entry)
     ajFmtPrintF(entfile,"# Date:    %S\n",entry->date);
 
     do_ref = (ajListGetLength(entry->reffiles)) ? ajTrue : ajFalse;
+
     if(!do_ref)
 	ajFmtPrintF(entfile,"Single");
     else
 	ajFmtPrintF(entfile,"Dual");
+
     ajFmtPrintF(entfile," filename database\n");
     
     for(i=0;i<entry->nfiles;++i)
-    {
 	if(!do_ref)
 	{
 	    ajListPop(entry->files,(void **)&tmpstr);
@@ -1047,8 +1088,6 @@ AjBool embBtreeWriteEntryFile(const EmbPBtreeEntry entry)
 	    ajListPushAppend(entry->files,(void *)tmpstr);
 	    ajListPushAppend(entry->reffiles,(void *)refstr);
 	}
-	
-    }
 
     ajFileClose(&entfile);
     
@@ -1073,17 +1112,54 @@ void embBtreeGetRsInfo(EmbPBtreeEntry entry)
     const char *resource;
     AjPStr value = NULL;
     ajuint  n = 0;
-    
+
     value = ajStrNew();
     
 
     resource = ajStrGetPtr(entry->dbrs);
+
     if(!ajNamRsAttrValueC(resource,"type",&value))
 	ajFatal("Missing resource entry (%S) for indexing",entry->dbrs);
+
     if(!ajStrMatchCaseC(value,"Index"))
 	ajFatal("Incorrect 'type' field for resource (%S)",entry->dbrs);
 
 
+    if(!ajNamGetValueC("CACHESIZE",&value))
+    {
+	entry->cachesize = BTREE_DEF_CACHESIZE;
+	ajUser("CACHESIZE defaults to %d", entry->cachesize);
+    }
+    else
+    {
+	if(ajStrToUint(value,&n))
+	{
+	    entry->cachesize = n;
+	}
+	else
+	{
+	    ajErr("Bad value for environment variable 'CACHESIZE'");
+	    entry->cachesize = BTREE_DEF_CACHESIZE;
+	}
+    }
+
+    if(!ajNamGetValueC("PAGESIZE",&value))
+    {
+	entry->pagesize = BTREE_DEF_PAGESIZE;
+	ajUser("PAGESIZE defaults to %d", entry->pagesize);
+    }
+    else
+    {
+	if(ajStrToUint(value,&n))
+	{
+	    entry->pagesize = n;
+	}
+	else
+	{
+	    ajErr("Bad value for environment variable 'PAGESIZE'");
+	    entry->pagesize = BTREE_DEF_PAGESIZE;
+	}
+    }
 
     if(!ajNamRsAttrValueC(resource,"idlen",&value))
 	entry->idlen = BTREE_DEF_IDLEN;
@@ -1163,97 +1239,240 @@ void embBtreeGetRsInfo(EmbPBtreeEntry entry)
 	}
     }
 
-    if(!ajNamGetValueC("CACHESIZE",&value))
-    {
-	entry->cachesize = BTREE_DEF_CACHESIZE;
-	ajUser("CACHESIZE defaults to %d", entry->cachesize);
-    }
+    if(!ajNamRsAttrValueC(resource,"idpagesize",&value))
+	entry->idpagesize = entry->pagesize;
     else
     {
-	if(ajStrToUint(value,&n))
+        if(ajStrToUint(value,&n))
 	{
-	    entry->cachesize = n;
+	    entry->idpagesize = n;
 	}
 	else
 	{
-	    ajErr("Bad value for environment variable 'CACHESIZE'");
-	    entry->cachesize = BTREE_DEF_CACHESIZE;
+	    ajErr("Bad value for index resource 'idpagesize'");
+	    entry->idpagesize = entry->pagesize;
 	}
     }
-
-    if(!ajNamGetValueC("PAGESIZE",&value))
-    {
-	entry->pagesize = BTREE_DEF_PAGESIZE;
-	ajUser("PAGESIZE defaults to %d", entry->pagesize);
-    }
+        
+    if(!ajNamRsAttrValueC(resource,"accpagesize",&value))
+	entry->acpagesize = entry->pagesize;
     else
     {
-	if(ajStrToUint(value,&n))
+        if(ajStrToUint(value,&n))
 	{
-	    entry->pagesize = n;
+	    entry->acpagesize = n;
 	}
 	else
 	{
-	    ajErr("Bad value for environment variable 'PAGESIZE'");
-	    entry->pagesize = BTREE_DEF_PAGESIZE;
+	    ajErr("Bad value for index resource 'accpagesize'");
+	    entry->acpagesize = entry->pagesize;
 	}
     }
-
-    
-    entry->idorder = (entry->pagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
+        
+    if(!ajNamRsAttrValueC(resource,"svpagesize",&value))
+	entry->svpagesize = entry->pagesize;
+    else
+    {
+        if(ajStrToUint(value,&n))
+	{
+	    entry->svpagesize = n;
+	}
+	else
+	{
+	    ajErr("Bad value for index resource 'svpagesize'");
+	    entry->svpagesize = entry->pagesize;
+	}
+    }
+        
+    if(!ajNamRsAttrValueC(resource,"keypagesize",&value))
+	entry->kwpagesize = entry->pagesize;
+    else
+    {
+        if(ajStrToUint(value,&n))
+	{
+	    entry->kwpagesize = n;
+	}
+	else
+	{
+	    ajErr("Bad value for index resource 'keypagesize'");
+	    entry->kwpagesize = entry->pagesize;
+	}
+    }
+        
+    if(!ajNamRsAttrValueC(resource,"despagesize",&value))
+	entry->depagesize = entry->pagesize;
+    else
+    {
+        if(ajStrToUint(value,&n))
+	{
+	    entry->depagesize = n;
+	}
+	else
+	{
+	    ajErr("Bad value for index resource 'despagesize'");
+	    entry->depagesize = entry->pagesize;
+	}
+    }
+        
+    if(!ajNamRsAttrValueC(resource,"orgpagesize",&value))
+	entry->txpagesize = entry->pagesize;
+    else
+    {
+        if(ajStrToUint(value,&n))
+	{
+	    entry->txpagesize = n;
+	}
+	else
+	{
+	    ajErr("Bad value for index resource 'orgpagesize'");
+	    entry->txpagesize = entry->pagesize;
+	}
+    }
+        
+    if(!ajNamRsAttrValueC(resource,"idcachesize",&value))
+	entry->idcachesize = entry->cachesize;
+    else
+    {
+        if(ajStrToUint(value,&n))
+	{
+	    entry->idcachesize = n;
+	}
+	else
+	{
+	    ajErr("Bad value for index resource 'idcachesize'");
+	    entry->idcachesize = entry->cachesize;
+	}
+    }
+        
+    if(!ajNamRsAttrValueC(resource,"acccachesize",&value))
+	entry->accachesize = entry->cachesize;
+    else
+    {
+        if(ajStrToUint(value,&n))
+	{
+	    entry->accachesize = n;
+	}
+	else
+	{
+	    ajErr("Bad value for index resource 'acccachesize'");
+	    entry->accachesize = entry->cachesize;
+	}
+    }
+        
+    if(!ajNamRsAttrValueC(resource,"svcachesize",&value))
+	entry->svcachesize = entry->cachesize;
+    else
+    {
+        if(ajStrToUint(value,&n))
+	{
+	    entry->svcachesize = n;
+	}
+	else
+	{
+	    ajErr("Bad value for index resource 'svcachesize'");
+	    entry->svcachesize = entry->cachesize;
+	}
+    }
+        
+    if(!ajNamRsAttrValueC(resource,"keycachesize",&value))
+	entry->kwcachesize = entry->cachesize;
+    else
+    {
+        if(ajStrToUint(value,&n))
+	{
+	    entry->kwcachesize = n;
+	}
+	else
+	{
+	    ajErr("Bad value for index resource 'keycachesize'");
+	    entry->kwcachesize = entry->cachesize;
+	}
+    }
+        
+    if(!ajNamRsAttrValueC(resource,"descachesize",&value))
+	entry->decachesize = entry->cachesize;
+    else
+    {
+        if(ajStrToUint(value,&n))
+	{
+	    entry->decachesize = n;
+	}
+	else
+	{
+	    ajErr("Bad value for index resource 'descachesize'");
+	    entry->decachesize = entry->cachesize;
+	}
+    }
+        
+    if(!ajNamRsAttrValueC(resource,"orgcachesize",&value))
+	entry->txcachesize = entry->cachesize;
+    else
+    {
+        if(ajStrToUint(value,&n))
+	{
+	    entry->txcachesize = n;
+	}
+	else
+	{
+	    ajErr("Bad value for index resource 'orgcachesize'");
+	    entry->txcachesize = entry->cachesize;
+	}
+    }
+        
+    entry->idorder = (entry->idpagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
         ((entry->idlen + 1) + BT_IDKEYEXTRA);
 
-    entry->idfill  = (entry->pagesize - BT_BUCKPREAMBLE) /
+    entry->idfill  = (entry->idpagesize - BT_BUCKPREAMBLE) /
         ((entry->idlen + 1) + BT_KEYLENENTRY + BT_DDOFFROFF);
 
-    entry->acorder = (entry->pagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
+    entry->acorder = (entry->acpagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
         ((entry->aclen + 1) + BT_IDKEYEXTRA);
 
-    entry->acfill  = (entry->pagesize - BT_BUCKPREAMBLE) /
+    entry->acfill  = (entry->acpagesize - BT_BUCKPREAMBLE) /
         ((entry->aclen + 1) + BT_KEYLENENTRY + BT_DDOFFROFF);
 
-    entry->svorder = (entry->pagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
+    entry->svorder = (entry->svpagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
         ((entry->svlen + 1) + BT_IDKEYEXTRA);
 
-    entry->svfill  = (entry->pagesize - BT_BUCKPREAMBLE) /
+    entry->svfill  = (entry->svpagesize - BT_BUCKPREAMBLE) /
         ((entry->svlen + 1) + BT_KEYLENENTRY + BT_DDOFFROFF);
 
-    entry->kworder = (entry->pagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
+    entry->kworder = (entry->kwpagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
         ((entry->kwlen + 1) + BT_IDKEYEXTRA);
 
-    entry->kwfill  = (entry->pagesize - BT_BUCKPREAMBLE) /
+    entry->kwfill  = (entry->kwpagesize - BT_BUCKPREAMBLE) /
         ((entry->kwlen + 1) + BT_KEYLENENTRY + BT_DDOFFROFF);
 
-    entry->deorder = (entry->pagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
+    entry->deorder = (entry->depagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
         ((entry->delen + 1) + BT_IDKEYEXTRA);
 
-    entry->defill  = (entry->pagesize - BT_BUCKPREAMBLE) /
+    entry->defill  = (entry->depagesize - BT_BUCKPREAMBLE) /
         ((entry->delen + 1) + BT_KEYLENENTRY + BT_DDOFFROFF);
 
-    entry->txorder = (entry->pagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
+    entry->txorder = (entry->txpagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
         ((entry->txlen + 1) + BT_IDKEYEXTRA);
 
-    entry->txfill  = (entry->pagesize - BT_BUCKPREAMBLE) /
+    entry->txfill  = (entry->txpagesize - BT_BUCKPREAMBLE) /
         ((entry->txlen + 1) + BT_KEYLENENTRY + BT_DDOFFROFF);
 
  
-    entry->idsecorder = (entry->pagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
+    entry->idsecorder = (entry->idpagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
         (BT_OFFKEYLEN + BT_IDKEYEXTRA);
 
-    entry->acsecorder = (entry->pagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
+    entry->acsecorder = (entry->acpagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
         (BT_OFFKEYLEN + BT_IDKEYEXTRA);
 
-    entry->svsecorder = (entry->pagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
+    entry->svsecorder = (entry->svpagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
         (BT_OFFKEYLEN + BT_IDKEYEXTRA);
 
  
-    entry->idsecfill  = (entry->pagesize - BT_BUCKPREAMBLE) /
+    entry->idsecfill  = (entry->idpagesize - BT_BUCKPREAMBLE) /
         BT_DOFFROFF;
 
-    entry->acsecfill  = (entry->pagesize - BT_BUCKPREAMBLE) /
+    entry->acsecfill  = (entry->acpagesize - BT_BUCKPREAMBLE) /
         BT_DOFFROFF;
 
-    entry->svsecfill  = (entry->pagesize - BT_BUCKPREAMBLE) /
+    entry->svsecfill  = (entry->svpagesize - BT_BUCKPREAMBLE) /
         BT_DOFFROFF;
 
 
@@ -1262,19 +1481,19 @@ void embBtreeGetRsInfo(EmbPBtreeEntry entry)
      *  the keywords
      */
 
-    entry->kwsecorder = (entry->pagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
+    entry->kwsecorder = (entry->kwpagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
         ((entry->idlen + 1) + BT_IDKEYEXTRA);
-    entry->desecorder = (entry->pagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
+    entry->desecorder = (entry->depagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
         ((entry->idlen + 1) + BT_IDKEYEXTRA);
-    entry->txsecorder = (entry->pagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
+    entry->txsecorder = (entry->txpagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
         ((entry->idlen + 1) + BT_IDKEYEXTRA);
 
 
-    entry->kwsecfill  = (entry->pagesize - BT_BUCKPREAMBLE) /
+    entry->kwsecfill  = (entry->kwpagesize - BT_BUCKPREAMBLE) /
         ((entry->idlen + 1) + BT_KEYLENENTRY);
-    entry->desecfill  = (entry->pagesize - BT_BUCKPREAMBLE) /
+    entry->desecfill  = (entry->depagesize - BT_BUCKPREAMBLE) /
         ((entry->idlen + 1) + BT_KEYLENENTRY);
-    entry->txsecfill  = (entry->pagesize - BT_BUCKPREAMBLE) /
+    entry->txsecfill  = (entry->txpagesize - BT_BUCKPREAMBLE) /
         ((entry->idlen + 1) + BT_KEYLENENTRY);
 
     ajStrDel(&value);
@@ -1310,9 +1529,9 @@ AjBool embBtreeOpenCaches(EmbPBtreeEntry entry)
     if(entry->do_id)
     {
 	entry->idcache = ajBtreeSecCacheNewC(basenam,ID_EXTENSION,idir,"w+",
-					     entry->pagesize, entry->idorder,
+					     entry->idpagesize, entry->idorder,
 					     entry->idfill, level,
-					     entry->cachesize,
+					     entry->idcachesize,
 					     entry->idsecorder, slevel,
 					     entry->idsecfill, count,
 					     entry->idlen);
@@ -1325,10 +1544,10 @@ AjBool embBtreeOpenCaches(EmbPBtreeEntry entry)
     if(entry->do_accession)
     {
 	entry->accache = ajBtreeSecCacheNewC(basenam,AC_EXTENSION,idir,"w+",
-					     entry->pagesize,
+					     entry->acpagesize,
 					     entry->acorder, entry->acfill,
 					     level,
-					     entry->cachesize,
+					     entry->accachesize,
 					     entry->acsecorder, slevel,
 					     entry->acsecfill, count,
 					     entry->aclen);
@@ -1341,9 +1560,9 @@ AjBool embBtreeOpenCaches(EmbPBtreeEntry entry)
     if(entry->do_sv)
     {
 	entry->svcache = ajBtreeSecCacheNewC(basenam,SV_EXTENSION,idir,"w+",
-					     entry->pagesize, entry->svorder,
+					     entry->svpagesize, entry->svorder,
 					     entry->svfill, level,
-					     entry->cachesize,
+					     entry->svcachesize,
 					     entry->svsecorder, slevel,
 					     entry->svsecfill, count,
 					     entry->svlen);
@@ -1358,10 +1577,10 @@ AjBool embBtreeOpenCaches(EmbPBtreeEntry entry)
     if(entry->do_keyword)
     {
 	entry->kwcache = ajBtreeSecCacheNewC(basenam,KW_EXTENSION,idir,"w+",
-					     entry->pagesize,
+					     entry->kwpagesize,
 					     entry->kworder, entry->kwfill,
 					     level,
-					     entry->cachesize,
+					     entry->kwcachesize,
 					     entry->kwsecorder, slevel,
 					     entry->kwsecfill, count,
 					     entry->kwlen);
@@ -1375,10 +1594,10 @@ AjBool embBtreeOpenCaches(EmbPBtreeEntry entry)
     if(entry->do_description)
     {
 	entry->decache = ajBtreeSecCacheNewC(basenam,DE_EXTENSION,idir,"w+",
-					     entry->pagesize,
+					     entry->depagesize,
 					     entry->deorder, entry->defill,
 					     level,
-					     entry->cachesize,
+					     entry->decachesize,
 					     entry->desecorder, slevel,
 					     entry->desecfill, count,
 					     entry->delen);
@@ -1392,10 +1611,10 @@ AjBool embBtreeOpenCaches(EmbPBtreeEntry entry)
     if(entry->do_taxonomy)
     {
 	entry->txcache = ajBtreeSecCacheNewC(basenam,TX_EXTENSION,idir,"w+",
-					     entry->pagesize,
+					     entry->txpagesize,
 					     entry->txorder, entry->txfill,
 					     level,
-					     entry->cachesize,
+					     entry->txcachesize,
 					     entry->txsecorder, slevel,
 					     entry->txsecfill, count,
 					     entry->txlen);
@@ -1478,6 +1697,7 @@ AjBool embBtreeCloseCaches(EmbPBtreeEntry entry)
 
 
 
+
 #if 0
 
 /* @func embBtreeProbeCaches ***********************************************
@@ -1515,6 +1735,8 @@ AjBool embBtreeProbeCaches(EmbPBtreeEntry entry)
 }
 
 #endif
+
+
 
 
 /* @func embBtreeDumpParameters ***********************************************
@@ -1556,6 +1778,8 @@ AjBool embBtreeDumpParameters(EmbPBtreeEntry entry)
 
     return ajTrue;
 }
+
+
 
 
 /* @func embIndexExit **********************************************************

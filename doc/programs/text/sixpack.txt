@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Display a DNA sequence with 6-frame translation and ORFs
@@ -116,7 +123,7 @@ Command line arguments
                                   24-45 blue 56-78 orange
                                   1-100 green 120-156 red
                                   A file of ranges to colour (one range per
-                                  line) can be specifed as '@filename'.
+                                  line) can be specified as '@filename'.
    -[no]number         boolean    [Y] Number the sequence at the beginning and
                                   the end of each line.
    -width              integer    [60] Number of nucleotides displayed on each
@@ -221,18 +228,17 @@ RP   1167-2167
 RX   DOI; 10.1016/0014-5793(89)80249-2.
 RX   PUBMED; 2495988.
 RA   Lowe N., Rice P.M., Drew R.E.;
-RT   "Nucleotide sequence of the aliphatic amidase regulator gene of Pseudomona
-s
-RT   aeruginosa";
+RT   "Nucleotide sequence of the aliphatic amidase regulator gene (amiR) of
+RT   Pseudomonas aeruginosa";
 RL   FEBS Lett. 246(1-2):39-43(1989).
 XX
 RN   [3]
 RP   1-1292
 RX   PUBMED; 1907262.
 RA   Wilson S., Drew R.;
-RT   "Cloning and DNA seqence of amiC, a new gene regulating expression of the
+RT   "Cloning and DNA sequence of amiC, a new gene regulating expression of the
 RT   Pseudomonas aeruginosa aliphatic amidase, and purification of the amiC
-RT   product.";
+RT   product";
 RL   J. Bacteriol. 173(16):4914-4921(1991).
 XX
 RN   [4]
@@ -244,8 +250,8 @@ RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG
 .
 XX
 DR   GOA; Q51417.
+DR   InterPro; IPR003211; AmiSUreI_transpt.
 DR   UniProtKB/Swiss-Prot; Q51417; AMIS_PSEAE.
-XX
 
 
   [Part of this file has been deleted for brevity]
@@ -709,36 +715,37 @@ Known bugs
 
 See also
 
-   Program name Description
-   abiview Display the trace in an ABI sequencer file
-   backtranambig Back-translate a protein sequence to ambiguous
-   nucleotide sequence
-   backtranseq Back-translate a protein sequence to a nucleotide sequence
-   cirdna Draws circular maps of DNA constructs
-   coderet Extract CDS, mRNA and translations from feature tables
-   getorf Finds and extracts open reading frames (ORFs)
-   lindna Draws linear maps of DNA constructs
-   marscan Finds matrix/scaffold recognition (MRS) signatures in DNA
-   sequences
-   pepnet Draw a helical net for a protein sequence
-   pepwheel Draw a helical wheel diagram for a protein sequence
-   plotorf Plot potential open reading frames in a nucleotide sequence
-   prettyplot Draw a sequence alignment with pretty formatting
-   prettyseq Write a nucleotide sequence and its translation to file
-   remap Display restriction enzyme binding sites in a nucleotide
-   sequence
-   seealso Finds programs with similar function to a specified program
-   showalign Display a multiple sequence alignment in pretty format
-   showdb Displays information on configured databases
-   showfeat Display features of a sequence in pretty format
-   showorf Display a nucleotide sequence and translation in pretty format
-   showseq Displays sequences with features in pretty format
-   syco Draw synonymous codon usage statictic plot for a nucleotide
-   sequence
-   tcode Identify protein-coding regions using Fickett TESTCODE statistic
-   textsearch Search the textual description of sequence(s)
-   transeq Translate nucleic acid sequences
-   wobble Plot third base position variability in a nucleotide sequence
+   Program name     Description
+   abiview          Display the trace in an ABI sequencer file
+   backtranambig    Back-translate a protein sequence to ambiguous
+                    nucleotide sequence
+   backtranseq      Back-translate a protein sequence to a nucleotide sequence
+   cirdna           Draws circular maps of DNA constructs
+   coderet          Extract CDS, mRNA and translations from feature tables
+   getorf           Finds and extracts open reading frames (ORFs)
+   lindna           Draws linear maps of DNA constructs
+   marscan          Finds matrix/scaffold recognition (MRS) signatures in DNA
+                    sequences
+   pepnet           Draw a helical net for a protein sequence
+   pepwheel         Draw a helical wheel diagram for a protein sequence
+   plotorf          Plot potential open reading frames in a nucleotide sequence
+   prettyplot       Draw a sequence alignment with pretty formatting
+   prettyseq        Write a nucleotide sequence and its translation to file
+   remap            Display restriction enzyme binding sites in a nucleotide
+                    sequence
+   seealso          Finds programs with similar function to a specified program
+   showalign        Display a multiple sequence alignment in pretty format
+   showdb           Displays information on configured databases
+   showfeat         Display features of a sequence in pretty format
+   showorf          Display a nucleotide sequence and translation in pretty format
+   showpep          Displays protein sequences with features in pretty format
+   showseq          Displays sequences with features in pretty format
+   syco             Draw synonymous codon usage statictic plot for a nucleotide
+                    sequence
+   tcode            Identify protein-coding regions using Fickett TESTCODE statistic
+   textsearch       Search the textual description of sequence(s)
+   transeq          Translate nucleic acid sequences
+   wobble           Plot third base position variability in a nucleotide sequence
 
 Author(s)
 

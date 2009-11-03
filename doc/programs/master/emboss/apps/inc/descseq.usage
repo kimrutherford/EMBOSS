@@ -6,7 +6,7 @@ Set the name of a sequence to "myclone23"
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>descseq -seq dna.text -out clone23.seq -name "myclone23" </b>
+% <b>descseq -seq dna.text -out clone23.seq -name 'myclone23' </b>
 Alter the name or description of a sequence.
 
 </pre></td></tr></table><p>
@@ -21,7 +21,7 @@ Set the description of a sequence to "This is my clone number 244"
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>descseq -seq dna.text -out xy24.seq -desc "This is my clone number 244" </b>
+% <b>descseq -seq dna.text -out xy24.seq -desc 'This is my clone number 244' </b>
 Alter the name or description of a sequence.
 
 </pre></td></tr></table><p>
@@ -36,7 +36,7 @@ Append some text to the description of a sequence
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>descseq -seq dna.text -out est4.seq -desc " (submitted)" -append </b>
+% <b>descseq -seq dna.text -out est4.seq -desc ' (submitted)' -append </b>
 Alter the name or description of a sequence.
 
 </pre></td></tr></table><p>

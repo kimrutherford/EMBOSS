@@ -48,6 +48,7 @@
 ** @attr lptr [EmbPHitlist] Pointer to EmbPHitlist structure 
 ** @@
 ****************************************************************************/
+
 typedef struct EmbSHitidx
 {  
     AjPStr      Id;
@@ -81,6 +82,13 @@ typedef struct EmbSSigcell
 } EmbOSigcell;
 #define EmbPSigcell EmbOSigcell*
 
+
+static EmbPSigcell embSigpath = NULL;  /*Path matrix as 1D array */
+static char *embSigprot = NULL;  /*Protein sequence */
+static char *embSigalign = NULL;   /*String for alignment */
+
+static ajint embSigsavedim = 0;		/* dimension of path */
+static ajint embSigsavenres = 0;		/* dimension of alg and p */
 
 
 
@@ -196,8 +204,10 @@ EmbPSigdat embSigdatNew(ajuint nres, ajuint ngap)
 	ajChararrPut(&ret->rids, nres-1, (char)' ');
 
 	AJCNEW0(ret->eids, nres);
+
 	for(x=0;x<nres;x++)
 	    ret->eids[x]=ajStrNew();
+
 	ret->efrq = ajUintNewL((ajint) nres);
         ajUintPut(&ret->efrq, nres-1, (ajint)0);
     }
@@ -298,8 +308,10 @@ void embSigdatDel(EmbPSigdat *pthis)
     {
 	for(x=0; x<(*pthis)->nres; x++)
 	    ajStrDel(&((*pthis)->eids[x]));
+
 	AJFREE((*pthis)->eids);    
     }
+
     ajUintDel(&(*pthis)->efrq);
 
     AJFREE(*pthis);    
@@ -385,6 +397,7 @@ static ajint embHitidxBinSearch(const AjPStr id, EmbPHitidx const *arr,
 
     l = 0;
     h = siz-1;
+
     while(l<=h)
     {
         m=(l+h)>>1;
@@ -425,7 +438,6 @@ static ajint embHitidxMatchId(const void *hit1, const void *hit2)
     q = (*(EmbPHitidx const *)hit2);
     
     return ajStrCmpS(p->Id, q->Id);
-
 }
 
 
@@ -468,6 +480,7 @@ static AjBool embHitlistReadFam(AjPFile scopf,
     if(!fam || !sfam || !fold || !class)
     {
 	ajWarn("Bad arguments passed to embHitlistReadFam\n");
+
 	return ajFalse;
     }
     
@@ -492,7 +505,6 @@ static AjBool embHitlistReadFam(AjPFile scopf,
 
     return ajFalse;
 }
-
 
 
 
@@ -532,6 +544,7 @@ static AjBool embHitlistReadSfam(AjPFile scopf,
     if(!sfam || !fold || !class)
     {
 	ajWarn("Bad arguments passed to embHitlistReadSfam\n");
+
 	return ajFalse;
     }
     
@@ -552,7 +565,6 @@ static AjBool embHitlistReadSfam(AjPFile scopf,
 
     return ajFalse;
 }
-
 
 
 
@@ -590,6 +602,7 @@ static AjBool embHitlistReadFold(AjPFile scopf,
     if(!fold || !class)
     {
 	ajWarn("Bad arguments passed to embHitlistReadFold\n");
+
 	return ajFalse;
     }
     
@@ -608,7 +621,6 @@ static AjBool embHitlistReadFold(AjPFile scopf,
 
     return ajFalse;	
 }
-
 
 
 
@@ -651,6 +663,7 @@ static AjBool embHitlistReadFamFasta(AjPFile scopf,
     if(!fam || !sfam || !fold || !class)
     {
 	ajWarn("Bad arguments passed to embHitlistReadFamFasta\n");
+
 	return ajFalse;
     }
     
@@ -675,7 +688,6 @@ static AjBool embHitlistReadFamFasta(AjPFile scopf,
 
     return ajFalse;
 }
-
 
 
 
@@ -716,6 +728,7 @@ static AjBool embHitlistReadSfamFasta(AjPFile scopf, const AjPStr fam,
     if(!sfam || !fold || !class)
     {
 	ajWarn("Bad arguments passed to embHitlistReadSfamFasta\n");
+
 	return ajFalse;
     }
     
@@ -736,7 +749,6 @@ static AjBool embHitlistReadSfamFasta(AjPFile scopf, const AjPStr fam,
 
     return ajFalse;
 }
-
 
 
 
@@ -774,6 +786,7 @@ static AjBool embHitlistReadFoldFasta(AjPFile scopf, const AjPStr fam,
     if(!fold || !class)
     {
 	ajWarn("Bad arguments passed to embHitlistReadFoldFasta\n");
+
 	return ajFalse;
     }
     
@@ -792,12 +805,6 @@ static AjBool embHitlistReadFoldFasta(AjPFile scopf, const AjPStr fam,
 
     return ajFalse;	
 }
-
-
-
-
-
-
 
 
 
@@ -847,13 +854,13 @@ EmbPHitlist embHitlistNew(ajuint n)
     if(n)
     {
 	AJCNEW0(ret->hits,n);
+
 	for(i=0;i<n;++i)
 	    ret->hits[i] = embHitNew();
     }	
 
     return ret;
 }
-
 
 
 
@@ -894,9 +901,6 @@ EmbPHit embHitNew(void)
 
     return ret;
 }
-
-
-
 
 
 
@@ -946,7 +950,6 @@ EmbPSignature embSignatureNew(ajuint n)
 
 
 
-
 /* ======================================================================= */
 /* =========================== destructors =============================== */
 /* ======================================================================= */
@@ -975,21 +978,28 @@ void embHitlistDel(EmbPHitlist *ptr)
     if(!(*ptr))
     {
 	ajWarn("Null pointer passed to embHitlistDel");
+
 	return;
     }
     
     if((*ptr)->Class)
 	ajStrDel(&(*ptr)->Class);
+
     if((*ptr)->Architecture)
 	ajStrDel(&(*ptr)->Architecture);
+
     if((*ptr)->Topology)
 	ajStrDel(&(*ptr)->Topology);
+
     if((*ptr)->Fold)
 	ajStrDel(&(*ptr)->Fold);
+
     if((*ptr)->Superfamily)
 	ajStrDel(&(*ptr)->Superfamily);
+
     if((*ptr)->Family)
 	ajStrDel(&(*ptr)->Family);
+
     if((*ptr)->Model)
 	ajStrDel(&(*ptr)->Model);
     
@@ -1007,7 +1017,6 @@ void embHitlistDel(EmbPHitlist *ptr)
     
     return;
 }
-
 
 
 
@@ -1043,7 +1052,6 @@ void embHitDel(EmbPHit *ptr)
 
 
 
-
 /* @func embSignatureDel ****************************************************
 **
 ** Destructor for Signature object.
@@ -1073,23 +1081,31 @@ void embSignatureDel(EmbPSignature *ptr)
 
     if((*ptr)->Class)
 	ajStrDel(&(*ptr)->Class);
+
     if((*ptr)->Architecture)
 	ajStrDel(&(*ptr)->Architecture);
+
     if((*ptr)->Topology)
 	ajStrDel(&(*ptr)->Topology);
+
     if((*ptr)->Fold)
 	ajStrDel(&(*ptr)->Fold);
+
     if((*ptr)->Superfamily)
 	ajStrDel(&(*ptr)->Superfamily);
+
     if((*ptr)->Family)
 	ajStrDel(&(*ptr)->Family);
 
     if((*ptr)->Id)
 	ajStrDel(&(*ptr)->Id);
+
     if((*ptr)->Domid)
 	ajStrDel(&(*ptr)->Domid);
+
     if((*ptr)->Ligid)
 	ajStrDel(&(*ptr)->Ligid);
+
     if((*ptr)->Desc)
 	ajStrDel(&(*ptr)->Desc);
 
@@ -1105,7 +1121,6 @@ void embSignatureDel(EmbPSignature *ptr)
 
     return;
 }
-
 
 
 
@@ -1147,12 +1162,14 @@ EmbPHit embHitMerge(const EmbPHit hit1, const EmbPHit hit2)
     if(!hit1 || !hit2)
     {
 	ajWarn("Bad arg's passed to EmbPHitMerge");
+
 	return NULL;
     }
 
     if(!ajStrMatchS(hit1->Acc, hit2->Acc))
     {
 	ajWarn("Merge attempted on 2 hits with different accession numbers");
+
 	return NULL;
     }
 
@@ -1241,7 +1258,6 @@ EmbPHit embHitMerge(const EmbPHit hit1, const EmbPHit hit2)
 
 
 
-
 /* ======================================================================= */
 /* ============================= Modifiers =============================== */
 /* ======================================================================= */
@@ -1251,7 +1267,6 @@ EmbPHit embHitMerge(const EmbPHit hit1, const EmbPHit hit2)
 ** These functions use the contents of an instance and update them.
 **
 ****************************************************************************/
-
 
 
 
@@ -1294,7 +1309,6 @@ ajint embHitlistMatchFold(const void *hit1, const void *hit2)
 
 
 
-
 /* @func embMatchScore ******************************************************
 **
 ** Function to sort Hit objects by score record. Usually called by 
@@ -1322,6 +1336,7 @@ ajint embMatchScore(const void *hit1, const void *hit2)
 
     return 1;
 }
+
 
 
 
@@ -1353,7 +1368,6 @@ ajint embMatchinvScore(const void *hit1, const void *hit2)
 
     return 1;
 }
-
 
 
 
@@ -1414,6 +1428,8 @@ ajint embMatchSN(const void *hit1, const void *hit2)
 }
 
 
+
+
 /* ======================================================================= */
 /* ============================== Casts ===================================*/
 /* ======================================================================= */
@@ -1426,7 +1442,6 @@ ajint embMatchSN(const void *hit1, const void *hit2)
 ** but should be used with caution.
 **
 ****************************************************************************/
-
 
 
 
@@ -1476,6 +1491,7 @@ AjBool embHitsOverlap(const EmbPHit hit1, const EmbPHit hit2, ajuint n)
 		return ajTrue;
 
 	    ajDebug("No string overlap in sequences\n");
+
 	    return ajFalse;
 	}
 
@@ -1485,6 +1501,7 @@ AjBool embHitsOverlap(const EmbPHit hit1, const EmbPHit hit2, ajuint n)
 
     if(hit1->End > hit2->Start)
 	len1 = hit1->End - hit2->Start + 1;
+
     if(hit2->End > hit1->Start)
 	len2 = hit2->End - hit2->Start + 1;
 
@@ -1552,6 +1569,7 @@ EmbPHit embHitReadFasta(AjPFile inf)
 		ajStrRemoveWhite(&hit->Seq);
 		ajStrDel(&line);
 		ajStrDel(&subline);
+
 		return hit;
 	    }	
 /*	    else
@@ -1559,6 +1577,7 @@ EmbPHit embHitReadFasta(AjPFile inf)
 
 	    /* Check line has correct no. of tokens and allocate Hit */
 	    ajStrAssignSubS(&subline, line, 1, -1);
+
 	    if( (ntok=ajStrParseCountC(subline, "^")) != 17)
 	    {
 		ajWarn("Wrong no. (%d) of tokens for a DHF file on line %S\n",
@@ -1566,6 +1585,7 @@ EmbPHit embHitReadFasta(AjPFile inf)
 		ajStrDel(&line);
 		ajStrDel(&subline);
 		embHitDel(&hit);
+
 		return NULL;
 	    }
 	    else
@@ -1577,12 +1597,14 @@ EmbPHit embHitReadFasta(AjPFile inf)
 	    token = ajStrParseC(subline, "^");
 	    ajStrAssignS(&hit->Acc, token);
 	    ajStrTrimWhite(&hit->Acc); 
+
 	    if(ajStrMatchC(hit->Acc, "."))
 		ajStrSetClear(&hit->Acc);
 
 	    /* Spr */
 	    token = ajStrParseC(NULL, "^");
 	    ajStrAssignS(&hit->Spr, token);
+
 	    if(ajStrMatchC(hit->Spr, "."))
 		ajStrSetClear(&hit->Spr);
 
@@ -1600,12 +1622,16 @@ EmbPHit embHitReadFasta(AjPFile inf)
 	    /* Dom */
 	    token = ajStrParseC(NULL, "^");
 	    ajStrAssignS(&hit->Dom, token);
+
 	    if(ajStrMatchC(hit->Dom, "."))
 		ajStrSetClear(&hit->Dom);
 
-	    /* Disregard domain identifier - a change of domain identifier indicates 
-	       a new block of hits in a file with multiple hitlists, but we only 
-	       want a single hit so don't need this. */
+	    /*
+            ** Disregard domain identifier - a change of domain
+            ** identifier indicates a new block of hits in a file with
+            ** multiple hitlists, but we only 
+	    ** want a single hit so don't need this.
+            */
 	    token = ajStrParseC(NULL, "^");
 	    token = ajStrParseC(NULL, "^");
 	    token = ajStrParseC(NULL, "^");
@@ -1643,6 +1669,7 @@ EmbPHit embHitReadFasta(AjPFile inf)
 	ajStrRemoveWhite(&hit->Seq);
 	ajStrDel(&line);
 	ajStrDel(&subline);
+
 	return hit;
     }
     
@@ -1650,6 +1677,7 @@ EmbPHit embHitReadFasta(AjPFile inf)
     /* Tidy up */
     ajStrDel(&line);
     ajStrDel(&subline);
+
     return NULL;
 }
 
@@ -1737,10 +1765,12 @@ EmbPHitlist embHitlistRead(AjPFile inf)
 	else if(ajStrPrefixC(line,"FO"))
 	{
 	    ajStrAssignC(&fold,ajStrGetPtr(line)+3);
+
 	    while((ok = ajReadlineTrim(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
+
 		ajStrAppendC(&fold,ajStrGetPtr(line)+3);
 	    }
 	    ajStrRemoveWhiteExcess(&fold);
@@ -1748,23 +1778,29 @@ EmbPHitlist embHitlistRead(AjPFile inf)
 	else if(ajStrPrefixC(line,"SF"))
 	{
 	    ajStrAssignC(&super,ajStrGetPtr(line)+3);
+
 	    while((ok = ajReadlineTrim(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
+
 		ajStrAppendC(&super,ajStrGetPtr(line)+3);
 	    }
+
 	    ajStrRemoveWhiteExcess(&super);
 	}
 	else if(ajStrPrefixC(line,"FA"))
 	{
 	    ajStrAssignC(&family,ajStrGetPtr(line)+3);
+
 	    while((ok = ajReadlineTrim(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
+
 		ajStrAppendC(&family,ajStrGetPtr(line)+3);
 	    }
+
 	    ajStrRemoveWhiteExcess(&family);
 	}
 	else if(ajStrPrefixC(line,"NS"))
@@ -1782,6 +1818,7 @@ EmbPHitlist embHitlistRead(AjPFile inf)
 	    ajStrAssignS(&(ret)->Superfamily, super);
 	    ajStrAssignS(&(ret)->Family, family);
 	    (ret)->Sunid_Family = Sunid_Family;
+
 	    if(ajStrMatchC(type, "SCOP"))
 		(ret)->Type = ajSCOP;
 	    else if(ajStrMatchC(type, "CATH"))
@@ -1798,17 +1835,11 @@ EmbPHitlist embHitlistRead(AjPFile inf)
 			"in embHitlistRead.\n Email jison@hgmp.mrc.ac.uk");
 	}
 	else if(ajStrPrefixC(line,"SC"))
-	{
 	    ajFmtScanS(line, "%*s %f", &(ret)->hits[n-1]->Score);
-	}
 	else if(ajStrPrefixC(line,"PV"))
-	{
 	    ajFmtScanS(line, "%*s %f", &(ret)->hits[n-1]->Pval);
-	}
 	else if(ajStrPrefixC(line,"EV"))
-	{
 	    ajFmtScanS(line, "%*s %f", &(ret)->hits[n-1]->Eval);
-	}
 	else if(ajStrPrefixC(line,"AC"))
 	{
 	    ajStrAssignC(&(ret)->hits[n-1]->Acc,ajStrGetPtr(line)+3);
@@ -1843,6 +1874,7 @@ EmbPHitlist embHitlistRead(AjPFile inf)
 	{
 	    while((ok=ajReadlineTrim(inf,&line)) && !ajStrPrefixC(line,"XX"))
 		ajStrAppendC(&(ret)->hits[n-1]->Seq,ajStrGetPtr(line));
+
 	    ajStrRemoveWhite(&(ret)->hits[n-1]->Seq);
 	    continue;
 	}
@@ -1866,7 +1898,6 @@ EmbPHitlist embHitlistRead(AjPFile inf)
 
 
 
-
 /* @func embHitlistReadFasta ************************************************
 **
 ** Read a hitlist object from a file in extended FASTA format 
@@ -1882,7 +1913,7 @@ EmbPHitlist embHitlistReadFasta(AjPFile inf)
 {
     EmbPHitlist hitlist   = NULL;
     EmbPHit     hit       = NULL;    /* Current hit.                     */
-    AjPList    tmplist   = NULL;    /* Temp. list of hits               */       
+    AjPList    tmplist   = NULL;    /* Temp. list of hits               */ 
     AjBool     donefirst = ajFalse; /* Read first code line.            */
     AjBool     doneseq   = ajFalse; /* Read at least one sequence line. */
     ajuint     this_id    = 0;       /* Domain id of last hit.           */
@@ -1920,11 +1951,13 @@ EmbPHitlist embHitlistReadFasta(AjPFile inf)
 	    {
 		if(MAJSTRGETLEN(hit->Seq))
 		    ajStrRemoveWhite(&hit->Seq);
+
 		ajListPushAppend(tmplist, hit);
 	    }
 	    
 	    /* Check line has correct no. of tokens and allocate Hit */
 	    ajStrAssignSubS(&subline, line, 1, -1);
+
 	    if( (ntok=ajStrParseCountC(subline, "^")) != 17)
 		ajFatal("Incorrect no. (%d) of tokens on line %S\n",
 			ntok, line);
@@ -1938,12 +1971,14 @@ EmbPHitlist embHitlistReadFasta(AjPFile inf)
 	    token = ajStrParseC(subline, "^");
 	    ajStrAssignS(&hit->Acc, token);
 	    ajStrTrimWhite(&hit->Acc); 
+
 	    if(ajStrMatchC(hit->Acc, "."))
 		ajStrSetClear(&hit->Acc);
 
 	    /* Spr */
 	    token = ajStrParseC(NULL, "^");
 	    ajStrAssignS(&hit->Spr, token);
+
 	    if(ajStrMatchC(hit->Spr, "."))
 		ajStrSetClear(&hit->Spr);
 
@@ -1962,6 +1997,7 @@ EmbPHitlist embHitlistReadFasta(AjPFile inf)
 	    /* Dom */
 	    token = ajStrParseC(NULL, "^");
 	    ajStrAssignS(&hit->Dom, token);
+
 	    if(ajStrMatchC(hit->Dom, "."))
 		ajStrSetClear(&hit->Dom);
 
@@ -1975,7 +2011,10 @@ EmbPHitlist embHitlistReadFasta(AjPFile inf)
 	       the list */
 	    if((this_id != last_id) && (donefirst))
 	    {
-		/* Delete the hit we've just read in ... which is of the wrong family */
+		/*
+                ** Delete the hit we've just read in ... which is of the
+                ** wrong family
+                */
 		embHitDel(&hit);
 		
 		hitlist->N = ajListToarray(tmplist, (void ***)&hitlist->hits);
@@ -1988,6 +2027,7 @@ EmbPHitlist embHitlistReadFasta(AjPFile inf)
 		    ajFileSeek(inf, fpos, 0);
 		else
 		    ajFileSeek(inf, fpos_noseq, 0);
+
 		return hitlist;
 	    }
 	    else
@@ -1996,13 +2036,16 @@ EmbPHitlist embHitlistReadFasta(AjPFile inf)
 		{
 		    hitlist = embHitlistNew(0);
 		    hitlist->Sunid_Family = this_id;
+
 		    if(ajStrMatchC(type, "SCOP"))
 			hitlist->Type = ajSCOP;
 		    else if(ajStrMatchC(type, "CATH"))
 			hitlist->Type = ajCATH;
 		}	
+
 		last_id = this_id;
 	    }	    
+
 	    if(donefirst)
 	    {
 		token = ajStrParseC(NULL, "^");
@@ -2016,31 +2059,37 @@ EmbPHitlist embHitlistReadFasta(AjPFile inf)
 	    {
 		token = ajStrParseC(NULL, "^");
 		ajStrAssignS(&hitlist->Class, token);
+
 		if(ajStrMatchC(hitlist->Class, "."))
 		    ajStrSetClear(&hitlist->Class);	
 
 		token = ajStrParseC(NULL, "^");
 		ajStrAssignS(&hitlist->Architecture, token);
+
 		if(ajStrMatchC(hitlist->Architecture, "."))
 		    ajStrSetClear(&hitlist->Architecture);
 
 		token = ajStrParseC(NULL, "^");
 		ajStrAssignS(&hitlist->Topology, token);
+
 		if(ajStrMatchC(hitlist->Topology, "."))
 		    ajStrSetClear(&hitlist->Topology);
 
 		token = ajStrParseC(NULL, "^");
 		ajStrAssignS(&hitlist->Fold, token);
+
 		if(ajStrMatchC(hitlist->Fold, "."))
 		    ajStrSetClear(&hitlist->Fold);
 
 		token = ajStrParseC(NULL, "^");
 		ajStrAssignS(&hitlist->Superfamily, token);
+
 		if(ajStrMatchC(hitlist->Superfamily, "."))
 		    ajStrSetClear(&hitlist->Superfamily);
 
 		token = ajStrParseC(NULL, "^");
 		ajStrAssignS(&hitlist->Family, token);
+
 		if(ajStrMatchC(hitlist->Family, "."))
 		    ajStrSetClear(&hitlist->Family);
 	    }
@@ -2080,6 +2129,7 @@ EmbPHitlist embHitlistReadFasta(AjPFile inf)
 	ajStrDel(&line);
 	ajStrDel(&type);
 	ajListFree(&tmplist);
+
 	return hitlist;
     }
 
@@ -2094,8 +2144,6 @@ EmbPHitlist embHitlistReadFasta(AjPFile inf)
     /* File read error */
     return NULL;
 }
-
-
 
 
 
@@ -2143,7 +2191,8 @@ AjPList embHitlistReadNode(AjPFile inf,
 	{
 	    ajWarn("Bad arguments passed to embHitlistReadNode\n");
 		ajListFree(&(ret));
-	    return NULL;
+
+                return NULL;
 	}
 	else
 	{
@@ -2151,7 +2200,8 @@ AjPList embHitlistReadNode(AjPFile inf,
 		return ret;
 	    else
 	    {
-		    ajListFree(&(ret));
+                ajListFree(&(ret));
+
 		return NULL;
 	    }
 	}
@@ -2166,7 +2216,8 @@ AjPList embHitlistReadNode(AjPFile inf,
 	{
 	    ajWarn("Bad arguments passed to embHitlistReadNode\n");
 		ajListFree(&(ret));
-	    return NULL;
+
+                return NULL;
 	}
 	else
 	{
@@ -2174,7 +2225,8 @@ AjPList embHitlistReadNode(AjPFile inf,
 		return ret;
 	    else
 	    {
-		    ajListFree(&(ret));
+                ajListFree(&(ret));
+
 		return NULL;
 	    }
 	}	   
@@ -2188,7 +2240,8 @@ AjPList embHitlistReadNode(AjPFile inf,
 	if(!class)
 	{
 	    ajWarn("Bad arguments passed to embHitlistReadNode\n");
-		ajListFree(&(ret));
+            ajListFree(&(ret));
+
 	    return NULL;
 	}
 	else
@@ -2197,7 +2250,8 @@ AjPList embHitlistReadNode(AjPFile inf,
 		return ret;
 	    else
 	    {
-		    ajListFree(&(ret));
+                ajListFree(&(ret));
+
 		return NULL;
 	    }
 	}
@@ -2257,7 +2311,8 @@ AjPList embHitlistReadNodeFasta(AjPFile inf,
 	{
 	    ajWarn("Bad arguments passed to embHitlistReadNodeFasta\n");
 		ajListFree(&(ret));
-	    return NULL;
+
+                return NULL;
 	}
 	else
 	{
@@ -2265,7 +2320,8 @@ AjPList embHitlistReadNodeFasta(AjPFile inf,
 		return ret;
 	    else
 	    {
-		    ajListFree(&(ret));
+                ajListFree(&(ret));
+
 		return NULL;
 	    }
 	}
@@ -2279,7 +2335,8 @@ AjPList embHitlistReadNodeFasta(AjPFile inf,
 	if(!fold || !class)
 	{
 	    ajWarn("Bad arguments passed to embHitlistReadNodeFasta\n");
-		ajListFree(&(ret));
+            ajListFree(&(ret));
+
 	    return NULL;
 	}
 	else
@@ -2288,7 +2345,8 @@ AjPList embHitlistReadNodeFasta(AjPFile inf,
 		return ret;
 	    else
 	    {
-		    ajListFree(&(ret));
+                ajListFree(&(ret));
+
 		return NULL;
 	    }
 	}	   
@@ -2302,7 +2360,8 @@ AjPList embHitlistReadNodeFasta(AjPFile inf,
 	if(!class)
 	{
 	    ajWarn("Bad arguments passed to embHitlistReadNodeFasta\n");
-		ajListFree(&(ret));
+            ajListFree(&(ret));
+
 	    return NULL;
 	}
 	else
@@ -2311,7 +2370,8 @@ AjPList embHitlistReadNodeFasta(AjPFile inf,
 		return ret;
 	    else
 	    {
-		    ajListFree(&(ret));
+                ajListFree(&(ret));
+
 		return NULL;
 	    }
 	}
@@ -2386,6 +2446,7 @@ AjBool embHitlistWrite(AjPFile outf, const EmbPHitlist obj)
     for(x=0;x<obj->N;x++)
     {
 	ajFmtPrintF(outf, "%-5s[%u]\nXX\n", "NN", x+1);
+
 	if(MAJSTRGETLEN(obj->hits[x]->Model))
 	{
 	    ajFmtPrintF(outf, "%-5s%S\n", "MO", obj->hits[x]->Model);
@@ -2434,6 +2495,7 @@ AjBool embHitlistWrite(AjPFile outf, const EmbPHitlist obj)
 	ajSeqoutDel(&outseq);
 	ajFmtPrintF(outf, "XX\n");
     }
+
     ajFmtPrintF(outf, "//\n");
 
     return ajTrue;
@@ -2538,6 +2600,7 @@ AjBool embHitlistWriteSubset(AjPFile outf,
 	    
 	    ajFmtPrintF(outf, "%-5s%S\n", "AC", obj->hits[x]->Acc);
 	    ajFmtPrintF(outf, "XX\n");
+
 	    if(MAJSTRGETLEN(obj->hits[x]->Spr))
 	    {
 		ajFmtPrintF(outf, "%-5s%S\n", "SP", obj->hits[x]->Spr);
@@ -2559,6 +2622,7 @@ AjBool embHitlistWriteSubset(AjPFile outf,
 	    ajFmtPrintF(outf, "XX\n");
 	}
     }
+
     ajFmtPrintF(outf, "//\n");
 	
     return ajTrue;
@@ -2670,7 +2734,6 @@ AjBool embHitlistWriteFasta(AjPFile outf, const  EmbPHitlist obj)
 
 
 
-
 /* @func embHitlistWriteSubsetFasta *****************************************
 **
 ** Write contents of a Hitlist object to an output file in embl-like format
@@ -2706,10 +2769,12 @@ AjBool embHitlistWriteSubsetFasta(AjPFile outf,
 		ajFmtPrintF(outf, "%S^", obj->hits[x]->Acc);
 	    else
 		ajFmtPrintF(outf, ".^");
+
 	    if(MAJSTRGETLEN(obj->hits[x]->Spr))
 		ajFmtPrintF(outf, "%S^", obj->hits[x]->Spr);
 	    else
 		ajFmtPrintF(outf, ".^");
+
 	    ajFmtPrintF(outf, "%u^%u^",
 			obj->hits[x]->Start, obj->hits[x]->End);
 
@@ -2726,34 +2791,42 @@ AjBool embHitlistWriteSubsetFasta(AjPFile outf,
 		ajFmtPrintF(outf, ".^");
 
 	    ajFmtPrintF(outf,"%u^", obj->Sunid_Family);
+
 	    if(MAJSTRGETLEN(obj->Class))
 		ajFmtPrintF(outf,"%S^",obj->Class);
 	    else
 		ajFmtPrintF(outf, ".^");
+
 	    if(MAJSTRGETLEN(obj->Architecture))
 		ajFmtPrintF(outf,"%S^",obj->Architecture);
 	    else
 		ajFmtPrintF(outf, ".^");
+
 	    if(MAJSTRGETLEN(obj->Topology))
 		ajFmtPrintF(outf,"%S^",obj->Topology);
 	    else
 		ajFmtPrintF(outf, ".^");
+
 	    if(MAJSTRGETLEN(obj->Fold))
 		ajFmtPrintF(outf,"%S^",obj->Fold);
 	    else
 		ajFmtPrintF(outf, ".^");
+
 	    if(MAJSTRGETLEN(obj->Superfamily))
 		ajFmtPrintF(outf,"%S^",obj->Superfamily);
 	    else
 		ajFmtPrintF(outf, ".^");
+
 	    if(MAJSTRGETLEN(obj->Family))
 		ajFmtPrintF(outf,"%S^",obj->Family);
 	    else
 		ajFmtPrintF(outf, ".^");
+
 	    if(MAJSTRGETLEN(obj->Model))
 		ajFmtPrintF(outf, "%S^", obj->Model);
 	    else
 		ajFmtPrintF(outf, ".^");
+
 	    ajFmtPrintF(outf, "%.2f^", obj->hits[x]->Score);
 	    ajFmtPrintF(outf, "%.3e^", obj->hits[x]->Pval);
 	    ajFmtPrintF(outf, "%.3e", obj->hits[x]->Eval);
@@ -2765,8 +2838,6 @@ AjBool embHitlistWriteSubsetFasta(AjPFile outf,
     
     return ajTrue;
 }
-
-
 
 
 
@@ -2792,6 +2863,7 @@ AjBool        embHitlistWriteHitFasta(AjPFile outf,
 {
     if(!obj)
 	return ajFalse;
+
     if(n >= obj->N)
 	return ajFalse;
     
@@ -2873,7 +2945,6 @@ AjBool        embHitlistWriteHitFasta(AjPFile outf,
 
 
 
-
 /* @func embSignatureReadNew ************************************************
 **
 ** Read a Signature object from a file in embl-like format (see documentation
@@ -2889,21 +2960,21 @@ EmbPSignature embSignatureReadNew(AjPFile inf)
 {
     EmbPSignature ret = NULL;
     
-    static AjPStr type   = NULL;
-    static AjPStr typesig= NULL;
-    static AjPStr line   = NULL;
-    static AjPStr class  = NULL;
-    static AjPStr arch   = NULL;
-    static AjPStr top    = NULL;
-    static AjPStr fold   = NULL;
-    static AjPStr super  = NULL;
-    static AjPStr family = NULL;
+    AjPStr type   = NULL;
+    AjPStr typesig= NULL;
+    AjPStr line   = NULL;
+    AjPStr class  = NULL;
+    AjPStr arch   = NULL;
+    AjPStr top    = NULL;
+    AjPStr fold   = NULL;
+    AjPStr super  = NULL;
+    AjPStr family = NULL;
     ajuint  Sunid_Family;        /* SCOP sunid for family */
 
-    static AjPStr id     = NULL;
-    static AjPStr domid  = NULL;
-    static AjPStr ligid  = NULL;
-    static AjPStr desc   = NULL;
+    AjPStr id     = NULL;
+    AjPStr domid  = NULL;
+    AjPStr ligid  = NULL;
+    AjPStr desc   = NULL;
 
     AjBool ok   = ajFalse;
     ajuint  npos = 0;   /* No. signature positions */
@@ -2915,7 +2986,7 @@ EmbPSignature embSignatureReadNew(AjPFile inf)
     ajuint  v1   = 0;
     ajuint  v2   = 0;
     char   c1   = '\0';
-    static AjPStr env  = NULL;
+    AjPStr env  = NULL;
     const AjPStr token = NULL;   /* For parsing      */
     
     /* Signature of type ajLIGAND only */
@@ -2931,24 +3002,20 @@ EmbPSignature embSignatureReadNew(AjPFile inf)
 	return NULL;
     
 
-    /* Only initialise strings if this is called for the first time */
-    if(!line)
-    {
-	class   = ajStrNew();
-	arch    = ajStrNew();
-	top     = ajStrNew();
-	fold    = ajStrNew();
-	super   = ajStrNew();
-	family  = ajStrNew();
-	line    = ajStrNew();
-	id      = ajStrNew();
-	domid   = ajStrNew();
-	ligid   = ajStrNew();
-	desc    = ajStrNew();
-	type    = ajStrNew();
-	typesig = ajStrNew();
-	env     = ajStrNew();
-    }
+    class   = ajStrNew();
+    arch    = ajStrNew();
+    top     = ajStrNew();
+    fold    = ajStrNew();
+    super   = ajStrNew();
+    family  = ajStrNew();
+    line    = ajStrNew();
+    id      = ajStrNew();
+    domid   = ajStrNew();
+    ligid   = ajStrNew();
+    desc    = ajStrNew();
+    type    = ajStrNew();
+    typesig = ajStrNew();
+    env     = ajStrNew();
 
 
     /* Read first line */
@@ -2965,11 +3032,11 @@ EmbPSignature embSignatureReadNew(AjPFile inf)
 
 	    token = ajStrParseC(NULL, ";");
 	    ajFmtScanS(token, "%*s %u", &ns);
-	  }
+        }
 
 	/* IP */
       	else if(ajStrPrefixC(line,"IP"))
-	  {
+        {
 	    token = ajStrParseC(line, ";");
 	    ajFmtScanS(line, "%*s %*s %u", &pn);
 
@@ -2981,44 +3048,36 @@ EmbPSignature embSignatureReadNew(AjPFile inf)
 
 	    token = ajStrParseC(NULL, ";");
 	    ajFmtScanS(token, "%*s %u", &maxgap);
-	  }
+        }
 
 	/* DE */
       	else if(ajStrPrefixC(line,"DE"))
-	  {
 	    ajFmtScanS(line, "%*s%S", &desc);
-	  }
 
 	/* ID */
       	else if(ajStrPrefixC(line,"ID"))
-	  {
+        {
 	    token = ajStrParseC(line, ";");
 	    ajFmtScanS(line, "%*s %*s %S", &id);
 	    token = ajStrParseC(NULL, ";");
 	    ajFmtScanS(token, "%*s %S", &domid);
 	    token = ajStrParseC(NULL, ";");
 	    ajFmtScanS(token, "%*s %S", &ligid);
-	  }
+        }
 
 
 
 	if(ajStrPrefixC(line,"TY"))
-	{
 	    ajFmtScanS(line, "%*s %S", &type);
-	}
 	else if(ajStrPrefixC(line,"TS"))
-	{
 	    ajFmtScanS(line, "%*s %S", &typesig);
-	}
 	else if(ajStrPrefixC(line,"XX"))
 	{
 	    ok = ajReadlineTrim(inf,&line);
 	    continue;
 	}
 	else if(ajStrPrefixC(line,"SI"))
-	{
 	    ajFmtScanS(line, "%*s %u", &Sunid_Family);
-	}
 	else if(ajStrPrefixC(line,"CL"))
 	{
 	    ajStrAssignC(&class,ajStrGetPtr(line)+3);
@@ -3048,23 +3107,29 @@ EmbPSignature embSignatureReadNew(AjPFile inf)
 	else if(ajStrPrefixC(line,"SF"))
 	{
 	    ajStrAssignC(&super,ajStrGetPtr(line)+3);
+
 	    while((ok = ajReadlineTrim(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
+
 		ajStrAppendC(&super,ajStrGetPtr(line)+3);
 	    }
+
 	    ajStrRemoveWhiteExcess(&super);
 	}
 	else if(ajStrPrefixC(line,"FA"))
 	{
 	    ajStrAssignC(&family,ajStrGetPtr(line)+3);
+
 	    while((ok = ajReadlineTrim(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
+
 		ajStrAppendC(&family,ajStrGetPtr(line)+3);
 	    }
+
 	    ajStrRemoveWhiteExcess(&family);
 	}
 	else if(ajStrPrefixC(line,"NP"))
@@ -3120,70 +3185,89 @@ EmbPSignature embSignatureReadNew(AjPFile inf)
 			" Email jison@ebi.ac.uk", n, npos);
 	}
 	else if(ajStrPrefixC(line,"IN"))
-	    {
-		ajFmtScanS(line, "%*s %*s %u %*c %*s %u %*c %*s %u", 
-			   &nres, &ngap, &wsiz);
+        {
+            ajFmtScanS(line, "%*s %*s %u %*c %*s %u %*c %*s %u", 
+                       &nres, &ngap, &wsiz);
 	
-		/* Create Sigdat structures and fill some elements */
-		(ret)->dat[n-1]=embSigdatNew(nres, ngap);
+            /* Create Sigdat structures and fill some elements */
+            (ret)->dat[n-1]=embSigdatNew(nres, ngap);
 
-		(ret)->dat[n-1]->wsiz=wsiz;
+            (ret)->dat[n-1]->wsiz=wsiz;
 
-		/* Skip 'XX' line */
-		if(!(ok = ajReadlineTrim(inf,&line)))
-		    break;
+            /* Skip 'XX' line */
+            if(!(ok = ajReadlineTrim(inf,&line)))
+                break;
 
-		/* Read in residue data */
-		for(i=0; i<(ret)->dat[n-1]->nres; i++)
-		{
-		    if(!(ok = ajReadlineTrim(inf,&line)))
-			break;
+            /* Read in residue data */
+            for(i=0; i<(ret)->dat[n-1]->nres; i++)
+            {
+                if(!(ok = ajReadlineTrim(inf,&line)))
+                    break;
 
-		    if(ret->Typesig == aj1D)
-		    {
-			ajFmtScanS(line, "%*s %c %*c %u", &c1,&v2);
-			ajChararrPut(&(ret)->dat[n-1]->rids,i,c1);
-			ajUintPut(&(ret)->dat[n-1]->rfrq,i,v2);
-		    }
-		    else if(ret->Typesig == aj3D)
-		    {
-			ajFmtScanS(line, "%*s %S %*c %u", &env,&v2);
-			ajStrAssignS(&(ret)->dat[n-1]->eids[i], env);
-			ajUintPut(&(ret)->dat[n-1]->efrq,i,v2);
-		    }
-		    else
-		    {
-			/* This code block identical to above */
-			ajWarn("Signature type (1D or 3D) not known in embSignatureWrite. Presuming 1D");
-			ajFmtScanS(line, "%*s %c %*c %u", &c1,&v2);
-			ajChararrPut(&(ret)->dat[n-1]->rids,i,c1);
-			ajUintPut(&(ret)->dat[n-1]->rfrq,i,v2);
-		    }
-		}
-		if(!ok)
-		    break;
+                if(ret->Typesig == aj1D)
+                {
+                    ajFmtScanS(line, "%*s %c %*c %u", &c1,&v2);
+                    ajChararrPut(&(ret)->dat[n-1]->rids,i,c1);
+                    ajUintPut(&(ret)->dat[n-1]->rfrq,i,v2);
+                }
+                else if(ret->Typesig == aj3D)
+                {
+                    ajFmtScanS(line, "%*s %S %*c %u", &env,&v2);
+                    ajStrAssignS(&(ret)->dat[n-1]->eids[i], env);
+                    ajUintPut(&(ret)->dat[n-1]->efrq,i,v2);
+                }
+                else
+                {
+                    /* This code block identical to above */
+                    ajWarn("Signature type (1D or 3D) not known in "
+                           "embSignatureWrite. Presuming 1D");
+                    ajFmtScanS(line, "%*s %c %*c %u", &c1,&v2);
+                    ajChararrPut(&(ret)->dat[n-1]->rids,i,c1);
+                    ajUintPut(&(ret)->dat[n-1]->rfrq,i,v2);
+                }
+            }
+
+            if(!ok)
+                break;
 	       
 
-		/* Skip 'XX' line */
-		if(!(ok = ajReadlineTrim(inf,&line)))
-		    break;
+            /* Skip 'XX' line */
+            if(!(ok = ajReadlineTrim(inf,&line)))
+                break;
 
-		/* Read in gap data */
-		for(i=0; i<(ret)->dat[n-1]->ngap; i++)
-		{
-		    if(!(ok = ajReadlineTrim(inf,&line)))
-			break;
-		    ajFmtScanS(line, "%*s %u %*c %u", &v1,&v2);
-		    ajUintPut(&(ret)->dat[n-1]->gsiz,i,v1);
-		    ajUintPut(&(ret)->dat[n-1]->gfrq,i,v2);
-		}
-		if(!ok)
-		    break;
-	    }
+            /* Read in gap data */
+            for(i=0; i<(ret)->dat[n-1]->ngap; i++)
+            {
+                if(!(ok = ajReadlineTrim(inf,&line)))
+                    break;
+
+                ajFmtScanS(line, "%*s %u %*c %u", &v1,&v2);
+                ajUintPut(&(ret)->dat[n-1]->gsiz,i,v1);
+                ajUintPut(&(ret)->dat[n-1]->gfrq,i,v2);
+            }
+
+            if(!ok)
+                break;
+        }
 
 	ok = ajReadlineTrim(inf,&line);
     }
     
+    ajStrDel(&line);
+    ajStrDel(&type);
+    ajStrDel(&typesig);
+    ajStrDel(&class);
+    ajStrDel(&arch);
+    ajStrDel(&top);
+    ajStrDel(&fold);
+    ajStrDel(&super);
+    ajStrDel(&family);
+    ajStrDel(&id);
+    ajStrDel(&domid);
+    ajStrDel(&ligid);
+    ajStrDel(&desc);
+    ajStrDel(&env);
+
     if(!ok)
 	return NULL;
 
@@ -3226,7 +3310,8 @@ AjBool embSignatureWrite(AjPFile outf, const EmbPSignature obj)
 	ajFmtPrintF(outf, "TS   3D\nXX\n");
     else
     {
-	ajWarn("Signature type (1D or 3D) not known in embSignatureWrite. Presuming 1D");
+	ajWarn("Signature type (1D or 3D) not known in embSignatureWrite."
+               " Presuming 1D");
 	ajFmtPrintF(outf, "TS   1D\nXX\n");
     }
     
@@ -3234,24 +3319,29 @@ AjBool embSignatureWrite(AjPFile outf, const EmbPSignature obj)
     {	ajFmtPrintF(outf,"CL   %S\n",obj->Class);
 	ajFmtPrintF(outf, "XX\n");
     }
+
     if(MAJSTRGETLEN(obj->Architecture))
     {	ajFmtPrintF(outf,"AR   %S\n",obj->Architecture);
 	ajFmtPrintF(outf, "XX\n");
     }
+
     if(MAJSTRGETLEN(obj->Topology))
     {	ajFmtPrintF(outf,"TP   %S\n",obj->Topology);
 	ajFmtPrintF(outf, "XX\n");
     }
+
     if(MAJSTRGETLEN(obj->Fold))
     {
 	ajFmtPrintSplit(outf,obj->Fold,"FO   ",75," \t\n\r");
 	ajFmtPrintF(outf, "XX\n");
     }
+
     if(MAJSTRGETLEN(obj->Superfamily))
     {
 	ajFmtPrintSplit(outf,obj->Superfamily,"SF   ",75," \t\n\r");
 	ajFmtPrintF(outf, "XX\n");
     }
+
     if(MAJSTRGETLEN(obj->Family))
     {
 	ajFmtPrintSplit(outf,obj->Family,"FA   ",75," \t\n\r");
@@ -3283,34 +3373,35 @@ AjBool embSignatureWrite(AjPFile outf, const EmbPSignature obj)
     /* Signatures of type ajLIGAND only */
     if(obj->Type == ajLIGAND)
     {
-      ajFmtPrintF(outf, "%-5sPDB %S; DOM %S; LIG %S;\n", 
-		  "ID", 
-		  obj->Id, 
-		  obj->Domid,
-		  obj->Ligid);
-      ajFmtPrintF(outf, "XX\n"); 
+        ajFmtPrintF(outf, "%-5sPDB %S; DOM %S; LIG %S;\n", 
+                    "ID", 
+                    obj->Id, 
+                    obj->Domid,
+                    obj->Ligid);
+        ajFmtPrintF(outf, "XX\n"); 
 
-      ajFmtPrintF(outf, "%-5s%S\n", 
-		  "DE", 
-		  obj->Desc);
-      ajFmtPrintF(outf, "XX\n");   
+        ajFmtPrintF(outf, "%-5s%S\n", 
+                    "DE", 
+                    obj->Desc);
+        ajFmtPrintF(outf, "XX\n");   
 
-      ajFmtPrintF(outf, "%-5sSN %u; NS %u\n", 
-		  "IS", 
-		  obj->sn, 
-		  obj->ns);
-      ajFmtPrintF(outf, "XX\n");   
+        ajFmtPrintF(outf, "%-5sSN %u; NS %u\n", 
+                    "IS", 
+                    obj->sn, 
+                    obj->ns);
+        ajFmtPrintF(outf, "XX\n");   
 
-      ajFmtPrintF(outf, "%-5sPN %u; NP %u; MP %u; MG %u\n", 
-		  "IP", 
-		  obj->pn, 
-		  obj->np, 
-		  obj->minpatch, 
-		  obj->maxgap);
-      ajFmtPrintF(outf, "XX\n");   
+        ajFmtPrintF(outf, "%-5sPN %u; NP %u; MP %u; MG %u\n", 
+                    "IP", 
+                    obj->pn, 
+                    obj->np, 
+                    obj->minpatch, 
+                    obj->maxgap);
+        ajFmtPrintF(outf, "XX\n");   
     }
 
     ajFmtPrintF(outf,"NP   %u\n",obj->npos);
+
     for(i=0;i<obj->npos;++i)
     {
 	ajFmtPrintF(outf,"XX\nNN   [%u]\n",i+1);
@@ -3322,6 +3413,7 @@ AjBool embSignatureWrite(AjPFile outf, const EmbPSignature obj)
 	    ajFmtPrintF(outf,"XX\nIN   NRES %u ; NGAP %u ; WSIZ %u\nXX\n",
 			obj->dat[i]->nres, obj->dat[i]->ngap,
 			obj->dat[i]->wsiz);
+
 	    for(j=0;j<obj->dat[i]->nres;++j)
 		ajFmtPrintF(outf,"AA   %c ; %u\n",
 			    (char)  ajChararrGet(obj->dat[i]->rids, j),
@@ -3332,12 +3424,11 @@ AjBool embSignatureWrite(AjPFile outf, const EmbPSignature obj)
 	    ajFmtPrintF(outf,"XX\nIN   NRES %u ; NGAP %u ; WSIZ %u\nXX\n",
 			obj->dat[i]->nenv, obj->dat[i]->ngap,
 			obj->dat[i]->wsiz);
+
 	    for(j=0;j<obj->dat[i]->nenv;++j)
-	    {
 		ajFmtPrintF(outf,"AA   %S ; %u\n",
 			    obj->dat[i]->eids[j], 
 			    (ajint) ajUintGet(obj->dat[i]->efrq, j));
-	    }
 	}
 	else
 	{
@@ -3347,6 +3438,7 @@ AjBool embSignatureWrite(AjPFile outf, const EmbPSignature obj)
 	    ajFmtPrintF(outf,"XX\nIN   NRES %u ; NGAP %u ; WSIZ %u\nXX\n",
 			obj->dat[i]->nres, obj->dat[i]->ngap,
 			obj->dat[i]->wsiz);
+
 	    for(j=0;j<obj->dat[i]->nres;++j)
 		ajFmtPrintF(outf,"AA   %c ; %u\n",
 			    (char)  ajChararrGet(obj->dat[i]->rids, j),
@@ -3355,18 +3447,17 @@ AjBool embSignatureWrite(AjPFile outf, const EmbPSignature obj)
 	
 
 	ajFmtPrintF(outf,"XX\n");
+
 	for(j=0;j<obj->dat[i]->ngap;++j)
 	    ajFmtPrintF(outf,"GA   %u ; %u\n",
 			(ajint) ajUintGet(obj->dat[i]->gsiz, j),
 			(ajint) ajUintGet(obj->dat[i]->gfrq, j));
     }
+
     ajFmtPrintF(outf,"//\n");
     
     return ajTrue;
 }
-
-
-
 
 
 
@@ -3406,6 +3497,7 @@ EmbPHitlist embSignatureHitsRead(AjPFile inf)
     if(!inf)
     {
 	ajWarn("NULL file pointer passed to embSignatureHitsRead");
+
 	return NULL;
     }
     
@@ -3424,13 +3516,9 @@ EmbPHitlist embSignatureHitsRead(AjPFile inf)
     while(ok && ajReadlineTrim(inf,&line))
     {
 	if(ajStrPrefixC(line,"TY"))
-	{
 	    ajFmtScanS(line, "%*s %S", &type);
-	}
 	else if(ajStrPrefixC(line,"SI"))
-	{
 	    ajFmtScanS(line, "%*s %u", &Sunid_Family);
-	}
 	else if(ajStrPrefixC(line,"CL"))
 	{
 	    ajStrAssignC(&class,ajStrGetPtr(line)+3);
@@ -3449,34 +3537,43 @@ EmbPHitlist embSignatureHitsRead(AjPFile inf)
 	else if(ajStrPrefixC(line,"FO"))
 	{
 	    ajStrAssignC(&fold,ajStrGetPtr(line)+3);
+
 	    while((ok=ajReadlineTrim(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
+
 		ajStrAppendC(&fold,ajStrGetPtr(line)+3);
 	    }
+
 	    ajStrRemoveWhiteExcess(&fold);
 	}
 	else if(ajStrPrefixC(line,"SF"))
 	{
 	    ajStrAssignC(&super,ajStrGetPtr(line)+3);
+
 	    while((ok = ajReadlineTrim(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
+
 		ajStrAppendC(&super,ajStrGetPtr(line)+3);
 	    }
+
 	    ajStrRemoveWhiteExcess(&super);
 	}
 	else if(ajStrPrefixC(line,"FA"))
 	{
 	    ajStrAssignC(&family,ajStrGetPtr(line)+3);
+
 	    while((ok = ajReadlineTrim(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
+
 		ajStrAppendC(&family,ajStrGetPtr(line)+3);
 	    }
+
 	    ajStrRemoveWhiteExcess(&family);
 	}
 	else if(ajStrPrefixC(line,"HI"))
@@ -3516,6 +3613,7 @@ EmbPHitlist embSignatureHitsRead(AjPFile inf)
     ajStrAssignS(&ret->Superfamily, super);
     ajStrAssignS(&ret->Family, family);
     ret->Sunid_Family = Sunid_Family;
+
     if(ajStrMatchC(type, "SCOP"))
 	(ret)->Type = ajSCOP;
     else if(ajStrMatchC(type, "CATH"))
@@ -3538,7 +3636,6 @@ EmbPHitlist embSignatureHitsRead(AjPFile inf)
     
     return ret;
 }
-
 
 
 
@@ -3584,18 +3681,25 @@ AjBool embSignatureHitsWrite(AjPFile outf, const EmbPSignature sig,
 	ajFmtPrintF(outf, "TY   CATH\nXX\n");
     else if ((sig->Type == ajLIGAND))
 	ajFmtPrintF(outf, "TY   LIGAND\nXX\n");
+
     if(MAJSTRGETLEN(sig->Class))
 	ajFmtPrintF(outf,"CL   %S",sig->Class);
+
     if(MAJSTRGETLEN(sig->Architecture))    
 	ajFmtPrintSplit(outf,sig->Architecture,"\nXX\nAR   ",75," \t\n\r");
+
     if(MAJSTRGETLEN(sig->Topology)) 
 	ajFmtPrintSplit(outf,sig->Topology,"\nXX\nTP   ",75," \t\n\r");
+
     if(MAJSTRGETLEN(sig->Fold)) 
 	ajFmtPrintSplit(outf,sig->Fold,"\nXX\nFO   ",75," \t\n\r");
+
     if(MAJSTRGETLEN(sig->Superfamily))
 	ajFmtPrintSplit(outf,sig->Superfamily,"XX\nSF   ",75," \t\n\r");
+
     if(MAJSTRGETLEN(sig->Family)) 
 	ajFmtPrintSplit(outf,sig->Family,"XX\nFA   ",75," \t\n\r");
+
     ajFmtPrintF(outf,"XX\nSI   %u\n", sig->Sunid_Family);
     ajFmtPrintF(outf,"XX\n");
     
@@ -3605,6 +3709,7 @@ AjBool embSignatureHitsWrite(AjPFile outf, const EmbPSignature sig,
     {
 	if(ajStrMatchC(hitlist->hits[x]->Typeobj, "FALSE"))
 	    nf++; 
+
 	if(nf>n)
 	    break;  
 
@@ -3659,8 +3764,6 @@ AjBool embSignatureHitsWrite(AjPFile outf, const EmbPSignature sig,
 
     return ajTrue;
 }
-
-
 
 
 
@@ -3766,6 +3869,7 @@ AjBool embHitlistClassify(EmbPHitlist hitlist, const AjPList targets,
     if(!hitlist || (!targets))
     {
 	ajWarn("NULL args passed to embHitlistClassify\n");
+
 	return ajFalse;
     }
     
@@ -3813,6 +3917,7 @@ AjBool embHitlistClassify(EmbPHitlist hitlist, const AjPList targets,
     for(x=0; x<hitlist->N; x++)
     {
 	hitx = hitlist->hits[x];
+
 	if((MAJSTRGETLEN(hitx->Acc)))
 	    pos=embHitidxBinSearch(hitx->Acc, idxarr, idxsiz);
 	else if((MAJSTRGETLEN(hitx->Spr)))
@@ -3932,6 +4037,7 @@ AjBool embHitlistClassify(EmbPHitlist hitlist, const AjPList targets,
 			hitx->Group);
 
 		tpos--;	
+
 		if(tpos<0) 
 		    break;
 	    }	    
@@ -4033,7 +4139,9 @@ AjBool embHitlistClassify(EmbPHitlist hitlist, const AjPList targets,
 				      "NOT_APPLICABLE");
 			}
 		    }
+
 		    tpos++;	
+
 		    if(tpos==idxsiz) 
 			break;
 		}
@@ -4050,6 +4158,7 @@ AjBool embHitlistClassify(EmbPHitlist hitlist, const AjPList targets,
 	    ajStrAssignC(&hitx->Typesbj, "UNKNOWN");
 	    ajStrAssignC(&hitx->Group, "NOT_APPLICABLE");
 	}
+
 	ajDebug("final '%S' hit[%d] obj '%S' sbj '%S' Group '%S'\n",
 		tmpstr, x,
 		hitx->Typeobj,
@@ -4060,6 +4169,7 @@ AjBool embHitlistClassify(EmbPHitlist hitlist, const AjPList targets,
 
     while(ajListPop(idxlist, (void **) &ptri))
 	embHitidxDel(&ptri);	
+
     ajListFree(&idxlist);
     AJFREE(idxarr);
     ajListIterDel(&itert);
@@ -4186,6 +4296,7 @@ AjBool embSignatureCompile(EmbPSignature *S, float gapo, float gape,
 	for(ngap=0, y=0; y<dim; y++)
 	    if(tgap[y])
 		ngap++;
+
 	(*S)->pos[x] = embSigposNew(ngap);
 
 
@@ -4211,9 +4322,12 @@ AjBool embSignatureCompile(EmbPSignature *S, float gapo, float gape,
 		    (*S)->pos[x]->subs[z] += 
 			(ajUintGet((*S)->dat[x]->rfrq, y)) * 
 			    sub[ajSeqcvtGetCodeK(cvt,(char)((ajint)'A'+z))]
-				[ajSeqcvtGetCodeK(cvt, ajChararrGet((*S)->dat[x]->rids,
+				[ajSeqcvtGetCodeK(cvt,
+                                                  ajChararrGet((*S)->dat[x]->
+                                                               rids,
 							     y))];
 		}
+
 		(*S)->pos[x]->subs[z] /= divi;
 	    }
 	}
@@ -4225,19 +4339,24 @@ AjBool embSignatureCompile(EmbPSignature *S, float gapo, float gape,
 		{
 		    divi+=(ajUintGet((*S)->dat[x]->efrq, y));
 		
-		    /* Environments are rows and residue identities are columns. */
+		    /*
+                    ** Environments are rows and residue identities are
+                    ** columns.
+                    */
 		    (*S)->pos[x]->subs[z] += 
 			(ajUintGet((*S)->dat[x]->efrq, y)) * 
 			    sub[ajSeqcvtGetCodeS(cvt, (*S)->dat[x]->eids[y])]
 				[ajSeqcvtGetCodeK(cvt,(char)((ajint)'A'+z))];
 
 		}
+
 		(*S)->pos[x]->subs[z] /= divi;
 	    }
 	}
 	else
 	{
-	    ajWarn("Signature type (1D or 3D) not known in embSignatureCompile. Presuming 1D");
+	    ajWarn("Signature type (1D or 3D) not known in "
+                   "embSignatureCompile. Presuming 1D");
 	    
 	    /* This code block identical to above */
 	    for(z=0;z<26; z++)
@@ -4249,15 +4368,14 @@ AjBool embSignatureCompile(EmbPSignature *S, float gapo, float gape,
 		    (*S)->pos[x]->subs[z] += 
 			(ajUintGet((*S)->dat[x]->rfrq, y)) * 
 			    sub[ajSeqcvtGetCodeK(cvt,(char)((ajint)'A'+z))]
-				[ajSeqcvtGetCodeK(cvt, ajChararrGet((*S)->dat[x]->rids,
-							     y))];
+				[ajSeqcvtGetCodeK(cvt, ajChararrGet((*S)->
+                                                             dat[x]->rids,y))];
 		}
+
 		(*S)->pos[x]->subs[z] /= divi;
 	    }
 	}
 	
-	       
-		
 	/* FREE tgap & tpen ARRAYS */
 	AJFREE(tgap);
 	AJFREE(tpen);
@@ -4265,7 +4383,6 @@ AjBool embSignatureCompile(EmbPSignature *S, float gapo, float gape,
         
     return ajTrue;
 }
-
 
 
 
@@ -4298,13 +4415,9 @@ AjBool embSignatureAlignSeq(const EmbPSignature S, const AjPSeq seq,
     ajuint  glast  = 0;	  /*Index of last gap to try */
     ajint  nres   = 0;	  /*No. of residues in protein */
     ajuint  nresm1 = 0;	  /*== nres-1 */
-    static EmbPSigcell path = NULL;  /*Path matrix as 1D array */
 
-    static ajint savedim = 0;		/* dimension of path */
-    static ajint savenres = 0;		/* dimension of alg and p */
     ajint dim =0;         /*Dimension of 1D path matrix == nres 
 				   * S->npos */
-    static char *p = NULL;  /*Protein sequence */
     ajint  start   = 0;	    /* Index into path matrix of first position 
 			    ** in the previous row to grow an alignment 
 			    ** from
@@ -4324,7 +4437,6 @@ AjBool embSignatureAlignSeq(const EmbPSignature S, const AjPSeq seq,
     ajint max  = 0;	  /*Index into path matrix for cell with mval */
     ajint maxp = 0;      /*Index into protein sequence for path matrix 
 				    cell with mval */
-    static char *alg = NULL;   /*String for alignment */
     ajint cnt;                 /*A loop counter */
     ajint mlen = 0;            /*Min. possible length of the alignment of the 
 				    signature */
@@ -4344,7 +4456,9 @@ AjBool embSignatureAlignSeq(const EmbPSignature S, const AjPSeq seq,
 
     /* INITIALISE VARIABLES */
     nres   = ajStrGetLen(P);    /* No. columns in path matrix */
-    if(nres<1) return ajFalse;
+
+    if(nres<1)
+        return ajFalse;
 
     nresm1 = nres-1;         /* Index of last column in path matrix */
     dim = nres * S->npos;
@@ -4352,30 +4466,31 @@ AjBool embSignatureAlignSeq(const EmbPSignature S, const AjPSeq seq,
 
     /* ALLOCATE MEMORY */
     /*First time the function is called */
-    if(!path)
+    if(!embSigpath)
     {
 	/* CREATE PATH MATRIX */
-	AJCNEW(path, dim);
-	savedim = dim;
+	AJCNEW(embSigpath, dim);
+	embSigsavedim = dim;
 
 	/* CREATE ALIGNMENT AND PROTEIN SEQUENCE STRINGS */
-	alg = AJALLOC((nres*sizeof(char))+1);
-	p = AJALLOC((nres*sizeof(char))+1);
-	savenres = nres;
+	embSigalign = AJALLOC((nres*sizeof(char))+1);
+	embSigprot = AJALLOC((nres*sizeof(char))+1);
+	embSigsavenres = nres;
     }	
     else 
     {
 	/* CREATE PATH MATRIX */
-	if(dim > savedim)
+	if(dim > embSigsavedim)
 	{
-	    AJCRESIZE(path, dim);
+	    AJCRESIZE(embSigpath, dim);
+            embSigsavedim = dim;
 	}
 	/* CREATE ALIGNMENT AND PROTEIN SEQUENCE STRINGS */
-	if((nres) > savenres)
+	if((nres) > embSigsavenres)
 	{
-	    AJCRESIZE(alg, nres+1);
-	    AJCRESIZE(p, nres+1);
-	    savenres = nres;
+	    AJCRESIZE(embSigalign, nres+1);
+	    AJCRESIZE(embSigprot, nres+1);
+	    embSigsavenres = nres;
 	}
     }
 
@@ -4386,17 +4501,17 @@ AjBool embSignatureAlignSeq(const EmbPSignature S, const AjPSeq seq,
     ** Only necessary to initialise <try> element to ajFalse
     */
     for(cnt=0;cnt<dim;cnt++)
-	path[cnt].visited = ajFalse;
+	embSigpath[cnt].visited = ajFalse;
     
     
 
 
     /* COPY SEQUENCE AND CONVERT TO UPPER CASE, OVERWRITE ALIGNMENT STRING */
-    strcpy(p, ajStrGetPtr(P));
-    ajCharFmtUpper(p);
+    strcpy(embSigprot, ajStrGetPtr(P));
+    ajCharFmtUpper(embSigprot);
     for(cnt=0;cnt<nres;cnt++)
-	alg[cnt] = '-';
-    alg[cnt] = '\0';
+	embSigalign[cnt] = '-';
+    embSigalign[cnt] = '\0';
     
     switch(nterm)
     {
@@ -4418,10 +4533,13 @@ AjBool embSignatureAlignSeq(const EmbPSignature S, const AjPSeq seq,
 	** error if first sig. position cannot be fitted
 	*/
 	mlen = 1;   /*For first signature position */
+
 	for(sidx=1;sidx<S->npos;sidx++)
 	    mlen+=(1+S->pos[sidx]->gsiz[0]);
+
 	start = startp = 0;
 	stop  = nres-mlen;
+
 	if(stop<0)
 	    return ajFalse;    
 	
@@ -4435,10 +4553,11 @@ AjBool embSignatureAlignSeq(const EmbPSignature S, const AjPSeq seq,
 	*/
 	for(this=0;this<=stop;this++)
 	{
-	    path[this].val = S->pos[0]->subs[(ajint) ((ajint)p[this] -
-						      (ajint)'A')];
-	    path[this].prev    = 0;
-	    path[this].visited = ajTrue;
+	    embSigpath[this].val =
+                S->pos[0]->subs[(ajint) ((ajint)embSigprot[this] -
+                                         (ajint)'A')];
+	    embSigpath[this].prev    = 0;
+	    embSigpath[this].visited = ajTrue;
 	}
 	break;
 	
@@ -4453,10 +4572,11 @@ AjBool embSignatureAlignSeq(const EmbPSignature S, const AjPSeq seq,
 	
 	for(this=0;this<nres;this++)
 	{
-	    path[this].val=S->pos[0]->subs[(ajint) ((ajint)p[this] -
-						    (ajint)'A')];
-	    path[this].prev=0;
-	    path[this].visited=ajTrue;
+	    embSigpath[this].val =
+                S->pos[0]->subs[(ajint) ((ajint)embSigprot[this] -
+                                         (ajint)'A')];
+	    embSigpath[this].prev=0;
+	    embSigpath[this].visited=ajTrue;
 	}
 	start = startp = 0;
 	stop  = nresm1;
@@ -4472,6 +4592,7 @@ AjBool embSignatureAlignSeq(const EmbPSignature S, const AjPSeq seq,
 	for(glast=S->pos[0]->ngaps; glast>0; glast--)
 	    if(S->pos[0]->gsiz[glast-1]<nresm1)
 		break;
+
 	if(glast==0)
 	    return ajFalse;
 	
@@ -4480,11 +4601,13 @@ AjBool embSignatureAlignSeq(const EmbPSignature S, const AjPSeq seq,
 	for(gidx=0; gidx<=glast; ++gidx)
 	{	
 	    this=S->pos[0]->gsiz[gidx];
-	    path[this].val=S->pos[0]->subs[(ajint) ((ajint)p[this] -
-						    (ajint)'A')];
-	    path[this].prev    = 0;
-	    path[this].visited = ajTrue;
+	    embSigpath[this].val =
+                S->pos[0]->subs[(ajint) ((ajint)embSigprot[this] -
+                                         (ajint)'A')];
+	    embSigpath[this].prev    = 0;
+	    embSigpath[this].visited = ajTrue;
 	}
+
 	startp = start = S->pos[0]->gsiz[0];
 	stop=S->pos[0]->gsiz[gidx-1];
 	break;
@@ -4505,7 +4628,7 @@ AjBool embSignatureAlignSeq(const EmbPSignature S, const AjPSeq seq,
 	/*Loop for permissible region of previous row */
 	for(last=start, lastp=startp; last<=stop; last++, lastp++)
 	{
-	    if(path[last].visited==ajFalse)
+	    if(embSigpath[last].visited==ajFalse)
 		continue;
 
 	    /*Loop for each permissible gap in current row */
@@ -4515,23 +4638,25 @@ AjBool embSignatureAlignSeq(const EmbPSignature S, const AjPSeq seq,
 		    break;
 
 		this = last+nres+S->pos[sidx]->gsiz[gidx]+1;
-		val  = path[last].val +
-		    S->pos[sidx]->subs[(ajint) (p[thisp] - (ajint)'A')] -
+		val  = embSigpath[last].val +
+		    S->pos[sidx]->subs[(ajint)(embSigprot[thisp]-(ajint)'A')] -
 			S->pos[sidx]->gpen[gidx];
 		
 
-		if((path[this].visited==ajTrue)&&(val > path[this].val))
+		if((embSigpath[this].visited==ajTrue)&&
+                   (val > embSigpath[this].val))
 		{
-		    path[this].val  = val;
-		    path[this].prev = last;
+		    embSigpath[this].val  = val;
+		    embSigpath[this].prev = last;
 		    continue;
 		}				
+
 		/*The cell hasn't been visited before so give it a score */
-		if(path[this].visited==ajFalse)
+		if(embSigpath[this].visited==ajFalse)
 		{
-		    path[this].val     = val;
-		    path[this].prev    = last;
-		    path[this].visited = ajTrue;
+		    embSigpath[this].val     = val;
+		    embSigpath[this].prev    = last;
+		    embSigpath[this].visited = ajTrue;
 		    continue;
 		}	
 	    }
@@ -4540,6 +4665,7 @@ AjBool embSignatureAlignSeq(const EmbPSignature S, const AjPSeq seq,
 	/* We cannot accomodate the next position */
 	if((startp+=(1+S->pos[sidx]->gsiz[0]))>=nresm1)
 	    break;
+
 	start += (nres+1+S->pos[sidx]->gsiz[0]);
 	/*last gives (index into last position tried)+1  because
 	  of loop increment.  */
@@ -4566,11 +4692,12 @@ AjBool embSignatureAlignSeq(const EmbPSignature S, const AjPSeq seq,
     */
     for(mval=-1000000 ; thisp>=0; this--, thisp--)
     {
-	if(path[this].visited==ajFalse)
+	if(embSigpath[this].visited==ajFalse)
 	    continue;
-	if(path[this].val > mval)
+
+	if(embSigpath[this].val > mval)
 	{
-	    mval = path[this].val;
+	    mval = embSigpath[this].val;
 	    max  = this;
 	    maxp = thisp;
 	}
@@ -4583,14 +4710,14 @@ AjBool embSignatureAlignSeq(const EmbPSignature S, const AjPSeq seq,
 
 
     /* Backtrack through matrix */
-    alg[maxp] = '*';
+    embSigalign[maxp] = '*';
 
-    for(this=path[max].prev; sidx>0; this=path[this].prev)
+    for(this=embSigpath[max].prev; sidx>0; this=embSigpath[this].prev)
     {
 	td = floor((double)(this/nres));
 	sidx = (ajuint) td;
 	thisp= this - (sidx * nres);
-	alg[thisp] = '*';
+	embSigalign[thisp] = '*';
     }
     
 
@@ -4599,13 +4726,15 @@ AjBool embSignatureAlignSeq(const EmbPSignature S, const AjPSeq seq,
 	*hit = embHitNew();
     
     ajStrAssignC(&(*hit)->Model, "SPARSE");    
-    ajStrAssignC(&(*hit)->Alg, alg);
+    ajStrAssignC(&(*hit)->Alg, embSigalign);
     ajStrAssignS(&(*hit)->Seq, P);
     (*hit)->Start=thisp;
     (*hit)->End=maxp;
     ajStrAssignS(&(*hit)->Acc, ajSeqGetAccS(seq));
+
     if(!MAJSTRGETLEN((*hit)->Acc))
 	ajStrAssignS(&(*hit)->Acc, ajSeqGetNameS(seq));
+
     if(!MAJSTRGETLEN((*hit)->Acc))
 	ajWarn("Could not find an accession number or name for a sequence"
 	       " in embSignatureAlignSeq");
@@ -4613,7 +4742,6 @@ AjBool embSignatureAlignSeq(const EmbPSignature S, const AjPSeq seq,
     
     return ajTrue;
 }
-
 
 
 
@@ -4651,6 +4779,7 @@ AjBool embSignatureAlignSeqall(const EmbPSignature sig, AjPSeqall db,
     if(!sig || !db || !hitlist)
     {
 	ajWarn("NULL arg passed to embSignatureAlignSeqall");
+
 	return ajFalse;
     }
     
@@ -4722,3 +4851,21 @@ AjBool embSignatureAlignSeqall(const EmbPSignature sig, AjPSeqall db,
 
 
 
+/* @func embSigExit ************************************************************
+**
+** Cleanup of signature function internals.
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void embSigExit(void)
+{
+    AJFREE(embSigpath);
+    AJFREE(embSigprot);
+    AJFREE(embSigalign);
+    embSigsavedim = 0;
+    embSigsavenres = 0;
+
+    return;
+}

@@ -36,7 +36,7 @@ Extract the regions 782-856, 951-1095, 1557-1612 and 1787-1912:
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>extractseq tembl:x65921 -reg "782..856,951..1095,1557..1612,1787..1912" stdout </b>
+% <b>extractseq tembl:x65921 -reg '782..856,951..1095,1557..1612,1787..1912' stdout </b>
 Extract regions from a sequence
 
 >X65921 X65921.1 H.sapiens fau 1 gene
@@ -60,7 +60,7 @@ Extract the regions 782-856, 951-1095, 1557-1612 and 1787-1912 all to separate o
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>extractseq tembl:x65921 -reg "782..856,951..1095,1557..1612,1787..1912" stdout -separate </b>
+% <b>extractseq tembl:x65921 -reg '782..856,951..1095,1557..1612,1787..1912' stdout -separate </b>
 Extract regions from a sequence
 
 >X65921_782_856 H.sapiens fau 1 gene

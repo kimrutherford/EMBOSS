@@ -20,7 +20,16 @@ seqretsplit
     Description
 </H2>
 
-<p><b>seqretsplit</b> is a variant of the standard program for reading and writing sequences, <b>seqret</b>.   It performs exactly the same function except that when it reads more than one sequence, it writes each sequence to an individual file. In all other respects, <b>skipseq</b> is the same as <b>seqret</b>.  Its main use is therefore to split a file containing multiple sequences into many files, each containing one sequence. There are many options built-in into EMBOSS for detailed specification of the input and output sequences, for example the sequence type and file format.  Optionally, feature information will be read and written.</p>
+<p><b>seqretsplit</b> is a variant of the standard program for reading
+and writing sequences, <b>seqret</b>.  It performs exactly the same
+function except that when it reads more than one sequence, it writes
+each sequence to an individual file. In all other
+respects, <b>skipseq</b> is the same as <b>seqret</b>.  Its main use
+is therefore to split a file containing multiple sequences into many
+files, each containing one sequence. There are many options built-in
+into EMBOSS for detailed specification of the input and output
+sequences, for example the sequence type and file format.  Optionally,
+feature information will be read and written.</p>
 
 
 <H2>
@@ -104,10 +113,25 @@ None.
     Notes
 </H2>
 
-<p>See the documentation for <b>seqret</b> to see the full range of things that you can do when reading and writing sequences.</p>
-<p>Some non-EMBOSS programs will accept only single sequences.  In such cases <b>seqretsplit</b> is useful for splitting a multiple sequence file into many individual files.  Some EMBOSS programs will also read only a single sequence, which may, however, be one of many in a file. You can specify the sequence using the USA filename:sequenceID.  Nonetheless, some people feel more comfortable handling one sequence per file, so <b>seqretsplit</b> will be useful to them too.</p>
+<p>See the documentation for <b>seqret</b> to see the full range of
+things that you can do when reading and writing sequences.</p>
 
-<p>One file for each input sequence is written.  The names of the files it creates are derived from the ID name of the sequence, followed by an extension denoting the format of the sequence. You have no control over the names of the files it writes out. For example, if the files <tt>embl:hsfa11*</tt> are read in and the output is specified as <tt>wibble.seq</tt>, then the following files are expected to be created:</p>
+<p>Some non-EMBOSS programs will accept only single sequences.  In
+such cases <b>seqretsplit</b> is useful for splitting a multiple
+sequence file into many individual files.  Some EMBOSS programs will
+also read only a single sequence, which may, however, be one of many
+in a file. You can specify the sequence using the USA
+filename:sequenceID.  Nonetheless, some people feel more comfortable
+handling one sequence per file, so <b>seqretsplit</b> will be useful
+to them too.</p>
+
+<p>One file for each input sequence is written.  The names of the
+files it creates are derived from the ID name of the sequence,
+followed by an extension denoting the format of the sequence. You have
+no control over the names of the files it writes out. For example, if
+the files <tt>embl:hsfa11*</tt> are read in and the output is
+specified as <tt>wibble.seq</tt>, then the following files are
+expected to be created:</p>
 
 <pre>
 hsfa110.fasta

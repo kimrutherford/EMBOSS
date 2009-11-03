@@ -25,7 +25,6 @@ import org.emboss.jemboss.Jemboss;
 import org.emboss.jemboss.gui.ShowSavedResults;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.Hashtable;
 import java.util.Enumeration;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;

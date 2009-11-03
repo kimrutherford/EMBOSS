@@ -79,6 +79,27 @@
 **
 ****************************************************************************/
 
+/* @func embDmxNrseqNew *******************************************************
+**
+** Creates an empty non redundant sequence object
+**
+** @param [r] seq [const AjPSeq] Sequence object
+** @return [EmbPDmxNrseq] New non-redundant sequence object
+******************************************************************************/
+
+EmbPDmxNrseq embDmxNrseqNew(const AjPSeq seq)
+{
+    EmbPDmxNrseq ret;
+
+    AJNEW0(ret);
+    ret->Seq = ajSeqNewSeq(seq);
+
+    return ret;
+}
+
+
+
+
 /* @func embDmxScophitsToHitlist *********************************************
 **
 ** Reads from a list of Scophit objects and writes a Hitlist object 
@@ -116,6 +137,7 @@ AjBool embDmxScophitsToHitlist(const AjPList in,
     if(!in || !iter)
     {
 	ajWarn("NULL arg passed to embDmxScophitsToHitlist");
+
 	return ajFalse;
     }
 
@@ -218,6 +240,7 @@ AjBool embDmxScophitsToHitlist(const AjPList in,
 	ajListPush(list, (EmbPHit) tmp);
 	tmp = NULL;
     }
+
     ajStrAssignS(&(*out)->Class, class);
     ajStrAssignS(&(*out)->Fold, fold);
     ajStrAssignS(&(*out)->Superfamily, sfam);
@@ -225,8 +248,6 @@ AjBool embDmxScophitsToHitlist(const AjPList in,
     (*out)->Sunid_Family = Sunid_Family;
     (*out)->Type = type;
     
-    
-
     /* Copy temp. list to Hitlist */
     (*out)->N = ajListToarray(list, (void ***) &((*out)->hits));
 
@@ -238,7 +259,6 @@ AjBool embDmxScophitsToHitlist(const AjPList in,
 
     return ajTrue;
 }
-
 
 
 
@@ -260,6 +280,7 @@ AjBool embDmxScophitToHit(EmbPHit *to, const AjPScophit from)
     if(!from)
     {
 	ajWarn("NULL arg passed to embDmxScophitToHit");
+
 	return ajFalse;
     }
     
@@ -287,7 +308,6 @@ AjBool embDmxScophitToHit(EmbPHit *to, const AjPScophit from)
 
     return ajTrue;
 }
-
 
 
 
@@ -339,6 +359,7 @@ AjBool embDmxScophitsAccToHitlist(const AjPList in,
     if(!in || !iter)
     {
 	ajWarn("NULL arg passed to embDmxScophitsAccToHitlist");
+
 	return ajFalse;
     }
 
@@ -355,6 +376,7 @@ AjBool embDmxScophitsAccToHitlist(const AjPList in,
     {
 	ajWarn("Empty list in embDmxScophitsToHitlist");
 	ajListIterDel(iter);	
+
 	return ajFalse;
     }
 
@@ -366,16 +388,16 @@ AjBool embDmxScophitsAccToHitlist(const AjPList in,
        (MAJSTRGETLEN(scoptmp->Acc)==0))
     {
 	while((scoptmp=(AjPScophit)ajListIterGet(*iter)))
-	{
 	    if((ajStrMatchC(scoptmp->Acc,"Not_available") == ajFalse) &&
 	       (MAJSTRGETLEN(scoptmp->Acc)!=0))
 		break;
-	}
+
 	if(!scoptmp)
 	{
 	    ajWarn("List with no Scophits with Acc in "
 		   "embDmxScophitsAccToHitlist");
 	    ajListIterDel(iter);	
+
 	    return ajFalse;
 	}
     }
@@ -486,7 +508,6 @@ AjBool embDmxScophitsAccToHitlist(const AjPList in,
 
 
 
-
 /* @func embDmxHitsWrite ****************************************************
  ** Writes a list of AjOHit objects to an output file. This is intended for 
  ** displaying the results from scans of a model against a protein sequence
@@ -499,6 +520,7 @@ AjBool embDmxScophitsAccToHitlist(const AjPList in,
  ** @return [AjBool] True if file was written
  ** @@
  ***************************************************************************/
+
 AjBool embDmxHitsWrite(AjPFile outf, EmbPHitlist hits, ajint maxhits)
 {
     ajint  x  = 0;
@@ -549,6 +571,7 @@ AjBool embDmxHitsWrite(AjPFile outf, EmbPHitlist hits, ajint maxhits)
     
 
     iter=ajListIterNewread(outlist);
+
     while((hit=(AjPScophit) ajListIterGet(iter)))
     {
 /*Fix for Typeobj 
@@ -576,9 +599,11 @@ AjBool embDmxHitsWrite(AjPFile outf, EmbPHitlist hits, ajint maxhits)
 
 	ajDmxScophitDel(&hit);
 
-/*CORRECTION*/	
-/*	if(ajStrMatchC(hit->Typeobj, "FALSE"))
-	    cnt++; */
+/*
+** CORRECTION
+** if(ajStrMatchC(hit->Typeobj, "FALSE"))
+**    cnt++;
+*/
 
 	x++;
     }
@@ -617,6 +642,7 @@ AjBool embDmxScopToScophit(const AjPScop source, AjPScophit* target)
     if(!source || !target)
     {
 	ajWarn("bad args passed to embDmxScopToScophit\n");
+
 	return ajFalse;
     }
     
@@ -644,11 +670,11 @@ AjBool embDmxScopToScophit(const AjPScop source, AjPScophit* target)
 	ajStrAssignS(&(*target)->Acc,source->Acc);
 	ajStrAssignS(&(*target)->Spr,source->Spr);
     }
+
     ajStrAssignS(&(*target)->Dom,source->Entry);
     
     return ajTrue;
 }
-
 
 
 
@@ -686,6 +712,7 @@ AjBool embDmxScopalgToScop(const AjPScopalg align, AjPScop const *scop_arr,
     {
         ajWarn("Bad args passed to embDmxScopalgToScop");
 	ajStrDel(&entry_up);
+
         return ajFalse;
     }
 
@@ -704,6 +731,7 @@ AjBool embDmxScopalgToScop(const AjPScopalg align, AjPScop const *scop_arr,
         if((idx = ajScopArrFindScopid(scop_arr,scop_dim,entry_up))==-1)
         {
 	    ajStrDel(&entry_up);
+
 	    return ajFalse;
 	}
 	else
@@ -716,13 +744,11 @@ AjBool embDmxScopalgToScop(const AjPScopalg align, AjPScop const *scop_arr,
 	}
 	
     }
-    
 
     ajStrDel(&entry_up);
 
     return ajTrue;
 }
-
 
 
 
@@ -768,7 +794,6 @@ AjBool embDmxScophitsOverlapAcc(const AjPScophit h1, const AjPScophit h2,
 
 
 
-
 /* @func embDmxScophitsOverlap **********************************************
 **
 ** Checks for overlap between two hits.
@@ -800,10 +825,9 @@ AjBool embDmxScophitsOverlap(const AjPScophit h1, const AjPScophit h2,
     if( (((h1->End - h2->Start + 1)>=n) && (h2->Start >= h1->Start)) ||
        (((h2->End - h1->Start + 1)>=n) && (h1->Start >= h2->Start)))
 	return ajTrue;
-    else 
-	return ajFalse;
-}
 
+    return ajFalse;
+}
 
 
 
@@ -867,12 +891,15 @@ AjPScophit embDmxScophitMerge(const AjPScophit hit1, const AjPScophit hit2)
     if(ajStrMatchS(hit1->Class, hit2->Class))
     {
 	ajStrAssignS(&(ret->Class), hit1->Class);
+
 	if(ajStrMatchS(hit1->Fold, hit2->Fold))
 	{
 	    ajStrAssignS(&(ret->Fold), hit1->Fold);
+
 	    if(ajStrMatchS(hit1->Superfamily, hit2->Superfamily))
 	    {
 		ajStrAssignS(&(ret->Superfamily), hit1->Superfamily);
+
 		if(ajStrMatchS(hit1->Family, hit2->Family))
 		    ajStrAssignS(&(ret->Family), hit1->Family);
 	    }
@@ -951,7 +978,6 @@ AjPScophit embDmxScophitMerge(const AjPScophit hit1, const AjPScophit hit2)
 
 
 
-
 /* @func embDmxScophitMergeInsertOther **************************************
 **
 ** Creates a new Scophit object which corresponds to a merging of two Scophit
@@ -983,7 +1009,6 @@ AjBool embDmxScophitMergeInsertOther(AjPList list, AjPScophit hit1,
     
     return ajTrue;
 }
-
 
 
 
@@ -1020,7 +1045,6 @@ AjBool embDmxScophitMergeInsertOtherTarget(AjPList list, AjPScophit hit1,
     
     return ajTrue;
 }
-
 
 
 
@@ -1064,7 +1088,6 @@ AjBool embDmxScophitMergeInsertOtherTargetBoth(AjPList list, AjPScophit hit1,
 
 
 
-
 /* @func embDmxScophitMergeInsertThis ***************************************
 **
 ** Creates a new Scophit object which corresponds to a merging of two Scophit
@@ -1097,7 +1120,6 @@ AjBool embDmxScophitMergeInsertThis(const AjPList list, AjPScophit hit1,
     
     return ajTrue;
 }
-
 
 
 
@@ -1141,7 +1163,6 @@ AjBool embDmxScophitMergeInsertThisTarget(const AjPList list,
 
 
 
-
 /* @func embDmxScophitMergeInsertThisTargetBoth  ****************************
 **
 ** Creates a new Scophit object which corresponds to a merging of two Scophit
@@ -1158,6 +1179,7 @@ AjBool embDmxScophitMergeInsertThisTarget(const AjPList list,
 ** @return [AjBool] True on success.
 ** @@
 ****************************************************************************/
+
 AjBool embDmxScophitMergeInsertThisTargetBoth(const AjPList list,
 					      AjPScophit hit1, 
 					      AjPScophit hit2,
@@ -1181,8 +1203,6 @@ AjBool embDmxScophitMergeInsertThisTargetBoth(const AjPList list,
     
     return ajTrue;
 }
-
-
 
 
 
@@ -1273,12 +1293,14 @@ AjBool embDmxSeqNR(const AjPList input, AjPUint *keep, ajint *nset,
 	AJFREE(path);
 	ajStrDel(&m);
 	ajStrDel(&n);
+
 	return ajFalse;
     }
 
 
     /* Create an ajint array to hold lengths of sequences */
     lens = ajUintNewL(nin);
+
     for(x=0; x<nin; x++)
 	ajUintPut(&lens,x,ajSeqGetLen(inseqs[x]->Seq));
 
@@ -1358,8 +1380,8 @@ AjBool embDmxSeqNR(const AjPList input, AjPUint *keep, ajint *nset,
 
 
 	    /* Write array with score*/
-	/* DIAGNOSTICS	   printf("Score=%f\n", sim);  */
-		    ajFloat2dPut(&scores,x,y,sim);
+            /* DIAGNOSTICS	   printf("Score=%f\n", sim);  */
+	    ajFloat2dPut(&scores,x,y,sim);
 	}
     }
 
@@ -1397,7 +1419,11 @@ AjBool embDmxSeqNR(const AjPList input, AjPUint *keep, ajint *nset,
 		    else	
 			ajUintPut(keep,y,0);
 		}
-		/* If just one is garbage, set non-garbage sequence as redundant */
+
+		/*
+                ** If just one is garbage, set non-garbage sequence as
+                ** redundant
+                */
 		else if(CheckGarbage &&
 			((inseqs[x]->Garbage) || (inseqs[y]->Garbage)))
 		{
@@ -1406,6 +1432,7 @@ AjBool embDmxSeqNR(const AjPList input, AjPUint *keep, ajint *nset,
 		    else
 			ajUintPut(keep,x,0);
 		}
+
 		/* Otherwise set on length as usual */
 		else
 		{
@@ -1436,21 +1463,18 @@ AjBool embDmxSeqNR(const AjPList input, AjPUint *keep, ajint *nset,
 		break;
 	    }
 	}
+
 	if(*nset == 0)
 	    ajWarn("nset == 0 after processing");
     }
     
-
-    for(x=0; x<nin; x++)
-    {
-	for(y=x+1; y<nin; y++)
-	{
-/*DIAGNOSTICS	    ajFmtPrint("x=%d y=%d\nComparing\n%S\nto\n%S\n\n", 
-		       x, y, inseqs[x]->Seq->Seq, inseqs[y]->Seq->Seq);        */
-	}
-    }
-    
-
+/*
+** DIAGNOSTIC
+**  for(x=0; x<nin; x++)
+**      for(y=x+1; y<nin; y++)
+**          ajFmtPrint("x=%d y=%d\nComparing\n%S\nto\n%S\n\n", 
+**              x, y, inseqs[x]->Seq->Seq, inseqs[y]->Seq->Seq);
+*/
 
     AJFREE(compass);
     AJFREE(path);
@@ -1462,7 +1486,6 @@ AjBool embDmxSeqNR(const AjPList input, AjPUint *keep, ajint *nset,
 
     return ajTrue;
 }
-
 
 
 
@@ -1501,6 +1524,7 @@ AjBool embDmxSeqNR(const AjPList input, AjPUint *keep, ajint *nset,
 ** @return [AjBool] ajTrue on success
 ** @@
 ****************************************************************************/
+
 AjBool embDmxSeqNRRange(const AjPList input, AjPUint *keep, ajint *nset,
 		      const AjPMatrixf matrix, float gapopen, float gapextend,
 		      float threshlow, float threshup, AjBool CheckGarbage)
@@ -1554,12 +1578,14 @@ AjBool embDmxSeqNRRange(const AjPList input, AjPUint *keep, ajint *nset,
 	AJFREE(path);
 	ajStrDel(&m);
 	ajStrDel(&n);
+
 	return ajFalse;
     }
 
 
     /* Create an ajint array to hold lengths of sequences */
     lens = ajUintNewL(nin);
+
     for(x=0; x<nin; x++)
 	ajUintPut(&lens,x,ajSeqGetLen(inseqs[x]->Seq));
 
@@ -1662,8 +1688,13 @@ AjBool embDmxSeqNRRange(const AjPList input, AjPUint *keep, ajint *nset,
 		    else	
 			ajUintPut(keep,y,0);
 		}
-		/* If just one is garbage, set non-garbage sequence as redundant */
-		else if(CheckGarbage && ((inseqs[x]->Garbage) || (inseqs[y]->Garbage)))
+
+		/*
+                ** If just one is garbage, set non-garbage sequence as
+                ** redundant
+                */
+		else if(CheckGarbage && ((inseqs[x]->Garbage) ||
+                                         (inseqs[y]->Garbage)))
 		{
 		    if(inseqs[x]->Garbage)
 			ajUintPut(keep,y,0);
@@ -1728,6 +1759,7 @@ AjBool embDmxSeqNRRange(const AjPList input, AjPUint *keep, ajint *nset,
 		break;
 	    }
 	}
+
 	if(*nset == 0)
 	    ajWarn("nset == 0 after processing");
     }
@@ -1743,7 +1775,6 @@ AjBool embDmxSeqNRRange(const AjPList input, AjPUint *keep, ajint *nset,
 
     return ajTrue;
 }
-
 
 
 
@@ -1814,12 +1845,14 @@ AjBool embDmxSeqCompall(const AjPList input, AjPFloat2d *scores,
 	AJFREE(path);
 	ajStrDel(&m);
 	ajStrDel(&n);
+
 	return ajFalse;
     }
 
 
     /* Create an ajint array to hold lengths of sequences */
     lens = ajUintNewL(nin);
+
     for(x=0; x<nin; x++)
 	ajUintPut(&lens,x,ajSeqGetLen(inseqs[x]));
 
@@ -1894,8 +1927,8 @@ AjBool embDmxSeqCompall(const AjPList input, AjPFloat2d *scores,
 
 
 	    /* Write array with score*/
-	/* DIAGNOSTICS	   printf("Score=%f\n", sim);  */
-		    ajFloat2dPut(scores,x,y,sim);
+            /* DIAGNOSTICS	   printf("Score=%f\n", sim);  */
+            ajFloat2dPut(scores,x,y,sim);
 	}
     }
 
@@ -1911,16 +1944,16 @@ AjBool embDmxSeqCompall(const AjPList input, AjPFloat2d *scores,
     */
     
 
-
+/*
     for(x=0; x<nin; x++)
     {
 	for(y=x+1; y<nin; y++)
 	{
-/*DIAGNOSTICS	    ajFmtPrint("x=%d y=%d\nComparing\n%S\nto\n%S\n\n", 
-		       x, y, inseqs[x]->Seq, inseqs[y]->Seq);        */
+            ajFmtPrint("x=%d y=%d\nComparing\n%S\nto\n%S\n\n", 
+		       x, y, inseqs[x]->Seq, inseqs[y]->Seq);
 	}
     }
-    
+*/  
 
 
     AJFREE(compass);
@@ -1983,7 +2016,8 @@ AjPList  embDmxScophitReadAllFasta(AjPFile inf)
 	    /* Check line has correct no. of tokens and allocate Hit */
 	    ajStrAssignSubS(&subline, line, 1, -1);
 	    if( (ntok=ajStrParseCountC(subline, "^")) != 17)
-		ajFatal("Incorrect no. (%d) of tokens on line %S\n", ntok, line);
+		ajFatal("Incorrect no. (%d) of tokens on line %S\n", ntok,
+                        line);
 	    else
 	    {
 		parseok = ajTrue;
@@ -1994,12 +2028,14 @@ AjPList  embDmxScophitReadAllFasta(AjPFile inf)
 	    token = ajStrParseC(subline, "^");
 	    ajStrAssignS(&hit->Acc, token);
 	    ajStrTrimWhite(&hit->Acc); 
+
 	    if(ajStrMatchC(hit->Acc, "."))
 		ajStrSetClear(&hit->Acc);
 
 	    /* Spr */
 	    token = ajStrParseC(NULL, "^");
 	    ajStrAssignS(&hit->Spr, token);
+
 	    if(ajStrMatchC(hit->Spr, "."))
 		ajStrSetClear(&hit->Spr);
 
@@ -2023,6 +2059,7 @@ AjPList  embDmxScophitReadAllFasta(AjPFile inf)
 	    /* Dom */
 	    token = ajStrParseC(NULL, "^");
 	    ajStrAssignS(&hit->Dom, token);
+
 	    if(ajStrMatchC(hit->Dom, "."))
 		ajStrSetClear(&hit->Dom);
 
@@ -2033,36 +2070,43 @@ AjPList  embDmxScophitReadAllFasta(AjPFile inf)
 
 	    token = ajStrParseC(NULL, "^");
 	    ajStrAssignS(&hit->Class, token);
+
 	    if(ajStrMatchC(hit->Class, "."))
 		ajStrSetClear(&hit->Class);	
 
 	    token = ajStrParseC(NULL, "^");
 	    ajStrAssignS(&hit->Architecture, token);
+
 	    if(ajStrMatchC(hit->Architecture, "."))
 		ajStrSetClear(&hit->Architecture);
 
 	    token = ajStrParseC(NULL, "^");
 	    ajStrAssignS(&hit->Topology, token);
+
 	    if(ajStrMatchC(hit->Topology, "."))
 		ajStrSetClear(&hit->Topology);
 
 	    token = ajStrParseC(NULL, "^");
 	    ajStrAssignS(&hit->Fold, token);
+
 	    if(ajStrMatchC(hit->Fold, "."))
 		ajStrSetClear(&hit->Fold);
 
 	    token = ajStrParseC(NULL, "^");
 	    ajStrAssignS(&hit->Superfamily, token);
+
 	    if(ajStrMatchC(hit->Superfamily, "."))
 		ajStrSetClear(&hit->Superfamily);
 
 	    token = ajStrParseC(NULL, "^");
 	    ajStrAssignS(&hit->Family, token);
+
 	    if(ajStrMatchC(hit->Family, "."))
 		ajStrSetClear(&hit->Family);
 
 	    token = ajStrParseC(NULL, "^");
 	    ajStrAssignS(&hit->Model, token);
+
 	    if(ajStrMatchC(hit->Model, "."))
 		ajStrSetClear(&hit->Model);
 
@@ -2103,7 +2147,6 @@ AjPList  embDmxScophitReadAllFasta(AjPFile inf)
 
 
 
-
 /* @func embDmxHitlistToScophits ********************************************
 **
 ** Read from a list of Hitlist structures and writes a list of Scophit 
@@ -2128,6 +2171,7 @@ AjBool embDmxHitlistToScophits(const AjPList in, AjPList out)
     if(!in)
     {
 	ajWarn("Null arg passed to embDmxHitlistToScophits");
+
 	return ajFalse;
     }
 
@@ -2177,12 +2221,10 @@ AjBool embDmxHitlistToScophits(const AjPList in, AjPList out)
 	}
     }	
     
-
     ajListIterDel(&iter);	
 
     return ajTrue;
 }
-
 
 
 
@@ -2198,6 +2240,32 @@ AjBool embDmxHitlistToScophits(const AjPList in, AjPList out)
 **
 ****************************************************************************/
 
+
+/* @func embDmxNrseqDel *******************************************************
+**
+** Creates an empty non redundant sequence object
+**
+** @param [d] Pnrseq [EmbPDmxNrseq*] Non-redundant sequence object
+** @return [void]
+******************************************************************************/
+
+void embDmxNrseqDel(EmbPDmxNrseq* Pnrseq)
+{
+    EmbPDmxNrseq nrseq;
+
+    if(!Pnrseq)
+        return;
+
+    nrseq = *Pnrseq;
+
+    if(!nrseq)
+        return;
+    
+    ajSeqDel(&nrseq->Seq);
+    AJFREE(*Pnrseq);
+
+    return;
+}
 
 
 
@@ -2302,10 +2370,3 @@ AjBool embDmxHitlistToScophits(const AjPList in, AjPList out)
 ** categories. 
 **
 ****************************************************************************/
-
-
-
-
-
-
-

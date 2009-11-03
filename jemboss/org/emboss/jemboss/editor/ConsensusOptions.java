@@ -117,7 +117,7 @@ public class ConsensusOptions extends JFrame
       public void actionPerformed(ActionEvent e)
       {
         setCursor(cbusy);
-        gsc.deleteSequence("Consensus");
+        gsc.deleteSequence(Consensus.DEFAULT_SEQUENCE_NAME);
         Consensus conseq = new Consensus(mat,
                     gsc.getSequenceCollection(),
                     getPlurality(),

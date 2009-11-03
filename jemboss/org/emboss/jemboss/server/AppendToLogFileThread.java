@@ -21,6 +21,7 @@
 package org.emboss.jemboss.server;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -70,7 +71,10 @@ public class AppendToLogFileThread extends Thread
     BufferedWriter bw = null;
     try
     {
-      bw = new BufferedWriter(new FileWriter(logFileName, true));
+      File logFile = new File(logFileName);
+      if (!logFile.exists())
+          logFile.mkdirs();
+      bw = new BufferedWriter(new FileWriter(logFile, true));
       bw.write(logEntry);
       bw.newLine();
       bw.flush();

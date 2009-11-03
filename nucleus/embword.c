@@ -226,6 +226,7 @@ void embWordPrintTable(const AjPTable table)
     ajTableToarray(table, &keyarray, &valarray);
 
     qsort(valarray, ajTableGetLength(table), sizeof (*valarray), wordCompare);
+
     for(i = 0; valarray[i]; i++)
     {
 	ajnew = (EmbPWord) valarray[i];
@@ -259,22 +260,30 @@ void embWordPrintTableFI(const AjPTable table, ajint mincount, AjPFile outf)
     EmbPWord ajnew;
     ajint i;
 
+    if(!ajTableGetLength(table)) return;
+
     i = ajTableToarray(table, &keyarray, &valarray);
 
     ajDebug("embWordPrintTableFI size %d mincount:%d\n", i, mincount);
+
     for(i = 0; valarray[i]; i++)
     {
 	ajnew = (EmbPWord) valarray[i];
 	ajDebug("embWordPrintTableFI unsorted [%d] %.*s %d\n",
 		i, wordLength, ajnew->fword,ajnew->count);
     }
+
     qsort(valarray, ajTableGetLength(table), sizeof (*valarray), wordCompare);
+
     for(i = 0; valarray[i]; i++)
     {
 	ajnew = (EmbPWord) valarray[i];
 	ajDebug("embWordPrintTableFI sorted [%d] %.*s %d\n",
 		i, wordLength, ajnew->fword,ajnew->count);
-	if(ajnew->count < mincount) break;
+
+	if(ajnew->count < mincount)
+            break;
+
 	ajFmtPrintF(outf, "%.*s\t%d\n",
 			   wordLength, ajnew->fword,ajnew->count);
     }
@@ -301,6 +310,7 @@ void embWordPrintTableFI(const AjPTable table, ajint mincount, AjPFile outf)
 void embWordPrintTableF(const AjPTable table, AjPFile outf)
 {
     embWordPrintTableFI(table, 1, outf);
+
     return;
 }
 
@@ -325,7 +335,8 @@ static void wordPositionListDelete(void **x,void *cl)
 
     AJFREE(p);
 
-    if(!cl) return;
+    if(!cl)
+        return;
 
     return;
 }
@@ -360,7 +371,9 @@ static void wordVFree(void **key, void **count, void *cl)
     /* free the word structure */
     AJFREE(*count);
 
-    if(!cl)return;
+    if(!cl)
+        return;
+
     return;
 }
 
@@ -406,7 +419,9 @@ static void wordMatchListDelete(void **x,void *cl)
 
     AJFREE(p);
 
-    if(!cl)return;
+    if(!cl)
+        return;
+
     return;
 }
 
@@ -523,6 +538,7 @@ void embWordMatchListConvToFeat(const AjPList list,
     ajStrAssignC(&tag,"note");
     
     iter = ajListIterNewread(list);
+
     while(!ajListIterDone(iter))
     {
 	EmbPWordMatch p = (EmbPWordMatch) ajListIterGet(iter);
@@ -578,6 +594,7 @@ AjBool embWordGetTable(AjPTable *table, const AjPSeq seq)
     wordsize = wordLength+1;
 
     skipchar = 'X';
+
     if(ajSeqIsNuc(seq))
 	skipchar = 'N';
 
@@ -590,6 +607,7 @@ AjBool embWordGetTable(AjPTable *table, const AjPSeq seq)
     {
 	ajDebug("sequence too short: wordsize = %d, sequence length = %d",
 	       wordLength, ajSeqGetLen(seq));
+
 	return ajFalse;
     }
 
@@ -607,23 +625,29 @@ AjBool embWordGetTable(AjPTable *table, const AjPSeq seq)
     ilast = ajSeqGetLen(seq) - wordLength;
 
     j=0;
+
     while(j<wordLength)
     {
 	if((char)toupper((ajint)startptr[j]) == skipchar)
 	{
 	    ajDebug("Skip '%c' at start from %d",
 		    skipchar, i+j+1);
+
 	    while((char)toupper((ajint)startptr[j]) == skipchar)
 	    {
 		i++;
 		startptr++;
 	    }
+
 	    ajDebug(" to %d\n",
 		    i+j);
 	    j = 0;
-	    if(i > ilast) {
+
+	    if(i > ilast)
+            {
 		ajDebug("sequence has no word without ambiguity code '%c'\n",
 			skipchar);
+
 		return ajFalse;
 	    }
 	}
@@ -636,14 +660,17 @@ AjBool embWordGetTable(AjPTable *table, const AjPSeq seq)
     while(i <= ilast)
     {
 	j = wordLength - 1;
+
 	if((char)toupper((ajint)startptr[j]) == skipchar)
 	{
 	    ajDebug("Skip '%c' from %d", skipchar, j);
+
 	    while((char)toupper((ajint)startptr[j]) == skipchar)
 	    {
 		i++;
 		startptr++;
 	    }
+
 	    i += j;
 	    startptr += j;
 	    ajDebug(" to %d\n", i);
@@ -708,6 +735,7 @@ static ajint wordFindWordAtPos(const char *word, const AjPTable seq1MatchTable,
     k = &nextpos;
 
     wordmatch = ajTableFetch(seq1MatchTable, word);
+
     if(wordmatch)
     {
 	iter = ajListIterNewread(wordmatch->list);
@@ -716,6 +744,7 @@ static ajint wordFindWordAtPos(const char *word, const AjPTable seq1MatchTable,
 	    if(*pos == *k)
 	    {
 		ajListIterDel(&iter);
+
 		return *pos +1;
 	    }
 
@@ -758,6 +787,7 @@ static ajint wordGetWholeMatch(EmbPWordMatch match,
     nextpos = match->seq1start + 1;
 
     ilast = ajSeqGetLen(seq2) - wordLength;
+
     while(i < (ilast+1))
     {
 	/* find if it matches */
@@ -988,8 +1018,10 @@ AjPList embWordBuildMatchTable(const AjPTable seq1MatchTable,
     {
 	ajWarn("ERROR: Sequence %S length %d less than word length %d",
 	       ajSeqGetUsaS(seq2), ajSeqGetLen(seq2), wordLength);
+
 	return hitlist;
     }
+
     startptr = ajSeqGetSeqC(seq2);
     ilast    = ajSeqGetLen(seq2) - wordLength;
 
@@ -1041,6 +1073,7 @@ AjPList embWordBuildMatchTable(const AjPTable seq1MatchTable,
 
                 ajListIterRewind(curiter);
                 matched = ajFalse;
+
                 while(!ajListIterDone(curiter) )
                 {
 		    curmatch = ajListIterGet(curiter);
@@ -1060,9 +1093,11 @@ AjPList embWordBuildMatchTable(const AjPTable seq1MatchTable,
                         ajListIterRemove(curiter);
                         continue;
                     }
+
                     if(kcur == knew && kcur2 == i)
                     {			/* check continued matches */
-                        /* ajDebug("**match knew: %d kcur: %d kcur2: %d start1: %d "
+                        /* ajDebug("**match knew: %d kcur: %d kcur2: %d "
+                           "start1: %d "
                                 "start2: %d len: %d i:%d\n",
                                 knew, kcur, kcur2,curmatch->seq1start,
                                 curmatch->seq2start,curmatch->length, i);*/
@@ -1083,6 +1118,7 @@ AjPList embWordBuildMatchTable(const AjPTable seq1MatchTable,
                             match2->seq1start, match2->seq2start,
                             match2->length);*/
                     ajListPushAppend(hitlist, match2); /* add to hitlist */
+
                     if(curiter)
                     {			/* add to wordCurList */
                         /*ajDebug("...ajListInsert using curiter %u\n",
@@ -1101,6 +1137,7 @@ AjPList embWordBuildMatchTable(const AjPTable seq1MatchTable,
                 }
  		/* ajDebug("k: %d i: %d\n", *k, i); */
 	    }
+
 	    ajListIterDel(&newiter);
             ajListIterDel(&curiter);
 	}
@@ -1146,12 +1183,14 @@ static void wordNewListTrace(ajint i, const AjPList newlist)
 
     ajDebug("\n++newlist... %d \n", i);
     ajDebug("++  k+len  i+len    k+1    i+1    len\n");
+
     while(!ajListIterDone(iter))
     {
 	k = (ajint*) ajListIterGet(iter);
 	ajDebug("++ %6d %6d %6d %6d %6d\n",
 		(*k)+wordLength, i+wordLength, (*k)+1, i+1, wordLength);
     }
+
     ajListIterDel(&iter);
 
     return;
@@ -1216,26 +1255,27 @@ static void wordCurIterTrace(const AjIList curiter)
     ajint i, j, ilen;
 
     ajDebug("curiter ...\n");
-    if(curiter->Here)
-       {
-       node = curiter->Here;
-       match = node->Item;
-       i = match->seq1start + 1;
-       j = match->seq2start + 1;
-       ilen = match->length;
-       ajDebug(" Here: %6d %6d %6d %6d %6d\n",
-       i+ilen, j+ilen, i, j, ilen);
-       }
-       else
-	   ajDebug(" Here: NULL\n");
 
-       node = curiter->Head->First;
-       match = node->Item;
-       i = match->seq1start + 1;
-       j = match->seq2start + 1;
-       ilen = match->length;
-       ajDebug(" Orig: %6d %6d %6d %6d %6d\n",
-       i+ilen, j+ilen, i, j, ilen);
+    if(curiter->Here)
+    {
+        node = curiter->Here;
+        match = node->Item;
+        i = match->seq1start + 1;
+        j = match->seq2start + 1;
+        ilen = match->length;
+        ajDebug(" Here: %6d %6d %6d %6d %6d\n",
+                i+ilen, j+ilen, i, j, ilen);
+    }
+    else
+        ajDebug(" Here: NULL\n");
+
+    node = curiter->Head->First;
+    match = node->Item;
+    i = match->seq1start + 1;
+    j = match->seq2start + 1;
+    ilen = match->length;
+    ajDebug(" Orig: %6d %6d %6d %6d %6d\n",
+            i+ilen, j+ilen, i, j, ilen);
 
     return;
 }
@@ -1434,6 +1474,7 @@ void embWordMatchMin(AjPList matchlist)
 
 	/* look at all remaining matches in matchlist */
 	iter = ajListIterNew(matchlist);
+
 	while(!ajListIterDone(iter))
 	{
 	    match = ajListIterGet(iter);
@@ -1457,6 +1498,7 @@ void embWordMatchMin(AjPList matchlist)
 		truncated = ajTrue;
 	    }
 	}
+
 	ajListIterDel(&iter);
 
 	/*

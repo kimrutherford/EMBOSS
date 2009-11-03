@@ -50,8 +50,10 @@ public class JembossJarUtil
     {
       // extracts just sizes only
       ClassLoader cl = this.getClass().getClassLoader();
-      ZipInputStream zis= new ZipInputStream(
-                     cl.getResourceAsStream(jarFile));
+      InputStream is = cl.getResourceAsStream(jarFile);
+      if (is==null)
+    	  throw new Exception();
+      ZipInputStream zis= new ZipInputStream(is);
       ZipEntry ze=null;
       Hashtable htSizes = new Hashtable();
 

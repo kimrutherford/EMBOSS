@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Search the textual description of sequence(s)
@@ -30,11 +37,10 @@ Usage
    Search for 'lactose':
 
 
-% textsearch tsw:* 'lactose' 
+% textsearch 'tsw:*' 'lactose' 
 Search the textual description of sequence(s)
-Output file [edd1_rat.textsearch]: 
+Output file [12s1_arath.textsearch]: 
 
-   Go to the input files for this example
    Go to the output files for this example
 
    Example 2
@@ -42,10 +48,11 @@ Output file [edd1_rat.textsearch]:
    Search for 'lactose' or 'permease' in E.coli proteins:
 
 
-% textsearch tsw:*_ecoli 'lactose | permease' 
+% textsearch 'tsw:*_ecoli' 'lactose | permease' 
 Search the textual description of sequence(s)
-Output file [laci_ecoli.textsearch]: 
+Output file [bgal_ecoli.textsearch]: 
 
+   Go to the input files for this example
    Go to the output files for this example
 
    Example 3
@@ -53,10 +60,9 @@ Output file [laci_ecoli.textsearch]:
    Output a search for 'lacz' formatted with HTML to a file:
 
 
-% textsearch tembl:* 'lacz' -html -outfile embl.lacz.html 
+% textsearch 'tembl:*' 'lacz' -html -outfile embl.lacz.html 
 Search the textual description of sequence(s)
 
-   Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
@@ -131,34 +137,29 @@ Input file format
 
    textsearch reads one or more normal sequence USAs.
 
-  Input files for usage example
+  Input files for usage example 2
 
-   'tsw:*' is a sequence entry in the example protein database 'tsw'
-
-  Input files for usage example 3
-
-   'tembl:*' is a sequence entry in the example nucleic acid database
-   'tembl'
+   '|' is a sequence entry in the example protein database '|'
 
 Output file format
 
   Output files for usage example
 
-  File: edd1_rat.textsearch
+  File: 12s1_arath.textsearch
 
 # Search for: lactose
-tsw-id:LACI_ECOLI LACI_ECOLI    P03023  Lactose operon repressor.
+tsw-id:LACI_ECOLI LACI_ECOLI    P03023  Lactose operon repressor
 tsw-id:LACY_ECOLI LACY_ECOLI    P02920  Lactose permease (Lactose-proton sympor
-t).
+t)
 
   Output files for usage example 2
 
-  File: laci_ecoli.textsearch
+  File: bgal_ecoli.textsearch
 
 # Search for: lactose | permease
-tsw-id:LACI_ECOLI LACI_ECOLI    P03023  Lactose operon repressor.
+tsw-id:LACI_ECOLI LACI_ECOLI    P03023  Lactose operon repressor
 tsw-id:LACY_ECOLI LACY_ECOLI    P02920  Lactose permease (Lactose-proton sympor
-t).
+t)
 
   Output files for usage example 3
 
@@ -192,20 +193,14 @@ Notes
 
    This is a rather slow way to search for text in databases. If you are
    searching for text in public databases, you should consider using
-   either Entrez (http://www.ncbi.nlm.nih.gov/Entrez/) or SRS
-   (http://srs.rfcgr.mrc.ac.uk/ or http://www.sanger.ac.uk/srs6/ etc.)
+   either SRS (http://srs.ebi.ac.uk/) or Entrez (
+   http://www.ncbi.nlm.nih.gov/Entrez/)
 
 References
 
    None.
 
 Warnings
-
-   This is a rather slow way to search for text in databases. If you are
-   searching for text in public databases, you should consider using
-   either Entrez (http://www.ncbi.nlm.nih.gov/Entrez/) or SRS
-   (http://srs.rfcgr.mrc.ac.uk/ or http://www.sanger.ac.uk/srs6/ etc.)
-   instead.
 
 Diagnostic Error Messages
 
@@ -221,30 +216,31 @@ Known bugs
 
 See also
 
-   Program name Description
-   abiview Display the trace in an ABI sequencer file
-   cirdna Draws circular maps of DNA constructs
-   infoalign Display basic information about a multiple sequence
-   alignment
-   infobase Return information on a given nucleotide base
-   inforesidue Return information on a given amino acid residue
-   infoseq Display basic information about sequences
-   lindna Draws linear maps of DNA constructs
-   pepnet Draw a helical net for a protein sequence
-   pepwheel Draw a helical wheel diagram for a protein sequence
-   prettyplot Draw a sequence alignment with pretty formatting
-   prettyseq Write a nucleotide sequence and its translation to file
-   remap Display restriction enzyme binding sites in a nucleotide
-   sequence
-   seealso Finds programs with similar function to a specified program
-   showalign Display a multiple sequence alignment in pretty format
-   showdb Displays information on configured databases
-   showfeat Display features of a sequence in pretty format
-   showseq Displays sequences with features in pretty format
-   sixpack Display a DNA sequence with 6-frame translation and ORFs
-   tfm Displays full documentation for an application
-   whichdb Search all sequence databases for an entry and retrieve it
-   wossname Finds programs by keywords in their short description
+   Program name     Description
+   abiview          Display the trace in an ABI sequencer file
+   cirdna           Draws circular maps of DNA constructs
+   infoalign        Display basic information about a multiple sequence
+                    alignment
+   infobase         Return information on a given nucleotide base
+   inforesidue      Return information on a given amino acid residue
+   infoseq          Display basic information about sequences
+   lindna           Draws linear maps of DNA constructs
+   pepnet           Draw a helical net for a protein sequence
+   pepwheel         Draw a helical wheel diagram for a protein sequence
+   prettyplot       Draw a sequence alignment with pretty formatting
+   prettyseq        Write a nucleotide sequence and its translation to file
+   remap            Display restriction enzyme binding sites in a nucleotide
+                    sequence
+   seealso          Finds programs with similar function to a specified program
+   showalign        Display a multiple sequence alignment in pretty format
+   showdb           Displays information on configured databases
+   showfeat         Display features of a sequence in pretty format
+   showpep          Displays protein sequences with features in pretty format
+   showseq          Displays sequences with features in pretty format
+   sixpack          Display a DNA sequence with 6-frame translation and ORFs
+   tfm              Displays full documentation for an application
+   whichdb          Search all sequence databases for an entry and retrieve it
+   wossname         Finds programs by keywords in their short description
 
 Author(s)
 

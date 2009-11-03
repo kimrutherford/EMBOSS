@@ -20,7 +20,11 @@ merger
 <H2>
     Description
 </H2>
-<p><b>merger</b> reads two overlapping input sequences of the same type (typically nucleotide) and uses a global alignment algorithm (Needleman & Wunsch) to optimally align the sequences.  A merged sequence is generated from the alignment and writen to the output file. The sequence alignment is also written.</p>
+<p><b>merger</b> reads two overlapping input sequences of the same
+type (typically nucleotide) and uses a global alignment algorithm
+(Needleman & Wunsch) to optimally align the sequences.  A merged
+sequence is generated from the alignment and writen to the output
+file. The sequence alignment is also written.</p>
 
 
 
@@ -28,20 +32,32 @@ merger
 Algorithm
 </H2>
 
-<p>It uses a global alignment algorithm (Needleman & Wunsch) to optimally align the sequences and then creates a merged sequence from the alignment. When there is a mismatch in the alignment between the two sequences, the base included in the merged sequence is the base from the sequence which has the best local sequence quality score.</p>
+<p>It uses a global alignment algorithm (Needleman & Wunsch) to
+optimally align the sequences and then creates a merged sequence from
+the alignment. When there is a mismatch in the alignment between the
+two sequences, the base included in the merged sequence is the base
+from the sequence which has the best local sequence quality score.</p>
 
-<p>The following heuristic is used to find the sequence quality score.  If one of the bases is a 'N', then the other sequence's base is used.  Otherwise, a window size around the disputed base is used to find the local quality score. This window size is increased from 5, to 10 to 20 bases or until there is a clear decision on the best choice. If there is no best choice after using a window of 20, then the base in the first sequence is used.</p>
+<p>The following heuristic is used to find the sequence quality score.
+If one of the bases is a 'N', then the other sequence's base is used.
+Otherwise, a window size around the disputed base is used to find the
+local quality score. This window size is increased from 5, to 10 to 20
+bases or until there is a clear decision on the best choice. If there
+is no best choice after using a window of 20, then the base in the
+first sequence is used.</p>
 
 <p>To calculate the quality of a window of a sequence around a base:</p>
 
-<pre>    * quality = sequence value/length under window either side of the base
+<pre>
+    * quality = sequence value/length under window either side of the base
     * sequence value = sum of points in that window
     * unambiguous bases (ACGTU) score 2 points
     * ambiguous bases (MRWSYKVHDB) score 1 point
     * Ns score 0 points
     * off end of the sequence scores 0 points 
 </pre>
-<p>This heavily discriminates against the iffy bits at the end of sequence reads.</p>
+<p>This heavily discriminates against the iffy bits at the end of
+sequence reads.</p>
 
 
 
@@ -53,8 +69,8 @@ Algorithm
 
 <p>
 
-Typically, one of the sequences will need to be reverse-complemented to put it
-into the correct orientation to make it join. For example:
+Typically, one of the sequences will need to be reverse-complemented
+to put it into the correct orientation to make it join. For example:
 
 <p>
 
@@ -124,9 +140,15 @@ or the file 'EDNAFULL' (for nucleic sequences).
     Notes
 </H2>
 
-<p>This program was originally written to aid in the reconstruction of mRNA sequences which had been sequenced from both ends as a 5' and 3' EST (cDNA). eg. joining two reads produced by primer walking sequencing.</p>
+<p>This program was originally written to aid in the reconstruction of
+mRNA sequences which had been sequenced from both ends as a 5' and 3'
+EST (cDNA). eg. joining two reads produced by primer walking
+sequencing.</p>
 
-<p>The gap open and gap extension penalties have been set at a higher level than is usual (50 and 5). This was experimentally determined to give the best results with a set of poor quality EST test sequences.</p>
+<p>The gap open and gap extension penalties have been set at a higher
+level than is usual (50 and 5). This was experimentally determined to
+give the best results with a set of poor quality EST test
+sequences.</p>
 
 <H2>
     References

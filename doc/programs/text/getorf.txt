@@ -3,6 +3,13 @@
 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
 Function
 
    Finds and extracts open reading frames (ORFs)
@@ -201,21 +208,8 @@ FT   CDS             31..1113
 FT                   /transl_table=11
 FT                   /note="reading frame"
 FT                   /db_xref="GOA:P03023"
-FT                   /db_xref="PDB:1CJG"
-FT                   /db_xref="PDB:1EFA"
-FT                   /db_xref="PDB:1JWL"
-FT                   /db_xref="PDB:1JYE"
-FT                   /db_xref="PDB:1JYF"
-FT                   /db_xref="PDB:1L1M"
-FT                   /db_xref="PDB:1LBG"
-FT                   /db_xref="PDB:1LBH"
-FT                   /db_xref="PDB:1LBI"
-FT                   /db_xref="PDB:1LCC"
-FT                   /db_xref="PDB:1LCD"
-FT                   /db_xref="PDB:1LQC"
-FT                   /db_xref="PDB:1LTP"
-FT                   /db_xref="PDB:1TLF"
-FT                   /db_xref="PDB:2BJC"
+FT                   /db_xref="InterPro:IPR001761"
+FT                   /db_xref="PDB:3EDC"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P03023"
 FT                   /protein_id="CAA23569.1"
 FT                   /translation="MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAE
@@ -294,7 +288,7 @@ VHNLLAQRVSGLIINYPLDDQDAIAVEAACTNVPALFLDVSDQTPINSIIFSHEDGTRLG
 VEHLVALGHQQIALLAGPLSSVSARLRLAGWHKYLTRNQIQPIAEREGDWSAMSGFQQTM
 QMLNEGIVPTAMLVANDQMALGAMRAITESGLRVGADISVVGYDDTEDSSCYIPPSTTIK
 QDFRLLGQTSVDRLLQLSQGQAVKGNQLLPVSLVKRKTTLAPNTQTASPRALADSLMQLA
-RQVSRLESGQ*
+RQVSRLESGQ
 >V00294_3 [465 - 49] (REVERSE SENSE) E. coli laci gene (codes for the lac repre
 ssor).
 RRNISAGSFHSNGILVIQRIVNDQPTDALREKIVHRRFTGFDAASFYHRHHHAGTQLIGA
@@ -491,16 +485,16 @@ Known bugs
 
 See also
 
-   Program name Description
-   marscan Finds matrix/scaffold recognition (MRS) signatures in DNA
-   sequences
-   plotorf Plot potential open reading frames in a nucleotide sequence
-   showorf Display a nucleotide sequence and translation in pretty format
-   sixpack Display a DNA sequence with 6-frame translation and ORFs
-   syco Draw synonymous codon usage statictic plot for a nucleotide
-   sequence
-   tcode Identify protein-coding regions using Fickett TESTCODE statistic
-   wobble Plot third base position variability in a nucleotide sequence
+   Program name     Description
+   marscan          Finds matrix/scaffold recognition (MRS) signatures in DNA
+                    sequences
+   plotorf          Plot potential open reading frames in a nucleotide sequence
+   showorf          Display a nucleotide sequence and translation in pretty format
+   sixpack          Display a DNA sequence with 6-frame translation and ORFs
+   syco             Draw synonymous codon usage statictic plot for a nucleotide
+                    sequence
+   tcode            Identify protein-coding regions using Fickett TESTCODE statistic
+   wobble           Plot third base position variability in a nucleotide sequence
 
      * checktrans - Reports STOP codons and ORF statistics of a protein
        sequence

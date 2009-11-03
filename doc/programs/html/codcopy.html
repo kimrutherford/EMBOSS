@@ -21,6 +21,18 @@ codcopy
 
 
 <H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
     Function
 </H2>
 Copy and reformat a codon usage table
@@ -36,7 +48,11 @@ IT IS DONE FOR YOU.
     Description
 </H2>
 
-<p><b>codcopy</b> reads and writes a codon usage table. Rather than a copy utility, it is intended as a format conversion utility so that codon usage data can be exported to other applications that support only a single format. This program supports all available codon usage input and output formats. </p>
+<p><b>codcopy</b> reads and writes a codon usage table. Rather than a
+copy utility, it is intended as a format conversion utility so that
+codon usage data can be exported to other applications that support
+only a single format. This program supports all available codon usage
+input and output formats. </p>
 
 
 
@@ -185,7 +201,7 @@ IT IS DONE FOR YOU.
         happens in unusual cases - null input, etc. 
    -->
 
-<b>codcopy</b> reads any normal sequence USAs.
+<b>codcopy</b> reads a codon usage file.
 
 <p>
 
@@ -200,8 +216,15 @@ IT IS DONE FOR YOU.
 
 
 <b>codcopy</b> 
-outputs a graph to the specified graphics device. 
-outputs a report format file. The default format is ...
+writes a codon usage table. The user can choose any supported
+output format.
+
+,p>
+See the full specification of codon tabel formats at:
+<br>
+<a href="http://emboss.sourceforge.net/docs/themes/CodonUsage.html">
+http://emboss.sourceforge.net/docs/themes/CodonUsage.html
+</a>
 
 
 <p>
@@ -549,6 +572,11 @@ None.
 </tr>
 
 <tr>
+<td><a href="nthseqset.html">nthseqset</a></td>
+<td>Reads and writes (returns) one set of sequences from many</td>
+</tr>
+
+<tr>
 <td><a href="pasteseq.html">pasteseq</a></td>
 <td>Insert one sequence into another</td>
 </tr>
@@ -561,6 +589,11 @@ None.
 <tr>
 <td><a href="seqret.html">seqret</a></td>
 <td>Reads and writes (returns) sequences</td>
+</tr>
+
+<tr>
+<td><a href="seqretsetall.html">seqretsetall</a></td>
+<td>Reads and writes (returns) many sets of sequences</td>
 </tr>
 
 <tr>
@@ -581,6 +614,11 @@ None.
 <tr>
 <td><a href="skipseq.html">skipseq</a></td>
 <td>Reads and writes (returns) sequences, skipping first few</td>
+</tr>
+
+<tr>
+<td><a href="splitsource.html">splitsource</a></td>
+<td>Split sequence(s) into original source sequences</td>
 </tr>
 
 <tr>
@@ -638,7 +676,7 @@ None.
 </H2>
 Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
 <br>
-Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
 
 

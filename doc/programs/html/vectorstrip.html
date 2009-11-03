@@ -22,6 +22,18 @@ vectorstrip
 
 
 <H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
     Function
 </H2>
 Removes vectors from the ends of nucleotide sequence(s)
@@ -63,14 +75,14 @@ output sequence(s) [pbluescript.fasta]: <b>vector.fasta</b>
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
                                   format, or reference (input USA)
-  [-[no]vectorfile]    toggle     [Y] Are your vector sequences in a file?
+  [-[no]readfile]      toggle     [Y] Are your vector sequences in a file?
 *  -vectorsfile        infile     Cloning vector definition file (optional)
    -mismatch           integer    [10] Max allowed % mismatch (Any integer
                                   value)
    -[no]besthits       boolean    [Y] Show only the best hits (minimise
                                   mismatches)?
-*  -linkera            string     The 5' sequence (Any string is accepted)
-*  -linkerb            string     The 3' sequence (Any string is accepted)
+*  -alinker            string     The 5' sequence (Any string is accepted)
+*  -blinker            string     The 3' sequence (Any string is accepted)
   [-outfile]           outfile    [*.vectorstrip] Output file name
   [-outseq]            seqoutall  [<sequence>.<format>] Sequence set(s)
                                   filename and optional format (output USA)
@@ -146,7 +158,7 @@ output sequence(s) [pbluescript.fasta]: <b>vector.fasta</b>
 </tr>
 
 <tr>
-<td>[-[no]vectorfile]<br>(Parameter 2)</td>
+<td>[-[no]readfile]<br>(Parameter 2)</td>
 <td>Are your vector sequences in a file?</td>
 <td>Toggle value Yes/No</td>
 <td>Yes</td>
@@ -174,14 +186,14 @@ output sequence(s) [pbluescript.fasta]: <b>vector.fasta</b>
 </tr>
 
 <tr>
-<td>-linkera</td>
+<td>-alinker</td>
 <td>The 5' sequence</td>
 <td>Any string is accepted</td>
 <td><i>An empty string is accepted</i></td>
 </tr>
 
 <tr>
-<td>-linkerb</td>
+<td>-blinker</td>
 <td>The 3' sequence</td>
 <td>Any string is accepted</td>
 <td><i>An empty string is accepted</i></td>
@@ -602,6 +614,11 @@ None.
 </tr>
 
 <tr>
+<td><a href="nthseqset.html">nthseqset</a></td>
+<td>Reads and writes (returns) one set of sequences from many</td>
+</tr>
+
+<tr>
 <td><a href="pasteseq.html">pasteseq</a></td>
 <td>Insert one sequence into another</td>
 </tr>
@@ -614,6 +631,11 @@ None.
 <tr>
 <td><a href="seqret.html">seqret</a></td>
 <td>Reads and writes (returns) sequences</td>
+</tr>
+
+<tr>
+<td><a href="seqretsetall.html">seqretsetall</a></td>
+<td>Reads and writes (returns) many sets of sequences</td>
 </tr>
 
 <tr>
@@ -634,6 +656,11 @@ None.
 <tr>
 <td><a href="skipseq.html">skipseq</a></td>
 <td>Reads and writes (returns) sequences, skipping first few</td>
+</tr>
+
+<tr>
+<td><a href="splitsource.html">splitsource</a></td>
+<td>Split sequence(s) into original source sequences</td>
 </tr>
 
 <tr>

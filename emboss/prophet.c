@@ -122,6 +122,7 @@ int main(int argc, char **argv)
 
     prophet_read_profile(inf,&pname,&mname,&mlen,&gapopen,&gapextend,&thresh,
 			 &maxfs, &cons);
+    ajAlignSetMatrixName(align, mname);
     AJCNEW(fmatrix, mlen);
 
     for(i=0;i<mlen;++i)

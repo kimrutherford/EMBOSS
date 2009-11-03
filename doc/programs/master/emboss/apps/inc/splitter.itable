@@ -39,20 +39,6 @@
 <td>0</td>
 </tr>
 
-<tr>
-<td>-source</td>
-<td>Split using source features with /origid qualifiers</td>
-<td>Boolean value Yes/No</td>
-<td>No</td>
-</tr>
-
-<tr>
-<td>-multifile</td>
-<td>Split sequence into multiple files</td>
-<td>Boolean value Yes/No</td>
-<td>No</td>
-</tr>
-
 <tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
 <th align="left">Allowed values</th>
@@ -68,7 +54,7 @@
 
 <tr>
 <td>-addoverlap</td>
-<td>Add overlap to size</td>
+<td>Include overlap in output sequence size</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>

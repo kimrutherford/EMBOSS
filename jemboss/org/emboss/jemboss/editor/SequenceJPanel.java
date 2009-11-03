@@ -22,7 +22,6 @@ package org.emboss.jemboss.editor;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.print.*;
 import javax.swing.*;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -353,9 +352,6 @@ public class SequenceJPanel extends JPanel
 
     seqHeight = metrics.stringWidth("A")+boundWidth;
 
-    String sName = null;
-    if(drawSequence)
-      sName = seq.getName();
     String seqS = null;
     if(!drawNumber)
     {
@@ -899,15 +895,15 @@ public class SequenceJPanel extends JPanel
   public void getSequencePrintGraphic(Graphics g2d, int MAXSEQNAME, 
                                       int istart, int istop) 
   {
-    String sName = null;
+    //String sName = null;
     String seqS  = null; 
 
     g2d.setFont(font);
     if(drawSequence)
     {
-      sName = seq.getName();
-      if(seq.getID() != null)
-        sName = seq.getID();
+      //sName = seq.getName();
+      //if(seq.getID() != null)
+        //sName = seq.getID();
 
       seqS  = seq.getSequence();
       int seqLength = seq.getLength();

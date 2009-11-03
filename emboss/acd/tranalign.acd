@@ -1,5 +1,5 @@
 application: tranalign [
-  documentation: "Generate an aligment of nucleic coding regions
+  documentation: "Generate an alignment of nucleic coding regions
                   from aligned proteins"
   groups: "Alignment:Multiple"
 ]
@@ -58,6 +58,7 @@ section: output [
   seqoutset: outseq [
     parameter: "Y"
     type: "gapnucleotide"
+    aligned: "Y"
   ]
 
 endsection: output

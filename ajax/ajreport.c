@@ -81,6 +81,8 @@ static void reportWritePir(AjPReport outrpt, const AjPFeattable ftable,
 			   const AjPSeq seq);
 static void reportWriteSwiss(AjPReport outrpt,const  AjPFeattable ftable,
 			     const AjPSeq seq);
+static void reportWriteDasgff(AjPReport outrpt,const  AjPFeattable ftable,
+			     const AjPSeq seq);
 
 static void reportWriteTrace(AjPReport outrpt, const AjPFeattable ftable,
 			     const AjPSeq seq);
@@ -147,6 +149,8 @@ static ReportOFormat reportFormat[] =
 	 AJFALSE, 0, AJFALSE, AJFALSE, AJTRUE,  AJFALSE, reportWritePir},
     {"swiss",     "Swissprot feature format",
 	 AJFALSE, 0, AJFALSE, AJFALSE, AJTRUE,  AJFALSE, reportWriteSwiss},
+    {"dasgff",    "DAS GFF feature format",
+	 AJFALSE, 0, AJFALSE, AJTRUE,  AJTRUE,  AJFALSE, reportWriteDasgff},
     /* trace  for debug */
     {"debug",     "Debugging trace of full internal data content",
 	 AJFALSE, 0, AJTRUE,  AJTRUE,  AJTRUE,  AJTRUE,  reportWriteTrace},
@@ -242,6 +246,7 @@ static void reportWriteTrace(AjPReport thys, const AjPFeattable ftable,
     ajFmtPrintF(thys->File, "Mintags: %d\n", thys->Mintags);
     ajFmtPrintF(thys->File, "CountSeq: %d\n", thys->CountSeq);
     ajFmtPrintF(thys->File, "CountHit: %d\n", thys->CountHit);
+    ajFmtPrintF(thys->File, "TotHits: %d\n", thys->TotHits);
     ajFmtPrintF(thys->File, "MaxHitAll: %d\n", thys->MaxHitAll);
     ajFmtPrintF(thys->File, "MaxHitSeq: %d\n", thys->MaxHitSeq);
     ajFmtPrintF(thys->File, "Format: %d\n", thys->Format);
@@ -273,22 +278,14 @@ static void reportWriteTrace(AjPReport thys, const AjPFeattable ftable,
 static void reportWriteEmbl(AjPReport thys,
 			    const AjPFeattable ftable, const AjPSeq seq)
 {
-    static AjPStr ftfmt = NULL;
-
-    if(!ftfmt)
-	ajStrAssignC(&ftfmt, "embl");
-
-   /*  ajFmtPrintF(thys->File, "#EMBL output\n"); */
+    /*  ajFmtPrintF(thys->File, "#EMBL output\n"); */
 
     ajFeattabOutDel(&thys->Ftquery);
-    thys->Ftquery = ajFeattabOutNewSSF(ftfmt, ajSeqGetNameS(seq),
+    thys->Ftquery = ajFeattabOutNewCSF("embl", ajSeqGetNameS(seq),
 				       ajStrGetPtr(thys->Type),
 				       thys->File);
     if(!ajFeatWrite(thys->Ftquery, ftable))
-	ajWarn("ajReportWriteEmbl features output failed format: '%S'",
-	       ftfmt);
-
-    ajStrDel(&ftfmt);
+	ajWarn("ajReportWriteEmbl features output failed format: 'embl'");
 
     return;
 }
@@ -310,23 +307,15 @@ static void reportWriteEmbl(AjPReport thys,
 static void reportWriteGenbank(AjPReport thys,
 			       const AjPFeattable ftable, const AjPSeq seq)
 {
-    static AjPStr ftfmt = NULL;
-
-    if(!ftfmt)
-	ajStrAssignC(&ftfmt, "genbank");
-
     /* ajFmtPrintF(thys->File, "#Genbank output\n"); */
 
     ajFeattabOutDel(&thys->Ftquery);
-    thys->Ftquery = ajFeattabOutNewSSF(ftfmt, ajSeqGetNameS(seq),
+    thys->Ftquery = ajFeattabOutNewCSF("genbank", ajSeqGetNameS(seq),
 				       ajStrGetPtr(thys->Type),
 				       thys->File);
 
     if(!ajFeatWrite(thys->Ftquery, ftable))
-	ajWarn("ajReportWriteGenbank features output failed format: '%S'",
-	       ftfmt);
-
-    ajStrDel(&ftfmt);
+	ajWarn("ajReportWriteGenbank features output failed format: 'genbank'");
 
     return;
 }
@@ -348,21 +337,13 @@ static void reportWriteGenbank(AjPReport thys,
 static void reportWriteGff(AjPReport thys,
 			   const AjPFeattable ftable, const AjPSeq seq)
 {
-    AjPStr ftfmt = NULL;
-
-    if(!ftfmt)
-	ajStrAssignC(&ftfmt, "gff");
-
     ajFeattabOutDel(&thys->Ftquery);
-    thys->Ftquery = ajFeattabOutNewSSF(ftfmt, ajSeqGetNameS(seq),
+    thys->Ftquery = ajFeattabOutNewCSF("gff", ajSeqGetNameS(seq),
 				       ajStrGetPtr(thys->Type),
 				       thys->File);
 
     if(!ajFeatWrite(thys->Ftquery, ftable))
-	ajWarn("ajReportWriteGff features output failed format: '%S'",
-	       ftfmt);
-
-    ajStrDel(&ftfmt);
+	ajWarn("ajReportWriteGff features output failed format: 'gff'");
 
     return;
 }
@@ -384,20 +365,12 @@ static void reportWriteGff(AjPReport thys,
 static void reportWritePir(AjPReport thys,
 			   const AjPFeattable ftable, const AjPSeq seq)
 {
-    static AjPStr ftfmt = NULL;
-
-    if(!ftfmt)
-	ajStrAssignC(&ftfmt, "pir");
-
     ajFeattabOutDel(&thys->Ftquery);
-    thys->Ftquery = ajFeattabOutNewSSF(ftfmt, ajSeqGetNameS(seq),
+    thys->Ftquery = ajFeattabOutNewCSF("pir", ajSeqGetNameS(seq),
 				       ajStrGetPtr(thys->Type),
 				       thys->File);
     if(!ajFeatWrite(thys->Ftquery, ftable))
-	ajWarn("ajReportWritePir features output failed format: '%S'",
-	       ftfmt);
-
-    ajStrDel(&ftfmt);
+	ajWarn("ajReportWritePir features output failed format: 'pir'");
 
     return;
 }
@@ -419,20 +392,45 @@ static void reportWritePir(AjPReport thys,
 static void reportWriteSwiss(AjPReport thys,
 			     const AjPFeattable ftable, const AjPSeq seq)
 {
-    static AjPStr ftfmt = NULL;
-
-    if(!ftfmt)
-	ajStrAssignC(&ftfmt, "swissprot");
-
     ajFeattabOutDel(&thys->Ftquery);
-    thys->Ftquery = ajFeattabOutNewSSF(ftfmt, ajSeqGetNameS(seq),
+    thys->Ftquery = ajFeattabOutNewCSF("swissprot", ajSeqGetNameS(seq),
 				       ajStrGetPtr(thys->Type),
 				       thys->File);
     if(!ajFeatWrite(thys->Ftquery, ftable))
-	ajWarn("ajReportWriteSwiss features output failed format: '%S'",
-	       ftfmt);
+	ajWarn("ajReportWriteSwiss features output failed format: 'swissprot'");
 
-    ajStrDel(&ftfmt);
+    return;
+}
+
+
+
+
+/* @funcstatic reportWriteDasgff **********************************************
+**
+** Writes a report in DAS GFF format
+**
+** @param [u] thys [AjPReport] Report object
+** @param [r] ftable [const AjPFeattable] Feature table object
+** @param [r] seq [const AjPSeq] Sequence object
+** @return [void]
+** @@
+******************************************************************************/
+
+static void reportWriteDasgff(AjPReport thys,
+                              const AjPFeattable ftable, const AjPSeq seq)
+{
+    if(!thys->CountSeq)
+    {
+        ajFeattabOutDel(&thys->Ftquery);
+        thys->Ftquery = ajFeattabOutNewCSF("dasgff", ajSeqGetNameS(seq),
+                                           ajStrGetPtr(thys->Type),
+                                           thys->File);
+    }
+    else
+        ajFeattabOutSetSeqname(thys->Ftquery, ajSeqGetNameS(seq));
+
+    if(!ajFeatWrite(thys->Ftquery, ftable))
+	ajWarn("ajReportWriteDasgff features output failed format: 'dasgff'");
 
     return;
 }
@@ -510,6 +508,7 @@ static void reportWriteDbMotif(AjPReport thys,
     ntags = ajReportLists(thys, &tagtypes, &tagnames, &tagprints, &tagsizes);
     
     iterft = ajListIterNewread(ftable->Features);
+
     while(!ajListIterDone(iterft))
     {
 	feature = (AjPFeature)ajListIterGet(iterft);
@@ -524,25 +523,29 @@ static void reportWriteDbMotif(AjPReport thys,
 
 	ajStrAssignResC(&tmpstr, ilen+10, "");
 	j=istart+1;
+
 	while(j++<iend)
 	    ajStrAppendK(&tmpstr, ' ');
+
 	ajStrAssignSubS(&subseq, seqalias, jstart, jend);
 
 	/* ajStrFmtUpper(&subseq); */
 	ajFmtPrintF(outf, "Length = %d\n", ilen);
 	ajFmtPrintF(outf, "Start = position %d of sequence\n", istart);
 	ajFmtPrintF(outf, "End = position %d of sequence\n\n", iend);
+
 	if(strand == '-')
 	{
 	    ajFmtPrintF(outf, "Strand = Reversed\n");
 	}
+
 	for(j=0; j < ntags; j++)
 	    if(ajFeatGetNote(feature, tagnames[j], &tagval))
 		ajFmtPrintF(outf, "%S = %S\n", tagprints[j], tagval);
 
 	ajFmtPrintF(outf, "\n");
-	
 	ajFmtPrintF(outf, "%S\n", subseq);
+
 	if(istart == iend)
 	{
 	    ajFmtPrintF(outf, "%*s|\n",(istart-jstart-1), "");
@@ -555,6 +558,7 @@ static void reportWriteDbMotif(AjPReport thys,
 			AJMIN(6, istart),
 			istart, tmpstr, iend);
 	}
+
 	ajStrDel(&tmpstr);
     }
     
@@ -657,6 +661,7 @@ static void reportWriteDiffseq(AjPReport thys,
      ajReportWriteHeader(thys, ftable, seq);
     
     iterft = ajListIterNewread(ftable->Features);
+
     while(!ajListIterDone(iterft))
     {
 	feature = (AjPFeature)ajListIterGet(iterft);
@@ -696,6 +701,7 @@ static void reportWriteDiffseq(AjPReport thys,
 		ajFmtPrintF(outf, "\n%S %d-%d Length: %d\n",
 			    ajReportSeqName(thys, seq), istart, iend, ilen);
 	    ifeat = 1;
+
 	    while(ajFeatGetNoteCI(feature, "first_feature",
 				  ifeat++, &firstfeat))
 		ajFmtPrintF(outf, "Feature: %S\n", firstfeat);
@@ -707,9 +713,11 @@ static void reportWriteDiffseq(AjPReport thys,
 	    ajFmtPrintF(outf, "\n%S %d Length: %d\n",
 			ajReportSeqName(thys, seq), istart, ilen);
 	    ifeat = 1;
+
 	    while(ajFeatGetNoteCI(feature, "first_feature",
 				  ifeat++, &firstfeat))
 		ajFmtPrintF(outf, "Feature: %S\n", firstfeat);
+
 	    ajFmtPrintF(outf, "Sequence: \n");
 	}
 	
@@ -720,6 +728,7 @@ static void reportWriteDiffseq(AjPReport thys,
 	{
 	    ajFmtPrintF(outf, "Sequence: %S\n", subseq);
 	    ifeat = 1;
+
 	    while(ajFeatGetNoteCI(feature, "second_feature",
 				  ifeat++, &secondfeat))
 		ajFmtPrintF(outf, "Feature: %S\n", secondfeat);
@@ -731,9 +740,11 @@ static void reportWriteDiffseq(AjPReport thys,
 	{
 	    ajFmtPrintF(outf, "Sequence: \n");
 	    ifeat = 1;
+
 	    while(ajFeatGetNoteCI(feature, "second_feature",
 				  ifeat++, &secondfeat))
 		ajFmtPrintF(outf, "Feature: %S\n", secondfeat);
+
 	    ajFmtPrintF(outf, "%S %d Length: %d\n",
 			jname, jstart, jlen);
 	}
@@ -817,8 +828,10 @@ static void reportWriteDraw(AjPReport thys,
     {
 	if(ajStrMatchCaseC(tagnames[j], "enzyme"))
 	    jenz = j;
+
 	if(ajStrMatchCaseC(tagnames[j], "5prime"))
 	    j5 = j;
+
 	if(ajStrMatchCaseC(tagnames[j], "3prime"))
 	    j3 = j;
     }
@@ -832,16 +845,19 @@ static void reportWriteDraw(AjPReport thys,
     ajFmtPrintF(outf, "group\n");
     
     iterft = ajListIterNewread(ftable->Features);
+
     while(!ajListIterDone(iterft))
     {
 	feature = (AjPFeature)ajListIterGet(iterft);
 
 	ajFmtPrintF(outf, "label\n");
+
 	if (j5 >= 0)
 	{
 	    ajFeatGetNote(feature, tagnames[j5], &tagval);
 	    ajStrToUint(tagval, &jstart);
 	    ajFmtPrintF(outf, "Tick %d 8\n", jstart);
+
 	    if (jenz >= 0)
 	    {
 		ajFeatGetNote(feature, tagnames[jenz], &tagval);
@@ -849,14 +865,17 @@ static void reportWriteDraw(AjPReport thys,
 	    }
 	    else
 		ajFmtPrintF(outf, "Enz\n");
+
 	    ajFmtPrintF(outf, "endlabel\n");
 	}
+
 	if (j3 >= 0)
 	{
 	    ajFmtPrintF(outf, "label\n");
 	    ajFeatGetNote(feature, tagnames[j3], &tagval);
 	    ajStrToUint(tagval, &jend);
 	    ajFmtPrintF(outf, "Tick %d 3\n", jend);
+
 	    if (jenz >= 0)
 	    {
 		ajFeatGetNote(feature, tagnames[jenz], &tagval);
@@ -864,6 +883,7 @@ static void reportWriteDraw(AjPReport thys,
 	    }
 	    else
 		ajFmtPrintF(outf, "Enz\n");
+
 	    ajFmtPrintF(outf, "endlabel\n");
 	}
 
@@ -951,9 +971,11 @@ static void reportWriteExcel(AjPReport thys,
     /* then extra tags */
     for(j=0; j < ntags; j++)
 	ajFmtPrintF(outf, "\t%S", tagprints[j]);
+
     ajFmtPrintF(outf, "\n");
     
     iterft = ajListIterNewread(ftable->Features);
+
     while(!ajListIterDone(iterft))
     {
 	feature = (AjPFeature)ajListIterGet(iterft);
@@ -961,11 +983,14 @@ static void reportWriteExcel(AjPReport thys,
 	iend    = feature->End;
 	score   = feature->Score;
 	strand = feature->Strand;
+
 	if(strand != '-')
 	    strand = '+';
+
 	ajStrAssignSubS(&subseq, ajSeqGetSeqS(seq), istart-1, iend-1);
 	/* ajStrFmtUpper(&subseq); */
 	i++;
+
 	if(thys->Showscore)
 	    ajFmtPrintF(outf, "%S\t%d\t%d\t%.*f\t%c",
 			ajReportSeqName(thys, seq),
@@ -983,6 +1008,7 @@ static void reportWriteExcel(AjPReport thys,
 	    else
 		ajFmtPrintF(outf, "\t."); /* missing value '.' for now */
 	}
+
 	ajFmtPrintF(outf, "\n");
 	ajStrDelStatic(&tmpstr);
     }
@@ -1055,6 +1081,7 @@ static void reportWriteFeatTable(AjPReport thys,const  AjPFeattable ftable,
     ntags = ajReportLists(thys, &tagtypes, &tagnames, &tagprints, &tagsizes);
     
     iterft = ajListIterNewread(ftable->Features);
+
     while(!ajListIterDone(iterft))
     {
 	feature = (AjPFeature)ajListIterGet(iterft);
@@ -1062,6 +1089,7 @@ static void reportWriteFeatTable(AjPReport thys,const  AjPFeattable ftable,
 	iend = feature->End;
 	ajStrAssignSubS(&subseq, ajSeqGetSeqS(seq), istart-1, iend-1);
 	/* ajStrFmtUpper(&subseq); */
+
 	if(feature->Strand == '-')
 	    ajFmtPrintF(outf, "FT   %-15.15S complement(%d..%d)\n",
 			ajFeatGetType(feature),
@@ -1144,6 +1172,7 @@ static void reportWriteListFile(AjPReport thys,
     ajReportWriteHeader(thys, ftable, seq);
 
     iterft = ajListIterNewread(ftable->Features);
+
     while(!ajListIterDone(iterft))
     {
 	feature = (AjPFeature)ajListIterGet(iterft);
@@ -1155,6 +1184,7 @@ static void reportWriteListFile(AjPReport thys,
 
 	if(istart)
 	    ajFmtPrintAppS(&tmpstr, "%d", istart);
+
 	ajFmtPrintAppS(&tmpstr, ":");
 
 	if(iend)
@@ -1162,10 +1192,13 @@ static void reportWriteListFile(AjPReport thys,
 
 	if(feature->Strand == '-')
 	    ajFmtPrintAppS(&tmpstr, ":r");
+
 	ajFmtPrintAppS(&tmpstr, "]");
 
 	ajStrAssignS(&tmpname, ajSeqGetUsaS(seq));
-	if(ajStrGetCharLast(tmpname) == ']') {
+
+	if(ajStrGetCharLast(tmpname) == ']')
+        {
 	    jpos = ajStrGetLen(tmpname);
 	    ipos = ajStrFindlastC(tmpname, "[");
 	    ajStrCutRange(&tmpname, ipos, jpos);
@@ -1277,17 +1310,20 @@ static void reportWriteMotif(AjPReport thys,
 	    jstar = j;
 	    ajFmtPrintF(outf, "%S at \"*\"\n", tagprints[jstar]);
 	}
+
 	if(ajStrMatchCaseC(tagnames[j], "pos2"))
 	{
 	    jplus = j;
 	    ajFmtPrintF(outf, "%S at \"+\"\n", tagprints[jplus]);
 	}
     }
+
     if(jstar != UINT_MAX || jplus != UINT_MAX)
 	ajFmtPrintF(outf, "\n");
 	
     
     iterft = ajListIterNewread(ftable->Features);
+
     while(!ajListIterDone(iterft))
     {
 	feature = (AjPFeature)ajListIterGet(iterft);
@@ -1299,12 +1335,16 @@ static void reportWriteMotif(AjPReport thys,
 	/* ajStrFmtUpper(&subseq); */
 	i++;
 	ajFmtPrintF(outf, "(%d)", i);
+
 	if(thys->Showscore)
 	    ajFmtPrintF(outf, " Score %.*f", thys->Precision, score);
+
 	ajFmtPrintF(outf, " length %d at %s %d->%d",
 		    ilen, reportCharname(thys), istart, iend);
+
 	if(strand == '-')
 	    ajFmtPrintF(outf, " (Reversed)");
+
 	ajFmtPrintF(outf, "\n");
 
 	jposmin = 0;
@@ -1326,6 +1366,7 @@ static void reportWriteMotif(AjPReport thys,
 	    if(ajFeatGetNote(feature, tagnames[jplus], &tagval))
 	    {
 		ajStrToUint(tagval, &jpos2);
+
 		if(jpos2 < jpos)
 		    jposmin = jpos2;
 		else
@@ -1335,6 +1376,7 @@ static void reportWriteMotif(AjPReport thys,
 
 	if(jposmin > iend)
 	    jposmin=iend;
+
 	if(jposmax > iend)
 	    jposmax=jposmin;
 
@@ -1342,6 +1384,7 @@ static void reportWriteMotif(AjPReport thys,
 
 	for(j=istart; j<jposmin; j++)
 	    ajStrAppendK(&tmpstr, ' ');
+
 	if(jpos == j)
 	    ajStrAppendK(&tmpstr, '*');
 	else if(jpos2 == j)
@@ -1351,16 +1394,19 @@ static void reportWriteMotif(AjPReport thys,
 	{
 	    for(j++; j<jposmax; j++)
 		ajStrAppendK(&tmpstr, ' ');
+
 	    if(jpos == j)
 		ajStrAppendK(&tmpstr, '*');
 	    else if(jpos2 == j)
 		ajStrAppendK(&tmpstr, '+');
 	}
+
 	ajFmtPrintF(outf, "           %S\n", tmpstr);
 
 	
 	ajFmtPrintF(outf, " Sequence: %S\n", subseq);
 	ajStrAssignResC(&tmpstr, ilen,"");
+
 	for(j=istart+1; j<iend; j++)
 	    ajStrAppendK(&tmpstr, ' ');
 
@@ -1380,6 +1426,7 @@ static void reportWriteMotif(AjPReport thys,
 	    {
 		if(j == jmax)
 		    continue;
+
 		if(ajFeatGetNote(feature, tagnames[j], &tagval))
 		    ajFmtPrintF(outf, " %S: %S\n", tagprints[j], tagval);
 	    }
@@ -1470,20 +1517,22 @@ static void reportWriteNameTable(AjPReport thys, const AjPFeattable ftable,
     ntags = ajReportLists(thys, &tagtypes, &tagnames, &tagprints, &tagsizes);
     
     iterft = ajListIterNewread(ftable->Features);
+
     while(!ajListIterDone(iterft))
     {
 	feature = (AjPFeature)ajListIterGet(iterft);
+
 	for(j=0; j < ntags; j++)
-	{
 	    if(ajFeatGetNote(feature, tagnames[j], &tagval))
 		tagsizes[j] = AJMAX(tagsizes[j], ajStrGetLen(tagval));
-	}
     }
-    ajListIterDel(&iterft);
 
+    ajListIterDel(&iterft);
     ajFmtPrintF(outf, "%-20s %7s %7s", "USA", "Start", "End");
+
     if(dostrand)
 	ajFmtPrintF(outf, " %7s", "Strand");
+
     if(thys->Showscore)
 	ajFmtPrintF(outf,
 		    " %7s", "Score");
@@ -1495,9 +1544,11 @@ static void reportWriteNameTable(AjPReport thys, const AjPFeattable ftable,
 	else
 	    ajFmtPrintF(outf, " %*S", tagsizes[j], tagprints[j]);
     }
+
     ajFmtPrintF(outf, "\n");
     
     iterft = ajListIterNewread(ftable->Features);
+
     while(!ajListIterDone(iterft))
     {
 	feature =(AjPFeature)ajListIterGet(iterft);
@@ -1514,17 +1565,21 @@ static void reportWriteNameTable(AjPReport thys, const AjPFeattable ftable,
 			istart, iend);
 	if(dostrand)
 	    ajFmtPrintF(outf, "       %c", strand);
+
 	if(thys->Showscore)
 	    ajFmtPrintF(outf, " %7.*f", thys->Precision, score);
+
 	for(j=0; j < ntags; j++)
 	{
 	    if(!ajFeatGetNote(feature, tagnames[j], &tagval))
 		ajStrAssignC(&tagval, ".");
+
 	    if(ajStrMatchS(tagtypes[j], tmpstr))
 		ajFmtPrintF(outf, " %-*S", tagsizes[j], tagval);
 	    else
 		ajFmtPrintF(outf, " %*S", tagsizes[j], tagval);
 	}
+
 	ajFmtPrintF(outf, "\n");
     }
     
@@ -1598,6 +1653,7 @@ static void reportWriteRegions(AjPReport thys, const AjPFeattable ftable,
     ntags = ajReportLists(thys, &tagtypes, &tagnames, &tagprints, &tagsizes);
     
     iterft = ajListIterNewread(ftable->Features);
+
     while(!ajListIterDone(iterft))
     {
 	feature = (AjPFeature)ajListIterGet(iterft);
@@ -1612,19 +1668,23 @@ static void reportWriteRegions(AjPReport thys, const AjPFeattable ftable,
 		    reportCharname(thys));
 	if(thys->Showscore)
 	    ajFmtPrintF(outf, "   Max score: %.*f", thys->Precision, score);
+
 	if(ntags)
 	{
 	    ajFmtPrintF(outf, " (");
+
 	    for(j=0; j < ntags; j++)
 		if(ajFeatGetNote(feature, tagnames[j], &tagval))
 		{
 		    if(j)
 			ajFmtPrintF(outf, ", ");
+
 		    ajFmtPrintF(outf, "%S: %S", tagprints[j], tagval);
 		}
 	    
 	    ajFmtPrintF(outf, ")");	    
 	}
+
 	ajFmtPrintF(outf, "\n\n");
     }
     
@@ -1731,17 +1791,19 @@ static void reportWriteSeqTable(AjPReport thys, const AjPFeattable ftable,
     while(!ajListIterDone(iterft))
     {
 	feature = (AjPFeature)ajListIterGet(iterft);
+
 	for(j=0; j < ntags; j++)
-	{
 	    if(ajFeatGetNote(feature, tagnames[j], &tagval))
 		tagsizes[j] = AJMAX(tagsizes[j], ajStrGetLen(tagval));
-	}
     }
+
     ajListIterDel(&iterft);
 
     ajFmtPrintF(outf, "%7s %7s", "Start", "End");
+
     if(dostrand)
 	ajFmtPrintF(outf, " %7s", "Strand");
+
     for(j=0; j < ntags; j++)
     {
 	if(ajStrMatchS(tagtypes[j], tmpstr))
@@ -1749,9 +1811,10 @@ static void reportWriteSeqTable(AjPReport thys, const AjPFeattable ftable,
 	else
 	    ajFmtPrintF(outf, " %*S", tagsizes[j], tagprints[j]);
     }
+
     ajFmtPrintF(outf, " Sequence\n");
-    
     iterft = ajListIterNewread(ftable->Features);
+
     while(!ajListIterDone(iterft))
     {
 	feature = (AjPFeature)ajListIterGet(iterft);
@@ -1774,19 +1837,23 @@ static void reportWriteSeqTable(AjPReport thys, const AjPFeattable ftable,
 		ajStrGetLen(subseq), ajSeqGetLen(seq), istart, iend);
 	
 	ajFmtPrintF(outf, "%7d %7d", istart, iend);
+
 	if(dostrand)
 	    ajFmtPrintF(outf, "       %c", strand);
+
 	for(j=0; j < ntags; j++)
 	{
 	    if(!ajFeatGetNote(feature, tagnames[j], &tagval))
 		ajStrAssignC(&tagval, ".");
 	    ajDebug("reportWriteSeqTable tagsizes[%d] %d tagval '%S'\n",
 		    j, tagsizes[j], tagval);
+
 	    if(ajStrMatchS(tagtypes[j], tmpstr))
 		ajFmtPrintF(outf, " %-*S", tagsizes[j], tagval);
 	    else
 		ajFmtPrintF(outf, " %*S", tagsizes[j], tagval);
 	}
+
 	ajFmtPrintF(outf, " %S\n", subseq);
     }
     
@@ -1938,9 +2005,9 @@ static void reportWriteSrsFlags(AjPReport thys, const AjPFeattable ftable,
 
     ajReportWriteHeader(thys, ftable, seq);
     
-    ntags = ajReportLists(thys, &tagtypes, &tagnames, &tagprints, &tagsizes);
-    
+    ntags  = ajReportLists(thys, &tagtypes, &tagnames, &tagprints, &tagsizes);
     iterft = ajListIterNewread(ftable->Features);
+
     while(!ajListIterDone(iterft))
     {
 	feature = (AjPFeature)ajListIterGet(iterft);
@@ -1975,6 +2042,7 @@ static void reportWriteSrsFlags(AjPReport thys, const AjPFeattable ftable,
 	/* We always write the strand - ignore thys->Showstrand */
 
 	ajFmtPrintF(outf, "Strand: %c\n", ajFeatGetStrand(feature));
+
 	if(feature->Frame)
 	    ajFmtPrintF(outf, "Frame: %d\n", feature->Frame);
 
@@ -2068,20 +2136,23 @@ static void reportWriteTable(AjPReport thys,
     
     ntags = ajReportLists(thys, &tagtypes, &tagnames, &tagprints, &tagsizes);
     iterft = ajListIterNewread(ftable->Features);
+
     while(!ajListIterDone(iterft))
     {
 	feature = (AjPFeature)ajListIterGet(iterft);
+
 	for(j=0; j < ntags; j++)
-	{
 	    if(ajFeatGetNote(feature, tagnames[j], &tagval))
 		tagsizes[j] = AJMAX(tagsizes[j], ajStrGetLen(tagval));
-	}
     }
+
     ajListIterDel(&iterft);
 
     ajFmtPrintF(outf, "%7s %7s", "Start", "End");
+
     if(dostrand)
 	ajFmtPrintF(outf, " %7s", "Strand");
+
     if(thys->Showscore)
 	ajFmtPrintF(outf, " %7s", "Score");
     
@@ -2092,9 +2163,10 @@ static void reportWriteTable(AjPReport thys,
 	else
 	    ajFmtPrintF(outf, " %*S", tagsizes[j], tagprints[j]);
     }
+
     ajFmtPrintF(outf, "\n");
-    
     iterft = ajListIterNewread(ftable->Features);
+
     while(!ajListIterDone(iterft))
     {
 	feature = (AjPFeature)ajListIterGet(iterft);
@@ -2106,8 +2178,10 @@ static void reportWriteTable(AjPReport thys,
 	/* ajStrFmtUpper(&subseq); */
 
 	ajFmtPrintF(outf, "%7d %7d", istart, iend);
+
 	if(dostrand)
 	    ajFmtPrintF(outf, "       %c", strand);
+
 	if(thys->Showscore)
 	    ajFmtPrintF(outf, " %7.*f", thys->Precision, score);
 
@@ -2115,11 +2189,13 @@ static void reportWriteTable(AjPReport thys,
 	{
 	    if(!ajFeatGetNote(feature, tagnames[j], &tagval))
 		ajStrAssignC(&tagval, ".");
+
 	    if(ajStrMatchS(tagtypes[j], tmpstr))
 		ajFmtPrintF(outf, " %-*S", tagsizes[j], tagval);
 	    else
 		ajFmtPrintF(outf, " %*S", tagsizes[j], tagval);
 	}
+
 	ajFmtPrintF(outf, "\n");
     }
     
@@ -2146,6 +2222,8 @@ static void reportWriteTable(AjPReport thys,
 **
 ** Writes a report in Tagseq format. Features are marked up below the sequence.
 ** Originally developed for the garnier application, but has general uses.
+** For garnier, it checks for a '*garnier' feature tag and hard codes the
+** standard garnier row names as the tagname.
 **
 ** Format:<br>
 **   Sequence (50 residues)<br>
@@ -2231,18 +2309,17 @@ static void reportWriteTagseq(AjPReport thys,
 
     if(ajFeattableIsNuc(ftable))
 	isnuc = ajTrue;
+
     if(ajSeqIsNuc(seq))
 	isnuc = ajTrue;
 
     ntags = ajReportLists(thys, &tagtypes, &tagnames, &tagprints, &tagsizes);
+
     for(j=0; j < ntags; j++)
-    {
 	if(ajStrMatchC(tagnames[j], "garnier"))
 	    isgarnier = ajTrue;
-    }
 
     if(isgarnier)
-    {
 	for(i=0; i < 4; i++)
 	{
 	    featname = ajStrNewC(garnierkeys[i]);
@@ -2253,13 +2330,14 @@ static void reportWriteTagseq(AjPReport thys,
 	    margin = AJMAX(margin, ajStrGetLen(featname));
 	    garnierkeystr[i] = ajStrNewS(featname);
 	}
-    }
     else
     {
 	iterft = ajListIterNewread(ftable->Features);
+
 	while(!ajListIterDone(iterft))
 	{
 	    feature = (AjPFeature)ajListIterGet(iterft);
+
 	    if(!ajTableFetch(featkeys, feature->Type))
 	    {
 		featname = ajStrNewS(feature->Type);
@@ -2267,6 +2345,7 @@ static void reportWriteTagseq(AjPReport thys,
 		ajStrAppendCountK(&seqmarkup, ' ', seqlen);
 		ajTablePut(featkeys, featname,seqmarkup);
 		ajListstrPushAppend(listkeys, featname);
+
 		if(isnuc)
 		    margin = AJMAX(margin,
 				   ajStrGetLen(ajFeatTypeNuc(featname)));
@@ -2275,6 +2354,7 @@ static void reportWriteTagseq(AjPReport thys,
 				   ajStrGetLen(ajFeatTypeProt(featname)));
 	    }
 	}
+
 	ajListIterDel(&iterft);
     }
 
@@ -2289,6 +2369,7 @@ static void reportWriteTagseq(AjPReport thys,
 	ajFmtPrintAppS(&seqnumber, "    .%5d", i+10);
 
     iterft = ajListIterNewread(ftable->Features);
+
     while(!ajListIterDone(iterft))
     {
 	feature = (AjPFeature)ajListIterGet(iterft);
@@ -2296,23 +2377,25 @@ static void reportWriteTagseq(AjPReport thys,
 	istart = feature->Start;
 	iend = feature->End;
 	ilen = iend - istart + 1;
+
 	if(isgarnier && ajFeatGetNoteC(feature, "garnier", &tagval))
 	{
 	    ctagval = ajStrGetCharFirst(tagval);
+
 	    switch(ctagval)
 	    {
-	    case 'H':
-		seqmarkup = ajTableFetch(featkeys, garnierkeystr[0]); 
-		break;
-	    case 'E':
-		seqmarkup = ajTableFetch(featkeys, garnierkeystr[1]); 
-		break;
-	    case 'T':
-		seqmarkup = ajTableFetch(featkeys, garnierkeystr[2]); 
-		break;
-	    default:
-		seqmarkup = ajTableFetch(featkeys, garnierkeystr[3]); 
-		break;
+                case 'H':
+                    seqmarkup = ajTableFetch(featkeys, garnierkeystr[0]); 
+                    break;
+                case 'E':
+                    seqmarkup = ajTableFetch(featkeys, garnierkeystr[1]); 
+                    break;
+                case 'T':
+                    seqmarkup = ajTableFetch(featkeys, garnierkeystr[2]); 
+                    break;
+                default:
+                    seqmarkup = ajTableFetch(featkeys, garnierkeystr[3]); 
+                    break;
 	    }
 
 	    ajStrPasteCountK(&seqmarkup, istart-1,
@@ -2326,6 +2409,7 @@ static void reportWriteTagseq(AjPReport thys,
     }
 
     iinit = seqbeg-1;
+
     for(i=iinit; i < seqend; i+=50)
     {
 	ilast = AJMIN(i+50-1, seqend-1);
@@ -2340,6 +2424,7 @@ static void reportWriteTagseq(AjPReport thys,
 	ajFmtPrintF(outf, "%*s %S\n", margin, "", subseq);
 	
 	iterkey = ajListIterNewread(listkeys);
+
 	while(!ajListIterDone(iterkey))
 	{
 	    featname = ajListstrIterGet(iterkey);
@@ -2356,6 +2441,7 @@ static void reportWriteTagseq(AjPReport thys,
 		ajFmtPrintF(outf, "%*S %S\n",
 			    margin, ajFeatTypeProt(featname), substr);
 	}
+
 	ajListIterDel(&iterkey);
     }
     
@@ -2375,10 +2461,8 @@ static void reportWriteTagseq(AjPReport thys,
     AJFREE(tagsizes);
 
     if(isgarnier)
-    {
 	for(i=0;i<4;i++)
 	    ajStrDel(&garnierkeystr[i]);
-    }
 
     ajTablestrFree(&featkeys);
     ajListFree(&listkeys);
@@ -2405,6 +2489,7 @@ void ajReportDel(AjPReport* pthys)
     AjPStr str = NULL;
 
     thys = *pthys;
+
     if(!thys)
 	return;
 
@@ -2415,19 +2500,27 @@ void ajReportDel(AjPReport* pthys)
 
     while(ajListPop(thys->FileTypes,(void **)&str))
 	ajStrDel(&str);
+
     ajListFree(&thys->FileTypes);
+
     while(ajListPop(thys->FileNames,(void **)&str))
 	ajStrDel(&str);
+
     ajListFree(&thys->FileNames);
 
     while(ajListPop(thys->Tagnames,(void **)&str))
 	ajStrDel(&str);
+
     ajListFree(&thys->Tagnames);
+
     while(ajListPop(thys->Tagprints,(void **)&str))
 	ajStrDel(&str);
+
     ajListFree(&thys->Tagprints);
+
     while(ajListPop(thys->Tagtypes,(void **)&str))
 	ajStrDel(&str);
+
     ajListFree(&thys->Tagtypes);
 
     ajStrDel(&thys->Header);
@@ -2464,6 +2557,7 @@ AjBool ajReportOpen(AjPReport thys, const AjPStr name)
 	return ajFalse;
 
     thys->File = ajFileNewOutNameS(name);
+
     if(thys->File)
 	return ajTrue;
 
@@ -2527,8 +2621,10 @@ AjBool ajReportFindFormat(const AjPStr format, ajint* iformat)
 	{
 	    *iformat = i;
 	    ajStrDel(&tmpformat);
+
 	    return ajTrue;
 	}
+
 	i++;
     }
 
@@ -2569,6 +2665,7 @@ AjBool ajReportSetTags(AjPReport thys, const AjPStr taglist)
 	reportTagExp = ajRegCompC("^ *([^:]+):([^= ]+)(=([^ ]+))?");
 
     ajStrAssignS(&tmplist, taglist);
+
     while(ajRegExec(reportTagExp, tmplist))
     {
 	tagtype = NULL;
@@ -2577,6 +2674,7 @@ AjBool ajReportSetTags(AjPReport thys, const AjPStr taglist)
 	ajRegSubI(reportTagExp, 1, &tagtype);
 	ajRegSubI(reportTagExp, 2, &tagname);
 	ajRegSubI(reportTagExp, 4, &tagprint);
+
 	if(!ajStrGetLen(tagprint))
 	    ajStrAssignS(&tagprint, tagname);
 
@@ -2599,6 +2697,7 @@ AjBool ajReportSetTags(AjPReport thys, const AjPStr taglist)
     if(ajStrGetLen(tmplist))
     {				      /* test acdc-reportbadtaglist */
 	ajErr("Bad report taglist at '%S'", tmplist);
+
 	return ajFalse;
     }
 
@@ -2631,6 +2730,7 @@ AjBool ajReportValid(AjPReport thys)
 	if(!ajReportFindFormat(thys->Formatstr, &thys->Format))
 	{
 	    ajErr("Unknown report format '%S'", thys->Formatstr);
+
 	    return ajFalse;
 	}
 
@@ -2643,6 +2743,7 @@ AjBool ajReportValid(AjPReport thys)
 	      reportFormat[thys->Format].Name,
 	      reportFormat[thys->Format].Mintags,
 	      ajListGetLength(thys->Tagnames));
+
 	return ajFalse;
     }
 
@@ -2669,6 +2770,7 @@ AjPReport ajReportNew(void)
 
     pthis->CountSeq  = 0;
     pthis->CountHit  = 0;
+    pthis->TotHits   = 0;
     pthis->Name      = ajStrNew();
     pthis->Formatstr = ajStrNew();
     pthis->Format    = 0;
@@ -2693,7 +2795,7 @@ AjPReport ajReportNew(void)
 ** @param [r] ftable [const AjPFeattable] Feature table object
 ** @param [r] seq [const AjPSeq] Sequence object
 ** @return [AjBool] True if data was written
-**                  False is maximum output has already been reached.
+**                  False if maximum output has already been reached.
 ** @category output [AjPReport] Master sequence output routine
 ** @@
 ******************************************************************************/
@@ -2716,10 +2818,12 @@ AjBool ajReportWrite(AjPReport thys,
 
     if(ajSeqIsNuc(seq) && ajFeattableIsNuc(ftable))
 	isnuc = ajTrue;
+
     if(ajSeqIsProt(seq) && ajFeattableIsProt(ftable))
 	isprot = ajTrue;
 
     ok = ajFalse;
+
     if(isnuc && reportFormat[thys->Format].Nucleotide)
 	ok = ajTrue;
     else if(isprot && reportFormat[thys->Format].Protein)
@@ -2736,6 +2840,7 @@ AjBool ajReportWrite(AjPReport thys,
 	else
 	    ajErr("Report format '%S' failed: unknown sequence type",
 		  thys->Formatstr);
+
 	return ajFalse;
     }
 
@@ -2746,8 +2851,11 @@ AjBool ajReportWrite(AjPReport thys,
     if(thys->MaxHitAll)
     {
 	maxreport = thys->MaxHitAll - thys->CountHit;
+
 	if(maxreport <= 0)
 	{
+            thys->MaxLimit = ajTrue;
+
 	    return ajFalse;
 	}
     }
@@ -2780,11 +2888,13 @@ AjBool ajReportWrite(AjPReport thys,
 	reportFormat[thys->Format].Write(thys, ftcopy, seq);
 	ajFeattableDel(&ftcopy);
 	thys->CountHit += maxreport;
+	thys->TotHits += ajFeattableSize(ftable);
     }
     else
     {
 	reportFormat[thys->Format].Write(thys, ftable, seq);
 	thys->CountHit += ajFeattableSize(ftable);
+	thys->TotHits += ajFeattableSize(ftable);
     }
 
     ++thys->CountSeq;
@@ -2825,6 +2935,7 @@ void ajReportClose(AjPReport thys)
 	ajReportWriteTail(thys, NULL, NULL);
     }
 
+    ajFeattabOutClear(&thys->Ftquery);
     ajFileClose(&thys->File);
 
     return;
@@ -2863,6 +2974,7 @@ ajint ajReportLists(const AjPReport thys, AjPStr** types, AjPStr** names,
     if(ntags)
     {
 	AJCRESIZE(*sizes, ntags);
+
 	for(i=0; i < ntags; i++)
 	    (*sizes)[i] = AJMAX(jmin, ajStrGetLen((*prints)[i]));
     }
@@ -2912,19 +3024,23 @@ void ajReportWriteHeader(AjPReport thys,
 	ajFmtPrintF(outf, "# Rundate: %D\n", today);
 	ajFmtPrintF(outf, "# Commandline: %S\n", ajAcdGetProgram());
 	ajStrAssignS(&tmpstr, ajAcdGetCmdline());
+
 	if(ajStrGetLen(tmpstr))
 	{
 	    ajStrExchangeCC(&tmpstr, "\n", "\1#    ");
 	    ajStrExchangeCC(&tmpstr, "\1", "\n");
 	    ajFmtPrintF(outf, "#    %S\n", tmpstr);
 	}
+
 	ajStrAssignS(&tmpstr, ajAcdGetInputs());
+
 	if(ajStrGetLen(tmpstr))
 	{
 	    ajStrExchangeCC(&tmpstr, "\n", "\1#    ");
 	    ajStrExchangeCC(&tmpstr, "\1", "\n");
 	    ajFmtPrintF(outf, "#    %S\n", tmpstr);
 	}
+
 	if(thys->MaxHitAll)
 	    ajFmtPrintF(outf, "# Max_hits_total: %d\n",
 			thys->MaxHitAll);
@@ -2933,6 +3049,7 @@ void ajReportWriteHeader(AjPReport thys,
 			thys->MaxHitSeq);
 	ajFmtPrintF(outf, "# Report_format: %S\n", thys->Formatstr);
 	ajFmtPrintF(outf, "# Report_file: %F\n", outf);
+
 	if(ajListGetLength(thys->FileNames))
 	{
 	    i = 0;
@@ -2946,6 +3063,7 @@ void ajReportWriteHeader(AjPReport thys,
 		tmptype = (AjPStr)ajListIterGet(itertype);
 		ajFmtPrintF(outf, "# %d: %S (%S)\n", ++i, tmpname, tmptype);
 	    }
+
 	    ajListIterDel(&itername);
 	    ajListIterDel(&itertype);
 	}
@@ -2977,6 +3095,7 @@ void ajReportWriteHeader(AjPReport thys,
 
 	if(thys->Showacc)
 	    ajFmtPrintF(outf, "# Accession: %S\n", ajSeqGetAccS(seq));
+
 	if(thys->Showdes)
 	    ajFmtPrintF(outf, "# Description: %S\n", ajSeqGetDescS(seq));
     }
@@ -2995,8 +3114,10 @@ void ajReportWriteHeader(AjPReport thys,
 	ajStrTrimEndC(&tmpstr, " ");
 	ajFmtPrintF(outf, "#\n");
 	ajFmtPrintF(outf, "# %S", tmpstr);
+
 	if(!ajStrSuffixC(tmpstr, "\n#"))
 	    ajFmtPrintF(outf, "\n#");
+
 	ajFmtPrintF(outf, "\n");
     }
     
@@ -3008,8 +3129,10 @@ void ajReportWriteHeader(AjPReport thys,
 	ajStrTrimEndC(&tmpstr, " ");
 	ajFmtPrintF(outf, "#\n");
 	ajFmtPrintF(outf, "# %S", tmpstr);
+
 	if(!ajStrSuffixC(tmpstr, "\n#"))
 	    ajFmtPrintF(outf, "\n#");
+
 	ajFmtPrintF(outf, "\n");
 	ajStrDel(&thys->SubHeader);
     }
@@ -3065,11 +3188,14 @@ void ajReportWriteTail(AjPReport thys,
 	    ajStrTrimEndC(&tmpstr, " ");
 	    ajFmtPrintF(outf, "#\n");
 	    ajFmtPrintF(outf, "# %S", tmpstr);
+
 	    if(!ajStrSuffixC(tmpstr, "\n#"))
 		ajFmtPrintF(outf, "\n#");
+
 	    ajFmtPrintF(outf, "\n");
 	    ajStrDel(&thys->SubTail);
 	}
+
 	if(ajStrGetLen(thys->Tail))
 	{
 	    ajStrAssignS(&tmpstr, thys->Tail);
@@ -3078,18 +3204,32 @@ void ajReportWriteTail(AjPReport thys,
 	    ajStrTrimEndC(&tmpstr, " ");
 	    ajFmtPrintF(outf, "#\n");
 	    ajFmtPrintF(outf, "# %S", tmpstr);
+
 	    if(!ajStrSuffixC(tmpstr, "\n#"))
 		ajFmtPrintF(outf, "\n#");
+
 	    ajFmtPrintF(outf, "\n");
 	}
     }
 
     if(!ftable)
     {
-	ajFmtPrintF(outf, "# Total_sequences: %d\n", thys->CountSeq);
-	ajFmtPrintF(outf, "# Total_hitcount: %d\n", thys->CountHit);
+	if(thys->Totseqs)
+            ajFmtPrintF(outf, "# Total_sequences: %Ld\n", thys->Totseqs);
+
+	if(thys->Totlength)
+            ajFmtPrintF(outf, "# Total_length: %Ld\n", thys->Totlength);
+	ajFmtPrintF(outf, "# Reported_sequences: %d\n", thys->CountSeq);
+	ajFmtPrintF(outf, "# Reported_hitcount: %d\n", thys->CountHit);
+
+        if(thys->CountHit < thys->TotHits)
+            ajFmtPrintF(outf, "# Unreported_hitcount: %d\n",
+                        thys->TotHits - thys->CountHit);
 	if(thys->MaxHitAll)
-	ajFmtPrintF(outf, "# Max_hitcount: %d\n", thys->MaxHitAll);
+            ajFmtPrintF(outf, "# Max_hitcount: %d\n", thys->MaxHitAll);
+
+	if(thys->MaxLimit)
+            ajFmtPrintF(outf, "# Maxhits_stop: %B\n", thys->MaxLimit);
     }
 
     if(!doSingle || thys->Multi)
@@ -3117,6 +3257,9 @@ void ajReportWriteTail(AjPReport thys,
 
 void ajReportSetHeader(AjPReport thys, const AjPStr header)
 {
+    if(!thys)
+        return;
+
     ajStrAssignS(&thys->Header, header);
 
     return;
@@ -3137,6 +3280,9 @@ void ajReportSetHeader(AjPReport thys, const AjPStr header)
 
 void ajReportSetHeaderC(AjPReport thys, const char* header)
 {
+    if(!thys)
+        return;
+
     ajStrAssignC(&thys->Header, header);
 
     return;
@@ -3157,11 +3303,12 @@ void ajReportSetHeaderC(AjPReport thys, const char* header)
 
 void ajReportAppendHeader(AjPReport thys, const AjPStr header)
 {
+    if(!thys) return;
+
     if(ajStrGetLen(thys->Header))
-    {
 	if(ajStrGetCharLast(thys->Header) != '\n')
 	    ajStrAppendK(&thys->Header, '\n');
-    }
+
     ajStrAppendS(&thys->Header, header);
 
     return;
@@ -3182,11 +3329,13 @@ void ajReportAppendHeader(AjPReport thys, const AjPStr header)
 
 void ajReportAppendHeaderC(AjPReport thys, const char* header)
 {
+    if(!thys)
+        return;
+
     if(ajStrGetLen(thys->Header))
-    {
 	if(ajStrGetCharLast(thys->Header) != '\n')
 	    ajStrAppendK(&thys->Header, '\n');
-    }
+
     ajStrAppendC(&thys->Header, header);
 
     return;
@@ -3207,6 +3356,9 @@ void ajReportAppendHeaderC(AjPReport thys, const char* header)
 
 void ajReportSetSubHeader(AjPReport thys, const AjPStr header)
 {
+    if(!thys)
+        return;
+
     ajStrAssignS(&thys->SubHeader, header);
 
     return;
@@ -3227,6 +3379,9 @@ void ajReportSetSubHeader(AjPReport thys, const AjPStr header)
 
 void ajReportSetSubHeaderC(AjPReport thys, const char* header)
 {
+    if(!thys)
+        return;
+
     ajStrAssignC(&thys->SubHeader, header);
 
     return;
@@ -3246,11 +3401,13 @@ void ajReportSetSubHeaderC(AjPReport thys, const char* header)
 
 void ajReportAppendSubHeader(AjPReport thys, const AjPStr header)
 {
+    if(!thys)
+        return;
+
     if(ajStrGetLen(thys->SubHeader))
-    {
 	if(ajStrGetCharLast(thys->SubHeader) != '\n')
 	    ajStrAppendK(&thys->SubHeader, '\n');
-    }
+
     ajStrAppendS(&thys->SubHeader, header);
 
     return;
@@ -3271,16 +3428,90 @@ void ajReportAppendSubHeader(AjPReport thys, const AjPStr header)
 
 void ajReportAppendSubHeaderC(AjPReport thys, const char* header)
 {
+    if(!thys)
+        return;
+
     if(ajStrGetLen(thys->SubHeader))
-    {
 	if(ajStrGetCharLast(thys->SubHeader) != '\n')
 	    ajStrAppendK(&thys->SubHeader, '\n');
-    }
+
     ajStrAppendC(&thys->SubHeader, header);
 
     return;
 }
 
+
+
+
+/* @func ajReportSetSeqstats ***************************************************
+**
+** Defines a feature report tail
+**
+** @param [u] thys [AjPReport] Report object
+** @param [r] seqall [const AjPSeqall] Sequence stream object
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajReportSetSeqstats(AjPReport thys, const AjPSeqall seqall)
+{
+    if(!thys)
+        return;
+
+    thys->Totseqs = ajSeqallGetCount(seqall);
+    thys->Totlength = ajSeqallGetTotlength(seqall);
+
+    return;
+}
+
+
+
+
+/* @func ajReportSetSeqsetstats ************************************************
+**
+** Defines a feature report tail
+**
+** @param [u] thys [AjPReport] Report object
+** @param [r] seqset [const AjPSeqset] Sequence set object
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajReportSetSeqsetstats(AjPReport thys, const AjPSeqset seqset)
+{
+    if(!thys)
+        return;
+
+    thys->Totseqs = ajSeqsetGetSize(seqset);
+    thys->Totlength = ajSeqsetGetTotlength(seqset);
+
+    return;
+}
+
+
+
+
+/* @func ajReportSetStatistics ************************************************
+**
+** Defines a feature report tail
+**
+** @param [u] thys [AjPReport] Report object
+** @param [r] totseqs [ajlong] Total number of sequences processed
+** @param [r] totlength [ajlong] Total sequence length processed
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajReportSetStatistics(AjPReport thys, ajlong totseqs, ajlong totlength)
+{
+    if(!thys)
+        return;
+
+    thys->Totseqs = totseqs;
+    thys->Totlength = totlength;
+
+    return;
+}
 
 
 
@@ -3297,6 +3528,9 @@ void ajReportAppendSubHeaderC(AjPReport thys, const char* header)
 
 void ajReportSetTail(AjPReport thys, const AjPStr tail)
 {
+    if(!thys)
+        return;
+
     ajStrAssignS(&thys->Tail, tail);
 
     return;
@@ -3317,6 +3551,9 @@ void ajReportSetTail(AjPReport thys, const AjPStr tail)
 
 void ajReportSetTailC(AjPReport thys, const char* tail)
 {
+    if(!thys)
+        return;
+
     ajStrAssignC(&thys->Tail, tail);
 
     return;
@@ -3337,11 +3574,13 @@ void ajReportSetTailC(AjPReport thys, const char* tail)
 
 void ajReportAppendTail(AjPReport thys, const AjPStr tail)
 {
+    if(!thys)
+        return;
+
     if(ajStrGetLen(thys->Tail))
-    {
 	if(ajStrGetCharLast(thys->Tail) != '\n')
 	    ajStrAppendK(&thys->Tail, '\n');
-    }
+
     ajStrAppendS(&thys->Tail, tail);
 
     return;
@@ -3362,11 +3601,13 @@ void ajReportAppendTail(AjPReport thys, const AjPStr tail)
 
 void ajReportAppendTailC(AjPReport thys, const char* tail)
 {
+    if(!thys)
+        return;
+
     if(ajStrGetLen(thys->Tail))
-    {
 	if(ajStrGetCharLast(thys->Tail) != '\n')
 	    ajStrAppendK(&thys->Tail, '\n');
-    }
+
     ajStrAppendC(&thys->Tail, tail);
 
     return;
@@ -3387,6 +3628,9 @@ void ajReportAppendTailC(AjPReport thys, const char* tail)
 
 void ajReportSetSubTail(AjPReport thys, const AjPStr tail)
 {
+    if(!thys)
+        return;
+
     ajStrAssignS(&thys->SubTail, tail);
 
     return;
@@ -3407,6 +3651,9 @@ void ajReportSetSubTail(AjPReport thys, const AjPStr tail)
 
 void ajReportSetSubTailC(AjPReport thys, const char* tail)
 {
+    if(!thys)
+        return;
+
     ajStrAssignC(&thys->SubTail, tail);
 
     return;
@@ -3427,11 +3674,13 @@ void ajReportSetSubTailC(AjPReport thys, const char* tail)
 
 void ajReportAppendSubTail(AjPReport thys, const AjPStr tail)
 {
+    if(!thys)
+        return;
+
     if(ajStrGetLen(thys->SubTail))
-    {
 	if(ajStrGetCharLast(thys->SubTail) != '\n')
 	    ajStrAppendK(&thys->SubTail, '\n');
-    }
+
     ajStrAppendS(&thys->SubTail, tail);
 
     return;
@@ -3452,11 +3701,13 @@ void ajReportAppendSubTail(AjPReport thys, const AjPStr tail)
 
 void ajReportAppendSubTailC(AjPReport thys, const char* tail)
 {
+    if(!thys)
+        return;
+
     if(ajStrGetLen(thys->SubTail))
-    {
 	if(ajStrGetCharLast(thys->SubTail) != '\n')
 	    ajStrAppendK(&thys->SubTail, '\n');
-    }
+
     ajStrAppendC(&thys->SubTail, tail);
 
     return;
@@ -3488,12 +3739,14 @@ void ajReportSetType(AjPReport thys,
     if(ajStrGetLen(ftable->Type))
     {
 	ajStrAssignS(&thys->Type, ftable->Type);
+
 	return;
     }
 
     if(seq && ajStrGetLen(seq->Type))
     {
 	ajStrAssignS(&thys->Type, seq->Type);
+
 	return;
     }
 
@@ -3521,11 +3774,11 @@ static const char* reportCharname(const AjPReport thys)
 
     switch(ajStrGetCharFirst(thys->Type))
     {
-    case 'n':
-    case 'N':
-	return nucstr;
-    default:
-	break;
+        case 'n':
+        case 'N':
+            return nucstr;
+        default:
+            break;
     }
 
     return protstr;
@@ -3555,7 +3808,6 @@ const AjPStr ajReportSeqName(const AjPReport thys, const AjPSeq seq)
 
 
 
-
 /* @func ajReportFileAdd ******************************************************
 **
 ** Adds an extra file name and description to the report
@@ -3573,6 +3825,7 @@ void ajReportFileAdd(AjPReport thys, AjPFile file, const AjPStr type)
 
     if(!thys->FileTypes)
 	thys->FileTypes = ajListstrNew();
+
     if(!thys->FileNames)
 	thys->FileNames = ajListstrNew();
 
@@ -3608,15 +3861,16 @@ void ajReportPrintFormat(AjPFile outf, AjBool full)
     ajFmtPrintF(outf, "# Alias   Alias name\n");
     ajFmtPrintF(outf, "# Nuc     Valid for nucleotide sequences\n");
     ajFmtPrintF(outf, "# Pro     Valid for protein sequences\n");
-    ajFmtPrintF(outf, "# Mintags Minimum number of tags to be specified (0 for all)\n");
+    ajFmtPrintF(outf, "# Mintags Minimum number of tags to be specified "
+                "(0 for all)\n");
     ajFmtPrintF(outf, "# Showseq Includes sequence\n");
     ajFmtPrintF(outf, "# Desc    Format description\n");
     ajFmtPrintF(outf, "# Name          Alias Nuc Pro Mintags Showseq "
 		"Description\n");
     ajFmtPrintF(outf, "\n");
     ajFmtPrintF(outf, "RFormat {\n");
+
     for(i=0; reportFormat[i].Name; i++)
-    {
 	if(full || !reportFormat[i].Alias)
 	    ajFmtPrintF(outf, "  %-12s %5B %3B %3B %7d %7B \"%s\"\n",
 			reportFormat[i].Name,
@@ -3626,11 +3880,15 @@ void ajReportPrintFormat(AjPFile outf, AjBool full)
 			reportFormat[i].Mintags,
 			reportFormat[i].Showseq,
 			reportFormat[i].Desc);
-    }
+
     ajFmtPrintF(outf, "}\n\n");
 
     return;
 }
+
+
+
+
 /* @func ajReportDummyFunction ************************************************
 **
 ** Dummy function to catch all unused functions defined in the ajreport
@@ -3647,7 +3905,10 @@ void ajReportDummyFunction(void)
     AjPSeq seq = NULL;
 
     reportWriteDraw(report, ftable, seq);
+
+    return;
 }
+
 
 
 

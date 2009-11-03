@@ -22,6 +22,18 @@ textsearch
 
 
 <H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
     Function
 </H2>
 Search the textual description of sequence(s)
@@ -31,13 +43,22 @@ Search the textual description of sequence(s)
 </H2>
 
 
-<p><b>textsearch</b> searches for words (specified as a regular expression) in the description text of one or more input sequences.  It writes an output file with optional contents such as the name, description and accession number of any sequence whose description line from the annotation matches the search term. Optionally, the search is case-sensitive and the results output as an HTML table. <b>textsearch</b> is convenient for small input files but will be slow for larger files and databases; you should use use SRS or Entrez instead.</p>
+<p><b>textsearch</b> searches for words (specified as a regular
+expression) in the description text of one or more input sequences.
+It writes an output file with optional contents such as the name,
+description and accession number of any sequence whose description
+line from the annotation matches the search term. Optionally, the
+search is case-sensitive and the results output as an HTML
+table. <b>textsearch</b> is convenient for small input files but will
+be slow for larger files and databases; you should use use SRS or
+Entrez instead.</p>
 
 
 <H2>
 Algorithm
 </H2>
-<p><b>textsearch</b> searches only the description line, not the full sequence annotation.</p>
+<p><b>textsearch</b> searches only the description line, not the full
+sequence annotation.</p>
 
 
 <H2>
@@ -51,13 +72,13 @@ Search for 'lactose':
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>textsearch tsw:* 'lactose' </b>
+% <b>textsearch 'tsw:*' 'lactose' </b>
 Search the textual description of sequence(s)
-Output file [edd1_rat.textsearch]: <b></b>
+Output file [12s1_arath.textsearch]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
-<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<a href="#output.1">Go to the output files for this example</a><p><p>
 <p>
 <b>Example 2</b>
 <p>
@@ -67,13 +88,13 @@ Search for 'lactose' or 'permease' in E.coli proteins:
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>textsearch tsw:*_ecoli 'lactose | permease' </b>
+% <b>textsearch 'tsw:*_ecoli' 'lactose | permease' </b>
 Search the textual description of sequence(s)
-Output file [laci_ecoli.textsearch]: <b></b>
+Output file [bgal_ecoli.textsearch]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
-<a href="#output.2">Go to the output files for this example</a><p><p>
+<a href="#input.2">Go to the input files for this example</a><br><a href="#output.2">Go to the output files for this example</a><p><p>
 <p>
 <b>Example 3</b>
 <p>
@@ -83,12 +104,12 @@ Output a search for 'lacz' formatted with HTML to a file:
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>textsearch tembl:* 'lacz' -html -outfile embl.lacz.html </b>
+% <b>textsearch 'tembl:*' 'lacz' -html -outfile embl.lacz.html </b>
 Search the textual description of sequence(s)
 
 </pre></td></tr></table><p>
 <p>
-<a href="#input.3">Go to the input files for this example</a><br><a href="#output.3">Go to the output files for this example</a><p><p>
+<a href="#output.3">Go to the output files for this example</a><p><p>
 
 
 <H2>
@@ -280,16 +301,10 @@ to get only the name output, you can specify
 <p>
 
 
-<a name="input.1"></a>
-<h3>Input files for usage example </h3>
+<a name="input.2"></a>
+<h3>Input files for usage example 2</h3>
 
-'tsw:*' is a sequence entry in the example protein database 'tsw'
-<p>
-
-<a name="input.3"></a>
-<h3>Input files for usage example 3</h3>
-
-'tembl:*' is a sequence entry in the example nucleic acid database 'tembl'
+'|' is a sequence entry in the example protein database '|'
 <p>
 
 <H2>
@@ -300,23 +315,23 @@ to get only the name output, you can specify
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: edd1_rat.textsearch</h3>
+<p><h3>File: 12s1_arath.textsearch</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 # Search for: lactose
-tsw-id:LACI_ECOLI LACI_ECOLI    P03023	Lactose operon repressor.
-tsw-id:LACY_ECOLI LACY_ECOLI    P02920	Lactose permease (Lactose-proton symport).
+tsw-id:LACI_ECOLI LACI_ECOLI    P03023	Lactose operon repressor
+tsw-id:LACY_ECOLI LACY_ECOLI    P02920	Lactose permease (Lactose-proton symport)
 </pre>
 </td></tr></table><p>
 
 <a name="output.2"></a>
 <h3>Output files for usage example 2</h3>
-<p><h3>File: laci_ecoli.textsearch</h3>
+<p><h3>File: bgal_ecoli.textsearch</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 # Search for: lactose | permease
-tsw-id:LACI_ECOLI LACI_ECOLI    P03023	Lactose operon repressor.
-tsw-id:LACY_ECOLI LACY_ECOLI    P02920	Lactose permease (Lactose-proton symport).
+tsw-id:LACI_ECOLI LACI_ECOLI    P03023	Lactose operon repressor
+tsw-id:LACY_ECOLI LACY_ECOLI    P02920	Lactose permease (Lactose-proton symport)
 </pre>
 </td></tr></table><p>
 
@@ -366,12 +381,14 @@ None.
 
 This is a rather slow way to search for text in databases.  If you are
 searching for text in public databases, you should consider using
-either Entrez (<a
-href="http://www.ncbi.nlm.nih.gov/Entrez/">http://www.ncbi.nlm.nih.gov/Entrez/</a>)
-or SRS (<a
-href="http://srs.rfcgr.mrc.ac.uk/">http://srs.rfcgr.mrc.ac.uk/</a> or <a
-href="http://www.sanger.ac.uk/srs6/">http://www.sanger.ac.uk/srs6/</a>
-etc.)
+either
+SRS (<a
+href="http://srs.ebi.ac.uk/">http://srs.ebi.ac.uk/</a>)
+or
+Entrez (<a
+href="http://www.ncbi.nlm.nih.gov/Entrez/">
+http://www.ncbi.nlm.nih.gov/Entrez/</a>)
+
 	
 <H2>
     References
@@ -384,7 +401,6 @@ None.
     Warnings
 </H2>
 
-<p>This is a rather slow way to search for text in databases. If you are searching for text in public databases, you should consider using either Entrez (<a href="http://www.ncbi.nlm.nih.gov/Entrez/">http://www.ncbi.nlm.nih.gov/Entrez/</a>) or SRS (<a href="http://srs.rfcgr.mrc.ac.uk/">http://srs.rfcgr.mrc.ac.uk/</a> or <a href="http://www.sanger.ac.uk/srs6/">http://www.sanger.ac.uk/srs6/</a> etc.) instead.</p>
 
 
 <H2>
@@ -490,6 +506,11 @@ None.
 <tr>
 <td><a href="showfeat.html">showfeat</a></td>
 <td>Display features of a sequence in pretty format</td>
+</tr>
+
+<tr>
+<td><a href="showpep.html">showpep</a></td>
+<td>Displays protein sequences with features in pretty format</td>
 </tr>
 
 <tr>
