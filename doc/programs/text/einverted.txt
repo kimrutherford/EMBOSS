@@ -5,34 +5,29 @@
 
 Function
 
-   Finds DNA inverted repeats
+   Finds inverted repeats in nucleotide sequences
 
 Description
 
-   einverted looks for inverted repeats (stem loops) in a nucleotide
-   sequence.
-
-   It will find inverted repeats that include a proprtion of mismatches
-   and gaps (bulges in the stem loop).
+   einverted finds inverted repeats (stem loops) in nucleotide sequences.
+   It identifies regions of local alignment of the input sequence and its
+   reverse complement that exceed a threshold score. The alignments may
+   include a proportion of mismatches and gaps, which correspond to
+   bulges in the stem loop. One or more sequences are read and a file
+   with the sequence(s) (without gap characters) of the inverted repeat
+   regions is written. It can find multiple inverted repeats in a
+   sequence. Only non-overlapping matches are reported.
 
 Algorithm
 
-   It works by finding alignments between the sequence and its reverse
-   complement that exceed a threshold score. Gaps and Mismatches are
-   assigned a penalty (negative) score. Matches are assigned a positive
-   score. The score is calculated by summing the values of each match,
-   the penalties of each mismatch and the large penalties of any gaps.
-   Any region whose score exceeds the threshold is reported.
-
-   einverted uses dynamic programming and thus is guaranteed to find the
-   optimal alignment, but is slower than, for example, a self-by-self
-   BLAST. It can find multiple inverted repeats in a sequence.
-
-   einverted does not report overlapping matches.
-
-   The original "inverted" program was written to annotate the nematode
-   genome. Excluding overlapping repeats saved problems with simple
-   repeat sequences in this genome.
+   einverted uses dynamic programming and thus is guaranteed to find
+   optimal, local alignments between the sequence and its reverse
+   complement. Matched bases contribute positively to the score whereas
+   gaps and mismatches are penalised. The score for a local alignment is
+   the sum of the values of each match, minus penalties for mismatches
+   and gap insertion. Any region whose score exceeds the threshold is
+   reported. The gap penalty, match score and mismatch score, and the
+   threshold score for reporting regions, are all user-specified.
 
 Usage
 
@@ -40,7 +35,7 @@ Usage
 
 
 % einverted tembl:d00596 
-Finds DNA inverted repeats
+Finds inverted repeats in nucleotide sequences
 Gap penalty [12]: 
 Minimum score threshold [50]: 
 Match score [3]: 
@@ -109,8 +104,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -363,6 +359,12 @@ Data files
 
 Notes
 
+   The original "inverted" program (from which einverted was derived) was
+   used to annotate the nematode genome. Excluding overlapping repeats
+   saved problems with simple repeat sequences in this genome.
+
+   einverted will find optimal alignments but is slower than heuristic
+   methods such as BLAST.
    Sometimes you can find repeats using the program palindrome that you
    can't find with einverted using the default parameters.
 
@@ -371,7 +373,7 @@ Notes
    parameter values are below einverted's default cutoff score - you
    should decrease the 'Minimum score threshold' to see them.
 
-   For example, when palindrome is run with 'em:hsfau1', it finds the
+   For example, when palindrome is run with 'em:x65921', it finds the
    repeat:
 
 64    aaaactaaggc    74
@@ -384,7 +386,7 @@ Notes
 
    If einverted is run as:
 
-   % einverted em:hsfau1 -threshold 33
+   % einverted em:x65921 -threshold 30
 
    then it will find it:
 
@@ -439,10 +441,10 @@ Known bugs
 
 See also
 
-   Program name                     Description
-   equicktandem Finds tandem repeats
-   etandem      Looks for tandem repeats in a nucleotide sequence
-   palindrome   Looks for inverted repeats in a nucleotide sequence
+   Program name                   Description
+   equicktandem Finds tandem repeats in nucleotide sequences
+   etandem      Finds tandem repeats in a nucleotide sequence
+   palindrome   Finds inverted repeats in nucleotide sequence(s)
 
    palindrome also looks for inverted repeats but is much faster and less
    sensitive, as it looks for near-perfect repeats.

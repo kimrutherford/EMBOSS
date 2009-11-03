@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>sigcleave </b>
-Reports protein signal cleavage sites
+Reports on signal cleavage sites in a protein sequence
 Input protein sequence(s): <b>tsw:ach2_drome</b>
 Minimum weight [3.5]: <b></b>
 Output report [ach2_drome.sig]: <b></b>

@@ -21,7 +21,6 @@
 
 package org.emboss.jemboss.parser.acd;
 
-import java.io.*;
 
 /**
 *

@@ -1,5 +1,5 @@
 application: whichdb [
-  documentation: "Search all databases for an entry"
+  documentation: "Search all sequence databases for an entry and retrieve it"
   groups: "Information"
   gui: "yes"
   batch: "yes"
@@ -37,6 +37,7 @@ section: output [
   outfile: outfile [
     standard: "@(!$(get))"
     nullok: "$(get)"
+    nulldefault: "$(get)"
     knowntype: "whichdb output"
   ]
 

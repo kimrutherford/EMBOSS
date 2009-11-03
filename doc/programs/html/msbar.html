@@ -24,61 +24,17 @@ msbar
 <H2>
     Function
 </H2>
-Mutate sequence beyond all recognition
+Mutate a sequence
 
 <H2>
     Description
 </H2>
 
+<p>This program changes a sequence, attempting to emulate various forms of mutation. It reads one or more sequences and writes an output file with with a set of (mutated) sequences.  The number, size and type of mutation may be specified.</p>
 
-This program changes a sequence a lot or a little, attempting to emulate
-various forms of mutation.  You can set the number and types of mutations.
 
-<p>
-It can act on the following sizes of sequence:
 
-<ul>
-<li>Point (single base or residue change)
-<li>Codon (not applicable in proteins)
-<li>Block of sequence (of a specified minimum and maximum random size)
-</ul>
 
-<p>
-If the sequence is nucleic, the codon and block-sized operations can
-optionally be done in-frame.  This causes the minimum block size to be
-set to 3 and the randomly chosen positions to be multiples of 3. 
-
-<p>
-For each of the above size of sequence it can produce the effects of any
-of the following types of mutation at a randomly chosen position:
-
-<ul>
-<li>Insertion of a randomly generated sequence
-<li>Deletion
-<li>Change (deletion then insertion of a random sequence of the same size)
-<li>Duplication at an adjacent position
-<li>Move region from one position to another (without deletion of the original)
-<li>Any of the above, chosen at random.
-<li>None of the above
-</ul>
-
-<p>
-The input and output sequences may not differ if only a few changes are
-chosen as (for example) one in four nucleic acid point substitutions
-will not change the sequence. 
-
-<p>
-N.B.  There is no selection of the types of mutation to produce viable
-sequence as there would be in a real organism.  In particular, there is
-no attempt to bias mutations of nucleic acid sequences to conform to the
-C+G ratio in the sequence or to bias the codons in the direction of the
-frequencies used in the organism.  This program emulates mutation, not
-selection. 
-
-<p>
-This program was named from the acronym of "Mutate Sequence Beyond All
-Recognition", by analogy with the acronym "fubar" commonly used in the
-US and UK armed forces. 
 
 <H2>
     Usage
@@ -92,7 +48,7 @@ This asks for 5 mutations, with point mutations as changes (substitutions), and 
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>msbar </b>
-Mutate sequence beyond all recognition
+Mutate a sequence
 Input sequence(s): <b>tembl:j01636</b>
 Number of times to perform the mutation operations [1]: <b>5</b>
 Point mutation operations
@@ -232,8 +188,9 @@ output sequence(s) [j01636.fasta]: <b></b>
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -599,8 +556,40 @@ None.
 <H2>
     Notes
 </H2>
+<p>The qualifiers allow the number, size and type of mutation to be controlled.</p>
 
-None.
+<p>The "size" of mutation may be set as following:</p>
+<ul>
+<li>Point (single base or residue change)
+<li>Codon (not applicable in proteins)
+<li>Block of sequence (of a specified minimum and maximum random size)
+</ul>
+
+<p>If the sequence is nucleic, the codon and block-sized operations can optionally be done in-frame. This causes the minimum block size to be set to 3 and the randomly chosen positions to be multiples of 3.</p>
+
+<p>For each of the above size of sequence it can produce the effects of any of the following types of mutation at a randomly chosen position:</p>
+
+
+<ul>
+<li>Insertion of a randomly generated sequence
+<li>Deletion
+<li>Change (deletion then insertion of a random sequence of the same size)
+<li>Duplication at an adjacent position
+<li>Move region from one position to another (without deletion of the original)
+<li>Any of the above, chosen at random.
+<li>None of the above
+</ul>
+
+
+<p>The input and output sequences may not differ if only a few changes are chosen as (for example) one in four nucleic acid point substitutions will not change the sequence.</p>
+
+<p>There is no selection of the types of mutation to produce viable sequence as there would be in a real organism. In particular, there is no attempt to bias mutations of nucleic acid sequences to conform to the C+G ratio in the sequence or to bias the codons in the direction of the frequencies used in the organism. This program emulates mutation, not selection.</p>
+
+<p>This program was named from the acronym of "Mutate Sequence Beyond All Recognition", by analogy with the acronym "fubar" commonly used in the US and UK armed forces. </p>
+
+<p>If you require the mutated sequences to not match some other set of sequences, this set may be specified with the -othersequence qualifier. For example, the mutants should not match the input sequence, or the results of a previous run of this program. <b>msbar</b> ensures the mutants do not match the specified sequences. If a match is found, then the mutation is started again with a fresh copy of the input sequence. If, after 10 such retries, there is still a match to the set of sequence given here, then the matching mutated sequence is written with a warning message.</p>
+
+
 
 <H2>
     References
@@ -634,7 +623,8 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="shuffleseq.html">shuffleseq</a></td>
 <td>Shuffles a set of sequences maintaining composition</td>

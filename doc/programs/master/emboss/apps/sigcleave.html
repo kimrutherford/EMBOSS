@@ -21,53 +21,14 @@ sigcleave
     Description
 </H2>
 
-Signal peptides mediate translocation across the ER membrane in 
-eukaryotes. In prokaryotes signal peptides mediate translocation across 
-the inner and outer membranes.
-
-<p>
-
-<b>sigcleave</b> predicts the site of cleavage between a signal sequence
-and the mature exported protein.  The predictive accuracy is estimated
-to be around 75-80% for both prokaryotic and eukaryotic proteins. 
-
-<p>
-
-<b>sigcleave</b> uses the method of von Heijne as modified by von Heijne in
-his later book where treatment of positions -1 and -3 in the matrix is
-slightly altered (see references).
+<p><b>sigcleave</b> predicts the site of cleavage between a signal sequence and the mature exported protein using the method of von Heijne. It reads one or more protein sequences and writes a standard EMBOSS report with the position, length and score of each predicted signal sequence. Optionally, you may specify the sequence is prokaryotic and this will change the default scoring data file used. The predictive accuracy is estimated to be around 75-80% for both prokaryotic and eukaryotic proteins.</p>
 
 
-<H3>
-   Why isn't there a cutoff to eliminate internal sites?
-</H3>
+<H2>
+Algorithm
+</H2>
 
-The program predicts cleavage sites inside the whole protein.  Apart
-from the N-terminal sites, the other sites are not biologically relevant. 
-Why isn't there a cutoff to eliminate internal sites?
-
-<p>
-
-The answer is partly because these sites can be relevant in some
-biological cases (additional pre-processing for example), but mostly
-because ... 
-
-<p>
-
-There is one thing in bioinformatics you can not be certain of ... the 
-start of a protein sequence.  The end is easy to predict. The start 
-depends on promoters, transcriptional controls, splicing, etc.
-
-<p>
-
-Most importantly, sigcleave is not perfect - you should check the 
-results and decide whether you like the prediction.
-
-<p>
-
-Also, remember you can put <b>-send 50</b> on the command line to make
-sure it only checks the first 50 residues. 
-
+<p><b>sigcleave</b> uses the method of von Heijne as modified by von Heijne in his later book where treatment of positions -1 and -3 in the matrix is slightly altered (see references). The minimum scoring weight value (<tt>-minweight</tt>) for the predicted cleavage site is specified.  The value of <tt>-minweight</tt> should be at least 3.5. At this level, the method should correctly identify 95% of signal peptides, and reject 95% of non-signal peptides. The cleavage site should be correctly predicted in 75-80% of cases.</p>
 
 <H2>
     Usage
@@ -160,16 +121,12 @@ Sample: 161 aligned sequences
     Notes
 </H2>
 
+<p>Signal peptides mediate translocation across the endoplasmic reticulum (ER) membrane in eukaryotes. In prokaryotes signal peptides mediate translocation across the inner and outer membranes.</p>
 
-The value of minweight should be at least 3.5. At this level,
-the method should correctly identify 95% of signal peptides, and
-reject 95% of non-signal peptides. The cleavage site should be
-correctly predicted in 75-80% of cases.
-<p>
+<p><b>sigcleave</b> may predict any number of cleavage sites in a protein sequence but not all of these will be biologically relevant; the prediction algorithm is not perfect.  There is no cutoff to eliminate sites because it is down to human expertise to decide what is relevant or not.  Although the end of a protein sequence is usually easy to predict from a nucleotide sequence, the same cannot be said for the start which depends on such things as promoters, transcriptional control and splicing.  This is why all predicted cleavage sites are reported.</p>
 
-If you use matrix tables with a different number of residues before or
-after the cleavage site, you must also set the advanced parameters nval
-and pval. 
+<p>It is often useful to specify to use just the starting region of the input sequence using the in-built qualifier <tt>-send</tt>.  For example, adding <tt>-send 50</tt> to the command-line will check only the first 50 residues.</p>
+
 
 
 <H2>

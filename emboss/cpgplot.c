@@ -116,9 +116,9 @@ int main(int argc, char **argv)
     minpc     = ajAcdGetFloat("minpc");
     doplot    = ajAcdGetToggle("plot");
     mult      = ajAcdGetGraphxy ("graph");
-    doobsexp  = ajAcdGetBool("obsexp");
-    docg      = ajAcdGetBool("cg");
-    dopc      = ajAcdGetBool("pc");
+    doobsexp  = ajAcdGetBoolean("obsexp");
+    docg      = ajAcdGetBoolean("cg");
+    dopc      = ajAcdGetBoolean("pc");
     featout   = ajAcdGetFeatout("outfeat");
 
 
@@ -295,15 +295,15 @@ static void cpgplot_countbases(const char *seq, const char *bases,
 
     *cxpy = *cx = *cy = 0.;
 
-    codex = ajAZToBin(bases[0]);
-    codey = ajAZToBin(bases[1]);
+    codex = ajBaseAlphaToBin(bases[0]);
+    codey = ajBaseAlphaToBin(bases[1]);
 
-    codeb = ajAZToBin(seq[0]);
+    codeb = ajBaseAlphaToBin(seq[0]);
 
     for(i=0; i<window; ++i)
     {
 	codea=codeb;
-	codeb=ajAZToBin(seq[i+1]);
+	codeb=ajBaseAlphaToBin(seq[i+1]);
 
         if(!(15-codea))   /* look for ambiguity code 'N' */
         {

@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>profit </b>
-Scan a sequence or database with a matrix or profile
+Scan one or more sequences with a simple frequency matrix
 Profile or weight matrix file: <b>outfile.prophecy</b>
 Input sequence(s): <b>tsw:*</b>
 Output file [outfile.profit]: <b></b>

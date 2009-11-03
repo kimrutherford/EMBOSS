@@ -160,7 +160,7 @@ int main( int argc , char **argv )
     finishres = ajAcdGetInt("finishresiduenumber");
 
     /* reserve memory for and read in structure */
-    /* JISON */    pdb = ajPdbReadoldNew(pdbfile);
+    /* JISON */    pdb = ajPdbReadNew(pdbfile,0);
     
     /* check and set number of chain to be analysed */
     highest = pdb->Nchn;
@@ -440,6 +440,9 @@ static ajint psiphi_first_residue_number (const AjPPdb pdb,
     ajint lowestres = 0;
 
     AjPAtom inlist   = NULL;
+
+    if(!ajListGetLength(pdb->Chains[myindex]->Atoms))
+	ajFatal("Chain %d has no atoms",myindex+1);
     
     /* read first atom in list into memory, but keep it on list */
     ajListPeek(pdb->Chains[myindex]->Atoms,
@@ -868,9 +871,9 @@ static AjPFeature psiphi_write_psi_phi (AjPFeattable angletab,
     angleft = ajFeatNewII(angletab,
 			  resnum,
 			  resnum);
-    ajFmtPrintS(&feattmp, "*phi: %7.2f", phi);
+    ajFmtPrintS(&feattmp, "*phi %7.2f", phi);
     ajFeatTagAdd(angleft, NULL, feattmp);
-    ajFmtPrintS(&feattmp, "*psi: %7.2f", psi);
+    ajFmtPrintS(&feattmp, "*psi %7.2f", psi);
     ajFeatTagAdd(angleft, NULL, feattmp);
 
     ajStrDel(&feattmp);

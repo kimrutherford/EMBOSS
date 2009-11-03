@@ -47,6 +47,13 @@
 <td>id,acc</td>
 </tr>
 
+<tr>
+<td>-outfile</td>
+<td>General log output file</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.dbxgcg</td>
+</tr>
+
 <tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Additional (Optional) qualifiers</th>
 <th align="left">Allowed values</th>

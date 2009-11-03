@@ -21,20 +21,7 @@ infoseq
     Description
 </H2>
 
-
-This is a small utility to list the sequences' USA, name, accession
-number, type (nucleic or protein), length, percentage C+G, and/or
-description. 
-
-<p>
-Any combination of these types of information can be easily selected or
-unselected. 
-
-<p>
-By default, the output file starts each line with the USA of the
-sequence being described, so the output file is a list file that can be
-manually edited and read in by any other EMBOSS program that can read in
-one or more sequence to be analysed. 
+<p><b>infoseq</b> displays on screen basic information about one or more input sequences.  This includes the Uniform Sequence Address (USA), name, accession number, type (nucleic or protein), length, percentage C+G and description.  Any combination of these records is easily selected or unselected for display. The same information may be written to an output file which (optionally) may be formatted in an HTML table.</p>
 
 <H2>
     Usage
@@ -125,24 +112,9 @@ None.
 </H2>
 
 
-This program was written to make it easier to get some specific bits
-of information on a sequence for use in small perl scripts.
+<p>There are many qualifiers to control exactly what information on the sequence is output and how it is formatted.  If you only want a few fields in the output file, the command line may be shortended by preceding the appropriate qualifier with <tt>-only</tt>.  For example, instead of specifying <tt>-nohead -noname -noacc -notype -nopgc -nodesc</tt> to get only the length output, you can specify <tt>-only -length</tt>.</p>
+<p>By default, the output file starts each line with the USA of the sequence being described, so the output file is a list file that can be manually edited and read in by any other EMBOSS program that can read in one or more sequence to be analysed.</p>
 
-This Perl code fragment to get the type of a sequence is typical:
-
-<pre>
-$type = `$PATH_TO_EMBOSS/infoseq $sequence -auto -only -type`;
-chomp $type;
-</pre>
-
-<p>
-You may find other uses for it, of course.
-	
-<p>
-By default, the output file starts each line with the USA of the
-sequence being described, so the output file is a list file that can be
-manually edited and read in by other EMBOSS programs using the list-file
-specification of '@filename'. 
 
 <H2>
     References

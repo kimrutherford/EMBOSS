@@ -5,7 +5,7 @@
 
 Function
 
-   Database b+tree indexing for flat file databases
+   Index a flat file database using b+tree indices
 
 Description
 
@@ -13,40 +13,15 @@ Description
    EMBOSS B+tree format index files. These indexes allow access of flat
    files larger than 2Gb.
 
-   Having created the EMBOSS indexes for this file, a database can then
-   be defined in the file emboss.defaults as something like:
-DB embl [
-   type: N
-   dbalias: embl   (see below)
-   format: embl
-   method: emboss
-   directory: /data/embl
-   file: *.dat
-   indexdirectory: /data/embl/indexes
-]
-
-   The index file 'basename' given to dbxflat must match the DB name in
-   the definition. If not, then a 'dbalias' line must be given which
-   specifies the basename of the indexes.
-
-  Fields Indexed
-
-   By default, dbxflat will index the ID name and the accession number
-   (if present).
-   If they are present in your database, you may also specify that
-   dbxflat should index the Sequence Version and GI, the words in the
-   description, the keywords and the organism words using the '-fields'
-   qualifier with the appropriate values.
-
 Usage
 
    Here is a sample session with dbxflat
 
 
 % dbxflat 
-Database b+tree indexing for flat file databases
+Index a flat file database using b+tree indices
 Basename for index files: embl
-Resource name: embl
+Resource name: emblresource
       EMBL : EMBL
      SWISS : Swiss-Prot, SpTrEMBL, TrEMBLnew
         GB : Genbank, DDBJ
@@ -61,38 +36,9 @@ Database directory [.]: embl
        key : Keywords
        org : Taxonomy
 Index fields [id,acc]: 
-
-Processing file /homes/user/test/embl/rod.dat
+General log output file [outfile.dbxflat]: 
 
    Go to the output files for this example
-
-Global Parameters
-
-   dbxflat requires that two global parameters be defined in the file
-   emboss.defaults. These are:
-SET PAGESIZE 2048
-SET CACHESIZE 200
-
-   The above values are recommended for most systems. The PAGESIZE is a
-   multiple of the size of disc pages the operating system buffers. The
-   CACHESIZE is the number of disc pages dbxflat is allowed to cache.
-
-Resources
-
-   dbxflat will ask you for the name of a resource definition in the file
-   emboss.defaults. This will be something like:
-RES embl [
-   type: Index
-   idlen:  15
-   acclen: 15
-   svlen:  20
-   keylen: 25
-   deslen: 25
-   orglen: 25
-]
-
-   The length definitions are the maximum lengths of 'words' in the field
-   being indexed. Longer words will be truncated to the value set.
 
 Command line arguments
 
@@ -113,6 +59,7 @@ Command line arguments
                                   (Accession number); sv (Sequence Version and
                                   GI); des (Description); key (Keywords); org
                                   (Taxonomy))
+   -outfile            outfile    [*.dbxflat] General log output file
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
@@ -123,11 +70,16 @@ Command line arguments
                                   is accepted)
    -indexoutdir        outdir     [.] Index file output directory
 
-   Associated qualifiers: (none)
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -158,6 +110,12 @@ Output file format
 
   Output files for usage example
 
+  File: outfile.dbxflat
+
+Processing directory: /homes/user/test/embl/
+Processing file: rod.dat entries: 6 (6) time: 0.0s (0.0s)
+Total time: 0.0s
+
   File: embl.ent
 
 # Number of files: 1
@@ -169,24 +127,24 @@ rod.dat
   File: embl.pxac
 
 Order     71
-Fill      47
+Fill      46
 Pagesize  2048
 Level     0
-Cachesize 200
-Order2    82
-Fill2     99
+Cachesize 100
+Order2    99
+Fill2     101
 Count     8
 Kwlimit   15
 
   File: embl.pxid
 
 Order     71
-Fill      47
+Fill      46
 Pagesize  2048
 Level     0
-Cachesize 200
-Order2    82
-Fill2     99
+Cachesize 100
+Order2    99
+Fill2     101
 Count     5
 Kwlimit   15
 
@@ -209,6 +167,59 @@ Notes
    The indexing system has been designed to allow on-the-fly updating of
    indexes. This feature is, however, not implemented in the current
    version. It will be made available in future releases.
+
+   Having created the EMBOSS indexes for this file, a database can then
+   be defined in the file emboss.defaults as something like:
+DB embl [
+   type: N
+   dbalias: embl   (see below)
+   format: embl
+   method: emboss
+   directory: /data/embl
+   file: *.dat
+   indexdirectory: /data/embl/indexes
+]
+
+   The index file 'basename' given to dbxflat must match the DB name in
+   the definition. If not, then a 'dbalias' line must be given which
+   specifies the basename of the indexes.
+
+  Fields Indexed
+
+   By default, dbxflat will index the ID name and the accession number
+   (if present).
+   If they are present in your database, you may also specify that
+   dbxflat should index the Sequence Version and GI, the words in the
+   description, the keywords and the organism words using the '-fields'
+   qualifier with the appropriate values.
+
+Global Parameters
+
+   dbxflat requires that two global parameters be defined in the file
+   emboss.defaults. These are:
+SET PAGESIZE 2048
+SET CACHESIZE 200
+
+   The above values are recommended for most systems. The PAGESIZE is a
+   multiple of the size of disc pages the operating system buffers. The
+   CACHESIZE is the number of disc pages dbxflat is allowed to cache.
+
+Resources
+
+   dbxflat will ask you for the name of a resource definition in the file
+   emboss.defaults. This will be something like:
+RES embl [
+   type: Index
+   idlen:  15
+   acclen: 15
+   svlen:  20
+   keylen: 25
+   deslen: 25
+   orglen: 25
+]
+
+   The length definitions are the maximum lengths of 'words' in the field
+   being indexed. Longer words will be truncated to the value set.
 
 References
 
@@ -234,11 +245,11 @@ See also
 
    Program name                     Description
    dbiblast     Index a BLAST database
-   dbifasta     Database indexing for fasta file databases
+   dbifasta     Index a fasta file database
    dbiflat      Index a flat file database
    dbigcg       Index a GCG formatted database
-   dbxfasta     Database b+tree indexing for fasta file databases
-   dbxgcg       Database b+tree indexing for GCG formatted databases
+   dbxfasta     Index a fasta file database using b+tree indices
+   dbxgcg       Index a GCG formatted database using b+tree indices
 
 Author(s)
 

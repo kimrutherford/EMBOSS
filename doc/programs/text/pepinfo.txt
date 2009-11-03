@@ -5,22 +5,18 @@
 
 Function
 
-   Plots simple amino acid properties in parallel
+   Plot amino acid properties of a protein sequence in parallel
 
 Description
 
-   pepinfo detects and displays various useful metrics about a protein
-   sequence.
-
-   It can plot and display the following properties:
-     * plots of hydrophobicity (using the method of Kyte & Doolittle), of
-       OHM (Sweet & Eisenberg), or of consensus parameters (Eisenberg et
-       al))
-     * a histogram of the presence of residues with the physico-chemical
-       properties: Tiny, Small, Aliphatic, Aromatic, Non-polar, Polar,
-       Charged, Positive, Negative.
-
-   The data are also written out to a data file.
+   pepinfo plots various amino acid properties in parallel for an input
+   protein sequence. The types of plot available are i. Hydrophobicity
+   plots using the method of Kyte & Doolittle, the optimal matching
+   hydrophobicity scale (OHM) of Sweet & Eisenberg, or consensus
+   parameters (Eisenberg et al). ii. Histogram of the presence of
+   residues with the physico-chemical properties: Tiny, Small, Aliphatic,
+   Aromatic, Non-polar, Polar, Charged, Positive, Negative. The data are
+   also written out to an output file.
 
 Usage
 
@@ -28,7 +24,7 @@ Usage
 
 
 % pepinfo 
-Plots simple amino acid properties in parallel
+Plot amino acid properties of a protein sequence in parallel.
 Input protein sequence: tsw:opsd_human
 Graph type [x11]: cps
 Output file [opsd_human.pepinfo]: 
@@ -93,8 +89,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -379,7 +376,12 @@ Data files
 
 Notes
 
-   None.
+   For calculating the hydrophobicity plots, hdrophobicity is calculated
+   in windows of a specified size over the sequence.
+
+   The optimal matching hydrophobicity scale (OHM) scale is based on the
+   likelihood of a given amino acid to be replaced by another hydrophobic
+   or "buried" amino acid.
 
 References
 
@@ -411,21 +413,24 @@ Known bugs
 
 See also
 
-   Program name                         Description
-   backtranambig Back translate a protein sequence to ambiguous codons
-   backtranseq   Back translate a protein sequence
-   charge        Protein charge plot
-   checktrans    Reports STOP codons and ORF statistics of a protein
-   compseq       Count composition of dimer/trimer/etc words in a sequence
-   emowse        Protein identification by mass spectrometry
-   freak         Residue/base frequency table or plot
-   iep           Calculates the isoelectric point of a protein
-   mwcontam      Shows molwts that match across a set of files
-   mwfilter      Filter noisy molwts from mass spec output
-   octanol       Displays protein hydropathy
-   pepstats      Protein statistics
-   pepwindow     Displays protein hydropathy
-   pepwindowall  Displays protein hydropathy of a set of sequences
+   Program name Description
+   backtranambig Back-translate a protein sequence to ambiguous
+   nucleotide sequence
+   backtranseq Back-translate a protein sequence to a nucleotide sequence
+   charge Draw a protein charge plot
+   checktrans Reports STOP codons and ORF statistics of a protein
+   compseq Calculate the composition of unique words in sequences
+   emowse Search protein sequences by digest fragment molecular weight
+   freak Generate residue/base frequency table or plot
+   iep Calculate the isoelectric point of proteins
+   mwcontam Find weights common to multiple molecular weights files
+   mwfilter Filter noisy data from molecular weights file
+   octanol Draw a White-Wimley protein hydropathy plot
+   pepstats Calculates statistics of protein properties
+   pepwindow Draw a Kyte-Doolittle hydropathy plot for a protein sequence
+   pepwindowall Draw Kyte-Doolittle hydropathy plot for a protein
+   alignment
+   wordcount Count and extract unique words in DNA sequence(s)
 
 Author(s)
 

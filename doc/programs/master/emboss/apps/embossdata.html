@@ -21,46 +21,7 @@ embossdata
     Description
 </H2>
 
-This is a utility to indicate which directories can hold EMBOSS
-data files and what the names of these files are. 
-<p>
-
-The names of EMBOSS data files all start with the character 'E', by
-convention, to distinguish them somewhat from any other files,
-especially files in your home directory. 
-
-<p>
-EMBOSS data files are read in by assorted EMBOSS programs, for
-example the files holding the various genetic codes to translate from
-nucleic acid codons to amino acids are held in files called "EGC.0",
-"EGC.1", "EGC.2", etc.  These files normally are kept in a standard data
-directory under the EMBOSS package installation position:
-".../emboss/emboss/data/".  When EMBOSS programs require a data file,
-they search for it, in order, through the following set of
-directories:
-
-<ul>
-<li> The current directory
-<li> '.embossdata' in the current directory
-<li> Your home directory
-<li> '.embossdata' in your home directory
-<li> The EMBOSS standard data directory
-</ul>
-<p>
-If a data file is placed in the current directory, EMBOSS
-programs will use it in preference to the file of the same name in the
-EMBOSS standard data directory.  Thus if you wish to modify a
-data file to change the behaviour of an EMBOSS program, you
-should obtain it from the EMBOSS standard data directory, edit it, and
-place it in one of the other directories, such as the current directory
-or your home directory. 
-
-<p>
-The program embossdata is a utility to enable you to check on
-the location of the directories which could hold data files, to display
-the names of data files in those directories and to make local copies
-of the data files from the EMBOSS standard data directory in
-order for you to modify them. 
+<p><b>embossdata</b> searches for a specified data file in all the directories which can hold them and writes the results of the search to screen or (optionally) to file.  Optionally, all the files in the searched directories can be displayed. Optionally, it will also copy the file from the EMBOSS standard data directory to the current directory so that you can safely edit and use it.</p>
 
 <H2>
     Usage
@@ -110,8 +71,32 @@ No data files are read by this program.
     Notes
 </H2>
 
+<p>Many EMBOSS programs use a data file.  The data files are typically kept in a standard directory in the EMBOSS installation (<tt>.../emboss/emboss/data/</tt>).  When an EMBOSS programs require a data file, it search for it in the following order of directories:</p>
+<ul>
+    <li> The current directory
+    <li> <tt>.embossdata</tt> subdirectory in the current directory
+    <li> Your home directory
+    <li> <tt>.embossdata</tt> subdirectory in your home directory
+    <li> The EMBOSS standard data directory 
+</ul>
 
-None.
+
+<p>EMBOSS will use the data file it finds first from the above directories.  For example, a data file in the current directory is used in preference to a file of the same name in the EMBOSS standard data directory.</p>
+
+<p>It is sometimes necessary to modify a data file to change the behaviour of an EMBOSS program.  To do this safely, you should copy the data file from the EMBOSS standard data directory to one of the other directories, such as the current directory or your home directory, before editing it.  <b>embossdata</b> helps here by displaying the names of data files in all the directories which could hold them, and copying a data file from the EMBOSS standard data directory to the current directory.</p>
+
+<p>By convention, all EMBOSS data file names start with the character 'E', to distinguish them from other files on your system. For example genetic codes to translate codons to amino acids are held in data files called "EGC.0", "EGC.1", "EGC.2", etc. </p>
+
+<h3> -filename option </h3>
+Name of data file to search for or copy into the current directory from the EMBOSS standard data directory. The name of the file is not altered when it is fetched. (Any string is accepted).
+
+<h3>-outfile option</h3>
+Name of file containing the results of searching the data directories.    By default this is written to the screen (<tt>stdout</tt>).
+
+<h3> -reject option </h3>
+The names of sub-directories of the EMBOSS data directory that should be ignored when displaying data directories.
+
+
 
 <H2>
     References

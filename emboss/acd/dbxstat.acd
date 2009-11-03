@@ -20,10 +20,10 @@ section: input [
     pattern: "[A-z][A-z0-9_]+"
   ]
 
-  string: indexdir [
+  directory: indexdir [
     standard: "y"
     default: "."
-    information: "Index file directory"
+    information: "Index directory"
     knowntype: "emboss database index"
   ]
 
@@ -73,6 +73,7 @@ section: output [
 
   outfile: outfile [
     standard: "y"
+    knowntype: "dbxstat output"
   ]
 
 endsection: output

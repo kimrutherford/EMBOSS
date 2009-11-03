@@ -24,52 +24,14 @@ rebaseextract
 <H2>
     Function
 </H2>
-Extract data from REBASE
+Process the REBASE database for use by restriction enzyme applications
 
 <H2>
     Description
 </H2>
 
 
-The Restriction Enzyme database (REBASE) is a collection of information
-about restriction enzymes and related proteins.  It contains published
-and unpublished references, recognition and cleavage sites,
-isoschizomers, commercial availability, methylation sensitivity, crystal
-and sequence data.  DNA methyltransferases, homing endonucleases,
-nicking enzymes, specificity subunits and control proteins are also
-included.  Most recently, putative DNA methyltransferases and
-restriction enzymes, as predicted from analysis of genomic sequences,
-are also listed. 
-
-<p>
-
-The home page of REBASE is:
-<A HREF="http://rebase.neb.com/">http://rebase.neb.com/</A>
-
-<p>
-
-This program derives recognition site and cleavage information from the
-"withrefm" file of an REBASE distribution.  It creates three files in
-the EMBOSS data subdirectory REBASE.  A pattern file, a reference file
-and a supplier file.  
-
-<p>
-
-It will also (by default) produce an 'embossre.equ' file.  This can be
-turned off by setting the -equivalences option to be false.  This option
-calculates an 'embossre.equ' file using restriction enzyme prototypes in
-the "withrefm" file.  The 'embossre.equ' file is a file of preferred
-isoschizomers.  You may edit it to contain your available restriction
-enzymes. 
-
-<p>
-
-The EMBOSS programs that find restriction cutting sites use the data
-files produced by this program and will not work without them. 
-
-<p>
-
-Running this program may be the job of your system manager. 
+<p><b>rebaseextract</b> processes the REBASE database for use by the EMBOSS restriction enzyme applications. It derives recognition site and cleavage information from the <tt>withrefm</tt> file of an REBASE distribution. It creates three files in the EMBOSS data subdirectory <tt>REBASE</tt>: a pattern file, a reference file and a supplier file. It will also (by default) produce an <tt>embossre.equ</tt> file of preferred isoschizomers using restriction enzyme prototypes in the "proto" file. This can be turned off by setting the <tt>-equivalences</tt> option to be false.</p>
 
 <H2>
     Usage
@@ -83,7 +45,7 @@ Running this program may be the job of your system manager.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>rebaseextract </b>
-Extract data from REBASE
+Process the REBASE database for use by restriction enzyme applications
 REBASE database withrefm file: <b>withrefm</b>
 REBASE database proto file: <b>proto</b>
 
@@ -110,8 +72,9 @@ REBASE database proto file: <b>proto</b>
    Associated qualifiers: (none)
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -624,19 +587,17 @@ program.
     Notes
 </H2>
 
+<p>The Restriction Enzyme database (REBASE) is a collection of information about restriction enzymes and related proteins. It contains published and unpublished references, recognition and cleavage sites, isoschizomers, commercial availability, methylation sensitivity, crystal and sequence data. DNA methyltransferases, homing endonucleases, nicking enzymes, specificity subunits and control proteins are also included. Most recently, putative DNA methyltransferases and restriction enzymes, as predicted from analysis of genomic sequences, are also listed.</p>
 
-The home page of REBASE is:
-<A HREF="http://rebase.neb.com/">http://rebase.neb.com/</A>
+<p>The home page of REBASE is: <a href="http://rebase.neb.com/">http://rebase.neb.com/</a></p>
 
-<p>
-Running this program may be the job of your system manager. 
+<p>The EMBOSS programs that find restriction cutting sites use the data files produced by this program and will not work without them. Running this program may be the job of your system manager.</p>
 
-<p>
-The ready-made files produced by this program may already be available
-at the REBASE web site:
-<a href="http://rebase.neb.com/rebase/rebase.files.html">http://rebase.neb.com/rebase/rebase.files.html</a>
-or
-<a href="http://rebase.neb.com/rebase/rebase.f37.html">http://rebase.neb.com/rebase/rebase.f37.html</a>
+<p>The ready-made files produced by this program may already be available at the REBASE web site: <a href="http://rebase.neb.com/rebase/rebase.files.html">http://rebase.neb.com/rebase/rebase.files.html</a> or <a href="http://rebase.neb.com/rebase/rebase.f37.html">http://rebase.neb.com/rebase/rebase.f37.html</a> </p>
+
+<p>You may edit the <tt>embossre.equ</tt> file it to contain details for your available restriction enzymes.</p>
+
+
 
 <H2>
     References
@@ -675,30 +636,36 @@ It exits with status 0 unless an error is reported.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="aaindexextract.html">aaindexextract</a></td>
-<td>Extract data from AAINDEX</td>
+<td>Extract amino acid property data from AAINDEX</td>
 </tr>
 
 <tr>
 <td><a href="cutgextract.html">cutgextract</a></td>
-<td>Extract data from CUTG</td>
+<td>Extract codon usage tables from from CUTG database</td>
+</tr>
+
+<tr>
+<td><a href="jaspextract.html">jaspextract</a></td>
+<td>Extract data from JASPAR</td>
 </tr>
 
 <tr>
 <td><a href="printsextract.html">printsextract</a></td>
-<td>Extract data from PRINTS</td>
+<td>Extract data from PRINTS database for use by pscan</td>
 </tr>
 
 <tr>
 <td><a href="prosextract.html">prosextract</a></td>
-<td>Build the PROSITE motif database for use by patmatmotifs</td>
+<td>Processes the PROSITE motif database for use by patmatmotifs</td>
 </tr>
 
 <tr>
 <td><a href="tfextract.html">tfextract</a></td>
-<td>Extract data from TRANSFAC</td>
+<td>Process TRANSFAC transcription factor database for use by tfscan</td>
 </tr>
 
 </table>

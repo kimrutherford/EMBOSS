@@ -20,47 +20,14 @@ listor
     Description
 </H2>
 
-<b>listor</b> reads in two sets of sequences and writes out a list file
-(file of file names) that result from the logical union of these two
-sets of sequences.  It is a simple way of manipulating and editing lists
-or sets of sequences to produce a list file.
-
-<p>
-
-When comparing sequences to see if they are the same between two sets of
-sequences, no use is made of the ID name or accession number of the
-sequences.  Only the sequences themselves are compared.  The comparison
-of the sequences is case-independent. 
-
-<p>
+<p><b>listor</b> reads in two sets of sequences (typically specified as list files) and writes out a list file that result from the logical union of the two sets.  A list file is a file with a list of Uniform Sequence Addresses (USAs), for example, a list of file names.  When comparing sequences from the input sets, no use is made of the ID name or accession number; only the sequence itself is compared. The comparison of the sequences is case-independent. The logical union is an OR operation by default. Other available operations are: <tt>AND</tt>, <tt>XOR</tt> and <tt>NOT</tt>.</p>
 
 
-The logical union is an OR operation by default.  Other available
-operations are: AND, XOR and NOT. 
+<H2>
+Algorithm
+</H2>
 
-<p>
-
-The (default) logical OR of the two sets of sequences is simply the
-result of merging the two sets of sequences, (without listing any
-shared sequences twice). 
-
-<p>
-
-A logical AND simply lists those sequences that occur in both sets of
-sequences. 
-
-<p>
-
-A logical XOR lists those sequences that ONLY occur in the first set or
-only occur in the second set - sequences occuring in both sets are
-ignored (the opposite of an AND). 
-
-<p>
-
-A logical NOT lists all those sequences in the first set except for
-those that also occur in the second set. 
-
-
+<p>All the input sequences are kept in memory while the logical unions of the two input sets of sequences is calculated. <b>listor</b> is therefore restricted by the available memory.  </p>
 
 <H2>
     Usage
@@ -129,12 +96,10 @@ None.
     Notes
 </H2>
 
-The program stores all of the input sequences in memory while it is
-working out the logical unions of the two sets of sequences.  This means
-that it is restricted by the available memory.  Doing logical unions
-involving all of the sequences in large databases, such as EMBL, is
-probably impractical unless you are lucky enough to have extraordinary
-amounts of memory on your machine. 
+<p>The inputs can be any valid USA but typically reference a list file.  Some other reference such as a wildcarded database entries or file name are equally valid.</p>
+<p>The (default) logical OR of the two sets of sequences is simply the result of merging the two sets of sequences.  A sequences appearing in both input sets is referenced once only in the output file. A logical <tt>AND</tt> simply lists those sequences that occur in both sets of sequences.</p>
+<p>A logical <tt>XOR</tt> lists those sequences that ONLY occur in the first set or only occur in the second set - sequences occuring in both sets are omitted (the opposite of an <tt>AND</tt>).</p>
+<p>A logical <tt>NOT</tt> lists all those sequences in the first set except for those that also occur in the second set. </p>
 
 <H2>
     References
@@ -145,10 +110,8 @@ None.
 <H2>
     Warnings
 </H2>
+<p><b>listor</b> is restricted by the available memory.  Doing logical unions involving all of the sequences in large databases, such as EMBL, is probably impractical unless you are lucky enough to have extraordinary amounts of memory on your machine.</p>
 
-If you try to do a logical union with all of the sequences in EMBL and
-another sequence set, this program will attempt to read all of the EMBL
-sequences into memory at once. This will probably not succeed.
 
 <H2>
     Diagnostic Error Messages

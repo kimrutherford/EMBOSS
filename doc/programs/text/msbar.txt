@@ -5,49 +5,14 @@
 
 Function
 
-   Mutate sequence beyond all recognition
+   Mutate a sequence
 
 Description
 
-   This program changes a sequence a lot or a little, attempting to
-   emulate various forms of mutation. You can set the number and types of
-   mutations.
-
-   It can act on the following sizes of sequence:
-     * Point (single base or residue change)
-     * Codon (not applicable in proteins)
-     * Block of sequence (of a specified minimum and maximum random size)
-
-   If the sequence is nucleic, the codon and block-sized operations can
-   optionally be done in-frame. This causes the minimum block size to be
-   set to 3 and the randomly chosen positions to be multiples of 3.
-
-   For each of the above size of sequence it can produce the effects of
-   any of the following types of mutation at a randomly chosen position:
-     * Insertion of a randomly generated sequence
-     * Deletion
-     * Change (deletion then insertion of a random sequence of the same
-       size)
-     * Duplication at an adjacent position
-     * Move region from one position to another (without deletion of the
-       original)
-     * Any of the above, chosen at random.
-     * None of the above
-
-   The input and output sequences may not differ if only a few changes
-   are chosen as (for example) one in four nucleic acid point
-   substitutions will not change the sequence.
-
-   N.B. There is no selection of the types of mutation to produce viable
-   sequence as there would be in a real organism. In particular, there is
-   no attempt to bias mutations of nucleic acid sequences to conform to
-   the C+G ratio in the sequence or to bias the codons in the direction
-   of the frequencies used in the organism. This program emulates
-   mutation, not selection.
-
-   This program was named from the acronym of "Mutate Sequence Beyond All
-   Recognition", by analogy with the acronym "fubar" commonly used in the
-   US and UK armed forces.
+   This program changes a sequence, attempting to emulate various forms
+   of mutation. It reads one or more sequences and writes an output file
+   with with a set of (mutated) sequences. The number, size and type of
+   mutation may be specified.
 
 Usage
 
@@ -58,7 +23,7 @@ Usage
 
 
 % msbar 
-Mutate sequence beyond all recognition
+Mutate a sequence
 Input sequence(s): tembl:j01636
 Number of times to perform the mutation operations [1]: 5
 Point mutation operations
@@ -192,8 +157,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -493,7 +459,54 @@ Data files
 
 Notes
 
-   None.
+   The qualifiers allow the number, size and type of mutation to be
+   controlled.
+
+   The "size" of mutation may be set as following:
+     * Point (single base or residue change)
+     * Codon (not applicable in proteins)
+     * Block of sequence (of a specified minimum and maximum random size)
+
+   If the sequence is nucleic, the codon and block-sized operations can
+   optionally be done in-frame. This causes the minimum block size to be
+   set to 3 and the randomly chosen positions to be multiples of 3.
+
+   For each of the above size of sequence it can produce the effects of
+   any of the following types of mutation at a randomly chosen position:
+     * Insertion of a randomly generated sequence
+     * Deletion
+     * Change (deletion then insertion of a random sequence of the same
+       size)
+     * Duplication at an adjacent position
+     * Move region from one position to another (without deletion of the
+       original)
+     * Any of the above, chosen at random.
+     * None of the above
+
+   The input and output sequences may not differ if only a few changes
+   are chosen as (for example) one in four nucleic acid point
+   substitutions will not change the sequence.
+
+   There is no selection of the types of mutation to produce viable
+   sequence as there would be in a real organism. In particular, there is
+   no attempt to bias mutations of nucleic acid sequences to conform to
+   the C+G ratio in the sequence or to bias the codons in the direction
+   of the frequencies used in the organism. This program emulates
+   mutation, not selection.
+
+   This program was named from the acronym of "Mutate Sequence Beyond All
+   Recognition", by analogy with the acronym "fubar" commonly used in the
+   US and UK armed forces.
+
+   If you require the mutated sequences to not match some other set of
+   sequences, this set may be specified with the -othersequence
+   qualifier. For example, the mutants should not match the input
+   sequence, or the results of a previous run of this program. msbar
+   ensures the mutants do not match the specified sequences. If a match
+   is found, then the mutation is started again with a fresh copy of the
+   input sequence. If, after 10 such retries, there is still a match to
+   the set of sequence given here, then the matching mutated sequence is
+   written with a warning message.
 
 References
 

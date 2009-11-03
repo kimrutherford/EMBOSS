@@ -77,7 +77,7 @@ int main(int argc, char **argv)
     orfml   = ajAcdGetInt("orfml");
     outseq  = ajAcdGetSeqoutall("outseq");
     featout = ajAcdGetFeatout("outfeat");
-    addlast = ajAcdGetBool("addlast");
+    addlast = ajAcdGetBoolean("addlast");
 
     substr    = ajStrNew();
 

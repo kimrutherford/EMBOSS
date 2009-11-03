@@ -1,6 +1,22 @@
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
+<p><h3>File: outfile.dbxgcg</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Processing directory: /homes/user/test/embl/
+Processing file: eem_ba1.seq entries: 10 (10) time: 0.0s (0.0s)
+Processing file: eem_est.seq entries: 11 (1) time: 0.0s (0.0s)
+Processing file: eem_fun.seq entries: 12 (1) time: 0.0s (0.0s)
+Processing file: eem_htginv1.seq entries: 17 (5) time: 0.0s (0.0s)
+Processing file: eem_hum1.seq entries: 32 (15) time: 0.0s (0.0s)
+Processing file: eem_in.seq entries: 34 (2) time: 0.0s (0.0s)
+Processing file: eem_ov.seq entries: 36 (2) time: 0.0s (0.0s)
+Processing file: eem_ro.seq entries: 39 (3) time: 0.0s (0.0s)
+Processing file: eem_vi.seq entries: 40 (1) time: 0.0s (0.0s)
+Total time: 0.0s
+</pre>
+</td></tr></table><p>
 <p><h3>File: embl.ent</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
@@ -23,12 +39,12 @@ eem_vi.seq eem_vi.ref
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 Order     71
-Fill      47
+Fill      46
 Pagesize  2048
 Level     0
-Cachesize 200
-Order2    82
-Fill2     99
+Cachesize 100
+Order2    99
+Fill2     101
 Count     47
 Kwlimit   15
 </pre>
@@ -37,12 +53,12 @@ Kwlimit   15
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 Order     71
-Fill      47
+Fill      46
 Pagesize  2048
 Level     0
-Cachesize 200
-Order2    82
-Fill2     99
+Cachesize 100
+Order2    99
+Fill2     101
 Count     39
 Kwlimit   15
 </pre>

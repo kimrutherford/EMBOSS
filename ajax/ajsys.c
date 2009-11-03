@@ -363,7 +363,7 @@ AjBool ajSysFileWhich(AjPStr *Pfilename)
     if(!fname)
 	fname = ajStrNew();
 
-    ajFileNameTrim(&tname);
+    ajFilenameTrimPath(&tname);
 
     p=ajSysFuncStrtok(p,PATH_SEPARATOR);
 
@@ -379,7 +379,7 @@ AjBool ajSysFileWhich(AjPStr *Pfilename)
     {
 	ajFmtPrintS(&fname,"%s%s%S",p,SLASH_STRING,tname);
 
-	if(ajFileStat(fname, AJ_FILE_X))
+	if(ajFilenameExistsExec(fname))
 	{
 	    ajStrSetClear(Pfilename);
 	    ajStrAssignEmptyS(Pfilename,fname);
@@ -443,7 +443,7 @@ AjBool ajSysFileWhichEnv(AjPStr *Pfilename, char * const env[])
     fname = ajStrNew();
     path  = ajStrNew();
     
-    ajFileNameTrim(&tname);
+    ajFilenameTrimPath(&tname);
 
 #ifdef WIN32
     ajStrAppendC(&tname,".exe");
@@ -503,7 +503,7 @@ AjBool ajSysFileWhichEnv(AjPStr *Pfilename, char * const env[])
 
     ajFmtPrintS(&fname,"%s%s%S",p,SLASH_STRING,tname);
 
-    while(!ajFileStat(fname, AJ_FILE_X))
+    while(!ajFilenameExistsExec(fname))
     {
 	if((p = ajSysFuncStrtokR(NULL,PATH_SEPARATOR,&save,&buf))==NULL)
 	{
@@ -1042,7 +1042,8 @@ __deprecated void ajSystemEnv(const AjPStr cl, char * const env[])
 
 /* @func ajSysSystemOut *******************************************************
 **
-** Exec a command line as if from the C shell
+** Exec a command line as if from the C shell with standard output redirected
+** to a named file
 **
 ** The exec'd program is passed a new argv array in argptr
 **
@@ -1199,7 +1200,7 @@ void ajSysExit(void)
 
 __deprecated void ajSysBasename(AjPStr *s)
 {
-    ajFileNameTrim(s);
+    ajFilenameTrimPath(s);
 
     return;
 }
@@ -1217,7 +1218,7 @@ __deprecated AjBool ajSysIsDirectory(const char *s)
     AjPStr tmpstr = NULL;
     tmpstr = ajStrNewC(s);
 
-    ret = ajFileDir(&tmpstr);
+    ret = ajDirnameFixExists(&tmpstr);
     ajStrDel(&tmpstr);
 
     return ret;
@@ -1237,7 +1238,7 @@ __deprecated AjBool ajSysIsRegular(const char *s)
 
     tmpstr = ajStrNewC(s);
 
-    ret = ajFileNameValid(tmpstr);
+    ret = ajFilenameExistsRead(tmpstr);
     ajStrDel(&tmpstr);
 
     return ret;

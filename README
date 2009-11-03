@@ -59,12 +59,11 @@ PNG driver.
 -----------
 
 To get the PNG driver you will need to have installed the z, png and
-gd libraries. In particular gd version >= 1.7.3 must be used.  If for
+gd libraries. In particular gd version >= 2.0.28 must be used.  If for
 some reason you do not have the required libraries and your system
-support group will not update these ( In particular gd, as the older
-versions support GIF which is NOT supported in later versions) then
-install all three latest versions (z, gd, png) to a new directory and
-then add this new directory to your configure line for EMBOSS.
+support group will not update these then install all three latest
+versions (z, gd, png) to a new directory and then add this new
+directory to your configure line for EMBOSS.
 
      ./configure --with-pngdriver=my_dir
 

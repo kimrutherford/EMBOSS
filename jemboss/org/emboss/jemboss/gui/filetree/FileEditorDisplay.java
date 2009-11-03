@@ -27,7 +27,6 @@ import java.awt.Dimension;
 import javax.swing.*;
 import javax.swing.text.*;
 import java.io.*;
-import java.net.URL;
 
 /**
 *
@@ -176,7 +175,7 @@ public class FileEditorDisplay extends JTextPane
   public void setText(String text, String type)
   {
 
-    Document doc = getDocument();
+    Document doc = new DefaultStyledDocument();
      
     if(type.equalsIgnoreCase("regular"))
     {
@@ -227,7 +226,7 @@ public class FileEditorDisplay extends JTextPane
       setText(text);
       setEditable(false);
     }
-
+    setDocument(doc);
   }
 
   /**

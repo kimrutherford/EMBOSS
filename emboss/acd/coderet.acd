@@ -65,7 +65,7 @@ section: output [
                   (optional)"
     osextension: "noncoding"
     nullok: "Y"
-    knowntype: "mrna sequence"
+    knowntype: "non coding sequence"
   ]
 
 endsection: output

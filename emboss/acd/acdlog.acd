@@ -1,5 +1,6 @@
 application: acdlog [
-  documentation: "ACD compiler logging"
+  documentation: "Test application ACD file processing and trace data
+                  structures"
   gui: "no"
   groups: "Acd"
 ]

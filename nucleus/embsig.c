@@ -1542,7 +1542,7 @@ EmbPHit embHitReadFasta(AjPFile inf)
     subline  = ajStrNew();
 
 
-    while((ajFileReadLine(inf,&line)))
+    while((ajReadlineTrim(inf,&line)))
     {
 	if(ajStrPrefixC(line,">"))
 	{
@@ -1699,7 +1699,7 @@ EmbPHitlist embHitlistRead(AjPFile inf)
 
     
     /* Read first line */
-    ok = ajFileReadLine(inf,&line);
+    ok = ajReadlineTrim(inf,&line);
 
     /* '//' is the delimiter for block of hits (in case the file 
        contains multiple hitlists). */
@@ -1708,7 +1708,7 @@ EmbPHitlist embHitlistRead(AjPFile inf)
     {
 	if(ajStrPrefixC(line,"XX"))
 	{
-	    ok = ajFileReadLine(inf,&line);
+	    ok = ajReadlineTrim(inf,&line);
 	    continue;
 	}
 	else if(ajStrPrefixC(line,"TY"))
@@ -1737,7 +1737,7 @@ EmbPHitlist embHitlistRead(AjPFile inf)
 	else if(ajStrPrefixC(line,"FO"))
 	{
 	    ajStrAssignC(&fold,ajStrGetPtr(line)+3);
-	    while((ok = ajFileReadLine(inf,&line)))
+	    while((ok = ajReadlineTrim(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
@@ -1748,7 +1748,7 @@ EmbPHitlist embHitlistRead(AjPFile inf)
 	else if(ajStrPrefixC(line,"SF"))
 	{
 	    ajStrAssignC(&super,ajStrGetPtr(line)+3);
-	    while((ok = ajFileReadLine(inf,&line)))
+	    while((ok = ajReadlineTrim(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
@@ -1759,7 +1759,7 @@ EmbPHitlist embHitlistRead(AjPFile inf)
 	else if(ajStrPrefixC(line,"FA"))
 	{
 	    ajStrAssignC(&family,ajStrGetPtr(line)+3);
-	    while((ok = ajFileReadLine(inf,&line)))
+	    while((ok = ajReadlineTrim(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
@@ -1841,13 +1841,13 @@ EmbPHitlist embHitlistRead(AjPFile inf)
 	    ajFmtScanS(line, "%*s %S", &(ret)->hits[n-1]->Group);
 	else if(ajStrPrefixC(line,"SQ"))
 	{
-	    while((ok=ajFileReadLine(inf,&line)) && !ajStrPrefixC(line,"XX"))
+	    while((ok=ajReadlineTrim(inf,&line)) && !ajStrPrefixC(line,"XX"))
 		ajStrAppendC(&(ret)->hits[n-1]->Seq,ajStrGetPtr(line));
 	    ajStrRemoveWhite(&(ret)->hits[n-1]->Seq);
 	    continue;
 	}
 	
-	ok = ajFileReadLine(inf,&line);
+	ok = ajReadlineTrim(inf,&line);
     }
 
 
@@ -1906,13 +1906,13 @@ EmbPHitlist embHitlistReadFasta(AjPFile inf)
     type     = ajStrNew();
     
 
-    while((ok = ajFileReadLine(inf,&line)))
+    while((ok = ajReadlineTrim(inf,&line)))
     {
 	if(ajStrPrefixC(line,">"))
 	{
 	    /* This line added so that it can process files with no sequence 
 	       info. correctly */
-	    fpos_noseq = ajFileTell(inf); 
+	    fpos_noseq = ajFileResetPos(inf); 
 
 
 	    /* Process the last hit */
@@ -2066,7 +2066,7 @@ EmbPHitlist embHitlistReadFasta(AjPFile inf)
 	{
 	    ajStrAppendS(&hit->Seq, line);
 	    doneseq=ajTrue;
-	    fpos = ajFileTell(inf);
+	    fpos = ajFileResetPos(inf);
 	}
     }
 
@@ -2952,7 +2952,7 @@ EmbPSignature embSignatureReadNew(AjPFile inf)
 
 
     /* Read first line */
-    ok=ajFileReadLine(inf,&line);
+    ok=ajReadlineTrim(inf,&line);
 
     while(ok && !ajStrPrefixC(line,"//"))
     {
@@ -3012,7 +3012,7 @@ EmbPSignature embSignatureReadNew(AjPFile inf)
 	}
 	else if(ajStrPrefixC(line,"XX"))
 	{
-	    ok = ajFileReadLine(inf,&line);
+	    ok = ajReadlineTrim(inf,&line);
 	    continue;
 	}
 	else if(ajStrPrefixC(line,"SI"))
@@ -3037,7 +3037,7 @@ EmbPSignature embSignatureReadNew(AjPFile inf)
 	else if(ajStrPrefixC(line,"FO"))
 	{
 	    ajStrAssignC(&fold,ajStrGetPtr(line)+3);
-	    while((ok = ajFileReadLine(inf,&line)))
+	    while((ok = ajReadlineTrim(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
@@ -3048,7 +3048,7 @@ EmbPSignature embSignatureReadNew(AjPFile inf)
 	else if(ajStrPrefixC(line,"SF"))
 	{
 	    ajStrAssignC(&super,ajStrGetPtr(line)+3);
-	    while((ok = ajFileReadLine(inf,&line)))
+	    while((ok = ajReadlineTrim(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
@@ -3059,7 +3059,7 @@ EmbPSignature embSignatureReadNew(AjPFile inf)
 	else if(ajStrPrefixC(line,"FA"))
 	{
 	    ajStrAssignC(&family,ajStrGetPtr(line)+3);
-	    while((ok = ajFileReadLine(inf,&line)))
+	    while((ok = ajReadlineTrim(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
@@ -3130,13 +3130,13 @@ EmbPSignature embSignatureReadNew(AjPFile inf)
 		(ret)->dat[n-1]->wsiz=wsiz;
 
 		/* Skip 'XX' line */
-		if(!(ok = ajFileReadLine(inf,&line)))
+		if(!(ok = ajReadlineTrim(inf,&line)))
 		    break;
 
 		/* Read in residue data */
 		for(i=0; i<(ret)->dat[n-1]->nres; i++)
 		{
-		    if(!(ok = ajFileReadLine(inf,&line)))
+		    if(!(ok = ajReadlineTrim(inf,&line)))
 			break;
 
 		    if(ret->Typesig == aj1D)
@@ -3165,13 +3165,13 @@ EmbPSignature embSignatureReadNew(AjPFile inf)
 	       
 
 		/* Skip 'XX' line */
-		if(!(ok = ajFileReadLine(inf,&line)))
+		if(!(ok = ajReadlineTrim(inf,&line)))
 		    break;
 
 		/* Read in gap data */
 		for(i=0; i<(ret)->dat[n-1]->ngap; i++)
 		{
-		    if(!(ok = ajFileReadLine(inf,&line)))
+		    if(!(ok = ajReadlineTrim(inf,&line)))
 			break;
 		    ajFmtScanS(line, "%*s %u %*c %u", &v1,&v2);
 		    ajUintPut(&(ret)->dat[n-1]->gsiz,i,v1);
@@ -3181,7 +3181,7 @@ EmbPSignature embSignatureReadNew(AjPFile inf)
 		    break;
 	    }
 
-	ok = ajFileReadLine(inf,&line);
+	ok = ajReadlineTrim(inf,&line);
     }
     
     if(!ok)
@@ -3421,7 +3421,7 @@ EmbPHitlist embSignatureHitsRead(AjPFile inf)
     type    = ajStrNew();
     
     
-    while(ok && ajFileReadLine(inf,&line))
+    while(ok && ajReadlineTrim(inf,&line))
     {
 	if(ajStrPrefixC(line,"TY"))
 	{
@@ -3449,7 +3449,7 @@ EmbPHitlist embSignatureHitsRead(AjPFile inf)
 	else if(ajStrPrefixC(line,"FO"))
 	{
 	    ajStrAssignC(&fold,ajStrGetPtr(line)+3);
-	    while((ok=ajFileReadLine(inf,&line)))
+	    while((ok=ajReadlineTrim(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
@@ -3460,7 +3460,7 @@ EmbPHitlist embSignatureHitsRead(AjPFile inf)
 	else if(ajStrPrefixC(line,"SF"))
 	{
 	    ajStrAssignC(&super,ajStrGetPtr(line)+3);
-	    while((ok = ajFileReadLine(inf,&line)))
+	    while((ok = ajReadlineTrim(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
@@ -3471,7 +3471,7 @@ EmbPHitlist embSignatureHitsRead(AjPFile inf)
 	else if(ajStrPrefixC(line,"FA"))
 	{
 	    ajStrAssignC(&family,ajStrGetPtr(line)+3);
-	    while((ok = ajFileReadLine(inf,&line)))
+	    while((ok = ajReadlineTrim(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;

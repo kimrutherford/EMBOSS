@@ -21,14 +21,14 @@ patmatdb
     Description
 </H2>
 
+<p><b>patmatdb</b> searches the input protein sequences for the specified sequence motif.  The output is a standard EMBOSS report file including the number of matches between the motif and each input sequence, length of match, start and end positions of match, and the motif-sequence alignment. Patterns for <b>patmatdb</b> are based on the format of pattern used in the PROSITE database, with the difference that the terminating dot '.' and the hyphens, '-', between the characters are optional.</p>
 
-Takes a protein motif and compares it to a set of protein sequences. 
 
-<p>
+<H2>
+Algorithm
+</H2>
 
-It returns the number of matches there were between the motif and each
-matched sequence, length of match, start and end positions of match, and
-writes out an alignment. 
+<p>Patterns for <b>patmatdb</b> are based on the format of pattern used in the PROSITE database, with the difference that the terminating dot '.' and the hyphens, '-', between the characters are optional.  For example: <tt>[DE](2)HS{P}X(2)PX(2,4)C</tt> means two Asps or Glus in any order followed by His, Ser, any residue other then Pro, then two of any residue followed by Pro followed by two to four of any residue followed by Cys. The search is case-independent, so <tt>AAA</tt> matches <tt>aaa</tt>. (Any string of at least 2 characters).</p>
 
 <H2>
     Usage

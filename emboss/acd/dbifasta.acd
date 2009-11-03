@@ -1,6 +1,6 @@
 application: dbifasta [
+  documentation: "Index a fasta file database"
   groups: "Utils:Database indexing"
-  documentation: "Database indexing for fasta file databases"
   gui: "yes"
   batch: "yes"
   cpu: "medium"

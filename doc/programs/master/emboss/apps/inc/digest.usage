@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>digest </b>
-Protein proteolytic enzyme or reagent cleavage digest
+Reports on protein proteolytic enzyme or reagent cleavage sites
 Input protein sequence(s): <b>tsw:opsd_human</b>
 Enzymes and Reagents
          1 : Trypsin
@@ -17,6 +17,7 @@ Enzymes and Reagents
          7 : Chymotrypsin
          8 : CNBr
 Select number [1]: <b></b>
+Use monoisotopic weights [N]: <b></b>
 Output report [opsd_human.digest]: <b></b>
 
 </pre></td></tr></table><p>

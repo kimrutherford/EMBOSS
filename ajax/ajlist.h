@@ -61,7 +61,6 @@ typedef struct AjSList {
 ** @attr Head [AjPList] Head of modifiable list
 ** @attr ReadHead [const AjPList] Head of read-only list
 ** @attr Here [AjPListNode] Current list node
-** @attr Orig [AjPListNode] First list node
 ** @attr Back [AjBool] Direction of last iterative move, true if reading back
 ** @attr Modify [AjBool] Allows iterator to modify the sequence
 **
@@ -72,7 +71,6 @@ typedef struct AjSIList {
   AjPList Head ;
   const AjPList ReadHead ;
   AjPListNode Here;
-  AjPListNode Orig;
   AjBool Back;
   AjBool Modify;
 } AjOIList;
@@ -97,6 +95,7 @@ AjBool      ajListIterDoneBack (const AjIList iter);
 void        ajListIterDel (AjIList* iter);
 void*       ajListIterGet (AjIList iter);
 void*       ajListIterGetBack (AjIList iter);
+void        ajListIterRewind (AjIList iter);
 AjBool      ajListIterDone (const AjIList iter);
 void        ajListIterTrace (const AjIList iter);
 AjBool      ajListPeekLast (const AjPList thys, void** x);
@@ -110,6 +109,8 @@ AjPList     ajListNew (void);          /* return header */
 AjBool      ajListPeek    (const AjPList list, void** x);
 AjBool      ajListPop    (AjPList list, void** x);
 AjBool      ajListPopLast (AjPList thys, void** x);
+void        ajListProbe   (AjPList const *list);
+void        ajListProbeData   (AjPList const *list);
 void        ajListPurge(AjPList list,
 			AjBool (*test)(const void *),
 			void (*nodedelete)(void **));
@@ -121,10 +122,12 @@ AjPList     ajListstrNewList   (const AjPList list);
 AjPList     ajListstrNewListref   (const AjPList list);
 void        ajListstrFree   (AjPList *list);
 void        ajListstrFreeData   (AjPList *list);
+AjPStr      ajListstrIterGet (AjIList iter);
+AjPStr      ajListstrIterGetBack (AjIList iter);
 void        ajListstrIterTrace (const AjIList iter);
 ajuint      ajListstrGetLength (const AjPList list);
 void        ajListstrMap (AjPList thys,
-			  void (*apply) (AjPStr* x, void* cl), void* cl);
+			  void apply(AjPStr* x, void* cl), void* cl);
 void        ajListstrMapread (const AjPList thys,
 			      void (*apply) (AjPStr x, void* cl), void* cl);
 AjPList     ajListstrNew (void);          /* return header */

@@ -1,5 +1,5 @@
 application: cai [
-  documentation: "CAI codon adaptation index"
+  documentation: "Calculate codon adaptation index"
   groups: "Nucleic:Codon usage"
 ]
 

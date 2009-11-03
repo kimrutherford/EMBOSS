@@ -22,37 +22,8 @@ infoalign
     Description
 </H2>
 
-<b>infoalign</b> is small utility to list some simple properties of
-sequences in an alignment. 
-
-<p>
-
-It will write a table containing one line per sequence.  The information
-is written out in columns separated by space or TAB characters.  The
-columns of data are: the sequences' USA, name, two measures of length,
-counts of gaps, and numbers of identical, similar and different residues
-or bases in this sequence when compared to a reference sequence,
-together with a simple statistic of the % change between the reference
-sequence and this sequence. 
-
-<p>
-
-The reference sequence can be either the calculated consensus sequence
-(the default) or it can be one of the set of aligned sequences,
-specified by either the ordinal number of that sequence in the input
-file, or by its name.
-
-<p>
-
-Any combination of these types of information can be easily selected or
-unselected. 
-
-<p>
-
-By default, the output file starts each line with the USA of the
-sequence being described, so the output file is a list file that can be
-manually edited and read in by any other EMBOSS program that can read in
-one or more sequence to be analysed. 
+<p><b>infoalign</b> displays on screen basic information about sequences in an input multiple sequence alignment.  This includes the sequences' USA, name, two measures of length, counts of gaps, and numbers of identical, similar and different residues or bases in this sequence when compared to a reference sequence, together with a simple statistic of the % change between the reference sequence and this sequence. Any combination of these records is easily selected or unselected for display. The same information may be written to an output file which (optionally) may be formatted in an HTML table.</p>
+<p>The reference sequence is the one against which all the other sequences are compared using a specified substitution matrix.  It is either the calculated consensus sequence of the alignment (the default) or it can be one of the set of aligned sequences, specified by either the ordinal number of that sequence in the input file, or by name.  There are various options to control how the consensus is calculated.</p>
 
 
 <H2>
@@ -244,10 +215,11 @@ sequence and to determine which matches are similar or not.
     Notes
 </H2>
 
-By default, the output file starts each line with the USA of the
-sequence being described, so the output file is a list file that can be
-manually edited and read in by other EMBOSS programs using the list-file
-specification of '@filename'. 
+<p>There are many qualifiers to control exactly what information on the sequence is output and how it is formatted.  If you only want a few fields in the output file, the command line may be shortended by preceding the appropriate qualifier with <tt>-only</tt>.  For example, instead of specifying <tt>-nohead -nousa -noname -noalign -nogaps -nogapcount -nosimcount -noidcount -nodiffcount -noweight</tt> to get only the sequence length output, you can specify <tt>-only -seqlength</tt>.</p>
+
+<p>By default, the output file starts each line with the USA of the sequence being described, so the output file is a list file that can be manually edited and read in by any other EMBOSS program that can read in one or more sequence to be analysed.</p>
+
+
 
 <H2>
     References

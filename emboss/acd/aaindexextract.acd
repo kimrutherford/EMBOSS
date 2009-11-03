@@ -1,9 +1,9 @@
 application: aaindexextract [
-  documentation: "Extract data from AAINDEX"
+  documentation: "Extract amino acid property data from AAINDEX"
   groups: "Utils:Database creation"
-  gui: "yes"
-  batch: "yes"
-  cpu: "medium"
+  gui: "no"
+  batch: "no"
+  cpu: "low"
 ]
 
 section: input [

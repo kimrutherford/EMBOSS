@@ -5,23 +5,18 @@
 
 Function
 
-   Predicts coiled coil regions
+   Predicts coiled coil regions in protein sequences
 
 Description
 
-   Coiled coils are formed by two or three alpha helices in parallel and
-   in register that cross at an angle of approximately 20 degrees, are
-   strongly amphipathic and display a pattern of hydrophilic and
-   hydrophobic residues that is repeated every seven residues. The seven
-   positions of the heptad repeat are designated a through g, a and d
-   being generally hydrophobic, while the others are hydrophilic.
-
-   The parallel two-stranded alpha-helical coiled coil is the most
-   frequently encountered subunit-oligomerization motif in proteins.
-
    pepcoil calculates the probability of a coiled-coil structure for
-   windows of 28 residues through a protein sequence using the method of
-   Lupas A, van Dyke M & Stock J (1991); Science 252:1162-4
+   windows of (by default) 28 residues through a protein sequence using
+   the method of Lupas A, van Dyke M & Stock J (1991); Science
+   252:1162-4. It reads one or more sequences and writes a standard
+   EMBOSS report file including the location and score of the putative
+   coiled-coil structures and their score for each input sequence.
+   Optionally, coiled coil regions, non-coiled coil regions and coil
+   frameshifts are reported.
 
 Usage
 
@@ -29,10 +24,10 @@ Usage
 
 
 % pepcoil 
-Predicts coiled coil regions
+Predicts coiled coil regions in protein sequences
 Input protein sequence(s): tsw:gcn4_yeast
 Window size [28]: 
-Output file [gcn4_yeast.pepcoil]: 
+Output report [gcn4_yeast.pepcoil]: 
 
    Go to the input files for this example
    Go to the output files for this example
@@ -43,13 +38,13 @@ Command line arguments
   [-sequence]          seqall     Protein sequence(s) filename and optional
                                   format, or reference (input USA)
    -window             integer    [28] Window size (Integer from 7 to 28)
-  [-outfile]           outfile    [*.pepcoil] Output file name
+  [-outfile]           report     [*.pepcoil] Output report file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
    -[no]coil           boolean    [Y] Report coiled coil regions
    -frame              boolean    [Yes if -coil is true] Show coil frameshifts
-   -[no]other          boolean    [Y] Report non coiled coil regions
+   -other              boolean    [N] Report non coiled coil regions
 
    Associated qualifiers:
 
@@ -70,12 +65,23 @@ Command line arguments
    -fopenfile1         string     Features file name
 
    "-outfile" associated qualifiers
-   -odirectory2        string     Output directory
+   -rformat2           string     Report format
+   -rname2             string     Base file name
+   -rextension2        string     File name extension
+   -rdirectory2        string     Output directory
+   -raccshow2          boolean    Show accession number in the report
+   -rdesshow2          boolean    Show description in the report
+   -rscoreshow2        boolean    Show the score in the report
+   -rstrandshow2       boolean    Show the nucleotide strand in the report
+   -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -214,16 +220,38 @@ Output file format
 
   File: gcn4_yeast.pepcoil
 
-PEPCOIL of GCN4_YEAST
-   using a window of 28 residues
+########################################
+# Program: pepcoil
+# Rundate: Tue 15 Jul 2008 12:00:00
+# Commandline: pepcoil
+#    -sequence tsw:gcn4_yeast
+# Report_format: motif
+# Report_file: gcn4_yeast.pepcoil
+########################################
+
+#=======================================
+#
+# Sequence: GCN4_YEAST     from: 1   to: 281
+# HitCount: 1
+#
+# Window size: 28 residues
+#
+#=======================================
+
+Max_coil_pos at "*"
+
+(1) Score 1.910 length 49 at residues 233->281
+                           *
+ Sequence: ARNTEAARRSRARKLQRMKQLEDKVEELLSKNYHLENEVARLKKLVGER
+           |                                               |
+         233                                               281
+ Probability: 1.000
+ Predict: coiled
+ Max_coil_pos: 249
 
 
-Other structures from 1 to 232 (232 residues)
-   Max score: 1.283 (probability 0.21)
-
-Prediction starts at 233
-Probable coiled-coil from 233 to 281 (49 residues)
-   Max score: 1.910 (probability 1.00)
+#---------------------------------------
+#---------------------------------------
 
 Data files
 
@@ -231,7 +259,15 @@ Data files
 
 Notes
 
-   None.
+   Coiled coils are formed by two or three alpha helices in parallel and
+   in register that cross at an angle of approximately 20 degrees, are
+   strongly amphipathic and display a pattern of hydrophilic and
+   hydrophobic residues that is repeated every seven residues. The seven
+   positions of the heptad repeat are designated a through g, a and d
+   being generally hydrophobic, while the others are hydrophilic.
+
+   The parallel two-stranded alpha-helical coiled coil is the most
+   frequently encountered subunit-oligomerization motif in proteins.
 
 References
 
@@ -256,24 +292,27 @@ Known bugs
 
 See also
 
-    Program name                         Description
-   antigenic      Finds antigenic sites in proteins
-   digest         Protein proteolytic enzyme or reagent cleavage digest
-   epestfind      Finds PEST motifs as potential proteolytic cleavage sites
-   fuzzpro        Protein pattern search
-   fuzztran       Protein pattern search after translation
-   garnier        Predicts protein secondary structure
-   helixturnhelix Report nucleic acid binding motifs
-   hmoment        Hydrophobic moment calculation
-   oddcomp        Find protein sequence regions with a biased composition
-   patmatdb       Search a protein sequence with a motif
-   patmatmotifs   Search a PROSITE motif database with a protein sequence
-   pepnet         Displays proteins as a helical net
-   pepwheel       Shows protein sequences as helices
-   preg           Regular expression search of a protein sequence
-   pscan          Scans proteins using PRINTS
-   sigcleave      Reports protein signal cleavage sites
-   tmap           Displays membrane spanning regions
+   Program name Description
+   antigenic Finds antigenic sites in proteins
+   digest Reports on protein proteolytic enzyme or reagent cleavage sites
+   epestfind Finds PEST motifs as potential proteolytic cleavage sites
+   fuzzpro Search for patterns in protein sequences
+   fuzztran Search for patterns in protein sequences (translated)
+   garnier Predicts protein secondary structure using GOR method
+   helixturnhelix Identify nucleic acid-binding motifs in protein
+   sequences
+   hmoment Calculate and plot hydrophobic moment for protein sequence(s)
+   oddcomp Identify proteins with specified sequence word composition
+   patmatdb Searches protein sequences with a sequence motif
+   patmatmotifs Scan a protein sequence with motifs from the PROSITE
+   database
+   pepnet Draw a helical net for a protein sequence
+   pepwheel Draw a helical wheel diagram for a protein sequence
+   preg Regular expression search of protein sequence(s)
+   pscan Scans protein sequence(s) with fingerprints from the PRINTS
+   database
+   sigcleave Reports on signal cleavage sites in a protein sequence
+   tmap Predict and plot transmembrane segments in protein sequences
 
 Author(s)
 

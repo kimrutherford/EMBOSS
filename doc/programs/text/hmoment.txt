@@ -5,30 +5,19 @@
 
 Function
 
-   Hydrophobic moment calculation
+   Calculate and plot hydrophobic moment for protein sequence(s)
 
 Description
 
-   hmoment plots or writes out the hydrophobic moment. Hydrophic moment
-   is the hydrophobicity of a peptide measured for a specified angle of
-   rotation per residue.
+   hmoment plots or writes out the hydrophobic moment calculated for
+   overlapping windows over one or more input protein sequences. The
+   hydrophic moment reflects the periodicity of hydrophobicity of a
+   peptide, as measured per residue for a specified angle of rotation.
+   The window size, alpha helix angle, and beta sheet angle are
+   user-specified. The alpha helix moment and beta sheet moment may be
+   plotted or output.
 
-   Periodicities in the polar/apolar character of the amino acid sequence
-   of a protein can be examined by assigning to each residue a numerical
-   hydrophobicity and searching for periodicity in the resulting
-   one-dimensional function. The strength of each periodic component is
-   the quantity that has been termed the hydrophobic moment.
-
-   When proteins of known three-dimensional structure are examined, it is
-   found that sequences that form alpha helices tend to have, on average,
-   a strong periodicity in the hydrophobicity of af 3.6 residues, the
-   period of the alpha helix. The angle of rotation per residue in alpha
-   helices is 100 degrees. Similarly, many sequences that form strands of
-   beta sheets tend to have a periodicity in their hydrophobicity of
-   about 2.3 residues, the period typical of beta structure. The angle of
-   rotation per residue in beta sheets is 160 degrees. This means that
-   many protein sequences tend to form the periodic structure that
-   maximizes their amphiphilicity.
+Algorithm
 
    The hydrophobic moment is measured within a moving window using the
    method of Eisenberg et al. The default angle of 100 degrees is used
@@ -36,17 +25,13 @@ Description
    the beta-sheet results. These angles can be changed if required using
    the appropriate options.
 
-   hmoment can plot two graphs when the option '-double' is given, one
-   for the alpha helix moment and one for the beta sheet moment.
-   Otherwise it just plots the alpha helix moment.
-
 Usage
 
    Here is a sample session with hmoment
 
 
 % hmoment tsw:hbb_human 
-Hydrophobic moment calculation
+Calculate and plot hydrophobic moment for protein sequence(s)
 Output file [hbb_human.hmoment]: 
 
    Go to the input files for this example
@@ -107,8 +92,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -366,7 +352,27 @@ Data files
 
 Notes
 
-   None.
+   When proteins of known three-dimensional structure are examined, it is
+   found that sequences that form alpha helices tend to have, on average,
+   a strong periodicity in the hydrophobicity of af 3.6 residues, the
+   period of the alpha helix. The angle of rotation per residue in alpha
+   helices is 100 degrees. Similarly, many sequences that form strands of
+   beta sheets tend to have a periodicity in their hydrophobicity of
+   about 2.3 residues, the period typical of beta structure. The angle of
+   rotation per residue in beta sheets is 160 degrees. This means that
+   many protein sequences tend to form the periodic structure that
+   maximizes their amphiphilicity.
+
+   Periodicities in the polar/apolar character of the amino acid sequence
+   of a protein can be examined by assigning to each residue a numerical
+   hydrophobicity and searching for periodicity in the resulting
+   one-dimensional function. The strength of each periodic component is
+   the quantity that has been termed the hydrophobic moment.
+
+   The -plot option must be specified to produce a plot. hmoment can plot
+   two graphs when the option -double is given, one for the alpha helix
+   moment and one for the beta sheet moment. Otherwise it just plots the
+   alpha helix moment.
 
 References
 
@@ -392,13 +398,14 @@ Known bugs
 
 See also
 
-    Program name              Description
-   garnier        Predicts protein secondary structure
-   helixturnhelix Report nucleic acid binding motifs
-   pepcoil        Predicts coiled coil regions
-   pepnet         Displays proteins as a helical net
-   pepwheel       Shows protein sequences as helices
-   tmap           Displays membrane spanning regions
+   Program name Description
+   garnier Predicts protein secondary structure using GOR method
+   helixturnhelix Identify nucleic acid-binding motifs in protein
+   sequences
+   pepcoil Predicts coiled coil regions in protein sequences
+   pepnet Draw a helical net for a protein sequence
+   pepwheel Draw a helical wheel diagram for a protein sequence
+   tmap Predict and plot transmembrane segments in protein sequences
 
 Author(s)
 

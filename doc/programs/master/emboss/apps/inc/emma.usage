@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>emma </b>
-Multiple alignment program - interface to ClustalW program
+Multiple sequence alignment (ClustalW wrapper)
 Input (gapped) sequence(s): <b>globins.fasta</b>
 output sequence set [hbb_human.aln]: <b></b>
 Dendrogram (tree file) from clustalw output file [hbb_human.dnd]: <b></b>

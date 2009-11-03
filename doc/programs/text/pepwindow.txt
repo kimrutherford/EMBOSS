@@ -5,12 +5,17 @@
 
 Function
 
-   --> Displays protein hydropathy
+   --> Draw a Kyte-Doolittle hydropathy plot for a protein sequence
 
 Description
 
-   pepwindow reads in a protein sequence and displays a graph of the
-   classic Kyte & Doolittle hydropathy plot of that protein.
+   pepwindow draws a classic Kyte & Doolittle hydropathy plot for a
+   protein sequence.
+
+Algorithm
+
+   pepwindow calculates hydropathy in windows of a specified size over
+   the input sequence.
 
 Usage
 
@@ -18,7 +23,7 @@ Usage
 
 
 % pepwindow tsw:hba_human 
-Displays protein hydropathy
+Draw a Kyte-Doolittle hydropathy plot for a protein sequence
 Graph type [x11]: cps
 
 Created pepwindow.ps
@@ -70,8 +75,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -295,7 +301,11 @@ J. Mol. Biol. 157, 105-132 (1982)
 
 Warnings
 
-   None.
+   In calculating hydropathy, pepwindow can use any of the amino acid
+   parameters from the database of "Nakai et al." which are now included
+   in the database AAINDEX. Before running pepwindow, you must first
+   extract the required data files from AAINDEX (see "Data Files"
+   section).
 
 Diagnostic Error Messages
 
@@ -311,21 +321,24 @@ Known bugs
 
 See also
 
-   Program name                         Description
-   backtranambig Back translate a protein sequence to ambiguous codons
-   backtranseq   Back translate a protein sequence
-   charge        Protein charge plot
-   checktrans    Reports STOP codons and ORF statistics of a protein
-   compseq       Count composition of dimer/trimer/etc words in a sequence
-   emowse        Protein identification by mass spectrometry
-   freak         Residue/base frequency table or plot
-   iep           Calculates the isoelectric point of a protein
-   mwcontam      Shows molwts that match across a set of files
-   mwfilter      Filter noisy molwts from mass spec output
-   octanol       Displays protein hydropathy
-   pepinfo       Plots simple amino acid properties in parallel
-   pepstats      Protein statistics
-   pepwindowall  Displays protein hydropathy of a set of sequences
+   Program name Description
+   backtranambig Back-translate a protein sequence to ambiguous
+   nucleotide sequence
+   backtranseq Back-translate a protein sequence to a nucleotide sequence
+   charge Draw a protein charge plot
+   checktrans Reports STOP codons and ORF statistics of a protein
+   compseq Calculate the composition of unique words in sequences
+   emowse Search protein sequences by digest fragment molecular weight
+   freak Generate residue/base frequency table or plot
+   iep Calculate the isoelectric point of proteins
+   mwcontam Find weights common to multiple molecular weights files
+   mwfilter Filter noisy data from molecular weights file
+   octanol Draw a White-Wimley protein hydropathy plot
+   pepinfo Plot amino acid properties of a protein sequence in parallel
+   pepstats Calculates statistics of protein properties
+   pepwindowall Draw Kyte-Doolittle hydropathy plot for a protein
+   alignment
+   wordcount Count and extract unique words in DNA sequence(s)
 
    pepwindow can use any of the "Nakai et al." database of amino acid
    parameters - these are in a database called "AAINDEX". The program

@@ -22,20 +22,12 @@ backtranseq
 </H2>
 
 
-<b>backtranseq</b> takes a protein sequence and makes a best estimate of the
-likely nucleic acid sequence it could have come from.  It does this by
-using a codon frequency table. For each amino acid, the corresponding
-most frequently occuring codon is used in the construction of the nucleic
-acid sequence.
+<p><b>backtranseq</b> reads a protein sequence and writes the nucleic acid sequence it is most likely to have come from.</p>
 
-<h3>Codon usage table name</h3>
-
-<b>backtranseq</b> reads in a data file containing the codon frequency
-tables.  The default codon frequency table is 'Ehum.cut' - the human
-codon frequency table.  It is important to use a codon frequency table
-that is appropriate for the species that your protein comes from. 
-See the <b>Data Files</b> section below for more details on these files.
-
+<H2>
+    Algorithm
+</H2>
+<p><b>backtranseq</b> uses a codon usage table which gives the frequency of usage of each codon for each amino acid. For each amino acid in the input sequence, the corresponding most frequently occuring codon is used in the nucleic acid sequence that is output.</p>
 
 
 <H2>
@@ -94,8 +86,7 @@ the EMBOSS distribution.
 <H2>
     Notes
 </H2>
-
-None.
+<p><b>backtranseq</b> reads a data file containing the codon usage table. The default file is <tt>Ehum.cut</tt> - the human codon usage table. Many others are available and can be set by name with the <tt>-cfile</tt> qualifier.  It is important to use one that is appropriate for the species that your protein comes from. The specified data file must exist in the EMBOSS data directory (see below for more information).</p>
 
 <H2>
     References

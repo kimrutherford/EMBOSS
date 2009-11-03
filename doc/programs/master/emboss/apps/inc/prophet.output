@@ -6,7 +6,7 @@
 <pre>
 ########################################
 # Program: prophet
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: prophet
 #    -sequence "tsw:h*"
 #    -infile ../../data/globins.gribskov
@@ -25,7 +25,7 @@
 # Identity:      20/167 (12.0%)
 # Similarity:    46/167 (27.5%)
 # Gaps:           6/167 ( 3.6%)
-# Score: 74.34
+# Score: 65.29
 # 
 #
 #=======================================
@@ -58,20 +58,20 @@ HD_FUGRU        2439 PVDFLQEKDVFREFLYR   2455
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-                     :|.|:.||.|||...|.|.| . .||||.||. . |....|.|..||::|
-HBB_PANPA          1 MVHLTPEEKSAVTALWGKVNVD-DEVGGEALGRL-LLVVYPWTQRFFESF     48
+                     :|.|:.||.|||...|.|.|. .||||.||.| |....|.|..||::|..
+HBB_PANPA          1 MVHLTPEEKSAVTALWGKVNV-DEVGGEALGR-LLVVYPWTQRFFESFGD     48
 
-globins           56 KYLSTFDLSKGSADVKAHGKKVLDALGDAVAHLDDLEGTLAALSDLHAHK    105
-                     ..|||.|...|:..|||||||||.|..|.:||||:|:||.|.||:||..|
-HBB_PANPA         49 GDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDK     98
+globins           58 LSTFDLSKGSADVKAHGKKVLDALGDAVAHLDDLEGTLAALSDLHAHKLK    107
+                     |||.|...|:..|||||||||.|..|.:||||:|:||.|.||:||..||.
+HBB_PANPA         49 LSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLH     98
 
-globins          106 LK-KGVDPVNFKLLSHCLLVVLASHLPGDFTPEVQASMDKFLASVATVLA    154
-                     |. .  ||.||:||.:.|:.|||.|...:|||.|||:..|.:|.||..||
-HBB_PANPA         99 LHVD--DPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALA    146
+globins          108 KGVDPVNFKLLSHCLLVVLASHLPGDFTPEVQASMDKFLASVATVLASKY    157
+                       |||.||:||.:.|:.|||.|...:|||.|||:..|.:|.||..||.||
+HBB_PANPA         99 --VDPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKY    146
 
-globins          155 SKYR    158
-                     .||.
-HBB_PANPA        147 HKYH    150
+globins          158 R    158
+                     .
+HBB_PANPA        147 H    147
 
 
 #=======================================
@@ -81,30 +81,30 @@ HBB_PANPA        147 HKYH    150
 # 2: HBB_PANTR
 # Matrix: EBLOSUM62
 #
-# Length: 154
-# Identity:      77/154 (50.0%)
-# Similarity:    92/154 (59.7%)
-# Gaps:           7/154 ( 4.5%)
-# Score: 178.67
+# Length: 151
+# Identity:      79/151 (52.3%)
+# Similarity:    94/151 (62.3%)
+# Gaps:           4/151 ( 2.6%)
+# Score: 165.18
 # 
 #
 #=======================================
 
-globins            8 VVSLSEEELSAVDKAWVKAN-SVAEVGGHALE-RGLFASEPMTLEFFDTF     55
-                     :|.|:.||.|||...|.|.| . .||||.||. . |....|.|..||::|
-HBB_PANTR          1 MVHLTPEEKSAVTALWGKVNVD-DEVGGEALGRL-LLVVYPWTQRFFESF     48
+globins            8 VVSLSEEELSAVDKAWVKANSVAEVGGHALERGLFASEPMTLEFFDTFKY     57
+                     :|.|:.||.|||...|.|.|. .||||.||.| |....|.|..||::|..
+HBB_PANTR          1 MVHLTPEEKSAVTALWGKVNV-DEVGGEALGR-LLVVYPWTQRFFESFGD     48
 
-globins           56 KYLSTFDLSKGSADVKAHGKKVLDALGDAVAHLDDLEGTLAALSDLHAHK    105
-                     ..|||.|...|:..|||||||||.|..|.:||||:|:||.|.||:||..|
-HBB_PANTR         49 GDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDK     98
+globins           58 LSTFDLSKGSADVKAHGKKVLDALGDAVAHLDDLEGTLAALSDLHAHKLK    107
+                     |||.|...|:..|||||||||.|..|.:||||:|:||.|.||:||..||.
+HBB_PANTR         49 LSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLH     98
 
-globins          106 LK-KGVDPVNFKLLSHCLLVVLASHLPGDFTPEVQASMDKFLASVATVLA    154
-                     |. .  ||.||:||.:.|:.|||.|...:|||.|||:..|.:|.||..||
-HBB_PANTR         99 LHVD--DPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALA    146
+globins          108 KGVDPVNFKLLSHCLLVVLASHLPGDFTPEVQASMDKFLASVATVLASKY    157
+                       |||.||:||.:.|:.|||.|...:|||.|||:..|.:|.||..||.||
+HBB_PANTR         99 --VDPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKY    146
 
-globins          155 SKYR    158
-                     .||.
-HBB_PANTR        147 HKYH    150
+globins          158 R    158
+                     .
+HBB_PANTR        147 H    147
 
 
 #---------------------------------------

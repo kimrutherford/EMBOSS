@@ -1,6 +1,6 @@
 application: psiphi [
-  documentation: "Phi and psi torsion angles from protein
-                  coordinates"
+  documentation: "Calculates phi and psi torsion angles from
+                  protein coordinates"
   groups: "protein:3D structure"
 ]
 

@@ -1,5 +1,5 @@
 application: backtranseq [
-  documentation: "Back translate a protein sequence"
+  documentation: "Back-translate a protein sequence to a nucleotide sequence"
   groups: "Nucleic:Translation, Protein:Composition"
 ]
 

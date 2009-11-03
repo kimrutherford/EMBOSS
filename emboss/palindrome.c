@@ -117,7 +117,7 @@ int main(int argc, char **argv)
     outfile = ajAcdGetOutfile("outfile");
 
     maxmismatches = ajAcdGetInt("nummismatches");
-    overlap       = ajAcdGetBool("overlap");
+    overlap       = ajAcdGetBoolean("overlap");
 
     while(ajSeqallNext(seqall, &sequence))
     {
@@ -166,11 +166,11 @@ int main(int argc, char **argv)
 		ic = current;
 		ir = rev;
 		if(ajStrGetCharPos(seqstr, ic) ==
-		   ajBaseComp(ajStrGetCharPos(seqstr, ir)))
+		   ajBaseAlphacharComp(ajStrGetCharPos(seqstr, ir)))
 		    while(mismatches <= maxmismatches && ic < ir)
 		    {
 			if(ajStrGetCharPos(seqstr, ic++) ==
-			   ajBaseComp(ajStrGetCharPos(seqstr, ir--)))
+			   ajBaseAlphacharComp(ajStrGetCharPos(seqstr, ir--)))
 			{
 			    mismatchAtEnd = 0;
 			    if(ajStrGetCharPos(seqstr, ic-1) != 'n')
@@ -466,7 +466,7 @@ static void palindrome_Print(AjPFile outfile,
 
     for(i = pal->forwardStart,
 	j=pal->revStart; i < pal->forwardEnd; i++)
-	if(ajStrGetCharPos(seq, i) == ajBaseComp(ajStrGetCharPos(seq, j--)))
+	if(ajStrGetCharPos(seq, i) == ajBaseAlphacharComp(ajStrGetCharPos(seq, j--)))
 	    ajFmtPrintF(outfile, "|");
 	else
 	    ajFmtPrintF(outfile, " ");

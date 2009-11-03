@@ -1,39 +1,50 @@
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="infoalign.html">infoalign</a></td>
-<td>Information on a multiple sequence alignment</td>
+<td>Display basic information about a multiple sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="infobase.html">infobase</a></td>
+<td>Return information on a given nucleotide base</td>
+</tr>
+
+<tr>
+<td><a href="inforesidue.html">inforesidue</a></td>
+<td>Return information on a given amino acid residue</td>
 </tr>
 
 <tr>
 <td><a href="seealso.html">seealso</a></td>
-<td>Finds programs sharing group names</td>
+<td>Finds programs with similar function to a specified program</td>
 </tr>
 
 <tr>
 <td><a href="showdb.html">showdb</a></td>
-<td>Displays information on the currently available databases</td>
+<td>Displays information on configured databases</td>
 </tr>
 
 <tr>
 <td><a href="textsearch.html">textsearch</a></td>
-<td>Search sequence documentation. Slow, use SRS and Entrez!</td>
+<td>Search the textual description of sequence(s)</td>
 </tr>
 
 <tr>
 <td><a href="tfm.html">tfm</a></td>
-<td>Displays a program's help documentation manual</td>
+<td>Displays full documentation for an application</td>
 </tr>
 
 <tr>
 <td><a href="whichdb.html">whichdb</a></td>
-<td>Search all databases for an entry</td>
+<td>Search all sequence databases for an entry and retrieve it</td>
 </tr>
 
 <tr>
 <td><a href="wossname.html">wossname</a></td>
-<td>Finds programs by keywords in their one-line documentation</td>
+<td>Finds programs by keywords in their short description</td>
 </tr>
 
 </table>

@@ -82,7 +82,7 @@ int main(int argc, char **argv)
     seqall    = ajAcdGetSeqall("bsequence");
     gapopen   = ajAcdGetFloat("gapopen");
     gapextend = ajAcdGetFloat("gapextend");
-    dobrief   = ajAcdGetBool("brief");
+    dobrief   = ajAcdGetBoolean("brief");
 
     align     = ajAcdGetAlign("outfile");
 
@@ -130,16 +130,16 @@ int main(int argc, char **argv)
 	ajStrAssignC(&m,"");
 	ajStrAssignC(&n,"");
 
-	embAlignPathCalc(p,q,lena,lenb,gapopen,gapextend,path,sub,cvt,
+	score = embAlignPathCalc(p,q,lena,lenb,gapopen,gapextend,path,sub,cvt,
 			compass,ajFalse);
 
-	score = embAlignScoreNWMatrix(path,a,b,sub,cvt,lena,lenb,
-				      gapopen,compass,
-				      gapextend,&start1,&start2);
+	/*score = embAlignScoreNWMatrix(path,compass,gapopen,gapextend,
+                                      a,b,lena,lenb,sub,cvt,
+				      &start1,&start2);*/
 
 
 	embAlignWalkNWMatrix(path,a,b,&m,&n,lena,lenb,&start1,&start2,gapopen,
-			    gapextend,cvt,compass,sub);
+			    gapextend,compass);
 
 	embAlignReportGlobal(align, a, b ,m, n,
 			     start1, start2,

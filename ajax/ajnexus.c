@@ -140,12 +140,12 @@ static AjBool              nexusSetSequences(AjPNexus thys);
 **
 ** Parses a nexus buffered file
 **
-** @param [u] buff [AjPFileBuff] Input buffered file
+** @param [u] buff [AjPFilebuff] Input buffered file
 ** @return [AjPNexus] Nexus data object
 ** @@
 ******************************************************************************/
 
-AjPNexus ajNexusParse(AjPFileBuff buff)
+AjPNexus ajNexusParse(AjPFilebuff buff)
 {
     AjPNexus ret;
     AjPStr rdline = NULL;
@@ -178,15 +178,15 @@ AjPNexus ajNexusParse(AjPFileBuff buff)
 
     ajDebug("ajNexusParse\n");
 
-    ajFileBuffGet(buff, &rdline);
+    ajBuffreadLine(buff, &rdline);
     if(!ajStrPrefixCaseC(rdline, "#NEXUS"))
     {				/* first line test */
-	ajFileBuffReset(buff);
+	ajFilebuffReset(buff);
 	return NULL;
     }
     ajDebug("ajNexusParse: First line ok '%S'\n", rdline);
 
-    ok = ajFileBuffGet(buff, &rdline);
+    ok = ajBuffreadLine(buff, &rdline);
     if(!ok)
 	return NULL;
 
@@ -237,7 +237,7 @@ AjPNexus ajNexusParse(AjPFileBuff buff)
 	{
 	    if (!nexusBlockSave(ret, blocklist, blockname))
 		return NULL;
-	    ajStrAssignC(&blockname, "");
+	    ajStrAssignClear(&blockname);
 	    block = ajFalse;
 	}
 	else if (block)				/* the rest */
@@ -250,7 +250,7 @@ AjPNexus ajNexusParse(AjPFileBuff buff)
 	    rdline = NULL;
 	}
 
-	ok = ajFileBuffGet(buff, &rdline);
+	ok = ajBuffreadLine(buff, &rdline);
     }
 
     if (block)

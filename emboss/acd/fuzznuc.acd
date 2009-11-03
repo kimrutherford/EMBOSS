@@ -1,5 +1,5 @@
 application: fuzznuc [
-  documentation: "Nucleic acid pattern search"
+  documentation: "Search for patterns in nucleotide sequences"
   groups: "Nucleic:Motifs"
   gui: "yes"
   batch: "yes"

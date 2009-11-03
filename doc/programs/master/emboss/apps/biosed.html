@@ -19,31 +19,15 @@ biosed
     Description
 </H2>
 
-<b>biosed</b> is a simple sequence editing utility that searches for a
-target subsequence in one or more input sequences and replaces it with a
-specified second subsequence (or optionally just deletes the found
-target subsequence). 
+<p><b>biosed</b> is a simple sequence editing utility that searches for a target subsequence in one or more input sequences and replaces it with an insert subsequence, or optionally, just deletes the target subsequence where found.  If the target subsequence occurs more than once, then each instance of the target is replaced or deleted.</p>
 
-<p>
-
-<b>biosed</b> was inspired by the useful UNIX utility <b>sed</b> which
-searches for a pattern in text and can replace or delete the found
-pattern. 
-
-<p>
-
-If the target subsequence occurs more than once, then each instance of
-the target is replaced. 
-
-<p>
-
-The target subsequence is not any sort of an ambiguity pattern, it is
-just a short sequence.  A simple string match is done and if it exactly
-matches then the replacement is done.  The matching is independent of
-the case of the sequence or the target - both uppercase and lowercase
-will match. 
+The <tt>-position</tt> option allows a sequence position to be specified as an additional constraint for the match: a replacement / deletion only occurs if the start of a match is at the specified <tt>-position</tt> position.
 
 
+<H2>
+    Algorithm
+</H2>
+<p>The target subsequence is just a short, literal sequence of characters.  <b>biosed</b> cannot interpret cannot any sort of an ambiguity pattern such as a regular expression.  A simple string match is done between the target and input sequences.  If there is an exact matches then the replacement or deletion is done. The matching is case insensitive, independent of the case of both the input sequences and target. </p>
 
 
 
@@ -97,7 +81,8 @@ None.
     Notes
 </H2>
 
-The edited sequence will be output in uppercase.
+<p><b>biosed</b> was inspired by the useful UNIX utility sed which searches for a pattern in text and can replace or delete the found pattern.</p>
+
 
 
 <H2>
@@ -112,11 +97,7 @@ None.
     Warnings
 </H2>
 
-No check is made on the replacement subsequence.  
-<br> 
-Any text can be used as the replacement, including characters only used
-in proteins (e.g.  D, E, F, etc.), characters rarely used in proteins (e.g. 
-U, J, O, etc), digits and punctuation characters. 
+<p>No check for correct type (protein, nucleic, gapped etc) is made on the replacement sequence so you must ensure it is of the type required.  Any text can be used, including characters only used in proteins (e.g. <tt>D</tt>, <tt>E</tt>, <tt>F</tt>, etc.), characters rarely used in proteins (e.g. <tt>U</tt>, <tt>J</tt>, <tt>O</tt>, etc), digits and punctuation characters.</p>
 
 <H2>
     Diagnostic Error Messages

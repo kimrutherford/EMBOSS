@@ -384,7 +384,7 @@ ajuint   ajNexusGetNtaxa(const AjPNexus thys);
 AjPStr*  ajNexusGetTaxa(const AjPNexus thys);
 AjPStr*  ajNexusGetSequences(AjPNexus thys);
 AjPNexus ajNexusNew(void);
-AjPNexus ajNexusParse(AjPFileBuff buff);
+AjPNexus ajNexusParse(AjPFilebuff buff);
 void     ajNexusTrace(const AjPNexus thys);
 
 /*

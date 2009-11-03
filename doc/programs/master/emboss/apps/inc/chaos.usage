@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>chaos tembl:j01636 -graph cps </b>
-Create a chaos game representation plot for a sequence
+Draw a chaos game representation plot for a nucleotide sequence
 
 Created chaos.ps
 

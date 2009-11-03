@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>backtranambig </b>
-Back translate a protein sequence to ambiguous codons
+Back-translate a protein sequence to ambiguous nucleotide sequence
 Input (gapped) protein sequence: <b>tsw:opsd_human</b>
 (gapped) nucleotide output sequence [opsd_human.fasta]: <b></b>
 

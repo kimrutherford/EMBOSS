@@ -1,6 +1,6 @@
 application: digest [
-  documentation: "Protein proteolytic enzyme or reagent
-                  cleavage digest"
+  documentation: "Reports on protein proteolytic enzyme or
+                  reagent cleavage sites"
   groups: "Protein:Motifs"
 ]
 
@@ -14,12 +14,12 @@ section: input [
     type: "Protein"
   ]
 
-  datafile: aadata [
-    information: "Amino acids properties and molecular weight
-                  data file"
-    help: "Molecular weight data for amino acids"
-    default: "Eamino.dat"
-    knowntype: "amino acid properties"
+  datafile: mwdata [
+    information: "Molecular weights data file"
+    help: "Molecular weight data for amino
+           acids"
+    default: "Emolwt.dat"
+    knowntype: "molecular weights"
   ]
 
 endsection: input
@@ -34,13 +34,20 @@ section: required [
     default: "1"
     minimum: "1"
     maximum: "1"
-    values: "1: Trypsin,2: Lys-C,3: Arg-C,4: Asp-N,5: V8-bicarb,6:
-             V8-phosph,7: Chymotrypsin,8: CNBr"
+    values: "1: Trypsin,2: Lys-C,3: Arg-C,4:
+             Asp-N,5: V8-bicarb,6: V8-phosph,7:
+             Chymotrypsin,8: CNBr"
     delimiter: ","
     codedelimiter: ":"
     header: "Enzymes and Reagents"
     information: "Select number"
     button: "Y"
+  ]
+
+  boolean: mono [
+    standard: "Y"
+    default: "N"
+    information: "Use monoisotopic weights"
   ]
 
 endsection: required
@@ -52,23 +59,39 @@ section: advanced [
 
   boolean: unfavoured [
     information: "Allow unfavoured cuts"
-    help: "Trypsin will not normally cut after a K if it is followed
-           by (e.g.) another K or a P. Specifying this shows those cuts. as
-           well as the favoured ones."
+    help: "Trypsin will not normally cut after
+           'KR' if they are followed by any of
+           'KRIFLP'. Lys-C will not normally cut
+           after 'K' if it is followed by 'P'.
+           Arg-C will not normally cut after 'R'
+           if it is followed by 'P'. V8-bicarb
+           will not normally cut after 'E' if it
+           is followed by any of 'KREP'.
+           V8-phosph will not normally cut after
+           'DE' if they are followed by 'P'.
+           Chymotrypsin will not normally cut
+           after 'FYWLM' if they are followed by
+           'P'. Specifying unfavoured shows
+           these unfavoured cuts as well as the
+           favoured ones."
   ]
 
   boolean: ragging [
     information: "Allow ragging"
-    help: "Allows semi-specific and non-specific digestion. This
-           option is particularly useful for generating lists of peptide
-           sequences for protein identification using mass-spectrometry."
+    help: "Allows semi-specific and non-specific
+           digestion. This option is
+           particularly useful for generating
+           lists of peptide sequences for
+           protein identification using
+           mass-spectrometry."
   ]
 
   list: termini [
     default: "1"
     minimum: "1"
     maximum: "4"
-    values: "1: none,2: nterm,3: cterm,4: nterm OR cterm"
+    values: "1: none,2: nterm,3: cterm,4: nterm
+             OR cterm"
     delimiter: ","
     codedelimiter: ":"
     header: "Ragging value"
@@ -85,23 +108,27 @@ section: output [
 
   boolean: overlap [
     information: "Show overlapping partials"
-    help: "Used for partial digestion. Shows all cuts from favoured
-           cut sites plus 1..3, 2..4, 3..5 etc but not (e.g.) 2..5. Overlaps
-           are therefore fragments with exactly one potential cut site within
-           it."
+    help: "Used for partial digestion. Shows all
+           cuts from favoured cut sites plus
+           1..3, 2..4, 3..5 etc but not (e.g.)
+           2..5. Overlaps are therefore
+           fragments with exactly one potential
+           cut site within it."
   ]
 
   boolean: allpartials [
     information: "Show all partials"
-    help: "As for overlap but fragments containing more than one
-           potential cut site are included."
+    help: "As for overlap but fragments
+           containing more than one potential
+           cut site are included."
   ]
 
   report: outfile [
     parameter: "Y"
     rformat: "seqtable"
     multiple: "Y"
-    taglist: "float:molwt=Mol_Weight str:cterm=Cterm str:nterm=Nterm"
+    taglist: "float:molwt=Mol_Weight
+              str:cterm=Cterm str:nterm=Nterm"
   ]
 
 endsection: output

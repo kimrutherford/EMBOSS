@@ -1,5 +1,6 @@
 application: marscan [
-  documentation: "Finds MAR/SAR sites in nucleic sequences"
+  documentation: "Finds matrix/scaffold recognition (MRS) signatures
+                  in DNA sequences"
   groups: "Nucleic:Gene finding, Nucleic:Motifs"
 ]
 

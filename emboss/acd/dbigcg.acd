@@ -1,6 +1,6 @@
 application: dbigcg [
-  groups: "Utils:Database indexing"
   documentation: "Index a GCG formatted database"
+  groups: "Utils:Database indexing"
   gui: "yes"
   batch: "yes"
   cpu: "medium"

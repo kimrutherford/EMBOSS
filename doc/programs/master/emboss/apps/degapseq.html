@@ -19,43 +19,7 @@ degapseq
     Description
 </H2>
 
-<b>degapseq</b> reads in one or more sequences and writes them out again
-minus any gap characters.  In effect it removes gaps from aligned
-sequences. 
-
-<p>
-
-In fact, if does more than just this as it removes <b>ANY</b>
-non-alphabetic character from the input sequence, so as well as removing
-the gap-characters, it will remove such things as the '*' in protein
-sequences that indicates the position of a 'translated' STOP codon. 
-
-<p>
-
-There are many different formats for storing sequences in files.  Some
-sequence formats allow you to store aligned sequences, including the
-information on where gaps have been introduced to make the sequence
-align properly.  This is indicated by using a special character to
-indicate that there is a gap at that position.  Different sequence
-formats use different characters to indicate gaps.  Some formats may use
-more than one type of character to indicate different types of gaps
-(e.g.  gaps at the ends of the sequences, internal gaps, gaps introduced
-by a program or by a person editing the alignment, etc.) Some typicate
-characters used to indicate where gaps are may be: '.', '-' and '~'. 
-
-<p>
-
-When EMBOSS programs read in a sequence that has gap-characters in, all
-gap characters are internally changed to '-' characters.  i.e.  EMBOSS
-only has one type of gap character.  Thus any distinguishing characters
-for different gap types are reduced to a '-'.  There is only one type of
-gap in EMBOSS. 
-
-<p>
-
-<b>degapseq</b> removes any non-alphabetic character in the sequence, in
-effect this means that gaps and '*' characters are removed.  The
-sequence is then written out. 
+<p><b>degapseq</b> reads one or more sequences and writes them out again but stripped of any non-alphabetic characters.  It's main purpose is to remove gap characters from aligned sequences, but it will also remove such things as the symbol for translation STOP ('*') in a protein sequence.</p>
 
 <H2>
     Usage
@@ -111,7 +75,11 @@ None.
     Notes
 </H2>
 
-None.
+<p>There are many different formats for storing molecular sequences in files. Some formats are specifically for aligned sequences, where gaps are inserted into the sequences for purposes of alignment. Gaps are indicated with different characters depending on the format in question, but commonly include '.', '-' and '~'.  Some formats use more than one type of character to indicate different types of gaps, for example gaps at the sequence ends, internal gaps, gaps inserted by a program and gaps inserted manually by a person editing the alignment may all be denoted with different characters.</p>
+
+<p>EMBOSS uses the dash character ('-') only to indicate gaps. When an EMBOSS program reads a sequence with gaps, all gap characters are changed internally to a dash ('-').  Thus any distinguishing characters for different gap types are convered to a '-' on output.</p>
+
+
 
 <H2>
     References

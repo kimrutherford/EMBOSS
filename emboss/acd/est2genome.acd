@@ -1,5 +1,5 @@
 application: est2genome [
-  documentation: "Align EST and genomic DNA sequences"
+  documentation: "Align EST sequences to genomic DNA sequence"
   groups: "Alignment:Global"
   gui: "yes"
   batch: "yes"

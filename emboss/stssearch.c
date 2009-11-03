@@ -90,7 +90,7 @@ int main(int argc, char **argv)
     out      = ajAcdGetOutfile("outfile");
     seqall   = ajAcdGetSeqall("seqall");
 
-    while(ajFileReadLine(primfile, &rdline))
+    while(ajReadlineTrim(primfile, &rdline))
     {
 	if(ajStrGetCharFirst(rdline) == '#')
 	    continue;

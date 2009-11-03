@@ -176,6 +176,7 @@ $testfile = "../memtest.dat";
 $blocksize=1;
 $blockcount = 0;
 $block = 1;
+$dowild=0;
 $dolist=0;
 $doall = 0;
 $dokeep=0;
@@ -188,6 +189,7 @@ foreach $test (@ARGV) {
 	elsif ($arg eq "list") {
 	    $dolist = 1;
 	}
+	elsif ($arg eq "wild") {$dowild=1;}
 	elsif ($arg eq "all") {$doall=1;}
 	elsif ($arg eq "keep") {$dokeep=1;}
 	elsif ($arg =~ /block=(\d+)/) {
@@ -200,7 +202,8 @@ foreach $test (@ARGV) {
     }
     else {
 	$test =~ s/\/$//;
-	push @dotest, $test;
+	$testname = $test;
+	push @dotest, $testname;
     }
 }
 
@@ -218,8 +221,18 @@ while (<MEMTEST>) {
 close MEMTEST;
 
 if($doall || $dolist) {
+    @dotest = ();
     foreach $x (sort (keys (%tests))) {
 	push @dotest, $x;
+    }
+}
+
+if($dowild) {
+    @dotest = ();
+    foreach $x (sort (keys (%tests))) {
+	if($x =~ /$testname/) {
+	    push @dotest, $x;
+	}
     }
 }
 

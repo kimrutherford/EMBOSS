@@ -61,7 +61,7 @@ int main(int argc, char **argv)
 	else
 	    adj = ajSeqGetOffset(seq);
 	ajDebug("begin:%d end:%d len:%d offset:%d offend:%d "
-		"rev:%B nuc:%B adj:%d",
+		"rev:%B nuc:%B adj:%d\n",
 	       ajSeqGetBegin(seq), ajSeqGetEnd(seq), ajSeqGetLen(seq),
 	       ajSeqGetOffset(seq), ajSeqGetOffend(seq),
 	       ajSeqIsReversed(seq), ajSeqIsNuc(seq), adj);
@@ -71,8 +71,8 @@ int main(int argc, char **argv)
 	ajDebug("Testing '%s' len: %d %d regex %x\n",
 		ajSeqGetNameC(seq), ajSeqGetLen(seq), ajStrGetLen(str),
 		patexp);
-	feat = ajFeattableNewDna(ajSeqGetNameS(seq));
-	embPatlistRegexSearch(feat, seq, plist, ajSeqIsReversed(seq));
+	feat = ajFeattableNewSeq(seq);
+	embPatlistRegexSearch(feat, seq, plist, ajFalse);
 	(void) ajReportWrite (report,feat,seq);
 
         ajFeattableDel(&feat);

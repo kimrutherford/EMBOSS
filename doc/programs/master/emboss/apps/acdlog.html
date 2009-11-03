@@ -21,23 +21,8 @@ acdlog
     Description
 </H2>
 
-Acdlog allows developers to see the detail of ACD file parsing and
-processing.
-
-<p>
-Acdlog does not have its own command line. Instead, it will run the
-command line of any EMBOSS program by reading its ACD file and
-processing the command line and user responses in exactly the same way
-as the true program.
-
-<p>
-Acdlog uses a very simple method. The first command line parameter is
-the name of the EMBOSS program to be compiled. All other command line
-parameters and qualifiers are processed by that program's ACD file.
-
-<p>
-Processing of the ACD file is reported to a file with the same name as
-the program, and the extension ".acdlog".
+<p><b>acdlog</b> processes an ACD file and user input, while logging the contents of internal data structures.  For the time being it's use is deprecated and the entrails application should be used instead.</p>
+<p><b>acdlog</b> works the same as <b>acdc</b> but reports on the data structures used to process the ACD file.</p>
 
 <H2>
     Usage
@@ -88,6 +73,11 @@ directly by the program's code.
 <H2>
     Notes
 </H2>
+<p><b>acdlog</b> does not have its own options, but takes a single parameter which is the name of the EMBOSS application that is being testsed.  It is invoked by specifying the name of the application to be tested along with any command-line options after the name of the utility application itself:</p>
+
+<p><tt><b>acdlog</b> ApplicationName  Options</tt></p>
+
+<p><b>acdlog</b> will run the command line interface of any EMBOSS program by reading its ACD file and processing the command line and user responses in exactly the same way as if the true program itself were running.  The application proper is not run; it is only the ACD file that is read.  Any command-line options for the application being called can be specified. The user is prompted for any required values for application parameters and any input files are read. Output files can be specified in any available format however they will be empty (the application code is not called so there will be no output).</p>
 
 
 <H2>

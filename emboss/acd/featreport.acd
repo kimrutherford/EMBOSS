@@ -1,0 +1,33 @@
+# with a comment
+application: featreport [
+  documentation: "Reads and writes a feature table"
+  groups: "Edit"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  sequence: sequence [
+    parameter: "Y"
+    type: "any"
+  ]
+
+  features: features [
+    parameter: "Y"
+  ]
+
+endsection: input
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  report: outfile [
+    parameter: "Y"
+    rformat: "gff"
+  ]
+
+endsection: output

@@ -67,10 +67,10 @@ int main(int argc, char **argv)
 
     embInit ("union", argc, argv);
 
-    feature = ajAcdGetBool ("feature");
-    source  = ajAcdGetBool ("source");
+    feature = ajAcdGetBoolean("feature");
+    source  = ajAcdGetBoolean("source");
     /* if true, search for overlaps */
-    findoverlap = ajAcdGetBool ("findoverlap");
+    findoverlap = ajAcdGetBoolean("findoverlap");
     /* file to write overlap base counts to */
     overlap_file = ajAcdGetOutfile ("overlapfile");
 

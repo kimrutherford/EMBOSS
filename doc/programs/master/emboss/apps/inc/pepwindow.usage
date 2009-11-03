@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>pepwindow tsw:hba_human </b>
-Displays protein hydropathy
+Draw a Kyte-Doolittle hydropathy plot for a protein sequence
 Graph type [x11]: <b>cps</b>
 
 Created pepwindow.ps

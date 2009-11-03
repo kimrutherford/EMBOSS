@@ -81,7 +81,7 @@ int main(int argc, char **argv)
 
     inf    = ajAcdGetInfile("infile");
     pfname = ajStrNewC(DATANAME);
-    ajFileDataNewWrite(pfname,&outf);
+    outf = ajDatafileNewOutNameS(pfname);
     printsextract_printHeader(outf);
     ajStrDel(&pfname);
 
@@ -138,7 +138,7 @@ int main(int argc, char **argv)
 
 static AjBool printsextract_prints_entry(AjPStr *s, AjPFile fp)
 {
-    while(ajFileReadLine(fp,s))
+    while(ajReadlineTrim(fp,s))
 	if(ajStrPrefixC(*s,"gc;"))
 	    return ajTrue;
 
@@ -188,7 +188,7 @@ static void printsextract_write_accession(AjPFile inf, AjPFile outf,
     char *p;
     AjPStr tmpstr = NULL;
 
-    if(!ajFileReadLine(inf,s))
+    if(!ajReadlineTrim(inf,s))
 	ajFatal("Premature EOF");
 
     if(!ajStrPrefixC(*s,"gx;"))
@@ -227,7 +227,7 @@ static ajint printsextract_write_sets(AjPFile inf, AjPFile outf, AjPStr *s)
     const char *p;
     ajint n;
 
-    if(!ajFileReadLine(inf,s))
+    if(!ajReadlineTrim(inf,s))
 	ajFatal("Premature EOF");
 
     if(!ajStrPrefixC(*s,"gn;"))
@@ -262,10 +262,10 @@ static ajint printsextract_write_sets(AjPFile inf, AjPFile outf, AjPStr *s)
 
 static void printsextract_write_title(AjPFile inf, AjPFile outf, AjPStr *s)
 {
-    if(!ajFileReadLine(inf,s))
+    if(!ajReadlineTrim(inf,s))
 	ajFatal("Premature EOF");
 
-    if(!ajFileReadLine(inf,s))
+    if(!ajReadlineTrim(inf,s))
 	ajFatal("Premature EOF");
 
     if(!ajStrPrefixC(*s,"gt;"))
@@ -299,9 +299,9 @@ static void printsextract_write_desc(AjPFile inf, AjPStr *s, AjPStr *a,
 
     fname = ajStrNewC("PRINTS/");
     ajStrAppendS(&fname,*a);
-    ajFileDataNewWrite(fname,&fp);
+    fp = ajDatafileNewOutNameS(fname);
     ajFmtPrintF(fp,"%s\n",ajStrGetPtr(*c));
-    while((e=ajFileReadLine(inf,s)))
+    while((e=ajReadlineTrim(inf,s)))
 	if(ajStrPrefixC(*s,"gd;"))
 	    break;
 
@@ -315,7 +315,7 @@ static void printsextract_write_desc(AjPFile inf, AjPStr *s, AjPStr *a,
 	else
 	    ajFmtPrintF(fp,"%s\n",ajStrGetPtr(*s)+4);
 
-	if(!ajFileReadLine(inf,s))
+	if(!ajReadlineTrim(inf,s))
 	    ajFatal("Premature EOF");
     }
     ajFileClose(&fp);
@@ -339,7 +339,7 @@ static void printsextract_write_desc(AjPFile inf, AjPStr *s, AjPStr *a,
 
 static void printsextract_skipToDn(AjPFile inf, AjPStr *s)
 {
-    while(ajFileReadLine(inf,s))
+    while(ajReadlineTrim(inf,s))
     {
 	if(ajStrPrefixC(*s,"gc;"))
 	    ajFatal("Missing dn; line");
@@ -367,14 +367,14 @@ static void printsextract_skipToDn(AjPFile inf, AjPStr *s)
 
 static ajlong printsextract_skipToFm(AjPFile inf, AjPStr *s)
 {
-    while(ajFileReadLine(inf,s))
+    while(ajReadlineTrim(inf,s))
     {
 	if(ajStrPrefixC(*s,"gc;"))
 	    ajFatal("Missing fm; line");
 
 
 	if(ajStrPrefixC(*s,"fm;"))
-	    return ajFileTell(inf);
+	    return ajFileResetPos(inf);
     }
     ajFatal("Premature EOF");
 
@@ -407,7 +407,7 @@ static void printsextract_getSeqNumbers(AjPFile inf, ajint *cnts,
     {
 	while(!ajStrPrefixC(*s,"fl;"))
 	{
-	    if(!ajFileReadLine(inf,s))
+	    if(!ajReadlineTrim(inf,s))
 		ajFatal("Premature EOF");
 
 	    if(ajStrPrefixC(*s,"gc;"))
@@ -415,8 +415,8 @@ static void printsextract_getSeqNumbers(AjPFile inf, ajint *cnts,
 	}
 	sscanf(ajStrGetPtr(*s)+4,"%d",&len);
 	lens[i]=len;
-	ajFileReadLine(inf,s);
-	ajFileReadLine(inf,s);
+	ajReadlineTrim(inf,s);
+	ajReadlineTrim(inf,s);
 	if(!ajStrPrefixC(*s,"fd;"))
 	    ajFatal("Missing fd; line (%s)\n",ajStrGetPtr(*s));
 
@@ -424,7 +424,7 @@ static void printsextract_getSeqNumbers(AjPFile inf, ajint *cnts,
 	while(ajStrPrefixC(*s,"fd;"))
 	{
 	    ++c;
-	    if(!ajFileReadLine(inf,s))
+	    if(!ajReadlineTrim(inf,s))
 		ajFatal("Premature EOF");
 
 	    if(ajStrPrefixC(*s,"gc;"))
@@ -471,9 +471,9 @@ static void printsextract_calcMatrices(AjPFile inf, AjPFile outf,
 
     for(i=0;i<n;++i)
     {
-	pos = ajFileTell(inf);
+	pos = ajFileResetPos(inf);
 	while(!ajStrPrefixC(*s,"fd;"))
-	    if(!ajFileReadLine(inf,s))
+	    if(!ajReadlineTrim(inf,s))
 		ajFatal("Premature EOF");
 
 	ajFmtPrintF(outf,"%d\n",lens[i]);
@@ -488,14 +488,14 @@ static void printsextract_calcMatrices(AjPFile inf, AjPFile outf,
 	    p = ajStrGetPtr(*s)+4;
 	    for(k=0;k<c;++k)
 	    {
-		t = ajAZToInt(*(p+k));
+		t = ajBasecodeToInt(*(p+k));
 
 		if(t>AZ)
 		    printf("Error\n");
-		++mat[ajAZToInt(*(p+k))][k];
+		++mat[ajBasecodeToInt(*(p+k))][k];
 	    }
 
-	    ajFileReadLine(inf,s);
+	    ajReadlineTrim(inf,s);
 	}
 
 
@@ -508,10 +508,10 @@ static void printsextract_calcMatrices(AjPFile inf, AjPFile outf,
 
 
 	ajFileSeek(inf,pos,SEEK_SET);
-	ajFileReadLine(inf,s);
+	ajReadlineTrim(inf,s);
 
 	while(!ajStrPrefixC(*s,"fd;"))
-	    if(!ajFileReadLine(inf,s))
+	    if(!ajReadlineTrim(inf,s))
 		ajFatal("Premature EOF");
 
 	for(j=0,min=INT_MAX;j<cnts[i];++j)
@@ -519,10 +519,10 @@ static void printsextract_calcMatrices(AjPFile inf, AjPFile outf,
 	    fmin = 0;
 	    p = ajStrGetPtr(*s)+4;
 	    for(k=0;k<c;++k)
-		fmin+=mat[ajAZToInt(*(p+k))][k];
+		fmin+=mat[ajBasecodeToInt(*(p+k))][k];
 	    
 	    min = (min<fmin) ? min : fmin;
-	    ajFileReadLine(inf,s);
+	    ajReadlineTrim(inf,s);
 	}
 
 	ajFmtPrintF(outf,"%d\n%d\n",(min*100)/sum,sum);

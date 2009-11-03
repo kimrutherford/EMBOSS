@@ -5,49 +5,26 @@
 
 Function
 
-   Extract data from CUTG
+   Extract codon usage tables from from CUTG database
 
 Description
 
-   Given the name of a directory containing the CUTG database
-   (ftp://ftp.ebi.ac.uk/pub/databases/cutg) cutgextract will calculate
-   codon usage tables for individual species (e.g. EHomo_sapiens.cut) and
-   place them in the CODONS subdirectory of the EMBOSS data directory.
-   This is an all-or-nothing extraction, will create many files and take
-   several minutes. The usage tables are from the sum of codons over all
-   sequences for each organism.
-
-   The EMBOSS distribution comes loaded with a set of codon usage tables.
-   Thes codon usage tables provided with the distribution are calculated
-   from the files in
-   ftp://ftp.ebi.ac.uk/pub/databases/codonusage/README), with a few
-   additions whose exact derivation cannot easily be determined. Many
-   people would prefer to create their own from the public CUTG data.
-
-   You run cutgextract on the CUTG database from
-   ftp://ftp.ebi.ac.uk/pub/databases/cutg. You should get all the
-   required *.codon files from CUTG, and uncompress them if they are
-   compressed before running cutgextract on them.
-
-   The task of downloading the CUTG database and running cutgextract to
-   create the codon usage table files from it would normally be done only
-   once when the EMBOSS package is being installled or if a new version
-   of the CUTG database is released.
-
-   Note by the way that CUTG has a drawback: it has a table for each
-   organism without making the distinction between different gene
-   populations.
+   Given the name of a directory containing the CUTG database,
+   cutgextract will calculate codon usage tables for individual species
+   (e.g. EHomo_sapiens.cut) and place them in the CODONS subdirectory of
+   the EMBOSS data directory. This is an all-or-nothing extraction; it
+   will create many files and take several minutes. The usage tables are
+   calculated from the sum of codons over all sequences for each
+   organism.
 
 Algorithm
 
    cutgextract looks in the specified directory and opens all the files
    with the extension '.codon'. These are all expected to be CUTG data
-   files.
-
-   It then parses out the codon usage data from these *.codon files and
-   writes one file per species into the EMBOSS data/CODONS directory. The
-   names of the files are derived from the species names in the CUTG
-   files. These files names will be long (and therefore descriptive).
+   files. It then parses out the codon usage data and writes one file per
+   species into the EMBOSS data/CODONS directory. The names of the files
+   are derived from the species names in the CUTG files. These files
+   names will be long and therefore descriptive.
 
 Usage
 
@@ -55,7 +32,7 @@ Usage
 
 
 % cutgextract 
-Extract data from CUTG
+Extract codon usage tables from from CUTG database
 Codon usage directories [.]: data
 General log output file [outfile.cutgextract]: 
 
@@ -89,8 +66,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -106,8 +84,8 @@ Input file format
 
 Output file format
 
-   cutgextract outputs a set of EMBOSS codon usage data files to the
-   EMBOSS data/CODONS data directory
+   cutgextract writes a set of EMBOSS codon usage data files to the
+   EMBOSS data/CODONS data directory.
 
   Output files for usage example
 
@@ -133,7 +111,24 @@ Data files
 
 Notes
 
-   None.
+   The EMBOSS distribution includes a set of codon usage tables
+   calculated from the files listed in
+   ftp://ftp.ebi.ac.uk/pub/databases/codonusage/README), with a few
+   additions whose exact derivation cannot easily be determined. Many
+   people would prefer to create their own from the public CUTG data. The
+   CUTG database can be downloaded from
+   ftp://ftp.ebi.ac.uk/pub/databases/cutg.
+
+   If you run cutgextract on the CUTG database from
+   ftp://ftp.ebi.ac.uk/pub/databases/cutg all of the *.codon files
+   included in the database will be processed. You may need to uncompress
+   these files (*.codon) before running cutgextract on them.
+
+   cutgextract would normally be used once when the EMBOSS package is
+   installled, or when a new version of the CUTG database is released.
+
+   CUTG has a drawback: it has a table for each organism without making
+   the distinction between different gene populations.
 
 References
 
@@ -157,12 +152,16 @@ Known bugs
 
 See also
 
-    Program name                        Description
-   aaindexextract Extract data from AAINDEX
-   printsextract  Extract data from PRINTS
-   prosextract    Build the PROSITE motif database for use by patmatmotifs
-   rebaseextract  Extract data from REBASE
-   tfextract      Extract data from TRANSFAC
+   Program name Description
+   aaindexextract Extract amino acid property data from AAINDEX
+   jaspextract Extract data from JASPAR
+   printsextract Extract data from PRINTS database for use by pscan
+   prosextract Processes the PROSITE motif database for use by
+   patmatmotifs
+   rebaseextract Process the REBASE database for use by restriction
+   enzyme applications
+   tfextract Process TRANSFAC transcription factor database for use by
+   tfscan
 
 Author(s)
 

@@ -20,25 +20,9 @@ codcmp
     Description
 </H2>
 
-This program reads in two codon usage table files.
+<p><b>codcmp</b> reads two codon usage table files and writes to file the differences in codon usage fractions between the two tables.</p>
+<p>The usage fraction of a codon is its proportion (0 to 1) of the total number of the codons in the sequences used to construct the usage table. For each codon that is used in both tables, it takes the difference between the usage fractions in the two tables.  The sum of the differences and the sum of the differences squared is reported in the output file.  It also counts the number of the 64 possible codons which are unused (i.e. has a usage fraction of 0) in either one or the other or both of the codon usage tables, and writes this to the output file.</p>
 
-<p>
-
-It counts the number of the 64 possible codons which are unused (i.e. 
-has a usage fraction of 0) in either one or the other or both of the
-codon usage tables.  
-
-<p>
-
-The usage fraction of a codon is its proportion (0 to 1) of the total of
-the codons in the sequences used to construct the usage table. 
-
-<p>
-
-For each codon that is used in both tables, it takes the difference
-between the usage fraction.  The sum of the differences and the sum of
-the differences squared is reported in the output file, together with
-the number of unused codons. 
 
 
 <H3>
@@ -141,14 +125,8 @@ See below for details.
     Data files
 </H2>
 
-The codon usage tables are read by default from "Ehum.cut" in the data/CODONS
-directory of the EMBOSS distribution.
+<p><b>codcmp</b> requires two codon usage tables which are read by default from the EMBOSS data file from <tt>Ehum.cut</tt> in the data/CODONS directory of the EMBOSS distribution.  If the name of a codon usage file is specified on the command line, then this file will first be searched for in the current directory and then in the <tt>data/CODONS</tt> directory of the EMBOSS distribution. </p>
 
-<p>
-If the name of a codon usage file is specified on the command line,
-then this file will first be searched for in the current directory and
-then in the 'data/CODONS' directory of the EMBOSS distribution.
-<p>
 
 <!--#include file="inc/localfiles.ihtml" -->
 
@@ -156,8 +134,16 @@ then in the 'data/CODONS' directory of the EMBOSS distribution.
     Notes
 </H2>
 
+<p>The following notes based on Derek Gatherer's comments are useful for interpreting the significance of any difference between the tables.</p>
 
-None.
+<p>It's not normally possible to be certain a a difference is statistically significant just from looking at it, as it is essentially a descriptive statistic about the difference between two 64-mer vectors. If you have a whole lot of sequences and <b>codcmp</b> results for all the possible pairwise comparisons, then the resulting distance matrix can be used to build a phylogenetic tree based on codon usage.</p>
+
+<p>However, if you generate a series of random sequences, measure their codon usage and then do <b>codcmp</b> between each of your test sequences and all the random sequences, you could then use a z-test to see if the result between the two test sequences was outside of the top or bottom 5%.</p>
+
+<p>This would assume that the <b>codcmp</b> results were normally distributed, but you could test that too. The simplest way is just to plot them and look for a bell-curve. For more rigour, find the mean and standard deviation of your results from the random sequences, use the normal distribution equation to generate a theoretical distribution for that mean and standard deviation, and then perform a chi square between the random data and the theoretically generated normal distribution. If you generate two sets of random data, each based on your two test sequences, an F-test should be used to establish that they have equal variances. Then you can safely go ahead and perform the z-test.</p>
+
+<p>You could use the shuffle program to base your random sequences on the test sequences - so that would ensure the randomised background had the same nucleotide content.  F-tests, z-tests and chi-tests can all be done in Excel, as well as being standard in most statistical analysis packages.</p>
+
 
 <H2>
     References

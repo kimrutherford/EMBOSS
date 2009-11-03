@@ -379,11 +379,11 @@ public class PendingResults
 
     ClassLoader cl = this.getClass().getClassLoader();
     ImageIcon jobIcon = new ImageIcon(cl.getResource("images/Job_manager_button.gif"));
-    JLabel jobLabel = new JLabel(jobIcon);
-    jobLabel.setToolTipText("Batch Job Manager");
 
-    jobPanel.add(jobLabel,BorderLayout.WEST);
-    jobButton = new JButton("(No Current Jobs)");
+    jobButton = new JButton("(No Current Jobs)", jobIcon);
+    jobButton.setIconTextGap(50);
+    jobButton.setHorizontalTextPosition(SwingConstants.RIGHT);
+    jobButton.setToolTipText("Batch Job Manager");
     jobButton.addActionListener(new ActionListener()
     {
       public void actionPerformed(ActionEvent e)
@@ -410,7 +410,7 @@ public class PendingResults
 
     Dimension d = jobPanel.getPreferredSize();
     d = new Dimension((int)d.getWidth(),
-                      jobIcon.getIconHeight()-2);
+                      jobIcon.getIconHeight()+4);
 
     jobPanel.setPreferredSize(d);
     return jobPanel;

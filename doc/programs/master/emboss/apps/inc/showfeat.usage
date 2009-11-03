@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showfeat </b>
-Show features of a sequence.
+Display features of a sequence in pretty format
 Input sequence(s): <b>tembl:x65921</b>
 Output file [x65921.showfeat]: <b></b>
 
@@ -22,7 +22,7 @@ Display 'joined' features on one line with positions:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showfeat -sort join -pos </b>
-Show features of a sequence.
+Display features of a sequence in pretty format
 Input sequence(s): <b>tembl:x65921</b>
 Output file [x65921.showfeat]: <b></b>
 
@@ -39,7 +39,7 @@ Display just positions and names of CDS features - this can be used as a regions
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showfeat -matchtype CDS -width 0 -noid -nodesc -noscale -pos  </b>
-Show features of a sequence.
+Display features of a sequence in pretty format
 Input sequence(s): <b>tembl:x65921</b>
 Output file [x65921.showfeat]: <b></b>
 

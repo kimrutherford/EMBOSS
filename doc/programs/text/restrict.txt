@@ -5,23 +5,23 @@
 
 Function
 
-   Finds restriction enzyme cleavage sites
+   Report restriction enzyme cleavage sites in a nucleotide sequence
 
 Description
 
-   Restrict uses the REBASE database of restriction enzymes to predict
-   cut sites in a DNA sequence. The program allows you to select a range
-   of cuts, whether the DNA is circular, whether IUB ambiguity codes are
-   used, whether blunt or sticky ends or both are reported. You may also
-   force the reporting of single cleavage sites.
+   restrict scans one or more nucleotide sequences for cut sites for a
+   supplied set of restriction enzymes. One or more restriction enzymes
+   can be specified or alternatively all the enzymes in the REBASE
+   database can be investigated. The minimum length of a recognition site
+   to be reported must be specified. It writes an output file showing the
+   location of the cut sites. There are several options to control
+   exactly what sites are reported and the format of the output file.
+   Optionally, the fragment lengths of the forward sense strand produced
+   by complete restriction by each restriction enzyme on its own, or by
+   using all of the input enzymes together, may be reported. Results are
+   added to the tail section of the report.
 
-   By default, only one of any group of isoschizomers (enzymes that have
-   the same recognition site and cut positions) is reported (this
-   behaviour can be turned off by setting the qualifier '-limit' to be
-   false.) The reported enzyme from any one group of isoschizomers (the
-   prototype) is specified in the REBASE database and the information is
-   held in the data file 'embossre.equ'. You may edit this file to set
-   your own preferred prototype,if you wish.
+Algorithm
 
 Usage
 
@@ -29,7 +29,7 @@ Usage
 
 
 % restrict 
-Finds restriction enzyme cleavage sites
+Report restriction enzyme cleavage sites in a nucleotide sequence
 Input nucleotide sequence(s): tembl:x65923
 Minimum recognition site length [4]: 
 Comma separated enzyme list [all]: 
@@ -45,7 +45,7 @@ Output report [x65923.restrict]:
 
 
 % restrict -fragments 
-Finds restriction enzyme cleavage sites
+Report restriction enzyme cleavage sites in a nucleotide sequence
 Input nucleotide sequence(s): tembl:x65923
 Minimum recognition site length [4]: 
 Comma separated enzyme list [all]: 
@@ -60,7 +60,7 @@ Output report [x65923.restrict]:
 
 
 % restrict -solofragment 
-Finds restriction enzyme cleavage sites
+Report restriction enzyme cleavage sites in a nucleotide sequence
 Input nucleotide sequence(s): tembl:x65923
 Minimum recognition site length [4]: 
 Comma separated enzyme list [all]: 
@@ -198,14 +198,16 @@ Command line arguments
    -raccshow2          boolean    Show accession number in the report
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
+   -rstrandshow2       boolean    Show the nucleotide strand in the report
    -rusashow2          boolean    Show the full USA in the report
    -rmaxall2           integer    Maximum total hits to report
    -rmaxseq2           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -339,7 +341,7 @@ Output file format
 
 ########################################
 # Program: restrict
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: restrict
 #    -sequence tembl:x65923
 # Report_format: table
@@ -361,61 +363,116 @@ Output file format
 #
 #=======================================
 
-  Start     End Enzyme_name Restriction_site 5prime 3prime 5primerev 3primerev
-     11      14 TaqI        TCGA                 11     13         .         .
-     28      25 AciI        CCGC                 25     27         .         .
-     36      31 BseYI       CCCAGC               31     35         .         .
-     38      41 AciI        CCGC                 38     40         .         .
-     44      40 BceAI       ACGGC                25     27         .         .
-     71      81 BsiYI       CCNNNNNNNGG          77     74         .         .
-     71      74 AciI        CCGC                 71     73         .         .
-     73      76 Hin6I       GCGC                 73     75         .         .
-     73      76 HhaI        GCGC                 75     73         .         .
-     77      81 EcoRII      CCWGG                76     81         .         .
-     77      81 BssKI       CCNGG                76     81         .         .
-     94      97 TaqI        TCGA                 94     96         .         .
-    103     106 HpaII       CCGG                103    105         .         .
-    105     108 HaeIII      GGCC                106    106         .         .
-    107     111 EcoRII      CCWGG               106    111         .         .
-    107     111 BssKI       CCNGG               106    111         .         .
-    107     117 BsiYI       CCNNNNNNNGG         113    110         .         .
-    122     132 BsiYI       CCNNNNNNNGG         128    125         .         .
-    125     135 Hin4I       GAYNNNNNVTC         116    111       148       143
-    146     150 BsrI        ACTGG               151    149         .         .
-    161     165 BssKI       CCNGG               160    165         .         .
-    162     165 HpaII       CCGG                162    164         .         .
-    182     186 EcoRII      CCWGG               181    186         .         .
-    182     186 BssKI       CCNGG               181    186         .         .
-    190     193 Hin6I       GCGC                190    192         .         .
-    190     193 HhaI        GCGC                192    190         .         .
-    192     195 Hin6I       GCGC                192    194         .         .
-    192     195 HhaI        GCGC                194    192         .         .
-    197     201 EcoRII      CCWGG               196    201         .         .
-    197     201 BssKI       CCNGG               196    201         .         .
-    209     212 HaeIII      GGCC                210    210         .         .
-    219     222 HaeIII      GGCC                220    220         .         .
-    221     231 BsiYI       CCNNNNNNNGG         227    224         .         .
-    225     221 BsrI        ACTGG               221    219         .         .
-    229     226 AciI        CCGC                226    228         .         .
-    236     239 HaeIII      GGCC                237    237         .         .
-    248     252 EcoRII      CCWGG               247    252         .         .
-    248     252 BssKI       CCNGG               247    252         .         .
-    261     264 HaeIII      GGCC                262    262         .         .
-    263     266 AciI        CCGC                263    265         .         .
-    293     297 EcoRII      CCWGG               292    297         .         .
-    293     297 BssKI       CCNGG               292    297         .         .
-    296     299 HaeIII      GGCC                297    297         .         .
-    335     338 HaeIII      GGCC                336    336         .         .
-    380     377 AciI        CCGC                377    379         .         .
-    383     380 AciI        CCGC                380    382         .         .
-    395     398 HpaII       CCGG                395    397         .         .
-    398     401 Hin6I       GCGC                398    400         .         .
-    398     401 HhaI        GCGC                400    398         .         .
-    405     410 HindII      GTYRAC              407    407         .         .
-    408     413 AclI        AACGTT              409    411         .         .
-    409     412 MaeII       ACGT                409    411         .         .
-    417     427 BsiYI       CCNNNNNNNGG         423    420         .         .
-    438     441 HaeIII      GGCC                439    439         .         .
+  Start     End  Strand Enzyme_name Restriction_site 5prime 3prime 5primerev 3p
+rimerev
+     11      14       + TaqI        TCGA                 11     13         .
+      .
+     25      28       - AciI        CCGC                 25     27         .
+      .
+     31      36       - BseYI       CCCAGC               31     35         .
+      .
+     38      41       + AciI        CCGC                 38     40         .
+      .
+     40      44       - BceAI       ACGGC                25     27         .
+      .
+     71      81       + BsiYI       CCNNNNNNNGG          77     74         .
+      .
+     71      74       + AciI        CCGC                 71     73         .
+      .
+     73      76       + Hin6I       GCGC                 73     75         .
+      .
+     73      76       + HhaI        GCGC                 75     73         .
+      .
+     77      81       + EcoRII      CCWGG                76     81         .
+      .
+     77      81       + BssKI       CCNGG                76     81         .
+      .
+     94      97       + TaqI        TCGA                 94     96         .
+      .
+    103     106       + HpaII       CCGG                103    105         .
+      .
+    105     108       + HaeIII      GGCC                106    106         .
+      .
+    107     111       + EcoRII      CCWGG               106    111         .
+      .
+    107     111       + BssKI       CCNGG               106    111         .
+      .
+    107     117       + BsiYI       CCNNNNNNNGG         113    110         .
+      .
+    122     132       + BsiYI       CCNNNNNNNGG         128    125         .
+      .
+    125     135       + Hin4I       GAYNNNNNVTC         116    111       148
+    143
+    146     150       + BsrI        ACTGG               151    149         .
+      .
+    161     165       + BssKI       CCNGG               160    165         .
+      .
+    162     165       + HpaII       CCGG                162    164         .
+      .
+    182     186       + EcoRII      CCWGG               181    186         .
+      .
+    182     186       + BssKI       CCNGG               181    186         .
+      .
+    190     193       + Hin6I       GCGC                190    192         .
+      .
+    190     193       + HhaI        GCGC                192    190         .
+      .
+    192     195       + Hin6I       GCGC                192    194         .
+      .
+    192     195       + HhaI        GCGC                194    192         .
+      .
+    197     201       + EcoRII      CCWGG               196    201         .
+      .
+    197     201       + BssKI       CCNGG               196    201         .
+      .
+    209     212       + HaeIII      GGCC                210    210         .
+      .
+    219     222       + HaeIII      GGCC                220    220         .
+      .
+    221     231       + BsiYI       CCNNNNNNNGG         227    224         .
+      .
+    221     225       - BsrI        ACTGG               221    219         .
+      .
+    226     229       - AciI        CCGC                226    228         .
+      .
+    236     239       + HaeIII      GGCC                237    237         .
+      .
+    248     252       + EcoRII      CCWGG               247    252         .
+      .
+    248     252       + BssKI       CCNGG               247    252         .
+      .
+    261     264       + HaeIII      GGCC                262    262         .
+      .
+    263     266       + AciI        CCGC                263    265         .
+      .
+    293     297       + EcoRII      CCWGG               292    297         .
+      .
+    293     297       + BssKI       CCNGG               292    297         .
+      .
+    296     299       + HaeIII      GGCC                297    297         .
+      .
+    335     338       + HaeIII      GGCC                336    336         .
+      .
+    377     380       - AciI        CCGC                377    379         .
+      .
+    380     383       - AciI        CCGC                380    382         .
+      .
+    395     398       + HpaII       CCGG                395    397         .
+      .
+    398     401       + Hin6I       GCGC                398    400         .
+      .
+    398     401       + HhaI        GCGC                400    398         .
+      .
+    405     410       + HindII      GTYRAC              407    407         .
+      .
+    408     413       + AclI        AACGTT              409    411         .
+      .
+    409     412       + MaeII       ACGT                409    411         .
+      .
+    417     427       + BsiYI       CCNNNNNNNGG         423    420         .
+      .
+    438     441       + HaeIII      GGCC                439    439         .
+      .
 
 #---------------------------------------
 #---------------------------------------
@@ -431,7 +488,7 @@ Output file format
 
 ########################################
 # Program: restrict
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: restrict
 #    -fragments
 #    -sequence tembl:x65923
@@ -454,31 +511,56 @@ Output file format
 #
 #=======================================
 
-  Start     End Enzyme_name Restriction_site 5prime 3prime 5primerev 3primerev
-     11      14 TaqI        TCGA                 11     13         .         .
-     28      25 AciI        CCGC                 25     27         .         .
-     36      31 BseYI       CCCAGC               31     35         .         .
-     38      41 AciI        CCGC                 38     40         .         .
-     44      40 BceAI       ACGGC                25     27         .         .
-     71      81 BsiYI       CCNNNNNNNGG          77     74         .         .
-     71      74 AciI        CCGC                 71     73         .         .
-     73      76 Hin6I       GCGC                 73     75         .         .
-     73      76 HhaI        GCGC                 75     73         .         .
-     77      81 EcoRII      CCWGG                76     81         .         .
-     77      81 BssKI       CCNGG                76     81         .         .
-     94      97 TaqI        TCGA                 94     96         .         .
-    103     106 HpaII       CCGG                103    105         .         .
-    105     108 HaeIII      GGCC                106    106         .         .
-    107     111 EcoRII      CCWGG               106    111         .         .
-    107     111 BssKI       CCNGG               106    111         .         .
-    107     117 BsiYI       CCNNNNNNNGG         113    110         .         .
-    122     132 BsiYI       CCNNNNNNNGG         128    125         .         .
-    125     135 Hin4I       GAYNNNNNVTC         116    111       148       143
-    146     150 BsrI        ACTGG               151    149         .         .
-    161     165 BssKI       CCNGG               160    165         .         .
-    162     165 HpaII       CCGG                162    164         .         .
-    182     186 EcoRII      CCWGG               181    186         .         .
-    182     186 BssKI       CCNGG               181    186         .         .
+  Start     End  Strand Enzyme_name Restriction_site 5prime 3prime 5primerev 3p
+rimerev
+     11      14       + TaqI        TCGA                 11     13         .
+      .
+     25      28       - AciI        CCGC                 25     27         .
+      .
+     31      36       - BseYI       CCCAGC               31     35         .
+      .
+     38      41       + AciI        CCGC                 38     40         .
+      .
+     40      44       - BceAI       ACGGC                25     27         .
+      .
+     71      81       + BsiYI       CCNNNNNNNGG          77     74         .
+      .
+     71      74       + AciI        CCGC                 71     73         .
+      .
+     73      76       + Hin6I       GCGC                 73     75         .
+      .
+     73      76       + HhaI        GCGC                 75     73         .
+      .
+     77      81       + EcoRII      CCWGG                76     81         .
+      .
+     77      81       + BssKI       CCNGG                76     81         .
+      .
+     94      97       + TaqI        TCGA                 94     96         .
+      .
+    103     106       + HpaII       CCGG                103    105         .
+      .
+    105     108       + HaeIII      GGCC                106    106         .
+      .
+    107     111       + EcoRII      CCWGG               106    111         .
+      .
+    107     111       + BssKI       CCNGG               106    111         .
+      .
+    107     117       + BsiYI       CCNNNNNNNGG         113    110         .
+      .
+    122     132       + BsiYI       CCNNNNNNNGG         128    125         .
+      .
+    125     135       + Hin4I       GAYNNNNNVTC         116    111       148
+    143
+    146     150       + BsrI        ACTGG               151    149         .
+      .
+    161     165       + BssKI       CCNGG               160    165         .
+      .
+    162     165       + HpaII       CCGG                162    164         .
+      .
+    182     186       + EcoRII      CCWGG               181    186         .
+      .
+    182     186       + BssKI       CCNGG               181    186         .
+      .
 
 
   [Part of this file has been deleted for brevity]
@@ -541,7 +623,7 @@ Output file format
 
 ########################################
 # Program: restrict
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: restrict
 #    -solofragment
 #    -sequence tembl:x65923
@@ -564,31 +646,56 @@ Output file format
 #
 #=======================================
 
-  Start     End Enzyme_name Restriction_site 5prime 3prime 5primerev 3primerev
-     11      14 TaqI        TCGA                 11     13         .         .
-     28      25 AciI        CCGC                 25     27         .         .
-     36      31 BseYI       CCCAGC               31     35         .         .
-     38      41 AciI        CCGC                 38     40         .         .
-     44      40 BceAI       ACGGC                25     27         .         .
-     71      81 BsiYI       CCNNNNNNNGG          77     74         .         .
-     71      74 AciI        CCGC                 71     73         .         .
-     73      76 Hin6I       GCGC                 73     75         .         .
-     73      76 HhaI        GCGC                 75     73         .         .
-     77      81 EcoRII      CCWGG                76     81         .         .
-     77      81 BssKI       CCNGG                76     81         .         .
-     94      97 TaqI        TCGA                 94     96         .         .
-    103     106 HpaII       CCGG                103    105         .         .
-    105     108 HaeIII      GGCC                106    106         .         .
-    107     111 EcoRII      CCWGG               106    111         .         .
-    107     111 BssKI       CCNGG               106    111         .         .
-    107     117 BsiYI       CCNNNNNNNGG         113    110         .         .
-    122     132 BsiYI       CCNNNNNNNGG         128    125         .         .
-    125     135 Hin4I       GAYNNNNNVTC         116    111       148       143
-    146     150 BsrI        ACTGG               151    149         .         .
-    161     165 BssKI       CCNGG               160    165         .         .
-    162     165 HpaII       CCGG                162    164         .         .
-    182     186 EcoRII      CCWGG               181    186         .         .
-    182     186 BssKI       CCNGG               181    186         .         .
+  Start     End  Strand Enzyme_name Restriction_site 5prime 3prime 5primerev 3p
+rimerev
+     11      14       + TaqI        TCGA                 11     13         .
+      .
+     25      28       - AciI        CCGC                 25     27         .
+      .
+     31      36       - BseYI       CCCAGC               31     35         .
+      .
+     38      41       + AciI        CCGC                 38     40         .
+      .
+     40      44       - BceAI       ACGGC                25     27         .
+      .
+     71      81       + BsiYI       CCNNNNNNNGG          77     74         .
+      .
+     71      74       + AciI        CCGC                 71     73         .
+      .
+     73      76       + Hin6I       GCGC                 73     75         .
+      .
+     73      76       + HhaI        GCGC                 75     73         .
+      .
+     77      81       + EcoRII      CCWGG                76     81         .
+      .
+     77      81       + BssKI       CCNGG                76     81         .
+      .
+     94      97       + TaqI        TCGA                 94     96         .
+      .
+    103     106       + HpaII       CCGG                103    105         .
+      .
+    105     108       + HaeIII      GGCC                106    106         .
+      .
+    107     111       + EcoRII      CCWGG               106    111         .
+      .
+    107     111       + BssKI       CCNGG               106    111         .
+      .
+    107     117       + BsiYI       CCNNNNNNNGG         113    110         .
+      .
+    122     132       + BsiYI       CCNNNNNNNGG         128    125         .
+      .
+    125     135       + Hin4I       GAYNNNNNVTC         116    111       148
+    143
+    146     150       + BsrI        ACTGG               151    149         .
+      .
+    161     165       + BssKI       CCNGG               160    165         .
+      .
+    162     165       + HpaII       CCGG                162    164         .
+      .
+    182     186       + EcoRII      CCWGG               181    186         .
+      .
+    182     186       + BssKI       CCNGG               181    186         .
+      .
 
 
   [Part of this file has been deleted for brevity]
@@ -686,7 +793,7 @@ Data files
      * ~/ (your home directory)
      * ~/.embossdata
 
-   The EMBOSS REBASE restriction enzyme data files are stored iin
+   The EMBOSS REBASE restriction enzyme data files are stored in
    directory 'data/REBASE/*' under the EMBOSS installation directory.
 
    These files must first be set up using the program 'rebaseextract'.
@@ -714,16 +821,30 @@ Data files
 
 Notes
 
+   Several criteria may be set to control what sites are reported: -min,
+   -max, -single (minimum or maximum number of cuts, or single site cuts
+   only. -blunt (enzymes which cut at the same position on the forward
+   and reverse strands). -sticky (enzymes which cut at different
+   positions on the forward and reverse strands, leaving an overhang).
+   -ambiguity (enzymes which have one or more N ambiguity codes in their
+   pattern). -commercial (enzymes with a commercial supplier). -plasmid
+   (allows searches for restriction enzyme recognition site and cut
+   postions that span the end of the sequence).
+
+   By default, only one enzyme of any group of isoschizomers (enzymes
+   that have the same recognition site and cut positions) is reported.
+   This behaviour can be changed by specifying -nolimit, in which case
+   all isoschizomers are reported. The default behaviour uses the
+   representative enzyme of an isoschizomer group (the prototype) which
+   is specified in the EMBOSS data file embossre.equ. This file is
+   generated from the REBASE database by running rebaseextract. You may
+   edit this file to set your own preferred prototype,if you wish.
+
    Output file size is related to the size of the recognition site and
    the maximum number of allowed cutting positions. Setting the site
    length to six and restricting the cuts to two is a common choice of
    parameters. The size of the output can sometimes be reduced by
    specifying the -noambiguity switch.
-
-   The data files must have been created before running this program.
-   This is done by running the rebaseextract program with the "withrefm"
-   and "prot" files from an REBASE release. You may have to ask your
-   system manager to do this.
 
 References
 
@@ -731,7 +852,10 @@ References
 
 Warnings
 
-   The program will warn you if a protein sequence is given.
+   restrict uses the EMBOSS REBASE restriction enzyme data files stored
+   in directory data/REBASE/* under the EMBOSS installation directory.
+   These files must first be set up using the program rebaseextract.
+   Running rebaseextract may be the job of your system manager.
 
 Diagnostic Error Messages
 
@@ -747,13 +871,16 @@ Known bugs
 
 See also
 
-   Program name                       Description
-   recoder      Remove restriction sites but maintain same translation
-   redata       Search REBASE for enzyme name, references, suppliers etc
-   remap        Display sequence with restriction sites, translation etc
-   restover     Find restriction enzymes producing specific overhang
-   showseq      Display a sequence with features, translation etc
-   silent       Silent mutation restriction enzyme scan
+   Program name Description
+   recoder Find restriction sites to remove (mutate) with no translation
+   change
+   redata Retrieve information from REBASE restriction enzyme database
+   remap Display restriction enzyme binding sites in a nucleotide
+   sequence
+   restover Find restriction enzymes producing a specific overhang
+   showseq Displays sequences with features in pretty format
+   silent Find restriction sites to insert (mutate) with no translation
+   change
 
 Author(s)
 

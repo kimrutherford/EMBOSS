@@ -5,9 +5,9 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>dbxgcg </b>
-Database b+tree indexing for GCG formatted databases
+Index a GCG formatted database using b+tree indices
 Basename for index files: <b>embl</b>
-Resource name: <b>embl</b>
+Resource name: <b>emblresource</b>
       EMBL : EMBL
      SWISS : Swiss-Prot, SpTrEMBL, TrEMBLnew
    GENBANK : Genbank, DDBJ
@@ -22,16 +22,7 @@ Wildcard database filename [*.seq]: <b></b>
        key : Keywords
        org : Taxonomy
 Index fields [id,acc]: <b></b>
-
-Processing file /homes/user/test/embl/eem_ba1.seq
-Processing file /homes/user/test/embl/eem_est.seq
-Processing file /homes/user/test/embl/eem_fun.seq
-Processing file /homes/user/test/embl/eem_htginv1.seq
-Processing file /homes/user/test/embl/eem_hum1.seq
-Processing file /homes/user/test/embl/eem_in.seq
-Processing file /homes/user/test/embl/eem_ov.seq
-Processing file /homes/user/test/embl/eem_ro.seq
-Processing file /homes/user/test/embl/eem_vi.seq
+General log output file [outfile.dbxgcg]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

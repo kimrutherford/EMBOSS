@@ -1,6 +1,5 @@
 application: megamerger [
-  documentation: "Merge two large overlapping nucleic acid
-                  sequences"
+  documentation: "Merge two large overlapping DNA sequences"
   groups: "Alignment:Consensus"
   gui: "yes"
   batch: "yes"

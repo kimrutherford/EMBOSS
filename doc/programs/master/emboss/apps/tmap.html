@@ -21,38 +21,8 @@ tmap
     Description
 </H2>
 
-This program predicts transmembrane segments in proteins,    
-utilising the algorithm described in:                        
-"Persson, B. & Argos, P. (1994) Prediction of transmembrane  
-segments in proteins utilising multiple sequence alignments   
-J. Mol. Biol. 237, 182-192."                                 
-<p>
+<p><b>tmap</b> predicts transmembrane segments for an aligned set of protein sequences, utilising the algorithm described in: "Persson, B. & Argos, P. (1994) Prediction of transmembrane segments in proteins utilising multiple sequence alignments J. Mol. Biol. 237, 182-192.".  A plot of the propensities to form the middle and the end of transmembrane regions is output. Bars are displayed in the plot above the regions predicted as being most likely to form transmembrane regions.  The transmembrane regions for the complete alignment are given first, followed by the predictions for each individual sequence in the alignment.</p>
 
-<b>tmap</b> reads in one or more aligned protein sequences.
-<p>
-
-Two sets of propensity values are then used for the calculations: one
-for the middle, hydrophobic portion and one for the terminal regions of
-the transmembrane sequence spans.  Average propensity values are
-calculated for each position along the alignment, with the contribution
-from each sequence weighted according to its dissimilarity relative to
-the other aligned sequences. 
-<p>
-
-Eight-residue segments are considered as potential cores of
-transmembrane segments and elongated if thier middle propensity values
-are above a threshold.  End propensity values are also considered as
-stop signals.  Only helices with a length of 15 to 29 residues are
-allowed and corrections for strictly conserved charged residues are
-made. 
-
-<p>
-
-The method is more successful than predictions based upon single
-sequences alone. 
-<p>
-
-The results are plotted on a graph and written to a text file.
 
 <H2>
     Usage
@@ -123,7 +93,12 @@ None.
     Notes
 </H2>
 
-None.
+<p>Two sets of transmembrane propensity values are then used for the calculations: one for the middle, hydrophobic portion and one for the terminal regions of the transmembrane sequence spans. Average propensity values are calculated for each position along the alignment, with the contribution from each sequence weighted according to its dissimilarity relative to the other aligned sequences.</p>
+
+<p>Eight-residue segments are considered as potential cores of transmembrane segments and elongated if thier middle propensity values are above a threshold. End propensity values are also considered as stop signals. Only helices with a length of 15 to 29 residues are allowed and corrections for strictly conserved charged residues are made.</p>
+
+<p>The method is more successful than predictions based upon single sequences alone.</p>
+
 
 
 <H2>

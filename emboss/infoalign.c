@@ -115,20 +115,20 @@ int main(int argc, char **argv)
 
     outfile = ajAcdGetOutfile("outfile");
 
-    html          = ajAcdGetBool("html");
-    doheader      = ajAcdGetBool("heading");
-    dousa         = ajAcdGetBool("usa");
-    doname        = ajAcdGetBool("name");
-    doseqlength   = ajAcdGetBool("seqlength");
-    doalignlength = ajAcdGetBool("alignlength");
-    dogaps        = ajAcdGetBool("gaps");
-    dogapcount    = ajAcdGetBool("gapcount");
-    doidcount     = ajAcdGetBool("idcount");
-    dosimcount    = ajAcdGetBool("simcount");
-    dodifcount    = ajAcdGetBool("diffcount");
-    dochange      = ajAcdGetBool("change");
-    dodesc        = ajAcdGetBool("description");
-    dowt          = ajAcdGetBool("weight");
+    html          = ajAcdGetBoolean("html");
+    doheader      = ajAcdGetBoolean("heading");
+    dousa         = ajAcdGetBoolean("usa");
+    doname        = ajAcdGetBoolean("name");
+    doseqlength   = ajAcdGetBoolean("seqlength");
+    doalignlength = ajAcdGetBoolean("alignlength");
+    dogaps        = ajAcdGetBoolean("gaps");
+    dogapcount    = ajAcdGetBoolean("gapcount");
+    doidcount     = ajAcdGetBoolean("idcount");
+    dosimcount    = ajAcdGetBoolean("simcount");
+    dodifcount    = ajAcdGetBoolean("diffcount");
+    dochange      = ajAcdGetBoolean("change");
+    dodesc        = ajAcdGetBoolean("description");
+    dowt          = ajAcdGetBoolean("weight");
 
     /* consensus parameters */
     fplural   = ajAcdGetFloat("plurality");

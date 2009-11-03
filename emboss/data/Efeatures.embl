@@ -1,9 +1,22 @@
+# Note: "SO: undefined" needs to be checked for a later SO definition
+
 # Updated to EMBL/GenBank/DDBJ FTv5.0 by Peter Rice 17th Jan 2003
 # Updated to EMBL/GenBank/DDBJ FTv6.2 by Peter Rice 27th Jan 2005
 # New in 6.2 is alternate mandatory qualifiers, shown by m rather than M
 # where e.g. /citation or /compare is used for a conflict
 
 # Updated to EMBL/GenBank/DDBJ FTv6.5 by Peter Rice 30th May 2006
+
+# "-" is a placeholder for no key; should be used when the need is
+# merely to mark region in order to comment on it or to use it in
+# another feature's location;
+
+# Features in EMBL feature table with SO aliases
+# ==============================================
+
+
+# SO: A biological feature that can be
+# attributed to a region of biological sequence.
 
 misc_feature SO:0000110
 	/allele
@@ -30,6 +43,14 @@ misc_feature SO:0000110
         # Removed in FT6.5
         #        /usedin
 
+# 1) region of DNA at which regulation of termination of transcription
+# occurs, which controls the expression of some bacterial operons; 2)
+# sequence segment located between the promoter and the first
+# structural gene that causes partial termination of transcription
+
+# SO: A sequence segment located between the promoter and a structural
+# gene that causes partial termination of transcription.
+
 attenuator SO:0000140
         /allele
         /citation
@@ -50,6 +71,12 @@ attenuator SO:0000140
         /phenotype
 	# Removed in FT6.5
         #        /usedin
+
+# constant region of immunoglobulin light and heavy  chains, and T-cell
+# receptor alpha, beta, and gamma  chains; includes one or more exons
+# depending on the  particular chain
+
+# SO: undefined
 
 #org=prokaryotes
 #mol=DNA
@@ -76,6 +103,15 @@ C_region SO:0000001_C_region
         # Removed in FT6.5
         #        /usedin
 
+# CAAT box; part of a conserved sequence located about 75 bp up-stream
+# of the start point of eukaryotic transcription units which may be
+# involved in RNA polymerase binding;
+
+# SO: consensus=GG(C or T)CAATCT [1,2].  Part of a conserved sequence
+# located about 75-bp upstream of the start point of eukaryotic
+# transcription units which may be involved in RNA polymerase binding;
+# consensus=GG(C|T)CAATCT.
+
 #up=CDS
 #org=eukaryotes
 
@@ -97,6 +133,13 @@ CAAT_signal SO:0000172
 	#        /partial
         # Removed in FT6.5
         #        /usedin
+
+# coding sequence; sequence of nucleotides that corresponds with the
+# sequence of amino acids in a protein (location includes stop codon);
+# feature includes amino acid conceptual translation.
+
+# SO: A contiguous sequence which begins with, and includes, a start
+# codon and ends with, and includes, a stop codon.
 
 #org=eukaryotes,eukaryotic_viruses
 #mol=DNA
@@ -137,7 +180,14 @@ CDS SO:0000316
         # Removed in FT6.5
         #         /usedin
 
-conflict SO:0000001_conflict
+# independent determinations of the "same" sequence differ at this site
+# or region;
+#
+# Or /compare=[accession-number.sequence-version]
+
+# SO: undefined
+
+conflict SO:0001085
        m/citation
        m/compare
         /db_xref
@@ -155,6 +205,19 @@ conflict SO:0000001_conflict
         /replace
         # Removed in FT6.5
         #        /usedin
+
+# displacement loop; a region within mitochondrial DNA in which a
+# short stretch of RNA is paired with one strand of DNA, displacing
+# the original partner DNA strand in this region; also used to
+# describe the displacement of a region of one strand of duplex DNA by
+# a single stranded invader in the reaction catalyzed by RecA protein
+
+
+# SO: Displacement loop; a region within mitochondrial DNA in which a
+# short stretch of RNA is paired with one strand of DNA, displacing
+# the original partner DNA strand in this region; also used to
+# describe the displacement of a region of one strand of duplex DNA by
+# a single stranded invader in the reaction catalyzed by RecA protein.
 
 D-loop SO:0000297
 	/allele
@@ -174,6 +237,12 @@ D-loop SO:0000297
 	#        /partial
         # Removed in FT6.5
         #        /usedin
+
+# Diversity segment of immunoglobulin heavy chain, and  T-cell receptor
+# beta chain;
+
+# SO: germline genomic DNA including D-region with 5' UTR and 3' UTR, also
+# designated as D-segment.
 
 #mol=DNA
 
@@ -199,6 +268,14 @@ D_segment SO:0000458
         # Removed in FT6.5
         #        /usedin
 
+# a cis-acting sequence that increases the utilization of (some)
+# eukaryotic promoters, and can function in either orientation and in
+# any location (upstream or downstream) relative to the promoter;
+
+# SO: A cis-acting sequence that increases the utilization of (some)
+# eukaryotic promoters, and can function in either orientation and in
+# any location (upstream or downstream) relative to the promoter.
+
 #up=CDS
 #org=eukaryotes
 
@@ -222,6 +299,14 @@ enhancer SO:0000165
         /standard_name
         # Removed in FT6.5
         #        /usedin
+
+# region of genome that codes for portion of spliced mRNA, rRNA and
+# tRNA; may contain 5'UTR, all CDSs and 3' UTR;
+
+# SO: A region of the genome that codes for portion of spliced
+# messenger RNA (SO:0000234); may contain 5'-untranslated region
+# (SO:0000204), all open reading frames (SO:0000236) and
+# 3'-untranslated region (SO:0000205).
 
 #org=eukaryotes,eukaryotic_viruses
 
@@ -250,6 +335,11 @@ exon SO:0000147
         # Removed in FT6.5
         #        /usedin
 
+# gap in the sequence
+
+# SO: A gap in the sequence of known length. The unkown bases are
+# filled in with N's.
+
 # New in 6.2
 gap SO:0000730
 	M/estimated_length
@@ -257,6 +347,14 @@ gap SO:0000730
 	/inference
 	/map
 	/note
+
+# GC box; a conserved GC-rich region located upstream of the start
+# point of eukaryotic transcription units which may occur in multiple
+# copies or in either orientation; consensus=GGGCGG;
+
+# SO: A conserved GC-rich region located upstream of the start point
+# of eukaryotic transcription units which may occur in multiple copies
+# or in either orientation; consensus=GGGCGG.
 
 GC_signal SO:0000173
 	/allele
@@ -276,6 +374,13 @@ GC_signal SO:0000173
 	#        /partial
         # Removed in FT6.5
         #        /usedin
+
+# region of biological interest identified as a gene and for which a
+# name has been assigned;
+
+# SO: A locatable region of genomic sequence, corresponding to a unit
+# of inheritance, which is associated with regulatory regions,
+# transcribed regions and/or other functional sequence regions
 
 #org=eukaryotes,eukaryotic_viruses
 
@@ -306,6 +411,11 @@ gene SO:0000704
         # Removed in FT6.5
         #        /usedin
 
+# DNA which is eliminated through any of several kinds of recombination;
+
+# SO: Genomic sequence removed from the genome, as a normal event, by
+# a process of recombination.
+
 iDNA SO:0000723
 	/allele
         /citation
@@ -327,6 +437,14 @@ iDNA SO:0000723
         /standard_name
         # Removed in FT6.5
         #        /usedin
+
+# a segment of DNA that is transcribed, but removed from within the
+# transcript by splicing together the sequences (exons) on either side
+# of it;
+
+# SO: A segment of DNA that is transcribed, but removed from within
+# the transcript by splicing together the sequences (exons) on either
+# side of it.
 
 #mol=DNA
 
@@ -357,6 +475,11 @@ intron SO:0000188
         # Removed in FT6.5
         #        /usedin
 
+# joining segment of immunoglobulin light and heavy  chains, and T-cell
+# receptor alpha, beta, and gamma  chains;
+
+# SO: undefined
+
 J_segment SO:0000001_J_segment
 	/allele
         /citation
@@ -377,6 +500,12 @@ J_segment SO:0000001_J_segment
         /standard_name
         # Removed in FT6.5
         #        /usedin
+
+# long terminal repeat, a sequence directly repeated at both ends of a
+# defined sequence, of the sort typically found in retroviruses;
+
+# SO: A sequence directly repeated at both ends of a defined sequence,
+# of the sort typically found in retroviruses.
 
 #up=CDS
 #org=eukaryotes
@@ -402,6 +531,14 @@ LTR SO:0000286
         # Removed in FT6.5
         #        /usedin
 
+# mature peptide or protein coding sequence; coding sequence for the
+# mature or final peptide or protein product following
+# post-translational modification; the location does not include the
+# stop codon (unlike the corresponding CDS);
+
+# SO: The coding sequence for the mature or final peptide or protein
+# product following post-translational modification.
+
 mat_peptide SO:0000419
 	/allele
         /citation
@@ -426,6 +563,13 @@ mat_peptide SO:0000419
         # Removed in FT6.5
         #        /usedin
 
+# site in nucleic acid which covalently or non-covalently binds
+# another moiety that cannot be described by any other binding key
+# (primer_bind or protein_bind);
+
+# SO: A region on the surface of a molecule that may interact with
+# another molecule.
+
 misc_binding SO:0000409
        M/bound_moiety
         /allele
@@ -446,6 +590,13 @@ misc_binding SO:0000409
 	#        /partial
         # Removed in FT6.5
         #        /usedin
+
+# feature sequence is different from that presented in the entry and
+# cannot be described by any other Difference key (conflict, unsure,
+# old_sequence, variation, or modified_base);
+
+# SO: A region where the sequences differs from that of a specified
+# sequence.
 
 misc_difference SO:0000413
 	/allele
@@ -471,6 +622,15 @@ misc_difference SO:0000413
         # Removed in FT6.5
         #        /usedin
 
+# site of any generalized, site-specific or replicative recombination
+# event where there is a breakage and reunion of duplex DNA that
+# cannot be described by other recombination keys or qualifiers of
+# source key (/insertion_seq, /transposon, /proviral);
+
+# SO: undefined general term that includes iDNA
+# sequence_rearrangement_feature haplotype_block and
+# recombination_hotspot
+
 misc_recomb SO:0000298
 	/allele
         /citation
@@ -493,6 +653,14 @@ misc_recomb SO:0000298
         /standard_name
         # Removed in FT6.5
         #        /usedin
+
+# any transcript or RNA product that cannot be defined by other RNA
+# keys (prim_transcript, precursor_RNA, mRNA, 5'clip, 3'clip, 5'UTR,
+# 3'UTR, exon, CDS, sig_peptide, transit_peptide, mat_peptide, intron,
+# polyA_site, rRNA, tRNA, scRNA, and snRNA);
+
+# SO: An RNA synthesized on a DNA or RNA template by an RNA
+# polymerase.
 
 #mol=DNA
 
@@ -523,6 +691,14 @@ misc_RNA SO:0000673
         # Removed in FT6.5
         #        /usedin
 
+# any region containing a signal controlling or altering gene function
+# or expression that cannot be described by other signal keys
+# (promoter, CAAT_signal, TATA_signal, -35_signal, -10_signal,
+# GC_signal, RBS, polyA_signal, enhancer, attenuator, terminator, and
+# rep_origin).
+
+# SO: A DNA sequence that controls the expression of a gene.
+
 misc_signal SO:0005836
 	/allele
         /citation
@@ -547,6 +723,11 @@ misc_signal SO:0005836
         # Removed in FT6.5
         #        /usedin
 
+# any secondary or tertiary nucleotide structure or conformation that
+# cannot be described by other Structure keys (stem_loop and D-loop);
+
+# SO: A folded sequence.
+
 misc_structure SO:0000002
 	/allele
         /citation
@@ -568,6 +749,13 @@ misc_structure SO:0000002
         # Removed in FT6.5
         #        /usedin
 
+# the indicated nucleotide is a modified nucleotide and should be
+# substituted for by the indicated molecule (given in the mod_base
+# qualifier value)
+
+# SO: A modified nucleotide, i.e. a nucleotide other than A, T, C. G
+# or (in RNA) U.
+
 modified_base SO:0000305
        M/mod_base
         /allele
@@ -586,6 +774,13 @@ modified_base SO:0000305
 	/old_locus_tag
         # Removed in FT6.5
         #        /usedin
+
+# messenger RNA; includes 5'untranslated region (5'UTR), coding
+# sequences (CDS, exon) and 3'untranslated region (3'UTR);
+
+# SO: messenger RNA is the intermediate molecule between DNA and
+# protein. It includes UTR and coding sequences. It does not contain
+# introns.
 
 mRNA SO:0000234
 	/allele
@@ -629,6 +824,11 @@ mRNA SO:0000234
 #        /standard_name
 #        /usedin
 
+# extra nucleotides inserted between rearranged immunoglobulin
+# segments.
+
+# SO: undefined
+
 N_region SO:0000001_N_region
 	/allele
         /citation
@@ -650,6 +850,13 @@ N_region SO:0000001_N_region
         /standard_name
         # Removed in FT6.5
         #        /usedin
+
+# the presented sequence revises a previous version of the sequence at
+# this location;
+#
+# Or /compare=[accession-number.sequence-version]
+
+# SO: undefined
 
 #up=CDS
 #org=eukaryotes
@@ -676,6 +883,13 @@ old_sequence SO:0000001_old_sequence
         # Removed in FT6.5
         #        /usedin
 
+# region containing polycistronic transcript containing genes that
+# encode enzymes that are in the same metabolic pathway and regulatory
+# sequences
+
+# SO: A group of contiguous genes transcribed as a single
+# (polycistronic) mRNA from a single regulatory region.
+
 # New in FT 6.2
 operon SO:0000178
 	M/operon
@@ -695,6 +909,12 @@ operon SO:0000178
 	 /standard_name
         # Removed in FT6.5
         #	 /usedin
+
+# origin of transfer; region of a DNA molecule where transfer is
+# initiated during the process of conjugation or mobilization
+
+# SO: A region of a DNA molecule whre transfer is initiated during the
+# process of conjugation or mobilization.
 
 # New in FT 6.2
 oriT SO:0000724
@@ -726,6 +946,14 @@ oriT SO:0000724
         # Removed in FT6.5
         #	/usedin
 
+# recognition region necessary for endonuclease cleavage of an RNA
+# transcript that is followed by polyadenylation; consensus=AATAAA
+# [1];
+
+# SO: The recognition sequence necessary for endonuclease cleavage of
+# an RNA transcript that is followed by polyadenylation;
+# consensus=AATAAA.
+
 #mol=DNA
 
 polyA_signal SO:0000551
@@ -747,6 +975,12 @@ polyA_signal SO:0000551
         # Removed in FT6.5
         #        /usedin
 
+# site on an RNA transcript to which will be added adenine residues by
+# post-transcriptional polyadenylation;
+
+# SO: The site on an RNA transcript to which will be added adenine
+# residues by post-transcriptional polyadenylation.
+
 #org=eukaryotes,eukaryotic_viruses
 
 polyA_site SO:0000553
@@ -765,6 +999,21 @@ polyA_site SO:0000553
  	/old_locus_tag
         # Removed in FT6.5
         #        /usedin
+
+# any RNA species that is not yet the mature RNA product; may include
+# 5' clipped region (5'clip), 5' untranslated region (5'UTR), coding
+# sequences (CDS, exon), intervening sequences (intron), 3'
+# untranslated region (3'UTR), and 3' clipped region (3'clip);
+
+# SO: The primary (initial, unprocessed) transcript; includes
+# five_prime_clip (SO:0000555), five_prime_untranslated_region
+# (SO:0000204), open reading frames (SO:0000236), introns (SO:0000188)
+# and three_prime_ untranslated_region (three_prime_UTR), and
+# three_prime_clip (SO:0000557).  precursor_RNA SO:0000185 /allele
+# /citation /db_xref /evidence /function /gene /label /locus_tag /map
+# /note /old_locus_tag /operon # removed in FTv5.0 for new entries -
+# use <> in location instead # /partial # added in FTv3.0 Jan 2001
+# /product /standard_name /usedin
 
 #org=eukaryotes,eukaryotic_viruses
 
@@ -794,6 +1043,12 @@ precursor_RNA SO:0000185_precursor_RNA
         # Removed in FT6.5
         #        /usedin
 
+#SO: The primary (initial, unprocessed) transcript; includes
+# five_prime_clip (SO:0000555), five_prime_untranslated_region
+# (SO:0000204), open reading frames (SO:0000236), introns (SO:0000188)
+# and three_prime_ untranslated_region (three_prime_UTR), and
+# three_prime_clip (SO:0000557)
+
 prim_transcript SO:0000185
 	/allele
         /citation
@@ -817,6 +1072,14 @@ prim_transcript SO:0000185
         # Removed in FT6.5
         #        /usedin
 
+# non-covalent primer binding site for initiation of replication,
+# transcription, or reverse transcription; includes site(s) for
+# synthetic e.g., PCR primer elements;
+
+# SO: Non-covalent primer binding
+# site for initiation of replication, transcription, or reverse
+# transcription.
+
 primer_bind SO:0005850
 	/allele
         /citation
@@ -837,6 +1100,12 @@ primer_bind SO:0005850
         /standard_name
         # Removed in FT6.5
         #        /usedin
+
+# region on a DNA molecule involved in RNA polymerase binding to
+# initiate transcription;
+
+# SO: The region on a DNA molecule involved in RNA polymerase binding
+# to initiate transcription.
 
 promoter SO:0000167
 	/allele
@@ -863,6 +1132,10 @@ promoter SO:0000167
         # Removed in FT6.5
         #        /usedin
 
+# non-covalent protein binding site on nucleic acid;
+
+# SO: A region of a molecule that binds to a protein.
+
 #mol=DNA
 
 # Use RBS instead for ribosome binding sites
@@ -888,6 +1161,10 @@ protein_bind SO:0000410
         # Removed in FT6.5
         #        /usedin
 
+# ribosome binding site;
+
+# SO: Region in mRNA where ribosome assembles
+
 RBS SO:0000139
 	/allele
         /citation
@@ -907,6 +1184,10 @@ RBS SO:0000139
         /standard_name
         # Removed in FT6.5
         #        /usedin
+
+# region of genome containing repeating units;
+
+# SO: A region of sequence containing one or more repeat units.
 
 repeat_region SO:0000657
 	/allele
@@ -942,6 +1223,10 @@ repeat_region SO:0000657
         # Removed in FT6.5
         #        /usedin
 
+# single repeat element;
+
+# SO: A single repeat element.
+
 repeat_unit SO:0000726
 	/allele
         /citation
@@ -972,6 +1257,9 @@ repeat_unit SO:0000726
         # Removed in FT6.5
         #        /usedin
 
+
+# SO: regulatory_region, equivalent to EMBL/GB misc_signal
+
 rep_origin SO:0005836_rep_origin
 	/allele
         /citation
@@ -992,6 +1280,12 @@ rep_origin SO:0005836_rep_origin
         /standard_name
         # Removed in FT6.5
         #        /usedin
+
+# mature ribosomal RNA ; RNA component of the ribonucleoprotein
+# particle (ribosome) which assembles amino acids into proteins.
+
+# SO: RNA that comprises part of a ribosome, and that can provide both
+# structural scaffolding and catalytic activity.
 
 rRNA SO:0000252
 	/allele
@@ -1017,6 +1311,12 @@ rRNA SO:0000252
         # Removed in FT6.5
         #        /usedin
 
+# switch region of immunoglobulin heavy chains; involved in the
+# rearrangement of heavy chain DNA leading to the expression of a
+# different immunoglobulin class from the same B-cell;
+
+# SO: undefined
+
 S_region SO:0000001_S_region
 	/allele
         /citation
@@ -1038,6 +1338,16 @@ S_region SO:0000001_S_region
         /standard_name
         # Removed in FT6.5
         #        /usedin
+
+# many tandem repeats (identical or related) of a short basic
+# repeating unit; many have a base composition or other property
+# different from the genome average that allows them to be separated
+# from the bulk (main band) genomic DNA;
+
+# SO: The many tandem repeats (identical or related) of a short basic
+# repeating unit; many have a base composition or other property
+# different from the genome average that allows them to be separated
+# from the bulk (main band) genomic DNA.
 
 #up=misc_signal
 #org=eukaryotes
@@ -1070,6 +1380,13 @@ satellite SO:0000005
         # Removed in FT6.5
         #        /usedin
 
+# small cytoplasmic RNA; any one of several small cytoplasmic RNA
+# molecules present in the cytoplasm and (sometimes) nucleus of a
+# eukaryote;
+
+# SO: Any one of several small cytoplasmic RNA moleculespresent in the
+# cytoplasm and sometimes nucleus of a eukaryote.
+
 #mol=DNA
 
 scRNA SO:0000013
@@ -1095,6 +1412,14 @@ scRNA SO:0000013
         # Removed in FT6.5
         #        /usedin
 
+# signal peptide coding sequence; coding sequence for an N-terminal
+# domain of a secreted protein; this domain is involved in attaching
+# nascent polypeptide to the membrane leader sequence;
+
+# SO: The sequence for an N-terminal domain of a secreted protein;
+# this domain is involved in attaching nascent polypeptide to the
+# membrane leader sequence.
+
 sig_peptide SO:0000418
 	/allele
         /citation
@@ -1118,6 +1443,29 @@ sig_peptide SO:0000418
         # Removed in FT6.5
         #        /usedin
 
+# small nucleolar RNA molecules mostly involved in rRNA modification
+# and processing;
+
+# SO: Small nucleolar RNAs (snoRNAs) are involved in the processing
+# and modification of rRNA in the nucleolus. There are two main
+# classes of snoRNAs: the box C/D class, and the box H/ACA class. U3
+# snoRNA is a member of the box C/D class. Indeed, the box C/D element
+# is a subset of the six short sequence elements found in all U3
+# snoRNAs, namely boxes A, A', B, C, C', and D. The U3 snoRNA
+# secondary structure is characterised by a small 5' domain (with
+# boxes A and A'), and a larger 3' domain (with boxes B, C, C', and
+# D), the two domains being linked by a single-stranded hinge. Boxes B
+# and C form the B/C motif, which appears to be exclusive to U3
+# snoRNAs, and boxes C' and D form the C'/D motif. The latter is
+# functionally similar to the C/D motifs found in other snoRNAs. The
+# 5' domain and the hinge region act as a pre-rRNA-binding domain. The
+# 3' domain has conserved protein-binding sites. Both the box B/C and
+# box C'/D motifs are sufficient for nuclear retention of U3
+# snoRNA. The box C'/D motif is also necessary for nucleolar
+# localization, stability and hypermethylation of U3 snoRNA. Both box
+# B/C and C'/D motifs are involved in specific protein interactions
+# and are necessary for the rRNA processing functions of U3 snoRNA.
+
 snoRNA SO:0000275
 	/allele
         /citation
@@ -1138,6 +1486,11 @@ snoRNA SO:0000275
         /standard_name
         # Removed in FT6.5
         #        /usedin
+
+# small nuclear RNA molecules involved in pre-mRNA splicing and
+# processing
+
+# SO: Small non-coding RNA in the nucleoplasm.
 
 snRNA SO:0000274
 	/allele
@@ -1161,6 +1514,18 @@ snRNA SO:0000274
         /standard_name
         # Removed in FT6.5
         #        /usedin
+
+#identifies the biological source of the specified span of the
+#sequence; this key is mandatory; more than one source key per
+#sequence is allowed; every entry/record will have, as a minimum,
+#either a single source key spanning the entire sequence or multiple
+#source keys which together span the entire
+#sequence. /mol_type="genomic DNA", "genomic RNA", "mRNA", "tRNA",
+#"rRNA", "snoRNA", "snRNA", "scRNA", "pre-RNA", "other RNA", "other
+#DNA", "unassigned DNA", "unassigned RNA"
+
+# SO: The sequence referred to by an entry in a databank such as
+# Genbank or SwissProt.
 
 source SO:2000061
        M/organism
@@ -1245,6 +1610,13 @@ source SO:2000061
         /variety
         /virion
 
+# hairpin; a double-helical region formed by base-pairing between
+# adjacent (inverted) complementary sequences in a single strand of
+# RNA or DNA.
+
+# SO: A double-helical region of nucleic acid formed by base-pairing between
+# adjacent (inverted) complementary sequences.
+
 stem_loop SO:0000313
 	/allele
         /citation
@@ -1267,6 +1639,14 @@ stem_loop SO:0000313
         # Removed in FT6.5
         #        /usedin
 
+# short, single-copy DNA sequence that characterizes a mapping
+# landmark on the genome and can be detected by PCR; a region of the
+# genome can be mapped by determining the order of a series of STSs;
+
+# SO: Short (typically a few hundred base pairs) DNA sequence that has
+# a single occurrence in a genome and whose location and base sequence
+# are known.
+
 STS SO:0000331
 # Location to include the primer(s) annotated usually in primer_bind feature
 	/allele
@@ -1287,6 +1667,16 @@ STS SO:0000331
         /standard_name
         # Removed in FT6.5
         #        /usedin
+
+# TATA box; Goldberg-Hogness box; a conserved AT-rich septamer found
+# about 25 bp before the start point of each eukaryotic RNA polymerase
+# II transcript unit which may be involved in positioning the enzyme
+# for correct initiation; consensus=TATA(A or T)A(A or T) [1,2];
+
+# SO: A conserved AT-rich septamer found about 25-bp before the start
+# point of many eukaryotic RNA polymerase II transcript units; may be
+# involved in positioning the enzyme for correct initiation;
+# consensus=TATA(A|T)A(A|T).
 
 #mol=DNA
 #up=misc_binding
@@ -1309,6 +1699,12 @@ TATA_signal SO:0000174
 	#        /partial
         # Removed in FT6.5
         #        /usedin
+
+# sequence of DNA located either at the end of the transcript that
+# causes RNA polymerase to terminate  transcription;
+
+# SO: The sequence of DNA located either at the end of the transcript that
+# causes RNA polymerase to terminate transcription.
 
 #org=eukaryotes,eukaryotic_viruses
 #mol=DNA
@@ -1334,6 +1730,15 @@ terminator SO:0000141
         # Removed in FT6.5
         #        /usedin
 
+# transit peptide coding sequence; coding sequence for an N-terminal
+# domain of a nuclear-encoded organellar protein; this domain is
+# involved in post-translational import of the protein into the
+# organelle;
+
+# SO: The coding sequence for an N-terminal domain of a
+# nuclear-encoded organellar protein: this domain is involved in post
+# translational import of the protein into the organelle.
+
 #mol=DNA
 
 transit_peptide SO:0000725
@@ -1358,6 +1763,24 @@ transit_peptide SO:0000725
         /standard_name
         # Removed in FT6.5
         #        /usedin
+
+# mature transfer RNA, a small RNA molecule (75-85 bases long) that
+# mediates the translation of a nucleic acid sequence into an amino
+# acid sequence;
+
+# SO: Transfer RNA (tRNA) molecules are approximately 80 nucleotides
+# in length. Their secondary structure includes four short
+# double-helical elements and three loops (D, anti-codon, and T
+# loops). Further hydrogen bonds mediate the characteristic L-shaped
+# molecular structure. tRNAs have two regions of fundamental
+# functional importance: the anti-codon, which is responsible for
+# specific mRNA codon recognition, and the 3' end, to which the tRNA's
+# corresponding amino acid is attached (by aminoacyl-tRNA
+# synthetases). tRNAs cope with the degeneracy of the genetic code in
+# two manners: having more than one tRNA (with a specific anti-codon)
+# for a particular amino acid; and 'wobble' base-pairing,
+# i.e. permitting non-standard base-pairing at the 3rd anti-codon
+# position.
 
 tRNA SO:0000253
 	/allele
@@ -1385,8 +1808,11 @@ tRNA SO:0000253
         # Removed in FT6.5
         #        /usedin
 
+# author is unsure of exact sequence in this region;
+
+# SO: undefined
+
 unsure SO:0000001_unsure
-# author is unsure of exact sequence in this region
 	/allele
         /citation
 	/compare
@@ -1405,6 +1831,13 @@ unsure SO:0000001_unsure
         /replace
         # Removed in FT6.5
         #        /usedin
+
+# variable region of immunoglobulin light and heavy chains, and T-cell
+# receptor alpha, beta, and gamma chains; codes for the variable amino
+# terminal portion; can be composed of V_segments, D_segments,
+# N_regions, and J_segments;
+
+# SO: undefined
 
 V_region SO:0000001_V_region
 	/allele
@@ -1427,6 +1860,13 @@ V_region SO:0000001_V_region
         /standard_name
         # Removed in FT6.5
         #        /usedin
+
+# variable segment of immunoglobulin light and heavy chains, and
+# T-cell receptor alpha, beta, and gamma chains; codes for most of the
+# variable region (V_region) and the last few amino acids of the
+# leader peptide;
+
+# SO: undefined
 
 #up=CDS
 #org=eukaryotes
@@ -1452,6 +1892,12 @@ V_segment SO:0000001_V_segment
         /standard_name
         # Removed in FT6.5
         #        /usedin
+
+# a related strain contains stable mutations from the same gene (e.g.,
+# RFLPs, polymorphisms, etc.) which differ from the presented sequence
+# at this location (and possibly others);
+
+# SO: A region of sequence where variation has been observed.
 
 #up=CDS
 #org=eukaryotes
@@ -1482,6 +1928,12 @@ variation SO:0000109
         # Removed in FT6.5
         #        /usedin
 
+# 3'-most region of a precursor transcript that is clipped off during
+# processing;
+
+# SO: 3'-most region of a precursor transcript that is clipped off
+# during processing.
+
 3'clip SO:0000557
 	/allele
         /citation
@@ -1502,6 +1954,13 @@ variation SO:0000109
         /standard_name
         # Removed in FT6.5
         #        /usedin
+
+# region at the 3' end of a mature transcript (following the stop
+# codon) that is not translated into a protein;
+
+# SO: A region at the 3' end of a mature transcript (following the
+# stop codon) that is not translated into a protein.
+
 
 3'UTR SO:0000205
 	/allele
@@ -1526,6 +1985,12 @@ variation SO:0000109
         # Removed in FT6.5
         #        /usedin
 
+# 5'-most region of a precursor transcript that is clipped off during
+# processing;
+
+# SO: 5' most region of a precursor transcript that is clipped off
+# during processing.
+
 5'clip SO:0000555
 	/allele
         /citation
@@ -1546,6 +2011,12 @@ variation SO:0000109
         /standard_name
         # Removed in FT6.5
         #        /usedin
+
+# region at the 5' end of a mature transcript (preceding the
+# initiation codon) that is not translated into a protein;
+
+# SO: A region at the 5' end of a mature transcript (preceding the
+# initiation codon) that is not translated into a protein.
 
 5'UTR SO:0000204
 	/allele
@@ -1570,6 +2041,14 @@ variation SO:0000109
         # Removed in FT6.5
         #        /usedin
 
+# Pribnow box; a conserved region about 10 bp upstream of the start
+# point of bacterial transcription units which may be involved in
+# binding RNA polymerase; consensus=TAtAaT [1,2,3,4];
+
+# SO: A conserved region about 10-bp upstream of the start point of
+# bacterial transcription units which may be involved in binding RNA
+# polymerase; consensus=TAtAaT.
+
 -10_signal SO:0000175
 	/allele
         /citation
@@ -1592,6 +2071,12 @@ variation SO:0000109
         /standard_name
         # Removed in FT6.5
         #        /usedin
+
+# a conserved hexamer about 35 bp upstream of the start point of
+# bacterial transcription units; consensus=TTGACa or TGTTGACA;
+
+# SO: A conserved hexamer about 35-bp upstream of the start point of
+# bacterial transcription units; consensus=TTGACa or TGTTGACA.
 
 #org=prokaryotes
 #mol=DNA
@@ -1619,13 +2104,17 @@ variation SO:0000109
         # Removed in FT6.5
         #        /usedin
 
+# "-" is a placeholder for no key; should be used when the need is
+# merely to mark region in order to comment on it or to use it in
+# another feature's location;
+# Otherwise, use misc_feature
+
+# SO: A biological feature that can be
+# attributed to a region of biological sequence.
+
 #org=prokaryotes
 #mol=DNA
 
-# Placeholder for "no feature key"
-# Used when marking a region to comment on it
-# or for use in another feature's location
-# Otherwise, use misc_feature
 - SO:0000001
         /citation
         /db_xref

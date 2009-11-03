@@ -80,21 +80,21 @@ int main(int argc, char **argv)
     fn=ajStrNew();
     ajStrAssignS(&fn,dirname);
     ajStrAppendC(&fn,"prosite.dat");
-    if(!(infdat=ajFileNewIn(fn)))
+    if(!(infdat=ajFileNewInNameS(fn)))
 	ajFatal("Cannot open file %S",fn);
     ajStrDel(&fn);
 
 
 
     fn=ajStrNewC("PROSITE/prosite.lines");
-    ajFileDataNewWrite(fn,&outf);
+    outf = ajDatafileNewOutNameS(fn);
     ajStrDel(&fn);
 
 
 
     haspattern = ajFalse;
 
-    while(ajFileReadLine(infdat, &line) )
+    while(ajReadlineTrim(infdat, &line) )
     {
 	if(ajStrPrefixC(line, "ID"))
 	{
@@ -151,7 +151,7 @@ int main(int argc, char **argv)
 		p = ajSysFuncStrtok(p, " \t.");
 		p = ajSysFuncStrtok(NULL, " \t.");
 		ajStrAppendC(&pa,p);
-		ajFileReadLine(infdat, &line);
+		ajReadlineTrim(infdat, &line);
 	    }
 
 	    ajFmtPrintF(outf, "%S\n", pa);
@@ -169,7 +169,7 @@ int main(int argc, char **argv)
     fn = ajStrNew();
     ajStrAssignS(&fn,dirname);
     ajStrAppendC(&fn,"prosite.doc");
-    if(!(infdoc=ajFileNewIn(fn)))
+    if(!(infdoc=ajFileNewInNameS(fn)))
 	ajFatal("Cannot open file %S",fn);
     ajStrDel(&fn);
 
@@ -181,21 +181,21 @@ int main(int argc, char **argv)
     goback = ajFalse;
 
 
-    while(ajFileReadLine(infdoc, &text))
+    while(ajReadlineTrim(infdoc, &text))
     {
 	if(ajStrPrefixC(text, "{PS") && isopen && !goback)
 	    goback = ajTrue;
 
 	if(ajStrPrefixC(text, "{PS") && !isopen)
 	{
-	    storepos = ajFileTell(infdoc);
+	    storepos = ajFileResetPos(infdoc);
 	    /* save out the documentation text to acc numbered outfiles . */
 	    p = ajStrGetPtr(text)+1;
 	    p = ajSysFuncStrtok(p, ";");
 	    ajStrAssignS(&filename, fname);
 	    ajStrAppendC(&filename, p);
 
-	    ajFileDataNewWrite(filename, &outs);
+	    outs = ajDatafileNewOutNameS(filename);
 	    flag   = ajTrue;
 	    isopen = ajTrue;
 	    continue;
@@ -204,7 +204,7 @@ int main(int argc, char **argv)
 
 	if(ajStrPrefixC(text, "{BEGIN}") && flag)
 	{
-	    while(ajFileReadLine(infdoc, &text))
+	    while(ajReadlineTrim(infdoc, &text))
 	    {
 		if(ajStrPrefixC(text,"{END}"))
 		    break;

@@ -107,7 +107,7 @@ public class LocalTreeToolBar extends JToolBar
     {
       public void actionPerformed(ActionEvent e)
       {
-        File cwd = new File(System.getProperty("user.dir"));
+        File cwd = new File(mysettings.getResultsHome());
         setDirectory(cwd, mysettings);
       }
     });
@@ -155,7 +155,7 @@ public class LocalTreeToolBar extends JToolBar
 //    mysettings.setUserHome(cwd);
       org.emboss.jemboss.Jemboss.tree.newRoot(cwd);
       if(SetUpMenuBar.localAndRemoteTree != null)
-      SetUpMenuBar.localAndRemoteTree.getLocalDragTree().newRoot(cwd);
+      LocalAndRemoteFileTreeFrame.getLocalDragTree().newRoot(cwd);
 
       if(!f.canWrite())
         JOptionPane.showMessageDialog(null,

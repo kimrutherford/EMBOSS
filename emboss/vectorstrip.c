@@ -165,11 +165,11 @@ int main(int argc, char **argv)
     outf       = ajAcdGetOutfile("outfile");
     seqout     = ajAcdGetSeqoutall("outseq");
     vec        = ajAcdGetToggle("vectorfile");
-    besthits   = ajAcdGetBool("besthits");
+    besthits   = ajAcdGetBoolean("besthits");
     fiveprime  = ajAcdGetString("linkerA");
     threeprime = ajAcdGetString("linkerB");
     vectorfile = ajAcdGetInfile("vectorsFILE");
-    allsequences = ajAcdGetBool("allsequences");
+    allsequences = ajAcdGetBoolean("allsequences");
 
     vectorlist = ajListNew();
 
@@ -192,7 +192,7 @@ int main(int argc, char **argv)
     /* check there are vectors to be searched */
     if(!ajListGetLength(vectorlist))
     {
-	ajUser("\nNo suitable vectors found - exiting\n");
+	ajErr("No suitable vectors found - exiting");
 	embExitBad();
 	return 0;
     }
@@ -333,7 +333,7 @@ static void vectorstrip_read_vector_data(AjPFile vectorfile,
 
     Vector vector = NULL;
 
-    while(ajFileReadLine(vectorfile, &rdline))
+    while(ajReadlineTrim(vectorfile, &rdline))
     {
 	AjPStr name  = NULL;
 	AjPStr five  = NULL;
@@ -579,7 +579,7 @@ static void vectorstrip_process_hits(const AjPList fivelist,
     switch(type)
     {
     case 1:
-	ajUser("5' and 3' sequence matches are identical; inconclusive\n");
+	ajWarn("5' and 3' sequence matches are identical; inconclusive");
 	break;
 
     case 2:

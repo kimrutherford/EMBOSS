@@ -6,7 +6,7 @@
 <pre>
 ########################################
 # Program: antigenic
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: antigenic
 #    -sequence tsw:actb1_fugru
 # Report_format: motif
@@ -26,24 +26,28 @@ Max_score_pos at "*"
  Sequence: EKLCYVALD
            |       |
          214       222
+ Max_score_pos: 218
 
 (2) Score 1.187 length 15 at residues 131-&gt;145
                  *
  Sequence: AMYVAIQAVLSLYAS
            |             |
          131             145
+ Max_score_pos: 137
 
 (3) Score 1.166 length 8 at residues 5-&gt;12
               *
  Sequence: IAALVVDN
            |      |
            5      12
+ Max_score_pos: 8
 
 (4) Score 1.164 length 12 at residues 27-&gt;38
                 *
  Sequence: PRAVFPSIVGRP
            |          |
           27          38
+ Max_score_pos: 32
 
 (5) Score 1.136 length 24 at residues 160-&gt;183
                         *
@@ -51,60 +55,56 @@ Max_score_pos at "*"
            |                      |
          160                      183
 
-(6) Score 1.135 length 6 at residues 367-&gt;372
-                *
- Sequence: PSIVHR
-
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-(11) Score 1.102 length 15 at residues 62-&gt;76
-                 *
- Sequence: RGILTLKYPIEHGIV
-           |             |
-          62             76
-
-(12) Score 1.086 length 19 at residues 232-&gt;250
                         *
  Sequence: SSSSLEKSYELPDGQVITI
            |                 |
          232                 250
+ Max_score_pos: 245
 
 (13) Score 1.083 length 6 at residues 327-&gt;332
               *
  Sequence: IKIIAP
            |    |
          327    332
+ Max_score_pos: 330
 
 (14) Score 1.074 length 7 at residues 317-&gt;323
               *
  Sequence: ITALAPS
            |     |
          317     323
+ Max_score_pos: 320
 
 (15) Score 1.068 length 7 at residues 186-&gt;192
                 *
  Sequence: TDYLMKI
            |     |
          186     192
+ Max_score_pos: 191
 
 (16) Score 1.066 length 7 at residues 40-&gt;46
               *
  Sequence: HQGVMVG
            |     |
           40     46
+ Max_score_pos: 43
 
 (17) Score 1.045 length 7 at residues 269-&gt;275
            *
  Sequence: MESCGIH
            |     |
          269     275
+ Max_score_pos: 269
 
 (18) Score 1.034 length 7 at residues 51-&gt;57
             *
  Sequence: DSYVGDE
            |     |
           51     57
+ Max_score_pos: 52
 
 
 #---------------------------------------
@@ -118,7 +118,7 @@ Max_score_pos at "*"
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ##gff-version 2.0
-##date 2006-07-15
+##date 2007-07-15
 ##Type Protein ACTB1_FUGRU
 ACTB1_FUGRU	antigenic	region	214	222	1.207	+	.	Sequence "ACTB1_FUGRU.1" ; note "*pos 218"
 ACTB1_FUGRU	antigenic	region	131	145	1.187	+	.	Sequence "ACTB1_FUGRU.2" ; note "*pos 137"

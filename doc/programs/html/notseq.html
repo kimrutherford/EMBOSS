@@ -23,51 +23,14 @@ notseq
 <H2>
     Function
 </H2>
-Exclude a set of sequences and write out the remaining ones
+Write to file a subset of an input stream of sequences
 
 
 <H2>
     Description
 </H2>
 
-When you have a set of sequences (a file of multiple sequences?) and you
-wish to remove one or more of them from the set, then use <b>notseq</b>. 
-
-<p>
-
-This program was written for the case where a file containing several
-sequences is being used as a small database, but some of the sequences
-are no longer required and must be deleted from the file. 
-
-<p>
-
-<b>notseq</b> splits the input sequences into those that you wish to
-keep and those you wish to exclude. 
-
-<p>
-
-<b>notseq</b> takes a set of sequences as input together with a list of
-sequence names or accession numbers.  It also takes the name of a new
-file to write the files that you want to keep into, and optionally the
-name of a file that will contain the files that you want excluded from
-the set. 
-
-<p>
-
-<b>notseq</b> then reads in the input sequences.  It outputs the ones
-that match one of the sequence names or acession numbers to the file of
-excluded sequences, and those that don't match are output to the file of
-sequences to be kept. 
-
-<p>
-
-Note that the names of the sequences to be excluded are not standard
-EMBOSS USAs.  Only the name or accession number shoudl be specified, not
-the database or file that these entries may occur in.  These excluded
-sequence names will be matched against the names of the input sequences
-to see if there is a match.  Wildcarded names may be specified by using
-'*'s.  Any specified names of sequences to be excluded that are not
-found are simply ignored. 
+<p><b>notseq</b> writes to file a subset of an input stream of sequences. The list of sequence names or accession numbers to exclude from output is provided as a string.  Optionally, the excluded sequences are also written to file.</p>
 
 
 
@@ -85,7 +48,7 @@ In this case the excluded sequences (myg_phyca and lgb2_luplu) are not saved to 
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>notseq </b>
-Exclude a set of sequences and write out the remaining ones
+Write to file a subset of an input stream of sequences
 Input (gapped) sequence(s): <b>globins.fasta</b>
 Sequence names to exclude: <b>myg_phyca,lgb2_luplu</b>
 output sequence(s) [hbb_human.fasta]: <b>mydata.seq</b>
@@ -103,7 +66,7 @@ Here is an example where the sequences to be excluded are saved to another file:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>notseq -junkout hb.seq </b>
-Exclude a set of sequences and write out the remaining ones
+Write to file a subset of an input stream of sequences
 Input (gapped) sequence(s): <b>globins.fasta</b>
 Sequence names to exclude: <b>hb*</b>
 output sequence(s) [hbb_human.fasta]: <b>mydata.seq</b>
@@ -194,8 +157,9 @@ output sequence(s) [hbb_human.fasta]: <b>mydata.seq</b>
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -420,10 +384,12 @@ None.
     Notes
 </H2>
 
-Note that the names or accession numbers of the sequences to be
-excluded are not standard EMBOSS USAs.  Only the ID name or accession
-number can be specified, you cannot specify the sequences as
-'database:ID', 'file:accession', 'format::file', etc. 
+<p><b>notseq</b> was written for the case where a file containing several sequences was being used as a small database, but some of the sequences were no longer required. <b>notseq</b> splits the input sequences into those that you wish to keep and those you wish to exclude.</p>
+
+<p>Wildcarded names and accession numbers may be specified in the input string by using <tt>*</tt>.</p>
+
+<p>The names (or accession numbers) of the sequences to be excluded can be entered as a file of such names by specifying an <tt>@</tt> followed by the name of the file containing the sequence names. For example: <tt>@names.dat</tt>.</p>
+
 
 <H2>
     References
@@ -436,7 +402,7 @@ None.
     Warnings
 </H2>
 
-None.
+<p>The input string does not support the full USA syntax; only the name or accession number should be specified, not the database or file that these entries may occur in.</p>
 
 <H2>
     Diagnostic Error Messages
@@ -462,7 +428,18 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="aligncopy.html">aligncopy</a></td>
+<td>Reads and writes alignments</td>
+</tr>
+
+<tr>
+<td><a href="aligncopypair.html">aligncopypair</a></td>
+<td>Reads and writes pairs from alignments</td>
+</tr>
+
 <tr>
 <td><a href="biosed.html">biosed</a></td>
 <td>Replace or delete sequence sections</td>
@@ -470,17 +447,17 @@ None.
 
 <tr>
 <td><a href="codcopy.html">codcopy</a></td>
-<td>Reads and writes a codon usage table</td>
+<td>Copy and reformat a codon usage table</td>
 </tr>
 
 <tr>
 <td><a href="cutseq.html">cutseq</a></td>
-<td>Removes a specified section from a sequence</td>
+<td>Removes a section from a sequence</td>
 </tr>
 
 <tr>
 <td><a href="degapseq.html">degapseq</a></td>
-<td>Removes gap characters from sequences</td>
+<td>Removes non-alphabetic (e.g. gap) characters from sequences</td>
 </tr>
 
 <tr>
@@ -490,7 +467,7 @@ None.
 
 <tr>
 <td><a href="entret.html">entret</a></td>
-<td>Reads and writes (returns) flatfile entries</td>
+<td>Retrieves sequence entries from flatfile databases and files</td>
 </tr>
 
 <tr>
@@ -500,12 +477,22 @@ None.
 
 <tr>
 <td><a href="extractfeat.html">extractfeat</a></td>
-<td>Extract features from a sequence</td>
+<td>Extract features from sequence(s)</td>
 </tr>
 
 <tr>
 <td><a href="extractseq.html">extractseq</a></td>
 <td>Extract regions from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="featcopy.html">featcopy</a></td>
+<td>Reads and writes a feature table</td>
+</tr>
+
+<tr>
+<td><a href="featreport.html">featreport</a></td>
+<td>Reads and writes a feature table</td>
 </tr>
 
 <tr>
@@ -515,37 +502,62 @@ None.
 
 <tr>
 <td><a href="makenucseq.html">makenucseq</a></td>
-<td>Creates random nucleotide sequences</td>
+<td>Create random nucleotide sequences</td>
 </tr>
 
 <tr>
 <td><a href="makeprotseq.html">makeprotseq</a></td>
-<td>Creates random protein sequences</td>
+<td>Create random protein sequences</td>
+</tr>
+
+<tr>
+<td><a href="maskambignuc.html">maskambignuc</a></td>
+<td>Masks all ambiguity characters in nucleotide sequences with N</td>
+</tr>
+
+<tr>
+<td><a href="maskambigprot.html">maskambigprot</a></td>
+<td>Masks all ambiguity characters in protein sequences with X</td>
 </tr>
 
 <tr>
 <td><a href="maskfeat.html">maskfeat</a></td>
-<td>Mask off features of a sequence</td>
+<td>Write a sequence with masked features</td>
 </tr>
 
 <tr>
 <td><a href="maskseq.html">maskseq</a></td>
-<td>Mask off regions of a sequence</td>
+<td>Write a sequence with masked regions</td>
 </tr>
 
 <tr>
 <td><a href="newseq.html">newseq</a></td>
-<td>Type in a short new sequence</td>
+<td>Create a sequence file from a typed-in sequence</td>
+</tr>
+
+<tr>
+<td><a href="nohtml.html">nohtml</a></td>
+<td>Remove mark-up (e.g. HTML tags) from an ASCII text file</td>
 </tr>
 
 <tr>
 <td><a href="noreturn.html">noreturn</a></td>
-<td>Removes carriage return from ASCII files</td>
+<td>Remove carriage return from ASCII files</td>
+</tr>
+
+<tr>
+<td><a href="nospace.html">nospace</a></td>
+<td>Remove all whitespace from an ASCII text file</td>
+</tr>
+
+<tr>
+<td><a href="notab.html">notab</a></td>
+<td>Replace tabs with spaces in an ASCII text file</td>
 </tr>
 
 <tr>
 <td><a href="nthseq.html">nthseq</a></td>
-<td>Writes one sequence from a multiple set of sequences</td>
+<td>Write to file a single sequence from an input stream of sequences</td>
 </tr>
 
 <tr>
@@ -555,7 +567,7 @@ None.
 
 <tr>
 <td><a href="revseq.html">revseq</a></td>
-<td>Reverse and complement a sequence</td>
+<td>Reverse and complement a nucleotide sequence</td>
 </tr>
 
 <tr>
@@ -565,7 +577,17 @@ None.
 
 <tr>
 <td><a href="seqretsplit.html">seqretsplit</a></td>
-<td>Reads and writes (returns) sequences in individual files</td>
+<td>Reads sequences and writes them to individual files</td>
+</tr>
+
+<tr>
+<td><a href="sizeseq.html">sizeseq</a></td>
+<td>Sort sequences by size</td>
+</tr>
+
+<tr>
+<td><a href="skipredundant.html">skipredundant</a></td>
+<td>Remove redundant sequences from an input set</td>
 </tr>
 
 <tr>
@@ -575,32 +597,37 @@ None.
 
 <tr>
 <td><a href="splitter.html">splitter</a></td>
-<td>Split a sequence into (overlapping) smaller sequences</td>
+<td>Split sequence(s) into smaller sequences</td>
 </tr>
 
 <tr>
 <td><a href="trimest.html">trimest</a></td>
-<td>Trim poly-A tails off EST sequences</td>
+<td>Remove poly-A tails from nucleotide sequences</td>
 </tr>
 
 <tr>
 <td><a href="trimseq.html">trimseq</a></td>
-<td>Trim ambiguous bits off the ends of sequences</td>
+<td>Remove unwanted characters from start and end of sequence(s)</td>
+</tr>
+
+<tr>
+<td><a href="trimspace.html">trimspace</a></td>
+<td>Remove extra whitespace from an ASCII text file</td>
 </tr>
 
 <tr>
 <td><a href="union.html">union</a></td>
-<td>Reads sequence fragments and builds one sequence</td>
+<td>Concatenate multiple sequences into a single sequence</td>
 </tr>
 
 <tr>
 <td><a href="vectorstrip.html">vectorstrip</a></td>
-<td>Strips out DNA between a pair of vector sequences</td>
+<td>Removes vectors from the ends of nucleotide sequence(s)</td>
 </tr>
 
 <tr>
 <td><a href="yank.html">yank</a></td>
-<td>Reads a sequence range, appends the full USA to a list file</td>
+<td>Add a sequence reference (a full USA) to a list file</td>
 </tr>
 
 </table>

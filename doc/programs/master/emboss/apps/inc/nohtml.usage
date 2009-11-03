@@ -1,0 +1,14 @@
+<b>Here is a sample session with nohtml</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>nohtml </b>
+Remove mark-up (e.g. HTML tags) from an ASCII text file
+ASCII text file: <b>webfile.html</b>
+ASCII text output file [webfile.nohtml]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

@@ -22,33 +22,7 @@ palindrome
 </H2>
 
 
-<b>palindrome</b> looks for inverted repeats (stem loops) in a
-nucleotide sequence. 
-
-<p>
-It will find inverted repeats that include a proportion of mismatches
-and gaps (bulges in the stem loop). 
-
-<p>
-
-It works by finding all possible inverted matches satisfying the
-specified conditions of minimum and maximum length of palindrome,
-maximum gap between repeated regions and number of mismatches allowed. 
-
-<p>
-
-Secondary structures like inverted repeats in genomic sequences may be
-implicated in initiation of DNA replication. 
-
-<p>
-
-Some genomic sequence entries in the databases are composed of
-unfinished, draft sequence with gaps of unknown size between contigs. 
-The positions of these gaps are often indicated by runs of 200 N
-characters.  To prevent <b>palindrome</b> producing large, uninformative
-outputs, any palindromes found that are composed only of N's will not be
-reported. 
-
+<p><b>palindrome</b> finds inverted repeats (stem loops) in nucleotide sequences. It will find inverted repeats that include a proportion of mismatches and gaps, that correspond to bulges in the stem loop.  It finds all possible inverted matches satisfying the specified conditions of minimum and maximum length of palindrome, maximum gap between repeated regions and number of mismatches allowed.</p>
 
 <H2>
     Usage
@@ -97,13 +71,13 @@ None.
 <H2>
     Notes
 </H2>
+<p>Secondary structures-like inverted repeats in genomic sequences may be implicated in initiation of DNA replication.</p>
+
+<p>Some genomic sequence entries in the databases are composed of unfinished, draft sequence with gaps of unknown size between contigs. The positions of these gaps are often indicated by runs of 200 'N' characters. To prevent <b>palindrome</b> producing large, uninformative outputs, any palindromes found that are composed only of <tt>N</tt> will not be reported. </p>
+
+<p>Unless the qualifier <tt>-nooverlap</tt> is specified, <b>palindrome</b> makes no attempt to exclude subsets of previously found palindromes.</p>
 
 
-Unless the qualifier '-nooverlap' is specified, palindrome makes no
-attempt to exclude subsets of previously found palindromes. 
-
-<p>
-Several examples can be seen in the sample output above.
 
 <H2>
     References

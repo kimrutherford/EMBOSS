@@ -24,56 +24,12 @@ seqretsplit
 <H2>
     Function
 </H2>
-Reads and writes (returns) sequences in individual files
+Reads sequences and writes them to individual files
 <H2>
     Description
 </H2>
 
-<b>seqretsplit</b> is exactly the same as the program <b>seqret</b>
-except that when it writes out more than one sequence, it writes each
-sequence to an individual file. 
-<P>
-
-Its main use is therefore to split a file containing multiple sequences
-into many files, each containing one sequence. 
-<p>
-
-The names of the files it creates are derived from the ID name of the
-sequence, followed by an extension denoting the format of the sequence. 
-You have no control over the names of the files it writes out. 
-<P>
-
-For example, if the files <i>embl:hsfa11*</i> are read in and the
-output is specified as <i>wibble.seq</i>, then the following files are
-expected to be created:
-<P>
-
-<pre>
-hsfa110.fasta
-hsfa111.fasta
-hsfa112.fasta
-hsfa113.fasta
-hsfa114.fasta
-</pre>
-<p>
-(No file <i>wibble.seq</i> is created.)
-<p>
-
-Why would you want to split a multiple sequence file into many
-individual files? 
-<p>
-
-EMBOSS programs can read in many sequences from one file where this is
-sensible.  Sometimes EMBOSS programs can only read in one sequence at a
-time because that is the sensible way to do things, but your sequence is
-one sequence of many in a file.  You can specify that sequence using the
-USA <i>filename:sequenceID</i>, but you may still feel more comfortable
-splitting your sequences up into many files first.
-<p>
-
-Many non-EMBOSS programs will also have restrictions on whether they can
-read in multiple sequence files or not.
-<p>
+<p><b>seqretsplit</b> is a variant of the standard program for reading and writing sequences, <b>seqret</b>.   It performs exactly the same function except that when it reads more than one sequence, it writes each sequence to an individual file. In all other respects, <b>skipseq</b> is the same as <b>seqret</b>.  Its main use is therefore to split a file containing multiple sequences into many files, each containing one sequence. There are many options built-in into EMBOSS for detailed specification of the input and output sequences, for example the sequence type and file format.  Optionally, feature information will be read and written.</p>
 
 
 <H2>
@@ -86,7 +42,7 @@ read in multiple sequence files or not.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>seqretsplit tembl:m1190* </b>
-Reads and writes (returns) sequences in individual files
+Reads sequences and writes them to individual files
 output sequence(s) [m11903.fasta]: <b></b>
 
 </pre></td></tr></table><p>
@@ -149,8 +105,9 @@ output file at all.
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -333,7 +290,20 @@ None.
     Notes
 </H2>
 
-None.
+<p>See the documentation for <b>seqret</b> to see the full range of things that you can do when reading and writing sequences.</p>
+<p>Some non-EMBOSS programs will accept only single sequences.  In such cases <b>seqretsplit</b> is useful for splitting a multiple sequence file into many individual files.  Some EMBOSS programs will also read only a single sequence, which may, however, be one of many in a file. You can specify the sequence using the USA filename:sequenceID.  Nonetheless, some people feel more comfortable handling one sequence per file, so <b>seqretsplit</b> will be useful to them too.</p>
+
+<p>One file for each input sequence is written.  The names of the files it creates are derived from the ID name of the sequence, followed by an extension denoting the format of the sequence. You have no control over the names of the files it writes out. For example, if the files <tt>embl:hsfa11*</tt> are read in and the output is specified as <tt>wibble.seq</tt>, then the following files are expected to be created:</p>
+
+<pre>
+hsfa110.fasta
+hsfa111.fasta
+hsfa112.fasta
+hsfa113.fasta
+hsfa114.fasta
+</pre>
+
+<p>(No file wibble.seq is created.)</p>
 
 <H2>
     References
@@ -365,13 +335,24 @@ It always exits with status 0.
 
 It shouldn't really prompt for the output filename.
 <p>
-This isa side effect of the waysequence output works in
+This is a side effect of the way sequence output works in
 EMBOSS. Writing multiple sequences to separate files (the -ossingle
 qualifier) does this, and seqretsplit has set it automatically on.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="aligncopy.html">aligncopy</a></td>
+<td>Reads and writes alignments</td>
+</tr>
+
+<tr>
+<td><a href="aligncopypair.html">aligncopypair</a></td>
+<td>Reads and writes pairs from alignments</td>
+</tr>
+
 <tr>
 <td><a href="biosed.html">biosed</a></td>
 <td>Replace or delete sequence sections</td>
@@ -379,17 +360,17 @@ qualifier) does this, and seqretsplit has set it automatically on.
 
 <tr>
 <td><a href="codcopy.html">codcopy</a></td>
-<td>Reads and writes a codon usage table</td>
+<td>Copy and reformat a codon usage table</td>
 </tr>
 
 <tr>
 <td><a href="cutseq.html">cutseq</a></td>
-<td>Removes a specified section from a sequence</td>
+<td>Removes a section from a sequence</td>
 </tr>
 
 <tr>
 <td><a href="degapseq.html">degapseq</a></td>
-<td>Removes gap characters from sequences</td>
+<td>Removes non-alphabetic (e.g. gap) characters from sequences</td>
 </tr>
 
 <tr>
@@ -399,7 +380,7 @@ qualifier) does this, and seqretsplit has set it automatically on.
 
 <tr>
 <td><a href="entret.html">entret</a></td>
-<td>Reads and writes (returns) flatfile entries</td>
+<td>Retrieves sequence entries from flatfile databases and files</td>
 </tr>
 
 <tr>
@@ -409,12 +390,22 @@ qualifier) does this, and seqretsplit has set it automatically on.
 
 <tr>
 <td><a href="extractfeat.html">extractfeat</a></td>
-<td>Extract features from a sequence</td>
+<td>Extract features from sequence(s)</td>
 </tr>
 
 <tr>
 <td><a href="extractseq.html">extractseq</a></td>
 <td>Extract regions from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="featcopy.html">featcopy</a></td>
+<td>Reads and writes a feature table</td>
+</tr>
+
+<tr>
+<td><a href="featreport.html">featreport</a></td>
+<td>Reads and writes a feature table</td>
 </tr>
 
 <tr>
@@ -424,42 +415,67 @@ qualifier) does this, and seqretsplit has set it automatically on.
 
 <tr>
 <td><a href="makenucseq.html">makenucseq</a></td>
-<td>Creates random nucleotide sequences</td>
+<td>Create random nucleotide sequences</td>
 </tr>
 
 <tr>
 <td><a href="makeprotseq.html">makeprotseq</a></td>
-<td>Creates random protein sequences</td>
+<td>Create random protein sequences</td>
+</tr>
+
+<tr>
+<td><a href="maskambignuc.html">maskambignuc</a></td>
+<td>Masks all ambiguity characters in nucleotide sequences with N</td>
+</tr>
+
+<tr>
+<td><a href="maskambigprot.html">maskambigprot</a></td>
+<td>Masks all ambiguity characters in protein sequences with X</td>
 </tr>
 
 <tr>
 <td><a href="maskfeat.html">maskfeat</a></td>
-<td>Mask off features of a sequence</td>
+<td>Write a sequence with masked features</td>
 </tr>
 
 <tr>
 <td><a href="maskseq.html">maskseq</a></td>
-<td>Mask off regions of a sequence</td>
+<td>Write a sequence with masked regions</td>
 </tr>
 
 <tr>
 <td><a href="newseq.html">newseq</a></td>
-<td>Type in a short new sequence</td>
+<td>Create a sequence file from a typed-in sequence</td>
+</tr>
+
+<tr>
+<td><a href="nohtml.html">nohtml</a></td>
+<td>Remove mark-up (e.g. HTML tags) from an ASCII text file</td>
 </tr>
 
 <tr>
 <td><a href="noreturn.html">noreturn</a></td>
-<td>Removes carriage return from ASCII files</td>
+<td>Remove carriage return from ASCII files</td>
+</tr>
+
+<tr>
+<td><a href="nospace.html">nospace</a></td>
+<td>Remove all whitespace from an ASCII text file</td>
+</tr>
+
+<tr>
+<td><a href="notab.html">notab</a></td>
+<td>Replace tabs with spaces in an ASCII text file</td>
 </tr>
 
 <tr>
 <td><a href="notseq.html">notseq</a></td>
-<td>Exclude a set of sequences and write out the remaining ones</td>
+<td>Write to file a subset of an input stream of sequences</td>
 </tr>
 
 <tr>
 <td><a href="nthseq.html">nthseq</a></td>
-<td>Writes one sequence from a multiple set of sequences</td>
+<td>Write to file a single sequence from an input stream of sequences</td>
 </tr>
 
 <tr>
@@ -469,12 +485,22 @@ qualifier) does this, and seqretsplit has set it automatically on.
 
 <tr>
 <td><a href="revseq.html">revseq</a></td>
-<td>Reverse and complement a sequence</td>
+<td>Reverse and complement a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="seqret.html">seqret</a></td>
 <td>Reads and writes (returns) sequences</td>
+</tr>
+
+<tr>
+<td><a href="sizeseq.html">sizeseq</a></td>
+<td>Sort sequences by size</td>
+</tr>
+
+<tr>
+<td><a href="skipredundant.html">skipredundant</a></td>
+<td>Remove redundant sequences from an input set</td>
 </tr>
 
 <tr>
@@ -484,32 +510,37 @@ qualifier) does this, and seqretsplit has set it automatically on.
 
 <tr>
 <td><a href="splitter.html">splitter</a></td>
-<td>Split a sequence into (overlapping) smaller sequences</td>
+<td>Split sequence(s) into smaller sequences</td>
 </tr>
 
 <tr>
 <td><a href="trimest.html">trimest</a></td>
-<td>Trim poly-A tails off EST sequences</td>
+<td>Remove poly-A tails from nucleotide sequences</td>
 </tr>
 
 <tr>
 <td><a href="trimseq.html">trimseq</a></td>
-<td>Trim ambiguous bits off the ends of sequences</td>
+<td>Remove unwanted characters from start and end of sequence(s)</td>
+</tr>
+
+<tr>
+<td><a href="trimspace.html">trimspace</a></td>
+<td>Remove extra whitespace from an ASCII text file</td>
 </tr>
 
 <tr>
 <td><a href="union.html">union</a></td>
-<td>Reads sequence fragments and builds one sequence</td>
+<td>Concatenate multiple sequences into a single sequence</td>
 </tr>
 
 <tr>
 <td><a href="vectorstrip.html">vectorstrip</a></td>
-<td>Strips out DNA between a pair of vector sequences</td>
+<td>Removes vectors from the ends of nucleotide sequence(s)</td>
 </tr>
 
 <tr>
 <td><a href="yank.html">yank</a></td>
-<td>Reads a sequence range, appends the full USA to a list file</td>
+<td>Add a sequence reference (a full USA) to a list file</td>
 </tr>
 
 </table>

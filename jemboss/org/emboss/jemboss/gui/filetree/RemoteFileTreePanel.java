@@ -72,7 +72,6 @@ public class RemoteFileTreePanel extends JPanel
                                                       throws JembossSoapException
   {
    
-    final JPanel jp=this;
     setLayout(new BorderLayout());
 
     final Hashtable rootsdone = new Hashtable();                 //record where we are

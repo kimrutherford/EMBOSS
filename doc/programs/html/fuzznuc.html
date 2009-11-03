@@ -23,21 +23,18 @@ fuzznuc
 <H2>
     Function
 </H2>
-Nucleic acid pattern search
+Search for patterns in nucleotide sequences
 <H2>
     Description
 </H2>
-fuzznuc uses PROSITE style patterns to search nucleotide sequences. 
+<p><b>fuzznuc</b> searches for a specified PROSITE-style pattern in nucleotide sequences. Such patterns are specifications of a (typically short) length of sequence to be found. They can specify a search for an exact sequence or they can allow various ambiguities, matches to variable lengths of sequence and repeated subsections of the sequence. One or more nucleotide sequences are read from file.  The output is a standard EMBOSS report file that includes data such as location and score of any matches.</p>
 
-<p>
-Patterns are specifications of a (typically short) length of sequence to
-be found.  They can specify a search for an exact sequence or they can
-allow various ambiguities, matches to variable lengths of sequence and
-repeated subsections of the sequence. 
 
-<p>
-fuzznuc intelligently selects the optimum searching algorithm to use,
-depending on the complexity of the search pattern specified. 
+<H2>
+Algorithm
+</H2>
+
+<p><b>fuzznuc</b> intelligently selects the optimum searching algorithm to use, depending on the complexity of the search pattern specified.</p>
 
 <H2>
     Usage
@@ -49,7 +46,7 @@ depending on the complexity of the search pattern specified.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>fuzznuc </b>
-Nucleic acid pattern search
+Search for patterns in nucleotide sequences
 Input nucleotide sequence(s): <b>tembl:L46634</b>
 Search pattern: <b>AAGCTT</b>
 Output report [l46634.fuzznuc]: <b></b>
@@ -65,7 +62,7 @@ Output report [l46634.fuzznuc]: <b></b>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>fuzznuc </b>
-Nucleic acid pattern search
+Search for patterns in nucleotide sequences
 Input nucleotide sequence(s): <b>tembl:L46634</b>
 Search pattern: <b>@nucseq.pat</b>
 Output report [l46634.fuzznuc]: <b></b>
@@ -81,7 +78,7 @@ Output report [l46634.fuzznuc]: <b></b>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>fuzznuc -pname test </b>
-Nucleic acid pattern search
+Search for patterns in nucleotide sequences
 Input nucleotide sequence(s): <b>tembl:L46634</b>
 Search pattern: <b>@nucsimple.pat</b>
 Output report [l46634.fuzznuc]: <b></b>
@@ -97,7 +94,7 @@ Output report [l46634.fuzznuc]: <b></b>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>fuzznuc </b>
-Nucleic acid pattern search
+Search for patterns in nucleotide sequences
 Input nucleotide sequence(s): <b>tembl:L46634</b>
 Search pattern: <b>@nuc.pat</b>
 Output report [l46634.fuzznuc]: <b></b>
@@ -180,14 +177,16 @@ Output report [l46634.fuzznuc]: <b></b>
    -raccshow2          boolean    Show accession number in the report
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
+   -rstrandshow2       boolean    Show the nucleotide strand in the report
    -rusashow2          boolean    Show the full USA in the report
    -rmaxall2           integer    Maximum total hits to report
    -rmaxseq2           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -430,7 +429,7 @@ ends with a `&gt;' symbol.
 </ul>
 
 <p>
-For example, in the EMBL entry ECLAC you can look for the pattern:
+For example, in the EMBL entry J01636 you can look for the pattern:
 
 <pre>
 
@@ -493,7 +492,7 @@ By default <b>fuzznuc</b> writes a 'seqtable' report file.
 <pre>
 ########################################
 # Program: fuzznuc
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: fuzznuc
 #    -sequence tembl:L46634
 #    -pattern AAGCTT
@@ -513,9 +512,9 @@ By default <b>fuzznuc</b> writes a 'seqtable' report file.
 #
 #=======================================
 
-  Start     End Pattern_name Mismatch Sequence
-      1       6 pattern1            . aagctt
-   1267    1272 pattern1            . aagctt
+  Start     End  Strand Pattern_name Mismatch Sequence
+      1       6       + pattern1            . aagctt
+   1267    1272       + pattern1            . aagctt
 
 #---------------------------------------
 #---------------------------------------
@@ -534,7 +533,7 @@ By default <b>fuzznuc</b> writes a 'seqtable' report file.
 <pre>
 ########################################
 # Program: fuzznuc
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: fuzznuc
 #    -sequence tembl:L46634
 #    -pattern @../../data/nucseq.pat
@@ -554,9 +553,9 @@ By default <b>fuzznuc</b> writes a 'seqtable' report file.
 #
 #=======================================
 
-  Start     End Pattern_name Mismatch Sequence
-    429     448 targetseq           . cggccctaaccctagcccta
-    491     510 targetseq           . cggccctaaccctagcccta
+  Start     End  Strand Pattern_name Mismatch Sequence
+    429     448       + targetseq           . cggccctaaccctagcccta
+    491     510       + targetseq           . cggccctaaccctagcccta
 
 #---------------------------------------
 #---------------------------------------
@@ -575,7 +574,7 @@ By default <b>fuzznuc</b> writes a 'seqtable' report file.
 <pre>
 ########################################
 # Program: fuzznuc
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: fuzznuc
 #    -pname test
 #    -sequence tembl:L46634
@@ -597,20 +596,20 @@ By default <b>fuzznuc</b> writes a 'seqtable' report file.
 #
 #=======================================
 
-  Start     End Pattern_name Mismatch Sequence
-    429     438 test1               . cggccctaac
-    491     500 test1               . cggccctaac
-    535     544 test1               . cggccctaac
-    605     614 test1               . cggccctaac
-    631     640 test1               . cggccctaac
-    695     704 test1               . cggccctaac
-    721     730 test1               . cggccctaac
-    753     762 test1               . cggccctaac
-    293     302 test2               . cctagcccta
-    439     448 test2               . cctagcccta
-    469     478 test2               . cctagcccta
-    501     510 test2               . cctagcccta
-    801     810 test2               . cctagcccta
+  Start     End  Strand Pattern_name Mismatch Sequence
+    429     438       + test1               . cggccctaac
+    491     500       + test1               . cggccctaac
+    535     544       + test1               . cggccctaac
+    605     614       + test1               . cggccctaac
+    631     640       + test1               . cggccctaac
+    695     704       + test1               . cggccctaac
+    721     730       + test1               . cggccctaac
+    753     762       + test1               . cggccctaac
+    293     302       + test2               . cctagcccta
+    439     448       + test2               . cctagcccta
+    469     478       + test2               . cctagcccta
+    501     510       + test2               . cctagcccta
+    801     810       + test2               . cctagcccta
 
 #---------------------------------------
 #---------------------------------------
@@ -629,7 +628,7 @@ By default <b>fuzznuc</b> writes a 'seqtable' report file.
 <pre>
 ########################################
 # Program: fuzznuc
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: fuzznuc
 #    -sequence tembl:L46634
 #    -pattern @../../data/nuc.pat
@@ -651,26 +650,26 @@ By default <b>fuzznuc</b> writes a 'seqtable' report file.
 #
 #=======================================
 
-  Start     End Pattern_name Mismatch Sequence
-    429     448 pat1                . cggccctaaccctagcccta
-    491     510 pat1                . cggccctaaccctagcccta
-    429     448 pat2                . cggccctaaccctagcccta
-    491     510 pat2                . cggccctaaccctagcccta
-    535     554 pat2                1 cggccctaaccctaacccta
-    605     624 pat2                1 cggccctaaccctaacccta
-    631     650 pat2                1 cggccctaaccctaacccta
-    695     714 pat2                1 cggccctaaccctaacccta
-    721     740 pat2                1 cggccctaaccctaacccta
-    753     772 pat2                1 cggccctaaccctaacccta
-    791     810 pat2                1 cggcccgaaccctagcccta
-    753     764 pat3                . cggccctaaccc
-    721     732 pat3                . cggccctaaccc
-    695     706 pat3                . cggccctaaccc
-    631     642 pat3                . cggccctaaccc
-    605     616 pat3                . cggccctaaccc
-    535     546 pat3                . cggccctaaccc
-    491     502 pat3                . cggccctaaccc
-    429     440 pat3                . cggccctaaccc
+  Start     End  Strand Pattern_name Mismatch Sequence
+    429     448       + pat1                . cggccctaaccctagcccta
+    491     510       + pat1                . cggccctaaccctagcccta
+    429     448       + pat2                . cggccctaaccctagcccta
+    491     510       + pat2                . cggccctaaccctagcccta
+    535     554       + pat2                1 cggccctaaccctaacccta
+    605     624       + pat2                1 cggccctaaccctaacccta
+    631     650       + pat2                1 cggccctaaccctaacccta
+    695     714       + pat2                1 cggccctaaccctaacccta
+    721     740       + pat2                1 cggccctaaccctaacccta
+    753     772       + pat2                1 cggccctaaccctaacccta
+    791     810       + pat2                1 cggcccgaaccctagcccta
+    753     764       + pat3                . cggccctaaccc
+    721     732       + pat3                . cggccctaaccc
+    695     706       + pat3                . cggccctaaccc
+    631     642       + pat3                . cggccctaaccc
+    605     616       + pat3                . cggccctaaccc
+    535     546       + pat3                . cggccctaaccc
+    491     502       + pat3                . cggccctaaccc
+    429     440       + pat3                . cggccctaaccc
 
 #---------------------------------------
 #---------------------------------------
@@ -732,20 +731,21 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="dreg.html">dreg</a></td>
-<td>Regular expression search of a nucleotide sequence</td>
+<td>Regular expression search of nucleotide sequence(s)</td>
 </tr>
 
 <tr>
 <td><a href="fuzztran.html">fuzztran</a></td>
-<td>Protein pattern search after translation</td>
+<td>Search for patterns in protein sequences (translated)</td>
 </tr>
 
 <tr>
 <td><a href="marscan.html">marscan</a></td>
-<td>Finds MAR/SAR sites in nucleic sequences</td>
+<td>Finds matrix/scaffold recognition (MRS) signatures in DNA sequences</td>
 </tr>
 
 </table>

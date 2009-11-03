@@ -1,1 +1,1 @@
-Removes gap characters from sequences
+Removes non-alphabetic (e.g. gap) characters from sequences

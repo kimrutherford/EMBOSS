@@ -24,51 +24,20 @@ cons
 <H2>
     Function
 </H2>
-Creates a consensus from multiple alignments
+Create a consensus sequence from a multiple alignment
 <H2>
     Description
 </H2>
 
-<b>cons</b> calculates a consensus sequence from a multiple sequence
-alignment.  To obtain the consensus, the sequence weights and a scoring
-matrix are used to calculate a score at each position in the alignment. 
-<P>
+<p><b>cons</b> calculates a consensus sequence from a multiple sequence alignment. To obtain the consensus, the sequence weights and a scoring matrix are used to calculate a score for each amino acid residue or nucleotide at each position in the alignment.  The highest scoring residue goes into the consensus sequence if the score is higher than a user-specified "plurality" value, otherwise, there is no consensus at that position.</p>
 
-The residue (or nucleotide) <b>i</b> in an alignment column, is compared
-to all other residues (<b>j</b>) in the column.  The score for <b>i</b>
-is the sum over all residues <b>j</b> (not <b>i=j</b>) of the
-score(<b>ij</b>)*weight(<b>j</b>) .  Where score(<b>ij</b>) is taken
-from a nucleotide or protein scoring matrix (see <b>-datafile</b>
-qualifier) and the "weight(<b>j</b>)" is the weighting given to the
-sequence <b>j</b>, which is given in the alignment file.
-<P>
 
-The highest scoring type of residue is then found in the column.  If the
-number of positive matches for this residue is greater than the
-"plurality value" then this residue is the consensus.  The positive
-matches for a residue <b>i</b> are calculated as being the sum of
-weights of all the residues that increase the score of residue <b>i</b>
-(i.e.  positive). 
-<P>
-
-Where no consensus is found at a position <b>i</b>, an 'n' or an 'x'
-character is output; (depending on it being a DNA or protein sequence).
-<P>
-
-   The "plurality" qualifier allows the user to set a cut-off for the
-number of positive matches below which there is no consensus.
-<P>
-
-    The "identity" qualifier provides the facility of setting the required
-number of identities at a site for it to give a consensus at that
-position.  Therefore, if this is set to the number of sequences in the
-alignment only columns of identities contribute to the consensus. 
-<P>
-
-    The "setcase" qualifier sets the threshold for the positive matches
-above which the consensus is is upper-case and below which the consensus
-is in lower-case. 
-<P>
+<H2>
+    Algorithm
+</H2>
+<p>To obtain the consensus, the sequence weights and a scoring matrix are used to calculate a score at each position in the alignment as follows. The residue (or nucleotide) i in an alignment column, is compared to all other residues (j) in the same column. The score for i is the sum over all residues j (not i=j) of the score(ij)*weight(j), where score(ij) is taken from a nucleotide or protein scoring matrix (see -datafile qualifier) and the "weight(j)" is the weighting given to the sequence j, which is given in the alignment file.</p>
+<p>The highest scoring type of residue is then found in the column. If the number of "positive matches" (see below) for this residue is greater than the "plurality value" (see below), then this residue is the consensus residue.  Otherwise there is no consensus for that position and an 'n' (nucleotide sequence alignment) or an 'x' (protein sequence alignment) character is written to the consensus sequence.</p>
+<p>The positive matches for a residue i are calculated as being the sum of the corresponding sequence weights for all the residues that increase the score of residue i (i.e. that have a positive score). The "plurality" qualifier sets the cut-off for the number of positive matches (weighted) below which there is no consensus.</p>
 
 
 
@@ -82,7 +51,7 @@ is in lower-case.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>cons </b>
-Creates a consensus from multiple alignments
+Create a consensus sequence from a multiple alignment
 Input (aligned) sequence set: <b>dna.msf</b>
 output sequence [dna.fasta]: <b>aligned.cons</b>
 
@@ -164,8 +133,9 @@ output sequence [dna.fasta]: <b>aligned.cons</b>
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -317,7 +287,9 @@ ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGT
     Data files
 </H2>
 
-It uses the standard set of scoring matrix data files.
+<p><b>cons</b> uses the standard set of scoring matrix data files in the EMBOSS data directory.</p>
+
+
 <P>
 <p>
 EMBOSS data files are distributed with the application and stored
@@ -364,7 +336,10 @@ The directories are searched in the following order:
     Notes
 </H2>
 
-None.
+<p>The "identity" qualifier provides an additional constrain to "plurality" when determining a consensus residue at an alignment site. "identity" sets the required number of identities at a site for it to be included in the consensus.  If for example this is set to the number of sequences in the alignment, then only a site with the same residue in all sequences would be included in the consensus.</p>
+
+<p>The "setcase" qualifier sets the threshold for the positive matches above which the consensus residue is given is upper-case and below which it is in lower-case.</p>
+
 
 <H2>
     References
@@ -399,10 +374,16 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="consambig.html">consambig</a></td>
+<td>Create an ambiguous consensus sequence from a multiple alignment</td>
+</tr>
+
 <tr>
 <td><a href="megamerger.html">megamerger</a></td>
-<td>Merge two large overlapping nucleic acid sequences</td>
+<td>Merge two large overlapping DNA sequences</td>
 </tr>
 
 <tr>

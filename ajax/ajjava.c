@@ -4839,7 +4839,7 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_seqAttrib
     field = (*env)->GetFieldID(env,jvc,"weight_soap","F");
     (*env)->SetFloatField(env,obj,field,weight);
 
-    ajStrAssignC(&outstd,"");
+    ajStrAssignClear(&outstd);
 
     field = (*env)->GetFieldID(env,jvc,"outStd","Ljava/lang/String;");
     ostr = (*env)->NewStringUTF(env,ajStrGetPtr(outstd));
@@ -5001,7 +5001,7 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_seqsetAttrib
     field = (*env)->GetFieldID(env,jvc,"weight_soap","F");
     (*env)->SetFloatField(env,obj,field,weight);
 
-    ajStrAssignC(&outstd,"");
+    ajStrAssignClear(&outstd);
 
 
     field = (*env)->GetFieldID(env,jvc,"outStd","Ljava/lang/String;");

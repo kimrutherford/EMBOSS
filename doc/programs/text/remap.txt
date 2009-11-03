@@ -5,56 +5,22 @@
 
 Function
 
-   Display sequence with restriction sites, translation etc
+   Display restriction enzyme binding sites in a nucleotide sequence
 
 Description
 
-   The Restriction Enzyme database (REBASE) is a collection of
-   information about restriction enzymes and related proteins. It
-   contains published and unpublished references, recognition and
-   cleavage sites, isoschizomers, commercial availability, methylation
-   sensitivity, crystal and sequence data. DNA methyltransferases, homing
-   endonucleases, nicking enzymes, specificity subunits and control
-   proteins are also included. Most recently, putative DNA
-   methyltransferases and restriction enzymes, as predicted from analysis
-   of genomic sequences, are also listed.
-
-   The home page of REBASE is: http://rebase.neb.com/
-
-   This program uses REBASE data to find the recognition sites and/or cut
-   sites of restriction enzymes in a nucleic acid sequence.
-
-   This program displays the cut sites on both strands by default. It
-   will optionally also display the translation of the sequence.
-
-   There are many options to change the style of display to aid in making
-   clear presentations.
-
-   One potentially very useful option is '-flatreformat' that displays
-   not only the cut sites which many other restriction cut-site programs
-   will show, but also shows the recognition site.
-
-   By default, only one of any group of isoschizomers (enzymes that have
-   the same recognition site and cut positions) is reported (this
-   behaviour can be turned off by setting the qualifier '-limit' to be
-   false.) The reported enzyme from any one group of isoschizomers (the
-   prototype) is specified in the REBASE database and the information is
-   held in the data file 'embossre.equ'. You may edit this file to set
-   your own preferred prototype,if you wish.
-
-   As well as the display of where enzymes cut in the sequence, remap
-   displays:
-
-     * The list of enzymes that cut the sequence and match the required
-       criteria.
-     * The list of enzymes that cut the sequence and fail the MINCUTS
-       criteria.
-     * The list of enzymes that cut the sequence and fail the MAXCUTS
-       criteria.
-     * The list of enzymes that do not cut the sequence but which match
-       all the required criteria.
-     * The number of enzymes that cut the sequence and fail the SITELEN,
-       BLUNT, STICKY, COMMERCIAL, AMBIGUOUS criteria.
+   remap scans one or more nucleotide sequences for recognition sites
+   and/or cut sites for a supplied set of restriction enzymes. One or
+   more restriction enzymes can be specified or alternatively all the
+   enzymes in the REBASE database can be investigated. The minimum length
+   of a recognition site to be reported must be specified. It writes an
+   output file showing the location of the cut sites and (optionally) the
+   recognition sites. Sites on both strands are shown by default but
+   there are many options to control exactly what sites are reported and
+   the format of the output file. Optionally, the translated sequence is
+   reported. Additionally, the output file lists enzymess that cut / do
+   not cut the sequence and which match / do not matching certain
+   specified criteria.
 
 Usage
 
@@ -66,7 +32,7 @@ Usage
 
 
 % remap -notran -sbeg 1 -send 60 
-Display sequence with restriction sites, translation etc.
+Display restriction enzyme binding sites in a nucleotide sequence
 Input nucleotide sequence(s): tembl:j01636
 Comma separated enzyme list [all]: taqi,bsu6i,acii,bsski
 Minimum recognition site length [4]: 
@@ -85,7 +51,7 @@ Output file [j01636.remap]:
 
 
 % remap -notran -sbeg 1 -send 60 
-Display sequence with restriction sites, translation etc.
+Display restriction enzyme binding sites in a nucleotide sequence
 Input nucleotide sequence(s): tembl:j01636
 Comma separated enzyme list [all]: 
 Minimum recognition site length [4]: 
@@ -103,7 +69,7 @@ Output file [j01636.remap]:
 
 
 % remap -notran -sbeg 1 -send 60 -nolimit 
-Display sequence with restriction sites, translation etc.
+Display restriction enzyme binding sites in a nucleotide sequence
 Input nucleotide sequence(s): tembl:j01636
 Comma separated enzyme list [all]: 
 Minimum recognition site length [4]: 
@@ -119,7 +85,7 @@ Output file [j01636.remap]:
 
 
 % remap -notran -sbeg 1 -send 60 -flat 
-Display sequence with restriction sites, translation etc.
+Display restriction enzyme binding sites in a nucleotide sequence
 Input nucleotide sequence(s): tembl:j01636
 Comma separated enzyme list [all]: 
 Minimum recognition site length [4]: 
@@ -334,8 +300,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -878,7 +845,7 @@ Data files
      * ~/ (your home directory)
      * ~/.embossdata
 
-   The EMBOSS REBASE restriction enzyme data files are stored iin
+   The EMBOSS REBASE restriction enzyme data files are stored in
    directory 'data/REBASE/*' under the EMBOSS installation directory.
 
    These files must first be set up using the program 'rebaseextract'.
@@ -906,7 +873,44 @@ Data files
 
 Notes
 
-   None.
+   The Restriction Enzyme database (REBASE) is a collection of
+   information about restriction enzymes and related proteins. It
+   contains published and unpublished references, recognition and
+   cleavage sites, isoschizomers, commercial availability, methylation
+   sensitivity, crystal and sequence data. DNA methyltransferases, homing
+   endonucleases, nicking enzymes, specificity subunits and control
+   proteins are also included. Most recently, putative DNA
+   methyltransferases and restriction enzymes, as predicted from analysis
+   of genomic sequences, are also listed.
+
+   The home page of REBASE is: http://rebase.neb.com/
+
+   Where the translation is given in the output file, the genetic code
+   and one or more frames for translation may be specified. The
+   -no[reverse] option specifies whether the translation (and cut and
+   recognition sites) are shown for the reverse sense strand.
+
+   By default, only one enzyme of any group of isoschizomers (enzymes
+   that have the same recognition site and cut positions) is reported.
+   This behaviour can be changed by specifying -nolimit, in which case
+   all isoschizomers are reported. The default behaviour uses the
+   representative enzyme of an isoschizomer group (the prototype) which
+   is specified in the EMBOSS data file embossre.equ. This file is
+   generated from the REBASE database by running rebaseextract. You may
+   edit this file to set your own preferred prototype, if you wish.
+
+   As well as the display of where enzymes cut in the sequence, remap
+   displays:
+     * The list of enzymes that cut the sequence and match the required
+       criteria.
+     * The list of enzymes that cut the sequence and fail the MINCUTS
+       criteria.
+     * The list of enzymes that cut the sequence and fail the MAXCUTS
+       criteria.
+     * The list of enzymes that do not cut the sequence but which match
+       all the required criteria.
+     * The number of enzymes that cut the sequence and fail the SITELEN,
+       BLUNT, STICKY, COMMERCIAL, AMBIGUOUS criteria.
 
 References
 
@@ -914,7 +918,10 @@ References
 
 Warnings
 
-   None.
+   remap uses the EMBOSS REBASE restriction enzyme data files stored in
+   directory data/REBASE/* under the EMBOSS installation directory. These
+   files must first be set up using the program rebaseextract. Running
+   rebaseextract may be the job of your system manager.
 
 Diagnostic Error Messages
 
@@ -930,32 +937,36 @@ Known bugs
 
 See also
 
-   Program name                         Description
-   abiview       Reads ABI file and display the trace
-   backtranambig Back translate a protein sequence to ambiguous codons
-   backtranseq   Back translate a protein sequence
-   cirdna        Draws circular maps of DNA constructs
-   coderet       Extract CDS, mRNA and translations from feature tables
-   lindna        Draws linear maps of DNA constructs
-   pepnet        Displays proteins as a helical net
-   pepwheel      Shows protein sequences as helices
-   plotorf       Plot potential open reading frames
-   prettyplot    Displays aligned sequences, with colouring and boxing
-   prettyseq     Output sequence with translated ranges
-   recoder       Remove restriction sites but maintain same translation
-   redata        Search REBASE for enzyme name, references, suppliers etc
-   restover      Find restriction enzymes producing specific overhang
-   restrict      Finds restriction enzyme cleavage sites
-   seealso       Finds programs sharing group names
-   showalign     Displays a multiple sequence alignment
-   showdb        Displays information on the currently available databases
-   showfeat      Show features of a sequence
-   showorf       Pretty output of DNA translations
-   showseq       Display a sequence with features, translation etc
-   silent        Silent mutation restriction enzyme scan
-   sixpack       Display a DNA sequence with 6-frame translation and ORFs
-   textsearch    Search sequence documentation. Slow, use SRS and Entrez!
-   transeq       Translate nucleic acid sequences
+   Program name Description
+   abiview Display the trace in an ABI sequencer file
+   backtranambig Back-translate a protein sequence to ambiguous
+   nucleotide sequence
+   backtranseq Back-translate a protein sequence to a nucleotide sequence
+   cirdna Draws circular maps of DNA constructs
+   coderet Extract CDS, mRNA and translations from feature tables
+   lindna Draws linear maps of DNA constructs
+   pepnet Draw a helical net for a protein sequence
+   pepwheel Draw a helical wheel diagram for a protein sequence
+   plotorf Plot potential open reading frames in a nucleotide sequence
+   prettyplot Draw a sequence alignment with pretty formatting
+   prettyseq Write a nucleotide sequence and its translation to file
+   recoder Find restriction sites to remove (mutate) with no translation
+   change
+   redata Retrieve information from REBASE restriction enzyme database
+   restover Find restriction enzymes producing a specific overhang
+   restrict Report restriction enzyme cleavage sites in a nucleotide
+   sequence
+   seealso Finds programs with similar function to a specified program
+   showalign Display a multiple sequence alignment in pretty format
+   showdb Displays information on configured databases
+   showfeat Display features of a sequence in pretty format
+   showorf Display a nucleotide sequence and translation in pretty format
+   showseq Displays sequences with features in pretty format
+   silent Find restriction sites to insert (mutate) with no translation
+   change
+   sixpack Display a DNA sequence with 6-frame translation and ORFs
+   textsearch Search the textual description of sequence(s)
+   transeq Translate nucleic acid sequences
 
 Author(s)
 

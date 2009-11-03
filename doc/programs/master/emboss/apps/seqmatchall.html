@@ -22,18 +22,7 @@ seqmatchall
     Description
 </H2>
 
-
-This takes a set of sequences and does an all-against-all pairwise
-comparison of words (fragments of the sequences of a specified fixed
-size) in the sequences, finding regions of identity between any two
-sequences. 
-
-<p>
-The larger the specified word size, the faster the comparison will
-proceed.  Regions whose stretches of identity are shorter than the word
-size will be missed.  You should therefore choose a word size that is
-small enough to find those regions of similarity you are interested in
-within a reasonable time-frame. 
+<p><b>seqmatchall</b> takes a set of sequences and does an all-against-all pairwise comparison of words of a specified size in the sequences, finding regions of identity between any two sequences. It writes an output file with a list of regions of identity in pairs of sequences, the start and end positions and length of the matching regions and the name of the sequences.</p>
 
 <H2>
     Usage
@@ -80,9 +69,9 @@ The sequences must be either all protein or all nucleic acid.
 
 <p>
 
-ECLAC (the complete E.coli lac operon) matches ECLACI ECLACZ ECLACY
-and ECLACA (the individual genes), and there is a short overlap
-between ECLACY and the flanking genes ECLACZ and ECLACA
+J01636 (the complete E.coli lac operon) matches V00294 V00295 V00296
+and X51872 (the individual genes), and there is a short overlap
+between V00295 (lacY) and the flanking genes V00296 (lacZ) and X51872 (lacA)
 
 <p>
 
@@ -117,9 +106,7 @@ None.
     Notes
 </H2>
 
-
-The larger the word size, the faster the comparisons will proceed, but
-regions of identitly smaller than the word size will not be reported.
+<p>The larger the specified word size, the faster the comparison will proceed. Regions whose stretches of identity are shorter than the word size will be missed. You should therefore choose a word size that is small enough to find those regions of similarity you are interested in within a reasonable time-frame.</p>
 
 <H2>
     References

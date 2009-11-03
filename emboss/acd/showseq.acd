@@ -1,6 +1,5 @@
 application: showseq [
-  documentation: "Display a sequence with features,
-                  translation etc.."
+  documentation: "Displays sequences with features in pretty format"
   groups: "Display, Nucleic:Translation, Nucleic:Restriction"
 ]
 

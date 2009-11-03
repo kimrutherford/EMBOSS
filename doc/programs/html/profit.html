@@ -25,38 +25,21 @@ profit
 <H2>
     Function
 </H2>
-Scan a sequence or database with a matrix or profile
+Scan one or more sequences with a simple frequency matrix
 
 <H2>
     Description
 </H2>
 
-<b>profit</b> takes a simple frequency matrix produced by
-<b>prophecy</b> and searches with this to find matches in the input
-sequence(s) you are searching. 
+<p>profit scans one or more sequences with a simple frequency matrix and writes an output file with any high-scoring matches.  All possible ungapped alignments of each sequence to the matrix are scored and any matches with a score higher than the specified threshold are written to the output file.  The output file includes the name of any matching sequence found, the start position in the sequence of the match and the percentage of the maximum possible score.</p>
 
-<p>
 
-Scores for the matches are calculated from the simple frequency matrix. 
-It is the sum of scores at each position of the matrix.
+<H2>
+Algorithm
+</H2>
+<p>All possible ungapped alignments of each sequence to the frequency matrix are scored. The first alignment has the first positions of the sequence and matrix in the same register.  If the sequence is larger than the matrix, there will be more than one alignment.  Otherwise, there will be just one.</p>
+<p>The score for a match is simply the sum of scores at each position of the matrix for the corresponding residue from the sequence.  The percentage of the maximum possible score reported in the output file is the sum of the highest value at each position in the frequency matrix. Where the match score is above the threshold percentage of the maximum possible score for that matrix, then a hit is reported.</p>
 
-<p>
-
-A 'simple frequency matrix' is simply a count of the number of times any
-particular amino acid occurs at each position in the alignment used to
-create it.  Simple frequency matrices are created using the program
-<b>prophecy</b> with the option '-type F' to create the correct type of
-matrix. The alignment should not have gaps in it.
-
-<p>
-
-The resulting matrix is moved to each position in the sequence(s) you
-are searching.  At each position in the sequence, the frequencies of the
-amino acids or bases covered by the length of the matrix is read from
-the matrix.  The sum of these frequencies at each position of the matrix
-is the score for that position of the sequence.  If this score is above
-the threshold percentage of the maximum possible score for that matrix,
-then a hit is reported. 
 
 
 <H2>
@@ -108,7 +91,7 @@ Output file [outfile.prophecy]:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>profit </b>
-Scan a sequence or database with a matrix or profile
+Scan one or more sequences with a simple frequency matrix
 Profile or weight matrix file: <b>outfile.prophecy</b>
 Input sequence(s): <b>tsw:*</b>
 Output file [outfile.profit]: <b></b>
@@ -155,8 +138,9 @@ Output file [outfile.profit]: <b></b>
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -318,7 +302,7 @@ None.
     Notes
 </H2>
 
-None.
+<p>A 'simple frequency matrix' is simply a table containing a count of the number of times any particular amino acid occurs at each position in the sequence alignment from which it was derived. Simple frequency matrices are created using the program prophecy with the option <tt>-type F</tt> to create the correct type of matrix. The input alignment should not have gaps in it.</p>
 
 <H2>
     References
@@ -355,15 +339,16 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="prophecy.html">prophecy</a></td>
-<td>Creates matrices/profiles from multiple alignments</td>
+<td>Create frequency matrix or profile from a multiple alignment</td>
 </tr>
 
 <tr>
 <td><a href="prophet.html">prophet</a></td>
-<td>Gapped alignment for profiles</td>
+<td>Scan one or more sequences with a Gribskov or Henikoff profile</td>
 </tr>
 
 </table>

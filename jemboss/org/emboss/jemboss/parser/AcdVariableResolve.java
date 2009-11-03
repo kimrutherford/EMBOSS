@@ -22,10 +22,6 @@
 package org.emboss.jemboss.parser;
 
 import org.apache.regexp.*;
-import java.io.*;
-import javax.swing.*;
-
-import org.emboss.jemboss.gui.form.*;
 
 /**
 *
@@ -63,7 +59,7 @@ public class AcdVariableResolve
       RE regvarexp = new RE(varexp);
       if(regvarexp.match(exp))
       {
-        String var = regvarexp.getParen(2);    // variable name
+        /*String var =*/ regvarexp.getParen(2);    // variable name
         int iend   = regvarexp.getParenEnd(1);
         String newvar = exp.substring(0,iend);
         iend   = regvarexp.getParenEnd(2);

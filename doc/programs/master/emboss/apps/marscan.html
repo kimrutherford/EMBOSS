@@ -20,75 +20,17 @@ marscan
     Description
 </H2>
 
-Matrix/scaffold attachment regions (MARs/SARs) are genomic elements
-thought to delineate the structural and functional organisation of the
-eukaryotic genome.  Originally, MARs and SARs were identified through
-their ability to bind to the nuclear matrix or scaffold.  Binding cannot
-be assigned to a unique sequence element, but is dispersed over a region
-of several hundred base pairs.  These elements are found flanking a gene
-or a small cluster of genes and are located often in the vicinity of
-cis-regulatory sequences.  This has led to the suggestion that they
-contribute to higher order regulation of transcription by defining
-boundaries of independently controlled chromatin domains.  There is
-indirect evidence to support this notion.  In transgenic experiments
-MARs/SARs dampen position effects by shielding the transgene from the
-effects of the chromatin structure at the site of integration. 
-Furthermore, they may act as boundary elements for enhancers,
-restricting their long range effect to only the promoters that are
-located in the same chromatin domain. 
-
-<p>
-
-<b>marscan</b> finds a bipartite sequence element that is unique for a
-large group of eukaryotic MARs/SARs.  This MAR/SAR recognition signature
-(<b>MRS</b>) comprises two individual sequence elements that are <200 bp
-apart and may be aligned on positioned nucleosomes in MARs.  The MRS can
-be used to correctly predict the position of MARs/SARs in plants and
-animals, based on genomic DNA sequence information alone.  Experimental
-evidence from the analysis of >300 kb of sequence data from several
-eukaryotic organisms show that wherever a MRS is observed in the DNA
-sequence, the corresponding genomic fragment is a biochemically
-identifiable SAR. 
-
-<p>
-
-The MRS is a bipartite sequence element that consists of two individual
-sequences of 8 (AATAAYAA) and 16 bp (AWWRTAANNWWGNNNC) within a 200 bp
-distance from each other.  One mismatch is allowed in the 16 bp pattern. 
-The patterns can occur on either strand of the DNA with respect to each
-other. The 8 bp and the 16 bp sites can overlap.
-
-<p>
-
-Where there are many possible MRS sites caused by many 8 bp and/or 16 bp
-pattern sites located within 200 bp of each other, then only the 8 bp
-site and the 16 bp site that occur closest to each other are reported. 
-
-<p>
-
-Once a MRS has been reported, no more sites will be looked for within
-200 bp of that site.  This reduces (but maybe will not totally
-eliminate) over-reporting of the clusters of MRS's that tend to occur
-within a MAR/SAR. 
+<p><b>marscan</b> finds MRS recognition signatures in DNA sequences.  The MRS signature is associated with matrix/scaffold attachment regions (MARs/SARs) which are genomic elements thought to delineate the structural and functional organisation of the eukaryotic genome. The MRS is a bipartite sequence element that consists of an 8bp motif (<tt>AATAAYAA</tt>) and a 16 bp motif (<tt>AWWRTAANNWWGNNNC</tt>) within a 200 bp distance from each other, on either sense strand of the genomic DNA.  <b>marscan</b> reads a DNA sequence and writes a standard EMBOSS report file with details of the MRS signatures identified.</p>
 
 
-<p>
 
-Not all SARs contain a MRS.  Analysis of >300 kb of genomic sequence
-from a variety of eukaryotic organisms shows that the MRS faithfully
-predicts 80% of MARs and SARs, suggesting that at least one other type
-of MAR/SAR may exist which does not contain a MRS. 
+<H2>
+Algorithm
+</H2>
 
-<p>
-
-It it still not at all clear whether MAR/SARs are real biological phenomena
-or just experimental artefacts.
-
-<p>
-
-The problem of how to define and find MARs is still being actively
-invetsigated.  For a recent evaluation of this method and others, see
-reference 3. 
+<p><b>marscan</b> searches for an MRS signature, that being the 8bp sequence (<tt>AATAAYAA</tt>) and the 16 bp sequence (<tt>AWWRTAANNWWGNNNC</tt>) within a 200 bp distance from each other. One mismatch is allowed in the 16 bp pattern. The patterns may occur on the same or different strands and can overlap.</p>
+<p>Where there are many suitable 8 bp and/or 16 bp pattern sites located within 200 bp of each other, then only the closest pair of 8 bp / 16 bp sites are reported.</p>
+<p>Once an MRS has been reported, no more sites will be looked for within 200 bp of that site. This reduces (but not eliminates entirely) over-reporting of the clusters of MRS's that tend to occur within a MAR/SAR.</par>
 
 
 <H2>
@@ -144,7 +86,11 @@ None.
     Notes
 </H2>
 
-It does not check whether the DNA input sequence is genomic or not.
+<p>Matrix/scaffold attachment regions (MARs/SARs) are genomic elements thought to delineate the structural and functional organisation of the eukaryotic genome. Originally, MARs and SARs were identified through their ability to bind to the nuclear matrix or scaffold. Binding cannot be assigned to a unique sequence element, but is dispersed over a region of several hundred base pairs. These elements are found flanking a gene or a small cluster of genes and are located often in the vicinity of cis-regulatory sequences. This has led to the suggestion that they contribute to higher order regulation of transcription by defining boundaries of independently controlled chromatin domains. There is indirect evidence to support this notion. In transgenic experiments MARs/SARs dampen position effects by shielding the transgene from the effects of the chromatin structure at the site of integration. Furthermore, they may act as boundary elements for enhancers, restricting their long range effect to only the promoters that are located in the same chromatin domain.</p>
+
+<p><b>marscan</b> finds a bipartite sequence element that is unique for a large group of eukaryotic MARs/SARs. This MAR/SAR recognition signature (MRS) comprises two individual sequence elements (AATAAYAA and AWWRTAANNWWGNNNC) that are <200 bp apart and may be aligned on positioned nucleosomes in MARs. The MRS signature can be used to correctly predict the position of MARs/SARs in plants and animals, based on genomic DNA sequence information alone. Experimental evidence from the analysis of >300 kb of sequence data from several eukaryotic organisms show that wherever an MRS signature is observed in the DNA sequence, the corresponding genomic fragment is a biochemically identifiable SAR.</p>
+
+<p>It it still not at all clear whether MAR/SARs are real biological phenomena or just experimental artefacts and the problem of how to define and find MARs is still being actively invetsigated. For a recent evaluation of this method and others, see reference 3.  Not all SARs contain a MRS. Analysis of >300 kb of genomic sequence from a variety of eukaryotic organisms shows that the MRS faithfully predicts 80% of MARs and SARs, suggesting that at least one other type of MAR/SAR may exist which does not contain a MRS.</p>
 
 <H2>
     References
@@ -185,7 +131,7 @@ Nucleic Acids Research 2002, Vol. 30, No. 15 3433-3442
     Warnings
 </H2>
 
-None
+<p><b>marscan</b> does not check whether the DNA input sequence is genomic or not.</p>
 
 <H2>
     Diagnostic Error Messages

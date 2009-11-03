@@ -5,9 +5,9 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>dbxflat </b>
-Database b+tree indexing for flat file databases
+Index a flat file database using b+tree indices
 Basename for index files: <b>embl</b>
-Resource name: <b>embl</b>
+Resource name: <b>emblresource</b>
       EMBL : EMBL
      SWISS : Swiss-Prot, SpTrEMBL, TrEMBLnew
         GB : Genbank, DDBJ
@@ -22,8 +22,7 @@ Database directory [.]: <b>embl</b>
        key : Keywords
        org : Taxonomy
 Index fields [id,acc]: <b></b>
-
-Processing file /homes/user/test/embl/rod.dat
+General log output file [outfile.dbxflat]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

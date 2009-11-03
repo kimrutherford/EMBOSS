@@ -56,7 +56,7 @@ public class AlignApplet extends JApplet
     jspSequence = new JScrollPane();
 
     gsc = new GraphicSequenceCollection(seqs,jspSequence,
-                                        true,true,true,true);
+                                        true,true,true,true, null);
     jspSequence.setViewportView(gsc);
 
 // set up a menu bar
@@ -100,7 +100,7 @@ public class AlignApplet extends JApplet
         {
           gsc = new GraphicSequenceCollection(sr.getSequenceVector(),
                                               jspSequence,
-                                              true,true,true,true);
+                                              true,true,true,true, null);
           jspSequence.setViewportView(gsc);
           calculateCons.setText("Calculate consensus");
           calculatePlotCon.setText("Calculate Consensus plot");
@@ -185,7 +185,7 @@ public class AlignApplet extends JApplet
         gsc.deleteSequence("Consensus");
         Consensus conseq = new Consensus(new File(matrix),
               gsc.getSequenceCollection(),1.f,1.f,1);
-        gsc.addSequence(conseq.getConsensusSequence(),true,5);
+        gsc.addSequence(conseq.getConsensusSequence(),true,5, 1);
         calculateCons.setText("Recalculate consensus");
       }
     });

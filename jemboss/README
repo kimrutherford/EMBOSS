@@ -8,19 +8,60 @@ development team. It is distributed as part of the EMBOSS
 software.
 
 Documentation on Jemboss can be found at:
-http://www.hgmp.mrc.ac.uk/Software/EMBOSS/Jemboss/
+http://emboss.sourceforge.net/Jemboss/
 
 It is possible to setup, using the code in the Jemboss 
 distribution, a Jemboss server for your own site. All
 documentation to do with setting up a client or a server
 can be found at: 
-http://www.hgmp.mrc.ac.uk/Software/EMBOSS/Jemboss/install/setup.html
+http://emboss.sourceforge.net/Jemboss/install/setup.html
 
-This is in on-going development and comments and suggestions
+This is an on-going development and comments and suggestions
 are welcome.
 
+Tim Carver   tjc@sanger.ac.uk
 
+
+Change Log:
 ---------------------------------------------------
-Tim Carver   tcarver@hgmp.mrc.ac.uk
-HGMP-RC
+03-July-2008
 
+ * Jemboss and BuildProgramMenu classes were refactored with GUI improvements
+
+24-Jun-2008
+
+ * context sensitive popup menu items in remote and local file managers
+ 
+20-Jun-2008
+
+  * When the user.home property has its default value and the operating system
+    is windows jemboss user-home directory is set to ${EMBOSS_ROOT}\${user.name},
+    similarly the jemboss results-home directory is set to
+    ${EMBOSS_ROOT}\${user.name}\results\
+
+18-Jun-2008
+
+  * "Save between Jemboss sessions" option is now selected by default
+  
+  * fixed the problem with saving the "results.home" property
+        
+  * loading and storing jemboss.properties files was updated by
+    using functions from java.util.Properties class
+    
+  * links on this page was updated and we started to have a changelog here
+         
+  * RunEmbossApplication2 class now records IO errors when starting application jobs 
+     
+  * SequnceList class now uses the same environment settings used by the
+    BuildProgramMenu class when launching EMBOSS applications
+    
+  * replaced the "Calculate sequence attributes" menu option
+    by "Get sequence lengths automatically" checkbox in SequenceList frame
+    
+  * added a new boolean property to store user preferences in the above checkbox
+  
+  * sequence lengths are not calculated if the entry is an existing file,
+    in SequenceList frame
+  
+
+     

@@ -49,7 +49,7 @@ public class RemoteFileNode extends DefaultMutableTreeNode
   /** root directory */
   private String rootdir; 
   /** parent directory listing */
-  private transient FileList parentList;        // make transient for
+  //private transient FileList parentList;        // make transient for
   /** jemboss properties */
   private transient JembossParams mysettings;   // Transferable to work
   /** remote server file roots */
@@ -94,12 +94,12 @@ public class RemoteFileNode extends DefaultMutableTreeNode
   { 
     this.mysettings = mysettings;
     this.froots = froots;
-    this.parentList = parentList;
+    //this.parentList = parentList;
     isDir = ldir;
     rootdir = froots.getCurrentRoot();
     serverPathToFile = (String)froots.getRoots().get(rootdir);
 
-    if(file.equals(" "))
+    if(file.equals(RemoteDragTree.REMOTE_HOME))
       isDir = true;
 
     if(parent != null)

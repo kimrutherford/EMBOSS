@@ -68,9 +68,9 @@ int main(int argc, char **argv)
     framelist = ajAcdGetList("frame");
     tablename = ajAcdGetListSingle("table");
     regions   = ajAcdGetRange("regions");
-    trim      = ajAcdGetBool("trim");
-    clean     = ajAcdGetBool("clean");
-    alternate = ajAcdGetBool("alternative");
+    trim      = ajAcdGetBoolean("trim");
+    clean     = ajAcdGetBoolean("clean");
+    alternate = ajAcdGetBoolean("alternative");
 
     /* get the frames to be translated */
     transeq_GetFrames(framelist, frames);

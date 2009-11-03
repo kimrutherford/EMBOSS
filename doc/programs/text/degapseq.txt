@@ -5,40 +5,15 @@
 
 Function
 
-   Removes gap characters from sequences
+   Removes non-alphabetic (e.g. gap) characters from sequences
 
 Description
 
-   degapseq reads in one or more sequences and writes them out again
-   minus any gap characters. In effect it removes gaps from aligned
-   sequences.
-
-   In fact, if does more than just this as it removes ANY non-alphabetic
-   character from the input sequence, so as well as removing the
-   gap-characters, it will remove such things as the '*' in protein
-   sequences that indicates the position of a 'translated' STOP codon.
-
-   There are many different formats for storing sequences in files. Some
-   sequence formats allow you to store aligned sequences, including the
-   information on where gaps have been introduced to make the sequence
-   align properly. This is indicated by using a special character to
-   indicate that there is a gap at that position. Different sequence
-   formats use different characters to indicate gaps. Some formats may
-   use more than one type of character to indicate different types of
-   gaps (e.g. gaps at the ends of the sequences, internal gaps, gaps
-   introduced by a program or by a person editing the alignment, etc.)
-   Some typicate characters used to indicate where gaps are may be: '.',
-   '-' and '~'.
-
-   When EMBOSS programs read in a sequence that has gap-characters in,
-   all gap characters are internally changed to '-' characters. i.e.
-   EMBOSS only has one type of gap character. Thus any distinguishing
-   characters for different gap types are reduced to a '-'. There is only
-   one type of gap in EMBOSS.
-
-   degapseq removes any non-alphabetic character in the sequence, in
-   effect this means that gaps and '*' characters are removed. The
-   sequence is then written out.
+   degapseq reads one or more sequences and writes them out again but
+   stripped of any non-alphabetic characters. It's main purpose is to
+   remove gap characters from aligned sequences, but it will also remove
+   such things as the symbol for translation STOP ('*') in a protein
+   sequence.
 
 Usage
 
@@ -46,7 +21,7 @@ Usage
 
 
 % degapseq dnagap.fasta nogaps.seq 
-Removes gap characters from sequences
+Removes non-alphabetic (e.g. gap) characters from sequences
 
    Go to the input files for this example
    Go to the output files for this example
@@ -93,8 +68,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -141,7 +117,20 @@ Data files
 
 Notes
 
-   None.
+   There are many different formats for storing molecular sequences in
+   files. Some formats are specifically for aligned sequences, where gaps
+   are inserted into the sequences for purposes of alignment. Gaps are
+   indicated with different characters depending on the format in
+   question, but commonly include '.', '-' and '~'. Some formats use more
+   than one type of character to indicate different types of gaps, for
+   example gaps at the sequence ends, internal gaps, gaps inserted by a
+   program and gaps inserted manually by a person editing the alignment
+   may all be denoted with different characters.
+
+   EMBOSS uses the dash character ('-') only to indicate gaps. When an
+   EMBOSS program reads a sequence with gaps, all gap characters are
+   changed internally to a dash ('-'). Thus any distinguishing characters
+   for different gap types are convered to a '-' on output.
 
 References
 
@@ -166,35 +155,50 @@ Known bugs
 
 See also
 
-   Program name                         Description
-   biosed       Replace or delete sequence sections
-   codcopy      Reads and writes a codon usage table
-   cutseq       Removes a specified section from a sequence
-   descseq      Alter the name or description of a sequence
-   entret       Reads and writes (returns) flatfile entries
+   Program name Description
+   aligncopy Reads and writes alignments
+   aligncopypair Reads and writes pairs from alignments
+   biosed Replace or delete sequence sections
+   codcopy Copy and reformat a codon usage table
+   cutseq Removes a section from a sequence
+   descseq Alter the name or description of a sequence
+   entret Retrieves sequence entries from flatfile databases and files
    extractalign Extract regions from a sequence alignment
-   extractfeat  Extract features from a sequence
-   extractseq   Extract regions from a sequence
-   listor       Write a list file of the logical OR of two sets of sequences
-   makenucseq   Creates random nucleotide sequences
-   makeprotseq  Creates random protein sequences
-   maskfeat     Mask off features of a sequence
-   maskseq      Mask off regions of a sequence
-   newseq       Type in a short new sequence
-   noreturn     Removes carriage return from ASCII files
-   notseq       Exclude a set of sequences and write out the remaining ones
-   nthseq       Writes one sequence from a multiple set of sequences
-   pasteseq     Insert one sequence into another
-   revseq       Reverse and complement a sequence
-   seqret       Reads and writes (returns) sequences
-   seqretsplit  Reads and writes (returns) sequences in individual files
-   skipseq      Reads and writes (returns) sequences, skipping first few
-   splitter     Split a sequence into (overlapping) smaller sequences
-   trimest      Trim poly-A tails off EST sequences
-   trimseq      Trim ambiguous bits off the ends of sequences
-   union        Reads sequence fragments and builds one sequence
-   vectorstrip  Strips out DNA between a pair of vector sequences
-   yank         Reads a sequence range, appends the full USA to a list file
+   extractfeat Extract features from sequence(s)
+   extractseq Extract regions from a sequence
+   featcopy Reads and writes a feature table
+   featreport Reads and writes a feature table
+   listor Write a list file of the logical OR of two sets of sequences
+   makenucseq Create random nucleotide sequences
+   makeprotseq Create random protein sequences
+   maskambignuc Masks all ambiguity characters in nucleotide sequences
+   with N
+   maskambigprot Masks all ambiguity characters in protein sequences with
+   X
+   maskfeat Write a sequence with masked features
+   maskseq Write a sequence with masked regions
+   newseq Create a sequence file from a typed-in sequence
+   nohtml Remove mark-up (e.g. HTML tags) from an ASCII text file
+   noreturn Remove carriage return from ASCII files
+   nospace Remove all whitespace from an ASCII text file
+   notab Replace tabs with spaces in an ASCII text file
+   notseq Write to file a subset of an input stream of sequences
+   nthseq Write to file a single sequence from an input stream of
+   sequences
+   pasteseq Insert one sequence into another
+   revseq Reverse and complement a nucleotide sequence
+   seqret Reads and writes (returns) sequences
+   seqretsplit Reads sequences and writes them to individual files
+   sizeseq Sort sequences by size
+   skipredundant Remove redundant sequences from an input set
+   skipseq Reads and writes (returns) sequences, skipping first few
+   splitter Split sequence(s) into smaller sequences
+   trimest Remove poly-A tails from nucleotide sequences
+   trimseq Remove unwanted characters from start and end of sequence(s)
+   trimspace Remove extra whitespace from an ASCII text file
+   union Concatenate multiple sequences into a single sequence
+   vectorstrip Removes vectors from the ends of nucleotide sequence(s)
+   yank Add a sequence reference (a full USA) to a list file
 
 Author(s)
 

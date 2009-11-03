@@ -21,11 +21,6 @@
 
 package org.emboss.jemboss.parser;
 
-import java.io.*;
-import java.util.*;
-import javax.swing.*;
-
-import org.emboss.jemboss.programs.ListFile;
 
 /**
 *
@@ -148,7 +143,7 @@ public class Ajax
   */
   public void setLength(int length)
   {
-    this.length = length;
+    Ajax.length = length;
   }
 
   /**
@@ -159,7 +154,7 @@ public class Ajax
   */
   public void setWeight(float weight)
   {
-    this.weight = weight;
+    Ajax.weight = weight;
   }
 
   /**
@@ -170,7 +165,7 @@ public class Ajax
   */
   public void setProtein(boolean protein)
   {
-    this.protein = protein;
+    Ajax.protein = protein;
   }
 
   /**

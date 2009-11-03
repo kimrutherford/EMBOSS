@@ -1,6 +1,5 @@
 application: infoalign [
-  documentation: "Information on a multiple sequence
-                  alignment"
+  documentation: "Display basic information about a multiple sequence alignment"
   groups: "Alignment:Multiple, Information"
 ]
 

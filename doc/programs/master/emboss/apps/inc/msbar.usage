@@ -7,7 +7,7 @@ This asks for 5 mutations, with point mutations as changes (substitutions), and 
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>msbar </b>
-Mutate sequence beyond all recognition
+Mutate a sequence
 Input sequence(s): <b>tembl:j01636</b>
 Number of times to perform the mutation operations [1]: <b>5</b>
 Point mutation operations

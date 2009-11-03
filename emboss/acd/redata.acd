@@ -1,6 +1,5 @@
 application: redata [
-  documentation: "Search REBASE for enzyme name, references,
-                  suppliers etc."
+  documentation: "Retrieve information from REBASE restriction enzyme database"
   groups: "Nucleic:Restriction"
 ]
 

@@ -29,9 +29,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.*;
 import javax.swing.border.*;
-import javax.imageio.*;
-import javax.imageio.stream.*;
-import java.util.Hashtable;
 
 import org.emboss.jemboss.gui.ScrollPanel;
 
@@ -49,7 +46,7 @@ public class PrintDNAImage extends ScrollPanel
   /** page format */
   private PageFormat format = null;
   /** page number to print    */
-  private int pageIndex = 0;
+  //private int pageIndex = 0;
   /** alignment sequence panel */
   private DNADraw dna;
   /** prefix of file           */
@@ -57,9 +54,9 @@ public class PrintDNAImage extends ScrollPanel
   /** status field for print preview */
   private JTextField statusField = new JTextField("");
   /** number of residues per line    */
-  private int nResPerLine = 0;
+  //private int nResPerLine = 0;
   /** line attributes */
-  private Hashtable lineAttr;
+  //private Hashtable lineAttr;
   /** type (jpeg/png) */
   private String type;
 
@@ -73,7 +70,7 @@ public class PrintDNAImage extends ScrollPanel
     super();
     this.dna = dna;
 
-    lineAttr = dna.getLineAttributes();
+    //lineAttr = dna.getLineAttributes();
     setBackground(Color.white);
   }
 

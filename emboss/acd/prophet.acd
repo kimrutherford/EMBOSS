@@ -1,5 +1,6 @@
 application: prophet [
-  documentation: "Gapped alignment for profiles"
+  documentation: "Scan one or more sequences with a Gribskov
+                  or Henikoff profile"
   groups: "Nucleic:Profiles, Protein:Profiles"
   gui: "yes"
   batch: "yes"

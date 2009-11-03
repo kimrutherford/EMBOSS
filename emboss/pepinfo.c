@@ -131,8 +131,8 @@ int main(int argc, char **argv)
     seq_start     = seq_begin - 1;
     outfile       = ajAcdGetOutfile("outfile");
     hwindow       = ajAcdGetInt("hwindow");
-    do_general    = ajAcdGetBool("generalplot");
-    do_hydropathy = ajAcdGetBool("hydropathyplot");
+    do_general    = ajAcdGetBoolean("generalplot");
+    do_hydropathy = ajAcdGetBoolean("hydropathyplot");
 
     aa_properties = ajAcdGetDatafile("aaproperties");
     aa_hydropathy = ajAcdGetDatafile("aahydropathy");
@@ -189,15 +189,15 @@ int main(int argc, char **argv)
 			    ival++;
 			else
 			{
-			    ajErr("value is not integer ..%s..\n",
-				  ajStrGetPtr(value));
+			    ajErr("value is not integer ..%S..\n",
+				  value);
 			    embExit();
 			}
 		    }
 		    else
 		    {
 			ajErr("At position %d in seq, couldn't find key "
-			      "%s in table", j, ajStrGetPtr(key));
+			      "%S", j, key);
 			embExit();
 		    }
 		}

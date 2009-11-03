@@ -7,7 +7,7 @@ Mask off bases 10 to 12 from a sequence 'prot.fasta' and write to the new sequen
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>maskseq prot.fasta prot2.seq -reg=10-12 </b>
-Mask off regions of a sequence.
+Write a sequence with masked regions
 
 </pre></td></tr></table><p>
 <p>
@@ -22,7 +22,7 @@ Mask off bases 20 to 30 from a sequence 'prot.fasta' using the character 'x' and
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>maskseq prot.fasta prot2.seq -reg=20-30 -mask=x </b>
-Mask off regions of a sequence.
+Write a sequence with masked regions
 
 </pre></td></tr></table><p>
 <p>
@@ -37,7 +37,7 @@ Mask off the regions 20 to 23, 34 to 45 and 88 to 90 in 'prot.fasta':
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>maskseq prot.fasta prot2.seq -reg=20-23,34-45,88-90 </b>
-Mask off regions of a sequence.
+Write a sequence with masked regions
 
 </pre></td></tr></table><p>
 <p>
@@ -52,7 +52,7 @@ Change to lower-case the regions 20 to 23, 34 to 45 and 88 to 90 in 'prot.fasta'
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>maskseq prot.fasta prot2.seq -reg=20-23,34-45,88-90 -tolower </b>
-Mask off regions of a sequence.
+Write a sequence with masked regions
 
 </pre></td></tr></table><p>
 <p>

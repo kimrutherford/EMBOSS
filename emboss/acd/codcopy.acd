@@ -1,5 +1,5 @@
 application: codcopy [
-  documentation: "Reads and writes a codon usage table"
+  documentation: "Copy and reformat a codon usage table"
   groups: "Edit"
 ]
 

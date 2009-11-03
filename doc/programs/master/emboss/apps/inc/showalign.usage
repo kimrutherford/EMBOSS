@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showalign </b>
-Displays a multiple sequence alignment
+Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: <b>globins.msf</b>
 Output file [globins.showalign]: <b></b>
 
@@ -22,7 +22,7 @@ Display the sequences in order of similarity to the reference sequence
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showalign -order=s </b>
-Displays a multiple sequence alignment
+Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: <b>globins.msf</b>
 Output file [globins.showalign]: <b></b>
 
@@ -39,7 +39,7 @@ Format for HTML and highlight some interesting regions in different colours:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showalign -html -high '4-13 green 43-43 red 51-56 blue' </b>
-Displays a multiple sequence alignment
+Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: <b>globins.msf</b>
 Output file [globins.showalign]: <b></b>
 
@@ -56,7 +56,7 @@ No consensus line at the bottom No ruler line No numbers line Don't repeat the r
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showalign -nocon -norule -nonum -nobot -ref=1 -sb=10 -send=30 </b>
-Displays a multiple sequence alignment
+Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: <b>globins.msf</b>
 Output file [globins.showalign]: <b></b>
 
@@ -73,7 +73,7 @@ Show non-identities between the sequences
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showalign -show=n </b>
-Displays a multiple sequence alignment
+Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: <b>globins.msf</b>
 Output file [globins.showalign]: <b></b>
 
@@ -90,7 +90,7 @@ Show all of the sequences
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showalign -show=a </b>
-Displays a multiple sequence alignment
+Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: <b>globins.msf</b>
 Output file [globins.showalign]: <b></b>
 
@@ -107,7 +107,7 @@ Show identities between the sequences
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showalign -show=i </b>
-Displays a multiple sequence alignment
+Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: <b>globins.msf</b>
 Output file [globins.showalign]: <b></b>
 
@@ -124,7 +124,7 @@ Show similarities between the sequences
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showalign -show=s </b>
-Displays a multiple sequence alignment
+Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: <b>globins.msf</b>
 Output file [globins.showalign]: <b></b>
 
@@ -141,7 +141,7 @@ Show dissimilarities between the sequences
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showalign -show=d </b>
-Displays a multiple sequence alignment
+Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: <b>globins.msf</b>
 Output file [globins.showalign]: <b></b>
 
@@ -158,7 +158,7 @@ Use the first sequence as the reference to compare to:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showalign -ref=1 </b>
-Displays a multiple sequence alignment
+Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: <b>globins.msf</b>
 Output file [globins.showalign]: <b></b>
 
@@ -175,7 +175,7 @@ Show a range of sequences in uppercase, everything else in lowercase
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showalign -nocon -ref=1 -sl -upper 9-15 -nosimilarcase </b>
-Displays a multiple sequence alignment
+Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: <b>globins.msf</b>
 Output file [globins.showalign]: <b></b>
 
@@ -192,7 +192,7 @@ Display the sequences in alphabetic order:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showalign -order=a </b>
-Displays a multiple sequence alignment
+Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: <b>globins.msf</b>
 Output file [globins.showalign]: <b></b>
 

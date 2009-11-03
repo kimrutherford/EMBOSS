@@ -5,7 +5,7 @@
 
 Function
 
-   Database indexing for fasta file databases
+   Index a fasta file database
 
 Description
 
@@ -15,38 +15,20 @@ Description
    addition to EMBOSS, and appears to be the most generally used and
    publicly available index file format for these databases.
 
-   Having created the EMBOSS indices for this file, a database can then
-   be defined in the file emboss.defaults as something like:
-DB emrod [
-   type: N
-   format: fasta
-   method: emblcd
-   directory: /data/embl/fasta
-]
-
-  Fields Indexed
-
-   By default, dbifasta will index the ID name and the accession number
-   (if present).
-   If they are present in your database, you may also specify that
-   dbifasta should index the Sequence Version and GI number and the words
-   in the description by using the '-fields' qualifier with the
-   appropriate values.
-
 Usage
 
    Here is a sample session with dbifasta
 
 
 % dbifasta 
-Database indexing for fasta file databases
+Index a fasta file database
 Database name: EMROD
-    simple : >ID
-     idacc : >ID ACC
+              simple : >ID
+               idacc : >ID ACC
   or >ID (ACC) gcgid : >db:ID
-  gcgidacc : >db:ID ACC
-      dbid : >db ID
-      ncbi : | formats
+            gcgidacc : >db:ID ACC
+                dbid : >db ID
+                ncbi : | formats
 ID line format [idacc]: idacc
 Database directory [.]: data
 Wildcard database filename [*.dat]: emrod
@@ -98,8 +80,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -141,10 +124,10 @@ Output file format
 
 ########################################
 # Program: dbifasta
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Dbname: EMROD
 # Release: 0.0
-# Date: 15/07/07
+# Date: 15/07/08
 # CurrentDirectory: /homes/user/test/qa/dbifasta-ex-keep/
 # IndexDirectory: ./
 # IndexDirectoryPath: /homes/user/test/qa/dbifasta-ex-keep/
@@ -210,6 +193,24 @@ Notes
    No allowance is made for two entries with the same name so it is not
    possible to index EMBL and EMBLNEW together.
 
+   Having created the EMBOSS indices for this file, a database can then
+   be defined in the file emboss.defaults as something like:
+DB emrod [
+   type: N
+   format: fasta
+   method: emblcd
+   directory: /data/embl/fasta
+]
+
+  Fields Indexed
+
+   By default, dbifasta will index the ID name and the accession number
+   (if present).
+   If they are present in your database, you may also specify that
+   dbifasta should index the Sequence Version and GI number and the words
+   in the description by using the '-fields' qualifier with the
+   appropriate values.
+
 References
 
    None.
@@ -232,9 +233,9 @@ See also
    dbiblast     Index a BLAST database
    dbiflat      Index a flat file database
    dbigcg       Index a GCG formatted database
-   dbxfasta     Database b+tree indexing for fasta file databases
-   dbxflat      Database b+tree indexing for flat file databases
-   dbxgcg       Database b+tree indexing for GCG formatted databases
+   dbxfasta     Index a fasta file database using b+tree indices
+   dbxflat      Index a flat file database using b+tree indices
+   dbxgcg       Index a GCG formatted database using b+tree indices
 
 Author(s)
 

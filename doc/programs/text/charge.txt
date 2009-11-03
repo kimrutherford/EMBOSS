@@ -5,20 +5,21 @@
 
 Function
 
-   Protein charge plot
+   Draw a protein charge plot
 
 Description
 
    charge reads a protein sequence and writes a file (or plots a graph)
-   of the charges of the amino acids within a window of specified length
-   as the window is moved along the sequence.
+   of the mean charge of the amino acids within a window of specified
+   length as the window is moved along the sequence.
 
 Algorithm
 
-   charge uses the column "charge" from the datafile Eamino.dat. It gives
-   the residues 'D' and 'E' a charge of -1, 'K' and 'R' a charge of +1,
-   and the residue 'H' a charge of +0.5. Then it calculates the mean
-   charge across -window (default is 5).
+   charge uses the column "charge" from a datafile (Eamino.dat) of amino
+   acid properties. It gives the residues 'D' and 'E' a charge of -1, 'K'
+   and 'R' a charge of +1, and the residue 'H' a charge of +0.5. Then it
+   calculates the mean charge across the window, which by default is 5
+   residues.
 
 Usage
 
@@ -26,7 +27,7 @@ Usage
 
 
 % charge tsw:hbb_human 
-Protein charge plot
+Draw a protein charge plot
 Output file [hbb_human.charge]: 
 
    Go to the input files for this example
@@ -83,8 +84,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -391,21 +393,24 @@ Known bugs
 
 See also
 
-   Program name                         Description
-   backtranambig Back translate a protein sequence to ambiguous codons
-   backtranseq   Back translate a protein sequence
-   checktrans    Reports STOP codons and ORF statistics of a protein
-   compseq       Count composition of dimer/trimer/etc words in a sequence
-   emowse        Protein identification by mass spectrometry
-   freak         Residue/base frequency table or plot
-   iep           Calculates the isoelectric point of a protein
-   mwcontam      Shows molwts that match across a set of files
-   mwfilter      Filter noisy molwts from mass spec output
-   octanol       Displays protein hydropathy
-   pepinfo       Plots simple amino acid properties in parallel
-   pepstats      Protein statistics
-   pepwindow     Displays protein hydropathy
-   pepwindowall  Displays protein hydropathy of a set of sequences
+   Program name Description
+   backtranambig Back-translate a protein sequence to ambiguous
+   nucleotide sequence
+   backtranseq Back-translate a protein sequence to a nucleotide sequence
+   checktrans Reports STOP codons and ORF statistics of a protein
+   compseq Calculate the composition of unique words in sequences
+   emowse Search protein sequences by digest fragment molecular weight
+   freak Generate residue/base frequency table or plot
+   iep Calculate the isoelectric point of proteins
+   mwcontam Find weights common to multiple molecular weights files
+   mwfilter Filter noisy data from molecular weights file
+   octanol Draw a White-Wimley protein hydropathy plot
+   pepinfo Plot amino acid properties of a protein sequence in parallel
+   pepstats Calculates statistics of protein properties
+   pepwindow Draw a Kyte-Doolittle hydropathy plot for a protein sequence
+   pepwindowall Draw Kyte-Doolittle hydropathy plot for a protein
+   alignment
+   wordcount Count and extract unique words in DNA sequence(s)
 
 Author(s)
 

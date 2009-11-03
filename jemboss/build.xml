@@ -85,6 +85,8 @@
     	  excludes="resources/**,api/**,org/emboss/jemboss/editor/AlignApplet.java"
       deprecation="false"
       depend="no"
+      target="1.3"
+      source="1.3"
       >
     	  <classpath refid="compile.classpath"/>
     </javac>

@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>tfscan </b>
-Scans DNA sequences for transcription factors
+Identify transcription factor binding sites in DNA sequences
 Input nucleotide sequence(s): <b>tembl:k00650</b>
 Transcription Factor Class
          F : fungi

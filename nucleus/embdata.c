@@ -91,13 +91,13 @@ static AjBool dataListNextLine(AjPFile pfile, const char *commentLine,
    ajint i;
    AjBool test;
 
-   test = ajFileReadLine(pfile, line);
+   test = ajReadlineTrim(pfile, line);
    while(test)
    {
       i = ajStrFindC(*line, commentLine);
       if(i!=0)
 	  break;
-      test = ajFileReadLine(pfile, line);
+      test = ajReadlineTrim(pfile, line);
    }
 
    if(test)

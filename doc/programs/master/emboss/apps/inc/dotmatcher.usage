@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>dotmatcher tsw:hba_human tsw:hbb_human -graph cps </b>
-Displays a thresholded dotplot of two sequences
+Draw a threshold dotplot of two sequences
 
 Created dotmatcher.ps
 

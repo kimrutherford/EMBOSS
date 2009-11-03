@@ -5,23 +5,15 @@
 
 Function
 
-   Calculates the isoelectric point of a protein
+   Calculate the isoelectric point of proteins
 
 Description
 
-   This calculates the isoelectric point of a protein from its amino acid
+   iep calculates the isoelectric point of a protein from its amino acid
    composition assuming that no electrostatic interactions change the
-   propensity for ionization.
-
-   Adjusting the pH of an aqueous protein solution to the point where the
-   numbers of positive and negative charges on the protein are equal
-   brings the protein to its isoelectric point. This is often the point
-   of lowest solubility, presumably because it is the point at which
-   there are fewest intermolecular repulsions, so that the molecules tend
-   to form aggregates.
-
-   The application can make a plot of the ionization curve with respect
-   to pH and can write an output file of the data.
+   propensity for ionization. Optionally, iep will plot the ionization
+   curve with respect to pH and write an output file of the data, where
+   for each pH point the number of bound electrons and charge is given.
 
 Usage
 
@@ -29,7 +21,7 @@ Usage
 
 
 % iep tsw:laci_ecoli 
-Calculates the isoelectric point of a protein
+Calculate the isoelectric point of proteins
 Output file [laci_ecoli.iep]: 
 
    Go to the input files for this example
@@ -39,7 +31,7 @@ Output file [laci_ecoli.iep]:
 
 
 % iep tsw:ifna2_human -disulphide 2 -lysinemodified 2  
-Calculates the isoelectric point of a protein
+Calculate the isoelectric point of proteins
 Output file [ifna2_human.iep]: 
 
    Go to the input files for this example
@@ -102,8 +94,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -469,7 +462,12 @@ Y               10.1
 
 Notes
 
-   None.
+   Adjusting the pH of an aqueous protein solution to the point where the
+   numbers of positive and negative charges on the protein are equal
+   brings the protein to its isoelectric point. This is often the point
+   of lowest solubility, presumably because it is the point at which
+   there are fewest intermolecular repulsions, so that the molecules tend
+   to form aggregates.
 
 References
 
@@ -493,21 +491,24 @@ Known bugs
 
 See also
 
-   Program name                         Description
-   backtranambig Back translate a protein sequence to ambiguous codons
-   backtranseq   Back translate a protein sequence
-   charge        Protein charge plot
-   checktrans    Reports STOP codons and ORF statistics of a protein
-   compseq       Count composition of dimer/trimer/etc words in a sequence
-   emowse        Protein identification by mass spectrometry
-   freak         Residue/base frequency table or plot
-   mwcontam      Shows molwts that match across a set of files
-   mwfilter      Filter noisy molwts from mass spec output
-   octanol       Displays protein hydropathy
-   pepinfo       Plots simple amino acid properties in parallel
-   pepstats      Protein statistics
-   pepwindow     Displays protein hydropathy
-   pepwindowall  Displays protein hydropathy of a set of sequences
+   Program name Description
+   backtranambig Back-translate a protein sequence to ambiguous
+   nucleotide sequence
+   backtranseq Back-translate a protein sequence to a nucleotide sequence
+   charge Draw a protein charge plot
+   checktrans Reports STOP codons and ORF statistics of a protein
+   compseq Calculate the composition of unique words in sequences
+   emowse Search protein sequences by digest fragment molecular weight
+   freak Generate residue/base frequency table or plot
+   mwcontam Find weights common to multiple molecular weights files
+   mwfilter Filter noisy data from molecular weights file
+   octanol Draw a White-Wimley protein hydropathy plot
+   pepinfo Plot amino acid properties of a protein sequence in parallel
+   pepstats Calculates statistics of protein properties
+   pepwindow Draw a Kyte-Doolittle hydropathy plot for a protein sequence
+   pepwindowall Draw Kyte-Doolittle hydropathy plot for a protein
+   alignment
+   wordcount Count and extract unique words in DNA sequence(s)
 
 Author(s)
 

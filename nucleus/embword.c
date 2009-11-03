@@ -565,10 +565,10 @@ void embWordMatchListConvToFeat(const AjPList list,
 AjBool embWordGetTable(AjPTable *table, const AjPSeq seq)
 {
     const char * startptr;
-    ajint i;
+    ajuint i;
     ajuint j;
-    ajint ilast;
-    ajint *k;
+    ajuint ilast;
+    ajuint *k;
     EmbPWord rec;
     char* key;
 
@@ -969,8 +969,10 @@ AjPList embWordBuildMatchTable(const AjPTable seq1MatchTable,
     void *ptr = NULL;
 
     ajint *k = 0;
-    ajint kcur = 0;
-    ajint knew = 0;
+    ajuint kcur = 0;
+    ajuint kcur2 = 0;
+    ajuint knew = 0;
+    AjBool matched = ajFalse;
 
     assert(wordLength > 0);
     AJNEW0(match);
@@ -991,7 +993,7 @@ AjPList embWordBuildMatchTable(const AjPTable seq1MatchTable,
     startptr = ajSeqGetSeqC(seq2);
     ilast    = ajSeqGetLen(seq2) - wordLength;
 
-    /*ajDebug("ilast: %d\n", ilast);*/
+    /*ajDebug("embWordBuildMatchTable ilast: %u\n", ilast);*/
 
     while(i < (ilast+1))
     {
@@ -1011,121 +1013,96 @@ AjPList embWordBuildMatchTable(const AjPTable seq1MatchTable,
 	    if(!ajListGetLength(newlist))
 		ajWarn("ERROR: newlist is empty\n");
 
+            /*ajDebug("\nnewlist %u i:%u\n", ajListGetLength(newlist), i);*/
 	    newiter = ajListIterNewread(newlist);
 
 	    /* this is the list of matches for the current word and position */
 
 	    if(ajListGetLength(wordCurList))
 	    {
-	      /* ajDebug("wordCurList size %d\n",ajListGetLength(wordCurList)); */
+                /*ajDebug("wordCurList size %d\n",
+                  ajListGetLength(wordCurList));*/
 		curiter = ajListIterNew(wordCurList);
 
 		curmatch = ajListIterGet(curiter);
 		kcur = curmatch->seq1start + curmatch->length - wordLength + 1;
+		kcur2 = curmatch->seq2start + curmatch->length - wordLength + 1;
 	    }
 	    else
-		curiter = 0;
+		curiter = NULL;
 
 	    while(!ajListIterDone(newiter) )
 	    {
 		k = (ajint*) ajListIterGet(newiter);
 		knew = *k;
 
+                /*ajDebug("knew: %u i:%u\n", knew, i);*/
 		/* compare to current hits to test for extending */
 
-		while(curiter && (kcur < knew))
-		{
-		  /*ajDebug("..skip knew: %d kcur: %d start1: %d start2: %d "
-			     "len: %d\n",
-			     knew, kcur, curmatch->seq1start,
-			     curmatch->seq2start,curmatch->length);*/
-		    ajListIterRemove(curiter);
-
+                ajListIterRewind(curiter);
+                matched = ajFalse;
+                while(!ajListIterDone(curiter) )
+                {
 		    curmatch = ajListIterGet(curiter);
-		    if(curmatch)
-		    {
-			kcur = curmatch->seq1start + curmatch->length -
-			    wordLength + 1;
-			/*ajDebug("curiter next kcur: %d\n", kcur);*/
-		    }
-		    else
-		    {
-			ajListIterDel(&curiter);
-		    }
-		}
+		    kcur = curmatch->seq1start + curmatch->length -
+                        wordLength + 1;
+                    kcur2 = curmatch->seq2start + curmatch->length -
+                        wordLength + 1;
+                    /*ajDebug(".test kcur/knew %u/%u kcur2/i %u/%u\n",
+                      kcur, knew, kcur2, i);*/
 
-		/* ajDebug("kcur: %d knew: %d\n", kcur, knew); */
-		if(kcur && kcur == knew)
-		{			/* check continued matches */
-		    while(curiter && (kcur == knew))
-		    {
-		      /* ajDebug("**match knew: %d kcur: %d start1: %d "
-				 "start2: %d len: %d\n",
-				 knew, kcur, curmatch->seq1start,
-				 curmatch->seq2start,curmatch->length); */
+                    /* when we test, we may have already incremented
+                       one of the matches - so test old and new kcur2 */
+                    if(kcur2 != i && kcur2 != i+1)
+                    {
+                        /*ajDebug("finished kcur: %u kcur2: %u i: %u\n",
+                          kcur, kcur2,i);*/
+                        ajListIterRemove(curiter);
+                        continue;
+                    }
+                    if(kcur == knew && kcur2 == i)
+                    {			/* check continued matches */
+                        /* ajDebug("**match knew: %d kcur: %d kcur2: %d start1: %d "
+                                "start2: %d len: %d i:%d\n",
+                                knew, kcur, kcur2,curmatch->seq1start,
+                                curmatch->seq2start,curmatch->length, i);*/
 			curmatch->length++;
-			curmatch = ajListIterGet(curiter);
-			if(curmatch)
-			    kcur = curmatch->seq1start + curmatch->length -
-				wordLength + 1;
-			else
-			{
-			    ajListIterDel(&curiter);
-			}
-		    }
-		}
-		else
-		{			/* new current match */
-		    AJNEW0(match2);
-		    match2->sequence  = seq2;
-		    match2->seq1start = knew;
-		    match2->seq2start = i;
-		    match2->length = wordLength;
-		    /* ajDebug("save start1: %d start2: %d len: %d\n",
-			     match2->seq1start, match2->seq2start,
-			     match2->length);*/
-		    /* ajDebug("Pushapp to hitlist\n"); */
-		    ajListPushAppend(hitlist, match2); /* add to hitlist */
-		    if(curiter)
-		    {			/* add to wordCurList */
-		      /* ajDebug("ajListInsert using curiter\n"); */
-			wordListInsertOld(curiter, match2);
-			/*wordCurListTrace(wordCurList);*/
-			/*wordCurIterTrace(curiter);*/
-		    }
-		    else
-		    {
-		      /* ajDebug("ajListPushAppend to wordCurList\n"); */
-			ajListPushAppend(wordCurList, match2);
-			/* wordCurListTrace(wordCurList); */
-		    }
-		}
-		/* ajDebug("k: %d i: %d\n", *k, i); */
+                        matched = ajTrue;
+                        continue;
+                    }
+                }
+
+                if(!matched)
+                {			/* new current match */
+                    AJNEW0(match2);
+                    match2->sequence  = seq2;
+                    match2->seq1start = knew;
+                    match2->seq2start = i;
+                    match2->length = wordLength;
+                    /*ajDebug("save start1: %d start2: %d len: %d\n",
+                            match2->seq1start, match2->seq2start,
+                            match2->length);*/
+                    ajListPushAppend(hitlist, match2); /* add to hitlist */
+                    if(curiter)
+                    {			/* add to wordCurList */
+                        /*ajDebug("...ajListInsert using curiter %u\n",
+                          ajListGetLength(wordCurList));*/
+                        wordListInsertOld(curiter, match2);
+                        /*wordCurListTrace(wordCurList);*/
+                        /*wordCurIterTrace(curiter);*/
+                    }
+                    else
+                    {
+                        /*ajDebug("...ajListPushAppend to wordCurList %u\n",
+                          ajListGetLength(wordCurList));*/
+                        ajListPushAppend(wordCurList, match2);
+                        /* wordCurListTrace(wordCurList); */
+                    }
+                }
+ 		/* ajDebug("k: %d i: %d\n", *k, i); */
 	    }
 	    ajListIterDel(&newiter);
-
-	    while(curiter)
-	    {
-	      /* ajDebug("..ignore knew: %d kcur: %d start1: %d "
-			 "start2: %d len: %d\n",
-			 knew, kcur, curmatch->seq1start, curmatch->seq2start,
-			 curmatch->length); */
-		ajListIterRemove(curiter);
-
-		curmatch = ajListIterGet(curiter);
-		if(curmatch)
-		{
-		    kcur = curmatch->seq1start +
-			curmatch->length - wordLength + 1;
-		    /* ajDebug("curiter next kcur: %d\n", kcur); */
-		}
-		else
-		{
-		  /* ajDebug("curiter finished - free it\n"); */
-		    ajListIterDel(&curiter);
-		}
-	    }
-
+            ajListIterDel(&curiter);
 	}
 
 	/* no match, so all existing matches are completed */
@@ -1252,7 +1229,7 @@ static void wordCurIterTrace(const AjIList curiter)
        else
 	   ajDebug(" Here: NULL\n");
 
-       node = curiter->Orig;
+       node = curiter->Head->First;
        match = node->Item;
        i = match->seq1start + 1;
        j = match->seq2start + 1;
@@ -1401,6 +1378,7 @@ static ajint wordDeadZone(EmbPWordMatch match,
 
 
 /* @func embWordMatchMin ******************************************************
+**
 ** Given a list of matches, reduce it to the minimal set of best
 ** non-overlapping matches.
 **
@@ -1561,7 +1539,7 @@ static void wordListInsertOld(AjIList iter, void* x)
 	return;
     }
 
-    if(p == iter->Orig)
+    if(p == list->First)
     {
 	if(!p->Prev->Prev)
 	    wordListInsertNodeOld(&list->First->Next,x);

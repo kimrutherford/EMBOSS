@@ -81,9 +81,9 @@ int main(int argc, char **argv)
     /* make the list of AjPStr to be used in sequence creation */
     if (data) {
 	ajDebug ("Distribution datafile '%s' given checking type\n",
-		 ajFileName(data));
+		 ajFileGetNameC(data));
 	seqstr = ajStrNew();
-	ajFileGetsTrim(data,&seqstr);
+	ajReadlineTrim(data,&seqstr);
 	if (ajStrFindC(seqstr,"PEPSTATS") == 0)
 	{
 	    makeprotseq_parse_pepstats (&list,data);
@@ -225,13 +225,13 @@ static void makeprotseq_parse_pepstats (AjPList* list,AjPFile data)
     ajDebug ("Parsing pepstats file.\n");
 
     /* skip the lines before residues */
-    while (ajFileGets(data,&line))
+    while (ajReadline(data,&line))
     {
 	if (ajStrFindC(line,"Residue") == 0)
 	    break;
     }
     /* parse residue part */
-    while (ajFileGetsTrim(data,&line))
+    while (ajReadlineTrim(data,&line))
     {
 	if (ajStrParseCountC(line," \t") == 0)
 	   break;

@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>tcode </b>
-Fickett TESTCODE statistic to identify protein-coding DNA
+Identify protein-coding regions using Fickett TESTCODE statistic
 Input nucleotide sequence(s): <b>tembl:x65921</b>
 Length of sliding window [200]: <b></b>
 Output report [x65921.tcode]: <b></b>
@@ -23,7 +23,7 @@ Produce a graphical plot
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>tcode -plot -graph cps </b>
-Fickett TESTCODE statistic to identify protein-coding DNA
+Identify protein-coding regions using Fickett TESTCODE statistic
 Input nucleotide sequence(s): <b>tembl:x65921</b>
 Length of sliding window [200]: <b></b>
 

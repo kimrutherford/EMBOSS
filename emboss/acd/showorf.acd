@@ -1,5 +1,6 @@
 application: showorf [
-  documentation: "Pretty output of DNA translations"
+  documentation: "Display a nucleotide sequence and translation in
+                  pretty format"
   groups: "Nucleic:Gene finding, Nucleic:Translation"
 ]
 

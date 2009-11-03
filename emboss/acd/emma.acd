@@ -1,6 +1,5 @@
 application: emma [
-  documentation: "Multiple alignment program - interface to
-                  ClustalW program"
+  documentation: "Multiple sequence alignment (ClustalW wrapper)"
   groups: "Alignment:Multiple"
   gui: "yes"
   batch: "yes"

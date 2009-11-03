@@ -9,22 +9,17 @@ Function
 
 Description
 
-   The program 'cirdna' draws circular maps of DNA constructs.
+   cirdna draws circular maps of DNA constructs. It uses graphical shapes
+   including ticks, ranges, and blocks to represent genetic markers (e.g,
+   genes and ESTs) and places them according to their position in a DNA
+   fragment. The markers can be organized in different groups. A group
+   may contain up to 10000 markers, so the program is suitable for
+   drawing circular representations of genomic sequences.
 
-   It uses the graphical shapes: ticks, ranges, and blocks to represent
-   genetic markers (e.g, genes and ESTs) and places them according to
-   their position in a DNA fragment. The markers can be organized in
-   different groups. A group may contain up to 10000 markers, so the
-   program can be used to draw circular representations of genomic
-   sequences.
-
-   The program reads in one input file in which the user specifies the
-   names and positions of the genetic markers. In this file the user also
-   enters data for controlling the appearance of the markers.
-
-   A refined customization of the drawing can be achieved by running the
-   program with '-options' on the command line and changing the values of
-   the desired parameters.
+   The program reads an input file containing the names and positions of
+   the genetic markers. You must write this file yourself (see Input File
+   Format below). Data for controlling the appearance of the markers may
+   also be added to this file.
 
 Usage
 
@@ -120,8 +115,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -257,7 +253,11 @@ Data files
 
 Notes
 
-   None.
+   There are many options for controlling the appearance of the plot.
+   Mostly these are "additional qualifiers" and can be specified on the
+   command-line by using the corresponding flag, but will not normally be
+   prompted for. To be prompted for values for them, run the program with
+   the -options global qualifier.
 
 References
 
@@ -281,21 +281,22 @@ Known bugs
 
 See also
 
-   Program name                        Description
-   abiview      Reads ABI file and display the trace
-   lindna       Draws linear maps of DNA constructs
-   pepnet       Displays proteins as a helical net
-   pepwheel     Shows protein sequences as helices
-   prettyplot   Displays aligned sequences, with colouring and boxing
-   prettyseq    Output sequence with translated ranges
-   remap        Display sequence with restriction sites, translation etc
-   seealso      Finds programs sharing group names
-   showalign    Displays a multiple sequence alignment
-   showdb       Displays information on the currently available databases
-   showfeat     Show features of a sequence
-   showseq      Display a sequence with features, translation etc
-   sixpack      Display a DNA sequence with 6-frame translation and ORFs
-   textsearch   Search sequence documentation. Slow, use SRS and Entrez!
+   Program name Description
+   abiview Display the trace in an ABI sequencer file
+   lindna Draws linear maps of DNA constructs
+   pepnet Draw a helical net for a protein sequence
+   pepwheel Draw a helical wheel diagram for a protein sequence
+   prettyplot Draw a sequence alignment with pretty formatting
+   prettyseq Write a nucleotide sequence and its translation to file
+   remap Display restriction enzyme binding sites in a nucleotide
+   sequence
+   seealso Finds programs with similar function to a specified program
+   showalign Display a multiple sequence alignment in pretty format
+   showdb Displays information on configured databases
+   showfeat Display features of a sequence in pretty format
+   showseq Displays sequences with features in pretty format
+   sixpack Display a DNA sequence with 6-frame translation and ORFs
+   textsearch Search the textual description of sequence(s)
 
 Author(s)
 

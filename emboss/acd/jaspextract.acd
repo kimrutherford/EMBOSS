@@ -1,0 +1,23 @@
+application: jaspextract [
+  documentation: "Extract data from JASPAR"
+  groups: "Utils:Database creation"
+  gui: "no"
+  batch: "no"
+  cpu: "medium"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  directory: directory [
+    parameter: "Y"
+    information: "JASPAR database directory"
+    help: "The directory containing the unzipped and untarred
+           JASPAR_CORE, JASPAR_FAM and JASPAR_PHYLOFACTS
+           subdirectories"
+    knowntype: "Jaspar database"
+  ]
+
+endsection: input

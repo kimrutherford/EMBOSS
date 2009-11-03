@@ -28,11 +28,11 @@ import java.awt.dnd.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.tree.*;
+
 import java.io.*;
 import java.util.*;
 
 import org.emboss.jemboss.gui.ShowResultSet;
-import org.emboss.jemboss.gui.ResultsMenuBar;
 import org.emboss.jemboss.soap.*;
 import org.emboss.jemboss.JembossParams;
 
@@ -52,8 +52,6 @@ public class RemoteDragTree extends JTree implements DragGestureListener,
   private static FileRoots froots;
   /** popup menu */
   private JPopupMenu popup;
-  /** file separator */
-  private String fs = new String(System.getProperty("file.separator"));
   /** line separator */
   private String ls = new String(System.getProperty("line.separator"));
   /** store of directories that are opened */
@@ -66,7 +64,12 @@ public class RemoteDragTree extends JTree implements DragGestureListener,
   private static final int AUTOSCROLL_MARGIN = 45;
   /** used by AutoScroll method */
   private Insets autoscrollInsets = new Insets( 0, 0, 0, 0 );
-
+  
+  public static final String REMOTE_HOME = " ";
+  
+  JMenuItem openMenu;
+  JMenuItem renameMenuItem;
+  JMenuItem deleteMenuItem;
 
   /**
   *
@@ -77,7 +80,7 @@ public class RemoteDragTree extends JTree implements DragGestureListener,
   public RemoteDragTree(final JembossParams mysettings, FileRoots froots)
   {
     this.mysettings = mysettings;
-    this.froots = froots;
+    RemoteDragTree.froots = froots;
 
     DragSource dragSource = DragSource.getDefaultDragSource();
     dragSource.createDefaultDragGestureRecognizer(
@@ -86,7 +89,7 @@ public class RemoteDragTree extends JTree implements DragGestureListener,
              this);                            // drag gesture recognizer
 
     setDropTarget(new DropTarget(this,this));
-    DefaultTreeModel model = createTreeModel(" ");
+    DefaultTreeModel model = createTreeModel(REMOTE_HOME);
     setModel(model);
     createTreeModelListener();
 
@@ -101,7 +104,7 @@ public class RemoteDragTree extends JTree implements DragGestureListener,
     popup.add(menuItem);
     popup.add(new JSeparator());
 //open menu
-    JMenu openMenu = new JMenu("Open With");
+    openMenu = new JMenu("Open With");
     popup.add(openMenu);
     menuItem = new JMenuItem("Jemboss Aligmnment Editor");
     menuItem.addActionListener(this);
@@ -110,15 +113,15 @@ public class RemoteDragTree extends JTree implements DragGestureListener,
     menuItem.addActionListener(this);
     openMenu.add(menuItem);
 
-    menuItem = new JMenuItem("Rename...");
-    menuItem.addActionListener(this);
-    popup.add(menuItem);
+    renameMenuItem = new JMenuItem("Rename...");
+    renameMenuItem.addActionListener(this);
+    popup.add(renameMenuItem);
     menuItem = new JMenuItem("New Folder...");
     menuItem.addActionListener(this);
     popup.add(menuItem);
-    menuItem = new JMenuItem("Delete...");
-    menuItem.addActionListener(this);
-    popup.add(menuItem);
+    deleteMenuItem = new JMenuItem("Delete...");
+    deleteMenuItem.addActionListener(this);
+    popup.add(deleteMenuItem);
     popup.add(new JSeparator());
     menuItem = new JMenuItem("De-select All");
     menuItem.addActionListener(this);
@@ -176,7 +179,7 @@ public class RemoteDragTree extends JTree implements DragGestureListener,
   public void refreshRoot()
   {
     DefaultTreeModel model = (DefaultTreeModel)getModel();
-    model = createTreeModel(" ");
+    model = createTreeModel(REMOTE_HOME);
     setModel(model);
   }
 
@@ -267,14 +270,11 @@ public class RemoteDragTree extends JTree implements DragGestureListener,
         try
         {
           setCursor(cbusy);
-          PrivateRequest gReq = new PrivateRequest(mysettings,
+          new PrivateRequest(mysettings,
                                  "EmbreoFile","mkdir",params);
           setCursor(cdone);
-          Runnable addDirToTree = new Runnable()
-          {
-            public void run () { addObject(pnn,inputValue,true); };
-          };
-          SwingUtilities.invokeLater(addDirToTree);
+          RemoteFileNode child = addObject(pnn,inputValue,true);
+          this.expandPath(new TreePath(child.getPath()));
         }
         catch (JembossSoapException jse)
         {
@@ -300,10 +300,9 @@ public class RemoteDragTree extends JTree implements DragGestureListener,
       clearSelection();
     else if(source.getText().equals("Rename..."))
     {
-      if(node.isLeaf())
       {
         String inputValue = (String)JOptionPane.showInputDialog(null,
-                              "New File Name","Rename "+fn,
+                              "New "+(node.isLeaf()?"file":"folder")+" name","Rename "+fn,
                               JOptionPane.QUESTION_MESSAGE,null,null,fn);
 
         pn = (RemoteFileNode)node.getParent();
@@ -351,7 +350,7 @@ public class RemoteDragTree extends JTree implements DragGestureListener,
     {
       try
       {
-        PrivateRequest gReq = new PrivateRequest(mysettings,
+        new PrivateRequest(mysettings,
                                "EmbreoFile","delFile",params);
         Runnable deleteFileFromTree = new Runnable()
         {
@@ -377,7 +376,7 @@ public class RemoteDragTree extends JTree implements DragGestureListener,
                  JOptionPane.ERROR_MESSAGE);
         else
         {
-          PrivateRequest gReq = new PrivateRequest(mysettings,
+          new PrivateRequest(mysettings,
                                "EmbreoFile","delDir",params);
           Runnable deleteFileFromTree = new Runnable()
           {
@@ -454,14 +453,14 @@ public class RemoteDragTree extends JTree implements DragGestureListener,
     try
     {
       setCursor(cbusy);
-      PrivateRequest gReq = new PrivateRequest(mysettings,
+      new PrivateRequest(mysettings,
                              "EmbreoFile","rename",params);
       setCursor(cdone);
       Runnable deleteFileFromTree = new Runnable()
       {
         public void run ()
         {
-          addObject(parentNode,newfile,false);
+          addObject(parentNode,newfile,node.isDirectory());
           deleteObject(node);
         };
       };
@@ -484,17 +483,17 @@ public class RemoteDragTree extends JTree implements DragGestureListener,
   * @param ldir         true if child is a directory
   *
   */
-  public void addObject(RemoteFileNode parentNode,String child,
+  public RemoteFileNode addObject(RemoteFileNode parentNode,String child,
                         boolean ldir)
   {
     DefaultTreeModel model = (DefaultTreeModel)getModel();
     
     if(parentNode == null)
-      return;
+      return null;
 
     String path = parentNode.getFullName();
     //create new file node
-    if(path.equals(" "))
+    if(path.equals(REMOTE_HOME))
       path = "";
 
     if(child.indexOf("/") > -1)
@@ -535,7 +534,7 @@ public class RemoteDragTree extends JTree implements DragGestureListener,
     // Make sure the user can see the new node.
     this.scrollPathToVisible(new TreePath(childNode.getPath()));
 
-    return;
+    return childNode;
   }
 
 
@@ -547,7 +546,6 @@ public class RemoteDragTree extends JTree implements DragGestureListener,
   */
   public void deleteObject(RemoteFileNode node)
   {
-    RemoteFileNode parentNode = (RemoteFileNode)node.getParent();
     DefaultTreeModel model = (DefaultTreeModel)getModel();
     model.removeNodeFromParent(node);
 //  model.nodeStructureChanged(parentNode);
@@ -809,11 +807,9 @@ public class RemoteDragTree extends JTree implements DragGestureListener,
 
           fn = getNode(fn.getServerName()); // need to get the instance of
                                             // this directly to manipulate tree
-          String dropDest = null;
           RemoteFileNode fdropPath = (RemoteFileNode)dropPath.getLastPathComponent();
-          String dropRoot = fdropPath.getRootDir();
           String dropFile = null;
-          if(fdropPath.getFile().equals(" "))
+          if(fdropPath.getFile().equals(REMOTE_HOME))
             dropFile = fn.getFile();
           else
             dropFile = fdropPath.getFile()+"/"+fn.getFile();
@@ -862,7 +858,7 @@ public class RemoteDragTree extends JTree implements DragGestureListener,
               params.addElement(fileData);
 
               setCursor(cbusy);
-              PrivateRequest gReq = new PrivateRequest(mysettings,"EmbreoFile",
+              new PrivateRequest(mysettings,"EmbreoFile",
                                                              "put_file",params);
               setCursor(cdone);
               //add file to remote file tree
@@ -1016,9 +1012,23 @@ public class RemoteDragTree extends JTree implements DragGestureListener,
 
     private void maybeShowPopup(MouseEvent e)
     {
-      if(e.isPopupTrigger())
+      RemoteFileNode node = getSelectedNode();
+      if(node != null && e.isPopupTrigger()){
+        if (node.getFile().equals(REMOTE_HOME)){
+            renameMenuItem.setEnabled(false);
+            deleteMenuItem.setEnabled(false);
+            openMenu.setEnabled(false);
+        } else{
+            renameMenuItem.setEnabled(true);
+            deleteMenuItem.setEnabled(true);
+            if(!node.isDirectory())
+                openMenu.setEnabled(true);
+            else
+                openMenu.setEnabled(false);
+        }
         popup.show(e.getComponent(),
                 e.getX(), e.getY());
+      }
     }
   }
 

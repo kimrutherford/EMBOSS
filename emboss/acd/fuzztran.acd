@@ -1,5 +1,5 @@
 application: fuzztran [
-  documentation: "Protein pattern search after translation"
+  documentation: "Search for patterns in protein sequences (translated)"
   groups: "Nucleic:Motifs, Protein:Motifs"
   gui: "yes"
   batch: "yes"

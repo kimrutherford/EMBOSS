@@ -5,40 +5,26 @@
 
 Function
 
-   Non-overlapping wordmatch dotplot of two sequences
+   Draw a non-overlapping wordmatch dotplot of two sequences
 
 Description
 
-   A dotplot is a graphical representation of the regions of similarity
-   between two sequences.
+   dotpath generates a dotplot from two input sequences. The dotplot is
+   an intuitive graphical representation of the regions of similarity
+   between two sequences. Sequence "words" of a user-specified length are
+   compared and all exact word matches between the two sequences are
+   recorded. The set of the longest possible but non-overlapping matches
+   is identified. The two sequences are the axes of the rectangular
+   dotplot. Wherever there is an exact matching word in the two sequences
+   a line is plotted.
 
-   The two sequences are placed on the axes of a rectangular image and
-   wherever there is a similarity between the sequences a dot is placed
-   on the image.
+Algorithm
 
-   Where the two sequences have substantial regions of similarity, many
-   dots align to form diagonal lines. It is therefore possible to see at
-   a glance where there are local regions of similarity.
-
-   dotpath is very similar to the program dottup which looks for places
-   where words (tuples) of a specified length have an exact match in both
-   sequences and draws a diagonal line over the position of these words.
-
-   Using a longer word size thus displays less random noise, runs
-   extremely quickly, but is less sensitive.
-
-   dotpath finds all matches of size -wordsize or greater between two
-   sequences. It then reduces the matches found to the minimal set of
-   long matches that do not overlap. This is a way of finding the
-   (nearly) optimal path aligning two sequences. It is not the true
-   optimal path as produced by the algorithms used in water or needle,
-   but for very closely related sequences it will produce the same result
-   and will work well with very long sequences.
-
-   If you wish to compare the path found by dotpath to the set of all
-   matches found then the qualifier -overlaps will show all matches in
-   red except for the matches in the minimal path which are shown in
-   black, as normal.
+   dotpath uses the same algorithm as diffseq and dottup for finding a
+   minimal set of exact matches between two sequences. It finds all
+   identical words of size -wordsize or greater in the two sequences. It
+   then reduces the matches found to the minimal set of matches that do
+   not overlap. This set is rendered as lines in the dotplot.
 
 Usage
 
@@ -46,7 +32,7 @@ Usage
 
 
 % dotpath tembl:AF129756 tembl:BA000025 -word 20 -graph cps -overlaps 
-Non-overlapping wordmatch dotplot of two sequences
+Draw a non-overlapping wordmatch dotplot of two sequences
 
 Created dotpath.ps
 
@@ -118,8 +104,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -473,7 +460,22 @@ Output file format
 
 Notes
 
-   None
+   For similar sequences, dotpath provides a convenient way to find a
+   path that aligns the two sequences well. It is not a true optimal path
+   as produced by the dynamic programming algorithms used in water or
+   needle, but for very closely related sequences it will produce the
+   same result. In contast to full alignment, it works very quickly with
+   very long sequences.
+
+   The entire set of matches found can be displayed with the -overlaps
+   qualifier. This shows all matches in red, except for those in the
+   minimal path (non-overlapping set) which are shown in black, as
+   normal.
+
+   Using a longer word size will create a dottplot with relatively less
+   noise; the matches are longer and therefore more likely to have
+   biological meaning. Such runs will be much faster, but of course are
+   less sensitive.
 
 References
 
@@ -498,10 +500,10 @@ Known bugs
 
 See also
 
-   Program name                       Description
-   dotmatcher   Displays a thresholded dotplot of two sequences
+   Program name                          Description
+   dotmatcher   Draw a threshold dotplot of two sequences
    dottup       Displays a wordmatch dotplot of two sequences
-   polydot      Displays all-against-all dotplots of a set of sequences
+   polydot      Draw dotplots for all-against-all comparison of a sequence set
 
    This program is closely based on dottup with the addition of by
    default displaying only the minimal set of non-overlapping matches.

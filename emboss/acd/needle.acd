@@ -1,5 +1,5 @@
 application: needle [
-  documentation: "Needleman-Wunsch global alignment."
+  documentation: "Needleman-Wunsch global alignment of two sequences"
   groups: "Alignment:Global"
   gui: "yes"
   batch: "yes"

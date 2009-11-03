@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>trimest tembl:x65923 x65923.seq </b>
-Trim poly-A tails off EST sequences
+Remove poly-A tails from nucleotide sequences
 
 </pre></td></tr></table><p>
 <p>

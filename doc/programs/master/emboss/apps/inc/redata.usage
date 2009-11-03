@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>redata </b>
-Search REBASE for enzyme name, references, suppliers etc.
+Retrieve information from REBASE restriction enzyme database
 Restriction enzyme name [BamHI]: <b>BamHI</b>
 Output file [outfile.redata]: <b></b>
 

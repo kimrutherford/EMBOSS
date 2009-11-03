@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>mwcontam </b>
-Shows molwts that match across a set of files
+Find weights common to multiple molecular weights files
 Molecular weights file list: <b>../data/mw2.dat,mw3.dat</b>
 Ppm tolerance [50.0]: <b></b>
 Molecular weights output file [outfile.mwcontam]: <b></b>

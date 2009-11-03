@@ -1,19 +1,20 @@
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="backtranambig.html">backtranambig</a></td>
-<td>Back translate a protein sequence to ambiguous codons</td>
+<td>Back-translate a protein sequence to ambiguous nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="backtranseq.html">backtranseq</a></td>
-<td>Back translate a protein sequence</td>
+<td>Back-translate a protein sequence to a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="charge.html">charge</a></td>
-<td>Protein charge plot</td>
+<td>Draw a protein charge plot</td>
 </tr>
 
 <tr>
@@ -23,52 +24,57 @@
 
 <tr>
 <td><a href="compseq.html">compseq</a></td>
-<td>Count composition of dimer/trimer/etc words in a sequence</td>
+<td>Calculate the composition of unique words in sequences</td>
 </tr>
 
 <tr>
 <td><a href="emowse.html">emowse</a></td>
-<td>Protein identification by mass spectrometry</td>
+<td>Search protein sequences by digest fragment molecular weight</td>
 </tr>
 
 <tr>
 <td><a href="freak.html">freak</a></td>
-<td>Residue/base frequency table or plot</td>
+<td>Generate residue/base frequency table or plot</td>
 </tr>
 
 <tr>
 <td><a href="iep.html">iep</a></td>
-<td>Calculates the isoelectric point of a protein</td>
+<td>Calculate the isoelectric point of proteins</td>
 </tr>
 
 <tr>
 <td><a href="mwcontam.html">mwcontam</a></td>
-<td>Shows molwts that match across a set of files</td>
+<td>Find weights common to multiple molecular weights files</td>
 </tr>
 
 <tr>
 <td><a href="mwfilter.html">mwfilter</a></td>
-<td>Filter noisy molwts from mass spec output</td>
+<td>Filter noisy data from molecular weights file</td>
 </tr>
 
 <tr>
 <td><a href="octanol.html">octanol</a></td>
-<td>Displays protein hydropathy</td>
+<td>Draw a White-Wimley protein hydropathy plot</td>
 </tr>
 
 <tr>
 <td><a href="pepinfo.html">pepinfo</a></td>
-<td>Plots simple amino acid properties in parallel</td>
+<td>Plot amino acid properties of a protein sequence in parallel</td>
 </tr>
 
 <tr>
 <td><a href="pepstats.html">pepstats</a></td>
-<td>Protein statistics</td>
+<td>Calculates statistics of protein properties</td>
 </tr>
 
 <tr>
 <td><a href="pepwindowall.html">pepwindowall</a></td>
-<td>Displays protein hydropathy of a set of sequences</td>
+<td>Draw Kyte-Doolittle hydropathy plot for a protein alignment</td>
+</tr>
+
+<tr>
+<td><a href="wordcount.html">wordcount</a></td>
+<td>Count and extract unique words in DNA sequence(s)</td>
 </tr>
 
 </table>

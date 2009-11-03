@@ -6,7 +6,7 @@ dnl Process this file with autoconf to produce a configure script.
 #CC=cc
 
 AC_INIT(ajax/ajacd.c)
-AM_INIT_AUTOMAKE(EMBOSS, 5.0.0)
+AM_INIT_AUTOMAKE(EMBOSS, 6.0.1)
 
 
 AC_PROG_AWK
@@ -32,7 +32,7 @@ fi
 
 
 AC_ARG_ENABLE(64,
-[  --enable-64             64 bit systems])
+[  --enable-64             64 bit pointers])
 if test "${enable_64}" = "yes" ; then
 AC_MSG_CHECKING(for 64bit compilation support)
 
@@ -299,7 +299,7 @@ fi
 
 
 AC_ARG_ENABLE(large,
-[  --enable-large          large file support (over 2Gbyte)])
+[  --enable-large          over 2Gb file support (default)])
 if test "${enable_large}" = "yes" ; then
 AC_MSG_CHECKING(for large file support)
 
@@ -513,6 +513,36 @@ LDFLAGS="$LDFLAGS -lsec"
 fi
 
 
+dnl Test if --enable-mprobe is given
+if test "${enable_mprobe+set}" != set; then
+enable_mprobe=no
+fi
+
+AC_MSG_CHECKING([for mprobe])
+AC_ARG_ENABLE(mprobe,
+[  --enable-mprobe         mprobe memory allocation test])
+if test "${enable_mprobe}" = "yes" ; then
+   CPPFLAGS="-DAJ_MPROBE $CPPFLAGS"
+   AC_MSG_RESULT(yes)
+else
+   AC_MSG_RESULT(no)
+fi
+
+dnl Test if --enable-savestats is given
+if test "${enable_savestats+set}" != set; then
+enable_savestats=no
+fi
+
+AC_MSG_CHECKING([for savestats])
+AC_ARG_ENABLE(savestats,
+[  --enable-savestats      save statistics and print with debug output])
+if test "${enable_savestats}" = "yes" ; then
+   CPPFLAGS="-DAJ_SAVESTATS $CPPFLAGS"
+   AC_MSG_RESULT(yes)
+else
+   AC_MSG_RESULT(no)
+fi
+
 dnl check and set compilation flags for Jemboss auth server code
 CHECK_THREADS
 
@@ -525,6 +555,9 @@ test/swnew/Makefile test/testdb/Makefile
 test/wormpep/Makefile emboss/data/Makefile
 emboss/data/AAINDEX/Makefile
 emboss/data/CODONS/Makefile emboss/data/REBASE/Makefile 
+emboss/data/JASPAR_CORE/Makefile emboss/data/JASPAR_FAM/Makefile
+emboss/data/JASPAR_PHYLOFACTS/Makefile emboss/data/JASPAR_CNE/Makefile
+emboss/data/JASPAR_POLII/Makefile emboss/data/JASPAR_SPLICE/Makefile
 emboss/data/PRINTS/Makefile emboss/data/PROSITE/Makefile
 doc/Makefile doc/manuals/Makefile doc/tutorials/Makefile
 doc/programs/Makefile doc/programs/html/Makefile doc/programs/text/Makefile

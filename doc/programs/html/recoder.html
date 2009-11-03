@@ -23,28 +23,16 @@ recoder
 <H2>
     Function
 </H2>
-Remove restriction sites but maintain same translation
+Find restriction sites to remove (mutate) with no translation change
 <H2>
     Description
 </H2>
 
-<b>recoder</b> scans a given nucleotide sequence for restriction
-sites. It reports single base positions in the restriction pattern which
-when mutated remove the restriction site whilst maintaining the same
-translation (in frame 1 of the input sequence).
+<p><b>recoder</b> finds restriction enzyme sites in a nucleotide sequence which can be removed without changing the translation. <b>recoder</b> scans a nucleotide sequence for restriction sites for a supplied set of restriction enzymes.  It writes a standard EMBOSS report of single base positions which, when mutated, remove the restriction site whilst maintaining the same translation in frame 1 of the input sequence. One or more restriction enzymes can be specified or alternatively all the enzymes in the REBASE database can be investigated. Optionally, the untranslated and translated sequence may be reported.</p>
 
-<p>
 
-Several restriction enzymes can be specified or
-alternatively all the enzymes in the REBASE database can be
-investigated. To find out whether the single point mutations found by
-'recoder', introduce new restriction sites, 'silent' should be run on the
-original sequence. ('Silent' searches for silent point mutation sites
-which maintain the same translation. 
 
-<p>
 
-The output for 'recoder' is similar to the format used by 'silent'.
 
 
 <H2>
@@ -57,7 +45,7 @@ The output for 'recoder' is similar to the format used by 'silent'.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>recoder </b>
-Remove restriction sites but maintain same translation
+Find restriction sites to remove (mutate) with no translation change
 Input nucleotide sequence: <b>tembl:x65923</b>
 Comma separated enzyme list [all]: <b>EcoRII</b>
 Output report [x65923.recoder]: <b></b>
@@ -112,14 +100,16 @@ Output report [x65923.recoder]: <b></b>
    -raccshow2          boolean    Show accession number in the report
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
+   -rstrandshow2       boolean    Show the nucleotide strand in the report
    -rusashow2          boolean    Show the full USA in the report
    -rmaxall2           integer    Maximum total hits to report
    -rmaxseq2           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -306,7 +296,7 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
 <pre>
 ########################################
 # Program: recoder
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: recoder
 #    -sequence tembl:x65923
 #    -enzymes EcoRII
@@ -331,41 +321,41 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
 #
 #=======================================
 
-  Start     End Dir    EnzymeName RS-Pattern Base-Posn    AAs Mutation
-     77      81 .      EcoRII     CCWGG             78    P.P     C-&gt;G
-     77      81 .      EcoRII     CCWGG             78    P.P     C-&gt;A
-     77      81 .      EcoRII     CCWGG             78    P.P     C-&gt;T
-     77      81 .      EcoRII     CCWGG             79    R.R     A-&gt;C
-     77      81 .      EcoRII     CCWGG             81    R.R     G-&gt;A
-    107     111 .      EcoRII     CCWGG            108    A.A     C-&gt;G
-    107     111 .      EcoRII     CCWGG            108    A.A     C-&gt;A
-    107     111 .      EcoRII     CCWGG            108    A.A     C-&gt;T
-    107     111 .      EcoRII     CCWGG            109    R.R     A-&gt;C
-    107     111 .      EcoRII     CCWGG            111    R.R     G-&gt;A
-    182     186 .      EcoRII     CCWGG            183    S.S     C-&gt;G
-    182     186 .      EcoRII     CCWGG            183    S.S     C-&gt;A
-    182     186 .      EcoRII     CCWGG            183    S.S     C-&gt;T
-    197     201 .      EcoRII     CCWGG            198    P.P     C-&gt;G
-    197     201 .      EcoRII     CCWGG            198    P.P     C-&gt;A
-    197     201 .      EcoRII     CCWGG            198    P.P     C-&gt;T
-    248     252 .      EcoRII     CCWGG            249    P.P     C-&gt;G
-    248     252 .      EcoRII     CCWGG            249    P.P     C-&gt;A
-    248     252 .      EcoRII     CCWGG            249    P.P     C-&gt;T
-    293     297 .      EcoRII     CCWGG            294    P.P     C-&gt;G
-    293     297 .      EcoRII     CCWGG            294    P.P     C-&gt;A
-    293     297 .      EcoRII     CCWGG            294    P.P     C-&gt;T
-     81      77 Rev    EcoRII     CCWGG             79    P.P     T-&gt;G
-     81      77 Rev    EcoRII     CCWGG             79    P.P     T-&gt;C
-    111     107 Rev    EcoRII     CCWGG            109    P.P     T-&gt;G
-    111     107 Rev    EcoRII     CCWGG            109    P.P     T-&gt;C
-    186     182 Rev    EcoRII     CCWGG            184    P.P     A-&gt;G
-    186     182 Rev    EcoRII     CCWGG            184    P.P     A-&gt;C
-    201     197 Rev    EcoRII     CCWGG            199    P.P     A-&gt;G
-    201     197 Rev    EcoRII     CCWGG            199    P.P     A-&gt;C
-    252     248 Rev    EcoRII     CCWGG            250    P.P     A-&gt;G
-    252     248 Rev    EcoRII     CCWGG            250    P.P     A-&gt;C
-    297     293 Rev    EcoRII     CCWGG            295    P.P     A-&gt;G
-    297     293 Rev    EcoRII     CCWGG            295    P.P     A-&gt;C
+  Start     End  Strand Dir    EnzymeName RS-Pattern Base-Posn    AAs Mutation
+     77      81       + .      EcoRII     CCWGG             78    P.P     C-&gt;G
+     77      81       + .      EcoRII     CCWGG             78    P.P     C-&gt;A
+     77      81       + .      EcoRII     CCWGG             78    P.P     C-&gt;T
+     77      81       + .      EcoRII     CCWGG             79    R.R     A-&gt;C
+     77      81       + .      EcoRII     CCWGG             81    R.R     G-&gt;A
+    107     111       + .      EcoRII     CCWGG            108    A.A     C-&gt;G
+    107     111       + .      EcoRII     CCWGG            108    A.A     C-&gt;A
+    107     111       + .      EcoRII     CCWGG            108    A.A     C-&gt;T
+    107     111       + .      EcoRII     CCWGG            109    R.R     A-&gt;C
+    107     111       + .      EcoRII     CCWGG            111    R.R     G-&gt;A
+    182     186       + .      EcoRII     CCWGG            183    S.S     C-&gt;G
+    182     186       + .      EcoRII     CCWGG            183    S.S     C-&gt;A
+    182     186       + .      EcoRII     CCWGG            183    S.S     C-&gt;T
+    197     201       + .      EcoRII     CCWGG            198    P.P     C-&gt;G
+    197     201       + .      EcoRII     CCWGG            198    P.P     C-&gt;A
+    197     201       + .      EcoRII     CCWGG            198    P.P     C-&gt;T
+    248     252       + .      EcoRII     CCWGG            249    P.P     C-&gt;G
+    248     252       + .      EcoRII     CCWGG            249    P.P     C-&gt;A
+    248     252       + .      EcoRII     CCWGG            249    P.P     C-&gt;T
+    293     297       + .      EcoRII     CCWGG            294    P.P     C-&gt;G
+    293     297       + .      EcoRII     CCWGG            294    P.P     C-&gt;A
+    293     297       + .      EcoRII     CCWGG            294    P.P     C-&gt;T
+     77      81       - Rev    EcoRII     CCWGG             79    P.P     T-&gt;G
+     77      81       - Rev    EcoRII     CCWGG             79    P.P     T-&gt;C
+    107     111       - Rev    EcoRII     CCWGG            109    P.P     T-&gt;G
+    107     111       - Rev    EcoRII     CCWGG            109    P.P     T-&gt;C
+    182     186       - Rev    EcoRII     CCWGG            184    P.P     A-&gt;G
+    182     186       - Rev    EcoRII     CCWGG            184    P.P     A-&gt;C
+    197     201       - Rev    EcoRII     CCWGG            199    P.P     A-&gt;G
+    197     201       - Rev    EcoRII     CCWGG            199    P.P     A-&gt;C
+    248     252       - Rev    EcoRII     CCWGG            250    P.P     A-&gt;G
+    248     252       - Rev    EcoRII     CCWGG            250    P.P     A-&gt;C
+    293     297       - Rev    EcoRII     CCWGG            295    P.P     A-&gt;G
+    293     297       - Rev    EcoRII     CCWGG            295    P.P     A-&gt;C
 
 #---------------------------------------
 #---------------------------------------
@@ -423,7 +413,7 @@ The directories are searched in the following order:
 </ul>
 <p>
 <p>
-The EMBOSS REBASE restriction enzyme data files are stored iin
+The EMBOSS REBASE restriction enzyme data files are stored in
 directory 'data/REBASE/*' under the EMBOSS installation directory.
 
 <p>
@@ -470,7 +460,7 @@ is the preferred (prototype) name.
     Notes
 </H2>
 
-None.
+<p>To find out whether the single point mutations found by <b>recoder</b> introduce new restriction sites, <b>silent</b> should be run on the original sequence. <b>silent</b> does the opposite to <b>recoder</b>. <b>silent</b> finds sites where a restriction enzyme site can be introduced without changing the translation in frame 1 of the sequence.</p>
 
 <H2>
     References
@@ -482,7 +472,7 @@ None.
     Warnings
 </H2>
 
-None.
+<p><b>recoder</b> uses the EMBOSS REBASE restriction enzyme data files stored in directory <tt>data/REBASE/*</tt> under the EMBOSS installation directory. These files must first be set up using the program <b>rebaseextract</b>. Running <b>rebaseextract</b> may be the job of your system manager.</p>
 
 <H2>
     Diagnostic Error Messages
@@ -504,35 +494,36 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="redata.html">redata</a></td>
-<td>Search REBASE for enzyme name, references, suppliers etc</td>
+<td>Retrieve information from REBASE restriction enzyme database</td>
 </tr>
 
 <tr>
 <td><a href="remap.html">remap</a></td>
-<td>Display sequence with restriction sites, translation etc</td>
+<td>Display restriction enzyme binding sites in a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="restover.html">restover</a></td>
-<td>Find restriction enzymes producing specific overhang</td>
+<td>Find restriction enzymes producing a specific overhang</td>
 </tr>
 
 <tr>
 <td><a href="restrict.html">restrict</a></td>
-<td>Finds restriction enzyme cleavage sites</td>
+<td>Report restriction enzyme cleavage sites in a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="showseq.html">showseq</a></td>
-<td>Display a sequence with features, translation etc</td>
+<td>Displays sequences with features in pretty format</td>
 </tr>
 
 <tr>
 <td><a href="silent.html">silent</a></td>
-<td>Silent mutation restriction enzyme scan</td>
+<td>Find restriction sites to insert (mutate) with no translation change</td>
 </tr>
 
 </table>

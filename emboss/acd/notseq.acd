@@ -1,6 +1,5 @@
 application: notseq [
-  documentation: "Exclude a set of sequences and write out
-                  the remaining ones"
+  documentation: "Write to file a subset of an input stream of sequences"
   groups: "Edit"
 ]
 

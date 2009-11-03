@@ -175,8 +175,8 @@ int main(int argc, char **argv)
     dbname     = ajAcdGetString("dbname");
     release    = ajAcdGetString("release");
     datestr    = ajAcdGetString("date");
-    systemsort = ajAcdGetBool("systemsort");
-    cleanup    = ajAcdGetBool("cleanup");
+    systemsort = ajAcdGetBoolean("systemsort");
+    cleanup    = ajAcdGetBoolean("cleanup");
     sortopt    = ajAcdGetString("sortoptions");
     maxindex   = ajAcdGetInt("maxindex");
     logfile    = ajAcdGetOutfile("outfile");
@@ -238,7 +238,7 @@ int main(int argc, char **argv)
     {
 	ajStrAssignS(&curfilename,(AjPStr) inputFiles[ifile]);
 	embDbiFlatOpenlib(curfilename, &libr);
-	ajFileNameTrim(&curfilename);
+	ajFilenameTrimPath(&curfilename);
 	if(ajStrGetLen(curfilename) >= maxfilelen)
 	    maxfilelen = ajStrGetLen(curfilename) + 1;
 
@@ -286,7 +286,7 @@ int main(int argc, char **argv)
 
     /* Write the entryname.idx index */
     ajStrAssignC(&tmpfname, "entrynam.idx");
-    entFile = ajFileNewOutD(indexdir, tmpfname);
+    entFile = ajFileNewOutNamePathS(tmpfname, indexdir);
 
     recsize = maxidlen+10;
     filesize = 300 + (idCount*(ajint)recsize);
@@ -638,8 +638,8 @@ static AjBool dbifasta_ParseFasta(AjPFile libr, ajint* dpos,
     if(!tstr)
 	tstr = ajStrNew();
 
-    *dpos = ajFileTell(libr);
-    ajFileGets(libr, &rline);
+    *dpos = ajFileResetPos(libr);
+    ajReadline(libr, &rline);
     if(!ajRegExec(idexp,rline))
     {
 	ajStrDelStatic(&dbifastaTmpAc);
@@ -789,16 +789,16 @@ static AjBool dbifasta_ParseFasta(AjPFile libr, ajint* dpos,
 	    }
     }
 
-    ipos = ajFileTell(libr);
+    ipos = ajFileResetPos(libr);
 
-    while(ajFileGets(libr, &rline))
+    while(ajReadline(libr, &rline))
     {
 	if(ajStrGetCharFirst(rline) == '>')
 	{
 	    ajFileSeek(libr, ipos, 0);
 	    return ajTrue;
 	}
-	ipos = ajFileTell(libr);
+	ipos = ajFileResetPos(libr);
     }
 
     ajFileSeek(libr, ipos, 0);		/* end of file reached */

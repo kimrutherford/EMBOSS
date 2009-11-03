@@ -1,0 +1,116 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:m23100' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:m23100</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   M23100; SV 1; linear; genomic DNA; STD; HUM; 2085 BP.
+XX
+AC   M23100; M32822;
+XX
+DT   06-JUL-1989 (Rel. 20, Created)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 10)
+XX
+DE   Human insulin receptor (INSR) gene, exon 1, clones lambda-hINSR-(1-13).
+XX
+KW   Alu repeat; insulin receptor.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-1933
+RX   PUBMED; 2911561.
+RA   Seino S., Seino M., Nishi S., Bell G.I.;
+RT   "Structure of the human insulin receptor gene and characterization of its
+RT   promoter";
+RL   Proc. Natl. Acad. Sci. U.S.A. 86(1):114-118(1989).
+XX
+RN   [2]
+RP   1-2085
+RX   PUBMED; 2210055.
+RA   Seino S., Seino M., Bell G.I.;
+RT   "Human insulin-receptor gene. Partial sequence and amplification of exons
+RT   by polymerase chain reaction";
+RL   Diabetes 39(1):123-128(1990).
+XX
+DR   EMBL-JOIN; M32972.
+DR   TRANSFAC; R03068; HS$INSR_01.
+DR   UniProtKB/Swiss-Prot; P06213; INSR_HUMAN.
+XX
+CC   Draft entry and computer-readable sequence for [1] kindly submitted
+CC   by G.Bell, 14-MAR-1990.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..2085
+FT                   /organism="Homo sapiens"
+FT                   /map="19p13.3-p13.2"
+FT                   /mol_type="genomic DNA"
+FT                   /dev_stage="foetus"
+FT                   /tissue_type="liver"
+FT                   /db_xref="taxon:9606"
+FT   repeat_region   &lt;1..76
+FT                   /rpt_family="Alu"
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+FT                   /number=1
+FT                   /note="alternative exon 1; G00-119-352"
+FT   exon            1548..1923
+FT                   /gene="INSR"
+FT                   /number=1
+FT                   /note="alternative exon 1; G00-119-352"
+FT   sig_peptide     1824..1904
+FT                   /gene="INSR"
+FT                   /note="G00-119-352"
+FT   intron          1924..&gt;2085
+FT                   /gene="INSR"
+FT                   /number=1
+FT                   /note="G00-119-352"
+XX
+SQ   Sequence 2085 BP; 417 A; 631 C; 702 G; 335 T; 0 other;
+     agatctggcc attgcactcc agcctgggca acagagaaaa actccatcta aaaaaaaaaa        60
+     aaaaaaaaaa aaaaaacaga gagagagaga gagagagaga gaaggaaacg gaactggggg       120
+     gaggatttgc aaaaatatgg ttagggatgg cacttcagag atgaagccat cctggagtgt       180
+     tacgggcaag ggaaatgctg gggcaaagcc ccagaggcag gaataggttt ggcctgttgc       240
+     atgaacagtg ggtccagctc ctagcaaact gtttattgaa tgaaagaaga atgaatgcct       300
+     tgggtctagg gttgtgctgg gcgctttctt aagttttctt tcccgggtac ctccccagaa       360
+     ctggcatgca ggtattatta aacccattac acaagtgaaa ctggcccaga gacagaaaag       420
+     tccctggtcc aagaccacac aggagtgagg ggtggaggaa ccctcctccc attgagttct       480
+     ggctttccta tactgaaagc cccttcctct cctgcagtaa ggtaggtgga accgctgtcc       540
+     cgccttgttg gtgaatgtcg ttgctagact tcagacacat acaggctggt ctgctgaaaa       600
+     tcagagatgt ccacctgcgc cctattcgag gtctccggcg tcttctttgg cgtcgtcttt       660
+     gccctttcag aagcgtctgc acatttttcc aggtgtcatt tctccaactt gaacacaggg       720
+     agcgcactgg gcacgcgggc acgtggctgt ccccaggggc ctggcttggg tctcgcccct       780
+     gggccggggc gcacgcgcgg gcgggacatc tgggggcgcc cacgcgctct gggacgagtg       840
+     tcgctggcca ggcccggact gaggaaaggc gagtgagaca ctactcgcct ggggtgcaaa       900
+     atttaaggga gtgaaaaaaa aaaaaaaaga aagaaaccaa aaccacctcg agtcaccaaa       960
+     ataaacattt taatgcagta ttttttaaaa aatcaacagg aatcctccaa agcccactat      1020
+     gaacaaaata gcaaaatggt agagaaagga tctgtgccgc tgcgtcgggc ctgtggggcg      1080
+     cctccggggg tctgaaactg gaggagactc ggggctgtag ggcgcgcgga tctggggcgc      1140
+     gccctcggtc ccggcgcgcc cagggcctcc cgcgcggggc ccggcacagg gaggcgggga      1200
+     ggcgggcggg gcggggcggg accgggcggc acctccctcc cctgcaagct ttccctccct      1260
+     ctcctgggcc tctcccgggc gcagagtccc ttcctaggcc agatccgcgc cgccttttcc      1320
+     cgcggcccgc acggggccca gctgacgggc cgcgttgttt acgggccgga gcagccctct      1380
+     ctcccgccgc ccgcccgcca cccgccagcc caggtgcccg cccgccagtc agctagtccg      1440
+     tcggtccgcg cgtccctctg tcccggagcc cgcagatcgc gacccagagc gcgcggggcc      1500
+     gagagccgag agacagtccc gggcgcagcg cggagctccg ggccccgaga tcctgggacg      1560
+     gggcccgggc cgcagcggcc ggggggtcgg ggccaccacc gcaagggcct ccgctcagta      1620
+     tttgtagctg gcgaagccgc gcgcgccctt cccggggctg cctctgggcc ctccccggca      1680
+     ggggggctgc ggcccgcggg tcgcgggcgt ggaagagaag gacgcgcggc ccccagcgcc      1740
+     tcttgggtgg ccgcctcgga gcatgacccc cgcgggccag cgccgcgcgc tctgatccga      1800
+     ggagaccccg cgctcccgca gccatgggca ccgggggccg gcggggagcg gcggccgcgc      1860
+     cgctgctggt ggcggtggcc gcgctgctac tgggcgccgc gggccacctg taccccggag      1920
+     agggtgagtc tgggggcgcg ggcgtgggcg gggagcgccg cgatggggag aggaccccac      1980
+     ccaagccaaa atcgatcccc cgcttgtgga ctgagaaccc tccccagggg cggggggcgg      2040
+     tggccaggac ggtagctcct gcatcgcgta gggggagcgg gaagc                      2085
+//
+</pre>
+</td></tr></table><p>

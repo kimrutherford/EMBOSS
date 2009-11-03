@@ -92,9 +92,9 @@ int main(int argc, char **argv)
     width  = ajAcdGetInt("width");
     range  = ajAcdGetRange("range");
     outf   = ajAcdGetOutfile("outfile");
-    isrule = ajAcdGetBool("ruler");
-    isp    = ajAcdGetBool("plabel");
-    isn    = ajAcdGetBool("nlabel");
+    isrule = ajAcdGetBoolean("ruler");
+    isp    = ajAcdGetBoolean("plabel");
+    isn    = ajAcdGetBoolean("nlabel");
 
     ajStrToInt(codestr, &gcode);
     codon  = ajCodNewCode(gcode);
@@ -173,8 +173,6 @@ static void prettyseq_Translate(ajint beg, ajint end,
 
     tri[3]='\0';
 
-    ajStrFmtUpper(s);
-
     /* Convert ranges to subsequence values */
     nr = ajRangeNumber(range);
     for(i=0;i<nr;++i)
@@ -203,6 +201,12 @@ static void prettyseq_Translate(ajint beg, ajint end,
 	    p[j] = (char)tolower((ajint)p[j]);
     }
 
+ 
+/* GSK
+* Need to ensure we can group-by-3 so ignore any trailing 1 or 2 nucls
+* otherwise we may get overwrites in arrays(?)
+*/
+    limit = 3*((limit+1)/3) - 1;
 
     /* Do the translation */
     q=ajStrGetuniquePtr(pro);
@@ -243,6 +247,9 @@ static void prettyseq_Translate(ajint beg, ajint end,
 	q[i+1] = q[i+2] = ' ';
 	i += 2;
     }
+    j = ajStrGetLen(*s)-limit;
+    while(j--)
+        q[i++] = ' ';
 
     return;
 }

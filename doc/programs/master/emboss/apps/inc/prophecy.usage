@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>prophecy </b>
-Creates matrices/profiles from multiple alignments
+Create frequency matrix or profile from a multiple alignment
 Input (aligned) sequence set: <b>globins.msf</b>
 Profile type
          F : Frequency
@@ -27,7 +27,7 @@ Output file [globins.prophecy]: <b></b>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>prophecy </b>
-Creates matrices/profiles from multiple alignments
+Create frequency matrix or profile from a multiple alignment
 Input (aligned) sequence set: <b>globins.msf</b>
 Profile type
          F : Frequency

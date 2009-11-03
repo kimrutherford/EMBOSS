@@ -25,8 +25,6 @@ import org.emboss.jemboss.gui.SequenceData;
 
 import java.awt.datatransfer.*;
 import javax.swing.*;
-import javax.swing.event.*;
-import java.awt.event.*;
 import javax.swing.border.*;
 import java.awt.dnd.*;
 import java.awt.*;

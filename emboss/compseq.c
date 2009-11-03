@@ -101,11 +101,11 @@ int main(int argc, char **argv)
     word      = ajAcdGetInt("word");
     outfile   = ajAcdGetOutfile("outfile");
     infile    = ajAcdGetInfile("infile");
-    zerocount = ajAcdGetBool("zerocount");
-    ignorebz  = ajAcdGetBool("ignorebz");
+    zerocount = ajAcdGetBoolean("zerocount");
+    ignorebz  = ajAcdGetBoolean("ignorebz");
     frame     = ajAcdGetInt("frame");
-    reverse   = ajAcdGetBool("reverse");
-    calcfreq  = ajAcdGetBool("calcfreq");
+    reverse   = ajAcdGetBoolean("reverse");
+    calcfreq  = ajAcdGetBoolean("calcfreq");
 
     /* Output some documentation to the results file */
     ajFmtPrintF(outfile, "#\n# Output from 'compseq'\n#\n");
@@ -139,7 +139,7 @@ int main(int argc, char **argv)
     else
     {
 	ajFmtPrintF(outfile,"# The Expected frequencies are taken "
-		    "from the file: %s\n",ajFileName(infile));
+		    "from the file: %s\n",ajFileGetNameC(infile));
 	compseq_readexpfreq(&exptable, infile, word);
 	have_exp_freq = ajTrue;
 	ajFileClose(&infile);
@@ -478,7 +478,7 @@ static void compseq_readexpfreq(AjPTable *exptable, AjPFile infile,
 
 
     /* read the file */
-    while(ajFileReadLine(infile, &line))
+    while(ajReadlineTrim(infile, &line))
     {
 	/* skip comment and blank lines */
 	if(!ajStrFindC(line, "#"))
@@ -508,7 +508,7 @@ static void compseq_readexpfreq(AjPTable *exptable, AjPFile infile,
     }
 
     /* read the file */
-    while(ajFileReadLine(infile, &line))
+    while(ajReadlineTrim(infile, &line))
     {
 	/* skip comment and blank lines */
 	if(!ajStrFindC(line, "#"))
@@ -526,7 +526,7 @@ static void compseq_readexpfreq(AjPTable *exptable, AjPFile infile,
     }
 
     /* read in the observed frequencies as a string */
-    while(ajFileReadLine(infile, &line))
+    while(ajReadlineTrim(infile, &line))
     {
 	/* skip comment and blank lines */
 	if(!ajStrFindC(line, "#"))

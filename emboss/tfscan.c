@@ -105,7 +105,7 @@ int main(int argc, char **argv)
 
     if(cp!='C')
     {
-	ajFileDataNew(pname,&inf);
+	inf = ajDatafileNewInNameS(pname);
 	if(!inf)
 	    ajFatal("Either EMBOSS_DATA undefined or TFEXTRACT needs running");
     }
@@ -133,7 +133,7 @@ int main(int argc, char **argv)
 	btable = ajTablestrNewLen(1000);
 	
 	sum=0;
-	while(ajFileReadLine(inf,&line))
+	while(ajReadlineTrim(inf,&line))
 	{
 	    p = ajStrGetPtr(line);
 

@@ -105,17 +105,17 @@ int main(int argc, char **argv)
     min        = ajAcdGetInt("min");
     max        = ajAcdGetInt("max");
     sitelen    = 2;
-    threeprime = ajAcdGetBool("threeprime");
-    blunt      = ajAcdGetBool("blunt");
-    sticky     = ajAcdGetBool("sticky");
-    single     = ajAcdGetBool("single");
-    html       = ajAcdGetBool("html");
-    alpha      = ajAcdGetBool("alphabetic");
-    ambiguity  = ajAcdGetBool("ambiguity");
-    plasmid    = ajAcdGetBool("plasmid");
-    commercial = ajAcdGetBool("commercial");
-    limit      = ajAcdGetBool("limit");
-    frags      = ajAcdGetBool("fragments");
+    threeprime = ajAcdGetBoolean("threeprime");
+    blunt      = ajAcdGetBoolean("blunt");
+    sticky     = ajAcdGetBoolean("sticky");
+    single     = ajAcdGetBoolean("single");
+    html       = ajAcdGetBoolean("html");
+    alpha      = ajAcdGetBoolean("alphabetic");
+    ambiguity  = ajAcdGetBoolean("ambiguity");
+    plasmid    = ajAcdGetBoolean("plasmid");
+    commercial = ajAcdGetBoolean("commercial");
+    limit      = ajAcdGetBoolean("limit");
+    frags      = ajAcdGetBoolean("fragments");
     dfile      = ajAcdGetDatafile("datafile");
 
     if(single)
@@ -132,7 +132,7 @@ int main(int argc, char **argv)
 
     if(!dfile)
     {
-	ajFileDataNewC(ENZDATA,&enzfile);
+	enzfile = ajDatafileNewInNameC(ENZDATA);
 	if(!enzfile)
 	    ajFatal("Cannot locate enzyme file. Run REBASEEXTRACT");
     }
@@ -145,7 +145,7 @@ int main(int argc, char **argv)
 
     if(limit)
     {
-	ajFileDataNewC(EQUDATA,&equfile);
+	equfile = ajDatafileNewInNameC(EQUDATA);
 	if(!equfile)
 	    limit=ajFalse;
 	else
@@ -474,7 +474,7 @@ static void restover_read_equiv(AjPFile equfile, AjPTable table)
 
     line = ajStrNew();
 
-    while(ajFileReadLine(equfile,&line))
+    while(ajReadlineTrim(equfile,&line))
     {
 	p=ajStrGetPtr(line);
 	if(!*p || *p=='#' || *p=='!')
@@ -514,7 +514,7 @@ static void restover_read_file_of_enzyme_names(AjPStr *enzymes)
     if (ajStrFindC(*enzymes, "@") == 0)
     {
 	ajStrTrimC(enzymes, "@");	/* remove the @ */
-	file = ajFileNewIn(*enzymes);
+	file = ajFileNewInNameS(*enzymes);
 	if (file == NULL)
 	    ajFatal ("Cannot open the file of enzyme names: '%S'", enzymes);
 
@@ -522,7 +522,7 @@ static void restover_read_file_of_enzyme_names(AjPStr *enzymes)
 	ajStrSetClear(enzymes);
 
 	line = ajStrNew();
-	while(ajFileReadLine(file, &line))
+	while(ajReadlineTrim(file, &line))
 	{
 	    p = ajStrGetPtr(line);
 	    if (!*p || *p == '#' || *p == '!')

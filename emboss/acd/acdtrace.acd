@@ -1,5 +1,5 @@
 application: acdtrace [
-  documentation: "ACD compiler on-screen trace"
+  documentation: "Trace processing of an application ACD file (for testing)"
   gui: "no"
   groups: "Acd"
 ]

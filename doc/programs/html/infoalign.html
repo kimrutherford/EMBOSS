@@ -24,44 +24,15 @@ infoalign
 <H2>
     Function
 </H2>
-Information on a multiple sequence alignment
+Display basic information about a multiple sequence alignment
 
 
 <H2>
     Description
 </H2>
 
-<b>infoalign</b> is small utility to list some simple properties of
-sequences in an alignment. 
-
-<p>
-
-It will write a table containing one line per sequence.  The information
-is written out in columns separated by space or TAB characters.  The
-columns of data are: the sequences' USA, name, two measures of length,
-counts of gaps, and numbers of identical, similar and different residues
-or bases in this sequence when compared to a reference sequence,
-together with a simple statistic of the % change between the reference
-sequence and this sequence. 
-
-<p>
-
-The reference sequence can be either the calculated consensus sequence
-(the default) or it can be one of the set of aligned sequences,
-specified by either the ordinal number of that sequence in the input
-file, or by its name.
-
-<p>
-
-Any combination of these types of information can be easily selected or
-unselected. 
-
-<p>
-
-By default, the output file starts each line with the USA of the
-sequence being described, so the output file is a list file that can be
-manually edited and read in by any other EMBOSS program that can read in
-one or more sequence to be analysed. 
+<p><b>infoalign</b> displays on screen basic information about sequences in an input multiple sequence alignment.  This includes the sequences' USA, name, two measures of length, counts of gaps, and numbers of identical, similar and different residues or bases in this sequence when compared to a reference sequence, together with a simple statistic of the % change between the reference sequence and this sequence. Any combination of these records is easily selected or unselected for display. The same information may be written to an output file which (optionally) may be formatted in an HTML table.</p>
+<p>The reference sequence is the one against which all the other sequences are compared using a specified substitution matrix.  It is either the calculated consensus sequence of the alignment (the default) or it can be one of the set of aligned sequences, specified by either the ordinal number of that sequence in the input file, or by name.  There are various options to control how the consensus is calculated.</p>
 
 
 <H2>
@@ -140,7 +111,7 @@ character:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>infoalign globins.msf </b>
-Information on a multiple sequence alignment
+Display basic information about a multiple sequence alignment
 Output file [globins.infoalign]: <b></b>
 
 </pre></td></tr></table><p>
@@ -156,7 +127,7 @@ This example doesn't display the USA of the sequence:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>infoalign globins.msf -nousa </b>
-Information on a multiple sequence alignment
+Display basic information about a multiple sequence alignment
 Output file [globins.infoalign]: <b></b>
 
 </pre></td></tr></table><p>
@@ -172,7 +143,7 @@ Display only the name and sequence length of a sequence:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>infoalign globins.msf -only -name -seqlength </b>
-Information on a multiple sequence alignment
+Display basic information about a multiple sequence alignment
 Output file [globins.infoalign]: <b></b>
 
 </pre></td></tr></table><p>
@@ -188,7 +159,7 @@ Display only the name, number of gap characters and differences to the consensus
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>infoalign globins.msf -only -name -gapcount -diffcount </b>
-Information on a multiple sequence alignment
+Display basic information about a multiple sequence alignment
 Output file [globins.infoalign]: <b></b>
 
 </pre></td></tr></table><p>
@@ -204,7 +175,7 @@ Display the name and number of gaps within a sequence:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>infoalign globins.msf -only -name -gaps </b>
-Information on a multiple sequence alignment
+Display basic information about a multiple sequence alignment
 Output file [globins.infoalign]: <b></b>
 
 </pre></td></tr></table><p>
@@ -220,7 +191,7 @@ Display information formatted with HTML:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>infoalign globins.msf -html </b>
-Information on a multiple sequence alignment
+Display basic information about a multiple sequence alignment
 Output file [globins.infoalign]: <b></b>
 
 </pre></td></tr></table><p>
@@ -236,7 +207,7 @@ Use the first sequence as the reference sequence to compare to:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>infoalign globins.msf -refseq 1 </b>
-Information on a multiple sequence alignment
+Display basic information about a multiple sequence alignment
 Output file [globins.infoalign]: <b></b>
 
 </pre></td></tr></table><p>
@@ -364,8 +335,9 @@ Output file [globins.infoalign]: <b></b>
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -1107,10 +1079,11 @@ The directories are searched in the following order:
     Notes
 </H2>
 
-By default, the output file starts each line with the USA of the
-sequence being described, so the output file is a list file that can be
-manually edited and read in by other EMBOSS programs using the list-file
-specification of '@filename'. 
+<p>There are many qualifiers to control exactly what information on the sequence is output and how it is formatted.  If you only want a few fields in the output file, the command line may be shortended by preceding the appropriate qualifier with <tt>-only</tt>.  For example, instead of specifying <tt>-nohead -nousa -noname -noalign -nogaps -nogapcount -nosimcount -noidcount -nodiffcount -noweight</tt> to get only the sequence length output, you can specify <tt>-only -seqlength</tt>.</p>
+
+<p>By default, the output file starts each line with the USA of the sequence being described, so the output file is a list file that can be manually edited and read in by any other EMBOSS program that can read in one or more sequence to be analysed.</p>
+
+
 
 <H2>
     References
@@ -1144,7 +1117,8 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="edialign.html">edialign</a></td>
 <td>Local multiple alignment of sequences</td>
@@ -1152,62 +1126,72 @@ None.
 
 <tr>
 <td><a href="emma.html">emma</a></td>
-<td>Multiple alignment program - interface to ClustalW program</td>
+<td>Multiple sequence alignment (ClustalW wrapper)</td>
+</tr>
+
+<tr>
+<td><a href="infobase.html">infobase</a></td>
+<td>Return information on a given nucleotide base</td>
+</tr>
+
+<tr>
+<td><a href="inforesidue.html">inforesidue</a></td>
+<td>Return information on a given amino acid residue</td>
 </tr>
 
 <tr>
 <td><a href="infoseq.html">infoseq</a></td>
-<td>Displays some simple information about sequences</td>
+<td>Display basic information about sequences</td>
 </tr>
 
 <tr>
 <td><a href="plotcon.html">plotcon</a></td>
-<td>Plot quality of conservation of a sequence alignment</td>
+<td>Plot conservation of a sequence alignment</td>
 </tr>
 
 <tr>
 <td><a href="prettyplot.html">prettyplot</a></td>
-<td>Displays aligned sequences, with colouring and boxing</td>
+<td>Draw a sequence alignment with pretty formatting</td>
 </tr>
 
 <tr>
 <td><a href="seealso.html">seealso</a></td>
-<td>Finds programs sharing group names</td>
+<td>Finds programs with similar function to a specified program</td>
 </tr>
 
 <tr>
 <td><a href="showalign.html">showalign</a></td>
-<td>Displays a multiple sequence alignment</td>
+<td>Display a multiple sequence alignment in pretty format</td>
 </tr>
 
 <tr>
 <td><a href="showdb.html">showdb</a></td>
-<td>Displays information on the currently available databases</td>
+<td>Displays information on configured databases</td>
 </tr>
 
 <tr>
 <td><a href="textsearch.html">textsearch</a></td>
-<td>Search sequence documentation. Slow, use SRS and Entrez!</td>
+<td>Search the textual description of sequence(s)</td>
 </tr>
 
 <tr>
 <td><a href="tfm.html">tfm</a></td>
-<td>Displays a program's help documentation manual</td>
+<td>Displays full documentation for an application</td>
 </tr>
 
 <tr>
 <td><a href="tranalign.html">tranalign</a></td>
-<td>Align nucleic coding regions given the aligned proteins</td>
+<td>Generate an aligment of nucleic coding regions from aligned proteins</td>
 </tr>
 
 <tr>
 <td><a href="whichdb.html">whichdb</a></td>
-<td>Search all databases for an entry</td>
+<td>Search all sequence databases for an entry and retrieve it</td>
 </tr>
 
 <tr>
 <td><a href="wossname.html">wossname</a></td>
-<td>Finds programs by keywords in their one-line documentation</td>
+<td>Finds programs by keywords in their short description</td>
 </tr>
 
 </table>

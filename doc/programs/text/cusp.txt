@@ -5,15 +5,19 @@
 
 Function
 
-   Create a codon usage table
+   Create a codon usage table from nucleotide sequence(s)
 
 Description
 
-   Reads one or more coding sequences (CDS sequence only) and calculates
-   a codon frequency table.
+   cusp calculates a codon usage table for one or more nucleotide coding
+   sequences and writes the table to file.
 
-   The output file can be used as a codon usage table in other
-   applications.
+   The codon usage table gives for each codon: i. Sequence of the codon.
+   ii. The encoded amino acid. iii. The proportion of usage of the codon
+   among its redundant set, i.e. the set of codons which code for this
+   codon's amino acid. iv. The expected number of codons, given the input
+   sequence(s), per 1000 bases. v. The observed number of codons in the
+   input sequences.
 
 Usage
 
@@ -24,7 +28,7 @@ Usage
 
 
 % cusp -sbeg 135 -send 1292 
-Create a codon usage table
+Create a codon usage table from nucleotide sequence(s)
 Input nucleotide sequence(s): tembl:x13776
 Output file [x13776.cusp]: 
 
@@ -63,8 +67,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -311,28 +316,27 @@ TAA    *     0.000     0.000      0
 TAG    *     0.000     0.000      0
 TGA    *     1.000     2.591      1
 
-   The example usage read in a single CDS from Pseudomonas aeruginosa
-   which has a very high GC content ands a strong coding bias, as shown
-   by the codons for Alanine where those ending with G or C are used
-   almost exclusively.
+   The example shown reads a single CDS from Pseudomonas aeruginosa which
+   has a very high GC content ands a strong coding bias, as shown by the
+   codons for Alanine where those ending with G or C are used almost
+   exclusively.
 
-   The 'Fract' column gives that proportion of usage of a given codon
-   among its redundant set (i.e. the set of codons which code for this
-   codon's amino acid). For example, the sum of the 6 codons representing
-   serine will add up to 1.00.
-
-   The /1000 column represents the number of codons, given the input
-   sequence(s), there are per 1000 bases. This will be an extrapolation
-   if the sequence is shorter than 1000 bases.
+   The columns are as follows: i. "Codon" (sequence of the codon). ii.
+   "AA" (the encoded amino acid). iii. "Fraction" (the proportion of
+   usage of the codon among its redundant set, i.e. the set of codons
+   which code for this codon's amino acid). iv. "Frequency" (the expected
+   number of codons, given the input sequence(s), per 1000 bases). This
+   will be an extrapolation if the sequence is shorter than 1000 bases.
+   v. "Number" (the observed number of codons in the input sequences).
 
    If multiple sequences are input then the statistics are given for all
    of the sequences together, not individually.
 
 Data files
 
-   cusp reads a codon usage file, but only as a template and does not use
-   any of the data so any codon usage file from any species will give the
-   same results.
+   cusp reads a codon usage file as a template for it's output file. The
+   data in this table is ignored entirely. This functionality is
+   hard-coded and invisible to the user.
 
    EMBOSS data files are distributed with the application and stored in
    the standard EMBOSS data directory, which is defined by the EMBOSS
@@ -385,11 +389,12 @@ Known bugs
 
 See also
 
-   Program name                  Description
-   cai          CAI codon adaptation index
-   chips        Codon usage statistics
-   codcmp       Codon usage table comparison
-   syco         Synonymous codon usage Gribskov statistic plot
+   Program name Description
+   cai Calculate codon adaptation index
+   chips Calculates Nc codon usage statistic
+   codcmp Codon usage table comparison
+   syco Draw synonymous codon usage statictic plot for a nucleotide
+   sequence
 
 Author(s)
 

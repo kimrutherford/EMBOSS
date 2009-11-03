@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>chips -sbeg 135 -send 1292 </b>
-Codon usage statistics
+Calculates Nc codon usage statistic
 Input nucleotide sequence(s): <b>tembl:x13776</b>
 Output file [x13776.chips]: <b></b>
 

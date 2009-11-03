@@ -585,7 +585,7 @@ AjPPatlistSeq ajPatlistSeqRead (const AjPStr patspec,
     AjPPatlistSeq patlist = NULL;
     AjPStr line = NULL;
     AjPStr name = NULL;
-    AjPFileBuff infile = NULL;
+    AjPFilebuff infile = NULL;
     AjPRegexp mismreg = NULL;
     AjPStr patstr = NULL;
     AjPStr pat = NULL;
@@ -609,7 +609,7 @@ AjPPatlistSeq ajPatlistSeqRead (const AjPStr patspec,
     if(ajStrGetCharFirst(patstr) == '@')
     {
 	ajStrCutStart(&patstr, 1);
-	infile = ajFileBuffNewIn(patstr);
+	infile = ajFilebuffNewNameS(patstr);
 	if(!infile)
 	{
 	    ajErr("Unable to open pattern file '%S'", patstr);
@@ -620,18 +620,18 @@ AjPPatlistSeq ajPatlistSeqRead (const AjPStr patspec,
 
 	if(!ifmt)
 	{
-	    ajFileBuffGetTrim(infile,&line);
+	    ajBuffreadLineTrim(infile,&line);
 	    if(ajStrPrefixC(line, ">"))
 		ifmt = 2;
 	    else
 		ifmt = 1;
-	    ajFileBuffReset(infile);
+	    ajFilebuffReset(infile);
 	}
 	
 	switch(ifmt)
 	{
 	case 1:
-	    while (ajFileBuffGetTrim(infile,&line))
+	    while (ajBuffreadLineTrim(infile,&line))
 	    {
 		npat++;
 		ajStrAppendS (&pat,line);
@@ -642,7 +642,7 @@ AjPPatlistSeq ajPatlistSeqRead (const AjPStr patspec,
 	    break;
 	default:
 	    mismreg = ajRegCompC("<mismatch=(\\d+)>");
-	    while (ajFileBuffGetTrim(infile,&line))
+	    while (ajBuffreadLineTrim(infile,&line))
 	    {
 		if (ajStrGetCharFirst(line) == '>')
 		{
@@ -673,7 +673,7 @@ AjPPatlistSeq ajPatlistSeqRead (const AjPStr patspec,
 	    ajRegFree(&mismreg);
 	    break;
 	}
-	ajFileBuffDel(&infile);
+	ajFilebuffDel(&infile);
     }
     else
     {
@@ -713,7 +713,7 @@ AjPPatlistRegex ajPatlistRegexRead (const AjPStr patspec,
     AjPStr line = NULL;
     AjPStr pat  = NULL;
     AjPStr name = NULL;
-    AjPFileBuff infile = NULL;
+    AjPFilebuff infile = NULL;
     AjPStr patstr = NULL;
     ajuint ifmt;
     ajuint npat = 0;
@@ -731,7 +731,7 @@ AjPPatlistRegex ajPatlistRegexRead (const AjPStr patspec,
     if(ajStrGetCharFirst(patspec) ==  '@')
     {
 	ajStrCutStart(&patstr, 1);
-	infile = ajFileBuffNewIn(patstr);
+	infile = ajFilebuffNewNameS(patstr);
 	if(!infile) {
 	    ajErr("Unable to open regular expression file '%S'", patstr);
 	    return NULL;
@@ -742,18 +742,18 @@ AjPPatlistRegex ajPatlistRegexRead (const AjPStr patspec,
 
 	if(!ifmt)
 	{
-	    ajFileBuffGetTrim(infile,&line);
+	    ajBuffreadLineTrim(infile,&line);
 	    if(ajStrPrefixC(line, ">"))
 		ifmt = 2;
 	    else
 		ifmt = 1;
-	    ajFileBuffReset(infile);
+	    ajFilebuffReset(infile);
 	}
 	
 	switch(ifmt)
 	{
 	case 1:
-	    while (ajFileBuffGetTrim(infile,&line))
+	    while (ajBuffreadLineTrim(infile,&line))
 	    {
 		npat++;
 		ajStrAppendS (&pat,line);
@@ -767,7 +767,7 @@ AjPPatlistRegex ajPatlistRegexRead (const AjPStr patspec,
 	    }
 	    break;
 	default:
-	    while (ajFileBuffGetTrim(infile,&line))
+	    while (ajBuffreadLineTrim(infile,&line))
 	    {
 		if (ajStrFindC(line,">")>-1)
 		{
@@ -795,7 +795,7 @@ AjPPatlistRegex ajPatlistRegexRead (const AjPStr patspec,
 	    ajStrSetClear(&pat);
 	    break;
 	}
-	ajFileBuffDel(&infile);
+	ajFilebuffDel(&infile);
     }
     else
     {

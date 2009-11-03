@@ -24,60 +24,17 @@ digest
 <H2>
     Function
 </H2>
-Protein proteolytic enzyme or reagent cleavage digest
+Reports on protein proteolytic enzyme or reagent cleavage sites
 <H2>
     Description
 </H2>
 
-<b>digest</b> finds the positions where a specified proteolytic enzyme
-or reagent might cut a peptide sequence. 
+<p>This programs allows you to input one or more protein sequences and to specify one proteolytic agent from a list, which might be a proteolytic enzyme or other reagent.  It will then write  a report file containing the positions where the agent cuts, together with the peptides produced.</p>
 
-<p>
-
-This programs allows you to input a protein sequence and to specify one
-proteolytic agent from a list.  It will then output a file containing
-the positions where the agent cuts, together with the peptides produced. 
-
-<p>
-
-Trypsin will not normally cut after a K if it is followed by (e.g.)
-another K or a P.  Specifying the qualifier <b>-unfavoured</b> shows
-those cuts.  as well as the favoured ones. 
-
-<p>
-
-If you wish to emulate a partial digestion, then using the
-<b>-overlap</b> qualifier will display the results from a digest in
-which all cut sites are used and in which one site at a time is not cut. 
-Thus the resulting peptide fragments from the cut sites numbered 1, 2,
-3, 4 etc.  are shown, plus the fragments produced by cutting at the
-sites 1..3, 2..4, etc. 
-
-<p>
-
-i.e. fragments containing one potential cut site are also shown.
-
-<p>
-
-If you wish to emulate a <b>very</b> partial digestion (!) then using
-the <b>-allpartials</b> qualifier will do what <b>-overlap</b> did, but
-also show all possible fragments from using all possible combinations of
-cut sites.  For example, fragments from the cut sites numbered 1, 2, 3,
-4, 5 and from the fragments produced by cutting between sites 1..3,
-1..4, 1..5, 2..4, 2..5, 3..5, etc. 
-
-<p>
-
-i.e. fragments containing one or more potential cut site are also shown.
-
-
-<p>
-
-If the boolean -ragging is specified then terminal break-up
-fragments are also shown; this can be useful for mass spectrometry.
-Ragging is further controlled by the -termini
-option which allows you to select removal of residues from
-the N and/or C termini.
+<H2>
+Algorithm
+</H2>
+<p>By default <b>digest</b> uses average molecular weights.  The <tt>-mono</tt> option will use monoisotopic weights.</p>
 
 <H2>
     Usage
@@ -89,7 +46,7 @@ the N and/or C termini.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>digest </b>
-Protein proteolytic enzyme or reagent cleavage digest
+Reports on protein proteolytic enzyme or reagent cleavage sites
 Input protein sequence(s): <b>tsw:opsd_human</b>
 Enzymes and Reagents
          1 : Trypsin
@@ -101,6 +58,7 @@ Enzymes and Reagents
          7 : Chymotrypsin
          8 : CNBr
 Select number [1]: <b></b>
+Use monoisotopic weights [N]: <b></b>
 Output report [opsd_human.digest]: <b></b>
 
 </pre></td></tr></table><p>
@@ -120,16 +78,26 @@ Output report [opsd_human.digest]: <b></b>
                                   (Lys-C); 3 (Arg-C); 4 (Asp-N); 5
                                   (V8-bicarb); 6 (V8-phosph); 7
                                   (Chymotrypsin); 8 (CNBr))
+   -mono               boolean    [N] Use monoisotopic weights
   [-outfile]           report     [*.digest] Output report file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
-   -aadata             datafile   [Eamino.dat] Molecular weight data for amino
+   -mwdata             datafile   [Emolwt.dat] Molecular weight data for amino
                                   acids
-   -unfavoured         boolean    Trypsin will not normally cut after a K if
-                                  it is followed by (e.g.) another K or a P.
-                                  Specifying this shows those cuts. as well as
-                                  the favoured ones.
+   -unfavoured         boolean    Trypsin will not normally cut after 'KR' if
+                                  they are followed by any of 'KRIFLP'. Lys-C
+                                  will not normally cut after 'K' if it is
+                                  followed by 'P'. Arg-C will not normally cut
+                                  after 'R' if it is followed by 'P'.
+                                  V8-bicarb will not normally cut after 'E' if
+                                  it is followed by any of 'KREP'. V8-phosph
+                                  will not normally cut after 'DE' if they are
+                                  followed by 'P'. Chymotrypsin will not
+                                  normally cut after 'FYWLM' if they are
+                                  followed by 'P'. Specifying unfavoured shows
+                                  these unfavoured cuts as well as the
+                                  favoured ones.
    -ragging            boolean    Allows semi-specific and non-specific
                                   digestion. This option is particularly
                                   useful for generating lists of peptide
@@ -171,14 +139,16 @@ Output report [opsd_human.digest]: <b></b>
    -raccshow2          boolean    Show accession number in the report
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
+   -rstrandshow2       boolean    Show the nucleotide strand in the report
    -rusashow2          boolean    Show the full USA in the report
    -rmaxall2           integer    Maximum total hits to report
    -rmaxseq2           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -215,6 +185,13 @@ Output report [opsd_human.digest]: <b></b>
 </tr>
 
 <tr>
+<td>-mono</td>
+<td>Use monoisotopic weights</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>Output report file name</td>
 <td>Report output file</td>
@@ -238,15 +215,15 @@ Output report [opsd_human.digest]: <b></b>
 </tr>
 
 <tr>
-<td>-aadata</td>
+<td>-mwdata</td>
 <td>Molecular weight data for amino acids</td>
 <td>Data file</td>
-<td>Eamino.dat</td>
+<td>Emolwt.dat</td>
 </tr>
 
 <tr>
 <td>-unfavoured</td>
-<td>Trypsin will not normally cut after a K if it is followed by (e.g.) another K or a P. Specifying this shows those cuts. as well as the favoured ones.</td>
+<td>Trypsin will not normally cut after 'KR' if they are followed by any of 'KRIFLP'. Lys-C will not normally cut after 'K' if it is followed by 'P'. Arg-C will not normally cut after 'R' if it is followed by 'P'. V8-bicarb will not normally cut after 'E' if it is followed by any of 'KREP'. V8-phosph will not normally cut after 'DE' if they are followed by 'P'. Chymotrypsin will not normally cut after 'FYWLM' if they are followed by 'P'. Specifying unfavoured shows these unfavoured cuts as well as the favoured ones.</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
@@ -441,7 +418,7 @@ By default <b>digest</b> writes a 'seqtable' report file.
 <pre>
 ########################################
 # Program: digest
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: digest
 #    -seqall tsw:opsd_human
 # Report_format: seqtable
@@ -458,20 +435,20 @@ By default <b>digest</b> writes a 'seqtable' report file.
 #=======================================
 
   Start     End Mol_Weight Cterm  Nterm  Sequence
-     70     135   7129.319 R      Y      TPLNYILLNLAVADLFMVLGGFTSTLYTSLHGYFVFGPTGCNLEGFFATLGGEIALWSLVVLAIER
-    178     231   6335.495 R      E      YIPEGLQCSCGIDYYTLKPEVNNESFVIYMFVVHFTIPMIIIFFCYGQLVFTVK
-     22      69   5788.873 R      T      SPFEYPQYYLAEPWQFSMLAAYMFLLIVLGFPINFLTLYVTVQHKKLR
-    253     296   5004.085 R      S      MVIIMVIAFLICWVPYASVAFYIFTHQGSNFGPIFMTIPAFFAK
-    136     177   4600.460 R      Y      YVVVCKPMSNFRFGENHAIMGVAFTWVMALACAAPPLAGWSR
-      1      21   2257.495 .      S      MNGTEGPNFYVPFSNATGVVR
-    297     311   1728.089 K      Q      SAAIYNPVIYIMMNK
-    232     245   1490.538 K      A      EAAAQQQESATTQK
-    326     339   1403.457 K      T      NPLGDDEASATVSK
-    315     325   1186.476 R      N      NCMLTTICCGK
-    340     348    902.950 K      .      TETSQVAPA
-    249     252    503.550 K      M      EVTR
-    312     314    449.504 K      N      QFR
-    246     248    346.378 K      E      AEK
+     70     135   7129.324 R      Y      TPLNYILLNLAVADLFMVLGGFTSTLYTSLHGYFVFGPTGCNLEGFFATLGGEIALWSLVVLAIER
+    178     231   6335.500 R      E      YIPEGLQCSCGIDYYTLKPEVNNESFVIYMFVVHFTIPMIIIFFCYGQLVFTVK
+     22      69   5788.878 R      T      SPFEYPQYYLAEPWQFSMLAAYMFLLIVLGFPINFLTLYVTVQHKKLR
+    253     296   5004.090 R      S      MVIIMVIAFLICWVPYASVAFYIFTHQGSNFGPIFMTIPAFFAK
+    136     177   4600.464 R      Y      YVVVCKPMSNFRFGENHAIMGVAFTWVMALACAAPPLAGWSR
+      1      21   2257.500 .      S      MNGTEGPNFYVPFSNATGVVR
+    297     311   1728.093 K      Q      SAAIYNPVIYIMMNK
+    232     245   1490.543 K      A      EAAAQQQESATTQK
+    326     339   1403.462 K      T      NPLGDDEASATVSK
+    315     325   1186.480 R      N      NCMLTTICCGK
+    340     348    902.954 K      .      TETSQVAPA
+    249     252    503.554 K      M      EVTR
+    312     314    449.509 K      N      QFR
+    246     248    346.383 K      E      AEK
 
 #---------------------------------------
 #---------------------------------------
@@ -508,7 +485,14 @@ None.
     Notes
 </H2>
 
-None.
+
+<p>If you wish to emulate a partial digestion, then using the <tt>-overlap</tt> qualifier will display the results from a digest in which all cut sites are used and in which one site at a time is not cut. Thus the resulting peptide fragments from the cut sites numbered 1, 2, 3, 4 etc. are shown, plus the fragments produced by cutting at the sites 1 to 3, 2 to 4, etc.  In other words, this option will reveal fragments containing one potential cut site.</p>
+
+<p>If you wish to emulate a very partial digestion (!) then using the <tt>-allpartials</tt> qualifier will do what -overlap did, but also show all possible fragments from using all possible combinations of cut sites. For example, fragments from the cut sites numbered 1, 2, 3, 4, 5 and from the fragments produced by cutting between sites 1..3, 1..4, 1..5, 2..4, 2..5, 3..5, etc. In other words, this option will reveal fragments containing one or more potential cut site.</p>
+
+<p>If the boolean <tt>-ragging</tt> is specified then terminal digest fragments are also shown; this can be useful for mass spectrometry. Ragging is further controlled by the <tt>-termini</tt> option which allows you to select removal of residues from the N and/or C termini.</p>
+
+<p>Each proteolytic enzyme has favoured as well as unfavoured cut sites.  For example, Trypsin will not normally cut after a K if it is followed by (e.g.) another K or a P.  By default, only data for favoured cut sites is generated.  Specifying the qualifier <tt>-unfavoured</tt> produces data for unfavoured cut sites as well.</p>
 
 
 <H2>
@@ -547,7 +531,8 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="antigenic.html">antigenic</a></td>
 <td>Finds antigenic sites in proteins</td>
@@ -560,52 +545,52 @@ None.
 
 <tr>
 <td><a href="fuzzpro.html">fuzzpro</a></td>
-<td>Protein pattern search</td>
+<td>Search for patterns in protein sequences</td>
 </tr>
 
 <tr>
 <td><a href="fuzztran.html">fuzztran</a></td>
-<td>Protein pattern search after translation</td>
+<td>Search for patterns in protein sequences (translated)</td>
 </tr>
 
 <tr>
 <td><a href="helixturnhelix.html">helixturnhelix</a></td>
-<td>Report nucleic acid binding motifs</td>
+<td>Identify nucleic acid-binding motifs in protein sequences</td>
 </tr>
 
 <tr>
 <td><a href="oddcomp.html">oddcomp</a></td>
-<td>Find protein sequence regions with a biased composition</td>
+<td>Identify proteins with specified sequence word composition</td>
 </tr>
 
 <tr>
 <td><a href="patmatdb.html">patmatdb</a></td>
-<td>Search a protein sequence with a motif</td>
+<td>Searches protein sequences with a sequence motif</td>
 </tr>
 
 <tr>
 <td><a href="patmatmotifs.html">patmatmotifs</a></td>
-<td>Search a PROSITE motif database with a protein sequence</td>
+<td>Scan a protein sequence with motifs from the PROSITE database</td>
 </tr>
 
 <tr>
 <td><a href="pepcoil.html">pepcoil</a></td>
-<td>Predicts coiled coil regions</td>
+<td>Predicts coiled coil regions in protein sequences</td>
 </tr>
 
 <tr>
 <td><a href="preg.html">preg</a></td>
-<td>Regular expression search of a protein sequence</td>
+<td>Regular expression search of protein sequence(s)</td>
 </tr>
 
 <tr>
 <td><a href="pscan.html">pscan</a></td>
-<td>Scans proteins using PRINTS</td>
+<td>Scans protein sequence(s) with fingerprints from the PRINTS database</td>
 </tr>
 
 <tr>
 <td><a href="sigcleave.html">sigcleave</a></td>
-<td>Reports protein signal cleavage sites</td>
+<td>Reports on signal cleavage sites in a protein sequence</td>
 </tr>
 
 </table>

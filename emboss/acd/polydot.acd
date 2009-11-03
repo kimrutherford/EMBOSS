@@ -1,6 +1,6 @@
 application: polydot [
-  documentation: "Displays all-against-all dotplots of a set
-                  of sequences"
+  documentation: "Draw dotplots for all-against-all comparison of a
+                  sequence set"
   groups: "Alignment:Dot plots"
 ]
 

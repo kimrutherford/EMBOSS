@@ -20,8 +20,8 @@ showfeat
     Description
 </H2>
 
-Showfeat reads a protein or nucleic sequence and its feature table, 
-and writes a text representation of the features to standard output.
+<p><b>showfeat</b> reads one or more protein or nucleic sequences with associated feature tables, and writes the features to file (or screen) in a style suitable for publication.  There are many options for controlling the format of the output.</p>
+
 
 <H2>
     Usage
@@ -74,7 +74,15 @@ None.
     Notes
 </H2>
 
-None.
+<p>Sequence regions to annotate may be specified as a set or ranges. Optionally, forward and reverse sense features, and features of unspecified sense (for example, CG-rich regions), are displayed.  Optionally, features from the same source and of the same type and sense may all be printed on the same line, although this may make it hard to distinguish overlapping features.</p>
+
+<p>By default, any features in the feature table are displayed however there are options to <b>restrict</b> this by feature source, type, feature tag and feature tag value.</p>
+
+<p>Features may be sorted by Type, Start or Source, left unsorted (in which case the same order as the input is used), or features for the coding regions presented all together.</p>
+
+<p>Various options control what else is displayed, including the sequence ID, description, scale line, width of display, strand of the features, feature source, start and end positions, feature type, and feature tags and tag values.  By default if any tag/value pair in a feature matches the specified tag and value, then all the tags/value pairs of that feature will be displayed. If this is set to be true, then only those tag/value pairs in a feature that match the specified tag and value will be displayed.</p>
+
+<p>Optionally, output can be in HTML.</p>
 
 
 <H2>

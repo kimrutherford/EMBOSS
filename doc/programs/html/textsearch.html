@@ -24,17 +24,21 @@ textsearch
 <H2>
     Function
 </H2>
-Search sequence documentation. Slow, use SRS and Entrez!
+Search the textual description of sequence(s)
 
 <H2>
     Description
 </H2>
 
 
-This is a small utility search for words in the description text of a
-sequence and for each match list the sequence's name and/or
-description.  NB. It only searches the description line of the
-annotation, not the full annotation.
+<p><b>textsearch</b> searches for words (specified as a regular expression) in the description text of one or more input sequences.  It writes an output file with optional contents such as the name, description and accession number of any sequence whose description line from the annotation matches the search term. Optionally, the search is case-sensitive and the results output as an HTML table. <b>textsearch</b> is convenient for small input files but will be slow for larger files and databases; you should use use SRS or Entrez instead.</p>
+
+
+<H2>
+Algorithm
+</H2>
+<p><b>textsearch</b> searches only the description line, not the full sequence annotation.</p>
+
 
 <H2>
     Usage
@@ -48,7 +52,7 @@ Search for 'lactose':
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>textsearch tsw:* 'lactose' </b>
-Search sequence documentation. Slow, use SRS and Entrez!
+Search the textual description of sequence(s)
 Output file [edd1_rat.textsearch]: <b></b>
 
 </pre></td></tr></table><p>
@@ -64,7 +68,7 @@ Search for 'lactose' or 'permease' in E.coli proteins:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>textsearch tsw:*_ecoli 'lactose | permease' </b>
-Search sequence documentation. Slow, use SRS and Entrez!
+Search the textual description of sequence(s)
 Output file [laci_ecoli.textsearch]: <b></b>
 
 </pre></td></tr></table><p>
@@ -80,7 +84,7 @@ Output a search for 'lacz' formatted with HTML to a file:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>textsearch tembl:* 'lacz' -html -outfile embl.lacz.html </b>
-Search sequence documentation. Slow, use SRS and Entrez!
+Search the textual description of sequence(s)
 
 </pre></td></tr></table><p>
 <p>
@@ -144,8 +148,9 @@ Search sequence documentation. Slow, use SRS and Entrez!
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -379,7 +384,7 @@ None.
     Warnings
 </H2>
 
-None.
+<p>This is a rather slow way to search for text in databases. If you are searching for text in public databases, you should consider using either Entrez (<a href="http://www.ncbi.nlm.nih.gov/Entrez/">http://www.ncbi.nlm.nih.gov/Entrez/</a>) or SRS (<a href="http://srs.rfcgr.mrc.ac.uk/">http://srs.rfcgr.mrc.ac.uk/</a> or <a href="http://www.sanger.ac.uk/srs6/">http://www.sanger.ac.uk/srs6/</a> etc.) instead.</p>
 
 
 <H2>
@@ -405,10 +410,11 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="abiview.html">abiview</a></td>
-<td>Reads ABI file and display the trace</td>
+<td>Display the trace in an ABI sequencer file</td>
 </tr>
 
 <tr>
@@ -418,12 +424,22 @@ None.
 
 <tr>
 <td><a href="infoalign.html">infoalign</a></td>
-<td>Information on a multiple sequence alignment</td>
+<td>Display basic information about a multiple sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="infobase.html">infobase</a></td>
+<td>Return information on a given nucleotide base</td>
+</tr>
+
+<tr>
+<td><a href="inforesidue.html">inforesidue</a></td>
+<td>Return information on a given amino acid residue</td>
 </tr>
 
 <tr>
 <td><a href="infoseq.html">infoseq</a></td>
-<td>Displays some simple information about sequences</td>
+<td>Display basic information about sequences</td>
 </tr>
 
 <tr>
@@ -433,52 +449,52 @@ None.
 
 <tr>
 <td><a href="pepnet.html">pepnet</a></td>
-<td>Displays proteins as a helical net</td>
+<td>Draw a helical net for a protein sequence</td>
 </tr>
 
 <tr>
 <td><a href="pepwheel.html">pepwheel</a></td>
-<td>Shows protein sequences as helices</td>
+<td>Draw a helical wheel diagram for a protein sequence</td>
 </tr>
 
 <tr>
 <td><a href="prettyplot.html">prettyplot</a></td>
-<td>Displays aligned sequences, with colouring and boxing</td>
+<td>Draw a sequence alignment with pretty formatting</td>
 </tr>
 
 <tr>
 <td><a href="prettyseq.html">prettyseq</a></td>
-<td>Output sequence with translated ranges</td>
+<td>Write a nucleotide sequence and its translation to file</td>
 </tr>
 
 <tr>
 <td><a href="remap.html">remap</a></td>
-<td>Display sequence with restriction sites, translation etc</td>
+<td>Display restriction enzyme binding sites in a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="seealso.html">seealso</a></td>
-<td>Finds programs sharing group names</td>
+<td>Finds programs with similar function to a specified program</td>
 </tr>
 
 <tr>
 <td><a href="showalign.html">showalign</a></td>
-<td>Displays a multiple sequence alignment</td>
+<td>Display a multiple sequence alignment in pretty format</td>
 </tr>
 
 <tr>
 <td><a href="showdb.html">showdb</a></td>
-<td>Displays information on the currently available databases</td>
+<td>Displays information on configured databases</td>
 </tr>
 
 <tr>
 <td><a href="showfeat.html">showfeat</a></td>
-<td>Show features of a sequence</td>
+<td>Display features of a sequence in pretty format</td>
 </tr>
 
 <tr>
 <td><a href="showseq.html">showseq</a></td>
-<td>Display a sequence with features, translation etc</td>
+<td>Displays sequences with features in pretty format</td>
 </tr>
 
 <tr>
@@ -488,17 +504,17 @@ None.
 
 <tr>
 <td><a href="tfm.html">tfm</a></td>
-<td>Displays a program's help documentation manual</td>
+<td>Displays full documentation for an application</td>
 </tr>
 
 <tr>
 <td><a href="whichdb.html">whichdb</a></td>
-<td>Search all databases for an entry</td>
+<td>Search all sequence databases for an entry and retrieve it</td>
 </tr>
 
 <tr>
 <td><a href="wossname.html">wossname</a></td>
-<td>Finds programs by keywords in their one-line documentation</td>
+<td>Finds programs by keywords in their short description</td>
 </tr>
 
 </table>

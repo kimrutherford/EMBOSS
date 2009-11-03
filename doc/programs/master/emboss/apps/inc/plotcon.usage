@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>plotcon -sformat msf globins.msf -graph cps </b>
-Plot quality of conservation of a sequence alignment
+Plot conservation of a sequence alignment
 Window size [4]: <b></b>
 
 Created plotcon.ps

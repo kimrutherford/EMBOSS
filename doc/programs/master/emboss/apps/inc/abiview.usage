@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>abiview -graph cps </b>
-Reads ABI file and display the trace
+Display the trace in an ABI sequencer file
 ABI sequencing trace file: <b>abiview.abi</b>
 nucleotide output sequence [abiview.fasta]: <b></b>
 

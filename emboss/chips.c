@@ -52,7 +52,7 @@ int main(int argc, char **argv)
 
     seqall = ajAcdGetSeqall("seqall");
     outf   = ajAcdGetOutfile("outfile");
-    sum    = ajAcdGetBool("sum");
+    sum    = ajAcdGetBoolean("sum");
     
     codon  = ajCodNewCode(0);
 

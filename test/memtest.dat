@@ -79,14 +79,14 @@ dbigcgmem = dbigcg -nosystemsort -dir ../../embl -file '*.seq' -index . -id embl
 dbigcg2 = dbigcg -dir ../../pir -file '*.seq' -index . -id pir -db pir -auto
 dbigcgmem2 = dbigcg -nosystemsort -dir ../../pir -file '*.seq' -index . -id pir -db pir -auto
 #dbxblast =test= dbxblast -dir ../../wormpep -file wormpep -index .  -id idacc -dbres worm -db worm -auto
-#dbxblastlist =test= dbxblast -dir ../../data -file 'swsplit.00.pin,swsplit.01.pin,swsplit.02.pin,swsplit.03.pin,swsplit.04.pin' -index . -dbres swnew -dbname swsplit -auto
-#dbxblastwild =test= dbxblast -dir ../../data -file swsplit.*.pin -index . -dbres swnew -dbname swsplit -auto
-#dbxblastwildstar =test= dbxblast -dir ../../data -file swsplit.*.* -index . -dbres swnew -dbname swsplit -auto
-dbxfasta = dbxfasta -dir ../../wormpep -file wormpep -index . -id idacc -dbres swnew -dbname worm -auto
-dbxflat = dbxflat -dir ../../swiss -file seq.dat -index . -id swiss -dbres swnew -dbname swiss -auto
-dbxgcg = dbxgcg -dir ../../embl -file '*.seq' -index . -id embl -dbres embl -dbname embl -auto
-dbxgcg2 = dbxgcg -dir ../../pir -file '*.seq' -index . -id pir -dbres pir -dbname pir -auto
-dbxgcg3 = dbxgcg -dir ../../pir -file '*.seq' -index . -id pir -dbres pir -dbname pir -fields "id,acc,des,key,org" -auto
+#dbxblastlist =test= dbxblast -dir ../../data -file 'swsplit.00.pin,swsplit.01.pin,swsplit.02.pin,swsplit.03.pin,swsplit.04.pin' -index . -dbres swnewresource -dbname swsplit -auto
+#dbxblastwild =test= dbxblast -dir ../../data -file swsplit.*.pin -index . -dbres swnewresource -dbname swsplit -auto
+#dbxblastwildstar =test= dbxblast -dir ../../data -file swsplit.*.* -index . -dbres swnewresource -dbname swsplit -auto
+dbxfasta = dbxfasta -dir ../../wormpep -file wormpep -index . -id idacc -dbres swnewresource -dbname worm -auto
+dbxflat = dbxflat -dir ../../swiss -file seq.dat -index . -id swiss -dbres swnewresource -dbname swiss -auto
+dbxgcg = dbxgcg -dir ../../embl -file '*.seq' -index . -id embl -dbres emblresource -dbname embl -auto
+dbxgcg2 = dbxgcg -dir ../../pir -file '*.seq' -index . -id pir -dbres pirresource -dbname pir -auto
+dbxgcg3 = dbxgcg -dir ../../pir -file '*.seq' -index . -id pir -dbres pirresource -dbname pir -fields "id,acc,des,key,org" -auto
 #
 degapseq = degapseq ../../data/globins.msf -auto
 descseq = descseq -desc 'Test' tsw:opsd_human -auto

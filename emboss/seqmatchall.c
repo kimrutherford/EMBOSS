@@ -28,11 +28,9 @@
 static void seqmatchall_matchListPrint(void *x,void *cl);
 static void seqmatchall_listPrint(AjPAlign align, const AjPList list);
 
-
-
-
-static const AjPSeq seq2;
-static const AjPSeq seq1;
+static AjPSeq *seqs = NULL;
+static ajuint iseq1 = 0;
+static ajuint iseq2 = 0;
 
 ajuint statwordlen;
 
@@ -54,7 +52,7 @@ int main(int argc, char **argv)
 
     ajuint i;
     ajuint j;
-
+    ajuint nseqs;
 
     embInit("seqmatchall", argc, argv);
 
@@ -62,24 +60,26 @@ int main(int argc, char **argv)
     statwordlen = ajAcdGetInt("wordsize");
     align    = ajAcdGetAlign("outfile");
 
-    /* ajAlignSetExternal(align, ajTrue); */
+    ajAlignSetExternal(align, ajTrue);
     embWordLength(statwordlen);
+    seqs = ajSeqsetGetSeqarray(seqset);
+    nseqs = ajSeqsetGetSize(seqset);
 
-    for(i=0;i<ajSeqsetGetSize(seqset);i++)
+    for(i=0;i<nseqs;i++)
     {
-	seq1 = ajSeqsetGetseqSeq(seqset,i);
+        iseq1 = i;
 	seq1MatchTable = 0;
-	if(ajSeqGetLen(seq1) > statwordlen)
+	if(ajSeqGetLen(seqs[iseq1]) > statwordlen)
 	{
-	    if(embWordGetTable(&seq1MatchTable, seq1)) /* get table of words */
+	    if(embWordGetTable(&seq1MatchTable, seqs[i])) /* get word table */
 	    {
 		for(j=i+1;j<ajSeqsetGetSize(seqset);j++)
 		{
-		    seq2 = ajSeqsetGetseqSeq(seqset,j);
-		    if(ajSeqGetLen(seq2) > statwordlen)
+		    iseq2 = j;
+		    if(ajSeqGetLen(seqs[j]) > statwordlen)
 		    {
 			matchlist = embWordBuildMatchTable(seq1MatchTable,
-							   seq2, ajTrue);
+							   seqs[j], ajTrue);
 			if (ajListGetLength(matchlist))
 			{
 			    seqmatchall_listPrint(align, matchlist);
@@ -98,6 +98,7 @@ int main(int argc, char **argv)
     ajAlignClose(align);
     ajAlignDel(&align);
     ajSeqsetDel(&seqset);
+    ajSeqDelarray(&seqs);
 
     embExit();
 
@@ -121,8 +122,6 @@ static void seqmatchall_matchListPrint(void *x,void *cl)
 {
     EmbPWordMatch p;
     AjPAlign align;
-    AjPStr sub1=NULL;
-    AjPStr sub2=NULL;
 
     p = (EmbPWordMatch)x;
     align = (AjPAlign) cl;
@@ -132,26 +131,16 @@ static void seqmatchall_matchListPrint(void *x,void *cl)
 		(*p).seq1start+1,(*p).seq1start+(*p).length,seq1->Name->Ptr,
 		(*p).seq2start+1,(*p).seq2start+(*p).length,seq2->Name->Ptr);
 */
-    ajStrAssignS(&sub1, ajSeqGetSeqS(p->sequence));
 
-    ajStrAssignS(&sub2, ajSeqGetSeqS(p->sequence));
-
-    ajDebug("suba %d..%d %d (%d/%d)\n", 1,
-		p->length, p->seq1start, ajStrGetLen(sub1),
-	    ajSeqGetLen(p->sequence));
-    ajDebug("subb %d..%d %d (%d/%d)\n", 1,
-		p->length, p->seq2start, ajStrGetLen(sub2),
-	    ajSeqGetLen(p->sequence));
-    ajAlignDefineCC(align, ajStrGetPtr(sub1), ajStrGetPtr(sub2),
-		    seq1->Name->Ptr, seq2->Name->Ptr);
+    ajAlignDefineSS(align, seqs[iseq1], seqs[iseq2]);
     ajAlignSetScoreI(align, p->length);
     /* ungapped so same length for both sequences */
-    ajAlignSetRange(align,
-		    1, p->length, p->length, p->seq1start,
-		    1, p->length, p->length, p->seq2start);
+    ajAlignSetSubRange(align,
+                       p->seq1start, 1, p->length,
+                       ajSeqIsReversed(seqs[iseq1]), ajSeqGetLen(seqs[iseq1]),
+                       p->seq2start, 1, p->length,
+                       ajSeqIsReversed(seqs[iseq2]), ajSeqGetLen(seqs[iseq2]));
     
-    ajStrDel(&sub1);
-    ajStrDel(&sub2);
 
     return;
 }

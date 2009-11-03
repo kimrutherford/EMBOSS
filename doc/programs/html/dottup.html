@@ -160,8 +160,9 @@ Created dottup.ps
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -520,20 +521,21 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="dotmatcher.html">dotmatcher</a></td>
-<td>Displays a thresholded dotplot of two sequences</td>
+<td>Draw a threshold dotplot of two sequences</td>
 </tr>
 
 <tr>
 <td><a href="dotpath.html">dotpath</a></td>
-<td>Non-overlapping wordmatch dotplot of two sequences</td>
+<td>Draw a non-overlapping wordmatch dotplot of two sequences</td>
 </tr>
 
 <tr>
 <td><a href="polydot.html">polydot</a></td>
-<td>Displays all-against-all dotplots of a set of sequences</td>
+<td>Draw dotplots for all-against-all comparison of a sequence set</td>
 </tr>
 
 </table>

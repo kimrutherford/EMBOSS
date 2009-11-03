@@ -9,80 +9,17 @@ Function
 
 Description
 
-   The feature table of sequence database entries often have sections
-   like this:
+   coderet extracts the coding nucleotide sequence (CDS), messenger RNA
+   nucleotide sequence (mRNA) and translations specified by the feature
+   tables of the input sequence(s). If the sequences to be extracted are
+   in other entries of that database, they are automatically fetched and
+   incorporated correctly into the output.
 
-   This specifies that the coding sequence for the gene is constructed by
-   joining several sections of code, many of which are in other entries
-   in this database.
-     _________________________________________________________________
-
-FT   CDS             join(U21925.1:818..987,U21926.1:258..420,
-FT                   U21927.1:428..520,U21928.1:196..336,U21929.1:279..415,
-FT                   U21930.1:895..1014,516..708)
-     _________________________________________________________________
-
-   or:
-
-   This specifies that the messenger RNA sequence for the gene is
-   constructed by joining several sections of code, many of which are in
-   other entries in this database.
-     _________________________________________________________________
-
-FT   mRNA            join(M88628.1:1006..1318,M88629.1:221..342,
-FT                   M88630.1:101..223,M88631.1:46..258,M88632.1:104..172,
-FT                   M88633.1:387..503,M88634.1:51..272,M88635.1:303..564,
-FT                   M88635.1:849..1020,M88636.1:282..375,M88637.1:39..253,
-FT                   M88638.1:91..241,M88639.1:168..377,M88640.1:627..3732,
-FT                   M88641.1:158..311,M88642.1:1051..1263,M88642.1:1550..1778,
-FT                   M88642.1:1986..2168,M88642.1:3904..4020,
-FT                   M88642.1:4627..4698,M88643.1:39..124,M88644.1:42..197,
-FT                   M88645.1:542..686,M88646.1:75..223,M88647.1:109..285,
-FT                   253..2211)
-     _________________________________________________________________
-
-   or:
-
-   This specifies that the translation of the coding region is as
-   follows.
-     _________________________________________________________________
-
-FT                   /translation="MAQDSVDLSCDYQFWMQKLSVWDQASTLETQQDTCLHVAQFQEF
-L
-FT                   RKMYEALKEMDSNTVIERFPTIGQLLAKACWNPFILAYDESQKILIWCLCCLINKEPQ
-N
-FT                   SGQSKLNSWIQGVLSHILSALRFDKEVALFTQGLGYAPIDYYPGLLKNMVLSLASELR
-E
-FT                   NHLNGFNTQRRMAPERVASLSRVCVPLITLTDVDPLVEALLICHGREPQEILQPEFFE
-A
-FT                   VNEAILLKKISLPMSAVVCLWLRHLPSLEKAMLHLFEKLISSERNCLRRIECFIKDSS
-L
-FT                   PQAACHPAIFRVDEMFRCALLETDGALEIIATIQVFTQCFVEALEKASKQLRFALKTY
-F
-FT                   PYTSPSLAMVLLQDPQDIPRGHWLQTLKHISELLREAVEDQTHGSCGGPFESWFLFIH
-F
-FT                   GGWAEMVAEQLLMSAAEPPTALLWLLAFYYGPRDGRQQRAQTMVQVKAVLGHLLAMSR
-S
-FT                   SSLSAQDLQTVAGQGTDTDLRAPAQQLIRHLLLNFLLWAPGGHTIAWDVITLMAHTAE
-I
-FT                   THEIIGFLDQTLYRWNRLGIESPRSEKLARELLKELRTQV"
-     _________________________________________________________________
-
-   It is often a tedious and error-prone job to extract the several
-   sections of these sequences from the database entries and to join them
-   together to construct the indicated finished sequence.
-
-   coderet does this job for you.
-
-   You specify the sequence containing the feature table and it extracts
-   the required CDS, mRNA and/or protein sequences specified by this
-   feature table. If any sequences are in other entries of that database,
-   they are automatically fetched and incorporated correctly into the
-   final sequence.
-
-   The translations are not made from the coding sequence, they are
-   extracted directly from the translation sequence held in the feature
-   table.
+   For each input sequence, an output sequence file is written containing
+   any CDS, mRNA and protein translation sequences from the input feature
+   table. Optionally, the CDS, mRNA, translated protein sequence and
+   non-coding nucleotide sequence regions may be written to separate
+   files.
 
 Usage
 
@@ -206,8 +143,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -431,7 +369,7 @@ Output file format
    pro) and a unique ordinal number for this type to distinguish it from
    others in this sequence. The name, type and number of separated by
    underscore characters. Thus the second CDS feature in the sequence
-   'HSXYZ' would be named 'HSXYZ_cds_2'.
+   'A12345' would be named 'A12345_cds_2'.
 
    The translations are not made from the coding sequence, they are
    extracted directly from the translation sequence held in the feature
@@ -500,9 +438,59 @@ Data files
 
 Notes
 
+   One or more of CDS, mRNA, translation or non-coding regions can be
+   excluded from output with the appropriate qualifiers; "no" is
+   prepended to the qualifier name, for example -nocds would exclude the
+   coding sequence.
+
    The translations are not made from the coding sequence, they are
    extracted directly from the translation sequence held in the feature
    table.
+
+   The regions of the feature table that concern us are shown below.
+
+   This specifies that the coding sequence for the gene is constructed by
+   joining several sections of code, many of which are in other entries
+   in this database:
+FT   CDS             join(U21925.1:818..987,U21926.1:258..420,
+FT                   U21927.1:428..520,U21928.1:196..336,U21929.1:279..415,
+FT                   U21930.1:895..1014,516..708)
+
+   This specifies that the messenger RNA sequence for the gene is
+   constructed by joining several sections of code, many of which are in
+   other entries in this database.
+FT   mRNA            join(M88628.1:1006..1318,M88629.1:221..342,
+FT                   M88630.1:101..223,M88631.1:46..258,M88632.1:104..172,
+FT                   M88633.1:387..503,M88634.1:51..272,M88635.1:303..564,
+FT                   M88635.1:849..1020,M88636.1:282..375,M88637.1:39..253,
+FT                   M88638.1:91..241,M88639.1:168..377,M88640.1:627..3732,
+FT                   M88641.1:158..311,M88642.1:1051..1263,M88642.1:1550..1778,
+FT                   M88642.1:1986..2168,M88642.1:3904..4020,
+FT                   M88642.1:4627..4698,M88643.1:39..124,M88644.1:42..197,
+FT                   M88645.1:542..686,M88646.1:75..223,M88647.1:109..285,
+FT                   253..2211)
+
+   This specifies that the translation of the coding region is as
+   follows:
+FT                   /translation="MAQDSVDLSCDYQFWMQKLSVWDQASTLETQQDTCLHVAQFQEF
+L
+FT                   RKMYEALKEMDSNTVIERFPTIGQLLAKACWNPFILAYDESQKILIWCLCCLINKEPQ
+N
+FT                   SGQSKLNSWIQGVLSHILSALRFDKEVALFTQGLGYAPIDYYPGLLKNMVLSLASELR
+E
+FT                   NHLNGFNTQRRMAPERVASLSRVCVPLITLTDVDPLVEALLICHGREPQEILQPEFFE
+A
+FT                   VNEAILLKKISLPMSAVVCLWLRHLPSLEKAMLHLFEKLISSERNCLRRIECFIKDSS
+L
+FT                   PQAACHPAIFRVDEMFRCALLETDGALEIIATIQVFTQCFVEALEKASKQLRFALKTY
+F
+FT                   PYTSPSLAMVLLQDPQDIPRGHWLQTLKHISELLREAVEDQTHGSCGGPFESWFLFIH
+F
+FT                   GGWAEMVAEQLLMSAAEPPTALLWLLAFYYGPRDGRQQRAQTMVQVKAVLGHLLAMSR
+S
+FT                   SSLSAQDLQTVAGQGTDTDLRAPAQQLIRHLLLNFLLWAPGGHTIAWDVITLMAHTAE
+I
+FT                   THEIIGFLDQTLYRWNRLGIESPRSEKLARELLKELRTQV"
 
 References
 
@@ -526,20 +514,22 @@ Known bugs
 
 See also
 
-   Program name                        Description
-   backtranambig Back translate a protein sequence to ambiguous codons
-   backtranseq   Back translate a protein sequence
-   extractfeat   Extract features from a sequence
-   maskfeat      Mask off features of a sequence
-   plotorf       Plot potential open reading frames
-   prettyseq     Output sequence with translated ranges
-   remap         Display sequence with restriction sites, translation etc
-   showfeat      Show features of a sequence
-   showorf       Pretty output of DNA translations
-   showseq       Display a sequence with features, translation etc
-   sixpack       Display a DNA sequence with 6-frame translation and ORFs
-   transeq       Translate nucleic acid sequences
-   twofeat       Finds neighbouring pairs of features in sequences
+   Program name Description
+   backtranambig Back-translate a protein sequence to ambiguous
+   nucleotide sequence
+   backtranseq Back-translate a protein sequence to a nucleotide sequence
+   extractfeat Extract features from sequence(s)
+   maskfeat Write a sequence with masked features
+   plotorf Plot potential open reading frames in a nucleotide sequence
+   prettyseq Write a nucleotide sequence and its translation to file
+   remap Display restriction enzyme binding sites in a nucleotide
+   sequence
+   showfeat Display features of a sequence in pretty format
+   showorf Display a nucleotide sequence and translation in pretty format
+   showseq Displays sequences with features in pretty format
+   sixpack Display a DNA sequence with 6-frame translation and ORFs
+   transeq Translate nucleic acid sequences
+   twofeat Finds neighbouring pairs of features in sequence(s)
 
 Author(s)
 

@@ -10,20 +10,18 @@ Function
 Description
 
    Antigenic predicts potentially antigenic regions of a protein
-   sequence, using the method of Kolaskar and Tongaonkar.
+   sequence, using the method of Kolaskar and Tongaonkar. This method is
+   based on a single parameter and thus very simple to use.
+
+Algorithm
 
    Analysis of data from experimentally determined antigenic sites on
    proteins has revealed that the hydrophobic residues Cys, Leu and Val,
    if they occur on the surface of a protein, are more likely to be a
-   part of antigenic sites. A semi-empirical method which makes use of
-   physicochemical properties of amino acid residues and their
-   frequencies of occurrence in experimentally known segmental epitopes
-   was developed by Kolaskar and Tongaonkar to predict antigenic
-   determinants on proteins. Application of this method to a large number
-   of proteins has shown that their method can predict antigenic
-   determinants with about 75% accuracy which is better than most of the
-   known methods. This method is based on a single parameter and thus
-   very simple to use.
+   part of antigenic sites. The method of Kolaskar and Tongaonkar to
+   predict antigenic determinants in proteins is semi-empirical and makes
+   use of physicochemical properties of amino acid residues and their
+   frequencies of occurrence in experimentally known segmental epitopes.
 
 Usage
 
@@ -90,14 +88,16 @@ Command line arguments
    -raccshow2          boolean    Show accession number in the report
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
+   -rstrandshow2       boolean    Show the nucleotide strand in the report
    -rusashow2          boolean    Show the full USA in the report
    -rmaxall2           integer    Maximum total hits to report
    -rmaxseq2           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -216,7 +216,7 @@ Output file format
 
 ########################################
 # Program: antigenic
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: antigenic
 #    -sequence tsw:actb1_fugru
 # Report_format: motif
@@ -236,24 +236,28 @@ Max_score_pos at "*"
  Sequence: EKLCYVALD
            |       |
          214       222
+ Max_score_pos: 218
 
 (2) Score 1.187 length 15 at residues 131->145
                  *
  Sequence: AMYVAIQAVLSLYAS
            |             |
          131             145
+ Max_score_pos: 137
 
 (3) Score 1.166 length 8 at residues 5->12
               *
  Sequence: IAALVVDN
            |      |
            5      12
+ Max_score_pos: 8
 
 (4) Score 1.164 length 12 at residues 27->38
                 *
  Sequence: PRAVFPSIVGRP
            |          |
           27          38
+ Max_score_pos: 32
 
 (5) Score 1.136 length 24 at residues 160->183
                         *
@@ -261,60 +265,56 @@ Max_score_pos at "*"
            |                      |
          160                      183
 
-(6) Score 1.135 length 6 at residues 367->372
-                *
- Sequence: PSIVHR
-
 
   [Part of this file has been deleted for brevity]
 
-(11) Score 1.102 length 15 at residues 62->76
-                 *
- Sequence: RGILTLKYPIEHGIV
-           |             |
-          62             76
-
-(12) Score 1.086 length 19 at residues 232->250
                         *
  Sequence: SSSSLEKSYELPDGQVITI
            |                 |
          232                 250
+ Max_score_pos: 245
 
 (13) Score 1.083 length 6 at residues 327->332
               *
  Sequence: IKIIAP
            |    |
          327    332
+ Max_score_pos: 330
 
 (14) Score 1.074 length 7 at residues 317->323
               *
  Sequence: ITALAPS
            |     |
          317     323
+ Max_score_pos: 320
 
 (15) Score 1.068 length 7 at residues 186->192
                 *
  Sequence: TDYLMKI
            |     |
          186     192
+ Max_score_pos: 191
 
 (16) Score 1.066 length 7 at residues 40->46
               *
  Sequence: HQGVMVG
            |     |
           40     46
+ Max_score_pos: 43
 
 (17) Score 1.045 length 7 at residues 269->275
            *
  Sequence: MESCGIH
            |     |
          269     275
+ Max_score_pos: 269
 
 (18) Score 1.034 length 7 at residues 51->57
             *
  Sequence: DSYVGDE
            |     |
           51     57
+ Max_score_pos: 52
 
 
 #---------------------------------------
@@ -325,7 +325,7 @@ Max_score_pos at "*"
   File: actb1_fugru.antigenic
 
 ##gff-version 2.0
-##date 2006-07-15
+##date 2007-07-15
 ##Type Protein ACTB1_FUGRU
 ACTB1_FUGRU     antigenic       region  214     222     1.207   +       .
 Sequence "ACTB1_FUGRU.1" ; note "*pos 218"
@@ -422,6 +422,10 @@ Total          2066         5340        7944
 
 Notes
 
+   Application of this method to a large number of proteins has shown
+   that their method can predict antigenic determinants with about 75%
+   accuracy which is better than most of the known methods.
+
 References
 
     1. Kolaskar,AS and Tongaonkar,PC (1990). A semi-empirical method for
@@ -447,19 +451,22 @@ Known bugs
 
 See also
 
-    Program name                         Description
-   digest         Protein proteolytic enzyme or reagent cleavage digest
-   epestfind      Finds PEST motifs as potential proteolytic cleavage sites
-   fuzzpro        Protein pattern search
-   fuzztran       Protein pattern search after translation
-   helixturnhelix Report nucleic acid binding motifs
-   oddcomp        Find protein sequence regions with a biased composition
-   patmatdb       Search a protein sequence with a motif
-   patmatmotifs   Search a PROSITE motif database with a protein sequence
-   pepcoil        Predicts coiled coil regions
-   preg           Regular expression search of a protein sequence
-   pscan          Scans proteins using PRINTS
-   sigcleave      Reports protein signal cleavage sites
+   Program name Description
+   digest Reports on protein proteolytic enzyme or reagent cleavage sites
+   epestfind Finds PEST motifs as potential proteolytic cleavage sites
+   fuzzpro Search for patterns in protein sequences
+   fuzztran Search for patterns in protein sequences (translated)
+   helixturnhelix Identify nucleic acid-binding motifs in protein
+   sequences
+   oddcomp Identify proteins with specified sequence word composition
+   patmatdb Searches protein sequences with a sequence motif
+   patmatmotifs Scan a protein sequence with motifs from the PROSITE
+   database
+   pepcoil Predicts coiled coil regions in protein sequences
+   preg Regular expression search of protein sequence(s)
+   pscan Scans protein sequence(s) with fingerprints from the PRINTS
+   database
+   sigcleave Reports on signal cleavage sites in a protein sequence
 
 Author(s)
 

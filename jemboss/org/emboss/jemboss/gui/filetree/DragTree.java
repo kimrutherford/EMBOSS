@@ -34,7 +34,6 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 
 import org.emboss.jemboss.soap.PrivateRequest;
-import org.emboss.jemboss.gui.ResultsMenuBar;
 import org.emboss.jemboss.gui.ShowResultSet;
 import org.emboss.jemboss.JembossParams;
 
@@ -68,6 +67,10 @@ public class DragTree extends JTree implements DragGestureListener,
   /** used by AutoScroll method */
   private Insets autoscrollInsets = new Insets( 0, 0, 0, 0 );
 
+  JMenuItem openMenu;
+  JMenuItem renameMenuItem;
+  JMenuItem deleteMenuItem;
+  
   /**
   *
   * @param rt		root directory
@@ -104,7 +107,7 @@ public class DragTree extends JTree implements DragGestureListener,
     popup.add(menuItem);
     popup.add(new JSeparator());
 //open menu
-    JMenu openMenu = new JMenu("Open With");
+    openMenu = new JMenu("Open With");
     popup.add(openMenu);
     menuItem = new JMenuItem("Jemboss Alignment Editor");
     menuItem.addActionListener(this);
@@ -113,15 +116,15 @@ public class DragTree extends JTree implements DragGestureListener,
     menuItem.addActionListener(this);
     openMenu.add(menuItem);
 
-    menuItem = new JMenuItem("Rename...");
-    menuItem.addActionListener(this);
-    popup.add(menuItem);
+    renameMenuItem = new JMenuItem("Rename...");
+    renameMenuItem.addActionListener(this);
+    popup.add(renameMenuItem);
     menuItem = new JMenuItem("New Folder...");
     menuItem.addActionListener(this);
     popup.add(menuItem);
-    menuItem = new JMenuItem("Delete...");
-    menuItem.addActionListener(this);
-    popup.add(menuItem);
+    deleteMenuItem = new JMenuItem("Delete...");
+    deleteMenuItem.addActionListener(this);
+    popup.add(deleteMenuItem);
     popup.add(new JSeparator());
     menuItem = new JMenuItem("De-select All");
     menuItem.addActionListener(this);
@@ -227,12 +230,14 @@ public class DragTree extends JTree implements DragGestureListener,
         File dir = new File(fullname);
         
         if(dir.exists())
-          JOptionPane.showMessageDialog(null, fullname+" alread exists!",
+          JOptionPane.showMessageDialog(null, fullname+" already exists!",
                                    "Error", JOptionPane.ERROR_MESSAGE);
         else
         {
-          if(dir.mkdir())
-            addObject(inputValue,path,node);
+          if(dir.mkdir()){
+            FileNode child = addObject(inputValue,path,node);
+            this.expandPath(new TreePath(child.getPath()));
+          }
           else
             JOptionPane.showMessageDialog(null,
                        "Cannot make the folder\n"+fullname,
@@ -258,10 +263,10 @@ public class DragTree extends JTree implements DragGestureListener,
     }
     else if(source.getText().equals("De-select All"))
       clearSelection();
-    else if(isFileSelection() && source.getText().equals("Rename..."))
+    else if(source.getText().equals("Rename..."))
     {
       String inputValue = (String)JOptionPane.showInputDialog(null,
-                              "New File Name","Rename "+f.getName(), 
+                              "New "+(isFileSelection()?"File":"Folder")+" Name","Rename "+f.getName(), 
                               JOptionPane.QUESTION_MESSAGE,null,null,f.getName());
 
       if(inputValue != null && !inputValue.equals("") )
@@ -317,7 +322,7 @@ public class DragTree extends JTree implements DragGestureListener,
   {
     final File fnew = new File(newFullName);
     if(fnew.exists())
-      JOptionPane.showMessageDialog(null, newFullName+" alread exists!",
+      JOptionPane.showMessageDialog(null, newFullName+" already exists!",
                                "Warning", JOptionPane.ERROR_MESSAGE);
     else
     {
@@ -475,7 +480,7 @@ public class DragTree extends JTree implements DragGestureListener,
   * @param node         node to add child to
   *
   */
-  public DefaultMutableTreeNode addObject(String child,
+  public FileNode addObject(String child,
                             String path, FileNode node)
   {
 
@@ -519,7 +524,6 @@ public class DragTree extends JTree implements DragGestureListener,
   public void deleteObject(FileNode node)
   {
     DefaultTreeModel model =(DefaultTreeModel)getModel();
-    FileNode parentNode = getNode(node.getFile().getParent());
     model.removeNodeFromParent(node);
   }
 
@@ -921,9 +925,23 @@ public class DragTree extends JTree implements DragGestureListener,
 
     private void maybeShowPopup(MouseEvent e)
     {
-      if(e.isPopupTrigger())
-        popup.show(e.getComponent(),
-                e.getX(), e.getY());
+        FileNode node = getSelectedNode();
+        if(node !=null && e.isPopupTrigger()){
+            if (node.getFile() == root){
+                renameMenuItem.setEnabled(false);
+                deleteMenuItem.setEnabled(false);
+                openMenu.setEnabled(false);
+            } else{
+                renameMenuItem.setEnabled(true);
+                deleteMenuItem.setEnabled(true);
+                if(!node.isDirectory())
+                    openMenu.setEnabled(true);
+                else
+                    openMenu.setEnabled(false);
+            }
+            popup.show(e.getComponent(),
+                    e.getX(), e.getY());
+        }
     }
   }
 

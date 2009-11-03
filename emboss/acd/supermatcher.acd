@@ -1,6 +1,6 @@
 application: supermatcher [
-  documentation: "Match large sequences against one or more
-                  other sequences"
+  documentation: "Calculate approximate local pair-wise alignments of
+                  larger sequences"
   groups: "Alignment:Local"
   gui: "yes"
   batch: "yes"

@@ -261,15 +261,15 @@ static void newcpgreport_countbases(const char *seq, const char *bases,
 
     *cxpy = *cx = *cy = 0;
 
-    codex = ajAZToBin(bases[0]);
-    codey = ajAZToBin(bases[1]);
+    codex = ajBaseAlphaToBin(bases[0]);
+    codey = ajBaseAlphaToBin(bases[1]);
 
-    codeb = ajAZToBin(seq[0]);
+    codeb = ajBaseAlphaToBin(seq[0]);
 
     for(i=0; i<window; ++i)
     {
 	codea = codeb;
-	codeb = ajAZToBin(seq[i+1]);
+	codeb = ajBaseAlphaToBin(seq[i+1]);
 	if(codea && !(codea & (15-codex)))
 	{
 	    ++*cx;

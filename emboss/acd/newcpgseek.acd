@@ -1,5 +1,6 @@
 application: newcpgseek [
-  documentation: "Reports CpG rich regions"
+  documentation: "Identify and report CpG-rich regions in
+                  nucleotide sequence(s)"
   groups: "Nucleic:CpG Islands"
 ]
 

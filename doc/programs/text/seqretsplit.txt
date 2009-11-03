@@ -5,46 +5,19 @@
 
 Function
 
-   Reads and writes (returns) sequences in individual files
+   Reads sequences and writes them to individual files
 
 Description
 
-   seqretsplit is exactly the same as the program seqret except that when
-   it writes out more than one sequence, it writes each sequence to an
-   individual file.
-
-   Its main use is therefore to split a file containing multiple
-   sequences into many files, each containing one sequence.
-
-   The names of the files it creates are derived from the ID name of the
-   sequence, followed by an extension denoting the format of the
-   sequence. You have no control over the names of the files it writes
-   out.
-
-   For example, if the files embl:hsfa11* are read in and the output is
-   specified as wibble.seq, then the following files are expected to be
-   created:
-
-hsfa110.fasta
-hsfa111.fasta
-hsfa112.fasta
-hsfa113.fasta
-hsfa114.fasta
-
-   (No file wibble.seq is created.)
-
-   Why would you want to split a multiple sequence file into many
-   individual files?
-
-   EMBOSS programs can read in many sequences from one file where this is
-   sensible. Sometimes EMBOSS programs can only read in one sequence at a
-   time because that is the sensible way to do things, but your sequence
-   is one sequence of many in a file. You can specify that sequence using
-   the USA filename:sequenceID, but you may still feel more comfortable
-   splitting your sequences up into many files first.
-
-   Many non-EMBOSS programs will also have restrictions on whether they
-   can read in multiple sequence files or not.
+   seqretsplit is a variant of the standard program for reading and
+   writing sequences, seqret. It performs exactly the same function
+   except that when it reads more than one sequence, it writes each
+   sequence to an individual file. In all other respects, skipseq is the
+   same as seqret. Its main use is therefore to split a file containing
+   multiple sequences into many files, each containing one sequence.
+   There are many options built-in into EMBOSS for detailed specification
+   of the input and output sequences, for example the sequence type and
+   file format. Optionally, feature information will be read and written.
 
 Usage
 
@@ -52,7 +25,7 @@ Usage
 
 
 % seqretsplit tembl:m1190* 
-Reads and writes (returns) sequences in individual files
+Reads sequences and writes them to individual files
 output sequence(s) [m11903.fasta]: 
 
    Go to the input files for this example
@@ -108,8 +81,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -207,7 +181,30 @@ Data files
 
 Notes
 
-   None.
+   See the documentation for seqret to see the full range of things that
+   you can do when reading and writing sequences.
+
+   Some non-EMBOSS programs will accept only single sequences. In such
+   cases seqretsplit is useful for splitting a multiple sequence file
+   into many individual files. Some EMBOSS programs will also read only a
+   single sequence, which may, however, be one of many in a file. You can
+   specify the sequence using the USA filename:sequenceID. Nonetheless,
+   some people feel more comfortable handling one sequence per file, so
+   seqretsplit will be useful to them too.
+
+   One file for each input sequence is written. The names of the files it
+   creates are derived from the ID name of the sequence, followed by an
+   extension denoting the format of the sequence. You have no control
+   over the names of the files it writes out. For example, if the files
+   embl:hsfa11* are read in and the output is specified as wibble.seq,
+   then the following files are expected to be created:
+hsfa110.fasta
+hsfa111.fasta
+hsfa112.fasta
+hsfa113.fasta
+hsfa114.fasta
+
+   (No file wibble.seq is created.)
 
 References
 
@@ -229,41 +226,56 @@ Known bugs
 
    It shouldn't really prompt for the output filename.
 
-   This isa side effect of the waysequence output works in EMBOSS.
+   This is a side effect of the way sequence output works in EMBOSS.
    Writing multiple sequences to separate files (the -ossingle qualifier)
    does this, and seqretsplit has set it automatically on.
 
 See also
 
-   Program name                         Description
-   biosed       Replace or delete sequence sections
-   codcopy      Reads and writes a codon usage table
-   cutseq       Removes a specified section from a sequence
-   degapseq     Removes gap characters from sequences
-   descseq      Alter the name or description of a sequence
-   entret       Reads and writes (returns) flatfile entries
+   Program name Description
+   aligncopy Reads and writes alignments
+   aligncopypair Reads and writes pairs from alignments
+   biosed Replace or delete sequence sections
+   codcopy Copy and reformat a codon usage table
+   cutseq Removes a section from a sequence
+   degapseq Removes non-alphabetic (e.g. gap) characters from sequences
+   descseq Alter the name or description of a sequence
+   entret Retrieves sequence entries from flatfile databases and files
    extractalign Extract regions from a sequence alignment
-   extractfeat  Extract features from a sequence
-   extractseq   Extract regions from a sequence
-   listor       Write a list file of the logical OR of two sets of sequences
-   makenucseq   Creates random nucleotide sequences
-   makeprotseq  Creates random protein sequences
-   maskfeat     Mask off features of a sequence
-   maskseq      Mask off regions of a sequence
-   newseq       Type in a short new sequence
-   noreturn     Removes carriage return from ASCII files
-   notseq       Exclude a set of sequences and write out the remaining ones
-   nthseq       Writes one sequence from a multiple set of sequences
-   pasteseq     Insert one sequence into another
-   revseq       Reverse and complement a sequence
-   seqret       Reads and writes (returns) sequences
-   skipseq      Reads and writes (returns) sequences, skipping first few
-   splitter     Split a sequence into (overlapping) smaller sequences
-   trimest      Trim poly-A tails off EST sequences
-   trimseq      Trim ambiguous bits off the ends of sequences
-   union        Reads sequence fragments and builds one sequence
-   vectorstrip  Strips out DNA between a pair of vector sequences
-   yank         Reads a sequence range, appends the full USA to a list file
+   extractfeat Extract features from sequence(s)
+   extractseq Extract regions from a sequence
+   featcopy Reads and writes a feature table
+   featreport Reads and writes a feature table
+   listor Write a list file of the logical OR of two sets of sequences
+   makenucseq Create random nucleotide sequences
+   makeprotseq Create random protein sequences
+   maskambignuc Masks all ambiguity characters in nucleotide sequences
+   with N
+   maskambigprot Masks all ambiguity characters in protein sequences with
+   X
+   maskfeat Write a sequence with masked features
+   maskseq Write a sequence with masked regions
+   newseq Create a sequence file from a typed-in sequence
+   nohtml Remove mark-up (e.g. HTML tags) from an ASCII text file
+   noreturn Remove carriage return from ASCII files
+   nospace Remove all whitespace from an ASCII text file
+   notab Replace tabs with spaces in an ASCII text file
+   notseq Write to file a subset of an input stream of sequences
+   nthseq Write to file a single sequence from an input stream of
+   sequences
+   pasteseq Insert one sequence into another
+   revseq Reverse and complement a nucleotide sequence
+   seqret Reads and writes (returns) sequences
+   sizeseq Sort sequences by size
+   skipredundant Remove redundant sequences from an input set
+   skipseq Reads and writes (returns) sequences, skipping first few
+   splitter Split sequence(s) into smaller sequences
+   trimest Remove poly-A tails from nucleotide sequences
+   trimseq Remove unwanted characters from start and end of sequence(s)
+   trimspace Remove extra whitespace from an ASCII text file
+   union Concatenate multiple sequences into a single sequence
+   vectorstrip Removes vectors from the ends of nucleotide sequence(s)
+   yank Add a sequence reference (a full USA) to a list file
 
 Author(s)
 

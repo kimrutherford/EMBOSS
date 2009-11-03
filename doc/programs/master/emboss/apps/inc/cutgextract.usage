@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>cutgextract </b>
-Extract data from CUTG
+Extract codon usage tables from from CUTG database
 Codon usage directories [.]: <b>data</b>
 General log output file [outfile.cutgextract]: <b></b>
 

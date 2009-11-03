@@ -1,5 +1,5 @@
 application: pepwindow [
-  documentation: "Displays protein hydropathy"
+  documentation: "Draw a Kyte-Doolittle hydropathy plot for a protein sequence"
   groups: "Protein:Composition"
 ]
 

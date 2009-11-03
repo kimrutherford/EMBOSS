@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>fuzztran -opt </b>
-Protein pattern search after translation
+Search for patterns in protein sequences (translated)
 Input nucleotide sequence(s): <b>tembl:Z46957</b>
 Search pattern: <b>RA</b>
 Translation frames

@@ -5,41 +5,36 @@
 
 Function
 
-   Count composition of dimer/trimer/etc words in a sequence
+   Calculate the composition of unique words in sequences
 
 Description
 
-   This takes a specified length of sequence and counts the number of
-   distinct subsequences of that length that there are in the input
-   sequence(s).
+   compseq calculates the composition of words of a specified length
+   (dimer, trimer etc) in the input sequence(s). The word length is
+   user-specified. The unique sequences (words), their observed count,
+   observed frequency, expected frequency and (observed / expected)
+   frequency are written to the output file. The (observed / expected)
+   frequency highlights any words with unusually high (or low) occurence
+   in the input sequences.
 
-   It can read in the result of a previous compseq analysis and use this
-   to set the expected frequencies of the subsequences.
+Algorithm
 
-   Unless you tell 'compseq' otherwise, it expects each word to be
-   equally likely. The 'Expected' frequency therefore of any dimer is
-   1/16 - this is simply the inverse of the number of possible dimers
-   (AA, AC, AG, AT, CA, CC, CG, CT, GA, GC, GG, GT, TA, TC, TG, TT).
+   By default, compseq makes the (false) assumption that each word is
+   equally likely. The expected frequency therefore of any dimer is 1/16
+   - this is simply the inverse of the number of possible dimers (AA, AC,
+   AG, AT, CA, CC, CG, CT, GA, GC, GG, GT, TA, TC, TG, TT). Similarly,
+   the expected frequency of any trimer is 1/64, etc. Clearly this is not
+   the case in real sequences where there will be bias in favour of some
+   monomers and words. There are ways around this (see "Notes").
 
-   Similarly, the 'Expected' frequency of any trimer is 1/64, etc.
-
-   Obviously this is not the case in real sequences - there will be bias
-   in favour of some words.
-
-   Compseq cannot otherwise guess what the 'Expected' frequency is. You
-   can, however, tell it what the Expected frequencies are by giving
-   compseq the output of the analysis of another set of sequences,
-   produced by a previous compseq run.
-
-   So you take a set of sequences that are representative of the type of
-   sequence you expect and you run compseq on it to get your expected
-   sequence frequencies.
-
-   You then take the sequences you wish to investigate, run compseq on
-   them giving compseq the expected frequencies that you have
-   established, above. You tell compseq what the file of expected
-   frequencies is by specifying it with '-infile filename' on the
-   command-line.
+   The normal behaviour of compseq is to count the frequencies of all
+   words that occur by moving a window of length 'word' up by one each
+   time. The '-frame' option allows you to move the window up by the
+   length of the word each time, skipping over the intervening words. You
+   can count only those words that occur in a single frame of the word by
+   setting this value to a number other than zero. If you set it to 1 it
+   will only count the words in frame 1, 2 will only count the words in
+   frame 2 and so on.
 
 Usage
 
@@ -49,7 +44,7 @@ Usage
 
 
 % compseq tembl:x65923 -word 2 result3.comp 
-Count composition of dimer/trimer/etc words in a sequence
+Calculate the composition of unique words in sequences
 
    Go to the input files for this example
    Go to the output files for this example
@@ -61,7 +56,7 @@ Count composition of dimer/trimer/etc words in a sequence
 
 
 % compseq tembl:x65923 -word 6 result6.comp -nozero 
-Count composition of dimer/trimer/etc words in a sequence
+Calculate the composition of unique words in sequences
 
    Go to the output files for this example
 
@@ -73,7 +68,7 @@ Count composition of dimer/trimer/etc words in a sequence
 
 
 % compseq tembl:x65923 -word 3 result3.comp -frame 2 -in prev.comp 
-Count composition of dimer/trimer/etc words in a sequence
+Calculate the composition of unique words in sequences
 
    Go to the input files for this example
    Go to the output files for this example
@@ -175,8 +170,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -646,11 +642,37 @@ Data files
 
 Notes
 
-   The results are held in an array in memory before being written to a
-   file. For large values of wordsize, you may run out of memory.
+   There is no way for compseq to guess what the true expected frequency
+   should be for each word. It can however read in the result of a
+   previous compseq analysis and use this to set the expected frequencies
+   of the subsequences. In this case, the input sequences under
+   investigation should be representative of those used for the previous
+   compseq analysis. It is down to your biological expertise to ensure
+   the sequences are genuinely "representative", for instance, you might
+   select a group of sequences belonging to the same taxonomic rank such
+   as genus or species.
 
-   You can produce very large output files if you choose large values of
-   wordsize.
+   The file of expected frequencies is specified by name with the -infile
+   qualifier. The word size in the current run must be the same as the
+   one in this results file. Obviously, you should use a file produced
+   from protein sequences if you are counting protein sequence word
+   frequencies, and you must use one made from nucleotide frequencies if
+   you are analysing a nucleotide sequence.
+
+   As an alternative to using -infile, the expected frequencies of words
+   may be calculated from the observed frequency of single bases or
+   residues in the sequences. To do this, specify the -calcfreq
+   qualifier. If you are reporting a word size of 1 (single bases or
+   residues) then there is no point in using this option because the
+   calculated expected frequency will be equal to the observed frequency.
+
+   Calculating the expected frequencies like this will give an
+   approximation of the expected frequencies that you might get by using
+   an input file of frequencies produced by a previous run of this
+   program. If an input file of expected word frequencies has been
+   specified then the values from that file will be used instead of this
+   calculation of expected frequency from the sequence, even if
+   'calcfreq' is set to be true.
 
 References
 
@@ -658,8 +680,10 @@ References
 
 Warnings
 
-   If you use large word-sizes (over about 7 for nucleic, 5 for protein)
-   you will use huge amounts of memory.
+   The results are held in an array in memory before being written to a
+   file. For large values of wordsize (over about 7 for nucleic, 5 for
+   protein), you may run out of memory or generate a very large output
+   file.
 
 Diagnostic Error Messages
 
@@ -701,28 +725,31 @@ Known bugs
 
 See also
 
-   Program name                       Description
-   backtranambig Back translate a protein sequence to ambiguous codons
-   backtranseq   Back translate a protein sequence
-   banana        Bending and curvature plot in B-DNA
-   btwisted      Calculates the twisting in a B-DNA sequence
-   chaos         Create a chaos game representation plot for a sequence
-   charge        Protein charge plot
-   checktrans    Reports STOP codons and ORF statistics of a protein
-   dan           Calculates DNA RNA/DNA melting temperature
-   emowse        Protein identification by mass spectrometry
-   freak         Residue/base frequency table or plot
-   iep           Calculates the isoelectric point of a protein
-   isochore      Plots isochores in large DNA sequences
-   mwcontam      Shows molwts that match across a set of files
-   mwfilter      Filter noisy molwts from mass spec output
-   octanol       Displays protein hydropathy
-   pepinfo       Plots simple amino acid properties in parallel
-   pepstats      Protein statistics
-   pepwindow     Displays protein hydropathy
-   pepwindowall  Displays protein hydropathy of a set of sequences
-   sirna         Finds siRNA duplexes in mRNA
-   wordcount     Counts words of a specified size in a DNA sequence
+   Program name Description
+   backtranambig Back-translate a protein sequence to ambiguous
+   nucleotide sequence
+   backtranseq Back-translate a protein sequence to a nucleotide sequence
+   banana Plot bending and curvature data for B-DNA
+   btwisted Calculate the twisting in a B-DNA sequence
+   chaos Draw a chaos game representation plot for a nucleotide sequence
+   charge Draw a protein charge plot
+   checktrans Reports STOP codons and ORF statistics of a protein
+   dan Calculates nucleic acid melting temperature
+   density Draw a nucleic acid density plot
+   emowse Search protein sequences by digest fragment molecular weight
+   freak Generate residue/base frequency table or plot
+   iep Calculate the isoelectric point of proteins
+   isochore Plots isochores in DNA sequences
+   mwcontam Find weights common to multiple molecular weights files
+   mwfilter Filter noisy data from molecular weights file
+   octanol Draw a White-Wimley protein hydropathy plot
+   pepinfo Plot amino acid properties of a protein sequence in parallel
+   pepstats Calculates statistics of protein properties
+   pepwindow Draw a Kyte-Doolittle hydropathy plot for a protein sequence
+   pepwindowall Draw Kyte-Doolittle hydropathy plot for a protein
+   alignment
+   sirna Finds siRNA duplexes in mRNA
+   wordcount Count and extract unique words in DNA sequence(s)
 
 Author(s)
 

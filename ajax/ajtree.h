@@ -9,7 +9,7 @@ extern "C"
 #include "ajdefine.h"
 #include "ajlist.h"
 
-enum AjETreeType {ajETreeAny, ajETreeStr};
+enum AjETreeType {ajETreeAny, ajETreeStr, ajETreeSpecial};
 
 #define AjPTreeNode AjOTreeNode*
 
@@ -34,20 +34,25 @@ enum AjETreeType {ajETreeAny, ajETreeStr};
 ** @attr Left  [struct AjSTree*] Previous tree node
 ** @attr Up    [struct AjSTree*] Parent tree node
 ** @attr Down  [struct AjSTree*] First child tree node
+** @attr Name [AjPStr] Name string
 ** @attr Data [void*] Data value
+** @attr Freedata [(AjBool*)] Complex data free function
 ** @attr Type [AjEnum] Tree type (any, string, etc.)
 ** @attr Padding [char[4]] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
-typedef struct AjSTree {
-  struct AjSTree* Right;
-  struct AjSTree* Left;
-  struct AjSTree* Up;
-  struct AjSTree* Down;
-  void* Data;
-  AjEnum Type;
-  char Padding[4];
+typedef struct AjSTree
+{
+    struct AjSTree* Right;
+    struct AjSTree* Left;
+    struct AjSTree* Up;
+    struct AjSTree* Down;
+    AjPStr Name;
+    void* Data;
+    AjBool (*Freedata)(void** data);
+    AjEnum Type;
+    char Padding[4];
 } AjOTree;
 
 #define AjPTree AjOTree*
@@ -59,7 +64,7 @@ typedef struct AjSTree {
 ** Prototype definitions
 */
 
-AjBool  ajTreeAddData(AjPTree thys, void* data);
+AjBool  ajTreeAddData(AjPTree thys, const AjPStr name, void* data);
 AjPTree ajTreeAddNode(AjPTree thys);
 AjPTree ajTreeAddSubNode(AjPTree thys);
 AjPTree ajTreeCopy(const AjPTree thys);
@@ -71,7 +76,8 @@ AjPTree ajTreeFollow(const AjPTree thys, const AjPTree parent);
 ajuint  ajTreeLength(const AjPTree thys);
 void    ajTreeMap(AjPTree thys, void apply(void** x, void* cl), void* cl);
 AjPTree ajTreeNew(void);
-AjBool  ajTreestrAddData(AjPTree thys, AjPStr data);
+AjPTree ajTreeNewNewick(const AjPStr newick);
+AjBool  ajTreestrAddData(AjPTree thys, const AjPStr name, AjPStr data);
 AjPTree ajTreestrCopy(const AjPTree thys);
 void    ajTreestrDel(AjPTree* pthis);
 void    ajTreestrFree(AjPTree* pthis);
@@ -80,6 +86,7 @@ void    ajTreestrMap(AjPTree thys, void apply(AjPStr* x, void* cl), void* cl);
 AjPTree ajTreestrNew(void);
 ajuint  ajTreestrToArray(const AjPTree thys, AjPStr** array);
 ajuint  ajTreeToArray(const AjPTree thys, void*** array);
+void    ajTreeToNewick(const AjPTree thys, AjPStr* Pnewick);
 void    ajTreeTrace(const AjPTree thys);
 void    ajTreestrTrace(const AjPTree thys);
 

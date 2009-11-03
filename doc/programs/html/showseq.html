@@ -24,162 +24,12 @@ showseq
 <H2>
     Function
 </H2>
-Display a sequence with features, translation etc
+Displays sequences with features in pretty format
 <H2>
     Description
 </H2>
 
-<b>showseq</b> displays a protein or a nucleic acid sequence in a style
-suitable for publication.
-<p>
-
-The output is sent to the screen by default for the user to view, but it
-can write the results to a file.
-<p>
-
-The display style of the output is very flexible.  The user can select a
-style from the pre-set choice of formats, or can design a style to suit
-their purposes and aesthetic tastes.
-
-<p>
-
-If designing a new format, you can choose the order in which things are
-printed around the sequence. The things that you can display are:
-
-<p>
-
-<pre>
-s	Sequence
-b	Blank line
-1	Frame 1 translation
-2	Frame 2 translation
-3	Frame 3 translation
--1	Frame -1 translation
--2	Frame -2 translation
--2	Frame -3 translation
-t	Ticks line
-n	Number ticks line
-c	Complement sequence
-f	Features (from the feature table or from a command line -ufo file)
-r	Restriction enzyme cut sites in the forward sense
--r	Restriction enzyme cut sites in the reverse sense
-a	User Annotation
-</pre>
-
-<p>
-
-The letters for these things can be in upper or lower case.
-<br>
-They can be displayed in any order.
-
-<p>
-
-You do not have to make your own format; there is a selection of
-pre-defined standard formats for you to choose from. 
-
-<p>
-
-
-The default standard format displays the following: for every new line
-that the sequence starts to write, the output display will contain first
-a blank line ('b'), then the position numbers of the ticks ('n') then
-the ticks every 10 characters ('t') then the sequence itself ('s') then
-any user-supplied annotation ('a') then the features from the feature
-table ('f').  Subsequent lines of the sequence output will repeat this
-format. 
-
-<p>
-         
-The 'thing' codes used in the list of standard formats are:
-
-<p>
-
-<pre>
-Sequence only:                  S A
-Default sequence:               B N T S A F
-Pretty sequence:                B N T S A
-One frame translation:          B N T S B 1 A F
-Three frame translations:       B N T S B 1 2 3 A F
-Six frame translations:         B N T S B 1 2 3 T -3 -2 -1 A F
-Restriction enzyme map:         B R S N T C -R B 1 2 3 T -3 -2 -1 A
-Baroque:                        B 1 2 3 N T R S T C -R T -3 -2 -1 A F
-</pre>          
-
-<p>          
-
-The displayed sequence can be numbered either by numbering the start and
-ending positions, or by placing a ruler with ticks above or below the
-sequence.
-
-<p>
-
-The width of a line can be set.  The width of a margin around the
-sequence reserved for numbering can be set.  The initial position to
-start numbering from can be set.
-
-<p>
-
-The sequence can be translated, using the selectable genetic code
-tables.  The translation can be done in one, three or six frames.  The
-translation can be displayed in one-letter or three-letter amino acid
-codes.  The translation can optionally be displayed only when it is in
-open reading frames (ORFs) of a specified minimum size.  One or more
-specified regions of the sequence can be individually translated.
-
-<p>
-
-Specified regions of the sequence can be displayed in uppercase to
-highlight them.
-
-<p>
-
-The output can be formatted for HTML.
-
-<p>
-
-If the output is being formatted for HTML, then specified regions of the
-sequence can be displayed in any valid HTML colours.
-
-<p>
-
-The Restriction Enzyme database (REBASE) is a collection of information
-about restriction enzymes and related proteins.  It contains published
-and unpublished references, recognition and cleavage sites,
-isoschizomers, commercial availability, methylation sensitivity, crystal
-and sequence data.  DNA methyltransferases, homing endonucleases,
-nicking enzymes, specificity subunits and control proteins are also
-included.  Most recently, putative DNA methyltransferases and
-restriction enzymes, as predicted from analysis of genomic sequences,
-are also listed.
-
-<p>
-
-The home page of REBASE is: 
-<A HREF="http://rebase.neb.com/">
-http://rebase.neb.com/</A>
-
-<p>
-
-This program can use REBASE data to find the recognition sites and/or
-cut sites of restriction enzymes in a nucleic acid sequence.
-
-<p>
-
-This program can display the cut sites on both strands.
-
-<p>
-
-One potentially very useful option is '-flatreformat' that displays not
-only the cut sites which many other restriction cut-site programs will
-show, but also shows the recognition site.
-
-<p>
-
-If the sequence is in EMBL, Genbank or SwissProt format, the feature table
-of the sequence can be dispalyed with the sequence. GFF file features can also
-be displayed if they are included on the command line with the <b>-ufo=file</b>
-qualifier.
-
+<p><b>showseq</b> displays one or more protein or nucleic acid sequences, with features, in a style suitable for publication. The output is sent to screen by default but can be written to file. You may pick a format from a list, alternatively, use the  many options to control what is output and in what format. Optionally, the sequence feature table can be displayed.  Where the input sequence is a nucleic acid, the sequence can be translated, using the specified genetic code tables. Also recognition sites and/or cut sites of restriction enzymes from the REBASE database may be displayed.  There are various other options for controlling how the sequence is displayed and numbered and the output can be formatted for HTML.</p>
 
 
 <H2>
@@ -192,7 +42,7 @@ qualifier.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showseq tembl:x13776 -sbeg 1 -send 100 </b>
-Display a sequence with features, translation etc..
+Displays sequences with features in pretty format
 Things to display
          0 : Enter your own list of things to display
          1 : Sequence only
@@ -219,7 +69,7 @@ The standard list of output formats are only a small selection of the possible w
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showseq tembl:x13776 -sbeg 1 -send 120 </b>
-Display a sequence with features, translation etc..
+Displays sequences with features in pretty format
 Things to display
          0 : Enter your own list of things to display
          1 : Sequence only
@@ -263,7 +113,7 @@ Display only the sequence:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showseq tembl:x13776 -sbeg 1 -send 100 -noname -nodesc -format 0 -thing S </b>
-Display a sequence with features, translation etc..
+Displays sequences with features in pretty format
 Output file [x13776.showseq]: <b></b>
 
 </pre></td></tr></table><p>
@@ -279,7 +129,7 @@ Protein sequence can be displayed in three-letter codes. (The codes are displaye
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showseq tsw:rs24_fugru -three -format 2 </b>
-Display a sequence with features, translation etc..
+Displays sequences with features in pretty format
 Output file [rs24_fugru.showseq]: <b></b>
 
 </pre></td></tr></table><p>
@@ -295,7 +145,7 @@ Number the sequence lines in the margin:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showseq tembl:x13776 -sbeg 1 -send 100 -format 1 -number </b>
-Display a sequence with features, translation etc..
+Displays sequences with features in pretty format
 Output file [x13776.showseq]: <b></b>
 
 </pre></td></tr></table><p>
@@ -311,7 +161,7 @@ Start the numbering at a specified value ('123' in this case):
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showseq tembl:x13776 -sbeg 1 -send 100 -format 1 -number -offset 123 </b>
-Display a sequence with features, translation etc..
+Displays sequences with features in pretty format
 Output file [x13776.showseq]: <b></b>
 
 </pre></td></tr></table><p>
@@ -327,7 +177,7 @@ Make selected regions uppercase. (Use '-slower' to force the rest of the sequenc
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showseq tembl:x13776 -sbeg 1 -send 100 -format 1 -slower -upper '25-45,101-203,333-362' </b>
-Display a sequence with features, translation etc..
+Displays sequences with features in pretty format
 Output file [x13776.showseq]: <b></b>
 
 </pre></td></tr></table><p>
@@ -343,7 +193,7 @@ Translate selected regions:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showseq tembl:x13776 -sbeg 1 -send 120 -format 4 -trans 25-49,66-76 </b>
-Display a sequence with features, translation etc..
+Displays sequences with features in pretty format
 Output file [x13776.showseq]: <b></b>
 
 </pre></td></tr></table><p>
@@ -359,7 +209,7 @@ Add your own annotation to the display:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showseq tembl:x13776 -sbeg 1 -send 100 -format 2 -send 120 -annotation '13-26 binding site 15-15 SNP' </b>
-Display a sequence with features, translation etc..
+Displays sequences with features in pretty format
 Output file [x13776.showseq]: <b></b>
 
 </pre></td></tr></table><p>
@@ -697,8 +547,9 @@ Output file [x13776.showseq]: <b></b>
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -1790,7 +1641,7 @@ Base3  = TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG
 </pre>
 
 <p>      
-The EMBOSS REBASE restriction enzyme data files are stored iin
+The EMBOSS REBASE restriction enzyme data files are stored in
 directory 'data/REBASE/*' under the EMBOSS installation directory.
 
 <p>
@@ -1837,7 +1688,56 @@ is the preferred (prototype) name.
     Notes
 </H2>
 
-None.
+<p>One or more things may be selected for display from a menu (<tt>-things</tt> option).  The order of specified characters (upper or lower case) determines the order in the output:</p>
+<pre>
+s	Sequence
+b	Blank line
+1	Frame 1 translation
+2	Frame 2 translation
+3	Frame 3 translation
+-1	Frame -1 translation
+-2	Frame -2 translation
+-2	Frame -3 translation
+t	Ticks line
+n	Number ticks line
+c	Complement sequence
+f	Features (from the feature table or from a command line -ufo file)
+r	Restriction enzyme cut sites in the forward sense
+-r	Restriction enzyme cut sites in the reverse sense
+a	User Annotation
+</pre>
+
+<p>Alternatively, there is a selection of pre-defined formats to choose from. The codes from above used in the list of standard formats are:</p>
+<pre>
+Sequence only:                  S A
+Default sequence:               B N T S A F
+Pretty sequence:                B N T S A
+One frame translation:          B N T S B 1 A F
+Three frame translations:       B N T S B 1 2 3 A F
+Six frame translations:         B N T S B 1 2 3 T -3 -2 -1 A F
+Restriction enzyme map:         B R S N T C -R B 1 2 3 T -3 -2 -1 A
+Baroque:                        B 1 2 3 N T R S T C -R T -3 -2 -1 A F</pre>
+
+
+
+<p>The default standard format displays the following: for every new line that the sequence starts to write, the output display will contain first a blank line (<tt>b</tt>), then the position numbers of the ticks (<tt>n</tt>) then the ticks every 10 characters (<tt>t</tt>) then the sequence itself (<tt>s</tt>) then any user-supplied annotation (<tt>a</tt>) then the features from the feature table (<tt>f</tt>). Subsequent lines of the sequence output will repeat this format.</p>
+
+<p>The sequence can be translated, using the specified genetic code tables. The translation can be done in one, three or six frames. The translation can be displayed in one-letter or three-letter amino acid codes. The translation can optionally be displayed only when it is in open reading frames (ORFs) of a specified minimum size. One or more specified regions of the sequence can be individually translated.</p>
+
+<p>The output can be formatted for HTML. If the output is being formatted for HTML, then specified regions of the sequence can be displayed in any valid HTML colours.</p>
+
+<p>This program can use REBASE data to find the recognition sites and/or cut sites of restriction enzymes in a nucleic acid sequence.  This program can display the cut sites on both strands.  The <tt>-flatreformat</tt> option displays not only the cut sites which many other restriction cut-site programs will show, but also shows the recognition site.</p>
+
+<p>The Restriction Enzyme database (REBASE) is a collection of information about restriction enzymes and related proteins. It contains published and unpublished references, recognition and cleavage sites, isoschizomers, commercial availability, methylation sensitivity, crystal and sequence data. DNA methyltransferases, homing endonucleases, nicking enzymes, specificity subunits and control proteins are also included. Most recently, putative DNA methyltransferases and restriction enzymes, as predicted from analysis of genomic sequences, are also listed. The home page of REBASE is: <a href="http://rebase.neb.com/">http://rebase.neb.com/</a></p>
+
+<p>If the sequence is in EMBL, Genbank or SwissProt format, the feature table of the sequence can be dispalyed with the sequence. GFF file features can also be displayed if they are included on the command line using <tt>-ufo=file</tt>.</p>
+
+<p>
+Other display options include:
+The displayed sequence can be numbered either by numbering the start and ending positions, or by placing a ruler with ticks above or below the sequence. An initial position to start the numbering from can be set.
+The width of a line, and width of a margin around the sequence reserved for numbering can be set. 
+Specified regions of the sequence can be displayed in uppercase to highlight them.</p>
+
 
 <H2>
     References
@@ -1879,20 +1779,21 @@ display of things like restriction enzyme cutting sites easier.
 It is not a bug. Please don't report it.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="abiview.html">abiview</a></td>
-<td>Reads ABI file and display the trace</td>
+<td>Display the trace in an ABI sequencer file</td>
 </tr>
 
 <tr>
 <td><a href="backtranambig.html">backtranambig</a></td>
-<td>Back translate a protein sequence to ambiguous codons</td>
+<td>Back-translate a protein sequence to ambiguous nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="backtranseq.html">backtranseq</a></td>
-<td>Back translate a protein sequence</td>
+<td>Back-translate a protein sequence to a nucleotide sequence</td>
 </tr>
 
 <tr>
@@ -1912,82 +1813,82 @@ It is not a bug. Please don't report it.
 
 <tr>
 <td><a href="pepnet.html">pepnet</a></td>
-<td>Displays proteins as a helical net</td>
+<td>Draw a helical net for a protein sequence</td>
 </tr>
 
 <tr>
 <td><a href="pepwheel.html">pepwheel</a></td>
-<td>Shows protein sequences as helices</td>
+<td>Draw a helical wheel diagram for a protein sequence</td>
 </tr>
 
 <tr>
 <td><a href="plotorf.html">plotorf</a></td>
-<td>Plot potential open reading frames</td>
+<td>Plot potential open reading frames in a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="prettyplot.html">prettyplot</a></td>
-<td>Displays aligned sequences, with colouring and boxing</td>
+<td>Draw a sequence alignment with pretty formatting</td>
 </tr>
 
 <tr>
 <td><a href="prettyseq.html">prettyseq</a></td>
-<td>Output sequence with translated ranges</td>
+<td>Write a nucleotide sequence and its translation to file</td>
 </tr>
 
 <tr>
 <td><a href="recoder.html">recoder</a></td>
-<td>Remove restriction sites but maintain same translation</td>
+<td>Find restriction sites to remove (mutate) with no translation change</td>
 </tr>
 
 <tr>
 <td><a href="redata.html">redata</a></td>
-<td>Search REBASE for enzyme name, references, suppliers etc</td>
+<td>Retrieve information from REBASE restriction enzyme database</td>
 </tr>
 
 <tr>
 <td><a href="remap.html">remap</a></td>
-<td>Display sequence with restriction sites, translation etc</td>
+<td>Display restriction enzyme binding sites in a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="restover.html">restover</a></td>
-<td>Find restriction enzymes producing specific overhang</td>
+<td>Find restriction enzymes producing a specific overhang</td>
 </tr>
 
 <tr>
 <td><a href="restrict.html">restrict</a></td>
-<td>Finds restriction enzyme cleavage sites</td>
+<td>Report restriction enzyme cleavage sites in a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="seealso.html">seealso</a></td>
-<td>Finds programs sharing group names</td>
+<td>Finds programs with similar function to a specified program</td>
 </tr>
 
 <tr>
 <td><a href="showalign.html">showalign</a></td>
-<td>Displays a multiple sequence alignment</td>
+<td>Display a multiple sequence alignment in pretty format</td>
 </tr>
 
 <tr>
 <td><a href="showdb.html">showdb</a></td>
-<td>Displays information on the currently available databases</td>
+<td>Displays information on configured databases</td>
 </tr>
 
 <tr>
 <td><a href="showfeat.html">showfeat</a></td>
-<td>Show features of a sequence</td>
+<td>Display features of a sequence in pretty format</td>
 </tr>
 
 <tr>
 <td><a href="showorf.html">showorf</a></td>
-<td>Pretty output of DNA translations</td>
+<td>Display a nucleotide sequence and translation in pretty format</td>
 </tr>
 
 <tr>
 <td><a href="silent.html">silent</a></td>
-<td>Silent mutation restriction enzyme scan</td>
+<td>Find restriction sites to insert (mutate) with no translation change</td>
 </tr>
 
 <tr>
@@ -1997,7 +1898,7 @@ It is not a bug. Please don't report it.
 
 <tr>
 <td><a href="textsearch.html">textsearch</a></td>
-<td>Search sequence documentation. Slow, use SRS and Entrez!</td>
+<td>Search the textual description of sequence(s)</td>
 </tr>
 
 <tr>

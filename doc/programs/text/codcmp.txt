@@ -9,19 +9,18 @@ Function
 
 Description
 
-   This program reads in two codon usage table files.
-
-   It counts the number of the 64 possible codons which are unused (i.e.
-   has a usage fraction of 0) in either one or the other or both of the
-   codon usage tables.
+   codcmp reads two codon usage table files and writes to file the
+   differences in codon usage fractions between the two tables.
 
    The usage fraction of a codon is its proportion (0 to 1) of the total
-   of the codons in the sequences used to construct the usage table.
-
-   For each codon that is used in both tables, it takes the difference
-   between the usage fraction. The sum of the differences and the sum of
-   the differences squared is reported in the output file, together with
-   the number of unused codons.
+   number of the codons in the sequences used to construct the usage
+   table. For each codon that is used in both tables, it takes the
+   difference between the usage fractions in the two tables. The sum of
+   the differences and the sum of the differences squared is reported in
+   the output file. It also counts the number of the 64 possible codons
+   which are unused (i.e. has a usage fraction of 0) in either one or the
+   other or both of the codon usage tables, and writes this to the output
+   file.
 
   Statistical significance
 
@@ -104,8 +103,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -135,17 +135,17 @@ Sum Squared Difference = 2.178
 Mean Squared Difference = 0.034
 Root Mean Squared Difference = 0.184
 Sum Difference         = 9.504
-Mean Difference         = 0.149
+Mean Difference         = 0.148
 Codons not appearing   = 0
 
 Data files
 
-   The codon usage tables are read by default from "Ehum.cut" in the
-   data/CODONS directory of the EMBOSS distribution.
-
-   If the name of a codon usage file is specified on the command line,
-   then this file will first be searched for in the current directory and
-   then in the 'data/CODONS' directory of the EMBOSS distribution.
+   codcmp requires two codon usage tables which are read by default from
+   the EMBOSS data file from Ehum.cut in the data/CODONS directory of the
+   EMBOSS distribution. If the name of a codon usage file is specified on
+   the command line, then this file will first be searched for in the
+   current directory and then in the data/CODONS directory of the EMBOSS
+   distribution.
 
    EMBOSS data files are distributed with the application and stored in
    the standard EMBOSS data directory, which is defined by the EMBOSS
@@ -174,7 +174,39 @@ Data files
 
 Notes
 
-   None.
+   The following notes based on Derek Gatherer's comments are useful for
+   interpreting the significance of any difference between the tables.
+
+   It's not normally possible to be certain a a difference is
+   statistically significant just from looking at it, as it is
+   essentially a descriptive statistic about the difference between two
+   64-mer vectors. If you have a whole lot of sequences and codcmp
+   results for all the possible pairwise comparisons, then the resulting
+   distance matrix can be used to build a phylogenetic tree based on
+   codon usage.
+
+   However, if you generate a series of random sequences, measure their
+   codon usage and then do codcmp between each of your test sequences and
+   all the random sequences, you could then use a z-test to see if the
+   result between the two test sequences was outside of the top or bottom
+   5%.
+
+   This would assume that the codcmp results were normally distributed,
+   but you could test that too. The simplest way is just to plot them and
+   look for a bell-curve. For more rigour, find the mean and standard
+   deviation of your results from the random sequences, use the normal
+   distribution equation to generate a theoretical distribution for that
+   mean and standard deviation, and then perform a chi square between the
+   random data and the theoretically generated normal distribution. If
+   you generate two sets of random data, each based on your two test
+   sequences, an F-test should be used to establish that they have equal
+   variances. Then you can safely go ahead and perform the z-test.
+
+   You could use the shuffle program to base your random sequences on the
+   test sequences - so that would ensure the randomised background had
+   the same nucleotide content. F-tests, z-tests and chi-tests can all be
+   done in Excel, as well as being standard in most statistical analysis
+   packages.
 
 References
 
@@ -198,11 +230,12 @@ Known bugs
 
 See also
 
-   Program name                  Description
-   cai          CAI codon adaptation index
-   chips        Codon usage statistics
-   cusp         Create a codon usage table
-   syco         Synonymous codon usage Gribskov statistic plot
+   Program name Description
+   cai Calculate codon adaptation index
+   chips Calculates Nc codon usage statistic
+   cusp Create a codon usage table from nucleotide sequence(s)
+   syco Draw synonymous codon usage statictic plot for a nucleotide
+   sequence
 
 Author(s)
 

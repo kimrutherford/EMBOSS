@@ -5,53 +5,18 @@
 
 Function
 
-   Search all databases for an entry
+   Search all sequence databases for an entry and retrieve it
 
 Description
 
-   whichdb searches all available EMBOSS databases for sequences with a
-   specified ID name or accession number.
-
-   EMBOSS does not allow database entries to be specified by just the ID
-   name or accession number. You must specify both the name of the
-   database and the entry, for example 'embl:hsfau', not just 'hsfau'.
-
-   If you do not know which database(s) contain the entry you are
-   interested in, whichdb will tell you.
-
-   whichdb can also, optionally, write out the sequences it finds to
-   files.
-
-  IDs and Accessions
-
-   An entry in a database must have some way of being uniquely identified
-   in that database. Most sequence databases have two such identifiers
-   for each sequence - an ID name and an Accession number.
-
-   Why are there two such identifiers? The ID name was originally
-   intended to be a human-readable name that had some indication of the
-   function of its sequence. In EMBL and GenBank the first two (or three)
-   letters indicated the species and the rest indicated the function, for
-   example 'hsfau' is the 'Homo Sapiens FAU pseudogene'. This naming
-   scheme started to be a problem when the number of entries added each
-   day was so vast that people could not make up the ID names fast
-   enough. Instead, the Accession numbers were used as the ID name.
-   Therefore you will now find ID names like 'AF061303', the same as the
-   Accession number for that sequence in EMBL.
-
-   ID names are not guaranteed to remain the same between different
-   versions of a database (although in practice they usually do).
-
-   Accession numbers are unique alphanumeric identifiers that are
-   guaranteed to remain with that sequence through the rest of the life
-   of the database. If two sequences are merged into one, then the new
-   sequence will get a new Accession number and the Accession numbers of
-   the merged sequences will be retained as 'secondary' Accession
-   numbers.
-
-   EMBL, GenBank and SwissProt share an Accession numbering scheme - an
-   Accession number uniquely identifies a sequence within these three
-   databases.
+   whichdb searches all available sequence databases for sequences with a
+   specified ID name or accession number. The uniform sequence address
+   (USA) of matching database entries is written to an output file.
+   whichdb will, optionally, write out the sequences it finds to files.
+   An "available" database is one that has been defined in the EMBOSS
+   system file (.embossrc or emboss.login) and is available from the
+   system you are running EMBOSS. If you do not know which database(s)
+   contain the entry you are interested in, whichdb will tell you.
 
 Usage
 
@@ -59,7 +24,7 @@ Usage
 
 
 % whichdb -showall 
-Search all databases for an entry
+Search all sequence databases for an entry and retrieve it
 ID or Accession number: x65921
 Output file [outfile.whichdb]: 
 
@@ -84,8 +49,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -212,7 +178,7 @@ tgb:x65921
    file.
 
    Each database that is defined in the local implementation of EMBOSS
-   which contains an entry called 'hsfau' is reported.
+   which contains an entry called 'x65923' is reported.
 
    Note that where a database is defined under several names ('embl',
    'em'), each definition of that database containing the entry is
@@ -226,12 +192,12 @@ tgb:x65921
    The names of the files that the sequences are written to is reported
    as they are written, for example:
 
-Writing hsfau.embl
-Writing hsfau.human
-Writing hsfau.tembl
-Writing hsfau.em
-Writing hsfau.genbank
-Writing hsfau.gb
+Writing x65923.embl
+Writing x65923.human
+Writing x65923.tembl
+Writing x65923.em
+Writing x65923.genbank
+Writing x65923.gb
 
 Data files
 
@@ -239,7 +205,43 @@ Data files
 
 Notes
 
-   None.
+   The Uniform Sequence Addresss (USA) method used by EMBOSS for
+   referencing sequences does not allow database entries to be specified
+   by just the ID name or accession number. You must specify both the
+   name of the database and the entry, for example embl:x65923, not just
+   x65923. whichdb is useful where you do not know the database that a
+   sequence entry is found in.
+
+  IDs and Accessions
+
+   An entry in a database must have some way of being uniquely identified
+   in that database. Most sequence databases have two such identifiers
+   for each sequence - an ID name and an Accession number.
+
+   Why are there two such identifiers? The ID name was originally
+   intended to be a human-readable name that had some indication of the
+   function of its sequence. In the early years of EMBL and GenBank the
+   first two (or three) letters indicated the species and the rest
+   indicated the function, for example HSFAU was the Homo Sapiens FAU
+   pseudogene. This naming scheme started to be a problem when the number
+   of entries added each day was so vast that people could not make up
+   the ID names fast enough. Instead, the Accession numbers were used as
+   the ID name. Therefore you will now find ID names like X65923, the
+   same as the Accession number for that sequence in EMBL. The protein
+   sequence databases continue to use recognizable names for entries (for
+   example AMIR_PSEAE for the AmiR gene product of Pseudomonas aeruginosa
+   in UniProt/SwissProt).
+
+   ID names are not guaranteed to remain the same between different
+   versions of a database (although in practice they usually do). In
+   contrast, accession numbers are unique alphanumeric identifiers that
+   are guaranteed to remain with that sequence through the rest of the
+   life of the database. If two sequences are merged into one, then the
+   new sequence will get a new Accession number and the Accession numbers
+   of the merged sequences will be retained as 'secondary' Accession
+   numbers. EMBL, GenBank and UniProt/SwissProt share an Accession
+   numbering scheme - an Accession number uniquely identifies a sequence
+   within these three databases.
 
 References
 
@@ -263,14 +265,17 @@ Known bugs
 
 See also
 
-   Program name                        Description
-   infoalign    Information on a multiple sequence alignment
-   infoseq      Displays some simple information about sequences
-   seealso      Finds programs sharing group names
-   showdb       Displays information on the currently available databases
-   textsearch   Search sequence documentation. Slow, use SRS and Entrez!
-   tfm          Displays a program's help documentation manual
-   wossname     Finds programs by keywords in their one-line documentation
+   Program name Description
+   infoalign Display basic information about a multiple sequence
+   alignment
+   infobase Return information on a given nucleotide base
+   inforesidue Return information on a given amino acid residue
+   infoseq Display basic information about sequences
+   seealso Finds programs with similar function to a specified program
+   showdb Displays information on configured databases
+   textsearch Search the textual description of sequence(s)
+   tfm Displays full documentation for an application
+   wossname Finds programs by keywords in their short description
 
 Author(s)
 

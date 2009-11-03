@@ -20,8 +20,6 @@
 
 package org.emboss.jemboss.server;
 
-import org.emboss.jemboss.programs.*;
-import org.emboss.jemboss.parser.*;
 
 import java.io.*;
 import java.util.*;

@@ -9,17 +9,13 @@ Function
 
 Description
 
-   Reads in a protein sequence containing stops, and writes a report of
-   any open reading frames (continuous protein sequence with no stops)
-   that are greater than a minimum size. The default minimum ORF size is
-   100 residues. It writes out any ORF sequences.
-
-   The input sequence might typically have been produced by transeq.
-
-   Note that if you have only translated a nucleic sequence in one frame,
-   checktrans will miss possible ORFs in other frames. You have to give
-   checktrans translations in all three (six?) frames in order for it to
-   be effective at finding all possible ORFs.
+   checktrans reads a protein sequence containing stop characters and
+   writes a statistical report of any open reading frames (ORFs) that are
+   greater than a minimum size. An open reading frame is defined as a
+   continuous region of protein sequence with no stop characters. The
+   default minimum ORF size is 100 residues. In addition to the report
+   output, any ORF sequences are written to file and features of those
+   sequences written to a separate file.
 
 Usage
 
@@ -104,8 +100,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -145,8 +142,8 @@ PRX
 Output file format
 
    This program writes three files: the ORF report file
-   (paamir_1.checktrans), the output sequence file (paamir_1.fasta) and
-   the feature file (paamir_1.out3) which is in GFF format by default.
+   (x13776_1.checktrans), the output sequence file (x13776_1.fasta) and
+   the feature file (x13776_1.out3) which is in GFF format by default.
 
    The ORF report file gives the numeric count of the ORF, the position
    of the terminating STOP codon, the length of the ORF, its start and
@@ -154,7 +151,7 @@ Output file format
 
    The name of the output sequences is constructed from the name of the
    input sequence followed by an underscore and then the numeric count of
-   the ORF (e.g. 'PAAMIR_1_7').
+   the ORF (e.g. 'X13776_1_7').
 
   Output files for usage example
 
@@ -184,10 +181,10 @@ DQPGQGVADAAPWLGRARGAPAPVAGSDEAARADPEDRSGVAGKRAVRLSDPGRPEQ
   File: paamir_1.gff
 
 ##gff-version 2.0
-##date 2006-07-15
+##date 2007-07-15
 ##Type Protein PAAMIR_1
-PAAMIR_1        checktrans      misc_feature    278     634     0.000   +
-.       Sequence "PAAMIR_1.1"
+PAAMIR_1        checktrans      region  278     634     0.000   +       .
+Sequence "PAAMIR_1.1"
 
 Data files
 
@@ -195,7 +192,21 @@ Data files
 
 Notes
 
-   None.
+   A reading frame is a relative position in DNA or RNA from which
+   contiguous, non-overlapping codons are read during transcription.
+   There are 3 possible reading frames in mRNA strand and six in a double
+   stranded DNA where transcription is possible from either strand. An
+   open reading frame (ORF) is a reading frame that begins with a start
+   codon and includes the subsequent transcribed region, stopping
+   immediately before the first stop codon.
+
+   Where you have a nucleotide sequence for analysis, it should first be
+   translated by using transeq. The transeq output file will then serve
+   as the input to checktrans. Note that if you have only translated a
+   nucleic sequence in one frame, checktrans will miss possible ORFs in
+   the other frames. You must provide checktrans with translations in all
+   three (six?) frames in order for it to be effective at finding all
+   possible ORFs.
 
 References
 
@@ -219,21 +230,24 @@ Known bugs
 
 See also
 
-   Program name                         Description
-   backtranambig Back translate a protein sequence to ambiguous codons
-   backtranseq   Back translate a protein sequence
-   charge        Protein charge plot
-   compseq       Count composition of dimer/trimer/etc words in a sequence
-   emowse        Protein identification by mass spectrometry
-   freak         Residue/base frequency table or plot
-   iep           Calculates the isoelectric point of a protein
-   mwcontam      Shows molwts that match across a set of files
-   mwfilter      Filter noisy molwts from mass spec output
-   octanol       Displays protein hydropathy
-   pepinfo       Plots simple amino acid properties in parallel
-   pepstats      Protein statistics
-   pepwindow     Displays protein hydropathy
-   pepwindowall  Displays protein hydropathy of a set of sequences
+   Program name Description
+   backtranambig Back-translate a protein sequence to ambiguous
+   nucleotide sequence
+   backtranseq Back-translate a protein sequence to a nucleotide sequence
+   charge Draw a protein charge plot
+   compseq Calculate the composition of unique words in sequences
+   emowse Search protein sequences by digest fragment molecular weight
+   freak Generate residue/base frequency table or plot
+   iep Calculate the isoelectric point of proteins
+   mwcontam Find weights common to multiple molecular weights files
+   mwfilter Filter noisy data from molecular weights file
+   octanol Draw a White-Wimley protein hydropathy plot
+   pepinfo Plot amino acid properties of a protein sequence in parallel
+   pepstats Calculates statistics of protein properties
+   pepwindow Draw a Kyte-Doolittle hydropathy plot for a protein sequence
+   pepwindowall Draw Kyte-Doolittle hydropathy plot for a protein
+   alignment
+   wordcount Count and extract unique words in DNA sequence(s)
 
 Author(s)
 

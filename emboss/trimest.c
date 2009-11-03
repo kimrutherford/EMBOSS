@@ -60,8 +60,8 @@ int main(int argc, char **argv)
     seqout 	= ajAcdGetSeqoutall("outseq");
     minlength 	= ajAcdGetInt("minlength");
     mismatches 	= ajAcdGetInt("mismatches");
-    reverse	= ajAcdGetBool("reverse");
-    fiveprime	= ajAcdGetBool("fiveprime");
+    reverse	= ajAcdGetBoolean("reverse");
+    fiveprime	= ajAcdGetBoolean("fiveprime");
     cvttolower  = ajAcdGetToggle("tolower");
     
 

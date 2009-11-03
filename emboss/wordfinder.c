@@ -163,9 +163,9 @@ int main(int argc, char **argv)
     /* obsolete. Can be uncommented in acd file and here to reuse */
 
     /* outf      = ajAcdGetOutfile("originalfile"); */
-    /* show      = ajAcdGetBool("showinternals");*/
-    /* scoreonly = ajAcdGetBool("scoreonly"); */
-    /* showalign = ajAcdGetBool("showalign"); */
+    /* show      = ajAcdGetBoolean("showinternals");*/
+    /* scoreonly = ajAcdGetBoolean("scoreonly"); */
+    /* showalign = ajAcdGetBoolean("showalign"); */
 
     gapopen   = ajRoundF(gapopen, 8);
     gapextend = ajRoundF(gapextend, 8);
@@ -252,18 +252,22 @@ int main(int argc, char **argv)
 		for(i=0;i<((trgend-trgstart)+1)*width;i++)
 		  path[i] = 0.0;
 
-		ajDebug("Calling embAlignPathCalcFast "
-			"%d..%d [%d/%d] %d..%d [%d/%d]\n",
+		ajDebug("Calling embAlignPathCalcSWFast "
+			"%d..%d [%d/%d] %d..%d [%d/%d] width:%d\n",
 			trgstart, trgend, (trgend - trgstart + 1), trglen,
-			qrystart, qryend, (qryend - qrystart + 1), qrylen);
+			qrystart, qryend, (qryend - qrystart + 1), qrylen,
+                        width);
 
-		embAlignPathCalcFast(&qqry[qrystart],&ptrg[trgstart],
-				     qryend-qrystart+1,trgend-trgstart+1,
-				     gapopen,gapextend,path,sub,cvt,
-				     compass,show,width);
+		score = embAlignPathCalcSWFast(&qqry[qrystart],
+                                               &ptrg[trgstart],
+                                               qryend-qrystart+1,
+                                               trgend-trgstart+1,
+                                               0,width,
+                                               gapopen,gapextend,path,sub,cvt,
+                                               compass,show);
 
 
-		ajDebug("Calling embAlignScoreSWMatrixFast\n");
+		/*ajDebug("Calling embAlignScoreSWMatrixFast\n");
 
 		score = embAlignScoreSWMatrixFast(path,compass,
 						  gapopen,gapextend,
@@ -272,7 +276,7 @@ int main(int argc, char **argv)
 						  trgend-trgstart+1,
 						  sub,cvt,
 						  &qrystart,&trgstart,
-						  width);
+						  width);*/
 
 		if(scoreonly)
 		{
@@ -289,9 +293,8 @@ int main(int argc, char **argv)
 					     &nqry,&mtrg,
 					     qryend-qrystart+1,
 					     trgend-trgstart+1,
-					     sub,cvt,
-					     &qrystart,&trgstart,
-					     width);
+					     0, width,
+                                             &qrystart,&trgstart);
 
 		    ajDebug("Calling embAlignPrintLocal\n");
 		    if(outf)

@@ -24,36 +24,13 @@ aaindexextract
 <H2>
     Function
 </H2>
-Extract data from AAINDEX
+Extract amino acid property data from AAINDEX
 <H2>
     Description
 </H2>
+<p><b>aaindexextract</b> extracts amino acid property data from the <tt>AAINDEX</tt> database (see references 1, 2 and 3).  One file for every amino acid property is created in the EMBOSS data directory <tt>data/AAINDEX</tt>.  Each file corresponds to a single entry in the file <tt>aindex1</tt> of the AAINDEX database.</p>
+<p>The <b>aaindexextract</b> output files files may be used by any program that uses amino acid property data.  For example, <b>pepwindow</b> and <b>pepwindowall</b> will take any one of these files if their <tt>-data</tt> qualifier is set to an appropriate file name.  By default however these programs will use the standard EMBOSS data file <tt>Enakai.dat</tt>.</p>
 
-<b>aaextractindex</b> extracts information from the AAINDEX database for use by
-<a href="pepwindow.html">pepwindow</a>
-and
-<a href="pepwindowall.html">pepwindowall</a>
-
-<p>
-
-AAINDEX is a database of properties of amino acids. See references [1] [2] [3].
-
-<p>
-
-The programs 
-<a href="pepwindow.html">pepwindow</a>
-and
-<a href="pepwindowall.html">pepwindowall</a>
-normally use the standard EMBOSS data file 'Enakai.dat' by default, but
-you can set their '-data' qualifier to use any of the files produced by
-<b>aaextractindex</b> from the AAINDEX database. 
-
-<p>
-
-
-The AAINDEX database file 'aaindex1' can be downloaded from the AAINDEX
-site: 
-<a href="ftp://ftp.genome.ad.jp/pub/db/genomenet/aaindex/aaindex1">ftp://ftp.genome.ad.jp/pub/db/genomenet/aaindex/aaindex1</a>
 
 <H2>
     Usage
@@ -66,7 +43,7 @@ site:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>aaindexextract </b>
-Extract data from AAINDEX
+Extract amino acid property data from AAINDEX
 AAINDEX database file: <b>aaindex1.test</b>
 
 </pre></td></tr></table><p>
@@ -88,8 +65,9 @@ AAINDEX database file: <b>aaindex1.test</b>
    Associated qualifiers: (none)
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -321,21 +299,14 @@ None.
 <H2>
     Notes
 </H2>
+<p>AAINDEX is a database of  biochemical and physicochemical properties of amino acids and pairs of amino acids. <tt>aaindex1</tt> for properties of each of the 20 single amino acids, <tt>aaindex2</tt> for amino acid mutation matrices and <tt>aaindex3</tt> for the amino-acid pair-wise contact potentials. All data are derived from the published literature.  The file <tt>aaindex1</tt> is required by <b>aaindexextract</b> and can be downloaded from the AAINDEX site: <a href="ftp://ftp.genome.ad.jp/pub/db/genomenet/aaindex/aaindex1">ftp://ftp.genome.ad.jp/pub/db/genomenet/aaindex/aaindex1</a>.</p>
 
-If <b>aaindexextract</b> tries to write the data to an unexpected
-location you can explicitly set the location of the EMBOSS data
-directory by putting the line:
+<p><b>aaindexextract</b> will write to the EMBOSS data directory <tt>data/AAINDEX</tt>.  If you cannot find the output files then it is likely the data directory has been set to somewhere other than expected.  To set explicitly the location of the EMBOSS data directory add the following to your <tt>emboss.default</tt> file:</p>
 
-<p>
+<p><tt>ENV EMBOSS_DATA /path/to/the/EMBOSS/data/directory</tt></p>
+<p>Where <tt>/path/to/the/EMBOSS/data/directory</tt> is the location of your EMBOSS data as unpacked from the distribution file.</p>
 
-ENV EMBOSS_DATA /path/to/the/EMBOSS/data/directory
-<br>
-in the EMBOSS <b>emboss.default</b> file.
 
-<p>
-
-(Where '/path/to/the/EMBOSS/data/directory' is the location of your
-EMBOSS data as unpacked from the distribution file.)
 
 <H2>
     References
@@ -386,30 +357,36 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="cutgextract.html">cutgextract</a></td>
-<td>Extract data from CUTG</td>
+<td>Extract codon usage tables from from CUTG database</td>
+</tr>
+
+<tr>
+<td><a href="jaspextract.html">jaspextract</a></td>
+<td>Extract data from JASPAR</td>
 </tr>
 
 <tr>
 <td><a href="printsextract.html">printsextract</a></td>
-<td>Extract data from PRINTS</td>
+<td>Extract data from PRINTS database for use by pscan</td>
 </tr>
 
 <tr>
 <td><a href="prosextract.html">prosextract</a></td>
-<td>Build the PROSITE motif database for use by patmatmotifs</td>
+<td>Processes the PROSITE motif database for use by patmatmotifs</td>
 </tr>
 
 <tr>
 <td><a href="rebaseextract.html">rebaseextract</a></td>
-<td>Extract data from REBASE</td>
+<td>Process the REBASE database for use by restriction enzyme applications</td>
 </tr>
 
 <tr>
 <td><a href="tfextract.html">tfextract</a></td>
-<td>Extract data from TRANSFAC</td>
+<td>Process TRANSFAC transcription factor database for use by tfscan</td>
 </tr>
 
 </table>

@@ -6,7 +6,7 @@
 <pre>
 ########################################
 # Program: fuzznuc
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: fuzznuc
 #    -sequence tembl:L46634
 #    -pattern AAGCTT
@@ -26,9 +26,9 @@
 #
 #=======================================
 
-  Start     End Pattern_name Mismatch Sequence
-      1       6 pattern1            . aagctt
-   1267    1272 pattern1            . aagctt
+  Start     End  Strand Pattern_name Mismatch Sequence
+      1       6       + pattern1            . aagctt
+   1267    1272       + pattern1            . aagctt
 
 #---------------------------------------
 #---------------------------------------
@@ -47,7 +47,7 @@
 <pre>
 ########################################
 # Program: fuzznuc
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: fuzznuc
 #    -sequence tembl:L46634
 #    -pattern @../../data/nucseq.pat
@@ -67,9 +67,9 @@
 #
 #=======================================
 
-  Start     End Pattern_name Mismatch Sequence
-    429     448 targetseq           . cggccctaaccctagcccta
-    491     510 targetseq           . cggccctaaccctagcccta
+  Start     End  Strand Pattern_name Mismatch Sequence
+    429     448       + targetseq           . cggccctaaccctagcccta
+    491     510       + targetseq           . cggccctaaccctagcccta
 
 #---------------------------------------
 #---------------------------------------
@@ -88,7 +88,7 @@
 <pre>
 ########################################
 # Program: fuzznuc
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: fuzznuc
 #    -pname test
 #    -sequence tembl:L46634
@@ -110,20 +110,20 @@
 #
 #=======================================
 
-  Start     End Pattern_name Mismatch Sequence
-    429     438 test1               . cggccctaac
-    491     500 test1               . cggccctaac
-    535     544 test1               . cggccctaac
-    605     614 test1               . cggccctaac
-    631     640 test1               . cggccctaac
-    695     704 test1               . cggccctaac
-    721     730 test1               . cggccctaac
-    753     762 test1               . cggccctaac
-    293     302 test2               . cctagcccta
-    439     448 test2               . cctagcccta
-    469     478 test2               . cctagcccta
-    501     510 test2               . cctagcccta
-    801     810 test2               . cctagcccta
+  Start     End  Strand Pattern_name Mismatch Sequence
+    429     438       + test1               . cggccctaac
+    491     500       + test1               . cggccctaac
+    535     544       + test1               . cggccctaac
+    605     614       + test1               . cggccctaac
+    631     640       + test1               . cggccctaac
+    695     704       + test1               . cggccctaac
+    721     730       + test1               . cggccctaac
+    753     762       + test1               . cggccctaac
+    293     302       + test2               . cctagcccta
+    439     448       + test2               . cctagcccta
+    469     478       + test2               . cctagcccta
+    501     510       + test2               . cctagcccta
+    801     810       + test2               . cctagcccta
 
 #---------------------------------------
 #---------------------------------------
@@ -142,7 +142,7 @@
 <pre>
 ########################################
 # Program: fuzznuc
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: fuzznuc
 #    -sequence tembl:L46634
 #    -pattern @../../data/nuc.pat
@@ -164,26 +164,26 @@
 #
 #=======================================
 
-  Start     End Pattern_name Mismatch Sequence
-    429     448 pat1                . cggccctaaccctagcccta
-    491     510 pat1                . cggccctaaccctagcccta
-    429     448 pat2                . cggccctaaccctagcccta
-    491     510 pat2                . cggccctaaccctagcccta
-    535     554 pat2                1 cggccctaaccctaacccta
-    605     624 pat2                1 cggccctaaccctaacccta
-    631     650 pat2                1 cggccctaaccctaacccta
-    695     714 pat2                1 cggccctaaccctaacccta
-    721     740 pat2                1 cggccctaaccctaacccta
-    753     772 pat2                1 cggccctaaccctaacccta
-    791     810 pat2                1 cggcccgaaccctagcccta
-    753     764 pat3                . cggccctaaccc
-    721     732 pat3                . cggccctaaccc
-    695     706 pat3                . cggccctaaccc
-    631     642 pat3                . cggccctaaccc
-    605     616 pat3                . cggccctaaccc
-    535     546 pat3                . cggccctaaccc
-    491     502 pat3                . cggccctaaccc
-    429     440 pat3                . cggccctaaccc
+  Start     End  Strand Pattern_name Mismatch Sequence
+    429     448       + pat1                . cggccctaaccctagcccta
+    491     510       + pat1                . cggccctaaccctagcccta
+    429     448       + pat2                . cggccctaaccctagcccta
+    491     510       + pat2                . cggccctaaccctagcccta
+    535     554       + pat2                1 cggccctaaccctaacccta
+    605     624       + pat2                1 cggccctaaccctaacccta
+    631     650       + pat2                1 cggccctaaccctaacccta
+    695     714       + pat2                1 cggccctaaccctaacccta
+    721     740       + pat2                1 cggccctaaccctaacccta
+    753     772       + pat2                1 cggccctaaccctaacccta
+    791     810       + pat2                1 cggcccgaaccctagcccta
+    753     764       + pat3                . cggccctaaccc
+    721     732       + pat3                . cggccctaaccc
+    695     706       + pat3                . cggccctaaccc
+    631     642       + pat3                . cggccctaaccc
+    605     616       + pat3                . cggccctaaccc
+    535     546       + pat3                . cggccctaaccc
+    491     502       + pat3                . cggccctaaccc
+    429     440       + pat3                . cggccctaaccc
 
 #---------------------------------------
 #---------------------------------------

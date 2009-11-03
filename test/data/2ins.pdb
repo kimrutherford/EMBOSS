@@ -1,0 +1,253 @@
+HEADER    HORMONE                                 10-MAY-82   2INS      2INS   3
+COMPND    DES-*PHE B1 INSULIN                                           2INS   4
+SOURCE    BOVINE (BOS TAURUS)                                           2INS   5
+AUTHOR    G.D.SMITH,W.L.DUAX,E.J.DODSON,G.G.DODSON,R.A.G.$DE *GRAAF,    2INSB  1
+AUTHOR   1 C.D.REYNOLDS                                                 2INS   7
+REVDAT   7   31-MAY-84 2INSF   1       REMARK                           2INSF  1
+REVDAT   6   31-JAN-84 2INSE   1       REMARK                           2INSE  1
+REVDAT   5   27-OCT-83 2INSD   1       REMARK                           2INSD  1
+REVDAT   4   30-SEP-83 2INSC   1       REVDAT                           2INSC  1
+REVDAT   3   13-JUN-83 2INSB   1       AUTHOR JRNL                      2INSC  2
+REVDAT   2   07-MAR-83 2INSA   3       JRNL   REMARK MTRIX              2INSC  3
+REVDAT   1   05-AUG-82 2INS    0                                        2INSC  4
+JRNL        AUTH   G.D.SMITH,W.L.DUAX,E.J.DODSON,G.G.DODSON,            2INS   8
+JRNL        AUTH 2 R.A.G.$DE *GRAAF,C.D.REYNOLDS                        2INSB  2
+JRNL        TITL   THE STRUCTURE OF DES-*PHE B1 BOVINE INSULIN          2INS  10
+JRNL        REF    ACTA CRYSTALLOGR.,SECT.B      V.  38  3028 1982      2INSA  1
+JRNL        REFN   ASTM ACBCAR  DK ISSN 0567-7408                  107  2INSA  2
+REMARK   1                                                              2INS  13
+REMARK   1 REFERENCE 1                                                  2INSD  2
+REMARK   1  AUTH   J.BORDAS,G.G.DODSON,H.GREWE,M.H.J.KOCH,B.KREBS,      2INSD  3
+REMARK   1  AUTH 2 J.RANDALL                                            2INSD  4
+REMARK   1  TITL   A COMPARATIVE ASSESSMENT OF THE ZINC-PROTEIN         2INSD  5
+REMARK   1  TITL 2 COORDINATION IN 2*ZN-INSULIN AS DETERMINED BY X-RAY  2INSD  6
+REMARK   1  TITL 3 ABSORPTION FINE STRUCTURE (/EXAFS$) AND X-RAY        2INSD  7
+REMARK   1  TITL 4 CRYSTALLOGRAPHY                                      2INSD  8
+REMARK   1  REF    PROC.R.SOC.LONDON,SER.B       V. 219    21 1983      2INSD  9
+REMARK   1  REFN   ASTM PRLBA4  UK ISSN 0080-4649                  338  2INSE  2
+REMARK   1 REFERENCE 2                                                  2INSD 11
+REMARK   1  AUTH   E.J.DODSON,G.G.DODSON,D.C.HODGKIN,C.D.REYNOLDS       2INS  15
+REMARK   1  TITL   STRUCTURAL RELATIONSHIPS IN THE TWO-ZINC INSULIN     2INS  16
+REMARK   1  TITL 2 HEXAMER                                              2INS  17
+REMARK   1  REF    CAN.J.BIOCHEM.                V.  57   469 1979      2INS  18
+REMARK   1  REFN   ASTM CJBIAE  CN ISSN 0008-4018                  415  2INS  19
+REMARK   1 REFERENCE 3                                                  2INSD 12
+REMARK   1  AUTH   N.W.ISAACS,R.C.AGARWAL                               2INS  21
+REMARK   1  TITL   EXPERIENCE WITH FAST FOURIER LEAST SQUARES IN THE    2INS  22
+REMARK   1  TITL 2 REFINEMENT OF THE CRYSTAL STRUCTURE OF RHOMBOHEDRAL  2INS  23
+REMARK   1  TITL 3 2-*ZINC INSULIN AT 1.5 ANGSTROMS RESOLUTION          2INS  24
+REMARK   1  REF    ACTA CRYSTALLOGR.,SECT.A      V.  34   782 1978      2INSA  3
+REMARK   1  REFN   ASTM ACACBN  DK ISSN 0567-7394                  108  2INSA  4
+REMARK   1 REFERENCE 4                                                  2INSD 13
+REMARK   1  AUTH   G.BENTLEY,G.DODSON,A.LEWITOVA                        2INS  28
+REMARK   1  TITL   RHOMBOHEDRAL INSULIN CRYSTAL TRANSFORMATION          2INS  29
+REMARK   1  REF    J.MOL.BIOL.                   V. 126   871 1978      2INS  30
+REMARK   1  REFN   ASTM JMOBAK  UK ISSN 0022-2836                  070  2INS  31
+REMARK   1 REFERENCE 5                                                  2INSD 14
+REMARK   1  AUTH   E.J.DODSON,N.W.ISAACS,J.S.ROLLETT                    2INS  33
+REMARK   1  TITL   A METHOD FOR FITTING SATISFACTORY MODELS TO SETS OF  2INS  34
+REMARK   1  TITL 2 ATOMIC POSITIONS IN PROTEIN STRUCTURE REFINEMENTS    2INS  35
+REMARK   1  REF    ACTA CRYSTALLOGR.,SECT.A      V.  32   311 1976      2INSA  5
+REMARK   1  REFN   ASTM ACACBN  DK ISSN 0567-7394                  108  2INSA  6
+REMARK   1 REFERENCE 6                                                  2INSD 15
+REMARK   1  AUTH   D.C.HODGKIN                                          2INS  39
+REMARK   1  TITL   VARIETIES OF INSULIN                                 2INS  40
+REMARK   1  REF    J.ENDOCRINOL.                 V.  63     1 1974      2INS  41
+REMARK   1  REFN   ASTM JOENAK  UK ISSN 0022-0795                  907  2INS  42
+REMARK   1 REFERENCE 7                                                  2INSD 16
+REMARK   1  AUTH   D.C.HODGKIN                                          2INS  44
+REMARK   1  TITL   THE STRUCTURE OF INSULIN                             2INS  45
+REMARK   1  REF    DAN.TIDSSKR.FARM.             V.  46     1 1972      2INS  46
+REMARK   1  REFN   ASTM DTFAAN  DK ISSN 0011-6513                  168  2INS  47
+REMARK   1 REFERENCE 8                                                  2INSD 17
+REMARK   1  AUTH   T.BLUNDELL,G.DODSON,D.HODGKIN,D.MERCOLA              2INS  49
+REMARK   1  TITL   INSULIN. THE STRUCTURE IN THE CRYSTAL AND ITS        2INS  50
+REMARK   1  TITL 2 REFLECTION IN CHEMISTRY AND BIOLOGY                  2INS  51
+REMARK   1  REF    ADV.PROTEIN CHEM.             V.  26   279 1972      2INS  52
+REMARK   1  REFN   ASTM APCHA2  US ISSN 0065-3233                  433  2INS  53
+REMARK   1 REFERENCE 9                                                  2INSD 18
+REMARK   1  AUTH   T.L.BLUNDELL,J.F.CUTFIELD,E.J.DODSON,G.G.DODSON,     2INS  55
+REMARK   1  AUTH 2 D.C.HODGKIN,D.A.MERCOLA                              2INS  56
+REMARK   1  TITL   THE CRYSTAL STRUCTURE OF RHOMBOHEDRAL 2 ZINC         2INS  57
+REMARK   1  TITL 2 INSULIN                                              2INS  58
+REMARK   1  REF    COLD SPRING HARBOR SYMP.      V.  36   233 1972      2INS  59
+REMARK   1  REF  2 QUANT.BIOL.                                          2INS  60
+REMARK   1  REFN   ASTM CSHSAZ  US ISSN 0091-7451                  421  2INSF  2
+REMARK   1 REFERENCE 10                                                 2INSD 19
+REMARK   1  AUTH   T.L.BLUNDELL,J.F.CUTFIELD,S.M.CUTFIELD,E.J.DODSON,   2INS  63
+REMARK   1  AUTH 2 G.G.DODSON,D.C.HODGKIN,D.A.MERCOLA,M.VIJAYAN         2INS  64
+REMARK   1  TITL   ATOMIC POSITIONS IN RHOMBOHEDRAL 2-*ZINC INSULIN     2INS  65
+REMARK   1  TITL 2 CRYSTALS                                             2INS  66
+REMARK   1  REF    NATURE                        V. 231   506 1971      2INS  67
+REMARK   1  REFN   ASTM NATUAS  UK ISSN 0028-0836                  006  2INS  68
+REMARK   1 REFERENCE 11                                                 2INSD 20
+REMARK   1  AUTH   T.L.BLUNDELL,G.G.DODSON,E.DODSON,D.C.HODGKIN,        2INS  70
+REMARK   1  AUTH 2 M.VIJAYAN                                            2INS  71
+REMARK   1  TITL   X-*RAY ANALYSIS AND THE STRUCTURE OF INSULIN         2INS  72
+REMARK   1  REF    RECENT PROG.HORM.RES.         V.  27     1 1971      2INS  73
+REMARK   1  REFN   ASTM RPHRA6  US ISSN 0079-9963                  908  2INS  74
+REMARK   1 REFERENCE 12                                                 2INSD 21
+REMARK   1  AUTH   E.N.BAKER,G.DODSON                                   2INS  76
+REMARK   1  TITL   X-RAY DIFFRACTION DATA ON SOME CRYSTALLINE           2INS  77
+REMARK   1  TITL 2 VARIETIES OF INSULIN                                 2INS  78
+REMARK   1  REF    J.MOL.BIOL.                   V.  54   605 1970      2INS  79
+REMARK   1  REFN   ASTM JMOBAK  UK ISSN 0022-2836                  070  2INS  80
+REMARK   1 REFERENCE 13                                                 2INSD 22
+REMARK   1  AUTH   M.J.ADAMS,T.L.BLUNDELL,E.J.DODSON,G.G.DODSON,        2INS  82
+REMARK   1  AUTH 2 M.VIJAYAN,E.N.BAKER,M.M.HARDING,D.C.HODGKIN,         2INS  83
+REMARK   1  AUTH 3 B.RIMMER,S.SHEAT                                     2INS  84
+REMARK   1  TITL   STRUCTURE OF RHOMBOHEDRAL 2 ZINC INSULIN CRYSTALS    2INS  85
+REMARK   1  REF    NATURE                        V. 224   491 1969      2INS  86
+REMARK   1  REFN   ASTM NATUAS  UK ISSN 0028-0836                  006  2INS  87
+REMARK   1 REFERENCE 14                                                 2INSD 23
+REMARK   1  EDIT   M.O.DAYHOFF                                          2INS  89
+REMARK   1  REF    ATLAS OF PROTEIN SEQUENCE     V.   5   187 1972      2INS  90
+REMARK   1  REF  2 AND STRUCTURE (DATA SECTION)                         2INS  91
+REMARK   1  PUBL   NATIONAL BIOMEDICAL RESEARCH FOUNDATION,             2INS  92
+REMARK   1  PUBL 2 SILVER SPRING,MD.                                    2INS  93
+REMARK   1  REFN                   ISBN 0-912466-02-2              435  2INS  94
+REMARK   2                                                              2INS  95
+REMARK   2 RESOLUTION. 2.5 ANGSTROMS.                                   2INS  96
+REMARK   3                                                              2INS  97
+REMARK   3 REFINEMENT. FAST FOURIER LEAST-SQUARES REFINEMENT FOLLOWED   2INS  98
+REMARK   3  BY EXAMINATION OF DIFFERENCE MAPS USING THE *MMS-X*         2INS  99
+REMARK   3  GRAPHICS SYSTEM.  THE FINAL R IS 0.18 FOR 2128              2INS 100
+REMARK   3  REFLECTIONS. THE RMS SHIFT AFTER REGULARIZATION IS 0.16     2INS 101
+REMARK   3  ANGSTROMS AND THE DEVIATION OF A BOND FROM ITS IDEAL        2INS 102
+REMARK   3  VALUE IS 0.20 ANGSTROMS. MODEL FIT PARAMETERS ARE SIGMA     2INS 103
+REMARK   3  (BOND) = 0.02 ANGSTROMS AND SIGMA(ANGLE) = 3.0 DEGREES.     2INS 104
+REMARK   4                                                              2INS 105
+REMARK   4 THE MODEL OF THE WATER STRUCTURE OBTAINED FROM THE           2INS 106
+REMARK   4 REFINEMENT OF 2 ZN PORCINE INSULIN AT 1.5 ANGSTROMS          2INS 107
+REMARK   4 RESOLUTION WAS USED THROUGHOUT THE DES-PHE B1 INSULIN        2INS 108
+REMARK   4 REFINEMENT.                                                  2INS 109
+REMARK   5                                                              2INS 110
+REMARK   5 THE CRYSTALLOGRAPHIC ASYMMETRIC UNIT OF INSULIN CONSISTS OF  2INS 111
+REMARK   5 TWO INSULIN MOLECULES EACH CONSISTING OF TWO CHAINS.  THIS   2INS 112
+REMARK   5 ENTRY PRESENTS COORDINATES FOR MOLECULES I (CHAIN            2INS 113
+REMARK   5 INDICATORS A AND B) AND II (CHAIN INDICATORS C AND D).  THE  2INS 114
+REMARK   5 QUASI-TWO-FOLD AXIS THAT TRANSFORMS MOLECULE I INTO          2INSA  7
+REMARK   5 MOLECULE II IS GIVEN IN THE MTRIX RECORDS BELOW.  APPLYING   2INSA  8
+REMARK   5 THE THREE-FOLD CRYSTALLOGRAPHIC AXIS YIELDS A HEXAMER        2INSA  9
+REMARK   5 AROUND THE AXIS.  THERE ARE TWO ZINC IONS SITUATED ON THIS   2INSA 10
+REMARK   5 THREE-FOLD AXIS.  COORDINATES FOR THE ZINC IONS AND SOME     2INSA 11
+REMARK   5 WATER MOLECULES ARE INCLUDED BELOW WITH A BLANK CHAIN        2INSA 12
+REMARK   5 INDICATOR.                                                   2INSA 13
+REMARK   6                                                              2INS 121
+REMARK   6 SITES *D1* AND *D2* ARE THE DIMER-FORMING RESIDUES IN        2INS 122
+REMARK   6 MOLECULES I AND II, RESPECTIVELY.  SITES *H1* AND *H2*       2INS 123
+REMARK   6 ARE THE HEXAMER-FORMING RESIDUES IN MOLECULES I AND II,      2INS 124
+REMARK   6 RESPECTIVELY.  SITES *SI1* AND *SI2* ARE THE                 2INS 125
+REMARK   6 SURFACE-INVARIANT RESIDUES IN MOLECULES I AND II,            2INS 126
+REMARK   6 RESPECTIVELY, THAT ARE NOT INVOLVED IN DIMERIZATION.         2INS 127
+REMARK   6 RESIDUE GLU A 4 IS INVARIANT AS A CARBOXYLIC ACID.           2INS 128
+REMARK   6 RESIDUES HIS B 5 AND ARG B22 ARE INVARIANT IN INSULINS OF    2INS 129
+REMARK   6 HIGH POTENCY ONLY.                                           2INS 130
+REMARK   7                                                              2INS 131
+REMARK   7 THERE ARE TWO COORDINATION SITES IN THE HEXAMER.  SITE       2INS 132
+REMARK   7 *ZN1* COMPRISES RESIDUE HIS B 10 AND WATER HOH 201 AND       2INSA 14
+REMARK   7 THEIR TWO CRYSTALLOGRAPHICALLY-RELATED EQUIVALENTS.  SITE    2INSA 15
+REMARK   7 *ZN2* COMPRISES RESIDUE HIS D 10 AND WATER HOH 513 AND       2INSA 16
+REMARK   7 THEIR TWO CRYSTALLOGRAPHICALLY-RELATED EQUIVALENTS.  SITE    2INSA 17
+REMARK   7 *ZN1* IS OCTAHEDRALLY COORDINATED AROUND ZN1 AND SITE *ZN2*  2INSA 18
+REMARK   7 IS OCTAHEDRALLY COORDINATED AROUND ZN2.  THE TWO SITES ARE   2INSA 19
+REMARK   7 VERY SIMILAR.                                                2INS 139
+REMARK   7 BECAUSE THE COORDINATES OF THE SYMMETRY-RELATED ATOMS ARE    2INS 140
+REMARK   7 NOT INCLUDED IN THIS ENTRY THE COMPLETE CONNECTIVITY OF      2INS 141
+REMARK   7 ATOMS ZN1 AND ZN2 CANNOT BE SPECIFIED.  PARTIAL              2INS 142
+REMARK   7 CONNECTIVITY IS GIVEN BY                                     2INS 143
+REMARK   7          CONECT  229  227  228  791                          2INS 144
+REMARK   7          CONECT  624  622  623  792                          2INS 145
+REMARK   7          CONECT  791  247  826  ...  ...  ...  ...           2INS 146
+REMARK   7          CONECT  792  624  942  ...  ...  ...  ...           2INS 147
+REMARK   7          CONECT  826  791                                    2INS 148
+REMARK   7          CONECT  942  792                                    2INS 149
+REMARK   7            .                                                 2INS 150
+REMARK   7            .                                                 2INS 151
+REMARK   7            .                                                 2INS 152
+REMARK   8                                                              2INS 153
+REMARK   8 NO DENSITY WAS OBSERVED FOR TYR C 14 INDICATING THAT THIS    2INS 154
+REMARK   8 SIDE CHAIN WAS MOVING FREELY.                                2INS 155
+REMARK   9                                                              2INSA 20
+REMARK   9 CORRECTION. CORRECT JOURNAL NAME FOR REFERENCES 2 AND 4.     2INSA 21
+REMARK   9  UPDATE JRNL REFERENCE TO REFLECT PUBLICATION.  CORRECT      2INSA 22
+REMARK   9  MTRIX TRANSFORMATION.  REVISE REMARKS 5 AND 7.  07-MAR-83.  2INSA 23
+REMARK  10                                                              2INSB  3
+REMARK  10 CORRECTION. INSERT TYPESETTING CODES.  13-JUN-83.            2INSB  4
+REMARK  11                                                              2INSC  5
+REMARK  11 CORRECTION. INSERT REVDAT RECORDS. 30-SEP-83.                2INSC  6
+REMARK  12                                                              2INSD 24
+REMARK  12 CORRECTION. ADD NEW PUBLICATION AS REFERENCE 1 AND           2INSD 25
+REMARK  12  RENUMBER THE OTHERS.  27-OCT-83.                            2INSD 26
+REMARK  13                                                              2INSE  3
+REMARK  13 CORRECTION. INSERT MISSING CODEN FOR REFERENCE 1.            2INSE  4
+REMARK  13  31-JAN-84.                                                  2INSE  5
+REMARK  14                                                              2INSF  3
+REMARK  14 CORRECTION. CORRECT ISSN FOR REFERENCE 9.  31-MAY-84.        2INSF  4
+SEQRES   1 A   21  GLY ILE VAL GLU GLN CYS CYS ALA SER VAL CYS SER LEU  2INS 156
+SEQRES   2 A   21  TYR GLN LEU GLU ASN TYR CYS ASN                      2INS 157
+SEQRES   1 B   29  VAL ASN GLN HIS LEU CYS GLY SER HIS LEU VAL GLU ALA  2INS 158
+SEQRES   2 B   29  LEU TYR LEU VAL CYS GLY GLU ARG GLY PHE PHE TYR THR  2INS 159
+SEQRES   3 B   29  PRO LYS ALA                                          2INS 160
+SEQRES   1 C   21  GLY ILE VAL GLU GLN CYS CYS ALA SER VAL CYS SER LEU  2INS 161
+SEQRES   2 C   21  TYR GLN LEU GLU ASN TYR CYS ASN                      2INS 162
+SEQRES   1 D   29  VAL ASN GLN HIS LEU CYS GLY SER HIS LEU VAL GLU ALA  2INS 163
+SEQRES   2 D   29  LEU TYR LEU VAL CYS GLY GLU ARG GLY PHE PHE TYR THR  2INS 164
+SEQRES   3 D   29  PRO LYS ALA                                          2INS 165
+FTNOTE   1                                                              2INS 166
+FTNOTE   1 THE QUASI-TWO-FOLD SYMMETRY BREAKS DOWN MOST SERIOUSLY AT    2INS 167
+FTNOTE   1 RESIDUES                                                     2INS 168
+FTNOTE   1    GLY A  1 TO GLN A  5   AND   GLY C  1 TO GLN C  5         2INS 169
+FTNOTE   1    HIS B  5               AND   HIS D  5                     2INS 170
+FTNOTE   1    PHE B 25               AND   PHE D 25                     2INS 171
+FTNOTE   2                                                              2INS 172
+FTNOTE   2 THE FOLLOWING RESIDUES ARE DISORDERED - ARG B 22,            2INS 173
+FTNOTE   2 LYS D 29.                                                    2INS 174
+FTNOTE   3                                                              2INS 175
+FTNOTE   3 SEE REMARK 8.                                                2INS 176
+HET    ZN1      1       1     ZINC ION ON 3-FOLD CRYSTAL AXIS           2INS 177
+HET    ZN2      2       1     ZINC ION ON 3-FOLD CRYSTAL AXIS           2INS 178
+FORMUL   5  ZN1    ZN1 ++                                               2INS 179
+FORMUL   6  ZN2    ZN1 ++                                               2INS 180
+FORMUL   7  HOH   *184(H2 01)                                           2INS 181
+HELIX    1 A11 GLY A    1  VAL A   10  1 NOT IDEAL ALPH,SOME PI CNTCTS  2INS 182
+HELIX    2 A12 SER A   12  GLU A   17  5 NOT IDEAL 3(10)                2INS 183
+HELIX    3 B11 SER B    9  GLY B   20  1 NOT IDEAL ALPH,3(10) CONTCTS   2INS 184
+HELIX    4 A21 GLY C    1  VAL C   10  1 NOT IDEAL ALPH,SOME PI CNTCTS  2INS 185
+HELIX    5 A22 SER C   12  GLU C   17  5 NOT IDEAL 3(10)                2INS 186
+HELIX    6 B21 SER D    9  GLY D   20  1 NOT IDEAL ALPH,3(10) CONTCTS   2INS 187
+SHEET    1   B 2 PHE B  24  TYR B  26  0                                2INS 188
+SHEET    2   B 2 PHE D  24  TYR D  26 -1  O  TYR D  26   N  PHE B  24   2INS 189
+TURN     1 1B1 CYS B  19  ARG B  22                                     2INS 190
+TURN     2 1B2 GLY B  20  GLY B  23                                     2INS 191
+TURN     3 2B1 CYS D  19  ARG D  22                                     2INS 192
+TURN     4 2B2 GLY D  20  GLY D  23                                     2INS 193
+SSBOND   1 CYS A    6    CYS A   11                                     2INS 194
+SSBOND   2 CYS C    6    CYS C   11                                     2INS 195
+SSBOND   3 CYS A    7    CYS B    7                                     2INS 196
+SSBOND   4 CYS A   20    CYS B   19                                     2INS 197
+SSBOND   5 CYS C    7    CYS D    7                                     2INS 198
+SSBOND   6 CYS C   20    CYS D   19                                     2INS 199
+SITE     1  D1  5 VAL B  12  TYR B  16  PHE B  24  PHE B  25            2INS 200
+SITE     2  D1  5 TYR B  26                                             2INS 201
+SITE     1  D2  5 VAL D  12  TYR D  16  PHE D  24  PHE D  25            2INS 202
+SITE     2  D2  5 TYR D  26                                             2INS 203
+SITE     1  H1  6 LEU A  13  TYR A  14  GLU B  13  ALA B  14            2INS 204
+SITE     2  H1  6 LEU B  17  VAL B  18                                  2INS 205
+SITE     1  H2  6 LEU C  13  TYR C  14  GLU D  13  ALA D  14            2INS 206
+SITE     2  H2  6 LEU D  17  VAL D  18                                  2INS 207
+SITE     1 SI1  7 GLY A   1  GLU A   4  GLN A   5  CYS A   7            2INS 208
+SITE     2 SI1  7 TYR A  19  ASN A  21  CYS B   7                       2INS 209
+SITE     1 SI2  7 GLY C   1  GLU C   4  GLN C   5  CYS C   7            2INS 210
+SITE     2 SI2  7 TYR C  19  ASN C  21  CYS D   7                       2INS 211
+CRYST1   81.600   81.600   34.000  90.00  90.00 120.00 R 3          18  2INS 212
+ORIGX1       .012255   .007075  0.000000        0.00000                 2INS 213
+ORIGX2      0.000000   .014151  0.000000        0.00000                 2INS 214
+ORIGX3      0.000000  0.000000   .029412        0.00000                 2INS 215
+SCALE1       .012255   .007075  0.000000        0.00000                 2INS 216
+SCALE2      0.000000   .014151  0.000000        0.00000                 2INS 217
+SCALE3      0.000000  0.000000   .029412        0.00000                 2INS 218
+MTRIX1   1  -.880000  -.480000   .020000        0.00000    1            2INSA 24
+MTRIX2   1  -.480000   .880000  -.020000        0.00000    1            2INSA 25
+MTRIX3   1  -.010000  -.030000 -1.000000        0.00000    1            2INSA 26
+END

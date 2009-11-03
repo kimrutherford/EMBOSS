@@ -1,6 +1,5 @@
 application: plotcon [
-  documentation: "Plot quality of conservation of a sequence
-                  alignment"
+  documentation: "Plot conservation of a sequence alignment"
   groups: "Alignment:Multiple"
 ]
 

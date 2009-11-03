@@ -23,27 +23,19 @@ equicktandem
 <H2>
     Function
 </H2>
-Finds tandem repeats
+Finds tandem repeats in nucleotide sequences
 <H2>
     Description
 </H2>
 
-<b>equicktandem</b> scans a sequence for potential tandem repeats up to a
-specified size.  The results can be used to run <b>etandem</b> on the
-candidate repeat lengths to identify genuine tandem repeats.
-<p>
+<p><b>equicktandem</b> identifies regions in a nucleotide sequence which are likely to contain tanden repeats.  For a region to be reported, it must be no larger than a specified maximum repeat size and must score higher than a threshold score, which is also user-specified. The output is a standard EMBOSS report file with details of the location and score of any potential tandem repeats.  Optionally, the output can be written in the format of the Sanger Centre quicktandem program.</p>
 
-<b>equicktandem</b> is a simple program that looks for segments in which
-each base tends to match the base 'repeatsize' back, i.e.  with an
-autocorrelation peak at 'repeatsize'.  This can allow drift in the
-repeating sequence, i.e.  it does not look for a consensus sequence for
-the whole repeat block (that is what <b>etandem</b> does).  But it is
-much quicker than etandem.  It does not account for gaps.
 
-<p>
+<H2>
+Algorithm
+</H2>
 
-The score is +1 for a match to the corresponding base
-'repeatsize' back and -1 for a mismatch.
+<p><b>equicktandem</b> looks for sequence segments in which each base tends to match the base a fixed number ('repeatsize') of nucleotides back in the sequence, i.e. with an autocorrelation peak at 'repeatsize'.  The score for a segment is the sum of the scores for each position in that segment: the score is incremented (+1) for a match to the corresponding base 'repeatsize' back and decremented (-1) for a mismatch.  The algorithm allows for drift in the repeating sequence, i.e. exact matches are not required, nor is a consensus sequence for the whole repeat block used (that is what <b>etandem</b> does).  The algorithm does not account for gaps but it is much quicker than <b>etandem</b>.</p>
 
 <H2>
     Usage
@@ -57,7 +49,7 @@ The input sequence is the human herpesvirus tandem repeat.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>equicktandem -noorigfile </b>
-Finds tandem repeats
+Finds tandem repeats in nucleotide sequences
 Input nucleotide sequence: <b>tembl:L46634</b>
 Maximum repeat size [600]: <b></b>
 Threshold score [20]: <b></b>
@@ -112,6 +104,7 @@ Output report [l46634.qtan]: <b></b>
    -raccshow2          boolean    Show accession number in the report
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
+   -rstrandshow2       boolean    Show the nucleotide strand in the report
    -rusashow2          boolean    Show the full USA in the report
    -rmaxall2           integer    Maximum total hits to report
    -rmaxseq2           integer    Maximum hits to report for one sequence
@@ -121,8 +114,9 @@ Output report [l46634.qtan]: <b></b>
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -319,7 +313,7 @@ By default <b>equicktandem</b> writes a 'table' report file.
 <pre>
 ########################################
 # Program: equicktandem
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: equicktandem
 #    -noorigfile
 #    -sequence tembl:L46634
@@ -337,8 +331,8 @@ By default <b>equicktandem</b> writes a 'table' report file.
 #
 #=======================================
 
-  Start     End   Score   Size  Count
-    191     935     339      6    124
+  Start     End  Strand   Score   Size  Count
+    191     935       +     339      6    124
 
 #---------------------------------------
 #---------------------------------------
@@ -355,7 +349,10 @@ None.
     Notes
 </H2>
 
-None.
+<p>A tandem repeat in a DNA sequence is where a sequence of two or more nucleotides is repeated without any intervening nucleotides.  For example "GATACAGATACAGATACA" is a tandem repeat of "GATACA".  A short tandem repeat is typically 2 to 10 base pairs and occur in introns.  The sequence and number of repeats at a given locus tend to be characteristic of an individual.  Where enough STR loci are examined, a unique genetic profile of an individual can be built.  Thus, tandem repeats are useful for genotyping, for example, in determining parentage and in forensic cases.</p>
+
+<p>To identify genuine tandem repeats, the repeat sizes and / or sequence regions identified by <b>equicktandem</b> can be used as input to <b>etandem</b>.  <b>etandem</b> will confirm which regions are true tandem repeats and give an accurate specification of the repeats.</p>
+
 
 <H2>
     References
@@ -389,20 +386,21 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="einverted.html">einverted</a></td>
-<td>Finds DNA inverted repeats</td>
+<td>Finds inverted repeats in nucleotide sequences</td>
 </tr>
 
 <tr>
 <td><a href="etandem.html">etandem</a></td>
-<td>Looks for tandem repeats in a nucleotide sequence</td>
+<td>Finds tandem repeats in a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="palindrome.html">palindrome</a></td>
-<td>Looks for inverted repeats in a nucleotide sequence</td>
+<td>Finds inverted repeats in nucleotide sequence(s)</td>
 </tr>
 
 </table>

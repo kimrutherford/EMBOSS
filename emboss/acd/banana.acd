@@ -1,5 +1,5 @@
 application: banana [
-  documentation: "Bending and curvature plot in B-DNA"
+  documentation: "Plot bending and curvature data for B-DNA"
   groups: "Nucleic:Composition"
 ]
 

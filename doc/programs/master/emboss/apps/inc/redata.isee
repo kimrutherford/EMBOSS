@@ -1,34 +1,35 @@
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="recoder.html">recoder</a></td>
-<td>Remove restriction sites but maintain same translation</td>
+<td>Find restriction sites to remove (mutate) with no translation change</td>
 </tr>
 
 <tr>
 <td><a href="remap.html">remap</a></td>
-<td>Display sequence with restriction sites, translation etc</td>
+<td>Display restriction enzyme binding sites in a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="restover.html">restover</a></td>
-<td>Find restriction enzymes producing specific overhang</td>
+<td>Find restriction enzymes producing a specific overhang</td>
 </tr>
 
 <tr>
 <td><a href="restrict.html">restrict</a></td>
-<td>Finds restriction enzyme cleavage sites</td>
+<td>Report restriction enzyme cleavage sites in a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="showseq.html">showseq</a></td>
-<td>Display a sequence with features, translation etc</td>
+<td>Displays sequences with features in pretty format</td>
 </tr>
 
 <tr>
 <td><a href="silent.html">silent</a></td>
-<td>Silent mutation restriction enzyme scan</td>
+<td>Find restriction sites to insert (mutate) with no translation change</td>
 </tr>
 
 </table>

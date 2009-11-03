@@ -1,5 +1,5 @@
 application: water [
-  documentation: "Smith-Waterman local alignment."
+  documentation: "Smith-Waterman local alignment of sequences"
   groups: "Alignment:Local"
   gui: "yes"
   batch: "yes"

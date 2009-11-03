@@ -20,11 +20,9 @@ cusp
     Description
 </H2>
 
-Reads one or more coding sequences (CDS sequence only) and calculates
-a codon frequency table.
+<p><b>cusp</b> calculates a codon usage table for one or more nucleotide coding sequences and writes the table to file.</p>
+<p>The codon usage table gives for each codon: i. Sequence of the codon.  ii. The encoded amino acid.  iii.  The proportion of usage of the codon among its redundant set, i.e. the set of codons which code for this codon's amino acid.  iv.  The expected number of codons, given the input sequence(s), per 1000 bases.  v. The observed number of codons in the input sequences.</p>
 
-<p>
-The output file can be used as a codon usage table in other applications.
 
 <H2>
     Usage
@@ -56,37 +54,19 @@ The output file can be used as a codon usage table in other applications.
 </H2>
 
 <!--#include file="inc/cusp.output" -->
-<p>
-The example usage read in a
-single CDS from Pseudomonas aeruginosa which has a very high GC
-content ands a strong coding bias, as shown by the codons for Alanine
-where those ending with G or C are used almost exclusively.
 
-<p>
+<p>The example shown reads a single CDS from Pseudomonas aeruginosa which has a very high GC content ands a strong coding bias, as shown by the codons for Alanine where those ending with <tt>G</tt> or <tt>C</tt> are used almost exclusively.</p>
 
-The 'Fract' column gives that proportion of usage of a given codon among
-its redundant set (i.e. the set of codons which code for this codon's amino
-acid).  For example, the sum of the 6 codons representing serine will
-add up to 1.00. 
+<p>The columns are as follows: i. "Codon" (sequence of the codon).  ii. "AA" (the encoded amino acid).  iii.  "Fraction" (the proportion of usage of the codon among its redundant set, i.e. the set of codons which code for this codon's amino acid).  iv.  "Frequency" (the expected number of codons, given the input sequence(s), per 1000 bases). This will be an extrapolation if the sequence is shorter than 1000 bases. v. "Number" (the observed number of codons in the input sequences).</p>
 
-<p>
+<p>If multiple sequences are input then the statistics are given for all of the sequences together, not individually.</p>
 
-The /1000 column represents the number of codons, given the
-input sequence(s), there are per 1000 bases. This will be an
-extrapolation if the sequence is shorter than 1000 bases.
-
-<p>
-
-If multiple sequences are input then the statistics are given for all of
-the sequences together, not individually. 
 
 <H2>
     Data files
 </H2>
 
-cusp reads a codon usage file, but only as a template and does not use
-any of the data so any codon usage file from any species will give the
-same results.
+<p><b>cusp</b> reads a codon usage file as a template for it's output file.  The data in this table is ignored entirely.  This functionality is hard-coded and invisible to the user.</p>
 
 <!--#include file="inc/localfiles.ihtml" -->
 

@@ -5,16 +5,14 @@
 
 Function
 
-   Report nucleic acid binding motifs
+   Identify nucleic acid-binding motifs in protein sequences
 
 Description
 
-   helixturnhelix uses the method of Dodd and Egan and finds
-   helix-turn-helix nucleic acid binding motifs in proteins.
-
-   The helix-turn-helix motif was originally identified as the
-   DNA-binding domain of phage repressors. One alpha-helix lies in the
-   wide groove of DNA; the other lies at an angle across DNA.
+   helixturnhelix uses the method of Dodd and Egan to identify
+   helix-turn-helix nucleic acid binding motifs in an input protein
+   sequence. The output is a standard EMBOSS report file describing the
+   location, size and score of any putative motifs.
 
 Usage
 
@@ -22,7 +20,7 @@ Usage
 
 
 % helixturnhelix 
-Report nucleic acid binding motifs
+Identify nucleic acid-binding motifs in protein sequences
 Input protein sequence(s): tsw:laci_ecoli
 Output report [laci_ecoli.hth]: 
 
@@ -72,14 +70,16 @@ Command line arguments
    -raccshow2          boolean    Show accession number in the report
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
+   -rstrandshow2       boolean    Show the nucleotide strand in the report
    -rusashow2          boolean    Show the full USA in the report
    -rmaxall2           integer    Maximum total hits to report
    -rmaxseq2           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -229,7 +229,7 @@ Output file format
 
 ########################################
 # Program: helixturnhelix
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: helixturnhelix
 #    -sequence tsw:laci_ecoli
 # Report_format: motif
@@ -252,6 +252,7 @@ Maximum_score_at at "*"
  Sequence: VTLYDVAEYAGVSYQTVSRVVN
            |                    |
            4                    25
+ Maximum_score_at: 4
  Standard_deviations: 6.54
 
 
@@ -339,7 +340,13 @@ Sample: 91 aligned sequences
 
 Notes
 
-   None.
+   The helix-turn-helix protein structural motif was originally
+   identified as the DNA-binding domain of phage repressors. One
+   alpha-helix lies in the wide groove of DNA; the other lies at an angle
+   across DNA. The motif is commonly involved in binding DNA. The motif
+   is of fundamental biological importance and is found in most proteins
+   that regulate gene expression. It is formed by of two alpha-helices
+   joined by a short turn.
 
 References
 
@@ -369,24 +376,26 @@ Known bugs
 
 See also
 
-   Program name                        Description
-   antigenic    Finds antigenic sites in proteins
-   digest       Protein proteolytic enzyme or reagent cleavage digest
-   epestfind    Finds PEST motifs as potential proteolytic cleavage sites
-   fuzzpro      Protein pattern search
-   fuzztran     Protein pattern search after translation
-   garnier      Predicts protein secondary structure
-   hmoment      Hydrophobic moment calculation
-   oddcomp      Find protein sequence regions with a biased composition
-   patmatdb     Search a protein sequence with a motif
-   patmatmotifs Search a PROSITE motif database with a protein sequence
-   pepcoil      Predicts coiled coil regions
-   pepnet       Displays proteins as a helical net
-   pepwheel     Shows protein sequences as helices
-   preg         Regular expression search of a protein sequence
-   pscan        Scans proteins using PRINTS
-   sigcleave    Reports protein signal cleavage sites
-   tmap         Displays membrane spanning regions
+   Program name Description
+   antigenic Finds antigenic sites in proteins
+   digest Reports on protein proteolytic enzyme or reagent cleavage sites
+   epestfind Finds PEST motifs as potential proteolytic cleavage sites
+   fuzzpro Search for patterns in protein sequences
+   fuzztran Search for patterns in protein sequences (translated)
+   garnier Predicts protein secondary structure using GOR method
+   hmoment Calculate and plot hydrophobic moment for protein sequence(s)
+   oddcomp Identify proteins with specified sequence word composition
+   patmatdb Searches protein sequences with a sequence motif
+   patmatmotifs Scan a protein sequence with motifs from the PROSITE
+   database
+   pepcoil Predicts coiled coil regions in protein sequences
+   pepnet Draw a helical net for a protein sequence
+   pepwheel Draw a helical wheel diagram for a protein sequence
+   preg Regular expression search of protein sequence(s)
+   pscan Scans protein sequence(s) with fingerprints from the PRINTS
+   database
+   sigcleave Reports on signal cleavage sites in a protein sequence
+   tmap Predict and plot transmembrane segments in protein sequences
 
 Author(s)
 

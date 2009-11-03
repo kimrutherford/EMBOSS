@@ -24,22 +24,20 @@ prophet
 <H2>
     Function
 </H2>
-Gapped alignment for profiles
+Scan one or more sequences with a Gribskov or Henikoff profile
 
 <H2>
     Description
 </H2>
 
-<b>prophet</b> finds matches between a GRIBSKOV or HENIKOFF profile
-produced by <b>prophecy</b> and one or more sequences.
+<p>prophet scans one or more sequences with the supplied Gribskov or Henikoff profile (produced by prophecy).  It writes the the highest-scoring (gapped) alignment for each sequence to file, which includes the score for the match.  Gap opening coefficient and gap extension coefficient must be specified.</p>
 
-<p>
 
-Note: <b>prophet</b> does <b>NOT</b> use the 'simple frequency matrices'
-produced by <b>prophecy</b>.  If you have a 'simple frequency matrix'you
-should use the program <b>profit</b> to scan sequences. 
 
-<p>
+<H2>
+Algorithm
+</H2>
+<p>prophet does NOT use the 'simple frequency matrices' produced by prophecy. If you have a 'simple frequency matrix'you should use the program profit to scan sequences.</p>
 
 
 
@@ -53,7 +51,7 @@ should use the program <b>profit</b> to scan sequences.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>prophet </b>
-Gapped alignment for profiles
+Scan one or more sequences with a Gribskov or Henikoff profile
 Input sequence(s): <b>tsw:h*</b>
 Profile or weight matrix file: <b>globins.gribskov</b>
 Gap opening coefficient [1.0]: <b></b>
@@ -113,8 +111,9 @@ Output alignment [hd_fugru.prophet]: <b></b>
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -334,7 +333,7 @@ Consensus	PIVDTGSVVSLSEEELSAVDKAWVKANSVAEVGGHALERGLFASEPMTLEFFDTFKYLSTFDLSKGSADV
 <pre>
 ########################################
 # Program: prophet
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: prophet
 #    -sequence "tsw:h*"
 #    -infile ../../data/globins.gribskov
@@ -353,7 +352,7 @@ Consensus	PIVDTGSVVSLSEEELSAVDKAWVKANSVAEVGGHALERGLFASEPMTLEFFDTFKYLSTFDLSKGSADV
 # Identity:      20/167 (12.0%)
 # Similarity:    46/167 (27.5%)
 # Gaps:           6/167 ( 3.6%)
-# Score: 74.34
+# Score: 65.29
 # 
 #
 #=======================================
@@ -386,20 +385,20 @@ HD_FUGRU        2439 PVDFLQEKDVFREFLYR   2455
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-                     :|.|:.||.|||...|.|.| . .||||.||. . |....|.|..||::|
-HBB_PANPA          1 MVHLTPEEKSAVTALWGKVNVD-DEVGGEALGRL-LLVVYPWTQRFFESF     48
+                     :|.|:.||.|||...|.|.|. .||||.||.| |....|.|..||::|..
+HBB_PANPA          1 MVHLTPEEKSAVTALWGKVNV-DEVGGEALGR-LLVVYPWTQRFFESFGD     48
 
-globins           56 KYLSTFDLSKGSADVKAHGKKVLDALGDAVAHLDDLEGTLAALSDLHAHK    105
-                     ..|||.|...|:..|||||||||.|..|.:||||:|:||.|.||:||..|
-HBB_PANPA         49 GDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDK     98
+globins           58 LSTFDLSKGSADVKAHGKKVLDALGDAVAHLDDLEGTLAALSDLHAHKLK    107
+                     |||.|...|:..|||||||||.|..|.:||||:|:||.|.||:||..||.
+HBB_PANPA         49 LSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLH     98
 
-globins          106 LK-KGVDPVNFKLLSHCLLVVLASHLPGDFTPEVQASMDKFLASVATVLA    154
-                     |. .  ||.||:||.:.|:.|||.|...:|||.|||:..|.:|.||..||
-HBB_PANPA         99 LHVD--DPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALA    146
+globins          108 KGVDPVNFKLLSHCLLVVLASHLPGDFTPEVQASMDKFLASVATVLASKY    157
+                       |||.||:||.:.|:.|||.|...:|||.|||:..|.:|.||..||.||
+HBB_PANPA         99 --VDPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKY    146
 
-globins          155 SKYR    158
-                     .||.
-HBB_PANPA        147 HKYH    150
+globins          158 R    158
+                     .
+HBB_PANPA        147 H    147
 
 
 #=======================================
@@ -409,30 +408,30 @@ HBB_PANPA        147 HKYH    150
 # 2: HBB_PANTR
 # Matrix: EBLOSUM62
 #
-# Length: 154
-# Identity:      77/154 (50.0%)
-# Similarity:    92/154 (59.7%)
-# Gaps:           7/154 ( 4.5%)
-# Score: 178.67
+# Length: 151
+# Identity:      79/151 (52.3%)
+# Similarity:    94/151 (62.3%)
+# Gaps:           4/151 ( 2.6%)
+# Score: 165.18
 # 
 #
 #=======================================
 
-globins            8 VVSLSEEELSAVDKAWVKAN-SVAEVGGHALE-RGLFASEPMTLEFFDTF     55
-                     :|.|:.||.|||...|.|.| . .||||.||. . |....|.|..||::|
-HBB_PANTR          1 MVHLTPEEKSAVTALWGKVNVD-DEVGGEALGRL-LLVVYPWTQRFFESF     48
+globins            8 VVSLSEEELSAVDKAWVKANSVAEVGGHALERGLFASEPMTLEFFDTFKY     57
+                     :|.|:.||.|||...|.|.|. .||||.||.| |....|.|..||::|..
+HBB_PANTR          1 MVHLTPEEKSAVTALWGKVNV-DEVGGEALGR-LLVVYPWTQRFFESFGD     48
 
-globins           56 KYLSTFDLSKGSADVKAHGKKVLDALGDAVAHLDDLEGTLAALSDLHAHK    105
-                     ..|||.|...|:..|||||||||.|..|.:||||:|:||.|.||:||..|
-HBB_PANTR         49 GDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDK     98
+globins           58 LSTFDLSKGSADVKAHGKKVLDALGDAVAHLDDLEGTLAALSDLHAHKLK    107
+                     |||.|...|:..|||||||||.|..|.:||||:|:||.|.||:||..||.
+HBB_PANTR         49 LSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLH     98
 
-globins          106 LK-KGVDPVNFKLLSHCLLVVLASHLPGDFTPEVQASMDKFLASVATVLA    154
-                     |. .  ||.||:||.:.|:.|||.|...:|||.|||:..|.:|.||..||
-HBB_PANTR         99 LHVD--DPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALA    146
+globins          108 KGVDPVNFKLLSHCLLVVLASHLPGDFTPEVQASMDKFLASVATVLASKY    157
+                       |||.||:||.:.|:.|||.|...:|||.|||:..|.:|.||..||.||
+HBB_PANTR         99 --VDPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKY    146
 
-globins          155 SKYR    158
-                     .||.
-HBB_PANTR        147 HKYH    150
+globins          158 R    158
+                     .
+HBB_PANTR        147 H    147
 
 
 #---------------------------------------
@@ -523,15 +522,16 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="profit.html">profit</a></td>
-<td>Scan a sequence or database with a matrix or profile</td>
+<td>Scan one or more sequences with a simple frequency matrix</td>
 </tr>
 
 <tr>
 <td><a href="prophecy.html">prophecy</a></td>
-<td>Creates matrices/profiles from multiple alignments</td>
+<td>Create frequency matrix or profile from a multiple alignment</td>
 </tr>
 
 </table>

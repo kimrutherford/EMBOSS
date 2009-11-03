@@ -121,14 +121,14 @@ static void notseq_readfile(const AjPStr exclude, AjPStr *pattern)
     {
 	ajStrAssignS(&filename, exclude);
         ajStrTrimC(&filename, "@");       /* remove the @ */
-        file = ajFileNewIn(filename);
+        file = ajFileNewInNameS(filename);
         if(file == NULL)
             ajFatal("Cannot open the file of sequence names: '%S'", filename);
 
         /* blank off the file name and replace with the sequence names */
         ajStrSetClear(pattern);
         line = ajStrNew();
-        while(ajFileReadLine(file, &line))
+        while(ajReadlineTrim(file, &line))
         {
             p = ajStrGetPtr(line);
 

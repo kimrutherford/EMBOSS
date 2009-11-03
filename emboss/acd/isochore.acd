@@ -1,5 +1,5 @@
 application: isochore [
-  documentation: "Plots isochores in large DNA sequences"
+  documentation: "Plots isochores in DNA sequences"
   groups: "Nucleic:Composition"
 ]
 

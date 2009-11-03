@@ -23,6 +23,101 @@ seqret
 </H2>
 
 
+<p><b>seqret</b> reads in one or more sequences and writes them out again. The sequence input may be a literal sequence or read from a database, file, file of sequence names, or even the command-line or the output of another programs. The sequence output can be written to screen, to file, or passed to another program. A wide range of standard sequence formats may be specified for input and output.  If you don't specify the input format, <b>seqret</b> will try a set of possible formats until it reads it in successfully. The sequence input and output, as for all EMBOSS programs, is described by a Uniform Sequence Address.  This is is a very flexible way of specifying one or more sequences from a variety of sources and includes sequence files, database queries and external applications.</p>
+
+<p>There are many options built-in into EMBOSS for detailed specification of the input and output sequences, for example the sequence type, file format. specification of sequence regions by begin and end positions, or generation of the reverse complement of a nucleic acid sequence.  On output <b>seqret</b> can change the case of the sequence to upper or to lower case. </p>
+
+<p><b>seqret</b> is useful for a variety of tasks, including extracting sequences from databases, displaying sequences, reformatting sequences, producing the reverse complement of a sequence, extracting fragments of a sequence, sequence case conversion or any combination of the above functions.</p>
+
+
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/seqret.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/seqret.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/seqret.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+
+<b>seqret</b> reads one or more sequence USAs.
+
+<p>
+
+<!--#include file="inc/seqret.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+
+The output from <b>seqret</b> is one or more sequences, and by default will be
+written in FASTA format. 
+
+<p>
+
+If the '-firstonly' qualifier is used then only the first sequence of the
+input USA specification will be written out. 
+
+<p>
+
+In some cases the output filename will be the same as the input
+filename, but as <b>seqret</b> reads only the first sequence before opening
+the output file it may try to overwrite the input.  Note that this is
+not true of <b>seqretset</b> which reads all sequences into memory at
+startup, but which can need a large amount of memory for many sequences.
+
+<p>
+
+<!--#include file="inc/seqret.output" -->
+
+<H2>
+    Data files
+</H2>
+
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+This description of what you can do when reading or writing files is not
+specific to the program <b>seqret</b>.  All EMBOSS programs that read or write
+sequences can do the same. 
+
+<p>
+
+<b>seqret</b> is often one of the first programs taught in EMBOSS training
+courses.  This is because it is versatile, it is extremely powerful for
+its size (17 lines of code) it illustrates many aspects of EMBOSS
+programs and it was one of the first EMBOSS programs to be written, so
+it has a special place in the hearts of EMBOSS developers. 
+
+<p>
+
+The name '<b>seqret</b>' derives both from its function ("sequence return") and
+from the fact that immense amounts of functionality can come from so few
+lines of source code - most of the work is done by the EMBOSS libraries
+which the program calls and whose complexity is hidden, or "secret". 
+
+<p>
 The simplicity of the above description of this program greatly
 understates the rich functionality of this program. 
 
@@ -179,39 +274,39 @@ The following are valid USAs for sequences:
 </TR>
 
 <TR>
-<TD>embl::paamir.em</TD>
-<TD>A sequence file "paamir.em" in EMBL format</TD>
+<TD>embl::x13776.em</TD>
+<TD>A sequence file "x13776.em" in EMBL format</TD>
 </TR>
 
 <TR>
-<TD>embl:paamir</TD>
-<TD>EMBL entry PAAMIR, using whatever access method is defined locally
+<TD>embl:x13776</TD>
+<TD>EMBL entry X13776, using whatever access method is defined locally
 for the EMBL database</TD>
 </TR>
 
 <TR>
-<TD>embl:X13776</TD>
-<TD>EMBL entry X13776, using whatever access method is defined locally
+<TD>embl:K01793</TD>
+<TD>EMBL entry K01793, using whatever access method is defined locally
 for the EMBL database and searching by accession number and entry name
-(X13776 is the accession number in this case)</TD>
+(K01793 is a secondary accession number in this case for entry J01636)</TD>
 </TR>
 
 <TR>
-<TD>embl-acc:X13776</TD>
+<TD>embl-acc:K01793</TD>
 <TD>EMBL entry X13776, using whatever access method is defined locally
 for the EMBL database and searching by accession number only
 </TD>
 </TR>
 
 <TR>
-<TD>embl-id:paamir</TD>
-<TD>EMBL entry PAAMIR, using whatever access method is defined locally
+<TD>embl-id:x13776</TD>
+<TD>EMBL entry x13776, using whatever access method is defined locally
 for the EMBL database, and searching by ID only</TD>
 </TR>
 
 <TR>
-<TD>embl:paami*</TD>
-<TD>EMBL entries PAAMIB, PAAMIE and so on, usually in alphabetical order,
+<TD>embl:v0029*</TD>
+<TD>EMBL entries V00290, V00291, and so on, usually in alphabetical order,
 using whatever access method is defined locally for the EMBL database</TD>
 </TR>
 
@@ -224,7 +319,7 @@ using whatever access method is defined locally for the EMBL database</TD>
 <TD>@mylist</TD>
 <TD>Reads file <i>mylist</i> and uses each line as a separate USA.  This
 is standard VMS list file syntax, also used in SRS 4.0 but missing in
-SRS 5.0.  The list file is a list of USAs (one per line).  List files
+SRS 5.0 onwards.  The list file is a list of USAs (one per line).  List files
 can contain references to other lists files or any other standard
 USA.</TD>
 </TR>
@@ -235,9 +330,9 @@ USA.</TD>
 </TR>
 
 <TR>
-<TD>'getz -e [embl-id:paamir] |'</TD>
-<TD>The pipe character "|" causes EMBOSS to fire up getz (SRS 5.1)
-to extract entry PAAMIR from EMBL in EMBL format. Any application or
+<TD>'getz -e [embl-id:x13776] |'</TD>
+<TD>The pipe character "|" causes EMBOSS to fire up getz (SRS)
+to extract entry x13776 from EMBL in EMBL format. Any application or
 script which writes one or more sequences to stdout can be used in
 this way.
 </TR>
@@ -247,7 +342,7 @@ this way.
 <TD>So far the shortest USA we
 could invent. In 'asis' format the name is the sequence so no file
 needs to be opened. This is a special case.  It was intended as a
-joke, but could be quite useful for generating command lines.</TD>
+joke, but has proved quite useful for generating command lines when testing.</TD>
 </TR>
 
 </TABLE>
@@ -483,7 +578,7 @@ qualifier <b>-ossingle</b> on the command line.  This will force the
 EMBOSS program to ignore the given output file name and will generate its
 own file names.  One sequence will be written to each such file.  These file
 names are made from the sequence ID name, with the name of the format as
-the extension (e.g.  <b>hsfau.gcg</b>). 
+the extension (e.g.  <b>x65923.gcg</b>). 
 <P>
 
 This is not ideal.  Preferably, you should stay away from formats that
@@ -765,91 +860,10 @@ all the info that is required, but will write to standard output by
 default.  The user will also still be prompted for an output filename,
 in case the user wants to save the output to a file. 
 
-<H2>
-    Usage
-</H2>
-<!--#include file="inc/seqret.usage" -->
 
 
-<H2>
-    Command line arguments
-</H2>
-<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
-<pre>
-<!--#include file="inc/seqret.ihelp" -->
-</pre>
-</td></tr></table>
-<P>
-
-<!--#include file="inc/seqret.itable" -->
 
 
-<H2>
-    Input file format
-</H2>
-
-
-<b>seqret</b> reads one or more sequence USAs.
-
-<p>
-
-<!--#include file="inc/seqret.input" -->
-
-<H2>
-    Output file format
-</H2>
-
-
-The output from <b>seqret</b> is one or more sequences, and by default will be
-written in FASTA format. 
-
-<p>
-
-If the '-firstonly' qualifier is used then only the first sequence of the
-input USA specification will be written out. 
-
-<p>
-
-In some cases the output filename will be the same as the input
-filename, but as <b>seqret</b> reads only the first sequence before opening
-the output file it may try to overwrite the input.  Note that this is
-not true of <b>seqretset</b> which reads all sequences into memory at
-startup, but which can need a large amount of memory for many sequences.
-
-<p>
-
-<!--#include file="inc/seqret.output" -->
-
-<H2>
-    Data files
-</H2>
-
-
-None.
-
-<H2>
-    Notes
-</H2>
-
-
-This description of what you can do when reading or writing files is not
-specific to the program <b>seqret</b>.  All EMBOSS programs that read or write
-sequences can do the same. 
-
-<p>
-
-<b>seqret</b> is often one of the first programs taught in EMBOSS training
-courses.  This is because it is versatile, it is extremely powerful for
-its size (17 lines of code) it illustrates many aspects of EMBOSS
-programs and it was one of the first EMBOSS programs to be written, so
-it has a special place in the hearts of EMBOSS developers. 
-
-<p>
-
-The name '<b>seqret</b>' derives both from its function ("sequence return") and
-from the fact that immense amounts of functionality can come from so few
-lines of source code - most of the work is done by the EMBOSS libraries
-which the program calls and whose complexity is hidden, or "secret". 
 
 
 <H2>

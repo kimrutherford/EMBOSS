@@ -39,42 +39,6 @@ IT IS DONE FOR YOU.
 EMBOSS B+tree format index files. These indexes allow access of flat
 files larger than 2Gb.
 
-<p>
-
-Having created the EMBOSS indexes for this file, a database can then be
-defined in the file <b>emboss.defaults</b> as something like:
-
-<pre>
-DB embl [
-   type: N
-   dbalias: embl   (see below)
-   format: embl
-   method: emboss
-   directory: /data/embl
-   file: *.dat
-   indexdirectory: /data/embl/indexes
-]
-</pre>
-
-The index file 'basename' given to <b>dbxflat</b> must match the DB name
-in the definition. If not, then a 'dbalias' line must be given which
-specifies the basename of the indexes. 
-
-<h3>Fields Indexed</H3>
-
-By default, <b>dbxflat</b> will index the ID name and the accession
-number (if present).
-
-<br>
-
-If they are present in your database, you may also specify that
-<b>dbxflat</b> should index the Sequence Version and GI, the words
-in the description, the keywords and the organism words using the
-'-fields' qualifier with the appropriate values.   
-
-
-
-
 
 <H2>
     Usage
@@ -86,52 +50,6 @@ in the description, the keywords and the organism words using the
  -->
 
 <!--#include file="inc/dbxflat.usage" -->
-
-<H2>
-    Global Parameters
-</H2>
-
-<b>dbxflat</b> requires that two global parameters be defined in
-the file <b>emboss.defaults</b>. These are:
-
-<pre>
-SET PAGESIZE 2048
-SET CACHESIZE 200
-</pre>
-
-The above values are recommended for most systems. The PAGESIZE is
-a multiple of the size of disc pages the operating system buffers.
-The CACHESIZE is the number of disc pages <b>dbxflat</b> is
-allowed to cache.
-
-
-<H2>
-    Resources
-</H2>
-
-
-<b>dbxflat</b> will ask you for the name of a resource definition
-in the file <b>emboss.defaults</b>. This will be something like:
-
-<pre>
-RES embl [
-   type: Index
-   idlen:  15
-   acclen: 15
-   svlen:  20
-   keylen: 25
-   deslen: 25
-   orglen: 25
-]
-</pre>
-
-The length definitions are the maximum lengths of 'words' in the
-field being indexed. Longer words will be truncated to the
-value set.
-
-
-
-
 
 
 
@@ -243,6 +161,88 @@ None.
 The indexing system has been designed to allow on-the-fly updating
 of indexes. This feature is, however, not implemented in the current
 version. It will be made available in future releases.
+
+
+
+<p>
+
+Having created the EMBOSS indexes for this file, a database can then be
+defined in the file <b>emboss.defaults</b> as something like:
+
+<pre>
+DB embl [
+   type: N
+   dbalias: embl   (see below)
+   format: embl
+   method: emboss
+   directory: /data/embl
+   file: *.dat
+   indexdirectory: /data/embl/indexes
+]
+</pre>
+
+The index file 'basename' given to <b>dbxflat</b> must match the DB name
+in the definition. If not, then a 'dbalias' line must be given which
+specifies the basename of the indexes. 
+
+<h3>Fields Indexed</H3>
+
+By default, <b>dbxflat</b> will index the ID name and the accession
+number (if present).
+
+<br>
+
+If they are present in your database, you may also specify that
+<b>dbxflat</b> should index the Sequence Version and GI, the words
+in the description, the keywords and the organism words using the
+'-fields' qualifier with the appropriate values.   
+
+
+
+
+
+<H2>
+    Global Parameters
+</H2>
+
+<b>dbxflat</b> requires that two global parameters be defined in
+the file <b>emboss.defaults</b>. These are:
+
+<pre>
+SET PAGESIZE 2048
+SET CACHESIZE 200
+</pre>
+
+The above values are recommended for most systems. The PAGESIZE is
+a multiple of the size of disc pages the operating system buffers.
+The CACHESIZE is the number of disc pages <b>dbxflat</b> is
+allowed to cache.
+
+
+<H2>
+    Resources
+</H2>
+
+
+<b>dbxflat</b> will ask you for the name of a resource definition
+in the file <b>emboss.defaults</b>. This will be something like:
+
+<pre>
+RES embl [
+   type: Index
+   idlen:  15
+   acclen: 15
+   svlen:  20
+   keylen: 25
+   deslen: 25
+   orglen: 25
+]
+</pre>
+
+The length definitions are the maximum lengths of 'words' in the
+field being indexed. Longer words will be truncated to the
+value set.
+
 
 
 

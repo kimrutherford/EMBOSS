@@ -21,17 +21,7 @@ pepwheel
     Description
 </H2>
 
-<b>pepwheel</b> displays peptide sequences in a helical representation.
-
-<p>
-
-This gives a view of a helix from a protein sequence looking down the
-axis of the helix. 
-
-<p>
-
-It is useful for highlighting amphipathicity and other properties of
-residues around a helix. 
+<p><b>pepwheel</b> draws a helical wheel diagram for a protein sequence.  This displays the sequence in a helical representation as if looking down the axis of the helix.  It is useful for highlighting amphipathicity and other properties of residues around a helix. By default, aliphatic residues are marked with squares, hydrophilic residues are marked with diamonds, and positively charged residues with octagons, although this can be changed.</p>
 
 <H2>
     Usage
@@ -83,12 +73,8 @@ None.
     Notes
 </H2>
 
-
-The default settings for turn (5) and steps (18) apply to alpha
-helices. For other possible secondary structures, see the following
-table:
-
-<p>
+<p>The number of residues plotted per turn is the specified "steps" value (<tt>-steps</tt>) divided by the specified "turns" value (<tt>-turns</tt>).</p>
+<p>The default settings for turn (5) and steps (18) apply to alpha helices. For other possible secondary structures, see the following table:</p>
 
 <pre>
 helix       phi   psi  omega  res/turn  transl.  turns  steps
@@ -102,8 +88,12 @@ anti Beta  -139   135   -178       2.0     3.4       4      9
 para Beta  -119   113    180       2.0     3.2       4      9
 
 PP is polyproline
-PG II is polyGlycine.
-</pre>
+PG II is polyGlycine.</pre>
+
+
+<p>When you specify the number of turns and steps, be aware that you should remove common factors from these two numbers. For example, if you (for some improbable reason) wished to plot a wheel with 8 turns in 18 steps (2.25 residues per turn) you should remove the common factor (i.e. 2) and specify 4 turns in 9 steps.</p>
+
+
 
 <H2>
     References

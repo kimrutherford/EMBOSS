@@ -21,25 +21,10 @@ cirdna
 </H2>
 
 
-The program 'cirdna' draws circular maps of DNA constructs.
+<p><b>cirdna</b> draws circular maps of DNA constructs. It uses graphical shapes including ticks, ranges, and blocks to represent genetic markers (e.g, genes and ESTs) and places them according to their position in a DNA fragment. The markers can be organized in different groups. A group may contain up to 10000 markers, so the program is suitable for drawing circular representations of genomic sequences.</p>
 
-<p>
-It uses the graphical shapes: ticks, ranges, and blocks to
-represent genetic markers (e.g, genes and ESTs) and places them
-according to their position in a DNA fragment.  The markers can be
-organized in different groups. A group may contain up to 10000 markers, so the 
-   program can be used to draw circular representations of genomic
-sequences. 
+<p>The program reads an input file containing the names and positions of the genetic markers. You must write this file yourself (see Input File Format below).  Data for controlling the appearance of the markers may also be added to this file.</p>
 
-<p>
-The program reads in one input file in which the user specifies the
-names and positions of the genetic markers.  In this file the user also
-enters data for controlling the appearance of the markers. 
-
-<p>
-A refined customization of the drawing can be achieved by running the
-program with '-options' on the command line and changing the values of
-the desired parameters. 
 
 <H2>
     Usage
@@ -179,7 +164,8 @@ None.
     Notes
 </H2>
 
-None.
+<p>There are many options for controlling the appearance of the plot.  Mostly these are "additional qualifiers" and can be specified on the command-line by using the corresponding flag, but will not normally be prompted for.  To be prompted for values for them, run the program with the <tt>-options</tt> global qualifier.</p>
+
 
 
 <H2>

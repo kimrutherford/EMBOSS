@@ -23,22 +23,7 @@ wossname
 </H2>
 
 
-This allows a user to search for keywords or parts of words in the
-brief documentation (as displayed by a program when it first starts).
-The program name and the brief description is output.  If no words to
-search for are specified, then details of all the EMBOSS programs are
-output.
-
-<p>
-
-The program has been written on the assumption that most people will
-use it to quickly find the name of a program based on that program's
-description, so the output goes to the screen by default.
-
-<p>
-
-This program may find some use in automatically generating lists of
-EMBOSS programs and their groups for Web pages.
+<p><b>wossname</b> search for the specified keywords (or parts thereof) in the application short description (as displayed by a program when it starts), functional group name and keywords. The group name, application name and short description of any matching applications is output (screen by default). If no search words are specified, then details of all the EMBOSS programs are output.  There are various options for controlling how the search is performed and what is given in the output file.  Optionally, the output will be wrapped in HTML tags ready for inclusion in a Web page.</p>
 
 <H2>
     Usage
@@ -112,19 +97,11 @@ The average user will not need to worry about this.
 </H2>
 
 
-If a program's ACD file does not assign the program to a group,
-it will be automatically assigned to the group 'ASSORTED'.
+<p><b>wossname</b> reads the short descriptions and the program groups from the program ACD files. These file describe the command-line interface of the applications.  You don't need to know about them unless you are writing EMBOSS programs. They are described in the EMBOSS Developers Manual.</p>
 
-<p>
+<p>If a program's ACD file does not specify a program group, then it will be automatically assigned to the group <tt>ASSORTED</tt> in the output file. A program can belong to more than one group.</p>
 
-A program can belong to more than one group.
 
-<p>
-
-The name of this program comes from its use as a favorite word of the
-author Terry Pratchett.  It is used especially by the characters of the
-parrot in <b>Eric</b> and the dog <i>Gaspode</i> in <b>Moving
-Pictures</b> and <b>Men at Arms</b>. 
 
 <H2>
     References

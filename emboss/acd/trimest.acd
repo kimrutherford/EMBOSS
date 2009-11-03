@@ -1,5 +1,5 @@
 application: trimest [
-  documentation: "Trim poly-A tails off EST sequences"
+  documentation: "Remove poly-A tails from nucleotide sequences"
   groups: "Edit"
 ]
 

@@ -22,50 +22,7 @@ maskfeat
     Description
 </H2>
 
-<b>maskfeat</b> reads in a sequence with its associated features.  The
-features can be found in the annotation of the sequence if it is in a
-format such as EMBL or SWISSPROT which includes features in the
-annotation, or they may be supplied explicitly in a GFF file by using
-the command-lin option '-gff filename'.
-
-<p>
-
-The feature table is then searched for features whose type matches the
-specified feature type to be masked.  By default, the type is 'repeat*'
-(i.e.  any type whose name starts with 'repeat').  You can specify the
-name of any other type of feature, or features that you wish to mask. 
-If you wish to specify more than one type of feature, separate their
-names with spaces or commas.  The names of the types of feature to be
-found may be wild-carded with asterisks '*' to find gruops of feature
-types sharing a common part of their names. 
-
-<p>
-
-If you are unsure of the names of feature types in use, please consult
-<A HREF="http://www3.ebi.ac.uk/Services/WebFeat/">
-http://www3.ebi.ac.uk/Services/WebFeat/</A>
-for a list of the EMBL feature types and see Appendix A of the Swissprot
-user manual in 
-<A HREF="http://www.expasy.ch/txt/userman.txt">
-http://www.expasy.ch/txt/userman.txt</A>
-for a list of the Swissprot feature types. 
-
-<p>
-
-If any features matching the specified names of feature types are found,
-then those regions of the sequence will be masked out by replacing that
-part of the sequence by masking characters.  The default masking
-characters are 'X' for a protein sequence and 'N' for a nucleic acid
-sequence, although you can specify your own masking character, if
-required. 
-
-<p>
-
-Some non-EMBOSS programs (for example FASTA) are capable of treating
-lower-case regions as if they are masked.  <b>maskfeat</b> can mask a
-region to lower-case instead of replacing the sequence with 'N's or 'X's
-if you use the qualifier '-tolower' or use a space character as the
-masking character.   
+<p><b>maskfeat</b> reads a sequence with associated features and writes the same information to file but with features of the specified type omitted (masked).  Sequence regions corresponding to the masked-out features are masked such that characters in those region are (optionally) converted to lower case and / or (optionally) replaced with the specified mask character.</p>
 
 <H2>
     Usage
@@ -119,7 +76,12 @@ None.
     Notes
 </H2>
 
-None.
+<p>Formats such as EMBL or SWISSPROT include features in the sequence annotation.  Otherwise, features they may be supplied in a separate file and specified with the qualifier <tt>-ufo</tt> or <tt>-fopenfile</tt> / <tt>-fformat</tt>.</p>
+
+<p>The feature type to mask is by default <tt>repeat*</tt>, i.e. any type whose name starts with <tt>repeat</tt> will be omitted from the output file. Any other type of feature(s) may be specified with the <tt>-type</tt> qualifier.  To specify more than one type of feature, separate their names with spaces or commas. The names may be wild-carded with asterisks <tt>*</tt> to find gruops of feature types sharing a common part of their names.</p>
+
+<p>If you are unsure of the names of feature types in use, please consult <a href="http://www3.ebi.ac.uk/Services/WebFeat/">http://www3.ebi.ac.uk/Services/WebFeat/</a>  (EMBL feature types) and see Appendix A of the Swissprot user manual in <a href="http://www.expasy.ch/txt/userman.txt">http://www.expasy.ch/txt/userman.txt</a> (Swissprot feature types).</p>
+
 
 <H2>
     References

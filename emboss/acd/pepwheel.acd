@@ -1,5 +1,5 @@
 application: pepwheel [
-  documentation: "Shows protein sequences as helices"
+  documentation: "Draw a helical wheel diagram for a protein sequence"
   groups: "Display, Protein:2D Structure"
 ]
 

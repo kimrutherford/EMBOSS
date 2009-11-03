@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>aaindexextract </b>
-Extract data from AAINDEX
+Extract amino acid property data from AAINDEX
 AAINDEX database file: <b>aaindex1.test</b>
 
 </pre></td></tr></table><p>

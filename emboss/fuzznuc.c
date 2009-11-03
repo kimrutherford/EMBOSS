@@ -51,7 +51,7 @@ int main(int argc, char **argv)
     seqall   = ajAcdGetSeqall("sequence");
     report   = ajAcdGetReport("outfile");
     plist   = ajAcdGetPattern("pattern");
-    sc       = ajAcdGetBool("complement");
+    sc       = ajAcdGetBoolean("complement");
  
     ajPatlistSeqDoc(plist, &tmpstr);
     ajFmtPrintAppS(&tmpstr, "\nComplement: %B\n", sc);
@@ -60,7 +60,7 @@ int main(int argc, char **argv)
     writeok=ajTrue;
     while (writeok && ajSeqallNext(seqall,&seq))
     {
-	tab = ajFeattableNewDna(ajSeqGetNameS(seq));
+	tab = ajFeattableNewSeq(seq);
         embPatlistSeqSearch(tab,seq,plist,ajFalse);
         if (sc)
             embPatlistSeqSearch (tab,seq,plist,ajTrue);

@@ -1,5 +1,5 @@
 application: degapseq [
-  documentation: "Removes gap characters from sequences"
+  documentation: "Removes non-alphabetic (e.g. gap) characters from sequences"
   groups: "Edit"
 ]
 

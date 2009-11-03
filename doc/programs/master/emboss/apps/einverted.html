@@ -20,38 +20,14 @@ einverted
     Description
 </H2>
 
-<b>einverted</b> looks for inverted repeats (stem loops) in a nucleotide
-sequence. 
 
-<p>
+<p><b>einverted</b> finds inverted repeats (stem loops) in nucleotide sequences.  It identifies regions of local alignment of the input sequence and its reverse complement that exceed a threshold score. The alignments may include a proportion of mismatches and gaps, which correspond to bulges in the stem loop.  One or more sequences are read and a file with the sequence(s) (without gap characters) of the inverted repeat regions is written. It can find multiple inverted repeats in a sequence. Only non-overlapping matches are reported.</p>
 
-It will find inverted repeats that include a proprtion of mismatches and
-gaps (bulges in the stem loop). 
+
 
 <H2>Algorithm</H2>
+<p><b>einverted</b> uses dynamic programming and thus is guaranteed to find optimal, local alignments between the sequence and its reverse complement.  Matched bases contribute positively to the score whereas gaps and mismatches are penalised. The score for a local alignment is the sum of the values of each match, minus penalties for mismatches and gap insertion. Any region whose score exceeds the threshold is reported.  The gap penalty, match score and mismatch score, and the threshold score for reporting regions, are all user-specified.</p>
 
-It works by finding alignments between the sequence and its reverse
-complement that exceed a threshold score.  Gaps and Mismatches are
-assigned a penalty (negative) score.  Matches are assigned a positive
-score.  The score is calculated by summing the values of each match, the
-penalties of each mismatch and the large penalties of any gaps.  Any
-region whose score exceeds the threshold is reported. 
-
-<p>
-
-<b>einverted</b>  uses dynamic programming and thus is guaranteed to find
-the optimal alignment, but is slower than, for example, a self-by-self BLAST.
-It can find multiple inverted repeats in a sequence.  
-
-<p>
-
-<b>einverted</b> does not report overlapping matches.
-
-<p>
-
-The original "inverted" program was written to annotate the nematode
-genome.  Excluding overlapping repeats saved problems with simple repeat
-sequences in this genome.
 
 
 <H2>
@@ -97,6 +73,9 @@ None.
     Notes
 </H2>
 
+<p>The original "inverted" program (from which <b>einverted</b> was derived) was used to annotate the nematode genome. Excluding overlapping repeats saved problems with simple repeat sequences in this genome. </p>
+<p><b>einverted</b> will find optimal alignments but is slower than heuristic methods such as BLAST.</p>
+
 Sometimes you can find repeats using the program <b>palindrome</b> that
 you can't find with <b>einverted</b> using the default parameters. 
 
@@ -109,7 +88,7 @@ score - you should decrease the 'Minimum score threshold' to see them.
 
 <p>
 
-For example, when <b>palindrome</b> is run with 'em:hsfau1', 
+For example, when <b>palindrome</b> is run with 'em:x65921', 
 it finds the repeat:
 
 <p>
@@ -129,7 +108,7 @@ cutoff of 50.
 If  <b>einverted</b> is run as:
 <p>
 
-% einverted em:hsfau1  -threshold 33 
+% einverted em:x65921  -threshold 30 
 <p>
 
 then it will find it:

@@ -5,35 +5,14 @@
 
 Function
 
-   Finds programs sharing group names
+   Finds programs with similar function to a specified program
 
 Description
 
-   This program takes the name of an existing program in EMBOSS (or a
-   program in one the associated EMBASSY packages) and gives a list of
-   the programs which share some functionality with it.
-
-   It does this by noting the functional groups that the program belongs
-   to and reporting any programs which share those functional groups.
-
-   The functional groups of a program are set in the ACD file (this is
-   the part of the program in the EMBOSS system which specifies the
-   required parameters, some help on the parameters, the one-line
-   description of the program, etc.) Normally the names of the groups are
-   fairly specific, such as: "NUCLEIC COMPOSITION", resulting in the
-   reporting of only a tightly restricted set of other programs also
-   dealing with the analysis of "NUCLEIC COMPOSITION". The '-explode'
-   qualifier will increase the number of groups that the program belongs
-   to by splitting the group name at selected points to produce such
-   groups as: "NUCLEIC", "NUCLEIC COMPOSITION" and "COMPOSITION". All
-   programs with the exploded group names which also include "NUCLEIC"
-   and "COMPOSITION" will now be reported. The result of this qualifier
-   is thus a report of a larger number of programs with a more tenuous
-   link to the specified program. In other words, use the '-explode'
-   qualifier to decrease the specificity of the search.
-
-   The groups that the program belongs to can be output by using the
-   '-groups' qualifier.
+   seealso takes the name of an EMBOSS or EMBASSY program and returns a
+   list of applications in the same functional group. Application names
+   and short descriptions are listed. Optionally, the output is written
+   to an HTML table.
 
 Usage
 
@@ -41,15 +20,16 @@ Usage
 
 
 % seealso 
-Finds programs sharing group names
+Finds programs with similar function to a specified program
 Program to search for: matcher
 
 SEE ALSO
-seqmatchall      All-against-all comparison of a set of sequences
-supermatcher     Match large sequences against one or more other sequences
-water            Smith-Waterman local alignment
+seqmatchall      All-against-all word comparison of a sequence set
+supermatcher     Calculate approximate local pair-wise alignments of larger seq
+uences
+water            Smith-Waterman local alignment of sequences
 wordfinder       Match large sequences against one or more other sequences
-wordmatch        Finds all exact matches of a given size between 2 sequences
+wordmatch        Finds regions of identity (exact matches) of two sequences
 
 
 Command line arguments
@@ -132,8 +112,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -163,7 +144,24 @@ Data files
 
 Notes
 
-   None.
+   The functional group of a program is set in its ACD file; this is an
+   EMBOSS system file which specifies the application command-line
+   interface such as required parameters, help on the parameters,
+   one-line description of the program and so on. Normally the names of
+   the groups are fairly specific. For example "NUCLEIC COMPOSITION" is a
+   small group of applications for nucleotide sequence composition
+   analysis.
+
+   The -explode qualifier will increase the number of groups that the
+   program retrieves by splitting the group name at selected points to
+   produce such groups as: "NUCLEIC", "NUCLEIC COMPOSITION" and
+   "COMPOSITION". All programs with the exploded group names which also
+   include "NUCLEIC" and "COMPOSITION" will now be reported. The result
+   of this qualifier is thus a report of a larger number of programs with
+   a more tenuous link to the specified program.
+
+   The groups that the program belongs to can be output by using the
+   -groups qualifier.
 
 References
 
@@ -171,7 +169,10 @@ References
 
 Warnings
 
-   None.
+   The (optional) HTML-formatted table output lacks the HTML document
+   structures such as
+   , , , . It is expected the table will be included in the middle of a
+   larger HTML document.
 
 Diagnostic Error Messages
 
@@ -192,26 +193,30 @@ Known bugs
 
 See also
 
-   Program name                        Description
-   abiview      Reads ABI file and display the trace
-   cirdna       Draws circular maps of DNA constructs
-   infoalign    Information on a multiple sequence alignment
-   infoseq      Displays some simple information about sequences
-   lindna       Draws linear maps of DNA constructs
-   pepnet       Displays proteins as a helical net
-   pepwheel     Shows protein sequences as helices
-   prettyplot   Displays aligned sequences, with colouring and boxing
-   prettyseq    Output sequence with translated ranges
-   remap        Display sequence with restriction sites, translation etc
-   showalign    Displays a multiple sequence alignment
-   showdb       Displays information on the currently available databases
-   showfeat     Show features of a sequence
-   showseq      Display a sequence with features, translation etc
-   sixpack      Display a DNA sequence with 6-frame translation and ORFs
-   textsearch   Search sequence documentation. Slow, use SRS and Entrez!
-   tfm          Displays a program's help documentation manual
-   whichdb      Search all databases for an entry
-   wossname     Finds programs by keywords in their one-line documentation
+   Program name Description
+   abiview Display the trace in an ABI sequencer file
+   cirdna Draws circular maps of DNA constructs
+   infoalign Display basic information about a multiple sequence
+   alignment
+   infobase Return information on a given nucleotide base
+   inforesidue Return information on a given amino acid residue
+   infoseq Display basic information about sequences
+   lindna Draws linear maps of DNA constructs
+   pepnet Draw a helical net for a protein sequence
+   pepwheel Draw a helical wheel diagram for a protein sequence
+   prettyplot Draw a sequence alignment with pretty formatting
+   prettyseq Write a nucleotide sequence and its translation to file
+   remap Display restriction enzyme binding sites in a nucleotide
+   sequence
+   showalign Display a multiple sequence alignment in pretty format
+   showdb Displays information on configured databases
+   showfeat Display features of a sequence in pretty format
+   showseq Displays sequences with features in pretty format
+   sixpack Display a DNA sequence with 6-frame translation and ORFs
+   textsearch Search the textual description of sequence(s)
+   tfm Displays full documentation for an application
+   whichdb Search all sequence databases for an entry and retrieve it
+   wossname Finds programs by keywords in their short description
 
 Author(s)
 

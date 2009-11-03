@@ -99,9 +99,9 @@ int main(int argc, char **argv)
     minsize    = ajAcdGetInt("minsize");
     maxsize    = ajAcdGetInt("maxsize");
     findstr    = ajAcdGetListSingle("find");
-    methionine = ajAcdGetBool("methionine");
-    circular   = ajAcdGetBool("circular");
-    reverse    = ajAcdGetBool("reverse");
+    methionine = ajAcdGetBoolean("methionine");
+    circular   = ajAcdGetBoolean("circular");
+    reverse    = ajAcdGetBoolean("reverse");
     around     = ajAcdGetInt("flanking");
     
     

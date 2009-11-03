@@ -547,9 +547,9 @@ void ajMatrixChar(const AjPMatrix thys, ajint i, AjPStr *label)
 
 /* @func ajMatrixfChar ********************************************************
 **
-** Returns the sequence character conversion table for a matrix.
+** Returns the sequence character conversion table for a floating point matrix.
 ** This table converts any character defined in the matrix to a
-** positive integer, and any other character is converted to zero.
+** floating point number, and any other character is converted to zero.
 **
 ** @param [r] thys [const AjPMatrixf] Matrix object
 ** @param [r] i [ajint] Character index
@@ -684,7 +684,7 @@ AjBool ajMatrixRead(AjPMatrix* pthis, const AjPStr filename)
 
     firststring = ajStrNew();
     
-    ajFileDataNew(filename,&file);
+    file = ajDatafileNewInNameS(filename);
     
     if(!file)
     {
@@ -694,7 +694,7 @@ AjBool ajMatrixRead(AjPMatrix* pthis, const AjPStr filename)
     }
     
     /* Read row labels */
-    while(ajFileGets(file,&buffer))
+    while(ajReadline(file,&buffer))
     {
 	ptr = ajStrGetPtr(buffer);
 #ifndef WIN32
@@ -719,7 +719,7 @@ AjBool ajMatrixRead(AjPMatrix* pthis, const AjPStr filename)
     ajFileSeek(file, 0, 0);
 
 
-    while(ajFileGets(file,&buffer))
+    while(ajReadline(file,&buffer))
     {
 	ajStrRemoveWhiteExcess(&buffer);
 	ptr = ajStrGetPtr(buffer);
@@ -853,7 +853,7 @@ AjBool ajMatrixfRead(AjPMatrixf* pthis, const AjPStr filename)
     firststring = ajStrNew();
     reststring  = ajStrNew();
 
-    ajFileDataNew(filename,&file);
+    file = ajDatafileNewInNameS(filename);
     
     if(!file)
     {
@@ -864,7 +864,7 @@ AjBool ajMatrixfRead(AjPMatrixf* pthis, const AjPStr filename)
     
 
     /* Read row labels */
-    while(ajFileGets(file,&buffer))
+    while(ajReadline(file,&buffer))
     {
 	ptr = ajStrGetPtr(buffer);
 #ifndef WIN32
@@ -889,7 +889,7 @@ AjBool ajMatrixfRead(AjPMatrixf* pthis, const AjPStr filename)
     ajFileSeek(file, 0, 0);
 
 
-    while(ajFileGets(file,&buffer))
+    while(ajReadline(file,&buffer))
     {
 	ajStrRemoveWhiteExcess(&buffer);
 	ptr = ajStrGetPtr(buffer);

@@ -5,17 +5,21 @@
 
 Function
 
-   Search a PROSITE motif database with a protein sequence
+   Scan a protein sequence with motifs from the PROSITE database
 
 Description
 
-   patmatmotifs takes a protein sequence and compares it to the PROSITE
-   database of motifs.
+   patmatmotifs reads a protein sequence and searches it against the
+   PROSITE database of motifs. It writes a standard EMBOSS report file
+   with details of the location and score of any matching motifs.
+   Optionally, full documentation for matching patterns is given in the
+   report. Optionally, simple post-translational modification sites are
+   not reported. PROSITE must be processed by running prosextract before
+   running patmatmotifs.
 
-   For a description of PROSITE, we can do no better than to quote the
-   PROSITE user's documentation: 
-
-   PROSITE is a method of determining what is the function of
+   The home web page of PROSITE is: http://www.expasy.ch/prosite/.
+   Quoting from the PROSITE user's documentation:
+   "PROSITE is a method of determining what is the function of
    uncharacterized proteins translated from genomic or cDNA sequences. It
    consists of a database of biologically significant sites and patterns
    formulated in such a way that with appropriate computational tools it
@@ -41,30 +45,27 @@ Description
    authors, as it can be illustrated from the following citations from
    two of the most well known experts of protein sequence analysis, R.F.
    Doolittle and A.M. Lesk:
-      "There are  many short  sequences  that  are  often  (but  not  always)
-      diagnostics of certain binding properties or active sites. These can be
-      set into a small subcollection and searched against your sequence (1)".
 
-      "In some  cases, the structure and function of an unknown protein which
-      is too  distantly related  to any  protein of known structure to detect
-      its affinity  by overall  sequence alignment  may be  identified by its
-      possession of  a particular  cluster of  residues types classified as a
-      motifs. The  motifs, or  templates, or  fingerprints, arise  because of
-      particular  requirements  of  binding  sites  that  impose  very  tight
-      constraint on the evolution of portions of a protein sequence (2)."
+   "There are many short sequences that are often (but not always)
+   diagnostics of certain binding properties or active sites. These can
+   be set into a small subcollection and searched against your sequence
+   (1)".
 
-   The home web page of PROSITE is: http://www.expasy.ch/prosite/
+   "In some cases, the structure and function of an unknown protein which
+   is too distantly related to any protein of known structure to detect
+   its affinity by overall sequence alignment may be identified by its
+   possession of a particular cluster of residues types classified as a
+   motifs. The motifs, or templates, or fingerprints, arise because of
+   particular requirements of binding sites that impose very tight
+   constraint on the evolution of portions of a protein sequence (2)."
 
    It is common to find that a search of the PROSITE database against a
    protein sequence will report many matches to the short motifs that are
    indicative of the post-translational modification sites, such as
    glycolsylation, myristylation and phosphorylation sites. These reports
    are often unwanted and are not normally reported. You can turn
-   reporting of these short motifs on by giving the '-noprune' option on
+   reporting of these short motifs on by giving the -noprune option on
    the command-line.
-
-   Your EMBOSS administrator must have set up the local EMBOSS PROSITE
-   database using the utility 'prosextract' before this program will run.
 
 Usage
 
@@ -72,7 +73,7 @@ Usage
 
 
 % patmatmotifs -full 
-Search a PROSITE motif database with a protein sequence
+Scan a protein sequence with motifs from the PROSITE database
 Input protein sequence: tsw:opsd_human
 Output report [opsd_human.patmatmotifs]: 
 
@@ -123,14 +124,16 @@ Command line arguments
    -raccshow2          boolean    Show accession number in the report
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
+   -rstrandshow2       boolean    Show the nucleotide strand in the report
    -rusashow2          boolean    Show the full USA in the report
    -rmaxall2           integer    Maximum total hits to report
    -rmaxseq2           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -280,7 +283,7 @@ Output file format
 
 ########################################
 # Program: patmatmotifs
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: patmatmotifs
 #    -full
 #    -sequence tsw:opsd_human
@@ -405,7 +408,7 @@ e
 Data files
 
    Data and documentation from PROSITE files is automatically read. This
-   has been generated and formatted by running prosextract before running
+   must be generated and formatted by running prosextract before running
    patmatmotifs.
 
 Notes
@@ -437,7 +440,7 @@ References
 Warnings
 
    Your EMBOSS administrator must have set up the local EMBOSS PROSITE
-   database using the utility 'prosextract' before this program will run.
+   database using the utility prosextract before this program will run.
 
 Diagnostic Error Messages
 
@@ -459,19 +462,21 @@ Known bugs
 
 See also
 
-    Program name                         Description
-   antigenic      Finds antigenic sites in proteins
-   digest         Protein proteolytic enzyme or reagent cleavage digest
-   epestfind      Finds PEST motifs as potential proteolytic cleavage sites
-   fuzzpro        Protein pattern search
-   fuzztran       Protein pattern search after translation
-   helixturnhelix Report nucleic acid binding motifs
-   oddcomp        Find protein sequence regions with a biased composition
-   patmatdb       Search a protein sequence with a motif
-   pepcoil        Predicts coiled coil regions
-   preg           Regular expression search of a protein sequence
-   pscan          Scans proteins using PRINTS
-   sigcleave      Reports protein signal cleavage sites
+   Program name Description
+   antigenic Finds antigenic sites in proteins
+   digest Reports on protein proteolytic enzyme or reagent cleavage sites
+   epestfind Finds PEST motifs as potential proteolytic cleavage sites
+   fuzzpro Search for patterns in protein sequences
+   fuzztran Search for patterns in protein sequences (translated)
+   helixturnhelix Identify nucleic acid-binding motifs in protein
+   sequences
+   oddcomp Identify proteins with specified sequence word composition
+   patmatdb Searches protein sequences with a sequence motif
+   pepcoil Predicts coiled coil regions in protein sequences
+   preg Regular expression search of protein sequence(s)
+   pscan Scans protein sequence(s) with fingerprints from the PRINTS
+   database
+   sigcleave Reports on signal cleavage sites in a protein sequence
 
 Author(s)
 

@@ -6,7 +6,7 @@
 <pre>
 ########################################
 # Program: patmatdb
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: patmatdb
 #    -sequence "tsw:*"
 #    -motif "st[ty]s"

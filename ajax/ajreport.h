@@ -42,6 +42,7 @@ extern "C"
 ** @attr Showdes [AjBool] Report sequence description
 ** @attr Showusa [AjBool] Report USA (-rusa) or only seqname
 ** @attr Showscore [AjBool] Report score (if optional for format)
+** @attr Showstrand [AjBool] Report nucleotide strand (if optional for format)
 ** @attr Multi [AjBool] if true, assume >1 sequence
 ** @attr Mintags [ajint] Minimum number of tags to report
 ** @attr CountSeq [ajint] Number of sequences reported so far
@@ -49,6 +50,7 @@ extern "C"
 ** @attr MaxHitAll [ajint] Maximum number of hits to report overall
 ** @attr MaxHitSeq [ajint] Maximum number of hits to report for each sequence
 ** @attr Format [AjEnum] Report format (index number)
+** @attr Padding [char[4]] Padding to alignment boundary
 **
 ** @new ajReportNew Default constructor
 ** @delete ajReportDel Default destructor
@@ -78,6 +80,7 @@ typedef struct AjSReport {
   AjBool Showdes;
   AjBool Showusa;
   AjBool Showscore;
+  AjBool Showstrand;
   AjBool Multi;
   ajint Mintags;
   ajint CountSeq;
@@ -85,6 +88,7 @@ typedef struct AjSReport {
   ajint MaxHitAll;
   ajint MaxHitSeq;
   AjEnum Format;
+  char Padding[4];
 } AjOReport;
 
 #define AjPReport AjOReport*

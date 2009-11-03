@@ -21,51 +21,18 @@ oddcomp
     Description
 </H2>
 
+<p><b>oddcomp</b> reads one or more protein sequences, identifies proteins containing regions with a specific sequence word composition, then writes a list of sequence identifiers of those proteins to an output file. The word composition is read from an input file which gives the minimum word occurence for any number of sequence words. For an input sequence to be listed in the output file, each word must be found at least the stated number of times in any window over the input sequence. The window size may be set to any value or the length of the current protein (<tt>-fullwindow</tt> option).</p>
 
-<b>oddcomp</b> searches a series of protein files, reporting the identifier for
-those that exceed a certain amino acid composition threshold in a
-portion of the sequence. 
 
-<p>
-<b>oddcomp</b> was written to answer the question 'which proteins contain at
-least n X and m Y in p residues'. 
+<H2>
+Algorithm
+</H2>
 
-<p>
-One could search for serine rich or polyglutamine rich, collagen helix,
-or similar proteins using this program. 
+<p>The input file of sequence word composition data is in the same format as the output from <b>compseq</b>. Only one word size (of any length) can be used and is specified at the top of the file. The search for words is a boolean AND meaning all words given in the file must be found in a sequence for it to be reported. </p>
 
-<p>
-<b>oddcomp</b> takes as input an amino acid composition data file in the same
-format as the output from compseq.  It can tolerate any word length
-within reason for the memory capacity of the machine in question.  Only
-the first two fields in the composition data file are used: the word and
-the number of occurrences.  Any word not mentioned is initialised to a
-threshold of zero. 
+<p>Each word must occur at least the stated number of times in a window over an input sequence for the sequence to be reported. The word size given in the input data file must be less than the specified window size; you will not get any hits otherwise.</p>
 
-<p>
-<b>oddcomp</b> measures the amino acid composition (this can be dimers etc as
-well as monomers) in a sliding window.  If and when composition meets or
-exceeds all the specified thresholds, the sequence is reported and
-<b>oddcomp</b> moves to the next sequence.  It does not report where in the
-sequence it found the matching region, merely the sequence ID. 
 
-<p>
-<b>oddcomp</b> was originally written to identify SR/RS containing proteins. 
-eg.  specifying a window of forty amino acids containing at least 3 SR
-and 4 RS words. 
-
-<p>
-To search for a specific set of words in a sequence, edit the input
-composition data file to delete any words from the input file in which
-you are not interested.  The search is a boolean AND so there must be
-(from the short example above) at least 3 SR AND at least 4 RS for the
-sequence to be reported.  If your total words specified exceeds
-window-wordlength+1 you will never get any hits. 
-
-<p>
-
-Only one word size can be used and is specified at the top of the file
-in compseq-style output. 
 
 <H2>
     Usage
@@ -161,7 +128,9 @@ None.
     Notes
 </H2>
 
-None.
+<p><b>oddcomp</b> was originally written to identify proteins with <tt>SR</tt>/<tt>RS</tt> dimers, for example, windows of forty amino acids containing at least 3 <tt>SR</tt> and 4 <tt>RS</tt> words. More generally, it will help answer questions of the type 'which proteins contain at least x occurrences of word X and y occurences of word Y in regions of n residues'.  For example, one could search for serine rich or polyglutamine rich, collagen helix, or similar proteins using this program.</p>
+
+<p><b>oddcomp</b> does not report the location of the word matches in the sequence, merely the sequence ID. To search for a specific set of words in a sequence, you should edit the input file of sequence word composition data.</p>
 
 <H2>
     References

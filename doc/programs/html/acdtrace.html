@@ -24,25 +24,15 @@ acdtrace
 <H2>
     Function
 </H2>
-ACD compiler on-screen trace
+Trace processing of an application ACD file (for testing)
 
 <H2>
     Description
 </H2>
+<p><b>acdtrace</b> reads and processes an ACD file, prompting the user as necessary in exactly the same way as if the application itself was running.  If it encounters an error it will terminate.  This allows the behaviour of the command-line interface to be tested under different conditions, even if the application itself has not yet been written.</p>
+<p><b>acdtrace</b> works the same as <b>acdc</b> but reports on the processing of lines in an ACD file.  It also also prints the results of evaluating any variables and operations in the ACD file.</p>
 
-Acdtrace reports the processing of lines in an ACD file, including the
-resolution of any variables or ACD functions.
 
-<p>
-Acdtrace does not have its own command line. Instead, it will run the
-command line of any EMBOSS program by reading its ACD file and
-processing the command line and user responses in exactly the same way
-as the true program.
-
-<p>
-Acdtrace uses a very simple method. The first command line parameter is
-the name of the EMBOSS program to be compiled. All other command line
-parameters and qualifiers are processed by that program's ACD file.
 
 <H2>
     Usage
@@ -150,6 +140,14 @@ The directories are searched in the following order:
 <H2>
     Notes
 </H2>
+<p><b>acdtrace</b> does not have its own options, but takes a single parameter which is the name of the EMBOSS application that is being testsed.  It is invoked by specifying the name of the application to be tested along with any command-line options after the name of the utility application itself:</p>
+
+<p><tt><b>acdtrace</b> ApplicationName Options</tt></p>
+
+
+<p><b>acdtrace</b> will run the command line interface of any EMBOSS program by reading its ACD file and processing the command line and user responses in exactly the same way as if the true program itself were running.  The application proper is not run; it is only the ACD file that is read.  Any command-line options for the application being called can be specified. The user is prompted for any required parameter values not given on the command line and any input files are read. Output files can be specified in any available format however they will be empty (the application code is not called so there will be no output).
+
+<p><b>acdtrace</b> will use any data files specified in the ACD file of the specified program, but will ignore any data files that are only used directly by the program's code.  EMBOSS data files are distributed with the application and stored in the standard EMBOSS data directory (see EMBOSS Users Manual for further information).</p>
 
 
 <H2>
@@ -161,8 +159,8 @@ The directories are searched in the following order:
     Warnings
 </H2>
 
+<p>The output on screen can look a little confusing but is by far the best way to see how variables and operations work in your ACD file.</p>
 
-None.
 
 <H2>
     Diagnostic Error Messages
@@ -187,25 +185,26 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="acdc.html">acdc</a></td>
-<td>ACD compiler</td>
+<td>Test an application ACD file</td>
 </tr>
 
 <tr>
 <td><a href="acdpretty.html">acdpretty</a></td>
-<td>ACD pretty printing utility</td>
+<td>Correctly reformat an application ACD file</td>
 </tr>
 
 <tr>
 <td><a href="acdtable.html">acdtable</a></td>
-<td>Creates an HTML table from an ACD file</td>
+<td>Generate an HTML table of parameters from an application ACD file</td>
 </tr>
 
 <tr>
 <td><a href="acdvalid.html">acdvalid</a></td>
-<td>ACD file validation</td>
+<td>Validate an application ACD file</td>
 </tr>
 
 </table>

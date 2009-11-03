@@ -152,7 +152,7 @@ static AjPTable btwisted_getdinucdata(AjPFile inf)
 
     table = ajTablestrNewCaseLen(20);
 
-    while(ajFileReadLine(inf,&line))
+    while(ajReadlineTrim(inf,&line))
     {
 	if(*ajStrGetPtr(line)=='#')
 	    continue;

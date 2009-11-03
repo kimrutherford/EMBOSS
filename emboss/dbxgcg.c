@@ -33,6 +33,8 @@
 #define GCGTYPE_TAX 5
 #define GCGTYPE_VER 6
 
+static ajuint maxidlen = 0;
+static ajuint idtrunc  = 0;
 
 static AjPRegexp dbxgcg_embl_typexp = NULL;
 static AjPRegexp dbxgcg_embl_idexp  = NULL;
@@ -137,6 +139,7 @@ int main(int argc, char **argv)
     AjPStr filename;
     AjPStr exclude;
     AjPStr dbtype = NULL;
+    AjPFile outf = NULL;
 
     AjPStr *fieldarray = NULL;
     
@@ -158,12 +161,18 @@ int main(int argc, char **argv)
     AjPBtPri priobj = NULL;
     AjPBtHybrid hyb = NULL;
     
+    ajulong nentries = 0L;
+    ajulong ientries = 0L;
+    AjPTime starttime = NULL;
+    AjPTime begintime = NULL;
+    AjPTime nowtime = NULL;
 
     embInit("dbxgcg", argc, argv);
 
     dbtype     = ajAcdGetListSingle("idformat");
     fieldarray = ajAcdGetList("fields");
     directory  = ajAcdGetDirectoryName("directory");
+    outf       = ajAcdGetOutfile("outfile");
     indexdir   = ajAcdGetOutdirName("indexoutdir");
     filename   = ajAcdGetString("filenames");
     exclude    = ajAcdGetString("exclude");
@@ -187,13 +196,14 @@ int main(int argc, char **argv)
     embBtreeGetRsInfo(entry);
 
     nfiles = embBtreeGetFiles(entry,directory,filename,exclude);
-    for(i=0; i<nfiles; ++i)
+
+     for(i=0; i<nfiles; ++i)
     {
 	ajListPop(entry->files,(void **) &seqname);
 	refname = ajStrNew();
 	ajStrAssignS(&refname,seqname);
-	ajFileNameExtC(&seqname,"seq");
-	ajFileNameExtC(&refname,"ref");
+	ajFilenameReplaceExtC(&seqname,"seq");
+	ajFilenameReplaceExtC(&refname,"ref");
 	ajListPushAppend(entry->files,(void *)seqname);
 	ajListPushAppend(entry->reffiles,(void *)refname);
     }
@@ -203,28 +213,48 @@ int main(int argc, char **argv)
 
     embBtreeOpenCaches(entry);
 
+    starttime = ajTimeNewToday();
 
+    ajFmtPrintF(outf, "Processing directory: %S\n", directory);
 
     for(i=0;i<nfiles;++i)
     {
-	ajListPop(entry->files,(void **)&thysfile);
-	ajListPushAppend(entry->files,(void *)thysfile);
-	ajFmtPrintS(&tmpstr,"%S%S",entry->directory,thysfile);
-	printf("Processing file %s\n",MAJSTRGETPTR(tmpstr));
-	if(!(infs=ajFileNewIn(tmpstr)))
-	    ajFatal("Cannot open input file %S\n",tmpstr);
+        begintime = ajTimeNewToday();
 
 	ajListPop(entry->reffiles,(void **)&thysfile);
 	ajListPushAppend(entry->files,(void *)thysfile);
 	ajFmtPrintS(&tmpstr,"%S%S",entry->directory,thysfile);
-	if(!(infr=ajFileNewIn(tmpstr)))
+	if(!(infr=ajFileNewInNameS(tmpstr)))
 	    ajFatal("Cannot open input file %S\n",tmpstr);
 	
+	ajListPop(entry->files,(void **)&thysfile);
+	ajListPushAppend(entry->files,(void *)thysfile);
+	ajFmtPrintS(&tmpstr,"%S%S",entry->directory,thysfile);
+	if(!(infs=ajFileNewInNameS(tmpstr)))
+	    ajFatal("Cannot open input file %S\n",tmpstr);
+
+	ajFilenameTrimPath(&tmpstr);
+	ajFmtPrintF(outf,"Processing file: %S",tmpstr);
+
+	ientries = 0L;
 
 	while(dbxgcg_NextEntry(entry,infs,infr,dbtype))
 	{
+	    ++ientries;
 	    if(entry->do_id)
 	    {
+               if(ajStrGetLen(entry->id) > entry->idlen)
+                {
+                    if(ajStrGetLen(entry->id) > maxidlen)
+                    {
+                        ajWarn("id '%S' too long, truncating to idlen %d",
+                               entry->id, entry->idlen);
+                        maxidlen = ajStrGetLen(entry->id);
+                    }
+                    idtrunc++;
+                    ajStrKeepRange(&entry->id,0,entry->idlen-1);
+                }
+    
 		ajStrFmtLower(&entry->id);
 		ajStrAssignS(&hyb->key1,entry->id);
 		hyb->dbno = i;
@@ -306,13 +336,36 @@ int main(int argc, char **argv)
 	
 	ajFileClose(&infs);
 	ajFileClose(&infr);
+	nentries += ientries;
+	nowtime = ajTimeNewToday();
+	ajFmtPrintF(outf, " entries: %Lu (%Lu) time: %.1fs (%.1fs)\n",
+		    nentries, ientries,
+		    ajTimeDiff(starttime, nowtime),
+		    ajTimeDiff(begintime, nowtime));
+	ajTimeDel(&begintime);
+	ajTimeDel(&nowtime);
     }
     
 
+    nowtime = ajTimeNewToday();
+    ajFmtPrintF(outf, "Total time: %.1fs\n", ajTimeDiff(starttime, nowtime));
+    ajTimeDel(&nowtime);
+    ajTimeDel(&starttime);
+
+    if(maxidlen)
+    {
+        ajFmtPrintF(outf,
+                    "Resource idlen truncated %u IDs. "
+                    "Maximum ID length was %u.",
+                    idtrunc, maxidlen);
+        ajWarn("Resource idlen truncated %u IDs. Maximum ID length was %u.",
+               idtrunc, maxidlen);
+    }
+    
     embBtreeDumpParameters(entry);
     embBtreeCloseCaches(entry);
     
-
+    ajFileClose(&outf);
     embBtreeEntryDel(&entry);
     ajStrDel(&tmpstr);
     ajStrDel(&filename);
@@ -387,8 +440,8 @@ static AjBool dbxgcg_NextEntry(EmbPBtreeEntry entry, AjPFile infs,
     if(!dbxgcg_splitexp)
 	dbxgcg_splitexp = ajRegCompC("_0+$");
 
-    entry->reffpos = ajFileTell(infr);
-    entry->fpos    = ajFileTell(infs);
+    entry->reffpos = ajFileResetPos(infr);
+    entry->fpos    = ajFileResetPos(infs);
 
     if(!dbxgcg_gcggetent(entry, infs, infr, dbtype) &&
        !dbxgcg_pirgetent(entry, infs, infr, dbtype))
@@ -472,15 +525,16 @@ static ajlong dbxgcg_gcggetent(EmbPBtreeEntry entry, AjPFile infs,
 	dbxgcg_gcg_rexp = ajRegCompC("^>>>>([^ \t\n]+)");
 
     if(!dbxgcg_gcg_sexp)
-	dbxgcg_gcg_sexp = ajRegCompC("^>>>>([^ \t]+)[ \t]+([^ \t]+)[ \t]+([^ \t]+)"
-			  "[ \t]+([^ \t]+)[ \t]+([0-9]+)");
+	dbxgcg_gcg_sexp = ajRegCompC("^>>>>([^ \t]+)[ \t]+"
+				     "(Dummy Header|[^ \t]+)[ \t]+([^ \t]+)"
+				     "[ \t]+([^ \t]+)[ \t]+([0-9]+)");
 
     ajStrAssignC(&sline, "");
 
     /* check for seqid first line */
     while(ajStrGetCharFirst(sline)!='>')
     {
-	if(!ajFileGets(infs, &sline))
+	if(!ajReadline(infs, &sline))
 	  {
 	    ajStrDel(&gcgtype);
 	    ajStrDel(&gcgdate);
@@ -491,11 +545,11 @@ static ajlong dbxgcg_gcggetent(EmbPBtreeEntry entry, AjPFile infs,
 	    return 0;			/* end of file */
 	  }
 	ajDebug("... read until next seq %Ld '%S'\n",
-		ajFileTell(infs), sline);
+		ajFileResetPos(infs), sline);
     }
 
     ajDebug("dbxgcg_gcggetent .seq (%S) %Ld '%S'\n",
-	    dbtype, ajFileTell(infs), sline);
+	    dbtype, ajFileResetPos(infs), sline);
 
     /* get the encoding/sequence length info */
     if(!ajRegExec(dbxgcg_gcg_sexp, sline))
@@ -517,17 +571,17 @@ static ajlong dbxgcg_gcggetent(EmbPBtreeEntry entry, AjPFile infs,
     ajStrAssignC(&rline, "");
 
     ajDebug("dbxgcg_gcggetent .ref (%S) %Ld '%S'\n",
-	    dbtype, ajFileTell(infr), rline);
+	    dbtype, ajFileResetPos(infr), rline);
 
     /* check for refid first line */
     while(ajStrGetCharFirst(rline)!='>')
     {
-	if(!ajFileGets(infr, &rline))
+	if(!ajReadline(infr, &rline))
 	{
 	    ajErr("ref ended before seq");
 	    break;			/* end of file */
 	}
-	ajDebug("... read until next ref %Ld '%S'\n", ajFileTell(infr), rline);
+	ajDebug("... read until next ref %Ld '%S'\n", ajFileResetPos(infr), rline);
     }
 
     /* get the encoding/sequence length info */
@@ -538,7 +592,7 @@ static ajlong dbxgcg_gcggetent(EmbPBtreeEntry entry, AjPFile infs,
     parser[iparser].Parser(entry, infr, &reflibstr);/* writes alistfile data */
 
     /* get the description line */
-    ajFileGets(infs, &sline);
+    ajReadline(infs, &sline);
 
     /* seek to the end of the sequence; +1 to jump over newline */
     if(ajStrGetCharFirst(gcgtype)=='2')
@@ -625,17 +679,17 @@ static ajlong dbxgcg_pirgetent(EmbPBtreeEntry entry, AjPFile infs,
 
     /* skip to seqid first line */
     while(ajStrGetCharFirst(sline)!='>')
-	if(!ajFileGets(infs, &sline))
+	if(!ajReadline(infs, &sline))
 	    return 0;			/* end of file */
 
     ajDebug("dbxgcg_pirgetent .seq (%S) %Ld '%S' \n",
-	    dbtype, ajFileTell(infs), sline);
+	    dbtype, ajFileResetPos(infs), sline);
 
     ajRegExec(dbxgcg_pir_pirexp, sline);
 
     /* skip to refid first line */
     while(ajStrGetCharFirst(rline)!='>')
-	if(!ajFileGets(infr, &rline))
+	if(!ajReadline(infr, &rline))
 	{
 	    ajErr("ref ended before seq"); /* end of file */
 	    break;
@@ -648,21 +702,21 @@ static ajlong dbxgcg_pirgetent(EmbPBtreeEntry entry, AjPFile infs,
     ajRegSubI(dbxgcg_pir_pirexp, 1, &entry->id);
 
     ajDebug("dbigcg_pirgetent seqid '%S' spos: %Ld\n",
-	    entry->id, ajFileTell(infs));
+	    entry->id, ajFileResetPos(infs));
     ajDebug("dbxgcg_pirgetent refid '%S' spos: %Ld\n",
-	    entry->id, ajFileTell(infr));
+	    entry->id, ajFileResetPos(infr));
 
     parser[iparser].Parser(entry, infr, &reflibstr);/* writes alistfile data */
 
     /* get the description line */
-    ajFileGets(infs, &sline);
+    ajReadline(infs, &sline);
     gcglen = 0;
 
     /* seek to the end of the sequence; +1 to jump over newline */
     while(ajStrGetCharFirst(sline)!='>')
     {
-	spos = ajFileTell(infs);
-	if(!ajFileGets(infs, &sline))
+	spos = ajFileResetPos(infs);
+	if(!ajReadline(infs, &sline))
 	{
 	    spos = 0;
 	    break;
@@ -740,12 +794,12 @@ static ajlong dbxgcg_gcgappent(AjPFile infr, AjPFile infs,
 
     while(!isend)
     {
-        spos = ajFileTell(infs);
-	ajFileGets(infs,&sline);
+        spos = ajFileResetPos(infs);
+	ajReadline(infs,&sline);
 	while(strncmp(ajStrGetPtr(sline),">>>>",4))
 	{
-	    spos = ajFileTell(infs);
-	    if(!ajFileGets(infs, &sline))
+	    spos = ajFileResetPos(infs);
+	    if(!ajReadline(infs, &sline))
 	    {
 	      ajStrDel(&reflibstr);
 	      ajStrDel(&seqlibstr);
@@ -761,13 +815,13 @@ static ajlong dbxgcg_gcgappent(AjPFile infr, AjPFile infs,
 	ajRegExec(sexp, sline);
 	ajRegSubI(sexp, 1, &seqlibstr);
 
-	rpos = ajFileTell(infr);
-	ajFileGets(infr, &rline);
+	rpos = ajFileResetPos(infr);
+	ajReadline(infr, &rline);
 
 	while(ajStrGetCharFirst(rline)!='>')
 	{
-	  rpos = ajFileTell(infr);
-	  if(!ajFileGets(infr, &rline))
+	  rpos = ajFileResetPos(infr);
+	  if(!ajReadline(infr, &rline))
 	  {
 	    ajDebug("end of file on seq\n");
 	    ajDebug("ref ended before seq\n");
@@ -851,13 +905,13 @@ static AjBool dbxgcg_ParseEmbl(EmbPBtreeEntry entry, AjPFile infr,
     if(!dbxgcg_embl_idexp)
 	dbxgcg_embl_idexp = ajRegCompC("^ID   ([^ \t;]+)");
 
-    rpos = ajFileTell(infr);
-    while(ajFileGets(infr, &rline))
+    rpos = ajFileResetPos(infr);
+    while(ajReadline(infr, &rline))
     {
 	if(ajStrGetCharFirst(rline) == '>')
 	    break;
 	
-        rpos = ajFileTell(infr);
+        rpos = ajFileResetPos(infr);
 	ajStrAssignS(&tmpstr,rline);
 
 	if(ajRegExec(dbxgcg_embl_typexp, tmpstr))
@@ -908,7 +962,8 @@ static AjBool dbxgcg_ParseEmbl(EmbPBtreeEntry entry, AjPFile infr,
 		ajStrAssignS(&str,tmpfd);
 		ajListPush(entry->ac,(void *)str);
 
-		ajRegPost(dbxgcg_embl_wrdexp, &tmpline);
+		ajRegPost(dbxgcg_embl_wrdexp, &tmpstr);
+                ajStrAssignS(&tmpline, tmpstr);
 	    }
 	    continue;
 	}
@@ -923,7 +978,8 @@ static AjBool dbxgcg_ParseEmbl(EmbPBtreeEntry entry, AjPFile infr,
 		ajStrAssignS(&str,tmpfd);
 		ajListPush(entry->de,(void *)str);
 
-		ajRegPost(dbxgcg_embl_wrdexp, &tmpline);
+		ajRegPost(dbxgcg_embl_wrdexp, &tmpstr);
+                ajStrAssignS(&tmpline, tmpstr);
 	    }
 	    continue;
 	}
@@ -938,7 +994,8 @@ static AjBool dbxgcg_ParseEmbl(EmbPBtreeEntry entry, AjPFile infr,
 		ajStrAssignS(&str,tmpfd);
 		ajListPush(entry->sv,(void *)str);
 
-		ajRegPost(dbxgcg_embl_verexp, &tmpline);
+		ajRegPost(dbxgcg_embl_verexp, &tmpstr);
+                ajStrAssignS(&tmpline, tmpstr);
 	    }
 	    continue;
 	}
@@ -947,7 +1004,8 @@ static AjBool dbxgcg_ParseEmbl(EmbPBtreeEntry entry, AjPFile infr,
 	    while(ajRegExec(dbxgcg_embl_phrexp, tmpline))
 	    {
 		ajRegSubI(dbxgcg_embl_phrexp, 1, &tmpfd);
-		ajRegPost(dbxgcg_embl_phrexp, &tmpline);
+		ajRegPost(dbxgcg_embl_phrexp, &tmpstr);
+                ajStrAssignS(&tmpline, tmpstr);
 		ajStrTrimWhiteEnd(&tmpfd);
 		if(!ajStrGetLen(tmpfd))
 		    continue;
@@ -964,7 +1022,8 @@ static AjBool dbxgcg_ParseEmbl(EmbPBtreeEntry entry, AjPFile infr,
 	    while(ajRegExec(dbxgcg_embl_taxexp, tmpline))
 	    {
 		ajRegSubI(dbxgcg_embl_taxexp, 1, &tmpfd);
-		ajRegPost(dbxgcg_embl_taxexp, &tmpline);
+		ajRegPost(dbxgcg_embl_taxexp, &tmpstr);
+                ajStrAssignS(&tmpline, tmpstr);
 		ajStrTrimWhiteEnd(&tmpfd);
 		if(!ajStrGetLen(tmpfd))
 		    continue;
@@ -1042,12 +1101,12 @@ static AjBool dbxgcg_ParseGenbank(EmbPBtreeEntry entry, AjPFile infr,
     if(!verexp)
 	verexp = ajRegCompC("([A-Za-z0-9]+)( +GI:([0-9]+))?");
 
-    while(ajFileGets(infr, &rline))
+    while(ajReadline(infr, &rline))
     {
 	if(ajStrGetCharFirst(rline) == '>')
 	    break;
 	
-        rpos = ajFileTell(infr);
+        rpos = ajFileResetPos(infr);
 	ajStrAssignS(&tmpstr,rline);
 
 	if(ajRegExec(typexp, tmpstr))
@@ -1096,7 +1155,8 @@ static AjBool dbxgcg_ParseGenbank(EmbPBtreeEntry entry, AjPFile infr,
 		ajStrAssignS(&str,tmpfd);
 		ajListPush(entry->ac,(void *)str);
 
-		ajRegPost(wrdexp, &tmpline);
+		ajRegPost(wrdexp, &tmpstr);
+                ajStrAssignS(&tmpline, tmpstr);
 	    }
 	    continue;
 	}
@@ -1111,7 +1171,8 @@ static AjBool dbxgcg_ParseGenbank(EmbPBtreeEntry entry, AjPFile infr,
 		ajStrAssignS(&str,tmpfd);
 		ajListPush(entry->de,(void *)str);
 
-		ajRegPost(wrdexp, &tmpline);
+		ajRegPost(wrdexp, &tmpstr);
+                ajStrAssignS(&tmpline, tmpstr);
 	    }
 	    continue;
 	}
@@ -1120,7 +1181,8 @@ static AjBool dbxgcg_ParseGenbank(EmbPBtreeEntry entry, AjPFile infr,
 	    while(ajRegExec(phrexp, tmpline))
 	    {
 	        ajRegSubI(phrexp, 1, &tmpfd);
-		ajRegPost(phrexp, &tmpline);
+		ajRegPost(phrexp, &tmpstr);
+                ajStrAssignS(&tmpline, tmpstr);
 		ajStrTrimWhiteEnd(&tmpfd);
 		if(!ajStrGetLen(tmpfd))
 		    continue;
@@ -1137,7 +1199,8 @@ static AjBool dbxgcg_ParseGenbank(EmbPBtreeEntry entry, AjPFile infr,
 	    while(ajRegExec(taxexp, tmpline))
 	    {
 	        ajRegSubI(taxexp, 1, &tmpfd);
-		ajRegPost(taxexp, &tmpline);
+		ajRegPost(taxexp, &tmpstr);
+                ajStrAssignS(&tmpline, tmpstr);
 		ajStrTrimWhiteEnd(&tmpfd);
 		if(!ajStrGetLen(tmpfd))
 		    continue;
@@ -1230,12 +1293,12 @@ static AjBool dbxgcg_ParsePir(EmbPBtreeEntry entry, AjPFile infr,
     if(!dbxgcg_pir_keyexp)
 	dbxgcg_pir_keyexp = ajRegCompC("^C;Keywords:");
 
-    rpos = ajFileTell(infr);
+    rpos = ajFileResetPos(infr);
 
     ajDebug("++id '%S'\n", *id);
 
 
-    ajFileGets(infr, &rline);
+    ajReadline(infr, &rline);
     ajDebug("line-2 '%S'\n", rline);
     if(entry->do_description)
     {
@@ -1248,13 +1311,14 @@ static AjBool dbxgcg_ParsePir(EmbPBtreeEntry entry, AjPFile infr,
 	    ajStrAssignS(&str,tmpfd);
 	    ajListPush(entry->de,(void *)str);
 
-	    ajRegPost(dbxgcg_pir_wrdexp, &rline);
+	    ajRegPost(dbxgcg_pir_wrdexp, &tmpstr);
+            ajStrAssignS(&rline, tmpstr);
 	}
     }
 
     while(ajStrGetCharFirst(rline)!='>')
     {
-        rpos = ajFileTell(infr);
+        rpos = ajFileResetPos(infr);
 	ajStrAssignS(&tmpstr,rline);
 
 	if(ajRegExec(dbxgcg_pir_acexp, rline))
@@ -1272,7 +1336,8 @@ static AjBool dbxgcg_ParsePir(EmbPBtreeEntry entry, AjPFile infr,
 		    ajListPush(entry->ac,(void *)str);
 		}
 
-		ajRegPost(dbxgcg_pir_ac2exp, &tmpline);
+		ajRegPost(dbxgcg_pir_ac2exp, &tmpstr);
+                ajStrAssignS(&tmpline, tmpstr);
 	    }
 	}
 
@@ -1291,7 +1356,8 @@ static AjBool dbxgcg_ParsePir(EmbPBtreeEntry entry, AjPFile infr,
 		    ajStrAssignS(&str,tmpfd);
 		    ajListPush(entry->kw,(void *)str);
 
-		    ajRegPost(dbxgcg_pir_phrexp, &tmpline);
+		    ajRegPost(dbxgcg_pir_phrexp, &tmpstr);
+                    ajStrAssignS(&tmpline, tmpstr);
 		}
 	    }
 	}
@@ -1311,12 +1377,13 @@ static AjBool dbxgcg_ParsePir(EmbPBtreeEntry entry, AjPFile infr,
 		    ajStrAssignS(&str,tmpfd);
 		    ajListPush(entry->tx,(void *)str);
 
-		    ajRegPost(dbxgcg_pir_tax2exp, &tmpline);
+		    ajRegPost(dbxgcg_pir_tax2exp, &tmpstr);
+                    ajStrAssignS(&tmpline, tmpstr);
 		}
 	    }
 	}
 
-	if(!ajFileGets(infr, &rline))
+	if(!ajReadline(infr, &rline))
 	{
 	    rpos = 0;
 	    break;

@@ -1,5 +1,5 @@
 application: abiview [
-  documentation: "Reads ABI file and display the trace"
+  documentation: "Display the trace in an ABI sequencer file"
   groups: "Display"
 ]
 

@@ -5,21 +5,16 @@
 
 Function
 
-   Displays some simple information about sequences
+   Display basic information about sequences
 
 Description
 
-   This is a small utility to list the sequences' USA, name, accession
-   number, type (nucleic or protein), length, percentage C+G, and/or
-   description.
-
-   Any combination of these types of information can be easily selected
-   or unselected.
-
-   By default, the output file starts each line with the USA of the
-   sequence being described, so the output file is a list file that can
-   be manually edited and read in by any other EMBOSS program that can
-   read in one or more sequence to be analysed.
+   infoseq displays on screen basic information about one or more input
+   sequences. This includes the Uniform Sequence Address (USA), name,
+   accession number, type (nucleic or protein), length, percentage C+G
+   and description. Any combination of these records is easily selected
+   or unselected for display. The same information may be written to an
+   output file which (optionally) may be formatted in an HTML table.
 
 Usage
 
@@ -29,7 +24,7 @@ Usage
 
 
 % infoseq tembl:x13776 
-Displays some simple information about sequences
+Display basic information about sequences
 
 USA                      Database  Name           Accession      Type Length %G
 C    Description
@@ -45,7 +40,7 @@ ation
 
 
 % infoseq tembl:x13776 -nousa 
-Displays some simple information about sequences
+Display basic information about sequences
 
 Database  Name           Accession      Type Length %GC    Description
 tembl          X13776         X13776         N    2167   66.54  Pseudomonas aer
@@ -57,7 +52,7 @@ uginosa amiC and amiR gene for aliphatic amidase regulation
 
 
 % infoseq tembl:x13776 -only -name -length 
-Displays some simple information about sequences
+Display basic information about sequences
 
 Name           Length
 X13776         2167
@@ -68,7 +63,7 @@ X13776         2167
 
 
 % infoseq tembl:x13776 -only -desc 
-Displays some simple information about sequences
+Display basic information about sequences
 
 Description
 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
@@ -79,7 +74,7 @@ Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
 
 
 % infoseq tembl:x13776 -only -type 
-Displays some simple information about sequences
+Display basic information about sequences
 
 Type
 N
@@ -90,7 +85,7 @@ N
 
 
 % infoseq tembl:x13776 -html 
-Displays some simple information about sequences
+Display basic information about sequences
 
 
  USA Database Name Accession Type Length %GC Description
@@ -174,8 +169,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -381,18 +377,17 @@ Data files
 
 Notes
 
-   This program was written to make it easier to get some specific bits
-   of information on a sequence for use in small perl scripts. This Perl
-   code fragment to get the type of a sequence is typical:
-$type = `$PATH_TO_EMBOSS/infoseq $sequence -auto -only -type`;
-chomp $type;
-
-   You may find other uses for it, of course.
+   There are many qualifiers to control exactly what information on the
+   sequence is output and how it is formatted. If you only want a few
+   fields in the output file, the command line may be shortended by
+   preceding the appropriate qualifier with -only. For example, instead
+   of specifying -nohead -noname -noacc -notype -nopgc -nodesc to get
+   only the length output, you can specify -only -length.
 
    By default, the output file starts each line with the USA of the
    sequence being described, so the output file is a list file that can
-   be manually edited and read in by other EMBOSS programs using the
-   list-file specification of '@filename'.
+   be manually edited and read in by any other EMBOSS program that can
+   read in one or more sequence to be analysed.
 
 References
 
@@ -416,14 +411,17 @@ Known bugs
 
 See also
 
-   Program name                        Description
-   infoalign    Information on a multiple sequence alignment
-   seealso      Finds programs sharing group names
-   showdb       Displays information on the currently available databases
-   textsearch   Search sequence documentation. Slow, use SRS and Entrez!
-   tfm          Displays a program's help documentation manual
-   whichdb      Search all databases for an entry
-   wossname     Finds programs by keywords in their one-line documentation
+   Program name Description
+   infoalign Display basic information about a multiple sequence
+   alignment
+   infobase Return information on a given nucleotide base
+   inforesidue Return information on a given amino acid residue
+   seealso Finds programs with similar function to a specified program
+   showdb Displays information on configured databases
+   textsearch Search the textual description of sequence(s)
+   tfm Displays full documentation for an application
+   whichdb Search all sequence databases for an entry and retrieve it
+   wossname Finds programs by keywords in their short description
 
      * geecee - Calculates the fractional GC content of a nucleic acid
        sequence

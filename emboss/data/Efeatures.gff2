@@ -1,0 +1,27 @@
+#include Efeatures.gff
+
+Finished
+	/Note
+similarity
+	/Note
+	/Target
+sequence
+	/Note
+	/Sequence
+
+Clone
+	/Note
+Oligo
+	/Note
+Clone_right_end
+	/note
+	/clone
+Clone_left_end
+	/note
+	/clone
+#intron
+#	/sequence
+#exon
+#	/sequence
+#cds
+#	/sequence

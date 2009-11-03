@@ -140,7 +140,7 @@ typedef struct AjSSeqout {
 ** Prototype definitions
 */
 
-void         ajSeqoutWriteSeq (AjPSeqout outseq, const AjPSeq seq);
+AjBool       ajSeqoutWriteSeq (AjPSeqout outseq, const AjPSeq seq);
 AjBool       ajSeqoutOpenFilename (AjPSeqout seqout, const AjPStr name);
 ajint        ajSeqoutGetCheckgcg (const AjPSeqout outseq);
 void         ajSeqoutClear (AjPSeqout thys);
@@ -163,7 +163,7 @@ AjBool       ajSeqoutSetFormatS (AjPSeqout thys, const AjPStr format);
 void         ajSeqoutTrace (const AjPSeqout seq);
 void         ajSeqoutPrintFormat (AjPFile outf, AjBool full);
 void         ajSeqoutClearUsa (AjPSeqout thys, const AjPStr Usa);
-void         ajSeqoutWriteSet (AjPSeqout seqout, const AjPSeqset seq);
+AjBool       ajSeqoutWriteSet (AjPSeqout seqout, const AjPSeqset seq);
 void         ajSeqoutClose (AjPSeqout outseq);
 void         ajSeqoutExit(void);
 

@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>trimseq untrimmed.seq trim1.seq -window 1 -percent 100 </b>
-Trim ambiguous bits off the ends of sequences
+Remove unwanted characters from start and end of sequence(s)
 
 </pre></td></tr></table><p>
 <p>
@@ -18,7 +18,7 @@ Trim ambiguous bits off the ends of sequences
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>trimseq untrimmed.seq trim2.seq -window 5 -percent 40 </b>
-Trim ambiguous bits off the ends of sequences
+Remove unwanted characters from start and end of sequence(s)
 
 </pre></td></tr></table><p>
 <p>
@@ -31,7 +31,7 @@ Trim ambiguous bits off the ends of sequences
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>trimseq untrimmed.seq trim3.seq -window 5 -percent 50 </b>
-Trim ambiguous bits off the ends of sequences
+Remove unwanted characters from start and end of sequence(s)
 
 </pre></td></tr></table><p>
 <p>
@@ -44,7 +44,7 @@ Trim ambiguous bits off the ends of sequences
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>trimseq untrimmed.seq trim4.seq -window 5 -percent 50 -strict </b>
-Trim ambiguous bits off the ends of sequences
+Remove unwanted characters from start and end of sequence(s)
 
 </pre></td></tr></table><p>
 <p>
@@ -57,7 +57,7 @@ Trim ambiguous bits off the ends of sequences
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>trimseq untrimmed.seq trim5.seq -window 5 -percent 50 -strict -noright </b>
-Trim ambiguous bits off the ends of sequences
+Remove unwanted characters from start and end of sequence(s)
 
 </pre></td></tr></table><p>
 <p>

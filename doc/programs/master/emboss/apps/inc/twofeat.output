@@ -6,7 +6,7 @@
 <pre>
 ########################################
 # Program: twofeat
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: twofeat
 #    [-sequence] tembl:x65923
 #    -atype polyA_signal
@@ -23,8 +23,8 @@
 # HitCount: 1
 #=======================================
 
-  Start     End   Score starta   enda startb   endb
-    484     509   0.000    484    489    509    509
+  Start     End  Strand   Score starta   enda startb   endb
+    484     509       +   0.000    484    489    509    509
 
 #---------------------------------------
 #---------------------------------------
@@ -41,10 +41,12 @@
 <p><h3>File: x65923.twofeat</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-##gff-version 2.0
-##date 2006-07-15
-##Type DNA X65923
-X65923	EMBL	polyA_signal	484	489	0.000	+	.	Sequence "X65923.6"
-X65923	EMBL	polyA_site	509	509	0.000	+	.	Sequence "X65923.7" ; FeatFlags "0x40"
+##gff-version 3
+##sequence-region X65923 1 518
+#!Date 2008-07-15
+#!Type DNA
+#!Source-version EMBOSS 6.0.0
+X65923	EMBL	polyA_signal_sequence	484	489	0.000	+	.	ID="X65923.6"
+X65923	EMBL	polyA_site	509	509	0.000	+	.	ID="X65923.7";featflags="0x40"
 </pre>
 </td></tr></table><p>

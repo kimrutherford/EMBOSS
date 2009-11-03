@@ -8,6 +8,7 @@ Alignment:Dot_plots Dot plot sequence comparisons
 Alignment:Global Global sequence alignment
 Alignment:Local Local sequence alignment
 Alignment:Multiple Multiple sequence alignment
+Assembly:Fragment_assembly DNA sequence assembly
 Display Publication-quality display
 Edit Sequence editing
 Enzyme_Kinetics Enzyme kinetics calculations

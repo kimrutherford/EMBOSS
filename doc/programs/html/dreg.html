@@ -24,12 +24,324 @@ dreg
 <H2>
     Function
 </H2>
-Regular expression search of a nucleotide sequence
+Regular expression search of nucleotide sequence(s)
 <H2>
     Description
 </H2>
 
-This searches for matches of a regular expression to a nucleic acid sequence.
+<p><b>dreg</b> searches one or more sequences with the supplied regular expression and writes an output file with the matches.</p>
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with dreg</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>dreg </b>
+Regular expression search of nucleotide sequence(s)
+Input nucleotide sequence(s): <b>tembl:x13776</b>
+Regular expression pattern: <b>ggtacc</b>
+Output report [x13776.dreg]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+  [-pattern]           regexp     Any regular expression pattern is accepted)
+  [-outfile]           report     [*.dreg] Output report file name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-pattern" associated qualifiers
+   -pformat2           string     File format
+   -pname2             string     Pattern base name
+
+   "-outfile" associated qualifiers
+   -rformat3           string     Report format
+   -rname3             string     Base file name
+   -rextension3        string     File name extension
+   -rdirectory3        string     Output directory
+   -raccshow3          boolean    Show accession number in the report
+   -rdesshow3          boolean    Show description in the report
+   -rscoreshow3        boolean    Show the score in the report
+   -rstrandshow3       boolean    Show the nucleotide strand in the report
+   -rusashow3          boolean    Show the full USA in the report
+   -rmaxall3           integer    Maximum total hits to report
+   -rmaxseq3           integer    Maximum hits to report for one sequence
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Nucleotide sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-pattern]<br>(Parameter 2)</td>
+<td>Regular expression pattern</td>
+<td>Any regular expression pattern is accepted</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 3)</td>
+<td>Output report file name</td>
+<td>Report output file</td>
+<td><i>&lt;*&gt;</i>.dreg</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+<H2>
+    Input file format
+</H2>
+Any nucleic sequence.
+
+<p>
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:x13776' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:x13776</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   X13776; SV 1; linear; genomic DNA; STD; PRO; 2167 BP.
+XX
+AC   X13776; M43175;
+XX
+DT   19-APR-1989 (Rel. 19, Created)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 24)
+XX
+DE   Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+XX
+KW   aliphatic amidase regulator; amiC gene; amiR gene.
+XX
+OS   Pseudomonas aeruginosa
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadales;
+OC   Pseudomonadaceae; Pseudomonas.
+XX
+RN   [1]
+RP   1167-2167
+RA   Rice P.M.;
+RT   ;
+RL   Submitted (16-DEC-1988) to the EMBL/GenBank/DDBJ databases.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
+XX
+RN   [2]
+RP   1167-2167
+RX   DOI; 10.1016/0014-5793(89)80249-2.
+RX   PUBMED; 2495988.
+RA   Lowe N., Rice P.M., Drew R.E.;
+RT   "Nucleotide sequence of the aliphatic amidase regulator gene of Pseudomonas
+RT   aeruginosa";
+RL   FEBS Lett. 246(1-2):39-43(1989).
+XX
+RN   [3]
+RP   1-1292
+RX   PUBMED; 1907262.
+RA   Wilson S., Drew R.;
+RT   "Cloning and DNA seqence of amiC, a new gene regulating expression of the
+RT   Pseudomonas aeruginosa aliphatic amidase, and purification of the amiC
+RT   product.";
+RL   J. Bacteriol. 173(16):4914-4921(1991).
+XX
+RN   [4]
+RP   1-2167
+RA   Rice P.M.;
+RT   ;
+RL   Submitted (04-SEP-1991) to the EMBL/GenBank/DDBJ databases.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
+XX
+DR   GOA; Q51417.
+DR   UniProtKB/Swiss-Prot; Q51417; AMIS_PSEAE.
+XX
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+FT                   /replace=""
+FT                   /note="ClaI fragment deleted in pSW36,  constitutive
+FT                   phenotype"
+FT   misc_feature    1
+FT                   /note="last base of an XhoI site"
+FT   misc_feature    648..653
+FT                   /note="end of 658bp XhoI fragment, deletion in  pSW3 causes
+FT                   constitutive expression of amiE"
+FT   conflict        1281
+FT                   /replace="g"
+FT                   /citation=[3]
+XX
+SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
+     ggtaccgctg gccgagcatc tgctcgatca ccaccagccg ggcgacggga actgcacgat        60
+     ctacctggcg agcctggagc acgagcgggt tcgcttcgta cggcgctgag cgacagtcac       120
+     aggagaggaa acggatggga tcgcaccagg agcggccgct gatcggcctg ctgttctccg       180
+     aaaccggcgt caccgccgat atcgagcgct cgcacgcgta tggcgcattg ctcgcggtcg       240
+     agcaactgaa ccgcgagggc ggcgtcggcg gtcgcccgat cgaaacgctg tcccaggacc       300
+     ccggcggcga cccggaccgc tatcggctgt gcgccgagga cttcattcgc aaccgggggg       360
+     tacggttcct cgtgggctgc tacatgtcgc acacgcgcaa ggcggtgatg ccggtggtcg       420
+     agcgcgccga cgcgctgctc tgctacccga ccccctacga gggcttcgag tattcgccga       480
+     acatcgtcta cggcggtccg gcgccgaacc agaacagtgc gccgctggcg gcgtacctga       540
+     ttcgccacta cggcgagcgg gtggtgttca tcggctcgga ctacatctat ccgcgggaaa       600
+     gcaaccatgt gatgcgccac ctgtatcgcc agcacggcgg cacggtgctc gaggaaatct       660
+     acattccgct gtatccctcc gacgacgact tgcagcgcgc cgtcgagcgc atctaccagg       720
+     cgcgcgccga cgtggtcttc tccaccgtgg tgggcaccgg caccgccgag ctgtatcgcg       780
+     ccatcgcccg tcgctacggc gacggcaggc ggccgccgat cgccagcctg accaccagcg       840
+     aggcggaggt ggcgaagatg gagagtgacg tggcagaggg gcaggtggtg gtcgcgcctt       900
+     acttctccag catcgatacg cccgccagcc gggccttcgt ccaggcctgc catggtttct       960
+     tcccggagaa cgcgaccatc accgcctggg ccgaggcggc ctactggcag accttgttgc      1020
+     tcggccgcgc cgcgcaggcc gcaggcaact ggcgggtgga agacgtgcag cggcacctgt      1080
+     acgacatcga catcgacgcg ccacaggggc cggtccgggt ggagcgccag aacaaccaca      1140
+     gccgcctgtc ttcgcgcatc gcggaaatcg atgcgcgcgg cgtgttccag gtccgctggc      1200
+     agtcgcccga accgattcgc cccgaccctt atgtcgtcgt gcataacctc gacgactggt      1260
+     ccgccagcat gggcggggga ccgctcccat gagcgccaac tcgctgctcg gcagcctgcg      1320
+     cgagttgcag gtgctggtcc tcaacccgcc gggggaggtc agcgacgccc tggtcttgca      1380
+     gctgatccgc atcggttgtt cggtgcgcca gtgctggccg ccgccggaag ccttcgacgt      1440
+     gccggtggac gtggtcttca ccagcatttt ccagaatggc caccacgacg agatcgctgc      1500
+     gctgctcgcc gccgggactc cgcgcactac cctggtggcg ctggtggagt acgaaagccc      1560
+     cgcggtgctc tcgcagatca tcgagctgga gtgccacggc gtgatcaccc agccgctcga      1620
+     tgcccaccgg gtgctgcctg tgctggtatc ggcgcggcgc atcagcgagg aaatggcgaa      1680
+     gctgaagcag aagaccgagc agctccagga ccgcatcgcc ggccaggccc ggatcaacca      1740
+     ggccaaggtg ttgctgatgc agcgccatgg ctgggacgag cgcgaggcgc accagcacct      1800
+     gtcgcgggaa gcgatgaagc ggcgcgagcc gatcctgaag atcgctcagg agttgctggg      1860
+     aaacgagccg tccgcctgag cgatccgggc cgaccagaac aataacaaga ggggtatcgt      1920
+     catcatgctg ggactggttc tgctgtacgt tggcgcggtg ctgtttctca atgccgtctg      1980
+     gttgctgggc aagatcagcg gtcgggaggt ggcggtgatc aacttcctgg tcggcgtgct      2040
+     gagcgcctgc gtcgcgttct acctgatctt ttccgcagca gccgggcagg gctcgctgaa      2100
+     ggccggagcg ctgaccctgc tattcgcttt tacctatctg tgggtggccg ccaaccagtt      2160
+     cctcgag                                                                2167
+//
+</pre>
+</td></tr></table><p>
+
+
+<H2>
+    Output file format
+</H2>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: x13776.dreg</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: dreg
+# Rundate: Tue 15 Jul 2008 12:00:00
+# Commandline: dreg
+#    -sequence tembl:x13776
+#    -pattern ggtacc
+# Report_format: seqtable
+# Report_file: x13776.dreg
+########################################
+
+#=======================================
+#
+# Sequence: X13776     from: 1   to: 2167
+# HitCount: 1
+#
+# Pattern: ggtacc
+#
+#=======================================
+
+  Start     End  Strand Pattern_name Sequence
+      1       6       + regex1       ggtacc
+
+#---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_hitcount: 1
+#---------------------------------------
+</pre>
+</td></tr></table><p>
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
 
 <p>
 A regular expression is a way of specifying an ambiguous pattern to
@@ -965,318 +1277,6 @@ does two things:
 
 
 <H2>
-    Usage
-</H2>
-<b>Here is a sample session with dreg</b>
-<p>
-
-<p>
-<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
-
-% <b>dreg </b>
-Regular expression search of a nucleotide sequence
-Input nucleotide sequence(s): <b>tembl:x13776</b>
-Regular expression pattern: <b>ggtacc</b>
-Output report [x13776.dreg]: <b></b>
-
-</pre></td></tr></table><p>
-<p>
-<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
-
-<H2>
-    Command line arguments
-</H2>
-<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
-<pre>
-   Standard (Mandatory) qualifiers:
-  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
-                                  format, or reference (input USA)
-  [-pattern]           regexp     Any regular expression pattern is accepted)
-  [-outfile]           report     [*.dreg] Output report file name
-
-   Additional (Optional) qualifiers: (none)
-   Advanced (Unprompted) qualifiers: (none)
-   Associated qualifiers:
-
-   "-sequence" associated qualifiers
-   -sbegin1            integer    Start of each sequence to be used
-   -send1              integer    End of each sequence to be used
-   -sreverse1          boolean    Reverse (if DNA)
-   -sask1              boolean    Ask for begin/end/reverse
-   -snucleotide1       boolean    Sequence is nucleotide
-   -sprotein1          boolean    Sequence is protein
-   -slower1            boolean    Make lower case
-   -supper1            boolean    Make upper case
-   -sformat1           string     Input sequence format
-   -sdbname1           string     Database name
-   -sid1               string     Entryname
-   -ufo1               string     UFO features
-   -fformat1           string     Features format
-   -fopenfile1         string     Features file name
-
-   "-pattern" associated qualifiers
-   -pformat2           string     File format
-   -pname2             string     Pattern base name
-
-   "-outfile" associated qualifiers
-   -rformat3           string     Report format
-   -rname3             string     Base file name
-   -rextension3        string     File name extension
-   -rdirectory3        string     Output directory
-   -raccshow3          boolean    Show accession number in the report
-   -rdesshow3          boolean    Show description in the report
-   -rscoreshow3        boolean    Show the score in the report
-   -rusashow3          boolean    Show the full USA in the report
-   -rmaxall3           integer    Maximum total hits to report
-   -rmaxseq3           integer    Maximum hits to report for one sequence
-
-   General qualifiers:
-   -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
-   -options            boolean    Prompt for standard and additional values
-   -debug              boolean    Write debug output to program.dbg
-   -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
-                                  information on associated and general
-                                  qualifiers can be found with -help -verbose
-   -warning            boolean    Report warnings
-   -error              boolean    Report errors
-   -fatal              boolean    Report fatal errors
-   -die                boolean    Report dying program messages
-
-</pre>
-</td></tr></table>
-<P>
-<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
-<tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
-</tr>
-
-<tr>
-<td>[-sequence]<br>(Parameter 1)</td>
-<td>Nucleotide sequence(s) filename and optional format, or reference (input USA)</td>
-<td>Readable sequence(s)</td>
-<td><b>Required</b></td>
-</tr>
-
-<tr>
-<td>[-pattern]<br>(Parameter 2)</td>
-<td>Regular expression pattern</td>
-<td>Any regular expression pattern is accepted</td>
-<td><b>Required</b></td>
-</tr>
-
-<tr>
-<td>[-outfile]<br>(Parameter 3)</td>
-<td>Output report file name</td>
-<td>Report output file</td>
-<td><i>&lt;*&gt;</i>.dreg</td>
-</tr>
-
-<tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Additional (Optional) qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
-</tr>
-
-<tr>
-<td colspan=4>(none)</td>
-</tr>
-
-<tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
-</tr>
-
-<tr>
-<td colspan=4>(none)</td>
-</tr>
-
-</table>
-
-<H2>
-    Input file format
-</H2>
-Any nucleic sequence.
-
-<p>
-
-<a name="input.1"></a>
-<h3>Input files for usage example </h3>
-
-'tembl:x13776' is a sequence entry in the example nucleic acid database 'tembl'
-<p>
-<p><h3>Database entry: tembl:x13776</h3>
-<table width="90%"><tr><td bgcolor="#FFCCFF">
-<pre>
-ID   X13776; SV 1; linear; genomic DNA; STD; PRO; 2167 BP.
-XX
-AC   X13776; M43175;
-XX
-DT   19-APR-1989 (Rel. 19, Created)
-DT   14-NOV-2006 (Rel. 89, Last updated, Version 24)
-XX
-DE   Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
-XX
-KW   aliphatic amidase regulator; amiC gene; amiR gene.
-XX
-OS   Pseudomonas aeruginosa
-OC   Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadales;
-OC   Pseudomonadaceae; Pseudomonas.
-XX
-RN   [1]
-RP   1167-2167
-RA   Rice P.M.;
-RT   ;
-RL   Submitted (16-DEC-1988) to the EMBL/GenBank/DDBJ databases.
-RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
-XX
-RN   [2]
-RP   1167-2167
-RX   DOI; 10.1016/0014-5793(89)80249-2.
-RX   PUBMED; 2495988.
-RA   Lowe N., Rice P.M., Drew R.E.;
-RT   "Nucleotide sequence of the aliphatic amidase regulator gene of Pseudomonas
-RT   aeruginosa";
-RL   FEBS Lett. 246(1-2):39-43(1989).
-XX
-RN   [3]
-RP   1-1292
-RX   PUBMED; 1907262.
-RA   Wilson S., Drew R.;
-RT   "Cloning and DNA seqence of amiC, a new gene regulating expression of the
-RT   Pseudomonas aeruginosa aliphatic amidase, and purification of the amiC
-RT   product.";
-RL   J. Bacteriol. 173(16):4914-4921(1991).
-XX
-RN   [4]
-RP   1-2167
-RA   Rice P.M.;
-RT   ;
-RL   Submitted (04-SEP-1991) to the EMBL/GenBank/DDBJ databases.
-RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
-XX
-DR   GOA; Q51417.
-DR   UniProtKB/Swiss-Prot; Q51417; AMIS_PSEAE.
-XX
-
-
-<font color=red>  [Part of this file has been deleted for brevity]</font>
-
-FT                   /replace=""
-FT                   /note="ClaI fragment deleted in pSW36,  constitutive
-FT                   phenotype"
-FT   misc_feature    1
-FT                   /note="last base of an XhoI site"
-FT   misc_feature    648..653
-FT                   /note="end of 658bp XhoI fragment, deletion in  pSW3 causes
-FT                   constitutive expression of amiE"
-FT   conflict        1281
-FT                   /replace="g"
-FT                   /citation=[3]
-XX
-SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
-     ggtaccgctg gccgagcatc tgctcgatca ccaccagccg ggcgacggga actgcacgat        60
-     ctacctggcg agcctggagc acgagcgggt tcgcttcgta cggcgctgag cgacagtcac       120
-     aggagaggaa acggatggga tcgcaccagg agcggccgct gatcggcctg ctgttctccg       180
-     aaaccggcgt caccgccgat atcgagcgct cgcacgcgta tggcgcattg ctcgcggtcg       240
-     agcaactgaa ccgcgagggc ggcgtcggcg gtcgcccgat cgaaacgctg tcccaggacc       300
-     ccggcggcga cccggaccgc tatcggctgt gcgccgagga cttcattcgc aaccgggggg       360
-     tacggttcct cgtgggctgc tacatgtcgc acacgcgcaa ggcggtgatg ccggtggtcg       420
-     agcgcgccga cgcgctgctc tgctacccga ccccctacga gggcttcgag tattcgccga       480
-     acatcgtcta cggcggtccg gcgccgaacc agaacagtgc gccgctggcg gcgtacctga       540
-     ttcgccacta cggcgagcgg gtggtgttca tcggctcgga ctacatctat ccgcgggaaa       600
-     gcaaccatgt gatgcgccac ctgtatcgcc agcacggcgg cacggtgctc gaggaaatct       660
-     acattccgct gtatccctcc gacgacgact tgcagcgcgc cgtcgagcgc atctaccagg       720
-     cgcgcgccga cgtggtcttc tccaccgtgg tgggcaccgg caccgccgag ctgtatcgcg       780
-     ccatcgcccg tcgctacggc gacggcaggc ggccgccgat cgccagcctg accaccagcg       840
-     aggcggaggt ggcgaagatg gagagtgacg tggcagaggg gcaggtggtg gtcgcgcctt       900
-     acttctccag catcgatacg cccgccagcc gggccttcgt ccaggcctgc catggtttct       960
-     tcccggagaa cgcgaccatc accgcctggg ccgaggcggc ctactggcag accttgttgc      1020
-     tcggccgcgc cgcgcaggcc gcaggcaact ggcgggtgga agacgtgcag cggcacctgt      1080
-     acgacatcga catcgacgcg ccacaggggc cggtccgggt ggagcgccag aacaaccaca      1140
-     gccgcctgtc ttcgcgcatc gcggaaatcg atgcgcgcgg cgtgttccag gtccgctggc      1200
-     agtcgcccga accgattcgc cccgaccctt atgtcgtcgt gcataacctc gacgactggt      1260
-     ccgccagcat gggcggggga ccgctcccat gagcgccaac tcgctgctcg gcagcctgcg      1320
-     cgagttgcag gtgctggtcc tcaacccgcc gggggaggtc agcgacgccc tggtcttgca      1380
-     gctgatccgc atcggttgtt cggtgcgcca gtgctggccg ccgccggaag ccttcgacgt      1440
-     gccggtggac gtggtcttca ccagcatttt ccagaatggc caccacgacg agatcgctgc      1500
-     gctgctcgcc gccgggactc cgcgcactac cctggtggcg ctggtggagt acgaaagccc      1560
-     cgcggtgctc tcgcagatca tcgagctgga gtgccacggc gtgatcaccc agccgctcga      1620
-     tgcccaccgg gtgctgcctg tgctggtatc ggcgcggcgc atcagcgagg aaatggcgaa      1680
-     gctgaagcag aagaccgagc agctccagga ccgcatcgcc ggccaggccc ggatcaacca      1740
-     ggccaaggtg ttgctgatgc agcgccatgg ctgggacgag cgcgaggcgc accagcacct      1800
-     gtcgcgggaa gcgatgaagc ggcgcgagcc gatcctgaag atcgctcagg agttgctggg      1860
-     aaacgagccg tccgcctgag cgatccgggc cgaccagaac aataacaaga ggggtatcgt      1920
-     catcatgctg ggactggttc tgctgtacgt tggcgcggtg ctgtttctca atgccgtctg      1980
-     gttgctgggc aagatcagcg gtcgggaggt ggcggtgatc aacttcctgg tcggcgtgct      2040
-     gagcgcctgc gtcgcgttct acctgatctt ttccgcagca gccgggcagg gctcgctgaa      2100
-     ggccggagcg ctgaccctgc tattcgcttt tacctatctg tgggtggccg ccaaccagtt      2160
-     cctcgag                                                                2167
-//
-</pre>
-</td></tr></table><p>
-
-
-<H2>
-    Output file format
-</H2>
-
-
-<a name="output.1"></a>
-<h3>Output files for usage example </h3>
-<p><h3>File: x13776.dreg</h3>
-<table width="90%"><tr><td bgcolor="#CCFFCC">
-<pre>
-########################################
-# Program: dreg
-# Rundate: Sun 15 Jul 2007 12:00:00
-# Commandline: dreg
-#    -sequence tembl:x13776
-#    -pattern ggtacc
-# Report_format: seqtable
-# Report_file: x13776.dreg
-########################################
-
-#=======================================
-#
-# Sequence: X13776     from: 1   to: 2167
-# HitCount: 1
-#
-# Pattern: ggtacc
-#
-#=======================================
-
-  Start     End Pattern_name Sequence
-      1       6 regex1       ggtacc
-
-#---------------------------------------
-#---------------------------------------
-
-#---------------------------------------
-# Total_sequences: 1
-# Total_hitcount: 1
-#---------------------------------------
-</pre>
-</td></tr></table><p>
-
-<H2>
-    Data files
-</H2>
-
-None.
-
-<H2>
-    Notes
-</H2>
-
-None.
-
-<H2>
     References
 </H2>
 
@@ -1313,20 +1313,21 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="fuzznuc.html">fuzznuc</a></td>
-<td>Nucleic acid pattern search</td>
+<td>Search for patterns in nucleotide sequences</td>
 </tr>
 
 <tr>
 <td><a href="fuzztran.html">fuzztran</a></td>
-<td>Protein pattern search after translation</td>
+<td>Search for patterns in protein sequences (translated)</td>
 </tr>
 
 <tr>
 <td><a href="marscan.html">marscan</a></td>
-<td>Finds MAR/SAR sites in nucleic sequences</td>
+<td>Finds matrix/scaffold recognition (MRS) signatures in DNA sequences</td>
 </tr>
 
 </table>

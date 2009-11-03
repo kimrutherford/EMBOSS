@@ -9,32 +9,21 @@ Function
 
 Description
 
-   listor reads in two sets of sequences and writes out a list file (file
-   of file names) that result from the logical union of these two sets of
-   sequences. It is a simple way of manipulating and editing lists or
-   sets of sequences to produce a list file.
+   listor reads in two sets of sequences (typically specified as list
+   files) and writes out a list file that result from the logical union
+   of the two sets. A list file is a file with a list of Uniform Sequence
+   Addresses (USAs), for example, a list of file names. When comparing
+   sequences from the input sets, no use is made of the ID name or
+   accession number; only the sequence itself is compared. The comparison
+   of the sequences is case-independent. The logical union is an OR
+   operation by default. Other available operations are: AND, XOR and
+   NOT.
 
-   When comparing sequences to see if they are the same between two sets
-   of sequences, no use is made of the ID name or accession number of the
-   sequences. Only the sequences themselves are compared. The comparison
-   of the sequences is case-independent.
+Algorithm
 
-   The logical union is an OR operation by default. Other available
-   operations are: AND, XOR and NOT.
-
-   The (default) logical OR of the two sets of sequences is simply the
-   result of merging the two sets of sequences, (without listing any
-   shared sequences twice).
-
-   A logical AND simply lists those sequences that occur in both sets of
-   sequences.
-
-   A logical XOR lists those sequences that ONLY occur in the first set
-   or only occur in the second set - sequences occuring in both sets are
-   ignored (the opposite of an AND).
-
-   A logical NOT lists all those sequences in the first set except for
-   those that also occur in the second set.
+   All the input sequences are kept in memory while the logical unions of
+   the two input sets of sequences is calculated. listor is therefore
+   restricted by the available memory.
 
 Usage
 
@@ -150,8 +139,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -239,12 +229,21 @@ Data files
 
 Notes
 
-   The program stores all of the input sequences in memory while it is
-   working out the logical unions of the two sets of sequences. This
-   means that it is restricted by the available memory. Doing logical
-   unions involving all of the sequences in large databases, such as
-   EMBL, is probably impractical unless you are lucky enough to have
-   extraordinary amounts of memory on your machine.
+   The inputs can be any valid USA but typically reference a list file.
+   Some other reference such as a wildcarded database entries or file
+   name are equally valid.
+
+   The (default) logical OR of the two sets of sequences is simply the
+   result of merging the two sets of sequences. A sequences appearing in
+   both input sets is referenced once only in the output file. A logical
+   AND simply lists those sequences that occur in both sets of sequences.
+
+   A logical XOR lists those sequences that ONLY occur in the first set
+   or only occur in the second set - sequences occuring in both sets are
+   omitted (the opposite of an AND).
+
+   A logical NOT lists all those sequences in the first set except for
+   those that also occur in the second set.
 
 References
 
@@ -252,9 +251,10 @@ References
 
 Warnings
 
-   If you try to do a logical union with all of the sequences in EMBL and
-   another sequence set, this program will attempt to read all of the
-   EMBL sequences into memory at once. This will probably not succeed.
+   listor is restricted by the available memory. Doing logical unions
+   involving all of the sequences in large databases, such as EMBL, is
+   probably impractical unless you are lucky enough to have extraordinary
+   amounts of memory on your machine.
 
 Diagnostic Error Messages
 
@@ -270,35 +270,50 @@ Known bugs
 
 See also
 
-   Program name                         Description
-   biosed       Replace or delete sequence sections
-   codcopy      Reads and writes a codon usage table
-   cutseq       Removes a specified section from a sequence
-   degapseq     Removes gap characters from sequences
-   descseq      Alter the name or description of a sequence
-   entret       Reads and writes (returns) flatfile entries
+   Program name Description
+   aligncopy Reads and writes alignments
+   aligncopypair Reads and writes pairs from alignments
+   biosed Replace or delete sequence sections
+   codcopy Copy and reformat a codon usage table
+   cutseq Removes a section from a sequence
+   degapseq Removes non-alphabetic (e.g. gap) characters from sequences
+   descseq Alter the name or description of a sequence
+   entret Retrieves sequence entries from flatfile databases and files
    extractalign Extract regions from a sequence alignment
-   extractfeat  Extract features from a sequence
-   extractseq   Extract regions from a sequence
-   makenucseq   Creates random nucleotide sequences
-   makeprotseq  Creates random protein sequences
-   maskfeat     Mask off features of a sequence
-   maskseq      Mask off regions of a sequence
-   newseq       Type in a short new sequence
-   noreturn     Removes carriage return from ASCII files
-   notseq       Exclude a set of sequences and write out the remaining ones
-   nthseq       Writes one sequence from a multiple set of sequences
-   pasteseq     Insert one sequence into another
-   revseq       Reverse and complement a sequence
-   seqret       Reads and writes (returns) sequences
-   seqretsplit  Reads and writes (returns) sequences in individual files
-   skipseq      Reads and writes (returns) sequences, skipping first few
-   splitter     Split a sequence into (overlapping) smaller sequences
-   trimest      Trim poly-A tails off EST sequences
-   trimseq      Trim ambiguous bits off the ends of sequences
-   union        Reads sequence fragments and builds one sequence
-   vectorstrip  Strips out DNA between a pair of vector sequences
-   yank         Reads a sequence range, appends the full USA to a list file
+   extractfeat Extract features from sequence(s)
+   extractseq Extract regions from a sequence
+   featcopy Reads and writes a feature table
+   featreport Reads and writes a feature table
+   makenucseq Create random nucleotide sequences
+   makeprotseq Create random protein sequences
+   maskambignuc Masks all ambiguity characters in nucleotide sequences
+   with N
+   maskambigprot Masks all ambiguity characters in protein sequences with
+   X
+   maskfeat Write a sequence with masked features
+   maskseq Write a sequence with masked regions
+   newseq Create a sequence file from a typed-in sequence
+   nohtml Remove mark-up (e.g. HTML tags) from an ASCII text file
+   noreturn Remove carriage return from ASCII files
+   nospace Remove all whitespace from an ASCII text file
+   notab Replace tabs with spaces in an ASCII text file
+   notseq Write to file a subset of an input stream of sequences
+   nthseq Write to file a single sequence from an input stream of
+   sequences
+   pasteseq Insert one sequence into another
+   revseq Reverse and complement a nucleotide sequence
+   seqret Reads and writes (returns) sequences
+   seqretsplit Reads sequences and writes them to individual files
+   sizeseq Sort sequences by size
+   skipredundant Remove redundant sequences from an input set
+   skipseq Reads and writes (returns) sequences, skipping first few
+   splitter Split sequence(s) into smaller sequences
+   trimest Remove poly-A tails from nucleotide sequences
+   trimseq Remove unwanted characters from start and end of sequence(s)
+   trimspace Remove extra whitespace from an ASCII text file
+   union Concatenate multiple sequences into a single sequence
+   vectorstrip Removes vectors from the ends of nucleotide sequence(s)
+   yank Add a sequence reference (a full USA) to a list file
 
 Author(s)
 

@@ -412,7 +412,7 @@ static AjPScopdes domainScopdesReadC(AjPFile inf, const char *entry)
     ajStrAssignC(&tentry,entry);
     ajStrFmtUpper(&tentry);
     
-    while((ok=ajFileReadLine(inf,&line)))
+    while((ok=ajReadlineTrim(inf,&line)))
     {
 	if((ajFmtScanS(line, "%S", &sunidstr)==0))
 	    return NULL;
@@ -520,7 +520,7 @@ static AjPScopcla domainScopclaReadC(AjPFile inf, const char *entry)
     ajStrAssignC(&tentry,entry);
     ajStrFmtUpper(&tentry);
     
-    while((ok=ajFileReadLine(inf,&line)))
+    while((ok=ajReadlineTrim(inf,&line)))
     {
 	if((ajFmtScanS(line, "%S", &scopid)==0))
 	    return NULL;
@@ -1235,7 +1235,7 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
        }
        */
     
-    while(ajFileReadLine(namesf, &CathNameLine))
+    while(ajReadlineTrim(namesf, &CathNameLine))
     {
     	CathNamePtr = domainCathNameNew();
 	
@@ -1295,7 +1295,7 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
        data from lines in domlist.v2.4 */
     
     
-    while(ajFileReadLine(domf, &CathDomLine))
+    while(ajReadlineTrim(domf, &CathDomLine))
     {	
 	/*1st token is DomainID e.g 1cuk00*/
 	/* ajStrTok goes through each element of line*/
@@ -1410,7 +1410,7 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
     /* Start of main application loop */
     /* while there is a line to read from caths.list.v2.4, 
        read a line into a string ... ajFileReadLine*/ 
-    while(ajFileReadLine(cathf, &CathListLine))
+    while(ajReadlineTrim(cathf, &CathListLine))
     {
 	/* Extract DomainId from string and write to temp. variable 
 	   - Search_DomainIDPtr */
@@ -1785,7 +1785,7 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
     ajStrAssignC(&tentry,entry);    
     ajStrFmtUpper(&tentry);	   
     
-    while((ok=ajFileReadLine(inf,&line)))
+    while((ok=ajReadlineTrim(inf,&line)))
     {
 	if(!ajStrPrefixC(line,"ID   "))
 	    continue;
@@ -1805,7 +1805,7 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
     {
 	if(ajStrPrefixC(line,"XX"))
 	{
-	    ok = ajFileReadLine(inf,&line);
+	    ok = ajReadlineTrim(inf,&line);
 	    continue;
 	}
 	
@@ -1822,7 +1822,7 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 	else if(ajStrPrefixC(line,"AR"))
 	{
 	    ajStrAssignS(&architecture,str);
-	    while(ajFileReadLine(inf,&line))
+	    while(ajReadlineTrim(inf,&line))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
@@ -1833,7 +1833,7 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 	else if(ajStrPrefixC(line,"TP"))
 	{
 	    ajStrAssignS(&topology,str);
-	    while(ajFileReadLine(inf,&line))
+	    while(ajReadlineTrim(inf,&line))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
@@ -1844,7 +1844,7 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 	else if(ajStrPrefixC(line,"SF"))
 	{
 	    ajStrAssignS(&superfamily,str);
-	    while(ajFileReadLine(inf,&line))
+	    while(ajReadlineTrim(inf,&line))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
@@ -1890,7 +1890,7 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 	/* Sequence from pdb file */
 	else if(ajStrPrefixC(line,"DS"))
 	{
-	    while((ok=ajFileReadLine(inf,&line)) && !ajStrPrefixC(line,"XX"))
+	    while((ok=ajReadlineTrim(inf,&line)) && !ajStrPrefixC(line,"XX"))
 		ajStrAppendC(&SeqPdb,ajStrGetPtr(line));
 	    ajStrRemoveWhite(&SeqPdb);
 	    continue;
@@ -1898,7 +1898,7 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 	/* Sequence from swissprot */
 	else if(ajStrPrefixC(line,"SQ"))
 	{
-	    while((ok=ajFileReadLine(inf,&line)) && !ajStrPrefixC(line,"XX"))
+	    while((ok=ajReadlineTrim(inf,&line)) && !ajStrPrefixC(line,"XX"))
 		ajStrAppendC(&SeqSpr,ajStrGetPtr(line));
 	    ajStrRemoveWhite(&SeqSpr);
 	    continue;
@@ -1914,7 +1914,7 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 	else if(ajStrPrefixC(line,"RA"))
 	    ajFmtScanS(line, "%*s %d %*s %d", &Startd, &Endd);
 	
-	ok = ajFileReadLine(inf,&line);
+	ok = ajReadlineTrim(inf,&line);
     }
  
     ajStrDel(&SeqSpr);
@@ -2543,7 +2543,7 @@ AjPScop ajScopReadCNew(AjPFile inf, const char *entry)
     ajStrAssignC(&tentry,entry);
     ajStrFmtUpper(&tentry);
     
-    while((ok=ajFileReadLine(inf,&line)))
+    while((ok=ajReadlineTrim(inf,&line)))
     {
 	if(!ajStrPrefixC(line,"ID   "))
 	    continue;
@@ -2585,13 +2585,13 @@ AjPScop ajScopReadCNew(AjPFile inf, const char *entry)
     {
 	if(ajStrPrefixC(line,"XX"))
 	{
-	    ok = ajFileReadLine(inf,&line);
+	    ok = ajReadlineTrim(inf,&line);
 	    continue;
 	}
 	/* Empty line */
 	if(!(MAJSTRGETLEN(line)))
 	{
-	    ok = ajFileReadLine(inf,&line);
+	    ok = ajReadlineTrim(inf,&line);
 	    continue;
 	}
    
@@ -2609,7 +2609,7 @@ AjPScop ajScopReadCNew(AjPFile inf, const char *entry)
 	else if(ajStrPrefixC(line,"FO"))
 	{
 	    ajStrAssignS(&fold,str);
-	    while((ok=ajFileReadLine(inf,&line)))
+	    while((ok=ajReadlineTrim(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
@@ -2620,7 +2620,7 @@ AjPScop ajScopReadCNew(AjPFile inf, const char *entry)
 	else if(ajStrPrefixC(line,"SF"))
 	{
 	    ajStrAssignS(&super,str);
-	    while((ok=ajFileReadLine(inf,&line)))
+	    while((ok=ajReadlineTrim(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
@@ -2631,7 +2631,7 @@ AjPScop ajScopReadCNew(AjPFile inf, const char *entry)
 	else if(ajStrPrefixC(line,"FA"))
 	{
 	    ajStrAssignS(&family,str);
-	    while((ok=ajFileReadLine(inf,&line)))
+	    while((ok=ajReadlineTrim(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
@@ -2642,7 +2642,7 @@ AjPScop ajScopReadCNew(AjPFile inf, const char *entry)
 	else if(ajStrPrefixC(line,"DO"))
 	{
 	    ajStrAssignS(&domain,str);
-	    while((ok=ajFileReadLine(inf,&line)))
+	    while((ok=ajReadlineTrim(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
@@ -2699,7 +2699,7 @@ AjPScop ajScopReadCNew(AjPFile inf, const char *entry)
 	/* Sequence from pdb file */
 	else if(ajStrPrefixC(line,"DS"))
 	{
-	    while((ok=ajFileReadLine(inf,&line)) && !ajStrPrefixC(line,"XX"))
+	    while((ok=ajReadlineTrim(inf,&line)) && !ajStrPrefixC(line,"XX"))
 		ajStrAppendC(&SeqPdb,ajStrGetPtr(line));
 	    ajStrRemoveWhite(&SeqPdb);
 	    continue;
@@ -2707,7 +2707,7 @@ AjPScop ajScopReadCNew(AjPFile inf, const char *entry)
 	/* Sequence from swissprot */
 	else if(ajStrPrefixC(line,"SQ"))
 	{
-	    while((ok=ajFileReadLine(inf,&line)) && !ajStrPrefixC(line,"XX"))
+	    while((ok=ajReadlineTrim(inf,&line)) && !ajStrPrefixC(line,"XX"))
 		ajStrAppendC(&SeqSpr,ajStrGetPtr(line));
 	    ajStrRemoveWhite(&SeqSpr);
 	    continue;
@@ -2728,7 +2728,7 @@ AjPScop ajScopReadCNew(AjPFile inf, const char *entry)
         /* SSS string */
 	else if(ajStrPrefixC(line,"SS"))
 	{
-	    while((ok=ajFileReadLine(inf,&line)) && !ajStrPrefixC(line,"XX"))
+	    while((ok=ajReadlineTrim(inf,&line)) && !ajStrPrefixC(line,"XX"))
 		ajStrAppendC(&sss,ajStrGetPtr(line));
 	    ajStrRemoveWhite(&sss);
 	    continue;
@@ -2745,7 +2745,7 @@ AjPScop ajScopReadCNew(AjPFile inf, const char *entry)
 		       &Sunid_Family, 
 		       &Sunid_Domain, &Sunid_Source, &Sunid_Domdat);
 	
-	ok = ajFileReadLine(inf,&line);
+	ok = ajReadlineTrim(inf,&line);
     }
  
     ajStrDel(&SeqSpr);
@@ -4647,9 +4647,9 @@ ajint ajDomainDCFType(AjPFile inf)
 	tmp     = ajStrNew();
     }
     
-    offset = ajFileTell(inf);
+    offset = ajFileResetPos(inf);
     
-    while((ajFileReadLine(inf,&line)))
+    while((ajReadlineTrim(inf,&line)))
     {
 	if(!ajStrPrefixC(line,"TY   "))
 	    continue;

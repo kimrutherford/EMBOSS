@@ -1,6 +1,7 @@
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="edialign.html">edialign</a></td>
 <td>Local multiple alignment of sequences</td>
@@ -8,27 +9,27 @@
 
 <tr>
 <td><a href="emma.html">emma</a></td>
-<td>Multiple alignment program - interface to ClustalW program</td>
+<td>Multiple sequence alignment (ClustalW wrapper)</td>
 </tr>
 
 <tr>
 <td><a href="infoalign.html">infoalign</a></td>
-<td>Information on a multiple sequence alignment</td>
+<td>Display basic information about a multiple sequence alignment</td>
 </tr>
 
 <tr>
 <td><a href="plotcon.html">plotcon</a></td>
-<td>Plot quality of conservation of a sequence alignment</td>
+<td>Plot conservation of a sequence alignment</td>
 </tr>
 
 <tr>
 <td><a href="prettyplot.html">prettyplot</a></td>
-<td>Displays aligned sequences, with colouring and boxing</td>
+<td>Draw a sequence alignment with pretty formatting</td>
 </tr>
 
 <tr>
 <td><a href="showalign.html">showalign</a></td>
-<td>Displays a multiple sequence alignment</td>
+<td>Display a multiple sequence alignment in pretty format</td>
 </tr>
 
 </table>

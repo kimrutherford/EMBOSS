@@ -5,12 +5,15 @@
 
 Function
 
-   Counts words of a specified size in a DNA sequence
+   Count and extract unique words in DNA sequence(s)
 
 Description
 
-   Displays all the words of the specified length with the number of
-   times it occurs.
+   wordcount counts and extracts all possible unique sequence words of a
+   specified size in one or more DNA sequences. It writes an output file
+   giving all possible words for that word size with a count of each word
+   in the input sequences. Optionally, only words occuring a specified
+   minimum number of times are reported.
 
 Usage
 
@@ -18,7 +21,7 @@ Usage
 
 
 % wordcount tembl:u68037 -wordsize=3 
-Counts words of a specified size in a DNA sequence
+Count and extract unique words in DNA sequence(s)
 Output file [u68037.wordcount]: 
 
    Go to the input files for this example
@@ -27,9 +30,10 @@ Output file [u68037.wordcount]:
 Command line arguments
 
    Standard (Mandatory) qualifiers:
-  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
-                                  format, or reference (input USA)
-   -wordsize           integer    [4] Word size (Integer 2 or more)
+  [-sequence]          seqall     Sequence(s) filename and optional format, or
+                                  reference (input USA)
+   -wordsize           integer    [@($(acdprotein)? 2 : 4)] Word size (Integer
+                                  1 or more)
   [-outfile]           outfile    [*.wordcount] Output file name
 
    Additional (Optional) qualifiers:
@@ -60,8 +64,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -302,15 +307,31 @@ Known bugs
 
 See also
 
-   Program name                        Description
-   banana       Bending and curvature plot in B-DNA
-   btwisted     Calculates the twisting in a B-DNA sequence
-   chaos        Create a chaos game representation plot for a sequence
-   compseq      Count composition of dimer/trimer/etc words in a sequence
-   dan          Calculates DNA RNA/DNA melting temperature
-   freak        Residue/base frequency table or plot
-   isochore     Plots isochores in large DNA sequences
-   sirna        Finds siRNA duplexes in mRNA
+   Program name Description
+   backtranambig Back-translate a protein sequence to ambiguous
+   nucleotide sequence
+   backtranseq Back-translate a protein sequence to a nucleotide sequence
+   banana Plot bending and curvature data for B-DNA
+   btwisted Calculate the twisting in a B-DNA sequence
+   chaos Draw a chaos game representation plot for a nucleotide sequence
+   charge Draw a protein charge plot
+   checktrans Reports STOP codons and ORF statistics of a protein
+   compseq Calculate the composition of unique words in sequences
+   dan Calculates nucleic acid melting temperature
+   density Draw a nucleic acid density plot
+   emowse Search protein sequences by digest fragment molecular weight
+   freak Generate residue/base frequency table or plot
+   iep Calculate the isoelectric point of proteins
+   isochore Plots isochores in DNA sequences
+   mwcontam Find weights common to multiple molecular weights files
+   mwfilter Filter noisy data from molecular weights file
+   octanol Draw a White-Wimley protein hydropathy plot
+   pepinfo Plot amino acid properties of a protein sequence in parallel
+   pepstats Calculates statistics of protein properties
+   pepwindow Draw a Kyte-Doolittle hydropathy plot for a protein sequence
+   pepwindowall Draw Kyte-Doolittle hydropathy plot for a protein
+   alignment
+   sirna Finds siRNA duplexes in mRNA
 
 Author(s)
 

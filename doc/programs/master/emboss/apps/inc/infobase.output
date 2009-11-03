@@ -1,0 +1,26 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: outfile.infobase</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Code Ambiguity  Complement Mnemonic
+A    A          T          adenine
+B    CGT        V          not_adenine
+C    C          G          cytosine
+D    AGT        H          not_cytosine
+G    G          C          guanine
+H    ACT        D          not_guanine
+K    GT         M          keto_base
+M    AC         K          amino_base
+N    ACGT       N          any_base
+R    AG         Y          purine_base
+S    CG         S          strong_bond
+T    T          A          thymine
+U    T          A          uracil
+V    ACG        B          not_thymine/uracil
+W    AT         W          weak_bond
+X    ACGT       X          unknown
+Y    CT         R          pyrimidine
+</pre>
+</td></tr></table><p>

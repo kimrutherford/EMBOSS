@@ -24,17 +24,13 @@ prosextract
 <H2>
     Function
 </H2>
-Build the PROSITE motif database for use by patmatmotifs
+Processes the PROSITE motif database for use by patmatmotifs
 
 <H2>
     Description
 </H2>
 
-
-Takes the IDentity, ACcession number and motif PAttern line 
-contents from prosite entries. Also converts the PAttern into a regular 
-expression and writes these four pieces to an output file -  defaulted to 
-be called 'prosite.lines'. 
+<p>prosextract processes the PROSITE motif database for use by <b>patmatmotifs</b>.  It reads the <tt>prosite.dat</tt> and <tt>prosite.doc</tt> files (from the Prosite distribution) from the specified directory and writes an output file (by default called <tt>prosite.lines</tt>) with the following information (corresponding lines from prosite.dat given in parentheses): i. Identity (<tt>ID</tt>). ii. Accession number (<tt>AC</tt>).  iii. Motif pattern (<tt>PA</tt>). iv. The motif pattern converted a regular expression.  Additionally, one output file per accession number is written containing documentation from <tt>prosite.doc</tt>.</p>
 
 <H2>
     Usage
@@ -46,7 +42,7 @@ be called 'prosite.lines'.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>prosextract </b>
-Build the PROSITE motif database for use by patmatmotifs
+Processes the PROSITE motif database for use by patmatmotifs
 PROSITE database directory [.]: <b></b>
 
 </pre></td></tr></table><p>
@@ -73,8 +69,9 @@ created after prosextract is run.
    Associated qualifiers: (none)
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -168,8 +165,7 @@ See Input file format above.
     Notes
 </H2>
 
-
-This program is most useful when used as a prerequisite for patmatmotifs.
+<p>This program most be run as a prerequisite to using <b>patmatmotifs</b>.</p>
 
 <H2>
     References
@@ -216,30 +212,36 @@ Always exits with status 0
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="aaindexextract.html">aaindexextract</a></td>
-<td>Extract data from AAINDEX</td>
+<td>Extract amino acid property data from AAINDEX</td>
 </tr>
 
 <tr>
 <td><a href="cutgextract.html">cutgextract</a></td>
-<td>Extract data from CUTG</td>
+<td>Extract codon usage tables from from CUTG database</td>
+</tr>
+
+<tr>
+<td><a href="jaspextract.html">jaspextract</a></td>
+<td>Extract data from JASPAR</td>
 </tr>
 
 <tr>
 <td><a href="printsextract.html">printsextract</a></td>
-<td>Extract data from PRINTS</td>
+<td>Extract data from PRINTS database for use by pscan</td>
 </tr>
 
 <tr>
 <td><a href="rebaseextract.html">rebaseextract</a></td>
-<td>Extract data from REBASE</td>
+<td>Process the REBASE database for use by restriction enzyme applications</td>
 </tr>
 
 <tr>
 <td><a href="tfextract.html">tfextract</a></td>
-<td>Extract data from TRANSFAC</td>
+<td>Process TRANSFAC transcription factor database for use by tfscan</td>
 </tr>
 
 </table>

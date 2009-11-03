@@ -1,6 +1,6 @@
 application: chaos [
-  documentation: "Create a chaos game representation plot for
-                  a sequence"
+  documentation: "Draw a chaos game representation plot for a
+                  nucleotide sequence"
   groups: "Nucleic:Composition"
 ]
 

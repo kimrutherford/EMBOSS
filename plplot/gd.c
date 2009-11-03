@@ -1,4 +1,4 @@
-/* $Id: gd.c,v 1.2 2007/05/17 10:37:26 ajb Exp $
+/* $Id: gd.c,v 1.4 2008/01/31 16:56:18 rice Exp $
 
          PNG, GIF, and JPEG device driver based on libgd
 
@@ -117,6 +117,7 @@
 
 
 #include "plDevs.h"
+
 
 #if defined(PLD_png) || defined(PLD_jpeg) || defined(PLD_gif)
 
@@ -1544,8 +1545,10 @@ void plD_eop_gif(PLStream *pls)
 
 
 #else
+int pldummy_png(void);
+
 int
-pldummy_png()
+pldummy_png(void)
 {
     return 0;
 }

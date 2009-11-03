@@ -1,6 +1,5 @@
 application: trimseq [
-  documentation: "Trim ambiguous bits off the ends of
-                  sequences"
+  documentation: "Remove unwanted characters from start and end of sequence(s)"
   groups: "Edit"
 ]
 

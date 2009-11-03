@@ -1,6 +1,5 @@
 application: infoseq [
-  documentation: "Displays some simple information about
-                  sequences"
+  documentation: "Display basic information about sequences"
   groups: "Information"
 ]
 

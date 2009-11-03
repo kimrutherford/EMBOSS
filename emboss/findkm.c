@@ -94,14 +94,14 @@ int main(int argc, char **argv)
 
     infile  = ajAcdGetInfile("infile");
     outfile = ajAcdGetOutfile ("outfile");
-    doplot  = ajAcdGetBool("plot");
+    doplot  = ajAcdGetBoolean("plot");
     graphLB = ajAcdGetGraphxy("graphLB");
     line = ajStrNew();
 
 
     /* Determine N by reading infile */
 
-    while(ajFileReadLine(infile, &line))
+    while(ajReadlineTrim(infile, &line))
         if(ajStrGetLen(line) >0)
 	    N++;
 
@@ -116,7 +116,7 @@ int main(int argc, char **argv)
     ajFileSeek(infile, 0L, 0);
 
     N=0;
-    while(ajFileReadLine(infile, &line))
+    while(ajReadlineTrim(infile, &line))
     {
 	if(ajStrGetLen(line) > 0)
         {

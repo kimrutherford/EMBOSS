@@ -1,14 +1,15 @@
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="backtranambig.html">backtranambig</a></td>
-<td>Back translate a protein sequence to ambiguous codons</td>
+<td>Back-translate a protein sequence to ambiguous nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="backtranseq.html">backtranseq</a></td>
-<td>Back translate a protein sequence</td>
+<td>Back-translate a protein sequence to a nucleotide sequence</td>
 </tr>
 
 <tr>
@@ -23,27 +24,27 @@
 
 <tr>
 <td><a href="marscan.html">marscan</a></td>
-<td>Finds MAR/SAR sites in nucleic sequences</td>
+<td>Finds matrix/scaffold recognition (MRS) signatures in DNA sequences</td>
 </tr>
 
 <tr>
 <td><a href="prettyseq.html">prettyseq</a></td>
-<td>Output sequence with translated ranges</td>
+<td>Write a nucleotide sequence and its translation to file</td>
 </tr>
 
 <tr>
 <td><a href="remap.html">remap</a></td>
-<td>Display sequence with restriction sites, translation etc</td>
+<td>Display restriction enzyme binding sites in a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="showorf.html">showorf</a></td>
-<td>Pretty output of DNA translations</td>
+<td>Display a nucleotide sequence and translation in pretty format</td>
 </tr>
 
 <tr>
 <td><a href="showseq.html">showseq</a></td>
-<td>Display a sequence with features, translation etc</td>
+<td>Displays sequences with features in pretty format</td>
 </tr>
 
 <tr>
@@ -53,12 +54,12 @@
 
 <tr>
 <td><a href="syco.html">syco</a></td>
-<td>Synonymous codon usage Gribskov statistic plot</td>
+<td>Draw synonymous codon usage statictic plot for a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="tcode.html">tcode</a></td>
-<td>Fickett TESTCODE statistic to identify protein-coding DNA</td>
+<td>Identify protein-coding regions using Fickett TESTCODE statistic</td>
 </tr>
 
 <tr>
@@ -68,7 +69,7 @@
 
 <tr>
 <td><a href="wobble.html">wobble</a></td>
-<td>Wobble base plot</td>
+<td>Plot third base position variability in a nucleotide sequence</td>
 </tr>
 
 </table>

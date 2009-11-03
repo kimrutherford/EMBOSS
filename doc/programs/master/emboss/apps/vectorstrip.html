@@ -21,48 +21,7 @@ vectorstrip
     Description
 </H2>
 
-<b>vectorstrip</b> is intended to be useful for stripping vector sequence
-from the ends of sequences of interest. For example, if a fragment has
-been cloned into a vector and then sequenced, the sequence may contain
-vector data eg from the cloning polylinker at the 5' and 3' ends of
-the sequence.  <b>vectorstrip</b> will remove these contaminating regions and
-output trimmed sequence ready for input into another application.
-
-<p>
-
-<b>vectorstrip</b> is suitable for use with low quality sequence data as it
-can allow for mismatches between the sequence and the vector patterns
-provided. You can specify the maximum level of mismatch
-expected.
-<p>
-Vector data can either be provided in a file or interactively. If
-presented in a file, <b>vectorstrip</b> will search all input sequences with
-all vectors listed in that file. The intention is that the user can
-maintain a single file for use with <b>vectorstrip</b>, containing all the
-linker sequences commonly used in the laboratory.
-
-<p>
-The two patterns for each vector are searched separately against the
-sequence. Once the search is completed, each of the hits of the 5'
-sequence is paired with each of the hits of the 3' sequence and the
-resulting subsequences are output. For example, if the 5' sequence
-matches the sequence from (a) position 30-60, and(b)position 70-100,
-and the 3' sequence matches from 150-175, then two subsequences will
-be output: from 61-149, and from 101-149. The lower the quality of
-the sequence, the more likely multiple hits become if nonzero
-mismatches are accepted.
-
-<p>
-Default behaviour is to report only the best matches between the
-vector patterns and the sequence. This means that if you
-specify a maximum mismatch level of 10%, but the vector patterns
-match the sequence with zero mismatches, the search will stop and the
-program will output only these "best" matches. If there are no perfect
-matches, the program will try searching again allowing 1 mismatch,
-then 2, and so on until either the patterns match the sequence or the
-maximum specified mismatch level is exceeded. You can tell <b>vectorstrip</b>
-to show all possible matches up to your specified maximum level, as
-illustrated in the examples below.
+<p><b>vectorstrip</b> reads one or more nucleotide sequences and writes them out again but with any of a specified set of vector sequences removed from the 5' and 3' termini. An output file with a summary of the results if also written. The vector sequences to strip out are (typically) provided in an input file.  The pair of 5' and 3' vector sequences are searched against each input sequence allowing a specified maximum level of mismatches. Each 5' hit is paired with each 3' hit and the resulting subsequences output.  By default only the best match between the vector patterns and each sequence are reported. Optionally, all matches up to the specified maximum mismatch level are reported.</p>
 
 <H2>
     Usage
@@ -143,7 +102,19 @@ None.
     Notes
 </H2>
 
-None.
+<p><b>vectorstrip</b> is intended for stripping vector sequence from the ends of sequences of interest. For example, if a fragment has been cloned into a vector and then sequenced, the sequence may contain vector data eg from the cloning polylinker at the 5' and 3' ends of the sequence. <b>vectorstrip</b> will remove these contaminating regions and output trimmed sequence ready for input into another application.</p>
+
+<p><b>vectorstrip</b> is suitable for use with low quality sequence data as it can allow for mismatches between the sequence and the vector patterns provided. You can specify the maximum level of mismatch expected.</p>
+
+<p>Vector data can either be provided in a file or interactively. If presented in a file, <b>vectorstrip</b> will search all input sequences with all vectors listed in that file. The intention is that the user can maintain a single file for use with <b>vectorstrip</b>, containing all the linker sequences commonly used in the laboratory.</p>
+
+<p>The two patterns for each vector are searched separately against the sequence. Once the search is completed, each of the hits of the 5' sequence is paired with each of the hits of the 3' sequence and the resulting subsequences are output. For example, if the 5' sequence matches the sequence from (a) position 30-60, and(b)position 70-100, and the 3' sequence matches from 150-175, then two subsequences will be output: from 61-149, and from 101-149. The lower the quality of the sequence, the more likely multiple hits become if nonzero mismatches are accepted.</p>
+
+<p>Default behaviour is to report only the best matches between the vector patterns and the sequence. This means that if you specify a maximum mismatch level of 10%, but the vector patterns match the sequence with zero mismatches, the search will stop and the program will output only these "best" matches. If there are no perfect matches, the program will try searching again allowing 1 mismatch, then 2, and so on until either the patterns match the sequence or the maximum specified mismatch level is exceeded. You can tell <b>vectorstrip</b> to show all possible matches up to your specified maximum level, as illustrated in the examples below.</p>
+
+
+
+
 
 <H2>
     References

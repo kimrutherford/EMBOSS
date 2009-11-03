@@ -123,7 +123,7 @@ int main(int argc, char **argv)
     substr = ajStrNew();
     matrix = ajInt2dNew();
 
-    eightyseven = ajAcdGetBool("eightyseven");
+    eightyseven = ajAcdGetBoolean("eightyseven");
 
     cols = helixturnhelix_readNab(&matrix,eightyseven);
     ajDebug("cols = %d\n",cols);
@@ -154,7 +154,7 @@ int main(int argc, char **argv)
 
 	q = ajStrGetuniquePtr(&substr);
 	for(i=0;i<len;++i,++q)
-	    *q = (char) ajAZToInt(*q);
+	    *q = (char) ajBasecodeToInt(*q);
 
 	p = ajStrGetPtr(substr);
 
@@ -271,9 +271,9 @@ static ajint helixturnhelix_readNab(AjPInt2d *matrix,AjBool eightyseven)
     ajint **mat;
 
     if(eightyseven)
-	ajFileDataNewC(HTH87FILE,&mfptr);
+	mfptr = ajDatafileNewInNameC(HTH87FILE);
     else
-	ajFileDataNewC(HTHFILE,&mfptr);
+	mfptr = ajDatafileNewInNameC(HTHFILE);
     if(!mfptr)
 	ajFatal("HTH file not found\n");
 
@@ -282,7 +282,7 @@ static ajint helixturnhelix_readNab(AjPInt2d *matrix,AjBool eightyseven)
 
     pass = ajTrue;
 
-    while(ajFileGets(mfptr, &line))
+    while(ajReadline(mfptr, &line))
     {
 	p = ajStrGetPtr(line);
 
@@ -310,7 +310,7 @@ static ajint helixturnhelix_readNab(AjPInt2d *matrix,AjBool eightyseven)
 	    if(xcols!=cols)
 		ajFatal("Assymetric table");
 
-	d1 = ajAZToInt((char)toupper((ajint)*p));
+	d1 = ajBasecodeToInt((char)toupper((ajint)*p));
 
 	q = ajStrGetPtr(line);
 	c = 0;

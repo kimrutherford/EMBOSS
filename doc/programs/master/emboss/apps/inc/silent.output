@@ -6,7 +6,7 @@
 <pre>
 ########################################
 # Program: silent
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: silent
 #    -sequence tembl:x65923
 #    -enzymes ecori,hindiii
@@ -31,8 +31,8 @@
 #
 #=======================================
 
-  Start     End Dir    EnzymeName RS-Pattern Base-Posn    AAs Silent Mutation
-    272     267 Rev    HindIII    AAGCTT           268    A.A    Yes     A-&gt;T
+  Start     End  Strand EnzymeName RS-Pattern Base-Posn    AAs Silent Mutation
+    267     272       - HindIII    AAGCTT           268    A.A    Yes     A-&gt;T
 
 #---------------------------------------
 #---------------------------------------

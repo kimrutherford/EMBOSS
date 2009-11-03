@@ -103,7 +103,7 @@ int main(int argc, char **argv)
     seqall     = ajAcdGetSeqall("sequence");
     opval      = -13;		/* was ajAcdGetInt */
     nval       = 2;		/* was ajAcdGetInt */
-    prokaryote = ajAcdGetBool("prokaryote");
+    prokaryote = ajAcdGetBoolean("prokaryote");
     minweight  = ajAcdGetFloat("minweight");
     report     = ajAcdGetReport("outfile");
 
@@ -141,7 +141,7 @@ int main(int argc, char **argv)
 
         q = ajStrGetuniquePtr(&substr);
 	for(i=0;i<len;++i,++q)
-	    *q = (char) ajAZToInt(*q);
+	    *q = (char) ajBasecodeToInt(*q);
 	p = ajStrGetPtr(substr);
 
 	maxsite   = n = 0;
@@ -371,9 +371,9 @@ static ajint sigcleave_readSig(AjPFloat2d *matrix,AjBool prokaryote)
     ajuint jmax;
 
     if(prokaryote)
-	ajFileDataNewC(PROFILE,&mfptr);
+	mfptr = ajDatafileNewInNameC(PROFILE);
     else
-	ajFileDataNewC(EUKFILE,&mfptr);
+	mfptr = ajDatafileNewInNameC(EUKFILE);
     if(!mfptr) ajFatal("SIG file  not found\n");
 
 
@@ -382,7 +382,7 @@ static ajint sigcleave_readSig(AjPFloat2d *matrix,AjBool prokaryote)
 
     pass = ajTrue;
 
-    while(ajFileGets(mfptr, &line))
+    while(ajReadline(mfptr, &line))
     {
 	p = ajStrGetPtr(line);
 
@@ -413,7 +413,7 @@ static ajint sigcleave_readSig(AjPFloat2d *matrix,AjBool prokaryote)
 	q = ajStrGetPtr(line);
 	q = ajSysFuncStrtok(q,ajStrGetPtr(delim));
 
-	d1 = ajAZToInt((char)toupper((ajint)*p));
+	d1 = ajBasecodeToInt((char)toupper((ajint)*p));
 	c  = 0;
 	while((q=ajSysFuncStrtok(NULL,ajStrGetPtr(delim))))
 	{

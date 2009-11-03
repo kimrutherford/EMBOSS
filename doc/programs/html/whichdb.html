@@ -23,67 +23,12 @@ whichdb
 <H2>
     Function
 </H2>
-Search all databases for an entry
+Search all sequence databases for an entry and retrieve it
 <H2>
     Description
 </H2>
 
-<b>whichdb</b> searches all available EMBOSS databases for sequences
-with a specified ID name or accession number.
-
-<p>
-
-EMBOSS does not allow database entries to be specified by just the ID
-name or accession number.  You must specify both the name of the
-database and the entry, for example 'embl:hsfau', not just 'hsfau'. 
-
-<p>
-
-If you do not know which database(s) contain the entry you are
-interested in, <b>whichdb</b> will tell you.
-
-<p>
-
-<b>whichdb</b> can also, optionally, write out the sequences it finds to
-files. 
-
-<H3>IDs and Accessions</H3>
-
-An entry in a database must have some way of being uniquely identified
-in that database.  Most sequence databases have two such identifiers for
-each sequence - an ID name and an Accession number. 
-
-<p>
-
-Why are there two such identifiers? The ID name was originally intended
-to be a human-readable name that had some indication of the function of
-its sequence.  In EMBL and GenBank the first two (or three) letters
-indicated the species and the rest indicated the function, for example
-'hsfau' is the 'Homo Sapiens FAU pseudogene'.  This naming scheme
-started to be a problem when the number of entries added each day was so
-vast that people could not make up the ID names fast enough.  Instead,
-the Accession numbers were used as the ID name.  Therefore you will now
-find ID names like 'AF061303', the same as the Accession number for that
-sequence in EMBL. 
-
-<p>
-
-ID names are not guaranteed to remain the same between different
-versions of a database (although in practice they usually do). 
-
-<p>
-
-Accession numbers are unique alphanumeric identifiers that are
-guaranteed to remain with that sequence through the rest of the life of
-the database.  If two sequences are merged into one, then the new
-sequence will get a new Accession number and the Accession numbers of
-the merged sequences will be retained as 'secondary' Accession numbers. 
-
-<p>
-
-EMBL, GenBank and SwissProt share an Accession numbering scheme - an
-Accession number uniquely identifies a sequence within these three
-databases. 
+<p><b>whichdb</b> searches all available sequence databases for sequences with a specified ID name or accession number.  The uniform sequence address (USA) of matching database entries is written to an output file. <b>whichdb</b> will, optionally, write out the sequences it finds to files.  An "available" database is one that has been defined in the EMBOSS system file (<tt>.embossrc</tt> or <tt>emboss.login</tt>) and is available from the system you are running EMBOSS. If you do not know which database(s) contain the entry you are interested in, <b>whichdb</b> will tell you.</p>
 
 
 <H2>
@@ -96,7 +41,7 @@ databases.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>whichdb -showall </b>
-Search all databases for an entry
+Search all sequence databases for an entry and retrieve it
 ID or Accession number: <b>x65921</b>
 Output file [outfile.whichdb]: <b></b>
 
@@ -128,8 +73,9 @@ Output file [outfile.whichdb]: <b></b>
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -326,7 +272,7 @@ The reported database entries are written out to the specified output file.
 <p>
 
 Each database that is defined in the local implementation of EMBOSS
-which contains an entry called 'hsfau' is reported.
+which contains an entry called 'x65923' is reported.
 
 <p>
 
@@ -349,12 +295,12 @@ they are written, for example:
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Writing hsfau.embl
-Writing hsfau.human
-Writing hsfau.tembl
-Writing hsfau.em
-Writing hsfau.genbank
-Writing hsfau.gb
+Writing x65923.embl
+Writing x65923.human
+Writing x65923.tembl
+Writing x65923.em
+Writing x65923.genbank
+Writing x65923.gb
 </td></tr></table><p>
 
 
@@ -369,7 +315,15 @@ None.
     Notes
 </H2>
 
-None.
+<p>The Uniform Sequence Addresss (USA) method used by EMBOSS for referencing sequences does not allow database entries to be specified by just the ID name or accession number. You must specify both the name of the database and the entry, for example <tt>embl:x65923</tt>, not just <tt>x65923</tt>.  <b>whichdb</b> is useful where you do not know the database that a sequence entry is found in.</p>
+
+
+<h3>IDs and Accessions</h3>
+<p>An entry in a database must have some way of being uniquely identified in that database. Most sequence databases have two such identifiers for each sequence - an ID name and an Accession number.</p>
+
+<p>Why are there two such identifiers? The ID name was originally intended to be a human-readable name that had some indication of the function of its sequence. In the early years of EMBL and GenBank the first two (or three) letters indicated the species and the rest indicated the function, for example <tt>HSFAU</tt> was the <tt>Homo Sapiens FAU pseudogene</tt>. This naming scheme started to be a problem when the number of entries added each day was so vast that people could not make up the ID names fast enough. Instead, the Accession numbers were used as the ID name. Therefore you will now find ID names like <tt>X65923</tt>, the same as the Accession number for that sequence in EMBL. The protein sequence databases continue to use recognizable names for entries (for example <tt>AMIR_PSEAE</tt> for the AmiR gene product of Pseudomonas aeruginosa in UniProt/SwissProt).</p>
+
+<p>ID names are not guaranteed to remain the same between different versions of a database (although in practice they usually do). In contrast, accession numbers are unique alphanumeric identifiers that are guaranteed to remain with that sequence through the rest of the life of the database. If two sequences are merged into one, then the new sequence will get a new Accession number and the Accession numbers of the merged sequences will be retained as 'secondary' Accession numbers. EMBL, GenBank and UniProt/SwissProt share an Accession numbering scheme - an Accession number uniquely identifies a sequence within these three databases. </p>
 
 <H2>
     References
@@ -404,40 +358,51 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="infoalign.html">infoalign</a></td>
-<td>Information on a multiple sequence alignment</td>
+<td>Display basic information about a multiple sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="infobase.html">infobase</a></td>
+<td>Return information on a given nucleotide base</td>
+</tr>
+
+<tr>
+<td><a href="inforesidue.html">inforesidue</a></td>
+<td>Return information on a given amino acid residue</td>
 </tr>
 
 <tr>
 <td><a href="infoseq.html">infoseq</a></td>
-<td>Displays some simple information about sequences</td>
+<td>Display basic information about sequences</td>
 </tr>
 
 <tr>
 <td><a href="seealso.html">seealso</a></td>
-<td>Finds programs sharing group names</td>
+<td>Finds programs with similar function to a specified program</td>
 </tr>
 
 <tr>
 <td><a href="showdb.html">showdb</a></td>
-<td>Displays information on the currently available databases</td>
+<td>Displays information on configured databases</td>
 </tr>
 
 <tr>
 <td><a href="textsearch.html">textsearch</a></td>
-<td>Search sequence documentation. Slow, use SRS and Entrez!</td>
+<td>Search the textual description of sequence(s)</td>
 </tr>
 
 <tr>
 <td><a href="tfm.html">tfm</a></td>
-<td>Displays a program's help documentation manual</td>
+<td>Displays full documentation for an application</td>
 </tr>
 
 <tr>
 <td><a href="wossname.html">wossname</a></td>
-<td>Finds programs by keywords in their one-line documentation</td>
+<td>Finds programs by keywords in their short description</td>
 </tr>
 
 </table>

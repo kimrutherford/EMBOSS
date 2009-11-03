@@ -5,16 +5,15 @@
 
 Function
 
-   Removes a specified section from a sequence
+   Removes a section from a sequence
 
 Description
 
    This simple editing program allows you to cut out a region from your
-   sequence by specifying the begin and end positions of the sequence to
-   remove.
-
-   It removes the sequence from the specified start to the end positions
-   (inclusive) and returns the rest of the sequence in the output file.
+   sequence by specifying the begin and end positions of the region to
+   remove. It removes the sequence from the specified start to the end
+   positions (inclusive) and writes the remaining sequence to the output
+   file.
 
 Usage
 
@@ -25,7 +24,7 @@ Usage
 
 
 % cutseq tembl:x13776 gatta2.seq -from=10 -to=12 
-Removes a specified section from a sequence.
+Removes a section from a sequence
 
    Go to the input files for this example
    Go to the output files for this example
@@ -37,7 +36,7 @@ Removes a specified section from a sequence.
 
 
 % cutseq tembl:x13776 -from=1 -to=20 -out=jsh.seq 
-Removes a specified section from a sequence.
+Removes a section from a sequence
 
    Go to the output files for this example
 
@@ -48,7 +47,7 @@ Removes a specified section from a sequence.
 
 
 % cutseq tembl:x13776 starta.seq -sbeg=-1000 -send=1290 
-Removes a specified section from a sequence.
+Removes a section from a sequence
 Start of region to delete [1168]: 
 End of region to delete [1290]: 
 
@@ -104,8 +103,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -379,7 +379,9 @@ Data files
 
 Notes
 
-   This can be used as a simple sequence editor.
+   Qualifiers that are in-built for sequence datatypes allow the input
+   and output files to be specified in more detail, for example, the
+   format for the output files.
 
 References
 
@@ -404,35 +406,50 @@ Known bugs
 
 See also
 
-   Program name                         Description
-   biosed       Replace or delete sequence sections
-   codcopy      Reads and writes a codon usage table
-   degapseq     Removes gap characters from sequences
-   descseq      Alter the name or description of a sequence
-   entret       Reads and writes (returns) flatfile entries
+   Program name Description
+   aligncopy Reads and writes alignments
+   aligncopypair Reads and writes pairs from alignments
+   biosed Replace or delete sequence sections
+   codcopy Copy and reformat a codon usage table
+   degapseq Removes non-alphabetic (e.g. gap) characters from sequences
+   descseq Alter the name or description of a sequence
+   entret Retrieves sequence entries from flatfile databases and files
    extractalign Extract regions from a sequence alignment
-   extractfeat  Extract features from a sequence
-   extractseq   Extract regions from a sequence
-   listor       Write a list file of the logical OR of two sets of sequences
-   makenucseq   Creates random nucleotide sequences
-   makeprotseq  Creates random protein sequences
-   maskfeat     Mask off features of a sequence
-   maskseq      Mask off regions of a sequence
-   newseq       Type in a short new sequence
-   noreturn     Removes carriage return from ASCII files
-   notseq       Exclude a set of sequences and write out the remaining ones
-   nthseq       Writes one sequence from a multiple set of sequences
-   pasteseq     Insert one sequence into another
-   revseq       Reverse and complement a sequence
-   seqret       Reads and writes (returns) sequences
-   seqretsplit  Reads and writes (returns) sequences in individual files
-   skipseq      Reads and writes (returns) sequences, skipping first few
-   splitter     Split a sequence into (overlapping) smaller sequences
-   trimest      Trim poly-A tails off EST sequences
-   trimseq      Trim ambiguous bits off the ends of sequences
-   union        Reads sequence fragments and builds one sequence
-   vectorstrip  Strips out DNA between a pair of vector sequences
-   yank         Reads a sequence range, appends the full USA to a list file
+   extractfeat Extract features from sequence(s)
+   extractseq Extract regions from a sequence
+   featcopy Reads and writes a feature table
+   featreport Reads and writes a feature table
+   listor Write a list file of the logical OR of two sets of sequences
+   makenucseq Create random nucleotide sequences
+   makeprotseq Create random protein sequences
+   maskambignuc Masks all ambiguity characters in nucleotide sequences
+   with N
+   maskambigprot Masks all ambiguity characters in protein sequences with
+   X
+   maskfeat Write a sequence with masked features
+   maskseq Write a sequence with masked regions
+   newseq Create a sequence file from a typed-in sequence
+   nohtml Remove mark-up (e.g. HTML tags) from an ASCII text file
+   noreturn Remove carriage return from ASCII files
+   nospace Remove all whitespace from an ASCII text file
+   notab Replace tabs with spaces in an ASCII text file
+   notseq Write to file a subset of an input stream of sequences
+   nthseq Write to file a single sequence from an input stream of
+   sequences
+   pasteseq Insert one sequence into another
+   revseq Reverse and complement a nucleotide sequence
+   seqret Reads and writes (returns) sequences
+   seqretsplit Reads sequences and writes them to individual files
+   sizeseq Sort sequences by size
+   skipredundant Remove redundant sequences from an input set
+   skipseq Reads and writes (returns) sequences, skipping first few
+   splitter Split sequence(s) into smaller sequences
+   trimest Remove poly-A tails from nucleotide sequences
+   trimseq Remove unwanted characters from start and end of sequence(s)
+   trimspace Remove extra whitespace from an ASCII text file
+   union Concatenate multiple sequences into a single sequence
+   vectorstrip Removes vectors from the ends of nucleotide sequence(s)
+   yank Add a sequence reference (a full USA) to a list file
 
 Author(s)
 

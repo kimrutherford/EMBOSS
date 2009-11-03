@@ -24,6 +24,12 @@
 #define KWLIMIT 12
 
 
+static AjPStr embindexLine      = NULL;
+static AjPStr embindexToken     = NULL;
+static AjPStr embindexTstr      = NULL;
+static AjPStr embindexPrefix    = NULL;
+static AjPStr embindexFormat    = NULL;
+static AjPStrTok embindexHandle = NULL;
 
 
 static AjPFile btreeCreateFile(const AjPStr idirectory, const AjPStr dbname,
@@ -51,12 +57,9 @@ void embBtreeEmblKW(const AjPStr kwline, AjPList kwlist, ajuint maxlen)
     AjPStr token     = NULL;
     AjPStr str       = NULL;
     
-    line  = ajStrNew();
-    token = ajStrNew();
-    
-    ajStrAssignC(&line, &MAJSTRGETPTR(kwline)[5]);
+    ajStrAssignSubS(&line, kwline, 5, -1);
 
-    handle = ajStrTokenNewC(line,"\n;");
+    handle = ajStrTokenNewC(line,"\n\r;");
 
     while(ajStrTokenNextParse(&handle,&token))
     {
@@ -64,7 +67,6 @@ void embBtreeEmblKW(const AjPStr kwline, AjPList kwlist, ajuint maxlen)
 	ajStrTrimWhite(&token);
 	if(ajStrGetLen(token))
 	{
-	    str = ajStrNew();
 	    if(maxlen)
 	    {
 		if(ajStrGetLen(token) > maxlen)
@@ -77,6 +79,7 @@ void embBtreeEmblKW(const AjPStr kwline, AjPList kwlist, ajuint maxlen)
 		ajStrAssignS(&str,token);
 	    ajStrFmtLower(&str);
 	    ajListPush(kwlist,(void *)str);
+	    str = NULL;
 	}
     }
 
@@ -109,12 +112,9 @@ void embBtreeEmblTX(const AjPStr txline, AjPList txlist, ajuint maxlen)
     AjPStr token     = NULL;
     AjPStr str       = NULL;
     
-    line  = ajStrNew();
-    token = ajStrNew();
-    
-    ajStrAssignC(&line, &MAJSTRGETPTR(txline)[5]);
+    ajStrAssignSubS(&line, txline, 5, -1);
 
-    handle = ajStrTokenNewC(line,"\n;()");
+    handle = ajStrTokenNewC(line,"\n\r;()");
 
     while(ajStrTokenNextParse(&handle,&token))
     {
@@ -123,7 +123,6 @@ void embBtreeEmblTX(const AjPStr txline, AjPList txlist, ajuint maxlen)
 	ajStrTrimWhite(&token);
 	if(ajStrGetLen(token))
 	{
-	    str = ajStrNew();
 	    if(maxlen)
 	    {
 		if(ajStrGetLen(token) > maxlen)
@@ -136,6 +135,7 @@ void embBtreeEmblTX(const AjPStr txline, AjPList txlist, ajuint maxlen)
 		ajStrAssignS(&str,token);
 	    ajStrFmtLower(&str);
 	    ajListPush(txlist,(void *)str);
+	    str = NULL;
 	}
     }
 
@@ -162,72 +162,54 @@ void embBtreeEmblTX(const AjPStr txline, AjPList txlist, ajuint maxlen)
 
 void embBtreeEmblAC(const AjPStr acline, AjPList aclist)
 {
-    AjPStr line      = NULL;
-    AjPStrTok handle = NULL;
-    AjPStr token     = NULL;
-    AjPStr str       = NULL;
-    AjPStr tstr      = NULL;
-    AjPStr prefix    = NULL;
-    AjPStr format    = NULL;
     char *p          = NULL;
     char *q          = NULL;
     ajuint lo = 0;
     ajuint hi = 0;
     ajuint field = 0;
     ajuint i;
+    AjPStr str = NULL;
     
-    line   = ajStrNew();
-    token  = ajStrNew();
-    tstr   = ajStrNew();
-    prefix = ajStrNew();
-    format = ajStrNew();
-    
-    ajStrAssignC(&line, &MAJSTRGETPTR(acline)[5]);
+    ajStrAssignSubS(&embindexLine, acline, 5, -1);
 
-    handle = ajStrTokenNewC(line,"\n;");
+    ajStrTokenAssignC(&embindexHandle,embindexLine,"\n\r;");
 
-    while(ajStrTokenNextParse(&handle,&token))
+    while(ajStrTokenNextParse(&embindexHandle,&embindexToken))
     {
-	ajStrTrimWhite(&token);
-	if((p=strchr(MAJSTRGETPTR(token),(int)'-')))
+	ajStrTrimWhite(&embindexToken);
+	if((p=strchr(MAJSTRGETPTR(embindexToken),(int)'-')))
 	{
 	    q = p;
 	    while(isdigit((int)*(--q)));
 	    ++q;
-	    ajStrAssignSubC(&tstr,q,0,(ajuint)(p-q-1));
-	    ajStrToUint(tstr,&lo);
+	    ajStrAssignSubC(&embindexTstr,q,0,(ajuint)(p-q-1));
+	    ajStrToUint(embindexTstr,&lo);
 	    field = (ajuint) (p-q);
-	    ajFmtPrintS(&format,"%%S%%0%uu",field);
+	    ajFmtPrintS(&embindexFormat,"%%S%%0%uu",field);
 	    
 	    ++p;
 	    q = p;
 	    while(!isdigit((int)*q))
 		++q;
 	    sscanf(q,"%u",&hi);
-	    ajStrAssignSubC(&prefix,p,0,(ajuint)(q-p-1));
+	    ajStrAssignSubC(&embindexPrefix,p,0,(ajuint)(q-p-1));
 	    
 	    for(i=lo;i<=hi;++i)
 	    {
-		str = ajStrNew();
-		ajFmtPrintS(&str,MAJSTRGETPTR(format),prefix,i);
+		ajFmtPrintS(&str,MAJSTRGETPTR(embindexFormat),
+			    embindexPrefix,i);
 		ajListPush(aclist,(void *)str);
+		str = NULL;
 	    }
 	}
 	else
 	{
-	    str = ajStrNew();
-	    ajStrAssignS(&str,token);
+	    ajStrAssignS(&str,embindexToken);
 	    ajListPush(aclist,(void *)str);
+	    str = NULL;
 	}
     }
 
-    ajStrDel(&tstr);
-    ajStrDel(&prefix);
-    ajStrDel(&format);
-    ajStrDel(&token);
-    ajStrTokenDel(&handle);
-    ajStrDel(&line);
-    
     return;
 }
 
@@ -253,16 +235,10 @@ void embBtreeEmblSV(const AjPStr idline, AjPList svlist)
     AjPStr idstr      = NULL;
     AjPStr svstr      = NULL;
     
-    line   = ajStrNew();
-    token  = ajStrNew();
-    idstr   = ajStrNew();
-    svstr   = ajStrNew();
-    
-    ajStrAssignC(&line, &MAJSTRGETPTR(idline)[5]);
+    ajStrAssignSubS(&line, idline, 5, -1);
 
-    handle = ajStrTokenNewC(line," \t\n;");
+    handle = ajStrTokenNewC(line," \t\n\r;");
 
-    str = ajStrNew();
     if(!ajStrTokenNextParse(&handle,&idstr))
 	return;
     if(!ajStrTokenNextParse(&handle,&token))
@@ -273,10 +249,13 @@ void embBtreeEmblSV(const AjPStr idline, AjPList svlist)
     if(!ajStrMatchC(token, "SV"))
 	return;
 
+    str = ajStrNewRes(MAJSTRGETLEN(idstr)+MAJSTRGETLEN(svstr)+2);
+
     ajFmtPrintS(&str,"%S.%S", idstr, svstr);
 
     ajListPush(svlist,(void *)str);
-
+    str = NULL;
+    
     ajStrDel(&idstr);
     ajStrDel(&svstr);
     ajStrDel(&token);
@@ -308,12 +287,9 @@ void embBtreeEmblDE(const AjPStr deline, AjPList delist, ajuint maxlen)
     AjPStr token     = NULL;
     AjPStr str       = NULL;
     
-    line  = ajStrNew();
-    token = ajStrNew();
-    
-    ajStrAssignC(&line, &MAJSTRGETPTR(deline)[5]);
+    ajStrAssignSubS(&line, deline, 5, -1);
 
-    handle = ajStrTokenNewC(line,"\n \t()");
+    handle = ajStrTokenNewC(line,"\n\r \t()");
 
     while(ajStrTokenNextParse(&handle,&token))
     {
@@ -321,7 +297,6 @@ void embBtreeEmblDE(const AjPStr deline, AjPList delist, ajuint maxlen)
 	ajStrTrimWhite(&token);
 	if(ajStrGetLen(token))
 	{
-	    str = ajStrNew();
 	    if(maxlen)
 	    {
 		if(ajStrGetLen(token) > maxlen)
@@ -334,6 +309,7 @@ void embBtreeEmblDE(const AjPStr deline, AjPList delist, ajuint maxlen)
 		ajStrAssignS(&str,token);
 	    ajStrFmtLower(&str);
 	    ajListPush(delist,(void *)str);
+	    str = NULL;
 	}
     }
 
@@ -373,16 +349,10 @@ void embBtreeGenBankAC(const AjPStr acline, AjPList aclist)
     ajuint hi = 0;
     ajuint field = 0;
     ajuint i;
-    
-    line   = ajStrNew();
-    token  = ajStrNew();
-    tstr   = ajStrNew();
-    prefix = ajStrNew();
-    format = ajStrNew();
-    
-    ajStrAssignC(&line, &MAJSTRGETPTR(acline)[12]);
 
-    handle = ajStrTokenNewC(line,"\n ");
+    ajStrAssignSubS(&line, acline, 12, -1);
+
+    handle = ajStrTokenNewC(line,"\n\r ");
 
     while(ajStrTokenNextParse(&handle,&token))
     {
@@ -406,16 +376,16 @@ void embBtreeGenBankAC(const AjPStr acline, AjPList aclist)
 	    
 	    for(i=lo;i<=hi;++i)
 	    {
-		str = ajStrNew();
 		ajFmtPrintS(&str,MAJSTRGETPTR(format),prefix,i);
 		ajListPush(aclist,(void *)str);
+		str = NULL;
 	    }
 	}
 	else
 	{
-	    str = ajStrNew();
 	    ajStrAssignS(&str,token);
 	    ajListPush(aclist,(void *)str);
+	    str = NULL;
 	}
     }
 
@@ -451,12 +421,9 @@ void embBtreeGenBankKW(const AjPStr kwline, AjPList kwlist, ajuint maxlen)
     AjPStr token     = NULL;
     AjPStr str       = NULL;
     
-    line  = ajStrNew();
-    token = ajStrNew();
-    
-    ajStrAssignC(&line, &MAJSTRGETPTR(kwline)[8]);
+    ajStrAssignSubS(&line, kwline, 8, -1);
 
-    handle = ajStrTokenNewC(line,"\n;");
+    handle = ajStrTokenNewC(line,"\n\r;");
 
     while(ajStrTokenNextParse(&handle,&token))
     {
@@ -464,7 +431,6 @@ void embBtreeGenBankKW(const AjPStr kwline, AjPList kwlist, ajuint maxlen)
 	ajStrTrimWhite(&token);
 	if(ajStrGetLen(token))
 	{
-	    str = ajStrNew();
 	    if(maxlen)
 	    {
 		if(ajStrGetLen(token) > maxlen)
@@ -477,6 +443,7 @@ void embBtreeGenBankKW(const AjPStr kwline, AjPList kwlist, ajuint maxlen)
 		ajStrAssignS(&str,token);
 	    ajStrFmtLower(&str);
 	    ajListPush(kwlist,(void *)str);
+	    str = NULL;
 	}
     }
 
@@ -509,12 +476,9 @@ void embBtreeGenBankDE(const AjPStr kwline, AjPList kwlist, ajuint maxlen)
     AjPStr token     = NULL;
     AjPStr str       = NULL;
     
-    line  = ajStrNew();
-    token = ajStrNew();
-    
-    ajStrAssignC(&line, &MAJSTRGETPTR(kwline)[10]);
+    ajStrAssignSubS(&line, kwline, 10, -1);
 
-    handle = ajStrTokenNewC(line,"\n \t()");
+    handle = ajStrTokenNewC(line,"\n\r \t()");
 
     while(ajStrTokenNextParse(&handle,&token))
     {
@@ -522,7 +486,6 @@ void embBtreeGenBankDE(const AjPStr kwline, AjPList kwlist, ajuint maxlen)
 	ajStrTrimWhite(&token);
 	if(ajStrGetLen(token))
 	{
-	    str = ajStrNew();
 	    if(maxlen)
 	    {
 		if(ajStrGetLen(token) > maxlen)
@@ -535,6 +498,7 @@ void embBtreeGenBankDE(const AjPStr kwline, AjPList kwlist, ajuint maxlen)
 		ajStrAssignS(&str,token);
 	    ajStrFmtLower(&str);
 	    ajListPush(kwlist,(void *)str);
+	    str = NULL;
 	}
     }
 
@@ -567,12 +531,9 @@ void embBtreeGenBankTX(const AjPStr kwline, AjPList kwlist, ajuint maxlen)
     AjPStr token     = NULL;
     AjPStr str       = NULL;
     
-    line  = ajStrNew();
-    token = ajStrNew();
-    
-    ajStrAssignC(&line, &MAJSTRGETPTR(kwline)[9]);
+    ajStrAssignSubS(&line, kwline, 9, -1);
 
-    handle = ajStrTokenNewC(line,"\n;()");
+    handle = ajStrTokenNewC(line,"\n\r;()");
 
     while(ajStrTokenNextParse(&handle,&token))
     {
@@ -581,7 +542,6 @@ void embBtreeGenBankTX(const AjPStr kwline, AjPList kwlist, ajuint maxlen)
 	ajStrTrimWhite(&token);
 	if(ajStrGetLen(token))
 	{
-	    str = ajStrNew();
 	    if(maxlen)
 	    {
 		if(ajStrGetLen(token) > maxlen)
@@ -594,6 +554,7 @@ void embBtreeGenBankTX(const AjPStr kwline, AjPList kwlist, ajuint maxlen)
 		ajStrAssignS(&str,token);
 	    ajStrFmtLower(&str);
 	    ajListPush(kwlist,(void *)str);
+	    str = NULL;
 	}
     }
 
@@ -625,9 +586,7 @@ void embBtreeFastaDE(const AjPStr kwline, AjPList kwlist, ajuint maxlen)
     AjPStr token     = NULL;
     AjPStr str       = NULL;
     
-    token = ajStrNew();
-    
-    handle = ajStrTokenNewC(kwline,"\n ");
+    handle = ajStrTokenNewC(kwline,"\n\r ");
 
     while(ajStrTokenNextParse(&handle,&token))
     {
@@ -648,6 +607,57 @@ void embBtreeFastaDE(const AjPStr kwline, AjPList kwlist, ajuint maxlen)
 		ajStrAssignS(&str,token);
 	    ajStrFmtLower(&str);
 	    ajListPush(kwlist,(void *)str);
+	    str = NULL;
+	}
+    }
+
+    ajStrDel(&token);
+    ajStrTokenDel(&handle);
+    
+    return;
+}
+
+
+
+
+/* @func embBtreeFastaSV **************************************************
+**
+** Extract sequence version keywords from a Fasta description
+**
+** @param [r] kwline[const AjPStr] sequence version or GI string
+** @param [w] kwlist [AjPList] list of sequence versions
+** @param [r] maxlen [ajuint] max sequence version length
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void embBtreeFastaSV(const AjPStr kwline, AjPList kwlist, ajuint maxlen)
+{
+    AjPStrTok handle = NULL;
+    AjPStr token     = NULL;
+    AjPStr str       = NULL;
+
+    handle = ajStrTokenNewC(kwline,"\n ");
+
+    while(ajStrTokenNextParse(&handle,&token))
+    {
+	ajStrTrimEndC(&token,".");
+	ajStrTrimWhite(&token);
+	if(ajStrGetLen(token))
+	{
+	    if(maxlen)
+	    {
+		if(ajStrGetLen(token) > maxlen)
+                    ajStrAssignSubS(&str,token,0,maxlen-1);
+		else
+		    ajStrAssignS(&str,token);
+            }
+	    else
+		ajStrAssignS(&str,token);
+	    ajStrFmtLower(&str);
+	    ajListPush(kwlist,(void *)str);
+	    str = NULL;
 	}
     }
 
@@ -687,15 +697,14 @@ ajuint embBtreeReadDir(AjPStr **filelist, const AjPStr fdirectory,
     /* ajDebug("In ajBtreeReadDir\n"); */
 
     lfiles = ajListNew();
-    nfiles = ajFileScan(fdirectory,files,&lfiles,ajFalse,ajFalse,NULL,NULL,
-			ajFalse,NULL);
+    nfiles = ajFilelistAddPathWild(lfiles, fdirectory, files);
 
     nremove = ajArrCommaList(exclude,&removelist);
     
     for(i=0;i<nfiles;++i)
     {
 	ajListPop(lfiles,(void **)&file);
-	ajFileNameTrim(&file);
+	ajFilenameTrimPath(&file);
 	for(j=0;j<nremove && ! ajStrMatchWildS(file,removelist[j]);++j);
 	if(j == nremove)
 	    ajListPushAppend(lfiles,(void *)file);
@@ -738,7 +747,7 @@ static AjPFile btreeCreateFile(const AjPStr idirectory, const AjPStr dbname,
 
     ajFmtPrintS(&filename,"%S%s%S%s",idirectory,SLASH_STRING,dbname,add);
     
-    fp =  ajFileNewOut(filename);
+    fp =  ajFileNewOutNameS(filename);
 
     ajStrDel(&filename);
     return fp;
@@ -956,8 +965,7 @@ ajuint embBtreeGetFiles(EmbPBtreeEntry entry, const AjPStr fdirectory,
     
     /* ajDebug("In embBtreeGetFiles\n"); */
 
-    nfiles = ajFileScan(fdirectory,files,&entry->files,ajFalse,ajFalse,NULL,
-			NULL,ajFalse,NULL);
+    nfiles = ajFilelistAddPathWild(entry->files, fdirectory,files);
 
     nremove = ajArrCommaList(exclude,&removelist);
 
@@ -965,7 +973,7 @@ ajuint embBtreeGetFiles(EmbPBtreeEntry entry, const AjPStr fdirectory,
     for(i=0;i<nfiles;++i)
     {
 	ajListPop(entry->files,(void **)&file);
-	ajFileNameTrim(&file);
+	ajFilenameTrimPath(&file);
 	for(j=0;j<nremove && !ajStrMatchWildS(file,removelist[j]);++j);
 	if(j == nremove)
 	{
@@ -1156,11 +1164,16 @@ void embBtreeGetRsInfo(EmbPBtreeEntry entry)
     }
 
     if(!ajNamGetValueC("CACHESIZE",&value))
+    {
 	entry->cachesize = BTREE_DEF_CACHESIZE;
+	ajUser("CACHESIZE defaults to %d", entry->cachesize);
+    }
     else
     {
 	if(ajStrToUint(value,&n))
+	{
 	    entry->cachesize = n;
+	}
 	else
 	{
 	    ajErr("Bad value for environment variable 'CACHESIZE'");
@@ -1169,11 +1182,16 @@ void embBtreeGetRsInfo(EmbPBtreeEntry entry)
     }
 
     if(!ajNamGetValueC("PAGESIZE",&value))
+    {
 	entry->pagesize = BTREE_DEF_PAGESIZE;
+	ajUser("PAGESIZE defaults to %d", entry->pagesize);
+    }
     else
     {
 	if(ajStrToUint(value,&n))
+	{
 	    entry->pagesize = n;
+	}
 	else
 	{
 	    ajErr("Bad value for environment variable 'PAGESIZE'");
@@ -1182,37 +1200,83 @@ void embBtreeGetRsInfo(EmbPBtreeEntry entry)
     }
 
     
-    entry->idorder = (entry->pagesize - 60) / ((entry->idlen + 1) + 12);
-    entry->idfill  = (entry->pagesize - 16) / (entry->idlen + 28);
-    entry->acorder = (entry->pagesize - 60) / ((entry->aclen + 1) + 12);
-    entry->acfill  = (entry->pagesize - 16) / (entry->aclen + 28);
-    entry->svorder = (entry->pagesize - 60) / ((entry->svlen + 1) + 12);
-    entry->svfill  = (entry->pagesize - 16) / (entry->svlen + 28);
+    entry->idorder = (entry->pagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
+        ((entry->idlen + 1) + BT_IDKEYEXTRA);
 
-    entry->kworder = (entry->pagesize - 60) / ((entry->kwlen + 1) + 12);
-    entry->kwfill  = (entry->pagesize - 16) / (entry->kwlen + 28);
-    entry->deorder = (entry->pagesize - 60) / ((entry->delen + 1) + 12);
-    entry->defill  = (entry->pagesize - 16) / (entry->delen + 28);
-    entry->txorder = (entry->pagesize - 60) / ((entry->txlen + 1) + 12);
-    entry->txfill  = (entry->pagesize - 16) / (entry->txlen + 28);
+    entry->idfill  = (entry->pagesize - BT_BUCKPREAMBLE) /
+        ((entry->idlen + 1) + BT_KEYLENENTRY + BT_DDOFFROFF);
 
-    entry->kwsecorder = (entry->pagesize - 60) / ((entry->idlen + 1) + 12);
-    entry->desecorder = (entry->pagesize - 60) / ((entry->idlen + 1) + 12);
-    entry->txsecorder = (entry->pagesize - 60) / ((entry->idlen + 1) + 12);
+    entry->acorder = (entry->pagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
+        ((entry->aclen + 1) + BT_IDKEYEXTRA);
 
-    entry->kwsecfill  = (entry->pagesize - 16) / (entry->idlen + 4);
-    entry->desecfill  = (entry->pagesize - 16) / (entry->idlen + 4);
-    entry->txsecfill  = (entry->pagesize - 16) / (entry->idlen + 4);
+    entry->acfill  = (entry->pagesize - BT_BUCKPREAMBLE) /
+        ((entry->aclen + 1) + BT_KEYLENENTRY + BT_DDOFFROFF);
 
-    entry->idsecorder = (entry->pagesize - 60) / 24;
-    entry->idsecfill  = (entry->pagesize - 60) / 20;
+    entry->svorder = (entry->pagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
+        ((entry->svlen + 1) + BT_IDKEYEXTRA);
 
-    entry->acsecorder = (entry->pagesize - 60) / 24;
-    entry->acsecfill  = (entry->pagesize - 60) / 20;
+    entry->svfill  = (entry->pagesize - BT_BUCKPREAMBLE) /
+        ((entry->svlen + 1) + BT_KEYLENENTRY + BT_DDOFFROFF);
 
-    entry->svsecorder = (entry->pagesize - 60) / 24;
-    entry->svsecfill  = (entry->pagesize - 60) / 20;
-    
+    entry->kworder = (entry->pagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
+        ((entry->kwlen + 1) + BT_IDKEYEXTRA);
+
+    entry->kwfill  = (entry->pagesize - BT_BUCKPREAMBLE) /
+        ((entry->kwlen + 1) + BT_KEYLENENTRY + BT_DDOFFROFF);
+
+    entry->deorder = (entry->pagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
+        ((entry->delen + 1) + BT_IDKEYEXTRA);
+
+    entry->defill  = (entry->pagesize - BT_BUCKPREAMBLE) /
+        ((entry->delen + 1) + BT_KEYLENENTRY + BT_DDOFFROFF);
+
+    entry->txorder = (entry->pagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
+        ((entry->txlen + 1) + BT_IDKEYEXTRA);
+
+    entry->txfill  = (entry->pagesize - BT_BUCKPREAMBLE) /
+        ((entry->txlen + 1) + BT_KEYLENENTRY + BT_DDOFFROFF);
+
+ 
+    entry->idsecorder = (entry->pagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
+        (BT_OFFKEYLEN + BT_IDKEYEXTRA);
+
+    entry->acsecorder = (entry->pagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
+        (BT_OFFKEYLEN + BT_IDKEYEXTRA);
+
+    entry->svsecorder = (entry->pagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
+        (BT_OFFKEYLEN + BT_IDKEYEXTRA);
+
+ 
+    entry->idsecfill  = (entry->pagesize - BT_BUCKPREAMBLE) /
+        BT_DOFFROFF;
+
+    entry->acsecfill  = (entry->pagesize - BT_BUCKPREAMBLE) /
+        BT_DOFFROFF;
+
+    entry->svsecfill  = (entry->pagesize - BT_BUCKPREAMBLE) /
+        BT_DOFFROFF;
+
+
+    /*
+     *  The secondary tree keys are the IDs of the entries containing
+     *  the keywords
+     */
+
+    entry->kwsecorder = (entry->pagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
+        ((entry->idlen + 1) + BT_IDKEYEXTRA);
+    entry->desecorder = (entry->pagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
+        ((entry->idlen + 1) + BT_IDKEYEXTRA);
+    entry->txsecorder = (entry->pagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
+        ((entry->idlen + 1) + BT_IDKEYEXTRA);
+
+
+    entry->kwsecfill  = (entry->pagesize - BT_BUCKPREAMBLE) /
+        ((entry->idlen + 1) + BT_KEYLENENTRY);
+    entry->desecfill  = (entry->pagesize - BT_BUCKPREAMBLE) /
+        ((entry->idlen + 1) + BT_KEYLENENTRY);
+    entry->txsecfill  = (entry->pagesize - BT_BUCKPREAMBLE) /
+        ((entry->idlen + 1) + BT_KEYLENENTRY);
+
     ajStrDel(&value);
 
     return;
@@ -1251,7 +1315,7 @@ AjBool embBtreeOpenCaches(EmbPBtreeEntry entry)
 					     entry->cachesize,
 					     entry->idsecorder, slevel,
 					     entry->idsecfill, count,
-					     entry->kwlen);
+					     entry->idlen);
 	if(!entry->idcache)
 	    ajFatal("Cannot open ID index");
 	
@@ -1267,7 +1331,7 @@ AjBool embBtreeOpenCaches(EmbPBtreeEntry entry)
 					     entry->cachesize,
 					     entry->acsecorder, slevel,
 					     entry->acsecfill, count,
-					     entry->kwlen);
+					     entry->aclen);
 	if(!entry->accache)
 	    ajFatal("Cannot open ACC index");
 
@@ -1282,7 +1346,7 @@ AjBool embBtreeOpenCaches(EmbPBtreeEntry entry)
 					     entry->cachesize,
 					     entry->svsecorder, slevel,
 					     entry->svsecfill, count,
-					     entry->kwlen);
+					     entry->svlen);
 	if(!entry->svcache)
 	    ajFatal("Cannot open SV index");
 
@@ -1414,6 +1478,44 @@ AjBool embBtreeCloseCaches(EmbPBtreeEntry entry)
 
 
 
+#if 0
+
+/* @func embBtreeProbeCaches ***********************************************
+**
+** Close index files
+**
+** @param [u] entry [EmbPBtreeEntry] database data
+**
+** @return [AjBool] true on success
+** @@
+******************************************************************************/
+
+AjBool embBtreeProbeCaches(EmbPBtreeEntry entry)
+{
+
+    if(entry->do_id)
+    {
+	ajBtreeProbePriArray(entry->idcache);
+	ajBtreeProbeSecArray(entry->idcache);
+    }
+
+    if(entry->do_accession)
+    {
+	ajBtreeProbePriArray(entry->accache);
+	ajBtreeProbeSecArray(entry->accache);
+    }
+
+    if(entry->do_sv)
+    {
+	ajBtreeProbePriArray(entry->svcache);
+	ajBtreeProbeSecArray(entry->svcache);
+    }
+
+    return ajTrue;
+}
+
+#endif
+
 
 /* @func embBtreeDumpParameters ***********************************************
 **
@@ -1453,4 +1555,24 @@ AjBool embBtreeDumpParameters(EmbPBtreeEntry entry)
 	ajBtreeWriteParams(entry->txcache, basenam, TX_EXTENSION, idir);    
 
     return ajTrue;
+}
+
+
+/* @func embIndexExit **********************************************************
+**
+** Cleanup indexing internals on exit
+**
+** @return [void]
+******************************************************************************/
+
+void embIndexExit(void)
+{
+    ajStrDel(&embindexLine);
+    ajStrDel(&embindexToken);
+    ajStrDel(&embindexTstr);
+    ajStrDel(&embindexPrefix);
+    ajStrDel(&embindexFormat);
+    ajStrTokenDel(&embindexHandle);
+
+    return;
 }

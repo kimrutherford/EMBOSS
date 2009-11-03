@@ -7,7 +7,7 @@ Type in a short sequence to the file 'mycc.pep' in SWISSPROT format:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>newseq </b>
-Type in a short new sequence.
+Create a sequence file from a typed-in sequence
 Name of the sequence: <b>cytoc</b>
 Description of the sequence: <b>fragment of cytochrome c</b>
 Type of sequence

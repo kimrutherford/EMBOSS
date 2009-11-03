@@ -38,7 +38,6 @@ import org.emboss.jemboss.soap.PrivateRequest;
 import org.emboss.jemboss.soap.JembossSoapException;
 import org.emboss.jemboss.gui.sequenceChooser.SequenceFilter;
 import org.emboss.jemboss.gui.filetree.*;
-import org.emboss.jemboss.gui.AdvancedOptions;
 import org.emboss.jemboss.JembossParams;
 import org.emboss.jemboss.server.JembossServer;
 
@@ -54,8 +53,6 @@ public class ResultsMenuBar extends JMenuBar
   private JMenuItem saveToLocalFile;
   /** menu to save to remote file  */
   private JMenuItem saveToRemoteFile;
-  /** frame containing the results */
-  private JFrame frame;
   /** tool bar */
   private JToolBar toolBar = new JToolBar();
   /** undo menu item */
@@ -451,8 +448,8 @@ public class ResultsMenuBar extends JMenuBar
 
             try
             {
-              PrivateRequest gReq = new PrivateRequest(mysettings,
-                                      "save_project_file",params);
+              //PrivateRequest gReq =
+              new PrivateRequest(mysettings, "save_project_file",params);
             }
             catch(JembossSoapException jse){}
           }
@@ -469,6 +466,7 @@ public class ResultsMenuBar extends JMenuBar
     //Font size selection
     String sizes[] = {"10", "12", "14", "16", "18"};
     final JComboBox fntSize = new JComboBox(sizes);
+    fntSize.setToolTipText("Font size");
     fntSize.setSelectedItem("12");
     fntSize.setPreferredSize(fntSize.getMinimumSize());
     fntSize.setMaximumSize(fntSize.getMinimumSize());
@@ -495,11 +493,13 @@ public class ResultsMenuBar extends JMenuBar
       }
     });
 
+    toolBar.addSeparator();
+    
     //Font style
     String styles[] = {"Plain","Bold","Italic"};
     final JComboBox cbFonts = new JComboBox(styles);
     cbFonts.setMaximumSize(cbFonts.getPreferredSize());
-    cbFonts.setToolTipText("Available styles");
+    cbFonts.setToolTipText("Available font styles");
     cbFonts.addActionListener(new ActionListener()
     {
       public void actionPerformed(ActionEvent e)
@@ -534,7 +534,6 @@ public class ResultsMenuBar extends JMenuBar
   */
   public void setResultsMenuBar(final JFrame frame, boolean addRemoteSaveMenu)
   {
-    this.frame = frame;
     add(Box.createRigidArea(new Dimension(5,24)));
 
     JMenu fileMenu = new JMenu("File");
@@ -573,14 +572,11 @@ public class ResultsMenuBar extends JMenuBar
     {
       public void actionPerformed(ActionEvent e)
       {
-        frame.setVisible(false);
+        frame.dispose();
       }
     });
     fileMenu.add(resFileMenuExit);
     add(fileMenu);
-
-    frame.setJMenuBar(this);
-    frame.getContentPane().add(toolBar, BorderLayout.NORTH);
   }
 
   /**
@@ -649,16 +645,6 @@ public class ResultsMenuBar extends JMenuBar
     }
   }
 
-  /**
-  *
-  * Get the menu bar
-  * @return 	menu bar
-  *
-  */ 
-//public JMenuBar getJMenuBar()
-//{
-//  return this;
-//}
 
   /**
   * 

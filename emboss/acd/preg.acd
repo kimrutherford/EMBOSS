@@ -1,6 +1,5 @@
 application: preg [
-  documentation: "Regular expression search of a protein
-                  sequence"
+  documentation: "Regular expression search of protein sequence(s)"
   groups: "Protein:Motifs"
 ]
 

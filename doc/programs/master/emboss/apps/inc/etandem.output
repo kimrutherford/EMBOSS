@@ -6,7 +6,7 @@
 <pre>
 ########################################
 # Program: etandem
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: etandem
 #    -noorigfile
 #    -sequence tembl:L46634
@@ -28,12 +28,12 @@
 #
 #=======================================
 
-  Start     End   Score   Size  Count Identity Consensus
-    793     936     120      6     24     93.8 acccta   
-    283     420      90      6     23     84.8 taaccc   
-    432     485      38      6      9     90.7 ccctaa   
-    494     529      26      6      6     94.4 ccctaa   
-    568     597      24      6      5    100.0 aaccct   
+  Start     End  Strand   Score   Size  Count Identity Consensus
+    793     936       +     120      6     24     93.8 acccta   
+    283     420       +      90      6     23     84.8 taaccc   
+    432     485       +      38      6      9     90.7 ccctaa   
+    494     529       +      26      6      6     94.4 ccctaa   
+    568     597       +      24      6      5    100.0 aaccct   
 
 #---------------------------------------
 #---------------------------------------

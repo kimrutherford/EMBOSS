@@ -44,7 +44,7 @@ int main(int argc, char **argv)
 
     seqout = ajAcdGetSeqout("outseq");
     seq    = ajAcdGetSeq("sequence");
-    append = ajAcdGetBool("append");
+    append = ajAcdGetBoolean("append");
     name   = ajAcdGetString("name");
     desc   = ajAcdGetString("description");
 

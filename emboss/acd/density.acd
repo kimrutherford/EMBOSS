@@ -1,0 +1,68 @@
+application: density [
+  documentation: "Draw a nucleic acid density plot"
+  groups: "Nucleic:Composition"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: seqall [
+    parameter: "Y"
+    type: "dna"
+  ]
+
+endsection: input
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  integer: window [
+    additional: "Y"
+    minimum: "1"
+    default: "100"
+    information: "Window length"
+  ]
+
+endsection: additional
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  toggle: quad [
+    default: "N"
+    information: "Produce graphic showing individual bases"
+  ]
+
+  toggle: dual [
+    default: "N"
+    information: "Produce AT vs GC graphic"
+  ]
+
+  xygraph: qgraph [
+    standard: "$(quad)"
+    multiple: "4"
+    information: "Quad (A+C+G+T) graph"
+  ]
+
+  xygraph: dgraph [
+    standard: "$(dual)"
+    multiple: "2"
+    information: "Dual (AT+GC) graph"
+  ]
+
+  report: outfile [
+    standard: "@(@(!$(quad)) & @(!$(dual)))"
+    taglist: "float:a float:c float:g float:t float:at float:gc"
+    rformat: "table"
+    knowntype: "density output"
+    nullok: "Y"
+    nulldefault: "@($(quad) | $(dual))"
+  ]
+
+endsection: output

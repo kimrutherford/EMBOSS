@@ -1,0 +1,30 @@
+# IUB codes for proteins
+# Substitution is for OR'd A=1, C=2, D=4 etc.
+#
+A	1	A	alanine
+B	2052	DN	aspartate/asparagine
+C	2	C	cysteine
+D	4	D	aspartate
+E	8	E	glutamate
+F	16	F	phenylalanine
+G	32	G	glycine
+H	64	H	histidine
+I	128	I	isoleucine
+J	640	IL	leucine/isoleucine
+K	256	K	lysine
+L	512	L	leucine
+M	1024	M	methionine
+N	2048	N	asparagine
+O	2097152	O	pyrrolysine
+P	4096	P	proline
+Q	8192	Q	glutamine
+R	16384	R	arginine
+S	32768	S	serine
+T	65536	T	threonine
+U	1048576	U	selenocysteine
+V	131072	V	valine
+W	262144	W	tryptophan
+X	1048575	ACDEFGHIKLMNPQRSTVWY	unknown
+Y	524288	Y	tyrosine
+Z	8200	EQ	glutamate/glutamine
+

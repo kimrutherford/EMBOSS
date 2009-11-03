@@ -61,13 +61,13 @@ Command line arguments
    -width              integer    [16] Alignment width (Integer 1 or more)
    -wordlen            integer    [6] Word length for initial matching
                                   (Integer 3 or more)
-   -limitmatch         integer    [0] Limiting match score (zero for no limit)
+   -limitmatch         integer    [0] Maximum match score (zero for no limit)
                                   (Integer 0 or more)
-   -limitalign         integer    [0] Limiting alignment length (zero for no
+   -limitalign         integer    [0] Maximum alignment length (zero for no
                                   limit) (Integer 0 or more)
-   -lowmatch           integer    [0] Limiting match score (zero for no limit)
+   -lowmatch           integer    [0] Minimum match score (zero for no limit)
                                   (Integer 0 or more)
-   -lowalign           integer    [0] Limiting alignment length (zero for no
+   -lowalign           integer    [0] Minimum alignment length (zero for no
                                   limit) (Integer 0 or more)
    -errorfile          outfile    [wordfinder.error] Error file to be written
                                   to
@@ -123,8 +123,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -350,7 +351,7 @@ Output file format
 
 ########################################
 # Program: wordfinder
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: wordfinder
 #    [-asequence] tembl:j01636
 #    [-bsequence] @../../data/eclac.list
@@ -539,12 +540,13 @@ Known bugs
 
 See also
 
-   Program name                         Description
-   matcher      Finds the best local alignments between two sequences
-   seqmatchall  All-against-all comparison of a set of sequences
-   supermatcher Match large sequences against one or more other sequences
-   water        Smith-Waterman local alignment
-   wordmatch    Finds all exact matches of a given size between 2 sequences
+   Program name Description
+   matcher Waterman-Eggert local alignment of two sequences
+   seqmatchall All-against-all word comparison of a sequence set
+   supermatcher Calculate approximate local pair-wise alignments of
+   larger sequences
+   water Smith-Waterman local alignment of sequences
+   wordmatch Finds regions of identity (exact matches) of two sequences
 
 Author(s)
 

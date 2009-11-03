@@ -20,7 +20,6 @@
  
 package org.emboss.jemboss.server;
 
-import java.awt.*;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;

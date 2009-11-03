@@ -7,10 +7,11 @@ Display information on the currently available databases:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showdb </b>
-Displays information on the currently available databases
+Displays information on configured databases
 
 # Name           Type  ID  Qry All Comment
 # ============== ==== ==  === === =======
+twp              P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM index
 qapblast         P    OK  OK  OK  BLAST swissnew
 qapblastall      P    OK  OK  OK  BLAST swissnew, all fields indexed
 qapblastsplit    P    OK  OK  OK  BLAST swissnew split in 5 files
@@ -30,7 +31,6 @@ qaxpirinc        P    OK  OK  OK  PIR
 tpir             P    OK  OK  OK  PIR using NBRF access for 4 files
 tsw              P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
 tswnew           P    OK  OK  OK  SpTrEmbl as 3 files in native format with EMBL CD-ROM index
-twp              P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM index
 genbanksrs       N    OK  -   -   Genbank IDs
 qanfasta         N    OK  OK  OK  FASTA file EMBL rodents
 qanfastaall      N    OK  OK  OK  FASTA file EMBL rodents, all fields indexed
@@ -78,7 +78,7 @@ Write the results to a file:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showdb -outfile showdb.out </b>
-Displays information on the currently available databases
+Displays information on configured databases
 
 </pre></td></tr></table><p>
 <p>
@@ -93,7 +93,7 @@ Display information on one explicit database:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showdb -database tsw </b>
-Displays information on the currently available databases
+Displays information on configured databases
 
 # Name         Type  ID  Qry All Comment
 # ============ ==== ==  === === =======
@@ -112,10 +112,11 @@ Display information on the databases formatted in HTML:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showdb -html </b>
-Displays information on the currently available databases
+Displays information on configured databases
 
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Name</th><th>Type</th><th>ID</th><th>Qry</th><th>All</th><th>Comment</th></tr>
+<tr><td>twp</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL new in native format with EMBL CD-ROM index</td></tr>
 <tr><td>qapblast</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>BLAST swissnew</td></tr>
 <tr><td>qapblastall</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>BLAST swissnew, all fields indexed</td></tr>
 <tr><td>qapblastsplit</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>BLAST swissnew split in 5 files</td></tr>
@@ -135,7 +136,6 @@ Displays information on the currently available databases
 <tr><td>tpir</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>PIR using NBRF access for 4 files</td></tr>
 <tr><td>tsw</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>Swissprot native format with EMBL CD-ROM index</td></tr>
 <tr><td>tswnew</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>SpTrEmbl as 3 files in native format with EMBL CD-ROM index</td></tr>
-<tr><td>twp</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL new in native format with EMBL CD-ROM index</td></tr>
 <tr><td>genbanksrs</td><td>N</td><td>OK  </td><td>-   </td><td>-   </td><td>Genbank IDs</td></tr>
 <tr><td>qanfasta</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>FASTA file EMBL rodents</td></tr>
 <tr><td>qanfastaall</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>FASTA file EMBL rodents, all fields indexed</td></tr>
@@ -184,10 +184,11 @@ Display protein databases only:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showdb -nonucleic </b>
-Displays information on the currently available databases
+Displays information on configured databases
 
 # Name           Type  ID  Qry All Comment
 # ============== ==== ==  === === =======
+twp              P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM index
 qapblast         P    OK  OK  OK  BLAST swissnew
 qapblastall      P    OK  OK  OK  BLAST swissnew, all fields indexed
 qapblastsplit    P    OK  OK  OK  BLAST swissnew split in 5 files
@@ -207,7 +208,6 @@ qaxpirinc        P    OK  OK  OK  PIR
 tpir             P    OK  OK  OK  PIR using NBRF access for 4 files
 tsw              P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
 tswnew           P    OK  OK  OK  SpTrEmbl as 3 files in native format with EMBL CD-ROM index
-twp              P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM index
 
 </pre></td></tr></table><p>
 <p>
@@ -222,8 +222,9 @@ Display the information with no headings:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showdb -noheading </b>
-Displays information on the currently available databases
+Displays information on configured databases
 
+twp              P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM index
 qapblast         P    OK  OK  OK  BLAST swissnew
 qapblastall      P    OK  OK  OK  BLAST swissnew, all fields indexed
 qapblastsplit    P    OK  OK  OK  BLAST swissnew split in 5 files
@@ -243,7 +244,6 @@ qaxpirinc        P    OK  OK  OK  PIR
 tpir             P    OK  OK  OK  PIR using NBRF access for 4 files
 tsw              P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
 tswnew           P    OK  OK  OK  SpTrEmbl as 3 files in native format with EMBL CD-ROM index
-twp              P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM index
 genbanksrs       N    OK  -   -   Genbank IDs
 qanfasta         N    OK  OK  OK  FASTA file EMBL rodents
 qanfastaall      N    OK  OK  OK  FASTA file EMBL rodents, all fields indexed
@@ -292,6 +292,7 @@ Display just a list of the available database names:
 
 % <b>showdb -noheading -notype -noid -noquery -noall -nocomment -auto </b>
 
+twp              
 qapblast         
 qapblastall      
 qapblastsplit    
@@ -311,7 +312,6 @@ qaxpirinc
 tpir             
 tsw              
 tswnew           
-twp              
 genbanksrs       
 qanfasta         
 qanfastaall      
@@ -359,8 +359,9 @@ Display only the names and types:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showdb -only -type </b>
-Displays information on the currently available databases
+Displays information on configured databases
 
+twp              P    
 qapblast         P    
 qapblastall      P    
 qapblastsplit    P    
@@ -380,7 +381,6 @@ qaxpirinc        P
 tpir             P    
 tsw              P    
 tswnew           P    
-twp              P    
 genbanksrs       N    
 qanfasta         N    
 qanfastaall      N    
@@ -428,10 +428,11 @@ Display everything
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showdb -full </b>
-Displays information on the currently available databases
+Displays information on configured databases
 
 # Name           Type  ID  Qry All Method    Fields            Defined  Release  Comment
 # ============== ==== ==  === === ========= ================= ======= ======= =======
+twp              P    OK  OK  OK  emblcd    des               global  16      EMBL new in native format with EMBL CD-ROM index
 qapblast         P    OK  OK  OK  blast     -                 special         BLAST swissnew
 qapblastall      P    OK  OK  OK  blast     sv,des            special         BLAST swissnew, all fields indexed
 qapblastsplit    P    OK  OK  OK  blast     -                 special         BLAST swissnew split in 5 files
@@ -451,7 +452,6 @@ qaxpirinc        P    OK  OK  OK  embossgcg -                 special         PI
 tpir             P    OK  OK  OK  gcg       des,org,key       special         PIR using NBRF access for 4 files
 tsw              P    OK  OK  OK  emblcd    sv,des,org,key    special 36      Swissprot native format with EMBL CD-ROM index
 tswnew           P    OK  OK  OK  emblcd    sv,des,org,key    special 37      SpTrEmbl as 3 files in native format with EMBL CD-ROM index
-twp              P    OK  OK  OK  emblcd    des               special 16      EMBL new in native format with EMBL CD-ROM index
 genbanksrs       N    OK  -   -   srswww    gi,sv,des,org,key global          Genbank IDs
 qanfasta         N    OK  OK  OK  emblcd    -                 special         FASTA file EMBL rodents
 qanfastaall      N    OK  OK  OK  emblcd    sv,des            special         FASTA file EMBL rodents, all fields indexed

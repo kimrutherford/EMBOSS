@@ -1,5 +1,5 @@
 application: showalign [
-  documentation: "Displays a multiple sequence alignment"
+  documentation: "Display a multiple sequence alignment in pretty format"
   groups: "Alignment:Multiple, Display"
 ]
 

@@ -35,7 +35,6 @@ import org.emboss.jemboss.programs.RunEmbossApplication2;
 import org.emboss.jemboss.gui.AdvancedOptions;
 import org.emboss.jemboss.gui.BuildProgramMenu;
 import org.emboss.jemboss.parser.*;
-import org.emboss.jemboss.programs.ListFile;
 import org.emboss.jemboss.gui.sequenceChooser.*;
 import org.emboss.jemboss.soap.CallAjax;
 import org.emboss.jemboss.soap.JembossSoapException;
@@ -51,7 +50,7 @@ import org.emboss.jemboss.JembossParams;
 public class SectionPanel
 {
 
-  private MultiTextField multiTextField[];
+  //private MultiTextField multiTextField[];
   /** text field sink    */
   private TextFieldSink textf[];
   /** integer field sink */
@@ -59,13 +58,13 @@ public class SectionPanel
   /** float field sink   */
   private TextFieldFloat textFloat[];
   /** range field        */
-  private JTextField rangeField[];
+  //private JTextField rangeField[];
   /** boolean fields     */
   private JCheckBox  checkBox[];
   /** input sequence attributes */
   private InputSequenceAttributes inSeqAttr[];
   /** list file panel    */
-  private ListFilePanel filelist[];
+  //private ListFilePanel filelist[];
   /** checkbox popup field for list and select */
   private JembossComboPopup fieldOption[];
   /** multiple option field for list and select */
@@ -180,7 +179,7 @@ public class SectionPanel
     this.textf = textf;
     this.textInt = textInt;
     this.textFloat = textFloat;
-    this.rangeField = rangeField;
+    //this.rangeField = rangeField;
     this.checkBox = checkBox;
     this.inSeqAttr = inSeqAttr;
     this.fieldOption = fieldOption;
@@ -449,7 +448,7 @@ public class SectionPanel
         }
         else if(att.startsWith("filelist"))
         {
-          filelist[h] = new ListFilePanel(15,mysettings);
+          filelist[h] = new ListFilePanel(15, mysettings, h==0 );
           pan.add(filelist[h]);
           pan.add(Box.createVerticalStrut(100));
         }
@@ -546,7 +545,7 @@ public class SectionPanel
       }
 
 //using jni?
-      if(AdvancedOptions.prefjni.isSelected())
+      if(AdvancedOptions.prefJNI.isSelected())
         checkDependents(section,envp);
 
       if((att.startsWith("seqset") || att.startsWith("seqall")||
@@ -816,8 +815,8 @@ public class SectionPanel
                   File tf;
                   try
                   {
-                    if(mysettings.isCygwin())
-                      tmp = mysettings.getCygwinRoot()+System.getProperty("file.separator")+"tmp";
+                    if(JembossParams.isCygwin())
+                      tmp = JembossParams.getCygwinRoot()+System.getProperty("file.separator")+"tmp";
                     else
                       tmp = System.getProperty("java.io.tmpdir");
 
@@ -850,7 +849,7 @@ public class SectionPanel
             {
               boolean ok = true;
               Ajax aj = null;
-              if(mysettings.isCygwin())
+              if(JembossParams.isCygwin())
                 ok = cygwinSeqAttr(fc,envp,att);
               else
               {
@@ -863,11 +862,11 @@ public class SectionPanel
 
               if(ok)
               {
-                if(!mysettings.isCygwin())
+                if(!JembossParams.isCygwin())
                 {
-                  ajaxLength  = aj.length;
-                  ajaxWeight  = aj.weight;
-                  ajaxProtein = aj.protein;
+                  ajaxLength  = Ajax.length;
+                  ajaxWeight  = Ajax.weight;
+                  ajaxProtein = Ajax.protein;
                 }
  
                 if( (updateBeginEnd(inSeqAttr[h].getBegSeq(),
@@ -1065,7 +1064,7 @@ public class SectionPanel
     {
       String exp = dep[i].getDependentExp();
       int field = dep[i].getDependentField();
-      int param = dep[i].getDependentParam();
+      //int param = dep[i].getDependentParam();
 
       try
       {

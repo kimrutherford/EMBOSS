@@ -28,31 +28,15 @@ Replace or delete sequence sections
     Description
 </H2>
 
-<b>biosed</b> is a simple sequence editing utility that searches for a
-target subsequence in one or more input sequences and replaces it with a
-specified second subsequence (or optionally just deletes the found
-target subsequence). 
+<p><b>biosed</b> is a simple sequence editing utility that searches for a target subsequence in one or more input sequences and replaces it with an insert subsequence, or optionally, just deletes the target subsequence where found.  If the target subsequence occurs more than once, then each instance of the target is replaced or deleted.</p>
 
-<p>
-
-<b>biosed</b> was inspired by the useful UNIX utility <b>sed</b> which
-searches for a pattern in text and can replace or delete the found
-pattern. 
-
-<p>
-
-If the target subsequence occurs more than once, then each instance of
-the target is replaced. 
-
-<p>
-
-The target subsequence is not any sort of an ambiguity pattern, it is
-just a short sequence.  A simple string match is done and if it exactly
-matches then the replacement is done.  The matching is independent of
-the case of the sequence or the target - both uppercase and lowercase
-will match. 
+The <tt>-position</tt> option allows a sequence position to be specified as an additional constraint for the match: a replacement / deletion only occurs if the start of a match is at the specified <tt>-position</tt> position.
 
 
+<H2>
+    Algorithm
+</H2>
+<p>The target subsequence is just a short, literal sequence of characters.  <b>biosed</b> cannot interpret cannot any sort of an ambiguity pattern such as a regular expression.  A simple string match is done between the target and input sequences.  If there is an exact matches then the replacement or deletion is done. The matching is case insensitive, independent of the case of both the input sequences and target. </p>
 
 
 
@@ -146,8 +130,9 @@ Replace or delete sequence sections
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -489,7 +474,8 @@ None.
     Notes
 </H2>
 
-The edited sequence will be output in uppercase.
+<p><b>biosed</b> was inspired by the useful UNIX utility sed which searches for a pattern in text and can replace or delete the found pattern.</p>
+
 
 
 <H2>
@@ -504,11 +490,7 @@ None.
     Warnings
 </H2>
 
-No check is made on the replacement subsequence.  
-<br> 
-Any text can be used as the replacement, including characters only used
-in proteins (e.g.  D, E, F, etc.), characters rarely used in proteins (e.g. 
-U, J, O, etc), digits and punctuation characters. 
+<p>No check for correct type (protein, nucleic, gapped etc) is made on the replacement sequence so you must ensure it is of the type required.  Any text can be used, including characters only used in proteins (e.g. <tt>D</tt>, <tt>E</tt>, <tt>F</tt>, etc.), characters rarely used in proteins (e.g. <tt>U</tt>, <tt>J</tt>, <tt>O</tt>, etc), digits and punctuation characters.</p>
 
 <H2>
     Diagnostic Error Messages
@@ -533,20 +515,31 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="aligncopy.html">aligncopy</a></td>
+<td>Reads and writes alignments</td>
+</tr>
+
+<tr>
+<td><a href="aligncopypair.html">aligncopypair</a></td>
+<td>Reads and writes pairs from alignments</td>
+</tr>
+
 <tr>
 <td><a href="codcopy.html">codcopy</a></td>
-<td>Reads and writes a codon usage table</td>
+<td>Copy and reformat a codon usage table</td>
 </tr>
 
 <tr>
 <td><a href="cutseq.html">cutseq</a></td>
-<td>Removes a specified section from a sequence</td>
+<td>Removes a section from a sequence</td>
 </tr>
 
 <tr>
 <td><a href="degapseq.html">degapseq</a></td>
-<td>Removes gap characters from sequences</td>
+<td>Removes non-alphabetic (e.g. gap) characters from sequences</td>
 </tr>
 
 <tr>
@@ -556,7 +549,7 @@ None.
 
 <tr>
 <td><a href="entret.html">entret</a></td>
-<td>Reads and writes (returns) flatfile entries</td>
+<td>Retrieves sequence entries from flatfile databases and files</td>
 </tr>
 
 <tr>
@@ -566,12 +559,22 @@ None.
 
 <tr>
 <td><a href="extractfeat.html">extractfeat</a></td>
-<td>Extract features from a sequence</td>
+<td>Extract features from sequence(s)</td>
 </tr>
 
 <tr>
 <td><a href="extractseq.html">extractseq</a></td>
 <td>Extract regions from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="featcopy.html">featcopy</a></td>
+<td>Reads and writes a feature table</td>
+</tr>
+
+<tr>
+<td><a href="featreport.html">featreport</a></td>
+<td>Reads and writes a feature table</td>
 </tr>
 
 <tr>
@@ -581,42 +584,67 @@ None.
 
 <tr>
 <td><a href="makenucseq.html">makenucseq</a></td>
-<td>Creates random nucleotide sequences</td>
+<td>Create random nucleotide sequences</td>
 </tr>
 
 <tr>
 <td><a href="makeprotseq.html">makeprotseq</a></td>
-<td>Creates random protein sequences</td>
+<td>Create random protein sequences</td>
+</tr>
+
+<tr>
+<td><a href="maskambignuc.html">maskambignuc</a></td>
+<td>Masks all ambiguity characters in nucleotide sequences with N</td>
+</tr>
+
+<tr>
+<td><a href="maskambigprot.html">maskambigprot</a></td>
+<td>Masks all ambiguity characters in protein sequences with X</td>
 </tr>
 
 <tr>
 <td><a href="maskfeat.html">maskfeat</a></td>
-<td>Mask off features of a sequence</td>
+<td>Write a sequence with masked features</td>
 </tr>
 
 <tr>
 <td><a href="maskseq.html">maskseq</a></td>
-<td>Mask off regions of a sequence</td>
+<td>Write a sequence with masked regions</td>
 </tr>
 
 <tr>
 <td><a href="newseq.html">newseq</a></td>
-<td>Type in a short new sequence</td>
+<td>Create a sequence file from a typed-in sequence</td>
+</tr>
+
+<tr>
+<td><a href="nohtml.html">nohtml</a></td>
+<td>Remove mark-up (e.g. HTML tags) from an ASCII text file</td>
 </tr>
 
 <tr>
 <td><a href="noreturn.html">noreturn</a></td>
-<td>Removes carriage return from ASCII files</td>
+<td>Remove carriage return from ASCII files</td>
+</tr>
+
+<tr>
+<td><a href="nospace.html">nospace</a></td>
+<td>Remove all whitespace from an ASCII text file</td>
+</tr>
+
+<tr>
+<td><a href="notab.html">notab</a></td>
+<td>Replace tabs with spaces in an ASCII text file</td>
 </tr>
 
 <tr>
 <td><a href="notseq.html">notseq</a></td>
-<td>Exclude a set of sequences and write out the remaining ones</td>
+<td>Write to file a subset of an input stream of sequences</td>
 </tr>
 
 <tr>
 <td><a href="nthseq.html">nthseq</a></td>
-<td>Writes one sequence from a multiple set of sequences</td>
+<td>Write to file a single sequence from an input stream of sequences</td>
 </tr>
 
 <tr>
@@ -626,7 +654,7 @@ None.
 
 <tr>
 <td><a href="revseq.html">revseq</a></td>
-<td>Reverse and complement a sequence</td>
+<td>Reverse and complement a nucleotide sequence</td>
 </tr>
 
 <tr>
@@ -636,7 +664,17 @@ None.
 
 <tr>
 <td><a href="seqretsplit.html">seqretsplit</a></td>
-<td>Reads and writes (returns) sequences in individual files</td>
+<td>Reads sequences and writes them to individual files</td>
+</tr>
+
+<tr>
+<td><a href="sizeseq.html">sizeseq</a></td>
+<td>Sort sequences by size</td>
+</tr>
+
+<tr>
+<td><a href="skipredundant.html">skipredundant</a></td>
+<td>Remove redundant sequences from an input set</td>
 </tr>
 
 <tr>
@@ -646,32 +684,37 @@ None.
 
 <tr>
 <td><a href="splitter.html">splitter</a></td>
-<td>Split a sequence into (overlapping) smaller sequences</td>
+<td>Split sequence(s) into smaller sequences</td>
 </tr>
 
 <tr>
 <td><a href="trimest.html">trimest</a></td>
-<td>Trim poly-A tails off EST sequences</td>
+<td>Remove poly-A tails from nucleotide sequences</td>
 </tr>
 
 <tr>
 <td><a href="trimseq.html">trimseq</a></td>
-<td>Trim ambiguous bits off the ends of sequences</td>
+<td>Remove unwanted characters from start and end of sequence(s)</td>
+</tr>
+
+<tr>
+<td><a href="trimspace.html">trimspace</a></td>
+<td>Remove extra whitespace from an ASCII text file</td>
 </tr>
 
 <tr>
 <td><a href="union.html">union</a></td>
-<td>Reads sequence fragments and builds one sequence</td>
+<td>Concatenate multiple sequences into a single sequence</td>
 </tr>
 
 <tr>
 <td><a href="vectorstrip.html">vectorstrip</a></td>
-<td>Strips out DNA between a pair of vector sequences</td>
+<td>Removes vectors from the ends of nucleotide sequence(s)</td>
 </tr>
 
 <tr>
 <td><a href="yank.html">yank</a></td>
-<td>Reads a sequence range, appends the full USA to a list file</td>
+<td>Add a sequence reference (a full USA) to a list file</td>
 </tr>
 
 </table>

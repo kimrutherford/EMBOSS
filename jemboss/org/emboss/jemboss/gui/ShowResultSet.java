@@ -31,7 +31,6 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 
 import org.apache.regexp.*;
-import java.io.*;
 import java.util.Hashtable;
 import java.util.Enumeration;
 
@@ -54,6 +53,8 @@ public class ShowResultSet extends JFrame
   private JTabbedPane rtp;
   /** grout panel */
   private GroutPanel grout = null;
+  /** toolbar */
+  private JToolBar toolbar = null;
 
   /**
   * 
@@ -119,7 +120,6 @@ public class ShowResultSet extends JFrame
 
     setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-    ScrollPanel s1;
     JScrollPane r1;
 
     String stabs[] = addHashContentsToTab(reslist,rtp);
@@ -190,13 +190,14 @@ public class ShowResultSet extends JFrame
   {
     int index = rtp.getSelectedIndex();
     String title = rtp.getTitleAt(index);
+    if (toolbar != null)
+        remove(toolbar);
     if(title.endsWith("x3d"))
     {
       grout = (GroutPanel)rtp.getSelectedComponent();
       JMenuBar groutMenuBar = grout.getMenuBar();
       setJMenuBar(groutMenuBar);
-      remove(menuBar.getToolBar());
-      getContentPane().add(grout.getToolBar(),BorderLayout.NORTH);
+      toolbar = grout.getToolBar();
     }
     else if(title.endsWith(".dat"))
     {
@@ -205,17 +206,27 @@ public class ShowResultSet extends JFrame
         return;
 
       JMenuBar graphMenuBar = graph.getMenuBar(false, this);
-      remove(menuBar.getToolBar());
+      toolbar = graph.getToolBar();
       setJMenuBar(graphMenuBar);
     }
+    else if(title.endsWith(".png"))
+    {
+      menuBar.getComponent(2).setEnabled(false);
+      setJMenuBar(menuBar);
+      toolbar = menuBar.getToolBar();
+      toolbar.getComponent(0).setEnabled(false);
+      toolbar.getComponent(2).setEnabled(false);
+    }    
     else 
     {
+      menuBar.getComponent(2).setEnabled(true);
       setJMenuBar(menuBar);
-      if(grout != null)
-        remove(grout.getToolBar());
-
-      getContentPane().add(menuBar.getToolBar(),BorderLayout.NORTH);
+      toolbar = menuBar.getToolBar();
+      toolbar.getComponent(0).setEnabled(true);
+      toolbar.getComponent(2).setEnabled(true);
     }
+    if (toolbar !=null)
+        getContentPane().add(toolbar,BorderLayout.NORTH);
   }
 
 
@@ -238,7 +249,6 @@ public class ShowResultSet extends JFrame
   */
   private String[] addHashContentsToTab(Hashtable h,JTabbedPane rtp)
   {
-    ScrollPanel s1;
     JScrollPane r1;
 
     String cmd = "cmd";

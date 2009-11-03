@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>pepstats </b>
-Protein statistics
+Calculates statistics of protein properties
 Input protein sequence(s): <b>tsw:laci_ecoli</b>
 Pepstats program output file [laci_ecoli.pepstats]: <b></b>
 

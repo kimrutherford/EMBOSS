@@ -1,0 +1,475 @@
+
+                                  density 
+
+
+
+Function
+
+   Draw a nucleic acid density plot
+
+Description
+
+   density produces a density plot of a nuleotide sequence.
+
+Usage
+
+   Here is a sample session with density
+
+
+% density tembl:x13776 
+Draw a nucleic acid density plot
+Output report [x13776.density]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+   Example 2
+
+
+% density tembl:x13776 -quad -qgraph cps 
+Draw a nucleic acid density plot
+
+Created density.ps
+
+   Go to the output files for this example
+
+   Example 3
+
+
+% density tembl:x13776 -dual -dgraph cps 
+Draw a nucleic acid density plot
+
+Created density.ps
+
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers (* if not always prompted):
+  [-seqall]            seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+*  -qgraph             xygraph    [$EMBOSS_GRAPHICS value, or x11] Quad
+                                  (A+C+G+T) graph (ps, hpgl, hp7470, hp7580,
+                                  meta, cps, x11, tekt, tek, none, data,
+                                  xterm, png, gif)
+*  -dgraph             xygraph    [$EMBOSS_GRAPHICS value, or x11] Dual
+                                  (AT+GC) graph (ps, hpgl, hp7470, hp7580,
+                                  meta, cps, x11, tekt, tek, none, data,
+                                  xterm, png, gif)
+*  -outfile            report     [*.density] Output report file name
+
+   Additional (Optional) qualifiers:
+   -window             integer    [100] Window length (Integer 1 or more)
+
+   Advanced (Unprompted) qualifiers:
+   -quad               toggle     [N] Produce graphic showing individual bases
+   -dual               toggle     [N] Produce AT vs GC graphic
+
+   Associated qualifiers:
+
+   "-seqall" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-qgraph" associated qualifiers
+   -gprompt            boolean    Graph prompting
+   -gdesc              string     Graph description
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
+
+   "-dgraph" associated qualifiers
+   -gprompt            boolean    Graph prompting
+   -gdesc              string     Graph description
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
+
+   "-outfile" associated qualifiers
+   -rformat            string     Report format
+   -rname              string     Base file name
+   -rextension         string     File name extension
+   -rdirectory         string     Output directory
+   -raccshow           boolean    Show accession number in the report
+   -rdesshow           boolean    Show description in the report
+   -rscoreshow         boolean    Show the score in the report
+   -rstrandshow        boolean    Show the nucleotide strand in the report
+   -rusashow           boolean    Show the full USA in the report
+   -rmaxall            integer    Maximum total hits to report
+   -rmaxseq            integer    Maximum hits to report for one sequence
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   density reads any normal sequence USAs.
+
+  Input files for usage example
+
+   'tembl:x13776' is a sequence entry in the example nucleic acid
+   database 'tembl'
+
+  Database entry: tembl:x13776
+
+ID   X13776; SV 1; linear; genomic DNA; STD; PRO; 2167 BP.
+XX
+AC   X13776; M43175;
+XX
+DT   19-APR-1989 (Rel. 19, Created)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 24)
+XX
+DE   Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+XX
+KW   aliphatic amidase regulator; amiC gene; amiR gene.
+XX
+OS   Pseudomonas aeruginosa
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadales;
+OC   Pseudomonadaceae; Pseudomonas.
+XX
+RN   [1]
+RP   1167-2167
+RA   Rice P.M.;
+RT   ;
+RL   Submitted (16-DEC-1988) to the EMBL/GenBank/DDBJ databases.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG
+.
+XX
+RN   [2]
+RP   1167-2167
+RX   DOI; 10.1016/0014-5793(89)80249-2.
+RX   PUBMED; 2495988.
+RA   Lowe N., Rice P.M., Drew R.E.;
+RT   "Nucleotide sequence of the aliphatic amidase regulator gene of Pseudomona
+s
+RT   aeruginosa";
+RL   FEBS Lett. 246(1-2):39-43(1989).
+XX
+RN   [3]
+RP   1-1292
+RX   PUBMED; 1907262.
+RA   Wilson S., Drew R.;
+RT   "Cloning and DNA seqence of amiC, a new gene regulating expression of the
+RT   Pseudomonas aeruginosa aliphatic amidase, and purification of the amiC
+RT   product.";
+RL   J. Bacteriol. 173(16):4914-4921(1991).
+XX
+RN   [4]
+RP   1-2167
+RA   Rice P.M.;
+RT   ;
+RL   Submitted (04-SEP-1991) to the EMBL/GenBank/DDBJ databases.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG
+.
+XX
+DR   GOA; Q51417.
+DR   UniProtKB/Swiss-Prot; Q51417; AMIS_PSEAE.
+XX
+
+
+  [Part of this file has been deleted for brevity]
+
+FT                   /replace=""
+FT                   /note="ClaI fragment deleted in pSW36,  constitutive
+FT                   phenotype"
+FT   misc_feature    1
+FT                   /note="last base of an XhoI site"
+FT   misc_feature    648..653
+FT                   /note="end of 658bp XhoI fragment, deletion in  pSW3 cause
+s
+FT                   constitutive expression of amiE"
+FT   conflict        1281
+FT                   /replace="g"
+FT                   /citation=[3]
+XX
+SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
+     ggtaccgctg gccgagcatc tgctcgatca ccaccagccg ggcgacggga actgcacgat        6
+0
+     ctacctggcg agcctggagc acgagcgggt tcgcttcgta cggcgctgag cgacagtcac       12
+0
+     aggagaggaa acggatggga tcgcaccagg agcggccgct gatcggcctg ctgttctccg       18
+0
+     aaaccggcgt caccgccgat atcgagcgct cgcacgcgta tggcgcattg ctcgcggtcg       24
+0
+     agcaactgaa ccgcgagggc ggcgtcggcg gtcgcccgat cgaaacgctg tcccaggacc       30
+0
+     ccggcggcga cccggaccgc tatcggctgt gcgccgagga cttcattcgc aaccgggggg       36
+0
+     tacggttcct cgtgggctgc tacatgtcgc acacgcgcaa ggcggtgatg ccggtggtcg       42
+0
+     agcgcgccga cgcgctgctc tgctacccga ccccctacga gggcttcgag tattcgccga       48
+0
+     acatcgtcta cggcggtccg gcgccgaacc agaacagtgc gccgctggcg gcgtacctga       54
+0
+     ttcgccacta cggcgagcgg gtggtgttca tcggctcgga ctacatctat ccgcgggaaa       60
+0
+     gcaaccatgt gatgcgccac ctgtatcgcc agcacggcgg cacggtgctc gaggaaatct       66
+0
+     acattccgct gtatccctcc gacgacgact tgcagcgcgc cgtcgagcgc atctaccagg       72
+0
+     cgcgcgccga cgtggtcttc tccaccgtgg tgggcaccgg caccgccgag ctgtatcgcg       78
+0
+     ccatcgcccg tcgctacggc gacggcaggc ggccgccgat cgccagcctg accaccagcg       84
+0
+     aggcggaggt ggcgaagatg gagagtgacg tggcagaggg gcaggtggtg gtcgcgcctt       90
+0
+     acttctccag catcgatacg cccgccagcc gggccttcgt ccaggcctgc catggtttct       96
+0
+     tcccggagaa cgcgaccatc accgcctggg ccgaggcggc ctactggcag accttgttgc      102
+0
+     tcggccgcgc cgcgcaggcc gcaggcaact ggcgggtgga agacgtgcag cggcacctgt      108
+0
+     acgacatcga catcgacgcg ccacaggggc cggtccgggt ggagcgccag aacaaccaca      114
+0
+     gccgcctgtc ttcgcgcatc gcggaaatcg atgcgcgcgg cgtgttccag gtccgctggc      120
+0
+     agtcgcccga accgattcgc cccgaccctt atgtcgtcgt gcataacctc gacgactggt      126
+0
+     ccgccagcat gggcggggga ccgctcccat gagcgccaac tcgctgctcg gcagcctgcg      132
+0
+     cgagttgcag gtgctggtcc tcaacccgcc gggggaggtc agcgacgccc tggtcttgca      138
+0
+     gctgatccgc atcggttgtt cggtgcgcca gtgctggccg ccgccggaag ccttcgacgt      144
+0
+     gccggtggac gtggtcttca ccagcatttt ccagaatggc caccacgacg agatcgctgc      150
+0
+     gctgctcgcc gccgggactc cgcgcactac cctggtggcg ctggtggagt acgaaagccc      156
+0
+     cgcggtgctc tcgcagatca tcgagctgga gtgccacggc gtgatcaccc agccgctcga      162
+0
+     tgcccaccgg gtgctgcctg tgctggtatc ggcgcggcgc atcagcgagg aaatggcgaa      168
+0
+     gctgaagcag aagaccgagc agctccagga ccgcatcgcc ggccaggccc ggatcaacca      174
+0
+     ggccaaggtg ttgctgatgc agcgccatgg ctgggacgag cgcgaggcgc accagcacct      180
+0
+     gtcgcgggaa gcgatgaagc ggcgcgagcc gatcctgaag atcgctcagg agttgctggg      186
+0
+     aaacgagccg tccgcctgag cgatccgggc cgaccagaac aataacaaga ggggtatcgt      192
+0
+     catcatgctg ggactggttc tgctgtacgt tggcgcggtg ctgtttctca atgccgtctg      198
+0
+     gttgctgggc aagatcagcg gtcgggaggt ggcggtgatc aacttcctgg tcggcgtgct      204
+0
+     gagcgcctgc gtcgcgttct acctgatctt ttccgcagca gccgggcagg gctcgctgaa      210
+0
+     ggccggagcg ctgaccctgc tattcgcttt tacctatctg tgggtggccg ccaaccagtt      216
+0
+     cctcgag                                                                216
+7
+//
+
+Output file format
+
+   density outputs a graph to the specified graphics device.
+
+  Output files for usage example
+
+  File: x13776.density
+
+########################################
+# Program: density
+# Rundate: Tue 15 Jul 2008 12:00:00
+# Commandline: density
+#    [-seqall] tembl:x13776
+# Report_format: table
+# Report_file: x13776.density
+########################################
+
+#=======================================
+#
+# Sequence: X13776     from: 1   to: 2167
+# HitCount: 2068
+#
+# Window size = 100
+#
+#=======================================
+
+  Start     End  Strand   Score      a      c      g      t     at     gc
+      1       1       +   0.000  0.180  0.330  0.330  0.160  0.340  0.660
+      2       2       +   0.000  0.180  0.340  0.320  0.160  0.340  0.660
+      3       3       +   0.000  0.180  0.340  0.320  0.160  0.340  0.660
+      4       4       +   0.000  0.180  0.340  0.330  0.150  0.330  0.670
+      5       5       +   0.000  0.170  0.350  0.330  0.150  0.320  0.680
+      6       6       +   0.000  0.170  0.340  0.340  0.150  0.320  0.680
+      7       7       +   0.000  0.170  0.340  0.340  0.150  0.320  0.680
+      8       8       +   0.000  0.170  0.340  0.330  0.160  0.330  0.670
+      9       9       +   0.000  0.170  0.330  0.340  0.160  0.330  0.670
+     10      10       +   0.000  0.180  0.330  0.340  0.150  0.330  0.670
+     11      11       +   0.000  0.180  0.330  0.340  0.150  0.330  0.670
+     12      12       +   0.000  0.180  0.340  0.330  0.150  0.330  0.670
+     13      13       +   0.000  0.180  0.330  0.340  0.150  0.330  0.670
+     14      14       +   0.000  0.190  0.320  0.340  0.150  0.340  0.660
+     15      15       +   0.000  0.190  0.330  0.330  0.150  0.340  0.660
+     16      16       +   0.000  0.190  0.330  0.330  0.150  0.340  0.660
+     17      17       +   0.000  0.190  0.330  0.330  0.150  0.340  0.660
+     18      18       +   0.000  0.190  0.320  0.330  0.160  0.350  0.650
+     19      19       +   0.000  0.180  0.330  0.330  0.160  0.340  0.660
+     20      20       +   0.000  0.190  0.330  0.330  0.150  0.340  0.660
+     21      21       +   0.000  0.190  0.330  0.330  0.150  0.340  0.660
+     22      22       +   0.000  0.200  0.330  0.330  0.140  0.340  0.660
+     23      23       +   0.000  0.200  0.330  0.330  0.140  0.340  0.660
+     24      24       +   0.000  0.200  0.320  0.340  0.140  0.340  0.660
+     25      25       +   0.000  0.210  0.320  0.340  0.130  0.340  0.660
+     26      26       +   0.000  0.210  0.310  0.350  0.130  0.340  0.660
+     27      27       +   0.000  0.220  0.310  0.340  0.130  0.350  0.650
+     28      28       +   0.000  0.210  0.310  0.350  0.130  0.340  0.660
+     29      29       +   0.000  0.210  0.310  0.360  0.120  0.330  0.670
+     30      30       +   0.000  0.220  0.300  0.360  0.120  0.340  0.660
+     31      31       +   0.000  0.220  0.300  0.360  0.120  0.340  0.660
+
+
+  [Part of this file has been deleted for brevity]
+
+   2026    2026       +   0.000  0.110  0.340  0.330  0.220  0.330  0.670
+   2027    2027       +   0.000  0.110  0.330  0.340  0.220  0.330  0.670
+   2028    2028       +   0.000  0.110  0.330  0.340  0.220  0.330  0.670
+   2029    2029       +   0.000  0.110  0.330  0.340  0.220  0.330  0.670
+   2030    2030       +   0.000  0.110  0.330  0.330  0.230  0.340  0.660
+   2031    2031       +   0.000  0.110  0.330  0.320  0.240  0.350  0.650
+   2032    2032       +   0.000  0.110  0.330  0.320  0.240  0.350  0.650
+   2033    2033       +   0.000  0.120  0.320  0.320  0.240  0.360  0.640
+   2034    2034       +   0.000  0.120  0.330  0.310  0.240  0.360  0.640
+   2035    2035       +   0.000  0.120  0.340  0.300  0.240  0.360  0.640
+   2036    2036       +   0.000  0.120  0.330  0.300  0.250  0.370  0.630
+   2037    2037       +   0.000  0.130  0.330  0.290  0.250  0.380  0.620
+   2038    2038       +   0.000  0.130  0.330  0.290  0.250  0.380  0.620
+   2039    2039       +   0.000  0.130  0.340  0.280  0.250  0.380  0.620
+   2040    2040       +   0.000  0.130  0.330  0.280  0.260  0.390  0.610
+   2041    2041       +   0.000  0.130  0.330  0.290  0.250  0.380  0.620
+   2042    2042       +   0.000  0.130  0.330  0.280  0.260  0.390  0.610
+   2043    2043       +   0.000  0.120  0.330  0.290  0.260  0.380  0.620
+   2044    2044       +   0.000  0.120  0.330  0.290  0.260  0.380  0.620
+   2045    2045       +   0.000  0.120  0.320  0.300  0.260  0.380  0.620
+   2046    2046       +   0.000  0.120  0.320  0.290  0.270  0.390  0.610
+   2047    2047       +   0.000  0.120  0.310  0.300  0.270  0.390  0.610
+   2048    2048       +   0.000  0.120  0.300  0.310  0.270  0.390  0.610
+   2049    2049       +   0.000  0.120  0.310  0.310  0.260  0.380  0.620
+   2050    2050       +   0.000  0.120  0.320  0.300  0.260  0.380  0.620
+   2051    2051       +   0.000  0.120  0.310  0.310  0.260  0.380  0.620
+   2052    2052       +   0.000  0.120  0.320  0.300  0.260  0.380  0.620
+   2053    2053       +   0.000  0.120  0.330  0.300  0.250  0.370  0.630
+   2054    2054       +   0.000  0.130  0.320  0.300  0.250  0.380  0.620
+   2055    2055       +   0.000  0.140  0.320  0.290  0.250  0.390  0.610
+   2056    2056       +   0.000  0.140  0.320  0.290  0.250  0.390  0.610
+   2057    2057       +   0.000  0.140  0.330  0.280  0.250  0.390  0.610
+   2058    2058       +   0.000  0.150  0.330  0.280  0.240  0.390  0.610
+   2059    2059       +   0.000  0.150  0.330  0.290  0.230  0.380  0.620
+   2060    2060       +   0.000  0.150  0.320  0.290  0.240  0.390  0.610
+   2061    2061       +   0.000  0.150  0.320  0.290  0.240  0.390  0.610
+   2062    2062       +   0.000  0.140  0.330  0.290  0.240  0.380  0.620
+   2063    2063       +   0.000  0.140  0.330  0.290  0.240  0.380  0.620
+   2064    2064       +   0.000  0.140  0.320  0.290  0.250  0.390  0.610
+   2065    2065       +   0.000  0.140  0.330  0.290  0.240  0.380  0.620
+   2066    2066       +   0.000  0.140  0.330  0.290  0.240  0.380  0.620
+   2067    2067       +   0.000  0.140  0.330  0.290  0.240  0.380  0.620
+   2068    2068       +   0.000  0.140  0.330  0.300  0.230  0.370  0.630
+
+#---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_hitcount: 2068
+#---------------------------------------
+
+  Output files for usage example 2
+
+  Graphics File: density.ps
+
+   [density results]
+
+  Output files for usage example 3
+
+  Graphics File: density.ps
+
+   [density results]
+
+Data files
+
+   None
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name                           Description
+   banana       Plot bending and curvature data for B-DNA
+   btwisted     Calculate the twisting in a B-DNA sequence
+   chaos        Draw a chaos game representation plot for a nucleotide sequence
+   compseq      Calculate the composition of unique words in sequences
+   dan          Calculates nucleic acid melting temperature
+   freak        Generate residue/base frequency table or plot
+   isochore     Plots isochores in DNA sequences
+   sirna        Finds siRNA duplexes in mRNA
+   wordcount    Count and extract unique words in DNA sequence(s)
+
+Author(s)
+
+   Alan Bleasby (ajb © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
+
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

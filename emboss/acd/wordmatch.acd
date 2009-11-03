@@ -1,6 +1,5 @@
 application: wordmatch [
-  documentation: "Finds all exact matches of a given size
-                  between 2 sequences"
+  documentation: "Finds regions of identity (exact matches) of two sequences"
   groups: "Alignment:Local"
 ]
 

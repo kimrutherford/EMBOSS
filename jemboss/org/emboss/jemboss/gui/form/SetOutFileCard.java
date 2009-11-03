@@ -25,8 +25,6 @@ package org.emboss.jemboss.gui.form;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.event.*;
 
 import org.emboss.jemboss.gui.sequenceChooser.*;
 
@@ -62,14 +60,13 @@ public class SetOutFileCard
     bacross.add(Box.createHorizontalGlue());
     bdown.add(bacross);
 
-    BuildJembossForm.outSeqAttr = new OutputSequenceAttributes();
+    BuildJembossForm.outSeqAttr = new OutputSequenceAttributes(tfs);
     final JScrollPane rscroll = BuildJembossForm.outSeqAttr.getJScrollPane();
     boption.addActionListener(new ActionListener()
     {
       public void actionPerformed(ActionEvent e)
       {
-        JOptionPane jop = new JOptionPane();
-        jop.showMessageDialog(sectionPane,rscroll,
+        JOptionPane.showMessageDialog(sectionPane,rscroll,
                 "Output Sequence",
                 JOptionPane.PLAIN_MESSAGE);
       }

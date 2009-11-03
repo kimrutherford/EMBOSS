@@ -38,9 +38,8 @@ typedef struct EmbSWordMatch {
 **
 ** NUCLEUS data structure for words
 **
-
 ** @attr fword [const char*] Original word
-** @attr list [AjPList] List of words
+** @attr list [AjPList] List of word positions
 ** @attr count [ajint] Size of list
 ** @attr Padding [char[4]] Padding to alignment boundary
 ** @@

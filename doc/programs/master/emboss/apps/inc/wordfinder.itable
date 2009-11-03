@@ -69,28 +69,28 @@
 
 <tr>
 <td>-limitmatch</td>
-<td>Limiting match score (zero for no limit)</td>
+<td>Maximum match score (zero for no limit)</td>
 <td>Integer 0 or more</td>
 <td>0</td>
 </tr>
 
 <tr>
 <td>-limitalign</td>
-<td>Limiting alignment length (zero for no limit)</td>
+<td>Maximum alignment length (zero for no limit)</td>
 <td>Integer 0 or more</td>
 <td>0</td>
 </tr>
 
 <tr>
 <td>-lowmatch</td>
-<td>Limiting match score (zero for no limit)</td>
+<td>Minimum match score (zero for no limit)</td>
 <td>Integer 0 or more</td>
 <td>0</td>
 </tr>
 
 <tr>
 <td>-lowalign</td>
-<td>Limiting alignment length (zero for no limit)</td>
+<td>Minimum alignment length (zero for no limit)</td>
 <td>Integer 0 or more</td>
 <td>0</td>
 </tr>

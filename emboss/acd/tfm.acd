@@ -1,6 +1,5 @@
 application: tfm [
-  documentation: "Displays a program's help documentation
-                  manual"
+  documentation: "Displays full documentation for an application"
   groups: "Information"
 ]
 

@@ -12,8 +12,7 @@
                                   tekt, tek, none, data, xterm, png, gif)
 
    Additional (Optional) qualifiers:
-   -aadata             datafile   [Eamino.dat] Amino acids properties and
-                                  molecular weight data file
+   -mwdata             datafile   [Emolwt.dat] Molecular weights data file
    -threshold          float      [+5.0] Threshold value to discriminate weak
                                   from potential PEST motifs. Valid PEST
                                   motifs are discriminated into 'poor' and
@@ -25,6 +24,7 @@
                                   mathematics. (Number from -55.00 to 55.00)
 
    Advanced (Unprompted) qualifiers:
+   -mono               boolean    [N] Use monoisotopic weights
    -[no]potential      boolean    [Y] Decide whether potential PEST motifs
                                   should be printed.
    -[no]poor           boolean    [Y] Decide whether poor PEST motifs should
@@ -67,8 +67,9 @@
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options

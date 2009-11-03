@@ -228,7 +228,7 @@ typedef struct AjSSeqQuery {
 ** @attr Formatstr [AjPStr] Sequence input format name
 ** @attr Filename [AjPStr] Original filename
 ** @attr Entryname [AjPStr] Entry name
-** @attr Filebuff [AjPFileBuff] Input sequence buffered file
+** @attr Filebuff [AjPFilebuff] Input sequence buffered file
 ** @attr Search [AjBool] Search for more entries (always true?)
 ** @attr Single [AjBool] Read single entries
 ** @attr CaseId [AjBool] Id case sensitive (default false)
@@ -275,7 +275,7 @@ typedef struct AjSSeqin {
   AjPStr Formatstr;
   AjPStr Filename;
   AjPStr Entryname;
-  AjPFileBuff Filebuff;
+  AjPFilebuff Filebuff;
   AjBool Search;
   AjBool Single;
   AjBool CaseId;

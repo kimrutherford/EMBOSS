@@ -6,9 +6,6 @@ extern "C"
 #ifndef ajtable_h
 #define ajtable_h
 
-
-
-
 struct binding {
 	struct binding *link;
 	void *key;
@@ -67,7 +64,6 @@ typedef struct AjSTable {
 
 
 
-
 /*
 ** Prototype definitions
 */
@@ -75,6 +71,8 @@ typedef struct AjSTable {
 void       ajTableExit(void);
 void       ajTableFree (AjPTable* table);
 void*      ajTableFetch  (const AjPTable table, const void *key);
+const AjPStr ajTablestrFetch (const AjPTable table, const AjPStr key);
+AjPStr*    ajTablestrFetchmod (AjPTable table, const AjPStr key);
 ajuint     ajTableGetLength (const AjPTable table);
 void       ajTableMap    (AjPTable table,
 			  void apply(const void *key, void **value, void *cl),

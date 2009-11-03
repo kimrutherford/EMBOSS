@@ -5,33 +5,31 @@
 
 Function
 
-   Displays a thresholded dotplot of two sequences
+   Draw a threshold dotplot of two sequences
 
 Description
 
-   A dotplot is a graphical representation of the regions of similarity
-   between two sequences.
+   dotmatcher generates a dotplot from two input sequences. The dotplot
+   is an intuitive graphical representation of the regions of similarity
+   between two sequences. All positions from the first input sequence are
+   compared with all positions from the second input sequence using a
+   specified substitution matrix. The two sequences are the axes of the
+   rectangular dotplot. Wherever there is "similarity" between a position
+   from each sequence a dot is plotted. The threshold conditions for
+   "similarity" are defined by the user.
 
-   The two sequences are placed on the axes of a rectangular image and
-   (subject to threshold conditions) wherever there is a similarity
-   between the sequences a dot is placed on the image.
+Algorithm
 
-   Where the two sequences have substantial regions of similarity, many
-   dots align to form diagonal lines. It is therefore possible to see at
-   a glance where there are local regions of similarity as these will
-   have long diagonal lines. It is also easy to see other features such
-   as repeats (which form parallel diagonal lines), and insertions or
-   deletions (which form breaks or discontinuities in the diagonal
-   lines).
-
-   dotmatcher uses a threshold to define whether a match is plotted
-   (calculated from the substitution matrix). A window of specified
-   length is moved up all possible diagonals and a score is calculated
-   within each window for each position along the diagonals. The score is
-   the sum of the comparisons of the two sequences using the given
-   similarity matrix along the window. If the score is above the
-   threshold, then a line is plotted on the image over the position of
-   the window.
+   All positions from the first input sequence are compared with all
+   positions from the second input sequence and scored, using the
+   specified substitution matrix. This produces a matrix of scores from
+   which local regions of similarity (corresponding to diagonals in the
+   dotplot) are identified. A window of user-specified length is moved
+   along all possible diagonals. Each position in the window corresponds
+   to a pair-wise score from the scoring matrix. The score for the entire
+   window is the sum of the scores for individual positions within it. If
+   the window score is above the user-defined threshold, then a line is
+   plotted on the dotplot corresponding to the window.
 
 Usage
 
@@ -39,7 +37,7 @@ Usage
 
 
 % dotmatcher tsw:hba_human tsw:hbb_human -graph cps 
-Displays a thresholded dotplot of two sequences
+Draw a threshold dotplot of two sequences
 
 Created dotmatcher.ps
 
@@ -131,8 +129,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -414,7 +413,12 @@ Data files
 
 Notes
 
-   None.
+   Where the two sequences have substantial regions of similarity, the
+   dots line up to form diagonal lines. It is possible to see at a glance
+   such local regions of similarity. It is also easy to see other
+   features such as repeats (which form parallel diagonal lines), and
+   insertions or deletions (which form breaks or discontinuities in the
+   diagonal lines).
 
 References
 
@@ -438,10 +442,10 @@ Known bugs
 
 See also
 
-   Program name                       Description
-   dotpath      Non-overlapping wordmatch dotplot of two sequences
+   Program name                          Description
+   dotpath      Draw a non-overlapping wordmatch dotplot of two sequences
    dottup       Displays a wordmatch dotplot of two sequences
-   polydot      Displays all-against-all dotplots of a set of sequences
+   polydot      Draw dotplots for all-against-all comparison of a sequence set
 
    dottup, by comparison, has no threshold, using a wordmatch-style
    method. dottup is less sensitive, but substantially faster than

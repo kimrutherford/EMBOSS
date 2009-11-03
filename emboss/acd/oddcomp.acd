@@ -1,6 +1,5 @@
 application: oddcomp [
-  documentation: "Find protein sequence regions with a biased
-                  composition"
+  documentation: "Identify proteins with specified sequence word composition"
   groups: "Protein:Motifs"
 ]
 

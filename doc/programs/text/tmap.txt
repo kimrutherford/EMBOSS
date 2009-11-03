@@ -5,35 +5,20 @@
 
 Function
 
-   Displays membrane spanning regions
+   Predict and plot transmembrane segments in protein sequences
 
 Description
 
-   This program predicts transmembrane segments in proteins, utilising
-   the algorithm described in: "Persson, B. & Argos, P. (1994) Prediction
-   of transmembrane segments in proteins utilising multiple sequence
-   alignments J. Mol. Biol. 237, 182-192."
-
-   tmap reads in one or more aligned protein sequences.
-
-   Two sets of propensity values are then used for the calculations: one
-   for the middle, hydrophobic portion and one for the terminal regions
-   of the transmembrane sequence spans. Average propensity values are
-   calculated for each position along the alignment, with the
-   contribution from each sequence weighted according to its
-   dissimilarity relative to the other aligned sequences.
-
-   Eight-residue segments are considered as potential cores of
-   transmembrane segments and elongated if thier middle propensity values
-   are above a threshold. End propensity values are also considered as
-   stop signals. Only helices with a length of 15 to 29 residues are
-   allowed and corrections for strictly conserved charged residues are
-   made.
-
-   The method is more successful than predictions based upon single
-   sequences alone.
-
-   The results are plotted on a graph and written to a text file.
+   tmap predicts transmembrane segments for an aligned set of protein
+   sequences, utilising the algorithm described in: "Persson, B. & Argos,
+   P. (1994) Prediction of transmembrane segments in proteins utilising
+   multiple sequence alignments J. Mol. Biol. 237, 182-192.". A plot of
+   the propensities to form the middle and the end of transmembrane
+   regions is output. Bars are displayed in the plot above the regions
+   predicted as being most likely to form transmembrane regions. The
+   transmembrane regions for the complete alignment are given first,
+   followed by the predictions for each individual sequence in the
+   alignment.
 
 Usage
 
@@ -41,7 +26,7 @@ Usage
 
 
 % tmap opsd.msf -out tmap.res -graph cps 
-Displays membrane spanning regions
+Predict and plot transmembrane segments in protein sequences
 
 Created tmap.ps
 
@@ -95,14 +80,16 @@ Command line arguments
    -raccshow2          boolean    Show accession number in the report
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
+   -rstrandshow2       boolean    Show the nucleotide strand in the report
    -rusashow2          boolean    Show the full USA in the report
    -rmaxall2           integer    Maximum total hits to report
    -rmaxseq2           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -171,7 +158,7 @@ Output file format
 
 ########################################
 # Program: tmap
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: tmap
 #    [-sequences] ../../data/opsd.msf
 #    -outfile tmap.res
@@ -260,7 +247,22 @@ Data files
 
 Notes
 
-   None.
+   Two sets of transmembrane propensity values are then used for the
+   calculations: one for the middle, hydrophobic portion and one for the
+   terminal regions of the transmembrane sequence spans. Average
+   propensity values are calculated for each position along the
+   alignment, with the contribution from each sequence weighted according
+   to its dissimilarity relative to the other aligned sequences.
+
+   Eight-residue segments are considered as potential cores of
+   transmembrane segments and elongated if thier middle propensity values
+   are above a threshold. End propensity values are also considered as
+   stop signals. Only helices with a length of 15 to 29 residues are
+   allowed and corrections for strictly conserved charged residues are
+   made.
+
+   The method is more successful than predictions based upon single
+   sequences alone.
 
 References
 
@@ -286,13 +288,14 @@ Known bugs
 
 See also
 
-    Program name              Description
-   garnier        Predicts protein secondary structure
-   helixturnhelix Report nucleic acid binding motifs
-   hmoment        Hydrophobic moment calculation
-   pepcoil        Predicts coiled coil regions
-   pepnet         Displays proteins as a helical net
-   pepwheel       Shows protein sequences as helices
+   Program name Description
+   garnier Predicts protein secondary structure using GOR method
+   helixturnhelix Identify nucleic acid-binding motifs in protein
+   sequences
+   hmoment Calculate and plot hydrophobic moment for protein sequence(s)
+   pepcoil Predicts coiled coil regions in protein sequences
+   pepnet Draw a helical net for a protein sequence
+   pepwheel Draw a helical wheel diagram for a protein sequence
 
 Author(s)
 

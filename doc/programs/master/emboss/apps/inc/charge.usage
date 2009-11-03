@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>charge tsw:hbb_human </b>
-Protein charge plot
+Draw a protein charge plot
 Output file [hbb_human.charge]: <b></b>
 
 </pre></td></tr></table><p>

@@ -2,7 +2,7 @@
 **
 ** Calculate protein statistics
 **
-** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @author Copyright (C) Alan Bleasby (ajb@ebi.ac.uk)
 ** @@
 **
 ** Dayhoff statistic by Rodrigo Lopez (rls@ebi.ac.uk)
@@ -31,6 +31,11 @@
 #define LAM1 (double)15.43
 #define LAM2 (double)-29.56
 #define CVDISC (double)1.71
+
+
+
+
+static AjBool pepstats_issize(const EmbPPropAmino aa, ajint crit);
 
 
 
@@ -78,20 +83,28 @@ int main(int argc, char **argv)
 
     float *dhstat = NULL;
     AjPFile mfptr = NULL;
+    AjPFile wfptr = NULL;
     AjPSeq  seq = NULL;
+
+    EmbPPropMolwt *mwdata;
+    EmbPPropAmino *aadata;
+    AjBool mono;
+    
     
     embInit("pepstats", argc, argv);
 
     a       = ajAcdGetSeqall("sequence");
-    termini = ajAcdGetBool("termini");
+    termini = ajAcdGetBoolean("termini");
     outf    = ajAcdGetOutfile("outfile");
-    mfptr  = ajAcdGetDatafile("aadata");
+    mfptr   = ajAcdGetDatafile("aadata");
+    wfptr   = ajAcdGetDatafile("mwdata");
+    mono    = ajAcdGetBoolean("mono");
+    
+    substr  = ajStrNew();
 
-    substr = ajStrNew();
 
-
-    embPropAminoRead(mfptr);
-
+    aadata = embPropEaminoRead(mfptr);
+    mwdata = embPropEmolwtRead(wfptr);
 
     if(!embReadAminoDataFloatC(DAYHOFF_FILE,&dhstat,(float)0.001))
 	ajFatal("Set the EMBOSS_DATA environment variable");
@@ -105,8 +118,6 @@ int main(int argc, char **argv)
 	ajStrAssignSubC(&substr,ajSeqGetSeqC(seq),be-1,en-1);
 	len = en-be+1;
 
-
-
 	embIepCompS(substr,1,0,0,c);
 	if(!termini)
 	    c[EMBIEPAMINO]=c[EMBIEPCARBOXYL]=0;
@@ -115,11 +126,10 @@ int main(int argc, char **argv)
 		    be,en);
 
 	ajFmtPrintF(outf,"Molecular weight = %-10.2f\t\tResidues = %-6d\n",
-		    (molwt=embPropCalcMolwt(ajStrGetPtr(substr),0,len-1)),len);
-
-
+		    (molwt=embPropCalcMolwt(ajStrGetPtr(substr),0,len-1,
+					    mwdata,mono)),len);
 	for(i=0,charge=0.0;i<26;++i)
-	    charge += (double)c[i] * EmbPropTable[i][EMBPROPCHARGE];
+	    charge += (double)c[i] * (double) embPropGetCharge(aadata[i]);
 
 	ajFmtPrintF(outf,"Average Residue Weight  = %-7.3f \t"
 		    "Charge   = %-6.1f\n", molwt/(double)len,charge);
@@ -129,12 +139,13 @@ int main(int argc, char **argv)
 	else
 	    ajFmtPrintF(outf,"Isoelectric Point = %-6.4lf\n",iep);
 
-	molar_ext_coeff = embPropCalcMolextcoeff(ajStrGetPtr(substr),0,len-1);
-	
+	molar_ext_coeff = embPropCalcMolextcoeff(ajStrGetPtr(substr),0,len-1,
+						 aadata);
+
 
 	ajFmtPrintF(outf,"A280 Molar Extinction Coefficient  = %-8d\n", 
 		    (ajint)molar_ext_coeff);
-	
+
 	ajFmtPrintF(outf,"A280 Extinction Coefficient 1mg/ml = %-10.2f\n",
 		    molar_ext_coeff / molwt);
 
@@ -157,13 +168,9 @@ int main(int argc, char **argv)
 		    "robability of expression in inclusion bodies = %.3lf\n\n",
 		    psolu);
 
-
 	ajFmtPrintF(outf,"Residue\t\tNumber\t\tMole%%\t\tDayhoffStat\n");
 	for(i=0;i<26;++i)
 	{
-	    if(!EmbPropTable[i][EMBPROPMOLWT])
-		continue;
-
 	    molpc=(100.0 * (double)c[i]/(double)len);
 	    ajFmtPrintF(outf,"%c = %s\t\t%d\t\t%-7.3f\t\t%-7.3f\t\n",i+'A',
 			embPropIntToThree(i),c[i],molpc,molpc/dhstat[i]);
@@ -175,7 +182,7 @@ int main(int argc, char **argv)
 	{
 	    ajFmtPrintF(outf,"%s",prop[i-1]);
 	    for(j=0,sum=0;j<26;++j)
-		if(EmbPropTable[j][i])
+		if(pepstats_issize(aadata[j],i))
 		    sum += c[j];
 	    ajFmtPrintF(outf,"%d\t\t%6.3f\n",sum,
 			100.0 * (double)sum/(double)len);
@@ -184,6 +191,8 @@ int main(int argc, char **argv)
     }
     
 
+    embPropAminoDel(&aadata);
+    embPropMolwtDel(&mwdata);
 
     AJFREE(dhstat);
     AJFREE(c);
@@ -191,6 +200,7 @@ int main(int argc, char **argv)
     ajStrDel(&substr);
     ajFileClose(&outf);
     ajFileClose(&mfptr);
+    ajFileClose(&wfptr);
 
     ajSeqallDel(&a);
     ajSeqDel(&seq);
@@ -198,4 +208,44 @@ int main(int argc, char **argv)
     embExit();
 
     return 0;
+}
+
+
+
+
+/* @funcstatic pepstats_issize **********************************************
+**
+** Returns true if an amino acd matches a given size criterion
+**
+** @param [r] aa [const EmbPPropAmino] amino acid data
+** @param [r] crit [ajint] criterion 
+** @return [AjBool] true if criterion is met
+** @@
+******************************************************************************/
+
+static AjBool pepstats_issize(const EmbPPropAmino aa, ajint crit)
+{
+    if(crit==1)
+	return aa->tiny;
+    else if(crit==2)
+	return aa->sm_all;
+    else if(crit==3)
+	return aa->aliphatic;
+    else if(crit==4)
+	return aa->aromatic;
+    else if(crit==5)
+	return aa->nonpolar;
+    else if(crit==6)
+	return aa->polar;
+    else if(crit==7)
+    {
+	if(aa->charge)
+	    return ajTrue;
+    }
+    else if(crit==8)
+	return aa->pve;
+    else if(crit==9)
+	return aa->nve;
+    
+    return ajFalse;
 }

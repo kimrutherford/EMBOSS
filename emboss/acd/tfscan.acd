@@ -1,6 +1,5 @@
 application: tfscan [
-  documentation: "Scans DNA sequences for transcription
-                  factors"
+  documentation: "Identify transcription factor binding sites in DNA sequences"
   groups: "Nucleic:Transcription"
 ]
 

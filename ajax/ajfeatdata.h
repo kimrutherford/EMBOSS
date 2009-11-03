@@ -34,7 +34,7 @@ extern "C"
 ** @attr Filename [AjPStr] Original filename
 ** @attr Seqid [AjPStr] Sequence entryname
 ** @attr Type [AjPStr] Type N or P
-** @attr Handle [AjPFileBuff] Input buffered file
+** @attr Handle [AjPFilebuff] Input buffered file
 ** @attr Seqname [AjPStr] name of AjPSeq assoc. with feature table
 ** @attr Format [ajint] Input format index
 ** @attr Local [AjBool] Opened as a local file if ajTrue
@@ -47,7 +47,7 @@ typedef struct AjSFeattabIn {
   AjPStr        Filename;
   AjPStr        Seqid;
   AjPStr        Type;
-  AjPFileBuff   Handle;
+  AjPFilebuff   Handle;
   AjPStr        Seqname;
   ajint         Format;
   AjBool        Local;

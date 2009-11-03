@@ -21,51 +21,10 @@ showdb
     Description
 </H2>
 
+<p><b>showdb</b> displays a table with the names, contents and access methods of the sequence databases configured for your EMBOSS installation.</p>
 
-This writes out a simple table displaying the names, contents and
-available ways of accessing the sequence databases.
 
-<p>
-The available ways of accessing the databases are 'ID', 'Query' and
-'All'.  These refer to the way that you can search the databases to
-get entries from them, which is governed by the ways the database has
-been set up and the way it is organised and indexed.
 
-<p>
-Different databases may have different access capabilities, depending
-on how your local site is organised.
-
-<p>
-EMBOSS has been designed to be extremely flexible in its use of
-sequence databases formats, so that it is easy to set EMBOSS up to use
-your site's existing databases.  Sometimes this means that it is hard
-to extract entries from some databases in particular ways.  For
-example, a flat file database with no index is only useful for reading
-all entries, while a database located in another site that is
-available via the WWW may only provide single entries.
-
-<p>
-'ID' (also known as 'single entry') allows the programs to extract a
-single explicitly named entry from the database, for example
-embl:x13776
-
-<p>
-'Query' (also known as 'wild') indicates that programs can extract a
-set of matching wildcard entry names (this may be slow for some
-methods of access).  For example you can look at all of the human PAX
-proteins in SWISS_PROT by: swissprot:pax*_human
-
-<p>
-'All' allows the programs to analyse all the entries in the database
-sequentially.  For example this lets you look at all entries in the
-database with the notation: embl:*
-
-<p>
-A database may have several different methods of access available.
-Ideally all of the databases available on your site will be available
-in all three ways, but this is not the best of all posssible worlds
-and so you might like to check how you can access the databases by
-running this program and having a look.
 
 <H2>
     Usage
@@ -156,60 +115,13 @@ settings.
     Notes
 </H2>
 
+<p>EMBOSS provides excellent database support.  All the common sequence formats you are likely to come across are supported.  There are three basic levels of database query with different ways to search for and retrieve entries:
 
-Note that 'OK' in the output does not mean that the database is working
-correctly.  It simply means that <b>showdb</b> has read the database
-definition correctly and that this method of access to the database
-should be possible. 
+<tt>entry</tt>  A single entry specified by database ID or accession number is retrieved.  For example "embl:x13776". 
+<tt>query</tt>  One or more entries matching a wildcard string in the USA are retrieved (this can be slow for some methods). For example you can specify all of the human PAX proteins in SWISS_PROT by: <tt>swissprot:pax*_human</tt>.
+<tt>all</tt>      All entries are read sequentially from a database. For example to specify all entries in the database use <tt>embl:*</tt>.</p>
 
-<p>
-
-If you are setting up a new database, then you should check that it
-works correctly by extracting entries from it using <b>seqret</b>. 
-
-<p>
-
-You can set up your own private databases by editing a file called
-'.embossrc' to contain database specifications. 
-
-<p>
-
-You can set up public databases by editing the file
-'/usr/local/share/EMBOSS/emboss.default' (if you have the permission to
-do this). 
-
-<p>
-
-The 'emboss.default' file will already have the definitions of the test
-databases in: tsw, tembl, tpir, etc.  These are the databases that are
-used in the examples shown in the documentation of the programs. 
-
-<p>
-
-For details of the database definitions, you should first read David's
-Administration Guide:
-<a href="/docs/adminguide/">
-http://emboss.sourceforge.net/docs/adminguide/
-</a>
-especially:
-<a href="/docs/adminguide/node4.html">
-http://emboss.sourceforge.net/docs/adminguide/adminguide/node4.html
-</a>
-
-<p>
-
-See also:
-<a href="/docs/themes/Databases.html">
-http://emboss.sourceforge.net/docs/themes/Databases.html
-</a>
-for a lot of detail of the syntax of database definition.
-
-<p>
-
-Just because showdb can display the database definitions, it does NOT
-mean that the databases are set up correctly.  You must now test them
-using <b>seqret</b>. 
-
+<p>One or more query levels may be available for a database depending on the database in question and how it has been setup and indexed.  Each database and access method must be configured for it to be available for use.  This involves editing one of the EMBOSS configuration files, either your own personal <tt>.embossrc</tt> or the installation-wide <tt>emboss.default</tt> file. The <tt>emboss.default</tt> file will typically contain the definitions of the test databases (<tt>tsw</tt>, <tt>tembl</tt>, <tt>tpir</tt>, etc) used in the usage examples for the application documentation and serve as example database definitions.  For more information, see the EMBOSS Administrators Manual.  You can run <b>showdb</b> to see the databases and access methods that have been configured successfully.</p>
 
 <H2>
     References
@@ -222,8 +134,10 @@ None.
     Warnings
 </H2>
 
+<p>Where the string <tt>OK</tt> is given next to a database is listed in <b>showdb</b> output, this means <b>showdb</b> has read the database definition correctly and that this access method is in principle possible, in other words, the database has been configured correctly..  It does not mean that the database or access method are available or working correctly. You should check things are ok by running, for example, <b>seqret</b> to retrieve an entry.</p>
 
-None.
+
+
 
 <H2>
     Diagnostic Error Messages

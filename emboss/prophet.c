@@ -127,7 +127,7 @@ int main(int argc, char **argv)
     for(i=0;i<mlen;++i)
     {
 	AJCNEW(fmatrix[i], AZ);
-	if(!ajFileReadLine(inf,&line))
+	if(!ajReadlineTrim(inf,&line))
 	    ajFatal("Missing matrix line");
 	p = ajStrGetPtr(line);
 	p = ajSysFuncStrtok(p," \t");
@@ -228,7 +228,7 @@ static ajint prophet_getType(AjPFile inf, AjPStr *tname)
 
     line = ajStrNew();
 
-    while(ajFileReadLine(inf,&line))
+    while(ajReadlineTrim(inf,&line))
     {
 	p = ajStrGetPtr(line);
 	if(!*p || *p=='#' || *p=='!' || *p=='\n')
@@ -278,7 +278,7 @@ static void prophet_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
 
     line = ajStrNew();
 
-    if(!ajFileReadLine(inf,&line))
+    if(!ajReadlineTrim(inf,&line))
 	ajFatal("Premature EOF in profile file");
     p = ajStrGetPtr(line);
 
@@ -289,7 +289,7 @@ static void prophet_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
     p = ajSysFuncStrtok(NULL," \t");
     ajStrAssignC(name,p);
 
-    if(!ajFileReadLine(inf,&line))
+    if(!ajReadlineTrim(inf,&line))
 	ajFatal("Premature EOF in profile file");
 
     p = ajStrGetPtr(line);
@@ -300,7 +300,7 @@ static void prophet_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
     ajStrAssignC(mname,p);
 
 
-    if(!ajFileReadLine(inf,&line))
+    if(!ajReadlineTrim(inf,&line))
 	ajFatal("Premature EOF in profile file");
     p = ajStrGetPtr(line);
 
@@ -308,7 +308,7 @@ static void prophet_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
 	ajFatal("Incorrect profile/matrix file format");
     sscanf(p,"%*s%d",mlen);
 
-    if(!ajFileReadLine(inf,&line))
+    if(!ajReadlineTrim(inf,&line))
 	ajFatal("Premature EOF in profile file");
     p = ajStrGetPtr(line);
 
@@ -316,7 +316,7 @@ static void prophet_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
 	ajFatal("Incorrect profile/matrix file format");
     sscanf(p,"%*s%f",maxs);
 
-    if(!ajFileReadLine(inf,&line))
+    if(!ajReadlineTrim(inf,&line))
 	ajFatal("Premature EOF in profile file");
     p = ajStrGetPtr(line);
 
@@ -325,7 +325,7 @@ static void prophet_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
     sscanf(p,"%*s%d",thresh);
 
 
-    if(!ajFileReadLine(inf,&line))
+    if(!ajReadlineTrim(inf,&line))
 	ajFatal("Premature EOF in profile file");
     p = ajStrGetPtr(line);
 
@@ -333,7 +333,7 @@ static void prophet_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
 	ajFatal("Incorrect profile/matrix file format");
     sscanf(p,"%*s%f",gapopen);
 
-    if(!ajFileReadLine(inf,&line))
+    if(!ajReadlineTrim(inf,&line))
 	ajFatal("Premature EOF in profile file");
     p = ajStrGetPtr(line);
 
@@ -341,7 +341,7 @@ static void prophet_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
 	ajFatal("Incorrect profile/matrix file format");
     sscanf(p,"%*s%f",gapextend);
 
-    if(!ajFileReadLine(inf,&line))
+    if(!ajReadlineTrim(inf,&line))
 	ajFatal("Premature EOF in profile file");
     p = ajStrGetPtr(line);
 
@@ -400,12 +400,13 @@ static void prophet_scan_profile(const AjPStr substr, const AjPStr name,
     AjPSeq seqn=NULL;
     
 
-    embAlignProfilePathCalc(ajStrGetPtr(substr),mlen,slen,opencoeff,extendcoeff,
-			    path,fmatrix,compass,0);
+    score=embAlignProfilePathCalc(ajStrGetPtr(substr),mlen,slen,
+                                  opencoeff,extendcoeff,
+                                  path,fmatrix,compass,0);
 
-    score=embAlignScoreProfileMatrix(path,compass,opencoeff,extendcoeff,
+    /*score=embAlignScoreProfileMatrix(path,compass,opencoeff,extendcoeff,
 				     substr,mlen,slen,fmatrix,&start1,
-				     &start2);
+				     &start2);*/
 
     embAlignWalkProfileMatrix(path,compass,opencoeff,extendcoeff,cons,
 			      substr,m,n,mlen,slen,fmatrix,&start1,

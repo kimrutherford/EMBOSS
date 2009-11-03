@@ -113,22 +113,22 @@ int main(int argc, char **argv)
     matchtag    = ajAcdGetString("matchtag");
     matchvalue  = ajAcdGetString("matchvalue");
     sortlist    = ajAcdGetListSingle("sort");
-    html        = ajAcdGetBool("html");
-    id          = ajAcdGetBool("id");
-    description = ajAcdGetBool("description");
-    scale       = ajAcdGetBool("scale");
+    html        = ajAcdGetBoolean("html");
+    id          = ajAcdGetBoolean("id");
+    description = ajAcdGetBoolean("description");
+    scale       = ajAcdGetBoolean("scale");
     width       = ajAcdGetInt("width");
-    collapse    = ajAcdGetBool("collapse");
-    forward     = ajAcdGetBool("forward");
-    reverse     = ajAcdGetBool("reverse");
-    unknown     = ajAcdGetBool("unknown");
-    strand      = ajAcdGetBool("strand");
-    source      = ajAcdGetBool("source");
-    position    = ajAcdGetBool("position");
-    type        = ajAcdGetBool("type");
-    tags        = ajAcdGetBool("tags");
-    values      = ajAcdGetBool("values");
-    stricttags  = ajAcdGetBool("stricttags");
+    collapse    = ajAcdGetBoolean("collapse");
+    forward     = ajAcdGetBoolean("forward");
+    reverse     = ajAcdGetBoolean("reverse");
+    unknown     = ajAcdGetBoolean("unknown");
+    strand      = ajAcdGetBoolean("strand");
+    source      = ajAcdGetBoolean("source");
+    position    = ajAcdGetBoolean("position");
+    type        = ajAcdGetBoolean("type");
+    tags        = ajAcdGetBoolean("tags");
+    values      = ajAcdGetBoolean("values");
+    stricttags  = ajAcdGetBoolean("stricttags");
     annotation  = ajAcdGetRange("annotation"); 
     
     while(ajSeqallNext(seqall, &seq))

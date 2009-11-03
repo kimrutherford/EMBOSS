@@ -224,7 +224,7 @@ int main(int argc, char **argv)
     maxlabels = ajAcdGetInt("maxlabels");
 
     /* to draw or not to draw the ruler */
-    Ruler = ajAcdGetBool("ruler");
+    Ruler = ajAcdGetBoolean("ruler");
 
     /* get the type of blocks */
     BlockType = ajAcdGetListSingle("blocktype");
@@ -234,12 +234,12 @@ int main(int argc, char **argv)
     InterColour = ajAcdGetInt("intercolour");
 
     /* to draw or not to draw junctions between ticks */
-    InterTicks = ajAcdGetBool("interticks");
+    InterTicks = ajAcdGetBoolean("interticks");
 
     /* get the size of the intervals between the ruler's ticks */
     GapSize = ajAcdGetInt("gapsize");
     /* to draw or not to draw vertical lines at ruler's ticks */
-    TickLines = ajAcdGetBool("ticklines");
+    TickLines = ajAcdGetBoolean("ticklines");
 
 
     /* set the output graphical context */
@@ -277,7 +277,7 @@ int main(int argc, char **argv)
     Width = DrawLength + 2*Border + Margin;
     Height = DrawLength + 2*Border;
 
-    ajGraphSetTitlePlus(graph, ajFileGetName(infile));
+    ajGraphSetTitlePlus(graph, ajFileGetNameS(infile));
 
     ajGraphOpenWin(graph, 0, Width, 0, Height*(float)1.1);
 
@@ -311,7 +311,7 @@ int main(int argc, char **argv)
     line = ajStrNew();
     ajFileSeek(infile, 0L, 0);
     i = 0;
-    while(ajFileReadLine(infile, &line))
+    while(ajReadlineTrim(infile, &line))
     {
 	if(ajStrPrefixC(line, "group"))
 	{
@@ -1378,7 +1378,7 @@ static void lindna_ReadInput(AjPFile infile, float *Start, float *End)
     AjPStr line;
 
     line = ajStrNew();
-    while(ajFileReadLine(infile, &line))
+    while(ajReadlineTrim(infile, &line))
     {
 	/* read the start and end positions */
 	if(ajStrPrefixC(line, "Start"))
@@ -1433,8 +1433,8 @@ static AjPStr lindna_ReadGroup(AjPFile infile, ajint maxlabels,
     style = (char *)AJALLOC0(10*sizeof(char));
 
     /* read the group's name */
-    pos = ajFileTell(infile);
-    while(ajFileReadLine(infile, &GroupName))
+    pos = ajFileResetPos(infile);
+    while(ajReadlineTrim(infile, &GroupName))
     {
 	token = ajStrParseC(GroupName, " \n\t\r\f");
 	if(ajStrGetLen(token)!=0)
@@ -1451,7 +1451,7 @@ static AjPStr lindna_ReadGroup(AjPFile infile, ajint maxlabels,
 
     i = 0;
     ajFileSeek(infile, pos, 0);
-    while(ajFileReadLine(infile, &line))
+    while(ajReadlineTrim(infile, &line))
     {
 	token = ajStrParseC(line, " \n\t\r\f");
 	if(ajStrGetLen(token)!=0)
@@ -1466,7 +1466,7 @@ static AjPStr lindna_ReadGroup(AjPFile infile, ajint maxlabels,
 		    if (i == maxlabels)
 			ajWarn("Too many labels (maxlabels=%d) in input",
 			       maxlabels);
-		    while(ajFileReadLine(infile, &line))
+		    while(ajReadlineTrim(infile, &line))
 		    {
 			token = ajStrParseC(line, " \n\t\r\f");
 			if(ajStrGetLen(token)!=0)
@@ -1498,7 +1498,7 @@ static AjPStr lindna_ReadGroup(AjPFile infile, ajint maxlabels,
 
 		    j = 0;
 		    /* read the label's name(s) */
-		    while(ajFileReadLine(infile, &line))
+		    while(ajReadlineTrim(infile, &line))
 		    {
 			token = ajStrParseC(line, " \n\t\r\f");
 			if(ajStrGetLen(token)!=0)

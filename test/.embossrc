@@ -7,7 +7,7 @@ SET emboss_tempdata /homes/pmr/local/share/EMBOSS/test
 # Used to make the output consistent where an application reports
 # today's date
 
-SET emboss_timetoday "2007-07-15 12:00:00"
+SET emboss_timetoday "2008-07-15 12:00:00"
 
 #######################################
 # Standard test databases
@@ -39,14 +39,6 @@ DB tswnew [ type: P dir: $emboss_tempdata/swnew
    method: emblcd format: swiss release: 37 
    fields: "sv des org key"
    comment: "SpTrEmbl as 3 files in native format with EMBL CD-ROM index" ]
-
-# wormpep
-# =======
-
-DB twp [ type: P dir: $emboss_tempdata/wormpep
-   method: emblcd format: fasta release: 16 
-   fields: "des"
-   comment: "EMBL new in native format with EMBL CD-ROM index" ]
 
 # embl
 # ====
@@ -481,6 +473,13 @@ DB temblrest [ type: N dir: "$emboss_tempdata/embl"
    exclude: "hum*.dat rod*.dat vrt*.dat"
 ]
 
-RES embl [ type: "Index" ]
-RES swnew [ type: "Index" ]
-RES pir [ type: "Index" ]
+# cache and page sizes for dbx indexing ... matching the default values
+
+SET emboss_pagesize 2048
+SET emboss_cachesize 100
+
+# dummy resource names for dbx indexing to use the default values
+
+RES emblresource [ type: "Index" ]
+RES swnewresource [ type: "Index" ]
+RES pirresource [ type: "Index" ]

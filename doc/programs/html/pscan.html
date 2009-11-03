@@ -24,55 +24,28 @@ pscan
 <H2>
     Function
 </H2>
-Scans proteins using PRINTS
+Scans protein sequence(s) with fingerprints from the PRINTS database
 
 <H2>
     Description
 </H2>
 
+<p>pscan reads one or more protein sequences and searches them against the PRINTS database of diagnostic protein signatures (fingerprints).  A fingerprint is a group of conserved motifs or elements that together form a diagnostic signature for a particular protein family.  The minimum and maximum number of elements per fingerprint may be specified.  pscan writes an output file with details of any matches between each input sequence and the fingerprints. It reports various classes of matches:</p>
 
-PRINTS is a database of diagnostic protein signatures, or fingerprints.
-
-<p>
-Fingerprints are groups of conserved motifs or elements that together
-form a diagnostic signature for particular protein families. 
-
-<p>
-An uncharacterised sequence matching all motifs or elements can then be
-readily diagnosed as a true match to a particular family fingerprint. 
-
-<p>
-They can be used to diagnose family relationships in newly-determined
-sequences (especially from genome projects). 
-
-<p>
-Usually the motifs or elements do not overlap, but are separated along a
-sequence, though they may be contiguous in 3D-space.  Fingerprints can
-encode protein folds and functionalities more flexibly and powerfully
-than can single motifs, full diagnostic potency deriving from the mutual
-context provided by motif neighbours. 
-
-<p>
-Diagnostically, this is more powerful than using single motifs by virtue
-of the biological context afforded by matching motif neighbours. 
-
-<p>
-pscan finds matches between a query protein sequence and the motifs or
-elements in the PRINTS database.  It reports various classes of matches:
-
-<p>
 <ul>
-
 <li>Matches where all elements of a motif exist in the correct order
 <li>Matches where all elements exist but some are in the incorrect order
 <li>Matches where some elements match and are in the correct order
 <li>Miscellaneous matches. 
-
 </ul>
 
-<p>
-The home web page of the PRINTS database is:
-<a href="http://www.bioinf.man.ac.uk/dbbrowser/PRINTS/">http://www.bioinf.man.ac.uk/dbbrowser/PRINTS/</a>
+<H2>
+Algorithm
+</H2>
+<p>The matrix information used to scan a sequence is derived from the final motif sets in the PRINTS database. The matrices are of the simple frequency type and contain the number of times a residue occurs in each position of a PRINTS alignment. Each matrix therefore has a highest possible score, being the sum of the maximum score of each column. A match to a window over the input sequence is obtained if it has a score equal to or greater than the percentage of the maximum score of the lowest scoring sequence in the final motif set.</p>
+
+
+
 
 <H2>
     Usage
@@ -84,7 +57,7 @@ The home web page of the PRINTS database is:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>pscan </b>
-Scans proteins using PRINTS
+Scans protein sequence(s) with fingerprints from the PRINTS database
 Input protein sequence(s): <b>tsw:opsd_human</b>
 Minimum number of elements per fingerprint [2]: <b></b>
 Maximum number of elements per fingerprint [20]: <b></b>
@@ -134,8 +107,9 @@ Output file [opsd_human.pscan]: <b></b>
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -425,22 +399,13 @@ The column information is described at the top of the matrix data file
 <H2>
     Notes
 </H2>
+<p>Fingerprints are groups of conserved motifs or elements that together form a diagnostic signature for particular protein families. An uncharacterised sequence matching all motifs or elements can then be readily diagnosed as a true match to a particular family fingerprint. They can be used to diagnose family relationships in newly-determined sequences (especially from genome projects).</p>
+
+<p>Usually the motifs or elements do not overlap, but are separated along a sequence, though they may be contiguous in 3D-space. Fingerprints can encode protein folds and functionalities more flexibly and powerfully than can single motifs, full diagnostic potency deriving from the mutual context provided by motif neighbours. Diagnostically, this is more powerful than using single motifs by virtue of the biological context afforded by matching motif neighbours.</p>
+
+<p>The home web page of the PRINTS database is: <a href="http://www.bioinf.man.ac.uk/dbbrowser/PRINTS/">http://www.bioinf.man.ac.uk/dbbrowser/PRINTS/</a> </p>
 
 
-The matrix information used to scan a sequence is derived from the final
-motif sets in the PRINTS database. The matrices are of the simple frequency
-type and contain the number of times a residue occurs in each position of
-the alignment. Each matrix therefore has a highest possible score, being
-the sum of the maximum score of each column. A match to the sequence
-window is obtained if it has a score equal to or greater than the percentage
-of the maximum score of the lowest scoring sequence in the final motif
-set.
-<p>
-
-The data files must have been created before running this program.  This
-is done by running the <b>printsextract</b> program with the
-"prints.dat" file from a PRINTS release.  You may have to ask your
-system manager to do this. 
 
 <H2>
     References
@@ -510,12 +475,16 @@ Attwood, T.K. and Findlay, J.B.C. (1993) Design of a discriminating finger-
 
 </ol>
 
+
+
 <H2>
     Warnings
 </H2>
 
 
-The program will warn you if a DNA sequence is given.
+<p>The data files must have been created before running this program. This is done by running the <b>printsextract</b> program with the <tt>prints.dat</tt> file from a PRINTS release. You may have to ask your system manager to do this.</p>
+
+
 
 <H2>
     Diagnostic Error Messages
@@ -549,7 +518,8 @@ It exits with status 0 unless an error is reported.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="antigenic.html">antigenic</a></td>
 <td>Finds antigenic sites in proteins</td>
@@ -557,7 +527,7 @@ It exits with status 0 unless an error is reported.
 
 <tr>
 <td><a href="digest.html">digest</a></td>
-<td>Protein proteolytic enzyme or reagent cleavage digest</td>
+<td>Reports on protein proteolytic enzyme or reagent cleavage sites</td>
 </tr>
 
 <tr>
@@ -567,47 +537,47 @@ It exits with status 0 unless an error is reported.
 
 <tr>
 <td><a href="fuzzpro.html">fuzzpro</a></td>
-<td>Protein pattern search</td>
+<td>Search for patterns in protein sequences</td>
 </tr>
 
 <tr>
 <td><a href="fuzztran.html">fuzztran</a></td>
-<td>Protein pattern search after translation</td>
+<td>Search for patterns in protein sequences (translated)</td>
 </tr>
 
 <tr>
 <td><a href="helixturnhelix.html">helixturnhelix</a></td>
-<td>Report nucleic acid binding motifs</td>
+<td>Identify nucleic acid-binding motifs in protein sequences</td>
 </tr>
 
 <tr>
 <td><a href="oddcomp.html">oddcomp</a></td>
-<td>Find protein sequence regions with a biased composition</td>
+<td>Identify proteins with specified sequence word composition</td>
 </tr>
 
 <tr>
 <td><a href="patmatdb.html">patmatdb</a></td>
-<td>Search a protein sequence with a motif</td>
+<td>Searches protein sequences with a sequence motif</td>
 </tr>
 
 <tr>
 <td><a href="patmatmotifs.html">patmatmotifs</a></td>
-<td>Search a PROSITE motif database with a protein sequence</td>
+<td>Scan a protein sequence with motifs from the PROSITE database</td>
 </tr>
 
 <tr>
 <td><a href="pepcoil.html">pepcoil</a></td>
-<td>Predicts coiled coil regions</td>
+<td>Predicts coiled coil regions in protein sequences</td>
 </tr>
 
 <tr>
 <td><a href="preg.html">preg</a></td>
-<td>Regular expression search of a protein sequence</td>
+<td>Regular expression search of protein sequence(s)</td>
 </tr>
 
 <tr>
 <td><a href="sigcleave.html">sigcleave</a></td>
-<td>Reports protein signal cleavage sites</td>
+<td>Reports on signal cleavage sites in a protein sequence</td>
 </tr>
 
 </table>

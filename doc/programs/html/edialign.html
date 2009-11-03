@@ -245,8 +245,9 @@ Output file [vtest.edialign]: <b></b>
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -728,35 +729,36 @@ None.
 -->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="emma.html">emma</a></td>
-<td>Multiple alignment program - interface to ClustalW program</td>
+<td>Multiple sequence alignment (ClustalW wrapper)</td>
 </tr>
 
 <tr>
 <td><a href="infoalign.html">infoalign</a></td>
-<td>Information on a multiple sequence alignment</td>
+<td>Display basic information about a multiple sequence alignment</td>
 </tr>
 
 <tr>
 <td><a href="plotcon.html">plotcon</a></td>
-<td>Plot quality of conservation of a sequence alignment</td>
+<td>Plot conservation of a sequence alignment</td>
 </tr>
 
 <tr>
 <td><a href="prettyplot.html">prettyplot</a></td>
-<td>Displays aligned sequences, with colouring and boxing</td>
+<td>Draw a sequence alignment with pretty formatting</td>
 </tr>
 
 <tr>
 <td><a href="showalign.html">showalign</a></td>
-<td>Displays a multiple sequence alignment</td>
+<td>Display a multiple sequence alignment in pretty format</td>
 </tr>
 
 <tr>
 <td><a href="tranalign.html">tranalign</a></td>
-<td>Align nucleic coding regions given the aligned proteins</td>
+<td>Generate an aligment of nucleic coding regions from aligned proteins</td>
 </tr>
 
 </table>

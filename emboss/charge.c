@@ -25,15 +25,13 @@
 #include "emboss.h"
 #include <math.h>
 
-#define AMINOFILE "Eamino.dat"
-
 
 
 
 static void  charge_addgraph(AjPGraph graph, ajint limit, const float *x,
 			     const float *y, float ymax, float ymin,
 			     ajint window);
-static AjPFloat charge_read_amino(AjPFile fp);
+/*static AjPFloat charge_read_amino(AjPFile fp);*/
 
 
 
@@ -48,8 +46,6 @@ int main(int argc, char **argv)
 {
     AjPSeqall  seqall;
     AjPSeq     seq;
-
-    AjPFloat   chg = NULL;
 
     AjPFile    outf = NULL;
     AjPFile    cdata = NULL;
@@ -80,20 +76,22 @@ int main(int argc, char **argv)
     const char *p;
     const char *sname;
 
+    EmbPPropAmino *adata = NULL;
+    
 
     ajGraphInit("charge", argc, argv);
 
     seqall    = ajAcdGetSeqall("seqall");
     plot      = ajAcdGetToggle("plot");
     window    = ajAcdGetInt("window");
-    cdata    = ajAcdGetDatafile("aadata");
+    cdata     = ajAcdGetDatafile("aadata");
 
     /* only one will be used - see variable 'plot' */
 
     outf  = ajAcdGetOutfile("outfile");
     graph = ajAcdGetGraphxy("graph");
 
-    chg = charge_read_amino(cdata);
+    adata = embPropEaminoRead(cdata);
     ajFileClose(&cdata);
 
     str = ajStrNew();
@@ -128,8 +126,8 @@ int main(int argc, char **argv)
 	    sum=0.;
 	    for(j=0;j<window;++j)
 	    {
-		idx = ajAZToInt(toupper((int)*(p+i+j)));
-		sum += ajFloatGet(chg,idx);
+		idx = ajBasecodeToInt(toupper((int)*(p+i+j)));
+		sum += embPropGetCharge(adata[idx]);
 	    }
 	    sum /= (float)window;
 	    y[i] = sum;
@@ -179,9 +177,9 @@ int main(int argc, char **argv)
     ajFileClose(&outf);
     ajFileClose(&cdata);
 
-    ajFloatDel(&chg);
-
     ajStrDel(&str);
+
+    embPropAminoDel(&adata);
 
     embExit();
 
@@ -248,43 +246,4 @@ static void charge_addgraph(AjPGraph graph, ajint limit, const float *x,
     ajStrDel(&st);
 
     return;
-}
-
-
-
-
-/* @funcstatic charge_read_amino **********************************************
-**
-** Undocumented.
-**
-** @param [u] fp [AjPFile] Undocumented
-** @return [AjPFloat] Undocumented
-** @@
-******************************************************************************/
-
-static AjPFloat charge_read_amino(AjPFile fp)
-{
-    AjPStr   line;
-    AjPFloat chg = NULL;
-    char     c;
-    float    v = 0.;
-    ajint    idx;
-
-    line = ajStrNew();
-    chg  = ajFloatNew();
-
-
-    while(ajFileReadLine(fp,&line))
-    {
-	if(*ajStrGetPtr(line)=='#' || !ajStrGetLen(line))
-	    continue;
-
-	ajFmtScanS(line,"%c%*f%*d%*d%*d%*d%*d%*d%f",&c,&v);
-	idx = toupper(ajAZToInt((int)c));
-	ajFloatPut(&chg,idx,v);
-    }
-
-    ajStrDel(&line);
-
-    return chg;
 }

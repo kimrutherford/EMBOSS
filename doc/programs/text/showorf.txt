@@ -5,17 +5,14 @@
 
 Function
 
-   Pretty output of DNA translations
+   Display a nucleotide sequence and translation in pretty format
 
 Description
 
-   Showorf displays a nucleic acid sequence with its protein translation
-   in a style suitable for publication. The translation can be done in
-   any frame or combination of frames.
-
-   It uses codon frequency files to do the translation. You can specify
-   the codon frequency file that you use with the '-cfile' option. The
-   default table is 'Ehum.cut'.
+   showorf writes an input nucleotide sequence and its protein
+   translation to an output file in a clear format that is suitable for
+   publication. The translation can be done in any frame or combination
+   of frames using an (optionally) specified genetic code.
 
 Usage
 
@@ -23,7 +20,7 @@ Usage
 
 
 % showorf 
-Pretty output of DNA translations
+Display a nucleotide sequence and translation in pretty format
 Input nucleotide sequence: tembl:x13776
 Select Frames To Translate
          0 : None
@@ -96,8 +93,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -269,8 +267,8 @@ SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
 
 Output file format
 
-   As a sequence with high GC content (from Pseudmonas aeruginosa) PAAMIR
-   has several overlapping open reading frames.
+   As a sequence with high GC content (from Pseudomonas aeruginosa)
+   X13776 has several overlapping open reading frames.
 
    The true ORFs are 1..109 (amiB partial) 135..1292 (amiC) 1289..1879
    (amiR) 1925..end (amiS partial)
@@ -430,21 +428,25 @@ Known bugs
 
 See also
 
-   Program name                         Description
-   backtranambig Back translate a protein sequence to ambiguous codons
-   backtranseq   Back translate a protein sequence
-   coderet       Extract CDS, mRNA and translations from feature tables
-   getorf        Finds and extracts open reading frames (ORFs)
-   marscan       Finds MAR/SAR sites in nucleic sequences
-   plotorf       Plot potential open reading frames
-   prettyseq     Output sequence with translated ranges
-   remap         Display sequence with restriction sites, translation etc
-   showseq       Display a sequence with features, translation etc
-   sixpack       Display a DNA sequence with 6-frame translation and ORFs
-   syco          Synonymous codon usage Gribskov statistic plot
-   tcode         Fickett TESTCODE statistic to identify protein-coding DNA
-   transeq       Translate nucleic acid sequences
-   wobble        Wobble base plot
+   Program name Description
+   backtranambig Back-translate a protein sequence to ambiguous
+   nucleotide sequence
+   backtranseq Back-translate a protein sequence to a nucleotide sequence
+   coderet Extract CDS, mRNA and translations from feature tables
+   getorf Finds and extracts open reading frames (ORFs)
+   marscan Finds matrix/scaffold recognition (MRS) signatures in DNA
+   sequences
+   plotorf Plot potential open reading frames in a nucleotide sequence
+   prettyseq Write a nucleotide sequence and its translation to file
+   remap Display restriction enzyme binding sites in a nucleotide
+   sequence
+   showseq Displays sequences with features in pretty format
+   sixpack Display a DNA sequence with 6-frame translation and ORFs
+   syco Draw synonymous codon usage statictic plot for a nucleotide
+   sequence
+   tcode Identify protein-coding regions using Fickett TESTCODE statistic
+   transeq Translate nucleic acid sequences
+   wobble Plot third base position variability in a nucleotide sequence
 
 Author(s)
 

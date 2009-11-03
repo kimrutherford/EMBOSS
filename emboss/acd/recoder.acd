@@ -1,6 +1,6 @@
 application: recoder [
-  documentation: "Remove restriction sites but maintain same
-                  translation"
+  documentation: "Find restriction sites to remove (mutate)
+                  with no translation change"
   groups: "Nucleic:Restriction"
 ]
 

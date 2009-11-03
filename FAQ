@@ -30,8 +30,8 @@ A) emboss@emboss.open-bio.org
 You can access the archives, subscribe/unsubscribe and alter
 the way email is sent to you (e.g. digests) by visiting:
 
-  http://emboss.open-bio.org/mailman/listinfo/emboss<
-  http://emboss.open-bio.org/mailman/listinfo/emboss-dev<
+  http://emboss.open-bio.org/mailman/listinfo/emboss
+  http://emboss.open-bio.org/mailman/listinfo/emboss-dev
   http://emboss.open-bio.org/mailman/listinfo/emboss-announce
 
 
@@ -159,10 +159,10 @@ A) You may well have the X11 server installed but you haven't installed
 
 Q) I'm trying to compile EMBOSS with the PNG support
 
-A) If you have  gd-1.7.3, zlib-1.1.3 and libpng-1.0.5 or greater
-   then the normal configure/compile should work! However, due to gd no longer
-   supporting gif format then you may need to install gd, zlib and
-   libpng locally.
+A) If you have gd-2.0.28 (or greater), zlib-1.1.3 and libpng-1.0.5 or greater
+   then the normal configure/compile should work! You may need to install gd, 
+   zlib and libpng locally. Look to see whether your operating system provides 
+   GD support via an update before installing from source code.
 
    You can unpack the tar.gz files in any directory, and install them in
    a common area.
@@ -180,12 +180,12 @@ A) If you have  gd-1.7.3, zlib-1.1.3 and libpng-1.0.5 or greater
    gunzip -c zlib-1.1.4.tar.gz   | tar xf -
    gunzip -c libpng-1.2.5.tar.gz | tar xf -
    gunzip -c jpegsrc.v6b.tar.gz | tar xf -
-   gunzip -c gd-2.0.9.tar.gz     | tar xf -
+   gunzip -c gd-2.0.28.tar.gz     | tar xf -
 
    ln -s zlib-1.1.4   zlib
    ln -s jpeg-6b jpeg
    ln -s libpng-1.2.5 libpng
-   ln -s gd-2.0.9     gd
+   ln -s gd-2.0.28     gd
 
    If these directories do not exist, "make install" for jpeg will need them:
 
@@ -649,15 +649,18 @@ A) To see what graphics drivers are available type ? at the promt for
 
 Q) How do i get the PNG driver?
 
-A) To get the PNG driver you will need to have installed z,png and gd
-   libraries. In particular gd version >=  1.7.3 must be used.
 
-   If for some reason you do not have the required libraries and your 
+A) To get the PNG driver you will need to have installed z,png and gd
+   libraries. In particular gd version >= 2.0.28 must be used as this
+   also provides a GIF driver.
+
+   If for some reason you do not have the required libraries and your
    system support group will not update these ( In particular gd, as
-   the older versions support GIF which is NOT supported in later
-   versions) then install all three latest versions (z,gd,png) to a 
-   new directory and then add this new directory to your configure
-   line for EMBOSS.
+   the older versions support GIF which is NOT supported for many
+   years) then install all three latest versions (z,gd,png) to a new
+   directory and then add this new directory to your configure line
+   for EMBOSS. Look to see whether your operating system provides GD
+   support via an update before installing from source code.
 
    i.e. 
 

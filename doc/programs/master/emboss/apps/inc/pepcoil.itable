@@ -21,8 +21,8 @@
 
 <tr>
 <td>[-outfile]<br>(Parameter 2)</td>
-<td>Output file name</td>
-<td>Output file</td>
+<td>Output report file name</td>
+<td>Report output file</td>
 <td><i>&lt;*&gt;</i>.pepcoil</td>
 </tr>
 
@@ -57,10 +57,10 @@
 </tr>
 
 <tr>
-<td>-[no]other</td>
+<td>-other</td>
 <td>Report non coiled coil regions</td>
 <td>Boolean value Yes/No</td>
-<td>Yes</td>
+<td>No</td>
 </tr>
 
 </table>

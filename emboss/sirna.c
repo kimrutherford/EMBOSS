@@ -91,11 +91,11 @@ int main(int argc, char **argv)
     embInit("sirna",argc,argv);
 
     seqall    = ajAcdGetSeqall("sequence");
-    poliii    = ajAcdGetBool("poliii");
-    aa        = ajAcdGetBool("aa");
-    tt        = ajAcdGetBool("tt");
-    polybase  = ajAcdGetBool("polybase");
-    context   = ajAcdGetBool("context");
+    poliii    = ajAcdGetBoolean("poliii");
+    aa        = ajAcdGetBoolean("aa");
+    tt        = ajAcdGetBoolean("tt");
+    polybase  = ajAcdGetBoolean("polybase");
+    context   = ajAcdGetBoolean("context");
     report    = ajAcdGetReport("outfile");
     seqout    = ajAcdGetSeqoutall("outseq");
 

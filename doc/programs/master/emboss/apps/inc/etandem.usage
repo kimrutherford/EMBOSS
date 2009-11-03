@@ -7,7 +7,7 @@ The input sequence is the human herpesvirus tandem repeat.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>etandem -noorigfile </b>
-Looks for tandem repeats in a nucleotide sequence
+Finds tandem repeats in a nucleotide sequence
 Input nucleotide sequence: <b>tembl:L46634</b>
 Minimum repeat size [10]: <b>6</b>
 Maximum repeat size [6]: <b></b>

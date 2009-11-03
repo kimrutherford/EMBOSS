@@ -34,35 +34,6 @@ the EMBL database CD-ROM distribution and by the Staden package in
 addition to EMBOSS, and appears to be the most generally used and
 publicly available index file format for these databases.
 
-<p>
-
-Having created the EMBOSS indices for this file, a database can then be
-defined in the file <b>emboss.defaults</b> as something like:
-
-<p>
-
-<pre>
-DB embl [
-   type: N
-   format: embl
-   method: gcg
-   directory: /data/gcg/gcgembl
-]
-</pre>  
-
-
-
-<h3>Fields Indexed</H3>
-
-By default, <b>dbigcg</b> will index the ID name and the accession
-number (if present).
-
-<br>
-
-If they are present in your database, you may also specify that <b>dbiflat</b>
-should index the Sequence Version and GI number, the Keywords and
-Taxonomy names and the words in the description by using the '-fields'
-qualifier with the appropriate values. 
                         
 
 
@@ -144,8 +115,35 @@ None.
     Notes
 </H2>
 
+<p>
 
-None.
+Having created the EMBOSS indices for this file, a database can then be
+defined in the file <b>emboss.defaults</b> as something like:
+
+<p>
+
+<pre>
+DB embl [
+   type: N
+   format: embl
+   method: gcg
+   directory: /data/gcg/gcgembl
+]
+</pre>  
+
+
+
+<h3>Fields Indexed</H3>
+
+By default, <b>dbigcg</b> will index the ID name and the accession
+number (if present).
+
+<br>
+
+If they are present in your database, you may also specify that <b>dbiflat</b>
+should index the Sequence Version and GI number, the Keywords and
+Taxonomy names and the words in the description by using the '-fields'
+qualifier with the appropriate values. 
 
 <H2>
     References

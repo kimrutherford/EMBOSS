@@ -24,7 +24,6 @@ import java.security.Security; //ssl
 import java.net.*;
 
 import org.emboss.jemboss.soap.AuthPopup; 
-import org.emboss.jemboss.soap.JembossSoapException;
 
 /**
 *

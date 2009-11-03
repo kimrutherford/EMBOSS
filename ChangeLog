@@ -1,4 +1,387 @@
+Version 6.0.0
+	New application aligncopy reads a set of aigned sequences and
+	prints a report in one of the standard alignment formats that can
+	accept the same number of sequences. Pairwise alignment formats
+	can only be used if the input has exactly two sequences.
+
+	New application aligncopypair reads a set of aigned sequences and
+	prints a report or each pair of aligned sequences in one of the
+	standard alignment formats.
+
+	New application featreport reads a sequence and a feature table,
+	and writes a report in and of the standard report formats.
+
+	New application featcopy reads and writes a feature table to
+	convert feature formats.
+
+	New applications maskambignuc and maskambigprot replace ambiguity
+	characters in nucleotide sequences with 'N' and in protein
+	sequences with 'X'.
+
+	New application consambig reports an alignment consensus sequence
+	using ambiguity characters. The intended use cases are sequencing
+	reads and SNP reporting.
+
+	New application sizeseq sorts sequences in ascending or descending
+	order of length. This is a port of the application seqsort from
+	the domsearch EMBASSY package.
+
+	New application skipredundant uses pairwise sequence matches to
+	exclude sequences that are similar from an input set. This is a
+	modified version of the application seqnr from the domsearch
+	EMBASSY package.
+
+	New applications provide utility functions for former GCG users:
+	nohtml removes HTML tags, notab replaces tabs with spaces,
+	nospace removes all whitespace from a file, skipspace removes
+	extra whitespace from a file.
+	
+	Older EMBOSS applications can now generate a warning message
+	stating that they are marked as 'obsolete' with an explanation and
+	an indication of alternative programs in EMBOSS or in an EMBASSY
+	package. This warning can be turned off by defining environment
+	variable EMBOSS_WARNOBSOLETE with a value of "N" or by defining
+	the same variable in the emboss.defaults or ~/.embossrc files. We
+	will begin to mark applications as 'obsolete' in future releases.
+
+	A new EMBASSY package "myembossdemo" contains the demonstration
+	applications demoalign, demofeatures, demolist, demoreport,
+	demosequence, demostring, demostringnew and demotable that
+	illustrate how to use EMBOSS data types in your own
+	applications. The myembossdemo package allows novice developers to
+	try simple EMBOSS programming. The myemboss package is available
+	for adding your own applications. The demo applications are no
+	longer distributed with the main EMBOSS package. They were not
+	installed and were only built with the "make check" option.
+
+	Application short descriptions have been revised. The minimum
+	length of application one line descriptions is increased from 60
+	to 70 characters. The descriptions are easier to write. Output
+	from wossname can now be 90 characters wide. Interfaces that use
+	the description in menus may need to allow some extra space.
+
+	Function names in ajfile.c have been standardised. Old names are
+	still accepted but are marked as "deprecated" and will generate
+	warnings with the gcc compiler (see ajstr below). Other compilers
+	will see no difference. New source files ajfiledata.c and
+	ajfileio.c have been added. The buffered file data structures are
+	renamed internally to be more consistent (AjPFileBuff to AjPFilebuff).
+
+	notseq was unable to search for IDs containing '|' characters
+	but uses string matching (not regular expressions) and these
+	characters are valid in NCBI-style FASTA files if read with the
+	"pearson" format which accepts the whole ID string without parsing.
+
+	The sequence alignment code has been updated. Sequence alignments
+	with low gap penalties failed to allow two gaps (one in each
+	sequence) without a match in between. The embAlign functions are
+	now simplified. Scores are returned by the PathCalc functions. The
+	Walk functions that walk through the path and return the aligned
+	sequences are faster and need fewer parameters. Profile alignments
+	occasionally duplicated residues in the sequence around gap
+	positions. Fast alignments around a limited width include
+	additional residues at each end and require an offset rather than
+	separate start positions. The offset if the difference between the
+	two start positions used in 5.0.0 and earlier releases.
+
+	Eprimer3 citations are corrected in the help text (from the ACD
+	file) and in the documentation. The citation errors were traced to
+	the original primer3_core documentation which has now been
+	corrected.
+
+	Wordmatch could confuse overlapping matches. It occasionally
+	extended the wrong match and missed a corresponding new match.
+
+	Seqmatchall results were correct with the default output
+	format which reports match positions, but gave incorrect results
+	with some other local alignment formats that include the sequence.
+	Seqmatchall now stores alignments in the same way as other local
+	alignment applications, and the alignment internals are corrected
+	to ensure other applictaiopns will not have the same problem.
+
+	Emma was officially supporting clustalw 1.83. Issues with clustalw
+	2.0 are now resolved and this version is supported if clustalw2 is
+	installed. Emma executes an applications called clustalw (not
+	clustalw2) so version 2.0 must be installed under this name or an
+	environment variable EMBOSS_CLUSTALW needs to be defined to point
+	to the executable clustalw2 file.
+
+	Sequence format "selex" allows invalid sequence data files to be
+	accepted as input. Selex format is still available but is no
+	longer included in the formats that can be automatically
+	detected. When reading selex format data, users need to put
+	"-sformat selex" on the command line, or specify "selex::" at the
+	from of the USA. See the HMMER (old version EMBASSY package)
+	documentation for examples. HMMERNEW (recommended) examples use
+	Stockholm format and so are unchanged.
+
+	Program dbxfasta now defaults to a filename of "*.fasta"
+	The previous default "*.dat" is not commonly used for FASTA format
+	databases.
+	
+	Program msbar block mutations were 1 longer than the specified
+	block and may crash if the block size was fixed (minimum and
+	maximum block sizes the same). This off-by-one error is now
+	corrected.
+
+	In GenBank output format, multiple line KEYWORD sections were not
+	formatted correctly.
+
+	ACD list and select values (the menus that appear in the user
+	prompt) can now have ACD variables. Although useful for local
+	application development these are not used in EMBOSS distributed
+	ACD files because the variables are difficult for web and GUI
+	interfaces to resolve when presenting the menu text.
+
+	List and Table internal data structures are now cached so that
+	creating and deleting temporary lists and tables is more efficient.
+
+	In emboss.default database definitions the filename and exclude
+	values can be delimited by spaces, commas or semicolons. Previous
+	releases used only spaces. Parsing is now consistent with the
+	fields definition which allowed all the above characters.
+
+	Protein sequences with pyrrolysine ('O') had 'O' converted to a
+	gap because this was a gap character in early versions of
+	Phylip. This was patched in 5.0.0 to allow 'O' in UniProt release
+	13. The gap character is upper case only, so 'o' was correctly
+	read as pyrrolysine.
+
+	Wordfinder used the same descriptions for two pairs of qualifiers.
+	The descriptions are changed to make their meaning clear in
+	commandline help and in web interfaces.
+
+	New function ajTimeDiff returns the difference in seconds between
+	two time values.
+
+	Profiling tests showed that file reading and string handling can
+	be made faster. String handling called functions many levels
+	deep. Making this code inline and using macro versions improved
+	performance for applications (e.g. database indexing) that use
+	many string calls. File input requires each input line to be
+	copied. Using copy-by-reference (ajStrAssignRef) often makes this
+	more efficient. Existing macros now test for undefined strings:
+	MAJSTRGETLEN, MAJSTRGETPTR, MAJSTRGETRES and MAJSTRGETUSE. New
+	macros are added for string handling: MAJSTRDEL,
+	MAJSTRGETUNIQUESTR, MAJSTRCMPC and MAJSTRCMPS.
+
+	Memory management includes new macros AJCRESIZE0 and AJRESIZE0
+	provide resize functions that guarantee new memory is set to
+	zero. The functions must be given the original allocated size.
+
+	Using the GNU C run-time library, calls to mcheck and mprobe are
+	available to test for memory corruption by examining the bytes
+	before and after an address allocated by malloc. This can be
+	turned on for any application, including Unix commands, with the
+	environment variable MALLOC_CHECK_ which has values 0, 1, 2 or
+	3. 1 writes to standard error when a problem is found, 2 aborts
+	the programs, 3 does both and 0 ignores errors. No recompilation
+	is needed for this simple method. EMBOSS now has a ./configure
+	option --enable-mprobe which enables two new
+	functions. ajMemProbe, passed an address from malloc (AJNEW0,
+	AJCNEW0, etc.) tests the bytes before and after and reports any
+	errors. The advantage of using ajMemProbe rather than mprobe is
+	that a macro MAJMEMPROBE also reports the file and line number
+	where ist was called. To avoid large numbers of messages (when
+	code has problems) a limit can be set with ajMemCheckSetLimit
+	after which the program will exit. Note that enable-mprobe is
+	incompatible with using valgrind to test for memory leaks - as
+	mprobe and mcheck have to look at illegal bytes before and after
+	allocated memory blocks. Memory checking is turned on by a call to
+	mcheck, passing the function ajMemCheck, in ajnam.c before the
+	first memory allocation. If any program calls malloc before
+	calling embInit or embInitP this call will fail and issue a
+	warning (if compiled with --enable-mprobe). A special call
+	ajStrProbe tests any string with mprobe. Special calls ajListProbe
+	and ajListProbeData test lists and their contents. For more
+	details see http://www.gnu.org/software/libc/manual/
+
+	Protein sequences from the Staden package were read as nucleotide
+	because they were missing information on the ID line to identify
+	EMBL of SWISSPROT format. The sequences are now tested and
+	correctly typed.
+
+	Wordcount now accepts protein sequences as input. Previous
+	releases only allowed nucleotide sequences.
+
+	Wordfinder options had the same information prompt. These have
+	been changed from "limit" to "minimum" and "maximum" to make their
+	function clear.
+
+	Prompting for values from the user now includes a test for
+	standard input in use as an input file. If standard input is open,
+	the default response is accepted and a message is written to the
+	user. This is to avoid problems with command lines that use
+	"stdin" as an input and do not include -auto.
+
+	The acdpretty utility can now preserve comments in ACD files.
+	Comments are maintained in blocks with blank lines before and
+	after. Inline comments are started in column 50 unless they are
+	exceptionally long. Comments themselves have white space cleaned
+	up but otherwise are not reformatted.
+
+	A new function ajAcdGetValueDefault is added to return the default
+	value of an ACD qualifier. This can be combined with
+	ajAcdIsUserdefined in wrappers to test for values changed by the
+	user.
+
+	Infile qualifiers in ACD have a new attribute "trydefault" which
+	allows the default filename to fail. Any filename provided by the
+	user has to exist. This was added to support the behaviour of the
+	MIRA EMBASSY package. To allow an infile to fail the attribute
+	"nullok" also must be set to "Y"
+
+	Applications which produce an output file or graphics often
+	created an empty output file when the plot was selected.
+	The ACD files have been corrected to only create the file if it
+	will be written to. Applications changed are charge, dan,
+	freak, hmoment, iep and tcode.
+
+	Whichdb only writes to its output file if -get is false.
+	With -get it creates sequences. The outfile is no longer created
+	when whichdb is in -get mode.
+
+	String functions corrected so that Case in the name always means
+	case-insensitive and works by converting to upper case. Some
+	functions were defined the wrong way, with "Case" for the
+	case-insensitive form.
+
+	GFF3 format is now the default feature output.
+
+	A new function ajFeatIsCds identifies protein coding nucleotide
+	features (CDS) using the SO identifier. A new function
+	ajFeattagIsNote identifies feature tags that are for the default
+	feature tag.
+
+	Protein features now use the new Sequence Ontology terms defined
+	by BioSapiens. These are not yet accepted by GFF3 validators. The
+	new SO identifiers are added to protein feature definitions and
+	used internally.
+
+	Feature format definitions (the Efeatures and Etags files)
+	now allow #include references to other files. This allows a
+	standard EMBL and Swissprot feature table definition to be
+	included by the internal and GFF definitions. Redefinitions are
+	allowed using + and - prefxes to add and remove tags for existing
+	feature types.
+
+	GFF3 format feature (and report) output is added.
+
+	A new application "density" has been added. This reports the
+	A+C+G+T and AT+GC densities of nucleic acid sequences within
+	an adjustable sliding window. Plots of A+C+G+T or AT+GC are
+	optionally produced.
+	
+	Molecular weight programs (e.g. digest, mowse) now have a
+	-mono switch to allow use of monoisotopic weights.
+	By default, average molecular weights are used.
+
+	The Eamino.dat format has changed. Molecular weight information
+	has been removed and put in its own Emolwt.dat file. This latter
+	now allows specification of average and monoisotopic weights. Values
+	for hydrogen and oxygen are specified as well as the amino acid weights.
+
+	The library representation of amino acid property information
+	has been changed. The EmbPropTable global table has been
+	removed and replaced with EmbPPropAmino and EmbPPropMolwt objects.
+	
+	Pepcoil now produces a report (replacing a text output) in "motif"
+	format. The default is changed to not report non coiled-coil
+	regions as they are hard to distinguish in this format.
+
+	The "motif" report format is extended to allow two score positions
+	marked with "*" and "+" and labelled internally as "pos" and
+	"pos2". No application uses pos2 (it was added for pepcoil, but
+	both score maximum positions are always the same)
+
+	A new function ajAcdIsUserdefined allows wrappers to test which
+	qualifiers have values changed by the user so that they can use
+	shorter command lines to launch the wrapped application.
+
+	jaspscan application added. Scans sequences for transcription
+	factors using the JASPAR matrices.
+
+	jaspextract application added to move the JASPAR matrices into the
+	EMBOSS data area subdirectories.
+	
+	Alignment format "trace" used to display internal data content, is
+	renamed to "debug" to be consisten with other formats. A "debug"
+	format is added for feature output.
+
+	Application documentation has been updated to remove obsolete
+	references to EMBL database identifiers. These are replaced with
+	the correct accession numbers.
+
+	Two new entries have been added to the "tembl" test EMBL database
+	for use in the QA tests.
+
+	Report output now checks the sequence and feature table type. Is
+	the sequence is not a valid protein, protein-only formats (pir,
+	swiss) will fail with an error message. Similarly, if the sequence
+	is not a valid nucleotide sequence then nucleotide-only formats
+	(embl, genbank) will fail with an error message.
+
+	Garnier now uses the correct SwissProt and internal feature keys
+	for protein secondary structure. The results will appear much
+	better for example as a swissprot feature table. This required
+	rewriting of the internals by recoding the secondary structure
+	features with a "garnier" tag replacing the previous "helix",
+	"sheet", "turns" and "coil" tags. The default output is
+	unchanged. The results in other report formats will be changed.
+
+	Silent no longer reports the "Dir" column. This is replaced by the
+	new "Strand" column which reports "+" for a forward feature and
+	"-" for a reverse feature.
+
+	The following programs have changed default report output, with
+	the strand included for nucleotide sequences: equicktandem,
+	etandem, fuzznuc, fuzztran, recoder, restrict, silent, tcode,
+	twofeat. The strand column can be removed with the new commandline
+	associated qualifier -norstrandshow.
+
+	Reports for nucleotide sequences have confusing ways to represent
+	the start and end positions for features on the complementary
+	strand. A strand column has been added to these reports,
+	controlled by a new -rstrandshow qualifier and attribute. By
+	default the strand is shown for all nucleotide reports (see a list
+	of changed program outputs above). The start position is always
+	lower than the end position for features on the complementary
+	strand indicating the region that should be reversed. In past
+	releases the seqtable report format (fuzznuc, dreg, dan)
+	confusingly reversed start and end positions to indicate the
+	unreported strand. For all report formats (nametable, table) the
+	start and end positions are now consistent with nucleotide feature
+	formats (gff, embl, genbank).
+
+	Reports from dreg incorrectly reported sequences reversed with the
+	-sreverse qualifier.
+
+	Report headers now include the text "(Reversed)" when the input
+	sequence(s) are reverse complemented.
+
+	Phylogenetic trees in newick format are now parsed into internal
+	trees and converted back for use by Phylip. This allows us to
+	read other tree formats and pass them to Phylip (e.g. Nexus)
+
+	Some ACD data types did not allow the input to be NULL because
+	extra tests were carried out on the results. These are all cleaned
+	up and tested so that they can safely be set to nullok and missing
+	in local applications.
+
+	New sequence reading formats for PDB files. By default the ATOM
+	records are used (format "pdb"). An alternative format "pdbseq"
+	will read the SEQRES records which give the original sequence. The
+	ATOM records give the sequence determined from the structure.
+
+	Improved the help text for the -stdout and -filter options to
+	explain output files are written to standard output. Some users
+	expected graphics output (from plplot) to be controlled.
+
 Version 5.0.0
+	Extractalign is a new applications to extract regions from a
+	sequence alignment in the same way extractseq extracts regions
+	from single sequences.
+
 	The MRS server in Nijmegen changed its syntax just before our
 	release. A new database access method "MRS3" supports the main
 	MRS3 server. We have very little documentation on the changed URL

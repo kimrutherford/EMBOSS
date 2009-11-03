@@ -21,7 +21,6 @@
 package org.emboss.jemboss.gui;
 
 import org.emboss.jemboss.soap.*;
-import java.io.*;
 
 /**
 *

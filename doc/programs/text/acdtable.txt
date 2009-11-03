@@ -5,22 +5,13 @@
 
 Function
 
-   Creates an HTML table from an ACD file
+   Generate an HTML table of parameters from an application ACD file
 
 Description
 
-   Acdtable is used to generate the HTML table of command line options
-   for an EMBOSS program.
-
-   Acdtable does not have its own command line. Instead, it will run the
-   command line of any EMBOSS program by reading its ACD file and
-   processing the command line and user responses in exactly the same way
-   as the true program.
-
-   Acdtable uses a very simple method. The first command line parameter
-   is the name of the EMBOSS program to be compiled. All other command
-   line parameters and qualifiers are processed by that program's ACD
-   file.
+   acdtable is used to create the table of parameters, allowed values and
+   defaults, used in the application documentation and to provide user
+   help.
 
 Usage
 
@@ -124,6 +115,18 @@ Data files
 
 Notes
 
+   acdtable does not have its own options, but takes a single parameter
+   which is the name of the EMBOSS application that is being testsed. It
+   is invoked by specifying the name of the application to be tested
+   after the name of the utility application itself:
+
+   acdtable ApplicationName
+
+   Acceptable expected and default values can be generated automatically
+   for most ACD datatypes. In other cases, the allowed values is defined
+   with the valid: global attribute, and the default value by the
+   expected: global attribute (see EMBOSS Developers Manual).
+
 References
 
 Warnings
@@ -142,11 +145,11 @@ Known bugs
 
 See also
 
-   Program name         Description
-   acdc         ACD compiler
-   acdpretty    ACD pretty printing utility
-   acdtrace     ACD compiler on-screen trace
-   acdvalid     ACD file validation
+   Program name                        Description
+   acdc         Test an application ACD file
+   acdpretty    Correctly reformat an application ACD file
+   acdtrace     Trace processing of an application ACD file (for testing)
+   acdvalid     Validate an application ACD file
 
 Author(s)
 

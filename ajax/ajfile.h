@@ -19,33 +19,21 @@ extern "C"
 ** @alias AjSFile
 ** @alias AjOFile
 **
-** @new ajFileNew Default constructor for an input file
-** @new ajFileNewF Constructor using an existing open file,
-**                 for example stdin or stdout
-** @new ajFileNewIn Constructor using a filename for an input file
-** @new ajFileNewApp Default constructor using a filename for an output file
-**                   to be opened for appending records to the end of the file
-** @new ajFileNewOut Default constructor using a filename for an output file
-** @new ajFileNewInPipe Constructor using output from a forked command
-** @new ajFileNewInList Constructor using an AjPList of filenames
-** @delete ajFileClose Default destructor
-** @modify ajFileGets Reads a record from a file
-** @modify ajFileGetsTrim Reads a record from a file and removes
-**                     newline characters
-** @cast ajFileName Returns the filename as char*
-** @cast ajFileNameS Returns the filename as an AjPStr
-** @cast ajFileFp Returns the equivalent C file pointer
-** @cast ajFileGetApp Returns the App element.
-** @other AjPFileBuff Buffered input file.
-**
 ** @attr fp [FILE*] C file pointer
 ** @attr Name [AjPStr] File name as used when opening
 ** @attr List [AjPList] List of file names (first is open)
 ** @attr End [AjBool] True if EOF has been reached
 ** @attr App [AjBool] True if file was opened for append. 
 ** @attr Buff [AjPStr] Buffer for latest line read
-** @attr Pid [pid_t] Process PID if any
+** @attr Workbuffer [char*] Block as a buffer for fgets etc
+** @attr Readblock [char*] Block as a buffer for fread
+** @attr Blocksize [ajuint] Read block maximum size
+** @attr Blockpos [ajuint] Read block position
+** @attr Blocklen [ajuint] Read block length used
+** @attr Buffsize [ajuint] Buffer size (zero for default size)
 ** @attr Handle [ajint] AJAX file number 0 if unused
+** @attr Filepos [ajlong] File offset for start of latest read
+** @attr Pid [pid_t] Process PID if any
 ** @@
 ******************************************************************************/
 
@@ -56,77 +44,56 @@ typedef struct AjSFile {
   AjBool End;
   AjBool App;
   AjPStr Buff;
+  char *Workbuffer;
+  char *Readblock;
+  ajuint Blocksize;
+  ajuint Blockpos;
+  ajuint Blocklen;
+  ajuint Buffsize;
+  ajint Handle;
+  ajlong Filepos;
 #ifndef WIN32
   pid_t Pid;
 #endif
-  ajint Handle;
 } AjOFile;
 
 #define AjPFile AjOFile*
 
-/* @data AjPFileBuffList ******************************************************
+/* @data AjPFilebufflist ******************************************************
 **
 ** Ajax file buffer, holding a simple linked list of buffered lines.
 ** This does not use the AjPList objects.
 **
-** This is a substructure of the AjPFileBuff object.
+** This is a substructure of the AjPFilebuff object.
 **
 ** @attr Line [AjPStr] String : this line
-** @attr Next [struct AjSFileBuffList*] Next line in the list, NULL for last
+** @attr Next [struct AjSFilebufflist*] Next line in the list, NULL for last
 ** @attr Fpos [ajlong] File offset for start of this line
 ** @@
 ******************************************************************************/
 
-typedef struct AjSFileBuffList {
+typedef struct AjSFilebufflist {
   AjPStr Line;
-  struct AjSFileBuffList* Next;
+  struct AjSFilebufflist* Next;
   ajlong Fpos;
-} AjOFileBuffList;
+} AjOFilebufflist;
 
-#define AjPFileBuffList AjOFileBuffList*
+#define AjPFilebufflist AjOFilebufflist*
 
-/* @data AjPFileBuff **********************************************************
+/* @data AjPFilebuff **********************************************************
 **
 ** Ajax buffered file object. Holds information for a buffered input file.
 **
-** @alias AjSFileBuff
-** @alias AjOFileBuff
-**
-** @new ajFileBuffNew Default constructor for an input file
-** @new ajFileBuffNewF Constructor using an existing open file,
-**                 for example stdin or stdout.
-** @new ajFileBuffNewIn Constructor using a filename
-** @new ajFileBuffNewS Constructor using a line of buffered data
-** @new ajFileBuffNewDW Constructor using a directory and wildcard filename
-** @new ajFileBuffNewInList Constructor using a list of filenames
-** @delete ajFileBuffDel Default destructor
-** @modify ajFileBuffNobuff Turns off input buffering.
-** @modify ajFileBuffReset Resets so the next read uses the first buffered line
-** @modify ajFileBuffClear Deletes unwanted old lines from the buffer
-**                      but can keep the most recent line(s) for reuse.
-** @modify ajFileBuffStripHtml Processes data in the file buffer,
-**                          removing HTML tokens
-** @input ajFileBuffLoad Reads all input lines from a file into the buffer.
-** @modify ajFileBuffGet Reads a line from a buffered file.
-** @modify ajFileBuffGetStore Reads a line from a buffered file with append.
-** @modify ajFileBuffGetStoreL Reads a line from a buffered file with append.
-** @use ajFileBuffEmpty Tests whether a file buffer is empty.
-** @use ajFileBuffTrace Writes debug messages to indicate the contents
-**                      of a buffered file.
-** @cast ajFileBuffFile Returns the equivalent AjPFile without the
-**                      buffer access.
-** @use ajFileBuffTraceFull Writes debug messages to show the full contents
-**                      of a buffered file.
-** @cast ajFileBuffIsBuffered Tests for input buffering.
-** @other AjPFile Simple input file.
+** @alias AjSFilebuff
+** @alias AjOFilebuff
 **
 ** @attr File [AjPFile] The input file - data to be buffered
-** @attr Lines [AjPFileBuffList] All lines ... where the data really is
-** @attr Freelines [AjPFileBuffList] Free list of lines for reuse
-** @attr Curr [AjPFileBuffList] Current line in Lines list
-** @attr Prev [AjPFileBuffList] Previous line (points to Curr for delete)
-** @attr Last [AjPFileBuffList] Last line for quick appending
-** @attr Freelast [AjPFileBuffList] Last free line for quick append
+** @attr Lines [AjPFilebufflist] All lines ... where the data really is
+** @attr Freelines [AjPFilebufflist] Free list of lines for reuse
+** @attr Curr [AjPFilebufflist] Current line in Lines list
+** @attr Prev [AjPFilebufflist] Previous line (points to Curr for delete)
+** @attr Last [AjPFilebufflist] Last line for quick appending
+** @attr Freelast [AjPFilebufflist] Last free line for quick append
 ** @attr Nobuff [AjBool] if true, do not buffer the file
 ** @attr Pos [ajint] Position in list
 ** @attr Size [ajint] Size of list
@@ -135,46 +102,34 @@ typedef struct AjSFileBuffList {
 ** @@
 ******************************************************************************/
 
-typedef struct AjSFileBuff {
+typedef struct AjSFilebuff {
   AjPFile File;
-  AjPFileBuffList Lines;
-  AjPFileBuffList Freelines;
-  AjPFileBuffList Curr;
-  AjPFileBuffList Prev;
-  AjPFileBuffList Last;
-  AjPFileBuffList Freelast;
+  AjPFilebufflist Lines;
+  AjPFilebufflist Freelines;
+  AjPFilebufflist Curr;
+  AjPFilebufflist Prev;
+  AjPFilebufflist Last;
+  AjPFilebufflist Freelast;
   AjBool Nobuff;
   ajint Pos;
   ajint Size;
   ajint FreeSize;
   ajlong Fpos;
-} AjOFileBuff;
+} AjOFilebuff;
 
-#define AjPFileBuff AjOFileBuff*
+#define AjPFilebuff AjOFilebuff*
 
 /* @data AjPDir **************************************************************
 **
 ** Ajax directory object. Holds information for an open
-** input or output directory.
+** input directory.
 **
 ** @alias AjSDir
 ** @alias AjODir
 **
-** @new ajDirNew Default constructor for a directory
-** @new ajDirNewS Directory constructor with extension
-** @new ajDirNewSS Directory constructor with prefix and extension
-** @new ajDiroutNew Default constructor for an output directory
-** @new ajDiroutNewS Output directory constructor with extension
-** @new ajDiroutNewSS Output directory constructor with prefix
-**                        and extension
-** @delete ajDirDel Default destructor
-** @delete ajDiroutDel Default destructor for output directory
-**
 ** @attr Name [AjPStr] Path
 ** @attr Prefix [AjPStr] Default filename prefix
 ** @attr Extension [AjPStr] Default file extension
-** @attr Output [AjBool] True if to be used for output
-** @attr Padding [char[4]] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
@@ -182,11 +137,29 @@ typedef struct AjSDir {
   AjPStr Name;
   AjPStr Prefix;
   AjPStr Extension;
-  AjBool Output;
-  char Padding[4];
 } AjODir;
 
 #define AjPDir AjODir*
+
+/* @data AjPDirout ***********************************************************
+**
+** Ajax output directory object. Holds information for an open
+** output directory.
+**
+** @alias AjSDirout
+** @alias AjODirout
+**
+** @attr Name [AjPStr] Path
+** @attr Extension [AjPStr] Default file extension
+** @@
+******************************************************************************/
+
+typedef struct AjSDirout {
+  AjPStr Name;
+  AjPStr Extension;
+} AjODirout;
+
+#define AjPDirout AjODirout*
 
 /* @data AjPOutfile ***********************************************************
 **
@@ -197,10 +170,6 @@ typedef struct AjSDir {
 **
 ** @alias AjSOutfile
 ** @alias AjOOutfile
-**
-** @new ajOutfileNew Default constructor for an output file
-** @delete ajOutfileClose Close file and descruct
-** @delete ajOutfileDel Default destructor
 **
 ** @attr File [AjPFile] File object
 ** @attr Type [AjPStr] Named data file type
@@ -240,173 +209,310 @@ enum AjEOutfileType
 ** Prototype definitions
 */
 
-void        ajDirDel (AjPDir* pthis);
-void        ajDiroutDel (AjPDir* pthis);
-AjPStr      ajDirExt(const AjPDir thys);
-AjPStr      ajDirName(const AjPDir thys);
-AjPDir      ajDirNew (const AjPStr name);
-AjPDir      ajDirNewS (const AjPStr name, const AjPStr ext);
-AjPDir      ajDirNewSS (const AjPStr name, const AjPStr prefix,
+void           ajDirDel(AjPDir* pthis);
+void           ajDiroutDel(AjPDirout* pthis);
+const AjPStr   ajDirGetExt(const AjPDir thys);
+const AjPStr   ajDirGetPath(const AjPDir thys);
+const AjPStr   ajDirGetPrefix(const AjPDir thys);
+const AjPStr   ajDiroutGetExt(const AjPDirout thys);
+const AjPStr   ajDiroutGetPath(const AjPDirout thys);
+AjPDir         ajDirNewPath(const AjPStr path);
+AjPDir         ajDirNewPathExt(const AjPStr path, const AjPStr ext);
+AjPDir         ajDirNewPathPreExt(const AjPStr path, const AjPStr prefix,
+                                const AjPStr ext);
+AjPDirout      ajDiroutNewPath(const AjPStr name);
+AjPDirout      ajDiroutNewPathExt(const AjPStr name, const AjPStr ext);
+ajint          ajFilelistAddPathWildRecursiveIgnore(AjPList list,
+						    const AjPStr path,
+						    const AjPStr wildname,
+						    AjPList ignorelist);
+void           ajDirnamePrintRecursiveIgnore(const AjPStr path,
+					     AjPList ignorelist,
+					     AjPFile outfile);
+ajint          ajFilelistAddPath(AjPList list,
+				 const AjPStr path);
+ajint          ajFilelistAddPathDir(AjPList list,
+                                    const AjPStr path);
+ajint          ajFilelistAddPathWild(AjPList list,
+				     const AjPStr path,
+				     const AjPStr filename);
+ajint          ajFilelistAddPathWildDir(AjPList list,
+				     const AjPStr path,
+				     const AjPStr filename);
+
+void           ajFilebuffDel(AjPFilebuff* pthis);
+AjPFilebuff    ajFilebuffNewNofile(void);
+AjPFilebuff    ajFilebuffNewNameS(const AjPStr name);
+AjPFilebuff    ajFilebuffNewNamePathC(const char* filename, const AjPStr dir);
+AjPFilebuff    ajFilebuffNewNamePathS(const AjPStr filename, const AjPStr dir);
+AjPFilebuff    ajFilebuffNewPathWild(const AjPStr path,
+                                     const AjPStr wildname);
+AjPFilebuff    ajFilebuffNewPathWildExclude(const AjPStr path,
+                                            const AjPStr wildname,
+                                            const AjPStr exclude);
+AjPFilebuff    ajFilebuffNewFromCfile(FILE *fp);
+AjPFilebuff    ajFilebuffNewFromFile(AjPFile file);
+AjPFilebuff    ajFilebuffNewLine(const AjPStr line);
+AjPFilebuff    ajFilebuffNewListinList(AjPList list);
+AjBool         ajFilebuffSetBuffered(AjPFilebuff thys);
+void           ajFilebuffClear(AjPFilebuff thys, ajint lines);
+void           ajFilebuffClearStore(AjPFilebuff thys, ajint lines,
+                                    const AjPStr rdline, AjBool store,
+                                    AjPStr *astr);
+AjBool         ajFilebuffIsEmpty(const AjPFilebuff thys);
+AjBool         ajFilebuffIsEnded(const AjPFilebuff thys);
+AjBool         ajFilebuffIsEof(const AjPFilebuff thys);
+AjPFile        ajFilebuffGetFile(const AjPFilebuff thys);
+void           ajFilebuffFix(AjPFilebuff thys);
+FILE*          ajFilebuffGetFileptr(const AjPFilebuff thys);
+AjBool         ajFilebuffIsBuffered(const AjPFilebuff thys);
+void           ajFilebuffLoadAll(AjPFilebuff buff);
+void           ajFilebuffLoadC(AjPFilebuff thys, const char* str);
+void           ajFilebuffLoadS(AjPFilebuff thys, const AjPStr str);
+AjBool         ajFilebuffSetUnbuffered(AjPFilebuff thys);
+void           ajFilebuffTraceTitle(const AjPFilebuff thys, const char* title);
+void           ajFilebuffReset(AjPFilebuff thys);
+void           ajFilebuffResetPos(AjPFilebuff thys);
+void           ajFilebuffResetStore(AjPFilebuff thys,
+                                    AjBool store, AjPStr *astr);
+AjBool         ajFilebuffReopenFile(AjPFilebuff* Pbuff, AjPFile file);
+void           ajFilebuffHtmlStrip(AjPFilebuff thys);
+AjBool         ajFilebuffHtmlPre(AjPFilebuff thys);
+void           ajFilebuffTrace(const AjPFilebuff thys);
+void           ajFilebuffTraceFull(const AjPFilebuff thys, size_t nlines,
+                                   size_t nfree);
+void           ajFileClose(AjPFile *pthis);
+AjBool         ajDirnameFixExists(AjPStr* dir);
+void           ajDirnameFix(AjPStr* dir);
+AjBool         ajDirnameUp(AjPStr* dir);
+AjBool         ajDirnameFillPath(AjPStr* dir);
+AjBool         ajFileDirTrim(AjPStr* name);
+AjBool         ajFileExtnTrim(AjPStr* name);
+AjBool         ajFileDirExtnTrim(AjPStr* name);
+AjBool         ajFileIsEof(const AjPFile thys);
+void           ajFileExit(void);
+ajint          ajFilelistAddListname(AjPList list, const AjPStr files);
+FILE*          ajFileGetFileptr(const AjPFile thys);
+const AjPStr   ajFileValueCwd(void);
+AjBool         ajFileIsAppend(const AjPFile thys);
+const AjPStr   ajFileGetName(const AjPFile thys);
+AjBool         ajFilenameHasPath(const AjPStr name);
+ajlong         ajFilenameGetSize(const AjPStr fname);
+AjBool         ajFilenameTrimPathExt(AjPStr* Pfilename);
+AjBool         ajFilenameTrimPath(AjPStr* Pfilename);
+AjBool         ajFilenameTrimExt(AjPStr* Pfilename);
+const char*    ajFileGetNameC(const AjPFile thys);
+const AjPStr   ajFileGetNameS(const AjPFile thys);
+AjBool         ajFilenameReplacePathS(AjPStr* filename, const AjPStr dir);
+AjBool         ajFilenameReplacePathC(AjPStr* filename, const char* dir);
+AjBool         ajFilenameReplaceExtS(AjPStr* filename,
+                                     const AjPStr extension);
+AjBool         ajFilenameReplaceExtC(AjPStr* filename, const char* extension);
+AjBool         ajFilenameTrimAll(AjPStr *fname);
+AjPFile        ajFileNewOutappendNameS(const AjPStr name);
+AjPFile        ajFileNewListinList(AjPList list);
+AjPFile        ajFileNewListinDirPre(const AjPDir dir, const AjPStr prefix);
+AjPFile        ajFileNewListinNameDirS(const AjPStr name, const AjPDir dir);
+AjPFile        ajFileNewListinPathWild(const AjPStr path,
+                                       const AjPStr wildname);
+AjPFile        ajFileNewListinPathWildExclude(const AjPStr path,
+                                              const AjPStr wildname,
+                                              const AjPStr exclude);
+
+AjPFile        ajFileNewFromCfile(FILE* file);
+AjPFile        ajFileNewInC(const char *name);
+AjPFile        ajFileNewInNameS(const AjPStr name);
+AjPFile        ajFileNewInBlockS(const AjPStr name, ajuint blocksize);
+AjPFile        ajFileNewInPipe(const AjPStr name);
+AjPFile        ajFileNewInNamePathC(const char* name, const AjPStr path);
+AjPFile        ajFileNewInNamePathS(const AjPStr name, const AjPStr path);
+AjPFile        ajFileNewOutNameC(const char *name);
+AjPFile        ajFileNewOutNameS(const AjPStr name);
+AjPFile        ajFileNewOutNameDirS(const AjPStr name, const AjPDirout dir);
+AjPFile        ajFileNewOutNamePathS(const AjPStr name, const AjPStr path);
+void           ajFileOutHeader(AjPFile thys);
+AjBool         ajFileReopenName(AjPFile thys, const AjPStr name);
+AjBool         ajFileReopenNext(AjPFile thys);
+ajint 	       ajFileScan(const AjPStr path, const AjPStr filename,
+                          AjPList *result,
+                          AjBool show, AjBool dolist, AjPList *list,
+                          AjPList rlist, AjBool recurs, AjPFile outf);
+ajint          ajFileSeek(AjPFile thys, ajlong offset, ajint wherefrom);
+AjBool         ajFilenameExists(const AjPStr filename);
+AjBool         ajFilenameExistsDir(const AjPStr filename);
+AjBool         ajFilenameExistsExec(const AjPStr filename);
+AjBool         ajFilenameExistsRead(const AjPStr filename);
+AjBool         ajFilenameExistsWrite(const AjPStr filename);
+AjBool         ajFileValueRedirectStderr(void);
+AjBool         ajFileValueRedirectStdin(void);
+AjBool         ajFileValueRedirectStdout(void);
+AjBool         ajFileIsStderr(const AjPFile file);
+AjBool         ajFileIsStdin(const AjPFile file);
+AjBool         ajFileIsStdout(const AjPFile file);
+AjBool         ajFileFix(AjPFile file);
+AjBool         ajFileResetEof(AjPFile thys);
+ajlong         ajFileResetPos(AjPFile thys);
+AjBool         ajFilenameSetTempname(AjPStr* Pfilename);
+AjBool         ajFilenameSetTempnamePathC(AjPStr* Pfilename,const char* txt);
+AjBool         ajFilenameSetTempnamePathS(AjPStr* Pfilename, const AjPStr str);
+AjBool         ajFilenameTestExclude(const AjPStr filename,
+				     const AjPStr exclude,
+				     const AjPStr include);
+AjBool         ajFilenameTestInclude(const AjPStr filename,
+				     const AjPStr exclude,
+				     const AjPStr include);
+AjBool         ajFilenameTestExcludePath(const AjPStr filename,
+					 const AjPStr exclude,
+					 const AjPStr include);
+AjBool         ajFilenameTestIncludePath(const AjPStr filename,
+					 const AjPStr exclude,
+					 const AjPStr include);
+void           ajFileTrace(const AjPFile thys);
+void           ajFileSetUnbuffer(AjPFile thys);
+
+ajuint         ajFileValueBuffsize(void);
+
+
+AjPOutfile     ajOutfileNewNameS(const AjPStr name);
+void           ajOutfileClose(AjPOutfile* pthis);
+AjPFile        ajOutfileGetFile(const AjPOutfile thys);
+FILE*          ajOutfileGetFileptr(const AjPOutfile thys);
+const AjPStr   ajOutfileGetFormat(const AjPOutfile thys);
+
+__deprecated ajint          ajFileBuffSize(void);
+__deprecated void           ajFileBuffClearStore(AjPFilebuff buff, ajint lines,
+                                                 const AjPStr rdline,
+                                                 AjBool store, AjPStr *astr);
+__deprecated AjBool         ajFileBuffBuff (AjPFilebuff thys);
+__deprecated AjBool         ajFileBuffEmpty (const AjPFilebuff thys);
+__deprecated AjBool         ajFileBuffEnd (const AjPFilebuff thys);
+__deprecated AjBool         ajFileBuffEof (const AjPFilebuff thys);
+__deprecated AjPFile        ajFileBuffFile (const AjPFilebuff thys);
+__deprecated void           ajFileBuffFix (AjPFilebuff thys);
+__deprecated AjBool         ajFileBuffIsBuffered (const AjPFilebuff thys);
+__deprecated FILE*          ajFileBuffFp (const AjPFilebuff thys);
+__deprecated void           ajFileBuffTrace (const AjPFilebuff thys);
+__deprecated void           ajFileBuffLoadC(AjPFilebuff thys, const char* str);
+__deprecated void           ajFileBuffLoadS(AjPFilebuff thys, const AjPStr str);
+__deprecated AjBool         ajFileBuffNobuff (AjPFilebuff thys);
+__deprecated void           ajFileBuffPrint (const AjPFilebuff thys,
+                                             const char* title);
+__deprecated void           ajFileBuffReset (AjPFilebuff thys);
+__deprecated void           ajFileBuffResetPos (AjPFilebuff thys);
+__deprecated void           ajFileBuffResetStore (AjPFilebuff thys,
+                                                  AjBool store, AjPStr *astr);
+__deprecated void           ajFileBuffTraceFull (const AjPFilebuff thys,
+                                                 size_t nlines,
+                                  size_t nfree);
+__deprecated AjBool         ajFileGetwd (AjPStr* dir);
+__deprecated AjBool         ajFileHasDir (const AjPStr name);
+__deprecated ajlong         ajFileLength (const AjPStr fname);
+__deprecated AjBool         ajFileNameShorten(AjPStr *fname);
+__deprecated AjBool         ajFileNameTrim(AjPStr *fname);
+__deprecated const char*    ajFileTempName (const char *dir);
+__deprecated AjBool         ajFileTestSkip (const AjPStr fullname,
+                             const AjPStr exc, const AjPStr inc,
+                             AjBool keep, AjBool ignoredirectory);
+__deprecated AjBool         ajFileDir (AjPStr* dir);
+__deprecated void           ajFileDirFix (AjPStr* dir);
+__deprecated AjBool         ajFileDirPath (AjPStr* dir);
+__deprecated AjBool         ajFileDirUp (AjPStr* dir);
+__deprecated ajint          ajDirScan(const AjPStr path,
+				      const AjPStr filename,
+				      AjPList *result);
+    
+__deprecated AjBool         ajFileSetDir (AjPStr *pname, const AjPStr dir);
+__deprecated FILE*          ajOutfileFp (const AjPOutfile thys);
+__deprecated AjBool         ajFileNameValid (const AjPStr filename);
+__deprecated AjBool         ajFileStat (const AjPStr filename, ajint mode);
+__deprecated AjPFile        ajOutfileFile (const AjPOutfile thys);
+__deprecated AjPStr         ajOutfileFormat (const AjPOutfile thys);
+__deprecated void           ajOutfileDel(AjPOutfile* pthis);
+__deprecated AjPOutfile     ajOutfileNew(const AjPStr name);
+__deprecated void           ajFileBuffStripHtml (AjPFilebuff thys);
+__deprecated AjBool         ajFileBuffStripHtmlPre (AjPFilebuff thys);
+__deprecated const AjPStr   ajFileNameS (const AjPFile thys);
+__deprecated const char*    ajFileName (const AjPFile thys);
+__deprecated AjPFilebuff ajFileBuffNewS(const AjPStr data);
+__deprecated AjPFilebuff ajFileBuffNewList(AjPList list);
+__deprecated AjBool         ajFileEof (const AjPFile thys);
+__deprecated FILE*          ajFileFp (const AjPFile thys);
+__deprecated AjBool         ajFileStderr (const AjPFile file);
+__deprecated AjBool         ajFileStdin (const AjPFile file);
+__deprecated AjBool         ajFileStdout (const AjPFile file);
+__deprecated void           ajFileBuffDel (AjPFilebuff* pthis);
+__deprecated AjPFilebuff    ajFileBuffNew (void);
+__deprecated AjPFilebuff    ajFileBuffNewF (FILE *fp);
+__deprecated void           ajFileBuffClear (AjPFilebuff thys, ajint lines);
+__deprecated AjBool ajFileBuffSetFile (AjPFilebuff* pthys, AjPFile file,
+                                       AjBool samefile);
+__deprecated AjBool         ajFileGetApp (const AjPFile thys);
+__deprecated ajlong         ajFileTell (AjPFile thys);
+__deprecated AjBool         ajFileNext (AjPFile thys);
+__deprecated FILE*          ajFileReopen (AjPFile thys, const AjPStr name);
+__deprecated const AjPStr      ajDirExt(const AjPDir thys);
+__deprecated const AjPStr      ajDirName(const AjPDir thys);
+__deprecated AjPDir      ajDirNew (const AjPStr name);
+__deprecated AjPDir      ajDirNewS (const AjPStr name, const AjPStr ext);
+__deprecated AjPDir      ajDirNewSS (const AjPStr name, const AjPStr prefix,
 			const AjPStr ext);
-AjPDir      ajDiroutNew (const AjPStr name);
-AjPDir      ajDiroutNewS (const AjPStr name, const AjPStr ext);
-AjPDir      ajDiroutNewSS (const AjPStr name, const AjPStr prefix,
-			   const AjPStr ext);
+__deprecated AjPFile     ajFileNew(void);
+__deprecated AjPFilebuff ajFileBuffNewIn(const AjPStr name);
+__deprecated AjPFile     ajFileNewIn(const AjPStr name);
+__deprecated AjPFile     ajFileNewInList(AjPList list);
+__deprecated AjPFile     ajFileNewDW(const AjPStr dir, const AjPStr wildfile);
+__deprecated AjPFile     ajFileNewDWE(const AjPStr dir, const AjPStr wildfile,
+                                      const AjPStr exclude);
 
-AjBool      ajFileBuffBuff (AjPFileBuff thys);
-void        ajFileBuffClear (AjPFileBuff thys, ajint lines);
-void        ajFileBuffClearStore (AjPFileBuff thys, ajint lines,
-				  const AjPStr rdline, AjBool store,
-				  AjPStr *astr);
-void        ajFileBuffDel (AjPFileBuff* pthis);
-AjBool      ajFileBuffEmpty (const AjPFileBuff thys);
-AjBool      ajFileBuffEnd (const AjPFileBuff thys);
-AjBool      ajFileBuffEof (const AjPFileBuff thys);
-AjPFile     ajFileBuffFile (const AjPFileBuff thys);
-void        ajFileBuffFix (AjPFileBuff thys);
-FILE*       ajFileBuffFp (const AjPFileBuff thys);
-void        ajFileBuffFreeClear (AjPFileBuff thys);
-AjBool      ajFileBuffGet  (AjPFileBuff thys, AjPStr *pdest);
-AjBool      ajFileBuffGetL (AjPFileBuff thys, AjPStr *pdest,
-			    ajlong* fpos);
-AjBool      ajFileBuffGetStore (AjPFileBuff thys, AjPStr* pdest,
-				AjBool store, AjPStr *astr);
-AjBool      ajFileBuffGetStoreL (AjPFileBuff thys, AjPStr* pdest,
-				 ajlong* fpos, AjBool store, AjPStr *astr);
-AjBool      ajFileBuffGetTrim(AjPFileBuff thys, AjPStr* pdest);
-AjBool      ajFileBuffIsBuffered (const AjPFileBuff thys);
-void        ajFileBuffLoad (AjPFileBuff thys);
-void        ajFileBuffLoadC (AjPFileBuff thys, const char* str);
-void        ajFileBuffLoadS (AjPFileBuff thys, const AjPStr str);
-AjPFileBuff ajFileBuffNew (void);
-AjPFileBuff ajFileBuffNewDC (const AjPStr dir, const char* filename);
-AjPFileBuff ajFileBuffNewDF (const AjPStr dir, const AjPStr filename);
-AjPFileBuff ajFileBuffNewDW (const AjPStr dir, const AjPStr wildfile);
-AjPFileBuff ajFileBuffNewDWE (const AjPStr dir, const AjPStr wildfile,
-			      const AjPStr exclude);
-AjPFileBuff ajFileBuffNewF (FILE *fp);
-AjPFileBuff ajFileBuffNewFile (AjPFile file);
-AjPFileBuff ajFileBuffNewIn (const AjPStr name);
-AjPFileBuff ajFileBuffNewInList (AjPList list);
-AjPFileBuff ajFileBuffNewS (const AjPStr data);
-AjBool      ajFileBuffNobuff (AjPFileBuff thys);
-void        ajFileBuffPrint (const AjPFileBuff thys, const char* title);
-void        ajFileBuffReset (AjPFileBuff thys);
-void        ajFileBuffResetPos (AjPFileBuff thys);
-void        ajFileBuffResetStore (AjPFileBuff thys,
-				  AjBool store, AjPStr *astr);
-AjBool      ajFileBuffSetFile (AjPFileBuff* pthys, AjPFile file,
-			       AjBool samefile);
-ajint       ajFileBuffSize (void);
-void        ajFileBuffStripHtml (AjPFileBuff thys);
-AjBool      ajFileBuffStripHtmlPre (AjPFileBuff thys);
-void        ajFileBuffTrace (const AjPFileBuff thys);
-void        ajFileBuffTraceFull (const AjPFileBuff thys, size_t nlines,
-				 size_t nfree);
-void        ajFileClose (AjPFile *pthis);
-void        ajFileDataDirNew  (const AjPStr tfile, const AjPStr dir,
-			       AjPFile *fnew);
-void        ajFileDataDirNewC (const char *s, const char* d,
-			       AjPFile *f);
-void        ajFileDataNew  (const AjPStr filename, AjPFile *newfileptr);
-void        ajFileDataNewC (const char *s, AjPFile *f);
-void        ajFileDataNewWrite (const AjPStr tfile, AjPFile *fnew);
-AjBool      ajFileDir (AjPStr* dir);
-void        ajFileDirFix (AjPStr* dir);
-AjBool      ajFileDirUp (AjPStr* dir);
-AjBool      ajFileDirPath (AjPStr* dir);
-AjBool      ajFileDirTrim (AjPStr* name);
-AjBool      ajFileExtnTrim (AjPStr* name);
-AjBool      ajFileDirExtnTrim (AjPStr* name);
-AjBool      ajFileEof (const AjPFile thys);
-void        ajFileExit (void);
-AjPList     ajFileFileList(const AjPStr files);
-FILE*       ajFileFp (const AjPFile thys);
-AjBool      ajFileGetwd (AjPStr* dir);
-AjBool      ajFileGetApp (const AjPFile thys);
-AjPStr      ajFileGetName (const AjPFile thys);
-AjBool      ajFileGets (AjPFile thys, AjPStr *pdest);
-AjBool      ajFileGetsL (AjPFile thys, AjPStr *pdest, ajlong* fpos);
-AjBool      ajFileGetsTrim  (AjPFile thys, AjPStr *pdest);
-AjBool      ajFileGetsTrimL (AjPFile thys, AjPStr *pdest, ajlong* fpos);
-AjBool      ajFileHasDir (const AjPStr name);
-ajlong      ajFileLength (const AjPStr fname);
-const char* ajFileName (const AjPFile thys);
-const AjPStr ajFileNameS (const AjPFile thys);
-AjBool      ajFileNameDir (AjPStr* filename, const AjPDir dir,
-			   const AjPStr name);
-AjBool      ajFileNameDirSet  (AjPStr* filename, const AjPStr dir);
-AjBool      ajFileNameDirSetC (AjPStr* filename, const char* dir);
-AjBool      ajFileNameExt  (AjPStr* filename, const AjPStr extension);
-AjBool      ajFileNameExtC (AjPStr* filename, const char* extension);
-AjBool      ajFileNameShorten(AjPStr *fname);
-AjBool      ajFileNameTrim(AjPStr *fname);
-AjPFile     ajFileNew (void);
-AjPFile     ajFileNewApp (const AjPStr name);
-AjPFile     ajFileNewDirF(const AjPDir dir, const AjPStr filename);
-AjPFile     ajFileNewDC (const AjPStr dir, const char* filename);
-AjPFile     ajFileNewDF (const AjPStr dir, const AjPStr filename);
-AjPFile     ajFileNewDW (const AjPStr dir, const AjPStr wildfile);
-AjPFile     ajFileNewDWE (const AjPStr dir, const AjPStr wildfile,
-			  const AjPStr exclude);
-AjPFile     ajFileNewF (FILE* file);
-AjPFile     ajFileNewIn (const AjPStr name);
-AjPFile     ajFileNewInC (const char *name);
-AjPFile     ajFileNewInPipe (const AjPStr name);
-AjPFile     ajFileNewInList (AjPList list);
-AjPFile     ajFileNewOut (const AjPStr name);
-AjPFile     ajFileNewOutC (const char *name);
-AjPFile     ajFileNewOutD (const AjPStr dir, const AjPStr name);
-AjPFile     ajFileNewOutDir(const AjPDir dir, const AjPStr name);
-void        ajFileOutHeader (AjPFile thys);
-void        ajFileOutClose (AjPFile *pthis);
-AjBool      ajFileNext (AjPFile thys);
-size_t      ajFileRead (void* ptr, size_t element_size, size_t count,
-			AjPFile thys);
-AjBool      ajFileReadAppend (AjPFile thys, AjPStr* pbuff);
-AjBool      ajFileReadLine (AjPFile thys, AjPStr *pdest);
-ajuint      ajFileReadUint (AjPFile thys, AjBool Bigendian);
-FILE*       ajFileReopen (AjPFile thys, const AjPStr name);
-ajint 	    ajFileScan (const AjPStr path, const AjPStr filename,
-			AjPList *result,
-			AjBool show, AjBool dolist, AjPList *list,
-			AjPList rlist, AjBool recurs, AjPFile outf);
-ajint       ajFileSeek (AjPFile thys, ajlong offset, ajint wherefrom);
-AjBool      ajFileSetDir (AjPStr *pname, const AjPStr dir);
-AjBool      ajFileStat (const AjPStr filename, ajint mode);
-AjBool      ajFileNameValid (const AjPStr filename);
-AjBool      ajFileStderr (const AjPFile file);
-AjBool      ajFileStdin (const AjPFile file);
-AjBool      ajFileStdout (const AjPFile file);
-ajlong      ajFileTell (const AjPFile thys);
-const char* ajFileTempName (const char *dir);
-AjBool      ajFileTestSkip (const AjPStr fullname,
-			    const AjPStr exc, const AjPStr inc,
-			    AjBool keep, AjBool ignoredirectory);
-void        ajFileTrace (const AjPFile thys);
-void        ajFileUnbuffer (AjPFile thys);
-size_t      ajFileWrite (AjPFile thys, const void* ptr,
-			 size_t element_size, size_t count);
 
-ajint       ajFileWriteByte (AjPFile thys, char ch);
-ajint       ajFileWriteChar (AjPFile thys, const char* str, ajint len);
-ajint       ajFileWriteInt2 (AjPFile thys, short i);
-ajint       ajFileWriteInt4 (AjPFile thys, ajint i);
-ajint       ajFileWriteInt8 (AjPFile thys, ajlong i);
-ajint       ajFileWriteStr  (AjPFile thys, const AjPStr str, ajuint len);
+__deprecated AjPFilebuff ajFileBuffNewFile(AjPFile file);
+__deprecated AjPFilebuff ajFileBuffNewDW(const AjPStr dir,
+                                         const AjPStr wildfile);
+__deprecated AjPFilebuff ajFileBuffNewDWE(const AjPStr dir,
+                                          const AjPStr wildfile,
+                                          const AjPStr exclude);
 
-void        ajOutfileClose(AjPOutfile* pthis);
-void        ajOutfileDel(AjPOutfile* pthis);
-AjPFile     ajOutfileFile (const AjPOutfile thys);
-AjPStr      ajOutfileFormat (const AjPOutfile thys);
-FILE*       ajOutfileFp (const AjPOutfile thys);
-AjPOutfile  ajOutfileNew(const AjPStr name);
+__deprecated AjPFile     ajFileNewApp(const AjPStr name);
+
+__deprecated AjPFile ajFileNewOut(const AjPStr name);
+
+__deprecated AjPFile     ajFileNewOutD (const AjPStr dir, const AjPStr name);
+__deprecated AjPFile     ajFileNewOutDir(const AjPDirout dir,
+                                         const AjPStr name);
+__deprecated AjPFile     ajFileNewF (FILE* file);
+__deprecated AjPDir ajDirOutNew(const AjPStr name);
+__deprecated AjPDir ajDirOutNewS(const AjPStr name, const AjPStr ext);
+__deprecated AjPDir ajDirOutNewSS(const AjPStr name,
+                                  const AjPStr prefix, const AjPStr ext);
+
+__deprecated AjPFilebuff  ajFileBuffNewDC (const AjPStr dir,
+                                           const char* filename);
+__deprecated AjPFilebuff  ajFileBuffNewDF (const AjPStr dir,
+                                           const AjPStr filename);
+__deprecated AjPFile      ajFileNewDC (const AjPStr dir,
+                                       const char* filename);
+__deprecated AjPFile      ajFileNewDF (const AjPStr dir,
+                                       const AjPStr filename);
+
+__deprecated AjBool       ajFileNameDirSet  (AjPStr* filename,
+                                             const AjPStr dir);
+__deprecated AjBool       ajFileNameDirSetC (AjPStr* filename,
+                                             const char* dir);
+__deprecated AjBool       ajFileNameExt  (AjPStr* filename,
+                                          const AjPStr extension);
+__deprecated AjBool       ajFileNameExtC (AjPStr* filename,
+                                          const char* extension);
+
+__deprecated AjPFile      ajFileNewDirF(const AjPDir dir,
+                                        const AjPStr filename);
+
+__deprecated void         ajFileUnbuffer (AjPFile thys);
 
 /*
 ** End of prototype definitions
 */
 
-
+#define    MAJFILETELL(file) (file->fp ? ftell(file->fp) : 0L)
 
 /* ============= definitions =========================*/
 #ifndef WIN32

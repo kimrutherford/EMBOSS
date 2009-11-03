@@ -1,6 +1,6 @@
 application: remap [
-  documentation: "Display sequence with restriction sites,
-                  translation etc."
+  documentation: "Display restriction enzyme binding sites in a
+                  nucleotide sequence"
   groups: "Display, Nucleic:Restriction, Nucleic:Translation"
 ]
 

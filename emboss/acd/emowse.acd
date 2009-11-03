@@ -1,6 +1,5 @@
 application: emowse [
-  documentation: "Protein identification by mass
-                  spectrometry"
+  documentation: "Search protein sequences by digest fragment molecular weight"
   groups: "Protein:Composition"
 ]
 
@@ -20,11 +19,10 @@ section: input [
     knowntype: "peptide molweights"
   ]
 
-  datafile: aadata [
-    information: "Amino acids properties and molecular weight
-                  data file"
-    default: "Eamino.dat"
-    knowntype: "amino acid properties"
+  datafile: mwdata [
+    information: "Molecular weights data file"
+    default: "Emolwt.dat"
+    knowntype: "molecular weights"
   ]
 
   datafile: frequencies [
@@ -44,6 +42,12 @@ section: required [
     standard: "Y"
     default: "0"
     information: "Whole sequence molwt"
+  ]
+
+  boolean: mono [
+    standard: "Y"
+    default: "N"
+    information: "Use monoisotopic weights"
   ]
 
 endsection: required

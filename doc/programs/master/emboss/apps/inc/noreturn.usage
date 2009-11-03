@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>noreturn abc.dat </b>
-Removes carriage return from ASCII files
+Remove carriage return from ASCII files
 ASCII text output file [abc.noreturn]: <b></b>
 
 </pre></td></tr></table><p>

@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>palindrome </b>
-Looks for inverted repeats in a nucleotide sequence
+Finds inverted repeats in nucleotide sequence(s)
 Input nucleotide sequence(s): <b>tembl:d00596</b>
 Enter minimum length of palindrome [10]: <b>15</b>
 Enter maximum length of palindrome [100]: <b></b>

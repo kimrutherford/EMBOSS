@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>mwfilter </b>
-Filter noisy molwts from mass spec output
+Filter noisy data from molecular weights file
 Molecular weights file: <b>molwts.dat</b>
 Ppm tolerance [50.0]: <b></b>
 Molecular weights output file [molwts.mwfilter]: <b></b>

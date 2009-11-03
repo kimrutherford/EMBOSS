@@ -113,9 +113,11 @@ void embConsCalc(const AjPSeqset seqset,const AjPMatrix cmpmatrix,
 		m2 = ajSeqcvtGetCodeK(cvt,seqcharptr[j][k]);
 		if(m1 && m2)
 		{
-		    contri = (float)matrix[m1][m2]*ajSeqsetGetseqWeight(seqset,j)
+		    contri = (float)matrix[m1][m2]*
+                             ajSeqsetGetseqWeight(seqset,j)
 			+ajFloatGet(score,i);
-		    contrj = (float)matrix[m1][m2]*ajSeqsetGetseqWeight(seqset,i)
+		    contrj = (float)matrix[m1][m2]*
+                             ajSeqsetGetseqWeight(seqset,i)
 			+ajFloatGet(score,j);
 
 		    ajFloatPut(&score,i,contri);

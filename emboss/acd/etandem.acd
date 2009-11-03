@@ -1,6 +1,5 @@
 application: etandem [
-  documentation: "Looks for tandem repeats in a nucleotide
-                  sequence"
+  documentation: "Finds tandem repeats in a nucleotide sequence"
   groups: "Nucleic:Repeats"
 ]
 

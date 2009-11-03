@@ -21,51 +21,11 @@ tfscan
     Description
 </H2>
 
-The <A HREF="http://www.gene-regulation.com/pub/databases.html">TRANSFAC
-Database</A> is a commercial database of eukaryotic cis-acting
-regulatory DNA elements and trans-acting factors.  It covers the whole
-range from yeast to human. 
-
-<p>
-
-An old public domain version is available at:
-<a href="ftp://ftp.ebi.ac.uk/pub/databases/transfac/transfac32.tar.Z">
-ftp://ftp.ebi.ac.uk/pub/databases/transfac/transfac32.tar.Z</a>
-
-<p>
-
-The 'site.dat' data file from TRANSFAC contains information on individual
-(putatively) regulatory protein binding sites.  It has been divided into
-the following taxonomic groups. 
-
-<p>
-
-<ul>
-<li>Fungi
-<li>Insects
-<li>Plants
-<li>Vertebrates
-<li>Other
-</ul>
-<p>
+<p><b>tfscan</b> scans one or more DNA sequences for transcription factor binding sites from the TRANSFAC database.    The taxonomic group (Fungi, Insects, ,Plants, Vertebrates or Other) is specified.  Matches are searched for using fast sequence word-matching, optionally allowing mismatches.  Because the binding sites are so small, there will be many spurious (false positive) matches. Optionally, the minimum length of a match to be reported may be specified.</p>
+<p>An output file is written with information on the matches, including sequence ID and accession number, the start and end positions of the match in an input sequence and the sequence of the region where a match has been found. Binding factor information, where available, is given at the end of the matches for each matching entry.</p>
 
 
 
-The program <b>tfscan</b> takes a sequence and the name of one of these
-taxonomic groups and does a fast match of the TRANSFAC sequences against
-the input sequence (optionally allowing mismatches). 
-
-<p>
-
-The results is a list of the positions which match the binding sites in
-the TRANSFAC SITE database. 
-
-<p>
-
-Because the binding sites are so small, there will be many spurious
-(false positive) matches. 
-
-<p>
 
 
 <H2>
@@ -158,7 +118,18 @@ in order to set these files up from the TRANSFAC distribution files.
     Notes
 </H2>
 
-None.
+<p>The TRANSFAC Database is a commercial database of eukaryotic cis-acting regulatory DNA elements and trans-acting factors. It covers the whole range from yeast to human.  The <tt>site.dat</tt> data file from TRANSFAC contains information on individual (putatively) regulatory protein binding sites. It has been divided into the following taxonomic groups.</p>
+<ul>
+<li>Fungi
+<li>Insects
+<li>Plants
+<li>Vertebrates
+<li>Other
+</ul>
+<p>An old public domain version of  TRANSFAC is available at: <a href="ftp://ftp.ebi.ac.uk/pub/databases/transfac/transfac32.tar.Z">ftp://ftp.ebi.ac.uk/pub/databases/transfac/transfac32.tar.Z</a></p>
+
+
+
 
 <H2>
     References

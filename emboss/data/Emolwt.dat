@@ -1,0 +1,41 @@
+# Molecular weights of amino acids
+#
+# Value for Selenocysteine calculated from Cysteine by replacing S
+# with Se.
+#
+# J is an ambiguity code for Isoleucine or Leucine for Mass Spec data
+#
+# O is pyrrolysine in Archaea. Molecular weight from Expasy FindMod.
+#
+
+Mol       Average     Monoisotopic
+
+A 	   71.0786     71.0371
+B 	  114.5960    114.5349
+C 	  103.1386    103.0092
+D 	  115.0884    115.0269
+E 	  129.1152    129.0426
+F 	  147.1762    147.0684
+G 	   57.0518     57.0215
+H 	  137.1408    137.0589
+I 	  113.1590    113.0841
+J	  113.1590    113.0841
+K	  128.1736    128.0950
+L 	  113.1590    113.0841
+# If met gets oxidised to the sulphoxide replace by 147.1926
+M 	  131.1926    131.0405
+N 	  114.1036    114.0429
+O	  109.1300    109.0528
+P 	   97.1164     97.0528
+Q	  128.1304    128.0586
+R 	  156.1870    156.1011
+S	   87.0780     87.0320
+T	  101.1048    101.0479
+U         150.0326    150.9536    
+V	   99.1322     99.0684
+W	  186.2128    186.0793
+X	  144.0000    144.0000
+Y	  163.1756    163.0633
+Z 	  128.6228    128.5506
+Hydrogen    1.0079      1.0078
+Oxygen     15.9994     15.9949

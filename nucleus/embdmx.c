@@ -1349,14 +1349,9 @@ AjBool embDmxSeqNR(const AjPList input, AjPUint *keep, ajint *nset,
 	    embAlignPathCalc(p,q,ajUintGet(lens,x),ajUintGet(lens,y), gapopen,
 			     gapextend,path,sub,cvt,compass,show);
 
-	    embAlignScoreNWMatrix(path,inseqs[x]->Seq,inseqs[y]->Seq,sub,cvt,
-				  ajUintGet(lens,x), ajUintGet(lens,y),gapopen,
-				  compass,gapextend,&start1,&start2);
-
 	    embAlignWalkNWMatrix(path,inseqs[x]->Seq,inseqs[y]->Seq,&m,&n,
 				 ajUintGet(lens,x),ajUintGet(lens,y),
-				 &start1,&start2,gapopen,gapextend,cvt,
-				 compass,sub);
+				 &start1,&start2,gapopen,gapextend,compass);
 
 	    embAlignCalcSimilarity(m,n,sub,cvt,ajUintGet(lens,x),
 				   ajUintGet(lens,y),&id,&sim,&idx, &simx);
@@ -1628,14 +1623,9 @@ AjBool embDmxSeqNRRange(const AjPList input, AjPUint *keep, ajint *nset,
 	    embAlignPathCalc(p,q,ajUintGet(lens,x),ajUintGet(lens,y), gapopen,
 			     gapextend,path,sub,cvt,compass,show);
 
-	    embAlignScoreNWMatrix(path,inseqs[x]->Seq,inseqs[y]->Seq,sub,cvt,
-				  ajUintGet(lens,x), ajUintGet(lens,y),gapopen,
-				  compass,gapextend,&start1,&start2);
-
 	    embAlignWalkNWMatrix(path,inseqs[x]->Seq,inseqs[y]->Seq,&m,&n,
 				 ajUintGet(lens,x),ajUintGet(lens,y),
-				 &start1,&start2,gapopen,gapextend,cvt,
-				 compass,sub);
+				 &start1,&start2,gapopen,gapextend,compass);
 
 	    embAlignCalcSimilarity(m,n,sub,cvt,ajUintGet(lens,x),
 				   ajUintGet(lens,y),&id,&sim,&idx, &simx);
@@ -1895,14 +1885,9 @@ AjBool embDmxSeqCompall(const AjPList input, AjPFloat2d *scores,
 	    embAlignPathCalc(p,q,ajUintGet(lens,x),ajUintGet(lens,y), gapopen,
 			     gapextend,path,sub,cvt,compass,show);
 
-	    embAlignScoreNWMatrix(path,inseqs[x],inseqs[y],sub,cvt,
-				  ajUintGet(lens,x), ajUintGet(lens,y),gapopen,
-				  compass,gapextend,&start1,&start2);
-
 	    embAlignWalkNWMatrix(path,inseqs[x],inseqs[y],&m,&n,
 				 ajUintGet(lens,x),ajUintGet(lens,y),
-				 &start1,&start2,gapopen,gapextend,cvt,
-				 compass,sub);
+				 &start1,&start2,gapopen,gapextend,compass);
 
 	    embAlignCalcSimilarity(m,n,sub,cvt,ajUintGet(lens,x),
 				   ajUintGet(lens,y),&id,&sim,&idx, &simx);
@@ -1983,7 +1968,7 @@ AjPList  embDmxScophitReadAllFasta(AjPFile inf)
     type     = ajStrNew();
     
 
-    while((ok = ajFileReadLine(inf,&line)))
+    while((ok = ajReadlineTrim(inf,&line)))
     {
 	if(ajStrPrefixC(line,">"))
 	{

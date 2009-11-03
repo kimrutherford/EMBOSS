@@ -19,47 +19,15 @@ hmoment
     Description
 </H2>
 
-<b>hmoment</b> plots or writes out the hydrophobic moment.  Hydrophic
-moment is the hydrophobicity of a peptide measured for a specified angle
-of rotation per residue. 
+<p><b>hmoment</b> plots or writes out the hydrophobic moment calculated for overlapping windows over one or more input protein sequences. The hydrophic moment reflects the periodicity of hydrophobicity of a peptide, as measured per residue for a specified angle of rotation. The window size, alpha helix angle, and beta sheet angle are user-specified.  The alpha helix moment and beta sheet moment may be plotted or output.</p>
 
-<p>
 
-Periodicities in the polar/apolar character of the amino acid sequence
-of a protein can be examined by assigning to each residue a numerical
-hydrophobicity and searching for periodicity in the resulting
-one-dimensional function.  The strength of each periodic component is
-the quantity that has been termed the hydrophobic moment. 
+<H2>
+Algorithm
+</H2>
 
-<p>
 
-When proteins of known three-dimensional structure are examined, it is
-found that sequences that form alpha helices tend to have, on average, a
-strong periodicity in the hydrophobicity of af 3.6 residues, the period
-of the alpha helix. The angle of rotation per residue in alpha helices is 
-100 degrees.
-
-Similarly, many sequences that form strands of beta sheets tend to have
-a periodicity in their hydrophobicity of about 2.3 residues, the period
-typical of beta structure.  The angle of rotation per residue in beta
-sheets is 160 degrees. 
-
-This means that many protein sequences tend to form the periodic
-structure that maximizes their amphiphilicity. 
-
-<p>
-
-The hydrophobic moment is measured within a moving window using the method
-of Eisenberg et al.  The default angle of 100 degrees is used for the
-alpha-helix results and the default of 160 degrees is used for the
-beta-sheet results.  These angles can be changed if required using the
-appropriate options. 
-
-<p>
-
-<b>hmoment</b> can plot two graphs when the option '-double' is given,
-one for the alpha helix moment and one for the beta sheet moment. 
-Otherwise it just plots the alpha helix moment.
+<p>The hydrophobic moment is measured within a moving window using the method of Eisenberg et al. The default angle of 100 degrees is used for the alpha-helix results and the default of 160 degrees is used for the beta-sheet results. These angles can be changed if required using the appropriate options.</p>
 
 <H2>
     Usage
@@ -119,7 +87,11 @@ None.
     Notes
 </H2>
 
-None.
+<p>When proteins of known three-dimensional structure are examined, it is found that sequences that form alpha helices tend to have, on average, a strong periodicity in the hydrophobicity of af 3.6 residues, the period of the alpha helix. The angle of rotation per residue in alpha helices is 100 degrees. Similarly, many sequences that form strands of beta sheets tend to have a periodicity in their hydrophobicity of about 2.3 residues, the period typical of beta structure. The angle of rotation per residue in beta sheets is 160 degrees. This means that many protein sequences tend to form the periodic structure that maximizes their amphiphilicity.</p>
+<p>Periodicities in the polar/apolar character of the amino acid sequence of a protein can be examined by assigning to each residue a numerical hydrophobicity and searching for periodicity in the resulting one-dimensional function. The strength of each periodic component is the quantity that has been termed the hydrophobic moment.</p>
+
+<p>The <tt>-plot</tt> option must be specified to produce a plot. <b>hmoment</b> can plot two graphs when the option <tt>-double</tt> is given, one for the alpha helix moment and one for the beta sheet moment. Otherwise it just plots the alpha helix moment.</p>
+
 
 <H2>
     References

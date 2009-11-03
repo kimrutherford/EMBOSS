@@ -83,8 +83,8 @@ int main(int argc, char **argv)
 
     sequence = ajAcdGetSeq("sequence");
     report   = ajAcdGetReport("outfile");
-    full     = ajAcdGetBool("full");
-    prune    = ajAcdGetBool("prune");
+    full     = ajAcdGetBoolean("full");
+    prune    = ajAcdGetBoolean("prune");
 
     ajSeqFmtUpper(sequence);		/* prosite regexs are all upper case */
     tab = ajFeattableNewSeq(sequence);
@@ -96,7 +96,7 @@ int main(int argc, char **argv)
     redatanew = ajStrNewC("PROSITE/prosite.lines");
     docdata   = ajStrNewC("PROSITE/");
 
-    ajFileDataNew(redatanew, &inf);
+    inf = ajDatafileNewInNameS(redatanew);
     if(!inf)
 	ajFatal("Either EMBOSS_DATA undefined or PROSEXTRACT needs running");
 
@@ -105,7 +105,7 @@ int main(int argc, char **argv)
     ajFmtPrintAppS(&tmpstr, "Data_file: %F\n", inf);
     ajReportSetHeader(report, tmpstr);
 
-    while(ajFileReadLine(inf, &regexp))
+    while(ajReadlineTrim(inf, &regexp))
     {
 	p=ajStrGetPtr(regexp);
 	if(*p && *p!=' ' && *p!='^')
@@ -121,7 +121,7 @@ int main(int argc, char **argv)
 		   ajStrMatchCaseC(name,"tyr_phospho_site"))
 		{
 		    for(i=0;i<4;++i)
-			ajFileReadLine(inf, &regexp);
+			ajReadlineTrim(inf, &regexp);
 		    continue;
 		}
 	    p=ajSysFuncStrtok(NULL," ");
@@ -173,7 +173,7 @@ int main(int argc, char **argv)
 	    {
 		ajStrAssignC(&redatanew,ajStrGetPtr(docdata));
 		ajStrAppendC(&redatanew,ajStrGetPtr(accession));
-		ajFileDataNew(redatanew, &inf2);
+		inf2 = ajDatafileNewInNameS(redatanew);
 		if(!inf2)
 		    continue;
 
@@ -183,7 +183,7 @@ int main(int argc, char **argv)
 		*/
 		ajFmtPrintAppS(&tailstr, "Motif: %S\n", name);
 		ajFmtPrintAppS(&tailstr, "Count: %d\n\n", number);
-		while(ajFileReadLine(inf2, &text))
+		while(ajReadlineTrim(inf2, &text))
 		    ajFmtPrintAppS(&tailstr, "%S\n", text);
 
 		ajFmtPrintAppS(&tailstr, "\n***************\n\n");

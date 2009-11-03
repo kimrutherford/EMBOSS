@@ -24,14 +24,10 @@ package org.emboss.jemboss.gui.sequenceChooser;
 
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.filechooser.*;
 import java.awt.event.*;
-import javax.swing.border.*;
 import java.io.*;
 
 import org.emboss.jemboss.gui.form.*;
-import org.emboss.jemboss.gui.AdvancedOptions;
 import org.emboss.jemboss.JembossParams;
 
 /**
@@ -97,7 +93,7 @@ public class FileChooser
         if (returnVal == JFileChooser.APPROVE_OPTION) 
         {
           String fileSelected = fc.getSelectedFile().getAbsolutePath();
-          String currentDirectory = fc.getCurrentDirectory().getPath();
+          //String currentDirectory = fc.getCurrentDirectory().getPath();
           fileName.setText(fileSelected);
         }
       }

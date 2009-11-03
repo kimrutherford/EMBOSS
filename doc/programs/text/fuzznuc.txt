@@ -5,16 +5,20 @@
 
 Function
 
-   Nucleic acid pattern search
+   Search for patterns in nucleotide sequences
 
 Description
 
-   fuzznuc uses PROSITE style patterns to search nucleotide sequences.
+   fuzznuc searches for a specified PROSITE-style pattern in nucleotide
+   sequences. Such patterns are specifications of a (typically short)
+   length of sequence to be found. They can specify a search for an exact
+   sequence or they can allow various ambiguities, matches to variable
+   lengths of sequence and repeated subsections of the sequence. One or
+   more nucleotide sequences are read from file. The output is a standard
+   EMBOSS report file that includes data such as location and score of
+   any matches.
 
-   Patterns are specifications of a (typically short) length of sequence
-   to be found. They can specify a search for an exact sequence or they
-   can allow various ambiguities, matches to variable lengths of sequence
-   and repeated subsections of the sequence.
+Algorithm
 
    fuzznuc intelligently selects the optimum searching algorithm to use,
    depending on the complexity of the search pattern specified.
@@ -25,7 +29,7 @@ Usage
 
 
 % fuzznuc 
-Nucleic acid pattern search
+Search for patterns in nucleotide sequences
 Input nucleotide sequence(s): tembl:L46634
 Search pattern: AAGCTT
 Output report [l46634.fuzznuc]: 
@@ -37,7 +41,7 @@ Output report [l46634.fuzznuc]:
 
 
 % fuzznuc 
-Nucleic acid pattern search
+Search for patterns in nucleotide sequences
 Input nucleotide sequence(s): tembl:L46634
 Search pattern: @nucseq.pat
 Output report [l46634.fuzznuc]: 
@@ -49,7 +53,7 @@ Output report [l46634.fuzznuc]:
 
 
 % fuzznuc -pname test 
-Nucleic acid pattern search
+Search for patterns in nucleotide sequences
 Input nucleotide sequence(s): tembl:L46634
 Search pattern: @nucsimple.pat
 Output report [l46634.fuzznuc]: 
@@ -61,7 +65,7 @@ Output report [l46634.fuzznuc]:
 
 
 % fuzznuc 
-Nucleic acid pattern search
+Search for patterns in nucleotide sequences
 Input nucleotide sequence(s): tembl:L46634
 Search pattern: @nuc.pat
 Output report [l46634.fuzznuc]: 
@@ -140,14 +144,16 @@ Command line arguments
    -raccshow2          boolean    Show accession number in the report
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
+   -rstrandshow2       boolean    Show the nucleotide strand in the report
    -rusashow2          boolean    Show the full USA in the report
    -rmaxall2           integer    Maximum total hits to report
    -rmaxseq2           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -315,7 +321,7 @@ cggc(2,4)taac(2,5)
      * A period ends the pattern. (Optional in fuzznuc).
      * All other characters, including spaces are not allowed.
 
-   For example, in the EMBL entry ECLAC you can look for the pattern:
+   For example, in the EMBL entry J01636 you can look for the pattern:
 
 [CG](5)TG{A}N(1,5)C
 
@@ -353,7 +359,7 @@ Output file format
 
 ########################################
 # Program: fuzznuc
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: fuzznuc
 #    -sequence tembl:L46634
 #    -pattern AAGCTT
@@ -373,9 +379,9 @@ Output file format
 #
 #=======================================
 
-  Start     End Pattern_name Mismatch Sequence
-      1       6 pattern1            . aagctt
-   1267    1272 pattern1            . aagctt
+  Start     End  Strand Pattern_name Mismatch Sequence
+      1       6       + pattern1            . aagctt
+   1267    1272       + pattern1            . aagctt
 
 #---------------------------------------
 #---------------------------------------
@@ -391,7 +397,7 @@ Output file format
 
 ########################################
 # Program: fuzznuc
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: fuzznuc
 #    -sequence tembl:L46634
 #    -pattern @../../data/nucseq.pat
@@ -411,9 +417,9 @@ Output file format
 #
 #=======================================
 
-  Start     End Pattern_name Mismatch Sequence
-    429     448 targetseq           . cggccctaaccctagcccta
-    491     510 targetseq           . cggccctaaccctagcccta
+  Start     End  Strand Pattern_name Mismatch Sequence
+    429     448       + targetseq           . cggccctaaccctagcccta
+    491     510       + targetseq           . cggccctaaccctagcccta
 
 #---------------------------------------
 #---------------------------------------
@@ -429,7 +435,7 @@ Output file format
 
 ########################################
 # Program: fuzznuc
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: fuzznuc
 #    -pname test
 #    -sequence tembl:L46634
@@ -451,20 +457,20 @@ Output file format
 #
 #=======================================
 
-  Start     End Pattern_name Mismatch Sequence
-    429     438 test1               . cggccctaac
-    491     500 test1               . cggccctaac
-    535     544 test1               . cggccctaac
-    605     614 test1               . cggccctaac
-    631     640 test1               . cggccctaac
-    695     704 test1               . cggccctaac
-    721     730 test1               . cggccctaac
-    753     762 test1               . cggccctaac
-    293     302 test2               . cctagcccta
-    439     448 test2               . cctagcccta
-    469     478 test2               . cctagcccta
-    501     510 test2               . cctagcccta
-    801     810 test2               . cctagcccta
+  Start     End  Strand Pattern_name Mismatch Sequence
+    429     438       + test1               . cggccctaac
+    491     500       + test1               . cggccctaac
+    535     544       + test1               . cggccctaac
+    605     614       + test1               . cggccctaac
+    631     640       + test1               . cggccctaac
+    695     704       + test1               . cggccctaac
+    721     730       + test1               . cggccctaac
+    753     762       + test1               . cggccctaac
+    293     302       + test2               . cctagcccta
+    439     448       + test2               . cctagcccta
+    469     478       + test2               . cctagcccta
+    501     510       + test2               . cctagcccta
+    801     810       + test2               . cctagcccta
 
 #---------------------------------------
 #---------------------------------------
@@ -480,7 +486,7 @@ Output file format
 
 ########################################
 # Program: fuzznuc
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: fuzznuc
 #    -sequence tembl:L46634
 #    -pattern @../../data/nuc.pat
@@ -502,26 +508,26 @@ Output file format
 #
 #=======================================
 
-  Start     End Pattern_name Mismatch Sequence
-    429     448 pat1                . cggccctaaccctagcccta
-    491     510 pat1                . cggccctaaccctagcccta
-    429     448 pat2                . cggccctaaccctagcccta
-    491     510 pat2                . cggccctaaccctagcccta
-    535     554 pat2                1 cggccctaaccctaacccta
-    605     624 pat2                1 cggccctaaccctaacccta
-    631     650 pat2                1 cggccctaaccctaacccta
-    695     714 pat2                1 cggccctaaccctaacccta
-    721     740 pat2                1 cggccctaaccctaacccta
-    753     772 pat2                1 cggccctaaccctaacccta
-    791     810 pat2                1 cggcccgaaccctagcccta
-    753     764 pat3                . cggccctaaccc
-    721     732 pat3                . cggccctaaccc
-    695     706 pat3                . cggccctaaccc
-    631     642 pat3                . cggccctaaccc
-    605     616 pat3                . cggccctaaccc
-    535     546 pat3                . cggccctaaccc
-    491     502 pat3                . cggccctaaccc
-    429     440 pat3                . cggccctaaccc
+  Start     End  Strand Pattern_name Mismatch Sequence
+    429     448       + pat1                . cggccctaaccctagcccta
+    491     510       + pat1                . cggccctaaccctagcccta
+    429     448       + pat2                . cggccctaaccctagcccta
+    491     510       + pat2                . cggccctaaccctagcccta
+    535     554       + pat2                1 cggccctaaccctaacccta
+    605     624       + pat2                1 cggccctaaccctaacccta
+    631     650       + pat2                1 cggccctaaccctaacccta
+    695     714       + pat2                1 cggccctaaccctaacccta
+    721     740       + pat2                1 cggccctaaccctaacccta
+    753     772       + pat2                1 cggccctaaccctaacccta
+    791     810       + pat2                1 cggcccgaaccctagcccta
+    753     764       + pat3                . cggccctaaccc
+    721     732       + pat3                . cggccctaaccc
+    695     706       + pat3                . cggccctaaccc
+    631     642       + pat3                . cggccctaaccc
+    605     616       + pat3                . cggccctaaccc
+    535     546       + pat3                . cggccctaaccc
+    491     502       + pat3                . cggccctaaccc
+    429     440       + pat3                . cggccctaaccc
 
 #---------------------------------------
 #---------------------------------------
@@ -561,10 +567,11 @@ Known bugs
 
 See also
 
-   Program name                    Description
-   dreg         Regular expression search of a nucleotide sequence
-   fuzztran     Protein pattern search after translation
-   marscan      Finds MAR/SAR sites in nucleic sequences
+   Program name Description
+   dreg Regular expression search of nucleotide sequence(s)
+   fuzztran Search for patterns in protein sequences (translated)
+   marscan Finds matrix/scaffold recognition (MRS) signatures in DNA
+   sequences
 
    Other EMBOSS programs allow you to search for regular expression
    patterns but may be less easy for the user who has never used regular

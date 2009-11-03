@@ -5,9 +5,9 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>embossversion </b>
-Writes the current EMBOSS version number
+Writes the current EMBOSS version number to a file
 
-4.1.0
+6.0.0
 
 </pre></td></tr></table><p>
 <p>

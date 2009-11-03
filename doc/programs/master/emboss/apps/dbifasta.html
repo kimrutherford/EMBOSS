@@ -26,32 +26,6 @@ the EMBL database CD-ROM distribution and by the Staden package in
 addition to EMBOSS, and appears to be the most generally used and
 publicly available index file format for these databases.
 
-<p>
-
-Having created the EMBOSS indices for this file, a database can then be
-defined in the file <b>emboss.defaults</b> as something like:
-
-<pre>
-DB emrod [
-   type: N
-   format: fasta
-   method: emblcd
-   directory: /data/embl/fasta
-]  
-</pre>
-
-
-<h3>Fields Indexed</H3>
-
-By default, <b>dbifasta</b> will index the ID name and the accession
-number (if present). 
-
-<br>
-
-If they are present in your database, you may also specify that
-<b>dbifasta</b> should index the Sequence Version and GI number and the
-words in the description by using the '-fields' qualifier with the
-appropriate values.                                                
 
 
 <H2>
@@ -131,6 +105,35 @@ None.
 The indexing method depends on each entry having a unique entry name.
 No allowance is made for two entries with the same name so it is
 not possible to index EMBL and EMBLNEW together.
+
+
+<p>
+
+Having created the EMBOSS indices for this file, a database can then be
+defined in the file <b>emboss.defaults</b> as something like:
+
+<pre>
+DB emrod [
+   type: N
+   format: fasta
+   method: emblcd
+   directory: /data/embl/fasta
+]  
+</pre>
+
+
+<h3>Fields Indexed</H3>
+
+By default, <b>dbifasta</b> will index the ID name and the accession
+number (if present). 
+
+<br>
+
+If they are present in your database, you may also specify that
+<b>dbifasta</b> should index the Sequence Version and GI number and the
+words in the description by using the '-fields' qualifier with the
+appropriate values.                                                
+
 
 <H2>
     References

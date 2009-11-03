@@ -37,21 +37,21 @@
 <td>-filenames</td>
 <td>Wildcard database filename</td>
 <td>Any string is accepted</td>
-<td>*.dat</td>
+<td>*.fasta</td>
 </tr>
 
 <tr>
-<td>-release</td>
-<td>Release number</td>
-<td>Any string up to 9 characters</td>
-<td>0.0</td>
+<td>-fields</td>
+<td>Index fields</td>
+<td><table><tr><td>id</td> <td><i>(ID)</i></td></tr><tr><td>acc</td> <td><i>(Accession number)</i></td></tr><tr><td>sv</td> <td><i>(Sequence Version and GI)</i></td></tr><tr><td>des</td> <td><i>(Description)</i></td></tr></table></td>
+<td>id,acc</td>
 </tr>
 
 <tr>
-<td>-date</td>
-<td>Index date</td>
-<td>Date string dd/mm/yy</td>
-<td>00/00/00</td>
+<td>-outfile</td>
+<td>General log output file</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.dbxfasta</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -71,10 +71,17 @@
 </tr>
 
 <tr>
-<td>-fields</td>
-<td>Index fields</td>
-<td><table><tr><td>id</td> <td><i>(ID)</i></td></tr><tr><td>acc</td> <td><i>(Accession number)</i></td></tr><tr><td>sv</td> <td><i>(Sequence Version and GI)</i></td></tr><tr><td>des</td> <td><i>(Description)</i></td></tr></table></td>
-<td>id,acc</td>
+<td>-release</td>
+<td>Release number</td>
+<td>Any string up to 9 characters</td>
+<td>0.0</td>
+</tr>
+
+<tr>
+<td>-date</td>
+<td>Index date</td>
+<td>Date string dd/mm/yy</td>
+<td>00/00/00</td>
 </tr>
 
 <tr>

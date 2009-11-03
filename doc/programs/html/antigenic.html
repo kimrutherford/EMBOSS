@@ -34,23 +34,16 @@ Finds antigenic sites in proteins
 </H2>
 
 
-Antigenic predicts potentially antigenic regions of a protein
-sequence, using the method of Kolaskar and Tongaonkar.
+<p><B>Antigenic</B> predicts potentially <b>antigenic</b> regions of a protein sequence, using the method of Kolaskar and Tongaonkar. This method is based on a single parameter and thus very simple to use.</p>
 
-<p>
 
-Analysis of data from experimentally determined antigenic sites on
-proteins has revealed that the hydrophobic residues Cys, Leu and Val, if
-they occur on the surface of a protein, are more likely to be a part of
-antigenic sites.  A semi-empirical method which makes use of
-physicochemical properties of amino acid residues and their frequencies
-of occurrence in experimentally known segmental epitopes was developed
-by Kolaskar and Tongaonkar
-to predict antigenic determinants on proteins.  Application of this
-method to a large number of proteins has shown that their method can
-predict antigenic determinants with about 75% accuracy which is better
-than most of the known methods.  This method is based on a single
-parameter and thus very simple to use. 
+<H2>
+    Algorithm
+</H2>
+
+<p>Analysis of data from experimentally determined <b>antigenic</b> sites on proteins has revealed that the hydrophobic residues Cys, Leu and Val, if they occur on the surface of a protein, are more likely to be a part of <b>antigenic</b> sites.  The method of Kolaskar and Tongaonkar to predict <b>antigenic</b> determinants in proteins is semi-empirical and makes use of physicochemical properties of amino acid residues and their frequencies of occurrence in experimentally known segmental epitopes.</p>
+
+
 
 <H2>
     Usage
@@ -140,14 +133,16 @@ IT IS DONE FOR YOU.
    -raccshow2          boolean    Show accession number in the report
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
+   -rstrandshow2       boolean    Show the nucleotide strand in the report
    -rusashow2          boolean    Show the full USA in the report
    -rmaxall2           integer    Maximum total hits to report
    -rmaxseq2           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -346,7 +341,7 @@ By default <b>antigenic</b> writes a 'motif' report file.
 <pre>
 ########################################
 # Program: antigenic
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: antigenic
 #    -sequence tsw:actb1_fugru
 # Report_format: motif
@@ -366,24 +361,28 @@ Max_score_pos at "*"
  Sequence: EKLCYVALD
            |       |
          214       222
+ Max_score_pos: 218
 
 (2) Score 1.187 length 15 at residues 131-&gt;145
                  *
  Sequence: AMYVAIQAVLSLYAS
            |             |
          131             145
+ Max_score_pos: 137
 
 (3) Score 1.166 length 8 at residues 5-&gt;12
               *
  Sequence: IAALVVDN
            |      |
            5      12
+ Max_score_pos: 8
 
 (4) Score 1.164 length 12 at residues 27-&gt;38
                 *
  Sequence: PRAVFPSIVGRP
            |          |
           27          38
+ Max_score_pos: 32
 
 (5) Score 1.136 length 24 at residues 160-&gt;183
                         *
@@ -391,60 +390,56 @@ Max_score_pos at "*"
            |                      |
          160                      183
 
-(6) Score 1.135 length 6 at residues 367-&gt;372
-                *
- Sequence: PSIVHR
-
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-(11) Score 1.102 length 15 at residues 62-&gt;76
-                 *
- Sequence: RGILTLKYPIEHGIV
-           |             |
-          62             76
-
-(12) Score 1.086 length 19 at residues 232-&gt;250
                         *
  Sequence: SSSSLEKSYELPDGQVITI
            |                 |
          232                 250
+ Max_score_pos: 245
 
 (13) Score 1.083 length 6 at residues 327-&gt;332
               *
  Sequence: IKIIAP
            |    |
          327    332
+ Max_score_pos: 330
 
 (14) Score 1.074 length 7 at residues 317-&gt;323
               *
  Sequence: ITALAPS
            |     |
          317     323
+ Max_score_pos: 320
 
 (15) Score 1.068 length 7 at residues 186-&gt;192
                 *
  Sequence: TDYLMKI
            |     |
          186     192
+ Max_score_pos: 191
 
 (16) Score 1.066 length 7 at residues 40-&gt;46
               *
  Sequence: HQGVMVG
            |     |
           40     46
+ Max_score_pos: 43
 
 (17) Score 1.045 length 7 at residues 269-&gt;275
            *
  Sequence: MESCGIH
            |     |
          269     275
+ Max_score_pos: 269
 
 (18) Score 1.034 length 7 at residues 51-&gt;57
             *
  Sequence: DSYVGDE
            |     |
           51     57
+ Max_score_pos: 52
 
 
 #---------------------------------------
@@ -458,7 +453,7 @@ Max_score_pos at "*"
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ##gff-version 2.0
-##date 2006-07-15
+##date 2007-07-15
 ##Type Protein ACTB1_FUGRU
 ACTB1_FUGRU	antigenic	region	214	222	1.207	+	.	Sequence "ACTB1_FUGRU.1" ; note "*pos 218"
 ACTB1_FUGRU	antigenic	region	131	145	1.187	+	.	Sequence "ACTB1_FUGRU.2" ; note "*pos 137"
@@ -565,6 +560,7 @@ Total          2066         5340        7944
 <H2>
     Notes
 </H2>
+<p>Application of this method to a large number of proteins has shown that their method can predict <b>antigenic</b> determinants with about 75% accuracy which is better than most of the known methods.</p>
 
 
 <H2>
@@ -614,10 +610,11 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="digest.html">digest</a></td>
-<td>Protein proteolytic enzyme or reagent cleavage digest</td>
+<td>Reports on protein proteolytic enzyme or reagent cleavage sites</td>
 </tr>
 
 <tr>
@@ -627,52 +624,52 @@ None.
 
 <tr>
 <td><a href="fuzzpro.html">fuzzpro</a></td>
-<td>Protein pattern search</td>
+<td>Search for patterns in protein sequences</td>
 </tr>
 
 <tr>
 <td><a href="fuzztran.html">fuzztran</a></td>
-<td>Protein pattern search after translation</td>
+<td>Search for patterns in protein sequences (translated)</td>
 </tr>
 
 <tr>
 <td><a href="helixturnhelix.html">helixturnhelix</a></td>
-<td>Report nucleic acid binding motifs</td>
+<td>Identify nucleic acid-binding motifs in protein sequences</td>
 </tr>
 
 <tr>
 <td><a href="oddcomp.html">oddcomp</a></td>
-<td>Find protein sequence regions with a biased composition</td>
+<td>Identify proteins with specified sequence word composition</td>
 </tr>
 
 <tr>
 <td><a href="patmatdb.html">patmatdb</a></td>
-<td>Search a protein sequence with a motif</td>
+<td>Searches protein sequences with a sequence motif</td>
 </tr>
 
 <tr>
 <td><a href="patmatmotifs.html">patmatmotifs</a></td>
-<td>Search a PROSITE motif database with a protein sequence</td>
+<td>Scan a protein sequence with motifs from the PROSITE database</td>
 </tr>
 
 <tr>
 <td><a href="pepcoil.html">pepcoil</a></td>
-<td>Predicts coiled coil regions</td>
+<td>Predicts coiled coil regions in protein sequences</td>
 </tr>
 
 <tr>
 <td><a href="preg.html">preg</a></td>
-<td>Regular expression search of a protein sequence</td>
+<td>Regular expression search of protein sequence(s)</td>
 </tr>
 
 <tr>
 <td><a href="pscan.html">pscan</a></td>
-<td>Scans proteins using PRINTS</td>
+<td>Scans protein sequence(s) with fingerprints from the PRINTS database</td>
 </tr>
 
 <tr>
 <td><a href="sigcleave.html">sigcleave</a></td>
-<td>Reports protein signal cleavage sites</td>
+<td>Reports on signal cleavage sites in a protein sequence</td>
 </tr>
 
 </table>

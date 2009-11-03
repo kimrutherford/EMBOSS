@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>printsextract </b>
-Extract data from PRINTS
+Extract data from PRINTS database for use by pscan
 PRINTS database file: <b>prints.test</b>
 
 </pre></td></tr></table><p>

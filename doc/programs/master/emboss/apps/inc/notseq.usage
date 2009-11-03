@@ -7,7 +7,7 @@ In this case the excluded sequences (myg_phyca and lgb2_luplu) are not saved to 
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>notseq </b>
-Exclude a set of sequences and write out the remaining ones
+Write to file a subset of an input stream of sequences
 Input (gapped) sequence(s): <b>globins.fasta</b>
 Sequence names to exclude: <b>myg_phyca,lgb2_luplu</b>
 output sequence(s) [hbb_human.fasta]: <b>mydata.seq</b>
@@ -25,7 +25,7 @@ Here is an example where the sequences to be excluded are saved to another file:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>notseq -junkout hb.seq </b>
-Exclude a set of sequences and write out the remaining ones
+Write to file a subset of an input stream of sequences
 Input (gapped) sequence(s): <b>globins.fasta</b>
 Sequence names to exclude: <b>hb*</b>
 output sequence(s) [hbb_human.fasta]: <b>mydata.seq</b>

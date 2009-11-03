@@ -22,32 +22,15 @@ profit
     Description
 </H2>
 
-<b>profit</b> takes a simple frequency matrix produced by
-<b>prophecy</b> and searches with this to find matches in the input
-sequence(s) you are searching. 
+<p>profit scans one or more sequences with a simple frequency matrix and writes an output file with any high-scoring matches.  All possible ungapped alignments of each sequence to the matrix are scored and any matches with a score higher than the specified threshold are written to the output file.  The output file includes the name of any matching sequence found, the start position in the sequence of the match and the percentage of the maximum possible score.</p>
 
-<p>
 
-Scores for the matches are calculated from the simple frequency matrix. 
-It is the sum of scores at each position of the matrix.
+<H2>
+Algorithm
+</H2>
+<p>All possible ungapped alignments of each sequence to the frequency matrix are scored. The first alignment has the first positions of the sequence and matrix in the same register.  If the sequence is larger than the matrix, there will be more than one alignment.  Otherwise, there will be just one.</p>
+<p>The score for a match is simply the sum of scores at each position of the matrix for the corresponding residue from the sequence.  The percentage of the maximum possible score reported in the output file is the sum of the highest value at each position in the frequency matrix. Where the match score is above the threshold percentage of the maximum possible score for that matrix, then a hit is reported.</p>
 
-<p>
-
-A 'simple frequency matrix' is simply a count of the number of times any
-particular amino acid occurs at each position in the alignment used to
-create it.  Simple frequency matrices are created using the program
-<b>prophecy</b> with the option '-type F' to create the correct type of
-matrix. The alignment should not have gaps in it.
-
-<p>
-
-The resulting matrix is moved to each position in the sequence(s) you
-are searching.  At each position in the sequence, the frequencies of the
-amino acids or bases covered by the length of the matrix is read from
-the matrix.  The sum of these frequencies at each position of the matrix
-is the score for that position of the sequence.  If this score is above
-the threshold percentage of the maximum possible score for that matrix,
-then a hit is reported. 
 
 
 <H2>
@@ -152,7 +135,7 @@ None.
     Notes
 </H2>
 
-None.
+<p>A 'simple frequency matrix' is simply a table containing a count of the number of times any particular amino acid occurs at each position in the sequence alignment from which it was derived. Simple frequency matrices are created using the program prophecy with the option <tt>-type F</tt> to create the correct type of matrix. The input alignment should not have gaps in it.</p>
 
 <H2>
     References

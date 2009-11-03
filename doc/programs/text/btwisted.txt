@@ -5,13 +5,12 @@
 
 Function
 
-   Calculates the twisting in a B-DNA sequence
+   Calculate the twisting in a B-DNA sequence
 
 Description
 
-   btwisted takes a region of a pure DNA sequence and calculates by
-   simple arithmetic the probable overall twist of the sequence and the
-   stacking energy.
+   btwisted reads a pure DNA sequence and calculates by simple arithmetic
+   the probable overall twist of the sequence and the stacking energy.
 
 Usage
 
@@ -60,8 +59,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -254,16 +254,15 @@ Average stacking energy per dinucleotide: -8.97
 
 Data files
 
-   The program reads in two data files.
+   The program requires two data files. A file (Eangles.dat by default)
+   containing base pair twist angles, and another (Eenergy.dat)
+   containing base pair stacking energies. No check is made that all
+   dinucleotides are listed in the files and so read for their energy and
+   twist. Attempting to run btwisted with an incomplete data file will
+   result a fatal error if the sequence contains a dinucleotide not in
+   the data files.
 
-   The first is prompted for by:
-
-   "File containing base pair twist angles"
-
-   This is the data file 'Eangles.dat' by default.
-
-   This consists of the data:
-
+   Eangles.dat consists of the data:
 aa      35.6    0.1
 ac      34.4    1.3
 ag      27.7    1.5
@@ -281,13 +280,7 @@ tc      36.9    0.9
 tg      34.5    0.9
 tt      35.6    0.1
 
-   The second is prompted for by:
-
-   "File containing base pair stacking energies"
-   This is the data file 'Eenergy.dat' by default.
-
-   This consists of the data:
-
+   'Eenergy.dat' consists of the data:
 #base pair stacking energy for B-DNA
 aa      -5.37
 ac      -10.51
@@ -305,11 +298,6 @@ ta      -3.82
 tc      -9.81
 tg      -6.57
 tt      -5.37
-
-   No check is made that all dinucleotides have been read for the energy
-   and twist. Attempting to run btwisted with an incomplete data file
-   will result a fatal error if the sequence contains a dinucleotide not
-   in the data files.
 
    EMBOSS data files are distributed with the application and stored in
    the standard EMBOSS data directory, which is defined by the EMBOSS
@@ -370,15 +358,16 @@ Known bugs
 
 See also
 
-   Program name                        Description
-   banana       Bending and curvature plot in B-DNA
-   chaos        Create a chaos game representation plot for a sequence
-   compseq      Count composition of dimer/trimer/etc words in a sequence
-   dan          Calculates DNA RNA/DNA melting temperature
-   freak        Residue/base frequency table or plot
-   isochore     Plots isochores in large DNA sequences
+   Program name                           Description
+   banana       Plot bending and curvature data for B-DNA
+   chaos        Draw a chaos game representation plot for a nucleotide sequence
+   compseq      Calculate the composition of unique words in sequences
+   dan          Calculates nucleic acid melting temperature
+   density      Draw a nucleic acid density plot
+   freak        Generate residue/base frequency table or plot
+   isochore     Plots isochores in DNA sequences
    sirna        Finds siRNA duplexes in mRNA
-   wordcount    Counts words of a specified size in a DNA sequence
+   wordcount    Count and extract unique words in DNA sequence(s)
 
 Author(s)
 

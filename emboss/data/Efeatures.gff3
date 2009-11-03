@@ -2,6 +2,12 @@
 # Automatically extracted from sofa.definition 8 June 2006
 
 # SO:ke
+# A biological feature that can be attributed to a region of biological
+# sequence.
+
+located_sequence_feature SO:0000110
+
+# SO:ke
 # The reverse complement of the primary transcript.
 
 antisense_primary_transcript SO:0000645
@@ -359,12 +365,6 @@ inverted_repeat SO:0000294
 # A junction refers to an interbase location of zero in a sequence.
 
 junction SO:0000699
-
-# SO:ke
-# A biological feature that can be attributed to a region of biological
-# sequence.
-
-located_sequence_feature SO:0000110
 
 # SO:ke
 # A region of sequence, aligned to another sequence with some statistical
@@ -799,6 +799,7 @@ scRNA SO:0000013
 # A region where the sequences differs from that of a specified sequence.
 
 sequence_difference SO:0000413
+sequence_conflict   SO:0001085
 
 # SO:ke
 # A region of sequence where variation has been observed.
@@ -1180,3 +1181,5 @@ virtual_sequence SO:0000499
 
 Y_RNA SO:0000405
 
+
+####include Efeatures.gff

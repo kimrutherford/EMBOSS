@@ -1,5 +1,5 @@
 application: cpgplot [
-  documentation: "Plot CpG rich areas"
+  documentation: "Identify and plot CpG islands in nucleotide sequence(s)"
   groups: "Nucleic:CpG Islands"
 ]
 

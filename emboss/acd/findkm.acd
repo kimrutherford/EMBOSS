@@ -1,5 +1,5 @@
 application: findkm [
-  documentation: "Find Km and Vmax for an enzyme reaction"
+  documentation: "Calculate and plot enzyme reaction data"
   groups: "Enzyme Kinetics"
 ]
 

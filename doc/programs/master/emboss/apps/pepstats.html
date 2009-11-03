@@ -22,13 +22,8 @@ pepstats
     Description
 </H2>
 
-
-<b>pepstats</b> outputs a report of simple protein sequence
-information including:
-
-<p>
+<p><b>pepstats</b> reads one or more protein sequences and writes an output file with various statistics on the protein properties.  This includes:</p>
 <ul>
-
 <li>Molecular weight
 <li>Number of residues
 <li>Average residue weight
@@ -41,29 +36,8 @@ information including:
 <li>Extinction coefficient at 1 mg/ml (A280)
 </ul>
 
-<p>
 
-DayhoffStat is the amino acid's molar percentage divided by the Dayhoff
-statistic.  The Dayhoff statistic is the amino acid's relative occurence
-per 1000 aa normalised to 100 by rls@ebi.ac.uk (original work from 1993)
 
-<p>
-
-The probability of expression in inclusion bodies is sometimes
-referred to as a type of solubility measure. If, however, a
-recombinant protein is expressed in Escherichia coli, it can be
-expressed as soluble in the cytosol or insoluble in inclusion bodies. If
-the Harrison model predicts a given protein to be probably expressed
-in includion bodies, this doesn't mean that it is not possible to get
-it soluble in the cytosol. One example: Thermatoga maritima cell
-divison protein FtsA with a C-terminal His-Tag has a 58% Harrison
-probability of being expressed in inclusion bodies. However, there was
-plenty of soluble protein in the E. coli cytosol (F. van den Ent and
-J.  Lowe, EMBO J. 19, 5300-5307 2000). If the protein is expressed in
-inclusion bodies or not is not only dependent on the sequence, but
-also on many other factors, such as E. coli strain, incubation
-temperature, type of expression vector, strength of promoter and
-medium.
 
 
 
@@ -120,7 +94,11 @@ directory with the command: 'embossdata -fetch'.
     Notes
 </H2>
 
-None.
+<p>DayhoffStat is the amino acid's molar percentage divided by the Dayhoff statistic. The Dayhoff statistic is read from the EMBOSS data file <tt>Edayhoff.freq</tt> and is the amino acid's relative occurence per 1000 aa normalised to 100.</p>
+
+<p>The probability of expression in inclusion bodies is sometimes referred to as a type of solubility measure. If, however, a recombinant protein is expressed in Escherichia coli, it can be expressed as soluble in the cytosol or insoluble in inclusion bodies. If the Harrison model predicts a given protein to be probably expressed in includion bodies, this doesn't mean that it is not possible to get it soluble in the cytosol. One example: Thermatoga maritima cell divison protein FtsA with a C-terminal His-Tag has a 58% Harrison probability of being expressed in inclusion bodies. However, there was plenty of soluble protein in the E. coli cytosol (F. van den Ent and J. Lowe, EMBO J. 19, 5300-5307 2000). If the protein is expressed in inclusion bodies or not is not only dependent on the sequence, but also on many other factors, such as E. coli strain, incubation temperature, type of expression vector, strength of promoter and medium. </p>
+
+
 
 <H2>
     References

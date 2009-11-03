@@ -184,14 +184,14 @@ int main(int argc, char **argv)
     width       = ajAcdGetInt("width");
     margin      = ajAcdGetInt("margin");
     matrix      = ajAcdGetMatrix("matrix");
-    similarcase = ajAcdGetBool("similarcase");
-    docon       = ajAcdGetBool("consensus");
-    bottom      = ajAcdGetBool("bottom");
-    number      = ajAcdGetBool("number");
-    ruler       = ajAcdGetBool("ruler");
+    similarcase = ajAcdGetBoolean("similarcase");
+    docon       = ajAcdGetBoolean("consensus");
+    bottom      = ajAcdGetBoolean("bottom");
+    number      = ajAcdGetBoolean("number");
+    ruler       = ajAcdGetBoolean("ruler");
 
     /* html and range formatting parameters */
-    html      = ajAcdGetBool("html");
+    html      = ajAcdGetBoolean("html");
     uppercase = ajAcdGetRange("uppercase");
     highlight = ajAcdGetRange("highlight");
 
@@ -199,7 +199,7 @@ int main(int argc, char **argv)
     fplural   = ajAcdGetFloat("plurality");
     setcase   = ajAcdGetFloat("setcase");
     identity  = ajAcdGetFloat("identity");
-    gaps      = ajAcdGetBool("gaps");
+    gaps      = ajAcdGetBoolean("gaps");
 
     cons      = ajStrNew();
     consensus = ajSeqNew();
@@ -820,13 +820,6 @@ static void showalign_Order(const AjPStr order,
 	break;
     }
 
-    /* debug
-       ajUser("sorted names:");
-       for(i=0; seqs[i]; i++)
-       if(aorder[i].seq != NULL)
-       ajUser("%s", ajSeqGetNameC(aorder[i].seq));
-
-       */
 
     return;
 }

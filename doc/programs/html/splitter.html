@@ -24,37 +24,16 @@ splitter
 <H2>
     Function
 </H2>
-Split a sequence into (overlapping) smaller sequences
+Split sequence(s) into smaller sequences
 
 <H2>
     Description
 </H2>
 
-
-This simple editing program allows you to split a long sequence
-into smaller, optionally overlapping, subsequences. 
-
-<p>
+<p><b>splitter</b> splits one or more input sequences into smaller, optionally overlapping, subsequences. The subsequence size and overlap (if any) may be specified. Optionally, feature information will be used.</p>
 
 
 
-There should be little requirement to split sequences into smaller
-sub-sequences in EMBOSS, but there may be circumstances where memory
-usage becomes restrictive when dealing with truly large sequences.  In
-this case, memory usage may be reduced by repeating the analysis several
-times on split sub-sequences. 
-
-<p>
-
-If you need to split a large sequence into smaller subsequences so that
-a non-EMBOSS program can analyse the smaller sequence, it may also be
-useful to write the sub-sequences into separate files instead of the
-default EMBOSS behaviour of concatenating them together into one file. 
-
-<p>
-
-To write the output sequences to separate files, use the command-line
-switch '-ossingle'. 
 
 <H2>
     Usage
@@ -68,7 +47,7 @@ Split a sequence into sub-sequences of 10,000 bases (the default size) with no o
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>splitter tembl:BA000025 ba000025.split </b>
-Split a sequence into (overlapping) smaller sequences
+Split sequence(s) into smaller sequences
 
 </pre></td></tr></table><p>
 <p>
@@ -83,7 +62,7 @@ Split a sequence into sub-sequences of 50,000 bases with an overlap of 3,000 bas
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>splitter tembl:BA000025 ba000025.split -size=50000 -over=3000 </b>
-Split a sequence into (overlapping) smaller sequences
+Split sequence(s) into smaller sequences
 
 </pre></td></tr></table><p>
 <p>
@@ -145,8 +124,9 @@ Split a sequence into (overlapping) smaller sequences
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -600,8 +580,8 @@ aacttgttttgagtgaaggacatctagggcaaatggtggctgaaagtgaatgagatc
 <p>
 The names of the sequences are the same as the original sequence, with
 '_start-end' appended, where 'start', and 'end' are the start and end
-positions of the sub-sequence. eg: The name HSHBB would be changed in
-the sub-sequences to: HSHBB_1-50000 and HSHBB_50001-73308 if they were
+positions of the sub-sequence. eg: The name U01317 would be changed in
+the sub-sequences to: U01317_1-50000 and U01317_50001-73308 if they were
 split at the size of 50000 with no overlap.
 
 <H2>
@@ -615,10 +595,11 @@ None.
     Notes
 </H2>
 
+<p>Splitting a large sequence into smaller sub-sequences for analysis might be useful in cases where a particularly memory or CPU intensive application will not run quickly enough or at all on the full sequence.  This should seldom be necessary in EMBOSS.</p>
 
-There should be little requirement to split sequences into smaller
-sub-sequences in EMBOSS, but there may be circumstances where memory
-usage becomes restrictive when dealing with truly large sequences.
+<p>By default, <b>splitter</b> will write all the sub-sequences to a single file. In some cases, particularly where non-EMBOSS programs are used, it is necessary to have a single sequence per file.  To write the sub-sequences into separate files use the command-line switch <tt>-ossingle</tt>.</p>
+
+
 
 <H2>
     References
@@ -657,7 +638,18 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="aligncopy.html">aligncopy</a></td>
+<td>Reads and writes alignments</td>
+</tr>
+
+<tr>
+<td><a href="aligncopypair.html">aligncopypair</a></td>
+<td>Reads and writes pairs from alignments</td>
+</tr>
+
 <tr>
 <td><a href="biosed.html">biosed</a></td>
 <td>Replace or delete sequence sections</td>
@@ -665,17 +657,17 @@ None.
 
 <tr>
 <td><a href="codcopy.html">codcopy</a></td>
-<td>Reads and writes a codon usage table</td>
+<td>Copy and reformat a codon usage table</td>
 </tr>
 
 <tr>
 <td><a href="cutseq.html">cutseq</a></td>
-<td>Removes a specified section from a sequence</td>
+<td>Removes a section from a sequence</td>
 </tr>
 
 <tr>
 <td><a href="degapseq.html">degapseq</a></td>
-<td>Removes gap characters from sequences</td>
+<td>Removes non-alphabetic (e.g. gap) characters from sequences</td>
 </tr>
 
 <tr>
@@ -685,7 +677,7 @@ None.
 
 <tr>
 <td><a href="entret.html">entret</a></td>
-<td>Reads and writes (returns) flatfile entries</td>
+<td>Retrieves sequence entries from flatfile databases and files</td>
 </tr>
 
 <tr>
@@ -695,12 +687,22 @@ None.
 
 <tr>
 <td><a href="extractfeat.html">extractfeat</a></td>
-<td>Extract features from a sequence</td>
+<td>Extract features from sequence(s)</td>
 </tr>
 
 <tr>
 <td><a href="extractseq.html">extractseq</a></td>
 <td>Extract regions from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="featcopy.html">featcopy</a></td>
+<td>Reads and writes a feature table</td>
+</tr>
+
+<tr>
+<td><a href="featreport.html">featreport</a></td>
+<td>Reads and writes a feature table</td>
 </tr>
 
 <tr>
@@ -710,42 +712,67 @@ None.
 
 <tr>
 <td><a href="makenucseq.html">makenucseq</a></td>
-<td>Creates random nucleotide sequences</td>
+<td>Create random nucleotide sequences</td>
 </tr>
 
 <tr>
 <td><a href="makeprotseq.html">makeprotseq</a></td>
-<td>Creates random protein sequences</td>
+<td>Create random protein sequences</td>
+</tr>
+
+<tr>
+<td><a href="maskambignuc.html">maskambignuc</a></td>
+<td>Masks all ambiguity characters in nucleotide sequences with N</td>
+</tr>
+
+<tr>
+<td><a href="maskambigprot.html">maskambigprot</a></td>
+<td>Masks all ambiguity characters in protein sequences with X</td>
 </tr>
 
 <tr>
 <td><a href="maskfeat.html">maskfeat</a></td>
-<td>Mask off features of a sequence</td>
+<td>Write a sequence with masked features</td>
 </tr>
 
 <tr>
 <td><a href="maskseq.html">maskseq</a></td>
-<td>Mask off regions of a sequence</td>
+<td>Write a sequence with masked regions</td>
 </tr>
 
 <tr>
 <td><a href="newseq.html">newseq</a></td>
-<td>Type in a short new sequence</td>
+<td>Create a sequence file from a typed-in sequence</td>
+</tr>
+
+<tr>
+<td><a href="nohtml.html">nohtml</a></td>
+<td>Remove mark-up (e.g. HTML tags) from an ASCII text file</td>
 </tr>
 
 <tr>
 <td><a href="noreturn.html">noreturn</a></td>
-<td>Removes carriage return from ASCII files</td>
+<td>Remove carriage return from ASCII files</td>
+</tr>
+
+<tr>
+<td><a href="nospace.html">nospace</a></td>
+<td>Remove all whitespace from an ASCII text file</td>
+</tr>
+
+<tr>
+<td><a href="notab.html">notab</a></td>
+<td>Replace tabs with spaces in an ASCII text file</td>
 </tr>
 
 <tr>
 <td><a href="notseq.html">notseq</a></td>
-<td>Exclude a set of sequences and write out the remaining ones</td>
+<td>Write to file a subset of an input stream of sequences</td>
 </tr>
 
 <tr>
 <td><a href="nthseq.html">nthseq</a></td>
-<td>Writes one sequence from a multiple set of sequences</td>
+<td>Write to file a single sequence from an input stream of sequences</td>
 </tr>
 
 <tr>
@@ -755,7 +782,7 @@ None.
 
 <tr>
 <td><a href="revseq.html">revseq</a></td>
-<td>Reverse and complement a sequence</td>
+<td>Reverse and complement a nucleotide sequence</td>
 </tr>
 
 <tr>
@@ -765,7 +792,17 @@ None.
 
 <tr>
 <td><a href="seqretsplit.html">seqretsplit</a></td>
-<td>Reads and writes (returns) sequences in individual files</td>
+<td>Reads sequences and writes them to individual files</td>
+</tr>
+
+<tr>
+<td><a href="sizeseq.html">sizeseq</a></td>
+<td>Sort sequences by size</td>
+</tr>
+
+<tr>
+<td><a href="skipredundant.html">skipredundant</a></td>
+<td>Remove redundant sequences from an input set</td>
 </tr>
 
 <tr>
@@ -775,27 +812,32 @@ None.
 
 <tr>
 <td><a href="trimest.html">trimest</a></td>
-<td>Trim poly-A tails off EST sequences</td>
+<td>Remove poly-A tails from nucleotide sequences</td>
 </tr>
 
 <tr>
 <td><a href="trimseq.html">trimseq</a></td>
-<td>Trim ambiguous bits off the ends of sequences</td>
+<td>Remove unwanted characters from start and end of sequence(s)</td>
+</tr>
+
+<tr>
+<td><a href="trimspace.html">trimspace</a></td>
+<td>Remove extra whitespace from an ASCII text file</td>
 </tr>
 
 <tr>
 <td><a href="union.html">union</a></td>
-<td>Reads sequence fragments and builds one sequence</td>
+<td>Concatenate multiple sequences into a single sequence</td>
 </tr>
 
 <tr>
 <td><a href="vectorstrip.html">vectorstrip</a></td>
-<td>Strips out DNA between a pair of vector sequences</td>
+<td>Removes vectors from the ends of nucleotide sequence(s)</td>
 </tr>
 
 <tr>
 <td><a href="yank.html">yank</a></td>
-<td>Reads a sequence range, appends the full USA to a list file</td>
+<td>Add a sequence reference (a full USA) to a list file</td>
 </tr>
 
 </table>

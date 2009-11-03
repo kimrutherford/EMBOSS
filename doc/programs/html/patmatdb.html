@@ -24,20 +24,20 @@ patmatdb
 <H2>
     Function
 </H2>
-Search a protein sequence with a motif
+Searches protein sequences with a sequence motif
 
 <H2>
     Description
 </H2>
 
+<p><b>patmatdb</b> searches the input protein sequences for the specified sequence motif.  The output is a standard EMBOSS report file including the number of matches between the motif and each input sequence, length of match, start and end positions of match, and the motif-sequence alignment. Patterns for <b>patmatdb</b> are based on the format of pattern used in the PROSITE database, with the difference that the terminating dot '.' and the hyphens, '-', between the characters are optional.</p>
 
-Takes a protein motif and compares it to a set of protein sequences. 
 
-<p>
+<H2>
+Algorithm
+</H2>
 
-It returns the number of matches there were between the motif and each
-matched sequence, length of match, start and end positions of match, and
-writes out an alignment. 
+<p>Patterns for <b>patmatdb</b> are based on the format of pattern used in the PROSITE database, with the difference that the terminating dot '.' and the hyphens, '-', between the characters are optional.  For example: <tt>[DE](2)HS{P}X(2)PX(2,4)C</tt> means two Asps or Glus in any order followed by His, Ser, any residue other then Pro, then two of any residue followed by Pro followed by two to four of any residue followed by Cys. The search is case-independent, so <tt>AAA</tt> matches <tt>aaa</tt>. (Any string of at least 2 characters).</p>
 
 <H2>
     Usage
@@ -49,7 +49,7 @@ writes out an alignment.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>patmatdb </b>
-Search a protein sequence with a motif
+Searches protein sequences with a sequence motif
 Input protein sequence(s): <b>tsw:*</b>
 Protein motif to search for: <b>st[ty]s</b>
 Output report [edd1_rat.patmatdb]: <b></b>
@@ -108,14 +108,16 @@ Output report [edd1_rat.patmatdb]: <b></b>
    -raccshow3          boolean    Show accession number in the report
    -rdesshow3          boolean    Show description in the report
    -rscoreshow3        boolean    Show the score in the report
+   -rstrandshow3       boolean    Show the nucleotide strand in the report
    -rusashow3          boolean    Show the full USA in the report
    -rmaxall3           integer    Maximum total hits to report
    -rmaxseq3           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -300,7 +302,7 @@ By default <b>patmatdb</b> writes a 'dbmotif' report file.
 <pre>
 ########################################
 # Program: patmatdb
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: patmatdb
 #    -sequence "tsw:*"
 #    -motif "st[ty]s"
@@ -441,7 +443,8 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="antigenic.html">antigenic</a></td>
 <td>Finds antigenic sites in proteins</td>
@@ -449,7 +452,7 @@ None.
 
 <tr>
 <td><a href="digest.html">digest</a></td>
-<td>Protein proteolytic enzyme or reagent cleavage digest</td>
+<td>Reports on protein proteolytic enzyme or reagent cleavage sites</td>
 </tr>
 
 <tr>
@@ -459,47 +462,47 @@ None.
 
 <tr>
 <td><a href="fuzzpro.html">fuzzpro</a></td>
-<td>Protein pattern search</td>
+<td>Search for patterns in protein sequences</td>
 </tr>
 
 <tr>
 <td><a href="fuzztran.html">fuzztran</a></td>
-<td>Protein pattern search after translation</td>
+<td>Search for patterns in protein sequences (translated)</td>
 </tr>
 
 <tr>
 <td><a href="helixturnhelix.html">helixturnhelix</a></td>
-<td>Report nucleic acid binding motifs</td>
+<td>Identify nucleic acid-binding motifs in protein sequences</td>
 </tr>
 
 <tr>
 <td><a href="oddcomp.html">oddcomp</a></td>
-<td>Find protein sequence regions with a biased composition</td>
+<td>Identify proteins with specified sequence word composition</td>
 </tr>
 
 <tr>
 <td><a href="patmatmotifs.html">patmatmotifs</a></td>
-<td>Search a PROSITE motif database with a protein sequence</td>
+<td>Scan a protein sequence with motifs from the PROSITE database</td>
 </tr>
 
 <tr>
 <td><a href="pepcoil.html">pepcoil</a></td>
-<td>Predicts coiled coil regions</td>
+<td>Predicts coiled coil regions in protein sequences</td>
 </tr>
 
 <tr>
 <td><a href="preg.html">preg</a></td>
-<td>Regular expression search of a protein sequence</td>
+<td>Regular expression search of protein sequence(s)</td>
 </tr>
 
 <tr>
 <td><a href="pscan.html">pscan</a></td>
-<td>Scans proteins using PRINTS</td>
+<td>Scans protein sequence(s) with fingerprints from the PRINTS database</td>
 </tr>
 
 <tr>
 <td><a href="sigcleave.html">sigcleave</a></td>
-<td>Reports protein signal cleavage sites</td>
+<td>Reports on signal cleavage sites in a protein sequence</td>
 </tr>
 
 </table>

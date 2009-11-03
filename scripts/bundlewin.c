@@ -98,7 +98,8 @@ static void copy_data(char *basedir);
 static void copy_doc(char *basedir);
 static void copy_test(char *basedir);
 static void copy_jemboss(char *basedir);
-
+static void copy_redist(char *basedir);
+    
 static void create_directories(char *basedir);
 static int header_exports(char *dir, FILE *fp);
 static void extract_funcnames(char *filename, FILE *fout);
@@ -162,6 +163,7 @@ int main(int argc, char **argv)
     copy_doc(basedir);
     copy_test(basedir);
     copy_jemboss(basedir);
+    copy_redist(basedir);
 
 
     /* Construct exports file (ajaxdll.def) */
@@ -520,6 +522,38 @@ static void copy_test(char *basedir)
 
 
 
+static void copy_redist(char *basedir)
+{
+    char command[MAXNAMLEN];
+    char prompt[MAXNAMLEN];
+    
+    static char *def="/dos8/vc2008/vc/redist/x86/Microsoft.VC90.CRT";
+    int len;
+    
+    fprintf(stdout,"Redist file directory [%s]: ",def);
+    fgets(prompt,MAXNAMLEN,stdin);
+    if(*prompt == '\n')
+        sprintf(prompt,"%s",def);
+
+    len = strlen(prompt);
+    if(prompt[len-1] == '\n')
+        prompt[len-1] = '\0';
+
+    
+    sprintf(command,"cp %s/* %s/win32/redist",prompt,basedir);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+    return;
+}
+
+
+
+
 static void zip_up(char *basedir)
 {
     char command[MAXNAMLEN];
@@ -562,6 +596,7 @@ static void create_directories(char *basedir)
 	"win32/apps",
 	"win32/acd",
 	"win32/DLLs",
+        "win32/redist",
 	"win32/plplot-inc",
 	"win32/plplot-inc/include",
 	"win32/plplot-inc/include/plplot",
@@ -807,7 +842,11 @@ static void write_nucleusexports(char *fn,char *basedir)
     fprintf(outf,"LIBRARY \t""nucleus.dll""\n\n");
     fprintf(outf,"EXPORTS\n");
 
-    fprintf(outf,"\tEmbPropTable DATA\n;others\n");
+    /*
+    ** EmbPropTable no longer exists but leave this as an example
+    ** of how to add rogue data definitions
+    **    fprintf(outf,"\tEmbPropTable DATA\n;others\n");
+    */
 
     if(!(inf=fopen(TMPFILE2,"r")))
     {
@@ -1257,8 +1296,8 @@ static void write_solution(char *basedir, char **prognames, char **uids,
     }
 
 
-    fprintf(fp,"Microsoft Visual Studio Solution File, Format Version 9.00\n");
-    fprintf(fp,"# Visual C++ Express 2005\n");
+    fprintf(fp,"Microsoft Visual Studio Solution File, Format Version 10.00\n");
+    fprintf(fp,"# Visual C++ Express 2008\n");
 
 
     for(i=0;i<napps;++i)
@@ -1293,6 +1332,15 @@ static void write_solution(char *basedir, char **prognames, char **uids,
     fprintf(fp,"\tGlobalSection(SolutionProperties) = preSolution\n");
     fprintf(fp,"\t\tHideSolutionNode = FALSE\n");
     fprintf(fp,"\tEndGlobalSection\n");
+
+
+    fprintf(fp,"\tGlobalSection(SolutionConfigurationPlatforms ) "
+            "= preSolution\n");
+    fprintf(fp,"\t\tDebug|Win32 = Debug|Win32\n");
+    fprintf(fp,"\t\tRelease|Win32 = Release|Win32\n");
+    fprintf(fp,"\tEndGlobalSection\n");
+    
+
     fprintf(fp,"EndGlobal\n");
     
     fclose(fp);

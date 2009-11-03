@@ -1,5 +1,5 @@
 application: charge [
-  documentation: "Protein charge plot"
+  documentation: "Draw a protein charge plot"
   groups: "Protein:Composition"
 ]
 
@@ -54,6 +54,7 @@ section: output [
     standard: "@(!$(plot))"
     knowntype: "charge output"
     nullok: "Y"
+    nulldefault: "$(plot)"
   ]
 
 endsection: output

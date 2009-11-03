@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>supermatcher @eclac.list tembl:j01636 -word 50  </b>
-Match large sequences against one or more other sequences
+Calculate approximate local pair-wise alignments of larger sequences
 Gap opening penalty [10.0]: <b></b>
 Gap extension penalty [0.5]: <b>3.0</b>
 Output alignment [j01636.supermatcher]: <b></b>

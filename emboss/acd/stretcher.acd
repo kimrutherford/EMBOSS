@@ -1,6 +1,5 @@
 application: stretcher [
-  documentation: "Finds the best global alignment between two
-                  sequences"
+  documentation: "Needleman-Wunsch rapid global alignment of two sequences"
   groups: "Alignment:Global"
 ]
 

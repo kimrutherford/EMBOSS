@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>psiphi 1hmp_a.ccf -chainnumber=1 -startresiduenumber=5 -finishresiduenumber=85 </b>
-Phi and psi torsion angles from protein coordinates
+Calculates phi and psi torsion angles from protein coordinates
 Output report [1hmp_a.psiphi]: <b></b>
 
 </pre></td></tr></table><p>

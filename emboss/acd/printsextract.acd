@@ -1,9 +1,9 @@
 application: printsextract [
-  documentation: "Extract data from PRINTS"
+  documentation: "Extract data from PRINTS database for use by pscan"
   groups: "Utils:Database creation"
-  gui: "yes"
-  batch: "yes"
-  cpu: "medium"
+  gui: "no"
+  batch: "no"
+  cpu: "low"
 ]
 
 section: input [

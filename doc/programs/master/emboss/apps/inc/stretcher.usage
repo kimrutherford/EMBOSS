@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>stretcher tsw:hba_human tsw:hbb_human </b>
-Finds the best global alignment between two sequences
+Needleman-Wunsch rapid global alignment of two sequences
 Output alignment [hba_human.stretcher]: <b></b>
 
 </pre></td></tr></table><p>

@@ -97,7 +97,7 @@ int main(int argc, char **argv)
     inf       = ajAcdGetInfile("infile");
     tolerance = ajAcdGetFloat("tolerance");
     datafile  = ajAcdGetDatafile("datafile");
-    showdel   = ajAcdGetBool("showdel");
+    showdel   = ajAcdGetBoolean("showdel");
     outf      = ajAcdGetOutfile("outfile");
 
     exparray = ajDoubleNew();
@@ -179,7 +179,7 @@ static void mwfilter_readdata(AjPFile inf, AjPDouble *rmarray,
     line = ajStrNew();
 
     /* Read in the top of the file (noisy molwts) */
-    while(ajFileReadLine(inf,&line) && !ajStrPrefixC(line,"Displacements"))
+    while(ajReadlineTrim(inf,&line) && !ajStrPrefixC(line,"Displacements"))
     {
 	if(!ajStrGetLen(line))
 	    continue;
@@ -203,7 +203,7 @@ static void mwfilter_readdata(AjPFile inf, AjPDouble *rmarray,
 	return;
     }
 
-    while(ajFileReadLine(inf,&line))
+    while(ajReadlineTrim(inf,&line))
     {
 	if(!ajStrGetLen(line))
 	    continue;
@@ -245,7 +245,7 @@ static void mwfilter_readexp(AjPFile inf, AjPDouble *exparray)
 
     line = ajStrNew();
 
-    while(ajFileReadLine(inf,&line))
+    while(ajReadlineTrim(inf,&line))
     {
 	if(!ajStrGetLen(line))
 	    continue;

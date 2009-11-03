@@ -1,5 +1,5 @@
 application: revseq [
-  documentation: "Reverse and complement a sequence"
+  documentation: "Reverse and complement a nucleotide sequence"
   groups: "Edit"
 ]
 

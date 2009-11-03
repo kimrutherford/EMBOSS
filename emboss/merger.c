@@ -145,14 +145,15 @@ int main(int argc, char **argv)
     ajStrAssignC(&m,"");
     ajStrAssignC(&n,"");
 
-    embAlignPathCalc(p,q,lena,lenb,gapopen,gapextend,path,sub,cvt,
+    score = embAlignPathCalc(p,q,lena,lenb,gapopen,gapextend,path,sub,cvt,
 		     compass, ajFalse);
 
-    score = embAlignScoreNWMatrix(path,a,b,sub,cvt,lena,lenb,gapopen,compass,
-				  gapextend,&start1,&start2);
+    /*score = embAlignScoreNWMatrix(path,compass,gapopen,gapextend,
+                                  a,b,lena,lenb,sub,cvt,
+				  &start1,&start2);*/
 
     embAlignWalkNWMatrix(path,a,b,&m,&n,lena,lenb, &start1,&start2,gapopen,
-			 gapextend,cvt,compass,sub);
+			 gapextend,compass);
 
     /*
     ** now construct the merged sequence, uppercase the bits of the two

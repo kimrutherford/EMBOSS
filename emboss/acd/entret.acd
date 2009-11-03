@@ -1,6 +1,5 @@
 application: entret [
-  documentation: "Reads and writes (returns) flatfile
-                  entries"
+  documentation: "Retrieves sequence entries from flatfile databases and files"
   groups: "Edit"
 ]
 

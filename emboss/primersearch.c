@@ -199,7 +199,7 @@ int main(int argc, char **argv)
     /* check there are primers to be searched */
     if(!ajListGetLength(primerList))
     {
-	ajUser("\nNo suitable primers found - exiting\n");
+	ajErr("No suitable primers found - exiting");
 	embExitBad();
 	return 0;
 
@@ -405,7 +405,7 @@ static void primersearch_read_primers(AjPList *primerList, AjPFile primerFile,
     Primer primdata = NULL;
 
 
-    while (ajFileReadLine (primerFile, &rdline))
+    while (ajReadlineTrim(primerFile, &rdline))
     {
 	primdata = NULL;
 	if (ajStrGetCharFirst(rdline) == '#')

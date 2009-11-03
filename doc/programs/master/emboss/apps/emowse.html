@@ -19,6 +19,208 @@ emowse
     Description
 </H2>
 
+
+<p>Given an input file of molecular weights corresponding to peptides cut by proteolytic enzymes or reagents, <b>emowse</b> will search the supplied input protein sequences for digest fragments that match the molecular weights.  For each input sequence, <b>emowse</b> derives both whole sequence molecular weight and calculated peptide molecular weights for complete digests. One of eight cutting enzymes/reagents can be specified and an optional whole sequence molecular weight (if known).  Optionally, monoisotopic weights are used.  <b>emowse</b> also incorporate calculated peptide Mw's resulting from incomplete or partial cleavages. At present, this is achieved by computing all nearest-neighbour pairs for each enzyme or reagent.</p>
+<p><b>emowse</b> writes an output file that includes: i. The specified search parameters (digest reagent, specified error tolerance, specified intact protein Mw and Mw filter percentage).  ii. Short 'hit' listing (the top 50 scoring proteins listed in descending order, the sequence ID name and brief text identifiers are included). iii. Detailed 'hit' listing (the top 50 entries listed in more detail).</p>
+
+
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/emowse.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/emowse.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/emowse.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+<!--#include file="inc/emowse.input" -->
+<p>
+
+The input file is a list of molecular weights of the peptide fragments. 
+One weight is allowed per line.  The example file above is a
+Trypsin digest of the protein sw:100K_rat (produced by using the program
+<b>digest</b>).
+
+<p>
+
+Each molecular weight must be on a line of its own.  Masses (M not
+M[H+]) are accepted in any order (ascending,descending or mixed). 
+Peptide masses can be entered as integers or floating-point values, the
+latter being rounded to the nearest integer value for the search. 
+
+<p>
+
+It is suggested that peptide masses should be selected from the range
+700-4000 Daltons.  This range balances the fact that very small peptides
+give little discrimination and minimizes the frequency of
+partially-cleaved peptides. 
+
+<p>
+
+As a general rule, users are advised to identify and remove peptide
+masses resulting from autodigestion of the cleavage enzyme (e.g tryptic
+fragments of trypsin), best obtained by MS analysis of control digests
+containing only the enzyme. 
+
+<p>
+
+Further information on the partial sequence and/or composition of the
+peptides can be given after the weight with a 'seq()' or 'comp()'
+specification. This should be formatted like:
+<p>
+<pre>
+mw seq(...) comp(...)
+</pre>
+<p>
+where mw is the molecular mass of the fragment,
+<TT>seq(...)</TT> is sequence information and
+<TT>comp(...)</TT> is composition information.
+
+A line may contain more than one sequence information qualifiers. 
+For example:
+
+<p>
+<hr>
+<pre>
+7176 seq(b-t[pqt]ln)
+1744
+1490
+1433   comp(3[ed]1[p]) seq(gmde)
+<pre>
+<hr>
+
+<p>
+
+<H3>Sequence information</H3>
+The sequence information should be given in standard
+One-character code. It should be preceded by a prefix
+as outlined in the table below, to indicate what type of sequence
+it is.
+<p>
+<Table border="1">
+<Caption><B>Prefixes to use with sequence information for
+<b>emowse</b></B></caption>
+<TR align="center"><TH>Prefix</TH><TH>Meaning</TH><TH>Example</TH></TR>
+<TR align="center"><TD><TT>b-</TT></TD><TD>N->C sequence</TD>
+<TD><TT>seq(b-DEFG)</TT></TD></TR>
+<TR align="center"><TD><TT>y-</TT></TD><TD>C->N sequence</TD>
+<TD><TT>seq(y-GFED)</TT></TD></TR>
+<TR align="center"><TD><TT>*-</TT></TD>
+<TD>Orientation unknown</TD>
+<TD><TT>seq(*-DEFG)<br>seq(*-GFED)</TT></TD></TR>
+<TR align="center"><TD><TT>n-</TT></TD><TD>N terminal sequence</TD>
+<TD><TT>seq(n-ACDE)</TT></TD></TR>
+<TR align="center"><TD><TT>c-</TT></TD><TD>C terminal sequence</TD>
+<TD><TT>seq(c-FGHI)</TT></TD></TR>
+<TR align="center"><TD colspan=3>The examples are all correct data for a
+peptide with a sequence ACDEFGHI.<BR> Note that *-DEFG
+will search for both DEFG and GFED</TD></TR>
+</TABLE>
+<p>
+Both lower and upper case characters may be used for amino-acids.
+An unknown amino acid may be indicated by an '<TT>X</TT>'.
+More than one amino acid may be specified for a position by
+putting them between square brackets.
+A line may contain several sequence information
+qualifiers. An example for a peptide with the actual
+sequence ACDEFGHI might look like:
+<pre>
+12345 seq(n-AC[DE]) seq(c-HI)
+</pre>
+
+<H3>Composition Information</H3>
+Composition should consist of a number, followed by the
+corresponding amino acid between square brackets.   
+For example
+<PRE>comp(2[H]0[M]3[DE]*[K])</PRE> indicates
+a peptide which contains 2 histidines, no methionines,
+3 acidic residues (glutamic or aspartic acid) and
+at least 1 lysine.
+<p>
+
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/emowse.output" -->
+<p>
+
+The <b>emowse</b> search program outputs a listing file containing the
+following information.
+
+<p>
+
+<h3>Specified search parameters</h3>
+
+        Includes all specified parameters such as digest reagent, 
+  specified error tolerance, specified intact protein Mw and Mw filter
+  percentage. All supplied peptide Mws are listed in descending order, 
+  followed by the total number of entries scanned during the search.
+
+<h3>Short 'hit' listing</h3>
+
+        The top 50 scoring proteins are then listed in descending
+  order, details include the sequence ID name and brief text
+ identifiers. Details are limited to the top 50 scores as a deliberate
+  compromise to keep the result listings as short as possible.
+
+<h3>Detailed 'hit' listing</h3>
+
+        The top 50 entries are then listed in more detail.The first
+  line includes the sequence ID name, the <b>emowse</b> search score
+  (typically a few powers of 10), the 'hit' protein Mw and finally
+  an 'accuracy' ratio calculated by dividing 'hits' by the total
+  number of peptides used for the search. This cannot be used to
+  ascribe significance, but experience has shown that anything below
+  0.3 is generally not worth pursuing. Line 2 is the protein
+  text identifier. Subsequent lines list 'hit' and 'miss' peptides,
+  with the appropriate start, end and corresponding sequences of correct
+  peptide matches.  'miss' peptides are indicated by 'No match' at the
+start of the last line for that protein. 
+
+<p>
+        Matching peptides marked with a '*' denote partially-cleaved
+  fragments. 
+
+<p>
+<H2>
+    Data files
+</H2>
+
+
+<b>emowse</b> reads in the pre-computed "Frequencies" data file
+'Efreqs.dat', (See the section "<b>emowse</b> Scoring scheme", above for
+a description of the frequency scores.)
+
+
+
+<!--#include file="inc/localfiles.ihtml" -->
+
+<H2>
+    Notes
+</H2>
+
+
+
+
 Peptide mass information can provide a 'fingerprint' signature
 sufficiently discriminating to allow for the unique and rapid
 identification of unknown sample proteins, independent of other
@@ -367,199 +569,6 @@ degree of discrimination afforded by relatively few peptide
 masses, even with generous allowance for error.
 
 
-<H2>
-    Usage
-</H2>
-<!--#include file="inc/emowse.usage" -->
-
-
-<H2>
-    Command line arguments
-</H2>
-<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
-<pre>
-<!--#include file="inc/emowse.ihelp" -->
-</pre>
-</td></tr></table>
-<P>
-<!--#include file="inc/emowse.itable" -->
-
-<H2>
-    Input file format
-</H2>
-
-<!--#include file="inc/emowse.input" -->
-<p>
-
-The input file is a list of molecular weights of the peptide fragments. 
-One weight is allowed per line.  The example file above is a
-Trypsin digest of the protein sw:100K_rat (produced by using the program
-<b>digest</b>).
-
-<p>
-
-Each molecular weight must be on a line of its own.  Masses (M not
-M[H+]) are accepted in any order (ascending,descending or mixed). 
-Peptide masses can be entered as integers or floating-point values, the
-latter being rounded to the nearest integer value for the search. 
-
-<p>
-
-It is suggested that peptide masses should be selected from the range
-700-4000 Daltons.  This range balances the fact that very small peptides
-give little discrimination and minimizes the frequency of
-partially-cleaved peptides. 
-
-<p>
-
-As a general rule, users are advised to identify and remove peptide
-masses resulting from autodigestion of the cleavage enzyme (e.g tryptic
-fragments of trypsin), best obtained by MS analysis of control digests
-containing only the enzyme. 
-
-<p>
-
-Further information on the partial sequence and/or composition of the
-peptides can be given after the weight with a 'seq()' or 'comp()'
-specification. This should be formatted like:
-<p>
-<pre>
-mw seq(...) comp(...)
-</pre>
-<p>
-where mw is the molecular mass of the fragment,
-<TT>seq(...)</TT> is sequence information and
-<TT>comp(...)</TT> is composition information.
-
-A line may contain more than one sequence information qualifiers. 
-For example:
-
-<p>
-<hr>
-<pre>
-7176 seq(b-t[pqt]ln)
-1744
-1490
-1433   comp(3[ed]1[p]) seq(gmde)
-<pre>
-<hr>
-
-<p>
-
-<H3>Sequence information</H3>
-The sequence information should be given in standard
-One-character code. It should be preceded by a prefix
-as outlined in the table below, to indicate what type of sequence
-it is.
-<p>
-<Table border="1">
-<Caption><B>Prefixes to use with sequence information for
-<b>emowse</b></B></caption>
-<TR align="center"><TH>Prefix</TH><TH>Meaning</TH><TH>Example</TH></TR>
-<TR align="center"><TD><TT>b-</TT></TD><TD>N->C sequence</TD>
-<TD><TT>seq(b-DEFG)</TT></TD></TR>
-<TR align="center"><TD><TT>y-</TT></TD><TD>C->N sequence</TD>
-<TD><TT>seq(y-GFED)</TT></TD></TR>
-<TR align="center"><TD><TT>*-</TT></TD>
-<TD>Orientation unknown</TD>
-<TD><TT>seq(*-DEFG)<br>seq(*-GFED)</TT></TD></TR>
-<TR align="center"><TD><TT>n-</TT></TD><TD>N terminal sequence</TD>
-<TD><TT>seq(n-ACDE)</TT></TD></TR>
-<TR align="center"><TD><TT>c-</TT></TD><TD>C terminal sequence</TD>
-<TD><TT>seq(c-FGHI)</TT></TD></TR>
-<TR align="center"><TD colspan=3>The examples are all correct data for a
-peptide with a sequence ACDEFGHI.<BR> Note that *-DEFG
-will search for both DEFG and GFED</TD></TR>
-</TABLE>
-<p>
-Both lower and upper case characters may be used for amino-acids.
-An unknown amino acid may be indicated by an '<TT>X</TT>'.
-More than one amino acid may be specified for a position by
-putting them between square brackets.
-A line may contain several sequence information
-qualifiers. An example for a peptide with the actual
-sequence ACDEFGHI might look like:
-<pre>
-12345 seq(n-AC[DE]) seq(c-HI)
-</pre>
-
-<H3>Composition Information</H3>
-Composition should consist of a number, followed by the
-corresponding amino acid between square brackets.   
-For example
-<PRE>comp(2[H]0[M]3[DE]*[K])</PRE> indicates
-a peptide which contains 2 histidines, no methionines,
-3 acidic residues (glutamic or aspartic acid) and
-at least 1 lysine.
-<p>
-
-
-
-
-
-<H2>
-    Output file format
-</H2>
-
-<!--#include file="inc/emowse.output" -->
-<p>
-
-The <b>emowse</b> search program outputs a listing file containing the
-following information.
-
-<p>
-
-<h3>Specified search parameters</h3>
-
-        Includes all specified parameters such as digest reagent, 
-  specified error tolerance, specified intact protein Mw and Mw filter
-  percentage. All supplied peptide Mws are listed in descending order, 
-  followed by the total number of entries scanned during the search.
-
-<h3>Short 'hit' listing</h3>
-
-        The top 50 scoring proteins are then listed in descending
-  order, details include the sequence ID name and brief text
- identifiers. Details are limited to the top 50 scores as a deliberate
-  compromise to keep the result listings as short as possible.
-
-<h3>Detailed 'hit' listing</h3>
-
-        The top 50 entries are then listed in more detail.The first
-  line includes the sequence ID name, the <b>emowse</b> search score
-  (typically a few powers of 10), the 'hit' protein Mw and finally
-  an 'accuracy' ratio calculated by dividing 'hits' by the total
-  number of peptides used for the search. This cannot be used to
-  ascribe significance, but experience has shown that anything below
-  0.3 is generally not worth pursuing. Line 2 is the protein
-  text identifier. Subsequent lines list 'hit' and 'miss' peptides,
-  with the appropriate start, end and corresponding sequences of correct
-  peptide matches.  'miss' peptides are indicated by 'No match' at the
-start of the last line for that protein. 
-
-<p>
-        Matching peptides marked with a '*' denote partially-cleaved
-  fragments. 
-
-<p>
-<H2>
-    Data files
-</H2>
-
-
-<b>emowse</b> reads in the pre-computed "Frequencies" data file
-'Efreqs.dat', (See the section "<b>emowse</b> Scoring scheme", above for
-a description of the frequency scores.)
-
-
-
-<!--#include file="inc/localfiles.ihtml" -->
-
-<H2>
-    Notes
-</H2>
-
-None.
 
 <H2>
     References

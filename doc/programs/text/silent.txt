@@ -5,18 +5,20 @@
 
 Function
 
-   Silent mutation restriction enzyme scan
+   Find restriction sites to insert (mutate) with no translation change
 
 Description
 
-   silent does a scan of a nucleic acid sequence for silent mutation
-   restriction enzyme sites.
-
-   silent finds positions in a sequence where a point mutation could be
-   made to introduce a specified restriction enzyme recognition site
-   without changing the translation.
-
-   Several restriction enzyme can be specified.
+   silent finds restriction enzyme sites in a nucleotide sequence which
+   can be inserted (mutated) without changing the translation. silent
+   scans a nucleotide sequence for restriction sites for a supplied set
+   of restriction enzymes. It writes a standard EMBOSS report of single
+   base positions which, when mutated, insert the restriction site whilst
+   maintaining the same translation in frame 1 of the input sequence. One
+   or more restriction enzymes can be specified or alternatively all the
+   enzymes in the REBASE database can be investigated. Optionally, all
+   possible mutations are shown and the untranslated and translated
+   sequence are reported.
 
 Usage
 
@@ -24,7 +26,7 @@ Usage
 
 
 % silent 
-Silent mutation restriction enzyme scan
+Find restriction sites to insert (mutate) with no translation change
 Input nucleotide sequence: tembl:x65923
 Comma separated enzyme list [all]: ecori,hindiii
 Output report [x65923.silent]: 
@@ -73,14 +75,16 @@ Command line arguments
    -raccshow2          boolean    Show accession number in the report
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
+   -rstrandshow2       boolean    Show the nucleotide strand in the report
    -rusashow2          boolean    Show the full USA in the report
    -rmaxall2           integer    Maximum total hits to report
    -rmaxseq2           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -201,7 +205,7 @@ Output file format
 
 ########################################
 # Program: silent
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: silent
 #    -sequence tembl:x65923
 #    -enzymes ecori,hindiii
@@ -226,8 +230,8 @@ Output file format
 #
 #=======================================
 
-  Start     End Dir    EnzymeName RS-Pattern Base-Posn    AAs Silent Mutation
-    272     267 Rev    HindIII    AAGCTT           268    A.A    Yes     A->T
+  Start     End  Strand EnzymeName RS-Pattern Base-Posn    AAs Silent Mutation
+    267     272       - HindIII    AAGCTT           268    A.A    Yes     A->T
 
 #---------------------------------------
 #---------------------------------------
@@ -264,7 +268,7 @@ Data files
      * ~/ (your home directory)
      * ~/.embossdata
 
-   The EMBOSS REBASE restriction enzyme data files are stored iin
+   The EMBOSS REBASE restriction enzyme data files are stored in
    directory 'data/REBASE/*' under the EMBOSS installation directory.
 
    These files must first be set up using the program 'rebaseextract'.
@@ -300,7 +304,10 @@ References
 
 Warnings
 
-   None.
+   recoder uses the EMBOSS REBASE restriction enzyme data files stored in
+   directory data/REBASE/* under the EMBOSS installation directory. These
+   files must first be set up using the program rebaseextract. Running
+   rebaseextract may be the job of your system manager.
 
 Diagnostic Error Messages
 
@@ -316,13 +323,16 @@ Known bugs
 
 See also
 
-   Program name                       Description
-   recoder      Remove restriction sites but maintain same translation
-   redata       Search REBASE for enzyme name, references, suppliers etc
-   remap        Display sequence with restriction sites, translation etc
-   restover     Find restriction enzymes producing specific overhang
-   restrict     Finds restriction enzyme cleavage sites
-   showseq      Display a sequence with features, translation etc
+   Program name Description
+   recoder Find restriction sites to remove (mutate) with no translation
+   change
+   redata Retrieve information from REBASE restriction enzyme database
+   remap Display restriction enzyme binding sites in a nucleotide
+   sequence
+   restover Find restriction enzymes producing a specific overhang
+   restrict Report restriction enzyme cleavage sites in a nucleotide
+   sequence
+   showseq Displays sequences with features in pretty format
 
    silent does the opposite to recode. silent finds sites where a
    restriction enzyme site can be introduced without changing the

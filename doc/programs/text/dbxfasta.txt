@@ -5,7 +5,7 @@
 
 Function
 
-   Database b+tree indexing for fasta file databases
+   Index a fasta file database using b+tree indices
 
 Description
 
@@ -13,40 +13,15 @@ Description
    EMBOSS B+tree format index files. These indexes allow access of flat
    files larger than 2Gb.
 
-   Having created the EMBOSS indexes for this file, a database can then
-   be defined in the file emboss.defaults as something like:
-DB emrod [
-   type: N
-   dbalias: emrod   (see below)
-   format: fasta
-   method: emboss
-   directory: /data/embl/fasta
-   file: emrod.fasta
-   indexdirectory: /data/embl/fasta/indexes
-]
-
-   The index file 'basename' given to dbxfasta must match the DB name in
-   the definition. If not, then a 'dbalias' line must be given which
-   specifies the basename of the indexes.
-
-  Fields Indexed
-
-   By default, dbxfasta will index the ID name and the accession number
-   (if present).
-   If they are present in your database, you may also specify that
-   dbxfasta should index the Sequence Version and GI, the words in the
-   description, the keywords and the organism words using the '-fields'
-   qualifier with the appropriate values.
-
 Usage
 
    Here is a sample session with dbxfasta
 
 
 % dbxfasta 
-Database b+tree indexing for fasta file databases
+Index a fasta file database using b+tree indices
 Basename for index files: emrod
-Resource name: embl
+Resource name: emblresource
     simple : >ID
      idacc : >ID ACC or >ID (ACC)
      gcgid : >db:ID
@@ -55,41 +30,15 @@ Resource name: embl
       ncbi : | formats
 ID line format [idacc]: idacc
 Database directory [.]: data
-Wildcard database filename [*.dat]: emrod
-Release number [0.0]: 
-Index date [00/00/00]: 
-
-Processing file /homes/user/test/data/emrod
+Wildcard database filename [*.fasta]: emrod
+        id : ID
+       acc : Accession number
+        sv : Sequence Version and GI
+       des : Description
+Index fields [id,acc]: 
+General log output file [outfile.dbxfasta]: 
 
    Go to the output files for this example
-
-Global Parameters
-
-   dbxfasta requires that two global parameters be defined in the file
-   emboss.defaults. These are:
-SET PAGESIZE 2048
-SET CACHESIZE 200
-
-   The above values are recommended for most systems. The PAGESIZE is a
-   multiple of the size of disc pages the operating system buffers. The
-   CACHESIZE is the number of disc pages dbxfasta is allowed to cache.
-
-Resources
-
-   dbxfasta will ask you for the name of a resource definition in the
-   file emboss.defaults. This will be something like:
-RES embl [
-   type: Index
-   idlen:  15
-   acclen: 15
-   svlen:  20
-   keylen: 25
-   deslen: 25
-   orglen: 25
-]
-
-   The length definitions are the maximum lengths of 'words' in the field
-   being indexed. Longer words will be truncated to the value set.
 
 Command line arguments
 
@@ -105,26 +54,32 @@ Command line arguments
                                   (>db:ID); gcgidacc (>db:ID ACC); dbid (>db
                                   ID); ncbi (| formats))
    -directory          directory  [.] Database directory
-   -filenames          string     [*.dat] Wildcard database filename (Any
+   -filenames          string     [*.fasta] Wildcard database filename (Any
                                   string is accepted)
-   -release            string     [0.0] Release number (Any string up to 9
-                                  characters)
-   -date               string     [00/00/00] Index date (Date string dd/mm/yy)
-
-   Additional (Optional) qualifiers: (none)
-   Advanced (Unprompted) qualifiers:
    -fields             menu       [id,acc] Index fields (Values: id (ID); acc
                                   (Accession number); sv (Sequence Version and
                                   GI); des (Description))
+   -outfile            outfile    [*.dbxfasta] General log output file
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -release            string     [0.0] Release number (Any string up to 9
+                                  characters)
+   -date               string     [00/00/00] Index date (Date string dd/mm/yy)
    -exclude            string     Wildcard filename(s) to exclude (Any string
                                   is accepted)
    -indexoutdir        outdir     [.] Index file output directory
 
-   Associated qualifiers: (none)
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -155,6 +110,12 @@ Output file format
 
   Output files for usage example
 
+  File: outfile.dbxfasta
+
+Processing directory: /homes/user/test/data/
+Processing file: emrod entries: 6 (6) time: 0.0s (0.0s)
+Total time: 0.0s
+
   File: emrod.ent
 
 # Number of files: 1
@@ -166,24 +127,24 @@ emrod
   File: emrod.pxac
 
 Order     71
-Fill      47
+Fill      46
 Pagesize  2048
 Level     0
-Cachesize 200
-Order2    82
-Fill2     99
+Cachesize 100
+Order2    99
+Fill2     101
 Count     5
 Kwlimit   15
 
   File: emrod.pxid
 
 Order     71
-Fill      47
+Fill      46
 Pagesize  2048
 Level     0
-Cachesize 200
-Order2    82
-Fill2     99
+Cachesize 100
+Order2    99
+Fill2     101
 Count     5
 Kwlimit   15
 
@@ -206,6 +167,59 @@ Notes
    The indexing system has been designed to allow on-the-fly updating of
    indexes. This feature is, however, not implemented in the current
    version. It will be made available in future releases.
+
+   Having created the EMBOSS indexes for this file, a database can then
+   be defined in the file emboss.defaults as something like:
+DB emrod [
+   type: N
+   dbalias: emrod   (see below)
+   format: fasta
+   method: emboss
+   directory: /data/embl/fasta
+   file: emrod.fasta
+   indexdirectory: /data/embl/fasta/indexes
+]
+
+   The index file 'basename' given to dbxfasta must match the DB name in
+   the definition. If not, then a 'dbalias' line must be given which
+   specifies the basename of the indexes.
+
+  Fields Indexed
+
+   By default, dbxfasta will index the ID name and the accession number
+   (if present).
+   If they are present in your database, you may also specify that
+   dbxfasta should index the Sequence Version and GI, the words in the
+   description, the keywords and the organism words using the '-fields'
+   qualifier with the appropriate values.
+
+Global Parameters
+
+   dbxfasta requires that two global parameters be defined in the file
+   emboss.defaults. These are:
+SET PAGESIZE 2048
+SET CACHESIZE 200
+
+   The above values are recommended for most systems. The PAGESIZE is a
+   multiple of the size of disc pages the operating system buffers. The
+   CACHESIZE is the number of disc pages dbxfasta is allowed to cache.
+
+Resources
+
+   dbxfasta will ask you for the name of a resource definition in the
+   file emboss.defaults. This will be something like:
+RES embl [
+   type: Index
+   idlen:  15
+   acclen: 15
+   svlen:  20
+   keylen: 25
+   deslen: 25
+   orglen: 25
+]
+
+   The length definitions are the maximum lengths of 'words' in the field
+   being indexed. Longer words will be truncated to the value set.
 
 References
 
@@ -231,11 +245,11 @@ See also
 
    Program name                     Description
    dbiblast     Index a BLAST database
-   dbifasta     Database indexing for fasta file databases
+   dbifasta     Index a fasta file database
    dbiflat      Index a flat file database
    dbigcg       Index a GCG formatted database
-   dbxflat      Database b+tree indexing for flat file databases
-   dbxgcg       Database b+tree indexing for GCG formatted databases
+   dbxflat      Index a flat file database using b+tree indices
+   dbxgcg       Index a GCG formatted database using b+tree indices
 
 Author(s)
 

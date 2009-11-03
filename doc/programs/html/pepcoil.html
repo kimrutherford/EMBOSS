@@ -24,28 +24,17 @@ pepcoil
 <H2>
     Function
 </H2>
-Predicts coiled coil regions
+Predicts coiled coil regions in protein sequences
 
 <H2>
     Description
 </H2>
 
 
-Coiled coils are formed by two or three alpha helices in parallel and in
-register that cross at an angle of approximately 20 degrees, are
-strongly amphipathic and display a pattern of hydrophilic and
-hydrophobic residues that is repeated every seven residues.  The seven
-positions of the heptad repeat are designated a through g, a and d being
-generally hydrophobic, while the others are hydrophilic. 
+<p><b>pepcoil</b> calculates the probability of a coiled-coil structure for windows of (by default) 28  residues through a protein sequence using the method of Lupas A, van Dyke M & Stock J (1991); Science 252:1162-4.  It reads one or more sequences and writes a standard EMBOSS report file including the location and score of the putative coiled-coil structures and their score for each input sequence.  Optionally, coiled coil regions, non-coiled coil regions and coil frameshifts are reported.</p>
 
-<p>
-The parallel two-stranded alpha-helical coiled coil is the most
-frequently encountered subunit-oligomerization motif in proteins. 
 
-<p>
-pepcoil calculates the probability of a coiled-coil structure for
-windows of 28 residues through a protein sequence using the method of
-Lupas A, van Dyke M & Stock J (1991); Science 252:1162-4
+
 
 <H2>
     Usage
@@ -57,10 +46,10 @@ Lupas A, van Dyke M & Stock J (1991); Science 252:1162-4
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>pepcoil </b>
-Predicts coiled coil regions
+Predicts coiled coil regions in protein sequences
 Input protein sequence(s): <b>tsw:gcn4_yeast</b>
 Window size [28]: <b></b>
-Output file [gcn4_yeast.pepcoil]: <b></b>
+Output report [gcn4_yeast.pepcoil]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -77,13 +66,13 @@ Output file [gcn4_yeast.pepcoil]: <b></b>
   [-sequence]          seqall     Protein sequence(s) filename and optional
                                   format, or reference (input USA)
    -window             integer    [28] Window size (Integer from 7 to 28)
-  [-outfile]           outfile    [*.pepcoil] Output file name
+  [-outfile]           report     [*.pepcoil] Output report file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
    -[no]coil           boolean    [Y] Report coiled coil regions
    -frame              boolean    [Yes if -coil is true] Show coil frameshifts
-   -[no]other          boolean    [Y] Report non coiled coil regions
+   -other              boolean    [N] Report non coiled coil regions
 
    Associated qualifiers:
 
@@ -104,12 +93,23 @@ Output file [gcn4_yeast.pepcoil]: <b></b>
    -fopenfile1         string     Features file name
 
    "-outfile" associated qualifiers
-   -odirectory2        string     Output directory
+   -rformat2           string     Report format
+   -rname2             string     Base file name
+   -rextension2        string     File name extension
+   -rdirectory2        string     Output directory
+   -raccshow2          boolean    Show accession number in the report
+   -rdesshow2          boolean    Show description in the report
+   -rscoreshow2        boolean    Show the score in the report
+   -rstrandshow2       boolean    Show the nucleotide strand in the report
+   -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -148,8 +148,8 @@ Output file [gcn4_yeast.pepcoil]: <b></b>
 
 <tr>
 <td>[-outfile]<br>(Parameter 2)</td>
-<td>Output file name</td>
-<td>Output file</td>
+<td>Output report file name</td>
+<td>Report output file</td>
 <td><i>&lt;*&gt;</i>.pepcoil</td>
 </tr>
 
@@ -184,10 +184,10 @@ Output file [gcn4_yeast.pepcoil]: <b></b>
 </tr>
 
 <tr>
-<td>-[no]other</td>
+<td>-other</td>
 <td>Report non coiled coil regions</td>
 <td>Boolean value Yes/No</td>
-<td>Yes</td>
+<td>No</td>
 </tr>
 
 </table>
@@ -327,16 +327,38 @@ SQ   SEQUENCE   281 AA;  31310 MW;  2ED1B8E35D509578 CRC64;
 The SwissProt annotation marks the true leucine zipper motif as from 253 to 274. The leucine zipper is a special case of a coiled-coil region. <p><h3>File: gcn4_yeast.pepcoil </h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-PEPCOIL of GCN4_YEAST
-   using a window of 28 residues
+########################################
+# Program: pepcoil
+# Rundate: Tue 15 Jul 2008 12:00:00
+# Commandline: pepcoil
+#    -sequence tsw:gcn4_yeast
+# Report_format: motif
+# Report_file: gcn4_yeast.pepcoil
+########################################
+
+#=======================================
+#
+# Sequence: GCN4_YEAST     from: 1   to: 281
+# HitCount: 1
+#
+# Window size: 28 residues
+#
+#=======================================
+
+Max_coil_pos at "*"
+
+(1) Score 1.910 length 49 at residues 233-&gt;281
+                           *
+ Sequence: ARNTEAARRSRARKLQRMKQLEDKVEELLSKNYHLENEVARLKKLVGER
+           |                                               |
+         233                                               281
+ Probability: 1.000
+ Predict: coiled
+ Max_coil_pos: 249
 
 
-Other structures from 1 to 232 (232 residues)
-   Max score: 1.283 (probability 0.21)
-
-Prediction starts at 233
-Probable coiled-coil from 233 to 281 (49 residues)
-   Max score: 1.910 (probability 1.00)
+#---------------------------------------
+#---------------------------------------
 </pre>
 </td></tr></table><p>
 
@@ -351,7 +373,10 @@ None.
     Notes
 </H2>
 
-None.
+<p>Coiled coils are formed by two or three alpha helices in parallel and in register that cross at an angle of approximately 20 degrees, are strongly amphipathic and display a pattern of hydrophilic and hydrophobic residues that is repeated every seven residues. The seven positions of the heptad repeat are designated a through g, a and d being generally hydrophobic, while the others are hydrophilic.</p>
+
+<p>The parallel two-stranded alpha-helical coiled coil is the most frequently encountered subunit-oligomerization motif in proteins.</p>
+
 
 <H2>
     References
@@ -393,7 +418,8 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="antigenic.html">antigenic</a></td>
 <td>Finds antigenic sites in proteins</td>
@@ -401,7 +427,7 @@ None.
 
 <tr>
 <td><a href="digest.html">digest</a></td>
-<td>Protein proteolytic enzyme or reagent cleavage digest</td>
+<td>Reports on protein proteolytic enzyme or reagent cleavage sites</td>
 </tr>
 
 <tr>
@@ -411,72 +437,72 @@ None.
 
 <tr>
 <td><a href="fuzzpro.html">fuzzpro</a></td>
-<td>Protein pattern search</td>
+<td>Search for patterns in protein sequences</td>
 </tr>
 
 <tr>
 <td><a href="fuzztran.html">fuzztran</a></td>
-<td>Protein pattern search after translation</td>
+<td>Search for patterns in protein sequences (translated)</td>
 </tr>
 
 <tr>
 <td><a href="garnier.html">garnier</a></td>
-<td>Predicts protein secondary structure</td>
+<td>Predicts protein secondary structure using GOR method</td>
 </tr>
 
 <tr>
 <td><a href="helixturnhelix.html">helixturnhelix</a></td>
-<td>Report nucleic acid binding motifs</td>
+<td>Identify nucleic acid-binding motifs in protein sequences</td>
 </tr>
 
 <tr>
 <td><a href="hmoment.html">hmoment</a></td>
-<td>Hydrophobic moment calculation</td>
+<td>Calculate and plot hydrophobic moment for protein sequence(s)</td>
 </tr>
 
 <tr>
 <td><a href="oddcomp.html">oddcomp</a></td>
-<td>Find protein sequence regions with a biased composition</td>
+<td>Identify proteins with specified sequence word composition</td>
 </tr>
 
 <tr>
 <td><a href="patmatdb.html">patmatdb</a></td>
-<td>Search a protein sequence with a motif</td>
+<td>Searches protein sequences with a sequence motif</td>
 </tr>
 
 <tr>
 <td><a href="patmatmotifs.html">patmatmotifs</a></td>
-<td>Search a PROSITE motif database with a protein sequence</td>
+<td>Scan a protein sequence with motifs from the PROSITE database</td>
 </tr>
 
 <tr>
 <td><a href="pepnet.html">pepnet</a></td>
-<td>Displays proteins as a helical net</td>
+<td>Draw a helical net for a protein sequence</td>
 </tr>
 
 <tr>
 <td><a href="pepwheel.html">pepwheel</a></td>
-<td>Shows protein sequences as helices</td>
+<td>Draw a helical wheel diagram for a protein sequence</td>
 </tr>
 
 <tr>
 <td><a href="preg.html">preg</a></td>
-<td>Regular expression search of a protein sequence</td>
+<td>Regular expression search of protein sequence(s)</td>
 </tr>
 
 <tr>
 <td><a href="pscan.html">pscan</a></td>
-<td>Scans proteins using PRINTS</td>
+<td>Scans protein sequence(s) with fingerprints from the PRINTS database</td>
 </tr>
 
 <tr>
 <td><a href="sigcleave.html">sigcleave</a></td>
-<td>Reports protein signal cleavage sites</td>
+<td>Reports on signal cleavage sites in a protein sequence</td>
 </tr>
 
 <tr>
 <td><a href="tmap.html">tmap</a></td>
-<td>Displays membrane spanning regions</td>
+<td>Predict and plot transmembrane segments in protein sequences</td>
 </tr>
 
 </table>

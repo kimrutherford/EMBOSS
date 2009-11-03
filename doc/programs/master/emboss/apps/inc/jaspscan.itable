@@ -1,0 +1,93 @@
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Nucleotide sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-menu</td>
+<td>Matrix set</td>
+<td><table><tr><td>C</td> <td><i>(Core)</i></td></tr><tr><td>F</td> <td><i>(Fam)</i></td></tr><tr><td>P</td> <td><i>(Phylofacts)</i></td></tr><tr><td>N</td> <td><i>(CNE)</i></td></tr><tr><td>O</td> <td><i>(POLII)</i></td></tr><tr><td>S</td> <td><i>(SPLICE)</i></td></tr></table></td>
+<td>C</td>
+</tr>
+
+<tr>
+<td>-matrices</td>
+<td>The name 'all' reads in all matrix files from the selected
+JASPAR matrix set. You can specify individual matrices by giving
+their names with commas between then, such as:
+'ma0001,ma0015'.
+The case of the names is not important. You can specify a file of
+matrix names to read in by giving the name of the file holding the
+matrix names with a '@' character in front of it, for example,
+'@matrix.list'.
+Blank lines and lines starting with a hash character or '!' are ignored and all other lines are concatenated together with a comma
+character ',' and then treated as the list of enzymes to search
+for.
+An example of a file of matrix names is:
+! my matrices
+ma0001, ma0002
+! other matrices
+ma0010
+ma0032
+ma0053</td>
+<td>Any string is accepted</td>
+<td>all</td>
+</tr>
+
+<tr>
+<td>-threshold</td>
+<td>If the matrix score is greater than or equal to this percentage
+then a hit will be reported</td>
+<td>Any numeric value</td>
+<td>80.0</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output report file name</td>
+<td>Report output file</td>
+<td><i>&lt;*&gt;</i>.jaspscan</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-exclude</td>
+<td>The names of any matrices to exclude from the 'matrices'
+list. Matrices are specified in the same way as for the
+selection list.</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr>
+<td>-both</td>
+<td>If set then both the forward and reverse strands are searched</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>

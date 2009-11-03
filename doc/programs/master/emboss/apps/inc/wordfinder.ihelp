@@ -20,13 +20,13 @@
    -width              integer    [16] Alignment width (Integer 1 or more)
    -wordlen            integer    [6] Word length for initial matching
                                   (Integer 3 or more)
-   -limitmatch         integer    [0] Limiting match score (zero for no limit)
+   -limitmatch         integer    [0] Maximum match score (zero for no limit)
                                   (Integer 0 or more)
-   -limitalign         integer    [0] Limiting alignment length (zero for no
+   -limitalign         integer    [0] Maximum alignment length (zero for no
                                   limit) (Integer 0 or more)
-   -lowmatch           integer    [0] Limiting match score (zero for no limit)
+   -lowmatch           integer    [0] Minimum match score (zero for no limit)
                                   (Integer 0 or more)
-   -lowalign           integer    [0] Limiting alignment length (zero for no
+   -lowalign           integer    [0] Minimum alignment length (zero for no
                                   limit) (Integer 0 or more)
    -errorfile          outfile    [wordfinder.error] Error file to be written
                                   to
@@ -82,8 +82,9 @@
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options

@@ -5,29 +5,16 @@
 
 Function
 
-   Looks for inverted repeats in a nucleotide sequence
+   Finds inverted repeats in nucleotide sequence(s)
 
 Description
 
-   palindrome looks for inverted repeats (stem loops) in a nucleotide
-   sequence.
-
-   It will find inverted repeats that include a proportion of mismatches
-   and gaps (bulges in the stem loop).
-
-   It works by finding all possible inverted matches satisfying the
-   specified conditions of minimum and maximum length of palindrome,
-   maximum gap between repeated regions and number of mismatches allowed.
-
-   Secondary structures like inverted repeats in genomic sequences may be
-   implicated in initiation of DNA replication.
-
-   Some genomic sequence entries in the databases are composed of
-   unfinished, draft sequence with gaps of unknown size between contigs.
-   The positions of these gaps are often indicated by runs of 200 N
-   characters. To prevent palindrome producing large, uninformative
-   outputs, any palindromes found that are composed only of N's will not
-   be reported.
+   palindrome finds inverted repeats (stem loops) in nucleotide
+   sequences. It will find inverted repeats that include a proportion of
+   mismatches and gaps, that correspond to bulges in the stem loop. It
+   finds all possible inverted matches satisfying the specified
+   conditions of minimum and maximum length of palindrome, maximum gap
+   between repeated regions and number of mismatches allowed.
 
 Usage
 
@@ -35,7 +22,7 @@ Usage
 
 
 % palindrome 
-Looks for inverted repeats in a nucleotide sequence
+Finds inverted repeats in nucleotide sequence(s)
 Input nucleotide sequence(s): tembl:d00596
 Enter minimum length of palindrome [10]: 15
 Enter maximum length of palindrome [100]: 
@@ -88,8 +75,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -348,10 +336,18 @@ Data files
 
 Notes
 
-   Unless the qualifier '-nooverlap' is specified, palindrome makes no
-   attempt to exclude subsets of previously found palindromes.
+   Secondary structures-like inverted repeats in genomic sequences may be
+   implicated in initiation of DNA replication.
 
-   Several examples can be seen in the sample output above.
+   Some genomic sequence entries in the databases are composed of
+   unfinished, draft sequence with gaps of unknown size between contigs.
+   The positions of these gaps are often indicated by runs of 200 'N'
+   characters. To prevent palindrome producing large, uninformative
+   outputs, any palindromes found that are composed only of N will not be
+   reported.
+
+   Unless the qualifier -nooverlap is specified, palindrome makes no
+   attempt to exclude subsets of previously found palindromes.
 
 References
 
@@ -389,10 +385,10 @@ Known bugs
 
 See also
 
-   Program name                    Description
-   einverted    Finds DNA inverted repeats
-   equicktandem Finds tandem repeats
-   etandem      Looks for tandem repeats in a nucleotide sequence
+   Program name                  Description
+   einverted    Finds inverted repeats in nucleotide sequences
+   equicktandem Finds tandem repeats in nucleotide sequences
+   etandem      Finds tandem repeats in a nucleotide sequence
 
    einverted also looks for inverted repeats but is much slower and more
    sensitive, as it finds low-quality (very mismatched) repeats and

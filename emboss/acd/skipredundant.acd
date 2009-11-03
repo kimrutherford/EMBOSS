@@ -1,0 +1,205 @@
+application: skipredundant
+[
+  documentation: "Remove redundant sequences from an input set"
+  groups: "Edit"
+  gui: "yes"
+  batch: "yes"
+  cpu: "low"
+]
+
+
+
+
+
+section: input 
+[
+  information: "Input section"
+  type: "page"
+]
+
+toggle: feature 
+[
+    information: "Use feature information"
+    help: "Sequence feature information will be retained if this option is set."
+]
+
+seqset: sequences
+[
+    parameter: "Y"
+    type: "gapany"
+    features: "$(feature)"
+    aligned: "N"
+]
+
+matrixf: datafile 
+[
+    additional: "Y"
+    information: "Matrix file"
+    protein: "$(acdprotein)"
+    help: "This is the scoring matrix file used when comparing
+           sequences. By default it is the file 'EBLOSUM62' (for proteins) or
+           the file 'EDNAFULL' (for nucleic sequences). These files are
+           found in the 'data' directory of the EMBOSS installation."
+]
+
+endsection: input
+
+
+
+
+
+section: required 
+[
+  information: "Required section"
+  type: "page"
+]
+
+list: mode 
+[
+    standard: "Y"
+    default: "1"
+    minimum: "1"
+    maximum: "1"
+    values: "1: Single threshold percentage sequence similarity,
+             2: Outside a range of acceptable threshold percentage similarities"
+    help: "This option specifies whether to remove redundancy at a
+           single threshold percentage sequence similarity or remove redundancy
+           outside a range of acceptable threshold percentage similarity. All
+           permutations of pair-wise sequence alignments are calculated for
+           each set of input sequences in turn using the EMBOSS
+           implementation of the Needleman and Wunsch global alignment
+           algorithm. Redundant sequences are removed in one of two modes as
+           follows: (i) If a pair of proteins achieve greater than a
+           threshold percentage sequence similarity (specified by the user)
+           the shortest sequence is discarded. (ii) If a pair of proteins
+           have a percentage sequence similarity that lies outside an
+           acceptable range (specified by the user) the shortest sequence is
+           discarded."
+    delimiter: ","
+    codedelimiter: ":"
+    header: "Redundancy removal options"
+    information: "Select number"
+]
+
+float: threshold 
+[
+    standard: "@($(mode)==1)"
+    information: "The percentage sequence identity redundancy
+                  threshold."
+    help: "This option specifies the percentage sequence identity redundancy
+           threshold. The percentage sequence identity redundancy threshold 
+           determines the redundancy calculation. If a pair of proteins
+           achieve greater than this threshold the shortest sequence is
+           discarded."
+    default: "95.0"
+]
+
+float: minthreshold
+[
+    standard: "@($(mode)==2)"
+    information: "The % sequence identity redundancy threshold
+                  (lower limit)."
+    help: "This option specifies the percentage sequence identity redundancy
+           threshold (lower limit). The percentage sequence identity redundancy
+           threshold determines the redundancy calculation. If a pair of
+           proteins have a percentage sequence similarity that lies outside
+           an acceptable range the shortest sequence is discarded."
+    default: "30.0"
+]
+
+float: maxthreshold
+[
+    standard: "@($(mode)==2)"
+    information: "The percentage sequence identity redundancy threshold
+                  (upper limit)."
+    help: "This option specifies the percentage sequence identity redundancy
+           threshold (upper limit). The percentage sequence identity redundancy
+           threshold determines the redundancy calculation. If a pair of
+           proteins have a percentage sequence similarity that lies outside
+           an acceptable range the shortest sequence is discarded."
+    default: "90.0"
+]
+
+float: gapopen 
+[
+    standard: "Y"
+    information: "Gap opening penalty"
+    minimum: "0.0"
+    maximum: "100.0"
+    default: "@($(acdprotein)? 10.0 : 10.0 )"
+    valid: "Floating point number from 1.0 to 100.0"
+    expected: "10.0 for any sequence"
+    help: "The gap open penalty is the score taken away when a gap is
+           created. The best value depends on the choice of comparison
+           matrix. The default value assumes you are using the EBLOSUM62
+           matrix for protein sequences, and the EDNAFULL matrix for
+           nucleotide sequences."
+]
+
+float: gapextend 
+[
+    standard: "Y"
+    information: "Gap extension penalty"
+    minimum: "0.0"
+    maximum: "10.0"
+    default: "@($(acdprotein)? 0.5 : 0.5 )"
+    valid: "Floating point number from 0.0 to 10.0"
+    expected: "0.5 for any sequence"
+    help: "The gap extension, penalty is added to the standard gap
+           penalty for each base or residue in the gap. This is how long gaps
+           are penalized. Usually you will expect a few long gaps rather
+           than many short gaps, so the gap extension penalty should be lower
+           than the gap penalty. An exception is where one or both sequences
+           are single reads with possible sequencing errors in which case
+           you would expect many single base gaps. You can get this result by
+           setting the gap open penalty to zero (or very low) and using the
+           gap extension penalty to control gap scoring."
+]
+
+endsection: required
+
+
+
+
+section: advanced
+[
+  information: "Advanced section"
+  type: "page"
+]
+
+toggle: keepredundant 
+[
+    information: "Retain redundant sequences."
+    help: "This option specifies whether to retain redundant
+           sequences. If this option is set a file of redundant 
+           sequences is written."
+    default: "N"
+]
+
+endsection: advanced
+
+
+
+
+
+section: output 
+[
+  information: "Output section"
+  type: "page"
+]
+
+seqoutall: outseq 
+[
+    parameter: "Y"
+    features:  "$(feature)"
+    extension: "keep"
+]
+
+seqoutall: redundantoutseq
+[
+    parameter: "Y"
+    features:  "$(feature)"
+    extension: "redundant"
+]
+
+endsection: output

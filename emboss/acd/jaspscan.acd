@@ -1,0 +1,117 @@
+application: jaspscan [
+  documentation: "Scans DNA sequences for transcription
+                  factors"
+  groups: "Nucleic:Transcription"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "DNA"
+  ]
+
+  list: menu [
+    standard: "Y"
+    default: "C"
+    minimum: "1"
+    maximum: "1"
+    values: "C:Core,F:Fam,P:Phylofacts,N:CNE,O:POLII,S:SPLICE"
+    delimiter: ","
+    codedelimiter: ":"
+    header: "Jaspar matrix set"
+    information: "Matrix set"
+    button: "Y"
+  ]
+
+
+  string:  matrices [
+    standard: "Y"
+    default: "all"
+    information: "Comma separated matrix list"
+    help: "The name 'all' reads in all matrix files from the selected \
+           JASPAR matrix set. You can specify individual matrices by giving \
+           their names with commas between then, such as: \
+           'ma0001,ma0015'. \
+           The case of the names is not important. You can specify a file of \
+           matrix names to read in by giving the name of the file holding the \
+           matrix names with a '@' character in front of it, for example, \
+           '@matrix.list'. \
+           Blank lines and lines starting with a hash character or '!' are
+           ignored and all other lines are concatenated together with a comma \
+           character ',' and then treated as the list of enzymes to search \
+           for. \
+           An example of a file of matrix names is: \
+           ! my matrices \
+           ma0001, ma0002 \
+           ! other matrices \
+           ma0010 \
+           ma0032 \
+           ma0053"
+    knowntype: "jaspar matrix id"
+  ]
+
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  float: threshold [
+    standard: "Y"
+    default: "80.0"
+    information: "Threshold percentage"
+    help: "If the matrix score is greater than or equal to this percentage \
+             then a hit will be reported"
+  ]
+
+endsection: required
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+
+  string:  exclude [
+    default: ""
+    additional: "Y"
+    information: "Comma separated matrix list for exclusion"
+    help: "The names of any matrices to exclude from the 'matrices' \
+           list. Matrices are specified in the same way as for the \
+           selection list."
+    knowntype: "jaspar matrix id"
+  ]
+
+  boolean: both [
+    additional: "Y"
+    default: "N"
+    information: "Scan both strands"
+    help: "If set then both the forward and reverse strands are searched"
+  ]
+
+endsection: additional
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  report: outfile [
+    parameter: "Y"
+    rformat: "seqtable"
+    multiple: "Y"
+    taglist: "float:pc=Score_Percent
+              str:id=ID str:name=Name str:species=Species str:class=Class
+              str:supergroup=Supergroup str:pseq=Protein_Seq
+              str:exp=Experiment str:pmid=Source_PMID float:info=Info_Content
+              str:jaspar=Closest_Jaspar str:transfac=Closest_Transfac
+              float:mcs=MCS_Score str:built=Built_From"
+  ]
+
+endsection: output

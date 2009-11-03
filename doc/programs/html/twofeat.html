@@ -23,58 +23,39 @@ twofeat
 <H2>
     Function
 </H2>
-Finds neighbouring pairs of features in sequences
+Finds neighbouring pairs of features in sequence(s)
 <H2>
     Description
 </H2>
 
-<b>twofeat</b> reads in the feature tables of sequences and reports
-occurances of pairs of specified features. 
 
-<p>
 
-This is intended for use as a simple data-mining tool to enable you to
-look for instances of pairs of features that occur near to each other in
-the same sequence entry. 
+<p><b>twofeat</b> finds neighbouring pairs of specified features in one or more input sequences. Each feature may be specified by type, name, sense, score, tag/value pairs etc.  Their relationship, e.g. their sequence separation or overlap, relative sense and order may also be specified. It writes a standard EMBOSS report file with any such feature pairs identified.  By default each pair is written as a single feature but (optionally) they are written in their original form.</p>
 
-<p>
 
-For each of the pair of features, you can specify its type name, its
-sense, its score and any tag/value pairs, amongst other things. 
-
-<p>
-
-You can then specify the type of relationship that the two features
-should have.  You can specify the minimum and maximum distance between
-them.  You can specify the type of overlap allowed: Any type of overlap
-or no overlap is allowed, Overlap required, No overlaps are allowed,
-Overlap required but one feature must not be completely within the
-other, Feature A must be completely enclosed within feature B, Feature B
-must be completely enclosed within feature A.  You can specify that the
-distance should be measured from the nearest ends of the two features,
-From the left ends, From right ends, From the furthest ends.  You can
-specify that the features should be in any sense, in the same sense or
-in opposite senses.  You can specify that the features should be in any
-order, Feature A then feature B, Feature B then feature A. 
-
-<p>
-
-By default the resulting pairs of features found are then written to a
-report file as a single feature from the first postion of the left-most
-feature to the last position of the right-most feature.  You can modify
-the output to report the pairs of features with no changes made to them. 
 
 <H2>
     Algorithm
 </H2>
 
-<pre>
-For each sequence:
-	identify the features that match the criteria for Feature A
-	identify the features that match the criteria for Feature B
-	compare all pairs of features
-	if they satisfy the requirements output them to the report file
-</pre>
+<p>For each of the pair of features, you can specify its type name, its sense, its score and any tag/value pairs, amongst other things.</p></p>
+
+<p>You can then specify the type of relationship that the two features should have as follows:</p>
+
+<p>Minimum and maximum distance between each feature. </p>
+<p>Distance measurement (measure from the nearest ends of the two features, from the left ends, from right ends, from the furthest ends.)</p>
+<p>Type of overlap (any type of overlap or no overlap is allowed, Overlap required, No overlaps are allowed, Overlap required but one feature must not be completely within the other, Feature A must be completely enclosed within feature B, Feature B must be completely enclosed within feature A). </p>
+<p>Feature sense (any sense, in the same sense or in opposite senses)</p>
+<p>Feature order (any order, Feature A then feature B, Feature B then feature A)</p>
+
+<p>The program proceeds as follows.  For eachs sequence:
+	Identify the features that match the criteria for Feature A
+	Identify the features that match the criteria for Feature B
+	Compare all pairs of features
+	If they satisfy the requirements output them to the report file</p>
+
+<p>By default the resulting pairs of features found are then written to a report file as a single feature from the first postion of the left-most feature to the last position of the right-most feature. You can modify the output to report the pairs of features with no changes made to them.</p> 
+
 
 
 <H2>
@@ -89,7 +70,7 @@ Without the -twoout option the output report contains just one feature for every
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>twofeat tembl:x65923 </b>
-Finds neighbouring pairs of features in sequences
+Finds neighbouring pairs of features in sequence(s)
 Type of first feature [*]: <b>polyA_signal</b>
 Type of second feature [*]: <b>polyA_site</b>
 The minimum distance between the features [0]: <b>10</b>
@@ -109,7 +90,7 @@ The -twoout option makes the output report give the pairs of features found. The
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>twofeat -twoout -rformat gff tembl:x65923 </b>
-Finds neighbouring pairs of features in sequences
+Finds neighbouring pairs of features in sequence(s)
 Type of first feature [*]: <b>polyA_signal</b>
 Type of second feature [*]: <b>polyA_site</b>
 The minimum distance between the features [0]: <b>10</b>
@@ -374,14 +355,16 @@ Output report [x65923.twofeat]: <b></b>
    -raccshow2          boolean    Show accession number in the report
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
+   -rstrandshow2       boolean    Show the nucleotide strand in the report
    -rusashow2          boolean    Show the full USA in the report
    -rmaxall2           integer    Maximum total hits to report
    -rmaxseq2           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -756,7 +739,7 @@ outputs a report format file. The default format is <b>table</b>
 <pre>
 ########################################
 # Program: twofeat
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: twofeat
 #    [-sequence] tembl:x65923
 #    -atype polyA_signal
@@ -773,8 +756,8 @@ outputs a report format file. The default format is <b>table</b>
 # HitCount: 1
 #=======================================
 
-  Start     End   Score starta   enda startb   endb
-    484     509   0.000    484    489    509    509
+  Start     End  Strand   Score starta   enda startb   endb
+    484     509       +   0.000    484    489    509    509
 
 #---------------------------------------
 #---------------------------------------
@@ -791,11 +774,13 @@ outputs a report format file. The default format is <b>table</b>
 <p><h3>File: x65923.twofeat</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-##gff-version 2.0
-##date 2006-07-15
-##Type DNA X65923
-X65923	EMBL	polyA_signal	484	489	0.000	+	.	Sequence "X65923.6"
-X65923	EMBL	polyA_site	509	509	0.000	+	.	Sequence "X65923.7" ; FeatFlags "0x40"
+##gff-version 3
+##sequence-region X65923 1 518
+#!Date 2008-07-15
+#!Type DNA
+#!Source-version EMBOSS 6.0.0
+X65923	EMBL	polyA_signal_sequence	484	489	0.000	+	.	ID="X65923.6"
+X65923	EMBL	polyA_site	509	509	0.000	+	.	ID="X65923.7";featflags="0x40"
 </pre>
 </td></tr></table><p>
 
@@ -810,9 +795,7 @@ None.
     Notes
 </H2>
 
-It can't find features that are not in the input sequences.
-It has no way of checking whether the input features are correct or not.
-Remember this when you are searching public databases.
+<p><b>twofeat</b> is intended for use as a simple data-mining tool to enable you to look for instances of pairs of features that occur near to each other in the same sequence entry.</p>
 
 <H2>
     References
@@ -848,7 +831,8 @@ This does no affect the results.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="coderet.html">coderet</a></td>
 <td>Extract CDS, mRNA and translations from feature tables</td>
@@ -856,17 +840,17 @@ This does no affect the results.
 
 <tr>
 <td><a href="extractfeat.html">extractfeat</a></td>
-<td>Extract features from a sequence</td>
+<td>Extract features from sequence(s)</td>
 </tr>
 
 <tr>
 <td><a href="maskfeat.html">maskfeat</a></td>
-<td>Mask off features of a sequence</td>
+<td>Write a sequence with masked features</td>
 </tr>
 
 <tr>
 <td><a href="showfeat.html">showfeat</a></td>
-<td>Show features of a sequence</td>
+<td>Display features of a sequence in pretty format</td>
 </tr>
 
 </table>

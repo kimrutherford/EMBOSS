@@ -7,7 +7,7 @@ Search for 'lactose':
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>textsearch tsw:* 'lactose' </b>
-Search sequence documentation. Slow, use SRS and Entrez!
+Search the textual description of sequence(s)
 Output file [edd1_rat.textsearch]: <b></b>
 
 </pre></td></tr></table><p>
@@ -23,7 +23,7 @@ Search for 'lactose' or 'permease' in E.coli proteins:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>textsearch tsw:*_ecoli 'lactose | permease' </b>
-Search sequence documentation. Slow, use SRS and Entrez!
+Search the textual description of sequence(s)
 Output file [laci_ecoli.textsearch]: <b></b>
 
 </pre></td></tr></table><p>
@@ -39,7 +39,7 @@ Output a search for 'lacz' formatted with HTML to a file:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>textsearch tembl:* 'lacz' -html -outfile embl.lacz.html </b>
-Search sequence documentation. Slow, use SRS and Entrez!
+Search the textual description of sequence(s)
 
 </pre></td></tr></table><p>
 <p>

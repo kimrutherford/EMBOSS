@@ -1,5 +1,5 @@
 application: einverted [
-  documentation: "Finds DNA inverted repeats"
+  documentation: "Finds inverted repeats in nucleotide sequences"
   groups: "Nucleic:Repeats, Nucleic:2D structure"
   gui: "yes"
   batch: "yes"

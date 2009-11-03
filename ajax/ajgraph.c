@@ -1255,6 +1255,17 @@ static void GraphLabelTitle(const char *title, const char *subtitle)
 	fold = ajGraphSetCharScale(fold);
     }
 
+    if (graphData)
+    {
+        ajFmtPrintF(graphData->File,"##Maintitle %s\n",title);
+        graphData->Lines++;
+        if(subtitle){
+            ajFmtPrintF(graphData->File,"##Subtitle %s\n",subtitle);
+            graphData->Lines++;
+        }
+    }
+
+
     /*  pllab(x,y,title);*/
 
     ajStrDel(&tmpstr);
@@ -1754,12 +1765,12 @@ void ajGraphDumpDevices(void)
     ajint j;
     AjPStr aliases = NULL;
 
-    ajUser("Devices allowed (with alternative names) are:-");
+    ajUserDumpC("Devices allowed (with alternative names) are:-");
     for(i=0;graphType[i].Name;i++)
     {
 	if(!graphType[i].Alias)
 	{
-	    ajStrAssignC(&aliases, "");
+	    ajStrAssignClear(&aliases);
 	    for(j=0;graphType[j].Name;j++)
 	    {
 		if(graphType[j].Alias &&
@@ -1773,7 +1784,7 @@ void ajGraphDumpDevices(void)
 	    if(ajStrGetLen(aliases))
 		ajUser("%s (%S)",graphType[i].Name, aliases);
 	    else
-		ajUser("%s",graphType[i].Name);
+		ajUserDumpC(graphType[i].Name);
 	}
     }
 
@@ -2731,16 +2742,16 @@ void ajGraphGetCharSize(float *defheight, float *currentheight)
 
 /* @func ajGraphGetOut ********************************************************
 **
-** Get the Output Device Parameters
+** Get the output page parameters
 **
-** For graph data type, sets to zero.
+** For graph data type, sets to zero as these are not applicable.
 **
-** @param [u] xp [float *] where to store the default char height
-** @param [u] yp [float *] where to the current  char height
-** @param [u] xleng [ajint *] where to store the default char height
-** @param [u] yleng [ajint *] where to the current  char height
-** @param [u] xoff [ajint *] where to store the default char height
-** @param [u] yoff [ajint *] where to the current  char height
+** @param [u] xp [float *] where to store the x position
+** @param [u] yp [float *] where to store the y position
+** @param [u] xleng [ajint *] where to store the x length
+** @param [u] yleng [ajint *] where to the y length
+** @param [u] xoff [ajint *] where to store the x offset
+** @param [u] yoff [ajint *] where to sore the y offset
 **
 ** @return [void]
 ** @@
@@ -3618,7 +3629,7 @@ void ajGraphHoriBars(ajint numofpoints, PLFLT *y, PLFLT *xmin, PLFLT *xmax)
 
 /* @func ajGraphInitSeq *******************************************************
 **
-** Creates a graph and define default values based on a sequence.
+** Initialises a graph using default values based on a sequence.
 **
 ** Existing titles and other data are unchanged
 **
@@ -3870,7 +3881,7 @@ static void GraphxyDisplayToData(AjPGraph thys, AjBool closeit,
 	
 	/* open a file for dumping the data points */
 	temp = ajFmtStr("%S%d%s",thys->plplot->outputfile,i+1,ext);
-	outf = ajFileNewOut(temp);
+	outf = ajFileNewOutNameS(temp);
 	ajListstrPushAppend(graphData->List, temp);
 	if(!outf)
 	{
@@ -3919,7 +3930,8 @@ static void GraphxyDisplayToData(AjPGraph thys, AjBool closeit,
 	}
 	else
 	{
-	    ajFmtPrintF(outf,"##Subtitle %S\n",graphdata->subtitle);
+	    if(graphdata->subtitle)
+	        ajFmtPrintF(outf,"##Subtitle %S\n",graphdata->subtitle);
 	    ajFmtPrintF(outf,"##Xtitle %S\n",graphdata->xaxis);
 	    ajFmtPrintF(outf,"##Ytitle %S\n",graphdata->yaxis);
 	}
@@ -4408,7 +4420,7 @@ void ajGraphSetTitleC(AjPGraph thys, const char* title)
 
 void ajGraphSetTitlePlus(AjPGraph thys, const AjPStr title)
 {
-    ajDebug("ajGraphSetTitle '%S'\n", title);
+    ajDebug("ajGraphSetTitlePlus '%S'\n", title);
     if (!thys->plplot)
 	return;
     if(ajStrGetLen(thys->plplot->title))
@@ -6382,12 +6394,12 @@ static void GraphPrint(const AjPGraph thys)
 
     if (!thys->plplot)
     {
-	ajUser("No plplot graph data");
+	ajUserDumpC("No plplot graph data");
 	return;
      }
     if(!thys->plplot->Obj)
     {
-	ajUser("No Objects");
+	ajUserDumpC("No Objects");
 	return;
     }
     else			   /* cycle through till NULL found */
@@ -6481,7 +6493,7 @@ static void GraphDraw(const AjPGraph thys)
 		ajGraphSetFore(temp);
 	    }
 	    else
-		ajUser("UNDEFINED OBJECT TYPE USED");
+		ajUserDumpC("UNDEFINED OBJECT TYPE USED");
 	    Obj = Obj->next;
 	}
     }
@@ -6765,7 +6777,7 @@ static void GraphDataPrint(const AjPGraphPlpData graphdata)
 
     if(!graphdata->Obj)
     {
-	ajUser("No Objects");
+	ajUserDumpC("No Objects");
 	return;
     }
     else
@@ -6852,7 +6864,7 @@ static void GraphDataDraw(const AjPGraphPlpData graphdata)
 		ajGraphSetFore(temp);
 	    }
 	    else
-		ajUser("UNDEFINED OBJECT TYPE USED");
+		ajUserDumpC("UNDEFINED OBJECT TYPE USED");
 	    Obj = Obj->next;
 	}
     }
@@ -7976,7 +7988,7 @@ static void GraphDatafileNext(void)
 	graphData->Lines = 0;
 	tempstr = ajFmtStr("%S%d%S",
 			   graphData->FName,++graphData->Num,graphData->Ext);
-	graphData->File = ajFileNewOut(tempstr);
+	graphData->File = ajFileNewOutNameS(tempstr);
 	if(!graphData->File)
 	{
 	    ajErr("Could not open graph file %S\n",tempstr);

@@ -1,0 +1,21 @@
+<b>Here is a sample session with skipredundant</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>skipredundant -threshold 80 -keepredundant </b>
+Remove redundant sequences from an input set
+Input sequence set: <b>globins.fasta</b>
+Redundancy removal options
+         1 : Single threshold percentage sequence similarity
+         2 : Outside a range of acceptable threshold percentage similarities
+Select number [1]: <b></b>
+Gap opening penalty [10.0]: <b></b>
+Gap extension penalty [0.5]: <b></b>
+output sequence(s) [globins.keep]: <b></b>
+Second output sequence(s) [globins.redundant]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

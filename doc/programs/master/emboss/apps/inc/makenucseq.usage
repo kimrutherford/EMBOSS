@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>makenucseq </b>
-Creates random nucleotide sequences
+Create random nucleotide sequences
 Codon usage file (optional): <b></b>
 Number of sequences created [100]: <b></b>
 Length of each sequence [100]: <b></b>
@@ -24,7 +24,7 @@ Providing a codon usage file specifies the sequence composition. This Pseudomona
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>makenucseq </b>
-Creates random nucleotide sequences
+Create random nucleotide sequences
 Codon usage file (optional): <b>Epseae.cut</b>
 Number of sequences created [100]: <b></b>
 Length of each sequence [100]: <b></b>

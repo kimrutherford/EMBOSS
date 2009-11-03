@@ -38,10 +38,14 @@ if ($html) {
 chdir "$cvsdoc/$dir";
  
 open(M, ">make.temp") || die "Can't open make.temp\n";
-   
+
+$firstchar="a";
 foreach $file (glob("*.gif"), glob("*.html"), glob("*.txt"), glob("*.jpg")) {  
 #print ">$file<\n";
-  if (length($line) + length($file) +1 > 60) {
+  $file =~ /^(.)/;
+  if($1 ne $firstchar) {$firstchar = $1;$newfirst=1}
+  else{$newfirst=0}
+  if ($newfirst || (length($line) + length($file) +1 > 60)) {
     if ($flag) {
       print M " \\\n\t";
     } else {
@@ -64,7 +68,7 @@ foreach $file (glob("*.gif"), glob("*.html"), glob("*.txt"), glob("*.jpg")) {
     $flag = 0;
   }
 }
-print M " \\\n               $line\n\n";
+print M " \\\n\t$line\n\n";
 print M "pkgdatadir=\$(prefix)/share/\$(PACKAGE)/doc/programs/$dir
 pkgdata2dir=\$(prefix)/share/\$(PACKAGE)/doc/programs/$dir\n";
 
@@ -72,7 +76,7 @@ pkgdata2dir=\$(prefix)/share/\$(PACKAGE)/doc/programs/$dir\n";
 close (M);
 
 # copy make.text to be Makefile.am
-system("mv make.temp Makefile.am");
+system("diff make.temp Makefile.am");
 
 # cvs commit it
 print "cvs commit -m'new makefile' Makefile.am\n";

@@ -1,0 +1,106 @@
+application: aligncopypair
+[
+  documentation: "Reads and writes pairs from alignments"
+  groups: "Edit"
+  gui: "yes"
+  batch: "yes"
+  cpu: "low"
+]
+
+
+
+
+
+section: input 
+[
+  information: "Input section"
+  type: "page"
+]
+
+seqset: sequences
+[
+    parameter: "Y"
+    type: "gapany"
+    aligned: "Y"
+    help: "File containing a sequence alignment."
+]
+
+endsection: input
+
+
+
+
+
+section: required 
+[
+  information: "Required section"
+  type: "page"
+]
+endsection: required
+
+
+
+
+
+section: additional
+[
+  information: "Additional section"
+  type: "page"
+]
+  string: name 
+  [
+    additional: "Y"
+    default: ""
+    information: "Name of the alignment"
+    knowntype: "sequence id output"
+  ]
+
+  string: comment 
+  [
+    additional: "Y"
+    default: ""
+    information: "Comment on the alignment"
+    knowntype: "string"
+  ]
+
+  boolean: append
+  [
+    additional: "Y"
+    default: "N"
+    information: "Append to the existing alignment header"
+    help: "This allows you to append the name and comments you have given 
+           on to the end of the existing alignment header."
+  ]
+
+endsection: additional
+
+
+
+
+
+section: advanced
+[
+  information: "Advanced section"
+  type: "page"
+]
+endsection: advanced
+
+
+
+
+
+section: output 
+[
+  information: "Output section"
+  type: "page"
+]
+
+align: outfile 
+[
+    parameter: "Y"
+    minseqs: "2"
+    maxseqs: "2"
+    aformat: "simple"
+]
+
+endsection: output

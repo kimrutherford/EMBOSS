@@ -110,8 +110,8 @@ int main(int argc, char **argv)
     seqout     = ajAcdGetSeqout("outseq");
     before     = ajAcdGetInt("before");
     after      = ajAcdGetInt("after");
-    join       = ajAcdGetBool("join");
-    featinname = ajAcdGetBool("featinname");
+    join       = ajAcdGetBoolean("join");
+    featinname = ajAcdGetBoolean("featinname");
     describe   = ajAcdGetString("describe");
     
     /* feature filter criteria */

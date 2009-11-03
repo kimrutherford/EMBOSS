@@ -1,6 +1,7 @@
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="eprimer3.html">eprimer3</a></td>
 <td>Picks PCR primers and hybridization oligos</td>
@@ -8,7 +9,7 @@
 
 <tr>
 <td><a href="primersearch.html">primersearch</a></td>
-<td>Searches DNA sequences for matches with primer pairs</td>
+<td>Search DNA sequences for matches with primer pairs</td>
 </tr>
 
 </table>

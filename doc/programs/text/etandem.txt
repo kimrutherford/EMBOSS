@@ -5,32 +5,44 @@
 
 Function
 
-   Looks for tandem repeats in a nucleotide sequence
+   Finds tandem repeats in a nucleotide sequence
 
 Description
 
-   etandem looks for tandem repeats in a sequence. It is normally used
-   after equicktandem has been run to identify potential repeat sizes. It
-   calculates a consensus for the repeat region and gives a score for how
-   many matches there are to the consensus - the number of mismatches.
+   etandem identifies tandem repeats in a nucleotide sequence. It
+   calculates a consensus sequence for a putative repeat region and
+   scores potential repeats based on the number of matches and mismatches
+   there are to the consensus. For a repeat to be identified, it must be
+   within the specified minimum and maximum size and must score higher
+   than the specified threshold score. The output is a standard EMBOSS
+   report file with details of the location and score of any tandem
+   repeats. Optionally, the output can be written in the format of the
+   Sanger Centre quicktandem program.
 
-   Input sequences are converted into ACGT or N (so ambiguity codes are
-   ignored).
-   The score is +1 for a match, -1 for a mismatch.
-   The first copy of a repeat is ignored.
-   The highest score is kept for each start position and repeat size.
+Algorithm
 
-   The lowest score to be reported is set by the threshold score. The
-   threshold score can be set on the command-line using the -threshold
-   qualifier, the default is 20. For perfect repeats, the score is the
-   length of the repeat (except for the first copy). Reduce the threshold
-   score a little if you wish to to allow mismatches. Each mismatch
-   scores -1 instead of +1 so it scores 2 less than a perfect match of
-   the same number of bases.
+   The input sequence is first converted so that it contains the
+   characters ACGT or N only, i.e. any ambiguity codes are converted to
+   N. etandem looks for sequence segments which match well to a consensus
+   sequence calculated from non-overlapping windows over the sequence.
+   For a given start point in the sequence and repeat size, a consensus
+   sequence is built from contiguous sequence segments of that size.
 
-   Running with a wide range of repeat sizes is inefficient. That is why
-   equicktandem was written - to give a rapid estimate of the major
-   repeat sizes.
+   The score for a segment (except the first segment which is not scored)
+   is based on the number of matches and mismatches there are to the
+   consensus: the score is incremented (+1) for a match and decremented
+   (-1) for a mismatch. By default, an "N" can never mismatch with a
+   nucleotide but this behaviour can be changed with the -mismatch
+   option. The highest scoring segment is kept for each start position
+   and repeat size.
+
+   Immediately adjacent segments that score higher than the specified
+   threshold score are reported as a tandem repeat. The threshold score
+   can be set on the command-line using the -threshold qualifier, the
+   default is 20. For perfect repeats, the score is the equal to the
+   length of the repeat. To allow for mismatches, the threshold score can
+   be reduced. Each mismatch scores -1 instead of +1 so it scores 2 less
+   than a perfect match of the same number of bases.
 
 Usage
 
@@ -40,7 +52,7 @@ Usage
 
 
 % etandem -noorigfile 
-Looks for tandem repeats in a nucleotide sequence
+Finds tandem repeats in a nucleotide sequence
 Input nucleotide sequence: tembl:L46634
 Minimum repeat size [10]: 6
 Maximum repeat size [6]: 
@@ -94,6 +106,7 @@ Command line arguments
    -raccshow2          boolean    Show accession number in the report
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
+   -rstrandshow2       boolean    Show the nucleotide strand in the report
    -rusashow2          boolean    Show the full USA in the report
    -rmaxall2           integer    Maximum total hits to report
    -rmaxseq2           integer    Maximum hits to report for one sequence
@@ -103,8 +116,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -236,7 +250,7 @@ Output file format
 
 ########################################
 # Program: etandem
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: etandem
 #    -noorigfile
 #    -sequence tembl:L46634
@@ -258,12 +272,12 @@ Output file format
 #
 #=======================================
 
-  Start     End   Score   Size  Count Identity Consensus
-    793     936     120      6     24     93.8 acccta
-    283     420      90      6     23     84.8 taaccc
-    432     485      38      6      9     90.7 ccctaa
-    494     529      26      6      6     94.4 ccctaa
-    568     597      24      6      5    100.0 aaccct
+  Start     End  Strand   Score   Size  Count Identity Consensus
+    793     936       +     120      6     24     93.8 acccta
+    283     420       +      90      6     23     84.8 taaccc
+    432     485       +      38      6      9     90.7 ccctaa
+    494     529       +      26      6      6     94.4 ccctaa
+    568     597       +      24      6      5    100.0 aaccct
 
 #---------------------------------------
 #---------------------------------------
@@ -274,9 +288,9 @@ Data files
 
 Notes
 
-   Running with a wide range of repeat sizes is inefficient. That is why
-   equicktandem was written - to give a rapid estimate of the major
-   repeat sizes.
+   Running etandem with a wide range of repeat sizes is inefficient. It
+   is normally used after equicktandem has been run to identify putative
+   sizes and locations of repeats.
 
 References
 
@@ -300,10 +314,10 @@ Known bugs
 
 See also
 
-   Program name                     Description
-   einverted    Finds DNA inverted repeats
-   equicktandem Finds tandem repeats
-   palindrome   Looks for inverted repeats in a nucleotide sequence
+   Program name                   Description
+   einverted    Finds inverted repeats in nucleotide sequences
+   equicktandem Finds tandem repeats in nucleotide sequences
+   palindrome   Finds inverted repeats in nucleotide sequence(s)
 
    Running with a wide range of repeat sizes is inefficient. That is why
    equicktandem was written - to give a rapid estimate of the major

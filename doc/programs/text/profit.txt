@@ -5,30 +5,32 @@
 
 Function
 
-   Scan a sequence or database with a matrix or profile
+   Scan one or more sequences with a simple frequency matrix
 
 Description
 
-   profit takes a simple frequency matrix produced by prophecy and
-   searches with this to find matches in the input sequence(s) you are
-   searching.
+   profit scans one or more sequences with a simple frequency matrix and
+   writes an output file with any high-scoring matches. All possible
+   ungapped alignments of each sequence to the matrix are scored and any
+   matches with a score higher than the specified threshold are written
+   to the output file. The output file includes the name of any matching
+   sequence found, the start position in the sequence of the match and
+   the percentage of the maximum possible score.
 
-   Scores for the matches are calculated from the simple frequency
-   matrix. It is the sum of scores at each position of the matrix.
+Algorithm
 
-   A 'simple frequency matrix' is simply a count of the number of times
-   any particular amino acid occurs at each position in the alignment
-   used to create it. Simple frequency matrices are created using the
-   program prophecy with the option '-type F' to create the correct type
-   of matrix. The alignment should not have gaps in it.
+   All possible ungapped alignments of each sequence to the frequency
+   matrix are scored. The first alignment has the first positions of the
+   sequence and matrix in the same register. If the sequence is larger
+   than the matrix, there will be more than one alignment. Otherwise,
+   there will be just one.
 
-   The resulting matrix is moved to each position in the sequence(s) you
-   are searching. At each position in the sequence, the frequencies of
-   the amino acids or bases covered by the length of the matrix is read
-   from the matrix. The sum of these frequencies at each position of the
-   matrix is the score for that position of the sequence. If this score
-   is above the threshold percentage of the maximum possible score for
-   that matrix, then a hit is reported.
+   The score for a match is simply the sum of scores at each position of
+   the matrix for the corresponding residue from the sequence. The
+   percentage of the maximum possible score reported in the output file
+   is the sum of the highest value at each position in the frequency
+   matrix. Where the match score is above the threshold percentage of the
+   maximum possible score for that matrix, then a hit is reported.
 
 Usage
 
@@ -65,7 +67,7 @@ Output file [outfile.prophecy]:
 
 
 % profit 
-Scan a sequence or database with a matrix or profile
+Scan one or more sequences with a simple frequency matrix
 Profile or weight matrix file: outfile.prophecy
 Input sequence(s): tsw:*
 Output file [outfile.profit]: 
@@ -106,8 +108,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -207,7 +210,12 @@ Data files
 
 Notes
 
-   None.
+   A 'simple frequency matrix' is simply a table containing a count of
+   the number of times any particular amino acid occurs at each position
+   in the sequence alignment from which it was derived. Simple frequency
+   matrices are created using the program prophecy with the option -type
+   F to create the correct type of matrix. The input alignment should not
+   have gaps in it.
 
 References
 
@@ -233,9 +241,9 @@ Known bugs
 
 See also
 
-   Program name                    Description
-   prophecy     Creates matrices/profiles from multiple alignments
-   prophet      Gapped alignment for profiles
+   Program name                          Description
+   prophecy     Create frequency matrix or profile from a multiple alignment
+   prophet      Scan one or more sequences with a Gribskov or Henikoff profile
 
 Author(s)
 

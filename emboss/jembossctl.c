@@ -2351,7 +2351,7 @@ static AjBool jembossctl_do_listfiles(char *buf, int uid, int gid,
 	return ajFalse;
     }
 
-    ajFileDirFix(&dir);
+    ajDirnameFix(&dir);
 
     list = ajListNew();
 
@@ -2543,7 +2543,7 @@ static AjBool jembossctl_do_listdirs(char *buf, int uid, int gid,
 	return ajFalse;
     }
 
-    ajFileDirFix(&dir);
+    ajDirnameFix(&dir);
 
     list = ajListNew();
 

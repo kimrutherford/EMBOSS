@@ -24,46 +24,20 @@ diffseq
 <H2>
     Function
 </H2>
-Find differences between nearly identical sequences
+Compare and report features of two similar sequences
 <H2>
     Description
 </H2>
 
-<b>diffseq</b> takes two overlapping, nearly identical sequences and
-reports the differences between them, together with any features that
-overlap with these regions. GFF files of the differences in each
-sequence are also produced.
+<p><b>diffseq</b> reads two sequences which typically are very similar or almost identical.  It finds regions of identity (exact matches) in the two sequences and reports on similarities and differences between the features of the two sequences within these regions.  The output is a standard EMBOSS report file.  The start and end positions of the regions of identity are reported.  Any features that are shared and any differerences in features are reported.  The original feature table of each sequence may also (optionally) be written to file.</p>
 
-<p>
 
-<b>diffseq</b> finds the region of overlap of the input sequences and
-then reports differences within this region, like a local alignment.
 
-<p>
+<H2>
+Algorithm
+</H2>
 
-The start and end positions of the overlap are reported.
-
-<p>
-
-<b>diffseq</b> should be of value when looking for SNPs, differences
-between strains of an organism and anything else that requires the
-differences between sequences to be highlighted.
-
-<p>  
-
-The sequences can be very long. The program does a match of all
-sequence words of size 10 (by default). It then reduces this to the
-minimum set of overlapping matches by sorting the matches in order of
-size (largest size first) and then for each such match it removes any
-smaller matches that overlap. The result is a set of the longest
-ungapped alignments between the two sequences that do not overlap with
-each other. The mismatched regions between these matches are reported.
-
-<p>   
-
-It should be possible to find differences between sequences that are Mega-bases
-long.
-
+<p><b>diffseq</b> searches for identical matches between all sequence words from both sequences. Identical sequence regions are found by creating a hash table of subsequences of user-defined size (-wordsize option), which is 10 by default. It then reduces the matches to a minimum set of overlapping matches by sorting them in order of size (largest size first).  For each such match it removes any smaller matches that overlap. The result is a set of the longest regions of identity between the two sequences that do not overlap with each other. The mismatched regions between these matches are reported.</p>
 
 <H2>
     Usage
@@ -75,7 +49,7 @@ long.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>diffseq tembl:x65923 tembl:ay411291 </b>
-Find differences between nearly identical sequences
+Compare and report features of two similar sequences
 Word size [10]: <b></b>
 Output report [x65923.diffseq]: <b></b>
 Features output [X65923.diffgff]: <b></b>
@@ -173,6 +147,7 @@ Second features output [AY411291.diffgff]: <b></b>
    -raccshow3          boolean    Show accession number in the report
    -rdesshow3          boolean    Show description in the report
    -rscoreshow3        boolean    Show the score in the report
+   -rstrandshow3       boolean    Show the nucleotide strand in the report
    -rusashow3          boolean    Show the full USA in the report
    -rmaxall3           integer    Maximum total hits to report
    -rmaxseq3           integer    Maximum hits to report for one sequence
@@ -195,8 +170,9 @@ Second features output [AY411291.diffgff]: <b></b>
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -483,7 +459,7 @@ By default <b>diffseq</b> writes a 'diffseq' report file.
 <pre>
 ########################################
 # Program: diffseq
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: diffseq
 #    [-asequence] tembl:x65923
 #    [-bsequence] tembl:ay411291
@@ -536,19 +512,23 @@ AY411291 228-228 Length: 1
 <p><h3>File: AY411291.diffgff</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-##gff-version 2.0
-##date 2006-07-15
-##Type DNA AY411291
-AY411291	diffseq	conflict	228	228	1.000	+	.	Sequence "AY411291.1" ; note "SNP in X65923" ; replace "t"
+##gff-version 3
+##sequence-region AY411291 1 402
+#!Date 2008-07-15
+#!Type DNA
+#!Source-version EMBOSS 6.0.0
+AY411291	diffseq	sequence_conflict	228	228	1.000	+	.	ID="AY411291.1";note="SNP in X65923";replace="t"
 </pre>
 </td></tr></table><p>
 <p><h3>File: X65923.diffgff</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-##gff-version 2.0
-##date 2006-07-15
-##Type DNA X65923
-X65923	diffseq	conflict	284	284	1.000	+	.	Sequence "X65923.1" ; note "SNP in AY411291" ; replace "c"
+##gff-version 3
+##sequence-region X65923 1 518
+#!Date 2008-07-15
+#!Type DNA
+#!Source-version EMBOSS 6.0.0
+X65923	diffseq	sequence_conflict	284	284	1.000	+	.	ID="X65923.1";note="SNP in AY411291";replace="c"
 </pre>
 </td></tr></table><p>
 
@@ -627,31 +607,12 @@ None
     Notes
 </H2>
 
-It should be noted that not all features are reported.
 
-<p>
+<p><b>diffseq</b> is useful when looking for SNPs, differences between strains of an organism and anything else that requires the differences between two eseentially identical sequences to be highlighted.</p>
 
-The 'source' feature found in all EMBL/Genbank feature table entries is
-not reported as this covers all of the sequence and so overlaps with any
-difference found in that sequence and so is uninformative and
-irritating.  It has therefore been removed from the output report. 
+<p>Identical sequence regions are found by creating a hash table of subsequences of user-defined size (-wordsize option, which is 10 by default). Making this value larger (e.g. 20) may speed-up the program slightly, but will mean that any two differences within <tt>wordsize</tt> bases bases or residues of each other will be grouped as a single region of difference.  This value may be made smaller to improve the resolution of nearby differences, but the program will go much slower.</p>
 
-<p>
-
-The translation information of CDS features is often extremely long and
-does not add useful information to the report.  It has therefore been
-removed from the output report. 
-
-<p>
-
-If you run out of memory, use a larger word size.
-
-<p>
-
-Using a larger word size increases the length between mismatches that
-will be reported as one event.  Thus a word size of 50 will report two
-single-base differences that are with 50 bases of each other as one mismatch. 
-
+<p>The sequences can be very long; it should be possible to find differences between sequences that are Mega-bases long. If, however, you run out of memory, use a larger word size.  This increases the length between mismatches that will be reported as one event. Thus a word size of 50 will report two single-base differences that are with 50 bases of each other as one mismatch.</p>
    
 <H2>
     References
@@ -663,7 +624,9 @@ None.
     Warnings
 </H2>
 
-None.
+<p>Not all features are compared and reported.  The 'source' feature found in all EMBL/Genbank feature table entries is not reported.  This feature is uninformative; it covers the entire sequence and therefore would always be reported. The translation information of CDS features is often extremely long and does not add useful information to the report. It has therefore been removed from the output report.</p>
+
+<p>By default <b>diffseq</b> finds regions of identity that are at least as long as the specified word-size. This is what's typically required when working with long overlapping nucleic acid sequences, where the non-overlapping sequence ends are less interesting. If however, you have protein sequences or short RNA sequences however, you may well be interested in differences at the very ends.  The <tt>-globaldifferences</tt> option when set means the differences at the ends will also be reported.</p>
 
 <H2>
     Diagnostic Error Messages
@@ -685,7 +648,8 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 </table>
 
 <H2>

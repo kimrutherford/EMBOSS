@@ -1,0 +1,14 @@
+<b>Here is a sample session with inforesidue</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>inforesidue </b>
+Return information on a given amino acid residue
+Amino acid residue code [ABCDEFGHIJKLMNOPQRSTUVWXYZ]: <b></b>
+Output file [outfile.inforesidue]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>

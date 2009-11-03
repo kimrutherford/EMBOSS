@@ -18,17 +18,14 @@ fuzznuc
 <H2>
     Description
 </H2>
-fuzznuc uses PROSITE style patterns to search nucleotide sequences. 
+<p><b>fuzznuc</b> searches for a specified PROSITE-style pattern in nucleotide sequences. Such patterns are specifications of a (typically short) length of sequence to be found. They can specify a search for an exact sequence or they can allow various ambiguities, matches to variable lengths of sequence and repeated subsections of the sequence. One or more nucleotide sequences are read from file.  The output is a standard EMBOSS report file that includes data such as location and score of any matches.</p>
 
-<p>
-Patterns are specifications of a (typically short) length of sequence to
-be found.  They can specify a search for an exact sequence or they can
-allow various ambiguities, matches to variable lengths of sequence and
-repeated subsections of the sequence. 
 
-<p>
-fuzznuc intelligently selects the optimum searching algorithm to use,
-depending on the complexity of the search pattern specified. 
+<H2>
+Algorithm
+</H2>
+
+<p><b>fuzznuc</b> intelligently selects the optimum searching algorithm to use, depending on the complexity of the search pattern specified.</p>
 
 <H2>
     Usage
@@ -101,7 +98,7 @@ ends with a `&gt;' symbol.
 </ul>
 
 <p>
-For example, in the EMBL entry ECLAC you can look for the pattern:
+For example, in the EMBL entry J01636 you can look for the pattern:
 
 <pre>
 

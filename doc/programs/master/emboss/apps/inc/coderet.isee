@@ -1,54 +1,55 @@
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="backtranambig.html">backtranambig</a></td>
-<td>Back translate a protein sequence to ambiguous codons</td>
+<td>Back-translate a protein sequence to ambiguous nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="backtranseq.html">backtranseq</a></td>
-<td>Back translate a protein sequence</td>
+<td>Back-translate a protein sequence to a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="extractfeat.html">extractfeat</a></td>
-<td>Extract features from a sequence</td>
+<td>Extract features from sequence(s)</td>
 </tr>
 
 <tr>
 <td><a href="maskfeat.html">maskfeat</a></td>
-<td>Mask off features of a sequence</td>
+<td>Write a sequence with masked features</td>
 </tr>
 
 <tr>
 <td><a href="plotorf.html">plotorf</a></td>
-<td>Plot potential open reading frames</td>
+<td>Plot potential open reading frames in a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="prettyseq.html">prettyseq</a></td>
-<td>Output sequence with translated ranges</td>
+<td>Write a nucleotide sequence and its translation to file</td>
 </tr>
 
 <tr>
 <td><a href="remap.html">remap</a></td>
-<td>Display sequence with restriction sites, translation etc</td>
+<td>Display restriction enzyme binding sites in a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="showfeat.html">showfeat</a></td>
-<td>Show features of a sequence</td>
+<td>Display features of a sequence in pretty format</td>
 </tr>
 
 <tr>
 <td><a href="showorf.html">showorf</a></td>
-<td>Pretty output of DNA translations</td>
+<td>Display a nucleotide sequence and translation in pretty format</td>
 </tr>
 
 <tr>
 <td><a href="showseq.html">showseq</a></td>
-<td>Display a sequence with features, translation etc</td>
+<td>Displays sequences with features in pretty format</td>
 </tr>
 
 <tr>
@@ -63,7 +64,7 @@
 
 <tr>
 <td><a href="twofeat.html">twofeat</a></td>
-<td>Finds neighbouring pairs of features in sequences</td>
+<td>Finds neighbouring pairs of features in sequence(s)</td>
 </tr>
 
 </table>

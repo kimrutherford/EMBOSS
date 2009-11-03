@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>primersearch tembl:z52466 </b>
-Searches DNA sequences for matches with primer pairs
+Search DNA sequences for matches with primer pairs
 Primer pairs file: <b>primers</b>
 Allowed percent mismatch [0]: <b></b>
 Whitehead primer3_core program output file [z52466.primersearch]: <b></b>
@@ -23,7 +23,7 @@ Here we run the same example but allowing 20% mismatch between the primers and t
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>primersearch tembl:z52466 </b>
-Searches DNA sequences for matches with primer pairs
+Search DNA sequences for matches with primer pairs
 Primer pairs file: <b>primers</b>
 Allowed percent mismatch [0]: <b>20</b>
 Whitehead primer3_core program output file [z52466.primersearch]: <b></b>

@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>est2genome </b>
-Align EST and genomic DNA sequences
+Align EST sequences to genomic DNA sequence
 Spliced EST nucleotide sequence(s): <b>tembl:h45989</b>
 Unspliced genomic nucleotide sequence: <b>tembl:z69719</b>
 Output file [h45989.est2genome]: <b></b>

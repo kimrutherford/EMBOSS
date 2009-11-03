@@ -24,25 +24,16 @@ syco
 <H2>
     Function
 </H2>
-Synonymous codon usage Gribskov statistic plot
+Draw synonymous codon usage statictic plot for a nucleotide sequence
 
 <H2>
     Description
 </H2>
 
-<b>syco</b> is a frame-specific gene finder that tries to recognize
-protein coding sequences by virtue of the similarity of their codon
-usage to a codon frequency table.
-<p>
-<b>syco</b> finds regions of each forward reading frame of a nucleic
-acid sequence that show strong codon preference. <b>syco</b> is useful
-for locating protein coding regions, determining their reading frames,
-estimating the level of expression of a gene, and locating nucleic
-acid sequencing errors.
+<p><b>syco</b> may is a frame-specific gene finder that tries to recognize protein coding sequences by virtue of the similarity of their codon usage to a codon frequency table. Given a codon usage file and an input nucleotide sequence, <b>syco</b> draws a plot of the synonymous codon usage Gribskov statistic calculated for windows over the sequence.  The same data may be written to an output file.  <b>syco</b> finds regions of each forward reading frame of a nucleic acid sequence that show strong codon preference. <b>syco</b> is useful for locating protein coding regions, determining their reading frames, estimating the level of expression of a gene, and locating nucleic acid sequencing errors. It is essential to use the correct codon usage file for the species. </p>
 
-<p>
 
-It is essential to use the correct codon usage file for the species.
+
 
 <H2>
     Usage
@@ -54,7 +45,7 @@ It is essential to use the correct codon usage file for the species.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>syco -plot -cfile Epseae.cut </b>
-Synonymous codon usage Gribskov statistic plot
+Draw synonymous codon usage statictic plot for a nucleotide sequence
 Input nucleotide sequence: <b>tembl:x13776</b>
 Graph type [x11]: <b>ps</b>
 
@@ -124,8 +115,9 @@ Created syco.ps
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -426,8 +418,10 @@ None.
 </H2>
 
 
-The default codon usage table file is the human <b>Ehum.cut</b>
-- caution: this may well not be the correct species.
+<p>The default codon usage table file is the human <tt>Ehum.cut</tt> - caution: this may well not be the correct species.</p>
+
+
+
 
 <H2>
     Diagnostic Error Messages
@@ -449,15 +443,16 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="cai.html">cai</a></td>
-<td>CAI codon adaptation index</td>
+<td>Calculate codon adaptation index</td>
 </tr>
 
 <tr>
 <td><a href="chips.html">chips</a></td>
-<td>Codon usage statistics</td>
+<td>Calculates Nc codon usage statistic</td>
 </tr>
 
 <tr>
@@ -467,7 +462,7 @@ None.
 
 <tr>
 <td><a href="cusp.html">cusp</a></td>
-<td>Create a codon usage table</td>
+<td>Create a codon usage table from nucleotide sequence(s)</td>
 </tr>
 
 <tr>
@@ -477,17 +472,17 @@ None.
 
 <tr>
 <td><a href="marscan.html">marscan</a></td>
-<td>Finds MAR/SAR sites in nucleic sequences</td>
+<td>Finds matrix/scaffold recognition (MRS) signatures in DNA sequences</td>
 </tr>
 
 <tr>
 <td><a href="plotorf.html">plotorf</a></td>
-<td>Plot potential open reading frames</td>
+<td>Plot potential open reading frames in a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="showorf.html">showorf</a></td>
-<td>Pretty output of DNA translations</td>
+<td>Display a nucleotide sequence and translation in pretty format</td>
 </tr>
 
 <tr>
@@ -497,12 +492,12 @@ None.
 
 <tr>
 <td><a href="tcode.html">tcode</a></td>
-<td>Fickett TESTCODE statistic to identify protein-coding DNA</td>
+<td>Identify protein-coding regions using Fickett TESTCODE statistic</td>
 </tr>
 
 <tr>
 <td><a href="wobble.html">wobble</a></td>
-<td>Wobble base plot</td>
+<td>Plot third base position variability in a nucleotide sequence</td>
 </tr>
 
 </table>

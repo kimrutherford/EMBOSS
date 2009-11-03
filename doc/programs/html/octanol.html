@@ -24,51 +24,15 @@ octanol
 <H2>
     Function
 </H2>
-Displays protein hydropathy
+Draw a White-Wimley protein hydropathy plot
 
 <H2>
     Description
 </H2>
 
 
-Protein sequences that form transmembrane regions are assumed to have
-a thermodynamic preference for a hydrophobic environment (inside the
-membrane lipid bilayer), rather than an aqueous environment in water.
 
-<p>
-The free energy change for each amino acid residue between a lipid and
-a water environment can be measured experimentally, and the values for
-peptides can be shown to be additive (White and Wimley 1999).
-
-<p>
-The octanol program calculates two free energy differences.
-
-<p>
-The first is the free energy difference between
-solution in water and association with the interface (glycerol group) of a
-POPC (palmitoyloleoylphosphocholine) bilayer.
-
-<p>
-The second is the free energy difference between water and octanol,
-equivalent to the environment inside a lipid bilayer.
-
-<p>
-Residues which can be buried inside a lipid bilayer must be in a
-region of the peptide where most residues show a free energy
-difference in favour of being in an octanol environment or at least being
-in the lipid/water interface region.
-
-<p>
-White and Wimley (1999) showed that a sliding window of either free
-energy difference will indicate the location of probably transmembrane
-regions, but that the best indicator is the difference between the two
-values, which is the free energy difference between the interface and
-octanol environments.
-
-<p> The free energies are calculated over a sliding window of 19
-residues, about the size of a membrane spanning alphahelix. The energy
-values for each residue are added over the window.
-
+<p><b>octanol</b> draws a hydropathy plot for an input protein sequence.  This plots the free energy difference calculated for windows over the protein sequence, of the residues in water compared to two lipid environments: i. Octanol (equivalent to inside a lipid bilayer). ii. The interface of a synthetic lipid bilayer. Free energy differences are calculated for each position in a window of 19 residues by default, about the size of a membrane spanning alpha-helix. The energy values for each residue are summed to get two values for each window.  By default, the value plotted is the free energy difference between the interface and octanol environments, which is the best indicator of the location of probable transmembrane regions.  Command line options allow the display of the octanol and interface values, or hiding the difference values. The experimental free energy values for the water-interface and water-octanol transitions are read from a datafile (<tt>Ewhite-wimley.dat</tt>)</p>
 
 <H2>
     Usage
@@ -80,7 +44,7 @@ values for each residue are added over the window.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>octanol </b>
-Displays protein hydropathy
+Draw a White-Wimley protein hydropathy plot
 Input protein sequence: <b>tsw:opsd_human</b>
 Graph type [x11]: <b>ps</b>
 
@@ -141,8 +105,9 @@ Created octanol.ps
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -462,7 +427,15 @@ The directories are searched in the following order:
     Notes
 </H2>
 
-None.
+<p>Protein sequences that form transmembrane regions are assumed to have a thermodynamic preference for a hydrophobic environment (inside the membrane lipid bilayer), rather than an aqueous environment in water.  The free energy change for each amino acid residue between a lipid and a water environment can be measured experimentally, and the values for peptides can be shown to be additive (White and Wimley 1999).</p>
+
+<p>For each amino acid residue in the protein, the free energy difference of the residue in lipid and water environments is measured in two ways.  The first is the free energy difference between the protein in water and the protein associated with the interface (glycerol group) of a POPC (palmitoyloleoylphosphocholine) bilayer.  The second is the free energy difference of the protein in water and the protein in octanol, equivalent to the environment inside a lipid bilayer.</p>
+
+<p>Residues which can be buried inside a lipid bilayer must be in a region of the peptide where most residues show a free energy difference in favour of being in an octanol environment or at least being in the lipid/water interface region.  White and Wimley (1999) showed that a sliding window of either free energy difference will indicate the location of probable transmembrane regions, but that the best indicator is the difference between the two values, which is the free energy difference between the interface and octanol environments.</p>
+
+
+
+
 
 <H2>
     References
@@ -503,20 +476,21 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="backtranambig.html">backtranambig</a></td>
-<td>Back translate a protein sequence to ambiguous codons</td>
+<td>Back-translate a protein sequence to ambiguous nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="backtranseq.html">backtranseq</a></td>
-<td>Back translate a protein sequence</td>
+<td>Back-translate a protein sequence to a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="charge.html">charge</a></td>
-<td>Protein charge plot</td>
+<td>Draw a protein charge plot</td>
 </tr>
 
 <tr>
@@ -526,52 +500,57 @@ None.
 
 <tr>
 <td><a href="compseq.html">compseq</a></td>
-<td>Count composition of dimer/trimer/etc words in a sequence</td>
+<td>Calculate the composition of unique words in sequences</td>
 </tr>
 
 <tr>
 <td><a href="emowse.html">emowse</a></td>
-<td>Protein identification by mass spectrometry</td>
+<td>Search protein sequences by digest fragment molecular weight</td>
 </tr>
 
 <tr>
 <td><a href="freak.html">freak</a></td>
-<td>Residue/base frequency table or plot</td>
+<td>Generate residue/base frequency table or plot</td>
 </tr>
 
 <tr>
 <td><a href="iep.html">iep</a></td>
-<td>Calculates the isoelectric point of a protein</td>
+<td>Calculate the isoelectric point of proteins</td>
 </tr>
 
 <tr>
 <td><a href="mwcontam.html">mwcontam</a></td>
-<td>Shows molwts that match across a set of files</td>
+<td>Find weights common to multiple molecular weights files</td>
 </tr>
 
 <tr>
 <td><a href="mwfilter.html">mwfilter</a></td>
-<td>Filter noisy molwts from mass spec output</td>
+<td>Filter noisy data from molecular weights file</td>
 </tr>
 
 <tr>
 <td><a href="pepinfo.html">pepinfo</a></td>
-<td>Plots simple amino acid properties in parallel</td>
+<td>Plot amino acid properties of a protein sequence in parallel</td>
 </tr>
 
 <tr>
 <td><a href="pepstats.html">pepstats</a></td>
-<td>Protein statistics</td>
+<td>Calculates statistics of protein properties</td>
 </tr>
 
 <tr>
 <td><a href="pepwindow.html">pepwindow</a></td>
-<td>Displays protein hydropathy</td>
+<td>Draw a Kyte-Doolittle hydropathy plot for a protein sequence</td>
 </tr>
 
 <tr>
 <td><a href="pepwindowall.html">pepwindowall</a></td>
-<td>Displays protein hydropathy of a set of sequences</td>
+<td>Draw Kyte-Doolittle hydropathy plot for a protein alignment</td>
+</tr>
+
+<tr>
+<td><a href="wordcount.html">wordcount</a></td>
+<td>Count and extract unique words in DNA sequence(s)</td>
 </tr>
 
 </table>

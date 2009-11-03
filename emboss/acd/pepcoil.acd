@@ -1,5 +1,5 @@
 application: pepcoil [
-  documentation: "Predicts coiled coil regions"
+  documentation: "Predicts coiled coil regions in protein sequences"
   groups: "Protein:2D Structure, Protein:Motifs"
 ]
 
@@ -47,13 +47,14 @@ section: output [
   ]
 
   boolean: other [
-    default: "Y"
+    default: "N"
     information: "Report non coiled coil regions"
   ]
 
-  outfile: outfile [
+  report: outfile [
     parameter: "Y"
-    knowntype: "pepcoil output"
+    rformat: "motif"
+    taglist: "float:Probability str:Predict int:pos=Max_coil_pos str:Frames"
   ]
 
 endsection: output

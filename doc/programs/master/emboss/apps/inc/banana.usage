@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>banana -nooutfile -graph ps </b>
-Bending and curvature plot in B-DNA
+Plot bending and curvature data for B-DNA
 Input nucleotide sequence: <b>tembl:u68037</b>
 
 Created banana.ps
@@ -21,7 +21,7 @@ Created banana.ps
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>banana -graph data </b>
-Bending and curvature plot in B-DNA
+Plot bending and curvature data for B-DNA
 Input nucleotide sequence: <b>tembl:u68037</b>
 
 Created banana1.dat

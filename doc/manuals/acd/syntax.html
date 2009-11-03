@@ -441,6 +441,18 @@ Kinetics" which had to be created to hold 'findkm').</p>
 
  <tr>
   <td>
+  <p>Assembly</p>
+  </td>
+  <td>
+  <p>Fragment_assembly</p>
+  </td>
+  <td>
+  <p>DNA sequence assembly</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
   <p>Display</p>
   </td>
   <td>
@@ -1581,6 +1593,7 @@ nullok: N<br>
   <td>
   <p>
 nullok: N<br>
+trydefault: N<br>
 binary: N<br>
 
  </p>
@@ -1685,7 +1698,7 @@ type: "string"<br>
   <td>
   <p>
 pformat: ""<br>
-pmismatch: ""<br>
+pmismatch: "0"<br>
 pname: ""<br>
 
  </p>
@@ -2690,6 +2703,7 @@ rdirectory: ""<br>
 raccshow: "N"<br>
 rdesshow: "N"<br>
 rscoreshow: "Y"<br>
+rstrandshow: "Y"<br>
 rusashow: "N"<br>
 rmaxall: "0"<br>
 rmaxseq: "0"<br>
@@ -4836,7 +4850,7 @@ they can fix the value, or provide parsers for each alternative.
   <p>&nbsp;</p>
   </td>
   <td>
-  <p>missval: <i>integer<i></p>
+  <p>missval: <i>Y/N<i></p>
   </td>
   <td>
   <p>Can have missing values (replicates zero)<br>Default: N</p>
@@ -4972,6 +4986,18 @@ they can fix the value, or provide parsers for each alternative.
   </td>
   <td>
   <p>Can accept a null filename as 'no file'<br>Default: N</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>trydefault: <i>Y/N<i></p>
+  </td>
+  <td>
+  <p>Default filename may not exist if nullok is true<br>Default: N</p>
   </td>
  </tr>
 
@@ -5797,7 +5823,11 @@ can run without a frequencies file.
 
 <p>The <i>nullok:</i> attribute specifies that a missing input file is
 acceptable to the application, and that -noxxx can be used on the
-command line to avoid reading the default input ifle (if any)</p>
+command line to avoid reading the default input file (if any)</p>
+
+<p>The <i>trydefault:</i> attribute specifies that the default
+filename may not exist. If <i>nullok:</i> is also defined as true then
+no error is reported.</p>
 
 <h5>Matrix</h5>
 
@@ -9128,6 +9158,27 @@ table 8.</p>
 
  <tr>
   <td>
+  <p>gapnucleotidesimple</p>
+  </td>
+  <td>
+  <p>Nucleotide only</p>
+  </td>
+  <td>
+  <p>Kept</p>
+  </td>
+  <td>
+  <p>Yes</p>
+  </td>
+  <td>
+  <p> 'B'=&gt;'N'<br> 'D'=&gt;'N'<br> 'H'=&gt;'N'<br> 'K'=&gt;'N'<br> 'M'=&gt;'N'<br> 'R'=&gt;'N'<br> 'S'=&gt;'N'<br> 'V'=&gt;'N'<br> 'W'=&gt;'N'<br> 'X'=&gt;'N'<br> 'Y'=&gt;'N'<br> '?'=&gt;'N'</p>
+  </td>
+  <td>
+  <p>nucleotide sequence with gaps but only N for ambiguity</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
   <p>protein</p>
   </td>
   <td>
@@ -9309,6 +9360,27 @@ table 8.</p>
   </td>
   <td>
   <p> '?'=&gt;'X'<br> '*'=&gt;'X'<br> 'U'=&gt;'X'<br> 'J'=&gt;'X'<br> 'O'=&gt;'X'</p>
+  </td>
+  <td>
+  <p>protein sequence with gaps but no selenocysteine</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>gapproteinsimple</p>
+  </td>
+  <td>
+  <p>Protein only</p>
+  </td>
+  <td>
+  <p>Kept</p>
+  </td>
+  <td>
+  <p>Yes</p>
+  </td>
+  <td>
+  <p> '?'=&gt;'X'<br> '*'=&gt;'X'<br> 'B'=&gt;'X'<br> 'Z'=&gt;'X'<br> 'U'=&gt;'X'<br> 'J'=&gt;'X'<br> 'O'=&gt;'X'</p>
   </td>
   <td>
   <p>protein sequence with gaps but no selenocysteine</p>
@@ -9995,7 +10067,7 @@ of the prefix ' <i>no</i>' to the qualifier <i>-options</i> (giving
   <p>-pmismatch: <i>integer<i></p>
   </td>
   <td>
-  <p>Pattern mismatch<br>Default: </p>
+  <p>Pattern mismatch<br>Default: 0</p>
   </td>
  </tr>
 
@@ -11246,6 +11318,18 @@ of the prefix ' <i>no</i>' to the qualifier <i>-options</i> (giving
   </td>
   <td>
   <p>Show the score in the report<br>Default: Y</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>-rstrandshow: <i>Y/N<i></p>
+  </td>
+  <td>
+  <p>Show the nucleotide strand in the report<br>Default: Y</p>
   </td>
  </tr>
 
@@ -12564,6 +12648,18 @@ a variable to be defined in this file.</p>
   </td>
   <td>
   <p>Date and time to override the current date - used to give a standard date and time for test runs<br>Default: "2006-07-15 12:00:00"</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>EMBOSS_WARNOBSOLETE</p>
+  </td>
+  <td>
+  <p>boolean</p>
+  </td>
+  <td>
+  <p>Print warning messages when ACD file declares an application as 'obsolete'<br>Default: Y</p>
   </td>
  </tr>
 

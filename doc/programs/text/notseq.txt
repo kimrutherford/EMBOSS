@@ -5,38 +5,14 @@
 
 Function
 
-   Exclude a set of sequences and write out the remaining ones
+   Write to file a subset of an input stream of sequences
 
 Description
 
-   When you have a set of sequences (a file of multiple sequences?) and
-   you wish to remove one or more of them from the set, then use notseq.
-
-   This program was written for the case where a file containing several
-   sequences is being used as a small database, but some of the sequences
-   are no longer required and must be deleted from the file.
-
-   notseq splits the input sequences into those that you wish to keep and
-   those you wish to exclude.
-
-   notseq takes a set of sequences as input together with a list of
-   sequence names or accession numbers. It also takes the name of a new
-   file to write the files that you want to keep into, and optionally the
-   name of a file that will contain the files that you want excluded from
-   the set.
-
-   notseq then reads in the input sequences. It outputs the ones that
-   match one of the sequence names or acession numbers to the file of
-   excluded sequences, and those that don't match are output to the file
-   of sequences to be kept.
-
-   Note that the names of the sequences to be excluded are not standard
-   EMBOSS USAs. Only the name or accession number shoudl be specified,
-   not the database or file that these entries may occur in. These
-   excluded sequence names will be matched against the names of the input
-   sequences to see if there is a match. Wildcarded names may be
-   specified by using '*'s. Any specified names of sequences to be
-   excluded that are not found are simply ignored.
+   notseq writes to file a subset of an input stream of sequences. The
+   list of sequence names or accession numbers to exclude from output is
+   provided as a string. Optionally, the excluded sequences are also
+   written to file.
 
 Usage
 
@@ -47,7 +23,7 @@ Usage
 
 
 % notseq 
-Exclude a set of sequences and write out the remaining ones
+Write to file a subset of an input stream of sequences
 Input (gapped) sequence(s): globins.fasta
 Sequence names to exclude: myg_phyca,lgb2_luplu
 output sequence(s) [hbb_human.fasta]: mydata.seq
@@ -62,7 +38,7 @@ output sequence(s) [hbb_human.fasta]: mydata.seq
 
 
 % notseq -junkout hb.seq 
-Exclude a set of sequences and write out the remaining ones
+Write to file a subset of an input stream of sequences
 Input (gapped) sequence(s): globins.fasta
 Sequence names to exclude: hb*
 output sequence(s) [hbb_human.fasta]: mydata.seq
@@ -145,8 +121,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -276,10 +253,18 @@ Data files
 
 Notes
 
-   Note that the names or accession numbers of the sequences to be
-   excluded are not standard EMBOSS USAs. Only the ID name or accession
-   number can be specified, you cannot specify the sequences as
-   'database:ID', 'file:accession', 'format::file', etc.
+   notseq was written for the case where a file containing several
+   sequences was being used as a small database, but some of the
+   sequences were no longer required. notseq splits the input sequences
+   into those that you wish to keep and those you wish to exclude.
+
+   Wildcarded names and accession numbers may be specified in the input
+   string by using *.
+
+   The names (or accession numbers) of the sequences to be excluded can
+   be entered as a file of such names by specifying an @ followed by the
+   name of the file containing the sequence names. For example:
+   @names.dat.
 
 References
 
@@ -287,7 +272,9 @@ References
 
 Warnings
 
-   None.
+   The input string does not support the full USA syntax; only the name
+   or accession number should be specified, not the database or file that
+   these entries may occur in.
 
 Diagnostic Error Messages
 
@@ -305,35 +292,50 @@ Known bugs
 
 See also
 
-   Program name                         Description
-   biosed       Replace or delete sequence sections
-   codcopy      Reads and writes a codon usage table
-   cutseq       Removes a specified section from a sequence
-   degapseq     Removes gap characters from sequences
-   descseq      Alter the name or description of a sequence
-   entret       Reads and writes (returns) flatfile entries
+   Program name Description
+   aligncopy Reads and writes alignments
+   aligncopypair Reads and writes pairs from alignments
+   biosed Replace or delete sequence sections
+   codcopy Copy and reformat a codon usage table
+   cutseq Removes a section from a sequence
+   degapseq Removes non-alphabetic (e.g. gap) characters from sequences
+   descseq Alter the name or description of a sequence
+   entret Retrieves sequence entries from flatfile databases and files
    extractalign Extract regions from a sequence alignment
-   extractfeat  Extract features from a sequence
-   extractseq   Extract regions from a sequence
-   listor       Write a list file of the logical OR of two sets of sequences
-   makenucseq   Creates random nucleotide sequences
-   makeprotseq  Creates random protein sequences
-   maskfeat     Mask off features of a sequence
-   maskseq      Mask off regions of a sequence
-   newseq       Type in a short new sequence
-   noreturn     Removes carriage return from ASCII files
-   nthseq       Writes one sequence from a multiple set of sequences
-   pasteseq     Insert one sequence into another
-   revseq       Reverse and complement a sequence
-   seqret       Reads and writes (returns) sequences
-   seqretsplit  Reads and writes (returns) sequences in individual files
-   skipseq      Reads and writes (returns) sequences, skipping first few
-   splitter     Split a sequence into (overlapping) smaller sequences
-   trimest      Trim poly-A tails off EST sequences
-   trimseq      Trim ambiguous bits off the ends of sequences
-   union        Reads sequence fragments and builds one sequence
-   vectorstrip  Strips out DNA between a pair of vector sequences
-   yank         Reads a sequence range, appends the full USA to a list file
+   extractfeat Extract features from sequence(s)
+   extractseq Extract regions from a sequence
+   featcopy Reads and writes a feature table
+   featreport Reads and writes a feature table
+   listor Write a list file of the logical OR of two sets of sequences
+   makenucseq Create random nucleotide sequences
+   makeprotseq Create random protein sequences
+   maskambignuc Masks all ambiguity characters in nucleotide sequences
+   with N
+   maskambigprot Masks all ambiguity characters in protein sequences with
+   X
+   maskfeat Write a sequence with masked features
+   maskseq Write a sequence with masked regions
+   newseq Create a sequence file from a typed-in sequence
+   nohtml Remove mark-up (e.g. HTML tags) from an ASCII text file
+   noreturn Remove carriage return from ASCII files
+   nospace Remove all whitespace from an ASCII text file
+   notab Replace tabs with spaces in an ASCII text file
+   nthseq Write to file a single sequence from an input stream of
+   sequences
+   pasteseq Insert one sequence into another
+   revseq Reverse and complement a nucleotide sequence
+   seqret Reads and writes (returns) sequences
+   seqretsplit Reads sequences and writes them to individual files
+   sizeseq Sort sequences by size
+   skipredundant Remove redundant sequences from an input set
+   skipseq Reads and writes (returns) sequences, skipping first few
+   splitter Split sequence(s) into smaller sequences
+   trimest Remove poly-A tails from nucleotide sequences
+   trimseq Remove unwanted characters from start and end of sequence(s)
+   trimspace Remove extra whitespace from an ASCII text file
+   union Concatenate multiple sequences into a single sequence
+   vectorstrip Removes vectors from the ends of nucleotide sequence(s)
+   yank Add a sequence reference (a full USA) to a list file
 
 Author(s)
 

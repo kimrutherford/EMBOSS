@@ -9,166 +9,9 @@ Function
 
 Description
 
-   RNA interference, or RNAi, is a phenomenon in which double stranded
-   RNA (dsRNA) effects silencing of the expression of genes that are
-   highly homologous to either of the RNA strands in the duplex. Gene
-   silencing in RNAi results from the degradation of mRNA sequences, and
-   the effect has been used to determine the function of many genes in
-   Drosophilia, C. elegans, and many plant species.
-
-   The duration of knockdown by siRNA can typically last for 7-10 days,
-   and has been shown to transfer to daughter cells. Of further note,
-   siRNAs are effective at quantities much lower than alternative gene
-   silencing methodologies, including antisense and ribozyme based
-   strategies.
-
-   Due to various mechanisms of antiviral response to long dsRNA, RNAi at
-   first proved more difficult to establish in mammalian species. Then,
-   Tuschl, Elbashir, and others discovered that RNAi can be elicited very
-   effectively by well-defined 21-base duplex RNAs. When these small
-   interfering RNA, or siRNA, are added in duplex form with a
-   transfection agent to mammalian cell cultures, the 21-base-pair RNA
-   acts in concert with cellular components to silence the gene with
-   sequence homology to one of the siRNA sequences. Strategies for the
-   design of effective siRNA sequences have been recently documented,
-   most notably by Sayda Elbashir, Thomas Tuschl, et al.
-
-   Their studies of mammalian RNAi suggest that the most efficient
-   gene-silencing effect is achieved using double-stranded siRNA having a
-   19-nucleotide complementary region and a 2-nucleotide 3' overhang at
-   each end. Current models of the RNAi mechanism suggest that the
-   antisense siRNA strand recognizes the specific gene target.
-
-   In gene-specific RNAi, the coding region (CDS) of the mRNA is usually
-   targeted. The search for an appropriate target sequence should begin
-   50-100 nucleotides downstream of the start codon. UTR-binding proteins
-   and/or translation initiation complexes may interfere with the binding
-   of the siRNP endonuclease complex. Tuschl, Elbashir et al. say that
-   they have successfully used siRNAs targetting the 3' UTR.
-
-   To avoid interference from mRNA regulatory proteins, sequences in the
-   5' untranslated region or near the start codon should not be targeted.
-
-   A set of rules for the design of siRNA has been suggested
-   http://www.mpibpc.gwdg.de/abteilungen/100/105/sirna.html based on the
-   work of Tuschl, Elbashir et al.
-
-   They suggest searching for 23-nt sequence motif AA(N19)TT (N, any
-   nucleotide) and select hits with approx. 50% G/C-content (30% to 70%
-   has also worked in for them). If no suitable sequences are found, the
-   search is extended using the motif NA(N21). The sequence of the sense
-   siRNA corresponds to (N19)TT or N21 (position 3 to 23 of the 23-nt
-   motif), respectively. In the latter case, they convert the 3' end of
-   the sense siRNA to TT.
-
-   The rationale for this sequence conversion is to generate a symmetric
-   duplex with respect to the sequence composition of the sense and
-   antisense 3' overhangs. The antisense siRNA is synthesized as the
-   complement to position 1 to 21 of the 23-nt motif. Because position 1
-   of the 23-nt motif is not recognized sequence-specifically by the
-   antisense siRNA, the 3'-most nucleotide residue of the antisense
-   siRNA, can be chosen deliberately. However, the penultimate nucleotide
-   of the antisense siRNA (complementary to position 2 of the 23-nt
-   motif) should always be complementary to the targeted sequence. For
-   simplifying chemical synthesis, they always use TT.
-
-   More recently, they preferentially select siRNAs corresponding to the
-   target motif NAR(N17)YNN, where R is purine (A, G) and Y is pyrimidine
-   (C, U). The respective 21-nt sense and antisense siRNAs therefore
-   begin with a purine nucleotide and can also be expressed from pol III
-   expression vectors without a change in targeting site; expression of
-   RNAs from pol III promoters is only efficient when the first
-   transcribed nucleotide is a purine.
-
-   They always design siRNAs with symmetric 3' TT overhangs, believing
-   that symmetric 3' overhangs help to ensure that the siRNPs are formed
-   with approximately equal ratios of sense and antisense target
-   RNA-cleaving siRNPs Please note that the modification of the overhang
-   of the sense sequence of the siRNA duplex is not expected to affect
-   targeted mRNA recognition, as the antisense siRNA strand guides target
-   recognition. In summary, no matter what you do to your overhangs,
-   siRNAs should still function to a reasonable extent. However, using TT
-   in the 3' overhang will always help your RNA synthesis company to let
-   you know when you accidentally order a siRNA sequences 3' to 5' rather
-   than in the recommended format of 5' to 3'.
-
-   sirna reports both the sense and antisense siRNAs as 5' to 3'.
-
-   Xeragon.com also suggest that choosing a region of the mRNA with a GC
-   content as close as possible to 50% is a more important consideration
-   than choosing a target sequence that begins with AA. They also suggest
-   that a key consideration in target selection is to avoid having more
-   than three guanosines in a row, since poly G sequences can hyperstack
-   and form agglomerates that potentially interfere with the siRNA
-   silencing mechanism.
-
-   siRNAs appear to effectively silence genes in more than 80% of cases.
-   Current data indicate that there are regions of some mRNAs where gene
-   silencing does not work. To help ensure that a given target gene is
-   silenced, it is advised that at least two target sequences as far
-   apart on the gene as possible be chosen.
-
-   mRNA secondary structure does not appear to have a significant effect
-   on gene silencing.
-
-  Coding region specification
-
-   It is possible (although the evidence is not clear) that regulatory
-   protein binding to regions in and near the untranslated 5' region
-   might interfere with the RNAi process.
-
-   Therefore, this program avoids choosing siRNA probes from the 5' UTR
-   and from the first 50 bases of the coding region. The second 50 bases
-   of the coding region has a penalty associated with it to reduce the
-   reporting of possible siRNA probes in this region.
-
-   If the input sequence has a feature table specifying a coding region,
-   then this will be used, else you can specify the start of the coding
-   region, where this is known by the '-sbegin' command-line qualifier
-   (which is normally used to specify the start of the region of a
-   sequence that should be analysed in all EMBOSS programs).
-
-   sirna looks at the feature table of the input mRNA sequence to find
-   the coding regions (CDS). It will ignore the 5' UTR and the first 50
-   bases of the CDS. It will assign a penalty of 2 points to any siRNA in
-   positions 51 to 100 in the CDS. If there is no CDS in the feature
-   table, you can specify the CDS by using the command-line qualifier
-   '-sbegin' to indicate where the CDS should start. If there is no CDS
-   in the feature table and you do not use the command-line qualifier
-   '-sbegin', then sirna will assume that the CDS region is not known and
-   will look for siRNAs in the whole of the sequence with no penalties
-   associated with the location within the sequence.
-
-  All these confusing regions
-
-   There are a lot of references to 23 base regions, 21 base regions, 19
-   base regions, etc. in any description of siRNA.
-
-   Perhaps an example with a sequence would be clearer?
-
-   The 23 base region, in this case starting with an 'AA', might
-   typically look like:
-
-5' AAGUGAGAGGUCAGACUCCUATC
-
-   The sense siRNA is made from the 19 bases of positions 3 to 21 of the
-   23 base target region, so:
-
-5'   GUGAGAGGUCAGACUCCUA
-
-   and then typically d(TT) is added, so:
-
-5'   GUGAGAGGUCAGACUCCUAdTdT
-
-   The antisense siRNA sequence is made from bases 3 to 21 of the target
-   region, so:
-
-5'   GUGAGAGGUCAGACUCCUA sense
-3'   CACUCUCCAGUCUGAGGAU antisense 3' -> 5'
-
-   so the antisense sequence that should be ordered with d(TT) added is:
-
-5'   UAGGAGUCUGACCUCUCACdTdT antisense 5' -> 3'
+   Finds siRNA duplexes in mRNA. The output is a standard EMBOSS report
+   file. The siRNAs are reported in order of best score first. sirna
+   reports both the sense and antisense siRNAs as 5' to 3'.
 
 Algorithm
 
@@ -338,6 +181,7 @@ Command line arguments
    -raccshow2          boolean    Show accession number in the report
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
+   -rstrandshow2       boolean    Show the nucleotide strand in the report
    -rusashow2          boolean    Show the full USA in the report
    -rmaxall2           integer    Maximum total hits to report
    -rmaxseq2           integer    Maximum hits to report for one sequence
@@ -356,8 +200,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -491,7 +336,7 @@ Output file format
 
 ########################################
 # Program: sirna
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: sirna
 #    -sequence tembl:x65923
 # Report_format: table
@@ -507,85 +352,160 @@ Output file format
 #
 #=======================================
 
-  Start     End   Score    GC% Sense_siRNA Antisense_siRNA
-    308     330   9.000   50.0 AAGUGAGAGGUCAGACUCCdTdT GGAGUCUGACCUCUCACUUdTdT
-    309     331   9.000   50.0 AGUGAGAGGUCAGACUCCUdTdT AGGAGUCUGACCUCUCACUdTdT
-    310     332   9.000   50.0 GUGAGAGGUCAGACUCCUAdTdT UAGGAGUCUGACCUCUCACdTdT
-    351     373   9.000   50.0 GAAGAAGAAGACAGGUCGGdTdT CCGACCUGUCUUCUUCUUCdTdT
-    166     188   8.000   55.0 GAUCAAGUCGUGCUCCUGGdTdT CCAGGAGCACGACUUGAUCdTdT
-    279     301   8.000   55.0 AGUUCAUGGUUCCCUGGCCdTdT GGCCAGGGAACCAUGAACUdTdT
-    330     352   8.000   55.0 GGUGGCCAAACAGGAGAAGdTdT CUUCUCCUGUUUGGCCACCdTdT
-    354     376   8.000   55.0 GAAGAAGACAGGUCGGGCUdTdT AGCCCGACCUGUCUUCUUCdTdT
-    357     379   8.000   55.0 GAAGACAGGUCGGGCUAAGdTdT CUUAGCCCGACCUGUCUUCdTdT
-    393     415   8.000   55.0 CCGGCGCUUUGUCAACGUUdTdT AACGUUGACAAAGCGCCGGdTdT
-    253     275   7.000   60.0 GUAGCAGGCCGCAUGCUUGdTdT CAAGCAUGCGGCCUGCUACdTdT
-    280     302   7.000   60.0 GUUCAUGGUUCCCUGGCCCdTdT GGGCCAGGGAACCAUGAACdTdT
-    339     361   7.000   40.0 ACAGGAGAAGAAGAAGAAGdTdT CUUCUUCUUCUUCUCCUGUdTdT
-    340     362   7.000   40.0 CAGGAGAAGAAGAAGAAGAdTdT UCUUCUUCUUCUUCUCCUGdTdT
-    348     370   7.000   40.0 GAAGAAGAAGAAGACAGGUdTdT ACCUGUCUUCUUCUUCUUCdTdT
-    375     397   7.000   60.0 GCGGCGGAUGCAGUACAACdTdT GUUGUACUGCAUCCGCCGCdTdT
-    408     430   7.000   60.0 CGUUGUGCCCACCUUUGGCdTdT GCCAAAGGUGGGCACAACGdTdT
-    429     451   7.000   60.0 GAAGAAGGGCCCCAAUGCCdTdT GGCAUUGGGGCCCUUCUUCdTdT
-    432     454   7.000   60.0 GAAGGGCCCCAAUGCCAACdTdT GUUGGCAUUGGGGCCCUUCdTdT
-    435     457   7.000   60.0 GGGCCCCAAUGCCAACUCUdTdT AGAGUUGGCAUUGGGGCCCdTdT
-    488     510   7.000   40.0 AAAGCCACUUAGUUCAGUCdTdT GACUGAACUAAGUGGCUUUdTdT
-    489     511   7.000   40.0 AAGCCACUUAGUUCAGUCAdTdT UGACUGAACUAAGUGGCUUdTdT
-    490     512   7.000   40.0 AGCCACUUAGUUCAGUCAAdTdT UUGACUGAACUAAGUGGCUdTdT
-    491     513   7.000   40.0 GCCACUUAGUUCAGUCAAAdTdT UUUGACUGAACUAAGUGGCdTdT
-    129     151   6.000   55.0 GGCUCAUGUAGCCUCACUGdTdT CAGUGAGGCUACAUGAGCCdTdT
-    165     187   6.000   50.0 AGAUCAAGUCGUGCUCCUGdTdT CAGGAGCACGACUUGAUCUdTdT
-    278     300   6.000   50.0 AAGUUCAUGGUUCCCUGGCdTdT GCCAGGGAACCAUGAACUUdTdT
-    314     336   6.000   50.0 GAGGUCAGACUCCUAAGGUdTdT ACCUUAGGAGUCUGACCUCdTdT
-    321     343   6.000   50.0 GACUCCUAAGGUGGCCAAAdTdT UUUGGCCACCUUAGGAGUCdTdT
-    323     345   6.000   50.0 CUCCUAAGGUGGCCAAACAdTdT UGUUUGGCCACCUUAGGAGdTdT
-    329     351   6.000   50.0 AGGUGGCCAAACAGGAGAAdTdT UUCUCCUGUUUGGCCACCUdTdT
+  Start     End  Strand   Score    GC%             Sense_siRNA         Antisens
+e_siRNA
+    308     330       +   9.000   50.0 AAGUGAGAGGUCAGACUCCdTdT GGAGUCUGACCUCUCA
+CUUdTdT
+    309     331       +   9.000   50.0 AGUGAGAGGUCAGACUCCUdTdT AGGAGUCUGACCUCUC
+ACUdTdT
+    310     332       +   9.000   50.0 GUGAGAGGUCAGACUCCUAdTdT UAGGAGUCUGACCUCU
+CACdTdT
+    351     373       +   9.000   50.0 GAAGAAGAAGACAGGUCGGdTdT CCGACCUGUCUUCUUC
+UUCdTdT
+    166     188       +   8.000   55.0 GAUCAAGUCGUGCUCCUGGdTdT CCAGGAGCACGACUUG
+AUCdTdT
+    279     301       +   8.000   55.0 AGUUCAUGGUUCCCUGGCCdTdT GGCCAGGGAACCAUGA
+ACUdTdT
+    330     352       +   8.000   55.0 GGUGGCCAAACAGGAGAAGdTdT CUUCUCCUGUUUGGCC
+ACCdTdT
+    354     376       +   8.000   55.0 GAAGAAGACAGGUCGGGCUdTdT AGCCCGACCUGUCUUC
+UUCdTdT
+    357     379       +   8.000   55.0 GAAGACAGGUCGGGCUAAGdTdT CUUAGCCCGACCUGUC
+UUCdTdT
+    393     415       +   8.000   55.0 CCGGCGCUUUGUCAACGUUdTdT AACGUUGACAAAGCGC
+CGGdTdT
+    253     275       +   7.000   60.0 GUAGCAGGCCGCAUGCUUGdTdT CAAGCAUGCGGCCUGC
+UACdTdT
+    280     302       +   7.000   60.0 GUUCAUGGUUCCCUGGCCCdTdT GGGCCAGGGAACCAUG
+AACdTdT
+    339     361       +   7.000   40.0 ACAGGAGAAGAAGAAGAAGdTdT CUUCUUCUUCUUCUCC
+UGUdTdT
+    340     362       +   7.000   40.0 CAGGAGAAGAAGAAGAAGAdTdT UCUUCUUCUUCUUCUC
+CUGdTdT
+    348     370       +   7.000   40.0 GAAGAAGAAGAAGACAGGUdTdT ACCUGUCUUCUUCUUC
+UUCdTdT
+    375     397       +   7.000   60.0 GCGGCGGAUGCAGUACAACdTdT GUUGUACUGCAUCCGC
+CGCdTdT
+    408     430       +   7.000   60.0 CGUUGUGCCCACCUUUGGCdTdT GCCAAAGGUGGGCACA
+ACGdTdT
+    429     451       +   7.000   60.0 GAAGAAGGGCCCCAAUGCCdTdT GGCAUUGGGGCCCUUC
+UUCdTdT
+    432     454       +   7.000   60.0 GAAGGGCCCCAAUGCCAACdTdT GUUGGCAUUGGGGCCC
+UUCdTdT
+    435     457       +   7.000   60.0 GGGCCCCAAUGCCAACUCUdTdT AGAGUUGGCAUUGGGG
+CCCdTdT
+    488     510       +   7.000   40.0 AAAGCCACUUAGUUCAGUCdTdT GACUGAACUAAGUGGC
+UUUdTdT
+    489     511       +   7.000   40.0 AAGCCACUUAGUUCAGUCAdTdT UGACUGAACUAAGUGG
+CUUdTdT
+    490     512       +   7.000   40.0 AGCCACUUAGUUCAGUCAAdTdT UUGACUGAACUAAGUG
+GCUdTdT
+    491     513       +   7.000   40.0 GCCACUUAGUUCAGUCAAAdTdT UUUGACUGAACUAAGU
+GGCdTdT
+    129     151       +   6.000   55.0 GGCUCAUGUAGCCUCACUGdTdT CAGUGAGGCUACAUGA
+GCCdTdT
+    165     187       +   6.000   50.0 AGAUCAAGUCGUGCUCCUGdTdT CAGGAGCACGACUUGA
+UCUdTdT
+    278     300       +   6.000   50.0 AAGUUCAUGGUUCCCUGGCdTdT GCCAGGGAACCAUGAA
+CUUdTdT
+    314     336       +   6.000   50.0 GAGGUCAGACUCCUAAGGUdTdT ACCUUAGGAGUCUGAC
+CUCdTdT
+    321     343       +   6.000   50.0 GACUCCUAAGGUGGCCAAAdTdT UUUGGCCACCUUAGGA
+GUCdTdT
+    323     345       +   6.000   50.0 CUCCUAAGGUGGCCAAACAdTdT UGUUUGGCCACCUUAG
+GAGdTdT
+    329     351       +   6.000   50.0 AGGUGGCCAAACAGGAGAAdTdT UUCUCCUGUUUGGCCA
+CCUdTdT
 
 
   [Part of this file has been deleted for brevity]
 
-    353     375   5.000   55.0 AGAAGAAGACAGGUCGGGCdTdT GCCCGACCUGUCUUCUUCUdTdT
-    360     382   5.000   65.0 GACAGGUCGGGCUAAGCGGdTdT CCGCUUAGCCCGACCUGUCdTdT
-    374     396   5.000   55.0 AGCGGCGGAUGCAGUACAAdTdT UUGUACUGCAUCCGCCGCUdTdT
-    383     405   5.000   55.0 UGCAGUACAACCGGCGCUUdTdT AAGCGCCGGUUGUACUGCAdTdT
-    387     409   5.000   55.0 GUACAACCGGCGCUUUGUCdTdT GACAAAGCGCCGGUUGUACdTdT
-    390     412   5.000   55.0 CAACCGGCGCUUUGUCAACdTdT GUUGACAAAGCGCCGGUUGdTdT
-    392     414   5.000   55.0 ACCGGCGCUUUGUCAACGUdTdT ACGUUGACAAAGCGCCGGUdTdT
-    407     429   5.000   55.0 ACGUUGUGCCCACCUUUGGdTdT CCAAAGGUGGGCACAACGUdTdT
-    428     450   5.000   55.0 AGAAGAAGGGCCCCAAUGCdTdT GCAUUGGGGCCCUUCUUCUdTdT
-    431     453   5.000   55.0 AGAAGGGCCCCAAUGCCAAdTdT UUGGCAUUGGGGCCCUUCUdTdT
-    434     456   5.000   60.0 AGGGCCCCAAUGCCAACUCdTdT GAGUUGGCAUUGGGGCCCUdTdT
-    444     466   5.000   35.0 UGCCAACUCUUAAGUCUUUdTdT AAAGACUUAAGAGUUGGCAdTdT
-    487     509   5.000   35.0 AAAAGCCACUUAGUUCAGUdTdT ACUGAACUAAGUGGCUUUUdTdT
-    123     145   4.000   50.0 GAUCAAGGCUCAUGUAGCCdTdT GGCUACAUGAGCCUUGAUCdTdT
-    125     147   4.000   50.0 UCAAGGCUCAUGUAGCCUCdTdT GAGGCUACAUGAGCCUUGAdTdT
-    128     150   4.000   50.0 AGGCUCAUGUAGCCUCACUdTdT AGUGAGGCUACAUGAGCCUdTdT
-    155     177   4.000   50.0 UUGCCCCGGAAGAUCAAGUdTdT ACUUGAUCUUCCGGGGCAAdTdT
-    234     256   4.000   60.0 GGCCCUGACUACCCUGGAAdTdT UUCCAGGGUAGUCAGGGCCdTdT
-    259     281   4.000   60.0 GGCCGCAUGCUUGGAGGUAdTdT UACCUCCAAGCAUGCGGCCdTdT
-    266     288   4.000   40.0 UGCUUGGAGGUAAAGUUCAdTdT UGAACUUUACCUCCAAGCAdTdT
-    342     364   4.000   40.0 GGAGAAGAAGAAGAAGAAGdTdT CUUCUUCUUCUUCUUCUCCdTdT
-    347     369   4.000   40.0 AGAAGAAGAAGAAGACAGGdTdT CCUGUCUUCUUCUUCUUCUdTdT
-    359     381   4.000   60.0 AGACAGGUCGGGCUAAGCGdTdT CGCUUAGCCCGACCUGUCUdTdT
-    111     133   3.000   55.0 AACGGUCGCCCAGAUCAAGdTdT CUUGAUCUGGGCGACCGUUdTdT
-    113     135   3.000   65.0 CGGUCGCCCAGAUCAAGGCdTdT GCCUUGAUCUGGGCGACCGdTdT
-    172     194   3.000   70.0 GUCGUGCUCCUGGCAGGCGdTdT CGCCUGCCAGGAGCACGACdTdT
-    443     465   3.000   35.0 AUGCCAACUCUUAAGUCUUdTdT AAGACUUAAGAGUUGGCAUdTdT
-    456     478   3.000   35.0 AGUCUUUUGUAAUUCUGGCdTdT GCCAGAAUUACAAAAGACUdTdT
-    468     490   3.000   30.0 UUCUGGCUUUCUCUAAUAAdTdT UUAUUAGAGAAAGCCAGAAdTdT
-    484     506   3.000   30.0 UAAAAAAGCCACUUAGUUCdTdT GAACUAAGUGGCUUUUUUAdTdT
-    108     130   2.000   60.0 GGAAACGGUCGCCCAGAUCdTdT GAUCUGGGCGACCGUUUCCdTdT
-    135     157   2.000   60.0 UGUAGCCUCACUGGAGGGCdTdT GCCCUCCAGUGAGGCUACAdTdT
-    139     161   2.000   60.0 GCCUCACUGGAGGGCAUUGdTdT CAAUGCCCUCCAGUGAGGCdTdT
-    150     172   2.000   60.0 GGGCAUUGCCCCGGAAGAUdTdT AUCUUCCGGGGCAAUGCCCdTdT
-    171     193   2.000   65.0 AGUCGUGCUCCUGGCAGGCdTdT GCCUGCCAGGAGCACGACUdTdT
-    201     223   2.000   65.0 GGAUGAGGCCACUCUGGGCdTdT GCCCAGAGUGGCCUCAUCCdTdT
-    204     226   2.000   65.0 UGAGGCCACUCUGGGCCAGdTdT CUGGCCCAGAGUGGCCUCAdTdT
-    245     267   2.000   65.0 CCCUGGAAGUAGCAGGCCGdTdT CGGCCUGCUACUUCCAGGGdTdT
-    256     278   2.000   65.0 GCAGGCCGCAUGCUUGGAGdTdT CUCCAAGCAUGCGGCCUGCdTdT
-    285     307   2.000   65.0 UGGUUCCCUGGCCCGUGCUdTdT AGCACGGGCCAGGGAACCAdTdT
-    338     360   2.000   35.0 AACAGGAGAAGAAGAAGAAdTdT UUCUUCUUCUUCUCCUGUUdTdT
-    345     367   2.000   35.0 GAAGAAGAAGAAGAAGACAdTdT UGUCUUCUUCUUCUUCUUCdTdT
-    486     508   2.000   35.0 AAAAAGCCACUUAGUUCAGdTdT CUGAACUAAGUGGCUUUUUdTdT
+    353     375       +   5.000   55.0 AGAAGAAGACAGGUCGGGCdTdT GCCCGACCUGUCUUCU
+UCUdTdT
+    360     382       +   5.000   65.0 GACAGGUCGGGCUAAGCGGdTdT CCGCUUAGCCCGACCU
+GUCdTdT
+    374     396       +   5.000   55.0 AGCGGCGGAUGCAGUACAAdTdT UUGUACUGCAUCCGCC
+GCUdTdT
+    383     405       +   5.000   55.0 UGCAGUACAACCGGCGCUUdTdT AAGCGCCGGUUGUACU
+GCAdTdT
+    387     409       +   5.000   55.0 GUACAACCGGCGCUUUGUCdTdT GACAAAGCGCCGGUUG
+UACdTdT
+    390     412       +   5.000   55.0 CAACCGGCGCUUUGUCAACdTdT GUUGACAAAGCGCCGG
+UUGdTdT
+    392     414       +   5.000   55.0 ACCGGCGCUUUGUCAACGUdTdT ACGUUGACAAAGCGCC
+GGUdTdT
+    407     429       +   5.000   55.0 ACGUUGUGCCCACCUUUGGdTdT CCAAAGGUGGGCACAA
+CGUdTdT
+    428     450       +   5.000   55.0 AGAAGAAGGGCCCCAAUGCdTdT GCAUUGGGGCCCUUCU
+UCUdTdT
+    431     453       +   5.000   55.0 AGAAGGGCCCCAAUGCCAAdTdT UUGGCAUUGGGGCCCU
+UCUdTdT
+    434     456       +   5.000   60.0 AGGGCCCCAAUGCCAACUCdTdT GAGUUGGCAUUGGGGC
+CCUdTdT
+    444     466       +   5.000   35.0 UGCCAACUCUUAAGUCUUUdTdT AAAGACUUAAGAGUUG
+GCAdTdT
+    487     509       +   5.000   35.0 AAAAGCCACUUAGUUCAGUdTdT ACUGAACUAAGUGGCU
+UUUdTdT
+    123     145       +   4.000   50.0 GAUCAAGGCUCAUGUAGCCdTdT GGCUACAUGAGCCUUG
+AUCdTdT
+    125     147       +   4.000   50.0 UCAAGGCUCAUGUAGCCUCdTdT GAGGCUACAUGAGCCU
+UGAdTdT
+    128     150       +   4.000   50.0 AGGCUCAUGUAGCCUCACUdTdT AGUGAGGCUACAUGAG
+CCUdTdT
+    155     177       +   4.000   50.0 UUGCCCCGGAAGAUCAAGUdTdT ACUUGAUCUUCCGGGG
+CAAdTdT
+    234     256       +   4.000   60.0 GGCCCUGACUACCCUGGAAdTdT UUCCAGGGUAGUCAGG
+GCCdTdT
+    259     281       +   4.000   60.0 GGCCGCAUGCUUGGAGGUAdTdT UACCUCCAAGCAUGCG
+GCCdTdT
+    266     288       +   4.000   40.0 UGCUUGGAGGUAAAGUUCAdTdT UGAACUUUACCUCCAA
+GCAdTdT
+    342     364       +   4.000   40.0 GGAGAAGAAGAAGAAGAAGdTdT CUUCUUCUUCUUCUUC
+UCCdTdT
+    347     369       +   4.000   40.0 AGAAGAAGAAGAAGACAGGdTdT CCUGUCUUCUUCUUCU
+UCUdTdT
+    359     381       +   4.000   60.0 AGACAGGUCGGGCUAAGCGdTdT CGCUUAGCCCGACCUG
+UCUdTdT
+    111     133       +   3.000   55.0 AACGGUCGCCCAGAUCAAGdTdT CUUGAUCUGGGCGACC
+GUUdTdT
+    113     135       +   3.000   65.0 CGGUCGCCCAGAUCAAGGCdTdT GCCUUGAUCUGGGCGA
+CCGdTdT
+    172     194       +   3.000   70.0 GUCGUGCUCCUGGCAGGCGdTdT CGCCUGCCAGGAGCAC
+GACdTdT
+    443     465       +   3.000   35.0 AUGCCAACUCUUAAGUCUUdTdT AAGACUUAAGAGUUGG
+CAUdTdT
+    456     478       +   3.000   35.0 AGUCUUUUGUAAUUCUGGCdTdT GCCAGAAUUACAAAAG
+ACUdTdT
+    468     490       +   3.000   30.0 UUCUGGCUUUCUCUAAUAAdTdT UUAUUAGAGAAAGCCA
+GAAdTdT
+    484     506       +   3.000   30.0 UAAAAAAGCCACUUAGUUCdTdT GAACUAAGUGGCUUUU
+UUAdTdT
+    108     130       +   2.000   60.0 GGAAACGGUCGCCCAGAUCdTdT GAUCUGGGCGACCGUU
+UCCdTdT
+    135     157       +   2.000   60.0 UGUAGCCUCACUGGAGGGCdTdT GCCCUCCAGUGAGGCU
+ACAdTdT
+    139     161       +   2.000   60.0 GCCUCACUGGAGGGCAUUGdTdT CAAUGCCCUCCAGUGA
+GGCdTdT
+    150     172       +   2.000   60.0 GGGCAUUGCCCCGGAAGAUdTdT AUCUUCCGGGGCAAUG
+CCCdTdT
+    171     193       +   2.000   65.0 AGUCGUGCUCCUGGCAGGCdTdT GCCUGCCAGGAGCACG
+ACUdTdT
+    201     223       +   2.000   65.0 GGAUGAGGCCACUCUGGGCdTdT GCCCAGAGUGGCCUCA
+UCCdTdT
+    204     226       +   2.000   65.0 UGAGGCCACUCUGGGCCAGdTdT CUGGCCCAGAGUGGCC
+UCAdTdT
+    245     267       +   2.000   65.0 CCCUGGAAGUAGCAGGCCGdTdT CGGCCUGCUACUUCCA
+GGGdTdT
+    256     278       +   2.000   65.0 GCAGGCCGCAUGCUUGGAGdTdT CUCCAAGCAUGCGGCC
+UGCdTdT
+    285     307       +   2.000   65.0 UGGUUCCCUGGCCCGUGCUdTdT AGCACGGGCCAGGGAA
+CCAdTdT
+    338     360       +   2.000   35.0 AACAGGAGAAGAAGAAGAAdTdT UUCUUCUUCUUCUCCU
+GUUdTdT
+    345     367       +   2.000   35.0 GAAGAAGAAGAAGAAGACAdTdT UGUCUUCUUCUUCUUC
+UUCdTdT
+    486     508       +   2.000   35.0 AAAAAGCCACUUAGUUCAGdTdT CUGAACUAAGUGGCUU
+UUUdTdT
 
 #---------------------------------------
 #---------------------------------------
@@ -709,7 +629,7 @@ taaaaaagccacttagttcagtc
 
 ########################################
 # Program: sirna
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: sirna
 #    -context
 #    -sequence tembl:x65923
@@ -729,151 +649,152 @@ taaaaaagccacttagttcagtc
 #
 #=======================================
 
-  Start     End   Score    GC% Sense_siRNA Antisense_siRNA
-    308     330   9.000   50.0 (AA)AAGUGAGAGGUCAGACUCCdTdT GGAGUCUGACCUCUCACUUd
-TdT
-    309     331   9.000   50.0 (AA)AGUGAGAGGUCAGACUCCUdTdT AGGAGUCUGACCUCUCACUd
-TdT
-    310     332   9.000   50.0 (AA)GUGAGAGGUCAGACUCCUAdTdT UAGGAGUCUGACCUCUCACd
-TdT
-    351     373   9.000   50.0 (AA)GAAGAAGAAGACAGGUCGGdTdT CCGACCUGUCUUCUUCUUCd
-TdT
-    166     188   8.000   55.0 (AA)GAUCAAGUCGUGCUCCUGGdTdT CCAGGAGCACGACUUGAUCd
-TdT
-    279     301   8.000   55.0 (AA)AGUUCAUGGUUCCCUGGCCdTdT GGCCAGGGAACCAUGAACUd
-TdT
-    330     352   8.000   55.0 (AA)GGUGGCCAAACAGGAGAAGdTdT CUUCUCCUGUUUGGCCACCd
-TdT
-    354     376   8.000   55.0 (AA)GAAGAAGACAGGUCGGGCUdTdT AGCCCGACCUGUCUUCUUCd
-TdT
-    357     379   8.000   55.0 (AA)GAAGACAGGUCGGGCUAAGdTdT CUUAGCCCGACCUGUCUUCd
-TdT
-    393     415   8.000   55.0 (AA)CCGGCGCUUUGUCAACGUUdTdT AACGUUGACAAAGCGCCGGd
-TdT
-    253     275   7.000   60.0 (AA)GUAGCAGGCCGCAUGCUUGdTdT CAAGCAUGCGGCCUGCUACd
-TdT
-    280     302   7.000   60.0 (AA)GUUCAUGGUUCCCUGGCCCdTdT GGGCCAGGGAACCAUGAACd
-TdT
-    339     361   7.000   40.0 (AA)ACAGGAGAAGAAGAAGAAGdTdT CUUCUUCUUCUUCUCCUGUd
-TdT
-    340     362   7.000   40.0 (AA)CAGGAGAAGAAGAAGAAGAdTdT UCUUCUUCUUCUUCUCCUGd
-TdT
-    348     370   7.000   40.0 (AA)GAAGAAGAAGAAGACAGGUdTdT ACCUGUCUUCUUCUUCUUCd
-TdT
-    375     397   7.000   60.0 (AA)GCGGCGGAUGCAGUACAACdTdT GUUGUACUGCAUCCGCCGCd
-TdT
-    408     430   7.000   60.0 (AA)CGUUGUGCCCACCUUUGGCdTdT GCCAAAGGUGGGCACAACGd
-TdT
-    429     451   7.000   60.0 (AA)GAAGAAGGGCCCCAAUGCCdTdT GGCAUUGGGGCCCUUCUUCd
-TdT
-    432     454   7.000   60.0 (AA)GAAGGGCCCCAAUGCCAACdTdT GUUGGCAUUGGGGCCCUUCd
-TdT
-    435     457   7.000   60.0 (AA)GGGCCCCAAUGCCAACUCUdTdT AGAGUUGGCAUUGGGGCCCd
-TdT
-    488     510   7.000   40.0 (AA)AAAGCCACUUAGUUCAGUCdTdT GACUGAACUAAGUGGCUUUd
-TdT
-    489     511   7.000   40.0 (AA)AAGCCACUUAGUUCAGUCAdTdT UGACUGAACUAAGUGGCUUd
-TdT
-    490     512   7.000   40.0 (AA)AGCCACUUAGUUCAGUCAAdTdT UUGACUGAACUAAGUGGCUd
-TdT
-    491     513   7.000   40.0 (AA)GCCACUUAGUUCAGUCAAAdTdT UUUGACUGAACUAAGUGGCd
-TdT
-    129     151   6.000   55.0 (AA)GGCUCAUGUAGCCUCACUGdTdT CAGUGAGGCUACAUGAGCCd
-TdT
-    165     187   6.000   50.0 (GA)AGAUCAAGUCGUGCUCCUGdTdT CAGGAGCACGACUUGAUCUd
-TdT
-    278     300   6.000   50.0 (UA)AAGUUCAUGGUUCCCUGGCdTdT GCCAGGGAACCAUGAACUUd
-TdT
+  Start     End  Strand   Score    GC%                 Sense_siRNA         Anti
+sense_siRNA
+    308     330       +   9.000   50.0 (AA)AAGUGAGAGGUCAGACUCCdTdT GGAGUCUGACCU
+CUCACUUdTdT
+    309     331       +   9.000   50.0 (AA)AGUGAGAGGUCAGACUCCUdTdT AGGAGUCUGACC
+UCUCACUdTdT
+    310     332       +   9.000   50.0 (AA)GUGAGAGGUCAGACUCCUAdTdT UAGGAGUCUGAC
+CUCUCACdTdT
+    351     373       +   9.000   50.0 (AA)GAAGAAGAAGACAGGUCGGdTdT CCGACCUGUCUU
+CUUCUUCdTdT
+    166     188       +   8.000   55.0 (AA)GAUCAAGUCGUGCUCCUGGdTdT CCAGGAGCACGA
+CUUGAUCdTdT
+    279     301       +   8.000   55.0 (AA)AGUUCAUGGUUCCCUGGCCdTdT GGCCAGGGAACC
+AUGAACUdTdT
+    330     352       +   8.000   55.0 (AA)GGUGGCCAAACAGGAGAAGdTdT CUUCUCCUGUUU
+GGCCACCdTdT
+    354     376       +   8.000   55.0 (AA)GAAGAAGACAGGUCGGGCUdTdT AGCCCGACCUGU
+CUUCUUCdTdT
+    357     379       +   8.000   55.0 (AA)GAAGACAGGUCGGGCUAAGdTdT CUUAGCCCGACC
+UGUCUUCdTdT
+    393     415       +   8.000   55.0 (AA)CCGGCGCUUUGUCAACGUUdTdT AACGUUGACAAA
+GCGCCGGdTdT
+    253     275       +   7.000   60.0 (AA)GUAGCAGGCCGCAUGCUUGdTdT CAAGCAUGCGGC
+CUGCUACdTdT
+    280     302       +   7.000   60.0 (AA)GUUCAUGGUUCCCUGGCCCdTdT GGGCCAGGGAAC
+CAUGAACdTdT
+    339     361       +   7.000   40.0 (AA)ACAGGAGAAGAAGAAGAAGdTdT CUUCUUCUUCUU
+CUCCUGUdTdT
+    340     362       +   7.000   40.0 (AA)CAGGAGAAGAAGAAGAAGAdTdT UCUUCUUCUUCU
+UCUCCUGdTdT
+    348     370       +   7.000   40.0 (AA)GAAGAAGAAGAAGACAGGUdTdT ACCUGUCUUCUU
+CUUCUUCdTdT
+    375     397       +   7.000   60.0 (AA)GCGGCGGAUGCAGUACAACdTdT GUUGUACUGCAU
+CCGCCGCdTdT
+    408     430       +   7.000   60.0 (AA)CGUUGUGCCCACCUUUGGCdTdT GCCAAAGGUGGG
+CACAACGdTdT
+    429     451       +   7.000   60.0 (AA)GAAGAAGGGCCCCAAUGCCdTdT GGCAUUGGGGCC
+CUUCUUCdTdT
+    432     454       +   7.000   60.0 (AA)GAAGGGCCCCAAUGCCAACdTdT GUUGGCAUUGGG
+GCCCUUCdTdT
+    435     457       +   7.000   60.0 (AA)GGGCCCCAAUGCCAACUCUdTdT AGAGUUGGCAUU
+GGGGCCCdTdT
+    488     510       +   7.000   40.0 (AA)AAAGCCACUUAGUUCAGUCdTdT GACUGAACUAAG
+UGGCUUUdTdT
+    489     511       +   7.000   40.0 (AA)AAGCCACUUAGUUCAGUCAdTdT UGACUGAACUAA
+GUGGCUUdTdT
+    490     512       +   7.000   40.0 (AA)AGCCACUUAGUUCAGUCAAdTdT UUGACUGAACUA
+AGUGGCUdTdT
+    491     513       +   7.000   40.0 (AA)GCCACUUAGUUCAGUCAAAdTdT UUUGACUGAACU
+AAGUGGCdTdT
+    129     151       +   6.000   55.0 (AA)GGCUCAUGUAGCCUCACUGdTdT CAGUGAGGCUAC
+AUGAGCCdTdT
+    165     187       +   6.000   50.0 (GA)AGAUCAAGUCGUGCUCCUGdTdT CAGGAGCACGAC
+UUGAUCUdTdT
+    278     300       +   6.000   50.0 (UA)AAGUUCAUGGUUCCCUGGCdTdT GCCAGGGAACCA
+UGAACUUdTdT
 
 
   [Part of this file has been deleted for brevity]
 
-    353     375   5.000   55.0 (GA)AGAAGAAGACAGGUCGGGCdTdT GCCCGACCUGUCUUCUUCUd
-TdT
-    360     382   5.000   65.0 (AA)GACAGGUCGGGCUAAGCGGdTdT CCGCUUAGCCCGACCUGUCd
-TdT
-    374     396   5.000   55.0 (UA)AGCGGCGGAUGCAGUACAAdTdT UUGUACUGCAUCCGCCGCUd
-TdT
-    383     405   5.000   55.0 (GA)UGCAGUACAACCGGCGCUUdTdT AAGCGCCGGUUGUACUGCAd
-TdT
-    387     409   5.000   55.0 (CA)GUACAACCGGCGCUUUGUCdTdT GACAAAGCGCCGGUUGUACd
-TdT
-    390     412   5.000   55.0 (UA)CAACCGGCGCUUUGUCAACdTdT GUUGACAAAGCGCCGGUUGd
-TdT
-    392     414   5.000   55.0 (CA)ACCGGCGCUUUGUCAACGUdTdT ACGUUGACAAAGCGCCGGUd
-TdT
-    407     429   5.000   55.0 (CA)ACGUUGUGCCCACCUUUGGdTdT CCAAAGGUGGGCACAACGUd
-TdT
-    428     450   5.000   55.0 (CA)AGAAGAAGGGCCCCAAUGCdTdT GCAUUGGGGCCCUUCUUCUd
-TdT
-    431     453   5.000   55.0 (GA)AGAAGGGCCCCAAUGCCAAdTdT UUGGCAUUGGGGCCCUUCUd
-TdT
-    434     456   5.000   60.0 (GA)AGGGCCCCAAUGCCAACUCdTdT GAGUUGGCAUUGGGGCCCUd
-TdT
-    444     466   5.000   35.0 (AA)UGCCAACUCUUAAGUCUUUdTdT AAAGACUUAAGAGUUGGCAd
-TdT
-    487     509   5.000   35.0 (AA)AAAAGCCACUUAGUUCAGUdTdT ACUGAACUAAGUGGCUUUUd
-TdT
-    123     145   4.000   50.0 (CA)GAUCAAGGCUCAUGUAGCCdTdT GGCUACAUGAGCCUUGAUCd
-TdT
-    125     147   4.000   50.0 (GA)UCAAGGCUCAUGUAGCCUCdTdT GAGGCUACAUGAGCCUUGAd
-TdT
-    128     150   4.000   50.0 (CA)AGGCUCAUGUAGCCUCACUdTdT AGUGAGGCUACAUGAGCCUd
-TdT
-    155     177   4.000   50.0 (CA)UUGCCCCGGAAGAUCAAGUdTdT ACUUGAUCUUCCGGGGCAAd
-TdT
-    234     256   4.000   60.0 (GA)GGCCCUGACUACCCUGGAAdTdT UUCCAGGGUAGUCAGGGCCd
-TdT
-    259     281   4.000   60.0 (CA)GGCCGCAUGCUUGGAGGUAdTdT UACCUCCAAGCAUGCGGCCd
-TdT
-    266     288   4.000   40.0 (CA)UGCUUGGAGGUAAAGUUCAdTdT UGAACUUUACCUCCAAGCAd
-TdT
-    342     364   4.000   40.0 (CA)GGAGAAGAAGAAGAAGAAGdTdT CUUCUUCUUCUUCUUCUCCd
-TdT
-    347     369   4.000   40.0 (GA)AGAAGAAGAAGAAGACAGGdTdT CCUGUCUUCUUCUUCUUCUd
-TdT
-    359     381   4.000   60.0 (GA)AGACAGGUCGGGCUAAGCGdTdT CGCUUAGCCCGACCUGUCUd
-TdT
-    111     133   3.000   55.0 (GA)AACGGUCGCCCAGAUCAAGdTdT CUUGAUCUGGGCGACCGUUd
-TdT
-    113     135   3.000   65.0 (AA)CGGUCGCCCAGAUCAAGGCdTdT GCCUUGAUCUGGGCGACCGd
-TdT
-    172     194   3.000   70.0 (AA)GUCGUGCUCCUGGCAGGCGdTdT CGCCUGCCAGGAGCACGACd
-TdT
-    443     465   3.000   35.0 (CA)AUGCCAACUCUUAAGUCUUdTdT AAGACUUAAGAGUUGGCAUd
-TdT
-    456     478   3.000   35.0 (UA)AGUCUUUUGUAAUUCUGGCdTdT GCCAGAAUUACAAAAGACUd
-TdT
-    468     490   3.000   30.0 (AA)UUCUGGCUUUCUCUAAUAAdTdT UUAUUAGAGAAAGCCAGAAd
-TdT
-    484     506   3.000   30.0 (AA)UAAAAAAGCCACUUAGUUCdTdT GAACUAAGUGGCUUUUUUAd
-TdT
-    108     130   2.000   60.0 (CA)GGAAACGGUCGCCCAGAUCdTdT GAUCUGGGCGACCGUUUCCd
-TdT
-    135     157   2.000   60.0 (CA)UGUAGCCUCACUGGAGGGCdTdT GCCCUCCAGUGAGGCUACAd
-TdT
-    139     161   2.000   60.0 (UA)GCCUCACUGGAGGGCAUUGdTdT CAAUGCCCUCCAGUGAGGCd
-TdT
-    150     172   2.000   60.0 (GA)GGGCAUUGCCCCGGAAGAUdTdT AUCUUCCGGGGCAAUGCCCd
-TdT
-    171     193   2.000   65.0 (CA)AGUCGUGCUCCUGGCAGGCdTdT GCCUGCCAGGAGCACGACUd
-TdT
-    201     223   2.000   65.0 (GA)GGAUGAGGCCACUCUGGGCdTdT GCCCAGAGUGGCCUCAUCCd
-TdT
-    204     226   2.000   65.0 (GA)UGAGGCCACUCUGGGCCAGdTdT CUGGCCCAGAGUGGCCUCAd
-TdT
-    245     267   2.000   65.0 (UA)CCCUGGAAGUAGCAGGCCGdTdT CGGCCUGCUACUUCCAGGGd
-TdT
-    256     278   2.000   65.0 (UA)GCAGGCCGCAUGCUUGGAGdTdT CUCCAAGCAUGCGGCCUGCd
-TdT
-    285     307   2.000   65.0 (CA)UGGUUCCCUGGCCCGUGCUdTdT AGCACGGGCCAGGGAACCAd
-TdT
-    338     360   2.000   35.0 (CA)AACAGGAGAAGAAGAAGAAdTdT UUCUUCUUCUUCUCCUGUUd
-TdT
-    345     367   2.000   35.0 (GA)GAAGAAGAAGAAGAAGACAdTdT UGUCUUCUUCUUCUUCUUCd
-TdT
-    486     508   2.000   35.0 (UA)AAAAAGCCACUUAGUUCAGdTdT CUGAACUAAGUGGCUUUUUd
-TdT
+    353     375       +   5.000   55.0 (GA)AGAAGAAGACAGGUCGGGCdTdT GCCCGACCUGUC
+UUCUUCUdTdT
+    360     382       +   5.000   65.0 (AA)GACAGGUCGGGCUAAGCGGdTdT CCGCUUAGCCCG
+ACCUGUCdTdT
+    374     396       +   5.000   55.0 (UA)AGCGGCGGAUGCAGUACAAdTdT UUGUACUGCAUC
+CGCCGCUdTdT
+    383     405       +   5.000   55.0 (GA)UGCAGUACAACCGGCGCUUdTdT AAGCGCCGGUUG
+UACUGCAdTdT
+    387     409       +   5.000   55.0 (CA)GUACAACCGGCGCUUUGUCdTdT GACAAAGCGCCG
+GUUGUACdTdT
+    390     412       +   5.000   55.0 (UA)CAACCGGCGCUUUGUCAACdTdT GUUGACAAAGCG
+CCGGUUGdTdT
+    392     414       +   5.000   55.0 (CA)ACCGGCGCUUUGUCAACGUdTdT ACGUUGACAAAG
+CGCCGGUdTdT
+    407     429       +   5.000   55.0 (CA)ACGUUGUGCCCACCUUUGGdTdT CCAAAGGUGGGC
+ACAACGUdTdT
+    428     450       +   5.000   55.0 (CA)AGAAGAAGGGCCCCAAUGCdTdT GCAUUGGGGCCC
+UUCUUCUdTdT
+    431     453       +   5.000   55.0 (GA)AGAAGGGCCCCAAUGCCAAdTdT UUGGCAUUGGGG
+CCCUUCUdTdT
+    434     456       +   5.000   60.0 (GA)AGGGCCCCAAUGCCAACUCdTdT GAGUUGGCAUUG
+GGGCCCUdTdT
+    444     466       +   5.000   35.0 (AA)UGCCAACUCUUAAGUCUUUdTdT AAAGACUUAAGA
+GUUGGCAdTdT
+    487     509       +   5.000   35.0 (AA)AAAAGCCACUUAGUUCAGUdTdT ACUGAACUAAGU
+GGCUUUUdTdT
+    123     145       +   4.000   50.0 (CA)GAUCAAGGCUCAUGUAGCCdTdT GGCUACAUGAGC
+CUUGAUCdTdT
+    125     147       +   4.000   50.0 (GA)UCAAGGCUCAUGUAGCCUCdTdT GAGGCUACAUGA
+GCCUUGAdTdT
+    128     150       +   4.000   50.0 (CA)AGGCUCAUGUAGCCUCACUdTdT AGUGAGGCUACA
+UGAGCCUdTdT
+    155     177       +   4.000   50.0 (CA)UUGCCCCGGAAGAUCAAGUdTdT ACUUGAUCUUCC
+GGGGCAAdTdT
+    234     256       +   4.000   60.0 (GA)GGCCCUGACUACCCUGGAAdTdT UUCCAGGGUAGU
+CAGGGCCdTdT
+    259     281       +   4.000   60.0 (CA)GGCCGCAUGCUUGGAGGUAdTdT UACCUCCAAGCA
+UGCGGCCdTdT
+    266     288       +   4.000   40.0 (CA)UGCUUGGAGGUAAAGUUCAdTdT UGAACUUUACCU
+CCAAGCAdTdT
+    342     364       +   4.000   40.0 (CA)GGAGAAGAAGAAGAAGAAGdTdT CUUCUUCUUCUU
+CUUCUCCdTdT
+    347     369       +   4.000   40.0 (GA)AGAAGAAGAAGAAGACAGGdTdT CCUGUCUUCUUC
+UUCUUCUdTdT
+    359     381       +   4.000   60.0 (GA)AGACAGGUCGGGCUAAGCGdTdT CGCUUAGCCCGA
+CCUGUCUdTdT
+    111     133       +   3.000   55.0 (GA)AACGGUCGCCCAGAUCAAGdTdT CUUGAUCUGGGC
+GACCGUUdTdT
+    113     135       +   3.000   65.0 (AA)CGGUCGCCCAGAUCAAGGCdTdT GCCUUGAUCUGG
+GCGACCGdTdT
+    172     194       +   3.000   70.0 (AA)GUCGUGCUCCUGGCAGGCGdTdT CGCCUGCCAGGA
+GCACGACdTdT
+    443     465       +   3.000   35.0 (CA)AUGCCAACUCUUAAGUCUUdTdT AAGACUUAAGAG
+UUGGCAUdTdT
+    456     478       +   3.000   35.0 (UA)AGUCUUUUGUAAUUCUGGCdTdT GCCAGAAUUACA
+AAAGACUdTdT
+    468     490       +   3.000   30.0 (AA)UUCUGGCUUUCUCUAAUAAdTdT UUAUUAGAGAAA
+GCCAGAAdTdT
+    484     506       +   3.000   30.0 (AA)UAAAAAAGCCACUUAGUUCdTdT GAACUAAGUGGC
+UUUUUUAdTdT
+    108     130       +   2.000   60.0 (CA)GGAAACGGUCGCCCAGAUCdTdT GAUCUGGGCGAC
+CGUUUCCdTdT
+    135     157       +   2.000   60.0 (CA)UGUAGCCUCACUGGAGGGCdTdT GCCCUCCAGUGA
+GGCUACAdTdT
+    139     161       +   2.000   60.0 (UA)GCCUCACUGGAGGGCAUUGdTdT CAAUGCCCUCCA
+GUGAGGCdTdT
+    150     172       +   2.000   60.0 (GA)GGGCAUUGCCCCGGAAGAUdTdT AUCUUCCGGGGC
+AAUGCCCdTdT
+    171     193       +   2.000   65.0 (CA)AGUCGUGCUCCUGGCAGGCdTdT GCCUGCCAGGAG
+CACGACUdTdT
+    201     223       +   2.000   65.0 (GA)GGAUGAGGCCACUCUGGGCdTdT GCCCAGAGUGGC
+CUCAUCCdTdT
+    204     226       +   2.000   65.0 (GA)UGAGGCCACUCUGGGCCAGdTdT CUGGCCCAGAGU
+GGCCUCAdTdT
+    245     267       +   2.000   65.0 (UA)CCCUGGAAGUAGCAGGCCGdTdT CGGCCUGCUACU
+UCCAGGGdTdT
+    256     278       +   2.000   65.0 (UA)GCAGGCCGCAUGCUUGGAGdTdT CUCCAAGCAUGC
+GGCCUGCdTdT
+    285     307       +   2.000   65.0 (CA)UGGUUCCCUGGCCCGUGCUdTdT AGCACGGGCCAG
+GGAACCAdTdT
+    338     360       +   2.000   35.0 (CA)AACAGGAGAAGAAGAAGAAdTdT UUCUUCUUCUUC
+UCCUGUUdTdT
+    345     367       +   2.000   35.0 (GA)GAAGAAGAAGAAGAAGACAdTdT UGUCUUCUUCUU
+CUUCUUCdTdT
+    486     508       +   2.000   35.0 (UA)AAAAAGCCACUUAGUUCAGdTdT CUGAACUAAGUG
+GCUUUUUdTdT
 
 #---------------------------------------
 #---------------------------------------
@@ -893,7 +814,148 @@ Data files
 
 Notes
 
-   None.
+   RNA interference (RNAi) is a phenomenon whereby small interfering RNA
+   strands (siRNA) inhibit gene expression at the level of transcription
+   or translation of specific genes. RNAi is a defence mechanism against
+   viruses and is important in regulating development and genome
+   maintenance. siRNA are double stranded RNA molecules where one or the
+   other strand is strongly complementary to a target RNA strand. Once
+   they bind to a target, a nuclease protein guided by the siRNA cleaves
+   the target and renders it untranslateable.
+
+   Gene silencing using RNAi has been used to determine the function of
+   many genes in Drosophilia, C. elegans, and many plant species. The
+   duration of knockdown by siRNA can typically last for 7-10 days, and
+   has been shown to transfer to daughter cells. Of further note, siRNAs
+   are effective at quantities much lower than alternative gene silencing
+   methodologies, including antisense and ribozyme based strategies.
+
+   Due to various mechanisms of antiviral response to long dsRNA, RNAi at
+   first proved more difficult to establish in mammalian species. Then,
+   Tuschl, Elbashir, and others discovered that RNAi can be elicited very
+   effectively by well-defined 21-base duplex RNAs. When these small
+   interfering RNA, or siRNA, are added in duplex form with a
+   transfection agent to mammalian cell cultures, the 21-base-pair RNA
+   acts in concert with cellular components to silence the gene with
+   sequence homology to one of the siRNA sequences. Strategies for the
+   design of effective siRNA sequences have been recently documented,
+   most notably by Sayda Elbashir, Thomas Tuschl, et al.
+
+   Their studies of mammalian RNAi suggest that the most efficient
+   gene-silencing effect is achieved using double-stranded siRNA having a
+   19-nucleotide complementary region and a 2-nucleotide 3' overhang at
+   each end. Current models of the RNAi mechanism suggest that the
+   antisense siRNA strand recognizes the specific gene target.
+
+   In gene-specific RNAi, the coding region (CDS) of the mRNA is usually
+   targeted. The search for an appropriate target sequence should begin
+   50-100 nucleotides downstream of the start codon. UTR-binding proteins
+   and/or translation initiation complexes may interfere with the binding
+   of the siRNP endonuclease complex. Tuschl, Elbashir et al. say that
+   they have successfully used siRNAs targetting the 3' UTR. To avoid
+   interference from mRNA regulatory proteins, sequences in the 5'
+   untranslated region or near the start codon should not be targeted.
+
+   A set of rules for the design of siRNA has been suggested
+   http://www.mpibpc.gwdg.de/abteilungen/100/105/sirna.html based on the
+   work of Tuschl, Elbashir et al. They suggest searching for 23-nt
+   sequence motif AA(N19)TT (N, any nucleotide) and select hits with
+   approx. 50% G/C-content (30% to 70% has also worked in for them). If
+   no suitable sequences are found, the search is extended using the
+   motif NA(N21). The sequence of the sense siRNA corresponds to (N19)TT
+   or N21 (position 3 to 23 of the 23-nt motif), respectively. In the
+   latter case, they convert the 3' end of the sense siRNA to TT.
+
+   The rationale for this sequence conversion is to generate a symmetric
+   duplex with respect to the sequence composition of the sense and
+   antisense 3' overhangs. The antisense siRNA is synthesized as the
+   complement to position 1 to 21 of the 23-nt motif. Because position 1
+   of the 23-nt motif is not recognized sequence-specifically by the
+   antisense siRNA, the 3'-most nucleotide residue of the antisense
+   siRNA, can be chosen deliberately. However, the penultimate nucleotide
+   of the antisense siRNA (complementary to position 2 of the 23-nt
+   motif) should always be complementary to the targeted sequence. For
+   simplifying chemical synthesis, they always use TT.
+
+   More recently, they preferentially select siRNAs corresponding to the
+   target motif NAR(N17)YNN, where R is purine (A, G) and Y is pyrimidine
+   (C, U). The respective 21-nt sense and antisense siRNAs therefore
+   begin with a purine nucleotide and can also be expressed from pol III
+   expression vectors without a change in targeting site; expression of
+   RNAs from pol III promoters is only efficient when the first
+   transcribed nucleotide is a purine.
+
+   They always design siRNAs with symmetric 3' TT overhangs, believing
+   that symmetric 3' overhangs help to ensure that the siRNPs are formed
+   with approximately equal ratios of sense and antisense target
+   RNA-cleaving siRNPs Please note that the modification of the overhang
+   of the sense sequence of the siRNA duplex is not expected to affect
+   targeted mRNA recognition, as the antisense siRNA strand guides target
+   recognition. In summary, no matter what you do to your overhangs,
+   siRNAs should still function to a reasonable extent. However, using TT
+   in the 3' overhang will always help your RNA synthesis company to let
+   you know when you accidentally order a siRNA sequences 3' to 5' rather
+   than in the recommended format of 5' to 3'. sirna reports both the
+   sense and antisense siRNAs as 5' to 3'.
+
+   Xeragon.com also suggest that choosing a region of the mRNA with a GC
+   content as close as possible to 50% is a more important consideration
+   than choosing a target sequence that begins with AA. They also suggest
+   that a key consideration in target selection is to avoid having more
+   than three guanosines in a row, since poly G sequences can hyperstack
+   and form agglomerates that potentially interfere with the siRNA
+   silencing mechanism.
+
+   siRNAs appear to effectively silence genes in more than 80% of cases.
+   Current data indicate that there are regions of some mRNAs where gene
+   silencing does not work. To help ensure that a given target gene is
+   silenced, it is advised that at least two target sequences as far
+   apart on the gene as possible be chosen.
+
+  Coding region specification
+
+   It's possible (although the evidence is unclear) that regulatory
+   protein binding to regions in and near the untranslated 5' region
+   might interfere with the RNAi process. Therefore, this program avoids
+   choosing siRNA probes from the 5' UTR and from the first 50 bases of
+   the coding region. The second 50 bases of the coding region has a
+   penalty associated with it to reduce the reporting of possible siRNA
+   probes in this region. If the input sequence has a feature table
+   specifying a coding region, then this will be used, else you can
+   specify the start of the coding region, where this is known by the
+   -sbegin command-line qualifier (which is normally used to specify the
+   start of the region of a sequence that should be analysed in all
+   EMBOSS programs). sirna looks at the feature table of the input mRNA
+   sequence to find the coding regions (CDS). It will ignore the 5' UTR
+   and the first 50 bases of the CDS. It will assign a penalty of 2
+   points to any siRNA in positions 51 to 100 in the CDS. If there is no
+   CDS in the feature table, you can specify the CDS by using the
+   command-line qualifier -sbegin to indicate where the CDS should start.
+   If there is no CDS in the feature table and you do not use the
+   command-line qualifier -sbegin, then sirna will assume that the CDS
+   region is not known and will look for siRNAs in the whole of the
+   sequence with no penaties associated with the location within the
+   sequence. All these confusing regions There are a lot of references to
+   23 base regions, 21 base regions, 19 base regions, etc. in any
+   description of siRNA. Perhaps an example with a sequence would be
+   clearer? The 23 base region, in this case starting with an AA, might
+   typically look like:
+5' AAGUGAGAGGUCAGACUCCUATC
+
+   The sense siRNA is made from the 19 bases of positions 3 to 21 of the
+   23 base target region, so:
+5'   GUGAGAGGUCAGACUCCUA
+
+   and then typically d(TT) is added, so:
+5'   GUGAGAGGUCAGACUCCUAdTdT
+
+   The antisense siRNA sequence is made from bases 3 to 21 of the target
+   region, so:
+5'   GUGAGAGGUCAGACUCCUA sense
+3'   CACUCUCCAGUCUGAGGAU antisense 3' -> 5'
+
+   so the antisense sequence that should be ordered with d(TT) added is:
+5'   UAGGAGUCUGACCUCUCACdTdT antisense 5' -> 3'
 
 References
 
@@ -922,15 +984,16 @@ Known bugs
 
 See also
 
-   Program name                        Description
-   banana       Bending and curvature plot in B-DNA
-   btwisted     Calculates the twisting in a B-DNA sequence
-   chaos        Create a chaos game representation plot for a sequence
-   compseq      Count composition of dimer/trimer/etc words in a sequence
-   dan          Calculates DNA RNA/DNA melting temperature
-   freak        Residue/base frequency table or plot
-   isochore     Plots isochores in large DNA sequences
-   wordcount    Counts words of a specified size in a DNA sequence
+   Program name                           Description
+   banana       Plot bending and curvature data for B-DNA
+   btwisted     Calculate the twisting in a B-DNA sequence
+   chaos        Draw a chaos game representation plot for a nucleotide sequence
+   compseq      Calculate the composition of unique words in sequences
+   dan          Calculates nucleic acid melting temperature
+   density      Draw a nucleic acid density plot
+   freak        Generate residue/base frequency table or plot
+   isochore     Plots isochores in DNA sequences
+   wordcount    Count and extract unique words in DNA sequence(s)
 
 Author(s)
 

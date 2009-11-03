@@ -21,23 +21,10 @@ transeq
     Description
 </H2>
 
-<b>Transeq</b> translates nucleic acid sequences to the corresponding
-peptide sequence.
-<p>
-It can translate in any of the 3 forward or three reverse sense
-frames, or in all three forward or reverse frames, or in all six
-frames.
-<p>
-It can translate specified regions corresponding to the coding
-regions of your sequences. 
-<p>
-It can translate using the standard ('Universal') genetic code
-and also with a selection of non-standard codes. 
-<p>
-Termination (STOP) codons are translated as the character '*'.
-<p>
-The output peptide sequence is always in the standard one-letter
-IUPAC code. 
+
+<p><b>transeq</b> reads one or more nucleotide sequences and writes the corresponding protein sequence translations to file.  It can translate in any of the 3 forward or three reverse sense frames, or in all three forward or reverse frames, or in all six frames. The translation may be restricted to specified regions, for example, corresponding to the coding regions of your sequences. It can translate using the standard ('Universal') genetic code and also with a selection of non-standard codes.</p>
+
+
 
 <H2>
     Usage
@@ -107,66 +94,28 @@ so the output name would be 'XYZ_1'.
     Notes
 </H2>
 
-The reverse frame '-1' is defined as the translation you get when you
-use the reverse-complement of the sequence with the same codon phase as
-the codon in frame '1'. 
 
-<p>
+<p>Termination (STOP) codons are translated as the character <tt>*</tt>. The -trim option removes all all <tt>X</tt> and <tt>*</tt> characters from the right end of the translation. This trimming process starts at the end and continues until the next character is not an <tt>X</tt> or a <tt>*</tt>.  The -clean option changes all STOP codon positions from the <tt>*</tt> character to <tt>X</tt> (an unknown residue). This is useful because some programs will not accept protein sequences with <tt>*</tt> characters in them.</p>
 
-Thus the sequence ACTGG in frame 1 is the translation of the codons
-ACT,GG; the translation of frame -1 uses these same codons, reverse
-complemented:
+<p>The reverse frame '-1' is defined as the translation you get when you use the reverse-complement of the sequence with the same codon phase as the codon in frame '1'. Thus the sequence ACTGG in frame 1 is the translation of the codons ACT,GG; the translation of frame -1 uses these same codons, reverse complemented:
 
-<p>
-
-<pre>
   forward sense          ACT GG
   reverse sense          TGA CC
 
   reverse-complement     CC AGT
   frame -1 translation       S
-</pre>
+</p>
 
-<p>
+<p>Frame -1 is the translation of CCAGT (the reverse complement of ACTGG) using the codon <tt>AGT</tt> (the first bases <tt>CC</tt> are ignored). The result is the peptide <tt>S</tt>.</p>
+<p>Similarly frame -2 is the phase used by frame 2, <tt>CAG T</tt> (the first base <tt>C</tt> is ignored). The last base cannot be successfully translated and is output as the unknown residue <tt>X</tt>. The result is the peptide <tt>QX</tt>.</p>
+<p>Frame -3 is the phase used by frame 3, <tt>CCA GT</tt>. The last two bases will translate to <tt>V</tt> as it does not matter what the next base is. (GTA, GTC, GTG, GTT all code for <tt>V</tt>). The result is the peptide <tt>PV</tt>.</p>
 
-Frame -1 is the translation of CCAGT (the reverse complement of ACTGG)
-using the codon 'AGT' (the first bases 'CC' are ignored).  The result is
-the peptide 'S'. 
+<p>The alternative way of generating the reverse translation frames used by some people is that frame -1 is made by taking the frame '1' of the reverse complement. There is no correspondence between the codons used in frame 1 and -1, 2 and -2, 3 and -3; the codons used change with the length modulus 3.</p>
 
-<p>
+<p>There does not appear to be a convention on which definition to use. The Staden package uses the same convention as this program. The GCG package sneakily avoids the problem by naming the frames using letters (a, b, c, d, e, f).  If you really need to define frame -1 as the frame given when you reverse complement the sequence and then start translating at the first frame in the resulting sequence, then use the <tt>-alternative</tt> qualifier.</p>
 
-Similarly frame -2 is the phase used by frame 2, 'CAG T' (the first base
-'C' is ignored). The last base cannot be successfully translated and is
-output as the unknown residue 'X'. The result is the peptide 'QX'.
 
-<p>
 
-Frame -3 is the phase used by frame 3, 'CCA GT'.  The last two bases
-will translate to 'V' as it does not matter what the next base is. 
-(GTA, GTC, GTG, GTT all code for 'V').  The result is the peptide 'PV'. 
-
-<p>
-
-The alternative way of generating the reverse translation frames used by
-some people is that frame -1 is made by taking the frame '1' of the
-reverse complement.  There is no correspondence between the codons used
-in frame 1 and -1, 2 and -2, 3 and -3; the codons used change with the
-length modulus 3. 
-
-<p>
-
-There does not appear to be a convention on which definition to use.
-<br>
-The Staden package uses the same convention as this program.
-<br>
-The GCG package sneakily avoids the problem by naming the frames using
-letters (a, b, c, d, e, f)
-
-<p>
-
-If you really need to define frame -1 as the frame given when you
-reverse complement the sequence and then start translating at the first
-frame in the resulting sequence, then use the '-alternative' qualifier. 
 
 
 <H2>
@@ -180,17 +129,9 @@ None.
     Warnings
 </H2>
 
+<p>When translating using a non-standard genetic code, you should check the table carefully for deviations from your particular organism's code.</p>
+<p>When using the <tt>-regions</tt> option, you should always leave the <tt>-frames</tt> option at the default of frame '1'. If you change the frame while specifying a region to translate, then the regions will be offset by 1 or 2 bases, which is not what you want.</p>
 
-	When translating using non-standard genetic code table, always
-	check the table carefully for deviations from your particular
-	organism's code.
-
-<p>
-
-When using the '-regions' option, you should always leave the '-frames'
-option at the default of frame '1'.  If you change the frame while
-specifying a region to translate, then the regions will be offset by 1
-or 2 bases, which is not what you want. 
 
 
 <H2>

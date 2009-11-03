@@ -5,7 +5,7 @@
 
 Function
 
-   Multiple alignment program - interface to ClustalW program
+   Multiple sequence alignment (ClustalW wrapper)
 
 Description
 
@@ -14,6 +14,593 @@ Description
    Gibson, T.J. (1994).
 
    This is an interface to the ClustalW distribution.
+
+Usage
+
+   Here is a sample session with emma
+
+
+% emma 
+Multiple sequence alignment (ClustalW wrapper)
+Input (gapped) sequence(s): globins.fasta
+output sequence set [hbb_human.aln]: 
+Dendrogram (tree file) from clustalw output file [hbb_human.dnd]: 
+
+
+
+
+ CLUSTAL W (1.83) Multiple Sequence Alignments
+
+
+
+Sequence type explicitly set to Protein
+Sequence format is Pearson
+Sequence 1: HBB_HUMAN       146 aa
+Sequence 2: HBB_HORSE       146 aa
+Sequence 3: HBA_HUMAN       141 aa
+Sequence 4: HBA_HORSE       141 aa
+Sequence 5: MYG_PHYCA       153 aa
+Sequence 6: GLB5_PETMA      149 aa
+Sequence 7: LGB2_LUPLU      153 aa
+Start of Pairwise alignments
+Aligning...
+Sequences (1:2) Aligned. Score:  83
+Sequences (1:3) Aligned. Score:  43
+Sequences (1:4) Aligned. Score:  42
+Sequences (1:5) Aligned. Score:  24
+Sequences (1:6) Aligned. Score:  21
+Sequences (1:7) Aligned. Score:  14
+Sequences (2:3) Aligned. Score:  41
+Sequences (2:4) Aligned. Score:  43
+Sequences (2:5) Aligned. Score:  24
+Sequences (2:6) Aligned. Score:  19
+Sequences (2:7) Aligned. Score:  15
+Sequences (3:4) Aligned. Score:  87
+Sequences (3:5) Aligned. Score:  26
+Sequences (3:6) Aligned. Score:  29
+Sequences (3:7) Aligned. Score:  16
+Sequences (4:5) Aligned. Score:  26
+Sequences (4:6) Aligned. Score:  27
+Sequences (4:7) Aligned. Score:  12
+Sequences (5:6) Aligned. Score:  21
+Sequences (5:7) Aligned. Score:  7
+Sequences (6:7) Aligned. Score:  11
+Guide tree        file created:   [12345678A]
+Start of Multiple Alignment
+There are 6 groups
+Aligning...
+Group 1: Sequences:   2      Score:2194
+Group 2: Sequences:   2      Score:2165
+Group 3: Sequences:   4      Score:960
+Group 4:                     Delayed
+Group 5:                     Delayed
+Group 6:                     Delayed
+Sequence:5     Score:865
+Sequence:6     Score:797
+Sequence:7     Score:1044
+Alignment Score 4164
+GCG-Alignment file created      [12345678A]
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     (Gapped) sequence(s) filename and optional
+                                  format, or reference (input USA)
+  [-outseq]            seqoutset  [.] Sequence set filename
+                                  and optional format (output USA)
+  [-dendoutfile]       outfile    [*.emma] Dendrogram (tree file) from
+                                  clustalw output file
+
+   Additional (Optional) qualifiers (* if not always prompted):
+   -onlydend           toggle     [N] Only produce dendrogram file
+*  -dend               toggle     [N] Do alignment using an old dendrogram
+*  -dendfile           infile     Dendrogram (tree file) from clustalw file
+                                  (optional)
+*  -pwmatrix           menu       [b] The scoring table which describes the
+                                  similarity of each amino acid to each other.
+                                  There are three 'in-built' series of weight
+                                  matrices offered. Each consists of several
+                                  matrices which work differently at different
+                                  evolutionary distances. To see the exact
+                                  details, read the documentation. Crudely, we
+                                  store several matrices in memory, spanning
+                                  the full range of amino acid distance (from
+                                  almost identical sequences to highly
+                                  divergent ones). For very similar sequences,
+                                  it is best to use a strict weight matrix
+                                  which only gives a high score to identities
+                                  and the most favoured conservative
+                                  substitutions. For more divergent sequences,
+                                  it is appropriate to use 'softer' matrices
+                                  which give a high score to many other
+                                  frequent substitutions.
+                                  1) BLOSUM (Henikoff). These matrices appear
+                                  to be the best available for carrying out
+                                  data base similarity (homology searches).
+                                  The matrices used are: Blosum80, 62, 45 and
+                                  30.
+                                  2) PAM (Dayhoff). These have been extremely
+                                  widely used since the late '70s. We use the
+                                  PAM 120, 160, 250 and 350 matrices.
+                                  3) GONNET . These matrices were derived
+                                  using almost the same procedure as the
+                                  Dayhoff one (above) but are much more up to
+                                  date and are based on a far larger data set.
+                                  They appear to be more sensitive than the
+                                  Dayhoff series. We use the GONNET 40, 80,
+                                  120, 160, 250 and 350 matrices.
+                                  We also supply an identity matrix which
+                                  gives a score of 1.0 to two identical amino
+                                  acids and a score of zero otherwise. This
+                                  matrix is not very useful. (Values: b
+                                  (blosum); p (pam); g (gonnet); i (id); o
+                                  (own))
+*  -pwdnamatrix        menu       [i] The scoring table which describes the
+                                  scores assigned to matches and mismatches
+                                  (including IUB ambiguity codes). (Values: i
+                                  (iub); c (clustalw); o (own))
+*  -pairwisedatafile   infile     Comparison matrix file (optional)
+*  -matrix             menu       [b] This gives a menu where you are offered
+                                  a choice of weight matrices. The default for
+                                  proteins is the PAM series derived by
+                                  Gonnet and colleagues. Note, a series is
+                                  used! The actual matrix that is used depends
+                                  on how similar the sequences to be aligned
+                                  at this alignment step are. Different
+                                  matrices work differently at each
+                                  evolutionary distance.
+                                  There are three 'in-built' series of weight
+                                  matrices offered. Each consists of several
+                                  matrices which work differently at different
+                                  evolutionary distances. To see the exact
+                                  details, read the documentation. Crudely, we
+                                  store several matrices in memory, spanning
+                                  the full range of amino acid distance (from
+                                  almost identical sequences to highly
+                                  divergent ones). For very similar sequences,
+                                  it is best to use a strict weight matrix
+                                  which only gives a high score to identities
+                                  and the most favoured conservative
+                                  substitutions. For more divergent sequences,
+                                  it is appropriate to use 'softer' matrices
+                                  which give a high score to many other
+                                  frequent substitutions.
+                                  1) BLOSUM (Henikoff). These matrices appear
+                                  to be the best available for carrying out
+                                  data base similarity (homology searches).
+                                  The matrices used are: Blosum80, 62, 45 and
+                                  30.
+                                  2) PAM (Dayhoff). These have been extremely
+                                  widely used since the late '70s. We use the
+                                  PAM 120, 160, 250 and 350 matrices.
+                                  3) GONNET . These matrices were derived
+                                  using almost the same procedure as the
+                                  Dayhoff one (above) but are much more up to
+                                  date and are based on a far larger data set.
+                                  They appear to be more sensitive than the
+                                  Dayhoff series. We use the GONNET 40, 80,
+                                  120, 160, 250 and 350 matrices.
+                                  We also supply an identity matrix which
+                                  gives a score of 1.0 to two identical amino
+                                  acids and a score of zero otherwise. This
+                                  matrix is not very useful. Alternatively,
+                                  you can read in your own (just one matrix,
+                                  not a series). (Values: b (blosum); p (pam);
+                                  g (gonnet); i (id); o (own))
+*  -dnamatrix          menu       [i] This gives a menu where a single matrix
+                                  (not a series) can be selected. (Values: i
+                                  (iub); c (clustalw); o (own))
+*  -mamatrixfile       infile     Comparison matrix file (optional)'
+   -[no]slow           toggle     [Y] A distance is calculated between every
+                                  pair of sequences and these are used to
+                                  construct the dendrogram which guides the
+                                  final multiple alignment. The scores are
+                                  calculated from separate pairwise
+                                  alignments. These can be calculated using 2
+                                  methods: dynamic programming (slow but
+                                  accurate) or by the method of Wilbur and
+                                  Lipman (extremely fast but approximate).
+                                  The slow-accurate method is fine for short
+                                  sequences but will be VERY SLOW for many
+                                  (e.g. >100) long (e.g. >1000 residue)
+                                  sequences.
+*  -pwgapopen          float      [10.0] The penalty for opening a gap in the
+                                  pairwise alignments. (Number 0.000 or more)
+*  -pwgapextend        float      [0.1] The penalty for extending a gap by 1
+                                  residue in the pairwise alignments. (Number
+                                  0.000 or more)
+*  -ktup               integer    [1 for protein, 2 for nucleic] This is the
+                                  size of exactly matching fragment that is
+                                  used. INCREASE for speed (max= 2 for
+                                  proteins; 4 for DNA), DECREASE for
+                                  sensitivity. For longer sequences (e.g.
+                                  >1000 residues) you may need to increase the
+                                  default. (integer from 0 to 4)
+*  -gapw               integer    [3 for protein, 5 for nucleic] This is a
+                                  penalty for each gap in the fast alignments.
+                                  It has little affect on the speed or
+                                  sensitivity except for extreme values.
+                                  (Positive integer)
+*  -topdiags           integer    [5 for protein, 4 for nucleic] The number of
+                                  k-tuple matches on each diagonal (in an
+                                  imaginary dot-matrix plot) is calculated.
+                                  Only the best ones (with most matches) are
+                                  used in the alignment. This parameter
+                                  specifies how many. Decrease for speed;
+                                  increase for sensitivity. (Positive integer)
+*  -window             integer    [5 for protein, 4 for nucleic] This is the
+                                  number of diagonals around each of the
+                                  'best' diagonals that will be used. Decrease
+                                  for speed; increase for sensitivity.
+                                  (Positive integer)
+*  -nopercent          boolean    [N] Fast pairwise alignment: similarity
+                                  scores: suppresses percentage score
+   -gapopen            float      [10.0] The penalty for opening a gap in the
+                                  alignment. Increasing the gap opening
+                                  penalty will make gaps less frequent.
+                                  (Positive foating point number)
+   -gapextend          float      [5.0] The penalty for extending a gap by 1
+                                  residue. Increasing the gap extension
+                                  penalty will make gaps shorter. Terminal
+                                  gaps are not penalised. (Positive foating
+                                  point number)
+   -[no]endgaps        boolean    [Y] End gap separation: treats end gaps just
+                                  like internal gaps for the purposes of
+                                  avoiding gaps that are too close (set by
+                                  'gap separation distance'). If you turn this
+                                  off, end gaps will be ignored for this
+                                  purpose. This is useful when you wish to
+                                  align fragments where the end gaps are not
+                                  biologically meaningful.
+   -gapdist            integer    [8] Gap separation distance: tries to
+                                  decrease the chances of gaps being too close
+                                  to each other. Gaps that are less than this
+                                  distance apart are penalised more than
+                                  other gaps. This does not prevent close
+                                  gaps; it makes them less frequent, promoting
+                                  a block-like appearance of the alignment.
+                                  (Positive integer)
+*  -norgap             boolean    [N] Residue specific penalties: amino acid
+                                  specific gap penalties that reduce or
+                                  increase the gap opening penalties at each
+                                  position in the alignment or sequence. As an
+                                  example, positions that are rich in glycine
+                                  are more likely to have an adjacent gap
+                                  than positions that are rich in valine.
+*  -hgapres            string     [GPSNDQEKR] This is a set of the residues
+                                  'considered' to be hydrophilic. It is used
+                                  when introducing Hydrophilic gap penalties.
+                                  (Any string is accepted)
+*  -nohgap             boolean    [N] Hydrophilic gap penalties: used to
+                                  increase the chances of a gap within a run
+                                  (5 or more residues) of hydrophilic amino
+                                  acids; these are likely to be loop or random
+                                  coil regions where gaps are more common.
+                                  The residues that are 'considered' to be
+                                  hydrophilic are set by '-hgapres'.
+   -maxdiv             integer    [30] This switch, delays the alignment of
+                                  the most distantly related sequences until
+                                  after the most closely related sequences
+                                  have been aligned. The setting shows the
+                                  percent identity level required to delay the
+                                  addition of a sequence; sequences that are
+                                  less identical than this level to any other
+                                  sequences will be aligned later. (Integer
+                                  from 0 to 100)
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outseq" associated qualifiers
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
+
+   "-dendoutfile" associated qualifiers
+   -odirectory3        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   The input is two or more sequences.
+
+  Input files for usage example
+
+  File: globins.fasta
+
+>HBB_HUMAN Sw:Hbb_Human => HBB_HUMAN
+VHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKV
+KAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFGK
+EFTPPVQAAYQKVVAGVANALAHKYH
+>HBB_HORSE Sw:Hbb_Horse => HBB_HORSE
+VQLSGEEKAAVLALWDKVNEEEVGGEALGRLLVVYPWTQRFFDSFGDLSNPGAVMGNPKV
+KAHGKKVLHSFGEGVHHLDNLKGTFAALSELHCDKLHVDPENFRLLGNVLVVVLARHFGK
+DFTPELQASYQKVVAGVANALAHKYH
+>HBA_HUMAN Sw:Hba_Human => HBA_HUMAN
+VLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHFDLSHGSAQVKGHGK
+KVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTPA
+VHASLDKFLASVSTVLTSKYR
+>HBA_HORSE Sw:Hba_Horse => HBA_HORSE
+VLSAADKTNVKAAWSKVGGHAGEYGAEALERMFLGFPTTKTYFPHFDLSHGSAQVKAHGK
+KVGDALTLAVGHLDDLPGALSNLSDLHAHKLRVDPVNFKLLSHCLLSTLAVHLPNDFTPA
+VHASLDKFLSSVSTVLTSKYR
+>MYG_PHYCA Sw:Myg_Phyca => MYG_PHYCA
+VLSEGEWQLVLHVWAKVEADVAGHGQDILIRLFKSHPETLEKFDRFKHLKTEAEMKASED
+LKKHGVTVLTALGAILKKKGHHEAELKPLAQSHATKHKIPIKYLEFISEAIIHVLHSRHP
+GDFGADAQGAMNKALELFRKDIAAKYKELGYQG
+>GLB5_PETMA Sw:Glb5_Petma => GLB5_PETMA
+PIVDTGSVAPLSAAEKTKIRSAWAPVYSTYETSGVDILVKFFTSTPAAQEFFPKFKGLTT
+ADQLKKSADVRWHAERIINAVNDAVASMDDTEKMSMKLRDLSGKHAKSFQVDPQYFKVLA
+AVIADTVAAGDAGFEKLMSMICILLRSAY
+>LGB2_LUPLU Sw:Lgb2_Luplu => LGB2_LUPLU
+GALTESQAALVKSSWEEFNANIPKHTHRFFILVLEIAPAAKDLFSFLKGTSEVPQNNPEL
+QAHAGKVFKLVYEAAIQLQVTGVVVTDATLKNLGSVHVSKGVADAHFPVVKEAILKTIKE
+VVGAKWSEELNSAWTIAYDELAIVIKKEMNDAA
+
+   EMBOSS programs do not allow you to simply type the names of two or
+   more files or database entries - they try to interpret this as all one
+   file-name and complain that a file of that name does not exist.
+
+   In order to enter the sequences that you wish to align, you must group
+   them in one of three ways: either make a 'list file' or place several
+   sequences in a single sequence file or specify the sequences using
+   wildcards.
+
+  Making a List file
+
+   A list file is a text file that holds the names of database entries
+   and/or sequence files.
+
+   You should use a text editor such as pico or nedit to edit a file to
+   contain the names of the sequence files or database entries. There
+   must be one sequence per line.
+
+   An example is the file 'fred' which contains:
+  __________________________________________________________________________
+
+opsd_abyko.fasta
+sw:opsd_xenla
+sw:opsd_c*
+@another_list
+  __________________________________________________________________________
+
+   This List files contains:
+
+     * opsd_abyko.fasta - this is the name of a sequence file. The file
+       is read in from the current directory.
+     * sw:opsd_xenla - this is a reference to a specific sequence in the
+       SwissProt database
+     * sw:opsd_c* - this represents all the sequences in SwissProt whose
+       identifiers start with ``opsd_c''
+     * another_list - this is the name of a second list file. List files
+       can be nested!
+
+   Notice the @ in front of the last entry. This is the way you tell
+   EMBOSS that this file is a List file, not a regular sequence file.
+   That last line was put there both as an indication of the way you tell
+   EMBOSS that a file is a List file and to emphasise that List files can
+   contain other List files.
+
+   When emma asks for the sequences to align, you should type '@fred'.
+   The '@' character tells EMBOSS that this is the name of a List file.
+
+   An alternative to editing a file and laboriously typing in all of the
+   names you require is to make a list of a directory containing the
+   sequence files and then to edit the list file to remove the names of
+   the sequences files than you do not require.
+
+   To make a list of all the files in the current directory that end in
+   '.pep', type:
+
+   ls *.pep > listfile
+
+  Several sequences in one file
+
+   EMBOSS can read in a single file which contains many sequences.
+
+   Each of the sequences in the file must be in the same format - if the
+   first sequence is in EMBL format, then all the others must be in EMBL
+   format.
+
+   There are some sequence formats that cannot be used when placing many
+   sequences in the same file. These are sequence formats that have no
+   clear indication of where the sequence ends and the annotation of the
+   next sequence starts. These formats include: plain or text format (no
+   real format, just the sequence), staden, gcg.
+
+   If your sequences are not already in a single file, you can place them
+   in one using seqret. The following example takes all the files ending
+   in '.pep' and places them in the file 'mystuff' in Fasta format.
+
+   seqret "*.pep" mystuff
+
+   When emma asks for the sequences to align, you should type 'mystuff'.
+
+  Using wildcards
+
+   'Wildcard' characters are characters that are expanded to match all
+   possible matching files or entries in a database.
+
+   By far the most commonly used wildcard character is '*' which matches
+   any number (or zero) of possible characters at that position in the
+   name.
+
+   A less commonly used wildcard character is '?' which matches any one
+   character at that position.
+
+   For example, when emma asks for sequences to align, you could answer:
+   abc*.pep This would select any files whose name starts with 'abc' and
+   then ends in '.pep'; the centre of the name where there is a '*' can
+   be anything.
+
+   Both file names and database entry names can be wildcarded.
+
+   There is a slightly irritating problem that occurs when wildcards are
+   used one the Unix command line (This is the line that you type against
+   the 'Unix' prompt together with the program name.)
+
+   In this case the Unix session gets the command line first, runs the
+   program, expands the wildcards and passes the program parameters to
+   the program. When Unix expands the wildcards, two things go wrong. You
+   may have specified wildcarded database entries - the Unix system tries
+   to file files that match that specification, it fails and refuses to
+   run the program. Alternatively, you may have specified wildcarded
+   files - Unix fileds them and gives the name of each of them to the
+   program as a separate parameter - emma gets the wrong number of
+   parameters and refuses to run.
+
+   You get round this by quoting the wildcard. You can either put the
+   whole wildcarded name in quotes:
+   "abc*.pep"
+   or you can quote just the '*' using a '\' as:
+   abc\*.pep
+
+   This problem does not occur when you reply to the prompt from the
+   program for the input sequences, or when you are typing the wildcard
+   files name in a web browser of GUI (such as Jemboss or SPIN) field
+
+Output file format
+
+  Output files for usage example
+
+  File: hbb_human.aln
+
+>HBB_HUMAN
+--------VHLTPEEKSAVTALWGKVN--VDEVGGEALGRLLVVYPWTQRFFESFGDLST
+PDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDP----ENFRLL
+GNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKYH------
+>HBB_HORSE
+--------VQLSGEEKAAVLALWDKVN--EEEVGGEALGRLLVVYPWTQRFFDSFGDLSN
+PGAVMGNPKVKAHGKKVLHSFGEGVHHLDNLKGTFAALSELHCDKLHVDP----ENFRLL
+GNVLVVVLARHFGKDFTPELQASYQKVVAGVANALAHKYH------
+>HBA_HUMAN
+---------VLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-----
+-DLSHGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDP----VNFKLL
+SHCLLVTLAAHLPAEFTPAVHASLDKFLASVSTVLTSKYR------
+>HBA_HORSE
+---------VLSAADKTNVKAAWSKVGGHAGEYGAEALERMFLGFPTTKTYFPHF-----
+-DLSHGSAQVKAHGKKVGDALTLAVGHLDDLPGALSNLSDLHAHKLRVDP----VNFKLL
+SHCLLSTLAVHLPNDFTPAVHASLDKFLSSVSTVLTSKYR------
+>MYG_PHYCA
+---------VLSEGEWQLVLHVWAKVEADVAGHGQDILIRLFKSHPETLEKFDRFKHLKT
+EAEMKASEDLKKHGVTVLTALGAILKKKGHHEAELKPLAQSHATKHKIPI----KYLEFI
+SEAIIHVLHSRHPGDFGADAQGAMNKALELFRKDIAAKYKELGYQG
+>GLB5_PETMA
+PIVDTGSVAPLSAAEKTKIRSAWAPVYSTYETSGVDILVKFFTSTPAAQEFFPKFKGLTT
+ADQLKKSADVRWHAERIINAVNDAVASMDDTEKMSMKLRDLSGKHAKSFQ----VDPQYF
+KVLAAVIADTVAAGDAGFEKLMSMICILLRSAY-------------
+>LGB2_LUPLU
+--------GALTESQAALVKSSWEEFNANIPKHTHRFFILVLEIAPAAKDLFSFLKG--T
+SEVPQNNPELQAHAGKVFKLVYEAAIQLQVTGVVVTDATLKNLGSVHVSKGVADAHFPVV
+KEAILKTIKEVVGAKWSEELNSAWTIAYDELAIVIKKEMNDAA---
+
+  File: hbb_human.dnd
+
+(
+(
+(
+(
+HBB_HUMAN:0.08080,
+HBB_HORSE:0.08359)
+:0.21952,
+(
+HBA_HUMAN:0.05452,
+HBA_HORSE:0.06605)
+:0.21070)
+:0.06034,
+MYG_PHYCA:0.39882)
+:0.01490,
+GLB5_PETMA:0.38267,
+LGB2_LUPLU:0.50324);
+
+  Sequences
+
+   emma writes the aligned sequences and a dendrogram file showing how
+   the sequences were clustered during the progressive alignments.
+
+   The clustalw output sequences are reformatted into the default EMBOSS
+   output format instead of being left as Clustal-format '.aln' files.
+
+  Trees
+
+   Believe it or not, we now use the New Hampshire (nested parentheses)
+   format as default for our trees. This format is compatible with e.g.
+   the PHYLIP package. If you want to view a tree, you can use the RETREE
+   or DRAWGRAM/DRAWTREE programs of PHYLIP. This format is used for all
+   our trees, even the initial guide trees for deciding the order of
+   multiple alignment. The output trees from the phylogenetic tree menu
+   can also be requested in our old verbose/cryptic format. This may be
+   more useful if, for example, you wish to see the bootstrap figures.
+   The bootstrap trees in the default New Hampshire format give the
+   bootstrap figures as extra labels which can be viewed very easily
+   using TREETOOL which is available as part of the GDE package. TREETOOL
+   is available from the RDP project by ftp from rdp.life.uiuc.edu.
+
+   The New Hampshire format is only useful if you have software to
+   display or manipulate the trees. The PHYLIP package is highly
+   recommended if you intend to do much work with trees and includes
+   programs for doing this. WE DO NOT PROVIDE ANY DIRECT MEANS FOR
+   VIEWING TREES GRAPHICALLY.
+
+Data files
+
+   The comparison matrices available for clustalw are not EMBOSS matrix
+   files, as they are defined in the clustalw code. The matrices
+   available for carrying out a protein sequence alignment are:
+     * blosum
+     * pam
+     * gonnet
+     * id
+     * user defined
+
+   The comparison matrices available in clustalw for carrying out a
+   nucleotide sequence alignment are:
+     * iub
+     * clustalw
+     * user defined
+
+Notes
 
   The basic alignment method
 
@@ -492,594 +1079,6 @@ Changes to the phylogentic tree calculations and some hints
    offering a JUMBLE option to shuffle the input order of your sequences
    between each bootstrap sample.
 
-Usage
-
-   Here is a sample session with emma
-
-
-% emma 
-Multiple alignment program - interface to ClustalW program
-Input (gapped) sequence(s): globins.fasta
-output sequence set [hbb_human.aln]: 
-Dendrogram (tree file) from clustalw output file [hbb_human.dnd]: 
-
-
-
-
- CLUSTAL W (1.83) Multiple Sequence Alignments
-
-
-
-Sequence type explicitly set to Protein
-Sequence format is Pearson
-Sequence 1: HBB_HUMAN       146 aa
-Sequence 2: HBB_HORSE       146 aa
-Sequence 3: HBA_HUMAN       141 aa
-Sequence 4: HBA_HORSE       141 aa
-Sequence 5: MYG_PHYCA       153 aa
-Sequence 6: GLB5_PETMA      149 aa
-Sequence 7: LGB2_LUPLU      153 aa
-Start of Pairwise alignments
-Aligning...
-Sequences (1:2) Aligned. Score:  83
-Sequences (1:3) Aligned. Score:  43
-Sequences (1:4) Aligned. Score:  42
-Sequences (1:5) Aligned. Score:  24
-Sequences (1:6) Aligned. Score:  21
-Sequences (1:7) Aligned. Score:  14
-Sequences (2:3) Aligned. Score:  41
-Sequences (2:4) Aligned. Score:  43
-Sequences (2:5) Aligned. Score:  24
-Sequences (2:6) Aligned. Score:  19
-Sequences (2:7) Aligned. Score:  15
-Sequences (3:4) Aligned. Score:  87
-Sequences (3:5) Aligned. Score:  26
-Sequences (3:6) Aligned. Score:  29
-Sequences (3:7) Aligned. Score:  16
-Sequences (4:5) Aligned. Score:  26
-Sequences (4:6) Aligned. Score:  27
-Sequences (4:7) Aligned. Score:  12
-Sequences (5:6) Aligned. Score:  21
-Sequences (5:7) Aligned. Score:  7
-Sequences (6:7) Aligned. Score:  11
-Guide tree        file created:   [12345678A]
-Start of Multiple Alignment
-There are 6 groups
-Aligning...
-Group 1: Sequences:   2      Score:2194
-Group 2: Sequences:   2      Score:2165
-Group 3: Sequences:   4      Score:960
-Group 4:                     Delayed
-Group 5:                     Delayed
-Group 6:                     Delayed
-Sequence:5     Score:865
-Sequence:6     Score:797
-Sequence:7     Score:1044
-Alignment Score 4164
-GCG-Alignment file created      [12345678A]
-
-   Go to the input files for this example
-   Go to the output files for this example
-
-Command line arguments
-
-   Standard (Mandatory) qualifiers:
-  [-sequence]          seqall     (Gapped) sequence(s) filename and optional
-                                  format, or reference (input USA)
-  [-outseq]            seqoutset  [.] Sequence set filename
-                                  and optional format (output USA)
-  [-dendoutfile]       outfile    [*.emma] Dendrogram (tree file) from
-                                  clustalw output file
-
-   Additional (Optional) qualifiers (* if not always prompted):
-   -onlydend           toggle     [N] Only produce dendrogram file
-*  -dend               toggle     [N] Do alignment using an old dendrogram
-*  -dendfile           infile     Dendrogram (tree file) from clustalw file
-                                  (optional)
-*  -pwmatrix           menu       [b] The scoring table which describes the
-                                  similarity of each amino acid to each other.
-                                  There are three 'in-built' series of weight
-                                  matrices offered. Each consists of several
-                                  matrices which work differently at different
-                                  evolutionary distances. To see the exact
-                                  details, read the documentation. Crudely, we
-                                  store several matrices in memory, spanning
-                                  the full range of amino acid distance (from
-                                  almost identical sequences to highly
-                                  divergent ones). For very similar sequences,
-                                  it is best to use a strict weight matrix
-                                  which only gives a high score to identities
-                                  and the most favoured conservative
-                                  substitutions. For more divergent sequences,
-                                  it is appropriate to use 'softer' matrices
-                                  which give a high score to many other
-                                  frequent substitutions.
-                                  1) BLOSUM (Henikoff). These matrices appear
-                                  to be the best available for carrying out
-                                  data base similarity (homology searches).
-                                  The matrices used are: Blosum80, 62, 45 and
-                                  30.
-                                  2) PAM (Dayhoff). These have been extremely
-                                  widely used since the late '70s. We use the
-                                  PAM 120, 160, 250 and 350 matrices.
-                                  3) GONNET . These matrices were derived
-                                  using almost the same procedure as the
-                                  Dayhoff one (above) but are much more up to
-                                  date and are based on a far larger data set.
-                                  They appear to be more sensitive than the
-                                  Dayhoff series. We use the GONNET 40, 80,
-                                  120, 160, 250 and 350 matrices.
-                                  We also supply an identity matrix which
-                                  gives a score of 1.0 to two identical amino
-                                  acids and a score of zero otherwise. This
-                                  matrix is not very useful. (Values: b
-                                  (blosum); p (pam); g (gonnet); i (id); o
-                                  (own))
-*  -pwdnamatrix        menu       [i] The scoring table which describes the
-                                  scores assigned to matches and mismatches
-                                  (including IUB ambiguity codes). (Values: i
-                                  (iub); c (clustalw); o (own))
-*  -pairwisedatafile   infile     Comparison matrix file (optional)
-*  -matrix             menu       [b] This gives a menu where you are offered
-                                  a choice of weight matrices. The default for
-                                  proteins is the PAM series derived by
-                                  Gonnet and colleagues. Note, a series is
-                                  used! The actual matrix that is used depends
-                                  on how similar the sequences to be aligned
-                                  at this alignment step are. Different
-                                  matrices work differently at each
-                                  evolutionary distance.
-                                  There are three 'in-built' series of weight
-                                  matrices offered. Each consists of several
-                                  matrices which work differently at different
-                                  evolutionary distances. To see the exact
-                                  details, read the documentation. Crudely, we
-                                  store several matrices in memory, spanning
-                                  the full range of amino acid distance (from
-                                  almost identical sequences to highly
-                                  divergent ones). For very similar sequences,
-                                  it is best to use a strict weight matrix
-                                  which only gives a high score to identities
-                                  and the most favoured conservative
-                                  substitutions. For more divergent sequences,
-                                  it is appropriate to use 'softer' matrices
-                                  which give a high score to many other
-                                  frequent substitutions.
-                                  1) BLOSUM (Henikoff). These matrices appear
-                                  to be the best available for carrying out
-                                  data base similarity (homology searches).
-                                  The matrices used are: Blosum80, 62, 45 and
-                                  30.
-                                  2) PAM (Dayhoff). These have been extremely
-                                  widely used since the late '70s. We use the
-                                  PAM 120, 160, 250 and 350 matrices.
-                                  3) GONNET . These matrices were derived
-                                  using almost the same procedure as the
-                                  Dayhoff one (above) but are much more up to
-                                  date and are based on a far larger data set.
-                                  They appear to be more sensitive than the
-                                  Dayhoff series. We use the GONNET 40, 80,
-                                  120, 160, 250 and 350 matrices.
-                                  We also supply an identity matrix which
-                                  gives a score of 1.0 to two identical amino
-                                  acids and a score of zero otherwise. This
-                                  matrix is not very useful. Alternatively,
-                                  you can read in your own (just one matrix,
-                                  not a series). (Values: b (blosum); p (pam);
-                                  g (gonnet); i (id); o (own))
-*  -dnamatrix          menu       [i] This gives a menu where a single matrix
-                                  (not a series) can be selected. (Values: i
-                                  (iub); c (clustalw); o (own))
-*  -mamatrixfile       infile     Comparison matrix file (optional)'
-   -[no]slow           toggle     [Y] A distance is calculated between every
-                                  pair of sequences and these are used to
-                                  construct the dendrogram which guides the
-                                  final multiple alignment. The scores are
-                                  calculated from separate pairwise
-                                  alignments. These can be calculated using 2
-                                  methods: dynamic programming (slow but
-                                  accurate) or by the method of Wilbur and
-                                  Lipman (extremely fast but approximate).
-                                  The slow-accurate method is fine for short
-                                  sequences but will be VERY SLOW for many
-                                  (e.g. >100) long (e.g. >1000 residue)
-                                  sequences.
-*  -pwgapopen          float      [10.0] The penalty for opening a gap in the
-                                  pairwise alignments. (Number 0.000 or more)
-*  -pwgapextend        float      [0.1] The penalty for extending a gap by 1
-                                  residue in the pairwise alignments. (Number
-                                  0.000 or more)
-*  -ktup               integer    [1 for protein, 2 for nucleic] This is the
-                                  size of exactly matching fragment that is
-                                  used. INCREASE for speed (max= 2 for
-                                  proteins; 4 for DNA), DECREASE for
-                                  sensitivity. For longer sequences (e.g.
-                                  >1000 residues) you may need to increase the
-                                  default. (integer from 0 to 4)
-*  -gapw               integer    [3 for protein, 5 for nucleic] This is a
-                                  penalty for each gap in the fast alignments.
-                                  It has little affect on the speed or
-                                  sensitivity except for extreme values.
-                                  (Positive integer)
-*  -topdiags           integer    [5 for protein, 4 for nucleic] The number of
-                                  k-tuple matches on each diagonal (in an
-                                  imaginary dot-matrix plot) is calculated.
-                                  Only the best ones (with most matches) are
-                                  used in the alignment. This parameter
-                                  specifies how many. Decrease for speed;
-                                  increase for sensitivity. (Positive integer)
-*  -window             integer    [5 for protein, 4 for nucleic] This is the
-                                  number of diagonals around each of the
-                                  'best' diagonals that will be used. Decrease
-                                  for speed; increase for sensitivity.
-                                  (Positive integer)
-*  -nopercent          boolean    [N] Fast pairwise alignment: similarity
-                                  scores: suppresses percentage score
-   -gapopen            float      [10.0] The penalty for opening a gap in the
-                                  alignment. Increasing the gap opening
-                                  penalty will make gaps less frequent.
-                                  (Positive foating point number)
-   -gapextend          float      [5.0] The penalty for extending a gap by 1
-                                  residue. Increasing the gap extension
-                                  penalty will make gaps shorter. Terminal
-                                  gaps are not penalised. (Positive foating
-                                  point number)
-   -[no]endgaps        boolean    [Y] End gap separation: treats end gaps just
-                                  like internal gaps for the purposes of
-                                  avoiding gaps that are too close (set by
-                                  'gap separation distance'). If you turn this
-                                  off, end gaps will be ignored for this
-                                  purpose. This is useful when you wish to
-                                  align fragments where the end gaps are not
-                                  biologically meaningful.
-   -gapdist            integer    [8] Gap separation distance: tries to
-                                  decrease the chances of gaps being too close
-                                  to each other. Gaps that are less than this
-                                  distance apart are penalised more than
-                                  other gaps. This does not prevent close
-                                  gaps; it makes them less frequent, promoting
-                                  a block-like appearance of the alignment.
-                                  (Positive integer)
-*  -norgap             boolean    [N] Residue specific penalties: amino acid
-                                  specific gap penalties that reduce or
-                                  increase the gap opening penalties at each
-                                  position in the alignment or sequence. As an
-                                  example, positions that are rich in glycine
-                                  are more likely to have an adjacent gap
-                                  than positions that are rich in valine.
-*  -hgapres            string     [GPSNDQEKR] This is a set of the residues
-                                  'considered' to be hydrophilic. It is used
-                                  when introducing Hydrophilic gap penalties.
-                                  (Any string is accepted)
-*  -nohgap             boolean    [N] Hydrophilic gap penalties: used to
-                                  increase the chances of a gap within a run
-                                  (5 or more residues) of hydrophilic amino
-                                  acids; these are likely to be loop or random
-                                  coil regions where gaps are more common.
-                                  The residues that are 'considered' to be
-                                  hydrophilic are set by '-hgapres'.
-   -maxdiv             integer    [30] This switch, delays the alignment of
-                                  the most distantly related sequences until
-                                  after the most closely related sequences
-                                  have been aligned. The setting shows the
-                                  percent identity level required to delay the
-                                  addition of a sequence; sequences that are
-                                  less identical than this level to any other
-                                  sequences will be aligned later. (Integer
-                                  from 0 to 100)
-
-   Advanced (Unprompted) qualifiers: (none)
-   Associated qualifiers:
-
-   "-sequence" associated qualifiers
-   -sbegin1            integer    Start of each sequence to be used
-   -send1              integer    End of each sequence to be used
-   -sreverse1          boolean    Reverse (if DNA)
-   -sask1              boolean    Ask for begin/end/reverse
-   -snucleotide1       boolean    Sequence is nucleotide
-   -sprotein1          boolean    Sequence is protein
-   -slower1            boolean    Make lower case
-   -supper1            boolean    Make upper case
-   -sformat1           string     Input sequence format
-   -sdbname1           string     Database name
-   -sid1               string     Entryname
-   -ufo1               string     UFO features
-   -fformat1           string     Features format
-   -fopenfile1         string     Features file name
-
-   "-outseq" associated qualifiers
-   -osformat2          string     Output seq format
-   -osextension2       string     File name extension
-   -osname2            string     Base file name
-   -osdirectory2       string     Output directory
-   -osdbname2          string     Database name to add
-   -ossingle2          boolean    Separate file for each entry
-   -oufo2              string     UFO features
-   -offormat2          string     Features format
-   -ofname2            string     Features file name
-   -ofdirectory2       string     Output directory
-
-   "-dendoutfile" associated qualifiers
-   -odirectory3        string     Output directory
-
-   General qualifiers:
-   -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
-   -options            boolean    Prompt for standard and additional values
-   -debug              boolean    Write debug output to program.dbg
-   -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
-                                  information on associated and general
-                                  qualifiers can be found with -help -verbose
-   -warning            boolean    Report warnings
-   -error              boolean    Report errors
-   -fatal              boolean    Report fatal errors
-   -die                boolean    Report dying program messages
-
-Input file format
-
-   The input is two or more sequences.
-
-  Input files for usage example
-
-  File: globins.fasta
-
->HBB_HUMAN Sw:Hbb_Human => HBB_HUMAN
-VHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKV
-KAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFGK
-EFTPPVQAAYQKVVAGVANALAHKYH
->HBB_HORSE Sw:Hbb_Horse => HBB_HORSE
-VQLSGEEKAAVLALWDKVNEEEVGGEALGRLLVVYPWTQRFFDSFGDLSNPGAVMGNPKV
-KAHGKKVLHSFGEGVHHLDNLKGTFAALSELHCDKLHVDPENFRLLGNVLVVVLARHFGK
-DFTPELQASYQKVVAGVANALAHKYH
->HBA_HUMAN Sw:Hba_Human => HBA_HUMAN
-VLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHFDLSHGSAQVKGHGK
-KVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTPA
-VHASLDKFLASVSTVLTSKYR
->HBA_HORSE Sw:Hba_Horse => HBA_HORSE
-VLSAADKTNVKAAWSKVGGHAGEYGAEALERMFLGFPTTKTYFPHFDLSHGSAQVKAHGK
-KVGDALTLAVGHLDDLPGALSNLSDLHAHKLRVDPVNFKLLSHCLLSTLAVHLPNDFTPA
-VHASLDKFLSSVSTVLTSKYR
->MYG_PHYCA Sw:Myg_Phyca => MYG_PHYCA
-VLSEGEWQLVLHVWAKVEADVAGHGQDILIRLFKSHPETLEKFDRFKHLKTEAEMKASED
-LKKHGVTVLTALGAILKKKGHHEAELKPLAQSHATKHKIPIKYLEFISEAIIHVLHSRHP
-GDFGADAQGAMNKALELFRKDIAAKYKELGYQG
->GLB5_PETMA Sw:Glb5_Petma => GLB5_PETMA
-PIVDTGSVAPLSAAEKTKIRSAWAPVYSTYETSGVDILVKFFTSTPAAQEFFPKFKGLTT
-ADQLKKSADVRWHAERIINAVNDAVASMDDTEKMSMKLRDLSGKHAKSFQVDPQYFKVLA
-AVIADTVAAGDAGFEKLMSMICILLRSAY
->LGB2_LUPLU Sw:Lgb2_Luplu => LGB2_LUPLU
-GALTESQAALVKSSWEEFNANIPKHTHRFFILVLEIAPAAKDLFSFLKGTSEVPQNNPEL
-QAHAGKVFKLVYEAAIQLQVTGVVVTDATLKNLGSVHVSKGVADAHFPVVKEAILKTIKE
-VVGAKWSEELNSAWTIAYDELAIVIKKEMNDAA
-
-   EMBOSS programs do not allow you to simply type the names of two or
-   more files or database entries - they try to interpret this as all one
-   file-name and complain that a file of that name does not exist.
-
-   In order to enter the sequences that you wish to align, you must group
-   them in one of three ways: either make a 'list file' or place several
-   sequences in a single sequence file or specify the sequences using
-   wildcards.
-
-  Making a List file
-
-   A list file is a text file that holds the names of database entries
-   and/or sequence files.
-
-   You should use a text editor such as pico or nedit to edit a file to
-   contain the names of the sequence files or database entries. There
-   must be one sequence per line.
-
-   An example is the file 'fred' which contains:
-  __________________________________________________________________________
-
-opsd_abyko.fasta
-sw:opsd_xenla
-sw:opsd_c*
-@another_list
-  __________________________________________________________________________
-
-   This List files contains:
-
-     * opsd_abyko.fasta - this is the name of a sequence file. The file
-       is read in from the current directory.
-     * sw:opsd_xenla - this is a reference to a specific sequence in the
-       SwissProt database
-     * sw:opsd_c* - this represents all the sequences in SwissProt whose
-       identifiers start with ``opsd_c''
-     * another_list - this is the name of a second list file. List files
-       can be nested!
-
-   Notice the @ in front of the last entry. This is the way you tell
-   EMBOSS that this file is a List file, not a regular sequence file.
-   That last line was put there both as an indication of the way you tell
-   EMBOSS that a file is a List file and to emphasise that List files can
-   contain other List files.
-
-   When emma asks for the sequences to align, you should type '@fred'.
-   The '@' character tells EMBOSS that this is the name of a List file.
-
-   An alternative to editing a file and laboriously typing in all of the
-   names you require is to make a list of a directory containing the
-   sequence files and then to edit the list file to remove the names of
-   the sequences files than you do not require.
-
-   To make a list of all the files in the current directory that end in
-   '.pep', type:
-
-   ls *.pep > listfile
-
-  Several sequences in one file
-
-   EMBOSS can read in a single file which contains many sequences.
-
-   Each of the sequences in the file must be in the same format - if the
-   first sequence is in EMBL format, then all the others must be in EMBL
-   format.
-
-   There are some sequence formats that cannot be used when placing many
-   sequences in the same file. These are sequence formats that have no
-   clear indication of where the sequence ends and the annotation of the
-   next sequence starts. These formats include: plain or text format (no
-   real format, just the sequence), staden, gcg.
-
-   If your sequences are not already in a single file, you can place them
-   in one using seqret. The following example takes all the files ending
-   in '.pep' and places them in the file 'mystuff' in Fasta format.
-
-   seqret "*.pep" mystuff
-
-   When emma asks for the sequences to align, you should type 'mystuff'.
-
-  Using wildcards
-
-   'Wildcard' characters are characters that are expanded to match all
-   possible matching files or entries in a database.
-
-   By far the most commonly used wildcard character is '*' which matches
-   any number (or zero) of possible characters at that position in the
-   name.
-
-   A less commonly used wildcard character is '?' which matches any one
-   character at that position.
-
-   For example, when emma asks for sequences to align, you could answer:
-   abc*.pep This would select any files whose name starts with 'abc' and
-   then ends in '.pep'; the centre of the name where there is a '*' can
-   be anything.
-
-   Both file names and database entry names can be wildcarded.
-
-   There is a slightly irritating problem that occurs when wildcards are
-   used one the Unix command line (This is the line that you type against
-   the 'Unix' prompt together with the program name.)
-
-   In this case the Unix session gets the command line first, runs the
-   program, expands the wildcards and passes the program parameters to
-   the program. When Unix expands the wildcards, two things go wrong. You
-   may have specified wildcarded database entries - the Unix system tries
-   to file files that match that specification, it fails and refuses to
-   run the program. Alternatively, you may have specified wildcarded
-   files - Unix fileds them and gives the name of each of them to the
-   program as a separate parameter - emma gets the wrong number of
-   parameters and refuses to run.
-
-   You get round this by quoting the wildcard. You can either put the
-   whole wildcarded name in quotes:
-   "abc*.pep"
-   or you can quote just the '*' using a '\' as:
-   abc\*.pep
-
-   This problem does not occur when you reply to the prompt from the
-   program for the input sequences, or when you are typing the wildcard
-   files name in a web browser of GUI (such as Jemboss or SPIN) field
-
-Output file format
-
-  Output files for usage example
-
-  File: hbb_human.aln
-
->HBB_HUMAN
---------VHLTPEEKSAVTALWGKVN--VDEVGGEALGRLLVVYPWTQRFFESFGDLST
-PDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDP----ENFRLL
-GNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKYH------
->HBB_HORSE
---------VQLSGEEKAAVLALWDKVN--EEEVGGEALGRLLVVYPWTQRFFDSFGDLSN
-PGAVMGNPKVKAHGKKVLHSFGEGVHHLDNLKGTFAALSELHCDKLHVDP----ENFRLL
-GNVLVVVLARHFGKDFTPELQASYQKVVAGVANALAHKYH------
->HBA_HUMAN
----------VLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-----
--DLSHGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDP----VNFKLL
-SHCLLVTLAAHLPAEFTPAVHASLDKFLASVSTVLTSKYR------
->HBA_HORSE
----------VLSAADKTNVKAAWSKVGGHAGEYGAEALERMFLGFPTTKTYFPHF-----
--DLSHGSAQVKAHGKKVGDALTLAVGHLDDLPGALSNLSDLHAHKLRVDP----VNFKLL
-SHCLLSTLAVHLPNDFTPAVHASLDKFLSSVSTVLTSKYR------
->MYG_PHYCA
----------VLSEGEWQLVLHVWAKVEADVAGHGQDILIRLFKSHPETLEKFDRFKHLKT
-EAEMKASEDLKKHGVTVLTALGAILKKKGHHEAELKPLAQSHATKHKIPI----KYLEFI
-SEAIIHVLHSRHPGDFGADAQGAMNKALELFRKDIAAKYKELGYQG
->GLB5_PETMA
-PIVDTGSVAPLSAAEKTKIRSAWAPVYSTYETSGVDILVKFFTSTPAAQEFFPKFKGLTT
-ADQLKKSADVRWHAERIINAVNDAVASMDDTEKMSMKLRDLSGKHAKSFQ----VDPQYF
-KVLAAVIADTVAAGDAGFEKLMSMICILLRSAY-------------
->LGB2_LUPLU
---------GALTESQAALVKSSWEEFNANIPKHTHRFFILVLEIAPAAKDLFSFLKG--T
-SEVPQNNPELQAHAGKVFKLVYEAAIQLQVTGVVVTDATLKNLGSVHVSKGVADAHFPVV
-KEAILKTIKEVVGAKWSEELNSAWTIAYDELAIVIKKEMNDAA---
-
-  File: hbb_human.dnd
-
-(
-(
-(
-(
-HBB_HUMAN:0.08080,
-HBB_HORSE:0.08359)
-:0.21952,
-(
-HBA_HUMAN:0.05452,
-HBA_HORSE:0.06605)
-:0.21070)
-:0.06034,
-MYG_PHYCA:0.39882)
-:0.01490,
-GLB5_PETMA:0.38267,
-LGB2_LUPLU:0.50324);
-
-  Sequences
-
-   emma writes the aligned sequences and a dendrogram file showing how
-   the sequences were clustered during the progressive alignments.
-
-   The clustalw output sequences are reformatted into the default EMBOSS
-   output format instead of being left as Clustal-format '.aln' files.
-
-  Trees
-
-   Believe it or not, we now use the New Hampshire (nested parentheses)
-   format as default for our trees. This format is compatible with e.g.
-   the PHYLIP package. If you want to view a tree, you can use the RETREE
-   or DRAWGRAM/DRAWTREE programs of PHYLIP. This format is used for all
-   our trees, even the initial guide trees for deciding the order of
-   multiple alignment. The output trees from the phylogenetic tree menu
-   can also be requested in our old verbose/cryptic format. This may be
-   more useful if, for example, you wish to see the bootstrap figures.
-   The bootstrap trees in the default New Hampshire format give the
-   bootstrap figures as extra labels which can be viewed very easily
-   using TREETOOL which is available as part of the GDE package. TREETOOL
-   is available from the RDP project by ftp from rdp.life.uiuc.edu.
-
-   The New Hampshire format is only useful if you have software to
-   display or manipulate the trees. The PHYLIP package is highly
-   recommended if you intend to do much work with trees and includes
-   programs for doing this. WE DO NOT PROVIDE ANY DIRECT MEANS FOR
-   VIEWING TREES GRAPHICALLY.
-
-Data files
-
-   The comparison matrices available for clustalw are not EMBOSS matrix
-   files, as they are defined in the clustalw code. The matrices
-   available for carrying out a protein sequence alignment are:
-     * blosum
-     * pam
-     * gonnet
-     * id
-     * user defined
-
-   The comparison matrices available in clustalw for carrying out a
-   nucleotide sequence alignment are:
-     * iub
-     * clustalw
-     * user defined
-
-Notes
-
-   None
-
 References
 
    The main reference for ClustalW is Thompson et al below.
@@ -1181,13 +1180,15 @@ Known bugs
 
 See also
 
-   Program name                       Description
-   edialign     Local multiple alignment of sequences
-   infoalign    Information on a multiple sequence alignment
-   plotcon      Plot quality of conservation of a sequence alignment
-   prettyplot   Displays aligned sequences, with colouring and boxing
-   showalign    Displays a multiple sequence alignment
-   tranalign    Align nucleic coding regions given the aligned proteins
+   Program name Description
+   edialign Local multiple alignment of sequences
+   infoalign Display basic information about a multiple sequence
+   alignment
+   plotcon Plot conservation of a sequence alignment
+   prettyplot Draw a sequence alignment with pretty formatting
+   showalign Display a multiple sequence alignment in pretty format
+   tranalign Generate an aligment of nucleic coding regions from aligned
+   proteins
 
 Author(s)
 

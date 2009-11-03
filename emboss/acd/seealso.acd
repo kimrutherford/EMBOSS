@@ -1,5 +1,5 @@
 application: seealso [
-  documentation: "Finds programs sharing group names"
+  documentation: "Finds programs with similar function to a specified program"
   groups: "Display, Information"
 ]
 

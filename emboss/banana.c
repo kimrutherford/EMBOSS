@@ -148,14 +148,14 @@ int main(int argc, char **argv)
     if(!file)
 	ajErr("Banana failed to open angle file");
 
-    ajFileGets(file,&buffer);		/* 3 junk lines */
-    ajFileGets(file,&buffer);
-    ajFileGets(file,&buffer);
+    ajReadline(file,&buffer);		/* 3 junk lines */
+    ajReadline(file,&buffer);
+    ajReadline(file,&buffer);
 
     for(k=0;k<4;k++)
 	for(ii=0;ii<4;ii++)
 	{
-	    if(ajFileGets(file,&buffer))
+	    if(ajReadline(file,&buffer))
 	    {
 		sscanf(ajStrGetPtr(buffer),"%f,%f,%f,%f",
 		       &twist[ii][0][k],&twist[ii][1][k],&twist[ii][2][k],
@@ -171,7 +171,7 @@ int main(int argc, char **argv)
 
     for(k=0;k<4;k++)
 	for(ii=0;ii<4;ii++)
-	    if(ajFileGets(file,&buffer))
+	    if(ajReadline(file,&buffer))
 	    {
 		sscanf(ajStrGetPtr(buffer),"%f,%f,%f,%f",&roll[ii][0][k],
 		       &roll[ii][1][k],&roll[ii][2][k],&roll[ii][3][k]);
@@ -182,14 +182,14 @@ int main(int argc, char **argv)
 
     for(k=0;k<4;k++)
 	for(ii=0;ii<4;ii++)
-	    if(ajFileGets(file,&buffer))
+	    if(ajReadline(file,&buffer))
 		sscanf(ajStrGetPtr(buffer),"%f,%f,%f,%f",&tilt[ii][0][k],
 		       &tilt[ii][1][k],&tilt[ii][2][k],&tilt[ii][3][k]);
 	    else
 		ajErr("Error reading angle file");
 
 
-    if(ajFileGets(file,&buffer))
+    if(ajReadline(file,&buffer))
 	sscanf(ajStrGetPtr(buffer),"%f,%f,%f,%f",&rbend,&rcurve,
 	       &bendscale,&curvescale);
     else

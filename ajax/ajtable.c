@@ -36,11 +36,16 @@
 
 
 
+#ifdef AJ_SAVESTATS
 static ajuint tableNewCnt = 0;
 static ajint tableDelCnt = 0;
 static ajuint tableMaxNum = 0;
 static size_t tableMaxMem = 0;
+#endif
 
+static ajint tableFreeNext = 0;
+static ajint tableFreeMax = 0;
+static struct binding ** tableFreeSet = NULL;
 
 static void tableStrDel(void** key, void** value, void* cl);
 static void tableStrDelKey(void** key, void** value, void* cl);
@@ -116,7 +121,7 @@ static ajint tableCmpAtom(const void *x, const void *y)
 **
 ** @param [r] key [const void*] Key
 ** @param [r] hashsize [ajuint] Hash size (maximum hash value)
-** @return [ajuint] 0 for success, 1 for different keys
+** @return [ajuint] Hash value in range 0 to hashsize-1
 ** @@
 ******************************************************************************/
 
@@ -206,6 +211,7 @@ AjPTable ajTableNewFunctionLen(ajuint size,
     table->length = 0;
     table->timestamp = 0;
 
+#ifdef AJ_SAVESTATS
     tableNewCnt++;
 
     if(iprime > tableMaxNum)
@@ -213,6 +219,7 @@ AjPTable ajTableNewFunctionLen(ajuint size,
 
     if(sizeof(*table) > tableMaxMem)
 	tableMaxMem = sizeof(*table);
+#endif
 
     return table;
 }
@@ -292,7 +299,7 @@ AjPTable ajTableNewLen(ajuint size)
 
 /* @func ajTableFetch *********************************************************
 **
-** returns the value associated with key in table, or null
+** Returns the value associated with key in table, or null
 ** if table does not hold key.
 **
 ** @param [r] table [const AjPTable] table to search
@@ -564,7 +571,10 @@ void * ajTablePut(AjPTable table, void *key, void *value)
 
     if(p == NULL)
     {
-	AJNEW0(p);
+        if(tableFreeNext)
+            p = tableFreeSet[--tableFreeNext];
+        else
+            AJNEW0(p);
 	p->key = key;
 	p->link = table->buckets[i];
 	table->buckets[i] = p;
@@ -615,7 +625,10 @@ void * ajTableRemove(AjPTable table, const void *key)
 	    struct binding *p = *pp;
 	    void *value = p->value;
 	    *pp = p->link;
-	    AJFREE(p);
+            if(tableFreeNext >= tableFreeMax)
+                AJFREE(p);
+            else
+                tableFreeSet[tableFreeNext++] = p;
 	    table->length--;
 	    return value;
 	}
@@ -661,7 +674,10 @@ void * ajTableRemoveKey(AjPTable table, const void *key, void** truekey)
 	    void *value = p->value;
 	    *truekey = p->key;
 	    *pp = p->link;
-	    AJFREE(p);
+            if(tableFreeNext >= tableFreeMax)
+                AJFREE(p);
+            else
+                tableFreeSet[tableFreeNext++] = p;
 	    table->length--;
 	    return value;
 	}
@@ -794,6 +810,32 @@ void ajTableMapDel(AjPTable table,
 **
 ******************************************************************************/
 
+/* @funcstatic tableFreeSetExpand **********************************************
+**
+** Expand the list of free structure bindings
+**
+** @return [void]
+******************************************************************************/
+
+static void tableFreeSetExpand (void)
+{
+    ajint newsize;
+    if(!tableFreeSet)
+    {
+        tableFreeMax = 1024;
+        AJCNEW0(tableFreeSet,tableFreeMax);
+        return;
+    }
+    if(tableFreeMax >= 65536)
+        return;
+    newsize = tableFreeMax + tableFreeMax;
+    AJCRESIZE0(tableFreeSet, tableFreeMax, newsize);
+    tableFreeMax = newsize;
+    return;
+}
+
+    
+    
 /* @func ajTableFree **********************************************************
 **
 ** Deallocates and clears a hash table. Does not clear keys or values.
@@ -821,8 +863,13 @@ void ajTableFree(AjPTable* Ptable)
 	    for(p = (*Ptable)->buckets[i]; p; p = q)
 	    {
 		q = p->link;
-		AJFREE(p);
-	    }
+                if(tableFreeNext >= tableFreeMax)
+                    tableFreeSetExpand();
+                if(tableFreeNext >= tableFreeMax)
+                    AJFREE(p);
+                else
+                    tableFreeSet[tableFreeNext++] = p;
+            }
     }
 
     AJFREE(*Ptable);
@@ -862,9 +909,24 @@ void ajTableFree(AjPTable* Ptable)
 
 void ajTableExit(void)
 {
+    ajint i;
+
+#ifdef AJ_SAVESTATS
     ajDebug("Table usage : %d opened, %d closed, %d maxsize, %d maxmem\n",
 	    tableNewCnt, tableDelCnt, tableMaxNum, tableMaxMem);
+#endif
 
+    if(tableFreeNext)
+        for(i=0;i<tableFreeNext;i++)
+            AJFREE(tableFreeSet[i]);
+
+            
+    if(tableFreeSet) 
+        AJFREE(tableFreeSet);
+
+    tableFreeNext = 0;
+    tableFreeMax = 0;
+    
     return;
 }
 
@@ -976,6 +1038,100 @@ AjPTable ajTablestrNewLen(ajuint size)
 
 
 
+/* @section Retrieval **********************************************************
+**
+** @fdata [AjPTable]
+**
+** Retrieves values from a hash table
+**
+** @nam3rule Fetch Retrieval fuction
+**
+** @argrule Fetch table [const AjPTable] Hash table
+** @argrule Fetch key [const AjPStr] Key
+**
+** @valrule Fetch [const AjPStr] Value
+**
+** @fcategory cast
+**
+******************************************************************************/
+
+/* @func ajTablestrFetch ******************************************************
+**
+** returns the value associated with key in table, or null
+** if table does not hold key.
+**
+** @param [r] table [const AjPTable] table to search
+** @param [r] key   [const AjPStr] key to find.
+** @return [const AjPStr]  value associated with key
+** @error NULL if key not found in table.
+** @@
+******************************************************************************/
+
+const AjPStr ajTablestrFetch(const AjPTable table, const AjPStr key)
+{
+    ajint i;
+    struct binding *p;
+
+    if(!table)
+	return NULL;
+    if (!key)
+	return NULL;
+
+    i = (*table->hash)(key, table->size);
+    for(p = table->buckets[i]; p; p = p->link)
+	if((*table->cmp)(key, p->key) == 0)
+	    break;
+
+    return p ? (const AjPStr) p->value : NULL;
+}
+
+/* @section Modify ************************************************************
+**
+** @fdata [AjPTable]
+**
+** Updates values from a hash table
+**
+** @nam3rule Fetchmod Retrieval fuction
+**
+** @argrule Fetchmod table [AjPTable] Hash table
+** @argrule Fetchmod key [const AjPStr] Key
+**
+** @valrule Fetchmod [AjPStr*] Value
+**
+** @fcategory modify
+**
+******************************************************************************/
+
+/* @func ajTablestrFetchmod ***************************************************
+**
+** returns the value associated with key in table, or null
+** if table does not hold key.
+**
+** @param [u] table [AjPTable] table to search
+** @param [r] key   [const AjPStr] key to find.
+** @return [AjPStr*]  value associated with key
+** @error NULL if key not found in table.
+** @@
+******************************************************************************/
+
+AjPStr* ajTablestrFetchmod(AjPTable table, const AjPStr key)
+{
+    ajint i;
+    struct binding *p;
+
+    if(!table)
+	return NULL;
+    if (!key)
+	return NULL;
+
+    i = (*table->hash)(key, table->size);
+    for(p = table->buckets[i]; p; p = p->link)
+	if((*table->cmp)(key, p->key) == 0)
+	    break;
+
+    return p ? (AjPStr*) (&p->value) : NULL;
+}
+
 /* @section Comparison functions **********************************************
 **
 ** @fdata [AjPTable]
@@ -1069,7 +1225,7 @@ __deprecated ajint ajStrTableCmpCase(const void* x, const void* y)
 **
 ** @param [r] key [const void*] Standard argument. Table key.
 ** @param [r] hashsize [ajuint] Standard argument. Estimated Hash size.
-** @return [ajuint] Hash value.
+** @return [ajuint] Hash value in range 0 to hashsize-1
 ** @@
 ******************************************************************************/
 
@@ -1105,7 +1261,7 @@ __deprecated ajuint ajStrTableHash(const void* key, ajuint hashsize)
 **
 ** @param [r] key [const void*] Standard argument. Table key.
 ** @param [r] hashsize [ajuint] Standard argument. Estimated Hash size.
-** @return [ajuint] Hash value.
+** @return [ajuint] Hash value in range 0 to hashsize-1
 ** @@
 ******************************************************************************/
 

@@ -58,8 +58,8 @@ int main(int argc, char **argv)
     
     program = ajAcdGetString("program");
     outfile = ajAcdGetOutfile("outfile");
-    html    = ajAcdGetBool("html");
-    more    = ajAcdGetBool("more");
+    html    = ajAcdGetBoolean("html");
+    more    = ajAcdGetBoolean("more");
 
     cmd     = ajStrNew();
     path    = ajStrNew();
@@ -79,7 +79,7 @@ int main(int argc, char **argv)
 	      docroot,program);
     
     /* outputing to STDOUT and piping through 'more'? */
-    if(ajFileStdout(outfile) && more)
+    if(ajFileIsStdout(outfile) && more)
     {
 	if(!ajNamGetValueC("PAGER",&pager))
 	{
@@ -95,9 +95,9 @@ int main(int argc, char **argv)
     else
     {
 	/* output file as-is */
-	infile = ajFileNewIn(path);
+	infile = ajFileNewInNameS(path);
 
-	while(ajFileGets(infile, &line))
+	while(ajReadline(infile, &line))
 	{
 	    if(html)
 		tfm_FixImages(&line,docroot);
@@ -167,25 +167,24 @@ static void tfm_FindAppDocRoot(const AjPStr program,
 	ajStrAssignS(docroot, roottmp);
     else
     {
-	ajNamRootInstall(&docrootinst);
-	ajFileDirFix(&docrootinst);
+        ajStrAssignS(&docrootinst, ajNamValueInstalldir());
+	ajDirnameFix(&docrootinst);
 
 	if(is_windows)
 	{
-	    ajFileDirFix(&docrootinst);
 	    ajFmtPrintS(&tmpstr,"%Sdoc",docrootinst);
-	    if(!ajFileDir(&tmpstr))
+	    if(!ajDirnameFixExists(&tmpstr))
 	    {
-		ajFileDirUp(&docrootinst);
-		ajFileDirUp(&docrootinst);
+		ajDirnameUp(&docrootinst);
+		ajDirnameUp(&docrootinst);
 	    }
 	    ajStrAppendC(&docrootinst,"doc");
+	    ajStrAppendC(&docrootinst,SLASH_STRING);
 	}
 	else
 	    ajFmtPrintAppS(&docrootinst, "share%sEMBOSS%sdoc%s",
 			SLASH_STRING,SLASH_STRING,SLASH_STRING);
 
-	ajFileDirFix(&docrootinst);
 
 	if(html)
 	{
@@ -208,21 +207,21 @@ static void tfm_FindAppDocRoot(const AjPStr program,
 	    ajFmtPrintS(docroot,"%Sprograms%stext%s",docrootinst,SLASH_STRING,
 			SLASH_STRING);
     }
-    ajFileDirFix(docroot);
+    ajDirnameFix(docroot);
     ajDebug("installed docroot '%S'\n", *docroot);
 
-    if(!ajFileDir(docroot) && !is_windows)
+    if(!ajDirnameFixExists(docroot) && !is_windows)
     {
 	/*
 	**  if that didn't work then try the doc directory from the
 	**  distribution tarball
 	*/
-	ajNamRootBase(docroot);
-	ajFileDirFix(docroot);
+	ajStrAssignS(docroot, ajNamValueBasedir());
+	ajDirnameFix(docroot);
 
 	if(ajStrGetLen(embassy))
 	{
-	  if(ajFileDir(docroot))
+	  if(ajDirnameFixExists(docroot))
 	    ajFmtPrintS(docroot, "embassy/%S/emboss_doc/", embassy);
 	  if(html)
 	    {
@@ -235,7 +234,7 @@ static void tfm_FindAppDocRoot(const AjPStr program,
 	}
 	else
 	{
-	  if(ajFileDir(docroot))
+	  if(ajDirnameFixExists(docroot))
 	    ajStrAppendC(docroot, "doc/programs/");
 	  if(html)
 	    {
@@ -273,35 +272,17 @@ static void tfm_FindAppDocRoot(const AjPStr program,
 static AjBool tfm_FindAppDoc(const AjPStr program, const AjPStr docroot,
 			     AjBool html, AjPStr* path)
 {
-    AjPStr target = NULL;
-    AjBool ret    = ajFalse;
-    
-    target = ajStrNew();
-
-    ajStrAssignS(&target,docroot);
+    ajStrAssignS(path, docroot);
+    ajStrAppendS(path, program);
 
     if(html)
-    {
-	ajStrAssignS(path, target);
-	ajStrAppendS(path, program);
 	ajStrAppendC(path, ".html");
-    }
     else
-    {
-	ajStrAssignS(path, target);
-	ajStrAppendS(path, program);
 	ajStrAppendC(path, ".txt");
-    }
 
     /* does the file exist and is it readable? */
-    if(ajFileStat(*path, AJ_FILE_R))
-	ret = ajTrue;
 
-    ajDebug("tfm_FindAppDoc '%S' %B\n", *path, ret);
-
-    ajStrDel(&target);
-
-    return ret;
+    return ajFilenameExistsRead(*path);
 }
 
 

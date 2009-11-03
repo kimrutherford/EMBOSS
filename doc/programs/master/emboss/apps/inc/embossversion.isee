@@ -1,9 +1,10 @@
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="embossdata.html">embossdata</a></td>
-<td>Finds or fetches data files read by EMBOSS programs</td>
+<td>Find and retrieve EMBOSS data files</td>
 </tr>
 
 </table>

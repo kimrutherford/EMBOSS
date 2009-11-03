@@ -144,7 +144,7 @@ int main(int argc, char **argv)
     logf = ajAcdGetOutfile("outfile");
     wildspecies = ajAcdGetString("species");
     filename = ajAcdGetString("filename");
-    allrecords = ajAcdGetBool("allrecords");
+    allrecords = ajAcdGetBoolean("allrecords");
 
     ajStrInsertC(&release, 0, "CUTG");
     ajStrRemoveWhite(&release);
@@ -152,7 +152,7 @@ int main(int argc, char **argv)
     while(ajListPop(flist,(void **)&entry))
     {
 	ajStrAssignS(&baseentry, entry);
-	ajFileNameTrim(&baseentry);
+	ajFilenameTrimPath(&baseentry);
 	ajDebug("Testing file '%S'\n", entry);
 	if(!ajStrMatchWildS(baseentry,wild))
 	{
@@ -161,12 +161,12 @@ int main(int argc, char **argv)
 	}
 
 	ajDebug("... matched wildcard '%S'\n", wild);
-	inf = ajFileNewIn(entry);
+	inf = ajFileNewInNameS(entry);
 	if(!inf)
 	    ajFatal("cannot open file %S",entry);
 
 	ajFmtPrintS(&division, "%F", inf);
-	ajFileNameShorten(&division);
+	ajFilenameTrimAll(&division);
 
 	while((entryname = cutgextract_next(inf, wildspecies,
 					    &species, &docstr)))
@@ -255,7 +255,7 @@ int main(int argc, char **argv)
 	}
 
 	ajFmtPrintS(&fname,"CODONS/%S",key);
-	ajFileDataNewWrite(fname,&outf);
+	outf = ajDatafileNewOutNameS(fname);
 	if(!outf)
 	    ajFatal("Cannot open output file %S",fname);
 
@@ -357,7 +357,7 @@ static char* cutgextract_next(AjPFile inf, const AjPStr wildspecies,
     {
 
 	while(ajStrGetCharFirst(cutgextractLine) != '>')
-	    if(!ajFileReadLine(inf,&cutgextractLine))
+	    if(!ajReadlineTrim(inf,&cutgextractLine))
 		return NULL;
 
 	handle = ajStrTokenNewC(cutgextractLine,"\\\n\t\r");
@@ -420,7 +420,7 @@ static char* cutgextract_next(AjPFile inf, const AjPStr wildspecies,
 	ajStrTokenDel(&handle);
 	ajStrDel(&token);
 	if(!done)
-	    if(!ajFileReadLine(inf,&cutgextractLine))
+	    if(!ajReadlineTrim(inf,&cutgextractLine))
 		return NULL;
     }
 
@@ -493,7 +493,7 @@ static ajint cutgextract_readcodons(AjPFile inf, AjBool allrecords,
 	value = ajStrNew();
     }
 
-    if(!ajFileReadLine(inf,&line))
+    if(!ajReadlineTrim(inf,&line))
 	ajFatal("Premature end of file");
 
 

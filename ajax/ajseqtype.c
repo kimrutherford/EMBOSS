@@ -160,7 +160,7 @@ static AjPStr seqtypeCharsetRnaGap       = NULL;
 ** - Phylip and some alignment output
 ** ~ GCG for gaps at ends
 ** * Staden for DNA but stop for protein (fix on input?)
-** O Phylip (fix on input?)
+** O Phylip (fix on input?) - no longer possible: O is pyrrolysine in proteins
 */
 
 
@@ -174,14 +174,14 @@ char seqCharProtStop[]  = "*";
 char seqCharNuc[]       = "ACGTUBDHKMNRSVWXY?";
 char seqCharNucPure[]   = "ACGTU";
 char seqCharNucAmbig[]  = "BDHKMNRSVWXY?";
-char seqCharGap[]       = ".~O-";	/* phylip uses O */
+char seqCharGap[]       = ".~-";	/* phylip used O in old versions */
 char seqCharNucDna[]    = "ACGTBDHKMNRSVWXY?";
 char seqCharNucRna[]    = "ACGUBDHKMNRSVWXY?";
-char seqCharGapany[]    = ".~O-";	/* phylip uses O */
+char seqCharGapany[]    = ".~-";	/* phylip used O in old versions*/
 char seqCharGapdash[]   = "-";
 char seqCharGapdot[]    = ".";
 char seqGap = '-';		/* the (only) EMBOSS gap character */
-char seqCharGapTest[]   = " .~O-";   /* phylip uses O - don't forget space */
+char seqCharGapTest[]   = " .~-";   /* phylip used O - don't forget space */
 char seqCharPhylo[]       = "?";	/* phylip uses ? for unknown or gap */
 
 
@@ -196,7 +196,7 @@ char seqCharPhylo[]       = "?";	/* phylip uses ? for unknown or gap */
 static SeqOType seqType[] =
 {
 /*   "name"            Gaps     Ambig    Type    Padding CvtFrom CvtTo
-         BadcharsFunction Description */
+         BadcharsFunction GoodCharsFunction Description */
     {"any",            AJFALSE, AJTRUE,  ISANY,  0, "?",    "X",
 	 seqTypeCharAny,
 	 seqTypeStrAny,
@@ -205,7 +205,7 @@ static SeqOType seqType[] =
 	 seqTypeCharAnyGap,
 	 seqTypeStrAnyGap,
 	 "any valid sequence with gaps"}, /* reset type */
-    {"dna",            AJFALSE, AJTRUE,  ISNUC,  0, "?XxUu", "NNNTt",
+    {"dna",            AJFALSE, AJTRUE,  ISNUC,  0, "?XxUu", "NNnTt",
 	 seqTypeCharNuc,
 	 seqTypeStrNuc,
 	 "DNA sequence"},
@@ -213,7 +213,7 @@ static SeqOType seqType[] =
 	 seqTypeCharNucPure,
 	 seqTypeStrNucPure,
 	 "DNA sequence, bases ACGT only"},
-    {"gapdna",         AJTRUE,  AJTRUE,  ISNUC,  0, "?XxUu", "NNNTt",
+    {"gapdna",         AJTRUE,  AJTRUE,  ISNUC,  0, "?XxUu", "NNnTt",
 	 seqTypeCharNucGap,
 	 seqTypeStrNucGap,
 	 "DNA sequence with gaps"},
@@ -221,7 +221,7 @@ static SeqOType seqType[] =
 	 seqTypeCharNucGapPhylo,
 	 seqTypeStrNucGapPhylo,
 	 "DNA sequence with gaps and queries"},
-    {"rna",            AJFALSE, AJTRUE,  ISNUC,  0, "?XxTt", "NNNUu",
+    {"rna",            AJFALSE, AJTRUE,  ISNUC,  0, "?XxTt", "NNnUu",
 	 seqTypeCharNuc,
 	 seqTypeStrNuc,
 	 "RNA sequence"},
@@ -229,7 +229,7 @@ static SeqOType seqType[] =
 	 seqTypeCharNucPure,
 	 seqTypeStrNucPure,
 	 "RNA sequence, bases ACGU only"},
-    {"gaprna",         AJTRUE,  AJTRUE,  ISNUC,  0, "?XxTt", "NNNUu",
+    {"gaprna",         AJTRUE,  AJTRUE,  ISNUC,  0, "?XxTt", "NNnUu",
 	 seqTypeCharNucGap,
 	 seqTypeStrNucGap,
 	 "RNA sequence with gaps"},
@@ -237,7 +237,7 @@ static SeqOType seqType[] =
 	 seqTypeCharNucGapPhylo,
 	 seqTypeStrNucGapPhylo,
 	 "RNA sequence with gaps and queries"},
-    {"nucleotide",     AJFALSE, AJTRUE,  ISNUC,  0, "?Xx",   "NNN",
+    {"nucleotide",     AJFALSE, AJTRUE,  ISNUC,  0, "?Xx",   "NNn",
 	 seqTypeCharNuc,
 	 seqTypeStrNuc,
 	 "nucleotide sequence"},
@@ -245,7 +245,7 @@ static SeqOType seqType[] =
 	 seqTypeCharNucPure,
 	 seqTypeStrNucPure,
 	 "nucleotide sequence, bases ACGTU only"},
-    {"gapnucleotide",  AJTRUE,  AJTRUE,  ISNUC,  0, "?Xx",   "NNN",
+    {"gapnucleotide",  AJTRUE,  AJTRUE,  ISNUC,  0, "?Xx",   "NNn",
 	 seqTypeCharNucGap,
 	 seqTypeStrNucGap,
 	 "nucleotide sequence with gaps"},
@@ -253,6 +253,11 @@ static SeqOType seqType[] =
 	 seqTypeCharNucGapPhylo,
 	 seqTypeStrNucGapPhylo,
 	 "nucleotide sequence with gaps and queries"},
+    {"gapnucleotidesimple",AJTRUE, AJTRUE , ISNUC,  0,
+                     "BbDdHhKkMmRrSsVvWwXxYy?", "NnNnNnNnNnNnNnNnNnNnNnN",
+	 seqTypeCharNucGap,
+	 seqTypeStrNucGap,
+	 "nucleotide sequence with gaps but only N for ambiguity"},
     {"protein",        AJFALSE, AJTRUE,  ISPROT, 0, "?*",  "XX",
 	 seqTypeCharProt,
 	 seqTypeStrProt,
@@ -286,6 +291,11 @@ static SeqOType seqType[] =
 	 seqTypeStrProtStop,
 	 "protein sequence with a possible stop but no selenocysteine"},
     {"gapproteinstandard", AJTRUE,  AJTRUE, ISPROT, 0, "?*UuJjOo", "XXXxXxXx",
+	 seqTypeCharProtGap,
+	 seqTypeStrProtGap,
+	 "protein sequence with gaps but no selenocysteine"},
+    {"gapproteinsimple", AJTRUE,  AJTRUE, ISPROT, 0,
+                                              "?*BbZzUuJjOo", "XXXxXxXxXxXx",
 	 seqTypeCharProtGap,
 	 seqTypeStrProtGap,
 	 "protein sequence with gaps but no selenocysteine"},
@@ -383,7 +393,7 @@ static AjBool seqTypeTestI(AjPSeq thys, ajint itype)
 
 static AjBool seqTypeFix(AjPSeq thys, ajint itype)
 {
-    ajDebug("seqTypeFix '%s'\n", seqType[itype].Name);
+    ajDebug("seqTypeFix '%s' '%S'\n", seqType[itype].Name, thys->Seq);
 
     /*
      ** if ungapped, remove any gap characters
@@ -425,6 +435,7 @@ static AjBool seqTypeFix(AjPSeq thys, ajint itype)
     if (ajCharMatchC(seqType[itype].Name, "pureprotein"))
 	seqTypeStopTrimS(&thys->Seq);
 
+    ajDebug("seqTypeFix done  '%S'\n", thys->Seq);
     return seqTypeTestI(thys, itype);
 }
 
@@ -446,7 +457,7 @@ static AjBool seqTypeFix(AjPSeq thys, ajint itype)
 
 static AjBool seqTypeFixReg(AjPSeq thys, ajint itype, char fixchar)
 {
-    ajDebug("seqTypeFixReg '%s'\n", seqType[itype].Name);
+    ajDebug("seqTypeFixReg '%s' '%S'\n", seqType[itype].Name, thys->Seq);
     /*ajDebug("Seq old '%S'\n", thys->Seq);*/
 
     return ajStrExchangeSetRestSK(&thys->Seq,
@@ -582,9 +593,9 @@ AjBool ajSeqTypeCheckIn(AjPSeq thys, const AjPSeqin seqin)
     AjPStr Type;
     ajint i;
     
-    /*ajDebug("testing sequence '%s' '%S' type '%S' IsNuc %B IsProt %B\n",
-	    ajSeqName(thys), thys->Seq,
-	    seqin->Inputtype, seqin->IsNuc, seqin->IsProt);*/
+    ajDebug("testing sequence '%s' '%S' type '%S' IsNuc %B IsProt %B\n",
+	    ajSeqGetNameC(thys), thys->Seq,
+	    seqin->Inputtype, seqin->IsNuc, seqin->IsProt);
 
     Type = seqin->Inputtype; /* ACD file had a predefined seq type */
     
@@ -2217,7 +2228,7 @@ AjBool ajSeqTypeSummary(const AjPStr type_name, AjPStr* Ptype, AjBool* gaps)
 	    ajStrAssignC(Ptype, "protein");
 	    break;
 	default:
-	    ajStrAssignC(Ptype, "");
+	    ajStrAssignClear(Ptype);
 	    break;
 	}
 	return ajTrue;

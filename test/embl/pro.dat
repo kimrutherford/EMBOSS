@@ -1089,6 +1089,125 @@ SQ   Sequence 3078 BP; 682 A; 841 C; 886 G; 669 T; 0 other;
      ccgtcagtat cggcggaatt ccagctgagc gccggtcgct accattacca gttggtctgg      3060
      tgtcaaaaat aataataa                                                    3078
 //
+ID   V00307; SV 1; linear; genomic DNA; STD; PRO; 2271 BP.
+XX
+AC   V00307; J01654;
+XX
+DT   09-JUN-1982 (Rel. 01, Created)
+DT   01-OCT-1996 (Rel. 49, Last updated, Version 8)
+XX
+DE   E. coli ompA gene (codes for the outer membrane protein II*).
+XX
+KW   membrane protein; unidentified reading frame.
+XX
+OS   Escherichia coli
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
+OC   Enterobacteriaceae; Escherichia.
+XX
+RN   [1]
+RP   1-2271
+RX   DOI; 10.1093/nar/8.13.3011.
+RX   PUBMED; 6253901.
+RA   Beck E., Bremer E.;
+RT   "Nucleotide sequence of the gene ompA coding the outer membrane protein II*
+RT   of Escherichia coli K-12";
+RL   Nucleic Acids Res. 8(13):3011-3027(1980).
+XX
+RN   [2]
+RP   783-1317
+RX   PUBMED; 7001445.
+RA   Movva N.R., Nakamura K., Inouye M.;
+RT   "Regulatory region of the gene for the ompA protein, a major outer membrane
+RT   protein of Escherichia coli";
+RL   Proc. Natl. Acad. Sci. U.S.A. 77(7):3845-3849(1980).
+XX
+DR   UniProtKB/Swiss-Prot; P0A8N0; YCBG_ECOLI.
+XX
+CC   KST ECO.OMPA
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..2271
+FT                   /organism="Escherichia coli"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:562"
+FT   CDS             172..669
+FT                   /transl_table=11
+FT                   /note="reading frame (unknown protein)"
+FT                   /db_xref="GOA:P0AFZ5"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P0AFZ5"
+FT                   /protein_id="CAA23587.1"
+FT                   /translation="MYTSGYAHRSSSFSSAASKIARVSTENTTAGLISEVVYREDQPMM
+FT                   TQLLLLPLLQQLGQQSRWQLWLTPQQKLSREWVQASGLPLTKVMQISQLSPCHTVESMV
+FT                   RALRTGNYSVVIGWLADDLTEEEHAEVVDAANEGNAMGFIIHSGKRILSRHETTFRAKN
+FT                   SL"
+FT   conflict        906..906
+FT                   /note="may be missing [2]"
+FT                   /citation=[2]
+FT   CDS             1037..2077
+FT                   /transl_table=11
+FT                   /gene="ompA"
+FT                   /product="ompA protein"
+FT                   /db_xref="GOA:P0A910"
+FT                   /db_xref="InterPro:IPR000498"
+FT                   /db_xref="InterPro:IPR002368"
+FT                   /db_xref="InterPro:IPR006664"
+FT                   /db_xref="InterPro:IPR006665"
+FT                   /db_xref="InterPro:IPR006690"
+FT                   /db_xref="PDB:1BXW"
+FT                   /db_xref="PDB:1G90"
+FT                   /db_xref="PDB:1QJP"
+FT                   /db_xref="PDB:2GE4"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P0A910"
+FT                   /protein_id="CAA23588.1"
+FT                   /translation="MKKTAIAIAVALAGFATVAQAAPKDNTWYTGAKLGWSQYHDTGFI
+FT                   NNNGPTHENQLGAGAFGGYQVNPYVGFEMGYDWLGRMPYKGSVENGAYKAQGVQLTAKL
+FT                   GYPITDDLDIYTRLGGMVWRADTKSNVYGKNHDTGVSPVFAGGVEYAITPEIATRLEYQ
+FT                   WTNNIGDAHTIGTRPDNGMLSLGVSYRFGQGEAAPVVAPAPAPAPEVQTKHFTLKSDVL
+FT                   FNFNKATLKPEGQAALDQLYSQLSNLDPKDGSVVVLGYTDRIGSDAYNQGLSERRAQSV
+FT                   VDYLISKGIPADKISARGMGESNPVTGNTCDNVKQRAALIDCLAPDRRVEIEVKGIKDV
+FT                   VTQPQA"
+XX
+SQ   Sequence 2271 BP; 567 A; 552 C; 548 G; 604 T; 0 other;
+     gatccgttaa ctacgaaaat aggcaactta ttcttaaggg gcaagattaa tttatgtttt        60
+     cccgtcacca acgacaaaat ttgcgaggct ctttccgaaa atagggttga tctttgttgt       120
+     cactggatgt actgtacatc catacagtaa ctcacagggg ctggattgat tatgtacact       180
+     tcaggctatg cacatcgttc ttcgtcgttc tcatccgcag caagtaaaat tgcgcgtgtc       240
+     tctacggaaa acactacagc cgggcttatc agtgaagttg tctatcgcga agatcagccc       300
+     atgatgacgc aacttctact gttgccattg ttacagcaac tcggtcagca atcgcgctgg       360
+     caactctggt taacaccgca acaaaaactg agtcgggaat gggttcaggc atctgggcta       420
+     cccttaacga aagtaatgca gattagccag ctctcccctt gccacactgt ggagtcaatg       480
+     gttcgcgctt tacgcacggg caattacagt gtggtgatcg gttggttggc agatgatttg       540
+     actgaagaag agcatgctga agttgttgat gcggcaaatg aaggtaacgc tatggggttt       600
+     attatacatt ccggtaagcg catcctctca cgccacgaga caactttccg ggctaaaaat       660
+     tcactctaat ttgtatcatt aagtaaattt aggattaatc ctggaacttt ttttgtcgcc       720
+     cagccaatgc tttcagtcgt gactaatttc cttgcggagg cttgtctgag cggtttccgc       780
+     gattctcttc tgtaaattgt cgctgacaaa aaagattaaa cataccttat acaagacttt       840
+     tttttcatat gcctgacgga gttcacactt gtaagttttc aactacgttg tagactttac       900
+     atcgccaagg gtgctcggca taagccgaag atatcggtag agttaatatt gagcagatcc       960
+     cccggtgaag gatttaaccg tgttatctcg ttggagatat tcatggcgta ttttggatga      1020
+     taacgaggcg caaaaaatga aaaagacagc tatcgcgatt gcagtggcac tggctggttt      1080
+     cgctaccgta gcgcaggccg ctccgaaaga taacacctgg tacactggtg ctaaactggg      1140
+     ctggtcccag taccatgata ctggtttcat caacaacaat ggcccgaccc atgaaaacca      1200
+     actgggcgct ggtgcttttg gtggttacca ggttaacccg tatgttggct ttgaaatggg      1260
+     ttacgactgg ttaggtcgta tgccgtacaa aggcagcgtt gaaaacggtg catacaaagc      1320
+     tcagggcgtt caactgaccg ctaaactggg ttacccaatc actgacgacc tggacatcta      1380
+     cactcgtctg ggtggcatgg tatggcgtgc agacactaaa tccaacgttt atggtaaaaa      1440
+     ccacgacacc ggcgtttctc cggtcttcgc tggcggtgtt gagtacgcga tcactcctga      1500
+     aatcgctacc cgtctggaat accagtggac gaacaacatc ggtgacgcac acaccatcgg      1560
+     cactcgtccg gacaacggca tgctgagcct gggtgtttcc taccgtttcg gtcagggcga      1620
+     ggcagctcca gtagttgctc cggctccagc tccggcaccg gaagtacaga ccaagcactt      1680
+     cactctgaag tctgacgttc tgttcaactt caacaaagca accctgaaac cggaaggtca      1740
+     ggctgctctg gatcagctgt acagccagct gagcaacttg gatccgaaag acggttccgt      1800
+     agttgttctg ggttacaccg accgcatcgg ttctgacgct tacaaccagg gtctgtccga      1860
+     gcgccgtgct cagtctgttg ttgattacct gatctccaaa ggtatcccgg cagacaagat      1920
+     ctccgcacgt ggtatgggcg aatccaaccc ggttactggc aacacctgtg acaacgtgaa      1980
+     acagcgtgct gcactgatcg actgcctggc tccggatcgt cgcgtagaga tcgaagttaa      2040
+     aggtatcaaa gacgttgtaa ctcagccgca ggcttaagtt ctcgtctggt agaaaaacgc      2100
+     tgctgcgggt ttttttttgc ctttagtaaa ttgaactgac tttcgtcagt tattccttac      2160
+     ccagcaatgc ctgcagatcc tgcttcagag aagacatttt attcgcgtat ttctctttgt      2220
+     tttccgcatc ttcaatcagc tgaacaatcg tttcagaaag cgttttaccg c               2271
+//
 ID   X77160; SV 1; linear; genomic DNA; STD; PRO; 1212 BP.
 XX
 AC   X77160;

@@ -1,5 +1,6 @@
 application: restrict [
-  documentation: "Finds restriction enzyme cleavage sites"
+  documentation: "Report restriction enzyme cleavage sites in
+                  a nucleotide sequence"
   groups: "Nucleic:Restriction"
 ]
 

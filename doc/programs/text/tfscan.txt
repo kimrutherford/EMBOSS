@@ -5,36 +5,23 @@
 
 Function
 
-   Scans DNA sequences for transcription factors
+   Identify transcription factor binding sites in DNA sequences
 
 Description
 
-   The TRANSFAC Database is a commercial database of eukaryotic
-   cis-acting regulatory DNA elements and trans-acting factors. It covers
-   the whole range from yeast to human.
+   tfscan scans one or more DNA sequences for transcription factor
+   binding sites from the TRANSFAC database. The taxonomic group (Fungi,
+   Insects, ,Plants, Vertebrates or Other) is specified. Matches are
+   searched for using fast sequence word-matching, optionally allowing
+   mismatches. Because the binding sites are so small, there will be many
+   spurious (false positive) matches. Optionally, the minimum length of a
+   match to be reported may be specified.
 
-   An old public domain version is available at:
-   ftp://ftp.ebi.ac.uk/pub/databases/transfac/transfac32.tar.Z
-
-   The 'site.dat' data file from TRANSFAC contains information on
-   individual (putatively) regulatory protein binding sites. It has been
-   divided into the following taxonomic groups.
-
-     * Fungi
-     * Insects
-     * Plants
-     * Vertebrates
-     * Other
-
-   The program tfscan takes a sequence and the name of one of these
-   taxonomic groups and does a fast match of the TRANSFAC sequences
-   against the input sequence (optionally allowing mismatches).
-
-   The results is a list of the positions which match the binding sites
-   in the TRANSFAC SITE database.
-
-   Because the binding sites are so small, there will be many spurious
-   (false positive) matches.
+   An output file is written with information on the matches, including
+   sequence ID and accession number, the start and end positions of the
+   match in an input sequence and the sequence of the region where a
+   match has been found. Binding factor information, where available, is
+   given at the end of the matches for each matching entry.
 
 Usage
 
@@ -42,7 +29,7 @@ Usage
 
 
 % tfscan 
-Scans DNA sequences for transcription factors
+Identify transcription factor binding sites in DNA sequences
 Input nucleotide sequence(s): tembl:k00650
 Transcription Factor Class
          F : fungi
@@ -98,8 +85,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -358,7 +346,20 @@ Data files
 
 Notes
 
-   None.
+   The TRANSFAC Database is a commercial database of eukaryotic
+   cis-acting regulatory DNA elements and trans-acting factors. It covers
+   the whole range from yeast to human. The site.dat data file from
+   TRANSFAC contains information on individual (putatively) regulatory
+   protein binding sites. It has been divided into the following
+   taxonomic groups.
+     * Fungi
+     * Insects
+     * Plants
+     * Vertebrates
+     * Other
+
+   An old public domain version of TRANSFAC is available at:
+   ftp://ftp.ebi.ac.uk/pub/databases/transfac/transfac32.tar.Z
 
 References
 
@@ -392,7 +393,8 @@ Known bugs
 
 See also
 
-   Program name Description
+   Program name                  Description
+   jaspscan     Scans DNA sequences for transcription factors
 
    Your EMBOSS administrator will have to run the EMBOSS program
    tfextract in order to set up the data files from the TRANSFAC

@@ -198,8 +198,8 @@ int main(int argc, char **argv)
     embInit("eprimer3", argc, argv);
 
     /* Global details */
-    explain_flag     = ajAcdGetBool("explainflag");
-    file_flag        = ajAcdGetBool("fileflag");
+    explain_flag     = ajAcdGetBoolean("explainflag");
+    file_flag        = ajAcdGetBoolean("fileflag");
     task             = ajAcdGetList("task");
     do_primer        = ajAcdGetToggle("primer");
     do_hybrid        = ajAcdGetToggle("hybridprobe");
@@ -215,7 +215,7 @@ int main(int argc, char **argv)
     right_input     = ajAcdGetString("reverseinput");
 
     /* Primer details */
-    pick_anyway         = ajAcdGetBool("pickanyway");
+    pick_anyway         = ajAcdGetBoolean("pickanyway");
     mispriming_library  = ajAcdGetInfile("mispriminglibraryfile");
     max_mispriming      = ajAcdGetFloat("maxmispriming");
     pair_max_mispriming = ajAcdGetFloat("pairmaxmispriming");
@@ -386,6 +386,9 @@ int main(int argc, char **argv)
 		 hSaveStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 		 if (!CreatePipe(&hChildStdoutRd, &hChildStdoutWr, &saAttr, 0))
 		     ajFatal ( "Couldn't open pipe() from" );
+
+		 SetHandleInformation(hChildStdoutRd,HANDLE_FLAG_INHERIT,0);
+
 		 if (!SetStdHandle(STD_OUTPUT_HANDLE, hChildStdoutWr)) 
 		     ajFatal("Redirecting STDOUT failed");
 		 fSuccess = DuplicateHandle(GetCurrentProcess(),
@@ -504,7 +507,7 @@ int main(int argc, char **argv)
             /* mispriming library may not have been specified */
             if(mispriming_library)
             eprimer3_send_stringC(stream, "PRIMER_MISPRIMING_LIBRARY",
-                                  ajFileName(mispriming_library));
+                                  ajFileGetNameC(mispriming_library));
     
             eprimer3_send_float(stream, "PRIMER_MAX_MISPRIMING", 
                                 max_mispriming);
@@ -579,7 +582,7 @@ int main(int argc, char **argv)
             if(internal_oligo_mishyb_library)
                 eprimer3_send_stringC(stream,
                     "PRIMER_INTERNAL_OLIGO_MISHYB_LIBRARY",
-                    ajFileName(internal_oligo_mishyb_library));
+                    ajFileGetNameC(internal_oligo_mishyb_library));
 
             eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_MAX_MISHYB",
                     internal_oligo_max_mishyb);
@@ -642,9 +645,10 @@ int main(int argc, char **argv)
     
             ajStrSetClear(&result);
 
-            close( pipeto[1] );
+#ifndef WIN32
+            close(pipeto[1]);
             close(pipefrom[0]);
-            
+#endif            
         }	/* end of parent/child fork */
 
     }	/* end of sequence loop */

@@ -1,0 +1,28 @@
+# EMBL/Genbank tags
+# =================
+
+#include Etags.embl
+
+# GFF allows multiple values up to a semicolon.
+# we could define ANY for these special cases
+# and LIMITED for those where we know the format
+
+# We could also make ANY the default, as perhaps 'comment'
+
+# GFF also allows # comments where we could hide non-conforming tags
+# but then we lose the tag order.
+
+# new type, not yet implemented
+# can be multiple values
+#Align I3
+# Align seqstart targetstart [length]
+# start of align block in 2 seqs, length usually ignored
+# continues until end of seq or next align block
+
+#Target Q3
+#Target QTEXT start end
+#For hits, the target sequence and base range
+
+# E_value REAL
+# E_value 0.003
+# float or exp format

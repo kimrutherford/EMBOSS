@@ -84,7 +84,7 @@ int main(int argc, char **argv)
     seqset   = ajAcdGetSeqset("sequences");
     graph    = ajAcdGetGraph("graph");
     gap      = ajAcdGetInt("gap");
-    boxit    = ajAcdGetBool("boxit");
+    boxit    = ajAcdGetBoolean("boxit");
     seq1out  = ajAcdGetFeatout("outfeat");
     dumpfeat = ajAcdGetToggle("dumpfeat");
 

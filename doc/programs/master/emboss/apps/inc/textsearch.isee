@@ -1,9 +1,10 @@
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="abiview.html">abiview</a></td>
-<td>Reads ABI file and display the trace</td>
+<td>Display the trace in an ABI sequencer file</td>
 </tr>
 
 <tr>
@@ -13,12 +14,22 @@
 
 <tr>
 <td><a href="infoalign.html">infoalign</a></td>
-<td>Information on a multiple sequence alignment</td>
+<td>Display basic information about a multiple sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="infobase.html">infobase</a></td>
+<td>Return information on a given nucleotide base</td>
+</tr>
+
+<tr>
+<td><a href="inforesidue.html">inforesidue</a></td>
+<td>Return information on a given amino acid residue</td>
 </tr>
 
 <tr>
 <td><a href="infoseq.html">infoseq</a></td>
-<td>Displays some simple information about sequences</td>
+<td>Display basic information about sequences</td>
 </tr>
 
 <tr>
@@ -28,52 +39,52 @@
 
 <tr>
 <td><a href="pepnet.html">pepnet</a></td>
-<td>Displays proteins as a helical net</td>
+<td>Draw a helical net for a protein sequence</td>
 </tr>
 
 <tr>
 <td><a href="pepwheel.html">pepwheel</a></td>
-<td>Shows protein sequences as helices</td>
+<td>Draw a helical wheel diagram for a protein sequence</td>
 </tr>
 
 <tr>
 <td><a href="prettyplot.html">prettyplot</a></td>
-<td>Displays aligned sequences, with colouring and boxing</td>
+<td>Draw a sequence alignment with pretty formatting</td>
 </tr>
 
 <tr>
 <td><a href="prettyseq.html">prettyseq</a></td>
-<td>Output sequence with translated ranges</td>
+<td>Write a nucleotide sequence and its translation to file</td>
 </tr>
 
 <tr>
 <td><a href="remap.html">remap</a></td>
-<td>Display sequence with restriction sites, translation etc</td>
+<td>Display restriction enzyme binding sites in a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="seealso.html">seealso</a></td>
-<td>Finds programs sharing group names</td>
+<td>Finds programs with similar function to a specified program</td>
 </tr>
 
 <tr>
 <td><a href="showalign.html">showalign</a></td>
-<td>Displays a multiple sequence alignment</td>
+<td>Display a multiple sequence alignment in pretty format</td>
 </tr>
 
 <tr>
 <td><a href="showdb.html">showdb</a></td>
-<td>Displays information on the currently available databases</td>
+<td>Displays information on configured databases</td>
 </tr>
 
 <tr>
 <td><a href="showfeat.html">showfeat</a></td>
-<td>Show features of a sequence</td>
+<td>Display features of a sequence in pretty format</td>
 </tr>
 
 <tr>
 <td><a href="showseq.html">showseq</a></td>
-<td>Display a sequence with features, translation etc</td>
+<td>Displays sequences with features in pretty format</td>
 </tr>
 
 <tr>
@@ -83,17 +94,17 @@
 
 <tr>
 <td><a href="tfm.html">tfm</a></td>
-<td>Displays a program's help documentation manual</td>
+<td>Displays full documentation for an application</td>
 </tr>
 
 <tr>
 <td><a href="whichdb.html">whichdb</a></td>
-<td>Search all databases for an entry</td>
+<td>Search all sequence databases for an entry and retrieve it</td>
 </tr>
 
 <tr>
 <td><a href="wossname.html">wossname</a></td>
-<td>Finds programs by keywords in their one-line documentation</td>
+<td>Finds programs by keywords in their short description</td>
 </tr>
 
 </table>

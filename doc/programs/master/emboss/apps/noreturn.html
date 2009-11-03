@@ -22,31 +22,7 @@ noreturn
 </H2>
 
 
-The way that Unix and PC operating systems store simple text files,
-(including sequence files), differs slightly. 
-
-<p>
-Unix files have a hidden character called 'new line' at the end of every
-line. 
-
-<p>
-PC files have two hidden characters called 'carriage return' and then
-'new line' at the end of every line. 
-
-<p>
-When files are transferred from PC machines to Unix machines, it is
-often useful to convert the file from the PC format to the Unix format,
-otherwise commands like 'more', to display the file, and text editors can
-become confused. 
-
-<p>
-This simple utility removes 'carriage return' characters from such
-files, converting them from PC format to Unix format text files. 
-
-<p>
-EMBOSS programs can read in both PC and Unix text file formats, so it is
-not necessary for you to use this utility all of the time. 
-
+<p><b>noreturn</b> reads an input file of plain text containing unwanted carriage returns on the end of lines, and writes an output file which is identical to the input file, except that any trailing carriage returns are removed.</p>
 
 <H2>
     Usage
@@ -102,9 +78,10 @@ None.
     Notes
 </H2>
 
+<p>Unix and PC operating systems store plain text files (which includes sequence files) slightly differently.  Unix files have a hidden character called 'new line' at the end of every line whereas PC files have a 'new line' and a 'carriage return' at the end of every line.  When files are transferred from a PC to a Unix machines, it is often useful to convert the file from the PC format to the Unix format, otherwise commands (such as 'more') and programs (such as text editors) that display  the file can become confused.  <b>noreturn</b> removes 'carriage return' characters from such files, converting them from PC format to Unix format text files.</p>
 
-EMBOSS programs can read in both PC and Unix text file formats, so it is 
-not necessary for you to use this utility all of the time.
+<p>EMBOSS programs can read in both PC and Unix text file formats, so it is not necessary for you to use this utility all of the time.</p>
+
 
 <H2>
     References

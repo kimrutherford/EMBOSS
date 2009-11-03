@@ -1,6 +1,5 @@
 application: cutseq [
-  documentation: "Removes a specified section from a
-                  sequence."
+  documentation: "Removes a section from a sequence"
   groups: "Edit"
 ]
 

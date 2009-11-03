@@ -46,10 +46,12 @@ int main(int argc, char **argv)
 {
     AjPList rlist = NULL;
     AjPList flocs = NULL;
-    AjPFile outf;
+    AjPFile outf = NULL;
+    AjPFile datafile = NULL;
+    AjPFile newdatafile = NULL;
     AjPStr  t = NULL;
+    AjPStr line = NULL;
 
-    AjBool  recurs = ajTrue;
     ajint i;
 
 
@@ -66,13 +68,12 @@ int main(int argc, char **argv)
     AjPStr cmd  = NULL;
     AjPStr* rstrs = NULL;
 
-    ajint result;
     char *p = NULL;
 
     embInit("embossdata", argc, argv);
 
     filename = ajAcdGetString("filename");
-    fetch    = ajAcdGetBool("fetch");
+    fetch    = ajAcdGetBoolean("fetch");
     showall  = ajAcdGetToggle("showall");
     rstrs    = ajAcdGetSelect("reject");
     outf     = ajAcdGetOutfile("outfile");
@@ -109,11 +110,17 @@ int main(int argc, char **argv)
     if(fetch)
     {
 	ajStrAssignS(&path,ddir);
-	ajFileScan(path,filename,&flocs,ajFalse,ajFalse,NULL,rlist,
-		   recurs, outf);
+	ajFilelistAddPathWildRecursiveIgnore(flocs, path,filename,rlist);
 	if(!ajListPop(flocs,(void **)&t))
 	    ajFatal("The file '%S' does not exist.", filename);
 	/* fetch it */
+        datafile = ajFileNewInNameS(t);
+        newdatafile = ajFileNewOutNameS(filename);
+        while(ajReadline(datafile, &line))
+            ajWriteline(newdatafile, line);
+        ajFileClose(&datafile);
+        ajFileClose(&newdatafile);
+        /*
 	ajStrAppendC(&cmd, "cp ");
 	ajStrAppendS(&cmd, t);
 	ajStrAppendC(&cmd, " ");
@@ -121,9 +128,11 @@ int main(int argc, char **argv)
 	result = system(ajStrGetPtr(cmd));
 	if(result)
 	    ajFatal("File not copied.");
+        */
 	ajFmtPrintF(outf, "File '%S' has been copied successfully.\n", t);
 	ajStrDel(&t);
 	ajStrDel(&cmd);
+	ajStrDel(&line);
     }
 
 
@@ -180,8 +189,7 @@ int main(int argc, char **argv)
 	if(isname)
 	{
 	    ajStrAssignS(&path,ddir);
-	    ajFileScan(path,filename,&flocs,ajFalse,ajFalse,NULL,rlist,
-		       recurs,outf);
+	    ajFilelistAddPathWildRecursiveIgnore(flocs,path,filename,rlist);
 
 	    if(!ajListPop(flocs,(void **)&t))
 		embossdata_check_file(ddir,filename,outf);
@@ -200,7 +208,7 @@ int main(int argc, char **argv)
     if(showall)
     {
 	ajStrAssignS(&path,ddir);
-	ajFileScan(path,NULL,NULL,ajTrue,ajFalse,NULL,rlist,recurs,outf);
+	ajDirnamePrintRecursiveIgnore(path,rlist,outf);
     }
 
     ajListFree(&flocs);
@@ -241,7 +249,7 @@ static void embossdata_check_dir(const AjPStr d, AjPFile outf)
     AjPStr tmpstr;
     tmpstr = ajStrNewS(d);
 
-    if(ajFileDir(&tmpstr))
+    if(ajDirnameFixExists(&tmpstr))
 	ajFmtPrintF(outf,"%-60.60S Exists\n",d);
     else
 	ajFmtPrintF(outf,"%-60.60S Does not exist\n",d);
@@ -274,7 +282,7 @@ static void embossdata_check_file(const AjPStr d, const AjPStr file,
     ajStrAssignS(&s,d);
     ajStrAppendC(&s,"/");
     ajStrAppendS(&s,file);
-    if(ajFileNameValid(s))
+    if(ajFilenameExistsRead(s))
 	ajFmtPrintF(outf,"File %-60.60S Exists\n",s);
     else
 	ajFmtPrintF(outf,"File %-60.60S Does not exist\n",s);
@@ -306,13 +314,14 @@ static AjPStr embossdata_data_dir(void)
 
     if(!ajNamGetValueC("DATA",&tmp))
     {
-	ajNamRootInstall(&where);
-	ajFileDirFix(&where);
+	ajStrAssignS(&where, ajNamValueInstalldir());
+	ajDirnameFix(&where);
 	ajFmtPrintS(&tmp,"%Sshare/EMBOSS/data/",where);
 
-	if(!ajFileDir(&tmp))
+	if(!ajDirnameFixExists(&tmp))
 	{
-	    if(ajNamRoot(&tmp))
+	    ajStrAssignS(&tmp, ajNamValueRootdir());
+	    if(ajStrGetLen(tmp))
 		ajStrAppendC(&tmp,"/data");
 	    else
 		ajFatal("The EMBOSS 'DATA' directory isn't defined.");

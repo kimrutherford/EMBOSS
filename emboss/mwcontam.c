@@ -128,12 +128,12 @@ static void mwcontam_readdata(AjPList files, AjPList **lists,
     {
 	(*lists)[i] = ajListNew();
 	ajListPop(files,(void **)&thysf);
-	inf = ajFileNewIn(thysf);
+	inf = ajFileNewInNameS(thysf);
 
 	if(!inf)
 	    ajFatal("Cannot open file %S",thysf);
 
-	while(ajFileReadLine(inf,&line))
+	while(ajReadlineTrim(inf,&line))
 	{
 	    c = *ajStrGetPtr(line);
 

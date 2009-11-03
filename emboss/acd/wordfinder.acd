@@ -83,28 +83,28 @@ section: additional [
     additional: "Y"
     default: "0"
     minimum: "0"
-    information: "Limiting match score (zero for no limit)"
+    information: "Maximum match score (zero for no limit)"
   ]
 
   integer: limitalign [
     additional: "Y"
     default: "0"
     minimum: "0"
-    information: "Limiting alignment length (zero for no limit)"
+    information: "Maximum alignment length (zero for no limit)"
   ]
 
   integer: lowmatch [
     additional: "Y"
     default: "0"
     minimum: "0"
-    information: "Limiting match score (zero for no limit)"
+    information: "Minimum match score (zero for no limit)"
   ]
 
   integer: lowalign [
     additional: "Y"
     default: "0"
     minimum: "0"
-    information: "Limiting alignment length (zero for no limit)"
+    information: "Minimum alignment length (zero for no limit)"
   ]
 
 endsection: additional

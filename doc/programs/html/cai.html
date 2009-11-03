@@ -23,26 +23,19 @@ cai
 <H2>
     Function
 </H2>
-CAI codon adaptation index
+Calculate codon adaptation index
 <H2>
     Description
 </H2>
 
-<b>cai</b> calculates the <b>Codon Adaptation Index</b>.  This is a
-simple, effective measure of synonymous codon usage bias. 
+<p><b>cai</b> calculates the Codon Adaptation Index for a given nucleotide sequence, given a reference codon usage table.  The CAI index is a simple, effective measure of synonymous codon usage bias. It index assesses the extent to which selection has been effective in moulding the pattern of codon usage. In that respect it is useful for predicting the level of expression of a gene, for assessing the adaptation of viral genes to their hosts, and for making comparisons of codon usage in different organisms. The index may also give an approximate indication of the likely success of heterologous gene expression. 
+</p>
 
-<p>
 
-The CAI index uses a reference set of highly expressed genes from a species
-to assess the relative merits of each codon, and a score for a gene sequence is
-calculated from the frequency of use of all codons in that gene sequence.  The
-index assesses the extent to which selection has been effective in
-moulding the pattern of codon usage.  In that respect it is useful for
-predicting the level of expression of a gene, for assessing the
-adaptation of viral genes to their hosts, and for making comparisons of
-codon usage in different organisms.  The index may also give an
-approximate indication of the likely success of heterologous gene
-expression. 
+<H2>
+    Algorithm
+</H2>
+<p>The CAI index uses a reference set of highly expressed genes from a species to assess the relative merits of each codon.  A score for a gene sequence is calculated from the frequency of use of all codons in that gene sequence.</p>
 
 
 <H2>
@@ -55,7 +48,7 @@ expression.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>cai TEMBL:AB009602 </b>
-CAI codon adaptation index
+Calculate codon adaptation index
 Codon usage file [Eyeast_cai.cut]: <b></b>
 Output file [ab009602.cai]: <b></b>
 
@@ -103,8 +96,9 @@ Output file [ab009602.cai]: <b></b>
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -268,20 +262,7 @@ Sequence: AB009602 CAI: 0.188
     Data files
 </H2>
 
-<b>cai</b> reads a reference codon usage table prepared from a set of
-genes which are known to be highly expressed.
-
-<p>
-
-The default codon usage table 'Eyeastcai.cut' is the standard set of
-Saccharomyces cerevisiae highly expressed gene codon
-frequiencies. Another table Eschpo_cai.cut was prepared from a set of
-Schizosaccharomyces pombe genes by Peter Rice for the S. pombe
-sequencing team at the Sanger Centre.
-
-<p>
-
-You should prepare your own codon usage table for your organism of interest.
+<p><b>cai</b> requires a reference codon usage table prepared from a set of genes which are known to be highly expressed.  This is specified by the <tt>-cfile</tt> option and must exist in the EMBOSS data directory.  The default codon usage table <tt>Eyeastcai.cut</tt> is the standard set of Saccharomyces cerevisiae highly expressed gene codon frequiencies. Another table (<tt>Eschpo_cai.cut</tt>) was prepared from a set of Schizosaccharomyces pombe genes by Peter Rice for the S. pombe sequencing team at the Sanger Centre, and is available in the EMBOSS data directory.  You should prepare your own codon usage table for your organism of interest.</p>
 
 <p>
 <p>
@@ -328,7 +309,13 @@ The directories are searched in the following order:
     Notes
 </H2>
 
-None.
+<p>Codons are nucleotide triplet that encode an amino acid residue in a polypeptide chain. There are four possible nucleotides in DNA; adenine (<tt>A</tt>), guanine (<tt>G</tt>), cytosine (<tt>C</tt>) and thymine (<tt>T</tt>), therefore 64 possible triplets to encode the 20 amino acids plus the translation termination signal. The encoding is therefore redundant, with all but two amino acids coded for by more than one triplet. Organisms often have a particular preference for one of the possible codons for a given amino acid.</p>
+
+<p>Codon preferences reflect a balance between mutational bias and selection for efficiency of translation. In fast-growing microorganisms there are optimal codons that reflect the composition of the genomic tRNA pool and probably help achieve faster translation rates and high accuracy.  Such selection is expected to be strong in highly expressed genes, as is the case for Escherichia coli or Saccharomyces cerevisiae.  In contrast, codon usage optimization is normally absent in organisms with slower growing rates such as Homo sapiens (human), where codon preferences are determined by mutational biases characteristic to a particular genome.</p>
+
+<p>Various factors are thought to influence codon usage bias in baceteria, including gene expression level already mentioned, %G+C composition (reflecting horizontal gene transfer or mutational bias), GC skew (reflecting strand-specific mutational bias), amino acid conservation, protein hydropathy, transcriptional selection, RNA stability, and optimal growth temperature.</p>
+<p>Various methods have been used to analyze codon usage bias. CAI and methods such as the 'frequency of optimal codons' (Fop) are commonly used to predict gene expression levels.  Others such as the 'effective number of codons' (Nc) and Shannon entropy are used to measure codon usage evenness, whereas multivariate statistical methods, iincluding correspondence analysis and principal component analysis, may be used to analyze variations in codon usage between genes.</p>
+
 
 <H2>
     References
@@ -340,6 +327,10 @@ None.
 Sharp PM., Li W-H.  "The codon adaptation index - a measure of
 directional synonymous codon usage bias, and its potential
 applications." Nucleic Acids Research 1987 vol 15, pp 1281-1295.
+
+<li>
+Synonymous codon usage in bacteria.
+Curr Issues Mol Biol. 2001 Oct;3(4):91-7.
 
 </ol>
 
@@ -369,10 +360,11 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="chips.html">chips</a></td>
-<td>Codon usage statistics</td>
+<td>Calculates Nc codon usage statistic</td>
 </tr>
 
 <tr>
@@ -382,12 +374,12 @@ None.
 
 <tr>
 <td><a href="cusp.html">cusp</a></td>
-<td>Create a codon usage table</td>
+<td>Create a codon usage table from nucleotide sequence(s)</td>
 </tr>
 
 <tr>
 <td><a href="syco.html">syco</a></td>
-<td>Synonymous codon usage Gribskov statistic plot</td>
+<td>Draw synonymous codon usage statictic plot for a nucleotide sequence</td>
 </tr>
 
 </table>

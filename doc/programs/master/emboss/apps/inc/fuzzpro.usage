@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>fuzzpro </b>
-Protein pattern search
+Search for patterns in protein sequences
 Input protein sequence(s): <b>tsw:*</b>
 Search pattern: <b>[FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G</b>
 Output report [edd1_rat.fuzzpro]: <b></b>

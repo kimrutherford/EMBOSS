@@ -82,17 +82,17 @@ int main(int argc, char **argv)
 
     embInit("redata", argc, argv);
 
-    ajFileDataNewC(ENZDATA,&enzfile);
-    ajFileDataNewC(REFDATA,&reffile);
-    ajFileDataNewC(SUPDATA,&supfile);
+    enzfile = ajDatafileNewInNameC(ENZDATA);
+    reffile = ajDatafileNewInNameC(REFDATA);
+    supfile = ajDatafileNewInNameC(SUPDATA);
     if(!enzfile || !reffile || !supfile)
 	ajFatal("EMBOSS_DATA undefined or REBASEEXTRACT needs running");
 
     enzyme        = ajAcdGetString("enzyme");
     outf          = ajAcdGetOutfile("outfile");
-    isoschizomers = ajAcdGetBool("isoschizomers");
-    references    = ajAcdGetBool("references");
-    suppliers     = ajAcdGetBool("suppliers");
+    isoschizomers = ajAcdGetBoolean("isoschizomers");
+    references    = ajAcdGetBoolean("references");
+    suppliers     = ajAcdGetBoolean("suppliers");
 
 
     ajStrRemoveWhite(&enzyme);
@@ -110,7 +110,7 @@ int main(int argc, char **argv)
     ajFileClose(&supfile);
 
     /* Read the enzyme line */
-    while(ajFileReadLine(enzfile,&enzline))
+    while(ajReadlineTrim(enzfile,&enzline))
     {
 	p=ajStrGetPtr(enzline);
 
@@ -157,7 +157,7 @@ int main(int argc, char **argv)
 		ajFmtPrintF(outf,"  Cut positions 5':%d 3':%d [5':%d 3':%d]\n",
 			    cut1,cut2,cut3,cut4);
 
-	    if(!ajFileReadLine(enzfile,&enzline))
+	    if(!ajReadlineTrim(enzfile,&enzline))
 		break;
 
 	    p = ajStrGetPtr(enzline);
@@ -166,7 +166,7 @@ int main(int argc, char **argv)
 	}
 
 	/* Read the reference file */
-	while(ajFileReadLine(reffile,&line))
+	while(ajReadlineTrim(reffile,&line))
 	{
 	    p = ajStrGetPtr(line);
 	    if(*p=='#' || *p=='\n' || *p=='!')
@@ -176,20 +176,20 @@ int main(int argc, char **argv)
 		break;
 
 	    while(!ajStrMatchC(line,"//"))
-		ajFileReadLine(reffile,&line);
+		ajReadlineTrim(reffile,&line);
 	}
 
-	ajFileReadLine(reffile,&line);
+	ajReadlineTrim(reffile,&line);
 	ajFmtPrintF(outf,"Organism: %s\n",ajStrGetPtr(line));
-	ajFileReadLine(reffile,&iso);
+	ajReadlineTrim(reffile,&iso);
 
 	if(ajStrGetLen(iso))
 	    ne = ajArrCommaList(iso,&ea);
-	ajFileReadLine(reffile,&line);
+	ajReadlineTrim(reffile,&line);
 
 	if(ajStrGetLen(line))
 	    ajFmtPrintF(outf,"Methylated: %s\n",ajStrGetPtr(line));
-	ajFileReadLine(reffile,&line);
+	ajReadlineTrim(reffile,&line);
 
 	if(ajStrGetLen(line))
 	    ajFmtPrintF(outf,"Source: %s\n",ajStrGetPtr(line));
@@ -210,7 +210,7 @@ int main(int argc, char **argv)
 	    }
 	    ajFmtPrintF(outf,"\n");
 	}
-	ajFileReadLine(reffile,&line);
+	ajReadlineTrim(reffile,&line);
 
 	if(suppliers && ajStrGetLen(line))
 	{
@@ -227,7 +227,7 @@ int main(int argc, char **argv)
 		++p;
 	    }
 	}
-	ajFileReadLine(reffile,&line);
+	ajReadlineTrim(reffile,&line);
 	if(references && ajStrGetLen(line))
 	{
 	    p = ajStrGetPtr(line);
@@ -235,7 +235,7 @@ int main(int argc, char **argv)
 	    ajFmtPrintF(outf,"\nReferences:\n");
 	    for(i=0;i<n;++i)
 	    {
-		ajFileReadLine(reffile,&line);
+		ajReadlineTrim(reffile,&line);
 		ajFmtPrintF(outf,"%s\n",ajStrGetPtr(line));
 	    }
 	}
@@ -294,7 +294,7 @@ static AjPTable redata_supply_table(AjPFile inf)
     t = ajTablestrNewLen(SUPPGUESS);
     line = ajStrNew();
 
-    while(ajFileReadLine(inf,&line))
+    while(ajReadlineTrim(inf,&line))
     {
 	p = ajStrGetPtr(line);
 	q = p;

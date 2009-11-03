@@ -1,6 +1,5 @@
 application: wossname [
-  documentation: "Finds programs by keywords in their
-                  one-line documentation"
+  documentation: "Finds programs by keywords in their short description"
   groups: "Information"
 ]
 

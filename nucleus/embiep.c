@@ -123,7 +123,7 @@ void embIepPkRead(void)
     if(AjIEPinit)
 	return;
 
-    ajFileDataNewC(PKFILE,&inf);
+    inf = ajDatafileNewInNameC(PKFILE);
     if(!inf)
 	ajFatal("%s file not found",PKFILE);
 
@@ -131,7 +131,7 @@ void embIepPkRead(void)
 	AjpK[i]=0.0;
 
     line = ajStrNew();
-    while(ajFileGets(inf,&line))
+    while(ajReadline(inf,&line))
     {
 	p = ajStrGetPtr(line);
 	if(*p=='#' || *p=='!' || *p=='\n' || *p=='\r')
@@ -156,7 +156,7 @@ void embIepPkRead(void)
 	p  = ajSysFuncStrtok(p," \t\n\r");
 	ch = ajSysCastItoc(toupper((ajint)*p));
 	p  = ajSysFuncStrtok(NULL," \t\n\r");
-	sscanf(p,"%lf",&AjpK[ajAZToInt(ch)]);
+	sscanf(p,"%lf",&AjpK[ajBasecodeToInt(ch)]);
     }
 
     AjpK[EMBIEPAMINO]    = amino;
@@ -199,7 +199,7 @@ void embIepCompC(const char *s, ajint amino,
     p=s;
     while(*p)
     {
-	++c[ajAZToInt(ajSysCastItoc(toupper((ajint)*p)))];
+	++c[ajBasecodeToInt(ajSysCastItoc(toupper((ajint)*p)))];
 	++p;
     }
 

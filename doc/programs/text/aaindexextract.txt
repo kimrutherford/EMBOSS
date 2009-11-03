@@ -5,23 +5,21 @@
 
 Function
 
-   Extract data from AAINDEX
+   Extract amino acid property data from AAINDEX
 
 Description
 
-   aaextractindex extracts information from the AAINDEX database for use
-   by pepwindow and pepwindowall
+   aaindexextract extracts amino acid property data from the AAINDEX
+   database (see references 1, 2 and 3). One file for every amino acid
+   property is created in the EMBOSS data directory data/AAINDEX. Each
+   file corresponds to a single entry in the file aindex1 of the AAINDEX
+   database.
 
-   AAINDEX is a database of properties of amino acids. See references [1]
-   [2] [3].
-
-   The programs pepwindow and pepwindowall normally use the standard
-   EMBOSS data file 'Enakai.dat' by default, but you can set their
-   '-data' qualifier to use any of the files produced by aaextractindex
-   from the AAINDEX database.
-
-   The AAINDEX database file 'aaindex1' can be downloaded from the
-   AAINDEX site: ftp://ftp.genome.ad.jp/pub/db/genomenet/aaindex/aaindex1
+   The aaindexextract output files files may be used by any program that
+   uses amino acid property data. For example, pepwindow and pepwindowall
+   will take any one of these files if their -data qualifier is set to an
+   appropriate file name. By default however these programs will use the
+   standard EMBOSS data file Enakai.dat.
 
 Usage
 
@@ -29,7 +27,7 @@ Usage
 
 
 % aaindexextract 
-Extract data from AAINDEX
+Extract amino acid property data from AAINDEX
 AAINDEX database file: aaindex1.test
 
    Go to the input files for this example
@@ -45,8 +43,9 @@ Command line arguments
    Associated qualifiers: (none)
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -228,15 +227,24 @@ Data files
 
 Notes
 
-   If aaindexextract tries to write the data to an unexpected location
-   you can explicitly set the location of the EMBOSS data directory by
-   putting the line:
+   AAINDEX is a database of biochemical and physicochemical properties of
+   amino acids and pairs of amino acids. aaindex1 for properties of each
+   of the 20 single amino acids, aaindex2 for amino acid mutation
+   matrices and aaindex3 for the amino-acid pair-wise contact potentials.
+   All data are derived from the published literature. The file aaindex1
+   is required by aaindexextract and can be downloaded from the AAINDEX
+   site: ftp://ftp.genome.ad.jp/pub/db/genomenet/aaindex/aaindex1.
+
+   aaindexextract will write to the EMBOSS data directory data/AAINDEX.
+   If you cannot find the output files then it is likely the data
+   directory has been set to somewhere other than expected. To set
+   explicitly the location of the EMBOSS data directory add the following
+   to your emboss.default file:
 
    ENV EMBOSS_DATA /path/to/the/EMBOSS/data/directory
-   in the EMBOSS emboss.default file.
 
-   (Where '/path/to/the/EMBOSS/data/directory' is the location of your
-   EMBOSS data as unpacked from the distribution file.)
+   Where /path/to/the/EMBOSS/data/directory is the location of your
+   EMBOSS data as unpacked from the distribution file.
 
 References
 
@@ -268,12 +276,16 @@ Known bugs
 
 See also
 
-   Program name                        Description
-   cutgextract   Extract data from CUTG
-   printsextract Extract data from PRINTS
-   prosextract   Build the PROSITE motif database for use by patmatmotifs
-   rebaseextract Extract data from REBASE
-   tfextract     Extract data from TRANSFAC
+   Program name Description
+   cutgextract Extract codon usage tables from from CUTG database
+   jaspextract Extract data from JASPAR
+   printsextract Extract data from PRINTS database for use by pscan
+   prosextract Processes the PROSITE motif database for use by
+   patmatmotifs
+   rebaseextract Process the REBASE database for use by restriction
+   enzyme applications
+   tfextract Process TRANSFAC transcription factor database for use by
+   tfscan
 
    The programs pepwindow and pepwindowall normally use the standard
    EMBOSS data file 'Enakai.dat' by default, but you can set their

@@ -1,5 +1,5 @@
 application: maskfeat [
-  documentation: "Mask off features of a sequence."
+  documentation: "Write a sequence with masked features"
   groups: "Edit, Feature tables"
 ]
 

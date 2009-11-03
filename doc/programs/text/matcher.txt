@@ -5,32 +5,23 @@
 
 Function
 
-   Finds the best local alignments between two sequences
+   Waterman-Eggert local alignment of two sequences
 
 Description
 
-   matcher compares two sequences looking for local sequence similarities
-   using a rigorous algorithm.
+   matcher identifies local similarities in two input sequences using a
+   rigorous algorithm based on Bill Pearson's lalign application, version
+   2.0u4 (Feb. 1996). The substitution matrix, gap insertion and
+   extension penalty are specified. The specified number of top-scoring
+   pair-wise local sequence alignments are written to file.
 
-   matcher is based on Bill Pearson's 'lalign' application, version 2.0u4
-   Feb. 1996
+Algorithm
 
-   Lalign uses code developed by X. Huang and W. Miller (Adv. Appl. Math.
-   (1991) 12:337-357) for the "sim" program, which is a linear-space
-   version of an algorithm described by M. S. Waterman and M. Eggert (J.
-   Mol. Biol. 197:723-728).
-
-   Like water, matcher is rigorous, but also very slow. The advantage of
-   matcher is that it uses far less memory than water, so you are much
-   less likely to run out of memory when aligning large sequences.
-
-   matcher will also report a specified number of alignments between the
-   two sequences showing the actual local alignments. (water will only
-   report the single best match.) The default number of alignments output
-   is 1, but can be increased to (for example) the 10 best alignments by
-   using the '-alternatives 10' command-line qualifier. In some cases,
-   for example multidomain proteins or cDNA and genomic DNA comparisons,
-   there may be many interesting and significant alignments.
+   matcher is based on Bill Pearson's lalign application, version 2.0u4
+   (Feb. 1996). lalign uses code developed by X. Huang and W. Miller
+   (Adv. Appl. Math. (1991) 12:337-357) for the "sim" program, which is a
+   linear-space version of an algorithm described by M. S. Waterman and
+   M. Eggert (J. Mol. Biol. 197:723-728).
 
 Usage
 
@@ -38,7 +29,7 @@ Usage
 
 
 % matcher tsw:hba_human tsw:hbb_human 
-Finds the best local alignments between two sequences
+Waterman-Eggert local alignment of two sequences
 Output alignment [hba_human.matcher]: 
 
    Go to the input files for this example
@@ -50,7 +41,7 @@ Output alignment [hba_human.matcher]:
 
 
 % matcher tsw:hba_human tsw:hbb_human -alt 10 
-Finds the best local alignments between two sequences
+Waterman-Eggert local alignment of two sequences
 Output alignment [hba_human.matcher]: 
 
    Go to the output files for this example
@@ -152,8 +143,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -416,7 +408,7 @@ Output file format
 
 ########################################
 # Program: matcher
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: matcher
 #    [-asequence] tsw:hba_human
 #    [-bsequence] tsw:hbb_human
@@ -470,7 +462,7 @@ HBB_HU ENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKY
 
 ########################################
 # Program: matcher
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: matcher
 #    [-asequence] tsw:hba_human
 #    [-bsequence] tsw:hbb_human
@@ -597,7 +589,26 @@ Data files
 
 Notes
 
-   None.
+   matcher is rigorous but also very slow. The advantage of matcher over
+   water (which is also rigorous) is that it uses far less memory, so you
+   are much less likely to run out of memory when aligning large
+   sequences.
+
+   matcher reports a specified number of alignments between the two
+   sequences. water in contrast will only report only the single
+   (optimal) match. The default number of alignments output is 1, but can
+   be increased to (for example) the 10 best alignments by using the
+   -alternatives 10 command-line qualifier. In some cases, for example
+   multidomain proteins or cDNA and genomic DNA comparisons, there may be
+   many interesting and significant alignments.
+
+   matcher will not produce an alignment that is guaranteed to be optimal
+   in the same way that water does, which implements the Needleman &
+   Wunsch algorith. water will generate the single, optimal local
+   alignment and uses memory in the order of the product of the lengths
+   of the sequences to be aligned. If you require an optimal alignment
+   you should use water. If you run out of memory or want several
+   possible good alignments, use matcher.
 
 References
 
@@ -622,12 +633,13 @@ Known bugs
 
 See also
 
-   Program name                         Description
-   seqmatchall  All-against-all comparison of a set of sequences
-   supermatcher Match large sequences against one or more other sequences
-   water        Smith-Waterman local alignment
-   wordfinder   Match large sequences against one or more other sequences
-   wordmatch    Finds all exact matches of a given size between 2 sequences
+   Program name Description
+   seqmatchall All-against-all word comparison of a sequence set
+   supermatcher Calculate approximate local pair-wise alignments of
+   larger sequences
+   water Smith-Waterman local alignment of sequences
+   wordfinder Match large sequences against one or more other sequences
+   wordmatch Finds regions of identity (exact matches) of two sequences
 
    water will give a single best rigorous local alignment. It will use
    memory of the order of the product of the lengths of the sequences to

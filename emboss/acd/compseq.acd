@@ -1,6 +1,5 @@
 application: compseq [
-  documentation: "Count composition of dimer/trimer/etc words
-                  in a sequence"
+  documentation: "Calculate the composition of unique words in sequences"
   groups: "Nucleic:Composition, Protein:Composition"
 ]
 

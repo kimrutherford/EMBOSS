@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>prettyseq </b>
-Output sequence with translated ranges
+Write a nucleotide sequence and its translation to file
 Input nucleotide sequence: <b>tembl:x13776</b>
 Range(s) to translate [1-2167]: <b>135-1292</b>
 Output file [x13776.prettyseq]: <b></b>

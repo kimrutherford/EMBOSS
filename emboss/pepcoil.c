@@ -48,15 +48,21 @@ int main(int argc, char **argv)
 {
     AjPSeqall seqall;
     AjPSeq seq    = NULL;
-    AjPFile outf  = NULL;
+    AjPReport report  = NULL;
+    AjPFeattable TabRpt = NULL;
+    AjPFeature gf = NULL;
     AjPStr strand = NULL;
     AjPStr sstr   = NULL;
     AjPStr stmp   = NULL;
     AjPStr substr = NULL;
+    AjPStr tmpstr = NULL;
+    AjPStr fthit  = NULL;
+    AjPStr ftmiss = NULL;
 
     ajint begin;
     ajint end;
     ajint len;
+    ajint coilpos=1;
 
     const char *p;
     char *q;
@@ -92,7 +98,7 @@ int main(int argc, char **argv)
     ajint isub;
     ajint startcoil;
     ajint endcoil;
-    ajint lencoil;
+/*    ajint lencoil; */
     ajint startframe;
     ajint coilframe;
     ajint fframe;
@@ -109,11 +115,11 @@ int main(int argc, char **argv)
 
     seqall = ajAcdGetSeqall("sequence");
     window = ajAcdGetInt("window");
-    outf   = ajAcdGetOutfile("outfile");
+    report = ajAcdGetReport("outfile");
 
-    coil   = ajAcdGetBool("coil");
-    frame  = ajAcdGetBool("frame");
-    other  = ajAcdGetBool("other");
+    coil   = ajAcdGetBoolean("coil");
+    frame  = ajAcdGetBoolean("frame");
+    other  = ajAcdGetBoolean("other");
 
 
     substr = ajStrNew();
@@ -126,6 +132,12 @@ int main(int argc, char **argv)
     rframes = ajFloatNew();
     frames  = ajIntNew();
     parray  = ajIntNew();
+
+    ajStrAssignC(&fthit, "coiled");
+    ajStrAssignC(&ftmiss, "region");
+
+    ajFmtPrintS(&tmpstr,"Window size: %d residues\n",window);
+    ajReportSetHeader(report, tmpstr);
 
     while(ajSeqallNext(seqall, &seq))
     {
@@ -140,9 +152,11 @@ int main(int argc, char **argv)
 
 	len = ajStrGetLen(substr);
 
+	TabRpt = ajFeattableNewSeq(seq);
+
 	q = ajStrGetuniquePtr(&substr);
 	for(i=0;i<len;++i,++q)
-	    *q = (char) ajAZToInt(*q);
+	    *q = (char) ajBasecodeToInt(*q);
 
 	p = ajStrGetPtr(substr);
 
@@ -187,10 +201,10 @@ int main(int argc, char **argv)
 		maxmaxscore=ajFloatGet(pscores,i);
 	}
 
-	for(i=0;i<len;++i) ajIntPut(&parray,i,i);
+	for(i=0;i<len;++i)
+	    ajIntPut(&parray,i,i);
 
-	ajFmtPrintF(outf,"PEPCOIL of %s\n",ajSeqGetNameC(seq));
-	ajFmtPrintF(outf,"   using a window of %d residues\n\n",window);
+
 	iscoil = (ajFloatGet(probs,0) >= 0.5);
 	startcoil = 0;
 	coilframe = ajIntGet(frames,0);
@@ -198,25 +212,46 @@ int main(int argc, char **argv)
 	maxcoil=ajFloatGet(probs,0);
 	maxscore=ajFloatGet(pscores,0);
 	if(iscoil && coil)
-	    ajFmtPrintF(outf,"\nPrediction starts at %d\n",startcoil +
-			begin);
+	{
+	    /*
+	    ajFmtPrintS(&tmpstr,"Prediction starts at %d\n",
+			startcoil + begin);
+	    ajReportAppendSubHeader(report, tmpstr);
+	    */
+	}
 
 	for(i=0;i<len;++i)
 	{
 	    if(ajFloatGet(probs,i) >= 0.5)
 	    {
+			    
 		if(iscoil)
 		{
-		    maxcoil=AJMAX(maxcoil,ajFloatGet(probs,i));
-		    maxscore=AJMAX(maxscore,ajFloatGet(pscores,i));
-		    if(pepcoil_inframe(startframe,i,ajIntGet(frames,i),7)!=
-		       coilframe)
+		    if(ajFloatGet(probs,i) > maxcoil)
 		    {
-			if(frame)
+			maxcoil = ajFloatGet(probs,i);
+			coilpos = i+1;
+		    }
+		    if(ajFloatGet(pscores,i) > maxscore)
+		    {
+			maxscore = ajFloatGet(pscores,i);
+		    }
+		    if(pepcoil_inframe(startframe,i,ajIntGet(frames,i),7)
+		       != coilframe)
+		    {
+			if(i && frame)
+			{
+			    ajFmtPrintS(&tmpstr, "*frames %d..%d",
+					coilframe,
+					ajIntGet(frames,i-1));
+			    ajFeatTagAdd(gf,  NULL, tmpstr);
+			/*
 			    ajFmtPrintF(outf,"%10d..%d   frame %d..%d\n",
 					startframe+begin,i-1+begin,
 					coilframe+begin,ajIntGet(frames,i-1)
 					+begin);
+			*/
+			}
 			coilframe  = ajIntGet(frames,i);
 			startframe = i;
 		    }
@@ -224,82 +259,164 @@ int main(int argc, char **argv)
 		else
 		{
 		    endcoil = i-1;
-		    lencoil = endcoil-startcoil+1;
+		    /* lencoil = endcoil-startcoil+1; */
 		    if(other)
 		    {
+			gf = ajFeatNewProt(TabRpt, NULL, ftmiss,
+					   startcoil+begin,
+					   endcoil+begin,
+					   maxscore);
+			ajFmtPrintS(&tmpstr, "*probability %.3f",
+				    maxcoil);
+			ajFeatTagAdd(gf,  NULL, tmpstr);
+			ajFmtPrintS(&tmpstr, "*pos %d",
+				    coilpos);
+			ajFeatTagAdd(gf,  NULL, tmpstr);
+			/*
 			ajFmtPrintF(outf,
 			  "\nOther structures from %d to %d (%d residues)\n",
 			  startcoil+begin,endcoil+begin,lencoil);
 			ajFmtPrintF(outf,
 				    "   Max score: %.3f (probability %.2f)\n",
 				    maxscore,maxcoil);
+			*/
 		    }
 		    iscoil = ajTrue;
 		    startcoil  = i;
+		    coilpos = i+1;
 		    maxcoil    = ajFloatGet(probs,i);
 		    maxscore   = ajFloatGet(pscores,i);
 		    coilframe  = ajIntGet(frames,i);
 		    startframe = i;
 		    if(coil)
+		    {
+			/*
+			ajFmtPrintS(&tmpstr,"Prediction starts at %d\n",
+				    startcoil + begin);
+			ajReportAppendSubHeader(report, tmpstr);
 			ajFmtPrintF(outf,"\nPrediction starts at %d\n",
-				    startcoil+begin);
+			startcoil+begin);
+			*/
+		    }
 		}
 	    }
 	    else
 	    {
 		if(iscoil)
 		{
+			    
 		    endcoil = i-1;
-		    lencoil = endcoil - startcoil;
+		    /* lencoil = endcoil - startcoil; */
 		    if(frame)
+		    {
+			/*
 			ajFmtPrintF(outf,"%10d..%d   frame %d..%d\n",
 				    startframe+begin,i-1+begin,
 				    coilframe+begin,ajIntGet(frames,i-1)
 				    +begin);
+			*/
+		    }
 		    if(coil)
 		    {
+			gf = ajFeatNewProt(TabRpt, NULL, fthit,
+					   startframe+begin,
+					   i-1+begin,
+					   maxscore);
+			if(frame)
+			{
+			    ajFmtPrintS(&tmpstr, "*frames %d..%d",
+					coilframe,
+					ajIntGet(frames,i-1));
+			    ajFeatTagAdd(gf,  NULL, tmpstr);
+			}
+			ajFmtPrintS(&tmpstr, "*predict coiled");
+			ajFeatTagAdd(gf,  NULL, tmpstr);
+			ajFmtPrintS(&tmpstr, "*probability %.3f",
+				    maxcoil);
+			ajFeatTagAdd(gf,  NULL, tmpstr);
+			ajFmtPrintS(&tmpstr, "*pos %d",
+				    coilpos);
+			ajFeatTagAdd(gf,  NULL, tmpstr);
+			/*
 			ajFmtPrintF(outf,
 			  "probable coiled-coil from %d to %d (%d residues)\n",
 			  startcoil+begin,endcoil+begin,lencoil);
 			ajFmtPrintF(outf,
 				    "   Max score: %.3f (probability %.2f)\n",
 				    maxscore,maxcoil);
+			*/
 		    }
 		    iscoil    = ajFalse;
 		    maxcoil   = ajFloatGet(probs,i);
 		    maxscore  = ajFloatGet(pscores,i);
 		    startcoil = i;
+		    coilpos = i+1;
 		}
 		else
 		{
-		    maxcoil  = AJMAX(maxcoil,ajFloatGet(probs,i));
-		    maxscore = AJMAX(maxscore,ajFloatGet(pscores,i));
+		    if(ajFloatGet(probs,i) > maxcoil)
+		    {
+			maxcoil = ajFloatGet(probs,i);
+			coilpos = i+1;
+		    }
+		    if(ajFloatGet(pscores,i) > maxscore)
+		    {
+			maxscore = ajFloatGet(pscores,i);
+		    }
 		}
 	    }
 	}
 
-	lencoil = len-startcoil;
+	/* lencoil = len-startcoil; */
 	if(iscoil)
 	{
 	    if(coil)
 	    {
+		gf = ajFeatNewProt(TabRpt, NULL, fthit,
+				   startcoil+begin,
+				   len-1+begin,
+				   maxscore);
+		ajFmtPrintS(&tmpstr, "*predict coiled");
+		ajFeatTagAdd(gf,  NULL, tmpstr);
+		ajFmtPrintS(&tmpstr, "*probability %.3f",
+			    maxcoil);
+		ajFeatTagAdd(gf,  NULL, tmpstr);
+		ajFmtPrintS(&tmpstr, "*pos %d",
+			    coilpos);
+		ajFeatTagAdd(gf,  NULL, tmpstr);
+	    /*
 		ajFmtPrintF(outf,
 			 "Probable coiled-coil from %d to %d (%d residues)\n",
 			 startcoil+begin,len+begin-1,lencoil);
 		ajFmtPrintF(outf,"   Max score: %.3f (probability %.2f)\n",
 			    maxscore,maxcoil);
+	    */
 	    }
 	}
 	else
 	    if(other)
 	    {
+		gf = ajFeatNewProt(TabRpt, NULL, ftmiss,
+				   startcoil+begin,
+				   len-1+begin,
+				   maxscore);
+		ajFmtPrintS(&tmpstr, "*probability %.3f",
+			    maxcoil);
+		ajFeatTagAdd(gf,  NULL, tmpstr);
+		ajFmtPrintS(&tmpstr, "*pos %d",
+			    coilpos);
+		ajFeatTagAdd(gf,  NULL, tmpstr);
+		/*
 		ajFmtPrintF(outf,
 			    "\nOther structures from %d to %d (%d residues)\n",
 			    startcoil+begin,len+begin-1,lencoil);
 		ajFmtPrintF(outf,"   Max score: %.3f (probability %.2f)\n",
 			    maxscore,maxcoil);
+		*/
 	    }
 
+	ajReportWrite(report, TabRpt, seq);
+	ajFeattableDel(&TabRpt);
 	ajStrDel(&strand);
     }
 
@@ -317,10 +434,14 @@ int main(int argc, char **argv)
     ajStrDel(&sstr);
     ajStrDel(&substr);
     ajSeqDel(&seq);
-    ajFileClose(&outf);
+    ajReportDel(&report);
 
     ajSeqallDel(&seqall);
     ajSeqDel(&seq);
+
+    ajStrDel(&fthit);
+    ajStrDel(&ftmiss);
+    ajStrDel(&tmpstr);
 
     embExit();
 
@@ -351,20 +472,20 @@ static void pepcoil_readcoildat(AjPFloat2d *rdat)
 
     float v;
 
-    ajFileDataNewC(COILFILE, &mfptr);
+    mfptr = ajDatafileNewInNameC(COILFILE);
     if(!mfptr)
-	ajFatal("%s file not found\n",COILFILE);
+	ajFatal("Pepcoil data file '%s' not found\n",COILFILE);
 
     line = ajStrNew();
 
-    while(ajFileGets(mfptr, &line))
+    while(ajReadline(mfptr, &line))
     {
 	p=ajStrGetuniquePtr(&line);
 	if(*p=='#' || *p=='!' || !*p) continue;
 	ajCharFmtUpper(p);
 	q=p;
 	q=ajSysFuncStrtok(q," \t");
-	n=ajAZToInt(*q);
+	n=ajBasecodeToInt(*q);
 	c = 0;
 	while((q=ajSysFuncStrtok(NULL,delim)))
 	{

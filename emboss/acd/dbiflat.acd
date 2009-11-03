@@ -1,6 +1,6 @@
 application: dbiflat [
-  groups: "Utils:Database indexing"
   documentation: "Index a flat file database"
+  groups: "Utils:Database indexing"
   gui: "yes"
   batch: "yes"
   cpu: "medium"

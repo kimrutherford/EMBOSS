@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>dotpath tembl:AF129756 tembl:BA000025 -word 20 -graph cps -overlaps </b>
-Non-overlapping wordmatch dotplot of two sequences
+Draw a non-overlapping wordmatch dotplot of two sequences
 
 Created dotpath.ps
 

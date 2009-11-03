@@ -64,13 +64,13 @@ int main(int argc, char **argv)
     seqall        = ajAcdGetSeqall("sequence");
     pattern       = ajAcdGetString("pattern");
     outfile       = ajAcdGetOutfile("outfile");
-    html          = ajAcdGetBool("html");
-    doheader      = ajAcdGetBool("heading");
-    casesensitive = ajAcdGetBool("casesensitive");
-    dousa         = ajAcdGetBool("usa");
-    doname        = ajAcdGetBool("name");
-    doacc         = ajAcdGetBool("accession");
-    dodesc        = ajAcdGetBool("description");
+    html          = ajAcdGetBoolean("html");
+    doheader      = ajAcdGetBoolean("heading");
+    casesensitive = ajAcdGetBoolean("casesensitive");
+    dousa         = ajAcdGetBoolean("usa");
+    doname        = ajAcdGetBoolean("name");
+    doacc         = ajAcdGetBoolean("accession");
+    dodesc        = ajAcdGetBoolean("description");
 
 
     altusa  = ajStrNewC("-");

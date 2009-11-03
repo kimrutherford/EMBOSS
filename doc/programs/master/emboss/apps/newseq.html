@@ -21,27 +21,8 @@ newseq
     Description
 </H2>
 
+<p><b>newseq</b> creates a sequence file from a sequence that is manually typed in at the command-line. This is a quicker, easier and less error-prone method than editing such a file in a text editor.</p>
 
-This allows you to type a sequence into a file in a quick and
-easy manner.
-
-<p>
-The length of the sequence you can type in is restricted to a
-fairly short length (typically less than 255 characters).  This
-length restriction is not a property of the EMBOSS package, but of the
-computer system you are using.  This is because, as you type in
-response to a prompt from this program, what you type is stored in the
-computer operating system before being handed over to the program. 
-There is often a limit of less than 255 characters on the length of a
-response that a computer system will allow you to give. 
-
-<p>
-Despite this restriction, it is expected that this program will
-be a useful and easy way of constructing new sequence files. 
-
-<p>
-(You wouldn't want to type a long sequence in by hand, anyway,
-would you?)
 
 <H2>
     Usage
@@ -111,7 +92,7 @@ None.
 </H2>
 
 
-None.
+<p>There will be a maximum permissible length (typically 255 characters) of the sequence that may be entered. This is not a property of the EMBOSS package but of the computer system you are using. Whenever you type something in at the command-line, the text is stored in a buffer before being passed to the program.  There is often a limit of less than 255 characters on the size of the buffer and so also the size of the sequence you can specify to <b>newseq</b>. The computer will normally issue a beep when the end of buffer is reached, and allow no more character input. </p>
 
 <H2>
     Diagnostic Error Messages

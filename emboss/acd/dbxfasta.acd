@@ -1,7 +1,6 @@
 application: dbxfasta [
+  documentation: "Index a fasta file database using b+tree indices"
   groups: "Utils:Database indexing"
-  documentation: "Database b+tree indexing for fasta file
-                  databases"
   gui: "yes"
   batch: "yes"
   cpu: "medium"
@@ -51,7 +50,7 @@ section: input [
 
   string: filenames [
     standard: "Y"
-    default: "*.dat"
+    default: "*.fasta"
     information: "Wildcard database filename"
     knowntype: "emboss database wildcard filename"
   ]
@@ -63,21 +62,14 @@ section: required [
   type: "page"
 ]
 
-  string: release [
+  list: fields [
     standard: "Y"
-    default: "0.0"
-    maxlength: "9"
-    information: "Release number"
-    knowntype: "emboss database release"
-  ]
-
-  string: date [
-    standard: "Y"
-    default: "00/00/00"
-    valid: "Date string dd/mm/yy"
-    information: "Index date"
-    pattern: "^([0-9]+.[0-9]+.[0-9]+)?$"
-    knowntype: "date"
+    information: "Index fields"
+    values: "id:ID;acc:Accession number;sv:Sequence Version and
+             GI;des:Description;"
+    minimum: "1"
+    maximum: "4"
+    default: "id,acc"
   ]
 
 endsection: required
@@ -87,13 +79,19 @@ section: advanced [
   type: "page"
 ]
 
-  list: fields [
-    information: "Index fields"
-    values: "id:ID;acc:Accession number;sv:Sequence Version and
-             GI;des:Description;"
-    minimum: "1"
-    maximum: "4"
-    default: "id,acc"
+  string: release [
+    default: "0.0"
+    maxlength: "9"
+    information: "Release number"
+    knowntype: "emboss database release"
+  ]
+
+  string: date [
+    default: "00/00/00"
+    valid: "Date string dd/mm/yy"
+    information: "Index date"
+    pattern: "^([0-9]+.[0-9]+.[0-9]+)?$"
+    knowntype: "date"
   ]
 
   string: exclude [
@@ -112,6 +110,12 @@ section: output [
     default: "."
     information: "Index file output directory"
     knowntype: "emboss database index"
+  ]
+
+  outfile: outfile [
+    standard: "Y"
+    knowntype: "log"
+    information: "General log output file"
   ]
 
 endsection: output

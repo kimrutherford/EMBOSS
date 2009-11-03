@@ -1,3 +1,4 @@
+# with a comment
 application: seqret [
   documentation: "Reads and writes (returns) sequences"
   groups: "Edit"
@@ -26,6 +27,7 @@ section: advanced [
 ]
 
   boolean: firstonly [
+    default: "N"
     information: "Read one sequence and stop"
   ]
 

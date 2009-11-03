@@ -22,23 +22,7 @@ prettyseq
 </H2>
 
 
-This writes out a nicely formatted display of the sequence with the
-translation (within specified ranges) displayed beneath it. 
-
-<p>
-
-The translated nucleic acid region will be shown in lower-case letters
-while the rest of the input sequence will be left in the input case.
-
-<p>
-
-The base and residue numbers of the sequences are shown beside the
-sequences in the output. 
-
-<p>
-
-Slightly unusually, this application uses the codon usage tables to
-translate the codons. 
+<p><b>prettyseq</b> reads a nucleotide sequence and writes an output file containing in a clean format the sequence with the translation (within specified ranges) displayed beneath it.  The translated nucleic acid region is given lower-case letters with the rest of the input sequence left in the input case. A specified codon usage table is used to translate the codons.</p>
 
 <H2>
     Usage
@@ -136,7 +120,10 @@ the EMBOSS distribution.
     Notes
 </H2>
 
-None.
+<p>By default, the base and residue numbers of the sequence and its translation are shown beside the sequences in the output. There are options to change this behaviour.</p>
+
+<p>The translation will be shown in a number of sequence regions only.  The ranges are specified with the <tt>-range</tt> qualifier.  As an alternative to specifying a set of ranges at the command-line, a range file containing such range data may be specified (see "Input File Format").</p>
+
 
 <H2>
     References

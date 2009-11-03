@@ -115,7 +115,7 @@ public class AuthPopup extends JFrame
 	ufield.setText(mysettings.getServiceUserName());
       
       pfield = new JPasswordField(16);
-      final JTextField xfield = new JTextField(16);
+      //final JTextField xfield = new JTextField(16);
 
       JLabel ulab = new JLabel(" Username:", SwingConstants.LEFT);
       JLabel plab = new JLabel(" Password:", SwingConstants.LEFT);

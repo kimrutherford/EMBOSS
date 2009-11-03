@@ -1,5 +1,5 @@
 application: newseq [
-  documentation: "Type in a short new sequence."
+  documentation: "Create a sequence file from a typed-in sequence"
   groups: "Edit"
 ]
 

@@ -118,6 +118,7 @@ section: output [
 
   outfile: outfile [
     parameter: "Y"
+    knowntype: "edialign output"
   ]
 
   seqoutall: outseq [

@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showseq tembl:x13776 -sbeg 1 -send 100 </b>
-Display a sequence with features, translation etc..
+Displays sequences with features in pretty format
 Things to display
          0 : Enter your own list of things to display
          1 : Sequence only
@@ -32,7 +32,7 @@ The standard list of output formats are only a small selection of the possible w
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showseq tembl:x13776 -sbeg 1 -send 120 </b>
-Display a sequence with features, translation etc..
+Displays sequences with features in pretty format
 Things to display
          0 : Enter your own list of things to display
          1 : Sequence only
@@ -76,7 +76,7 @@ Display only the sequence:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showseq tembl:x13776 -sbeg 1 -send 100 -noname -nodesc -format 0 -thing S </b>
-Display a sequence with features, translation etc..
+Displays sequences with features in pretty format
 Output file [x13776.showseq]: <b></b>
 
 </pre></td></tr></table><p>
@@ -92,7 +92,7 @@ Protein sequence can be displayed in three-letter codes. (The codes are displaye
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showseq tsw:rs24_fugru -three -format 2 </b>
-Display a sequence with features, translation etc..
+Displays sequences with features in pretty format
 Output file [rs24_fugru.showseq]: <b></b>
 
 </pre></td></tr></table><p>
@@ -108,7 +108,7 @@ Number the sequence lines in the margin:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showseq tembl:x13776 -sbeg 1 -send 100 -format 1 -number </b>
-Display a sequence with features, translation etc..
+Displays sequences with features in pretty format
 Output file [x13776.showseq]: <b></b>
 
 </pre></td></tr></table><p>
@@ -124,7 +124,7 @@ Start the numbering at a specified value ('123' in this case):
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showseq tembl:x13776 -sbeg 1 -send 100 -format 1 -number -offset 123 </b>
-Display a sequence with features, translation etc..
+Displays sequences with features in pretty format
 Output file [x13776.showseq]: <b></b>
 
 </pre></td></tr></table><p>
@@ -140,7 +140,7 @@ Make selected regions uppercase. (Use '-slower' to force the rest of the sequenc
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showseq tembl:x13776 -sbeg 1 -send 100 -format 1 -slower -upper '25-45,101-203,333-362' </b>
-Display a sequence with features, translation etc..
+Displays sequences with features in pretty format
 Output file [x13776.showseq]: <b></b>
 
 </pre></td></tr></table><p>
@@ -156,7 +156,7 @@ Translate selected regions:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showseq tembl:x13776 -sbeg 1 -send 120 -format 4 -trans 25-49,66-76 </b>
-Display a sequence with features, translation etc..
+Displays sequences with features in pretty format
 Output file [x13776.showseq]: <b></b>
 
 </pre></td></tr></table><p>
@@ -172,7 +172,7 @@ Add your own annotation to the display:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showseq tembl:x13776 -sbeg 1 -send 100 -format 2 -send 120 -annotation '13-26 binding site 15-15 SNP' </b>
-Display a sequence with features, translation etc..
+Displays sequences with features in pretty format
 Output file [x13776.showseq]: <b></b>
 
 </pre></td></tr></table><p>

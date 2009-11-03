@@ -1,6 +1,5 @@
 application: distmat [
-  documentation: "Creates a distance matrix from multiple
-                  alignments"
+  documentation: "Create a distance matrix from a multiple sequence alignment"
   groups: "Phylogeny:Molecular sequence"
 ]
 

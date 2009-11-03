@@ -21,26 +21,7 @@ descseq
     Description
 </H2>
 
-Most sequence formats allow, at the very minimum, a name for the
-sequence and some comments to be stored in the sequence file.
-
-<p>
-
-Rather than using an editor to alter the name or the comments,
-<b>descseq</b> allows you to simply change them and write out a new file
-with the changes in and the sequence left unaltered. 
-
-<p>
-
-The default action is to replace the existing name or description with
-your new one, but by using the qualifier '-append' what you enter is
-appended to the existing name or description. 
-
-<p>
-
-Note that if you append to a description, no space is inserted by
-default bewteen the existing description and your appended text. You
-have to put in a space yourself if you require one. 
+<p><b>descseq</b> reads a sequence and writes it to file but with a different name and / or description.  All other records including the sequence itself are left unaltered.</p>
 
 <H2>
     Usage
@@ -87,8 +68,8 @@ None.
     Notes
 </H2>
 
-
-None.
+<p>Most sequence formats allow, at the very minimum, a name for the sequence and some comments to be stored in the sequence file.  <b>descseq</b> let's you change the sequence name and / or description, and is far more convenient and less error-prone than using the editor for editing.</p>
+<p>The default action is to replace the existing name or description with your new one, but by using the qualifier <tt>-append</tt> what you enter is appended to the existing name or description.  Note that if you append to a description, no space is inserted by default bewteen the existing description and your appended text. You have to put in a space yourself if you require one. </p>
 	
 <H2>
     References

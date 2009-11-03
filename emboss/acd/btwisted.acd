@@ -1,6 +1,5 @@
 application: btwisted [
-  documentation: "Calculates the twisting in a B-DNA
-                  sequence"
+  documentation: "Calculate the twisting in a B-DNA sequence"
   groups: "Nucleic:Composition"
 ]
 

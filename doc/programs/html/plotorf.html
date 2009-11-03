@@ -24,42 +24,20 @@ plotorf
 <H2>
     Function
 </H2>
-Plot potential open reading frames
+Plot potential open reading frames in a nucleotide sequence
 
 <H2>
     Description
 </H2>
 
 
-Plot potential open reading frames.
+<p><b>plotorf</b> plots potential open reading frames (ORFs) for an input nucleotide sequence.  ORFs in this program are defined as being regions between the specified START and STOP codons.  A graphical representation of where the open reading frames are in all 6 reading frames is shown. The ORFs are displayed as blue boxes.</p>
 
-<p>
+<H2>
+ Algorithm
+</H2>
 
-A graphical representation of where the open reading frames are in all 6
-reading frames is shown.  The ORFs are displayed as blue boxes.  
-
-<p>
-
-ORFs in this program are defined as being regions between START and STOP
-codons. 
-
-<p>
-
-Note that this definition of an ORF would miss those exons in eukaryotic
-genomic sequences which do not contain a START codon.  <b>plotorf</b> is
-only really useful when dealing with prokaryotic or mRNA eukaryotic
-sequences. 
-
-<p>
-
-The default START codon is: "ATG".
-<br>
-The default STOP codons are: "TAA,TAG,TGA".
-
-<p>
-
-You can specify your own set of start and stop codons using the
-<b>-start</b> and <b>-stop</b> qualifiers. 
+<p>ORFs in this program are defined as being regions between START and STOP codons. The default START codon is: <tt>ATG</tt>. The default STOP codons are: <tt>TAA</tt>,<tt>TAG</tt>,<tt>TGA</tt>. You can specify your own set of start and stop codons using the <tt>-start</tt> and <tt>-stop</tt> qualifiers.</p>
 
 
 <H2>
@@ -74,7 +52,7 @@ You can specify your own set of start and stop codons using the
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>plotorf </b>
-Plot potential open reading frames
+Plot potential open reading frames in a nucleotide sequence
 Input nucleotide sequence: <b>tembl:x13776</b>
 Graph type [x11]: <b>cps</b>
 
@@ -93,7 +71,7 @@ An example of specifying your own START and STOP codons with a mitochondrial seq
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>plotorf -start ATT,ATC,ATA,ATG,GTG -stop TAA,TAG,AGA,AGG </b>
-Plot potential open reading frames
+Plot potential open reading frames in a nucleotide sequence
 Input nucleotide sequence: <b>mito.seq</b>
 Graph type [x11]: <b>cps</b>
 
@@ -151,8 +129,9 @@ Created plotorf.ps
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -484,8 +463,7 @@ None.
     Notes
 </H2>
 
-ORFs in this program are defined as being regions between START and STOP
-codons. 
+
 
 <p>
 
@@ -505,7 +483,7 @@ None.
     Warnings
 </H2>
 
-See the Notes section.
+<p>ORFs in this program are defined as being regions between START and STOP codons.  This definition would miss those exons in eukaryotic genomic sequences which do not contain a START codon. <b>plotorf</b> is therefore only really useful when dealing with prokaryotic or mRNA eukaryotic sequences.</p>
 
 <H2>
     Diagnostic Error Messages
@@ -527,15 +505,16 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="backtranambig.html">backtranambig</a></td>
-<td>Back translate a protein sequence to ambiguous codons</td>
+<td>Back-translate a protein sequence to ambiguous nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="backtranseq.html">backtranseq</a></td>
-<td>Back translate a protein sequence</td>
+<td>Back-translate a protein sequence to a nucleotide sequence</td>
 </tr>
 
 <tr>
@@ -550,27 +529,27 @@ None.
 
 <tr>
 <td><a href="marscan.html">marscan</a></td>
-<td>Finds MAR/SAR sites in nucleic sequences</td>
+<td>Finds matrix/scaffold recognition (MRS) signatures in DNA sequences</td>
 </tr>
 
 <tr>
 <td><a href="prettyseq.html">prettyseq</a></td>
-<td>Output sequence with translated ranges</td>
+<td>Write a nucleotide sequence and its translation to file</td>
 </tr>
 
 <tr>
 <td><a href="remap.html">remap</a></td>
-<td>Display sequence with restriction sites, translation etc</td>
+<td>Display restriction enzyme binding sites in a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="showorf.html">showorf</a></td>
-<td>Pretty output of DNA translations</td>
+<td>Display a nucleotide sequence and translation in pretty format</td>
 </tr>
 
 <tr>
 <td><a href="showseq.html">showseq</a></td>
-<td>Display a sequence with features, translation etc</td>
+<td>Displays sequences with features in pretty format</td>
 </tr>
 
 <tr>
@@ -580,12 +559,12 @@ None.
 
 <tr>
 <td><a href="syco.html">syco</a></td>
-<td>Synonymous codon usage Gribskov statistic plot</td>
+<td>Draw synonymous codon usage statictic plot for a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="tcode.html">tcode</a></td>
-<td>Fickett TESTCODE statistic to identify protein-coding DNA</td>
+<td>Identify protein-coding regions using Fickett TESTCODE statistic</td>
 </tr>
 
 <tr>
@@ -595,7 +574,7 @@ None.
 
 <tr>
 <td><a href="wobble.html">wobble</a></td>
-<td>Wobble base plot</td>
+<td>Plot third base position variability in a nucleotide sequence</td>
 </tr>
 
 </table>

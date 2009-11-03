@@ -19,233 +19,11 @@ sirna
 <H2>
     Description
 </H2>
+<p>Finds siRNA duplexes in mRNA.  The output is a standard EMBOSS report file. The siRNAs are reported in order of best score first. <b>sirna</b> reports both the sense and antisense siRNAs as 5' to 3'. </p>
 
-RNA interference, or RNAi, is a phenomenon in which double stranded RNA
-(dsRNA) effects silencing of the expression of genes that are highly
-homologous to either of the RNA strands in the duplex.  Gene silencing
-in RNAi results from the degradation of mRNA sequences, and the effect
-has been used to determine the function of many genes in Drosophilia, C. 
-elegans, and many plant species. 
-
-<p>
-
-The duration of knockdown by siRNA can typically last for 7-10 days, and
-has been shown to transfer to daughter cells.  Of further note, siRNAs
-are effective at quantities much lower than alternative gene silencing
-methodologies, including antisense and ribozyme based strategies. 
-
-<p>
-                       
-Due to various mechanisms of antiviral response to long dsRNA, RNAi at
-first proved more difficult to establish in mammalian species.  Then,
-Tuschl, Elbashir, and others discovered that RNAi can be elicited very
-effectively by well-defined 21-base duplex RNAs.  When these small
-interfering RNA, or siRNA, are added in duplex form with a transfection
-agent to mammalian cell cultures, the 21-base-pair RNA acts in concert
-with cellular components to silence the gene with sequence homology to
-one of the siRNA sequences. 
-
-Strategies for the design of effective siRNA sequences have been
-recently documented, most notably by Sayda Elbashir, Thomas Tuschl, et
-al. 
-
-<p>
-
-Their studies of mammalian RNAi suggest that the most efficient
-gene-silencing effect is achieved using double-stranded siRNA having a
-19-nucleotide complementary region and a 2-nucleotide 3' overhang at
-each end.  Current models of the RNAi mechanism suggest that the
-antisense siRNA strand recognizes the specific gene target. 
-
-<p>
-
-In gene-specific RNAi, the coding region (CDS) of the mRNA is usually
-targeted.  The search for an appropriate target sequence should begin
-50-100 nucleotides downstream of the start codon.  UTR-binding proteins
-and/or translation initiation complexes may interfere with the binding
-of the siRNP endonuclease complex.  Tuschl, Elbashir et al.  say that
-they have successfully used siRNAs targetting the 3' UTR. 
-
-<p>
-
-To avoid interference
-from mRNA regulatory proteins, sequences in the 5' untranslated region
-or near the start codon should not be targeted. 
-
-<p>
-
-A set of rules for the design of siRNA has been suggested <A href
-="http://www.mpibpc.gwdg.de/abteilungen/100/105/sirna.html
-">http://www.mpibpc.gwdg.de/abteilungen/100/105/sirna.html</a> based on
-the work of Tuschl, Elbashir et al. 
-
-<p>
-
-They suggest searching for 23-nt sequence motif AA(N19)TT (N, any
-nucleotide) and select hits with approx.  50% G/C-content (30% to 70%
-has also worked in for them).  If no suitable sequences are found, the
-search is extended using the motif NA(N21).  The sequence of the sense
-siRNA corresponds to (N19)TT or N21 (position 3 to 23 of the 23-nt
-motif), respectively.  In the latter case, they convert the 3' end of
-the sense siRNA to TT. 
-
-<p>
-
-The rationale for this sequence conversion is to generate a symmetric
-duplex with respect to the sequence composition of the sense and
-antisense 3' overhangs.  The antisense siRNA is synthesized as the
-complement to position 1 to 21 of the 23-nt motif.  Because position 1
-of the 23-nt motif is not recognized sequence-specifically by the
-antisense siRNA, the 3'-most nucleotide residue of the antisense siRNA,
-can be chosen deliberately.  However, the penultimate nucleotide of the
-antisense siRNA (complementary to position 2 of the 23-nt motif) should
-always be complementary to the targeted sequence.  For simplifying
-chemical synthesis, they always use TT.  
-
-<p>
-
-More recently, they preferentially select siRNAs corresponding to the
-target motif NAR(N17)YNN, where R is purine (A, G) and Y is pyrimidine
-(C, U).  The respective 21-nt sense and antisense siRNAs therefore begin
-with a purine nucleotide and can also be expressed from pol III
-expression vectors without a change in targeting site; expression of
-RNAs from pol III promoters is only efficient when the first transcribed
-nucleotide is a purine. 
-
-<p>
-
-They always design siRNAs with symmetric 3' TT overhangs, believing that
-symmetric 3' overhangs help to ensure that the siRNPs are formed with
-approximately equal ratios of sense and antisense target RNA-cleaving
-siRNPs Please note that the modification of the overhang of the sense
-sequence of the siRNA duplex is not expected to affect targeted mRNA
-recognition, as the antisense siRNA strand guides target recognition. 
-In summary, no matter what you do to your overhangs, siRNAs should still
-function to a reasonable extent.  However, using TT in the 3' overhang
-will always help your RNA synthesis company to let you know when you
-accidentally order a siRNA sequences 3' to 5' rather than in the
-recommended format of 5' to 3'.  
-
-<p>
-
-<b>sirna</b> reports both the sense and antisense siRNAs as 5' to 3'. 
-
-<p>
-
-<a href="http://www.xeragon.com/siRNA_support.html">Xeragon.com</a> also
-suggest that choosing a region of the mRNA with a GC content as
-close as possible to 50% is a more important consideration than choosing
-a target sequence that begins with AA.  They also suggest that a key
-consideration in target selection is to avoid having more than three
-guanosines in a row, since poly G sequences can hyperstack and form
-agglomerates that potentially interfere with the siRNA silencing
-mechanism.
-
-<p>
-
-siRNAs appear to effectively silence genes in more than 80% of cases. 
-Current data indicate that there are regions of some mRNAs where gene
-silencing does not work.  To help ensure that a given target gene is
-silenced, it is advised that at least two target sequences as far apart
-on the gene as possible be chosen. 
-
-<p>
-
-mRNA secondary structure does not appear to have a significant effect on
-gene silencing. 
-
-<p>
-
-<h3>Coding region specification</h3>
-
-It is possible (although the evidence is not clear) that regulatory
-protein binding to regions in and near the untranslated 5' region might
-interfere with the RNAi process. 
-
-<p>
-
-Therefore, this program avoids choosing siRNA probes from the 5' UTR and
-from the first 50 bases of the coding region.  The second 50 bases of
-the coding region has a penalty associated with it to reduce the
-reporting of possible siRNA probes in this region. 
-
-<p>
-
-If the input sequence has a feature table specifying a coding region,
-then this will be used, else you can specify the start of the coding
-region, where this is known by the '-sbegin' command-line qualifier
-(which is normally used to specify the start of the region of a sequence
-that should be analysed in all EMBOSS programs). 
-
-<p>
-
-<b>sirna</b> looks at the feature table of the input mRNA sequence to
-find the coding regions (CDS).  It will ignore the 5' UTR and the first
-50 bases of the CDS.  It will assign a penalty of 2 points to any siRNA
-in positions 51 to 100 in the CDS.  If there is no CDS in the feature
-table, you can specify the CDS by using the command-line qualifier
-'-sbegin' to indicate where the CDS should start.  If there is no CDS in
-the feature table and you do not use the command-line qualifier
-'-sbegin', then <b>sirna</b> will assume that the CDS region is not
-known and will look for siRNAs in the whole of the sequence with no
-penalties associated with the location within the sequence. 
-
-<h3>All these confusing regions</h3>
-
-There are a lot of references to 23 base regions, 21 base regions, 19 base regions, etc.
-in any description of siRNA.
-
-<p>
-
-Perhaps an example with a sequence would be clearer?
-
-<p>
-
-The 23 base region, in this case starting with an 'AA', might typically look like:
-
-<p>
-<pre>
-5' AAGUGAGAGGUCAGACUCCUATC
-</pre>
-<p>
-
-The sense siRNA is made from the 19 bases of positions 3 to 21 of the 23 base target
-region, so:
-
-<p>
-<pre>
-5'   GUGAGAGGUCAGACUCCUA
-</pre>
-<p>  
-
-and then typically d(TT) is added, so:
-
-<p>
-<pre>
-5'   GUGAGAGGUCAGACUCCUAdTdT
-</pre>
-<p>
-
-The antisense siRNA sequence is made from bases 3 to 21 of the target
-region, so:
-
-<p>
-<pre>
-5'   GUGAGAGGUCAGACUCCUA sense
-3'   CACUCUCCAGUCUGAGGAU antisense 3' -> 5'
-</pre>
-<p>
-
-so the antisense sequence that should be ordered with d(TT) added is:
-
-<p>
-<pre>
-5'   UAGGAGUCUGACCUCUCACdTdT antisense 5' -> 3'
-</pre>
-<p>
 
 <H2>
-    Algorithm
+Algorithm
 </H2>
 
 <pre>
@@ -288,6 +66,7 @@ for each input sequence:
     take the window bases 3 to 21, add 'dTdT' output to the report file
     take the window bases 3 to 21, reverse complement, add 'dTdT' output to the report file
 </pre>
+
 
 
 <H2>
@@ -351,7 +130,63 @@ None.
     Notes
 </H2>
 
-None.
+<p>RNA interference (RNAi) is a phenomenon whereby small interfering RNA strands (siRNA) inhibit gene expression at the level of transcription or translation of specific genes.  RNAi is a defence mechanism against viruses and is important in regulating development and genome maintenance. siRNA are double stranded RNA molecules where one or the other strand is strongly complementary to a target RNA strand. Once they bind to a target, a nuclease protein guided by the siRNA cleaves the target and renders it untranslateable.</p>
+
+
+<p>Gene silencing using RNAi has been used to determine the function of many genes in Drosophilia, C. elegans, and many plant species. The duration of knockdown by siRNA can typically last for 7-10 days, and has been shown to transfer to daughter cells. Of further note, siRNAs are effective at quantities much lower than alternative gene silencing methodologies, including antisense and ribozyme based strategies.</p>
+
+<p>Due to various mechanisms of antiviral response to long dsRNA, RNAi at first proved more difficult to establish in mammalian species. Then, Tuschl, Elbashir, and others discovered that RNAi can be elicited very effectively by well-defined 21-base duplex RNAs. When these small interfering RNA, or siRNA, are added in duplex form with a transfection agent to mammalian cell cultures, the 21-base-pair RNA acts in concert with cellular components to silence the gene with sequence homology to one of the siRNA sequences. Strategies for the design of effective siRNA sequences have been recently documented, most notably by Sayda Elbashir, Thomas Tuschl, et al.</p>
+
+<p>Their studies of mammalian RNAi suggest that the most efficient gene-silencing effect is achieved using double-stranded siRNA having a 19-nucleotide complementary region and a 2-nucleotide 3' overhang at each end. Current models of the RNAi mechanism suggest that the antisense siRNA strand recognizes the specific gene target.</p>
+
+<p>In gene-specific RNAi, the coding region (CDS) of the mRNA is usually targeted. The search for an appropriate target sequence should begin 50-100 nucleotides downstream of the start codon. UTR-binding proteins and/or translation initiation complexes may interfere with the binding of the siRNP endonuclease complex. Tuschl, Elbashir et al. say that they have successfully used siRNAs targetting the 3' UTR. To avoid interference from mRNA regulatory proteins, sequences in the 5' untranslated region or near the start codon should not be targeted.</p>
+
+<p>A set of rules for the design of siRNA has been suggested <a href="http://www.mpibpc.gwdg.de/abteilungen/100/105/sirna.html">http://www.mpibpc.gwdg.de/abteilungen/100/105/sirna.html</a> based on the work of Tuschl, Elbashir et al. They suggest searching for 23-nt sequence motif AA(N19)TT (N, any nucleotide) and select hits with approx. 50% G/C-content (30% to 70% has also worked in for them). If no suitable sequences are found, the search is extended using the motif NA(N21). The sequence of the sense siRNA corresponds to (N19)TT or N21 (position 3 to 23 of the 23-nt motif), respectively. In the latter case, they convert the 3' end of the sense siRNA to TT.</p>
+
+<p>The rationale for this sequence conversion is to generate a symmetric duplex with respect to the sequence composition of the sense and antisense 3' overhangs. The antisense siRNA is synthesized as the complement to position 1 to 21 of the 23-nt motif. Because position 1 of the 23-nt motif is not recognized sequence-specifically by the antisense siRNA, the 3'-most nucleotide residue of the antisense siRNA, can be chosen deliberately. However, the penultimate nucleotide of the antisense siRNA (complementary to position 2 of the 23-nt motif) should always be complementary to the targeted sequence. For simplifying chemical synthesis, they always use TT.</p>
+
+<p>More recently, they preferentially select siRNAs corresponding to the target motif NAR(N17)YNN, where R is purine (A, G) and Y is pyrimidine (C, U). The respective 21-nt sense and antisense siRNAs therefore begin with a purine nucleotide and can also be expressed from pol III expression vectors without a change in targeting site; expression of RNAs from pol III promoters is only efficient when the first transcribed nucleotide is a purine.</p>
+
+<p>They always design siRNAs with symmetric 3' TT overhangs, believing that symmetric 3' overhangs help to ensure that the siRNPs are formed with approximately equal ratios of sense and antisense target RNA-cleaving siRNPs Please note that the modification of the overhang of the sense sequence of the siRNA duplex is not expected to affect targeted mRNA recognition, as the antisense siRNA strand guides target recognition. In summary, no matter what you do to your overhangs, siRNAs should still function to a reasonable extent. However, using TT in the 3' overhang will always help your RNA synthesis company to let you know when you accidentally order a siRNA sequences 3' to 5' rather than in the recommended format of 5' to 3'. <b>sirna</b> reports both the sense and antisense siRNAs as 5' to 3'.</p>
+
+<p>Xeragon.com also suggest that choosing a region of the mRNA with a GC content as close as possible to 50% is a more important consideration than choosing a target sequence that begins with AA. They also suggest that a key consideration in target selection is to avoid having more than three guanosines in a row, since poly G sequences can hyperstack and form agglomerates that potentially interfere with the siRNA silencing mechanism.</p>
+
+<p>siRNAs appear to effectively silence genes in more than 80% of cases. Current data indicate that there are regions of some mRNAs where gene silencing does not work. To help ensure that a given target gene is silenced, it is advised that at least two target sequences as far apart on the gene as possible be chosen.</p>
+
+
+
+
+<h3>Coding region specification</h3>
+It's possible (although the evidence is unclear) that regulatory protein binding to regions in and near the untranslated 5' region might interfere with the RNAi process. Therefore, this program avoids choosing siRNA probes from the 5' UTR and from the first 50 bases of the coding region. The second 50 bases of the coding region has a penalty associated with it to reduce the reporting of possible siRNA probes in this region.</p>
+
+If the input sequence has a feature table specifying a coding region, then this will be used, else you can specify the start of the coding region, where this is known by the <tt>-sbegin</tt> command-line qualifier (which is normally used to specify the start of the region of a sequence that should be analysed in all EMBOSS programs).
+
+<b>sirna</b> looks at the feature table of the input mRNA sequence to find the coding regions (CDS). It will ignore the 5' UTR and the first 50 bases of the CDS. It will assign a penalty of 2 points to any siRNA in positions 51 to 100 in the CDS. If there is no CDS in the feature table, you can specify the CDS by using the command-line qualifier <tt>-sbegin</tt> to indicate where the CDS should start. If there is no CDS in the feature table and you do not use the command-line qualifier <tt>-sbegin</tt>, then <b>sirna</b> will assume that the CDS region is not known and will look for siRNAs in the whole of the sequence with no penaties associated with the location within the sequence.
+All these confusing regions
+There are a lot of references to 23 base regions, 21 base regions, 19 base regions, etc. in any description of siRNA.
+
+Perhaps an example with a sequence would be clearer?
+
+The 23 base region, in this case starting with an <tt>AA</tt>, might typically look like:
+
+<pre>5' AAGUGAGAGGUCAGACUCCUATC</pre>
+
+The sense siRNA is made from the 19 bases of positions 3 to 21 of the 23 base target region, so:
+
+<pre>5'   GUGAGAGGUCAGACUCCUA</pre>
+
+and then typically d(TT) is added, so:
+
+<pre>5'   GUGAGAGGUCAGACUCCUAdTdT</pre>
+
+The antisense siRNA sequence is made from bases 3 to 21 of the target region, so:
+
+<pre>5'   GUGAGAGGUCAGACUCCUA sense
+3'   CACUCUCCAGUCUGAGGAU antisense 3' -> 5'</pre>
+
+so the antisense sequence that should be ordered with d(TT) added is:
+
+<pre>5'   UAGGAGUCUGACCUCUCACdTdT antisense 5' -> 3'</pre>
 
 <H2>
     References

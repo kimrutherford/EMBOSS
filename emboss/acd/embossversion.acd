@@ -1,5 +1,5 @@
 application: embossversion [
-  documentation: "Writes the current EMBOSS version number"
+  documentation: "Writes the current EMBOSS version number to a file"
   groups: "Utils:Misc"
 ]
 

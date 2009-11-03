@@ -9,25 +9,20 @@ Function
 
 Description
 
-   epestfind allows rapid and objective identification of PEST motifs in
-   protein target sequences. Briefly, the PEST hypothesis was based on a
-   literature survey that combined both information on protein stability
-   as well as protein primary sequence information. Initially, the study
-   relied on 12 short-lived proteins with well-known properties [1], but
-   was continually extended later [2,3]. The initial group of proteins
-   included E1A, c-myc, p53, c-fos, v-myb, P730 phytochrome, heat shock
-   protein 70 (HSP 70), HMG-CoA reductase, tyrosine aminotransferase
-   (TAT), ornithine decarboxylase (ODC), alpha-Casein and beta-Casein.
-   Although all these proteins exerted various different cellular
-   functions it became apparent that they shared high local
-   concentrations of amino acids proline (P), glutamic acid (E), serine
-   (S), threonine (T) and to a lesser extent aspartic acid (D). From that
-   it was concluded that PEST motifs reduce the half-lives of proteins
+   epestfind rapidly and objectively identifies PEST motifs in an input
+   protein sequence. PEST motifs reduce the half-lives of proteins
    dramatically and hence, that they target proteins for proteolytic
-   degradation.
+   degradation. epestfind writes an output file with putative PEST motifs
+   and (optionally) the PEST scores are plotted for the whole sequence
+   length.
 
-   PEST means Black Death in German, so that the name of this programme
-   sounds a bit strange, at least in our ears.
+   The epestfind output file includes poor and potential PEST motifs
+   together with their PEST score, mass percent of DEPST and their
+   hydrophobicity index. 'Valid' PEST motifs below the specified
+   threshold score are considered as 'poor', while PEST scores above the
+   threshold score are of real biological interest. The higher the PEST
+   score, the more likely is degradation of proteins mediated via
+   'potential' PEST motifs in eukaryotic cells.
 
 Algorithm
 
@@ -145,8 +140,7 @@ Command line arguments
                                   tekt, tek, none, data, xterm, png, gif)
 
    Additional (Optional) qualifiers:
-   -aadata             datafile   [Eamino.dat] Amino acids properties and
-                                  molecular weight data file
+   -mwdata             datafile   [Emolwt.dat] Molecular weights data file
    -threshold          float      [+5.0] Threshold value to discriminate weak
                                   from potential PEST motifs. Valid PEST
                                   motifs are discriminated into 'poor' and
@@ -158,6 +152,7 @@ Command line arguments
                                   mathematics. (Number from -55.00 to 55.00)
 
    Advanced (Unprompted) qualifiers:
+   -mono               boolean    [N] Use monoisotopic weights
    -[no]potential      boolean    [Y] Decide whether potential PEST motifs
                                   should be printed.
    -[no]poor           boolean    [Y] Decide whether poor PEST motifs should
@@ -200,8 +195,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -450,7 +446,24 @@ Z       128.6228         0 0 0 0 0 1 -.5 0 1
 
 Notes
 
-   None.
+   Briefly, the PEST hypothesis was based on a literature survey that
+   combined both information on protein stability as well as protein
+   primary sequence information. Initially, the study relied on 12
+   short-lived proteins with well-known properties [1], but was
+   continually extended later [2,3]. The initial group of proteins
+   included E1A, c-myc, p53, c-fos, v-myb, P730 phytochrome, heat shock
+   protein 70 (HSP 70), HMG-CoA reductase, tyrosine aminotransferase
+   (TAT), ornithine decarboxylase (ODC), alpha-Casein and beta-Casein.
+   Although all these proteins exerted various different cellular
+   functions it became apparent that they shared high local
+   concentrations of amino acids proline (P), glutamic acid (E), serine
+   (S), threonine (T) and to a lesser extent aspartic acid (D). From that
+   it was concluded that PEST motifs reduce the half-lives of proteins
+   dramatically and hence, that they target proteins for proteolytic
+   degradation.
+
+   PEST means Black Death in German, so that the name of this programme
+   sounds a bit strange, at least in our ears.
 
 References
 
@@ -482,19 +495,22 @@ Known bugs
 
 See also
 
-    Program name                        Description
-   antigenic      Finds antigenic sites in proteins
-   digest         Protein proteolytic enzyme or reagent cleavage digest
-   fuzzpro        Protein pattern search
-   fuzztran       Protein pattern search after translation
-   helixturnhelix Report nucleic acid binding motifs
-   oddcomp        Find protein sequence regions with a biased composition
-   patmatdb       Search a protein sequence with a motif
-   patmatmotifs   Search a PROSITE motif database with a protein sequence
-   pepcoil        Predicts coiled coil regions
-   preg           Regular expression search of a protein sequence
-   pscan          Scans proteins using PRINTS
-   sigcleave      Reports protein signal cleavage sites
+   Program name Description
+   antigenic Finds antigenic sites in proteins
+   digest Reports on protein proteolytic enzyme or reagent cleavage sites
+   fuzzpro Search for patterns in protein sequences
+   fuzztran Search for patterns in protein sequences (translated)
+   helixturnhelix Identify nucleic acid-binding motifs in protein
+   sequences
+   oddcomp Identify proteins with specified sequence word composition
+   patmatdb Searches protein sequences with a sequence motif
+   patmatmotifs Scan a protein sequence with motifs from the PROSITE
+   database
+   pepcoil Predicts coiled coil regions in protein sequences
+   preg Regular expression search of protein sequence(s)
+   pscan Scans protein sequence(s) with fingerprints from the PRINTS
+   database
+   sigcleave Reports on signal cleavage sites in a protein sequence
 
 Author(s)
 

@@ -6,7 +6,7 @@
 <pre>
 ########################################
 # Program: fuzztran
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: fuzztran
 #    -options
 #    -sequence tembl:Z46957
@@ -28,16 +28,16 @@
 #
 #=======================================
 
-  Start     End   Score Pattern_name Mismatch  Frame PStart   PEnd Translation
-     97     102       2 pattern1            .      1     33     34 RA         
-    133     138       2 pattern1            .      1     45     46 RA         
-    421     426       2 pattern1            .      1    141    142 RA         
-    625     630       2 pattern1            .      1    209    210 RA         
-    835     840       2 pattern1            .      1    279    280 RA         
-    919     924       2 pattern1            .      1    307    308 RA         
-    227     232       2 pattern1            .      2     76     77 RA         
-    752     757       2 pattern1            .      2    251    252 RA         
-     72      77       2 pattern1            .      3     24     25 RA         
+  Start     End  Strand   Score Pattern_name Mismatch  Frame PStart   PEnd Translation
+     97     102       +       2 pattern1            .      1     33     34 RA         
+    133     138       +       2 pattern1            .      1     45     46 RA         
+    421     426       +       2 pattern1            .      1    141    142 RA         
+    625     630       +       2 pattern1            .      1    209    210 RA         
+    835     840       +       2 pattern1            .      1    279    280 RA         
+    919     924       +       2 pattern1            .      1    307    308 RA         
+    227     232       +       2 pattern1            .      2     76     77 RA         
+    752     757       +       2 pattern1            .      2    251    252 RA         
+     72      77       +       2 pattern1            .      3     24     25 RA         
 
 #---------------------------------------
 #---------------------------------------

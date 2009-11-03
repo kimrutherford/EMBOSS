@@ -120,7 +120,7 @@ int main(int argc, char **argv)
 	for(i=0;i<mlen;++i)
 	{
 	    AJCNEW(matrix[i], AZ);
-	    if(!ajFileReadLine(inf,&line))
+	    if(!ajReadlineTrim(inf,&line))
 		ajFatal("Missing matrix line");
 	    p = ajStrGetPtr(line);
 	    p = ajSysFuncStrtok(p," \t");
@@ -143,7 +143,7 @@ int main(int argc, char **argv)
 	for(i=0;i<mlen;++i)
 	{
 	    AJCNEW(fmatrix[i],(AZ+1));
-	    if(!ajFileReadLine(inf,&line))
+	    if(!ajReadlineTrim(inf,&line))
 		ajFatal("Missing matrix line");
 	    p = ajStrGetPtr(line);
 	    p = ajSysFuncStrtok(p," \t");
@@ -166,7 +166,7 @@ int main(int argc, char **argv)
 	for(i=0;i<mlen;++i)
 	{
 	    AJCNEW(fmatrix[i], (AZ+1));
-	    if(!ajFileReadLine(inf,&line))
+	    if(!ajReadlineTrim(inf,&line))
 		ajFatal("Missing matrix line");
 	    p = ajStrGetPtr(line);
 	    p = ajSysFuncStrtok(p," \t");
@@ -260,7 +260,7 @@ static ajint profit_getType(AjPFile inf)
 
     line=ajStrNew();
 
-    while(ajFileReadLine(inf,&line))
+    while(ajReadlineTrim(inf,&line))
     {
 	p=ajStrGetPtr(line);
 	if(!*p || *p=='#' || *p=='!' || *p=='\n') continue;
@@ -307,7 +307,7 @@ static void profit_read_simple(AjPFile inf, AjPStr *name, ajint *mlen,
 
     line = ajStrNew();
 
-    if(!ajFileReadLine(inf,&line))
+    if(!ajReadlineTrim(inf,&line))
 	ajFatal("Premature EOF in profile file");
     p = ajStrGetPtr(line);
 
@@ -317,7 +317,7 @@ static void profit_read_simple(AjPFile inf, AjPStr *name, ajint *mlen,
     p = ajSysFuncStrtok(NULL," \t");
     ajStrAssignC(name,p);
 
-    if(!ajFileReadLine(inf,&line))
+    if(!ajReadlineTrim(inf,&line))
 	ajFatal("Premature EOF in profile file");
     p = ajStrGetPtr(line);
 
@@ -325,7 +325,7 @@ static void profit_read_simple(AjPFile inf, AjPStr *name, ajint *mlen,
 	ajFatal("Incorrect profile/matrix file format");
     sscanf(p,"%*s%d",mlen);
 
-    if(!ajFileReadLine(inf,&line))
+    if(!ajReadlineTrim(inf,&line))
 	ajFatal("Premature EOF in profile file");
     p = ajStrGetPtr(line);
 
@@ -333,7 +333,7 @@ static void profit_read_simple(AjPFile inf, AjPStr *name, ajint *mlen,
 	ajFatal("Incorrect profile/matrix file format");
     sscanf(p,"%*s%*s%d",maxs);
 
-    if(!ajFileReadLine(inf,&line))
+    if(!ajReadlineTrim(inf,&line))
 	ajFatal("Premature EOF in profile file");
     p = ajStrGetPtr(line);
 
@@ -341,7 +341,7 @@ static void profit_read_simple(AjPFile inf, AjPStr *name, ajint *mlen,
 	ajFatal("Incorrect profile/matrix file format");
     sscanf(p,"%*s%d",thresh);
 
-    if(!ajFileReadLine(inf,&line))
+    if(!ajReadlineTrim(inf,&line))
 	ajFatal("Premature EOF in profile file");
     p = ajStrGetPtr(line);
 
@@ -384,7 +384,7 @@ static void profit_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
 
     line = ajStrNew();
 
-    if(!ajFileReadLine(inf,&line))
+    if(!ajReadlineTrim(inf,&line))
 	ajFatal("Premature EOF in profile file");
     p = ajStrGetPtr(line);
 
@@ -394,7 +394,7 @@ static void profit_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
     p = ajSysFuncStrtok(NULL," \t");
     ajStrAssignC(name,p);
 
-    if(!ajFileReadLine(inf,&line))
+    if(!ajReadlineTrim(inf,&line))
 	ajFatal("Premature EOF in profile file");
     p = ajStrGetPtr(line);
 
@@ -405,7 +405,7 @@ static void profit_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
     ajStrAssignC(mname,p);
 
 
-    if(!ajFileReadLine(inf,&line))
+    if(!ajReadlineTrim(inf,&line))
 	ajFatal("Premature EOF in profile file");
     p = ajStrGetPtr(line);
 
@@ -413,7 +413,7 @@ static void profit_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
 	ajFatal("Incorrect profile/matrix file format");
     sscanf(p,"%*s%d",mlen);
 
-    if(!ajFileReadLine(inf,&line))
+    if(!ajReadlineTrim(inf,&line))
 	ajFatal("Premature EOF in profile file");
     p = ajStrGetPtr(line);
 
@@ -421,7 +421,7 @@ static void profit_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
 	ajFatal("Incorrect profile/matrix file format");
     sscanf(p,"%*s%f",maxs);
 
-    if(!ajFileReadLine(inf,&line))
+    if(!ajReadlineTrim(inf,&line))
 	ajFatal("Premature EOF in profile file");
     p = ajStrGetPtr(line);
 
@@ -430,7 +430,7 @@ static void profit_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
     sscanf(p,"%*s%d",thresh);
 
 
-    if(!ajFileReadLine(inf,&line))
+    if(!ajReadlineTrim(inf,&line))
 	ajFatal("Premature EOF in profile file");
     p = ajStrGetPtr(line);
 
@@ -438,7 +438,7 @@ static void profit_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
 	ajFatal("Incorrect profile/matrix file format");
     sscanf(p,"%*s%f",gapopen);
 
-    if(!ajFileReadLine(inf,&line))
+    if(!ajReadlineTrim(inf,&line))
 	ajFatal("Premature EOF in profile file");
     p = ajStrGetPtr(line);
 
@@ -446,7 +446,7 @@ static void profit_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
 	ajFatal("Incorrect profile/matrix file format");
     sscanf(p,"%*s%f",gapextend);
 
-    if(!ajFileReadLine(inf,&line))
+    if(!ajReadlineTrim(inf,&line))
 	ajFatal("Premature EOF in profile file");
     p = ajStrGetPtr(line);
 
@@ -502,7 +502,7 @@ static void profit_scan_simple(const AjPStr substr,
     {
 	sum = 0;
 	for(j=0;j<mlen;++j)
-	    sum += matrix[j][ajAZToInt(*(p+i+j))];
+	    sum += matrix[j][ajBasecodeToInt(*(p+i+j))];
 	score = sum * 100 / maxs;
 	if(score >= thresh)
 	    profit_printHits(pname,i,score,outf);
@@ -576,7 +576,7 @@ static void profit_scan_profile (const AjPStr substr,
     {
 	sum=0.0;
 	for(j=0;j<mlen;++j)
-	    sum += fmatrix[j][ajAZToInt(*(p+i+j))];
+	    sum += fmatrix[j][ajBasecodeToInt(*(p+i+j))];
 	score = sum * (float)100. / maxs;
 	if((ajint)score >= thresh)
 	    profit_printHits(pname,i,(ajint)score,outf);

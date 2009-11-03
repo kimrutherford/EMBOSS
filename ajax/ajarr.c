@@ -1972,6 +1972,7 @@ AjBool ajFloatParse (const AjPStr str, AjPFloat* array)
     float t = 0.0;
 
     AjPStr tmpstr = NULL;
+    AjPStr tmpstr2 = NULL;
     AjPStr numstr = NULL;
 
     if (!floatRegNum)
@@ -1982,7 +1983,8 @@ AjBool ajFloatParse (const AjPStr str, AjPFloat* array)
     while (ajRegExec (floatRegNum, tmpstr))
     {
 	ajRegSubI (floatRegNum, 0, &numstr);
-	ajRegPost (floatRegNum, &tmpstr);
+	ajRegPost (floatRegNum, &tmpstr2);
+        ajStrAssignS(&tmpstr, tmpstr2);
 	ajStrToFloat (numstr, &t);
 	ajFloatPut(array,i,t);
 	i++;
@@ -1990,6 +1992,7 @@ AjBool ajFloatParse (const AjPStr str, AjPFloat* array)
 
     ajStrDel(&numstr);
     ajStrDel(&tmpstr);
+    ajStrDel(&tmpstr2);
 
     if (!i)
 	return ajFalse;
@@ -2276,7 +2279,7 @@ AjPInt2d ajInt2dNew(void)
 
 
     AJNEW0(thys);
-    thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(AjPInt*));
+    thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(AjPInt));
     thys->Len = 0;
     thys->Res = RESERVED_SIZE;
 
@@ -2311,7 +2314,7 @@ AjPInt2d ajInt2dNewL(ajuint size)
     size = ajRound(size,RESERVED_SIZE);
 
     AJNEW0(thys);
-    thys->Ptr = AJALLOC0(size*sizeof(AjPInt*));
+    thys->Ptr = AJALLOC0(size*sizeof(AjPInt));
     thys->Len = 0;
     thys->Res = size;
 
@@ -2346,7 +2349,7 @@ AjPInt2d ajInt2dNewLL(ajuint size, ajuint size2)
     size = ajRound(size,RESERVED_SIZE);
 
     AJNEW0(thys);
-    thys->Ptr = AJALLOC0(size*sizeof(AjPInt*));
+    thys->Ptr = AJALLOC0(size*sizeof(AjPInt));
     thys->Len = 0;
     thys->Res = size;
 
@@ -2523,7 +2526,7 @@ static AjBool arrInt2dResize(AjPInt2d *thys, ajuint size)
     p = *thys;
 
     AJNEW0(nthys);
-    nthys->Ptr = AJALLOC0(s*sizeof(AjPInt*));
+    nthys->Ptr = AJALLOC0(s*sizeof(AjPInt));
     nthys->Res = s;
 
     if(size < p->Len)
@@ -2531,7 +2534,7 @@ static AjBool arrInt2dResize(AjPInt2d *thys, ajuint size)
     else
 	limit = p->Len;
 
-    memmove(nthys->Ptr,p->Ptr,limit*sizeof(AjPInt*));
+    memmove(nthys->Ptr,p->Ptr,limit*sizeof(AjPInt));
 
     i = nthys->Len = size+1;
 
@@ -2634,7 +2637,7 @@ AjPInt3d ajInt3dNew(void)
 
 
     AJNEW0(thys);
-    thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(AjPInt2d*));
+    thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(AjPInt2d));
     thys->Len = 0;
     thys->Res = RESERVED_SIZE;
 
@@ -2666,7 +2669,7 @@ AjPInt3d ajInt3dNewL(ajuint size)
     size = ajRound(size,RESERVED_SIZE);
 
     AJNEW0(thys);
-    thys->Ptr = AJALLOC0(size*sizeof(AjPInt2d*));
+    thys->Ptr = AJALLOC0(size*sizeof(AjPInt2d));
     thys->Len = 0;
     thys->Res = size;
 
@@ -2839,7 +2842,7 @@ static AjBool arrInt3dResize(AjPInt3d *thys, ajuint size)
     p = *thys;
 
     AJNEW0(nthys);
-    nthys->Ptr = AJALLOC0(s*sizeof(AjPInt2d*));
+    nthys->Ptr = AJALLOC0(s*sizeof(AjPInt2d));
     nthys->Res = s;
 
     if(size < p->Len)
@@ -2847,7 +2850,7 @@ static AjBool arrInt3dResize(AjPInt3d *thys, ajuint size)
     else
 	limit = p->Len;
 
-    memmove(nthys->Ptr,p->Ptr,limit*sizeof(AjPInt2d*));
+    memmove(nthys->Ptr,p->Ptr,limit*sizeof(AjPInt2d));
 
     i = nthys->Len = size+1;
 
@@ -2976,7 +2979,7 @@ AjPUint2d ajUint2dNew(void)
 
 
     AJNEW0(thys);
-    thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(AjPInt*));
+    thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(AjPUint));
     thys->Len = 0;
     thys->Res = RESERVED_SIZE;
 
@@ -3011,7 +3014,7 @@ AjPUint2d ajUint2dNewL(ajuint size)
     size = ajRound(size,RESERVED_SIZE);
 
     AJNEW0(thys);
-    thys->Ptr = AJALLOC0(size*sizeof(AjPInt*));
+    thys->Ptr = AJALLOC0(size*sizeof(AjPUint));
     thys->Len = 0;
     thys->Res = size;
 
@@ -3046,7 +3049,7 @@ AjPUint2d ajUint2dNewLL(ajuint size, ajuint size2)
     size = ajRound(size,RESERVED_SIZE);
 
     AJNEW0(thys);
-    thys->Ptr = AJALLOC0(size*sizeof(AjPUint*));
+    thys->Ptr = AJALLOC0(size*sizeof(AjPUint));
     thys->Len = 0;
     thys->Res = size;
 
@@ -3218,7 +3221,7 @@ static AjBool arrUint2dResize(AjPUint2d *thys, ajuint size)
     p = *thys;
 
     AJNEW0(nthys);
-    nthys->Ptr = AJALLOC0(s*sizeof(AjPUint*));
+    nthys->Ptr = AJALLOC0(s*sizeof(AjPUint));
     nthys->Res = s;
 
     if(size < p->Len)
@@ -3226,7 +3229,7 @@ static AjBool arrUint2dResize(AjPUint2d *thys, ajuint size)
     else
 	limit = p->Len;
 
-    memmove(nthys->Ptr,p->Ptr,limit*sizeof(AjPUint*));
+    memmove(nthys->Ptr,p->Ptr,limit*sizeof(AjPUint));
 
     i = nthys->Len = size+1;
 
@@ -3329,7 +3332,7 @@ AjPUint3d ajUint3dNew(void)
 
 
     AJNEW0(thys);
-    thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(AjPUint2d*));
+    thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(AjPUint2d));
     thys->Len = 0;
     thys->Res = RESERVED_SIZE;
 
@@ -3361,7 +3364,7 @@ AjPUint3d ajUint3dNewL(ajuint size)
     size = ajRound(size,RESERVED_SIZE);
 
     AJNEW0(thys);
-    thys->Ptr = AJALLOC0(size*sizeof(AjPInt2d*));
+    thys->Ptr = AJALLOC0(size*sizeof(AjPInt2d));
     thys->Len = 0;
     thys->Res = size;
 
@@ -3531,7 +3534,7 @@ static AjBool arrUint3dResize(AjPUint3d *thys, ajuint size)
     p = *thys;
 
     AJNEW0(nthys);
-    nthys->Ptr = AJALLOC0(s*sizeof(AjPUint2d*));
+    nthys->Ptr = AJALLOC0(s*sizeof(AjPUint2d));
     nthys->Res = s;
 
     if(size < p->Len)
@@ -3539,7 +3542,7 @@ static AjBool arrUint3dResize(AjPUint3d *thys, ajuint size)
     else
 	limit = p->Len;
 
-    memmove(nthys->Ptr,p->Ptr,limit*sizeof(AjPUint2d*));
+    memmove(nthys->Ptr,p->Ptr,limit*sizeof(AjPUint2d));
 
     i = nthys->Len = size+1;
 
@@ -3669,7 +3672,7 @@ AjPFloat2d ajFloat2dNew(void)
 
 
     AJNEW0(thys);
-    thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(AjPFloat*));
+    thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(AjPFloat));
     thys->Len = 0;
     thys->Res = RESERVED_SIZE;
 
@@ -3701,7 +3704,7 @@ AjPFloat2d ajFloat2dNewL(ajuint size)
     size = ajRound(size,RESERVED_SIZE);
 
     AJNEW0(thys);
-    thys->Ptr = AJALLOC0(size*sizeof(AjPFloat*));
+    thys->Ptr = AJALLOC0(size*sizeof(AjPFloat));
     thys->Len = 0;
     thys->Res = size;
 
@@ -3868,7 +3871,7 @@ static AjBool arrFloat2dResize(AjPFloat2d *thys, ajuint size)
     p = *thys;
 
     AJNEW0(nthys);
-    nthys->Ptr = AJALLOC0(s*sizeof(AjPFloat*));
+    nthys->Ptr = AJALLOC0(s*sizeof(AjPFloat));
     nthys->Res = s;
 
     if(size < p->Len)
@@ -3876,7 +3879,7 @@ static AjBool arrFloat2dResize(AjPFloat2d *thys, ajuint size)
     else
 	limit = p->Len;
 
-    memmove(nthys->Ptr,p->Ptr,limit*sizeof(AjPFloat*));
+    memmove(nthys->Ptr,p->Ptr,limit*sizeof(AjPFloat));
 
     i = nthys->Len = size+1;
 
@@ -3978,7 +3981,7 @@ AjPFloat3d ajFloat3dNew(void)
 
 
     AJNEW0(thys);
-    thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(AjPFloat2d*));
+    thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(AjPFloat2d));
     thys->Len = 0;
     thys->Res = RESERVED_SIZE;
 
@@ -4010,7 +4013,7 @@ AjPFloat3d ajFloat3dNewL(ajuint size)
     size = ajRound(size,RESERVED_SIZE);
 
     AJNEW0(thys);
-    thys->Ptr = AJALLOC0(size*sizeof(AjPFloat2d*));
+    thys->Ptr = AJALLOC0(size*sizeof(AjPFloat2d));
     thys->Len = 0;
     thys->Res = size;
 
@@ -4181,7 +4184,7 @@ static AjBool arrFloat3dResize(AjPFloat3d *thys, ajuint size)
     p = *thys;
 
     AJNEW0(nthys);
-    nthys->Ptr = AJALLOC0(s*sizeof(AjPFloat2d*));
+    nthys->Ptr = AJALLOC0(s*sizeof(AjPFloat2d));
     nthys->Res = s;
 
     if(size < p->Len)
@@ -4189,7 +4192,7 @@ static AjBool arrFloat3dResize(AjPFloat3d *thys, ajuint size)
     else
 	limit = p->Len;
 
-    memmove(nthys->Ptr,p->Ptr,limit*sizeof(AjPFloat2d*));
+    memmove(nthys->Ptr,p->Ptr,limit*sizeof(AjPFloat2d));
 
     i = nthys->Len = size+1;
 
@@ -4318,7 +4321,7 @@ AjPDouble2d ajDouble2dNew(void)
 
 
     AJNEW0(thys);
-    thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(AjPDouble*));
+    thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(AjPDouble));
     thys->Len = 0;
     thys->Res = RESERVED_SIZE;
 
@@ -4350,7 +4353,7 @@ AjPDouble2d ajDouble2dNewL(ajuint size)
     size = ajRound(size,RESERVED_SIZE);
 
     AJNEW0(thys);
-    thys->Ptr = AJALLOC0(size*sizeof(AjPDouble*));
+    thys->Ptr = AJALLOC0(size*sizeof(AjPDouble));
     thys->Len = 0;
     thys->Res = size;
 
@@ -4517,7 +4520,7 @@ static AjBool arrDouble2dResize(AjPDouble2d *thys, ajuint size)
     p = *thys;
 
     AJNEW0(nthys);
-    nthys->Ptr = AJALLOC0(s*sizeof(AjPDouble*));
+    nthys->Ptr = AJALLOC0(s*sizeof(AjPDouble));
     nthys->Res = s;
 
     if(size < p->Len)
@@ -4525,7 +4528,7 @@ static AjBool arrDouble2dResize(AjPDouble2d *thys, ajuint size)
     else
 	limit = p->Len;
 
-    memmove(nthys->Ptr,p->Ptr,limit*sizeof(AjPDouble*));
+    memmove(nthys->Ptr,p->Ptr,limit*sizeof(AjPDouble));
 
     i = nthys->Len = size+1;
 
@@ -4627,7 +4630,7 @@ AjPDouble3d ajDouble3dNew(void)
 
 
     AJNEW0(thys);
-    thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(AjPDouble2d*));
+    thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(AjPDouble2d));
     thys->Len = 0;
     thys->Res = RESERVED_SIZE;
 
@@ -4659,7 +4662,7 @@ AjPDouble3d ajDouble3dNewL(ajuint size)
     size = ajRound(size,RESERVED_SIZE);
 
     AJNEW0(thys);
-    thys->Ptr = AJALLOC0(size*sizeof(AjPDouble2d*));
+    thys->Ptr = AJALLOC0(size*sizeof(AjPDouble2d));
     thys->Len = 0;
     thys->Res = size;
 
@@ -4829,7 +4832,7 @@ static AjBool arrDouble3dResize(AjPDouble3d *thys, ajuint size)
     p = *thys;
 
     AJNEW0(nthys);
-    nthys->Ptr = AJALLOC0(s*sizeof(AjPDouble2d*));
+    nthys->Ptr = AJALLOC0(s*sizeof(AjPDouble2d));
     nthys->Res = s;
 
     if(size < p->Len)
@@ -4837,7 +4840,7 @@ static AjBool arrDouble3dResize(AjPDouble3d *thys, ajuint size)
     else
 	limit = p->Len;
 
-    memmove(nthys->Ptr,p->Ptr,limit*sizeof(AjPDouble2d*));
+    memmove(nthys->Ptr,p->Ptr,limit*sizeof(AjPDouble2d));
 
     i = nthys->Len = size+1;
 
@@ -4966,7 +4969,7 @@ AjPShort2d ajShort2dNew(void)
 
 
     AJNEW0(thys);
-    thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(AjPShort*));
+    thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(AjPShort));
     thys->Len = 0;
     thys->Res = RESERVED_SIZE;
 
@@ -4998,7 +5001,7 @@ AjPShort2d ajShort2dNewL(ajuint size)
     size = ajRound(size,RESERVED_SIZE);
 
     AJNEW0(thys);
-    thys->Ptr = AJALLOC0(size*sizeof(AjPShort*));
+    thys->Ptr = AJALLOC0(size*sizeof(AjPShort));
     thys->Len = 0;
     thys->Res = size;
 
@@ -5165,7 +5168,7 @@ static AjBool arrShort2dResize(AjPShort2d *thys, ajuint size)
     p = *thys;
 
     AJNEW0(nthys);
-    nthys->Ptr = AJALLOC0(s*sizeof(AjPShort*));
+    nthys->Ptr = AJALLOC0(s*sizeof(AjPShort));
     nthys->Res = s;
 
     if(size < p->Len)
@@ -5173,7 +5176,7 @@ static AjBool arrShort2dResize(AjPShort2d *thys, ajuint size)
     else
 	limit = p->Len;
 
-    memmove(nthys->Ptr,p->Ptr,limit*sizeof(AjPShort*));
+    memmove(nthys->Ptr,p->Ptr,limit*sizeof(AjPShort));
 
     i = nthys->Len = size+1;
 
@@ -5275,7 +5278,7 @@ AjPShort3d ajShort3dNew(void)
 
 
     AJNEW0(thys);
-    thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(AjPShort2d*));
+    thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(AjPShort2d));
     thys->Len = 0;
     thys->Res = RESERVED_SIZE;
 
@@ -5307,7 +5310,7 @@ AjPShort3d ajShort3dNewL(ajuint size)
     size = ajRound(size,RESERVED_SIZE);
 
     AJNEW0(thys);
-    thys->Ptr = AJALLOC0(size*sizeof(AjPShort2d*));
+    thys->Ptr = AJALLOC0(size*sizeof(AjPShort2d));
     thys->Len = 0;
     thys->Res = size;
 
@@ -5478,7 +5481,7 @@ static AjBool arrShort3dResize(AjPShort3d *thys, ajuint size)
     p = *thys;
 
     AJNEW0(nthys);
-    nthys->Ptr = AJALLOC0(s*sizeof(AjPShort2d*));
+    nthys->Ptr = AJALLOC0(s*sizeof(AjPShort2d));
     nthys->Res = s;
 
     if(size < p->Len)
@@ -5486,7 +5489,7 @@ static AjBool arrShort3dResize(AjPShort3d *thys, ajuint size)
     else
 	limit = p->Len;
 
-    memmove(nthys->Ptr,p->Ptr,limit*sizeof(AjPShort2d*));
+    memmove(nthys->Ptr,p->Ptr,limit*sizeof(AjPShort2d));
 
     i = nthys->Len = size+1;
 
@@ -5615,7 +5618,7 @@ AjPLong2d ajLong2dNew(void)
 
 
     AJNEW0(thys);
-    thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(AjPLong*));
+    thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(AjPLong));
     thys->Len = 0;
     thys->Res = RESERVED_SIZE;
 
@@ -5647,7 +5650,7 @@ AjPLong2d ajLong2dNewL(ajuint size)
     size = ajRound(size,RESERVED_SIZE);
 
     AJNEW0(thys);
-    thys->Ptr = AJALLOC0(size*sizeof(AjPLong*));
+    thys->Ptr = AJALLOC0(size*sizeof(AjPLong));
     thys->Len = 0;
     thys->Res = size;
 
@@ -5814,7 +5817,7 @@ static AjBool arrLong2dResize(AjPLong2d *thys, ajuint size)
     p = *thys;
 
     AJNEW0(nthys);
-    nthys->Ptr = AJALLOC0(s*sizeof(AjPLong*));
+    nthys->Ptr = AJALLOC0(s*sizeof(AjPLong));
     nthys->Res = s;
 
     if(size < p->Len)
@@ -5822,7 +5825,7 @@ static AjBool arrLong2dResize(AjPLong2d *thys, ajuint size)
     else
 	limit = p->Len;
 
-    memmove(nthys->Ptr,p->Ptr,limit*sizeof(AjPLong*));
+    memmove(nthys->Ptr,p->Ptr,limit*sizeof(AjPLong));
 
     i = nthys->Len = size+1;
 
@@ -5924,7 +5927,7 @@ AjPLong3d ajLong3dNew(void)
 
 
     AJNEW0(thys);
-    thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(AjPLong2d*));
+    thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(AjPLong2d));
     thys->Len = 0;
     thys->Res = RESERVED_SIZE;
 
@@ -5956,7 +5959,7 @@ AjPLong3d ajLong3dNewL(ajuint size)
     size = ajRound(size,RESERVED_SIZE);
 
     AJNEW0(thys);
-    thys->Ptr = AJALLOC0(size*sizeof(AjPLong2d*));
+    thys->Ptr = AJALLOC0(size*sizeof(AjPLong2d));
     thys->Len = 0;
     thys->Res = size;
 
@@ -6127,7 +6130,7 @@ static AjBool arrLong3dResize(AjPLong3d *thys, ajuint size)
     p = *thys;
 
     AJNEW0(nthys);
-    nthys->Ptr = AJALLOC0(s*sizeof(AjPLong2d*));
+    nthys->Ptr = AJALLOC0(s*sizeof(AjPLong2d));
     nthys->Res = s;
 
     if(size < p->Len)
@@ -6135,7 +6138,7 @@ static AjBool arrLong3dResize(AjPLong3d *thys, ajuint size)
     else
 	limit = p->Len;
 
-    memmove(nthys->Ptr,p->Ptr,limit*sizeof(AjPLong2d*));
+    memmove(nthys->Ptr,p->Ptr,limit*sizeof(AjPLong2d));
 
     i = nthys->Len = size+1;
 

@@ -161,7 +161,7 @@ int main(int argc, char **argv)
     seq2out = ajAcdGetFeatout("boutfeat");
 
     /* advanced qualifiers */
-    global        = ajAcdGetBool("globaldifferences");
+    global        = ajAcdGetBoolean("globaldifferences");
 		    
 
     ajSeqTrim(seq1);

@@ -58,7 +58,7 @@ int main(int argc, char **argv)
 
 static void ajtest_kim (const AjPStr seqout_name, const AjPSeq subseq)
 {
-    AjPFile seqout_file = ajFileNewOut(seqout_name);
+    AjPFile seqout_file = ajFileNewOutNameS(seqout_name);
     AjPSeqout named_seqout = ajSeqoutNewFile(seqout_file);
 
     AjPStr format_str = ajStrNew();

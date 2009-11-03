@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>infoalign globins.msf </b>
-Information on a multiple sequence alignment
+Display basic information about a multiple sequence alignment
 Output file [globins.infoalign]: <b></b>
 
 </pre></td></tr></table><p>
@@ -21,7 +21,7 @@ This example doesn't display the USA of the sequence:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>infoalign globins.msf -nousa </b>
-Information on a multiple sequence alignment
+Display basic information about a multiple sequence alignment
 Output file [globins.infoalign]: <b></b>
 
 </pre></td></tr></table><p>
@@ -37,7 +37,7 @@ Display only the name and sequence length of a sequence:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>infoalign globins.msf -only -name -seqlength </b>
-Information on a multiple sequence alignment
+Display basic information about a multiple sequence alignment
 Output file [globins.infoalign]: <b></b>
 
 </pre></td></tr></table><p>
@@ -53,7 +53,7 @@ Display only the name, number of gap characters and differences to the consensus
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>infoalign globins.msf -only -name -gapcount -diffcount </b>
-Information on a multiple sequence alignment
+Display basic information about a multiple sequence alignment
 Output file [globins.infoalign]: <b></b>
 
 </pre></td></tr></table><p>
@@ -69,7 +69,7 @@ Display the name and number of gaps within a sequence:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>infoalign globins.msf -only -name -gaps </b>
-Information on a multiple sequence alignment
+Display basic information about a multiple sequence alignment
 Output file [globins.infoalign]: <b></b>
 
 </pre></td></tr></table><p>
@@ -85,7 +85,7 @@ Display information formatted with HTML:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>infoalign globins.msf -html </b>
-Information on a multiple sequence alignment
+Display basic information about a multiple sequence alignment
 Output file [globins.infoalign]: <b></b>
 
 </pre></td></tr></table><p>
@@ -101,7 +101,7 @@ Use the first sequence as the reference sequence to compare to:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>infoalign globins.msf -refseq 1 </b>
-Information on a multiple sequence alignment
+Display basic information about a multiple sequence alignment
 Output file [globins.infoalign]: <b></b>
 
 </pre></td></tr></table><p>

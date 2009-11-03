@@ -24,41 +24,15 @@ seealso
 <H2>
     Function
 </H2>
-Finds programs sharing group names
+Finds programs with similar function to a specified program
 
 <H2>
     Description
 </H2>
 
 
-This program takes the name of an existing program in EMBOSS (or a
-program in one the associated EMBASSY packages) and gives a list of the
-programs which share some functionality with it. 
 
-<p>
-It does this by noting the functional groups that the program belongs to
-and reporting any programs which share those functional groups.
-<p>
-
-The functional groups of a program are set in the ACD file (this is the
-part of the program in the EMBOSS system which specifies the required
-parameters, some help on the parameters, the one-line description of the
-program, etc.) Normally the names of the groups are fairly specific,
-such as: "NUCLEIC COMPOSITION", resulting in the reporting of only a
-tightly restricted set of other programs also dealing with the analysis
-of "NUCLEIC COMPOSITION".  The '-explode' qualifier will increase the
-number of groups that the program belongs to by splitting the group name
-at selected points to produce such groups as: "NUCLEIC", "NUCLEIC
-COMPOSITION" and "COMPOSITION".  All programs with the exploded group
-names which also include "NUCLEIC" and "COMPOSITION" will now be
-reported.  The result of this qualifier is thus a report of a larger
-number of programs with a more tenuous link to the specified program. 
-In other words, use the '-explode' qualifier to decrease the specificity
-of the search. 
-
-<p>
-The groups that the program belongs to can be output by using the
-'-groups' qualifier. 
+<p><b>seealso</b> takes the name of an EMBOSS or EMBASSY program and returns a list of applications in the same functional group.  Application names and short descriptions are listed. Optionally, the output is written to an HTML table.</p>
 
 <H2>
     Usage
@@ -70,15 +44,15 @@ The groups that the program belongs to can be output by using the
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>seealso </b>
-Finds programs sharing group names
+Finds programs with similar function to a specified program
 Program to search for: <b>matcher</b>
 
 SEE ALSO
-seqmatchall      All-against-all comparison of a set of sequences
-supermatcher     Match large sequences against one or more other sequences
-water            Smith-Waterman local alignment
+seqmatchall      All-against-all word comparison of a sequence set
+supermatcher     Calculate approximate local pair-wise alignments of larger sequences
+water            Smith-Waterman local alignment of sequences
 wordfinder       Match large sequences against one or more other sequences
-wordmatch        Finds all exact matches of a given size between 2 sequences
+wordmatch        Finds regions of identity (exact matches) of two sequences
 
 
 </pre></td></tr></table><p>
@@ -169,8 +143,9 @@ wordmatch        Finds all exact matches of a given size between 2 sequences
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -308,7 +283,11 @@ None.
 </H2>
 
 
-None.
+<p>The functional group of a program is set in its ACD file; this is an EMBOSS system file which specifies the application command-line interface such as required parameters, help on the parameters, one-line description of the program and so on.  Normally the names of the groups are fairly specific.  For example "NUCLEIC COMPOSITION" is a small group of applications for nucleotide sequence composition analysis.</p>
+
+<p>The <tt>-explode</tt> qualifier will increase the number of groups that the program retrieves by splitting the group name at selected points to produce such groups as: "NUCLEIC", "NUCLEIC COMPOSITION" and "COMPOSITION". All programs with the exploded group names which also include "NUCLEIC" and "COMPOSITION" will now be reported. The result of this qualifier is thus a report of a larger number of programs with a more tenuous link to the specified program. </p>
+
+<p>The groups that the program belongs to can be output by using the <tt>-groups</tt> qualifier. </p>
 
 <H2>
     References
@@ -321,8 +300,7 @@ None.
     Warnings
 </H2>
 
-
-None.
+<p>The (optional) HTML-formatted table output lacks the HTML document structures such as <HTML>, <BODY>, </BODY>, </HTML>. It is expected the table will be included in the middle of a larger HTML document.</p>
 
 <H2>
     Diagnostic Error Messages
@@ -356,10 +334,11 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="abiview.html">abiview</a></td>
-<td>Reads ABI file and display the trace</td>
+<td>Display the trace in an ABI sequencer file</td>
 </tr>
 
 <tr>
@@ -369,12 +348,22 @@ None.
 
 <tr>
 <td><a href="infoalign.html">infoalign</a></td>
-<td>Information on a multiple sequence alignment</td>
+<td>Display basic information about a multiple sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="infobase.html">infobase</a></td>
+<td>Return information on a given nucleotide base</td>
+</tr>
+
+<tr>
+<td><a href="inforesidue.html">inforesidue</a></td>
+<td>Return information on a given amino acid residue</td>
 </tr>
 
 <tr>
 <td><a href="infoseq.html">infoseq</a></td>
-<td>Displays some simple information about sequences</td>
+<td>Display basic information about sequences</td>
 </tr>
 
 <tr>
@@ -384,47 +373,47 @@ None.
 
 <tr>
 <td><a href="pepnet.html">pepnet</a></td>
-<td>Displays proteins as a helical net</td>
+<td>Draw a helical net for a protein sequence</td>
 </tr>
 
 <tr>
 <td><a href="pepwheel.html">pepwheel</a></td>
-<td>Shows protein sequences as helices</td>
+<td>Draw a helical wheel diagram for a protein sequence</td>
 </tr>
 
 <tr>
 <td><a href="prettyplot.html">prettyplot</a></td>
-<td>Displays aligned sequences, with colouring and boxing</td>
+<td>Draw a sequence alignment with pretty formatting</td>
 </tr>
 
 <tr>
 <td><a href="prettyseq.html">prettyseq</a></td>
-<td>Output sequence with translated ranges</td>
+<td>Write a nucleotide sequence and its translation to file</td>
 </tr>
 
 <tr>
 <td><a href="remap.html">remap</a></td>
-<td>Display sequence with restriction sites, translation etc</td>
+<td>Display restriction enzyme binding sites in a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="showalign.html">showalign</a></td>
-<td>Displays a multiple sequence alignment</td>
+<td>Display a multiple sequence alignment in pretty format</td>
 </tr>
 
 <tr>
 <td><a href="showdb.html">showdb</a></td>
-<td>Displays information on the currently available databases</td>
+<td>Displays information on configured databases</td>
 </tr>
 
 <tr>
 <td><a href="showfeat.html">showfeat</a></td>
-<td>Show features of a sequence</td>
+<td>Display features of a sequence in pretty format</td>
 </tr>
 
 <tr>
 <td><a href="showseq.html">showseq</a></td>
-<td>Display a sequence with features, translation etc</td>
+<td>Displays sequences with features in pretty format</td>
 </tr>
 
 <tr>
@@ -434,22 +423,22 @@ None.
 
 <tr>
 <td><a href="textsearch.html">textsearch</a></td>
-<td>Search sequence documentation. Slow, use SRS and Entrez!</td>
+<td>Search the textual description of sequence(s)</td>
 </tr>
 
 <tr>
 <td><a href="tfm.html">tfm</a></td>
-<td>Displays a program's help documentation manual</td>
+<td>Displays full documentation for an application</td>
 </tr>
 
 <tr>
 <td><a href="whichdb.html">whichdb</a></td>
-<td>Search all databases for an entry</td>
+<td>Search all sequence databases for an entry and retrieve it</td>
 </tr>
 
 <tr>
 <td><a href="wossname.html">wossname</a></td>
-<td>Finds programs by keywords in their one-line documentation</td>
+<td>Finds programs by keywords in their short description</td>
 </tr>
 
 </table>

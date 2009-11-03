@@ -22,13 +22,10 @@
 
 package org.emboss.jemboss.gui.filetree;
 
-import java.awt.event.*;
 import java.io.*;
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.event.*;
 import org.emboss.jemboss.gui.sequenceChooser.*;
-import org.emboss.jemboss.gui.AdvancedOptions;
 import org.emboss.jemboss.JembossParams;
 
 /**

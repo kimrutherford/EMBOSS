@@ -89,7 +89,7 @@ int main(int argc, char **argv)
     doplot    = ajAcdGetToggle("plot");
     dofile    = ajAcdGetToggle("report");
     step      = ajAcdGetFloat("step");
-    termini   = ajAcdGetBool("termini");
+    termini   = ajAcdGetBoolean("termini");
     amino     = ajAcdGetInt("amino");
     outf      = ajAcdGetOutfile("outfile");
 

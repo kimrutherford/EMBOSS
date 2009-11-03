@@ -1,0 +1,13 @@
+<b>Here is a sample session with jaspextract</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>jaspextract </b>
+Extract data from JASPAR
+JASPAR database directory [.]: <b>jaspar</b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>

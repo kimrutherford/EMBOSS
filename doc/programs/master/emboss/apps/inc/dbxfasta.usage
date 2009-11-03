@@ -5,9 +5,9 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>dbxfasta </b>
-Database b+tree indexing for fasta file databases
+Index a fasta file database using b+tree indices
 Basename for index files: <b>emrod</b>
-Resource name: <b>embl</b>
+Resource name: <b>emblresource</b>
     simple : >ID
      idacc : >ID ACC or >ID (ACC)
      gcgid : >db:ID
@@ -16,11 +16,13 @@ Resource name: <b>embl</b>
       ncbi : | formats
 ID line format [idacc]: <b>idacc</b>
 Database directory [.]: <b>data</b>
-Wildcard database filename [*.dat]: <b>emrod</b>
-Release number [0.0]: <b></b>
-Index date [00/00/00]: <b></b>
-
-Processing file /homes/user/test/data/emrod
+Wildcard database filename [*.fasta]: <b>emrod</b>
+        id : ID
+       acc : Accession number
+        sv : Sequence Version and GI
+       des : Description
+Index fields [id,acc]: <b></b>
+General log output file [outfile.dbxfasta]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

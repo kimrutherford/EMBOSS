@@ -5,27 +5,13 @@
 
 Function
 
-   Split a sequence into (overlapping) smaller sequences
+   Split sequence(s) into smaller sequences
 
 Description
 
-   This simple editing program allows you to split a long sequence into
-   smaller, optionally overlapping, subsequences.
-
-   There should be little requirement to split sequences into smaller
-   sub-sequences in EMBOSS, but there may be circumstances where memory
-   usage becomes restrictive when dealing with truly large sequences. In
-   this case, memory usage may be reduced by repeating the analysis
-   several times on split sub-sequences.
-
-   If you need to split a large sequence into smaller subsequences so
-   that a non-EMBOSS program can analyse the smaller sequence, it may
-   also be useful to write the sub-sequences into separate files instead
-   of the default EMBOSS behaviour of concatenating them together into
-   one file.
-
-   To write the output sequences to separate files, use the command-line
-   switch '-ossingle'.
+   splitter splits one or more input sequences into smaller, optionally
+   overlapping, subsequences. The subsequence size and overlap (if any)
+   may be specified. Optionally, feature information will be used.
 
 Usage
 
@@ -36,7 +22,7 @@ Usage
 
 
 % splitter tembl:BA000025 ba000025.split 
-Split a sequence into (overlapping) smaller sequences
+Split sequence(s) into smaller sequences
 
    Go to the input files for this example
    Go to the output files for this example
@@ -48,7 +34,7 @@ Split a sequence into (overlapping) smaller sequences
 
 
 % splitter tembl:BA000025 ba000025.split -size=50000 -over=3000 
-Split a sequence into (overlapping) smaller sequences
+Split sequence(s) into smaller sequences
 
    Go to the output files for this example
 
@@ -104,8 +90,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -123,9 +110,16 @@ Data files
 
 Notes
 
-   There should be little requirement to split sequences into smaller
-   sub-sequences in EMBOSS, but there may be circumstances where memory
-   usage becomes restrictive when dealing with truly large sequences.
+   Splitting a large sequence into smaller sub-sequences for analysis
+   might be useful in cases where a particularly memory or CPU intensive
+   application will not run quickly enough or at all on the full
+   sequence. This should seldom be necessary in EMBOSS.
+
+   By default, splitter will write all the sub-sequences to a single
+   file. In some cases, particularly where non-EMBOSS programs are used,
+   it is necessary to have a single sequence per file. To write the
+   sub-sequences into separate files use the command-line switch
+   -ossingle.
 
 References
 
@@ -149,35 +143,50 @@ Known bugs
 
 See also
 
-   Program name                         Description
-   biosed       Replace or delete sequence sections
-   codcopy      Reads and writes a codon usage table
-   cutseq       Removes a specified section from a sequence
-   degapseq     Removes gap characters from sequences
-   descseq      Alter the name or description of a sequence
-   entret       Reads and writes (returns) flatfile entries
+   Program name Description
+   aligncopy Reads and writes alignments
+   aligncopypair Reads and writes pairs from alignments
+   biosed Replace or delete sequence sections
+   codcopy Copy and reformat a codon usage table
+   cutseq Removes a section from a sequence
+   degapseq Removes non-alphabetic (e.g. gap) characters from sequences
+   descseq Alter the name or description of a sequence
+   entret Retrieves sequence entries from flatfile databases and files
    extractalign Extract regions from a sequence alignment
-   extractfeat  Extract features from a sequence
-   extractseq   Extract regions from a sequence
-   listor       Write a list file of the logical OR of two sets of sequences
-   makenucseq   Creates random nucleotide sequences
-   makeprotseq  Creates random protein sequences
-   maskfeat     Mask off features of a sequence
-   maskseq      Mask off regions of a sequence
-   newseq       Type in a short new sequence
-   noreturn     Removes carriage return from ASCII files
-   notseq       Exclude a set of sequences and write out the remaining ones
-   nthseq       Writes one sequence from a multiple set of sequences
-   pasteseq     Insert one sequence into another
-   revseq       Reverse and complement a sequence
-   seqret       Reads and writes (returns) sequences
-   seqretsplit  Reads and writes (returns) sequences in individual files
-   skipseq      Reads and writes (returns) sequences, skipping first few
-   trimest      Trim poly-A tails off EST sequences
-   trimseq      Trim ambiguous bits off the ends of sequences
-   union        Reads sequence fragments and builds one sequence
-   vectorstrip  Strips out DNA between a pair of vector sequences
-   yank         Reads a sequence range, appends the full USA to a list file
+   extractfeat Extract features from sequence(s)
+   extractseq Extract regions from a sequence
+   featcopy Reads and writes a feature table
+   featreport Reads and writes a feature table
+   listor Write a list file of the logical OR of two sets of sequences
+   makenucseq Create random nucleotide sequences
+   makeprotseq Create random protein sequences
+   maskambignuc Masks all ambiguity characters in nucleotide sequences
+   with N
+   maskambigprot Masks all ambiguity characters in protein sequences with
+   X
+   maskfeat Write a sequence with masked features
+   maskseq Write a sequence with masked regions
+   newseq Create a sequence file from a typed-in sequence
+   nohtml Remove mark-up (e.g. HTML tags) from an ASCII text file
+   noreturn Remove carriage return from ASCII files
+   nospace Remove all whitespace from an ASCII text file
+   notab Replace tabs with spaces in an ASCII text file
+   notseq Write to file a subset of an input stream of sequences
+   nthseq Write to file a single sequence from an input stream of
+   sequences
+   pasteseq Insert one sequence into another
+   revseq Reverse and complement a nucleotide sequence
+   seqret Reads and writes (returns) sequences
+   seqretsplit Reads sequences and writes them to individual files
+   sizeseq Sort sequences by size
+   skipredundant Remove redundant sequences from an input set
+   skipseq Reads and writes (returns) sequences, skipping first few
+   trimest Remove poly-A tails from nucleotide sequences
+   trimseq Remove unwanted characters from start and end of sequence(s)
+   trimspace Remove extra whitespace from an ASCII text file
+   union Concatenate multiple sequences into a single sequence
+   vectorstrip Removes vectors from the ends of nucleotide sequence(s)
+   yank Add a sequence reference (a full USA) to a list file
 
 Author(s)
 

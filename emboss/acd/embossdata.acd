@@ -1,6 +1,5 @@
 application: embossdata [
-  documentation: "Finds or fetches data files read by EMBOSS
-                  programs"
+  documentation: "Find and retrieve EMBOSS data files"
   groups: "Utils:Misc"
 ]
 

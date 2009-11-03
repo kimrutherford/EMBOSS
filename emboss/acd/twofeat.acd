@@ -1,6 +1,5 @@
 application: twofeat [
-  documentation: "Finds neighbouring pairs of features in
-                  sequences"
+  documentation: "Finds neighbouring pairs of features in sequence(s)"
   groups: "Feature tables"
 ]
 

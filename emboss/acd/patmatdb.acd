@@ -1,5 +1,5 @@
 application: patmatdb [
-  documentation: "Search a protein sequence with a motif"
+  documentation: "Searches protein sequences with a sequence motif"
   groups: "Protein:Motifs"
 ]
 

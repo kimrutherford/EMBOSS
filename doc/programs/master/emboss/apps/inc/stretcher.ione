@@ -1,1 +1,1 @@
-Finds the best global alignment between two sequences
+Needleman-Wunsch rapid global alignment of two sequences

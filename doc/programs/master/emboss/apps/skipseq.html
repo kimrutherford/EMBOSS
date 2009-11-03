@@ -19,25 +19,9 @@ skipseq
     Description
 </H2>
 
-<b>skipseq</b> skips the first few sequences in a multiple set of
-sequences, and writes out the rest of them. 
-
-<p>
-
-<b>skipseq</b> is a variant of the standard program for reading and
-writing sequences, <b>seqret</b>. 
-
-<p>
-
-<b>seqret</b> has an option to allow it to only read the first sequence
-from a multiple set of sequences (-firstonly).  <b>seqret</b> cannot,
-however, skip the first few sequences from a multiple set of sequence,
-writing out the rest; this is what <b>skipseq</b> is for.
-
-<p>
+<p><b>skipseq</b> is a variant of the standard program for reading and writing sequences, <b>seqret</b>. It performs exactly the same function except that it skips the first specified number of sequences from the input stream and writes out the rest of them.  In all other respects, <b>skipseq</b> is the same as <b>seqret</b>.  There are many options built-in into EMBOSS for detailed specification of the input and output sequences, for example the sequence type and file format.  Optionally, feature information will be read and written.</p>
 
 
-In all other respects, <b>skipseq</b> is the same as <b>seqret</b>. 
 
 <H2>
     Usage
@@ -101,7 +85,9 @@ None.
     Notes
 </H2>
 
-None.
+<p>See the documentation for <b>seqret</b> to see the full range of things that you can do when reading and writing sequences.</p>
+<p><b>seqret</b> has an option to allow it to only read the first sequence from a multiple set of sequences (<tt>-firstonly</tt>). <b>seqret</b> cannot, however, skip the first few sequences from a multiple set of sequence, writing out the rest; this is what <b>skipseq</b> is for.</p>
+
 
 <H2>
     References

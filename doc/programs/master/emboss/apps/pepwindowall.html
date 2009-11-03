@@ -22,18 +22,14 @@ pepwindowall
 </H2>
 
 
-<b>pepwindowall</b> produces a set of superimposed Kyte & Doolittle
-hydropathy plots from an aligned set of protein sequences. 
+<p><b>pepwindow</b> draws a set of superimposed Kyte & Doolittle hydropathy plots for a set of protein sequences.</p>
 
-<p>
 
-The result is the same as running <b>pepwindow</b> on a set of proteins
-with aligning gaps and superimposing the plots.
+<H2>
+Algorithm
+</H2>
+<p><b>pepwindow</b> calculates hydropathy in windows of a specified size over the input sequences.</p>
 
-<p>
-
-It is useful for visualising the average hydropathy and its variability
-along the alignment. 
 
 <H2>
     Usage
@@ -120,7 +116,10 @@ I   A/L    R/K    N/M    D/F    C/P    Q/S    E/T    G/W    H/Y    I/V
     Notes
 </H2>
 
-None.
+<p>In calculating hydropathy, <b>pepwindowall</b> can use any of the amino acid parameters from the database of "Nakai et al." which are now included in the database AAINDEX. Before running <b>pepwindow</b>, you must first extract the required data files from AAINDEX (see "Data Files" section).</p>
+
+<p>The result of running <b>pepwindowall</b> is the same as running <b>pepwindow</b> on a set of proteins with aligning gaps and superimposing the plots. It is useful for visualising the average hydropathy and its variability along an alignment.</p>
+
 
 <H2>
     References

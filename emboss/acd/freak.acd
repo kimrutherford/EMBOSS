@@ -1,5 +1,5 @@
 application: freak [
-  documentation: "Residue/base frequency table or plot"
+  documentation: "Generate residue/base frequency table or plot"
   groups: "Nucleic:Composition, Protein:Composition"
 ]
 
@@ -66,6 +66,7 @@ section: output [
     standard: "@(!$(plot))"
     knowntype: "freak output"
     nullok: "$(plot)"
+    nulldefault: "$(plot)"
   ]
 
 endsection: output

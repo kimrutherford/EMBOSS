@@ -21,17 +21,17 @@ void embAlignCalcSimilarity(const AjPStr m, const AjPStr n,
 			    ajint lenm, ajint lenn, float *id, float *sim,
 			    float *idx, float *simx);
 
-void embAlignPathCalc(const char *a, const char *b,
-		      ajint lena, ajint lenb, float gapopen,
-		      float gapextend, float *path,
-		      float * const *sub, const AjPSeqCvt cvt,
-		      ajint *compass, AjBool show);
+float embAlignPathCalc(const char *a, const char *b,
+                       ajint lena, ajint lenb, float gapopen,
+                       float gapextend, float *path,
+                       float * const *sub, const AjPSeqCvt cvt,
+                       ajint *compass, AjBool show);
 
-void embAlignPathCalcSW(const char *a, const char *b, ajint lena, ajint lenb,
-			float gapopen, float gapextend, float *path,
-			float * const *sub, const AjPSeqCvt cvt,
-			ajint *compass,
-			AjBool show);
+float embAlignPathCalcSW(const char *a, const char *b, ajint lena, ajint lenb,
+                         float gapopen, float gapextend, float *path,
+                         float * const *sub, const AjPSeqCvt cvt,
+                         ajint *compass,
+                         AjBool show);
 
 void embAlignPrintGlobal(AjPFile outf, const char *a, const char *b,
 			 const AjPStr m, const AjPStr n,
@@ -51,11 +51,11 @@ void embAlignPrintProfile(AjPFile outf,
 			  float * const *fmatrix, const char *namea,
 			  const char *nameb, ajint begina, ajint beginb);
 
-void embAlignProfilePathCalc(const char *a,
-			     ajint mlen, ajint slen, float gapopen,
-			     float gapextend, float *path,
-			     float * const *fmatrix,
-			     ajint *compass, AjBool show);
+float embAlignProfilePathCalc(const char *a,
+                              ajint mlen, ajint slen, float gapopen,
+                              float gapextend, float *path,
+                              float * const *fmatrix,
+                              ajint *compass, AjBool show);
 
 void embAlignReportGlobal (AjPAlign align,
 			   const AjPSeq seqa, const AjPSeq seqb,
@@ -77,69 +77,49 @@ void embAlignReportProfile(AjPAlign align,
 			   float score,
 			   const char *namea, const char *nameb);
 
-float embAlignScoreNWMatrix(const float *path, const AjPSeq a, const AjPSeq b,
-			    float * const *fmatrix,
-			    const AjPSeqCvt cvt, ajint lena, ajint lenb,
-			    float gapopen, const ajint *compass,
-			    float gapextend, ajint *start1, ajint *start2);
-
-float embAlignScoreProfileMatrix(const float *path, const ajint *compass,
+/*float embAlignScoreProfileMatrix(const float *path, const ajint *compass,
 				 float gapopen,
 				 float gapextend, const AjPStr b,
 				 ajint clen, ajint slen,
 				 float * const *fmatrix,
 				 ajint *start1, ajint *start2);
-float embAlignScoreSWMatrix(const float *path, const ajint *compass,
-			    float gapopen,
-			    float gapextend,  const AjPSeq a, const AjPSeq b,
-			    ajint lena, ajint lenb, float * const *sub,
-			    const AjPSeqCvt cvt, ajint *start1, ajint *start2);
+*/
+void embAlignWalkNWMatrix(const float *path,
+                          const AjPSeq a, const AjPSeq b,
+			  AjPStr *m, AjPStr *n,
+                          ajint lena, ajint lenb,
+                          ajint *start1, ajint *start2,
+                          float gapopen, float gapextend,
+                          const ajint *compass);
 
-void embAlignWalkNWMatrix(const float *path, const AjPSeq a, const AjPSeq b,
-			  AjPStr *m,
-			  AjPStr *n, ajint lena, ajint lenb, ajint *start1,
-			  ajint *start2, float gapopen,
-			  float gapextend, const AjPSeqCvt cvt,
-			  const ajint *compass, float * const *sub);
 void embAlignWalkProfileMatrix(const float *path, const ajint *compass,
-			       float gapopen,
-			       float gapextend,
+			       float gapopen, float gapextend,
 			       const AjPStr cons, const AjPStr b,
-			       AjPStr *m, AjPStr *n, ajint clen, ajint slen,
-			       float * const *fmatrix,
+			       AjPStr *m, AjPStr *n,
+                               ajint clen, ajint slen,
+			       float * const *pmatrix,
 			       ajint *start1, ajint *start2);
 void embAlignWalkSWMatrix(const float *path, const ajint *compass,
-			  float gapopen,
-			  float gapextend, const AjPSeq a, const AjPSeq b,
-			  AjPStr *m,
-			  AjPStr *n, ajint lena, ajint lenb,
-			  float * const *sub,
-			  const AjPSeqCvt cvt, ajint *start1, ajint *start2);
+			  float gapopen, float gapextend,
+                          const AjPSeq a, const AjPSeq b,
+			  AjPStr *m, AjPStr *n,
+                          ajint lena, ajint lenb,
+			  ajint *start1, ajint *start2);
 
-void embAlignPathCalcFast(const char *a, const char *b, ajint lena, ajint lenb,
-			  float gapopen, float gapextend, float *path,
-			  float * const *sub, const AjPSeqCvt cvt,
-			  ajint *compass, AjBool show, ajint width);
-
-float embAlignScoreSWMatrixFast(const float *path, const ajint *compass,
-				float gapopen,
-				float gapextend,
-				const AjPSeq a, const AjPSeq b,
-				ajint lena, ajint lenb,
-				float * const *sub,
-				const AjPSeqCvt cvt,
-				ajint *start1, ajint *start2,
-				ajint width);
+float embAlignPathCalcSWFast(const char *a, const char *b,
+                             ajint lena, ajint lenb,
+                             ajint offset, ajint width,
+                             float gapopen, float gapextend, float *path,
+                             float * const *sub, const AjPSeqCvt cvt,
+                             ajint *compass, AjBool show);
 
 void embAlignWalkSWMatrixFast(const float *path, const ajint *compass,
-			      float gapopen,
-			      float gapextend, const AjPSeq a, const AjPSeq b,
-			      AjPStr *m,
-			      AjPStr *n, ajint lena, ajint lenb,
-			      float * const *sub,
-			      const AjPSeqCvt cvt,
-			      ajint *start1, ajint *start2,
-			      ajint width);
+			      float gapopen, float gapextend,
+                              const AjPSeq a, const AjPSeq b,
+			      AjPStr *m, AjPStr *n,
+                              ajint lena, ajint lenb,
+			      ajint offset, ajint width,
+                              ajint *start1, ajint *start2);
 
 void embAlignUnused(void);
 

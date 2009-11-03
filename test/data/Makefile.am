@@ -7,7 +7,7 @@ pkgdata_DATA = aaindex1.test prosite.dat prosite.doc prints.test withrefm \
                dna.phylip dna.phylip3 dna.staden dna.strider dna.text \
                feat.emft feat.fasta feat.pir \
 	       mw1.dat mw2.dat mw3.dat \
-               paamir.pep pax6_cdna.fasta \
+               paamir.gff paamir.gff3 paamir.pep pax6_cdna.fasta \
                prot.acedb prot.codata prot.fasta prot.gcg prot.gcg8 \
                prot.ig prot.m-acedb prot.m-codata prot.m-fasta prot.m-nbrf \
                prot.m-ncbi prot.m-swiss prot.nbrf prot.ncbi prot.swiss \

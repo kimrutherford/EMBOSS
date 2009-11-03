@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>codcopy </b>
-Reads and writes a codon usage table
+Copy and reformat a codon usage table
 Codon usage file: <b>Eecoli.cut</b>
 Codon usage output file [eecoli.cut]: <b></b>
 

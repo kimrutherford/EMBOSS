@@ -48,8 +48,7 @@ AjBool embReadAminoDataDoubleC(const char *s, double **a, double fill)
     ajint  idx;
     ajint  i;
 
-    inf = ajFileNew();
-    ajFileDataNewC(s,&inf);
+    inf = ajDatafileNewInNameC(s);
 
     if(!inf)
     {
@@ -62,7 +61,7 @@ AjBool embReadAminoDataDoubleC(const char *s, double **a, double fill)
 	(*a)[i] = fill;
 
     line = ajStrNew();
-    while(ajFileReadLine(inf,&line))
+    while(ajReadlineTrim(inf,&line))
     {
 	p = ajStrGetPtr(line);
 	if(*p=='#' || *p=='!' || !*p)
@@ -77,7 +76,7 @@ AjBool embReadAminoDataDoubleC(const char *s, double **a, double fill)
 	    AJFREE(*a);
 	    return ajFalse;
 	}
-	idx = ajAZToInt(*p);
+	idx = ajBasecodeToInt(*p);
 	p = ajSysFuncStrtok(NULL," \t\r");
 
 	if(!p)
@@ -129,7 +128,7 @@ AjBool embReadAminoDataFloatC(const char *s, float **a, float fill)
     ajint  idx;
     ajint  i;
 
-    ajFileDataNewC(s,&inf);
+    inf = ajDatafileNewInNameC(s);
     if(!inf)
     {
 	ajWarn("File [%s] not found",s);
@@ -141,7 +140,7 @@ AjBool embReadAminoDataFloatC(const char *s, float **a, float fill)
 	(*a)[i] = fill;
 
     line = ajStrNew();
-    while(ajFileReadLine(inf,&line))
+    while(ajReadlineTrim(inf,&line))
     {
 	p = ajStrGetPtr(line);
 	if(*p=='#' || *p=='!' || !*p)
@@ -156,7 +155,7 @@ AjBool embReadAminoDataFloatC(const char *s, float **a, float fill)
 	    AJFREE(*a);
 	    return ajFalse;
 	}
-	idx = ajAZToInt(*p);
+	idx = ajBasecodeToInt(*p);
 	p   = ajSysFuncStrtok(NULL," \t\r");
 
 	if(!p)
@@ -208,8 +207,7 @@ AjBool embReadAminoDataIntC(const char *s, ajint **a, ajint fill)
     ajint  idx;
     ajint  i;
 
-    inf = ajFileNew();
-    ajFileDataNewC(s,&inf);
+    inf = ajDatafileNewInNameC(s);
 
     if(!inf)
     {
@@ -223,7 +221,7 @@ AjBool embReadAminoDataIntC(const char *s, ajint **a, ajint fill)
 
 
     line = ajStrNew();
-    while(ajFileReadLine(inf,&line))
+    while(ajReadlineTrim(inf,&line))
     {
 	p = ajStrGetPtr(line);
 	if(*p=='#' || *p=='!' || !*p)
@@ -238,7 +236,7 @@ AjBool embReadAminoDataIntC(const char *s, ajint **a, ajint fill)
 	    AJFREE(*a);
 	    return ajFalse;
 	}
-	idx = ajAZToInt(*p);
+	idx = ajBasecodeToInt(*p);
 	p   = ajSysFuncStrtok(NULL," \t\r");
 
 	if(!p)

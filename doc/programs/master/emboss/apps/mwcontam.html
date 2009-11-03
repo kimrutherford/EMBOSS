@@ -19,16 +19,9 @@ mwcontam
     Description
 </H2>
 
-<b>mwcontam</b> finds molecular weights that are common between a set of
-mass spectrometry result files.  Such molecular weights are usually a form of
-contamination resulting from autolysis of a protease, degradation of the
-matrix or presence of keratin from the sample preparer. 
+<p><p><b>mwcontam</b> finds molecular weights that are common between a set of mass spectrometry result files at a specified ppm tolerance. Such molecular weights are usually a form of contamination resulting from autolysis of a protease, degradation of the matrix or presence of keratin from the sample preparer. The input is a comma-separated list of files each containing a list of experimental molecular weights.  The output is a file with a list of the molecular weights common to all files.</p></p>
 
-<p>
 
-The output of <b>mwcontam</b>, with minimal editing, can be added to the
-data file for the <a href="mwfilter.html"><b>mwfilter</b></a> program
-('Emwfilter.dat').
 
 <H2>
     Usage
@@ -113,7 +106,13 @@ mwcontam	415.000
     Notes
 </H2>
 
-None.
+<p>The output of <b>mwcontam</b>, with minimal editing, can be added to the data file for the <b>mwfilter</b> program (<tt>Emwfilter.dat</tt>), which will then remove these weights from its input file of molecular weights. For example you might like to fetch <tt>Emwfilter.dat</tt> using <b>embossdata</b> (as described in the <b>mwfilter</b> documentation) and edit it to include the lines:
+
+# data produced from the program mwcontam
+mwcontam	67.000
+mwcontam	415.000 
+</p>
+
 
 <H2>
     References

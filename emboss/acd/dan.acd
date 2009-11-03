@@ -1,5 +1,5 @@
 application: dan [
-  documentation: "Calculates DNA RNA/DNA melting temperature"
+  documentation: "Calculates nucleic acid melting temperature"
   groups: "Nucleic:Composition"
 ]
 
@@ -189,6 +189,7 @@ section: output [
     taglist: "float:tm=Tm float:gc=GC float:dg=DeltaG
               float:dh=DeltaH float:ds=DeltaS float:tmprod=TmProd"
     nullok: "$(plot)"
+    nulldefault: "$(plot)"
   ]
 
 endsection: output

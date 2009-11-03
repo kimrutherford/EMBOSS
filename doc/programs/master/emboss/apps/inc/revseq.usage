@@ -7,7 +7,7 @@ To create the reverse complement (reverse sense) of 'tembl:x65923' in the file '
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>revseq tembl:x65923 x65923.rev </b>
-Reverse and complement a sequence
+Reverse and complement a nucleotide sequence
 
 </pre></td></tr></table><p>
 <p>
@@ -22,7 +22,7 @@ To create the complement of 'tembl:x65923' in the file 'x65923.rev':
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>revseq tembl:x65923 x65923.rev -norev </b>
-Reverse and complement a sequence
+Reverse and complement a nucleotide sequence
 
 </pre></td></tr></table><p>
 <p>
@@ -37,7 +37,7 @@ To create the reverse of 'tembl:x65923' in the file 'x65923.rev':
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>revseq tembl:x65923 x65923.rev -nocomp </b>
-Reverse and complement a sequence
+Reverse and complement a nucleotide sequence
 
 </pre></td></tr></table><p>
 <p>

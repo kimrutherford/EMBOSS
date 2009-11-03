@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>octanol </b>
-Displays protein hydropathy
+Draw a White-Wimley protein hydropathy plot
 Input protein sequence: <b>tsw:opsd_human</b>
 Graph type [x11]: <b>ps</b>
 

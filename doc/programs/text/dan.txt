@@ -5,16 +5,34 @@
 
 Function
 
-   Calculates DNA RNA/DNA melting temperature
+   Calculates nucleic acid melting temperature
 
 Description
 
-   Dan calculates the melting temperature (Tm) and the percent G+C of a
-   nucleic acid sequence (optionally plotting them). For the Melting
-   temperature profile, free energy values calculated from nearest
-   neighbor thermodynamics are used (Breslauer et al. Proc. Natl. Acad.
-   Sci. USA 83, 3746-3750 and Baldino et al. Methods in Enzymol. 168,
-   761-777).
+   Dan calculates the melting temperature (Tm) and the percentage of G+C
+   nucleotides for windows over a nucleic acid sequence, optionally
+   plotting them. If a plot is not being produced, dan reports the
+   sequence of each oligomer window, its melting temperature under the
+   specified conditions and its percentage GC content. The change in
+   enthalpy (H), entropy (S) and Gibbs free energy (S) for dissociation
+   of the oligomers may (optionally) be reported to file (but not
+   plotted).
+
+Algorithm
+
+   The values of melting point and other thermodynamic properties of the
+   sequence, namely change in enthalpy (H), entropy (S) and Gibbs free
+   energy (S) on dissociation, are calculated for a sequence region (or
+   "window") of a user-specified size (see "-windowsize" option). The
+   window is incrementally moved along the sequence with the properties
+   being calculated at each new position. The user must provide the salt
+   and DNA concentration. Optionally, the percent formamide, percent of
+   mismatches allowed and product length may be specified.
+
+   For the Melting temperature profile, free energy values calculated
+   from nearest neighbor thermodynamics are used (Breslauer et al. Proc.
+   Natl. Acad. Sci. USA 83, 3746-3750 and Baldino et al. Methods in
+   Enzymol. 168, 761-777).
 
 Usage
 
@@ -22,7 +40,7 @@ Usage
 
 
 % dan 
-Calculates DNA RNA/DNA melting temperature
+Calculates nucleic acid melting temperature
 Input nucleotide sequence(s): tembl:x13776
 Enter window size [20]: 
 Enter Shift Increment [1]: 
@@ -39,7 +57,7 @@ Output report [x13776.dan]:
 
 
 % dan -plot -graph cps 
-Calculates DNA RNA/DNA melting temperature
+Calculates nucleic acid melting temperature
 Input nucleotide sequence(s): tembl:x13776
 Enter window size [20]: 
 Enter Shift Increment [1]: 
@@ -151,14 +169,16 @@ Command line arguments
    -raccshow           boolean    Show accession number in the report
    -rdesshow           boolean    Show description in the report
    -rscoreshow         boolean    Show the score in the report
+   -rstrandshow        boolean    Show the nucleotide strand in the report
    -rusashow           boolean    Show the full USA in the report
    -rmaxall            integer    Maximum total hits to report
    -rmaxseq            integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -353,7 +373,7 @@ Output file format
 
 ########################################
 # Program: dan
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: dan
 #    -sequence tembl:x13776
 # Report_format: seqtable
@@ -366,93 +386,175 @@ Output file format
 # HitCount: 2148
 #=======================================
 
-  Start     End     Tm     GC DeltaG DeltaH DeltaS TmProd Sequence
-      1      20   64.9   70.0      .      .      .      . ggtaccgctggccgagcatc
-      2      21   63.7   65.0      .      .      .      . gtaccgctggccgagcatct
-      3      22   63.7   65.0      .      .      .      . taccgctggccgagcatctg
-      4      23   66.9   70.0      .      .      .      . accgctggccgagcatctgc
-      5      24   66.7   70.0      .      .      .      . ccgctggccgagcatctgct
-      6      25   65.5   70.0      .      .      .      . cgctggccgagcatctgctc
-      7      26   65.5   70.0      .      .      .      . gctggccgagcatctgctcg
-      8      27   63.7   65.0      .      .      .      . ctggccgagcatctgctcga
-      9      28   62.9   60.0      .      .      .      . tggccgagcatctgctcgat
-     10      29   62.6   65.0      .      .      .      . ggccgagcatctgctcgatc
-     11      30   61.7   60.0      .      .      .      . gccgagcatctgctcgatca
-     12      31   60.2   60.0      .      .      .      . ccgagcatctgctcgatcac
-     13      32   60.2   60.0      .      .      .      . cgagcatctgctcgatcacc
-     14      33   59.0   55.0      .      .      .      . gagcatctgctcgatcacca
-     15      34   59.2   55.0      .      .      .      . agcatctgctcgatcaccac
-     16      35   60.4   60.0      .      .      .      . gcatctgctcgatcaccacc
-     17      36   58.9   55.0      .      .      .      . catctgctcgatcaccacca
-     18      37   58.6   55.0      .      .      .      . atctgctcgatcaccaccag
-     19      38   61.3   60.0      .      .      .      . tctgctcgatcaccaccagc
-     20      39   62.4   65.0      .      .      .      . ctgctcgatcaccaccagcc
-     21      40   63.9   65.0      .      .      .      . tgctcgatcaccaccagccg
-     22      41   64.9   70.0      .      .      .      . gctcgatcaccaccagccgg
-     23      42   64.3   70.0      .      .      .      . ctcgatcaccaccagccggg
-     24      43   66.1   70.0      .      .      .      . tcgatcaccaccagccgggc
-     25      44   67.5   75.0      .      .      .      . cgatcaccaccagccgggcg
-     26      45   66.1   70.0      .      .      .      . gatcaccaccagccgggcga
-     27      46   66.3   70.0      .      .      .      . atcaccaccagccgggcgac
-     28      47   68.6   75.0      .      .      .      . tcaccaccagccgggcgacg
-     29      48   69.8   80.0      .      .      .      . caccaccagccgggcgacgg
-     30      49   70.7   80.0      .      .      .      . accaccagccgggcgacggg
-     31      50   70.5   80.0      .      .      .      . ccaccagccgggcgacggga
-     32      51   68.6   75.0      .      .      .      . caccagccgggcgacgggaa
-     33      52   68.6   75.0      .      .      .      . accagccgggcgacgggaac
-     34      53   68.4   75.0      .      .      .      . ccagccgggcgacgggaact
+  Start     End  Strand     Tm     GC DeltaG DeltaH DeltaS TmProd Sequence
+      1      20       +   64.9   70.0      .      .      .      . ggtaccgctggcc
+gagcatc
+      2      21       +   63.7   65.0      .      .      .      . gtaccgctggccg
+agcatct
+      3      22       +   63.7   65.0      .      .      .      . taccgctggccga
+gcatctg
+      4      23       +   66.9   70.0      .      .      .      . accgctggccgag
+catctgc
+      5      24       +   66.7   70.0      .      .      .      . ccgctggccgagc
+atctgct
+      6      25       +   65.5   70.0      .      .      .      . cgctggccgagca
+tctgctc
+      7      26       +   65.5   70.0      .      .      .      . gctggccgagcat
+ctgctcg
+      8      27       +   63.7   65.0      .      .      .      . ctggccgagcatc
+tgctcga
+      9      28       +   62.9   60.0      .      .      .      . tggccgagcatct
+gctcgat
+     10      29       +   62.6   65.0      .      .      .      . ggccgagcatctg
+ctcgatc
+     11      30       +   61.7   60.0      .      .      .      . gccgagcatctgc
+tcgatca
+     12      31       +   60.2   60.0      .      .      .      . ccgagcatctgct
+cgatcac
+     13      32       +   60.2   60.0      .      .      .      . cgagcatctgctc
+gatcacc
+     14      33       +   59.0   55.0      .      .      .      . gagcatctgctcg
+atcacca
+     15      34       +   59.2   55.0      .      .      .      . agcatctgctcga
+tcaccac
+     16      35       +   60.4   60.0      .      .      .      . gcatctgctcgat
+caccacc
+     17      36       +   58.9   55.0      .      .      .      . catctgctcgatc
+accacca
+     18      37       +   58.6   55.0      .      .      .      . atctgctcgatca
+ccaccag
+     19      38       +   61.3   60.0      .      .      .      . tctgctcgatcac
+caccagc
+     20      39       +   62.4   65.0      .      .      .      . ctgctcgatcacc
+accagcc
+     21      40       +   63.9   65.0      .      .      .      . tgctcgatcacca
+ccagccg
+     22      41       +   64.9   70.0      .      .      .      . gctcgatcaccac
+cagccgg
+     23      42       +   64.3   70.0      .      .      .      . ctcgatcaccacc
+agccggg
+     24      43       +   66.1   70.0      .      .      .      . tcgatcaccacca
+gccgggc
+     25      44       +   67.5   75.0      .      .      .      . cgatcaccaccag
+ccgggcg
+     26      45       +   66.1   70.0      .      .      .      . gatcaccaccagc
+cgggcga
+     27      46       +   66.3   70.0      .      .      .      . atcaccaccagcc
+gggcgac
+     28      47       +   68.6   75.0      .      .      .      . tcaccaccagccg
+ggcgacg
+     29      48       +   69.8   80.0      .      .      .      . caccaccagccgg
+gcgacgg
+     30      49       +   70.7   80.0      .      .      .      . accaccagccggg
+cgacggg
+     31      50       +   70.5   80.0      .      .      .      . ccaccagccgggc
+gacggga
+     32      51       +   68.6   75.0      .      .      .      . caccagccgggcg
+acgggaa
+     33      52       +   68.6   75.0      .      .      .      . accagccgggcga
+cgggaac
+     34      53       +   68.4   75.0      .      .      .      . ccagccgggcgac
+gggaact
 
 
   [Part of this file has been deleted for brevity]
 
-   2101    2120   69.9   80.0      .      .      .      . ggccggagcgctgaccctgc
-   2102    2121   68.7   75.0      .      .      .      . gccggagcgctgaccctgct
-   2103    2122   65.5   70.0      .      .      .      . ccggagcgctgaccctgcta
-   2104    2123   63.5   65.0      .      .      .      . cggagcgctgaccctgctat
-   2105    2124   61.3   60.0      .      .      .      . ggagcgctgaccctgctatt
-   2106    2125   60.1   60.0      .      .      .      . gagcgctgaccctgctattc
-   2107    2126   61.7   60.0      .      .      .      . agcgctgaccctgctattcg
-   2108    2127   63.4   65.0      .      .      .      . gcgctgaccctgctattcgc
-   2109    2128   61.7   60.0      .      .      .      . cgctgaccctgctattcgct
-   2110    2129   59.5   55.0      .      .      .      . gctgaccctgctattcgctt
-   2111    2130   57.1   50.0      .      .      .      . ctgaccctgctattcgcttt
-   2112    2131   56.4   45.0      .      .      .      . tgaccctgctattcgctttt
-   2113    2132   54.7   45.0      .      .      .      . gaccctgctattcgctttta
-   2114    2133   55.0   45.0      .      .      .      . accctgctattcgcttttac
-   2115    2134   55.9   50.0      .      .      .      . ccctgctattcgcttttacc
-   2116    2135   54.7   45.0      .      .      .      . cctgctattcgcttttacct
-   2117    2136   52.0   40.0      .      .      .      . ctgctattcgcttttaccta
-   2118    2137   51.2   35.0      .      .      .      . tgctattcgcttttacctat
-   2119    2138   50.9   40.0      .      .      .      . gctattcgcttttacctatc
-   2120    2139   49.0   35.0      .      .      .      . ctattcgcttttacctatct
-   2121    2140   49.3   35.0      .      .      .      . tattcgcttttacctatctg
-   2122    2141   51.1   35.0      .      .      .      . attcgcttttacctatctgt
-   2123    2142   52.2   40.0      .      .      .      . ttcgcttttacctatctgtg
-   2124    2143   54.0   45.0      .      .      .      . tcgcttttacctatctgtgg
-   2125    2144   55.2   50.0      .      .      .      . cgcttttacctatctgtggg
-   2126    2145   53.9   45.0      .      .      .      . gcttttacctatctgtgggt
-   2127    2146   52.3   45.0      .      .      .      . cttttacctatctgtgggtg
-   2128    2147   53.5   45.0      .      .      .      . ttttacctatctgtgggtgg
-   2129    2148   56.0   50.0      .      .      .      . tttacctatctgtgggtggc
-   2130    2149   57.8   55.0      .      .      .      . ttacctatctgtgggtggcc
-   2131    2150   60.1   60.0      .      .      .      . tacctatctgtgggtggccg
-   2132    2151   63.4   65.0      .      .      .      . acctatctgtgggtggccgc
-   2133    2152   64.3   70.0      .      .      .      . cctatctgtgggtggccgcc
-   2134    2153   63.4   65.0      .      .      .      . ctatctgtgggtggccgcca
-   2135    2154   62.7   60.0      .      .      .      . tatctgtgggtggccgccaa
-   2136    2155   64.5   65.0      .      .      .      . atctgtgggtggccgccaac
-   2137    2156   66.5   70.0      .      .      .      . tctgtgggtggccgccaacc
-   2138    2157   66.8   70.0      .      .      .      . ctgtgggtggccgccaacca
-   2139    2158   66.8   70.0      .      .      .      . tgtgggtggccgccaaccag
-   2140    2159   66.8   70.0      .      .      .      . gtgggtggccgccaaccagt
-   2141    2160   65.9   65.0      .      .      .      . tgggtggccgccaaccagtt
-   2142    2161   65.6   70.0      .      .      .      . gggtggccgccaaccagttc
-   2143    2162   65.6   70.0      .      .      .      . ggtggccgccaaccagttcc
-   2144    2163   64.4   65.0      .      .      .      . gtggccgccaaccagttcct
-   2145    2164   64.1   65.0      .      .      .      . tggccgccaaccagttcctc
-   2146    2165   65.4   70.0      .      .      .      . ggccgccaaccagttcctcg
-   2147    2166   64.2   65.0      .      .      .      . gccgccaaccagttcctcga
-   2148    2167   62.4   65.0      .      .      .      . ccgccaaccagttcctcgag
+   2101    2120       +   69.9   80.0      .      .      .      . ggccggagcgctg
+accctgc
+   2102    2121       +   68.7   75.0      .      .      .      . gccggagcgctga
+ccctgct
+   2103    2122       +   65.5   70.0      .      .      .      . ccggagcgctgac
+cctgcta
+   2104    2123       +   63.5   65.0      .      .      .      . cggagcgctgacc
+ctgctat
+   2105    2124       +   61.3   60.0      .      .      .      . ggagcgctgaccc
+tgctatt
+   2106    2125       +   60.1   60.0      .      .      .      . gagcgctgaccct
+gctattc
+   2107    2126       +   61.7   60.0      .      .      .      . agcgctgaccctg
+ctattcg
+   2108    2127       +   63.4   65.0      .      .      .      . gcgctgaccctgc
+tattcgc
+   2109    2128       +   61.7   60.0      .      .      .      . cgctgaccctgct
+attcgct
+   2110    2129       +   59.5   55.0      .      .      .      . gctgaccctgcta
+ttcgctt
+   2111    2130       +   57.1   50.0      .      .      .      . ctgaccctgctat
+tcgcttt
+   2112    2131       +   56.4   45.0      .      .      .      . tgaccctgctatt
+cgctttt
+   2113    2132       +   54.7   45.0      .      .      .      . gaccctgctattc
+gctttta
+   2114    2133       +   55.0   45.0      .      .      .      . accctgctattcg
+cttttac
+   2115    2134       +   55.9   50.0      .      .      .      . ccctgctattcgc
+ttttacc
+   2116    2135       +   54.7   45.0      .      .      .      . cctgctattcgct
+tttacct
+   2117    2136       +   52.0   40.0      .      .      .      . ctgctattcgctt
+ttaccta
+   2118    2137       +   51.2   35.0      .      .      .      . tgctattcgcttt
+tacctat
+   2119    2138       +   50.9   40.0      .      .      .      . gctattcgctttt
+acctatc
+   2120    2139       +   49.0   35.0      .      .      .      . ctattcgctttta
+cctatct
+   2121    2140       +   49.3   35.0      .      .      .      . tattcgcttttac
+ctatctg
+   2122    2141       +   51.1   35.0      .      .      .      . attcgcttttacc
+tatctgt
+   2123    2142       +   52.2   40.0      .      .      .      . ttcgcttttacct
+atctgtg
+   2124    2143       +   54.0   45.0      .      .      .      . tcgcttttaccta
+tctgtgg
+   2125    2144       +   55.2   50.0      .      .      .      . cgcttttacctat
+ctgtggg
+   2126    2145       +   53.9   45.0      .      .      .      . gcttttacctatc
+tgtgggt
+   2127    2146       +   52.3   45.0      .      .      .      . cttttacctatct
+gtgggtg
+   2128    2147       +   53.5   45.0      .      .      .      . ttttacctatctg
+tgggtgg
+   2129    2148       +   56.0   50.0      .      .      .      . tttacctatctgt
+gggtggc
+   2130    2149       +   57.8   55.0      .      .      .      . ttacctatctgtg
+ggtggcc
+   2131    2150       +   60.1   60.0      .      .      .      . tacctatctgtgg
+gtggccg
+   2132    2151       +   63.4   65.0      .      .      .      . acctatctgtggg
+tggccgc
+   2133    2152       +   64.3   70.0      .      .      .      . cctatctgtgggt
+ggccgcc
+   2134    2153       +   63.4   65.0      .      .      .      . ctatctgtgggtg
+gccgcca
+   2135    2154       +   62.7   60.0      .      .      .      . tatctgtgggtgg
+ccgccaa
+   2136    2155       +   64.5   65.0      .      .      .      . atctgtgggtggc
+cgccaac
+   2137    2156       +   66.5   70.0      .      .      .      . tctgtgggtggcc
+gccaacc
+   2138    2157       +   66.8   70.0      .      .      .      . ctgtgggtggccg
+ccaacca
+   2139    2158       +   66.8   70.0      .      .      .      . tgtgggtggccgc
+caaccag
+   2140    2159       +   66.8   70.0      .      .      .      . gtgggtggccgcc
+aaccagt
+   2141    2160       +   65.9   65.0      .      .      .      . tgggtggccgcca
+accagtt
+   2142    2161       +   65.6   70.0      .      .      .      . gggtggccgccaa
+ccagttc
+   2143    2162       +   65.6   70.0      .      .      .      . ggtggccgccaac
+cagttcc
+   2144    2163       +   64.4   65.0      .      .      .      . gtggccgccaacc
+agttcct
+   2145    2164       +   64.1   65.0      .      .      .      . tggccgccaacca
+gttcctc
+   2146    2165       +   65.4   70.0      .      .      .      . ggccgccaaccag
+ttcctcg
+   2147    2166       +   64.2   65.0      .      .      .      . gccgccaaccagt
+tcctcga
+   2148    2167       +   62.4   65.0      .      .      .      . ccgccaaccagtt
+cctcgag
 
 #---------------------------------------
 #---------------------------------------
@@ -462,8 +564,6 @@ Output file format
   Graphics File: dan.ps
 
    [dan results]
-
-  File: x13776.dan
 
    The header information contains details of the program, date and
    sequence
@@ -517,7 +617,14 @@ Data files
 
 Notes
 
-   None.
+   The enthalpy of a reaction equates to the "heat" of the reaction so
+   long as temperate and pressure are constant. Enthalpy depends upon the
+   strength of the chemical bonds and non-bonding interactions involved.
+   The entropy of a reaction reflects the level of disorder or randomness
+   of the molecules involved. The higher the entropy, the greater the
+   disorder. The free energy of a reaction reflects it's ability to do
+   work. It helps one determine whether a reaction is feasible given a
+   set of conditions and it's quilibrium.
 
 References
 
@@ -548,15 +655,16 @@ Known bugs
 
 See also
 
-   Program name                        Description
-   banana       Bending and curvature plot in B-DNA
-   btwisted     Calculates the twisting in a B-DNA sequence
-   chaos        Create a chaos game representation plot for a sequence
-   compseq      Count composition of dimer/trimer/etc words in a sequence
-   freak        Residue/base frequency table or plot
-   isochore     Plots isochores in large DNA sequences
+   Program name                           Description
+   banana       Plot bending and curvature data for B-DNA
+   btwisted     Calculate the twisting in a B-DNA sequence
+   chaos        Draw a chaos game representation plot for a nucleotide sequence
+   compseq      Calculate the composition of unique words in sequences
+   density      Draw a nucleic acid density plot
+   freak        Generate residue/base frequency table or plot
+   isochore     Plots isochores in DNA sequences
    sirna        Finds siRNA duplexes in mRNA
-   wordcount    Counts words of a specified size in a DNA sequence
+   wordcount    Count and extract unique words in DNA sequence(s)
 
 Author(s)
 

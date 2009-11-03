@@ -5,43 +5,16 @@
 
 Function
 
-   Mask off features of a sequence
+   Write a sequence with masked features
 
 Description
 
-   maskfeat reads in a sequence with its associated features. The
-   features can be found in the annotation of the sequence if it is in a
-   format such as EMBL or SWISSPROT which includes features in the
-   annotation, or they may be supplied explicitly in a GFF file by using
-   the command-lin option '-gff filename'.
-
-   The feature table is then searched for features whose type matches the
-   specified feature type to be masked. By default, the type is 'repeat*'
-   (i.e. any type whose name starts with 'repeat'). You can specify the
-   name of any other type of feature, or features that you wish to mask.
-   If you wish to specify more than one type of feature, separate their
-   names with spaces or commas. The names of the types of feature to be
-   found may be wild-carded with asterisks '*' to find gruops of feature
-   types sharing a common part of their names.
-
-   If you are unsure of the names of feature types in use, please consult
-   http://www3.ebi.ac.uk/Services/WebFeat/ for a list of the EMBL feature
-   types and see Appendix A of the Swissprot user manual in
-   http://www.expasy.ch/txt/userman.txt for a list of the Swissprot
-   feature types.
-
-   If any features matching the specified names of feature types are
-   found, then those regions of the sequence will be masked out by
-   replacing that part of the sequence by masking characters. The default
-   masking characters are 'X' for a protein sequence and 'N' for a
-   nucleic acid sequence, although you can specify your own masking
-   character, if required.
-
-   Some non-EMBOSS programs (for example FASTA) are capable of treating
-   lower-case regions as if they are masked. maskfeat can mask a region
-   to lower-case instead of replacing the sequence with 'N's or 'X's if
-   you use the qualifier '-tolower' or use a space character as the
-   masking character.
+   maskfeat reads a sequence with associated features and writes the same
+   information to file but with features of the specified type omitted
+   (masked). Sequence regions corresponding to the masked-out features
+   are masked such that characters in those region are (optionally)
+   converted to lower case and / or (optionally) replaced with the
+   specified mask character.
 
 Usage
 
@@ -52,7 +25,7 @@ Usage
 
 
 % maskfeat tembl:ab000360 
-Mask off features of a sequence.
+Write a sequence with masked features
 output sequence [ab000360.fasta]: 
 
    Go to the input files for this example
@@ -66,7 +39,7 @@ output sequence [ab000360.fasta]:
 
 
 % maskfeat tembl:ab000360 -tolower -supper 
-Mask off features of a sequence.
+Write a sequence with masked features
 output sequence [ab000360.fasta]: 
 
    Go to the output files for this example
@@ -146,8 +119,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -433,7 +407,21 @@ Data files
 
 Notes
 
-   None.
+   Formats such as EMBL or SWISSPROT include features in the sequence
+   annotation. Otherwise, features they may be supplied in a separate
+   file and specified with the qualifier -ufo or -fopenfile / -fformat.
+
+   The feature type to mask is by default repeat*, i.e. any type whose
+   name starts with repeat will be omitted from the output file. Any
+   other type of feature(s) may be specified with the -type qualifier. To
+   specify more than one type of feature, separate their names with
+   spaces or commas. The names may be wild-carded with asterisks * to
+   find gruops of feature types sharing a common part of their names.
+
+   If you are unsure of the names of feature types in use, please consult
+   http://www3.ebi.ac.uk/Services/WebFeat/ (EMBL feature types) and see
+   Appendix A of the Swissprot user manual in
+   http://www.expasy.ch/txt/userman.txt (Swissprot feature types).
 
 References
 
@@ -457,38 +445,53 @@ Known bugs
 
 See also
 
-   Program name                         Description
-   biosed       Replace or delete sequence sections
-   codcopy      Reads and writes a codon usage table
-   coderet      Extract CDS, mRNA and translations from feature tables
-   cutseq       Removes a specified section from a sequence
-   degapseq     Removes gap characters from sequences
-   descseq      Alter the name or description of a sequence
-   entret       Reads and writes (returns) flatfile entries
+   Program name Description
+   aligncopy Reads and writes alignments
+   aligncopypair Reads and writes pairs from alignments
+   biosed Replace or delete sequence sections
+   codcopy Copy and reformat a codon usage table
+   coderet Extract CDS, mRNA and translations from feature tables
+   cutseq Removes a section from a sequence
+   degapseq Removes non-alphabetic (e.g. gap) characters from sequences
+   descseq Alter the name or description of a sequence
+   entret Retrieves sequence entries from flatfile databases and files
    extractalign Extract regions from a sequence alignment
-   extractfeat  Extract features from a sequence
-   extractseq   Extract regions from a sequence
-   listor       Write a list file of the logical OR of two sets of sequences
-   makenucseq   Creates random nucleotide sequences
-   makeprotseq  Creates random protein sequences
-   maskseq      Mask off regions of a sequence
-   newseq       Type in a short new sequence
-   noreturn     Removes carriage return from ASCII files
-   notseq       Exclude a set of sequences and write out the remaining ones
-   nthseq       Writes one sequence from a multiple set of sequences
-   pasteseq     Insert one sequence into another
-   revseq       Reverse and complement a sequence
-   seqret       Reads and writes (returns) sequences
-   seqretsplit  Reads and writes (returns) sequences in individual files
-   showfeat     Show features of a sequence
-   skipseq      Reads and writes (returns) sequences, skipping first few
-   splitter     Split a sequence into (overlapping) smaller sequences
-   trimest      Trim poly-A tails off EST sequences
-   trimseq      Trim ambiguous bits off the ends of sequences
-   twofeat      Finds neighbouring pairs of features in sequences
-   union        Reads sequence fragments and builds one sequence
-   vectorstrip  Strips out DNA between a pair of vector sequences
-   yank         Reads a sequence range, appends the full USA to a list file
+   extractfeat Extract features from sequence(s)
+   extractseq Extract regions from a sequence
+   featcopy Reads and writes a feature table
+   featreport Reads and writes a feature table
+   listor Write a list file of the logical OR of two sets of sequences
+   makenucseq Create random nucleotide sequences
+   makeprotseq Create random protein sequences
+   maskambignuc Masks all ambiguity characters in nucleotide sequences
+   with N
+   maskambigprot Masks all ambiguity characters in protein sequences with
+   X
+   maskseq Write a sequence with masked regions
+   newseq Create a sequence file from a typed-in sequence
+   nohtml Remove mark-up (e.g. HTML tags) from an ASCII text file
+   noreturn Remove carriage return from ASCII files
+   nospace Remove all whitespace from an ASCII text file
+   notab Replace tabs with spaces in an ASCII text file
+   notseq Write to file a subset of an input stream of sequences
+   nthseq Write to file a single sequence from an input stream of
+   sequences
+   pasteseq Insert one sequence into another
+   revseq Reverse and complement a nucleotide sequence
+   seqret Reads and writes (returns) sequences
+   seqretsplit Reads sequences and writes them to individual files
+   showfeat Display features of a sequence in pretty format
+   sizeseq Sort sequences by size
+   skipredundant Remove redundant sequences from an input set
+   skipseq Reads and writes (returns) sequences, skipping first few
+   splitter Split sequence(s) into smaller sequences
+   trimest Remove poly-A tails from nucleotide sequences
+   trimseq Remove unwanted characters from start and end of sequence(s)
+   trimspace Remove extra whitespace from an ASCII text file
+   twofeat Finds neighbouring pairs of features in sequence(s)
+   union Concatenate multiple sequences into a single sequence
+   vectorstrip Removes vectors from the ends of nucleotide sequence(s)
+   yank Add a sequence reference (a full USA) to a list file
 
 Author(s)
 

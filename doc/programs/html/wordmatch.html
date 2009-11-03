@@ -41,23 +41,16 @@ wordmatch
 DON'T WRITE ANYTHING HERE.
 IT IS DONE FOR YOU.
 -->
-Finds all exact matches of a given size between 2 sequences
+Finds regions of identity (exact matches) of two sequences
 
 <H2>
     Description
 </H2>
 
-Finds all exact matches of a given minimum size between 2
-    sequences displaying the start points in each sequence and the
-    match length.
-<p>
+<p><b>wordmatch</b> finds all regions of identity (exact matches) of a specified minimum size of two input sequences.  These regions are reported in a standard EMBOSS alignment file and (optionally) in standard EMBOSS sequence feature files.</p>
 
-This program takes two sequences and finds regions where they are
-identical.  These regions are reported in the output file (and
-optionally) in GFF (Gene Feature Format) files. 
-<p>
 
-It will not find identical regions smaller than the specified <b>wordsize</b>.
+
 
 <H2>
     Usage
@@ -71,7 +64,7 @@ It will not find identical regions smaller than the specified <b>wordsize</b>.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>wordmatch tsw:hba_human tsw:hbb_human </b>
-Finds all exact matches of a given size between 2 sequences
+Finds regions of identity (exact matches) of two sequences
 Word size [4]: <b></b>
 Output alignment [hba_human.wordmatch]: <b></b>
 Features output [HBA_HUMAN.gff]: <b></b>
@@ -170,8 +163,9 @@ IT IS DONE FOR YOU.
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -541,7 +535,7 @@ for further information on alignment formats.
 <pre>
 ########################################
 # Program: wordmatch
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: wordmatch
 #    [-asequence] tsw:hba_human
 #    [-bsequence] tsw:hbb_human
@@ -568,22 +562,22 @@ for further information on alignment formats.
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ##gff-version 2.0
-##date 2006-07-15
+##date 2007-07-15
 ##Type Protein HBA_HUMAN
-HBA_HUMAN	wordmatch	misc_feature	59	63	1.000	+	.	Sequence "HBA_HUMAN.1" ; note "HBB_HUMAN"
-HBA_HUMAN	wordmatch	misc_feature	15	18	1.000	+	.	Sequence "HBA_HUMAN.2" ; note "HBB_HUMAN"
-HBA_HUMAN	wordmatch	misc_feature	117	120	1.000	+	.	Sequence "HBA_HUMAN.3" ; note "HBB_HUMAN"
+HBA_HUMAN	wordmatch	region	59	63	1.000	+	.	Sequence "HBA_HUMAN.1" ; note "HBB_HUMAN"
+HBA_HUMAN	wordmatch	region	15	18	1.000	+	.	Sequence "HBA_HUMAN.2" ; note "HBB_HUMAN"
+HBA_HUMAN	wordmatch	region	117	120	1.000	+	.	Sequence "HBA_HUMAN.3" ; note "HBB_HUMAN"
 </pre>
 </td></tr></table><p>
 <p><h3>File: HBB_HUMAN.gff</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ##gff-version 2.0
-##date 2006-07-15
+##date 2007-07-15
 ##Type Protein HBB_HUMAN
-HBB_HUMAN	wordmatch	misc_feature	64	68	1.000	+	.	Sequence "HBB_HUMAN.1" ; note "HBA_HUMAN"
-HBB_HUMAN	wordmatch	misc_feature	16	19	1.000	+	.	Sequence "HBB_HUMAN.2" ; note "HBA_HUMAN"
-HBB_HUMAN	wordmatch	misc_feature	122	125	1.000	+	.	Sequence "HBB_HUMAN.3" ; note "HBA_HUMAN"
+HBB_HUMAN	wordmatch	region	64	68	1.000	+	.	Sequence "HBB_HUMAN.1" ; note "HBA_HUMAN"
+HBB_HUMAN	wordmatch	region	16	19	1.000	+	.	Sequence "HBB_HUMAN.2" ; note "HBA_HUMAN"
+HBB_HUMAN	wordmatch	region	122	125	1.000	+	.	Sequence "HBB_HUMAN.3" ; note "HBA_HUMAN"
 </pre>
 </td></tr></table><p>
 
@@ -612,7 +606,7 @@ None.
     Notes
 </H2>
 
-None.
+<p>wormatch will only report identical regions that are at least as long as the specified wordsize.</p>
 
 
 <H2>
@@ -656,25 +650,26 @@ None.
 -->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="matcher.html">matcher</a></td>
-<td>Finds the best local alignments between two sequences</td>
+<td>Waterman-Eggert local alignment of two sequences</td>
 </tr>
 
 <tr>
 <td><a href="seqmatchall.html">seqmatchall</a></td>
-<td>All-against-all comparison of a set of sequences</td>
+<td>All-against-all word comparison of a sequence set</td>
 </tr>
 
 <tr>
 <td><a href="supermatcher.html">supermatcher</a></td>
-<td>Match large sequences against one or more other sequences</td>
+<td>Calculate approximate local pair-wise alignments of larger sequences</td>
 </tr>
 
 <tr>
 <td><a href="water.html">water</a></td>
-<td>Smith-Waterman local alignment</td>
+<td>Smith-Waterman local alignment of sequences</td>
 </tr>
 
 <tr>

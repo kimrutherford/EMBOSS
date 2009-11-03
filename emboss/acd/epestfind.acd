@@ -15,12 +15,11 @@ section: input [
     help: "Protein sequence USA to be analysed."
   ]
 
-  datafile: aadata [
+  datafile: mwdata [
     additional: "Y"
-    default: "Eamino.dat"
-    information: "Amino acids properties and molecular weight
-                  data file"
-    knowntype: "amino acid properties"
+    default: "Emolwt.dat"
+    information: "Molecular weights data file"
+    knowntype: "molecular weights"
   ]
 
 endsection: input
@@ -82,6 +81,11 @@ section: advanced [
   information: "Advanced section"
   type: "page"
 ]
+
+  boolean: mono [
+    default: "N"
+    information: "Use monoisotopic weights"
+  ]
 
   boolean: potential [
     default: "Y"

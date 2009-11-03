@@ -23,22 +23,15 @@ embossversion
 <H2>
     Function
 </H2>
-Writes the current EMBOSS version number
+Writes the current EMBOSS version number to a file
 <H2>
     Description
 </H2>
-This small utility writes out the current version of the EMBOSS package.
 
-<p>
 
-It is expected that this may have a use in scripts which automatically
-write descriptions of the state of the EMBOSS package that is set up
-locally. 
+<p><b>embossversion</b> writes the version number of the EMBOSS package to to screen (by default) or (optionally) to file.</p>
 
-<p>
 
-It will also be a useful way for people to ascertain what version is
-being run if they are giving user-support to people in another site. 
 <H2>
     Usage
 </H2>
@@ -49,9 +42,9 @@ being run if they are giving user-support to people in another site.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>embossversion </b>
-Writes the current EMBOSS version number
+Writes the current EMBOSS version number to a file
 
-4.1.0
+6.0.0
 
 </pre></td></tr></table><p>
 <p>
@@ -76,8 +69,9 @@ Writes the current EMBOSS version number
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -177,7 +171,7 @@ None.
     Notes
 </H2>
 
-None.
+<p><b>embossversion</b> might be called by scripts in automated systems requiring versioning information, or in user-support as a convenient way to ascertain the version of an EMBOSS installation being used remotely.</p>
 
 <H2>
     References
@@ -211,10 +205,11 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="embossdata.html">embossdata</a></td>
-<td>Finds or fetches data files read by EMBOSS programs</td>
+<td>Find and retrieve EMBOSS data files</td>
 </tr>
 
 </table>

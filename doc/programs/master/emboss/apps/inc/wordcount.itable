@@ -7,7 +7,7 @@
 
 <tr>
 <td>[-sequence]<br>(Parameter 1)</td>
-<td>Nucleotide sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Sequence(s) filename and optional format, or reference (input USA)</td>
 <td>Readable sequence(s)</td>
 <td><b>Required</b></td>
 </tr>
@@ -15,8 +15,8 @@
 <tr>
 <td>-wordsize</td>
 <td>Word size</td>
-<td>Integer 2 or more</td>
-<td>4</td>
+<td>Integer 1 or more</td>
+<td>@($(acdprotein)? 2 : 4)</td>
 </tr>
 
 <tr>

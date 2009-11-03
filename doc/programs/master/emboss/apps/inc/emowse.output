@@ -60,13 +60,13 @@ Using data fragments of:
 
          No Match      1086.2 1399.6 2030.2 2424.7 2930.3 5423.0 6082.8 
 
-    18 : FLAV_CLOSA     4.938e+00 17763.3    0.125 
+    18 : FLAV_CLOSA     4.938e+00 17763.4    0.125 
          Flavodoxin.
          Mw     Start  End    Seq
         *1085.3 17     26     VAKLIEEGVK                                   
          No Match      1399.6 2030.2 2424.7 2930.3 3086.3 5423.0 6082.8 
 
-    19 : AMIC_PSEAE     3.859e+00 42806.9    0.125 
+    19 : AMIC_PSEAE     3.859e+00 42807.0    0.125 
          Aliphatic amidase expression-regulating protein.
          Mw     Start  End    Seq
         *2423.7 308    328    VEDVQRHLYDICIDAPQGPVR                        

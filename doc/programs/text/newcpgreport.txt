@@ -5,49 +5,42 @@
 
 Function
 
-   Report CpG rich areas
+   Identify CpG islands in nucleotide sequence(s)
 
 Description
 
-   This application is used in the production of the CpG Island database
-   'CPGISLE'. It produces CPGISLE database entry format reports for a
-   potential CpG island.
+   newcpgreport identifies CpG islands in one or more nucleotide
+   sequences. The ratio of observered to expected number of GC
+   dinucleotides patterns is calculated over a window (sequence region)
+   which is moved along the sequence. The calculated ratios are used to
+   identify regions which match the program's definition of a "CpG
+   island" (a CG dinucleotide rich area). A report file is written giving
+   the input sequence name, CpG island parameters and data on any CpG
+   islands that are found.
 
-   See the FTP site: ftp://ftp.ebi.ac.uk/pub/databases/cpgisle/ for the
-   finished database.
+Algorithm
 
-   CpG refers to a C nucleotide immediately followed by a G. The 'p' in
-   'CpG' refers to the phosphate group linking the two bases.
+   The ratio of observered to expected number of GC dinucleotides
+   patterns is calculated over a window of user-specified size (-window
+   parameter). The window is slid along the sequence and the ratio
+   recalculated until the end of the sequence is reached.
 
-   Detection of regions of genomic sequences that are rich in the CpG
-   pattern is important because such regions are resistant to methylation
-   and tend to be associated with genes which are frequently switched on.
-   Regions rich in the CpG pattern are known as CpG islands.
+   By default, cpgplot defines a CpG island as a region where, over an
+   average of 10 windows and not less than 200 bases, the calculated (%G
+   + %C) content is over 50% and the calculated Observed/Expected ratio
+   is over 0.6. These conditions can be modified by setting the values of
+   the appropriate parameters.
 
-   It has been estimated that about half of all mammalian genes have a
-   CpG-rich region around their 5' end. It is said that all mammalian
-   house-keeping genes have a CpG island!
+   The Observed number of CpG patterns in a window is simply the number
+   of times a C is found followed immediately by a G.
 
-   Non-mammalian vertebrates have some CpG islands that are associated
-   with genes, but the association gets equivocal in the farther
-   taxonomic groups.
-
-   Finding a CpG island upstream of predicted exons or genes is good
-   contributory evidence for that gene's existance.
-
-   By default, this program defines a CpG island as a region where, over
-   an average of 10 windows, the calculated % composition is over 50% and
-   the calculated Obs/Exp ratio is over 0.6 and the conditions hold for a
-   minimum of 200 bases. These conditions can be modified by setting the
-   values of the appropriate parameters.
-
-   The Expected number of CpG patterns in a window is calculated as the
-   number of 'C's in the window multiplied by the number of 'G's in the
-   window, divided by the window length.
-
-   This program reads in one or more sequences and finds regions where
-   there is a high absolute frequency of CpG dimers as well as a high
-   proportion of CpG compared to GpC.
+   The Expected number of CpG patterns is calculated for each window as
+   the number of CpG dinucleotides you would expect to see in that window
+   based on the frequency of C's and G's in that window. Thus, the
+   Expected frequency of CpG's in a window is calculated as the number of
+   Cs in the window multiplied by the number of Gs in the window, divided
+   by the window length. Expected = (number of C's * number of G's) /
+   window length
 
 Usage
 
@@ -55,7 +48,7 @@ Usage
 
 
 % newcpgreport 
-Report CpG rich areas
+Identify CpG islands in nucleotide sequence(s)
 Input nucleotide sequence(s): tembl:u68037
 Window size [100]: 
 Shift increment [1]: 
@@ -106,8 +99,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -274,7 +268,57 @@ Data files
 
 Notes
 
-   None.
+   "CpG" refers to a C nucleotide immediately followed by a G. The 'p' in
+   'CpG' refers to the phosphate group linking the two bases. Regions of
+   genomic sequences rich in the CpG pattern or "CpG islands" are
+   resistant to methylation and tend to be associated with genes which
+   are frequently switched on. It's been estimated that about half of all
+   mammalian genes, and, possibly all mammalian house-keeping genes, have
+   a CpG-rich region around their 5' end. Non-mammalian vertebrates have
+   some CpG islands that are associated with genes, but the association
+   gets equivocal in the farther taxonomic groups. The detection of CpG
+   island upstream of predicted exons or genes is evidence in support of
+   a highly expressed gene.
+
+   newcpgreport is used in the production of the CpG Island database
+   'CPGISLE'. It produces a report for potential CpG islands in CPGISLE
+   database entry format. See the FTP site:
+   ftp://ftp.ebi.ac.uk/pub/databases/cpgisle/ for the finished database.
+
+   As there is no official definition of what is a CpG island is or how
+   to identify where they begin and end, we work with two definitions and
+   thus two methods. These are:
+
+   1. cpgplot and newcpgreport use a sliding window within which the
+   Observed/Expected ratio of CpG is calculated. For a sequence region to
+   reported as a CpG island, it must satisfy the following contraints:
+  Observed/Expected ratio > 0.6
+   % C + % G > 50%
+   Sequence Length > 200
+
+   2. newcpgseek and cpgreport use a running sum calculated from all
+   positions in a sequence rather than a window to produce a score. If
+   there is not a CG dinucleotide at a position, the score is
+   decremented, if there is one, the score is incremented by a constant
+   (user-defined) value. If the score for a region in the sequence is
+   higher than a threshold (17 at the moment) then a putative island is
+   declared. Sequence regions scoring above the threshold are searched
+   for recursively.
+
+   This method overpredicts islands but finds the smaller ones around
+   primary exons. newcpgseek uses the same method as cpgreport but the
+   output is different and more readable. For most purposes you should
+   probably use newcpgreport rather than cpgreport. It is used to produce
+   the human cpgisland database you can find on the EBI's ftp server as
+   well as on the EBI's SRS server.
+
+   newcpgseek and cpgreport both now display the actual CpG count, the
+   (%C + %G) and the Observed/Expected ratio in the region where the
+   score is above the threshold.
+
+   The geecee program measures CG content in the entire input sequence
+   and is not to be used to detect CpG islands. It can be useful for
+   detecting sequences that MIGHT contain an island.
 
 References
 
@@ -299,11 +343,13 @@ Known bugs
 
 See also
 
-   Program name                        Description
-   cpgplot      Plot CpG rich areas
-   cpgreport    Reports all CpG rich regions
-   geecee       Calculates fractional GC content of nucleic acid sequences
-   newcpgseek   Reports CpG rich regions
+   Program name Description
+   cpgplot Identify and plot CpG islands in nucleotide sequence(s)
+   cpgreport Identify and report CpG-rich regions in nucleotide
+   sequence(s)
+   geecee Calculate fractional GC content of nucleic acid sequences
+   newcpgseek Identify and report CpG-rich regions in nucleotide
+   sequence(s)
 
    As there is no official definition of what is a cpg island is, and
    worst where they begin and end, we have to live with 2 definitions and

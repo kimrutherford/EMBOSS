@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>preg </b>
-Regular expression search of a protein sequence
+Regular expression search of protein sequence(s)
 Input protein sequence(s): <b>tsw:*_rat</b>
 Regular expression pattern: <b>IA[QWF]A</b>
 Output report [edd1_rat.preg]: <b></b>

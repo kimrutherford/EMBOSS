@@ -340,21 +340,24 @@ int main(int argc, char **argv)
     char   symbol = '\0'; /* single character as result of string iterations */
     float  ymax   = +60.0; /* Maximum PEST-find score (graphics y-axis) */
     float  ymin   = -60.0; /* Minimum PEST-find score (graphics y-axis) */
-    
 
+    EmbPPropMolwt *mwdata = NULL;
+    AjBool mono;
+    double dtmp = 0.;
+    
     ajGraphInit("epestfind", argc, argv);
 
     ajGraphSetPage(960, 960);
 
     seq    = ajAcdGetSeq("sequence");
     win    = ajAcdGetInt("window");
-    dsppot = ajAcdGetBool("potential");
-    dspwea = ajAcdGetBool("poor");
-    dspinv = ajAcdGetBool("invalid");
-    dspmap = ajAcdGetBool("map");
+    dsppot = ajAcdGetBoolean("potential");
+    dspwea = ajAcdGetBoolean("poor");
+    dspinv = ajAcdGetBoolean("invalid");
+    dspmap = ajAcdGetBoolean("map");
     trshld = ajAcdGetFloat("threshold");
     outf   = ajAcdGetOutfile("outfile");
-    mfptr = ajAcdGetDatafile("aadata");
+    mfptr = ajAcdGetDatafile("mwdata");
     sorder = ajAcdGetSelectSingle("order");
     graph  = ajAcdGetGraphxy("graph");
     begin  = ajSeqGetBegin(seq);
@@ -363,8 +366,9 @@ int main(int argc, char **argv)
     str    = ajStrNew();
     substr = ajStrNew();
     reslst = ajListNew();
+    mono   = ajAcdGetBoolean("mono");
     
-    embPropAminoRead(mfptr);
+    mwdata = embPropEmolwtRead(mfptr);
     ajFileClose(&mfptr);	  /* Close the amino acid datafile. */
     
     AJCNEW0(aac, EMBIEPSIZE);
@@ -429,9 +433,11 @@ int main(int argc, char **argv)
 		    embIepCompS(substr, 1, 0, 0, aac);
 		    /* Valid PEST motifs must contain D or E, P and S or T. */
 		    if(
-		       aac[ajAZToInt ('D')] + aac[ajAZToInt ('E')] == 0 ||
-		       aac[ajAZToInt ('P')] == 0 ||
-		       aac[ajAZToInt ('S')] + aac[ajAZToInt ('T')] == 0
+                        (aac[ajBasecodeToInt ('D')] +
+                         aac[ajBasecodeToInt ('E')]) == 0 ||
+                        aac[ajBasecodeToInt ('P')] == 0 ||
+                        (aac[ajBasecodeToInt ('S')] +
+                         aac[ajBasecodeToInt ('T')]) == 0
 		       )
 		    {
 			/* invalid PEST motifs */
@@ -448,26 +454,52 @@ int main(int argc, char **argv)
 			break;
 		    }
 		    momass  = embPropCalcMolwtMod(ajStrGetPtr(substr), 0,
-						(sublen - 1), 0, 0);
+						(sublen - 1), mwdata, mono,
+						  0, 0);
 		    pstsum  = 0;
-		    pstsum += EmbPropTable[ajAZToInt('D')][EMBPROPMOLWT] *
-			aac[ajAZToInt('D')];
-		    pstsum += EmbPropTable[ajAZToInt('E')][EMBPROPMOLWT] *
-			aac[ajAZToInt('E')];
-		    pstsum += EmbPropTable[ajAZToInt('P')][EMBPROPMOLWT] *
-			aac[ajAZToInt('P')];
-		    pstsum += EmbPropTable[ajAZToInt('S')][EMBPROPMOLWT] *
-			aac[ajAZToInt('S')];
-		    pstsum += EmbPropTable[ajAZToInt('T')][EMBPROPMOLWT] *
-			aac[ajAZToInt('T')];
-		    pstsum -= EmbPropTable[ajAZToInt('E')][EMBPROPMOLWT];
-		    pstsum -= EmbPropTable[ajAZToInt('P')][EMBPROPMOLWT];
-		    pstsum -= EmbPropTable[ajAZToInt('T')][EMBPROPMOLWT];
+
+
+		    dtmp = (mono) ? mwdata[ajBasecodeToInt('D')]->mono :
+			mwdata[ajBasecodeToInt('D')]->average;
+		    pstsum += dtmp * aac[ajBasecodeToInt('D')];
+
+		    dtmp = (mono) ? mwdata[ajBasecodeToInt('E')]->mono :
+			mwdata[ajBasecodeToInt('E')]->average;
+		    pstsum += dtmp * aac[ajBasecodeToInt('E')];
+
+		    dtmp = (mono) ? mwdata[ajBasecodeToInt('P')]->mono :
+			mwdata[ajBasecodeToInt('P')]->average;
+		    pstsum += dtmp * aac[ajBasecodeToInt('P')];
+
+		    dtmp = (mono) ? mwdata[ajBasecodeToInt('S')]->mono :
+			mwdata[ajBasecodeToInt('S')]->average;
+		    pstsum += dtmp * aac[ajBasecodeToInt('S')];
+
+		    dtmp = (mono) ? mwdata[ajBasecodeToInt('T')]->mono :
+			mwdata[ajBasecodeToInt('T')]->average;
+		    pstsum += dtmp * aac[ajBasecodeToInt('T')];
+
+		    dtmp = (mono) ? mwdata[ajBasecodeToInt('E')]->mono :
+			mwdata[ajBasecodeToInt('E')]->average;
+		    pstsum -= dtmp;
+
+		    dtmp = (mono) ? mwdata[ajBasecodeToInt('P')]->mono :
+			mwdata[ajBasecodeToInt('P')]->average;
+		    pstsum -= dtmp;
+
+		    dtmp = (mono) ? mwdata[ajBasecodeToInt('T')]->mono :
+			mwdata[ajBasecodeToInt('T')]->average;
+		    pstsum -= dtmp;
+		    
 		    pstpct  = pstsum / momass * 100;
 		    hydind  = 0;
 		    for(i = 0; i < 26; i++)
-			hydind += EmbPropTable[i][EMBPROPMOLWT] *
+		    {
+			dtmp = (mono) ? mwdata[i]->mono : mwdata[i]->average;
+			hydind += dtmp *
 			    (double) aac[i] * (double) ltkdhi[i] / momass;
+		    }
+		    
 
 		    pscore = 0.55 * pstpct - 0.5 * hydind;
 		    /* valid PEST motifs */
@@ -747,6 +779,10 @@ int main(int argc, char **argv)
     }
     
     AJFREE(aac);
+
+    embPropMolwtDel(&mwdata);
+    
+
     /* Delete the list of PEST data and all objects within. */
     ajListFree(&reslst);
     ajStrDel(&map);		/* Delete the map string. */

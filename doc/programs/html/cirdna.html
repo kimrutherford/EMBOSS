@@ -30,25 +30,10 @@ Draws circular maps of DNA constructs
 </H2>
 
 
-The program 'cirdna' draws circular maps of DNA constructs.
+<p><b>cirdna</b> draws circular maps of DNA constructs. It uses graphical shapes including ticks, ranges, and blocks to represent genetic markers (e.g, genes and ESTs) and places them according to their position in a DNA fragment. The markers can be organized in different groups. A group may contain up to 10000 markers, so the program is suitable for drawing circular representations of genomic sequences.</p>
 
-<p>
-It uses the graphical shapes: ticks, ranges, and blocks to
-represent genetic markers (e.g, genes and ESTs) and places them
-according to their position in a DNA fragment.  The markers can be
-organized in different groups. A group may contain up to 10000 markers, so the 
-   program can be used to draw circular representations of genomic
-sequences. 
+<p>The program reads an input file containing the names and positions of the genetic markers. You must write this file yourself (see Input File Format below).  Data for controlling the appearance of the markers may also be added to this file.</p>
 
-<p>
-The program reads in one input file in which the user specifies the
-names and positions of the genetic markers.  In this file the user also
-enters data for controlling the appearance of the markers. 
-
-<p>
-A refined customization of the drawing can be achieved by running the
-program with '-options' on the command line and changing the values of
-the desired parameters. 
 
 <H2>
     Usage
@@ -153,8 +138,9 @@ Created cirdna.ps
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -510,7 +496,8 @@ None.
     Notes
 </H2>
 
-None.
+<p>There are many options for controlling the appearance of the plot.  Mostly these are "additional qualifiers" and can be specified on the command-line by using the corresponding flag, but will not normally be prompted for.  To be prompted for values for them, run the program with the <tt>-options</tt> global qualifier.</p>
+
 
 
 <H2>
@@ -548,10 +535,11 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="abiview.html">abiview</a></td>
-<td>Reads ABI file and display the trace</td>
+<td>Display the trace in an ABI sequencer file</td>
 </tr>
 
 <tr>
@@ -561,52 +549,52 @@ None.
 
 <tr>
 <td><a href="pepnet.html">pepnet</a></td>
-<td>Displays proteins as a helical net</td>
+<td>Draw a helical net for a protein sequence</td>
 </tr>
 
 <tr>
 <td><a href="pepwheel.html">pepwheel</a></td>
-<td>Shows protein sequences as helices</td>
+<td>Draw a helical wheel diagram for a protein sequence</td>
 </tr>
 
 <tr>
 <td><a href="prettyplot.html">prettyplot</a></td>
-<td>Displays aligned sequences, with colouring and boxing</td>
+<td>Draw a sequence alignment with pretty formatting</td>
 </tr>
 
 <tr>
 <td><a href="prettyseq.html">prettyseq</a></td>
-<td>Output sequence with translated ranges</td>
+<td>Write a nucleotide sequence and its translation to file</td>
 </tr>
 
 <tr>
 <td><a href="remap.html">remap</a></td>
-<td>Display sequence with restriction sites, translation etc</td>
+<td>Display restriction enzyme binding sites in a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="seealso.html">seealso</a></td>
-<td>Finds programs sharing group names</td>
+<td>Finds programs with similar function to a specified program</td>
 </tr>
 
 <tr>
 <td><a href="showalign.html">showalign</a></td>
-<td>Displays a multiple sequence alignment</td>
+<td>Display a multiple sequence alignment in pretty format</td>
 </tr>
 
 <tr>
 <td><a href="showdb.html">showdb</a></td>
-<td>Displays information on the currently available databases</td>
+<td>Displays information on configured databases</td>
 </tr>
 
 <tr>
 <td><a href="showfeat.html">showfeat</a></td>
-<td>Show features of a sequence</td>
+<td>Display features of a sequence in pretty format</td>
 </tr>
 
 <tr>
 <td><a href="showseq.html">showseq</a></td>
-<td>Display a sequence with features, translation etc</td>
+<td>Displays sequences with features in pretty format</td>
 </tr>
 
 <tr>
@@ -616,7 +604,7 @@ None.
 
 <tr>
 <td><a href="textsearch.html">textsearch</a></td>
-<td>Search sequence documentation. Slow, use SRS and Entrez!</td>
+<td>Search the textual description of sequence(s)</td>
 </tr>
 
 </table>

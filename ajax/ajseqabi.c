@@ -51,14 +51,14 @@ AjBool ajSeqABITest(AjPFile fp)
 
     ajDebug("ajSeqABITest file %F end: %B\n", fp, fp->End);
 
-    if (fp->End && ajFileStdin(fp))
+    if (fp->End && ajFileIsStdin(fp))
     {
 	ajDebug("EOF: ajSeqABITest already at end file %F\n", fp);
 	return ajFalse;
     }
 
     if(ajFileSeek(fp,0,SEEK_SET) >= 0)
-	if(ajFileRead((void *)pabi,4,1,fp))
+	if(ajReadbinBinary(fp,1,4,(void *)pabi))
 	{
 	    ajDebug("ajSeqABITest was at '%s'\n", pabi);
 	    if(ajCharPrefixC(pabi,"ABIF"))
@@ -68,7 +68,7 @@ AjBool ajSeqABITest(AjPFile fp)
     if(ajFileSeek(fp,26,SEEK_SET) >= 0)
     {
 	ajDebug("ajSeqABITest seek to pos 26\n");
-	if(ajFileRead((void*)pabi,4,1,fp))
+	if(ajReadbinBinary(fp,1,4,(void*)pabi))
 	{
 	    ajDebug("ajSeqABITest seek to '%s'\n", pabi);
 	    if(ajCharPrefixC(pabi,"ABIF"))
@@ -105,7 +105,7 @@ AjBool ajSeqABIReadSeq(AjPFile fp,ajlong baseO,ajlong numBases,
     ajFileSeek(fp,baseO,SEEK_SET);
     for (i=0;i<(ajint)numBases;i++)
     {
-	ajFileRead(&pseq,1,1,fp);
+	ajReadbinBinary(fp,1,1,&pseq);
 	ajStrAppendK(nseq,pseq);
     }
 
@@ -137,9 +137,9 @@ AjBool ajSeqABIMachineName(AjPFile fp,AjPStr *machine)
     {
 	if (ajFileSeek(fp,mchn,SEEK_SET) >= 0)
 	{
-	    ajFileRead(&l,sizeof(char),1,fp);
+	    ajReadbinBinary(fp,1,sizeof(char),&l);
 	    *machine = ajStrNewRes(l+1);
-	    ajFileRead((void*)ajStrGetuniquePtr(machine),l,1,fp);
+	    ajReadbinBinary(fp,1,l,(void*)ajStrGetuniquePtr(machine));
 	    *(ajStrGetuniquePtr(machine)+l)='\0';
 	}
 	else
@@ -553,7 +553,7 @@ static AjBool seqABIReadInt4(AjPFile fp,ajlong *i4)
 
     unsigned char buf[sizeof(ajlong)];
 
-    if (ajFileRead((void *)buf,4,1,fp) != 1)
+    if (ajReadbinBinary(fp,1,4,(void *)buf) != 1)
 	return ajFalse;
 
     *i4 = (ajlong)
@@ -588,7 +588,7 @@ static AjBool seqABIReadFloat4(AjPFile fp,float* f4)
     unsigned char buf[sizeof(ajlong)];
     ajulong res;
     
-    if (ajFileRead((void *)buf,4,1,fp) != 1)
+    if (ajReadbinBinary(fp,1,4,(void *)buf) != 1)
 	return ajFalse;
 
     res = (ajulong)
@@ -619,7 +619,7 @@ static AjBool seqABIReadInt2(AjPFile fp, ajshort *i2)
 {
     unsigned char buf[sizeof(ajshort)];
 
-    if (ajFileRead((void *)buf,2,1,fp) != 1)
+    if (ajReadbinBinary(fp,1,2,(void *)buf) != 1)
 	return ajFalse;
     *i2 = (ajshort)
         (((ajushort)buf[1]) +
@@ -838,9 +838,9 @@ AjBool ajSeqABISampleName(AjPFile fp, AjPStr *sample)
     if((seqABIGetFlag(fp,SMPLtag,1,5,&mchn)) &&
        (ajFileSeek(fp,mchn,SEEK_SET) >= 0))
     {
-	ajFileRead(&l,sizeof(char),1,fp);
+	ajReadbinBinary(fp,1,sizeof(char),&l);
 	*sample = ajStrNewRes(l+1);
-	ajFileRead((void*)ajStrGetuniquePtr(sample),l,1,fp);
+	ajReadbinBinary(fp,1,l,(void*)ajStrGetuniquePtr(sample));
 	*(ajStrGetuniquePtr(sample)+l)='\0';
     }
 

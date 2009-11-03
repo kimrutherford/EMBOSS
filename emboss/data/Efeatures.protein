@@ -71,7 +71,7 @@ chain
 
 # COILED - Extent of a coiled-coil region
 
-coiled
+coiled SO:0001080
 	/note
 	/comment
 

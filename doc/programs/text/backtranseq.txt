@@ -5,23 +5,19 @@
 
 Function
 
-   Back translate a protein sequence
+   Back-translate a protein sequence to a nucleotide sequence
 
 Description
 
-   backtranseq takes a protein sequence and makes a best estimate of the
-   likely nucleic acid sequence it could have come from. It does this by
-   using a codon frequency table. For each amino acid, the corresponding
-   most frequently occuring codon is used in the construction of the
-   nucleic acid sequence.
+   backtranseq reads a protein sequence and writes the nucleic acid
+   sequence it is most likely to have come from.
 
-  Codon usage table name
+Algorithm
 
-   backtranseq reads in a data file containing the codon frequency
-   tables. The default codon frequency table is 'Ehum.cut' - the human
-   codon frequency table. It is important to use a codon frequency table
-   that is appropriate for the species that your protein comes from. See
-   the Data Files section below for more details on these files.
+   backtranseq uses a codon usage table which gives the frequency of
+   usage of each codon for each amino acid. For each amino acid in the
+   input sequence, the corresponding most frequently occuring codon is
+   used in the nucleic acid sequence that is output.
 
 Usage
 
@@ -32,7 +28,7 @@ Usage
 
 
 % backtranseq 
-Back translate a protein sequence
+Back-translate a protein sequence to a nucleotide sequence
 Input (gapped) protein sequence: tsw:opsd_human
 (gapped) nucleotide output sequence [opsd_human.fasta]: 
 
@@ -45,7 +41,7 @@ Input (gapped) protein sequence: tsw:opsd_human
 
 
 % backtranseq -cfile Edrome.cut 
-Back translate a protein sequence
+Back-translate a protein sequence to a nucleotide sequence
 Input (gapped) protein sequence: tsw:ach2_drome
 (gapped) nucleotide output sequence [ach2_drome.fasta]: 
 
@@ -100,8 +96,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -440,7 +437,12 @@ Data files
 
 Notes
 
-   None.
+   backtranseq reads a data file containing the codon usage table. The
+   default file is Ehum.cut - the human codon usage table. Many others
+   are available and can be set by name with the -cfile qualifier. It is
+   important to use one that is appropriate for the species that your
+   protein comes from. The specified data file must exist in the EMBOSS
+   data directory (see below for more information).
 
 References
 
@@ -469,29 +471,33 @@ Known bugs
 
 See also
 
-   Program name                         Description
-   backtranambig Back translate a protein sequence to ambiguous codons
-   charge        Protein charge plot
-   checktrans    Reports STOP codons and ORF statistics of a protein
-   coderet       Extract CDS, mRNA and translations from feature tables
-   compseq       Count composition of dimer/trimer/etc words in a sequence
-   emowse        Protein identification by mass spectrometry
-   freak         Residue/base frequency table or plot
-   iep           Calculates the isoelectric point of a protein
-   mwcontam      Shows molwts that match across a set of files
-   mwfilter      Filter noisy molwts from mass spec output
-   octanol       Displays protein hydropathy
-   pepinfo       Plots simple amino acid properties in parallel
-   pepstats      Protein statistics
-   pepwindow     Displays protein hydropathy
-   pepwindowall  Displays protein hydropathy of a set of sequences
-   plotorf       Plot potential open reading frames
-   prettyseq     Output sequence with translated ranges
-   remap         Display sequence with restriction sites, translation etc
-   showorf       Pretty output of DNA translations
-   showseq       Display a sequence with features, translation etc
-   sixpack       Display a DNA sequence with 6-frame translation and ORFs
-   transeq       Translate nucleic acid sequences
+   Program name Description
+   backtranambig Back-translate a protein sequence to ambiguous
+   nucleotide sequence
+   charge Draw a protein charge plot
+   checktrans Reports STOP codons and ORF statistics of a protein
+   coderet Extract CDS, mRNA and translations from feature tables
+   compseq Calculate the composition of unique words in sequences
+   emowse Search protein sequences by digest fragment molecular weight
+   freak Generate residue/base frequency table or plot
+   iep Calculate the isoelectric point of proteins
+   mwcontam Find weights common to multiple molecular weights files
+   mwfilter Filter noisy data from molecular weights file
+   octanol Draw a White-Wimley protein hydropathy plot
+   pepinfo Plot amino acid properties of a protein sequence in parallel
+   pepstats Calculates statistics of protein properties
+   pepwindow Draw a Kyte-Doolittle hydropathy plot for a protein sequence
+   pepwindowall Draw Kyte-Doolittle hydropathy plot for a protein
+   alignment
+   plotorf Plot potential open reading frames in a nucleotide sequence
+   prettyseq Write a nucleotide sequence and its translation to file
+   remap Display restriction enzyme binding sites in a nucleotide
+   sequence
+   showorf Display a nucleotide sequence and translation in pretty format
+   showseq Displays sequences with features in pretty format
+   sixpack Display a DNA sequence with 6-frame translation and ORFs
+   transeq Translate nucleic acid sequences
+   wordcount Count and extract unique words in DNA sequence(s)
 
 Author(s)
 

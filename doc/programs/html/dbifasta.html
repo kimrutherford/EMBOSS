@@ -24,7 +24,7 @@ dbifasta
 <H2>
     Function
 </H2>
-Database indexing for fasta file databases
+Index a fasta file database
 <H2>
     Description
 </H2>
@@ -35,32 +35,6 @@ the EMBL database CD-ROM distribution and by the Staden package in
 addition to EMBOSS, and appears to be the most generally used and
 publicly available index file format for these databases.
 
-<p>
-
-Having created the EMBOSS indices for this file, a database can then be
-defined in the file <b>emboss.defaults</b> as something like:
-
-<pre>
-DB emrod [
-   type: N
-   format: fasta
-   method: emblcd
-   directory: /data/embl/fasta
-]  
-</pre>
-
-
-<h3>Fields Indexed</H3>
-
-By default, <b>dbifasta</b> will index the ID name and the accession
-number (if present). 
-
-<br>
-
-If they are present in your database, you may also specify that
-<b>dbifasta</b> should index the Sequence Version and GI number and the
-words in the description by using the '-fields' qualifier with the
-appropriate values.                                                
 
 
 <H2>
@@ -73,14 +47,14 @@ appropriate values.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>dbifasta </b>
-Database indexing for fasta file databases
+Index a fasta file database
 Database name: <b>EMROD</b>
-    simple : >ID
-     idacc : >ID ACC
+              simple : >ID
+               idacc : >ID ACC
   or >ID (ACC) gcgid : >db:ID
-  gcgidacc : >db:ID ACC
-      dbid : >db ID
-      ncbi : | formats
+            gcgidacc : >db:ID ACC
+                dbid : >db ID
+                ncbi : | formats
 ID line format [idacc]: <b>idacc</b>
 Database directory [.]: <b>data</b>
 Wildcard database filename [*.dat]: <b>emrod</b>
@@ -138,8 +112,9 @@ General log output file [outfile.dbifasta]: <b></b>
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -301,10 +276,10 @@ General log output file [outfile.dbifasta]: <b></b>
 <pre>
 ########################################
 # Program: dbifasta
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Dbname: EMROD
 # Release: 0.0
-# Date: 15/07/07
+# Date: 15/07/08
 # CurrentDirectory: /homes/user/test/qa/dbifasta-ex-keep/
 # IndexDirectory: ./
 # IndexDirectoryPath: /homes/user/test/qa/dbifasta-ex-keep/
@@ -386,6 +361,35 @@ The indexing method depends on each entry having a unique entry name.
 No allowance is made for two entries with the same name so it is
 not possible to index EMBL and EMBLNEW together.
 
+
+<p>
+
+Having created the EMBOSS indices for this file, a database can then be
+defined in the file <b>emboss.defaults</b> as something like:
+
+<pre>
+DB emrod [
+   type: N
+   format: fasta
+   method: emblcd
+   directory: /data/embl/fasta
+]  
+</pre>
+
+
+<h3>Fields Indexed</H3>
+
+By default, <b>dbifasta</b> will index the ID name and the accession
+number (if present). 
+
+<br>
+
+If they are present in your database, you may also specify that
+<b>dbifasta</b> should index the Sequence Version and GI number and the
+words in the description by using the '-fields' qualifier with the
+appropriate values.                                                
+
+
 <H2>
     References
 </H2>
@@ -418,7 +422,8 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="dbiblast.html">dbiblast</a></td>
 <td>Index a BLAST database</td>
@@ -436,17 +441,17 @@ None.
 
 <tr>
 <td><a href="dbxfasta.html">dbxfasta</a></td>
-<td>Database b+tree indexing for fasta file databases</td>
+<td>Index a fasta file database using b+tree indices</td>
 </tr>
 
 <tr>
 <td><a href="dbxflat.html">dbxflat</a></td>
-<td>Database b+tree indexing for flat file databases</td>
+<td>Index a flat file database using b+tree indices</td>
 </tr>
 
 <tr>
 <td><a href="dbxgcg.html">dbxgcg</a></td>
-<td>Database b+tree indexing for GCG formatted databases</td>
+<td>Index a GCG formatted database using b+tree indices</td>
 </tr>
 
 </table>

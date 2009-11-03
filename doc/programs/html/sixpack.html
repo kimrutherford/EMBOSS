@@ -38,56 +38,26 @@ IT IS DONE FOR YOU.
     Description
 </H2>
 
-<!-- 
-	This is the main part of the document.
-        This is what the user looks at to find out if this program will do what he wants. 
-        Long description.
-        Why it is useful.
-        When it should/shouldn't be used.
-  -->
-
-<b>sixpack</b> takes a nucleic acid sequence and writes out the forward
-and reverse senses of the sequence with the 3 forward and three reverse
-translations in a pretty display format. 
-
-<p>
-
-It also writes a file containing the open reading frames that are larger
-than the specified minimum size (default 1 base, showing all possible
-open reading frames).  These open reading frames are written as protein
-sequences in the default output sequence format. 
-
-<p>
-
-An open reading frame is defined in this program as any possible
-translation between two STOP codons. 
+<p><b>sixpack</b> reads a DNA sequence and writes an output file giving out the forward and reverse sense sequences with the three forward and (optionally) three reverse translations in a pretty display format.  A genetic code may be specified for the translation.  There are various options to control the appearance of the output file.  It also writes a file of protein sequences corresponding to any open reading frames that are larger than the specified minimum size: the default of 1 base shows all possible open reading frames.</p>
 
 <H2>
     Algorithm
 </H2>
 
-The nucleic acid sequence is read in.
-<br>
-The required genetic code is read in from the EGC* data files.
-<br>
-The three forward and three reverse translations are created.
-<br>
-The name and description are written to the ouput display file.
-<br>
-Any required regions to be changed to upper case are changed.
-<br>
-Any required regions to be highlighted in HTML colour tags are changed.
-<br>
-The reverse sense sequence is placed below the forward sequence.
-<br>
-The forward translations are placed above the sequences.
-<br>
-The reverse translation are placed below the sequences.
-<br>
-The display is written out, split at the ends of lines.
-<br>
-Any ORFs that are longer than the specified minimum size are written to
-the output sequence file. 
+<p>The program takes the following steps:</p>
+<pre>
+ The nucleic acid sequence is read in.
+ The required genetic code is read in from the EGC* data files.
+ The three forward and three reverse translations are created.
+ The name and description are written to the ouput display file.
+ Any required regions to be changed to upper case are changed.
+ Any required regions to be highlighted in HTML colour tags are changed.
+ The reverse sense sequence is placed below the forward sequence.
+ The forward translations are placed above the sequences.
+ The reverse translation are placed below the sequences.
+ The display is written out, split at the ends of lines.
+ Any ORFs that are longer than the specified minimum size are written to the output sequence file.
+</pre>
 
 <H2>
     Usage
@@ -234,8 +204,9 @@ protein output sequence(s) [x13776.fasta]: <b></b>
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -913,7 +884,7 @@ Base3  = TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG
     Notes
 </H2>
 
-None.
+<p>An open reading frame is defined in this program as any possible translation between two STOP codons. Optionally, the beginning or end of a sequence may be counted as an ORF even if it's less than the minimal ORF size or (end only) lacking a STOP codon.  See the -firstorf and -lastorf options.</p>
 
 <H2>
     References
@@ -947,20 +918,21 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="abiview.html">abiview</a></td>
-<td>Reads ABI file and display the trace</td>
+<td>Display the trace in an ABI sequencer file</td>
 </tr>
 
 <tr>
 <td><a href="backtranambig.html">backtranambig</a></td>
-<td>Back translate a protein sequence to ambiguous codons</td>
+<td>Back-translate a protein sequence to ambiguous nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="backtranseq.html">backtranseq</a></td>
-<td>Back translate a protein sequence</td>
+<td>Back-translate a protein sequence to a nucleotide sequence</td>
 </tr>
 
 <tr>
@@ -985,82 +957,82 @@ None.
 
 <tr>
 <td><a href="marscan.html">marscan</a></td>
-<td>Finds MAR/SAR sites in nucleic sequences</td>
+<td>Finds matrix/scaffold recognition (MRS) signatures in DNA sequences</td>
 </tr>
 
 <tr>
 <td><a href="pepnet.html">pepnet</a></td>
-<td>Displays proteins as a helical net</td>
+<td>Draw a helical net for a protein sequence</td>
 </tr>
 
 <tr>
 <td><a href="pepwheel.html">pepwheel</a></td>
-<td>Shows protein sequences as helices</td>
+<td>Draw a helical wheel diagram for a protein sequence</td>
 </tr>
 
 <tr>
 <td><a href="plotorf.html">plotorf</a></td>
-<td>Plot potential open reading frames</td>
+<td>Plot potential open reading frames in a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="prettyplot.html">prettyplot</a></td>
-<td>Displays aligned sequences, with colouring and boxing</td>
+<td>Draw a sequence alignment with pretty formatting</td>
 </tr>
 
 <tr>
 <td><a href="prettyseq.html">prettyseq</a></td>
-<td>Output sequence with translated ranges</td>
+<td>Write a nucleotide sequence and its translation to file</td>
 </tr>
 
 <tr>
 <td><a href="remap.html">remap</a></td>
-<td>Display sequence with restriction sites, translation etc</td>
+<td>Display restriction enzyme binding sites in a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="seealso.html">seealso</a></td>
-<td>Finds programs sharing group names</td>
+<td>Finds programs with similar function to a specified program</td>
 </tr>
 
 <tr>
 <td><a href="showalign.html">showalign</a></td>
-<td>Displays a multiple sequence alignment</td>
+<td>Display a multiple sequence alignment in pretty format</td>
 </tr>
 
 <tr>
 <td><a href="showdb.html">showdb</a></td>
-<td>Displays information on the currently available databases</td>
+<td>Displays information on configured databases</td>
 </tr>
 
 <tr>
 <td><a href="showfeat.html">showfeat</a></td>
-<td>Show features of a sequence</td>
+<td>Display features of a sequence in pretty format</td>
 </tr>
 
 <tr>
 <td><a href="showorf.html">showorf</a></td>
-<td>Pretty output of DNA translations</td>
+<td>Display a nucleotide sequence and translation in pretty format</td>
 </tr>
 
 <tr>
 <td><a href="showseq.html">showseq</a></td>
-<td>Display a sequence with features, translation etc</td>
+<td>Displays sequences with features in pretty format</td>
 </tr>
 
 <tr>
 <td><a href="syco.html">syco</a></td>
-<td>Synonymous codon usage Gribskov statistic plot</td>
+<td>Draw synonymous codon usage statictic plot for a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="tcode.html">tcode</a></td>
-<td>Fickett TESTCODE statistic to identify protein-coding DNA</td>
+<td>Identify protein-coding regions using Fickett TESTCODE statistic</td>
 </tr>
 
 <tr>
 <td><a href="textsearch.html">textsearch</a></td>
-<td>Search sequence documentation. Slow, use SRS and Entrez!</td>
+<td>Search the textual description of sequence(s)</td>
 </tr>
 
 <tr>
@@ -1070,7 +1042,7 @@ None.
 
 <tr>
 <td><a href="wobble.html">wobble</a></td>
-<td>Wobble base plot</td>
+<td>Plot third base position variability in a nucleotide sequence</td>
 </tr>
 
 </table>

@@ -1,5 +1,5 @@
 application: maskseq [
-  documentation: "Mask off regions of a sequence."
+  documentation: "Write a sequence with masked regions"
   groups: "Edit"
 ]
 

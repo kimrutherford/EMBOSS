@@ -50,7 +50,7 @@ int main(int argc, char **argv)
 
     seqout    = ajAcdGetSeqoutall("outseq");
     seqall    = ajAcdGetSeqall("sequence");
-    firstonly = ajAcdGetBool("firstonly");
+    firstonly = ajAcdGetBoolean("firstonly");
 
     table = ajTablestrNewCaseLen(1000); /* 1000 sequences. Number not critical */
 

@@ -1,5 +1,6 @@
 application: silent [
-  documentation: "Silent mutation restriction enzyme scan"
+  documentation: "Find restriction sites to insert (mutate)
+                  with no translation change"
   groups: "Nucleic:Restriction"
 ]
 
@@ -52,8 +53,8 @@ section: output [
   report: outfile [
     parameter: "Y"
     rformat: "table"
-    taglist: "str:Dir str:enzyme=EnzymeName
-              str:rspattern=RS-Pattern int:baseposn=Base-Posn rstr:aa=AAs
+    taglist: "str:enzyme=EnzymeName str:rspattern=RS-Pattern
+    	      int:baseposn=Base-Posn rstr:aa=AAs
               rstr:silent=Silent rstr:mutation=Mutation"
     rscoreshow: "N"
   ]

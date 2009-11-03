@@ -1,0 +1,931 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: skipredundant
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+skipredundant
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+    Function
+</H2>
+Remove redundant sequences from an input set
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+Redundancy in a database or other collection of sequences occurs when
+one or more similar sequences are present. The inclusion of very
+similar sequences in certain analyses will introduce undesirable
+bias. For example, a family may possess 100 sequences in the sequence
+database, but 90 of these might be essentially the same sequence,
+e.g. very close relatives or mutations of a single sequence.  Although
+100 sequences are known, the family only contains 11 sequences that
+are essentially unique.  For many applications it is desirable or even
+essential to remove redundant sequences from a set in order to produce
+a smaller set that is representative of the whole. SEQNR removes
+redundancy from an input file of sequences, either at a single
+threshold of sequence similiarty (e.g. 40%) or within a threshold
+range of sequence similiarty (e.g. 40% - 70%).
+
+
+
+
+
+
+
+<H2>
+    Algorithm
+</H2>
+
+Redundancy is calculated for each pair of sequences in turn.
+
+
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+<b>Here is a sample session with skipredundant</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>skipredundant -threshold 80 -keepredundant </b>
+Remove redundant sequences from an input set
+Input sequence set: <b>globins.fasta</b>
+Redundancy removal options
+         1 : Single threshold percentage sequence similarity
+         2 : Outside a range of acceptable threshold percentage similarities
+Select number [1]: <b></b>
+Gap opening penalty [10.0]: <b></b>
+Gap extension penalty [0.5]: <b></b>
+output sequence(s) [globins.keep]: <b></b>
+Second output sequence(s) [globins.redundant]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers (* if not always prompted):
+  [-sequences]         seqset     Sequence set filename and optional format,
+                                  or reference (input USA)
+   -mode               menu       [1] This option specifies whether to remove
+                                  redundancy at a single threshold percentage
+                                  sequence similarity or remove redundancy
+                                  outside a range of acceptable threshold
+                                  percentage similarity. All permutations of
+                                  pair-wise sequence alignments are calculated
+                                  for each set of input sequences in turn
+                                  using the EMBOSS implementation of the
+                                  Needleman and Wunsch global alignment
+                                  algorithm. Redundant sequences are removed
+                                  in one of two modes as follows: (i) If a
+                                  pair of proteins achieve greater than a
+                                  threshold percentage sequence similarity
+                                  (specified by the user) the shortest
+                                  sequence is discarded. (ii) If a pair of
+                                  proteins have a percentage sequence
+                                  similarity that lies outside an acceptable
+                                  range (specified by the user) the shortest
+                                  sequence is discarded. (Values: 1 (Single
+                                  threshold percentage sequence similarity); 2
+                                  (Outside a range of acceptable threshold
+                                  percentage similarities))
+*  -threshold          float      [95.0] This option specifies the percentage
+                                  sequence identity redundancy threshold. The
+                                  percentage sequence identity redundancy
+                                  threshold determines the redundancy
+                                  calculation. If a pair of proteins achieve
+                                  greater than this threshold the shortest
+                                  sequence is discarded. (Any numeric value)
+*  -minthreshold       float      [30.0] This option specifies the percentage
+                                  sequence identity redundancy threshold
+                                  (lower limit). The percentage sequence
+                                  identity redundancy threshold determines the
+                                  redundancy calculation. If a pair of
+                                  proteins have a percentage sequence
+                                  similarity that lies outside an acceptable
+                                  range the shortest sequence is discarded.
+                                  (Any numeric value)
+*  -maxthreshold       float      [90.0] This option specifies the percentage
+                                  sequence identity redundancy threshold
+                                  (upper limit). The percentage sequence
+                                  identity redundancy threshold determines the
+                                  redundancy calculation. If a pair of
+                                  proteins have a percentage sequence
+                                  similarity that lies outside an acceptable
+                                  range the shortest sequence is discarded.
+                                  (Any numeric value)
+   -gapopen            float      [10.0 for any sequence] The gap open penalty
+                                  is the score taken away when a gap is
+                                  created. The best value depends on the
+                                  choice of comparison matrix. The default
+                                  value assumes you are using the EBLOSUM62
+                                  matrix for protein sequences, and the
+                                  EDNAFULL matrix for nucleotide sequences.
+                                  (Floating point number from 1.0 to 100.0)
+   -gapextend          float      [0.5 for any sequence] The gap extension,
+                                  penalty is added to the standard gap penalty
+                                  for each base or residue in the gap. This
+                                  is how long gaps are penalized. Usually you
+                                  will expect a few long gaps rather than many
+                                  short gaps, so the gap extension penalty
+                                  should be lower than the gap penalty. An
+                                  exception is where one or both sequences are
+                                  single reads with possible sequencing
+                                  errors in which case you would expect many
+                                  single base gaps. You can get this result by
+                                  setting the gap open penalty to zero (or
+                                  very low) and using the gap extension
+                                  penalty to control gap scoring. (Floating
+                                  point number from 0.0 to 10.0)
+  [-outseq]            seqoutall  [<sequence>.<format>] Sequence set(s)
+                                  filename and optional format (output USA)
+  [-redundantoutseq]   seqoutall  [<sequence>.<format>] Sequence set(s)
+                                  filename and optional format (output USA)
+
+   Additional (Optional) qualifiers:
+   -datafile           matrixf    [EBLOSUM62 for protein, EDNAFULL for DNA]
+                                  This is the scoring matrix file used when
+                                  comparing sequences. By default it is the
+                                  file 'EBLOSUM62' (for proteins) or the file
+                                  'EDNAFULL' (for nucleic sequences). These
+                                  files are found in the 'data' directory of
+                                  the EMBOSS installation.
+
+   Advanced (Unprompted) qualifiers:
+   -feature            toggle     Sequence feature information will be
+                                  retained if this option is set.
+   -keepredundant      toggle     [N] This option specifies whether to retain
+                                  redundant sequences. If this option is set a
+                                  file of redundant sequences is written.
+
+   Associated qualifiers:
+
+   "-sequences" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outseq" associated qualifiers
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
+
+   "-redundantoutseq" associated qualifiers
+   -osformat3          string     Output seq format
+   -osextension3       string     File name extension
+   -osname3            string     Base file name
+   -osdirectory3       string     Output directory
+   -osdbname3          string     Database name to add
+   -ossingle3          boolean    Separate file for each entry
+   -oufo3              string     UFO features
+   -offormat3          string     Features format
+   -ofname3            string     Features file name
+   -ofdirectory3       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequences]<br>(Parameter 1)</td>
+<td>Sequence set filename and optional format, or reference (input USA)</td>
+<td>Readable set of sequences</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-mode</td>
+<td>This option specifies whether to remove redundancy at a single threshold percentage sequence similarity or remove redundancy outside a range of acceptable threshold percentage similarity. All permutations of pair-wise sequence alignments are calculated for each set of input sequences in turn using the EMBOSS implementation of the Needleman and Wunsch global alignment algorithm. Redundant sequences are removed in one of two modes as follows: (i) If a pair of proteins achieve greater than a threshold percentage sequence similarity (specified by the user) the shortest sequence is discarded. (ii) If a pair of proteins have a percentage sequence similarity that lies outside an acceptable range (specified by the user) the shortest sequence is discarded.</td>
+<td><table><tr><td>1</td> <td><i>(Single threshold percentage sequence similarity)</i></td></tr><tr><td>2</td> <td><i>(Outside a range of acceptable threshold percentage similarities)</i></td></tr></table></td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-threshold</td>
+<td>This option specifies the percentage sequence identity redundancy threshold. The percentage sequence identity redundancy threshold determines the redundancy calculation. If a pair of proteins achieve greater than this threshold the shortest sequence is discarded.</td>
+<td>Any numeric value</td>
+<td>95.0</td>
+</tr>
+
+<tr>
+<td>-minthreshold</td>
+<td>This option specifies the percentage sequence identity redundancy threshold (lower limit). The percentage sequence identity redundancy threshold determines the redundancy calculation. If a pair of proteins have a percentage sequence similarity that lies outside an acceptable range the shortest sequence is discarded.</td>
+<td>Any numeric value</td>
+<td>30.0</td>
+</tr>
+
+<tr>
+<td>-maxthreshold</td>
+<td>This option specifies the percentage sequence identity redundancy threshold (upper limit). The percentage sequence identity redundancy threshold determines the redundancy calculation. If a pair of proteins have a percentage sequence similarity that lies outside an acceptable range the shortest sequence is discarded.</td>
+<td>Any numeric value</td>
+<td>90.0</td>
+</tr>
+
+<tr>
+<td>-gapopen</td>
+<td>The gap open penalty is the score taken away when a gap is created. The best value depends on the choice of comparison matrix. The default value assumes you are using the EBLOSUM62 matrix for protein sequences, and the EDNAFULL matrix for nucleotide sequences.</td>
+<td>Floating point number from 1.0 to 100.0</td>
+<td>10.0 for any sequence</td>
+</tr>
+
+<tr>
+<td>-gapextend</td>
+<td>The gap extension, penalty is added to the standard gap penalty for each base or residue in the gap. This is how long gaps are penalized. Usually you will expect a few long gaps rather than many short gaps, so the gap extension penalty should be lower than the gap penalty. An exception is where one or both sequences are single reads with possible sequencing errors in which case you would expect many single base gaps. You can get this result by setting the gap open penalty to zero (or very low) and using the gap extension penalty to control gap scoring.</td>
+<td>Floating point number from 0.0 to 10.0</td>
+<td>0.5 for any sequence</td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 2)</td>
+<td>Sequence set(s) filename and optional format (output USA)</td>
+<td>Writeable sequence(s)</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr>
+<td>[-redundantoutseq]<br>(Parameter 3)</td>
+<td>Sequence set(s) filename and optional format (output USA)</td>
+<td>Writeable sequence(s)</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-datafile</td>
+<td>This is the scoring matrix file used when comparing sequences. By default it is the file 'EBLOSUM62' (for proteins) or the file 'EDNAFULL' (for nucleic sequences). These files are found in the 'data' directory of the EMBOSS installation.</td>
+<td>Comparison matrix file in EMBOSS data path</td>
+<td>EBLOSUM62 for protein<br>EDNAFULL for DNA</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-feature</td>
+<td>Sequence feature information will be retained if this option is set.</td>
+<td>Toggle value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-keepredundant</td>
+<td>This option specifies whether to retain redundant sequences. If this option is set a file of redundant sequences is written.</td>
+<td>Toggle value Yes/No</td>
+<td>No</td>
+</tr>
+
+</table>
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+<b>skipredundant</b> reads any normal sequence USAs.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: globins.fasta</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+&gt;HBB_HUMAN Sw:Hbb_Human =&gt; HBB_HUMAN
+VHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKV
+KAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFGK
+EFTPPVQAAYQKVVAGVANALAHKYH
+&gt;HBB_HORSE Sw:Hbb_Horse =&gt; HBB_HORSE
+VQLSGEEKAAVLALWDKVNEEEVGGEALGRLLVVYPWTQRFFDSFGDLSNPGAVMGNPKV
+KAHGKKVLHSFGEGVHHLDNLKGTFAALSELHCDKLHVDPENFRLLGNVLVVVLARHFGK
+DFTPELQASYQKVVAGVANALAHKYH
+&gt;HBA_HUMAN Sw:Hba_Human =&gt; HBA_HUMAN
+VLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHFDLSHGSAQVKGHGK
+KVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTPA
+VHASLDKFLASVSTVLTSKYR
+&gt;HBA_HORSE Sw:Hba_Horse =&gt; HBA_HORSE
+VLSAADKTNVKAAWSKVGGHAGEYGAEALERMFLGFPTTKTYFPHFDLSHGSAQVKAHGK
+KVGDALTLAVGHLDDLPGALSNLSDLHAHKLRVDPVNFKLLSHCLLSTLAVHLPNDFTPA
+VHASLDKFLSSVSTVLTSKYR
+&gt;MYG_PHYCA Sw:Myg_Phyca =&gt; MYG_PHYCA
+VLSEGEWQLVLHVWAKVEADVAGHGQDILIRLFKSHPETLEKFDRFKHLKTEAEMKASED
+LKKHGVTVLTALGAILKKKGHHEAELKPLAQSHATKHKIPIKYLEFISEAIIHVLHSRHP
+GDFGADAQGAMNKALELFRKDIAAKYKELGYQG
+&gt;GLB5_PETMA Sw:Glb5_Petma =&gt; GLB5_PETMA
+PIVDTGSVAPLSAAEKTKIRSAWAPVYSTYETSGVDILVKFFTSTPAAQEFFPKFKGLTT
+ADQLKKSADVRWHAERIINAVNDAVASMDDTEKMSMKLRDLSGKHAKSFQVDPQYFKVLA
+AVIADTVAAGDAGFEKLMSMICILLRSAY
+&gt;LGB2_LUPLU Sw:Lgb2_Luplu =&gt; LGB2_LUPLU
+GALTESQAALVKSSWEEFNANIPKHTHRFFILVLEIAPAAKDLFSFLKGTSEVPQNNPEL
+QAHAGKVFKLVYEAAIQLQVTGVVVTDATLKNLGSVHVSKGVADAHFPVVKEAILKTIKE
+VVGAKWSEELNSAWTIAYDELAIVIKKEMNDAA
+</pre>
+</td></tr></table><p>
+
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<!-- 
+        This includes example output file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null output, errors etc. 
+
+        If you wish to include the standard description of the avalable
+	report formats, use:
+        #include file="inc/reportformats.ihtml"
+   -->
+
+<b>skipredundant</b> 
+outputs a graph to the specified graphics device. 
+outputs a report format file. The default format is ...
+
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: globins.keep</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;HBB_HUMAN Sw:Hbb_Human =&gt; HBB_HUMAN
+VHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKV
+KAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFGK
+EFTPPVQAAYQKVVAGVANALAHKYH
+&gt;HBA_HUMAN Sw:Hba_Human =&gt; HBA_HUMAN
+VLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHFDLSHGSAQVKGHGK
+KVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTPA
+VHASLDKFLASVSTVLTSKYR
+&gt;MYG_PHYCA Sw:Myg_Phyca =&gt; MYG_PHYCA
+VLSEGEWQLVLHVWAKVEADVAGHGQDILIRLFKSHPETLEKFDRFKHLKTEAEMKASED
+LKKHGVTVLTALGAILKKKGHHEAELKPLAQSHATKHKIPIKYLEFISEAIIHVLHSRHP
+GDFGADAQGAMNKALELFRKDIAAKYKELGYQG
+&gt;GLB5_PETMA Sw:Glb5_Petma =&gt; GLB5_PETMA
+PIVDTGSVAPLSAAEKTKIRSAWAPVYSTYETSGVDILVKFFTSTPAAQEFFPKFKGLTT
+ADQLKKSADVRWHAERIINAVNDAVASMDDTEKMSMKLRDLSGKHAKSFQVDPQYFKVLA
+AVIADTVAAGDAGFEKLMSMICILLRSAY
+&gt;LGB2_LUPLU Sw:Lgb2_Luplu =&gt; LGB2_LUPLU
+GALTESQAALVKSSWEEFNANIPKHTHRFFILVLEIAPAAKDLFSFLKGTSEVPQNNPEL
+QAHAGKVFKLVYEAAIQLQVTGVVVTDATLKNLGSVHVSKGVADAHFPVVKEAILKTIKE
+VVGAKWSEELNSAWTIAYDELAIVIKKEMNDAA
+</pre>
+</td></tr></table><p>
+<p><h3>File: globins.redundant</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;HBB_HORSE Sw:Hbb_Horse =&gt; HBB_HORSE
+VQLSGEEKAAVLALWDKVNEEEVGGEALGRLLVVYPWTQRFFDSFGDLSNPGAVMGNPKV
+KAHGKKVLHSFGEGVHHLDNLKGTFAALSELHCDKLHVDPENFRLLGNVLVVVLARHFGK
+DFTPELQASYQKVVAGVANALAHKYH
+&gt;HBA_HORSE Sw:Hba_Horse =&gt; HBA_HORSE
+VLSAADKTNVKAAWSKVGGHAGEYGAEALERMFLGFPTTKTYFPHFDLSHGSAQVKAHGK
+KVGDALTLAVGHLDDLPGALSNLSDLHAHKLRVDPVNFKLLSHCLLSTLAVHLPNDFTPA
+VHASLDKFLSSVSTVLTSKYR
+</pre>
+</td></tr></table><p>
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+
+For protein sequences EBLOSUM62 is used for the substitution
+matrix. For nucleotide sequence, EDNAFULL is used. Others can be specified.
+
+<p>
+<p>
+EMBOSS data files are distributed with the application and stored
+in the standard EMBOSS data directory, which is defined
+by the EMBOSS environment variable EMBOSS_DATA.
+
+<p>
+
+To see the available EMBOSS data files, run:
+<p>
+<pre>
+% embossdata -showall
+</pre>
+<p>
+To fetch one of the data files (for example 'Exxx.dat') into your
+current directory for you to inspect or modify, run:
+
+<pre>
+
+% embossdata -fetch -file Exxx.dat
+
+</pre>
+<p>
+
+Users can provide their own data files in their own directories.
+Project specific files can be put in the current directory, or for
+tidier directory listings in a subdirectory called
+".embossdata". Files for all EMBOSS runs can be put in the user's home
+directory, or again in a subdirectory called ".embossdata".
+
+<p>
+The directories are searched in the following order:
+
+<ul>
+   <li> . (your current directory)
+   <li> .embossdata (under your current directory)
+   <li> ~/ (your home directory)
+   <li> ~/.embossdata
+</ul>
+<p>
+
+
+
+
+
+
+
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+<ol>
+
+<li>
+
+</ol>
+
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="aligncopy.html">aligncopy</a></td>
+<td>Reads and writes alignments</td>
+</tr>
+
+<tr>
+<td><a href="aligncopypair.html">aligncopypair</a></td>
+<td>Reads and writes pairs from alignments</td>
+</tr>
+
+<tr>
+<td><a href="biosed.html">biosed</a></td>
+<td>Replace or delete sequence sections</td>
+</tr>
+
+<tr>
+<td><a href="codcopy.html">codcopy</a></td>
+<td>Copy and reformat a codon usage table</td>
+</tr>
+
+<tr>
+<td><a href="cutseq.html">cutseq</a></td>
+<td>Removes a section from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="degapseq.html">degapseq</a></td>
+<td>Removes non-alphabetic (e.g. gap) characters from sequences</td>
+</tr>
+
+<tr>
+<td><a href="descseq.html">descseq</a></td>
+<td>Alter the name or description of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="entret.html">entret</a></td>
+<td>Retrieves sequence entries from flatfile databases and files</td>
+</tr>
+
+<tr>
+<td><a href="extractalign.html">extractalign</a></td>
+<td>Extract regions from a sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="extractfeat.html">extractfeat</a></td>
+<td>Extract features from sequence(s)</td>
+</tr>
+
+<tr>
+<td><a href="extractseq.html">extractseq</a></td>
+<td>Extract regions from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="featcopy.html">featcopy</a></td>
+<td>Reads and writes a feature table</td>
+</tr>
+
+<tr>
+<td><a href="featreport.html">featreport</a></td>
+<td>Reads and writes a feature table</td>
+</tr>
+
+<tr>
+<td><a href="listor.html">listor</a></td>
+<td>Write a list file of the logical OR of two sets of sequences</td>
+</tr>
+
+<tr>
+<td><a href="makenucseq.html">makenucseq</a></td>
+<td>Create random nucleotide sequences</td>
+</tr>
+
+<tr>
+<td><a href="makeprotseq.html">makeprotseq</a></td>
+<td>Create random protein sequences</td>
+</tr>
+
+<tr>
+<td><a href="maskambignuc.html">maskambignuc</a></td>
+<td>Masks all ambiguity characters in nucleotide sequences with N</td>
+</tr>
+
+<tr>
+<td><a href="maskambigprot.html">maskambigprot</a></td>
+<td>Masks all ambiguity characters in protein sequences with X</td>
+</tr>
+
+<tr>
+<td><a href="maskfeat.html">maskfeat</a></td>
+<td>Write a sequence with masked features</td>
+</tr>
+
+<tr>
+<td><a href="maskseq.html">maskseq</a></td>
+<td>Write a sequence with masked regions</td>
+</tr>
+
+<tr>
+<td><a href="newseq.html">newseq</a></td>
+<td>Create a sequence file from a typed-in sequence</td>
+</tr>
+
+<tr>
+<td><a href="nohtml.html">nohtml</a></td>
+<td>Remove mark-up (e.g. HTML tags) from an ASCII text file</td>
+</tr>
+
+<tr>
+<td><a href="noreturn.html">noreturn</a></td>
+<td>Remove carriage return from ASCII files</td>
+</tr>
+
+<tr>
+<td><a href="nospace.html">nospace</a></td>
+<td>Remove all whitespace from an ASCII text file</td>
+</tr>
+
+<tr>
+<td><a href="notab.html">notab</a></td>
+<td>Replace tabs with spaces in an ASCII text file</td>
+</tr>
+
+<tr>
+<td><a href="notseq.html">notseq</a></td>
+<td>Write to file a subset of an input stream of sequences</td>
+</tr>
+
+<tr>
+<td><a href="nthseq.html">nthseq</a></td>
+<td>Write to file a single sequence from an input stream of sequences</td>
+</tr>
+
+<tr>
+<td><a href="pasteseq.html">pasteseq</a></td>
+<td>Insert one sequence into another</td>
+</tr>
+
+<tr>
+<td><a href="revseq.html">revseq</a></td>
+<td>Reverse and complement a nucleotide sequence</td>
+</tr>
+
+<tr>
+<td><a href="seqret.html">seqret</a></td>
+<td>Reads and writes (returns) sequences</td>
+</tr>
+
+<tr>
+<td><a href="seqretsplit.html">seqretsplit</a></td>
+<td>Reads sequences and writes them to individual files</td>
+</tr>
+
+<tr>
+<td><a href="sizeseq.html">sizeseq</a></td>
+<td>Sort sequences by size</td>
+</tr>
+
+<tr>
+<td><a href="skipseq.html">skipseq</a></td>
+<td>Reads and writes (returns) sequences, skipping first few</td>
+</tr>
+
+<tr>
+<td><a href="splitter.html">splitter</a></td>
+<td>Split sequence(s) into smaller sequences</td>
+</tr>
+
+<tr>
+<td><a href="trimest.html">trimest</a></td>
+<td>Remove poly-A tails from nucleotide sequences</td>
+</tr>
+
+<tr>
+<td><a href="trimseq.html">trimseq</a></td>
+<td>Remove unwanted characters from start and end of sequence(s)</td>
+</tr>
+
+<tr>
+<td><a href="trimspace.html">trimspace</a></td>
+<td>Remove extra whitespace from an ASCII text file</td>
+</tr>
+
+<tr>
+<td><a href="union.html">union</a></td>
+<td>Concatenate multiple sequences into a single sequence</td>
+</tr>
+
+<tr>
+<td><a href="vectorstrip.html">vectorstrip</a></td>
+<td>Removes vectors from the ends of nucleotide sequence(s)</td>
+</tr>
+
+<tr>
+<td><a href="yank.html">yank</a></td>
+<td>Add a sequence reference (a full USA) to a list file</td>
+</tr>
+
+</table>
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+Jon Ison (jison&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+
+
+<H2>
+    History
+</H2>
+<!--
+        Date written and what changes have been made go in this file.
+   -->
+
+
+
+
+<H2>
+    Target users
+</H2>
+<!--
+        For general users, use this text
+   -->
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+<!--
+        User/developer/other comments go in this file.
+   -->
+None
+
+
+</BODY>
+</HTML>
+

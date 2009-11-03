@@ -24,23 +24,13 @@ pepwheel
 <H2>
     Function
 </H2>
-Shows protein sequences as helices
+Draw a helical wheel diagram for a protein sequence
 
 <H2>
     Description
 </H2>
 
-<b>pepwheel</b> displays peptide sequences in a helical representation.
-
-<p>
-
-This gives a view of a helix from a protein sequence looking down the
-axis of the helix. 
-
-<p>
-
-It is useful for highlighting amphipathicity and other properties of
-residues around a helix. 
+<p><b>pepwheel</b> draws a helical wheel diagram for a protein sequence.  This displays the sequence in a helical representation as if looking down the axis of the helix.  It is useful for highlighting amphipathicity and other properties of residues around a helix. By default, aliphatic residues are marked with squares, hydrophilic residues are marked with diamonds, and positively charged residues with octagons, although this can be changed.</p>
 
 <H2>
     Usage
@@ -52,7 +42,7 @@ residues around a helix.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>pepwheel tsw:hbb_human -send 30 </b>
-Shows protein sequences as helices
+Draw a helical wheel diagram for a protein sequence
 Graph type [x11]: <b>cps</b>
 
 Created pepwheel.ps
@@ -130,8 +120,9 @@ Created pepwheel.ps
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -382,12 +373,8 @@ None.
     Notes
 </H2>
 
-
-The default settings for turn (5) and steps (18) apply to alpha
-helices. For other possible secondary structures, see the following
-table:
-
-<p>
+<p>The number of residues plotted per turn is the specified "steps" value (<tt>-steps</tt>) divided by the specified "turns" value (<tt>-turns</tt>).</p>
+<p>The default settings for turn (5) and steps (18) apply to alpha helices. For other possible secondary structures, see the following table:</p>
 
 <pre>
 helix       phi   psi  omega  res/turn  transl.  turns  steps
@@ -401,8 +388,12 @@ anti Beta  -139   135   -178       2.0     3.4       4      9
 para Beta  -119   113    180       2.0     3.2       4      9
 
 PP is polyproline
-PG II is polyGlycine.
-</pre>
+PG II is polyGlycine.</pre>
+
+
+<p>When you specify the number of turns and steps, be aware that you should remove common factors from these two numbers. For example, if you (for some improbable reason) wished to plot a wheel with 8 turns in 18 steps (2.25 residues per turn) you should remove the common factor (i.e. 2) and specify 4 turns in 9 steps.</p>
+
+
 
 <H2>
     References
@@ -452,10 +443,11 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="abiview.html">abiview</a></td>
-<td>Reads ABI file and display the trace</td>
+<td>Display the trace in an ABI sequencer file</td>
 </tr>
 
 <tr>
@@ -465,17 +457,17 @@ None.
 
 <tr>
 <td><a href="garnier.html">garnier</a></td>
-<td>Predicts protein secondary structure</td>
+<td>Predicts protein secondary structure using GOR method</td>
 </tr>
 
 <tr>
 <td><a href="helixturnhelix.html">helixturnhelix</a></td>
-<td>Report nucleic acid binding motifs</td>
+<td>Identify nucleic acid-binding motifs in protein sequences</td>
 </tr>
 
 <tr>
 <td><a href="hmoment.html">hmoment</a></td>
-<td>Hydrophobic moment calculation</td>
+<td>Calculate and plot hydrophobic moment for protein sequence(s)</td>
 </tr>
 
 <tr>
@@ -485,52 +477,52 @@ None.
 
 <tr>
 <td><a href="pepcoil.html">pepcoil</a></td>
-<td>Predicts coiled coil regions</td>
+<td>Predicts coiled coil regions in protein sequences</td>
 </tr>
 
 <tr>
 <td><a href="pepnet.html">pepnet</a></td>
-<td>Displays proteins as a helical net</td>
+<td>Draw a helical net for a protein sequence</td>
 </tr>
 
 <tr>
 <td><a href="prettyplot.html">prettyplot</a></td>
-<td>Displays aligned sequences, with colouring and boxing</td>
+<td>Draw a sequence alignment with pretty formatting</td>
 </tr>
 
 <tr>
 <td><a href="prettyseq.html">prettyseq</a></td>
-<td>Output sequence with translated ranges</td>
+<td>Write a nucleotide sequence and its translation to file</td>
 </tr>
 
 <tr>
 <td><a href="remap.html">remap</a></td>
-<td>Display sequence with restriction sites, translation etc</td>
+<td>Display restriction enzyme binding sites in a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="seealso.html">seealso</a></td>
-<td>Finds programs sharing group names</td>
+<td>Finds programs with similar function to a specified program</td>
 </tr>
 
 <tr>
 <td><a href="showalign.html">showalign</a></td>
-<td>Displays a multiple sequence alignment</td>
+<td>Display a multiple sequence alignment in pretty format</td>
 </tr>
 
 <tr>
 <td><a href="showdb.html">showdb</a></td>
-<td>Displays information on the currently available databases</td>
+<td>Displays information on configured databases</td>
 </tr>
 
 <tr>
 <td><a href="showfeat.html">showfeat</a></td>
-<td>Show features of a sequence</td>
+<td>Display features of a sequence in pretty format</td>
 </tr>
 
 <tr>
 <td><a href="showseq.html">showseq</a></td>
-<td>Display a sequence with features, translation etc</td>
+<td>Displays sequences with features in pretty format</td>
 </tr>
 
 <tr>
@@ -540,12 +532,12 @@ None.
 
 <tr>
 <td><a href="textsearch.html">textsearch</a></td>
-<td>Search sequence documentation. Slow, use SRS and Entrez!</td>
+<td>Search the textual description of sequence(s)</td>
 </tr>
 
 <tr>
 <td><a href="tmap.html">tmap</a></td>
-<td>Displays membrane spanning regions</td>
+<td>Predict and plot transmembrane segments in protein sequences</td>
 </tr>
 
 </table>

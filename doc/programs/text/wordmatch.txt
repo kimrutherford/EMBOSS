@@ -5,19 +5,14 @@
 
 Function
 
-   Finds all exact matches of a given size between 2 sequences
+   Finds regions of identity (exact matches) of two sequences
 
 Description
 
-   Finds all exact matches of a given minimum size between 2 sequences
-   displaying the start points in each sequence and the match length.
-
-   This program takes two sequences and finds regions where they are
-   identical. These regions are reported in the output file (and
-   optionally) in GFF (Gene Feature Format) files.
-
-   It will not find identical regions smaller than the specified
-   wordsize.
+   wordmatch finds all regions of identity (exact matches) of a specified
+   minimum size of two input sequences. These regions are reported in a
+   standard EMBOSS alignment file and (optionally) in standard EMBOSS
+   sequence feature files.
 
 Usage
 
@@ -25,7 +20,7 @@ Usage
 
 
 % wordmatch tsw:hba_human tsw:hbb_human 
-Finds all exact matches of a given size between 2 sequences
+Finds regions of identity (exact matches) of two sequences
 Word size [4]: 
 Output alignment [hba_human.wordmatch]: 
 Features output [HBA_HUMAN.gff]: 
@@ -111,8 +106,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -375,7 +371,7 @@ Output file format
 
 ########################################
 # Program: wordmatch
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: wordmatch
 #    [-asequence] tsw:hba_human
 #    [-bsequence] tsw:hbb_human
@@ -400,26 +396,26 @@ Output file format
   File: HBA_HUMAN.gff
 
 ##gff-version 2.0
-##date 2006-07-15
+##date 2007-07-15
 ##Type Protein HBA_HUMAN
-HBA_HUMAN       wordmatch       misc_feature    59      63      1.000   +
-.       Sequence "HBA_HUMAN.1" ; note "HBB_HUMAN"
-HBA_HUMAN       wordmatch       misc_feature    15      18      1.000   +
-.       Sequence "HBA_HUMAN.2" ; note "HBB_HUMAN"
-HBA_HUMAN       wordmatch       misc_feature    117     120     1.000   +
-.       Sequence "HBA_HUMAN.3" ; note "HBB_HUMAN"
+HBA_HUMAN       wordmatch       region  59      63      1.000   +       .
+Sequence "HBA_HUMAN.1" ; note "HBB_HUMAN"
+HBA_HUMAN       wordmatch       region  15      18      1.000   +       .
+Sequence "HBA_HUMAN.2" ; note "HBB_HUMAN"
+HBA_HUMAN       wordmatch       region  117     120     1.000   +       .
+Sequence "HBA_HUMAN.3" ; note "HBB_HUMAN"
 
   File: HBB_HUMAN.gff
 
 ##gff-version 2.0
-##date 2006-07-15
+##date 2007-07-15
 ##Type Protein HBB_HUMAN
-HBB_HUMAN       wordmatch       misc_feature    64      68      1.000   +
-.       Sequence "HBB_HUMAN.1" ; note "HBA_HUMAN"
-HBB_HUMAN       wordmatch       misc_feature    16      19      1.000   +
-.       Sequence "HBB_HUMAN.2" ; note "HBA_HUMAN"
-HBB_HUMAN       wordmatch       misc_feature    122     125     1.000   +
-.       Sequence "HBB_HUMAN.3" ; note "HBA_HUMAN"
+HBB_HUMAN       wordmatch       region  64      68      1.000   +       .
+Sequence "HBB_HUMAN.1" ; note "HBA_HUMAN"
+HBB_HUMAN       wordmatch       region  16      19      1.000   +       .
+Sequence "HBB_HUMAN.2" ; note "HBA_HUMAN"
+HBB_HUMAN       wordmatch       region  122     125     1.000   +       .
+Sequence "HBB_HUMAN.3" ; note "HBA_HUMAN"
 
    The normal 'report' header is output. It contains the details of the
    program run and the input sequences.
@@ -437,7 +433,8 @@ Data files
 
 Notes
 
-   None.
+   wormatch will only report identical regions that are at least as long
+   as the specified wordsize.
 
 References
 
@@ -461,12 +458,13 @@ Known bugs
 
 See also
 
-   Program name                        Description
-   matcher      Finds the best local alignments between two sequences
-   seqmatchall  All-against-all comparison of a set of sequences
-   supermatcher Match large sequences against one or more other sequences
-   water        Smith-Waterman local alignment
-   wordfinder   Match large sequences against one or more other sequences
+   Program name Description
+   matcher Waterman-Eggert local alignment of two sequences
+   seqmatchall All-against-all word comparison of a sequence set
+   supermatcher Calculate approximate local pair-wise alignments of
+   larger sequences
+   water Smith-Waterman local alignment of sequences
+   wordfinder Match large sequences against one or more other sequences
 
 Author(s)
 

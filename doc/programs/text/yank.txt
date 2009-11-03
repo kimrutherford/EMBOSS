@@ -5,56 +5,19 @@
 
 Function
 
-   Reads a sequence range, appends the full USA to a list file
+   Add a sequence reference (a full USA) to a list file
 
 Description
 
-   yank is a simple utility to add a specified sequence name to a list
-   file.
-
-   In fact, it writes out not just the name of the sequence, but also the
-   start and end position of a region within that sequence and, if the
-   sequence is nucleic, if can specify whether the sequence is the
-   reverse complement.
-
-   Without the program yank you would need to use a text editor such as
-   pico to create the appropriate list files. yank makes this process
-   easy.
-
-  List Files
-
-   Many EMBOSS programs can read in a set of sequences. (Some examples
-   are emma and union) There are many ways of specifying these sequences,
-   including wildcarded sequence file names, wildcarded database entry
-   names and list files. List files (files of file names) are the most
-   flexible. yank is a utility to add sequences to a list file.
-
-   Instead of containing the sequences themselves, a List file contains
-   "references" to sequences - so, for example, you might include
-   database entries, the names of files containing sequences, or even the
-   names of other list files. For example, here's a valid list file,
-   called seq.list:
-
-unix % more seq.list
-
-opsd_abyko.fasta
-sw:opsd_xenla
-sw:opsd_c*
-@another_list
-
-   This looks a bit odd, but it's really very straightforward; the file
-   contains:
-
-     * opsd_abyko.fasta - this is the name of a sequence file. The file
-       is read in from the current directory.
-     * sw:opsd_xenla - this is a reference to a specific sequence in the
-       SwissProt database
-     * sw:opsd_c* - this represents all the sequences in SwissProt whose
-       identifiers start with ``opsd_c''
-     * another_list - this is the name of a second list file
-
-   Notice the @ in front of the last entry. This is the way you tell
-   EMBOSS that this file is a list file, not a regular sequence file.
+   yank adds the full Uniform Sequence Address (USA) of a specified
+   sequence, or a region (subsequence) of a sequence, to a list file. The
+   file is appended to by default but (optionally) is overwritten.A list
+   file contains one or more sequence references (USAs). For example, a
+   database entry, the name of a file containing sequences, or even the
+   names of another list file. In addition to the name of the sequence,
+   it can write the start and end position of a region within that
+   sequence and, if the sequence is nucleic, if can specify whether the
+   sequence is the reverse complement.
 
 Usage
 
@@ -65,7 +28,7 @@ Usage
 
 
 % yank 
-Reads a sequence range, appends the full USA to a list file
+Add a sequence reference (a full USA) to a list file
 Input (gapped) sequence: tembl:x65921
      Begin at position [start]: 1913
        End at position [end]: 1915
@@ -109,8 +72,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -300,7 +264,34 @@ Data files
 
 Notes
 
-   None.
+   There are many ways of specifying input and output sequences for
+   EMBOSS programs, including wildcarded sequence file names, wildcarded
+   database entry names and list files. List files (files of file names)
+   are the most flexible. Instead of containing the sequences themselves,
+   a list file contains one or more sequence references (USAs). For
+   example, a database entry, the name of a file containing sequences, or
+   even the names of another list file. For example, here's a valid list
+   file:
+opsd_abyko.fasta
+sw:opsd_xenla
+sw:opsd_c*
+@another_list
+
+   The file contains:
+    * opsd_abyko.fasta - this is the name of a sequence file. The file is read
+in from the current directory.
+    * sw:opsd_xenla - this is a reference to a specific sequence in the SwissPr
+ot database
+    * sw:opsd_c* - this represents all the sequences in SwissProt whose identif
+iers start with ``opsd_c''
+    * another_list - this is the name of a second list file
+
+   Notice the @ in front of the last entry. This is the way you tell
+   EMBOSS that this file is a list file, not a regular sequence file.
+
+   Without the program yank you would need to use a text editor such as
+   pico to create the appropriate list files. yank makes this process
+   easy.
 
 References
 
@@ -324,35 +315,50 @@ Known bugs
 
 See also
 
-   Program name                         Description
-   biosed       Replace or delete sequence sections
-   codcopy      Reads and writes a codon usage table
-   cutseq       Removes a specified section from a sequence
-   degapseq     Removes gap characters from sequences
-   descseq      Alter the name or description of a sequence
-   entret       Reads and writes (returns) flatfile entries
+   Program name Description
+   aligncopy Reads and writes alignments
+   aligncopypair Reads and writes pairs from alignments
+   biosed Replace or delete sequence sections
+   codcopy Copy and reformat a codon usage table
+   cutseq Removes a section from a sequence
+   degapseq Removes non-alphabetic (e.g. gap) characters from sequences
+   descseq Alter the name or description of a sequence
+   entret Retrieves sequence entries from flatfile databases and files
    extractalign Extract regions from a sequence alignment
-   extractfeat  Extract features from a sequence
-   extractseq   Extract regions from a sequence
-   listor       Write a list file of the logical OR of two sets of sequences
-   makenucseq   Creates random nucleotide sequences
-   makeprotseq  Creates random protein sequences
-   maskfeat     Mask off features of a sequence
-   maskseq      Mask off regions of a sequence
-   newseq       Type in a short new sequence
-   noreturn     Removes carriage return from ASCII files
-   notseq       Exclude a set of sequences and write out the remaining ones
-   nthseq       Writes one sequence from a multiple set of sequences
-   pasteseq     Insert one sequence into another
-   revseq       Reverse and complement a sequence
-   seqret       Reads and writes (returns) sequences
-   seqretsplit  Reads and writes (returns) sequences in individual files
-   skipseq      Reads and writes (returns) sequences, skipping first few
-   splitter     Split a sequence into (overlapping) smaller sequences
-   trimest      Trim poly-A tails off EST sequences
-   trimseq      Trim ambiguous bits off the ends of sequences
-   union        Reads sequence fragments and builds one sequence
-   vectorstrip  Strips out DNA between a pair of vector sequences
+   extractfeat Extract features from sequence(s)
+   extractseq Extract regions from a sequence
+   featcopy Reads and writes a feature table
+   featreport Reads and writes a feature table
+   listor Write a list file of the logical OR of two sets of sequences
+   makenucseq Create random nucleotide sequences
+   makeprotseq Create random protein sequences
+   maskambignuc Masks all ambiguity characters in nucleotide sequences
+   with N
+   maskambigprot Masks all ambiguity characters in protein sequences with
+   X
+   maskfeat Write a sequence with masked features
+   maskseq Write a sequence with masked regions
+   newseq Create a sequence file from a typed-in sequence
+   nohtml Remove mark-up (e.g. HTML tags) from an ASCII text file
+   noreturn Remove carriage return from ASCII files
+   nospace Remove all whitespace from an ASCII text file
+   notab Replace tabs with spaces in an ASCII text file
+   notseq Write to file a subset of an input stream of sequences
+   nthseq Write to file a single sequence from an input stream of
+   sequences
+   pasteseq Insert one sequence into another
+   revseq Reverse and complement a nucleotide sequence
+   seqret Reads and writes (returns) sequences
+   seqretsplit Reads sequences and writes them to individual files
+   sizeseq Sort sequences by size
+   skipredundant Remove redundant sequences from an input set
+   skipseq Reads and writes (returns) sequences, skipping first few
+   splitter Split sequence(s) into smaller sequences
+   trimest Remove poly-A tails from nucleotide sequences
+   trimseq Remove unwanted characters from start and end of sequence(s)
+   trimspace Remove extra whitespace from an ASCII text file
+   union Concatenate multiple sequences into a single sequence
+   vectorstrip Removes vectors from the ends of nucleotide sequence(s)
 
    The program extract does not make list files, but creates a sequence
    from sub-regions of a single other sequence.

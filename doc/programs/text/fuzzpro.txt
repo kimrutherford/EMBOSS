@@ -5,18 +5,22 @@
 
 Function
 
-   Protein pattern search
+   Search for patterns in protein sequences
 
 Description
 
-   fuzzpro uses PROSITE style patterns to search protein sequences.
+   fuzznuc searches for a specified PROSITE-style pattern in protein
+   sequences. Such patterns are specifications of a (typically short)
+   length of sequence to be found. They can specify a search for an exact
+   sequence or they can allow various ambiguities, matches to variable
+   lengths of sequence and repeated subsections of the sequence. One or
+   more protein sequences are read from file. The output is a standard
+   EMBOSS report file that includes data such as location and score of
+   any matches.
 
-   Patterns are specifications of a (typically short) length of sequence
-   to be found. They can specify a search for an exact sequence or they
-   can allow various ambiguities, matches to variable lengths of sequence
-   and repeated subsections of the sequence.
+Algorithm
 
-   fuzzpro intelligently selects the optimum searching algorithm to use,
+   fuzznuc intelligently selects the optimum searching algorithm to use,
    depending on the complexity of the search pattern specified.
 
 Usage
@@ -25,7 +29,7 @@ Usage
 
 
 % fuzzpro 
-Protein pattern search
+Search for patterns in protein sequences
 Input protein sequence(s): tsw:*
 Search pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
 Output report [edd1_rat.fuzzpro]: 
@@ -102,14 +106,16 @@ Command line arguments
    -raccshow2          boolean    Show accession number in the report
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
+   -rstrandshow2       boolean    Show the nucleotide strand in the report
    -rusashow2          boolean    Show the full USA in the report
    -rmaxall2           integer    Maximum total hits to report
    -rmaxseq2           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -189,7 +195,7 @@ Output file format
 
 ########################################
 # Program: fuzzpro
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: fuzzpro
 #    -sequence "tsw:*"
 #    -pattern "[FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G"
@@ -323,19 +329,22 @@ Known bugs
 
 See also
 
-    Program name                         Description
-   antigenic      Finds antigenic sites in proteins
-   digest         Protein proteolytic enzyme or reagent cleavage digest
-   epestfind      Finds PEST motifs as potential proteolytic cleavage sites
-   fuzztran       Protein pattern search after translation
-   helixturnhelix Report nucleic acid binding motifs
-   oddcomp        Find protein sequence regions with a biased composition
-   patmatdb       Search a protein sequence with a motif
-   patmatmotifs   Search a PROSITE motif database with a protein sequence
-   pepcoil        Predicts coiled coil regions
-   preg           Regular expression search of a protein sequence
-   pscan          Scans proteins using PRINTS
-   sigcleave      Reports protein signal cleavage sites
+   Program name Description
+   antigenic Finds antigenic sites in proteins
+   digest Reports on protein proteolytic enzyme or reagent cleavage sites
+   epestfind Finds PEST motifs as potential proteolytic cleavage sites
+   fuzztran Search for patterns in protein sequences (translated)
+   helixturnhelix Identify nucleic acid-binding motifs in protein
+   sequences
+   oddcomp Identify proteins with specified sequence word composition
+   patmatdb Searches protein sequences with a sequence motif
+   patmatmotifs Scan a protein sequence with motifs from the PROSITE
+   database
+   pepcoil Predicts coiled coil regions in protein sequences
+   preg Regular expression search of protein sequence(s)
+   pscan Scans protein sequence(s) with fingerprints from the PRINTS
+   database
+   sigcleave Reports on signal cleavage sites in a protein sequence
 
    Other EMBOSS programs allow you to search for regular expression
    patterns but may be less easy for the user who has never used regular

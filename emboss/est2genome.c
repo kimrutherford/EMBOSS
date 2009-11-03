@@ -131,7 +131,7 @@ int main(int argc, char **argv)
     gap_penalty    = ajAcdGetInt("gappenalty");
     intron_penalty = ajAcdGetInt("intronpenalty");
     splice_penalty = ajAcdGetInt("splicepenalty");
-    doreverse      = ajAcdGetBool("reverse");
+    doreverse      = ajAcdGetBoolean("reverse");
 
     /* the min score for an alignment to be output */
     minscore = ajAcdGetInt("minscore");
@@ -139,10 +139,10 @@ int main(int argc, char **argv)
     if(doreverse)
 	isreverse = 1;
 
-    splice = ajAcdGetBool("splice");
+    splice = ajAcdGetBoolean("splice");
 
     /* Print the alignment */
-    align = ajAcdGetBool("align");
+    align = ajAcdGetBoolean("align");
     width = ajAcdGetInt("width");
 
     /* mode: This is complicated.
@@ -179,7 +179,7 @@ int main(int argc, char **argv)
 
     /* just print the best alignment ? */
 
-    best = ajAcdGetBool("best");
+    best = ajAcdGetBoolean("best");
 
     /* max space in megabytes */
 
@@ -187,8 +187,8 @@ int main(int argc, char **argv)
 
     /* print debugging info */
 
-    verbose = ajAcdGetBool("verbose");
-    debug = ajAcdGetBool("debug");
+    verbose = ajAcdGetBoolean("verbose");
+    debug = ajAcdGetBoolean("debug");
 
     if(verbose)
 	ajDebug("debugging set to %d\n", debug);

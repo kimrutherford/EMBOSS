@@ -21,11 +21,7 @@ prosextract
     Description
 </H2>
 
-
-Takes the IDentity, ACcession number and motif PAttern line 
-contents from prosite entries. Also converts the PAttern into a regular 
-expression and writes these four pieces to an output file -  defaulted to 
-be called 'prosite.lines'. 
+<p>prosextract processes the PROSITE motif database for use by <b>patmatmotifs</b>.  It reads the <tt>prosite.dat</tt> and <tt>prosite.doc</tt> files (from the Prosite distribution) from the specified directory and writes an output file (by default called <tt>prosite.lines</tt>) with the following information (corresponding lines from prosite.dat given in parentheses): i. Identity (<tt>ID</tt>). ii. Accession number (<tt>AC</tt>).  iii. Motif pattern (<tt>PA</tt>). iv. The motif pattern converted a regular expression.  Additionally, one output file per accession number is written containing documentation from <tt>prosite.doc</tt>.</p>
 
 <H2>
     Usage
@@ -89,8 +85,7 @@ See Input file format above.
     Notes
 </H2>
 
-
-This program is most useful when used as a prerequisite for patmatmotifs.
+<p>This program most be run as a prerequisite to using <b>patmatmotifs</b>.</p>
 
 <H2>
     References

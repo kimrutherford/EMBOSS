@@ -1,6 +1,5 @@
 application: pepwindowall [
-  documentation: "Displays protein hydropathy of a set of
-                  sequences"
+  documentation: "Draw Kyte-Doolittle hydropathy plot for a protein alignment"
   groups: "Protein:Composition"
 ]
 

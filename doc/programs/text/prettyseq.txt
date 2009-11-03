@@ -5,20 +5,15 @@
 
 Function
 
-   Output sequence with translated ranges
+   Write a nucleotide sequence and its translation to file
 
 Description
 
-   This writes out a nicely formatted display of the sequence with the
-   translation (within specified ranges) displayed beneath it.
-
-   The translated nucleic acid region will be shown in lower-case letters
-   while the rest of the input sequence will be left in the input case.
-
-   The base and residue numbers of the sequences are shown beside the
-   sequences in the output.
-
-   Slightly unusually, this application uses the codon usage tables to
+   prettyseq reads a nucleotide sequence and writes an output file
+   containing in a clean format the sequence with the translation (within
+   specified ranges) displayed beneath it. The translated nucleic acid
+   region is given lower-case letters with the rest of the input sequence
+   left in the input case. A specified codon usage table is used to
    translate the codons.
 
 Usage
@@ -27,7 +22,7 @@ Usage
 
 
 % prettyseq 
-Output sequence with translated ranges
+Write a nucleotide sequence and its translation to file
 Input nucleotide sequence: tembl:x13776
 Range(s) to translate [1-2167]: 135-1292
 Output file [x13776.prettyseq]: 
@@ -90,8 +85,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -429,7 +425,14 @@ Data files
 
 Notes
 
-   None.
+   By default, the base and residue numbers of the sequence and its
+   translation are shown beside the sequences in the output. There are
+   options to change this behaviour.
+
+   The translation will be shown in a number of sequence regions only.
+   The ranges are specified with the -range qualifier. As an alternative
+   to specifying a set of ranges at the command-line, a range file
+   containing such range data may be specified (see "Input File Format").
 
 References
 
@@ -455,27 +458,29 @@ Known bugs
 
 See also
 
-   Program name                         Description
-   abiview       Reads ABI file and display the trace
-   backtranambig Back translate a protein sequence to ambiguous codons
-   backtranseq   Back translate a protein sequence
-   cirdna        Draws circular maps of DNA constructs
-   coderet       Extract CDS, mRNA and translations from feature tables
-   lindna        Draws linear maps of DNA constructs
-   pepnet        Displays proteins as a helical net
-   pepwheel      Shows protein sequences as helices
-   plotorf       Plot potential open reading frames
-   prettyplot    Displays aligned sequences, with colouring and boxing
-   remap         Display sequence with restriction sites, translation etc
-   seealso       Finds programs sharing group names
-   showalign     Displays a multiple sequence alignment
-   showdb        Displays information on the currently available databases
-   showfeat      Show features of a sequence
-   showorf       Pretty output of DNA translations
-   showseq       Display a sequence with features, translation etc
-   sixpack       Display a DNA sequence with 6-frame translation and ORFs
-   textsearch    Search sequence documentation. Slow, use SRS and Entrez!
-   transeq       Translate nucleic acid sequences
+   Program name Description
+   abiview Display the trace in an ABI sequencer file
+   backtranambig Back-translate a protein sequence to ambiguous
+   nucleotide sequence
+   backtranseq Back-translate a protein sequence to a nucleotide sequence
+   cirdna Draws circular maps of DNA constructs
+   coderet Extract CDS, mRNA and translations from feature tables
+   lindna Draws linear maps of DNA constructs
+   pepnet Draw a helical net for a protein sequence
+   pepwheel Draw a helical wheel diagram for a protein sequence
+   plotorf Plot potential open reading frames in a nucleotide sequence
+   prettyplot Draw a sequence alignment with pretty formatting
+   remap Display restriction enzyme binding sites in a nucleotide
+   sequence
+   seealso Finds programs with similar function to a specified program
+   showalign Display a multiple sequence alignment in pretty format
+   showdb Displays information on configured databases
+   showfeat Display features of a sequence in pretty format
+   showorf Display a nucleotide sequence and translation in pretty format
+   showseq Displays sequences with features in pretty format
+   sixpack Display a DNA sequence with 6-frame translation and ORFs
+   textsearch Search the textual description of sequence(s)
+   transeq Translate nucleic acid sequences
 
    showseq has more options for specifying various ways of displaying a
    sequence, with or without various ways of translating it.

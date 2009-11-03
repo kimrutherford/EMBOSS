@@ -20,55 +20,12 @@ digest
     Description
 </H2>
 
-<b>digest</b> finds the positions where a specified proteolytic enzyme
-or reagent might cut a peptide sequence. 
+<p>This programs allows you to input one or more protein sequences and to specify one proteolytic agent from a list, which might be a proteolytic enzyme or other reagent.  It will then write  a report file containing the positions where the agent cuts, together with the peptides produced.</p>
 
-<p>
-
-This programs allows you to input a protein sequence and to specify one
-proteolytic agent from a list.  It will then output a file containing
-the positions where the agent cuts, together with the peptides produced. 
-
-<p>
-
-Trypsin will not normally cut after a K if it is followed by (e.g.)
-another K or a P.  Specifying the qualifier <b>-unfavoured</b> shows
-those cuts.  as well as the favoured ones. 
-
-<p>
-
-If you wish to emulate a partial digestion, then using the
-<b>-overlap</b> qualifier will display the results from a digest in
-which all cut sites are used and in which one site at a time is not cut. 
-Thus the resulting peptide fragments from the cut sites numbered 1, 2,
-3, 4 etc.  are shown, plus the fragments produced by cutting at the
-sites 1..3, 2..4, etc. 
-
-<p>
-
-i.e. fragments containing one potential cut site are also shown.
-
-<p>
-
-If you wish to emulate a <b>very</b> partial digestion (!) then using
-the <b>-allpartials</b> qualifier will do what <b>-overlap</b> did, but
-also show all possible fragments from using all possible combinations of
-cut sites.  For example, fragments from the cut sites numbered 1, 2, 3,
-4, 5 and from the fragments produced by cutting between sites 1..3,
-1..4, 1..5, 2..4, 2..5, 3..5, etc. 
-
-<p>
-
-i.e. fragments containing one or more potential cut site are also shown.
-
-
-<p>
-
-If the boolean -ragging is specified then terminal break-up
-fragments are also shown; this can be useful for mass spectrometry.
-Ragging is further controlled by the -termini
-option which allows you to select removal of residues from
-the N and/or C termini.
+<H2>
+Algorithm
+</H2>
+<p>By default <b>digest</b> uses average molecular weights.  The <tt>-mono</tt> option will use monoisotopic weights.</p>
 
 <H2>
     Usage
@@ -137,7 +94,14 @@ None.
     Notes
 </H2>
 
-None.
+
+<p>If you wish to emulate a partial digestion, then using the <tt>-overlap</tt> qualifier will display the results from a digest in which all cut sites are used and in which one site at a time is not cut. Thus the resulting peptide fragments from the cut sites numbered 1, 2, 3, 4 etc. are shown, plus the fragments produced by cutting at the sites 1 to 3, 2 to 4, etc.  In other words, this option will reveal fragments containing one potential cut site.</p>
+
+<p>If you wish to emulate a very partial digestion (!) then using the <tt>-allpartials</tt> qualifier will do what -overlap did, but also show all possible fragments from using all possible combinations of cut sites. For example, fragments from the cut sites numbered 1, 2, 3, 4, 5 and from the fragments produced by cutting between sites 1..3, 1..4, 1..5, 2..4, 2..5, 3..5, etc. In other words, this option will reveal fragments containing one or more potential cut site.</p>
+
+<p>If the boolean <tt>-ragging</tt> is specified then terminal digest fragments are also shown; this can be useful for mass spectrometry. Ragging is further controlled by the <tt>-termini</tt> option which allows you to select removal of residues from the N and/or C termini.</p>
+
+<p>Each proteolytic enzyme has favoured as well as unfavoured cut sites.  For example, Trypsin will not normally cut after a K if it is followed by (e.g.) another K or a P.  By default, only data for favoured cut sites is generated.  Specifying the qualifier <tt>-unfavoured</tt> produces data for unfavoured cut sites as well.</p>
 
 
 <H2>

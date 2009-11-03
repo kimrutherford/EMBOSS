@@ -388,7 +388,7 @@ static struct hept_pref* newcoils_read_matrix(AjPFile inf)
     h->n = 0;
     h->smallest = 1.0;
 
-    while(ajFileReadLine(inf,&buff))
+    while(ajReadlineTrim(inf,&buff))
     {
 	pbuff = ajStrGetPtr(buff);
 	if(*pbuff != '%')

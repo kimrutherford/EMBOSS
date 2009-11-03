@@ -1,6 +1,5 @@
 application: cons [
-  documentation: "Creates a consensus from multiple
-                  alignments"
+  documentation: "Create a consensus sequence from a multiple alignment"
   groups: "Alignment:Consensus"
 ]
 

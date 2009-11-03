@@ -51,8 +51,6 @@ public class ParseAcd
   private Dependent dep[];
  		       /** number of dependent variables */
   private int numOfDependents;
- 		       /** String of the groups application belongs to */
-  private String groupList = "";
  		       /** number of sections */
   private int nsection = 0;
  		       /** number of subsections */
@@ -87,14 +85,6 @@ public class ParseAcd
   private int nmultiTextField;
 
 // Groups the program belongs to
-                      /** true if primary group is defined */
-  private boolean isPrimaryGp;
-                      /** true if secondary group is defined */
-  private boolean isSecondaryGp;
-                      /** primary group */
-  private String primaryGp;
-                      /** secondary group */
-  private String secondaryGp;
 
   /**
   *
@@ -119,12 +109,12 @@ public class ParseAcd
     try 
     {
       BufferedReader in = new BufferedReader(new StringReader(acdText));
-      line = new String();
+      //line = new String();
       in.mark(2500);
-      line = in.readLine();
+      //line = in.readLine();
 
 // loop over all fields defined in the ACD
-      do 
+      while((line = in.readLine()) != null)
       {
         line = line.trim();    // removes leading & trailing whitespace
      
@@ -244,7 +234,7 @@ public class ParseAcd
         numofFields++;
         in.mark(2500);
 
-      } while((line = in.readLine()) != null);
+      };
    
     }
     catch (IOException e) 
@@ -862,8 +852,6 @@ public class ParseAcd
   {
     int num = getNumofParams(field);
     int i;
-    String help = "";
-    String helpText = "";
 
     ApplicationFields aF = (ApplicationFields)vappF.get(field);
     for(i=0;i<num;i++) 
@@ -1198,7 +1186,6 @@ public class ParseAcd
     String delim     = ";";  // list item delimeter default
     String codedelim = ":";  // label delimeter default
     String listAll = null;
-    String item;
     String key="";
 
     ApplicationFields aF = (ApplicationFields)vappF.get(field);
@@ -1223,7 +1210,7 @@ public class ParseAcd
     for(int i=0;i<index+1;i++) 
     {
       key = st.nextToken(codedelim);
-      item = st.nextToken(delim);
+      st.nextToken(delim);
     }
     if(index>0)
       key = key.substring(1,key.length()).trim();

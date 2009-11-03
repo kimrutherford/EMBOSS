@@ -7,7 +7,7 @@ This example uses only a small region of the input sequence to save space. This 
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>remap -notran -sbeg 1 -send 60 </b>
-Display sequence with restriction sites, translation etc.
+Display restriction enzyme binding sites in a nucleotide sequence
 Input nucleotide sequence(s): <b>tembl:j01636</b>
 Comma separated enzyme list [all]: <b>taqi,bsu6i,acii,bsski</b>
 Minimum recognition site length [4]: <b></b>
@@ -26,7 +26,7 @@ This is an example where all enzymes in the REBASE database are used, (but only 
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>remap -notran -sbeg 1 -send 60 </b>
-Display sequence with restriction sites, translation etc.
+Display restriction enzyme binding sites in a nucleotide sequence
 Input nucleotide sequence(s): <b>tembl:j01636</b>
 Comma separated enzyme list [all]: <b></b>
 Minimum recognition site length [4]: <b></b>
@@ -45,7 +45,7 @@ This is an example where all enzymes in the REBASE database are used but the -li
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>remap -notran -sbeg 1 -send 60 -nolimit </b>
-Display sequence with restriction sites, translation etc.
+Display restriction enzyme binding sites in a nucleotide sequence
 Input nucleotide sequence(s): <b>tembl:j01636</b>
 Comma separated enzyme list [all]: <b></b>
 Minimum recognition site length [4]: <b></b>
@@ -64,7 +64,7 @@ This shows the 'flat' format: This is run with a small test version of the restr
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>remap -notran -sbeg 1 -send 60 -flat </b>
-Display sequence with restriction sites, translation etc.
+Display restriction enzyme binding sites in a nucleotide sequence
 Input nucleotide sequence(s): <b>tembl:j01636</b>
 Comma separated enzyme list [all]: <b></b>
 Minimum recognition site length [4]: <b></b>

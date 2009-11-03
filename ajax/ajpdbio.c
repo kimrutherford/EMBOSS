@@ -516,8 +516,9 @@ static AjBool WriteSeqresChain(AjPFile errf, AjPFile outf, const AjPPdb pdb,
 	    for(x=last_rn; x<this_rn-1; x++)
 	    {	
 		/* Check that position x is in range for the sequence */
-		if(!ajBaseAa1ToAa3(ajStrGetCharPos(pdb->Chains[chn-1]->Seq, x),
- 				   &tmp2))
+		if(!ajResidueToTriplet(
+                       ajStrGetCharPos(pdb->Chains[chn-1]->Seq, x),
+                       &tmp2))
 		{
 		    ajWarn("Index out of range in WriteSeqresChain");
 		    ajFmtPrintF(errf, "//\n%S\nERROR Index out "
@@ -547,7 +548,9 @@ static AjBool WriteSeqresChain(AjPFile errf, AjPFile outf, const AjPPdb pdb,
     
     /* Assign sequence for residues missing from end of linked list */
     for(x=last_rn; x<pdb->Chains[chn-1]->Nres; x++)
-	if(!ajBaseAa1ToAa3(ajStrGetCharPos(pdb->Chains[chn-1]->Seq, x), &tmp2))
+	if(!ajResidueToTriplet(
+               ajStrGetCharPos(pdb->Chains[chn-1]->Seq, x),
+               &tmp2))
 	    { 
 		ajStrDel(&tmp1);
 		ajStrDel(&tmp2);
@@ -746,8 +749,9 @@ static AjBool WriteSeqresDomain(AjPFile errf, AjPFile outf, const AjPPdb pdb,
 		for(x=last_rn; x<this_rn-1; x++)
 		{	
 		    /* Check that position x is in range for the sequence */
-		    if(!ajBaseAa1ToAa3(ajStrGetCharPos(pdb->Chains[chn-1]->Seq, x), 
-				   &tmp2))
+		    if(!ajResidueToTriplet(
+                           ajStrGetCharPos(pdb->Chains[chn-1]->Seq, x), 
+                           &tmp2))
 		    {
 			ajListIterDel(&iter);			
 			ajStrDel(&tmp1);
@@ -849,8 +853,9 @@ static AjBool WriteSeqresDomain(AjPFile errf, AjPFile outf, const AjPPdb pdb,
 	if(noend)
 	{	    
 	    for(x=last_rn; x<pdb->Chains[chn-1]->Nres; x++)    
-		if(!ajBaseAa1ToAa3(ajStrGetCharPos(pdb->Chains[chn-1]->Seq, x),
-			       &tmp2))
+		if(!ajResidueToTriplet(
+                       ajStrGetCharPos(pdb->Chains[chn-1]->Seq, x),
+                       &tmp2))
 		{	 
 		    ajStrDel(&tmp1);
 		    ajStrDel(&tmp2);
@@ -1808,7 +1813,7 @@ static AjPPdbfile ReadLines(AjPFile inf)
     
     /* Read pdb file and append lines to list */ 
     line = ajStrNew();
-    while(ajFileReadLine(inf,&line))
+    while(ajReadlineTrim(inf,&line))
     {
 	ajListstrPushAppend(list, line);
 	line = ajStrNew();
@@ -3131,7 +3136,7 @@ static AjBool SeqresToSequence(const AjPStr seqres,
 		}
 	    }
 	    
-	    ajBaseAa3ToAa1(&aa1, aa3);
+	    ajResidueFromTriplet(aa3, &aa1);
 	    ajStrAppendK(seq, aa1);
 	}
 	while((aa3=ajStrParseC(NULL, " \n")));
@@ -3378,8 +3383,8 @@ static AjBool CheckTer(AjPPdbfile pdbfile, AjPFile logf)
 		{
 		    ajStrAssignSubS(&aa1, pdbfile->lines[i-1], 17, 19);
 		    ajStrAssignSubS(&aa2, pdbfile->lines[i+1], 17, 19);
-		    if((ajBaseAa3ToAa1(&aa, aa1)) && 
-		       (ajBaseAa3ToAa1(&aa, aa2)))
+		    if((ajResidueFromTriplet(aa1, &aa)) && 
+		       (ajResidueFromTriplet(aa2, &aa)))
 		    {
 			pdbfile->linetype[i]=PDBPARSE_IGNORE;
 
@@ -4009,7 +4014,7 @@ static AjBool MaskChains(AjPPdbfile pdbfile, AjPFile logf,
     aa3=ajStrNew();
     lastrn=ajStrNew();
     sub=ajStrNew();
-    ajStrAssignC(&sub, "");
+    ajStrAssignClear(&sub);
     
     
     firstatm=lastatm=pdbfile->idxfirst;
@@ -4101,8 +4106,8 @@ static AjBool MaskChains(AjPPdbfile pdbfile, AjPFile logf,
 		/* Mask coordinate lines for residues lacking a CA atom */
 		if(noca)
 		{
-		    odd = (!(ajBaseAa3ToAa1(&tmp, 
-					  pdbfile->rtype[lastatm-1])));
+		    odd = (!(ajResidueFromTriplet(pdbfile->rtype[lastatm-1],
+                                                  &tmp)));
 		    
 		    if((camask  && odd) ||
 		       (camask1 && !odd))
@@ -4131,7 +4136,7 @@ static AjBool MaskChains(AjPPdbfile pdbfile, AjPFile logf,
 		
 		
 		/* Increment the residue counter if the code is recognised */
-		if(ajBaseAa3ToAa1(&aa1, pdbfile->rtype[i]))
+		if(ajResidueFromTriplet(pdbfile->rtype[i], &aa1))
 		    rcnt++;	
 		
 		if(rcnt>=min_chain_size)
@@ -4197,7 +4202,7 @@ static AjBool MaskChains(AjPPdbfile pdbfile, AjPFile logf,
 	{*/
     if(noca)
     {
-	odd = (!(ajBaseAa3ToAa1(&tmp, pdbfile->rtype[lastatm-1])));
+	odd = (!(ajResidueFromTriplet(pdbfile->rtype[lastatm-1],&tmp)));
 	
 	
 	if((camask  && odd) ||
@@ -4453,7 +4458,7 @@ static AjBool StandardiseNumbering(AjPPdbfile pdbfile, AjPFile logf)
 	    pdbfile->nres[pdbfile->chnn[i]-1])||
 	   (pdbfile->resn1[i] >=  1))
 	{
-	    ajBaseAa3ToAa1(&aa1, pdbfile->rtype[i]);
+	    ajResidueFromTriplet(pdbfile->rtype[i],&aa1);
 	    ipos = pdbfile->chnn[i] - 1;
 	    if(aa1 == ajStrGetCharPos(pdbfile->seqres[ipos], 
 				pdbfile->resn1[i]-1))
@@ -5077,7 +5082,7 @@ static AjBool AlignNumbering(AjPPdbfile pdbfile, AjPFile logf, ajuint lim,
 
 	    if(pdbfile->resn1[i] != last1)
 	    {
-		ajBaseAa3ToAa1(&aa1, pdbfile->rtype[i]);
+		ajResidueFromTriplet(pdbfile->rtype[i],&aa1);
 		ajStrAppendK(&seq1[c], aa1);
 		
 		ajIntPut(&num1[c], nres1[c],pdbfile->resn1[i]);
@@ -5086,7 +5091,7 @@ static AjBool AlignNumbering(AjPPdbfile pdbfile, AjPFile logf, ajuint lim,
 	    }
 	    if((pdbfile->resn2[i] != last2) && (!pdbfile->oddnum[i]))
 	    {
-		ajBaseAa3ToAa1(&aa1, pdbfile->rtype[i]);
+		ajResidueFromTriplet(pdbfile->rtype[i],&aa1);
 		ajStrAppendK(&seq2[c], aa1);
 		
 		ajIntPut(&num2[c], nres2[c],pdbfile->resn2[i]);
@@ -5240,7 +5245,7 @@ static AjBool AlignNumbering(AjPPdbfile pdbfile, AjPFile logf, ajuint lim,
 		    /* Sequence are same length but contain mismatches */
 		    else
 		    {	
-			for(ajStrAssignC(&msgstr, ""), nmismatches=0, k=0;
+			for(ajStrAssignClear(&msgstr), nmismatches=0, k=0;
 			    k<nres[i];k++)
 			    if(ajStrGetCharPos(seq[i], k) != 
 			       ajStrGetCharPos(pdbfile->seqres[i], k))
@@ -5261,7 +5266,7 @@ static AjBool AlignNumbering(AjPPdbfile pdbfile, AjPFile logf, ajuint lim,
 
 				/* Get the id of the mismatch residue in the 
 				   SEQRES sequence.  */
-				ajBaseAa1ToAa3(pdbfile->seqres[i]->Ptr[k], 
+				ajResidueToTriplet(pdbfile->seqres[i]->Ptr[k], 
 					       &aa_misfit);
 
 				/* To give correct index into SEQRES records 
@@ -5563,7 +5568,7 @@ static AjBool AlignNumbering(AjPPdbfile pdbfile, AjPFile logf, ajuint lim,
 
 		/* Check whether residue numbering is correct (and count 
 		   the number of mismatches) */
-		for(err=ajFalse, ajStrAssignC(&msgstr, ""), nmismatches=0, 
+		for(err=ajFalse, ajStrAssignClear(&msgstr), nmismatches=0, 
 		    k=0;k<nres[i];k++)
 		{
 		    this_num = ajIntGet(num[i], k);
@@ -5590,8 +5595,9 @@ static AjBool AlignNumbering(AjPPdbfile pdbfile, AjPFile logf, ajuint lim,
 			    /* Get the id of the mismatch residue in the 
 			       SEQRES sequence.  */
 			    
-			    ajBaseAa1ToAa3(pdbfile->seqres[i]->Ptr[this_num-1], 
-					   &aa_misfit);
+			    ajResidueToTriplet(
+                                pdbfile->seqres[i]->Ptr[this_num-1], 
+                                &aa_misfit);
 
 			    ajFmtPrintS(&msgbit,  "%S%S:%S%d.    ", 
 					pdbfile->rtype[a], pdbfile->pdbn[a], 
@@ -5869,7 +5875,7 @@ static AjBool AlignNumbering(AjPPdbfile pdbfile, AjPFile logf, ajuint lim,
 		   */
 		
 
-		for(ajStrAssignC(&msgstr, ""), 
+		for(ajStrAssignClear(&msgstr), 
 		    nmismatches=0,
 		    done_end=ajFalse,  
 		    len=pdbfile->nres[i],
@@ -6102,8 +6108,9 @@ static AjBool AlignNumbering(AjPPdbfile pdbfile, AjPFile logf, ajuint lim,
 
 			/* Get the id of the mismatch residue 
 			   in the SEQRES sequence.  */
-			ajBaseAa1ToAa3(pdbfile->seqres[i]->Ptr[idx_misfit_seqres], 
-				       &aa_misfit);
+			ajResidueToTriplet(
+                            pdbfile->seqres[i]->Ptr[idx_misfit_seqres], 
+                            &aa_misfit);
 			
 			
 			/* To give correct index into SEQRES records in 
@@ -6738,7 +6745,7 @@ static AjBool PdbfileToPdb(AjPPdb *ret, AjPPdbfile pdb)
 	       ((pdb)->linetype[j]==PDBPARSE_COORDWAT))
 		atm->Id1='.';
 	    else
-		ajBaseAa3ToAa1(&atm->Id1, (pdb)->rtype[j]);
+		ajResidueFromTriplet((pdb)->rtype[j],&atm->Id1);
 		
 	    ajStrAssignS(&atm->Id3, (pdb)->rtype[j]);
 	    ajStrAssignS(&atm->Atm, (pdb)->atype[j]);

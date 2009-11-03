@@ -23,23 +23,12 @@ silent
 <H2>
     Function
 </H2>
-Silent mutation restriction enzyme scan
+Find restriction sites to insert (mutate) with no translation change
 <H2>
     Description
 </H2>
 
-<b>silent</b> does a scan of a nucleic acid sequence for silent mutation
-restriction enzyme sites.
-
-<p>
-
-<b>silent</b> finds positions in a sequence where a point mutation could
-be made to introduce a specified restriction enzyme recognition site
-without changing the translation. 
-
-<p>
-
-Several restriction enzyme can be specified.
+<p><b>silent</b> finds restriction enzyme sites in a nucleotide sequence which can be inserted (mutated) without changing the translation. <b>silent</b> scans a nucleotide sequence for restriction sites for a supplied set of restriction enzymes.  It writes a standard EMBOSS report of single base positions which, when mutated, insert the restriction site whilst maintaining the same translation in frame 1 of the input sequence. One or more restriction enzymes can be specified or alternatively all the enzymes in the REBASE database can be investigated. Optionally, all possible mutations are shown and the untranslated and translated sequence are reported.</p>
 
 <H2>
     Usage
@@ -51,7 +40,7 @@ Several restriction enzyme can be specified.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>silent </b>
-Silent mutation restriction enzyme scan
+Find restriction sites to insert (mutate) with no translation change
 Input nucleotide sequence: <b>tembl:x65923</b>
 Comma separated enzyme list [all]: <b>ecori,hindiii</b>
 Output report [x65923.silent]: <b></b>
@@ -105,14 +94,16 @@ Output report [x65923.silent]: <b></b>
    -raccshow2          boolean    Show accession number in the report
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
+   -rstrandshow2       boolean    Show the nucleotide strand in the report
    -rusashow2          boolean    Show the full USA in the report
    -rmaxall2           integer    Maximum total hits to report
    -rmaxseq2           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -305,7 +296,7 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
 <pre>
 ########################################
 # Program: silent
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: silent
 #    -sequence tembl:x65923
 #    -enzymes ecori,hindiii
@@ -330,8 +321,8 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
 #
 #=======================================
 
-  Start     End Dir    EnzymeName RS-Pattern Base-Posn    AAs Silent Mutation
-    272     267 Rev    HindIII    AAGCTT           268    A.A    Yes     A-&gt;T
+  Start     End  Strand EnzymeName RS-Pattern Base-Posn    AAs Silent Mutation
+    267     272       - HindIII    AAGCTT           268    A.A    Yes     A-&gt;T
 
 #---------------------------------------
 #---------------------------------------
@@ -388,7 +379,7 @@ The directories are searched in the following order:
 </ul>
 <p>
 <p>
-The EMBOSS REBASE restriction enzyme data files are stored iin
+The EMBOSS REBASE restriction enzyme data files are stored in
 directory 'data/REBASE/*' under the EMBOSS installation directory.
 
 <p>
@@ -448,7 +439,8 @@ None.
     Warnings
 </H2>
 
-None.
+<p><b>recoder</b> uses the EMBOSS REBASE restriction enzyme data files stored in directory <tt>data/REBASE/*</tt> under the EMBOSS installation directory. These files must first be set up using the program <b>rebaseextract</b>. Running <b>rebaseextract</b> may be the job of your system manager.</p>
+
 
 <H2>
     Diagnostic Error Messages
@@ -470,35 +462,36 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="recoder.html">recoder</a></td>
-<td>Remove restriction sites but maintain same translation</td>
+<td>Find restriction sites to remove (mutate) with no translation change</td>
 </tr>
 
 <tr>
 <td><a href="redata.html">redata</a></td>
-<td>Search REBASE for enzyme name, references, suppliers etc</td>
+<td>Retrieve information from REBASE restriction enzyme database</td>
 </tr>
 
 <tr>
 <td><a href="remap.html">remap</a></td>
-<td>Display sequence with restriction sites, translation etc</td>
+<td>Display restriction enzyme binding sites in a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="restover.html">restover</a></td>
-<td>Find restriction enzymes producing specific overhang</td>
+<td>Find restriction enzymes producing a specific overhang</td>
 </tr>
 
 <tr>
 <td><a href="restrict.html">restrict</a></td>
-<td>Finds restriction enzyme cleavage sites</td>
+<td>Report restriction enzyme cleavage sites in a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="showseq.html">showseq</a></td>
-<td>Display a sequence with features, translation etc</td>
+<td>Displays sequences with features in pretty format</td>
 </tr>
 
 </table>

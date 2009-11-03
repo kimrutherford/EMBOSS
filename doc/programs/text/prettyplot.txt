@@ -5,13 +5,14 @@
 
 Function
 
-   Displays aligned sequences, with colouring and boxing
+   Draw a sequence alignment with pretty formatting
 
 Description
 
-   prettyplot reads in a set of aligned DNA or protein sequences. It
-   displays them graphically, with conserved regions highlighted in
-   various ways.
+   prettyplot draws a plot of the input sequence alignment. The sequences
+   are rendered in pretty formatting on the specified graphics device.
+   Drawing options control the appearance of the image, such as boxes,
+   colour and shading for highlighting conserved regions.
 
 Usage
 
@@ -19,7 +20,7 @@ Usage
 
 
 % prettyplot -resbreak=10 -boxcol -consensus -plurality=3 
-Displays aligned sequences, with colouring and boxing
+Draw a sequence alignment with pretty formatting
 Input (aligned) sequence set: globins.msf
 Graph type [x11]: cps
 
@@ -32,7 +33,7 @@ Created prettyplot.ps
 
 
 % prettyplot globins.msf -plurality=3 -docolour 
-Displays aligned sequences, with colouring and boxing
+Draw a sequence alignment with pretty formatting
 Graph type [x11]: cps
 
 Created prettyplot.ps
@@ -160,8 +161,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -283,7 +285,19 @@ Data files
 
 Notes
 
-   None.
+   A consesnsus sequence is calculated for the alignment and individual
+   sequences compared to the consensus using the specified comparison
+   matrix file. The default matrix for protein sequences is EBLOSUM62 and
+   for nucleotide sequences is EDNAFULL. The drawing options render
+   conserved sites and regions identified from the comparisons. For
+   example, residues in a sequence are classed as "identical", "similar"
+   or "other" to the consensus depending on user-specified thresholds of
+   sequence similarity (-pair option). Residues in each class are
+   rendered red, green and black by default (this can be changed).
+
+   There are other more general drawing options, for example, controlling
+   the number of residues displayed per line, background shading and
+   whether to display sequence names or not.
 
 References
 
@@ -308,26 +322,29 @@ Known bugs
 
 See also
 
-   Program name                        Description
-   abiview      Reads ABI file and display the trace
-   cirdna       Draws circular maps of DNA constructs
-   edialign     Local multiple alignment of sequences
-   emma         Multiple alignment program - interface to ClustalW program
-   infoalign    Information on a multiple sequence alignment
-   lindna       Draws linear maps of DNA constructs
-   pepnet       Displays proteins as a helical net
-   pepwheel     Shows protein sequences as helices
-   plotcon      Plot quality of conservation of a sequence alignment
-   prettyseq    Output sequence with translated ranges
-   remap        Display sequence with restriction sites, translation etc
-   seealso      Finds programs sharing group names
-   showalign    Displays a multiple sequence alignment
-   showdb       Displays information on the currently available databases
-   showfeat     Show features of a sequence
-   showseq      Display a sequence with features, translation etc
-   sixpack      Display a DNA sequence with 6-frame translation and ORFs
-   textsearch   Search sequence documentation. Slow, use SRS and Entrez!
-   tranalign    Align nucleic coding regions given the aligned proteins
+   Program name Description
+   abiview Display the trace in an ABI sequencer file
+   cirdna Draws circular maps of DNA constructs
+   edialign Local multiple alignment of sequences
+   emma Multiple sequence alignment (ClustalW wrapper)
+   infoalign Display basic information about a multiple sequence
+   alignment
+   lindna Draws linear maps of DNA constructs
+   pepnet Draw a helical net for a protein sequence
+   pepwheel Draw a helical wheel diagram for a protein sequence
+   plotcon Plot conservation of a sequence alignment
+   prettyseq Write a nucleotide sequence and its translation to file
+   remap Display restriction enzyme binding sites in a nucleotide
+   sequence
+   seealso Finds programs with similar function to a specified program
+   showalign Display a multiple sequence alignment in pretty format
+   showdb Displays information on configured databases
+   showfeat Display features of a sequence in pretty format
+   showseq Displays sequences with features in pretty format
+   sixpack Display a DNA sequence with 6-frame translation and ORFs
+   textsearch Search the textual description of sequence(s)
+   tranalign Generate an aligment of nucleic coding regions from aligned
+   proteins
 
 Author(s)
 

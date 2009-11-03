@@ -21,30 +21,7 @@ maskseq
 </H2>
 
 
-This simple editing program allows you to mask off regions of a
-sequence with a specified letter. 
-
-<p>
-
-Why would you wish to do this? It is common for database
-searches to mask out low-complexity or biased composition
-regions of a sequence so that spurious matches do not occur.
-It is just possible that you have a program that has reported
-such biased regions but which has not masked the sequence
-itself.  In that case, you can use this program to do the
-masking.
-
-<p>
-
-You may find other uses for it.
-
-<p>
-
-Some non-EMBOSS programs (for example FASTA) are capable of treating
-lower-case regions as if they are masked.  <b>maskseq</b> can mask a
-region to lower-case instead of replacing the sequence with 'N's or 'X's
-if you use the qualifier '-tolower' or use a space character as the
-masking character. 
+<p><b>maskseq</b> reads a sequence and writes a masked version of it to file. The sequence is masked in a specified set of regions such that characters in that region are (optionally) converted to lower case and / or (optionally) replaced with the specified mask character.</p>
 
 
 <H2>
@@ -134,8 +111,10 @@ None.
     Notes
 </H2>
 
+<p>It is common for database searches to mask out low-complexity or biased composition regions of a sequence so that spurious matches do not occur. It is possible that you have a program that has reported such biased regions but which has not masked the sequence itself. In that case, you can use this program to do the masking.</p>
 
-None.
+<p>There are other uses for it. For example, some non-EMBOSS programs (for example FASTA) are capable of treating lower-case regions as if they are masked. <b>maskseq</b> can mask a region to lower-case instead of replacing the sequence with <tt>N</tt>'s or <tt>X</tt>'s if you use the qualifier <tt>-tolower</tt> or use a space character as the masking character.</p>
+
 
 <H2>
     References

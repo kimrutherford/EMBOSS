@@ -1,6 +1,5 @@
 application: dotmatcher [
-  documentation: "Displays a thresholded dotplot of two
-                  sequences"
+  documentation: "Draw a threshold dotplot of two sequences"
   groups: "Alignment:Dot plots"
 ]
 

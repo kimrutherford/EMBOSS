@@ -37,6 +37,7 @@ typedef struct AjSTime {
 ** Prototype definitions
 */
 
+double        ajTimeDiff(const AjPTime thys, const AjPTime newtime);
 void          ajTimeExit(void);
 AjBool        ajTimeSetLocal(AjPTime thys, const time_t timer);
 

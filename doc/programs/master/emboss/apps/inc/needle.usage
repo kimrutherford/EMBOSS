@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>needle tsw:hba_human tsw:hbb_human </b>
-Needleman-Wunsch global alignment.
+Needleman-Wunsch global alignment of two sequences
 Gap opening penalty [10.0]: <b></b>
 Gap extension penalty [0.5]: <b></b>
 Output alignment [hba_human.needle]: <b></b>

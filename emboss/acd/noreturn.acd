@@ -1,5 +1,5 @@
 application: noreturn [
-  documentation: "Removes carriage return from ASCII files"
+  documentation: "Remove carriage return from ASCII files"
   groups: "Edit"
 ]
 

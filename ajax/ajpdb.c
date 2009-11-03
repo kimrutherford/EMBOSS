@@ -151,7 +151,7 @@ AjPList       ajPdbtospReadAllRawNew(AjPFile inf)
 
 
     /* Read lines from file */
-    while(ajFileReadLine(inf, &line))
+    while(ajReadlineTrim(inf, &line))
     {
 	if(ajStrPrefixC(line, "____  _"))
 	{
@@ -170,7 +170,7 @@ AjPList       ajPdbtospReadAllRawNew(AjPFile inf)
 
 	/* Read in pdb code first.  Then tokenise by ':', discard the 
 	   first token, then tokenise the second token by ',', parsing 
-	   out the swisssprot codes and accession numbers from the 
+	   out the swissprot codes and accession numbers from the 
 	   subtokens */
 
 
@@ -335,7 +335,7 @@ AjPPdbtosp ajPdbtospReadCNew(AjPFile inf, const char *entry)
     ajStrAssignC(&tentry,entry);
     ajStrFmtUpper(&tentry);
     
-    while((ok=ajFileReadLine(inf,&line)))
+    while((ok=ajReadlineTrim(inf,&line)))
     {
 	if(!ajStrPrefixC(line,"EN   "))
 	    continue;
@@ -350,7 +350,7 @@ AjPPdbtosp ajPdbtospReadCNew(AjPFile inf, const char *entry)
     {
 	if(ajStrPrefixC(line,"XX"))
 	{
-	    ok = ajFileReadLine(inf,&line);
+	    ok = ajReadlineTrim(inf,&line);
 	    continue;
 	}
 	else if(ajStrPrefixC(line,"NE"))
@@ -366,7 +366,7 @@ AjPPdbtosp ajPdbtospReadCNew(AjPFile inf, const char *entry)
 	    i++;
 	}
 	
-	ok = ajFileReadLine(inf,&line);
+	ok = ajReadlineTrim(inf,&line);
     }
     
     return ret;
@@ -586,7 +586,7 @@ AjPCmap ajCmapReadNew(AjPFile inf, ajint mode, ajint chn, ajint mod)
     
 
     /* Start of main loop */
-    while((ajFileReadLine(inf, &line)))
+    while((ajReadlineTrim(inf, &line)))
     {
         /* // */
 	if(ajStrPrefixC(line, "//"))
@@ -703,7 +703,7 @@ AjPCmap ajCmapReadNew(AjPFile inf, ajint mode, ajint chn, ajint mod)
 	/* S1 */
 	else if(ajStrPrefixC(line, "S1"))
 	{    
-	    while(ajFileReadLine(inf,&line) && !ajStrPrefixC(line,"XX"))
+	    while(ajReadlineTrim(inf,&line) && !ajStrPrefixC(line,"XX"))
 		ajStrAppendC(&seq1,ajStrGetPtr(line));
 	    ajStrRemoveWhite(&seq1);
 	}
@@ -711,7 +711,7 @@ AjPCmap ajCmapReadNew(AjPFile inf, ajint mode, ajint chn, ajint mod)
 	/* S2 */
 	else if(ajStrPrefixC(line, "S2"))
 	{    
-	    while(ajFileReadLine(inf,&line) && !ajStrPrefixC(line,"XX"))
+	    while(ajReadlineTrim(inf,&line) && !ajStrPrefixC(line,"XX"))
 		ajStrAppendC(&seq2,ajStrGetPtr(line));
 	    ajStrRemoveWhite(&seq2);
 	}
@@ -807,8 +807,8 @@ AjPCmap ajCmapReadNew(AjPFile inf, ajint mode, ajint chn, ajint mod)
 	    /* Check residue number is in range */
 	    if((x>(ret)->Dim) || (y>(ret)->Dim))
 		ajFatal("Fatal attempt to write bad data in "
-			"ajCmapReadNew\nFile: %S (%S)\nx: %d y:%d\nEmail culprit: "
-			"jison@hgmp.mrc.ac.uk\n", ajFileGetName(inf), temp_id, x, y);
+			"ajCmapReadNew\nFile: %S (%S)\nx: %d y:%d\n",
+			ajFileGetNameS(inf), temp_id, x, y);
 	    
 	    /* Enter '1' in matrix to indicate contact */
 	    ajUint2dPut(&(ret)->Mat, x-1, y-1, 1);
@@ -825,8 +825,8 @@ AjPCmap ajCmapReadNew(AjPFile inf, ajint mode, ajint chn, ajint mod)
 	    /* Check residue number is in range */
 	    if((x>(ret)->Dim))
 		ajFatal("Fatal attempt to write bad data in "
-			"ajCmapReadNew\nFile: %S (%S)\nx: %d\nEmail culprit: "
-			"jison@hgmp.mrc.ac.uk\n", ajFileGetName(inf), temp_id, x);
+			"ajCmapReadNew\nFile: %S (%S)\nx: %d\n",
+			ajFileGetNameS(inf), temp_id, x);
 	    
 	    /* Enter '1' in matrix to indicate contact.  For ligand contacts, 
 	       the first row / column only is used. */
@@ -875,7 +875,7 @@ AjPVdwall  ajVdwallReadNew(AjPFile inf)
 
 
     /* Start of main loop */
-    while((ajFileReadLine(inf, &line)))
+    while((ajReadlineTrim(inf, &line)))
     {
 	/* Parse NR line */
 	if(ajStrPrefixC(line, "NR"))
@@ -969,7 +969,7 @@ AjPHet  ajHetReadNew(AjPFile inf)
     list = ajListNew();
   
     /* Read lines from file */
-    while(ajFileReadLine(inf, &line))
+    while(ajReadlineTrim(inf, &line))
     {
 	if(ajStrPrefixC(line, "ID   "))
 	{
@@ -1048,7 +1048,7 @@ AjPHet ajHetReadRawNew(AjPFile inf)
 
     
     /* Read lines from file */
-    while(ajFileReadLine(inf, &line))
+    while(ajReadlineTrim(inf, &line))
     {
 	if(ajStrPrefixC(line,"HET "))
 	{
@@ -1091,8 +1091,7 @@ AjPHet ajHetReadRawNew(AjPFile inf)
 	ajListFree(&list);	    
 	ajStrDel(&line);
 
-	ajFatal("Fatal discrepancy in count of HET and FORMUL records\n"
-		"Email wawan@hgmp.mrc.ac.uk\n");
+	ajFatal("Fatal discrepancy in count of HET and FORMUL records\n");
     }	
     
     ret = ajHetNew(0);
@@ -1186,6 +1185,10 @@ AjPPdb ajPdbReadNew(AjPFile inf, ajint mode)
     
     AjPAtom    atom     = NULL;
     AjPResidue residue  = NULL;
+    ajint      rn_last = -100000;
+    ajint      mn_last = -100000;
+
+    AjBool     fixReadAtoms = ajTrue;
 
     /* Intitialise strings */
     line  = ajStrNew();
@@ -1196,7 +1199,7 @@ AjPPdb ajPdbReadNew(AjPFile inf, ajint mode)
     xstr  = ajStrNew();
 
     /* Start of main loop */
-    while(ajFileReadLine(inf,&line))
+    while(ajReadlineTrim(inf,&line))
     {
 	if(ajStrPrefixC(line,"XX"))
 	    continue;
@@ -1361,7 +1364,7 @@ AjPPdb ajPdbReadNew(AjPFile inf, ajint mode)
 	/* Parse sequence line */
 	else if(ajStrPrefixC(line,"SQ"))
 	{
-	    while(ajFileReadLine(inf,&line) && !ajStrPrefixC(line,"XX"))
+	    while(ajReadlineTrim(inf,&line) && !ajStrPrefixC(line,"XX"))
 		ajStrAppendC(&(ret)->Chains[nc-1]->Seq,ajStrGetPtr(line));
 	    ajStrRemoveWhite(&(ret)->Chains[nc-1]->Seq);
 	    continue;
@@ -1369,7 +1372,7 @@ AjPPdb ajPdbReadNew(AjPFile inf, ajint mode)
 
 
 	/* Parse atom line */
-	else if(ajStrPrefixC(line,"AT"))
+	else if(fixReadAtoms && ajStrPrefixC(line,"AT"))
 	{
 	    mod = chn = gpn = 0;
 	    
@@ -1384,7 +1387,7 @@ AjPPdb ajPdbReadNew(AjPFile inf, ajint mode)
 	      {
 		/* break; */
 		/* Discard remaining AT lines */
-		while(ajFileReadLine(inf,&line) && ajStrPrefixC(line,"AT"));
+		while(ajReadlineTrim(inf,&line) && ajStrPrefixC(line,"AT"));
 	      }
 
 	    /* Chain number */
@@ -1462,8 +1465,7 @@ AjPPdb ajPdbReadNew(AjPFile inf, ajint mode)
 		    ajListPushAppend((ret)->Water,(void *)atom);
 		else
 		    ajFatal("Unexpected parse error in "
-			    "ajPdbReadFirstModelNew. Email "
-			    "jison@hgmp.mrc.ac.uk");
+			    "ajPdbReadFirstModelNew");
 	    }
 	    else
 	      {
@@ -1488,7 +1490,7 @@ AjPPdb ajPdbReadNew(AjPFile inf, ajint mode)
 	      {
 		/* break;*/
 		/* Discard remaining RE lines */
-		while(ajFileReadLine(inf,&line) && ajStrPrefixC(line,"RE"));
+		while(ajReadlineTrim(inf,&line) && ajStrPrefixC(line,"RE"));
 	      }
 	    /* Chain number */
 	    ajStrTokenNextParse(&handle,&token);
@@ -1597,6 +1599,162 @@ AjPPdb ajPdbReadNew(AjPFile inf, ajint mode)
 
 	    continue;
 	}
+	/* Parse coordinate line */
+	else if(ajStrPrefixC(line,"CO"))
+	{
+	    mod = chn = gpn = 0;
+	    
+	    ajStrTokenAssignC(&handle,line," \t\n\r");
+	    ajStrTokenNextParse(&handle,&token);
+
+	    ajStrTokenNextParse(&handle,&token);
+	    ajStrToInt(token,&mod);
+
+	    ajStrTokenNextParse(&handle,&token);
+	    ajStrToInt(token,&chn);
+
+	    ajStrTokenNextParse(&handle,&token);
+	    ajStrToInt(token,&gpn);
+	    
+	    /* AJNEW0(atom); */
+	    atom = ajAtomNew();
+	    
+	    atom->Mod = mod;
+	    atom->Chn = chn;
+	    atom->Gpn = gpn;
+	    
+	    ajStrTokenNextParse(&handle,&token);
+	    atom->Type = ajStrGetCharFirst(token);
+	    
+	    ajStrTokenNextParse(&handle,&token);
+	    ajStrToInt(token,&atom->Idx);
+
+	    ajStrTokenNextParse(&handle,&token);
+	    ajStrAssignS(&atom->Pdb,token);
+
+	    /* Residue object */
+	    if(atom->Type=='P')
+	    {
+		/* New model */
+		if(atom->Mod != mn_last)
+		{
+		    rn_last = -100000;
+		    mn_last = atom->Mod;
+		}
+		/* New residue */
+		if(atom->Idx != rn_last)
+		{
+		    residue = ajResidueNew();
+
+		    residue->Mod     = atom->Mod;
+		    residue->Chn     = atom->Chn;
+		    residue->Idx     = atom->Idx;
+		    ajStrAssignS(&residue->Pdb, atom->Pdb);
+		}	
+	    }	
+
+	    ajStrTokenNextParse(&handle,&token);
+	    residue->eType = *ajStrGetPtr(token);
+
+	    ajStrTokenNextParse(&handle,&token);
+	    ajStrToInt(token,&residue->eNum);
+
+	    ajStrTokenNextParse(&handle,&token);
+	    ajStrAssignS(&residue->eId,token);
+	    
+	    ajStrTokenNextParse(&handle,&token);
+	    ajStrToInt(token,&residue->eClass);
+
+	    ajStrTokenNextParse(&handle,&token);
+	    residue->eStrideType = *ajStrGetPtr(token);
+
+	    ajStrTokenNextParse(&handle,&token);
+	    ajStrToInt(token,&residue->eStrideNum);
+
+	    ajStrTokenNextParse(&handle,&token);
+	    atom->Id1 = *ajStrGetPtr(token);
+	    residue->Id1  = atom->Id1;
+	    
+	    ajStrTokenNextParse(&handle,&token);
+	    ajStrAssignS(&atom->Id3,token);
+	    ajStrAssignS(&residue->Id3, atom->Id3);
+
+	    ajStrTokenNextParse(&handle,&token);
+	    ajStrAssignS(&atom->Atm,token);
+
+	    ajStrTokenNextParse(&handle,&token);
+	    ajStrToFloat(token,&atom->X);
+
+	    ajStrTokenNextParse(&handle,&token);
+	    ajStrToFloat(token,&atom->Y);
+
+	    ajStrTokenNextParse(&handle,&token);
+	    ajStrToFloat(token,&atom->Z);
+
+	    ajStrTokenNextParse(&handle,&token);
+	    ajStrToFloat(token,&atom->O);
+
+	    ajStrTokenNextParse(&handle,&token);
+	    ajStrToFloat(token,&atom->B);
+
+	    ajStrTokenNextParse(&handle,&token);
+            ajStrToFloat(token,&residue->Phi);
+
+            ajStrTokenNextParse(&handle,&token);
+            ajStrToFloat(token,&residue->Psi);
+
+            ajStrTokenNextParse(&handle,&token);
+            ajStrToFloat(token,&residue->Area);
+
+            ajStrTokenNextParse(&handle,&token);
+            ajStrToFloat(token,&residue->all_abs);
+
+            ajStrTokenNextParse(&handle,&token);
+            ajStrToFloat(token,&residue->all_rel);
+
+            ajStrTokenNextParse(&handle,&token);
+            ajStrToFloat(token,&residue->side_abs);
+
+            ajStrTokenNextParse(&handle,&token);
+            ajStrToFloat(token,&residue->side_rel);
+
+            ajStrTokenNextParse(&handle,&token);
+            ajStrToFloat(token,&residue->main_abs);
+
+            ajStrTokenNextParse(&handle,&token);
+            ajStrToFloat(token,&residue->main_rel);
+
+            ajStrTokenNextParse(&handle,&token);
+            ajStrToFloat(token,&residue->npol_abs);
+
+            ajStrTokenNextParse(&handle,&token);
+            ajStrToFloat(token,&residue->npol_rel);
+
+            ajStrTokenNextParse(&handle,&token);
+            ajStrToFloat(token,&residue->pol_abs);
+
+            ajStrTokenNextParse(&handle,&token);
+            ajStrToFloat(token,&residue->pol_rel);
+
+
+	    /* Check for coordinates for water or groups that could not
+	       be uniquely assigned to a chain */
+	    if(chn==0)
+	    {
+		/* Heterogen */
+		if(atom->Type == 'H')
+		    ajListPushAppend((ret)->Groups,(void *)atom);
+		else if(atom->Type == 'W')
+		    ajListPushAppend((ret)->Water,(void *)atom);
+		else
+		    ajFatal("Unexpected parse error in ajPdbRead");
+	    }
+	    else
+		ajListPushAppend((ret)->Chains[chn-1]->Atoms,(void *)atom);
+
+	    
+	    ajListPushAppend((ret)->Chains[chn-1]->Residues,(void *)residue);
+	}
     }
     /* End of main application loop */
     
@@ -1668,7 +1826,7 @@ AjPPdb ajPdbReadoldNew(AjPFile inf)
     xstr  = ajStrNew();
 
     /* Start of main application loop */
-    while(ajFileReadLine(inf,&line))
+    while(ajReadlineTrim(inf,&line))
     {
 	if(ajStrPrefixC(line,"XX"))
 	    continue;
@@ -1810,7 +1968,7 @@ AjPPdb ajPdbReadoldNew(AjPFile inf)
 	/* Parse sequence line */
 	if(ajStrPrefixC(line,"SQ"))
 	{
-	    while(ajFileReadLine(inf,&line) && !ajStrPrefixC(line,"XX"))
+	    while(ajReadlineTrim(inf,&line) && !ajStrPrefixC(line,"XX"))
 		ajStrAppendC(&(ret)->Chains[nc-1]->Seq,ajStrGetPtr(line));
 	    ajStrRemoveWhite(&(ret)->Chains[nc-1]->Seq);
 	    continue;
@@ -1966,8 +2124,7 @@ AjPPdb ajPdbReadoldNew(AjPFile inf)
 		else if(atom->Type == 'W')
 		    ajListPushAppend((ret)->Water,(void *)atom);
 		else
-		    ajFatal("Unexpected parse error in ajPdbRead. "
-			    "Email jison@hgmp.mrc.ac.uk");
+		    ajFatal("Unexpected parse error in ajPdbRead");
 	    }
 	    else
 		ajListPushAppend((ret)->Chains[chn-1]->Atoms,(void *)atom);
@@ -2046,7 +2203,7 @@ AjPPdb ajPdbReadoldFirstModelNew(AjPFile inf)
     xstr  = ajStrNew();
 
     /* Start of main application loop */
-    while(ajFileReadLine(inf,&line))
+    while(ajReadlineTrim(inf,&line))
     {
 	if(ajStrPrefixC(line,"XX"))
 	    continue;
@@ -2194,7 +2351,7 @@ AjPPdb ajPdbReadoldFirstModelNew(AjPFile inf)
 	/* Parse sequence line */
 	if(ajStrPrefixC(line,"SQ"))
 	{
-	    while(ajFileReadLine(inf,&line) && !ajStrPrefixC(line,"XX"))
+	    while(ajReadlineTrim(inf,&line) && !ajStrPrefixC(line,"XX"))
 		ajStrAppendC(&(ret)->Chains[nc-1]->Seq,ajStrGetPtr(line));
 	    ajStrRemoveWhite(&(ret)->Chains[nc-1]->Seq);
 	    continue;
@@ -2354,8 +2511,7 @@ AjPPdb ajPdbReadoldFirstModelNew(AjPFile inf)
 		    ajListPushAppend((ret)->Water,(void *)atom);
 		else
 		    ajFatal("Unexpected parse error in "
-			    "ajPdbReadFirstModelNew. Email "
-			    "jison@hgmp.mrc.ac.uk");
+			    "ajPdbReadFirstModelNew");
 	    }
 	    else
 		ajListPushAppend((ret)->Chains[chn-1]->Atoms,(void *)atom);
@@ -6595,10 +6751,12 @@ AjBool   ajCmapWrite(AjPFile outf, const AjPCmap cmap)
 		if((ajUint2dGet(cmap->Mat, x, y)==1))
 		{
 		    /* Assign residue id. */
-		    if(!ajBaseAa1ToAa3(ajStrGetCharPos(cmap->Seq1, x), &res1))
+		    if(!ajResidueToTriplet(ajStrGetCharPos(cmap->Seq1, x),
+                                           &res1))
 			ajFatal("Index out of range in ajCmapWrite");
 		
-		    if(!ajBaseAa1ToAa3(ajStrGetCharPos(cmap->Seq1, y), &res2))
+		    if(!ajResidueToTriplet(ajStrGetCharPos(cmap->Seq1, y),
+                                           &res2))
 			ajFatal("Index out of range in ajCmapWrite");
 
 		    /* Print out the contact. */
@@ -6615,10 +6773,12 @@ AjBool   ajCmapWrite(AjPFile outf, const AjPCmap cmap)
 		if((ajUint2dGet(cmap->Mat, x, y)==1))
 		{
 		    /* Assign residue id. */
-		    if(!ajBaseAa1ToAa3(ajStrGetCharPos(cmap->Seq1, x), &res1))
+		    if(!ajResidueToTriplet(ajStrGetCharPos(cmap->Seq1, x),
+                                           &res1))
 			ajFatal("Index out of range in ajCmapWrite");
 		
-		    if(!ajBaseAa1ToAa3(ajStrGetCharPos(cmap->Seq2, y), &res2))
+		    if(!ajResidueToTriplet(ajStrGetCharPos(cmap->Seq2, y),
+                                           &res2))
 			ajFatal("Index out of range in ajCmapWrite");
 
 		    /* Print out the contact. */
@@ -6633,7 +6793,7 @@ AjBool   ajCmapWrite(AjPFile outf, const AjPCmap cmap)
 	    if((ajUint2dGet(cmap->Mat, 0, x)==1))
 	    {
 		/* Assign residue id. */
-		if(!ajBaseAa1ToAa3(ajStrGetCharPos(cmap->Seq1, x), &res1))
+		if(!ajResidueToTriplet(ajStrGetCharPos(cmap->Seq1, x), &res1))
 		    ajFatal("Index out of range in ajCmapWrite");
 		
 		/* Print out the contact. */

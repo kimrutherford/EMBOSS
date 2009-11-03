@@ -21,25 +21,7 @@ pepinfo
 </H2>
 
 
-pepinfo detects and displays various useful metrics about a protein
-sequence. 
-
-<p>
-It can plot and display the following properties:
-
-<ul>
-
-<li>plots of hydrophobicity (using the method of Kyte & Doolittle), of
-OHM (Sweet & Eisenberg), or of consensus parameters (Eisenberg et al))
-
-<li>a histogram of the presence of residues with the physico-chemical
-properties: Tiny, Small, Aliphatic, Aromatic, Non-polar, Polar,
-Charged, Positive, Negative.
-
-</ul>
-
-<p>
-The data are also written out to a data file.
+<p><b>pepinfo</b> plots various amino acid properties in parallel for an input protein sequence.  The types of plot available are i. Hydrophobicity plots using the method of Kyte & Doolittle,  the optimal matching hydrophobicity scale (OHM) of Sweet & Eisenberg, or consensus parameters (Eisenberg et al).  ii. Histogram of the presence of residues with the physico-chemical properties: Tiny, Small, Aliphatic, Aromatic, Non-polar, Polar, Charged, Positive, Negative.  The data are also written out to an output file.</p>
 
 <H2>
     Usage
@@ -134,7 +116,8 @@ The directories are searched in the following order:
     Notes
 </H2>
 
-None.
+<p>For calculating the hydrophobicity plots, hdrophobicity is calculated in windows of a specified size over the sequence.</p>
+<p>The optimal matching hydrophobicity scale (OHM) scale is based on the likelihood of a given amino acid to be replaced by another hydrophobic or "buried" amino acid.</p>
 
 <H2>
     References

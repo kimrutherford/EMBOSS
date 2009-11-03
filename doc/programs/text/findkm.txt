@@ -5,13 +5,15 @@
 
 Function
 
-   Find Km and Vmax for an enzyme reaction
+   Calculate and plot enzyme reaction data
 
 Description
 
-   Takes a file of enzymatic data and plots Michaelis Menten and Hanes
-   Woolf plots of the data. From these it calculates the Michaelis Menten
-   constant (Km) and the maximum velocity (Vmax) of the reaction.
+   findkm reads a file of enzymatic reaction data (substrate
+   concentration [S] versus reaction velocity [V]) and draws Michaelis
+   Menten and Hanes Woolf plots of the data. From these it calculates the
+   Michaelis Menten constant (Km) and the maximum velocity (Vmax) of the
+   reaction. An output file with all relevant data is written.
 
 Usage
 
@@ -19,7 +21,7 @@ Usage
 
 
 % findkm -graph cps 
-Find Km and Vmax for an enzyme reaction
+Calculate and plot enzyme reaction data
 Enzyme kinetics data (application-specific) file: enztest.dat
 Output file [enztest.findkm]: 
 
@@ -59,8 +61,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -105,7 +108,7 @@ Where line cuts x axis = (-0.20, 0)
 Where line cuts y axis = (0, 0.05)
 Limit-point of graph for plot = (103.00, 1.08)
 
-Vmax = 99.70, Km = 4.894611
+Vmax = 99.70, Km = 4.894612
 
   Graphics File: findkm.ps
 

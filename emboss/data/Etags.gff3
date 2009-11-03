@@ -24,7 +24,6 @@ ID
 
 Name
 
-
 # A secondary name for the feature.  It is suggested that this tag be
 # used whenever a secondary identifier for the feature is needed, such
 # as locus names and accession numbers.  Unlike ID, there is no
@@ -37,7 +36,7 @@ Alias
 # A feature may have multiple parents.  Parent can *only* be used to
 # indicate a partof relationship.
 
- Parent
+Parent
 
 # Indicates the target of a nucleotide-to-nucleotide or
 # protein-to-nucleotide alignment.  The format of the value is
@@ -77,3 +76,4 @@ Dbxref
 
 Ontology_term
 
+#include Etags.gff

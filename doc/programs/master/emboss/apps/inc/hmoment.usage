@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>hmoment tsw:hbb_human </b>
-Hydrophobic moment calculation
+Calculate and plot hydrophobic moment for protein sequence(s)
 Output file [hbb_human.hmoment]: <b></b>
 
 </pre></td></tr></table><p>

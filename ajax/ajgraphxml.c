@@ -652,7 +652,7 @@ void ajXmlAddTextC(AjPGraphXml file, double x, double y, double size,
     xml_AddACoord(x, y, ajFalse, &attributeVal, &temp);
     xml_SetAttributeC(transformNode, "translation", ajStrGetPtr(attributeVal));
     ajStrAssignC(&attributeVal,"0 0 1 ");
-    ajStrAssignC(&temp,"");
+    ajStrAssignClear(&temp);
 
     xml_StrFromDouble(&temp, angle);
     ajStrAppendS(&attributeVal, temp);
@@ -2657,7 +2657,7 @@ void ajXmlAddGraphicC(AjPGraphXml file, const char *type)
 
 
     if(file->nodeTypes)
-	file->nodeTypes = ajStrTableNew(1);
+	file->nodeTypes = ajTablestrNewLen(1);
     
     /*  el unrefed above if type == NULL */
     /* look to see if I need some checking here hugh */
@@ -2917,7 +2917,7 @@ static void xml_AddCylinder(AjPGraphXml file, double xCentre, double yCentre,
     ajStrAppendS(&translation, temp);
     ajStrAppendC(&translation, " 0");
 
-    ajStrAssignC(&temp,"");
+    ajStrAssignClear(&temp);
     xml_StrFromDouble(&temp, angle);
     ajStrAppendS(&rotation, temp);
     
@@ -2931,10 +2931,10 @@ static void xml_AddCylinder(AjPGraphXml file, double xCentre, double yCentre,
     elCylinder = xml_MakeNewShapeNodeC(file, transformNode, 
 				      "Cylinder");
 
-    ajStrAssignC(&temp,"");
+    ajStrAssignClear(&temp);
     xml_StrFromDouble(&temp, height);
     xml_SetAttributeC(elCylinder, "height", ajStrGetPtr(temp));
-    ajStrAssignC(&temp,"");
+    ajStrAssignClear(&temp);
     xml_StrFromDouble(&temp, width);
     xml_SetAttributeC(elCylinder, "width", ajStrGetPtr(temp));
 
@@ -3858,7 +3858,7 @@ static  AjPStr xml_PresentColourAsString(const AjPGraphXml file)
     
     for(i=0; i<3; ++i)
     {
-	ajStrAssignC(&temp,"");
+	ajStrAssignClear(&temp);
 	xml_StrFromDouble(&temp, file->colour[i]);
 	ajStrAppendS(&colour, temp);
 	if(i<2)
@@ -4210,7 +4210,7 @@ static void xml_AddArc(AjPGraphXml file, double xCentre, double yCentre,
     xml_AddACoord(xEnd, yEnd, ajFalse, &controlPoints, &temp);
 
     ajStrAppendC(&weights, "1 ");
-    ajStrAssignC(&temp,"");
+    ajStrAssignClear(&temp);
     xml_StrFromDouble(&temp, middleWeight);
     ajStrAppendC(&weights, ajStrGetPtr(temp));
     ajStrAppendC(&weights, " 1");
@@ -4266,12 +4266,12 @@ static AjPXmlNode xml_GetNodeTypeMakeIfNot(AjPGraphXml file,
     ajint limit;
     ajint limit2;
     
-    /*    returnNode = (AjPXmlNode) ajTableGet(file->nodeTypes, nameReqd); */
+    /*    returnNode = (AjPXmlNode) ajTableFetch(file->nodeTypes, nameReqd); */
 
 
-    colourTable = (AjPTable) ajTableGet(file->nodeTypes, nameReqd);
+    colourTable = (AjPTable) ajTableFetch(file->nodeTypes, nameReqd);
     if(colourTable != NULL)
-	returnNode = (AjPXmlNode) ajTableGet(colourTable, 
+	returnNode = (AjPXmlNode) ajTableFetch(colourTable, 
 					     xml_PresentColourAsString(file));
     
 
@@ -4346,10 +4346,10 @@ static AjPXmlNode xml_GetNodeTypeMakeIfNot(AjPGraphXml file,
 	gdome_n_ref(xml_GetNode(xml_GetCurrentGraphic(file)), &exc);
 
 
-	colourTable = (AjPTable) ajTableGet(file->nodeTypes, nameReqd);
+	colourTable = (AjPTable) ajTableFetch(file->nodeTypes, nameReqd);
 	if(colourTable == NULL)
 	{
-	    colourTable = ajStrTableNew(1);
+	    colourTable = ajTablestrNewLen(1);
     
 	    ajTablePut(file->nodeTypes, (const void *) ajStrNewS(nameReqd),
 		       (void *)colourTable);
@@ -4463,10 +4463,10 @@ static AjPXmlNode xml_GetNodeTypeMakeIfNot(AjPGraphXml file,
 	gdome_n_ref(xml_GetNode(returnNode2), &exc);
 
 
-	colourTable = (AjPTable) ajTableGet(file->nodeTypes, nameReqd);
+	colourTable = (AjPTable) ajTableFetch(file->nodeTypes, nameReqd);
 	if(colourTable == NULL)
 	{
-	    colourTable = ajStrTableNew(1);
+	    colourTable = ajTablestrNewLen(1);
 	    ajTablePut(file->nodeTypes, (const void *) ajStrNewS(nameReqd),
 		       (void *)colourTable);
 	}
@@ -4486,10 +4486,10 @@ static AjPXmlNode xml_GetNodeTypeMakeIfNot(AjPGraphXml file,
     gdome_n_ref(xml_GetNode(returnNode), &exc);
 
 
-    colourTable = (AjPTable) ajTableGet(file->nodeTypes, nameReqd);
+    colourTable = (AjPTable) ajTableFetch(file->nodeTypes, nameReqd);
     if(colourTable == NULL)
     {
-	colourTable = ajStrTableNew(1);
+	colourTable = ajTablestrNewLen(1);
 	ajTablePut(file->nodeTypes, 
 		   (const void *) ajStrNewS(nameReqd),
 		   (void *)colourTable);
@@ -4565,12 +4565,12 @@ static void xml_AddACoord(double x, double y, AjBool joined, AjPStr* coord,
     ajStrAppendC(coord, ajStrGetPtr(temp));
     ajStrAppendC(coord, " ");
 
-    ajStrAssignC(&temp,"");
+    ajStrAssignClear(&temp);
     xml_StrFromDouble(&temp, y);
     ajStrAppendC(coord, ajStrGetPtr(temp));
     ajStrAppendC(coord, " ");
 
-    ajStrAssignC(&temp,"");
+    ajStrAssignClear(&temp);
     ajStrFromInt(&temp, 0);
     ajStrAppendC(coord, ajStrGetPtr(temp));
     
@@ -4584,7 +4584,7 @@ static void xml_AddACoord(double x, double y, AjBool joined, AjPStr* coord,
     else
 	lastIndex = -1;
 
-    ajStrAssignC(&temp,"");
+    ajStrAssignClear(&temp);
     ajStrFromInt(&temp, (lastIndex+1));
     ajStrAppendC(index, ajStrGetPtr(temp));
       
@@ -4770,7 +4770,7 @@ static AjPGraphXml xml_CreateNewOutputFile()
 
     xml_AddCommonBit(file);
 
-    file->nodeTypes = ajStrTableNew(1);
+    file->nodeTypes = ajTablestrNewLen(1);
     
     gdome_str_unref (name);
     gdome_str_unref (publicId);

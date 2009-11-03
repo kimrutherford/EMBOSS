@@ -5,23 +5,30 @@
 
 Function
 
-   Finds tandem repeats
+   Finds tandem repeats in nucleotide sequences
 
 Description
 
-   equicktandem scans a sequence for potential tandem repeats up to a
-   specified size. The results can be used to run etandem on the
-   candidate repeat lengths to identify genuine tandem repeats.
+   equicktandem identifies regions in a nucleotide sequence which are
+   likely to contain tanden repeats. For a region to be reported, it must
+   be no larger than a specified maximum repeat size and must score
+   higher than a threshold score, which is also user-specified. The
+   output is a standard EMBOSS report file with details of the location
+   and score of any potential tandem repeats. Optionally, the output can
+   be written in the format of the Sanger Centre quicktandem program.
 
-   equicktandem is a simple program that looks for segments in which each
-   base tends to match the base 'repeatsize' back, i.e. with an
-   autocorrelation peak at 'repeatsize'. This can allow drift in the
-   repeating sequence, i.e. it does not look for a consensus sequence for
-   the whole repeat block (that is what etandem does). But it is much
-   quicker than etandem. It does not account for gaps.
+Algorithm
 
-   The score is +1 for a match to the corresponding base 'repeatsize'
-   back and -1 for a mismatch.
+   equicktandem looks for sequence segments in which each base tends to
+   match the base a fixed number ('repeatsize') of nucleotides back in
+   the sequence, i.e. with an autocorrelation peak at 'repeatsize'. The
+   score for a segment is the sum of the scores for each position in that
+   segment: the score is incremented (+1) for a match to the
+   corresponding base 'repeatsize' back and decremented (-1) for a
+   mismatch. The algorithm allows for drift in the repeating sequence,
+   i.e. exact matches are not required, nor is a consensus sequence for
+   the whole repeat block used (that is what etandem does). The algorithm
+   does not account for gaps but it is much quicker than etandem.
 
 Usage
 
@@ -31,7 +38,7 @@ Usage
 
 
 % equicktandem -noorigfile 
-Finds tandem repeats
+Finds tandem repeats in nucleotide sequences
 Input nucleotide sequence: tembl:L46634
 Maximum repeat size [600]: 
 Threshold score [20]: 
@@ -81,6 +88,7 @@ Command line arguments
    -raccshow2          boolean    Show accession number in the report
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
+   -rstrandshow2       boolean    Show the nucleotide strand in the report
    -rusashow2          boolean    Show the full USA in the report
    -rmaxall2           integer    Maximum total hits to report
    -rmaxseq2           integer    Maximum hits to report for one sequence
@@ -90,8 +98,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -223,7 +232,7 @@ Output file format
 
 ########################################
 # Program: equicktandem
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: equicktandem
 #    -noorigfile
 #    -sequence tembl:L46634
@@ -241,8 +250,8 @@ Output file format
 #
 #=======================================
 
-  Start     End   Score   Size  Count
-    191     935     339      6    124
+  Start     End  Strand   Score   Size  Count
+    191     935       +     339      6    124
 
 #---------------------------------------
 #---------------------------------------
@@ -253,7 +262,20 @@ Data files
 
 Notes
 
-   None.
+   A tandem repeat in a DNA sequence is where a sequence of two or more
+   nucleotides is repeated without any intervening nucleotides. For
+   example "GATACAGATACAGATACA" is a tandem repeat of "GATACA". A short
+   tandem repeat is typically 2 to 10 base pairs and occur in introns.
+   The sequence and number of repeats at a given locus tend to be
+   characteristic of an individual. Where enough STR loci are examined, a
+   unique genetic profile of an individual can be built. Thus, tandem
+   repeats are useful for genotyping, for example, in determining
+   parentage and in forensic cases.
+
+   To identify genuine tandem repeats, the repeat sizes and / or sequence
+   regions identified by equicktandem can be used as input to etandem.
+   etandem will confirm which regions are true tandem repeats and give an
+   accurate specification of the repeats.
 
 References
 
@@ -277,10 +299,10 @@ Known bugs
 
 See also
 
-   Program name                     Description
-   einverted    Finds DNA inverted repeats
-   etandem      Looks for tandem repeats in a nucleotide sequence
-   palindrome   Looks for inverted repeats in a nucleotide sequence
+   Program name                   Description
+   einverted    Finds inverted repeats in nucleotide sequences
+   etandem      Finds tandem repeats in a nucleotide sequence
+   palindrome   Finds inverted repeats in nucleotide sequence(s)
 
    equicktandem identifies regions wich are likely to contain tanden
    repeats. tandem should then be run on those regions to confirm them

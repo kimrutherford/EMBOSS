@@ -87,12 +87,12 @@ int main(int argc, char **argv)
     seqall    = ajAcdGetSeqall("bsequence");
     gapopen   = ajAcdGetFloat("gapopen");
     gapextend = ajAcdGetFloat("gapextend");
-    dobrief   = ajAcdGetBool("brief");
+    dobrief   = ajAcdGetBoolean("brief");
     align     = ajAcdGetAlign("outfile");
     
     /* obsolete. Can be uncommented in acd file and here to reuse */
     
-    /* show      = ajAcdGetBool("showinternals"); */
+    /* show      = ajAcdGetBoolean("showinternals"); */
     
     m  = ajStrNew();
     n  = ajStrNew();
@@ -140,14 +140,14 @@ int main(int argc, char **argv)
 	ajStrAssignC(&m,"");
 	ajStrAssignC(&n,"");
 
-	embAlignPathCalcSW(p,q,lena,lenb,gapopen,gapextend,path,sub,cvt,
+	score = embAlignPathCalcSW(p,q,lena,lenb,gapopen,gapextend,path,sub,cvt,
 			   compass,show);
 
-	score=embAlignScoreSWMatrix(path,compass,gapopen,gapextend,a,b,lena,
-				    lenb,sub,cvt,&start1,&start2);
+	/*score=embAlignScoreSWMatrix(path,compass,gapopen,gapextend,a,b,lena,
+          lenb,sub,cvt,&start1,&start2);*/
 
-	embAlignWalkSWMatrix(path,compass,gapopen,gapextend,a,b,&m,&n,lena,
-			     lenb,sub,cvt,&start1,&start2);
+	embAlignWalkSWMatrix(path,compass,gapopen,gapextend,a,b,&m,&n,
+			     lena,lenb,&start1,&start2);
 
 	ajDebug("ReportLocal call start1:%d begina:%d start2:%d beginb:%d\n",
 		start1, begina, start2, beginb);

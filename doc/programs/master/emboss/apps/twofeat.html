@@ -19,53 +19,34 @@ twofeat
     Description
 </H2>
 
-<b>twofeat</b> reads in the feature tables of sequences and reports
-occurances of pairs of specified features. 
 
-<p>
 
-This is intended for use as a simple data-mining tool to enable you to
-look for instances of pairs of features that occur near to each other in
-the same sequence entry. 
+<p><b>twofeat</b> finds neighbouring pairs of specified features in one or more input sequences. Each feature may be specified by type, name, sense, score, tag/value pairs etc.  Their relationship, e.g. their sequence separation or overlap, relative sense and order may also be specified. It writes a standard EMBOSS report file with any such feature pairs identified.  By default each pair is written as a single feature but (optionally) they are written in their original form.</p>
 
-<p>
 
-For each of the pair of features, you can specify its type name, its
-sense, its score and any tag/value pairs, amongst other things. 
-
-<p>
-
-You can then specify the type of relationship that the two features
-should have.  You can specify the minimum and maximum distance between
-them.  You can specify the type of overlap allowed: Any type of overlap
-or no overlap is allowed, Overlap required, No overlaps are allowed,
-Overlap required but one feature must not be completely within the
-other, Feature A must be completely enclosed within feature B, Feature B
-must be completely enclosed within feature A.  You can specify that the
-distance should be measured from the nearest ends of the two features,
-From the left ends, From right ends, From the furthest ends.  You can
-specify that the features should be in any sense, in the same sense or
-in opposite senses.  You can specify that the features should be in any
-order, Feature A then feature B, Feature B then feature A. 
-
-<p>
-
-By default the resulting pairs of features found are then written to a
-report file as a single feature from the first postion of the left-most
-feature to the last position of the right-most feature.  You can modify
-the output to report the pairs of features with no changes made to them. 
 
 <H2>
     Algorithm
 </H2>
 
-<pre>
-For each sequence:
-	identify the features that match the criteria for Feature A
-	identify the features that match the criteria for Feature B
-	compare all pairs of features
-	if they satisfy the requirements output them to the report file
-</pre>
+<p>For each of the pair of features, you can specify its type name, its sense, its score and any tag/value pairs, amongst other things.</p></p>
+
+<p>You can then specify the type of relationship that the two features should have as follows:</p>
+
+<p>Minimum and maximum distance between each feature. </p>
+<p>Distance measurement (measure from the nearest ends of the two features, from the left ends, from right ends, from the furthest ends.)</p>
+<p>Type of overlap (any type of overlap or no overlap is allowed, Overlap required, No overlaps are allowed, Overlap required but one feature must not be completely within the other, Feature A must be completely enclosed within feature B, Feature B must be completely enclosed within feature A). </p>
+<p>Feature sense (any sense, in the same sense or in opposite senses)</p>
+<p>Feature order (any order, Feature A then feature B, Feature B then feature A)</p>
+
+<p>The program proceeds as follows.  For eachs sequence:
+	Identify the features that match the criteria for Feature A
+	Identify the features that match the criteria for Feature B
+	Compare all pairs of features
+	If they satisfy the requirements output them to the report file</p>
+
+<p>By default the resulting pairs of features found are then written to a report file as a single feature from the first postion of the left-most feature to the last position of the right-most feature. You can modify the output to report the pairs of features with no changes made to them.</p> 
+
 
 
 <H2>
@@ -119,9 +100,7 @@ None.
     Notes
 </H2>
 
-It can't find features that are not in the input sequences.
-It has no way of checking whether the input features are correct or not.
-Remember this when you are searching public databases.
+<p><b>twofeat</b> is intended for use as a simple data-mining tool to enable you to look for instances of pairs of features that occur near to each other in the same sequence entry.</p>
 
 <H2>
     References

@@ -1,6 +1,6 @@
 application: syco [
-  documentation: "Synonymous codon usage Gribskov statistic
-                  plot"
+  documentation: "Draw synonymous codon usage statictic plot for a
+                  nucleotide sequence"
   groups: "Nucleic:Codon usage, Nucleic:Gene finding"
 ]
 

@@ -22,7 +22,6 @@
 package org.emboss.jemboss.parser;
 
 import org.apache.regexp.*;
-import java.io.*;
 import javax.swing.*;
 
 import org.emboss.jemboss.gui.form.*;

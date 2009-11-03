@@ -25,24 +25,13 @@ seqmatchall
     Function
 </H2>
 
-All-against-all comparison of a set of sequences
+All-against-all word comparison of a sequence set
 
 <H2>
     Description
 </H2>
 
-
-This takes a set of sequences and does an all-against-all pairwise
-comparison of words (fragments of the sequences of a specified fixed
-size) in the sequences, finding regions of identity between any two
-sequences. 
-
-<p>
-The larger the specified word size, the faster the comparison will
-proceed.  Regions whose stretches of identity are shorter than the word
-size will be missed.  You should therefore choose a word size that is
-small enough to find those regions of similarity you are interested in
-within a reasonable time-frame. 
+<p><b>seqmatchall</b> takes a set of sequences and does an all-against-all pairwise comparison of words of a specified size in the sequences, finding regions of identity between any two sequences. It writes an output file with a list of regions of identity in pairs of sequences, the start and end positions and length of the matching regions and the name of the sequences.</p>
 
 <H2>
     Usage
@@ -56,7 +45,7 @@ Here is an example using an increased word size to avoid accidental matches:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>seqmatchall </b>
-All-against-all comparison of a set of sequences
+All-against-all word comparison of a sequence set
 Input sequence set: <b>@eclac.list</b>
 Word size [4]: <b>15</b>
 Output alignment [j01636.seqmatchall]: <b></b>
@@ -111,8 +100,9 @@ Output alignment [j01636.seqmatchall]: <b></b>
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -228,7 +218,7 @@ tembl:V00296
 <pre>
 ########################################
 # Program: seqmatchall
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: seqmatchall
 #    -sequence @../../data/eclac.list
 #    -wordsize 15
@@ -298,9 +288,9 @@ tembl:V00296
 
 <p>
 
-ECLAC (the complete E.coli lac operon) matches ECLACI ECLACZ ECLACY
-and ECLACA (the individual genes), and there is a short overlap
-between ECLACY and the flanking genes ECLACZ and ECLACA
+J01636 (the complete E.coli lac operon) matches V00294 V00295 V00296
+and X51872 (the individual genes), and there is a short overlap
+between V00295 (lacY) and the flanking genes V00296 (lacZ) and X51872 (lacA)
 
 <p>
 
@@ -335,9 +325,7 @@ None.
     Notes
 </H2>
 
-
-The larger the word size, the faster the comparisons will proceed, but
-regions of identitly smaller than the word size will not be reported.
+<p>The larger the specified word size, the faster the comparison will proceed. Regions whose stretches of identity are shorter than the word size will be missed. You should therefore choose a word size that is small enough to find those regions of similarity you are interested in within a reasonable time-frame.</p>
 
 <H2>
     References
@@ -375,20 +363,21 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="matcher.html">matcher</a></td>
-<td>Finds the best local alignments between two sequences</td>
+<td>Waterman-Eggert local alignment of two sequences</td>
 </tr>
 
 <tr>
 <td><a href="supermatcher.html">supermatcher</a></td>
-<td>Match large sequences against one or more other sequences</td>
+<td>Calculate approximate local pair-wise alignments of larger sequences</td>
 </tr>
 
 <tr>
 <td><a href="water.html">water</a></td>
-<td>Smith-Waterman local alignment</td>
+<td>Smith-Waterman local alignment of sequences</td>
 </tr>
 
 <tr>
@@ -398,7 +387,7 @@ None.
 
 <tr>
 <td><a href="wordmatch.html">wordmatch</a></td>
-<td>Finds all exact matches of a given size between 2 sequences</td>
+<td>Finds regions of identity (exact matches) of two sequences</td>
 </tr>
 
 </table>

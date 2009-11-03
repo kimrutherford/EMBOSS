@@ -23,8 +23,6 @@
 package org.emboss.jemboss.draw;
 
 import javax.swing.*;
-import javax.swing.event.*;
-import java.util.Vector;
 import java.awt.Dimension;
 import java.awt.event.*;
 

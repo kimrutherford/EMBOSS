@@ -19,6 +19,9 @@ extern "C"
 #define EMBPROPNEGATIVE   9
 #define EMBPROPABSORBANCE 10
 
+#define EMBPROPHINDEX 26
+#define EMBPROPOINDEX 27
+
 /* define monoisotopic masses for common N- and C- terminal modifications */
 #define EMBPROPMSTN_H       1.00782
 #define EMBPROPMSTN_FORMYL 29.00274
@@ -29,15 +32,58 @@ extern "C"
 
 
 
-#ifndef WIN32
-extern double *EmbPropTable[];
-#else
-#ifdef NUCLEUS_EXPORTS
-__declspec(dllexport) double *EmbPropTable[];
-#else
-__declspec(dllimport) double *EmbPropTable[];
-#endif
-#endif
+/* @data EmbPPropAmino ********************************************************
+**
+** Amino acid properties
+**
+** @attr tiny [ajint] tiny
+** @attr sm_all [ajint] small
+** @attr aliphatic [ajint] aliphatic
+** @attr aromatic [ajint] aromatic
+** @attr nonpolar [ajint] non-polar
+** @attr polar [ajint] polar
+** @attr charge [float] charge
+** @attr pve [ajint] positive
+** @attr nve [ajint] negative
+** @attr extcoeff [ajint] extinction coefficient
+** @attr Padding [char[4]] padding to alignment boundary
+** @@
+******************************************************************************/
+
+typedef struct EmbSPropAmino
+{
+    ajint     tiny;
+    ajint     sm_all;
+    ajint     aliphatic;
+    ajint     aromatic;
+    ajint     nonpolar;
+    ajint     polar;
+    float     charge;
+    ajint     pve;
+    ajint     nve;
+    ajint     extcoeff;
+    char      Padding[4];
+} EmbOPropAmino;
+#define EmbPPropAmino EmbOPropAmino*
+
+
+
+
+/* @data EmbPPropMolwt ********************************************************
+**
+** Molecular weights
+**
+** @attr average [double] average molwt
+** @attr mono [double] monoisotopic molwt
+** @@
+******************************************************************************/
+
+typedef struct EmbSPropMolwt
+{
+    double average;
+    double mono;
+} EmbOPropMolwt;
+#define EmbPPropMolwt EmbOPropMolwt*
 
 
 
@@ -59,21 +105,44 @@ typedef struct EmbSPropFrag	/* Enzyme digestion structure */
 ** Prototype definitions
 */
 
-void    embPropAminoRead (AjPFile fp);
+EmbPPropAmino *embPropEaminoRead(AjPFile fp);
+EmbPPropMolwt *embPropEmolwtRead(AjPFile fp);
+void          embPropAminoDel(EmbPPropAmino **thys);
+void          embPropMolwtDel(EmbPPropMolwt **thys);
+
+float embPropMolwtGetMolwt(const EmbPPropMolwt prop);
+float embPropGetCharge(const EmbPPropAmino prop);
+AjBool embPropGetProperties(const EmbPPropAmino prop, AjPStr* Pstr);
+ajint embPropGetTiny(const EmbPPropAmino prop);
+ajint embPropGetSmall(const EmbPPropAmino prop);
+ajint embPropGetAliphatic(const EmbPPropAmino prop);
+ajint embPropGetAromatic(const EmbPPropAmino prop);
+ajint embPropGetNonpolar(const EmbPPropAmino prop);
+ajint embPropGetPolar(const EmbPPropAmino prop);
+ajint embPropGetPve(const EmbPPropAmino prop);
+ajint embPropGetNve(const EmbPPropAmino prop);
+ajint embPropGetExtcoeff(const EmbPPropAmino prop);
+
+
+
 /* void    embPropAminoRead (void); */
 void 	embPropCalcFragments (const char *s, ajint n,
 			      AjPList *l, AjPList *pa,
 			      AjBool unfavoured, AjBool overlap,
 			      AjBool allpartials, ajint *ncomp, ajint *npart,
 			      AjPStr *rname, AjBool nterm, AjBool cterm,
-			      AjBool dorag);
-double  embPropCalcMolextcoeff(const char *s, ajint start, ajint end);
-double  embPropCalcMolwt (const char *s, ajint start, ajint end);
+			      AjBool dorag, EmbPPropMolwt const  *mwdata,
+			      AjBool mono);
+double  embPropCalcMolextcoeff(const char *s, ajint start, ajint end,
+			       EmbPPropAmino const *aadata);
+double  embPropCalcMolwt (const char *s, ajint start, ajint end,
+			  EmbPPropMolwt const *mwdata, AjBool mono);
 /* new method for chemically modified ends */
 double  embPropCalcMolwtMod (const char *s, ajint start, ajint end,
+			     EmbPPropMolwt const *mwdata, AjBool mono,
 			     double nmass, double cmass);
 const char*   embPropCharToThree (char c);
-void    embPropExit(void);
+
 void    embPropFixF(float matrix[], float missing);
 const char*   embPropIntToThree (ajint c);
 AjPStr  embPropProtGaps (AjPSeq seq, ajint pad);

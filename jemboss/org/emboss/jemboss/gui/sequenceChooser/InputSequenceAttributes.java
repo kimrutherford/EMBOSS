@@ -23,10 +23,7 @@ package org.emboss.jemboss.gui.sequenceChooser;
 
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.event.*;
 import java.awt.event.*;
-import javax.swing.border.*;
-import java.io.*;
 
 import org.emboss.jemboss.gui.form.*;
 

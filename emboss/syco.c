@@ -94,7 +94,7 @@ int main(int argc, char **argv)
     window = ajAcdGetInt("window");
     plot   = ajAcdGetToggle("plot");
     outf   = ajAcdGetOutfile("outfile");
-    show   = ajAcdGetBool("uncommon");
+    show   = ajAcdGetBoolean("uncommon");
     min    = ajAcdGetFloat("minimum");
     graph = ajAcdGetGraphxy("graph");
     

@@ -31,12 +31,7 @@ Shuffles a set of sequences maintaining composition
     Description
 </H2>
 
-This takes a sequence as input and outputs one or more sequences
-whose order has been randomly shuffled.  No bases or residues
-are changed, only their order.
-<p>
-The number of shuffled sequences output can be set by the
-'-shuffle' qualifier. 
+<p><b>shuffleseq</b> reads one or more sequences and writes them out again in a random (shuffled) order.  The number of shuffles may be specified.  Only the order of sequences is changed, no bases or residues are changed.</p>
 
 <H2>
     Usage
@@ -106,8 +101,9 @@ output sequence(s) [l48662.fasta]: <b></b>
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -284,9 +280,11 @@ None.
     Notes
 </H2>
 
-        This program may be useful for producing sets of sequences which
-        can be used to check the statistics of sequence similarity
-        finding software. 
+<p><b>shuffleseq</b> is useful for producing sets of sequences with randomised order which can be used for checking the statistics of sequence similarity searches.</p>
+
+
+
+
 
 <H2>
     References
@@ -320,10 +318,11 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="msbar.html">msbar</a></td>
-<td>Mutate sequence beyond all recognition</td>
+<td>Mutate a sequence</td>
 </tr>
 
 </table>

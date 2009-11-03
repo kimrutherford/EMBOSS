@@ -19,26 +19,7 @@ getorf
 <H2>
     Description
 </H2>
-
-This program finds and outputs the sequences of open reading frames
-(ORFs).
-
-<p>
-The ORFs can be defined as regions of a specified minimum size between
-STOP codons or between START and STOP codons.  
-
-<p>
-The ORFs can be output as the nucleotide sequence or as the translation. 
-
-<p>
-The program can also output the region around the START or the initial
-STOP codon or the ending STOP codons of an ORF for those doing analysis
-of the properties of these regions. 
-
-<p>
-The START and STOP codons are defined in the Genetic Code tables.
-A suitable Genetic Code table can be selected for the organism you are
-investigating. 
+<p>This program finds and outputs the sequences of open reading frames (ORFs) in one or more nucleotide sequences.  An ORF may be defined as a region of a specified minimum size between two STOP codons, or between a START and a STOP codon.  The ORFs can be output as the nucleotide sequence or as the protein translation. Optionally, the program will output the region around the START codon, the first STOP codon, or the final STOP codon of an ORF. The START and STOP codons are defined in a Genetic Code table; a suitable table can be selected for the organism you are investigating. The output is a sequence file containing predicted open reading frames longer than the minimum size, which defaults to 30 bases (i.e. 10 amino acids).</p>
 
 <H2>
     Usage
@@ -97,7 +78,7 @@ indicating any order, positioning or sense-strand of the ORFs.
 If the ORF has been found in the reverse sense, then the start position
 will be smaller than the end position.  The numbering uses the
 forward-sense positions, but read in the reverse sense.  For example,
-<b>&gt;ECLACI_3 [465 - 49]</b> in the output above is a reverse-sense
+<b>&gt;V00294_3 [465 - 49]</b> in the output above is a reverse-sense
 ORF running from position 465 to 49.  The description will also contain
 '(REVERSE SENSE)'. 
 
@@ -149,9 +130,7 @@ file. To do this, use the program <b>embossdata</b>.
     Notes
 </H2>
 
-If you have selected one of the options to report a regions around a
-START or STOP codon, then note that any such region that crosses the
-beginning or end of the sequence will not be reported. 
+<p>There are two common definitions of an open reading frame: it can either be a region that is free of STOP codons or a region that begins with a START codon and ends with a STOP codon.</p>
 
 <H2>
     References

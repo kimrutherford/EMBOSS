@@ -23,42 +23,22 @@ etandem
 <H2>
     Function
 </H2>
-Looks for tandem repeats in a nucleotide sequence
+Finds tandem repeats in a nucleotide sequence
 <H2>
 Description
 </H2>
 
-<b>etandem</b> looks for tandem repeats in a sequence. It is normally
-used after equicktandem has been run to identify potential repeat
-sizes.  It calculates a consensus for the repeat region and gives a
-score for how many matches there are to the consensus - the number of
-mismatches.
+<p><b>etandem</b> identifies tandem repeats in a nucleotide sequence. It calculates a consensus sequence for a putative repeat region and scores potential repeats based on the number of matches and mismatches there are to the consensus. For a repeat to be identified, it must be within the specified minimum and maximum size and must score higher than the specified threshold score. The output is a standard EMBOSS report file with details of the location and score of any tandem repeats. Optionally, the output can be written in the format of the Sanger Centre quicktandem program.</p>
 
-<p>
 
-Input sequences are converted into ACGT or N (so ambiguity codes are ignored).
-<br>
-The score is +1 for a match, -1 for a mismatch.
-<br>
-The first copy of a repeat is ignored.
-<br>
-The highest score is kept for each start position and repeat size.
+<H2>
+Algorithm
+</H2>
 
-<p>
+<p>The input sequence is first converted so that it contains the characters <tt>ACGT</tt> or <tt>N</tt> only, i.e. any ambiguity codes are converted to N.  <b>etandem</b> looks for sequence segments which match well to a consensus sequence calculated from non-overlapping windows over the sequence.  For a given start point in the sequence and repeat size, a consensus sequence is built from contiguous sequence segments of that size.</p>
+<p>The score for a segment (except the first segment which is not scored) is based on the number of matches and mismatches there are to the consensus: the score is incremented (+1) for a match and decremented (-1) for a mismatch.  By default, an "N" can never mismatch with a nucleotide but this behaviour can be changed with the <tt>-mismatch</tt> option. The highest scoring segment is kept for each start position and repeat size.</p>
+<p>Immediately adjacent segments that score higher than the specified threshold score are reported as a tandem repeat. The threshold score can be set on the command-line using the <tt>-threshold</tt> qualifier, the default is 20. For perfect repeats, the score is the equal to the length of the repeat. To allow for mismatches, the threshold score can be reduced. Each mismatch scores -1 instead of +1 so it scores 2 less than a perfect match of the same number of bases.</p>
 
-The lowest score to be reported is set by the threshold score.  The
-threshold score can be set on the command-line using the
-<b>-threshold</b> qualifier, the default is 20.  For perfect repeats, the
-score is the length of the repeat (except for the first copy).  Reduce
-the threshold score a little if you wish to to allow mismatches.  Each
-mismatch scores -1 instead of +1 so it scores 2 less than a perfect
-match of the same number of bases. 
-
-<p>
-
-Running with a wide range of repeat sizes is inefficient. That is why
-equicktandem was written - to give a rapid estimate of the major repeat
-sizes.
 
 <H2>
     Usage
@@ -72,7 +52,7 @@ The input sequence is the human herpesvirus tandem repeat.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>etandem -noorigfile </b>
-Looks for tandem repeats in a nucleotide sequence
+Finds tandem repeats in a nucleotide sequence
 Input nucleotide sequence: <b>tembl:L46634</b>
 Minimum repeat size [10]: <b>6</b>
 Maximum repeat size [6]: <b></b>
@@ -130,6 +110,7 @@ Output report [l46634.tan]: <b></b>
    -raccshow2          boolean    Show accession number in the report
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
+   -rstrandshow2       boolean    Show the nucleotide strand in the report
    -rusashow2          boolean    Show the full USA in the report
    -rmaxall2           integer    Maximum total hits to report
    -rmaxseq2           integer    Maximum hits to report for one sequence
@@ -139,8 +120,9 @@ Output report [l46634.tan]: <b></b>
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -361,7 +343,7 @@ By default <b>etandem</b> writes a 'table' report file.
 <pre>
 ########################################
 # Program: etandem
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: etandem
 #    -noorigfile
 #    -sequence tembl:L46634
@@ -383,12 +365,12 @@ By default <b>etandem</b> writes a 'table' report file.
 #
 #=======================================
 
-  Start     End   Score   Size  Count Identity Consensus
-    793     936     120      6     24     93.8 acccta   
-    283     420      90      6     23     84.8 taaccc   
-    432     485      38      6      9     90.7 ccctaa   
-    494     529      26      6      6     94.4 ccctaa   
-    568     597      24      6      5    100.0 aaccct   
+  Start     End  Strand   Score   Size  Count Identity Consensus
+    793     936       +     120      6     24     93.8 acccta   
+    283     420       +      90      6     23     84.8 taaccc   
+    432     485       +      38      6      9     90.7 ccctaa   
+    494     529       +      26      6      6     94.4 ccctaa   
+    568     597       +      24      6      5    100.0 aaccct   
 
 #---------------------------------------
 #---------------------------------------
@@ -405,9 +387,7 @@ None
     Notes
 </H2>
 
-Running with a wide range of repeat sizes is inefficient. That is why
-equicktandem was written - to give a rapid estimate of the major repeat
-sizes.
+<p>Running <b>etandem</b> with a wide range of repeat sizes is inefficient. It is normally used after <b>equicktandem</b> has been run to identify putative sizes and locations of repeats.</p>
 
 <H2>
     References
@@ -443,20 +423,21 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="einverted.html">einverted</a></td>
-<td>Finds DNA inverted repeats</td>
+<td>Finds inverted repeats in nucleotide sequences</td>
 </tr>
 
 <tr>
 <td><a href="equicktandem.html">equicktandem</a></td>
-<td>Finds tandem repeats</td>
+<td>Finds tandem repeats in nucleotide sequences</td>
 </tr>
 
 <tr>
 <td><a href="palindrome.html">palindrome</a></td>
-<td>Looks for inverted repeats in a nucleotide sequence</td>
+<td>Finds inverted repeats in nucleotide sequence(s)</td>
 </tr>
 
 </table>

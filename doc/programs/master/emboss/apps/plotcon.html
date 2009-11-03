@@ -19,64 +19,30 @@ plotcon
     Description
 </H2>
 
-Displays a graphical representation of the similarity along a set of
-aligned sequences.
-<p>
-
-The similarity is calculated by moving a window of a specified length
-along the aligned sequences.  Within the window, the similarity of any
-one position is taken to be the average of all the possible pairwise
-scores of the bases or residues at that position.  The pairwise scores
-are taken from the specified similarity matrix.  The average of the
-position similarities within the window is plotted. 
-
-<p>
-
-The program is useful for determining where the quality of alignments
-is good or bad. 
-
-<p>
+<p><b>plotcon</b> reads a sequence alignment and draws a plot of the sequence conservation within windows over the alignment.</p>
 
 
-The average similarity is calculated by:
+<H2>
+Algorithm
+</H2>
 
-<p>
+<p>Sequence conservation is calculated for windows of a specified length over the alignment. Within a window, the similarity of any one position is taken to be the average of all the possible pairwise substitution scores of the bases or residues at that position. The pairwise substitution scores are taken from the specified similarity matrix. The average of the position similarities within the window is plotted.</p>
 
+<p>The average similarity is calculated by:</p>
 <pre>
+
 Av. Sim. =       sum( Mij*wi + Mji*wj  )
                       -------------------
                   (Nseq*Wsize)*((Nseq-1)*Wsize)
-</pre>
-
-<p>
-
 
 sum - over column*window size
-<br>
 w - sequence weighting
-<br>
 M - matrix comparison table
-<br>
 i,j - with respect to residue i or j
-<br>
 Nseq - number of sequences in the alignment
-<br>
 Wsize - window size
+</pre>
 
-<p>
-
-This program is useful for gaining a qualitative insight into where
-there are regions of conservation in a group of aligned sequences. 
-
-<p>
-
-Note that you should only compare the results of two runs of
-<b>plotcon</b> if you use the same window size in each.  This is because
-the 'similarity score' units that are output are very sensitive to the
-size of the window.  A large window (e.g.  100) gives a nice, smooth
-curve, and very low 'similarity score' units, whereas a small window
-(e.g.  4) gives a very spikey, noisy plot with 'similarity score' units
-of a round 1.00
 
 
 
@@ -135,7 +101,12 @@ It reads in the specified similarity matrix.
     Notes
 </H2>
 
-None.
+<p>The program is useful for visualising the quality of alignment along its length. This can give a qualitative insight into where there are regions of conservation in a group of aligned sequences.</p>
+
+<p>Note that you should only compare the results of two runs of <b>plotcon</b> if you use the same window size in each. This is because the 'similarity score' units that are output are very sensitive to the size of the window. A large window (e.g. 100) gives a nice, smooth curve, and very low 'similarity score' units, whereas a small window (e.g. 4) gives a very spikey, noisy plot with 'similarity score' units of a round 1.00 </p>
+
+
+
 
 <H2>
     References
@@ -147,8 +118,8 @@ None.
     Warnings
 </H2>
 
-If you give it a set of unaligned sequences, it will plot the (poor!)
-quality of these as if they were aligned.
+<p><b>plotcon</b> does not distinguish between aligned and unaligned sets of sequences.  If the input set of sequences is unaligned, the output will in most cases lack much biological meaning.</p>
+
 
 
 <H2>

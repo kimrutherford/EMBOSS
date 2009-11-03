@@ -1,6 +1,5 @@
 application: diffseq [
-  documentation: "Find differences between nearly identical
-                  sequences"
+  documentation: "Compare and report features of two similar sequences"
   groups: "Alignment:Differences"
   gui: "yes"
   batch: "yes"

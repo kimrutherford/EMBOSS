@@ -1,9 +1,15 @@
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="consambig.html">consambig</a></td>
+<td>Create an ambiguous consensus sequence from a multiple alignment</td>
+</tr>
+
 <tr>
 <td><a href="megamerger.html">megamerger</a></td>
-<td>Merge two large overlapping nucleic acid sequences</td>
+<td>Merge two large overlapping DNA sequences</td>
 </tr>
 
 <tr>

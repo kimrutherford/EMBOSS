@@ -39,7 +39,7 @@ int main(int argc, char **argv)
 
     embInit("embossversion", argc, argv);
 
-    full = ajAcdGetBool("full");
+    full = ajAcdGetBoolean("full");
     outfile = ajAcdGetOutfile("outfile");
 
     if (!full) {
@@ -48,23 +48,28 @@ int main(int argc, char **argv)
     else {
 	tmpstr = ajStrNewRes(128);
 
-	if (!ajNamRootPack(&tmpstr))
+        ajStrAssignS(&tmpstr, ajNamValuePackage());
+	if (!ajStrGetLen(tmpstr))
 	    ajStrAssignC(&tmpstr, "(unknown)");
 	ajFmtPrintF(outfile, "PackageName: %S\n", tmpstr);
 
-	if (!ajNamRootVersion(&tmpstr))
+        ajStrAssignS(&tmpstr, ajNamValueVersion());
+	if (!ajStrGetLen(tmpstr))
 	    ajStrAssignC(&tmpstr, "(unknown)");
 	ajFmtPrintF(outfile, "LibraryVersion: %S\n", tmpstr);
 
-	if (!ajNamRootInstall(&tmpstr))
+        ajStrAssignS(&tmpstr, ajNamValueInstalldir());
+	if (!ajStrGetLen(tmpstr))
 	    ajStrAssignC(&tmpstr, "(unknown)");
 	ajFmtPrintF(outfile, "InstallDirectory: %S\n", tmpstr);
 
-	if (!ajNamRoot(&tmpstr))
+        ajStrAssignS(&tmpstr, ajNamValueRootdir());
+	if (!ajStrGetLen(tmpstr))
 	    ajStrAssignC(&tmpstr, "(unknown)");
 	ajFmtPrintF(outfile, "RootDirectory: %S\n", tmpstr);
 	    
-	if (!ajNamRootBase(&tmpstr))
+        ajStrAssignS(&tmpstr, ajNamValueBasedir());
+	if (!ajStrGetLen(tmpstr))
 	    ajStrAssignC(&tmpstr, "(unknown)");
 	ajFmtPrintF(outfile, "BaseDirectory: %S\n", tmpstr);
 	    

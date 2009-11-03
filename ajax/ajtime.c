@@ -634,6 +634,50 @@ __deprecated AjBool ajTimeLocal(const time_t timer, AjPTime thys)
 }
 
 
+/* @section comparison ********************************************************
+**
+** Functions for comparing time objects.
+**
+** @fdata [AjPTime]
+**
+** @nam3rule  Diff  Return time difference.
+**
+** @argrule   *   thys [const AjPTime] Time object.
+** @argrule   *   newtime [const AjPTime] Later time object.
+** 
+** @valrule   Diff  [double] Time difference in seconds
+** @fcategory use
+**
+******************************************************************************/
+
+
+/* @func ajTimeDiff ***********************************************************
+**
+** Difference between two time objects
+**
+** @param [r] thys [const AjPTime] Original time object
+** @param [r] newtime [const AjPTime] Later time object
+** @return [double] Difference in seconds
+******************************************************************************/
+
+double ajTimeDiff(const AjPTime thys, const AjPTime newtime)
+{
+  double ret = 0.0;
+  struct tm oldt;
+  struct tm newt;
+  time_t oldtm;
+  time_t newtm;
+
+  oldt = thys->time;
+  newt = newtime->time;
+  oldtm = mktime(&oldt);
+  newtm = mktime(&newt);
+
+  ret = difftime(newtm,oldtm);
+
+  return ret;
+}
+
 /* @funcstatic TimeFormat *****************************************************
 **
 ** AJAX function to return the ANSI C format for an AJAX time string

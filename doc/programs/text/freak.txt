@@ -5,17 +5,20 @@
 
 Function
 
-   Residue/base frequency table or plot
+   Generate residue/base frequency table or plot
 
 Description
 
-   freak takes one or more sequences as input and a set of bases or
-   residues to search for. It then calculates the frequency of these
-   bases/residues in a window as it moves along the sequence. The
-   frequency is output to a data file or (optionally) plotted.
+   freak reads one or more sequences and a set of bases or residues to
+   search for. It then calculates the frequency of these bases/residues
+   in a window as it moves along the sequence. The frequency is output to
+   a data file or (optionally) plotted.
 
-   The default set of bases is 'cg' which will calculate the frequency of
-   'G' + 'C' bases within the default moving window of 30 bases.
+Algorithm
+
+   The frequency of bases/residues is calculated in a window that is
+   moved along the sequence. The window size and stepping value (number
+   of positions the window is moved along each time) may be specified.
 
 Usage
 
@@ -23,7 +26,7 @@ Usage
 
 
 % freak tembl:x65923 
-Residue/base frequency table or plot
+Generate residue/base frequency table or plot
 Residue letters [gc]: 
 Output file [x65923.freak]: 
 
@@ -82,8 +85,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -318,7 +322,8 @@ Data files
 
 Notes
 
-   None.
+   The default set of bases is cg which will calculate the frequency of G
+   + C bases within the default moving window of 30 bases.
 
 References
 
@@ -342,28 +347,31 @@ Known bugs
 
 See also
 
-   Program name                         Description
-   backtranambig Back translate a protein sequence to ambiguous codons
-   backtranseq   Back translate a protein sequence
-   banana        Bending and curvature plot in B-DNA
-   btwisted      Calculates the twisting in a B-DNA sequence
-   chaos         Create a chaos game representation plot for a sequence
-   charge        Protein charge plot
-   checktrans    Reports STOP codons and ORF statistics of a protein
-   compseq       Count composition of dimer/trimer/etc words in a sequence
-   dan           Calculates DNA RNA/DNA melting temperature
-   emowse        Protein identification by mass spectrometry
-   iep           Calculates the isoelectric point of a protein
-   isochore      Plots isochores in large DNA sequences
-   mwcontam      Shows molwts that match across a set of files
-   mwfilter      Filter noisy molwts from mass spec output
-   octanol       Displays protein hydropathy
-   pepinfo       Plots simple amino acid properties in parallel
-   pepstats      Protein statistics
-   pepwindow     Displays protein hydropathy
-   pepwindowall  Displays protein hydropathy of a set of sequences
-   sirna         Finds siRNA duplexes in mRNA
-   wordcount     Counts words of a specified size in a DNA sequence
+   Program name Description
+   backtranambig Back-translate a protein sequence to ambiguous
+   nucleotide sequence
+   backtranseq Back-translate a protein sequence to a nucleotide sequence
+   banana Plot bending and curvature data for B-DNA
+   btwisted Calculate the twisting in a B-DNA sequence
+   chaos Draw a chaos game representation plot for a nucleotide sequence
+   charge Draw a protein charge plot
+   checktrans Reports STOP codons and ORF statistics of a protein
+   compseq Calculate the composition of unique words in sequences
+   dan Calculates nucleic acid melting temperature
+   density Draw a nucleic acid density plot
+   emowse Search protein sequences by digest fragment molecular weight
+   iep Calculate the isoelectric point of proteins
+   isochore Plots isochores in DNA sequences
+   mwcontam Find weights common to multiple molecular weights files
+   mwfilter Filter noisy data from molecular weights file
+   octanol Draw a White-Wimley protein hydropathy plot
+   pepinfo Plot amino acid properties of a protein sequence in parallel
+   pepstats Calculates statistics of protein properties
+   pepwindow Draw a Kyte-Doolittle hydropathy plot for a protein sequence
+   pepwindowall Draw Kyte-Doolittle hydropathy plot for a protein
+   alignment
+   sirna Finds siRNA duplexes in mRNA
+   wordcount Count and extract unique words in DNA sequence(s)
 
 Author(s)
 

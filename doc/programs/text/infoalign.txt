@@ -5,33 +5,27 @@
 
 Function
 
-   Information on a multiple sequence alignment
+   Display basic information about a multiple sequence alignment
 
 Description
 
-   infoalign is small utility to list some simple properties of sequences
-   in an alignment.
+   infoalign displays on screen basic information about sequences in an
+   input multiple sequence alignment. This includes the sequences' USA,
+   name, two measures of length, counts of gaps, and numbers of
+   identical, similar and different residues or bases in this sequence
+   when compared to a reference sequence, together with a simple
+   statistic of the % change between the reference sequence and this
+   sequence. Any combination of these records is easily selected or
+   unselected for display. The same information may be written to an
+   output file which (optionally) may be formatted in an HTML table.
 
-   It will write a table containing one line per sequence. The
-   information is written out in columns separated by space or TAB
-   characters. The columns of data are: the sequences' USA, name, two
-   measures of length, counts of gaps, and numbers of identical, similar
-   and different residues or bases in this sequence when compared to a
-   reference sequence, together with a simple statistic of the % change
-   between the reference sequence and this sequence.
-
-   The reference sequence can be either the calculated consensus sequence
-   (the default) or it can be one of the set of aligned sequences,
-   specified by either the ordinal number of that sequence in the input
-   file, or by its name.
-
-   Any combination of these types of information can be easily selected
-   or unselected.
-
-   By default, the output file starts each line with the USA of the
-   sequence being described, so the output file is a list file that can
-   be manually edited and read in by any other EMBOSS program that can
-   read in one or more sequence to be analysed.
+   The reference sequence is the one against which all the other
+   sequences are compared using a specified substitution matrix. It is
+   either the calculated consensus sequence of the alignment (the
+   default) or it can be one of the set of aligned sequences, specified
+   by either the ordinal number of that sequence in the input file, or by
+   name. There are various options to control how the consensus is
+   calculated.
 
 Algorithm
 
@@ -97,7 +91,7 @@ Usage
 
 
 % infoalign globins.msf 
-Information on a multiple sequence alignment
+Display basic information about a multiple sequence alignment
 Output file [globins.infoalign]: 
 
    Go to the input files for this example
@@ -109,7 +103,7 @@ Output file [globins.infoalign]:
 
 
 % infoalign globins.msf -nousa 
-Information on a multiple sequence alignment
+Display basic information about a multiple sequence alignment
 Output file [globins.infoalign]: 
 
    Go to the output files for this example
@@ -120,7 +114,7 @@ Output file [globins.infoalign]:
 
 
 % infoalign globins.msf -only -name -seqlength 
-Information on a multiple sequence alignment
+Display basic information about a multiple sequence alignment
 Output file [globins.infoalign]: 
 
    Go to the output files for this example
@@ -132,7 +126,7 @@ Output file [globins.infoalign]:
 
 
 % infoalign globins.msf -only -name -gapcount -diffcount 
-Information on a multiple sequence alignment
+Display basic information about a multiple sequence alignment
 Output file [globins.infoalign]: 
 
    Go to the output files for this example
@@ -143,7 +137,7 @@ Output file [globins.infoalign]:
 
 
 % infoalign globins.msf -only -name -gaps 
-Information on a multiple sequence alignment
+Display basic information about a multiple sequence alignment
 Output file [globins.infoalign]: 
 
    Go to the output files for this example
@@ -154,7 +148,7 @@ Output file [globins.infoalign]:
 
 
 % infoalign globins.msf -html 
-Information on a multiple sequence alignment
+Display basic information about a multiple sequence alignment
 Output file [globins.infoalign]: 
 
    Go to the output files for this example
@@ -165,7 +159,7 @@ Output file [globins.infoalign]:
 
 
 % infoalign globins.msf -refseq 1 
-Information on a multiple sequence alignment
+Display basic information about a multiple sequence alignment
 Output file [globins.infoalign]: 
 
    Go to the output files for this example
@@ -278,8 +272,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -841,10 +836,18 @@ Data files
 
 Notes
 
+   There are many qualifiers to control exactly what information on the
+   sequence is output and how it is formatted. If you only want a few
+   fields in the output file, the command line may be shortended by
+   preceding the appropriate qualifier with -only. For example, instead
+   of specifying -nohead -nousa -noname -noalign -nogaps -nogapcount
+   -nosimcount -noidcount -nodiffcount -noweight to get only the sequence
+   length output, you can specify -only -seqlength.
+
    By default, the output file starts each line with the USA of the
    sequence being described, so the output file is a list file that can
-   be manually edited and read in by other EMBOSS programs using the
-   list-file specification of '@filename'.
+   be manually edited and read in by any other EMBOSS program that can
+   read in one or more sequence to be analysed.
 
 References
 
@@ -868,20 +871,23 @@ Known bugs
 
 See also
 
-   Program name                        Description
-   edialign     Local multiple alignment of sequences
-   emma         Multiple alignment program - interface to ClustalW program
-   infoseq      Displays some simple information about sequences
-   plotcon      Plot quality of conservation of a sequence alignment
-   prettyplot   Displays aligned sequences, with colouring and boxing
-   seealso      Finds programs sharing group names
-   showalign    Displays a multiple sequence alignment
-   showdb       Displays information on the currently available databases
-   textsearch   Search sequence documentation. Slow, use SRS and Entrez!
-   tfm          Displays a program's help documentation manual
-   tranalign    Align nucleic coding regions given the aligned proteins
-   whichdb      Search all databases for an entry
-   wossname     Finds programs by keywords in their one-line documentation
+   Program name Description
+   edialign Local multiple alignment of sequences
+   emma Multiple sequence alignment (ClustalW wrapper)
+   infobase Return information on a given nucleotide base
+   inforesidue Return information on a given amino acid residue
+   infoseq Display basic information about sequences
+   plotcon Plot conservation of a sequence alignment
+   prettyplot Draw a sequence alignment with pretty formatting
+   seealso Finds programs with similar function to a specified program
+   showalign Display a multiple sequence alignment in pretty format
+   showdb Displays information on configured databases
+   textsearch Search the textual description of sequence(s)
+   tfm Displays full documentation for an application
+   tranalign Generate an aligment of nucleic coding regions from aligned
+   proteins
+   whichdb Search all sequence databases for an entry and retrieve it
+   wossname Finds programs by keywords in their short description
 
 Author(s)
 

@@ -19,52 +19,24 @@ trimest
     Description
 </H2>
 
-EST and mRNA sequences often have poly-A tails at the end of them.  This
-utility removes those poly-A tails. 
+<p><b>trimest</b> reads one or more nucleotide sequences and writes them out again but with any 3' poly-A tail (or, optionally, 5' poly-T tail) removed. It detect any poly-A and poly-T tails in the input sequences that are at least the specified minimum length.  The tails may continue a defined num of non-A or non-T bases.  If both a 5' poly-T tail and a 3' poly-A tail is identified, it removes the longest of the two. The output is a set of sequences with the poly-A (or poly-T) tails removed. If a sequence had a 5' poly-T tail then the resulting sequence is reverse-complemented by default. The description line has a comment appended about the changes made to the sequence.</p>
 
-<p>
 
-EST sequences are often the reverse complement of the corresponding
-mRNA's forward sense and have poly-T tails at their 5' end.  By default,
-this program also detects and removes these and writes out the reverse
-complement of the sequence. 
 
-<p>
 
-<b>trimest</b> is not infallible.  There are often repeats of 'A' (or
-'T') in a sequence that just happen by chance to occur at the 3' (or 5')
-end of the EST sequence.  <b>trimest</b> has no way of determining if the
-A's it finds are part of a real poly-A tail or are a part of the
-transcribed genomic sequence.  It removes any apparent poly-A tails that
-match its criteria for a poly-A tail. 
+<H2>
+Algorithm
+</H2>
 
-<p>
 
-<b>trimest</b> looks for a repeat of at least '-minlength' A's at the 3'
-end (and, by default, '-minlength' T's at the 5' end).  If there are an
-apparent 5' poly-T tail and a poly-A tail, then it removes whichever is
-the longer of the two. 
+<p><b>trimest</b> looks for a repeat of at least <tt>-minlength</tt> A's at the 3' end (and, by default, <tt>-minlength</tt> T's at the 5' end). If there are an apparent 5' poly-T tail and a poly-A tail, then it removes whichever is the longer of the two.</p>
 
-<p>
+<p>By default, it will allow <tt>-mismatches</tt> non-A (or non-T) bases in the tail. If a mismatch is found, then there has to be at least <tt>-minlength</tt> A's (or T's) past the mismatch (working from the end) for the mismatch to be considered part of the tail. If <tt>-mismatches</tt> is greater than 1 then that number of contiguous non-A (or non-T) bases will be allowed as part of the tail.</p>
 
-By default, it will allow '-mismatches' non-A (or non-T) bases in the
-tail.  If a mismatch is found, then there has to be at least
-'-minlength' A's (or T's) past the mismatch (working from the end) for
-the mismatch to be considered part of the tail.  If '-mismatches' is
-greater than 1 then that number of contiguous non-A (or non-T) bases
-will be allowed as part of the tail. 
 
-<p>
 
-If a 5' poly-T tail is found, then the sequence will be optionally
-reverse-complemented when it is written out. 
 
-<p>
 
-If a poly-A tail is reomved then '[poly-A tail removed]' is appended to
-the description of the sequence.  If poly-T is removed, then '[poly-T
-tail removed]' is appended and if the sequence is reversed, '[reverse
-complement]' is appended. 
 <H2>
     Usage
 </H2>
@@ -99,6 +71,9 @@ complement]' is appended.
     Output file format
 </H2>
 
+<p>If a poly-A tail is reomved then <tt>[poly-A tail removed]</tt> is appended to the description of the sequence. If poly-T is removed, then <tt>[poly-T tail removed]</tt> is appended and if the sequence is reversed, <tt>[reverse complement]</tt> is appended.</p>
+
+
 <!--#include file="inc/trimest.output" -->
 
 <p>
@@ -119,7 +94,9 @@ None.
     Notes
 </H2>
 
-None.
+<p>EST and mRNA sequences often have poly-A tails at their 3' end.  Where an EST sequences is the reverse complement of a corresponding mRNA's forward sense it may have a poly-T tail at its 5' end.  </p>
+
+<p><b>trimest</b> is not infallible. There are often repeats of <tt>A</tt> (or <tt>T</tt>) in a sequence that just happen by chance to occur at the 3' (or 5') end of the EST sequence. <b>trimest</b> has no way of determining if the A's it finds are part of a real poly-A tail or are a part of the transcribed genomic sequence. It removes any apparent poly-A tails that match its criteria for a poly-A tail (see "Algorithm").</p>
 
 
 <H2>
@@ -132,8 +109,7 @@ None.
     Warnings
 </H2>
 
-It will trim any run of more than -minlength A's or T's at the 3' or 5'
-end, whether or not they are a true poly-A tail. 
+<p><b>trimest</b> can make no guarantee that the tails removed have biologic significance or not.  They may in fact be part of the transcribed sequence.</p>
 
 
 <H2>

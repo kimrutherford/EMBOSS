@@ -1,6 +1,5 @@
 application: showdb [
-  documentation: "Displays information on the currently
-                  available databases"
+  documentation: "Displays information on configured databases"
   groups: "Display, Information"
 ]
 

@@ -14,8 +14,6 @@ endif
 
 check_PROGRAMS = acdlog ajtest \
 complex corbatest dbxstat \
-demoalign demofeatures demolist demoreport \
-demosequence demostring demostringnew demotable \
 entrails giep histogramtest intconv \
 origsplitter origunion \
 newcoils \
@@ -27,29 +25,30 @@ testplot treetypedisplay
 
 bin_PROGRAMS = aaindexextract abiview \
 acdc acdpretty acdtable acdtrace acdvalid \
-antigenic \
+aligncopy aligncopypair antigenic \
 backtranambig backtranseq banana biosed btwisted \
 cai chaos charge checktrans chips \
 cirdna codcmp codcopy coderet \
-compseq cons cpgplot cpgreport \
+compseq cons consambig cpgplot cpgreport \
 cusp cutgextract cutseq \
 dan dbiblast dbifasta dbiflat dbigcg \
 dbxfasta dbxflat dbxgcg \
-degapseq descseq diffseq digest distmat \
+degapseq density descseq diffseq digest distmat \
 dotmatcher dotpath dottup dreg \
 edialign einverted embossdata embossversion emma \
 emowse entret epestfind eprimer3 \
 equicktandem est2genome etandem \
 extractalign extractfeat extractseq \
-findkm freak fuzznuc fuzzpro fuzztran \
+featcopy featreport findkm freak fuzznuc fuzzpro fuzztran \
 garnier geecee getorf helixturnhelix hmoment \
-iep infoalign infoseq isochore \
-jembossctl lindna listor \
-makenucseq makeprotseq marscan maskfeat maskseq \
+iep infoalign infobase inforesidue infoseq isochore \
+jaspextract jaspscan jembossctl lindna listor \
+makenucseq makeprotseq marscan \
+maskambignuc maskambigprot maskfeat maskseq \
 matcher megamerger merger msbar \
 mwcontam mwfilter \
 needle newcpgreport newcpgseek newseq \
-noreturn notseq nthseq \
+nohtml noreturn nospace notab notseq nthseq \
 octanol oddcomp \
 palindrome pasteseq patmatdb patmatmotifs \
 pepcoil pepinfo pepnet pepstats \
@@ -62,12 +61,12 @@ rebaseextract recoder redata remap  \
 restover restrict revseq \
 seealso seqmatchall seqret seqretsplit \
 showalign showdb showfeat showorf showseq \
-shuffleseq sigcleave silent sirna sixpack \
-skipseq splitter stretcher \
+shuffleseq sigcleave silent sirna sixpack sizeseq \
+skipredundant skipseq splitter stretcher \
 stssearch supermatcher syco \
 tcode textsearch tfextract tfm tfscan \
 tmap tranalign transeq \
-trimest trimseq twofeat \
+trimest trimseq trimspace twofeat \
 union vectorstrip \
 water whichdb wobble \
 wordcount wordfinder wordmatch wossname \
@@ -82,6 +81,8 @@ acdpretty_SOURCES = acdpretty.c
 acdtable_SOURCES = acdtable.c
 acdtrace_SOURCES = acdtrace.c
 acdvalid_SOURCES = acdvalid.c
+aligncopy_SOURCES = aligncopy.c
+aligncopypair_SOURCES = aligncopypair.c
 antigenic_SOURCES = antigenic.c
 backtranambig_SOURCES = backtranambig.c
 backtranseq_SOURCES = backtranseq.c
@@ -98,6 +99,7 @@ codcmp_SOURCES = codcmp.c
 coderet_SOURCES = coderet.c
 compseq_SOURCES = compseq.c
 cons_SOURCES = cons.c
+consambig_SOURCES = consambig.c
 cpgplot_SOURCES = cpgplot.c
 cpgreport_SOURCES = cpgreport.c
 cusp_SOURCES = cusp.c
@@ -113,6 +115,7 @@ dbxflat_SOURCES = dbxflat.c
 dbxstat_SOURCES = dbxstat.c
 dbxgcg_SOURCES = dbxgcg.c
 degapseq_SOURCES = degapseq.c
+density_SOURCES = density.c
 descseq_SOURCES = descseq.c
 diffseq_SOURCES = diffseq.c
 digest_SOURCES = digest.c
@@ -136,6 +139,8 @@ embossversion_SOURCES = embossversion.c
 extractalign_SOURCES = extractalign.c
 extractfeat_SOURCES = extractfeat.c
 extractseq_SOURCES = extractseq.c
+featcopy_SOURCES = featcopy.c
+featreport_SOURCES = featreport.c
 findkm_SOURCES = findkm.c
 freak_SOURCES = freak.c
 fuzznuc_SOURCES = fuzznuc.c
@@ -148,12 +153,18 @@ helixturnhelix_SOURCES = helixturnhelix.c
 hmoment_SOURCES = hmoment.c
 iep_SOURCES = iep.c
 infoalign_SOURCES = infoalign.c
+infobase_SOURCES = infobase.c
+inforesidue_SOURCES = inforesidue.c
 infoseq_SOURCES = infoseq.c
 isochore_SOURCES = isochore.c
+jaspextract_SOURCES = jaspextract.c
+jaspscan_SOURCES = jaspscan.c
 jembossctl_SOURCES = jembossctl.c
 lindna_SOURCES = lindna.c
 listor_SOURCES = listor.c
 marscan_SOURCES = marscan.c
+maskambignuc_SOURCES = maskambignuc.c
+maskambigprot_SOURCES = maskambigprot.c
 maskfeat_SOURCES = maskfeat.c
 maskseq_SOURCES = maskseq.c
 matcher_SOURCES = matcher.c
@@ -166,7 +177,10 @@ needle_SOURCES = needle.c
 newcpgreport_SOURCES = newcpgreport.c
 newcpgseek_SOURCES = newcpgseek.c
 newseq_SOURCES = newseq.c
+nohtml_SOURCES = nohtml.c
 noreturn_SOURCES = noreturn.c
+nospace_SOURCES = nospace.c
+notab_SOURCES = notab.c
 notseq_SOURCES = notseq.c
 nthseq_SOURCES = nthseq.c
 octanol_SOURCES = octanol.c
@@ -217,6 +231,9 @@ sigcleave_SOURCES = sigcleave.c
 silent_SOURCES = silent.c
 sirna_SOURCES = sirna.c
 sixpack_SOURCES = sixpack.c
+sizeseq_SOURCES = sizeseq.c
+skipredundant_SOURCES = skipredundant.c
+skipseq_SOURCES = skipseq.c
 splitter_SOURCES = splitter.c
 stretcher_SOURCES = stretcher.c
 stssearch_SOURCES = stssearch.c
@@ -232,6 +249,7 @@ tranalign_SOURCES = tranalign.c
 transeq_SOURCES = transeq.c
 trimest_SOURCES = trimest.c
 trimseq_SOURCES = trimseq.c
+trimspace_SOURCES = trimspace.c
 twofeat_SOURCES = twofeat.c
 union_SOURCES = union.c
 vectorstrip_SOURCES = vectorstrip.c
@@ -249,14 +267,6 @@ acdlog_SOURCES = acdlog.c
 ajtest_SOURCES = ajtest.c
 complex_SOURCES = complex.c
 corbatest_SOURCES = corbatest.c
-demoalign_SOURCES = demoalign.c
-demofeatures_SOURCES = demofeatures.c
-demolist_SOURCES = demolist.c
-demoreport_SOURCES = demoreport.c
-demosequence_SOURCES = demosequence.c
-demostring_SOURCES = demostring.c
-demostringnew_SOURCES = demostringnew.c
-demotable_SOURCES = demotable.c
 entrails_SOURCES = entrails.c
 histogramtest_SOURCES = histogramtest.c
 intconv_SOURCES = intconv.c

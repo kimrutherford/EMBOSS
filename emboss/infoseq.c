@@ -94,19 +94,19 @@ int main(int argc, char **argv)
 
     outfile   = ajAcdGetOutfile("outfile");
     seqall    = ajAcdGetSeqall("sequence");
-    html      = ajAcdGetBool("html");
-    doheader  = ajAcdGetBool("heading");
-    dousa     = ajAcdGetBool("usa");
-    dodb      = ajAcdGetBool("database");
-    doname    = ajAcdGetBool("name");
-    doacc     = ajAcdGetBool("accession");
-    dogi      = ajAcdGetBool("gi");
-    dosv      = ajAcdGetBool("version");
-    dotype    = ajAcdGetBool("type");
-    dolength  = ajAcdGetBool("length");
-    dopgc     = ajAcdGetBool("pgc");
-    dodesc    = ajAcdGetBool("description");
-    columns   = ajAcdGetBool("columns"); 
+    html      = ajAcdGetBoolean("html");
+    doheader  = ajAcdGetBoolean("heading");
+    dousa     = ajAcdGetBoolean("usa");
+    dodb      = ajAcdGetBoolean("database");
+    doname    = ajAcdGetBoolean("name");
+    doacc     = ajAcdGetBoolean("accession");
+    dogi      = ajAcdGetBoolean("gi");
+    dosv      = ajAcdGetBoolean("version");
+    dotype    = ajAcdGetBoolean("type");
+    dolength  = ajAcdGetBoolean("length");
+    dopgc     = ajAcdGetBoolean("pgc");
+    dodesc    = ajAcdGetBoolean("description");
+    columns   = ajAcdGetBoolean("columns"); 
     delimiter = ajAcdGetString("delimiter"); 
 
     altusa    = ajStrNewC("-");

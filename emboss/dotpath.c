@@ -86,9 +86,9 @@ int main(int argc, char **argv)
     wordlen  = ajAcdGetInt("wordsize");
     seq1     = ajAcdGetSeq("asequence");
     seq2     = ajAcdGetSeq("bsequence");
-    overlaps = ajAcdGetBool("overlaps");
+    overlaps = ajAcdGetBoolean("overlaps");
     graph    = ajAcdGetGraph("graph");
-    boxit    = ajAcdGetBool("boxit");
+    boxit    = ajAcdGetBoolean("boxit");
     
     len1 = ajSeqGetLen(seq1);
     len2 = ajSeqGetLen(seq2);

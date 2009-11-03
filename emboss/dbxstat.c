@@ -97,7 +97,7 @@ int main(int argc, char **argv)
     embInit("dbxstat", argc, argv);
     
     dbname = ajAcdGetString("dbname");
-    idir   = ajAcdGetString("indexdir");
+    idir   = ajAcdGetDirectoryName("indexdir");
     itype  = ajAcdGetList("idtype");
     imin   = ajAcdGetInt("minimum");
     imax   = ajAcdGetInt("maximum");

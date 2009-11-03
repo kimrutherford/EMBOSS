@@ -25,11 +25,8 @@ package org.emboss.jemboss.graphics;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
-import java.awt.event.*;
 import javax.swing.*;
 import java.io.*;
-import javax.imageio.*;
-import javax.imageio.stream.*;
 
 
 import org.emboss.jemboss.gui.ScrollPanel;

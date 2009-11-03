@@ -61,8 +61,8 @@ int main(int argc, char **argv)
     jmax  = ajAcdGetInt("jmax");
 
     omnia = ajAcdGetToggle("omnia");
-    freq  = ajAcdGetBool("freq");
-    print = ajAcdGetBool("print");
+    freq  = ajAcdGetBoolean("freq");
+    print = ajAcdGetBoolean("print");
 
     seqall = ajAcdGetSeqall("sequence");
 

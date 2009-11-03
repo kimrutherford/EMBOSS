@@ -1,7 +1,8 @@
    Standard (Mandatory) qualifiers:
-  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
-                                  format, or reference (input USA)
-   -wordsize           integer    [4] Word size (Integer 2 or more)
+  [-sequence]          seqall     Sequence(s) filename and optional format, or
+                                  reference (input USA)
+   -wordsize           integer    [@($(acdprotein)? 2 : 4)] Word size (Integer
+                                  1 or more)
   [-outfile]           outfile    [*.wordcount] Output file name
 
    Additional (Optional) qualifiers:
@@ -32,8 +33,9 @@
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options

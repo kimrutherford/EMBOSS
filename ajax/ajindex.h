@@ -38,6 +38,66 @@ extern "C"
 #define TX_EXTENSION "xtx"
 
 
+/* Useful page filling values */
+
+/*
+ *  Length of integers after the ID string in a primary bucket 
+ *  i.e. dbno + dups + offset + refoffset
+ */
+#define BT_DDOFFROFF (sizeof(ajint) + sizeof(ajint) + sizeof(ajlong) +  \
+                      sizeof(ajlong))
+
+/*
+ *  Preamble before key lengths in an internal node
+ * i.e. nodetype+blocknumber+nkeys+totlen+left+right+overflow+prev
+ */
+#define BT_NODEPREAMBLE (sizeof(ajint) + sizeof(ajlong) + sizeof(ajint) + \
+    sizeof(ajint) + sizeof(ajlong) + sizeof(ajlong) + sizeof(ajlong) + \
+                         sizeof(ajlong))
+
+/*
+ *  This is the length of extra pointer required in primary index
+ *  page space calculations i.e. the total space taken by
+ *  key/pointer pairs in an internal page is:
+ *  BT_PTRLEN + ((keylenmax + sizeof(long))*nkeys)
+ *  This is because there is one more pointer than the
+ *  value of 'order' in a B+ tree.
+ */
+#define BT_PTRLEN sizeof(ajlong)
+
+
+/*
+ *  Length of extra space, on top of a key string, taken up by a
+ *  key in an internal node. This is an ajint holding the length
+ *  of a string plus the length of a block pointer (ajlong)
+ */
+#define BT_IDKEYEXTRA (sizeof(ajint) + sizeof(ajlong))
+
+
+/*
+ *  Preamble before key lengths in an id bucket
+ *  i.e. nodetype+nentries+overflow
+ */
+#define BT_BUCKPREAMBLE (sizeof(ajint) + sizeof(ajint) + sizeof(ajlong))
+
+
+/*
+ *  Size of a key in a key length table block in an internal node or bucket
+ */
+#define BT_KEYLENENTRY sizeof(ajint)
+
+/*
+ *  Size of an offset key
+ */
+#define BT_OFFKEYLEN sizeof(ajlong)
+
+/*
+ *  Length of integers per entry in a num bucket 
+ *  i.e. dbno + offset + refoffset
+ */
+#define BT_DOFFROFF (sizeof(ajint) + sizeof(ajlong) + sizeof(ajlong))
+    
+
 
 
 /* @data AjPBtNode ***********************************************************

@@ -74,7 +74,7 @@
 
 const char **seqcharptr;
 ajint **seqcolptr;
-ajint **seqboxptr;
+ajint **seqboxptr = NULL;
 ajint *seqcount = NULL;
 ajint charlen;
 AjBool shownames;
@@ -212,12 +212,12 @@ int main(int argc, char **argv)
     numseq = ajSeqsetGetSize(seqset);
 
     graph             = ajAcdGetGraph("graph");
-    colourbyconsensus = ajAcdGetBool("ccolours");
-    colourbyresidues  = ajAcdGetBool("docolour");
+    colourbyconsensus = ajAcdGetBoolean("ccolours");
+    colourbyresidues  = ajAcdGetBoolean("docolour");
     shade             = ajAcdGetString("shade");
     pair              = ajAcdGetArray("pair");
     identity          = ajAcdGetInt("identity");
-    boxit             = ajAcdGetBool("box");
+    boxit             = ajAcdGetBoolean("box");
 
     ajtime = ajTimeNewTodayFmt("daytime");
 
@@ -232,7 +232,7 @@ int main(int argc, char **argv)
 	for(i=0;i<numseq;i++)
 	    AJCNEW(seqboxptr[i], ajSeqsetGetLen(seqset));
     }
-    boxcol      = ajAcdGetBool("boxcol");
+    boxcol      = ajAcdGetBoolean("boxcol");
     sboxcolval  = ajAcdGetString("boxcolval");
 
     if(boxcol)
@@ -242,19 +242,19 @@ int main(int argc, char **argv)
 	    iboxcolval = GREY;
     }
 
-    consensus = ajAcdGetBool("consensus");
+    consensus = ajAcdGetBoolean("consensus");
     if(consensus)
     {
 	AJCNEW(constr, ajSeqsetGetLen(seqset)+1);
 	constr[0] = '\0';
     }
-    shownames   = ajAcdGetBool("name");
-    shownumbers = ajAcdGetBool("number");
+    shownames   = ajAcdGetBoolean("name");
+    shownumbers = ajAcdGetBoolean("number");
     charlen     = ajAcdGetInt("maxnamelen");
     fplural     = ajAcdGetFloat("plurality");
-    portrait    = ajAcdGetBool("portrait");
-    collision   = ajAcdGetBool("collision");
-    listoptions = ajAcdGetBool("listoptions");
+    portrait    = ajAcdGetBoolean("portrait");
+    collision   = ajAcdGetBoolean("collision");
+    listoptions = ajAcdGetBoolean("listoptions");
     altstr = ajAcdGetListSingle("alternative");
     cmpmatrix   = ajAcdGetMatrix("matrixfile");
 
@@ -566,26 +566,6 @@ int main(int argc, char **argv)
 	    }
 	}
 
-/*
-//	if(showscore==k+1)
-//	{
-//	    ajUser("Identical----------->");
-//	    for(i=0;i<numseq;i++)
-//	    {
-//		m1 = ajSeqcvtGetCodeK(cvt, seqcharptr[i][k]);
-//		ajUser("%d %c %f",k+1,seqcharptr[i][k],identical[m1]);
-//	    }
-//	    ajUser("Matching------------>");
-//
-//	    for(i=0;i<numseq;i++)
-//	    {
-//		m1 = ajSeqcvtGetCodeK(cvt, seqcharptr[i][k]);
-//		ajUser("%d %c %f %d",k+1,seqcharptr[i][k],matching[m1],
-//		       m1==matchingmaxindex);
-//	    }
-//	}
-*/
-
 	iscons = ajFalse;
 	boxindex = -1;
 	max = -3;
@@ -636,19 +616,9 @@ int main(int argc, char **argv)
 		if(alternative == 1)
 		{
 		    /* check to see if this is unique for collisions */
-/*
-//		    if(showscore==k+1)
-//			ajUser("col test  identicalmax %d %f",k+1,
-//			       identical[identicalmaxindex]);
-*/
 		    for(i=0;i<numseq;i++)
 		    {
 			m1 = ajSeqcvtGetCodeK(cvt, seqcharptr[i][k]);
-/*
-//			if(showscore==k+1)
-//			    ajUser("col test  %d %c %f %d",k+1,
-//				   seqcharptr[i][k],identical[m1],m1);
-*/
 			if(identical[m1] >= identical[identicalmaxindex] &&
 			   m1 != identicalmaxindex)
 			    iscons = ajFalse;
@@ -662,11 +632,6 @@ int main(int argc, char **argv)
 		    for(i=0;i<numseq;i++)
 		    {
 			m1 = ajSeqcvtGetCodeK(cvt, seqcharptr[i][k]);
-/*
-//			if(showscore==k+1)
-//			    ajUser("col test (alt=2) %d %c %f",k+1,
-//				   seqcharptr[i][k],matching[m1]);
-*/
 
 			if((matching[m1] >= matching[matchingmaxindex] &&
 			    m1 != matchingmaxindex &&
@@ -705,11 +670,6 @@ int main(int argc, char **argv)
 		    for(i=0;i<numseq;i++)
 		    {
 			m1 = ajSeqcvtGetCodeK(cvt, seqcharptr[i][k]);
-/*
-//			if(showscore==k+1)
-//			    ajUser("col test  %d %c %f",k+1,seqcharptr[i][k],
-//				   colcheck[m1]);
-*/
 			/* if any other matches then we have a collision */
 			if(colcheck[m1] >= fplural)
 			    iscons = ajFalse;
@@ -722,11 +682,6 @@ int main(int argc, char **argv)
 		    for(i=0;i<numseq;i++)
 		    {
 			m1 = ajSeqcvtGetCodeK(cvt, seqcharptr[i][k]);
-/*
-//			if(showscore==k+1)
-//			    ajUser("col test (alt=2) %d %c %f",k+1,
-//				   seqcharptr[i][k],matching[m1]);
-*/
 			if((matching[m1] >= matching[matchingmaxindex] &&
 			    m1 != matchingmaxindex &&
 			    matrix[m1][matchingmaxindex] < 0.1))
@@ -1020,7 +975,8 @@ int main(int argc, char **argv)
     {
 	ajStrDel(&seqnames[i]);
 	AJFREE(seqcolptr[i]);
-	AJFREE(seqboxptr[i]);
+	if(seqboxptr)
+            AJFREE(seqboxptr[i]);
     }
     AJFREE(seqcolptr);
     AJFREE(seqboxptr);
@@ -1082,8 +1038,6 @@ static ajint prettyplot_calcseqperpage(float yincr,float y,AjBool consensus)
 						      (float)2)));
 	numallowed++;
     }
-
-    /*  ajUser("numallowed = %d\n",numallowed-1);*/
 
     return numallowed-1;
 }

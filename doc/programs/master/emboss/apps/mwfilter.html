@@ -19,21 +19,19 @@ mwfilter
     Description
 </H2>
 
-<b>mwfilter</b> is designed to remove unwanted (noisy) data from mass
-spectrometry output in proteomics. Given a list of molecular weights
-this program removes those which are:
+<p><b>mwfilter</b> removes unwanted (noisy) data from mass spectrometry output in proteomics. It reads an input file with a list of experimental molecular weights and writes the same data to an output file but with unwanted (noisy) data removed, at a specified ppm tolerance. Optionally the deleted molecular weights are shown.  It removes those molecular weights which are:</p>
 
-<p>
+
 <ul>
   <li>Contaminating trypsin or keratin
   <li>Modified oxy-methionine or oxy-threonine
   <li>Peaks associated with sodium ions.
 </ul>
+
 <p>
- 
 The last two operations can be done as most peaks are reported in
 both modified and unmodified forms. Removal of modified peaks
-aids in database searching for protein identification.
+aids in database searching for protein identification.</p>
 
 <H2>
     Usage

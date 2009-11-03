@@ -157,9 +157,9 @@ int main(int argc, char **argv)
 
     seq     = ajAcdGetSeq("sequence");
     enzymes = ajAcdGetString("enzymes");
-    sshow   = ajAcdGetBool("sshow");
-    tshow   = ajAcdGetBool("tshow");
-    allmut  = ajAcdGetBool("allmut");
+    sshow   = ajAcdGetBoolean("sshow");
+    tshow   = ajAcdGetBoolean("tshow");
+    allmut  = ajAcdGetBoolean("allmut");
     report = ajAcdGetReport ("outfile");
 
     shits  = ajListNew();
@@ -437,9 +437,9 @@ static ajint silent_restr_read(AjPList *relist,const AjPStr enzymes)
     rptr       = embPatRestrictNew();
     *relist    = ajListNew();
 
-    ajFileDataNew(refilename,&fin);
+    fin = ajDatafileNewInNameS(refilename);
     if(!fin)
-	ajFatal("Aborting...restriction file not found");
+	ajFatal("Aborting...restriction file '%S' not found", refilename);
 
     /* Parse the user-selected enzyme list */
     if(!enzymes)
@@ -585,7 +585,7 @@ static AjPSilent silent_checktrans(const AjPStr seq,const EmbPMatMatch match,
 
 
     count=0;
-    while(ajAZToBin(*q++) & ajAZToBin(*p++))
+    while(ajBaseAlphaToBin(*q++) & ajBaseAlphaToBin(*p++))
           ++count;
 
     /* Changed base postion */
@@ -729,17 +729,12 @@ static void silent_fmt_hits(AjPList hits, AjPFeattable feat,
     while(ajListPop(hits,(void **)&res))
     {
 	if (rev)
-	{
 	    sf = ajFeatNewIIRev(feat,
 				res->match, res->match+ajStrGetLen(res->site)-1);
-	    ajFmtPrintS(&tmpFeatStr, "*dir Rev");
-	    ajFeatTagAdd (sf, NULL, tmpFeatStr);
-	}
 	else
-	{
 	    sf = ajFeatNewII(feat,
 			     res->match, res->match+ajStrGetLen(res->site)-1);
-	}
+
 	if (silent)
 	{
 	    ajFmtPrintS(&tmpFeatStr, "*silent Yes");

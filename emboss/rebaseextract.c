@@ -104,7 +104,7 @@ int main(int argc, char **argv)
 
     inf   = ajAcdGetInfile("infile");
     infp  = ajAcdGetInfile("protofile");
-    doequ = ajAcdGetBool("equivalences");
+    doequ = ajAcdGetBoolean("equivalences");
 
     equ1 = ajListNew();
     equ2 = ajListNew();
@@ -113,21 +113,21 @@ int main(int argc, char **argv)
     
 
     pfname = ajStrNewC(DATANAME);
-    ajFileDataNewWrite(pfname,&outf);
+    outf = ajDatafileNewOutNameS(pfname);
     rebaseextract_printEnzHeader(outf);
 
     ajStrAssignC(&pfname,DATANAME2);
-    ajFileDataNewWrite(pfname,&outf2);
+    outf2 = ajDatafileNewOutNameS(pfname);
     rebaseextract_printRefHeader(outf2);
 
     ajStrAssignC(&pfname,DATANAME3);
-    ajFileDataNewWrite(pfname,&outf3);
+    outf3 = ajDatafileNewOutNameS(pfname);
     rebaseextract_printSuppHeader(outf3);
 
     if(doequ)
     {
 	ajStrAssignC(&pfname,DATANAME4);
-	ajFileDataNewWrite(pfname,&oute);
+	oute = ajDatafileNewOutNameS(pfname);
 	ptable = ajTablestrNewLen(EQUGUESS);
 	isostr = ajStrNew();
     }
@@ -147,7 +147,7 @@ int main(int argc, char **argv)
     /*
      *  Extract Supplier information
      */
-    while(ajFileReadLine(inf,&line))
+    while(ajReadlineTrim(inf,&line))
     {
 	if(ajStrFindC(line,"withrefm.")>=0)
 	    isrefm = ajTrue;
@@ -160,7 +160,7 @@ int main(int argc, char **argv)
     }
 
 
-    while(ajFileReadLine(infp,&line))
+    while(ajReadlineTrim(infp,&line))
     {
 	if(ajStrFindC(line,"proto.")>=0)
 	    isproto = ajTrue;
@@ -184,7 +184,7 @@ int main(int argc, char **argv)
 
 
 
-    while(doequ && ajFileReadLine(infp,&line))
+    while(doequ && ajReadlineTrim(infp,&line))
     {
 	if(!ajStrGetLen(line))
 	    continue;
@@ -205,24 +205,24 @@ int main(int argc, char **argv)
 	}
     }
     
-    if(!ajFileReadLine(inf,&line))
+    if(!ajReadlineTrim(inf,&line))
 	ajFatal("No Supplier Information Found");
 
-    if(!ajFileReadLine(inf,&line))
+    if(!ajReadlineTrim(inf,&line))
 	ajFatal("Unexpected EOF");
 
     while(ajStrGetLen(line))
     {
 	ajStrRemoveWhiteExcess(&line);
 	ajFmtPrintF(outf3,"%s\n",ajStrGetPtr(line));
-	if(!ajFileReadLine(inf,&line))
+	if(!ajReadlineTrim(inf,&line))
 	    ajFatal("Unexpected EOF");
     }
     ajFileClose(&outf3);
 
 
 
-    while(ajFileReadLine(inf,&line))
+    while(ajReadlineTrim(inf,&line))
     {
 	/* Get RE */
 	if(!ajStrPrefixC(line,"<1>"))
@@ -231,7 +231,7 @@ int main(int argc, char **argv)
 	ajStrAssignC(&code,ajStrGetPtr(line)+3);
 
 	/* Get isoschizomers */
-	if(!ajFileReadLine(inf,&line2))
+	if(!ajReadlineTrim(inf,&line2))
 	    ajFatal("Unexpected EOF");
 
 	if(ajStrGetLen(line2)>3)
@@ -241,7 +241,7 @@ int main(int argc, char **argv)
 
 
 	/* Get recognition sequence */
-	if(!ajFileReadLine(inf,&line))
+	if(!ajReadlineTrim(inf,&line))
 	    ajFatal("Unexpected EOF");
 
 	if(ajStrGetLen(line)>3)
@@ -271,7 +271,7 @@ int main(int argc, char **argv)
 	    ajStrAssignC(&pattern,"");
 
 	/* Get methylation */
-	if(!ajFileReadLine(inf,&line))
+	if(!ajReadlineTrim(inf,&line))
 	    ajFatal("Unexpected EOF");
 
 	if(ajStrGetLen(line)>3)
@@ -280,7 +280,7 @@ int main(int argc, char **argv)
 	    ajStrAssignC(&meth,"");
 
 	/* Get title */
-	if(!ajFileReadLine(inf,&line))
+	if(!ajReadlineTrim(inf,&line))
 	    ajFatal("Unexpected EOF");
 
 	if(ajStrGetLen(line)>3)
@@ -289,7 +289,7 @@ int main(int argc, char **argv)
 	    ajStrAssignC(&tit,"");
 
 	/* Get source */
-	if(!ajFileReadLine(inf,&line))
+	if(!ajReadlineTrim(inf,&line))
 	    ajFatal("Unexpected EOF");
 
 	if(ajStrGetLen(line)>3)
@@ -298,7 +298,7 @@ int main(int argc, char **argv)
 	    ajStrAssignC(&sou,"");
 
 	/* Get commercial supplier */
-	if(!ajFileReadLine(inf,&line))
+	if(!ajReadlineTrim(inf,&line))
 	    ajFatal("Unexpected EOF");
 
 	hstr1 = ajStrNew();
@@ -329,17 +329,17 @@ int main(int argc, char **argv)
 
 	/* Get references */
 	count = -1;
-	pos = ajFileTell(inf);
+	pos = ajFileResetPos(inf);
 	while(ajStrGetLen(line))
 	{
-	    if(!ajFileReadLine(inf,&line))
+	    if(!ajReadlineTrim(inf,&line))
 		break;
 	    ++count;
 	}
 	ajFileSeek(inf,pos,0);
 
 
-	if(!ajFileReadLine(inf,&line))
+	if(!ajReadlineTrim(inf,&line))
 	    ajFatal("Unexpected EOF");
 
 	if(ajStrGetLen(line)==3)
@@ -349,7 +349,7 @@ int main(int argc, char **argv)
 	    ajFmtPrintF(outf2,"%d\n%s\n",count,ajStrGetPtr(line)+3);
 	    for(i=1;i<count;++i)
 	    {
-		if(!ajFileReadLine(inf,&line))
+		if(!ajReadlineTrim(inf,&line))
 		    ajFatal("Unexpected EOF");
 		ajFmtPrintF(outf2,"%s\n",ajStrGetPtr(line));
 	    }

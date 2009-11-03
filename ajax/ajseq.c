@@ -691,8 +691,10 @@ __deprecated AjPSeq  ajSeqNewS(const AjPSeq seq)
 ** @fcategory delete
 **
 ** @nam3rule Del Destroy (free) a sequence object
+** @nam3rule Delarray Array destructor
 **
-** @argrule * Pseq [AjPSeq*] Sequence object address
+** @argrule Del Pseq [AjPSeq*] Sequence object address
+** @argrule Delarray PPseq [AjPSeq**] Sequence object array
 **
 ** @valrule * [void]
 **
@@ -779,6 +781,37 @@ void ajSeqDel(AjPSeq* Pseq)
     return;
 }
 
+
+
+
+/* @func ajSeqDelarray *****************************************************
+**
+** Destructor for array of sequence objects
+**
+** @param [d] PPseq [AjPSeq**] Sequence object array
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajSeqDelarray(AjPSeq **PPseq)
+{
+    ajuint i = 0;
+
+    if(!PPseq || !*PPseq)
+	return;
+
+    while((*PPseq)[i])
+    {
+	ajSeqDel(&(*PPseq)[i]);
+	i++;
+    }
+
+    ajDebug("ajSeqDelarray size: %d\n", i);
+
+    AJFREE(*PPseq);
+
+    return;
+}
 
 
 
@@ -1355,6 +1388,7 @@ __deprecated void  ajSeqAssSeqCI (AjPSeq thys, const char* text, ajint ilen)
     static ajint savelen;
     savelen = ilen;
 */
+    (void) ilen;
     ajSeqAssignSeqC(thys, text);
     return;
 }
@@ -2520,6 +2554,7 @@ void ajSeqTrim(AjPSeq seq)
 ** @valrule Offset [ajuint] Sequence start offset
 ** @valrule Range [ajuint] Sequence length
 ** @valrule Rev [AjBool] Reverse attribute
+** @valrule Revtext [AjPStr] Reverse text
 ** @valrule *Feat [const AjPFeattable] Link to internal feature table
 ** @valrule *FeatCopy [AjPFeattable] New feature table with original contents
 ** @valrule *SeqCopyC [char*] New sequence with original contents
@@ -2583,7 +2618,7 @@ __deprecated const AjPStr  ajSeqGetAcc(const AjPSeq seq)
 ** or 1 if no start has been set.
 **
 ** To return the position within the original sequence, which may be different
-** if the sequence has been trimmed, use ajSeqTrueBegin
+** if the sequence has been trimmed, use ajSeqGetBeginTrue
 **
 ** @param [r] seq [const AjPSeq] Sequence object
 ** @return [ajuint] Start position.
@@ -4965,7 +5000,7 @@ void ajSeqsetDel(AjPSeqset *Pseq)
 **
 ** Destructor for array of sequence set objects
 **
-** @param [d] PPseq [AjPSeqset**] Sequence set object reference
+** @param [d] PPseq [AjPSeqset**] Sequence set object array
 ** @return [void]
 ** @@
 ******************************************************************************/
@@ -4983,7 +5018,7 @@ void ajSeqsetDelarray(AjPSeqset **PPseq)
 	i++;
     }
 
-    ajDebug("ajSeqsetallDel size: %d\n", i);
+    ajDebug("ajSeqsetDelarray size: %d\n", i);
 
     AJFREE(*PPseq);
 
@@ -7388,7 +7423,7 @@ AjBool ajSeqrefAppendXref(AjPSeqRef ref, const AjPStr str)
 
 AjBool ajSeqrefFmtAuthorsEmbl(const AjPSeqRef ref, AjPStr* Pdest)
 {
-    ajStrAssignC(Pdest, "");
+    ajStrAssignClear(Pdest);
 
     if(!ref->Authors)
 	return ajFalse;
@@ -7413,7 +7448,7 @@ AjBool ajSeqrefFmtAuthorsGb(const AjPSeqRef ref, AjPStr* Pdest)
     ajint imax;
     char* cp;
 
-    ajStrAssignC(Pdest, "");
+    ajStrAssignClear(Pdest);
 
     if(!ref->Authors)
 	return ajFalse;
@@ -7447,7 +7482,7 @@ AjBool ajSeqrefFmtAuthorsGb(const AjPSeqRef ref, AjPStr* Pdest)
 
 AjBool ajSeqrefFmtLocationEmbl(const AjPSeqRef ref, AjPStr* Pdest)
 {
-    ajStrAssignC(Pdest, "");
+    ajStrAssignClear(Pdest);
 
     if(!ref->Location)
 	return ajFalse;
@@ -7468,7 +7503,7 @@ AjBool ajSeqrefFmtLocationEmbl(const AjPSeqRef ref, AjPStr* Pdest)
 
 AjBool ajSeqrefFmtLocationGb(const AjPSeqRef ref, AjPStr* Pdest)
 {
-    ajStrAssignC(Pdest, "");
+    ajStrAssignClear(Pdest);
 
     if(!ref->Location)
 	return ajFalse;
@@ -7494,7 +7529,7 @@ AjBool ajSeqrefFmtLocationGb(const AjPSeqRef ref, AjPStr* Pdest)
 
 AjBool ajSeqrefFmtTitleGb(const AjPSeqRef ref, AjPStr* Pdest)
 {
-    ajStrAssignC(Pdest, "");
+    ajStrAssignClear(Pdest);
 
     if(!ajStrGetLen(ref->Title))
     {
@@ -8149,7 +8184,7 @@ void ajSeqstrComplement(AjPStr* Pseq)
 
     while(*cp)
     {
-	*cp = ajBaseComp(*cp);
+	*cp = ajBaseAlphacharComp(*cp);
 	cp++;
     }
 
@@ -8196,15 +8231,15 @@ void ajSeqstrReverse(AjPStr* Pseq)
 
     while(cp < cq)
     {
-	tmp = ajBaseComp(*cp);
-	*cp = ajBaseComp(*cq);
+	tmp = ajBaseAlphacharComp(*cp);
+	*cp = ajBaseAlphacharComp(*cq);
 	*cq = tmp;
 	cp++;
 	cq--;
     }
 
     if(cp == cq)
-	*cp = ajBaseComp(*cp);
+	*cp = ajBaseAlphacharComp(*cp);
 
     return;
 }

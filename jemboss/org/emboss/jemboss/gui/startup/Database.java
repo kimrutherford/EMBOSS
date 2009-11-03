@@ -22,7 +22,6 @@
 package org.emboss.jemboss.gui.startup;
 
 import java.io.*;
-import java.util.*;
 
 /**
 *

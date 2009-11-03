@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>findkm -graph cps </b>
-Find Km and Vmax for an enzyme reaction
+Calculate and plot enzyme reaction data
 Enzyme kinetics data (application-specific) file: <b>enztest.dat</b>
 Output file [enztest.findkm]: <b></b>
 

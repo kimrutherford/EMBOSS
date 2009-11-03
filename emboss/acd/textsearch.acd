@@ -1,6 +1,5 @@
 application: textsearch [
-  documentation: "Search sequence documentation. Slow, use
-                  SRS and Entrez!"
+  documentation: "Search the textual description of sequence(s)"
   groups: "Display, Information"
 ]
 

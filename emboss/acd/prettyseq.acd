@@ -1,5 +1,5 @@
 application: prettyseq [
-  documentation: "Output sequence with translated ranges"
+  documentation: "Write a nucleotide sequence and its translation to file"
   groups: "Display, Nucleic:Translation"
 ]
 

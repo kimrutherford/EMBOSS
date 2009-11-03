@@ -7,7 +7,7 @@ This example uses only one input sequence. The normal use would be to use a set 
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>cusp -sbeg 135 -send 1292 </b>
-Create a codon usage table
+Create a codon usage table from nucleotide sequence(s)
 Input nucleotide sequence(s): <b>tembl:x13776</b>
 Output file [x13776.cusp]: <b></b>
 

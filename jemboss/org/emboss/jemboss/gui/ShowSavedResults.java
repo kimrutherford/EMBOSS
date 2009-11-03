@@ -31,6 +31,7 @@ import javax.swing.event.*;
 
 import org.emboss.jemboss.programs.*;
 import org.emboss.jemboss.soap.*;
+import org.emboss.jemboss.Jemboss;
 import org.emboss.jemboss.JembossParams;
 
 /**
@@ -110,7 +111,7 @@ public class ShowSavedResults extends JFrame
   public ShowSavedResults(final JembossParams mysettings, final JFrame f)
   {
 
-    this("Saved Results on Server");
+    this("Saved results list"+(Jemboss.withSoap ? " on server":""));
      
     Dimension d = new Dimension(270,270);
     ss.setPreferredSize(d);
@@ -385,7 +386,7 @@ public class ShowSavedResults extends JFrame
 	      {
 	        setCursor(cbusy); 
                 selList = convertToOriginal(selList);
-	        ResultList thisres = new ResultList(mysettings,selList,
+	        new ResultList(mysettings,selList,
                                          "delete_saved_results"); 
 	        setCursor(cdone);
 	       
@@ -619,7 +620,7 @@ public class ShowSavedResults extends JFrame
             {
 	      setCursor(cbusy);
               selList = convertToOriginal(selList);
-	      ResultList thisres = new ResultList(mysettings,selList,
+	      new ResultList(mysettings,selList,
                                              "delete_saved_results");
 	      setCursor(cdone);
 
@@ -722,7 +723,7 @@ public class ShowSavedResults extends JFrame
   */
   public static String convertToPretty(String sorig)
   {
-    int index = sorig.indexOf('_');
+//    int index = sorig.indexOf('_');
 //  if(index > -1)
 //    sorig = sorig.substring(0,index) + "\t" +
 //            sorig.substring(index+1);

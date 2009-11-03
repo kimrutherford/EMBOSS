@@ -23,81 +23,23 @@ marscan
 <H2>
     Function
 </H2>
-Finds MAR/SAR sites in nucleic sequences
+Finds matrix/scaffold recognition (MRS) signatures in DNA sequences
 
 <H2>
     Description
 </H2>
 
-Matrix/scaffold attachment regions (MARs/SARs) are genomic elements
-thought to delineate the structural and functional organisation of the
-eukaryotic genome.  Originally, MARs and SARs were identified through
-their ability to bind to the nuclear matrix or scaffold.  Binding cannot
-be assigned to a unique sequence element, but is dispersed over a region
-of several hundred base pairs.  These elements are found flanking a gene
-or a small cluster of genes and are located often in the vicinity of
-cis-regulatory sequences.  This has led to the suggestion that they
-contribute to higher order regulation of transcription by defining
-boundaries of independently controlled chromatin domains.  There is
-indirect evidence to support this notion.  In transgenic experiments
-MARs/SARs dampen position effects by shielding the transgene from the
-effects of the chromatin structure at the site of integration. 
-Furthermore, they may act as boundary elements for enhancers,
-restricting their long range effect to only the promoters that are
-located in the same chromatin domain. 
-
-<p>
-
-<b>marscan</b> finds a bipartite sequence element that is unique for a
-large group of eukaryotic MARs/SARs.  This MAR/SAR recognition signature
-(<b>MRS</b>) comprises two individual sequence elements that are <200 bp
-apart and may be aligned on positioned nucleosomes in MARs.  The MRS can
-be used to correctly predict the position of MARs/SARs in plants and
-animals, based on genomic DNA sequence information alone.  Experimental
-evidence from the analysis of >300 kb of sequence data from several
-eukaryotic organisms show that wherever a MRS is observed in the DNA
-sequence, the corresponding genomic fragment is a biochemically
-identifiable SAR. 
-
-<p>
-
-The MRS is a bipartite sequence element that consists of two individual
-sequences of 8 (AATAAYAA) and 16 bp (AWWRTAANNWWGNNNC) within a 200 bp
-distance from each other.  One mismatch is allowed in the 16 bp pattern. 
-The patterns can occur on either strand of the DNA with respect to each
-other. The 8 bp and the 16 bp sites can overlap.
-
-<p>
-
-Where there are many possible MRS sites caused by many 8 bp and/or 16 bp
-pattern sites located within 200 bp of each other, then only the 8 bp
-site and the 16 bp site that occur closest to each other are reported. 
-
-<p>
-
-Once a MRS has been reported, no more sites will be looked for within
-200 bp of that site.  This reduces (but maybe will not totally
-eliminate) over-reporting of the clusters of MRS's that tend to occur
-within a MAR/SAR. 
+<p><b>marscan</b> finds MRS recognition signatures in DNA sequences.  The MRS signature is associated with matrix/scaffold attachment regions (MARs/SARs) which are genomic elements thought to delineate the structural and functional organisation of the eukaryotic genome. The MRS is a bipartite sequence element that consists of an 8bp motif (<tt>AATAAYAA</tt>) and a 16 bp motif (<tt>AWWRTAANNWWGNNNC</tt>) within a 200 bp distance from each other, on either sense strand of the genomic DNA.  <b>marscan</b> reads a DNA sequence and writes a standard EMBOSS report file with details of the MRS signatures identified.</p>
 
 
-<p>
 
-Not all SARs contain a MRS.  Analysis of >300 kb of genomic sequence
-from a variety of eukaryotic organisms shows that the MRS faithfully
-predicts 80% of MARs and SARs, suggesting that at least one other type
-of MAR/SAR may exist which does not contain a MRS. 
+<H2>
+Algorithm
+</H2>
 
-<p>
-
-It it still not at all clear whether MAR/SARs are real biological phenomena
-or just experimental artefacts.
-
-<p>
-
-The problem of how to define and find MARs is still being actively
-invetsigated.  For a recent evaluation of this method and others, see
-reference 3. 
+<p><b>marscan</b> searches for an MRS signature, that being the 8bp sequence (<tt>AATAAYAA</tt>) and the 16 bp sequence (<tt>AWWRTAANNWWGNNNC</tt>) within a 200 bp distance from each other. One mismatch is allowed in the 16 bp pattern. The patterns may occur on the same or different strands and can overlap.</p>
+<p>Where there are many suitable 8 bp and/or 16 bp pattern sites located within 200 bp of each other, then only the closest pair of 8 bp / 16 bp sites are reported.</p>
+<p>Once an MRS has been reported, no more sites will be looked for within 200 bp of that site. This reduces (but not eliminates entirely) over-reporting of the clusters of MRS's that tend to occur within a MAR/SAR.</par>
 
 
 <H2>
@@ -110,7 +52,7 @@ reference 3.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>marscan </b>
-Finds MAR/SAR sites in nucleic sequences
+Finds matrix/scaffold recognition (MRS) signatures in DNA sequences
 Input nucleotide sequence(s): <b>tembl:u01317</b>
 Output report [u01317.marscan]: <b></b>
 
@@ -162,14 +104,16 @@ Output report [u01317.marscan]: <b></b>
    -raccshow2          boolean    Show accession number in the report
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
+   -rstrandshow2       boolean    Show the nucleotide strand in the report
    -rusashow2          boolean    Show the full USA in the report
    -rmaxall2           integer    Maximum total hits to report
    -rmaxseq2           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -390,16 +334,18 @@ By default <b>marscan</b> writes a GFF (Gene Feature Format) report file.
 <p><h3>File: u01317.marscan </h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-##gff-version 2.0
-##date 2006-07-15
-##Type DNA U01317
-U01317	marscan	misc_signal	2242	2458	0.000	+	.	Sequence "U01317.1" ; note "*type MAR/SAR recognition site (MRS)" ; note "*start8bp 2451" ; note "*end8bp 2458" ; note "*start16bp 2242" ; note "*end16bp 2257"
-U01317	marscan	misc_signal	17654	17730	0.000	+	.	Sequence "U01317.2" ; note "*type MAR/SAR recognition site (MRS)" ; note "*start8bp 17723" ; note "*end8bp 17730" ; note "*start16bp 17654" ; note "*end16bp 17669"
-U01317	marscan	misc_signal	40956	41123	0.000	+	.	Sequence "U01317.3" ; note "*type MAR/SAR recognition site (MRS)" ; note "*start8bp 40956" ; note "*end8bp 40963" ; note "*start16bp 41108" ; note "*end16bp 41123"
-U01317	marscan	misc_signal	42232	42248	0.000	+	.	Sequence "U01317.4" ; note "*type MAR/SAR recognition site (MRS)" ; note "*start8bp 42232" ; note "*end8bp 42239" ; note "*start16bp 42233" ; note "*end16bp 42248"
-U01317	marscan	misc_signal	47834	47966	0.000	+	.	Sequence "U01317.5" ; note "*type MAR/SAR recognition site (MRS)" ; note "*start8bp 47959" ; note "*end8bp 47966" ; note "*start16bp 47834" ; note "*end16bp 47849"
-U01317	marscan	misc_signal	65112	65146	0.000	+	.	Sequence "U01317.6" ; note "*type MAR/SAR recognition site (MRS)" ; note "*start8bp 65139" ; note "*end8bp 65146" ; note "*start16bp 65112" ; note "*end16bp 65127"
-U01317	marscan	misc_signal	65947	65963	0.000	+	.	Sequence "U01317.7" ; note "*type MAR/SAR recognition site (MRS)" ; note "*start8bp 65947" ; note "*end8bp 65954" ; note "*start16bp 65948" ; note "*end16bp 65963"
+##gff-version 3
+##sequence-region U01317 1 65963
+#!Date 2008-07-15
+#!Type DNA
+#!Source-version EMBOSS 6.0.0
+U01317	marscan	regulatory_region	2242	2458	0.000	+	.	ID="U01317.1";note="*type MAR/SAR recognition site (MRS)";note="*start8bp 2451";note="*end8bp 2458";note="*start16bp 2242";note="*end16bp 2257"
+U01317	marscan	regulatory_region	17654	17730	0.000	+	.	ID="U01317.2";note="*type MAR/SAR recognition site (MRS)";note="*start8bp 17723";note="*end8bp 17730";note="*start16bp 17654";note="*end16bp 17669"
+U01317	marscan	regulatory_region	40956	41123	0.000	+	.	ID="U01317.3";note="*type MAR/SAR recognition site (MRS)";note="*start8bp 40956";note="*end8bp 40963";note="*start16bp 41108";note="*end16bp 41123"
+U01317	marscan	regulatory_region	42232	42248	0.000	+	.	ID="U01317.4";note="*type MAR/SAR recognition site (MRS)";note="*start8bp 42232";note="*end8bp 42239";note="*start16bp 42233";note="*end16bp 42248"
+U01317	marscan	regulatory_region	47834	47966	0.000	+	.	ID="U01317.5";note="*type MAR/SAR recognition site (MRS)";note="*start8bp 47959";note="*end8bp 47966";note="*start16bp 47834";note="*end16bp 47849"
+U01317	marscan	regulatory_region	65112	65146	0.000	+	.	ID="U01317.6";note="*type MAR/SAR recognition site (MRS)";note="*start8bp 65139";note="*end8bp 65146";note="*start16bp 65112";note="*end16bp 65127"
+U01317	marscan	regulatory_region	65947	65963	0.000	+	.	ID="U01317.7";note="*type MAR/SAR recognition site (MRS)";note="*start8bp 65947";note="*end8bp 65954";note="*start16bp 65948";note="*end16bp 65963"
 </pre>
 </td></tr></table><p>
 
@@ -415,7 +361,11 @@ None.
     Notes
 </H2>
 
-It does not check whether the DNA input sequence is genomic or not.
+<p>Matrix/scaffold attachment regions (MARs/SARs) are genomic elements thought to delineate the structural and functional organisation of the eukaryotic genome. Originally, MARs and SARs were identified through their ability to bind to the nuclear matrix or scaffold. Binding cannot be assigned to a unique sequence element, but is dispersed over a region of several hundred base pairs. These elements are found flanking a gene or a small cluster of genes and are located often in the vicinity of cis-regulatory sequences. This has led to the suggestion that they contribute to higher order regulation of transcription by defining boundaries of independently controlled chromatin domains. There is indirect evidence to support this notion. In transgenic experiments MARs/SARs dampen position effects by shielding the transgene from the effects of the chromatin structure at the site of integration. Furthermore, they may act as boundary elements for enhancers, restricting their long range effect to only the promoters that are located in the same chromatin domain.</p>
+
+<p><b>marscan</b> finds a bipartite sequence element that is unique for a large group of eukaryotic MARs/SARs. This MAR/SAR recognition signature (MRS) comprises two individual sequence elements (AATAAYAA and AWWRTAANNWWGNNNC) that are <200 bp apart and may be aligned on positioned nucleosomes in MARs. The MRS signature can be used to correctly predict the position of MARs/SARs in plants and animals, based on genomic DNA sequence information alone. Experimental evidence from the analysis of >300 kb of sequence data from several eukaryotic organisms show that wherever an MRS signature is observed in the DNA sequence, the corresponding genomic fragment is a biochemically identifiable SAR.</p>
+
+<p>It it still not at all clear whether MAR/SARs are real biological phenomena or just experimental artefacts and the problem of how to define and find MARs is still being actively invetsigated. For a recent evaluation of this method and others, see reference 3.  Not all SARs contain a MRS. Analysis of >300 kb of genomic sequence from a variety of eukaryotic organisms shows that the MRS faithfully predicts 80% of MARs and SARs, suggesting that at least one other type of MAR/SAR may exist which does not contain a MRS.</p>
 
 <H2>
     References
@@ -456,7 +406,7 @@ Nucleic Acids Research 2002, Vol. 30, No. 15 3433-3442
     Warnings
 </H2>
 
-None
+<p><b>marscan</b> does not check whether the DNA input sequence is genomic or not.</p>
 
 <H2>
     Diagnostic Error Messages
@@ -479,20 +429,21 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="dreg.html">dreg</a></td>
-<td>Regular expression search of a nucleotide sequence</td>
+<td>Regular expression search of nucleotide sequence(s)</td>
 </tr>
 
 <tr>
 <td><a href="fuzznuc.html">fuzznuc</a></td>
-<td>Nucleic acid pattern search</td>
+<td>Search for patterns in nucleotide sequences</td>
 </tr>
 
 <tr>
 <td><a href="fuzztran.html">fuzztran</a></td>
-<td>Protein pattern search after translation</td>
+<td>Search for patterns in protein sequences (translated)</td>
 </tr>
 
 <tr>
@@ -502,12 +453,12 @@ None.
 
 <tr>
 <td><a href="plotorf.html">plotorf</a></td>
-<td>Plot potential open reading frames</td>
+<td>Plot potential open reading frames in a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="showorf.html">showorf</a></td>
-<td>Pretty output of DNA translations</td>
+<td>Display a nucleotide sequence and translation in pretty format</td>
 </tr>
 
 <tr>
@@ -517,17 +468,17 @@ None.
 
 <tr>
 <td><a href="syco.html">syco</a></td>
-<td>Synonymous codon usage Gribskov statistic plot</td>
+<td>Draw synonymous codon usage statictic plot for a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="tcode.html">tcode</a></td>
-<td>Fickett TESTCODE statistic to identify protein-coding DNA</td>
+<td>Identify protein-coding regions using Fickett TESTCODE statistic</td>
 </tr>
 
 <tr>
 <td><a href="wobble.html">wobble</a></td>
-<td>Wobble base plot</td>
+<td>Plot third base position variability in a nucleotide sequence</td>
 </tr>
 
 </table>

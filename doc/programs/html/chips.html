@@ -24,45 +24,14 @@ chips
 <H2>
     Function
 </H2>
-Codon usage statistics
+Calculates Nc codon usage statistic
 <H2>
     Description
 </H2>
 
+<p><b>chips</b> calculates Frank Wright's Nc statistic for a nucleotide sequence.  This is the "effective number of codons used in a gene sequence" (ref 1), and is a simple measure of synonymous codon usage bias.  Nc quantifies how far the codon usage of a gene departs from equal usage of synonymous codons.</p>
+<p>Nc is easily calculated from codon usage data alone and is independent of gene length and amino acid composition. Nc can take values from 20, in the case of extreme bias where one codon is exclusively used for each amino acid, to 61 when the use of alternative synonymous codons is equally likely. Nc thus provides an intuitively meaningful measure of the extent of codon preference in a gene.  Low values therefore indicate a strong codon bias, and high values indicate a low bias (and possibly a non-coding region).</p>
 
-<b>chips</b> calculates Frank Wright's Nc statistic for the effective
-number of codons used (ref 1). 
-
-<p>
-
-This is a simple measure that quantifies how far the codon usage of a
-gene departs from equal usage of synonymous codons.  This measure of
-synonymous codon usage bias, the 'effective number of codons used in a
-gene', Nc, can be easily calculated from codon usage data alone, and is
-independent of gene length and amino acid (aa) composition.  Nc can take
-values from 20, in the case of extreme bias where one codon is
-exclusively used for each aa, to 61 when the use of alternative
-synonymous codons is equally likely.  Nc thus provides an intuitively
-meaningful measure of the extent of codon preference in a gene. 
-
-<p>
-
-The Nc statistic has problems in very short sequences (20 amino acids
-or less) which are yet to be fully resolved. They are caused by the
-need to consider amino acids which are missing in the sequence.
-
-<p>
-This calculation was originally in the EGCG package as "codfish"
-(codon usage for fission yeast). As Frank Wright is a vegan, we looked
-for a meat-free name for the EMBOSS version, "chips". The official
-explanation is "Codon Heterozygosity (Inverse of) in a
-Protein-coding Sequence"
-
-<p>
-
-If the sequence extends beyond the coding region then the start and/or
-end positions of the CDS must be provided because chips analyses
-exclusively protein coding regions. 
 
 <H2>
     Usage
@@ -74,7 +43,7 @@ exclusively protein coding regions.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>chips -sbeg 135 -send 1292 </b>
-Codon usage statistics
+Calculates Nc codon usage statistic
 Input nucleotide sequence(s): <b>tembl:x13776</b>
 Output file [x13776.chips]: <b></b>
 
@@ -120,8 +89,9 @@ Output file [x13776.chips]: <b></b>
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -331,12 +301,8 @@ Nc = 32.951
     Data files
 </H2>
 
-<b>chips</b> reads a codon usage file but only as a template and ignores the
-original data.
+<p><b>chips</b> reads the codon usage file "CODONS/Ehum.cut" from the EMBOSS data directory. It uses the file as a template only and ignores the date itself.</p>
 
-<p>
-The codon usage table is by default the file "CODONS/Ehum.cut"
-in the EMBOSS distribution directory.
 
 <p>
 <p>
@@ -383,7 +349,7 @@ The directories are searched in the following order:
     Notes
 </H2>
 
-None.
+<p>This calculation was originally in the EGCG package as "codfish" (codon usage for fission yeast). As Frank Wright is a vegan, we looked for a meat-free name for the EMBOSS version, "chips". The official explanation is "Codon Heterozygosity (Inverse of) in a Protein-coding Sequence".</p>
 
 <H2>
     References
@@ -401,7 +367,10 @@ Wright, F. (1990) Gene 87:23-29
     Warnings
 </H2>
 
-None.
+<p>The Nc statistic has problems for very short sequences (20 amino acids or less) which are yet to be fully resolved. They are caused by the need to consider amino acids which are missing in the sequence.</p>
+
+<p><b>chips</b> analyses exclusively protein coding regions. If the provided sequence extends beyond the coding region then the start and/or end positions of the CDS must be specified by using the -sbegin and -send qualifiers that are in-built for all sequence types.</p>
+
 
 <H2>
     Diagnostic Error Messages
@@ -424,10 +393,11 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="cai.html">cai</a></td>
-<td>CAI codon adaptation index</td>
+<td>Calculate codon adaptation index</td>
 </tr>
 
 <tr>
@@ -437,12 +407,12 @@ None.
 
 <tr>
 <td><a href="cusp.html">cusp</a></td>
-<td>Create a codon usage table</td>
+<td>Create a codon usage table from nucleotide sequence(s)</td>
 </tr>
 
 <tr>
 <td><a href="syco.html">syco</a></td>
-<td>Synonymous codon usage Gribskov statistic plot</td>
+<td>Draw synonymous codon usage statictic plot for a nucleotide sequence</td>
 </tr>
 
 </table>

@@ -20,6 +20,13 @@
 </tr>
 
 <tr>
+<td>-mono</td>
+<td>Use monoisotopic weights</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>Output report file name</td>
 <td>Report output file</td>
@@ -43,15 +50,15 @@
 </tr>
 
 <tr>
-<td>-aadata</td>
+<td>-mwdata</td>
 <td>Molecular weight data for amino acids</td>
 <td>Data file</td>
-<td>Eamino.dat</td>
+<td>Emolwt.dat</td>
 </tr>
 
 <tr>
 <td>-unfavoured</td>
-<td>Trypsin will not normally cut after a K if it is followed by (e.g.) another K or a P. Specifying this shows those cuts. as well as the favoured ones.</td>
+<td>Trypsin will not normally cut after 'KR' if they are followed by any of 'KRIFLP'. Lys-C will not normally cut after 'K' if it is followed by 'P'. Arg-C will not normally cut after 'R' if it is followed by 'P'. V8-bicarb will not normally cut after 'E' if it is followed by any of 'KREP'. V8-phosph will not normally cut after 'DE' if they are followed by 'P'. Chymotrypsin will not normally cut after 'FYWLM' if they are followed by 'P'. Specifying unfavoured shows these unfavoured cuts as well as the favoured ones.</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>

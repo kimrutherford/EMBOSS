@@ -1,6 +1,5 @@
 application: splitter [
-  documentation: "Split a sequence into (overlapping) smaller
-                  sequences"
+  documentation: "Split sequence(s) into smaller sequences"
   groups: "Edit"
 ]
 

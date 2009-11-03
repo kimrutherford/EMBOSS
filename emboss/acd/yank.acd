@@ -1,6 +1,6 @@
 application: yank [
-  documentation: "Reads a sequence range, appends the full
-                  USA to a list file"
+  documentation: "Add a sequence reference (a full USA) to a list file
+"
   groups: "Edit"
 ]
 

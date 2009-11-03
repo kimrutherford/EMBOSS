@@ -6,7 +6,7 @@
 <pre>
 ########################################
 # Program: helixturnhelix
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: helixturnhelix
 #    -sequence tsw:laci_ecoli
 # Report_format: motif
@@ -29,6 +29,7 @@ Maximum_score_at at "*"
  Sequence: VTLYDVAEYAGVSYQTVSRVVN
            |                    |
            4                    25
+ Maximum_score_at: 4
  Standard_deviations: 6.54
 
 

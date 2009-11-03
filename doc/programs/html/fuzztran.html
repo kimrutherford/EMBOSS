@@ -24,23 +24,12 @@ fuzztran
 <H2>
     Function
 </H2>
-Protein pattern search after translation
+Search for patterns in protein sequences (translated)
 <H2>
     Description
 </H2>
 
-fuzztran uses PROSITE style protein patterns to search nucleic acid
-sequences translated in the specified frame(s). 
-
-<p>
-Patterns are specifications of a (typically short) length of sequence to
-be found.  They can specify a search for an exact sequence or they can
-allow various ambiguities, matches to variable lengths of sequence and
-repeated subsections of the sequence. 
-
-<p>
-fuzztran intelligently selects the optimum searching algorithm to use,
-depending on the complexity of the search pattern specified. 
+<p><b>fuzztran</b> searches for a specified PROSITE-style pattern in nucleic acid sequences that are first translated to protein in the specified frame(s) with a specified genetic code.  Such patterns are specifications of a (typically short) length of sequence to be found. They can specify a search for an exact sequence or they can allow various ambiguities, matches to variable lengths of sequence and repeated subsections of the sequence. One or more nucleotide sequences are read from file.  The output is a standard EMBOSS report file that includes data such as location and score of any matches.</p>
 
 <H2>
     Usage
@@ -52,7 +41,7 @@ depending on the complexity of the search pattern specified.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>fuzztran -opt </b>
-Protein pattern search after translation
+Search for patterns in protein sequences (translated)
 Input nucleotide sequence(s): <b>tembl:Z46957</b>
 Search pattern: <b>RA</b>
 Translation frames
@@ -186,14 +175,16 @@ Output report [z46957.fuzztran]: <b></b>
    -raccshow2          boolean    Show accession number in the report
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
+   -rstrandshow2       boolean    Show the nucleotide strand in the report
    -rusashow2          boolean    Show the full USA in the report
    -rmaxall2           integer    Maximum total hits to report
    -rmaxseq2           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -493,7 +484,7 @@ By default <b>fuzztran</b> writes a 'table' report file.
 <pre>
 ########################################
 # Program: fuzztran
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: fuzztran
 #    -options
 #    -sequence tembl:Z46957
@@ -515,16 +506,16 @@ By default <b>fuzztran</b> writes a 'table' report file.
 #
 #=======================================
 
-  Start     End   Score Pattern_name Mismatch  Frame PStart   PEnd Translation
-     97     102       2 pattern1            .      1     33     34 RA         
-    133     138       2 pattern1            .      1     45     46 RA         
-    421     426       2 pattern1            .      1    141    142 RA         
-    625     630       2 pattern1            .      1    209    210 RA         
-    835     840       2 pattern1            .      1    279    280 RA         
-    919     924       2 pattern1            .      1    307    308 RA         
-    227     232       2 pattern1            .      2     76     77 RA         
-    752     757       2 pattern1            .      2    251    252 RA         
-     72      77       2 pattern1            .      3     24     25 RA         
+  Start     End  Strand   Score Pattern_name Mismatch  Frame PStart   PEnd Translation
+     97     102       +       2 pattern1            .      1     33     34 RA         
+    133     138       +       2 pattern1            .      1     45     46 RA         
+    421     426       +       2 pattern1            .      1    141    142 RA         
+    625     630       +       2 pattern1            .      1    209    210 RA         
+    835     840       +       2 pattern1            .      1    279    280 RA         
+    919     924       +       2 pattern1            .      1    307    308 RA         
+    227     232       +       2 pattern1            .      2     76     77 RA         
+    752     757       +       2 pattern1            .      2    251    252 RA         
+     72      77       +       2 pattern1            .      3     24     25 RA         
 
 #---------------------------------------
 #---------------------------------------
@@ -733,7 +724,8 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="antigenic.html">antigenic</a></td>
 <td>Finds antigenic sites in proteins</td>
@@ -741,12 +733,12 @@ None.
 
 <tr>
 <td><a href="digest.html">digest</a></td>
-<td>Protein proteolytic enzyme or reagent cleavage digest</td>
+<td>Reports on protein proteolytic enzyme or reagent cleavage sites</td>
 </tr>
 
 <tr>
 <td><a href="dreg.html">dreg</a></td>
-<td>Regular expression search of a nucleotide sequence</td>
+<td>Regular expression search of nucleotide sequence(s)</td>
 </tr>
 
 <tr>
@@ -756,57 +748,57 @@ None.
 
 <tr>
 <td><a href="fuzznuc.html">fuzznuc</a></td>
-<td>Nucleic acid pattern search</td>
+<td>Search for patterns in nucleotide sequences</td>
 </tr>
 
 <tr>
 <td><a href="fuzzpro.html">fuzzpro</a></td>
-<td>Protein pattern search</td>
+<td>Search for patterns in protein sequences</td>
 </tr>
 
 <tr>
 <td><a href="helixturnhelix.html">helixturnhelix</a></td>
-<td>Report nucleic acid binding motifs</td>
+<td>Identify nucleic acid-binding motifs in protein sequences</td>
 </tr>
 
 <tr>
 <td><a href="marscan.html">marscan</a></td>
-<td>Finds MAR/SAR sites in nucleic sequences</td>
+<td>Finds matrix/scaffold recognition (MRS) signatures in DNA sequences</td>
 </tr>
 
 <tr>
 <td><a href="oddcomp.html">oddcomp</a></td>
-<td>Find protein sequence regions with a biased composition</td>
+<td>Identify proteins with specified sequence word composition</td>
 </tr>
 
 <tr>
 <td><a href="patmatdb.html">patmatdb</a></td>
-<td>Search a protein sequence with a motif</td>
+<td>Searches protein sequences with a sequence motif</td>
 </tr>
 
 <tr>
 <td><a href="patmatmotifs.html">patmatmotifs</a></td>
-<td>Search a PROSITE motif database with a protein sequence</td>
+<td>Scan a protein sequence with motifs from the PROSITE database</td>
 </tr>
 
 <tr>
 <td><a href="pepcoil.html">pepcoil</a></td>
-<td>Predicts coiled coil regions</td>
+<td>Predicts coiled coil regions in protein sequences</td>
 </tr>
 
 <tr>
 <td><a href="preg.html">preg</a></td>
-<td>Regular expression search of a protein sequence</td>
+<td>Regular expression search of protein sequence(s)</td>
 </tr>
 
 <tr>
 <td><a href="pscan.html">pscan</a></td>
-<td>Scans proteins using PRINTS</td>
+<td>Scans protein sequence(s) with fingerprints from the PRINTS database</td>
 </tr>
 
 <tr>
 <td><a href="sigcleave.html">sigcleave</a></td>
-<td>Reports protein signal cleavage sites</td>
+<td>Reports on signal cleavage sites in a protein sequence</td>
 </tr>
 
 </table>

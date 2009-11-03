@@ -108,26 +108,26 @@ void embGrpGetProgGroups(AjPList glist, AjPList alpha, char * const env[],
     acdrootinst = ajStrNew();
     alphaname   = ajStrNew();
 
-    ajNamRootPack(&acdpack);
-    ajNamRootInstall(&acdrootinst);
+    ajStrAssignS(&acdpack, ajNamValuePackage());
+    ajStrAssignS(&acdrootinst, ajNamValueInstalldir());
     if(emboss)
     {
 	if(ajNamGetValueC("acdroot", &acdroot))
 	{
-	    ajFileDirFix(&acdroot);
+	    ajDirnameFix(&acdroot);
 	    /*ajStrAppendC(&acdroot, "acd/");*/
 	}
 	else
 	{
-	    ajFileDirFix(&acdrootinst);
+	    ajDirnameFix(&acdrootinst);
 	    ajFmtPrintS(&acdroot, "%Sshare/%S/acd/", acdrootinst, acdpack);
 
-	    if(ajFileDir(&acdroot))
+	    if(ajDirnameFixExists(&acdroot))
 		doneinstall = ajTrue;
 	    else
 	    {
-		ajNamRoot(&acdrootdir);
-		ajFileDirFix(&acdrootdir);
+		ajStrAssignS(&acdrootdir, ajNamValueRootdir());
+		ajDirnameFix(&acdrootdir);
 		ajFmtPrintS(&acdroot, "%Sacd/", acdrootdir);
 	    }
 	}
@@ -139,21 +139,21 @@ void embGrpGetProgGroups(AjPList glist, AjPList alpha, char * const env[],
 
     if(embassy && !doneinstall)
     {
-	ajFileDirFix(&acdroot);
+	ajDirnameFix(&acdroot);
 
 	/* EMBOSS install directory */
 	ajFmtPrintS(&acdroot, "%Sshare/%S/acd/",
 		    acdrootinst, acdpack);
 
-	if(ajFileDir(&acdroot))
+	if(ajDirnameFixExists(&acdroot))
 	    /* embassadir ACD files */
 	    grpGetAcdFiles(glist, alpha, env, acdroot, explode, colon,
 			   gui, embassy, embassyname);
 	else
 	{
 	    /* look for all source directories */
-	    ajNamRoot(&acdrootdir);
-	    ajFileDirUp(&acdrootdir);
+	    ajStrAssignS(&acdrootdir, ajNamValueRootdir());
+	    ajDirnameUp(&acdrootdir);
 	    ajFmtPrintS(&acdroot, "%Sembassy/", acdrootdir);
 	    /* embassadir ACD files */
 	    grpGetAcdDirs(glist, alpha, env, acdroot, explode, colon,
@@ -207,32 +207,32 @@ AjBool embGrpGetEmbassy(const AjPStr appname, AjPStr* embassyname)
     acdrootdir  = ajStrNew();
     acdrootinst = ajStrNew();
 
-    ajNamRootPack(&acdpack);
-    ajNamRootInstall(&acdrootinst);
+    ajStrAssignS(&acdpack, ajNamValuePackage());
+    ajStrAssignS(&acdrootinst, ajNamValueInstalldir());
 
     ajStrAssignC(embassyname, "");
 
     if(ajNamGetValueC("acdroot", &acdroot))
     {
-	ajFileDirFix(&acdroot);
+	ajDirnameFix(&acdroot);
 	/*ajStrAppendC(&acdroot, "acd/");*/
     }
     else
     {
-	ajFileDirFix(&acdrootinst);
+	ajDirnameFix(&acdrootinst);
 	ajFmtPrintS(&acdroot, "%Sshare/%S/acd/", acdrootinst, acdpack);
       
-	if(!ajFileDir(&acdroot))
+	if(!ajDirnameFixExists(&acdroot))
 	{
-	    ajNamRoot(&acdrootdir);
-	    ajFileDirFix(&acdrootdir);
+	    ajStrAssignS(&acdrootdir, ajNamValueRootdir());
+	    ajDirnameFix(&acdrootdir);
 	    ajFmtPrintS(&acdroot, "%Sacd/", acdrootdir);
 	}
     }
     
     /* normal EMBOSS ACD */
     ajFmtPrintS(&filename, "%S%S.acd", acdroot, appname);
-    acdfile = ajFileNewIn(filename);
+    acdfile = ajFileNewInNameS(filename);
     if(acdfile) {
 	grpParseEmbassy(acdfile, embassyname);
 	ajFileClose(&acdfile);
@@ -242,8 +242,8 @@ AjBool embGrpGetEmbassy(const AjPStr appname, AjPStr* embassyname)
     if(!ok)
     {
       /* look for all source directories */
-      ajNamRoot(&acdrootdir);
-      ajFileDirUp(&acdrootdir);
+      ajStrAssignS(&acdrootdir, ajNamValueRootdir());
+      ajDirnameUp(&acdrootdir);
       ajFmtPrintS(&acdroot, "%Sembassy/", acdrootdir);
       /* embassadir ACD files */
       ok = grpGetAcdByname(appname, acdroot, embassyname);
@@ -307,7 +307,7 @@ static AjBool grpGetAcdByname(const AjPStr appname, const AjPStr acddir,
 	{
 	    closedir(dirpa);
 	    ajFmtPrintS(&filename, "%S%S.acd", dirname, appname);
-	    acdfile = ajFileNewIn(filename);
+	    acdfile = ajFileNewInNameS(filename);
 	    if(acdfile) {
 	      grpParseEmbassy(acdfile, embassyname);
 	      ajFileClose(&acdfile);
@@ -447,10 +447,10 @@ static void grpGetAcdFiles(AjPList glist, AjPList alpha, char * const env[],
 	    if(ajStrSuffixC(progpath, ".acd"))
 	    {
 		/* see if it is a normal file */
-		if(ajFileNameValid(progpath))
+		if(ajFilenameExistsRead(progpath))
 		{
 		    /* open the file and parse it */
-		    if((file = ajFileNewIn(progpath)) != NULL)
+		    if((file = ajFileNewInNameS(progpath)) != NULL)
 		    {
 			groups = ajListstrNew();
 			grpParse(file, &appl, &doc, &keywords, groups,
@@ -550,7 +550,7 @@ static void grpParse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPStr *keywords,
     *embassy = ajFalse;
 
     /* read file into one line, stripping out comment lines and blanks */
-    while(ajFileReadLine(file, &line))
+    while(ajReadlineTrim(file, &line))
     {
 	grpNoComment(&line);
 	if(ajStrGetLen(line))
@@ -688,7 +688,7 @@ static void grpParseEmbassy(AjPFile file, AjPStr* embassyname)
     ajStrAssignC(embassyname, "");
 
     /* read file into one line, stripping out comment lines and blanks */
-    while(ajFileReadLine(file, &line))
+    while(ajReadlineTrim(file, &line))
     {
 	grpNoComment(&line);
 	if(ajStrGetLen(line))
@@ -1492,8 +1492,8 @@ void embGrpOutputProgsList(AjPFile outfile, const AjPList progslist,
     /* output the programs for each group */
     piter = ajListIterNewread(progslist);
     if(html) ajFmtPrintF(outfile,
-			 "<tr><th>Program name</th><th>Description"
-			 "</th></tr>\n");
+			 "<tr><th>Program name</th>\n"
+                         "<th>Description</th></tr>\n");
 
     while((pl = ajListIterGet(piter)) != NULL)
     {

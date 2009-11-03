@@ -22,11 +22,12 @@
 package org.emboss.jemboss.gui.sequenceChooser;
 
 import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
 import javax.swing.*;
-import javax.swing.event.*;
-import java.awt.event.*;
-import javax.swing.border.*;
-import java.io.*;
+
+import org.emboss.jemboss.gui.form.TextFieldSink;
 
 /**
 *
@@ -41,13 +42,12 @@ public class OutputSequenceAttributes
   /** output base name */
   private JTextField osname = new JTextField();
  
-//private JTextField osdbname = new JTextField();
   /** feature format */
   private JTextField offormat = new JTextField();
   /** features filename */
   private JTextField ofname = new JTextField();
   /** uniform feature object */
-  private JTextField UFO = new JTextField();
+  //private JTextField UFO = new JTextField();
   /** separate file for each entry */
   private JRadioButton ossingle;
   /** combobox for file formats */
@@ -68,7 +68,7 @@ public class OutputSequenceAttributes
 
   
 
-  public OutputSequenceAttributes() 
+  public OutputSequenceAttributes(final TextFieldSink tfs) 
   {
     JPanel pscroll = new JPanel(new BorderLayout());
     rscroll = new JScrollPane(pscroll);
@@ -78,6 +78,7 @@ public class OutputSequenceAttributes
 
     Box bx = new Box(BoxLayout.X_AXIS);
     b.add(bx);
+    bx.add(Box.createRigidArea(new Dimension(3,0)));
     JLabel lab = new JLabel("Sequence Attributes");
     lab.setForeground(Color.red);
     lab.setFont(new Font("SansSerif", Font.BOLD, 13));
@@ -87,44 +88,20 @@ public class OutputSequenceAttributes
     b.add(Box.createRigidArea(new Dimension(0,3)));   //oformat
     bx = new Box(BoxLayout.X_AXIS);
     b.add(bx);
-    fileFormats = new JComboBox(ff){
-      public Dimension getMinimumSize() 
-      {
-        return getPreferredSize();
-      }
-      public Dimension getPreferredSize() 
-      {
-        return new Dimension(100, 25);
-      }
-      public Dimension getMaximumSize() 
-      {
-        return getPreferredSize();
-      }
-    };
+    fileFormats = new JComboBox(ff);
+    setRigidSize(fileFormats, 100, 25);
     fileFormats.setSelectedIndex(0);
 
+    bx.add(Box.createRigidArea(new Dimension(3,0)));
     bx.add(fileFormats);
-    bx.add(Box.createRigidArea(new Dimension(2,0)));
+    bx.add(Box.createRigidArea(new Dimension(3,0)));
     lab = new JLabel("Sequence format");
     lab.setForeground(Color.black);
     bx.add(lab);
     bx.add(Box.createHorizontalGlue());
     
-    osextension = new JTextField()
-    {   
-      public Dimension getMinimumSize() 
-      {
-        return getPreferredSize();
-      }
-      public Dimension getPreferredSize() 
-      {
-        return new Dimension(100, 30);
-      }
-      public Dimension getMaximumSize() 
-      {
-        return getPreferredSize();
-      }
-    };
+    osextension = new JTextField();
+    setRigidSize(osextension, 100, 30);
 
     b.add(Box.createRigidArea(new Dimension(0,3)));
     bx = new Box(BoxLayout.X_AXIS);
@@ -132,27 +109,14 @@ public class OutputSequenceAttributes
     bx.add(Box.createRigidArea(new Dimension(3,0)));
     bx.add(osextension);
     bx.add(Box.createRigidArea(new Dimension(2,0)));
-    lab = new JLabel("File name extension");
+    final JLabel lab_fne = new JLabel("File name extension");
     lab.setForeground(Color.black);
-    bx.add(lab);
+    bx.add(lab_fne);
     bx.add(Box.createHorizontalGlue());
 
 
-    osname = new JTextField()
-    {       
-      public Dimension getMinimumSize() 
-      {
-        return getPreferredSize();
-      }
-      public Dimension getPreferredSize() 
-      {
-        return new Dimension(100, 30);
-      }
-      public Dimension getMaximumSize() 
-      {
-        return getPreferredSize();
-      }
-    };
+    osname = new JTextField();
+    setRigidSize(osname, 100, 30);
 
     b.add(Box.createRigidArea(new Dimension(0,3)));
     bx = new Box(BoxLayout.X_AXIS);
@@ -160,15 +124,37 @@ public class OutputSequenceAttributes
     bx.add(Box.createRigidArea(new Dimension(3,0)));
     bx.add(osname);
     bx.add(Box.createRigidArea(new Dimension(2,0)));
-    lab = new JLabel("Base file name");
+    final JLabel lab_bfn = new JLabel("Base file name");
     lab.setForeground(Color.black);
-    bx.add(lab);
+    bx.add(lab_bfn);
     bx.add(Box.createHorizontalGlue());
 
-
-                                                 //ossingle
+    //ossingle
     ossingle = new JRadioButton("Separate file for each entry");
-//  ossingle.setBackground(Color.white);
+    ossingle.addItemListener(new ItemListener(){
+        public void itemStateChanged(ItemEvent e) {
+            final String why = "'Separate file for each entry' option " +
+            "has been selected";
+            if (ossingle.isSelected()){
+                osname.setEnabled(false);
+                osextension.setEnabled(false);
+                osname.setToolTipText(why);
+                osextension.setToolTipText(why);
+                lab_fne.setEnabled(false);
+                lab_bfn.setEnabled(false);
+                tfs.setEnabled(false);
+            } else {
+                osname.setEnabled(true);
+                osextension.setEnabled(true);
+                osname.setToolTipText("");
+                osextension.setToolTipText("");
+                tfs.setEnabled(true);
+                lab_fne.setEnabled(true);
+                lab_bfn.setEnabled(true);
+            }
+        }
+    });
+
     b.add(Box.createRigidArea(new Dimension(0,3)));
     bx = new Box(BoxLayout.X_AXIS);
     b.add(bx);
@@ -176,48 +162,22 @@ public class OutputSequenceAttributes
     bx.add(ossingle);
     bx.add(Box.createHorizontalGlue());
 
-    UFO = new JTextField()                      //oufo
-    {
-      public Dimension getMinimumSize() 
-      {
-        return getPreferredSize();
-      }
-      public Dimension getPreferredSize() 
-      {
-        return new Dimension(100, 30);
-      }
-      public Dimension getMaximumSize() 
-      {
-        return getPreferredSize();
-      }
-    };
+    //UFO = new JTextField();                      //oufo
+    //setRigidSize(UFO, 100, 30);
 
-    b.add(Box.createRigidArea(new Dimension(0,3)));
-    bx = new Box(BoxLayout.X_AXIS);
-    b.add(bx);
-    bx.add(Box.createRigidArea(new Dimension(3,0)));
-    bx.add(UFO);
-    bx.add(Box.createRigidArea(new Dimension(2,0)));
-    lab = new JLabel("UFO features");
-    lab.setForeground(Color.black);
-    bx.add(lab);
+    //b.add(Box.createRigidArea(new Dimension(0,3)));
+    //bx = new Box(BoxLayout.X_AXIS);
+    //b.add(bx);
+    //bx.add(Box.createRigidArea(new Dimension(3,0)));
+    //bx.add(UFO);
+    //bx.add(Box.createRigidArea(new Dimension(2,0)));
+    //lab = new JLabel("UFO features");
+    //lab.setForeground(Color.black);
+    //bx.add(lab);
     bx.add(Box.createHorizontalGlue());
 
-    offormat = new JTextField()
-    {
-      public Dimension getMinimumSize() 
-      {
-        return getPreferredSize();
-      }
-      public Dimension getPreferredSize() 
-      {
-        return new Dimension(100, 30);
-      }
-      public Dimension getMaximumSize() 
-      {
-        return getPreferredSize();
-      }
-    };
+    offormat = new JTextField();
+    setRigidSize(offormat, 100, 30);
 
     b.add(Box.createRigidArea(new Dimension(0,3)));
     bx = new Box(BoxLayout.X_AXIS);
@@ -225,26 +185,13 @@ public class OutputSequenceAttributes
     bx.add(Box.createRigidArea(new Dimension(3,0)));
     bx.add(offormat);
     bx.add(Box.createRigidArea(new Dimension(2,0)));
-    lab = new JLabel("Features format");
+    final JLabel lab_ff = new JLabel("Features format");
     lab.setForeground(Color.black);
-    bx.add(lab);
+    bx.add(lab_ff);
     bx.add(Box.createHorizontalGlue());
 
-    ofname = new JTextField()              //ofname
-    {
-      public Dimension getMinimumSize() 
-      {
-        return getPreferredSize();
-      }
-      public Dimension getPreferredSize() 
-      {
-        return new Dimension(100, 30);
-      }
-      public Dimension getMaximumSize() 
-      {
-        return getPreferredSize();
-      }
-    };
+    ofname = new JTextField();              //ofname
+    setRigidSize(ofname, 100, 30);
 
     b.add(Box.createRigidArea(new Dimension(0,3)));
     bx = new Box(BoxLayout.X_AXIS);
@@ -252,10 +199,38 @@ public class OutputSequenceAttributes
     bx.add(Box.createRigidArea(new Dimension(3,0)));
     bx.add(ofname);
     bx.add(Box.createRigidArea(new Dimension(2,0)));
-    lab = new JLabel("Features file name");
+    final JLabel lab_ffn = new JLabel("Features file name");
     lab.setForeground(Color.black);
-    bx.add(lab);
+    bx.add(lab_ffn);
     bx.add(Box.createHorizontalGlue());
+
+    fileFormats.addItemListener(new ItemListener(){
+        public void itemStateChanged(ItemEvent e) {
+            final String why = "A sequence format that is " +
+            		"capable of holding a feature table has been specified";
+            int i = fileFormats.getSelectedIndex();
+            String format = ff[i];
+            if (format.equals("swiss")||format.equals("nbrf")||
+                    format.equals("pir") || format.equals("genbank")||
+                    format.equals("embl") || format.equals("gff")){
+                offormat.setEnabled(false);
+                ofname.setEnabled(false);
+                lab_ff.setEnabled(false);
+                lab_ffn.setEnabled(false);
+                offormat.setToolTipText(why);
+                ofname.setToolTipText(why);
+                //UFO.setEnabled(false);
+            } else {
+                offormat.setEnabled(true);
+                ofname.setEnabled(true);
+                offormat.setToolTipText("");
+                ofname.setToolTipText("");
+                lab_ff.setEnabled(true);
+                lab_ffn.setEnabled(true);
+                //UFO.setEnabled(true);
+            }
+        }
+    });
 
   }
 
@@ -287,13 +262,13 @@ public class OutputSequenceAttributes
   * @return 	true if a value has been set
   *
   */
-  public boolean isUFODefault()
-  {
-    if(UFO.getText() == null || UFO.getText().equals(""))
-     return true;
-    else
-     return false;
-  }
+//  public boolean isUFODefault()
+//  {
+//    if(UFO.getText() == null || UFO.getText().equals(""))
+//     return true;
+//    else
+//     return false;
+//  }
 
   /**
   *
@@ -323,13 +298,6 @@ public class OutputSequenceAttributes
      return false;
   }
 
-//public boolean isDBNameDefault()
-//{
-//  if(osdbname.getText() == null || osdbname.getText().equals(""))
-//   return true;
-//  else
-//   return false;
-//}
 
   /**
   *
@@ -356,28 +324,35 @@ public class OutputSequenceAttributes
   {
     String options="";
 
-    if(!isUFODefault())
-      options = options.concat(" -oufo " + UFO.getText());
+    //if(!isUFODefault())
+      //options = options.concat(" -oufo " + UFO.getText());
 
     if(!getFormatChoosen().equals("unspecified"))
        options = options.concat(" -osformat " + getFormatChoosen());
      
-    if(!isExtensionDefault())
+    if(osextension.isEnabled() && !isExtensionDefault())
        options = options.concat(" -osextension " + osextension.getText());
 
-    if(!isNameDefault())
+    if(osname.isEnabled() && !isNameDefault())
        options = options.concat(" -osname " + osname.getText());
-
-//  if(!isDBNameDefault())
-//     options = options.concat(" -osdbname " + osdbname.getText());
 
     if(ossingle.isSelected())
        options = options.concat(" -ossingle ");
 
-    if(!isFNameDefault())
+    if(ofname.isEnabled() && !isFNameDefault())
        options = options.concat(" -ofname " + ofname.getText());   
 
+    if(offormat.isEnabled() && offormat.getText() != null && !offormat.getText().equals(""))
+        options = options.concat(" -offormat " + offormat.getText());   
+    
     return options;
+  }
+  
+  private void setRigidSize(JComponent c, int width, int height){
+      Dimension d = new Dimension(width, height);
+      c.setPreferredSize(d);
+      c.setMinimumSize(d);
+      c.setMaximumSize(d);
   }
 
 }

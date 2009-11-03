@@ -37,13 +37,6 @@
 
 
 
-#define IUBFILE "Ebases.iub"
-
-AjIUB aj_base_iubS[256];      /* base letters and their alternatives */
-
-
-
-
 static AjPFloat2d distmat_calc_match(char* const * seqcharptr,
 				     ajint len, ajint nseqs,
 				     AjBool ambig, AjBool nuc,
@@ -76,7 +69,6 @@ static void distmat_outputDist(AjPFile outf, ajint nseqs,
 			       const AjPSeqset seqset, const AjPFloat2d match,
 			       float gapwt, ajint method, AjBool ambig,
 			       AjBool nuc, ajint posn, ajint incr);
-static float distmat_checkambigNuc(char m1, char m2);
 static float distmat_checkambigProt(ajint t1, ajint t2);
 static void distmat_checkSubs(ajint t1, ajint t2, ajint* trans, ajint* tranv);
 static void distmat_checkRY(ajint t1, ajint t2, ajint* trans, ajint* tranv);
@@ -129,7 +121,7 @@ int main (int argc, char * argv[])
 
 
     outf   = ajAcdGetOutfile("outfile"); /* output filename  */
-    ambig  = ajAcdGetBool("ambiguous");
+    ambig  = ajAcdGetBoolean("ambiguous");
     gapwt  = ajAcdGetFloat("gapweight");
     if(nuc)
     {
@@ -142,7 +134,7 @@ int main (int argc, char * argv[])
 	methodlist = ajAcdGetListSingle("protmethod");
     }
     posn   = ajAcdGetInt("position");
-    calc_a = ajAcdGetBool("calculatea");
+    calc_a = ajAcdGetBoolean("calculatea");
     var_a  = ajAcdGetFloat("parametera");
 
 
@@ -652,7 +644,7 @@ static AjPFloat2d distmat_calc_match(char* const * seqcharptr,
 		m2 = seqcharptr[j][k];
 		if(ambig && nuc)	/* using -ambiguous */
 		{
-		    m = distmat_checkambigNuc(m1,m2);
+		    m = ajBaseAlphacharCompare(m1,m2);
 		    m = ajFloat2dGet(match,i,j)+m;
 		    ajFloat2dPut(&match,i,j,m);
 		}
@@ -1324,76 +1316,13 @@ static float distmat_checkambigProt(ajint t1, ajint t2)
     else if(((strchr("Z",t1) && strchr("EQ",t2)) ||
               (strchr("Z",t2) && strchr("EQ",t1))) )
 	n = (float)0.5;
+    else if(((strchr("J",t1) && strchr("IL",t2)) ||
+              (strchr("J",t2) && strchr("IL",t1))) )
+	n = (float)0.5;
     else if( strchr("X",t1) && strchr("X",t2) )
 	n = (float)0.0025;
     else if( strchr("X",t1) || strchr("X",t2) )
 	n = (float)0.05;
-
-    return n;
-}
-
-
-
-
-/* @funcstatic distmat_checkambigNuc ******************************************
-**
-** Check ambiguity codes (IUB) to estimate the distance score.
-**
-** @param [r] m1 [char] First base to compare
-** @param [r] m2 [char] Second base to compare
-** @return [float] estimated match
-**
-******************************************************************************/
-
-static float distmat_checkambigNuc(char m1, char m2)
-{
-    AjPStr b1 = NULL;
-    AjPStr b2 = NULL;
-    AjPStr b = NULL;
-    AjPRegexp rexp = NULL;
-    AjBool pmatch = ajFalse;
-
-    ajuint i;
-    float n;
-    ajint len1;
-    ajint len2;
-
-
-    ajBaseInit();
-
-    len1 = ajStrGetLen(aj_base_iubS[(int)m1].list)-1;
-    len2 = ajStrGetLen(aj_base_iubS[(int)m2].list)-1;
-
-    b1 = ajStrNew();
-    ajStrAssignS(&b1,aj_base_iubS[(int)m1].list);
-
-    b2 = ajStrNew();
-    ajStrAssignS(&b2,aj_base_iubS[(int)m2].list);
-
-    /*
-    ** for each base code in 1 cf. base code
-    ** for seq 2 to see if there is a match
-    */
-    for(i = 0;i < (ajuint) len1;i++)
-    {
-	b = ajStrNew();
-	ajStrAssignSubS(&b,b1,i,i);
-	rexp = ajRegComp(b);
-
-	if(ajRegExec(rexp,b2))
-	    pmatch = ajTrue;
-	ajRegFree(&rexp);
-	ajStrDel(&b);
-    }
-
-
-    ajStrDel(&b1);
-    ajStrDel(&b2);
-
-    if(pmatch)
-	n = ((float)1./len1)*((float)1./len2);
-    else
-	n = 0.;
 
     return n;
 }

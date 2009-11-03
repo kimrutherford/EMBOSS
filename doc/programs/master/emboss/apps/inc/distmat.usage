@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>distmat pax.align </b>
-Creates a distance matrix from multiple alignments
+Create a distance matrix from a multiple sequence alignment
 Multiple substitution correction methods for proteins
          0 : Uncorrected
          1 : Jukes-Cantor

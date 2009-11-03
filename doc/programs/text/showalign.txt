@@ -5,96 +5,21 @@
 
 Function
 
-   Displays a multiple sequence alignment
+   Display a multiple sequence alignment in pretty format
 
 Description
 
-   showalign displays an aligned set of protein or a nucleic acid
-   sequences in a style suitable for publication.
-
-   The output is sent to the screen by default for the user to view, but
-   it can write the results to a file.
-
-   The output highlights various differences or similarities between each
-   of the sequences and a reference sequence by setting selected types of
-   matches to a reference sequence to be '.' characters.
-
-   The reference sequence can be either the calculated consensus sequence
-   (the default) or it can be one of the set of aligned sequences,
-   specified by either the ordinal number of that sequence in the input
-   file, or by its name.
-
-   The output sequences can be displayed in either the input order (the
-   default) or they can be sorted in order of their similarity to the
-   reference sequence or sorted alphabetically by their names.
-
-   By using the '-show' option, the displayed sequences can either be
-   shown as:
-     * complete (-show=All),
-     * only identical matches between the sequence and the reference
-       sequence, all other positions being replaced by '.' characters
-       (-show=Identities)
-     * non-identical matches, with identical matches being replaced by
-       '.' characters, similar matches are shown in lower case
-       (-show=Non-identities)
-     * similar matches, with non-similar matches being replaced by '.'
-       characters, similar matches are shown in lower case
-       (-show=Similarities)
-     * dissimilar matches, with identical or similar matches being
-       replaced by '.' characters (-show=Dissimilarities)
-
-   A small table of the way these alignments are displayed illustrates
-   this.
-   If we have a reference protein sequence of "III" and a sequence
-   aligned to this of "ILW", then we have an identical matching residue,
-   then a similar one, then a dissimilar one.
-   The different methods of display would give the following:
-     _________________________________________________________________
-
-Reference       III
-
-All             ILw
-Identical       I..
-Non-id          .lW
-Similar         Il.
-Dissimilar      ..W
-     _________________________________________________________________
-
-   Changing the similar matches to lowercase can optionally be disable by
-   using the option -nosimilarcase.
-
-   The displayed sequence can be numbered by placing a ruler with ticks
-   above the sequence.
-
-   The width of a line can be set. The width of a margin to the left of
-   the sequences that shows the sequence names can be set.
-
-   Specified regions of the sequence can be displayed in uppercase to
-   highlight them.
-
-   The output can be formatted for HTML.
-
-   If the output is being formatted for HTML, then specified regions of
-   the sequence can be displayed in any valid HTML colours.
-
-  The consensus line
-
-   The consensus line can be displayed in a mixture of uppercase and
-   lowercase symbols.
-
-   The uppercase consensus symbol is indicates that the consensus is
-   strong and lowercase indicates that it is weak.
-
-   The cutoff for setting the case of the consensus is set by the
-   qualifier '-setcase'. If the number of residues at that position that
-   match the consensus value is greater than this, then the symbol is in
-   uppercase, otherwise the symbol is in lowercase. By default, the value
-   of setcase is set so that if there are more than 50% of residues
-   identical to the consunsus at that position, then the consensus is in
-   uppercase.
-
-   To put all of the consensus symbols into uppercase or lowercase, make
-   -setcase zero or very large (try 100000 ?).
+   showalign reads a set of aligned protein or a nucleic acid sequences,
+   and writes them to file (or screen) in a style suitable for
+   publication. Similarities and differences of each sequence to a
+   reference sequence are highlighted for specified types of matches. The
+   reference sequence can be the calculated consensus sequence (default)
+   or one of the input set (specified by name or the ordinal number of
+   that sequence in the file). The output sequences can be displayed in
+   either the input order (the default), sorted in order of their
+   similarity to the reference sequence, or sorted alphabetically by
+   their names. There are many other options to control the content and
+   format of the output.
 
 Usage
 
@@ -102,7 +27,7 @@ Usage
 
 
 % showalign 
-Displays a multiple sequence alignment
+Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: globins.msf
 Output file [globins.showalign]: 
 
@@ -115,7 +40,7 @@ Output file [globins.showalign]:
 
 
 % showalign -order=s 
-Displays a multiple sequence alignment
+Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: globins.msf
 Output file [globins.showalign]: 
 
@@ -128,7 +53,7 @@ Output file [globins.showalign]:
 
 
 % showalign -html -high '4-13 green 43-43 red 51-56 blue' 
-Displays a multiple sequence alignment
+Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: globins.msf
 Output file [globins.showalign]: 
 
@@ -143,7 +68,7 @@ Output file [globins.showalign]:
 
 
 % showalign -nocon -norule -nonum -nobot -ref=1 -sb=10 -send=30 
-Displays a multiple sequence alignment
+Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: globins.msf
 Output file [globins.showalign]: 
 
@@ -155,7 +80,7 @@ Output file [globins.showalign]:
 
 
 % showalign -show=n 
-Displays a multiple sequence alignment
+Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: globins.msf
 Output file [globins.showalign]: 
 
@@ -165,7 +90,7 @@ Output file [globins.showalign]:
 
 
 % showalign -show=a 
-Displays a multiple sequence alignment
+Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: globins.msf
 Output file [globins.showalign]: 
 
@@ -177,7 +102,7 @@ Output file [globins.showalign]:
 
 
 % showalign -show=i 
-Displays a multiple sequence alignment
+Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: globins.msf
 Output file [globins.showalign]: 
 
@@ -189,7 +114,7 @@ Output file [globins.showalign]:
 
 
 % showalign -show=s 
-Displays a multiple sequence alignment
+Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: globins.msf
 Output file [globins.showalign]: 
 
@@ -201,7 +126,7 @@ Output file [globins.showalign]:
 
 
 % showalign -show=d 
-Displays a multiple sequence alignment
+Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: globins.msf
 Output file [globins.showalign]: 
 
@@ -213,7 +138,7 @@ Output file [globins.showalign]:
 
 
 % showalign -ref=1 
-Displays a multiple sequence alignment
+Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: globins.msf
 Output file [globins.showalign]: 
 
@@ -225,7 +150,7 @@ Output file [globins.showalign]:
 
 
 % showalign -nocon -ref=1 -sl -upper 9-15 -nosimilarcase 
-Displays a multiple sequence alignment
+Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: globins.msf
 Output file [globins.showalign]: 
 
@@ -237,7 +162,7 @@ Output file [globins.showalign]:
 
 
 % showalign -order=a 
-Displays a multiple sequence alignment
+Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: globins.msf
 Output file [globins.showalign]: 
 
@@ -393,8 +318,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -970,7 +896,60 @@ Data files
 
 Notes
 
-   None.
+   showalign reads in a scoring matrix to determine the consesnus
+   sequence and to determine which matches are similar or not.
+
+   By using the -show option, the displayed sequences can be shown as:
+     * complete (-show=All),
+     * only identical matches between the sequence and the reference
+       sequence, all other positions being replaced by '.' characters
+       (-show=Identities)
+     * non-identical matches, with identical matches being replaced by
+       '.' characters, similar matches are shown in lower case
+       (-show=Non-identities)
+     * similar matches, with non-similar matches being replaced by '.'
+       characters, similar matches are shown in lower case
+       (-show=Similarities)
+     * dissimilar matches, with identical or similar matches being
+       replaced by '.' characters (-show=Dissimilarities)
+
+   Changing the similar matches to lowercase can optionally be disable by
+   using the option -nosimilarcase.
+
+   A small table of the way these alignments are displayed illustrates
+   this. If we have a reference protein sequence of "III" and a sequence
+   aligned to this of "ILW", then we have an identical matching residue,
+   then a similar one, then a dissimilar one. The different methods of
+   display would give the following:
+Reference       III
+
+All             ILw
+Identical       I..
+Non-id          .lW
+Similar         Il.
+Dissimilar      ..W
+
+   The consensus line can be displayed in a mixture of uppercase and
+   lowercase symbols. Uppercase indicates a strong consensus and
+   lowercase a weak one. The cutoff for setting the consensus case is set
+   by the qualifier -setcase. If the number of residues at that position
+   that match the consensus value is greater than this, then the symbol
+   is in uppercase, otherwise the symbol is in lowercase. By default, the
+   value of -setcase is set so that if there are more than 50% of
+   residues identical to the consunsus at that position, then the
+   consensus is in uppercase. To put all of the consensus symbols into
+   uppercase or lowercase, make -setcase zero or very large (try 100000
+   ?).
+
+   Other display options include Sequence numbering ruler with ticks
+   above the sequence. The width of a line can be set. The width of a
+   margin to the left of the sequences that shows the sequence names can
+   be set. Specified regions of the sequence can be displayed in
+   uppercase to highlight them.
+
+   The output can be formatted for HTML. If the output is being formatted
+   for HTML, then specified regions of the sequence can be displayed in
+   any valid HTML colours.
 
 References
 

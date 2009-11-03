@@ -1,5 +1,5 @@
 application: showfeat [
-  documentation: "Show features of a sequence."
+  documentation: "Display features of a sequence in pretty format"
   groups: "Display, Feature tables"
 ]
 

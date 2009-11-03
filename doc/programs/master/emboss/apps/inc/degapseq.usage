@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>degapseq dnagap.fasta nogaps.seq </b>
-Removes gap characters from sequences
+Removes non-alphabetic (e.g. gap) characters from sequences
 
 </pre></td></tr></table><p>
 <p>

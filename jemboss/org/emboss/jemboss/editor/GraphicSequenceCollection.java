@@ -22,7 +22,6 @@ package org.emboss.jemboss.editor;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.awt.print.*;
 import java.util.*;
 import java.io.File;
@@ -78,7 +77,7 @@ public class GraphicSequenceCollection extends JPanel
   /** draw sequence position number */
   protected boolean drawNumber;
   /** draw as per prettplot */
-  private boolean prettPlot = false;
+  //private boolean prettPlot = false;
   /** gap between sequences and consensus plot */
   private int plotConStrut = 20;
   /** pretty plot values */

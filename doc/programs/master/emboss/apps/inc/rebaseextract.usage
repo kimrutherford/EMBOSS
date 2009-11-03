@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>rebaseextract </b>
-Extract data from REBASE
+Process the REBASE database for use by restriction enzyme applications
 REBASE database withrefm file: <b>withrefm</b>
 REBASE database proto file: <b>proto</b>
 

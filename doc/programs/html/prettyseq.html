@@ -24,30 +24,14 @@ prettyseq
 <H2>
     Function
 </H2>
-Output sequence with translated ranges
+Write a nucleotide sequence and its translation to file
 
 <H2>
     Description
 </H2>
 
 
-This writes out a nicely formatted display of the sequence with the
-translation (within specified ranges) displayed beneath it. 
-
-<p>
-
-The translated nucleic acid region will be shown in lower-case letters
-while the rest of the input sequence will be left in the input case.
-
-<p>
-
-The base and residue numbers of the sequences are shown beside the
-sequences in the output. 
-
-<p>
-
-Slightly unusually, this application uses the codon usage tables to
-translate the codons. 
+<p><b>prettyseq</b> reads a nucleotide sequence and writes an output file containing in a clean format the sequence with the translation (within specified ranges) displayed beneath it.  The translated nucleic acid region is given lower-case letters with the rest of the input sequence left in the input case. A specified codon usage table is used to translate the codons.</p>
 
 <H2>
     Usage
@@ -59,7 +43,7 @@ translate the codons.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>prettyseq </b>
-Output sequence with translated ranges
+Write a nucleotide sequence and its translation to file
 Input nucleotide sequence: <b>tembl:x13776</b>
 Range(s) to translate [1-2167]: <b>135-1292</b>
 Output file [x13776.prettyseq]: <b></b>
@@ -127,8 +111,9 @@ Output file [x13776.prettyseq]: <b></b>
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -564,7 +549,10 @@ The directories are searched in the following order:
     Notes
 </H2>
 
-None.
+<p>By default, the base and residue numbers of the sequence and its translation are shown beside the sequences in the output. There are options to change this behaviour.</p>
+
+<p>The translation will be shown in a number of sequence regions only.  The ranges are specified with the <tt>-range</tt> qualifier.  As an alternative to specifying a set of ranges at the command-line, a range file containing such range data may be specified (see "Input File Format").</p>
+
 
 <H2>
     References
@@ -601,20 +589,21 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="abiview.html">abiview</a></td>
-<td>Reads ABI file and display the trace</td>
+<td>Display the trace in an ABI sequencer file</td>
 </tr>
 
 <tr>
 <td><a href="backtranambig.html">backtranambig</a></td>
-<td>Back translate a protein sequence to ambiguous codons</td>
+<td>Back-translate a protein sequence to ambiguous nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="backtranseq.html">backtranseq</a></td>
-<td>Back translate a protein sequence</td>
+<td>Back-translate a protein sequence to a nucleotide sequence</td>
 </tr>
 
 <tr>
@@ -634,57 +623,57 @@ None.
 
 <tr>
 <td><a href="pepnet.html">pepnet</a></td>
-<td>Displays proteins as a helical net</td>
+<td>Draw a helical net for a protein sequence</td>
 </tr>
 
 <tr>
 <td><a href="pepwheel.html">pepwheel</a></td>
-<td>Shows protein sequences as helices</td>
+<td>Draw a helical wheel diagram for a protein sequence</td>
 </tr>
 
 <tr>
 <td><a href="plotorf.html">plotorf</a></td>
-<td>Plot potential open reading frames</td>
+<td>Plot potential open reading frames in a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="prettyplot.html">prettyplot</a></td>
-<td>Displays aligned sequences, with colouring and boxing</td>
+<td>Draw a sequence alignment with pretty formatting</td>
 </tr>
 
 <tr>
 <td><a href="remap.html">remap</a></td>
-<td>Display sequence with restriction sites, translation etc</td>
+<td>Display restriction enzyme binding sites in a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="seealso.html">seealso</a></td>
-<td>Finds programs sharing group names</td>
+<td>Finds programs with similar function to a specified program</td>
 </tr>
 
 <tr>
 <td><a href="showalign.html">showalign</a></td>
-<td>Displays a multiple sequence alignment</td>
+<td>Display a multiple sequence alignment in pretty format</td>
 </tr>
 
 <tr>
 <td><a href="showdb.html">showdb</a></td>
-<td>Displays information on the currently available databases</td>
+<td>Displays information on configured databases</td>
 </tr>
 
 <tr>
 <td><a href="showfeat.html">showfeat</a></td>
-<td>Show features of a sequence</td>
+<td>Display features of a sequence in pretty format</td>
 </tr>
 
 <tr>
 <td><a href="showorf.html">showorf</a></td>
-<td>Pretty output of DNA translations</td>
+<td>Display a nucleotide sequence and translation in pretty format</td>
 </tr>
 
 <tr>
 <td><a href="showseq.html">showseq</a></td>
-<td>Display a sequence with features, translation etc</td>
+<td>Displays sequences with features in pretty format</td>
 </tr>
 
 <tr>
@@ -694,7 +683,7 @@ None.
 
 <tr>
 <td><a href="textsearch.html">textsearch</a></td>
-<td>Search sequence documentation. Slow, use SRS and Entrez!</td>
+<td>Search the textual description of sequence(s)</td>
 </tr>
 
 <tr>

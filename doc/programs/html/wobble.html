@@ -24,28 +24,14 @@ wobble
 <H2>
     Function
 </H2>
-Wobble base plot
+Plot third base position variability in a nucleotide sequence
 
 <H2>
     Description
 </H2>
 
 
-Wobble plots the third position variability as an indicator of a 
-potential coding region.
-<p>
-
-For each of the six possible translation frames, this plots a graph
-showing the percentage of 'G' and 'C' bases in the third position of
-codons in the frame within a window that is moved over the sequence. 
-<p>
-
-Bases other than 'G' and 'C' can be chosen with the <b>-bases</b> option.
-<p>
-
-The Mean of the third base percentage value is drawn as a horizontal
-line across the plots. 
-<p>
+<p><B>wobble</B> draws a plot of the third base position variability in a nucleotide sequence as an indicator of potential coding regions.  For each of the six possible translation frames, it plots a graph showing the percentage of <tt>G</tt> and <tt>C</tt> bases in the third position of codons in the frame within a window that is moved over the sequence. The mean of the third base percentage value is drawn as a horizontal line across the plots.  Optionally, bases other than <tt>G</tt> and <tt>C</tt> can be chosen. Optionally, the same data can be written to an output file.</p>
 
 
 <H2>
@@ -60,7 +46,7 @@ Here is a sample session with wobble. The example sequence is from Pseudomonas a
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>wobble </b>
-Wobble base plot
+Plot third base position variability in a nucleotide sequence
 Input nucleotide sequence: <b>tembl:x13776</b>
 Graph type [x11]: <b>cps</b>
 Output file [x13776.wobble]: <b></b>
@@ -125,8 +111,9 @@ Created wobble.ps
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -406,7 +393,8 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="getorf.html">getorf</a></td>
 <td>Finds and extracts open reading frames (ORFs)</td>
@@ -414,17 +402,17 @@ None.
 
 <tr>
 <td><a href="marscan.html">marscan</a></td>
-<td>Finds MAR/SAR sites in nucleic sequences</td>
+<td>Finds matrix/scaffold recognition (MRS) signatures in DNA sequences</td>
 </tr>
 
 <tr>
 <td><a href="plotorf.html">plotorf</a></td>
-<td>Plot potential open reading frames</td>
+<td>Plot potential open reading frames in a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="showorf.html">showorf</a></td>
-<td>Pretty output of DNA translations</td>
+<td>Display a nucleotide sequence and translation in pretty format</td>
 </tr>
 
 <tr>
@@ -434,12 +422,12 @@ None.
 
 <tr>
 <td><a href="syco.html">syco</a></td>
-<td>Synonymous codon usage Gribskov statistic plot</td>
+<td>Draw synonymous codon usage statictic plot for a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="tcode.html">tcode</a></td>
-<td>Fickett TESTCODE statistic to identify protein-coding DNA</td>
+<td>Identify protein-coding regions using Fickett TESTCODE statistic</td>
 </tr>
 
 </table>

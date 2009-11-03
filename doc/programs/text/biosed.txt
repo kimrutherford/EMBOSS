@@ -10,21 +10,23 @@ Function
 Description
 
    biosed is a simple sequence editing utility that searches for a target
-   subsequence in one or more input sequences and replaces it with a
-   specified second subsequence (or optionally just deletes the found
-   target subsequence).
+   subsequence in one or more input sequences and replaces it with an
+   insert subsequence, or optionally, just deletes the target subsequence
+   where found. If the target subsequence occurs more than once, then
+   each instance of the target is replaced or deleted.
+   The -position option allows a sequence position to be specified as an
+   additional constraint for the match: a replacement / deletion only
+   occurs if the start of a match is at the specified -position position.
 
-   biosed was inspired by the useful UNIX utility sed which searches for
-   a pattern in text and can replace or delete the found pattern.
+Algorithm
 
-   If the target subsequence occurs more than once, then each instance of
-   the target is replaced.
-
-   The target subsequence is not any sort of an ambiguity pattern, it is
-   just a short sequence. A simple string match is done and if it exactly
-   matches then the replacement is done. The matching is independent of
-   the case of the sequence or the target - both uppercase and lowercase
-   will match.
+   The target subsequence is just a short, literal sequence of
+   characters. biosed cannot interpret cannot any sort of an ambiguity
+   pattern such as a regular expression. A simple string match is done
+   between the target and input sequences. If there is an exact matches
+   then the replacement or deletion is done. The matching is case
+   insensitive, independent of the case of both the input sequences and
+   target.
 
 Usage
 
@@ -101,8 +103,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -365,7 +368,8 @@ Data files
 
 Notes
 
-   The edited sequence will be output in uppercase.
+   biosed was inspired by the useful UNIX utility sed which searches for
+   a pattern in text and can replace or delete the found pattern.
 
 References
 
@@ -373,10 +377,11 @@ References
 
 Warnings
 
-   No check is made on the replacement subsequence.
-   Any text can be used as the replacement, including characters only
-   used in proteins (e.g. D, E, F, etc.), characters rarely used in
-   proteins (e.g. U, J, O, etc), digits and punctuation characters.
+   No check for correct type (protein, nucleic, gapped etc) is made on
+   the replacement sequence so you must ensure it is of the type
+   required. Any text can be used, including characters only used in
+   proteins (e.g. D, E, F, etc.), characters rarely used in proteins
+   (e.g. U, J, O, etc), digits and punctuation characters.
 
 Diagnostic Error Messages
 

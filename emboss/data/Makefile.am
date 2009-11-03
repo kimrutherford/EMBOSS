@@ -1,4 +1,5 @@
-SUBDIRS = AAINDEX CODONS REBASE PRINTS PROSITE
+SUBDIRS = AAINDEX CODONS REBASE PRINTS PROSITE JASPAR_CORE JASPAR_FAM \
+	  JASPAR_PHYLOFACTS JASPAR_CNE JASPAR_POLII JASPAR_SPLICE
 
 pkgdata_DATA = EBLOSUM30 EBLOSUM35 EBLOSUM40 EBLOSUM45 EBLOSUM50 \
                EBLOSUM55 EBLOSUM60 EBLOSUM62 EBLOSUM62-12 EBLOSUM65 \
@@ -20,11 +21,13 @@ pkgdata_DATA = EBLOSUM30 EBLOSUM35 EBLOSUM40 EBLOSUM45 EBLOSUM50 \
                Eamino.dat Eangles.dat Eangles_tri.dat Eantigenic.dat \
                Ebases.iub Edayhoff.freq Edna.melt Eembl.ior Eenergy.dat \
                Efeatures.embl Efeatures.emboss \
-               Efeatures.gff Efeatures.gff3 Efeatures.gffprotein \
+               Efeatures.gff Efeatures.gff3 \
+               Efeatures.gffprotein Efeatures.gff3protein \
                Efeatures.pir Efeatures.protein Efeatures.swiss \
                Efreqs.dat Ehet.dat Ehth.dat \
-               Ehth87.dat Ememe.dat Enakai.dat Epepcoil.dat Epk.dat \
-               Epprofile Eprior1.plib Eprior30.plib Erna.melt \
+               Ehth87.dat Ememe.dat Emolwt.dat Enakai.dat \
+               Epepcoil.dat Epk.dat \
+               Epprofile Eprior1.plib Eprior30.plib Erna.melt Eresidues.iub \
                Esig.euk Esig.pro \
                Etags.embl Etags.emboss \
                Etags.gff Etags.gff3 Etags.gffprotein \

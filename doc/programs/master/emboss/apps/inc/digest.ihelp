@@ -5,16 +5,26 @@
                                   (Lys-C); 3 (Arg-C); 4 (Asp-N); 5
                                   (V8-bicarb); 6 (V8-phosph); 7
                                   (Chymotrypsin); 8 (CNBr))
+   -mono               boolean    [N] Use monoisotopic weights
   [-outfile]           report     [*.digest] Output report file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
-   -aadata             datafile   [Eamino.dat] Molecular weight data for amino
+   -mwdata             datafile   [Emolwt.dat] Molecular weight data for amino
                                   acids
-   -unfavoured         boolean    Trypsin will not normally cut after a K if
-                                  it is followed by (e.g.) another K or a P.
-                                  Specifying this shows those cuts. as well as
-                                  the favoured ones.
+   -unfavoured         boolean    Trypsin will not normally cut after 'KR' if
+                                  they are followed by any of 'KRIFLP'. Lys-C
+                                  will not normally cut after 'K' if it is
+                                  followed by 'P'. Arg-C will not normally cut
+                                  after 'R' if it is followed by 'P'.
+                                  V8-bicarb will not normally cut after 'E' if
+                                  it is followed by any of 'KREP'. V8-phosph
+                                  will not normally cut after 'DE' if they are
+                                  followed by 'P'. Chymotrypsin will not
+                                  normally cut after 'FYWLM' if they are
+                                  followed by 'P'. Specifying unfavoured shows
+                                  these unfavoured cuts as well as the
+                                  favoured ones.
    -ragging            boolean    Allows semi-specific and non-specific
                                   digestion. This option is particularly
                                   useful for generating lists of peptide
@@ -56,14 +66,16 @@
    -raccshow2          boolean    Show accession number in the report
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
+   -rstrandshow2       boolean    Show the nucleotide strand in the report
    -rusashow2          boolean    Show the full USA in the report
    -rmaxall2           integer    Maximum total hits to report
    -rmaxseq2           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options

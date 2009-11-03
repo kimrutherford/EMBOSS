@@ -1,6 +1,5 @@
 application: seqmatchall [
-  documentation: "All-against-all comparison of a set of
-                  sequences"
+  documentation: "All-against-all word comparison of a sequence set"
   groups: "Alignment:Local"
 ]
 

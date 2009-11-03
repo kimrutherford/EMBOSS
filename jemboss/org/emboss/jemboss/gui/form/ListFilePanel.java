@@ -28,6 +28,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import org.emboss.jemboss.gui.ScrollPanel;
+import org.emboss.jemboss.gui.SetUpMenuBar;
 import org.emboss.jemboss.gui.sequenceChooser.*;
 import org.emboss.jemboss.JembossParams;
 
@@ -52,7 +53,7 @@ public class ListFilePanel extends JPanel
   * @param mysettings	jemboss properties
   *
   */  
-  public ListFilePanel(int nFiles, JembossParams mysettings)
+  public ListFilePanel(int nFiles, JembossParams mysettings, boolean getDefaults)
   {
     super(new BorderLayout());
     this.nFiles = nFiles;
@@ -72,6 +73,9 @@ public class ListFilePanel extends JPanel
         fcdim = new Dimension(210, (int)fcdim.getHeight());
       }
       fileChooser[i].setPreferredSize(fcdim);
+      String defaultSeq = getDefaults ? SetUpMenuBar.seqList.getDefaultSequenceName(i) : null;
+      if(defaultSeq != null)
+        fileChooser[i].setText(defaultSeq);
 
       bdown.add(Box.createVerticalStrut(2));  
     }

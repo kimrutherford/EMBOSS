@@ -9,33 +9,30 @@ Function
 
 Description
 
-   sixpack takes a nucleic acid sequence and writes out the forward and
-   reverse senses of the sequence with the 3 forward and three reverse
-   translations in a pretty display format.
-
-   It also writes a file containing the open reading frames that are
-   larger than the specified minimum size (default 1 base, showing all
-   possible open reading frames). These open reading frames are written
-   as protein sequences in the default output sequence format.
-
-   An open reading frame is defined in this program as any possible
-   translation between two STOP codons.
+   sixpack reads a DNA sequence and writes an output file giving out the
+   forward and reverse sense sequences with the three forward and
+   (optionally) three reverse translations in a pretty display format. A
+   genetic code may be specified for the translation. There are various
+   options to control the appearance of the output file. It also writes a
+   file of protein sequences corresponding to any open reading frames
+   that are larger than the specified minimum size: the default of 1 base
+   shows all possible open reading frames.
 
 Algorithm
 
-   The nucleic acid sequence is read in.
-   The required genetic code is read in from the EGC* data files.
-   The three forward and three reverse translations are created.
-   The name and description are written to the ouput display file.
-   Any required regions to be changed to upper case are changed.
-   Any required regions to be highlighted in HTML colour tags are
-   changed.
-   The reverse sense sequence is placed below the forward sequence.
-   The forward translations are placed above the sequences.
-   The reverse translation are placed below the sequences.
-   The display is written out, split at the ends of lines.
-   Any ORFs that are longer than the specified minimum size are written
-   to the output sequence file.
+   The program takes the following steps:
+ The nucleic acid sequence is read in.
+ The required genetic code is read in from the EGC* data files.
+ The three forward and three reverse translations are created.
+ The name and description are written to the ouput display file.
+ Any required regions to be changed to upper case are changed.
+ Any required regions to be highlighted in HTML colour tags are changed.
+ The reverse sense sequence is placed below the forward sequence.
+ The forward translations are placed above the sequences.
+ The reverse translation are placed below the sequences.
+ The display is written out, split at the ends of lines.
+ Any ORFs that are longer than the specified minimum size are written to the ou
+tput sequence file.
 
 Usage
 
@@ -171,8 +168,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -683,7 +681,11 @@ Base3  = TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG
 
 Notes
 
-   None.
+   An open reading frame is defined in this program as any possible
+   translation between two STOP codons. Optionally, the beginning or end
+   of a sequence may be counted as an ORF even if it's less than the
+   minimal ORF size or (end only) lacking a STOP codon. See the -firstorf
+   and -lastorf options.
 
 References
 
@@ -707,32 +709,36 @@ Known bugs
 
 See also
 
-   Program name                         Description
-   abiview       Reads ABI file and display the trace
-   backtranambig Back translate a protein sequence to ambiguous codons
-   backtranseq   Back translate a protein sequence
-   cirdna        Draws circular maps of DNA constructs
-   coderet       Extract CDS, mRNA and translations from feature tables
-   getorf        Finds and extracts open reading frames (ORFs)
-   lindna        Draws linear maps of DNA constructs
-   marscan       Finds MAR/SAR sites in nucleic sequences
-   pepnet        Displays proteins as a helical net
-   pepwheel      Shows protein sequences as helices
-   plotorf       Plot potential open reading frames
-   prettyplot    Displays aligned sequences, with colouring and boxing
-   prettyseq     Output sequence with translated ranges
-   remap         Display sequence with restriction sites, translation etc
-   seealso       Finds programs sharing group names
-   showalign     Displays a multiple sequence alignment
-   showdb        Displays information on the currently available databases
-   showfeat      Show features of a sequence
-   showorf       Pretty output of DNA translations
-   showseq       Display a sequence with features, translation etc
-   syco          Synonymous codon usage Gribskov statistic plot
-   tcode         Fickett TESTCODE statistic to identify protein-coding DNA
-   textsearch    Search sequence documentation. Slow, use SRS and Entrez!
-   transeq       Translate nucleic acid sequences
-   wobble        Wobble base plot
+   Program name Description
+   abiview Display the trace in an ABI sequencer file
+   backtranambig Back-translate a protein sequence to ambiguous
+   nucleotide sequence
+   backtranseq Back-translate a protein sequence to a nucleotide sequence
+   cirdna Draws circular maps of DNA constructs
+   coderet Extract CDS, mRNA and translations from feature tables
+   getorf Finds and extracts open reading frames (ORFs)
+   lindna Draws linear maps of DNA constructs
+   marscan Finds matrix/scaffold recognition (MRS) signatures in DNA
+   sequences
+   pepnet Draw a helical net for a protein sequence
+   pepwheel Draw a helical wheel diagram for a protein sequence
+   plotorf Plot potential open reading frames in a nucleotide sequence
+   prettyplot Draw a sequence alignment with pretty formatting
+   prettyseq Write a nucleotide sequence and its translation to file
+   remap Display restriction enzyme binding sites in a nucleotide
+   sequence
+   seealso Finds programs with similar function to a specified program
+   showalign Display a multiple sequence alignment in pretty format
+   showdb Displays information on configured databases
+   showfeat Display features of a sequence in pretty format
+   showorf Display a nucleotide sequence and translation in pretty format
+   showseq Displays sequences with features in pretty format
+   syco Draw synonymous codon usage statictic plot for a nucleotide
+   sequence
+   tcode Identify protein-coding regions using Fickett TESTCODE statistic
+   textsearch Search the textual description of sequence(s)
+   transeq Translate nucleic acid sequences
+   wobble Plot third base position variability in a nucleotide sequence
 
 Author(s)
 

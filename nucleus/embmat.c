@@ -117,10 +117,10 @@ void embMatMatchDel(EmbPMatMatch *s)
 
 void embMatPrintsInit(AjPFile *fp)
 {
-    ajFileDataNewC(PRINTS_MAT,fp);
+    *fp = ajDatafileNewInNameC(PRINTS_MAT);
 
     if(!*fp)
-	ajFatal("prints.mat file not found. Create it with printsextract.");
+	ajFatal("%s file not found. Create it with printsextract.", PRINTS_MAT);
 
     return;
 }
@@ -154,7 +154,7 @@ EmbPMatPrints embMatProtReadInt(AjPFile fp)
     p = ajStrGetPtr(line);
     while(!*p || *p=='#' || *p=='!' || *p=='\n')
     {
-	if(!ajFileReadLine(fp,&line))
+	if(!ajReadlineTrim(fp,&line))
 	{
 	    ajStrDel(&line);
 	    return NULL;
@@ -170,12 +170,12 @@ EmbPMatPrints embMatProtReadInt(AjPFile fp)
     ret->cod = ajStrNew();
     ajStrAssignS(&ret->cod,line);
 
-    ajFileReadLine(fp,&line);
+    ajReadlineTrim(fp,&line);
     ret->acc = ajStrNew();
     ajStrAssignS(&ret->acc,line);
-    ajFileReadLine(fp,&line);
+    ajReadlineTrim(fp,&line);
     ajStrToUint(line,&ret->n);
-    ajFileReadLine(fp,&line);
+    ajReadlineTrim(fp,&line);
     ret->tit = ajStrNew();
     ajStrAssignS(&ret->tit,line);
 
@@ -187,18 +187,18 @@ EmbPMatPrints embMatProtReadInt(AjPFile fp)
 
     for(m=0;m<ret->n;++m)
     {
-	ajFileReadLine(fp,&line);
+	ajReadlineTrim(fp,&line);
 	ajStrToUint(line,&ret->len[m]);
-	ajFileReadLine(fp,&line);
+	ajReadlineTrim(fp,&line);
 	ajStrToUint(line,&ret->thresh[m]);
-	ajFileReadLine(fp,&line);
+	ajReadlineTrim(fp,&line);
 	ajStrToUint(line,&ret->max[m]);
 	ajDebug ("m: %d/%d len:%d thresh:%d max:%d\n",
 		 m, ret->n, ret->len[m], ret->thresh[m], ret->max[m]);
 	for(i=0;i<26;++i)
 	{
 	    AJCNEW0(ret->matrix[m][i], ret->len[m]);
-	    ajFileReadLine(fp,&line);
+	    ajReadlineTrim(fp,&line);
 	    ajDebug ("Linec [%d][%d]: %S\n", m, i, line);
 	    p = ajStrGetPtr(line);
 	    for(j=0;j<ret->len[m];++j)
@@ -212,7 +212,7 @@ EmbPMatPrints embMatProtReadInt(AjPFile fp)
 	}
     }
 
-    ajFileReadLine(fp,&line);
+    ajReadlineTrim(fp,&line);
     ajDebug ("Linec: %S\n", line);
 
     ajStrDel(&line);
@@ -306,7 +306,7 @@ ajuint embMatProtScanInt(const AjPStr s, const AjPStr n, const EmbPMatPrints m,
     p = q = ajStrGetuniquePtr(&t);
     slen = ajStrGetLen(t);
     for(i=0;i<slen;++i,++p)
-	*p = ajSysCastItoc(ajAZToInt((ajint)*p));
+	*p = ajSysCastItoc(ajBasecodeToInt((ajint)*p));
     p = q;
 
     *all = *ordered = ajTrue;

@@ -20,14 +20,12 @@
 
 package org.emboss.jemboss.soap;
 
-import java.io.*;
 import java.util.*;
 
 import org.emboss.jemboss.JembossParams;
 import javax.swing.JOptionPane;
 //AXIS
 import org.apache.axis.client.Call;
-import org.apache.axis.client.Service;
 import javax.xml.namespace.QName;
 import org.apache.axis.encoding.XMLType;
 
@@ -87,7 +85,7 @@ public class PrivateRequest
        org.apache.axis.client.Service serv =
                                new org.apache.axis.client.Service();
        Call    call     = (Call) serv.createCall();
-       QName   qn       = new QName(service, method);
+       //QName   qn       = new QName(service, method);
        call.setTargetEndpointAddress( new java.net.URL(endpoint) );
        call.setOperationName(new QName(service, method));
        call.setEncodingStyle(org.apache.axis.Constants.URI_SOAP12_ENC);

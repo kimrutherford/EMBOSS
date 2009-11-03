@@ -1,6 +1,5 @@
 application: primersearch [
-  documentation: "Searches DNA sequences for matches with
-                  primer pairs"
+  documentation: "Search DNA sequences for matches with primer pairs"
   groups: "Nucleic:Primers"
 ]
 

@@ -22,12 +22,13 @@ base_pair_twist_angles            file           DNA base pair twist angle data
 base_trimer_roll_angles           file           DNA base timer roll angles data
 blast_nucleotide_dbname           string         Blast nucleotide database name
 blast_protein_dbname              string         Blast protein database name
+caf_project                       file           CAF assembly project file
 cds_sequence                      sequence       Coding
 clique_input                      file           Phylip clique program input
 clique_output                     file           Phylip clique program output
 codon_list                        string         Codon triplet(s)
 codon_usage                       codon          Codon usage
-comparison_matrix                 file           Comparison matrix
+comparison_matrix                 file           Comparison matrix file
 comparison_matrix_name            string         Comparison matrix name
 complex_temporary_output          file           Program complex temporary
 compseq_output                    file           Program compseq output
@@ -50,7 +51,8 @@ discrete_characters               discretestates Phylip character discrete state
 discrete_states                   discretestates Phylip discrete states
 discriminator                     file           Discriminator
 distance_matrix                   distances      Phylip distance matrix
-dna_fasta                         file           Nucleotide sequence in fasta format
+dna_fasta                         file           Nucleotide sequence in FASTA format
+dna_fasta_set                     file           Nucleotide sequences in FASTA format
 dnacomp_output                    file           Phylip dnacomp program output
 dnadist_output                    file           Phylip dnadist program output
 dnainvar_output                   file           Phylip dnainvar program output
@@ -69,6 +71,7 @@ domain_clean_coordinates          file           Clean domain coordinates
 domain_families                   file           Domain families
 domain_hits                       file           Domain hits
 domain_pdb                        file           Domain pdb
+domainatrix_calculations_log      file           Domainatrix calculations log
 domainatrix_ligand_hits           file           Domainatrix LHF ligand hits
 domainatrix_log                   file           Domainatrix log
 domainatrix_signature             file           Domainatrix signature
@@ -90,6 +93,8 @@ enzyme_data                       file           Enzyme kinetics data (applicati
 enzyme_list                       string         Restriction enzyme name list
 enzyme_name                       string         Restriction enzyme name
 est_sequence                      sequence       Spliced EST
+exp_file                          file           EXP assembly project file
+exp_file_of_filenames             file           EXP assembly project file of filenames
 external_program                  string         External program name
 factor_input                      file           Phylip factor program input
 factor_output                     file           Phylip factor program output
@@ -100,6 +105,7 @@ feature_tag_list                  string         List of feature tags with wildc
 feature_tagvalue_list             string         List of feature tag values with wildcards, separated by |
 file_extension                    string         Filename extension
 filename                          string         Input base filename
+file_basename                     string         Input filename base name
 filename_prefix                   string         Input filename prefix
 filename_wildcard                 string         Input filename wildcard
 fitch_input                       file           Phylip fitch program input
@@ -133,6 +139,8 @@ integer_gap_extension             integer        Affine gap extension penalty
 integer_gap_penalty               integer        Affine gap penalty
 integer_long_data                 file           Standard format information on int and long data
 inverted_output                   file           Sanger Centre program inverted output
+jaspar_database                   file           JASPAR database
+jaspar_matrix_id		  string	 JASPAR matrix identifier
 keywords                          file           Keywords file
 kitsch_input                      file           Phylip kitsch program input
 kitsch_output                     file           Phylip kitsch program output
@@ -147,18 +155,23 @@ meme_database                     file           MEME database
 meme_background_frequencies       file           MEME background frequencies file
 meme_motif_order                  string         MEME directive for ordering and spacing of motifs
 meme_output                       file           MEME program output
+mira_parameters                   file           MIRA program parameters
+mira_strain_data                  file           MIRA program strain data file
 mix_input                         file           Phylip mix program input
 mix_output                        file           Phylip mix program output
-molwt                             file           Molecular weights
+molecular_weights                 file           Molecular weights
 mrna_sequence                     sequence       Messenger RNA
 multistate_factors                properties     Phylip multistate factors
 naccess_log                       file           Naccess program log
 name                              string         Single word without spaces
+name_prefix                       string         First part of a name
+name_suffix                       string         Last part of a name
 neighbor_input                    file           Phylip neighbor program input
 neighbor_output                   file           Phylip neighbor program output
 newcoils_datafile                 file           Program newcoils data
 newick                            tree           Phylip tree
 newick_tree                       file           Phylip tree
+non_coding_sequence               sequence       Non-coding
 nucleotide_codes                  string         DNA/RNA sequence characters
 nucleotide_sequence               string         DNA/RNA sequence
 output_delimiter                  string         Delimiter between fields in single line output
@@ -174,6 +187,8 @@ penny_input                       file           Phylip penny program input
 penny_output                      file           Phylip penny program output
 pepstats_output                   file           Pepstats program output
 peptide_molweights                file           Peptide molecular weight values
+phd_file_of_filenames             file           PHD assembly project file of filenames
+phd_sequences                    file           PHD assembly project sequences file
 phylip_ancestor                   file           Phylip ancestor data
 phylip_category_values            string         Space-separated phylip category values
 phylip_factor                     file           Phylip factor data
@@ -200,13 +215,15 @@ protdist_input                    file           Phylip protdist program input
 protdist_output                   file           Phylip protdist program output
 protein_clean_coordinates         file           Clean protein structure coordinates
 protein_codes                     string         Protein sequence characters
+protein_fasta                     file           Protein sequence in FASTA format
+protein_fasta_set                 file           Protein sequences in FASTA format
 protpars_input                    file           Phylip protpars program input
 protpars_output                   file           Phylip protpars program output
 quicktandem_output                file           Sanger Centre program quicktandem output
 raw_cath_domlist                  file           Raw cath domlist
 raw_cath_list                     file           Raw cath list
 raw_cath_names                    file           Raw cath names
-raw_dictionary_of_heterogen_groups file           Raw dictionary of heterogen groups
+raw_dictionary_of_heterogen_groups file          Raw dictionary of heterogen groups
 raw_scop_classification           file           Raw scop classification
 raw_scop_description              file           Raw scop description
 rebase_proto                      file           REBASE database proto
@@ -219,7 +236,7 @@ restml_input                      file           Phylip restml program input
 restml_output                     file           Phylip restml program output
 restriction_enzyme_data           file           Restriction enzyme data
 rna_concentration                 file           Vienna RNA concentration data
-rna_constraint                    file           Vienna RNA structure contraints
+rna_constraint                    file           Vienna RNA structure constraints
 rna_parameter                     file           Vienna RNA parameters
 rna_structures                    file           Vienna RNA structures
 rnaeval_output                    file           Vienna RNAeval output
@@ -227,6 +244,7 @@ rnafold_output                    file           Vienna RNAfold output
 rnalfold_output                   file           Vienna RNALfold output
 rocplot_summary                   file           Rocplot summary
 secondary_structure               file           Secondary structure
+scf_file                          file           SCF assembly project file
 selex                             file           Selex alignment
 seqalign_input                    file           Program seqalign input
 seqboot_input                     file           Phylip seqboot program input
@@ -237,19 +255,24 @@ seqbootrest_output                file           Phylip seqboot_rest program out
 seqbootseq_output                 file           Phylip seqboot_seq program output
 sequence                          string         Sequence
 sequence_data                     file           Sequence
+sequence_fasta                    file           Nucleotide or protein sequence in FASTA format
+sequence_fasta_set                file           Nucleotide or protein sequences in FASTA format
 sequence_id_input                 string         Sequence identifier for an input sequence
 sequence_id_list                  string         Sequence identifier list or @filename for input sequences
 sequence_id_output                string         Sequence identifier for an output sequence
 sequence_mask_character           string         Sequence code or space (lowercase) for sequence masking
 sequence_overlap                  file           Sequence overlaps
 sequence_range                    string         Sequence range in the format nn..nn
+sequence_read_quality             file           Sequence read quality scores
 sequence_type                     string         EMBOSS sequence type
+sequence_trace_information        file           Sequence trace information
 signature_alignment               file           Domainatrix signature alignment
 sigscanlig_output                 file           Domainatrix sigscanlig program output
 sim4_output                       file           Sim4 program output
 sites_log                         file           Sites log
 sort_utility_options              string         Command line options for the system sort utility
-standard_molwt                    file           Molecular weight standards
+standard_molecular_weights        file           Molecular weight standards
+strain_name                       string         Strain name
 stride_log                        file           Stride program log
 string                            string         Any string value
 supermatcher_error                file           Program supermatcher errors
@@ -271,8 +294,10 @@ url_suffix                        string         Suffix for all URLs
 usa_list                          file           List of USAs
 van_der_waals_radii               file           Van der waals radii
 vector                            file           Cloning vector definition
+vienna_alignment                  file           Vienna RNA alignment
 vienna_dotplot                    file           Vienna dotplot postscript
 vienna_structure                  file           Vienna structure postscript
 weights                           properties     Phylip weights
 white_wimley_datafile             file           White-Wimley data
 wildcard_string                   string         String with wildcard characters
+wordfinder_error                  file           Program wordfinder errors

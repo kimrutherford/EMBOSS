@@ -1,6 +1,5 @@
 application: profit [
-  documentation: "Scan a sequence or database with a matrix
-                  or profile"
+  documentation: "Scan one or more sequences with a simple frequency matrix"
   groups: "Nucleic:Profiles, Protein:Profiles"
 ]
 

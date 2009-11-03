@@ -24,7 +24,6 @@ package org.emboss.jemboss.gui.filetree;
 import java.awt.datatransfer.*;
 import javax.swing.tree.*;
 import java.io.*;
-import java.util.*;
 
 /**
 *

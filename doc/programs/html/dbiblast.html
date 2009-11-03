@@ -51,57 +51,6 @@ with different index file names, <b>dbiblast</b> will ask about the database
 type. If the answer is "unknown" <b>dbiblast</b> will test each possible set
 of file names until one is found.
 
-<p>
-
-Having created the EMBOSS indices for this file, a database can then be
-defined in the file <b>emboss.defaults</b> as something like:
-
-<p>
-
-<pre>
-DB swnew [
-   type: P
-   format: embl
-   method: blast
-   directory: /data/embl
-]  
-</pre>
-
-
-<h3>Fields Indexed</H3>
-
-By default, <b>dbiblast</b> will index the ID name and the accession number (if present).
-
-<br>
-
-If they are present in your database, you may specify that
-<b>dbiblast</b> should index the Sequence Version and GI number and the
-words in the description by using the '-fields' qualifier with the
-appropriate values. 
-
-<h3>Indexing the Blast database</h3>
-
-<b>dbiblast</b> can't use the new style of Blast indices.  You must
-create the old style of Blast indices by adding <b>-A F</b> to the
-formatdb command line. 
-
-<p>
-
-The reason is that NCBI have not documented the new format, so we cannot
-extend dbiblast to read it.
-
-<p>
-
-If you have the original (fasta format) file you can build the previous
-blast database format with:
-
-<p>
-
-<i>formatdb -A F</i>
-
-<p>
-
-This turns off the new "ASN.1" formatting. blastall will still work. 
 
 
 <H2>
@@ -185,8 +134,9 @@ General log output file [outfile.dbiblast]: <b></b>
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -366,10 +316,10 @@ Any BLAST1 or BLAST2 database index files.
 <pre>
 ########################################
 # Program: dbiblast
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Dbname: swnew
 # Release: 0.0
-# Date: 15/07/07
+# Date: 15/07/08
 # CurrentDirectory: /homes/user/test/qa/dbiblast-ex-keep/
 # IndexDirectory: ./
 # IndexDirectoryPath: /homes/user/test/qa/dbiblast-ex-keep/
@@ -450,6 +400,60 @@ None.
 create the old style of Blast indices by adding <b>-A F</b> to the
 formatdb command line. 
 
+
+<p>
+
+Having created the EMBOSS indices for this file, a database can then be
+defined in the file <b>emboss.defaults</b> as something like:
+
+<p>
+
+<pre>
+DB swnew [
+   type: P
+   format: embl
+   method: blast
+   directory: /data/embl
+]  
+</pre>
+
+
+<h3>Fields Indexed</H3>
+
+By default, <b>dbiblast</b> will index the ID name and the accession number (if present).
+
+<br>
+
+If they are present in your database, you may specify that
+<b>dbiblast</b> should index the Sequence Version and GI number and the
+words in the description by using the '-fields' qualifier with the
+appropriate values. 
+
+<h3>Indexing the Blast database</h3>
+
+<b>dbiblast</b> can't use the new style of Blast indices.  You must
+create the old style of Blast indices by adding <b>-A F</b> to the
+formatdb command line. 
+
+<p>
+
+The reason is that NCBI have not documented the new format, so we cannot
+extend dbiblast to read it.
+
+<p>
+
+If you have the original (fasta format) file you can build the previous
+blast database format with:
+
+<p>
+
+<i>formatdb -A F</i>
+
+<p>
+
+This turns off the new "ASN.1" formatting. blastall will still work. 
+
+
 <H2>
     References
 </H2>
@@ -486,10 +490,11 @@ formatdb command line.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="dbifasta.html">dbifasta</a></td>
-<td>Database indexing for fasta file databases</td>
+<td>Index a fasta file database</td>
 </tr>
 
 <tr>
@@ -504,17 +509,17 @@ formatdb command line.
 
 <tr>
 <td><a href="dbxfasta.html">dbxfasta</a></td>
-<td>Database b+tree indexing for fasta file databases</td>
+<td>Index a fasta file database using b+tree indices</td>
 </tr>
 
 <tr>
 <td><a href="dbxflat.html">dbxflat</a></td>
-<td>Database b+tree indexing for flat file databases</td>
+<td>Index a flat file database using b+tree indices</td>
 </tr>
 
 <tr>
 <td><a href="dbxgcg.html">dbxgcg</a></td>
-<td>Database b+tree indexing for GCG formatted databases</td>
+<td>Index a GCG formatted database using b+tree indices</td>
 </tr>
 
 </table>

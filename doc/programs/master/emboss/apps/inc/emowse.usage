@@ -5,10 +5,11 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>emowse </b>
-Protein identification by mass spectrometry
+Search protein sequences by digest fragment molecular weight
 Input protein sequence(s): <b>tsw:*</b>
 Peptide molecular weight values file: <b>test.mowse</b>
 Whole sequence molwt [0]: <b></b>
+Use monoisotopic weights [N]: <b></b>
 Output file [edd1_rat.emowse]: <b></b>
 
 </pre></td></tr></table><p>

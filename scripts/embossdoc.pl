@@ -261,7 +261,7 @@ sub secttest($$) {
     elsif ($sect =~ /Miscellaneous$/) {$stype = "misc"}
     if ($stype eq "") {return $stype}
     if ($stype ne $ctype) {
-	print "bad category '$ctype' in section '$sect'\n";
+	print "bad category '$ctype' (expected '$stype') in section '$sect'\n";
     }
     return $stype;
 }
@@ -588,6 +588,8 @@ $filestr = "<p><b>Datatypes:</b> ";
 $filestrstatic = "<p><b>Datatypes:</b> ";
 
 $ftable = "";
+
+$lastfname = "";
 
 ### cppreserved is a list of C++ reserved words not to be used as param names.
 ### test is whether to test the return etc.

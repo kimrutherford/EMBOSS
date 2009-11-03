@@ -7,7 +7,7 @@ The input sequence is the human herpesvirus tandem repeat.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>equicktandem -noorigfile </b>
-Finds tandem repeats
+Finds tandem repeats in nucleotide sequences
 Input nucleotide sequence: <b>tembl:L46634</b>
 Maximum repeat size [600]: <b></b>
 Threshold score [20]: <b></b>

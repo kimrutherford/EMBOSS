@@ -124,7 +124,7 @@ int main(int argc, char **argv)
 	    y[i] = f / (float)window;
 	}
 
-	if(!plot && c)
+	if(!plot && c && outf)
 	{
 	    ajFmtPrintF(outf,"FREAK of %s from %d to %d Window %d Step %d\n\n",
 			ajSeqGetNameC(seq),pos+1,end+1,window,step);

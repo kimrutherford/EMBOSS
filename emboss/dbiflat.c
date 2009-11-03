@@ -56,6 +56,7 @@
 
 static AjPStr rline = NULL;
 static AjPStr id = NULL;
+static AjPStr tmpstr = NULL;
 static AjPStr tmpline = NULL;
 static AjPStr tmpfd   = NULL;
 static AjPStr typStr  = NULL;
@@ -234,8 +235,8 @@ int main(int argc, char **argv)
     dbname     = ajAcdGetString("dbname");
     release    = ajAcdGetString("release");
     datestr    = ajAcdGetString("date");
-    systemsort = ajAcdGetBool("systemsort");
-    cleanup    = ajAcdGetBool("cleanup");
+    systemsort = ajAcdGetBoolean("systemsort");
+    cleanup    = ajAcdGetBoolean("cleanup");
     sortopt    = ajAcdGetString("sortoptions");
     maxindex   = ajAcdGetInt("maxindex");
     logfile    = ajAcdGetOutfile("outfile");
@@ -292,7 +293,7 @@ int main(int argc, char **argv)
     {
 	ajStrAssignS(&curfilename, (AjPStr) inputFiles[ifile]);
 	embDbiFlatOpenlib(curfilename, &libr);
-	ajFileNameTrim(&curfilename);
+	ajFilenameTrimPath(&curfilename);
 	if(ajStrGetLen(curfilename) >= maxfilelen)
 	    maxfilelen = ajStrGetLen(curfilename) + 1;
 
@@ -339,7 +340,7 @@ int main(int argc, char **argv)
 
     /* Write the entryname.idx index */
     ajStrAssignC(&tmpfname, "entrynam.idx");
-    entFile = ajFileNewOutD(indexdir, tmpfname);
+    entFile = ajFileNewOutNamePathS(tmpfname, indexdir);
 
     recsize = maxidlen+10;
     filesize = 300 + (idCount*(ajint)recsize);
@@ -466,6 +467,7 @@ int main(int argc, char **argv)
     ajStrDel(&rline);
     ajStrDel(&tmpfd);
     ajStrDel(&tmpline);
+    ajStrDel(&tmpstr);
     ajStrDel(&typStr);
     ajStrDel(&id);
 
@@ -635,7 +637,6 @@ static AjBool dbiflat_ParseEmbl(AjPFile libr, AjPFile* alistfile,
     ajint hi;
     ajint fieldwidth;
     AjPStr tmpac = NULL;
-    AjPStr tmpstr = NULL;
     AjPStr format = NULL;
     AjPStr prefix = NULL;
     const char* p;
@@ -697,9 +698,9 @@ static AjBool dbiflat_ParseEmbl(AjPFile libr, AjPFile* alistfile,
     if(!regEmblEnd)
 	regEmblEnd = ajRegCompC("^//");
 
-    *dpos = ajFileTell(libr);
+    *dpos = ajFileResetPos(libr);
 
-    while(ajFileGets(libr, &rline))
+    while(ajReadline(libr, &rline))
     {
 	if(ajRegExec(regEmblEnd, rline))
 	{
@@ -831,7 +832,8 @@ static AjBool dbiflat_ParseEmbl(AjPFile libr, AjPFile* alistfile,
 			ajListPushAppend(myfdl[accfield], fd);
 		    }
 		}
-		ajRegPost(regEmblAcc, &tmpline);
+		ajRegPost(regEmblAcc, &tmpstr);
+                ajStrAssignS(&tmpline, tmpstr);
 	    }
 	    continue;
 	}
@@ -852,7 +854,8 @@ static AjBool dbiflat_ParseEmbl(AjPFile libr, AjPFile* alistfile,
 		    fd = ajCharNewS(tmpfd);
 		    ajListPushAppend(myfdl[desfield], fd);
 		}
-		ajRegPost(regEmblWrd, &tmpline);
+		ajRegPost(regEmblWrd, &tmpstr);
+                ajStrAssignS(&tmpline, tmpstr);
 	    }
 	    continue;
 	}
@@ -873,8 +876,9 @@ static AjBool dbiflat_ParseEmbl(AjPFile libr, AjPFile* alistfile,
 		    fd = ajCharNewS(tmpfd);
 		    ajListPushAppend(myfdl[svnfield], fd);
 		}
-		ajRegPost(regEmblVer, &tmpline);
-	    }
+		ajRegPost(regEmblVer, &tmpstr);	
+                ajStrAssignS(&tmpline, tmpstr);
+            }
 	    svndone = ajTrue;
 	    continue;
 	}
@@ -883,7 +887,8 @@ static AjBool dbiflat_ParseEmbl(AjPFile libr, AjPFile* alistfile,
 	    while(ajRegExec(regEmblPhr, tmpline))
 	    {
 		ajRegSubI(regEmblPhr, 1, &tmpfd);
-		ajRegPost(regEmblPhr, &tmpline);
+		ajRegPost(regEmblPhr, &tmpstr);
+                ajStrAssignS(&tmpline, tmpstr);
 		ajStrTrimWhiteEnd(&tmpfd);
 		if(!ajStrGetLen(tmpfd))
 		    continue;
@@ -907,7 +912,8 @@ static AjBool dbiflat_ParseEmbl(AjPFile libr, AjPFile* alistfile,
 	    while(ajRegExec(regEmblTax, tmpline))
 	    {
 		ajRegSubI(regEmblTax, 1, &tmpfd);
-		ajRegPost(regEmblTax, &tmpline);
+		ajRegPost(regEmblTax, &tmpstr);
+                ajStrAssignS(&tmpline, tmpstr);
 		ajStrFmtUpper(&tmpfd);
 		ajStrTrimWhiteEnd(&tmpfd);
 		if(!ajStrGetLen(tmpfd))
@@ -947,7 +953,6 @@ static AjBool dbiflat_ParseEmbl(AjPFile libr, AjPFile* alistfile,
     }
 
     ajStrDel(&tmpacnum);
-    ajStrDel(&tmpstr);
 
     return ajTrue;
 }
@@ -1044,9 +1049,9 @@ static AjBool dbiflat_ParseGenbank(AjPFile libr, AjPFile* alistfile,
     if(!regGbEnd)
 	regGbEnd = ajRegCompC("^//");
 
-    ipos = ajFileTell(libr);
+    ipos = ajFileResetPos(libr);
 
-    while(ajFileGets(libr, &rline))
+    while(ajReadline(libr, &rline))
     {
 	if(ajRegExec(regGbEnd, rline))
 	{
@@ -1107,7 +1112,8 @@ static AjBool dbiflat_ParseGenbank(AjPFile libr, AjPFile* alistfile,
 		    fd = ajCharNewS(tmpfd);
 		    ajListPushAppend(myfdl[accfield], fd);
 		}
-		ajRegPost(regGbWrd, &tmpline);
+		ajRegPost(regGbWrd, &tmpstr);
+                ajStrAssignS(&tmpline, tmpstr);
 	    }
 	    continue;
 	}
@@ -1130,7 +1136,8 @@ static AjBool dbiflat_ParseGenbank(AjPFile libr, AjPFile* alistfile,
 		    fd = ajCharNewS(tmpfd);
 		    ajListPushAppend(myfdl[desfield], fd);
 		}
-		ajRegPost(regGbWrd, &tmpline);
+		ajRegPost(regGbWrd, &tmpstr);
+                ajStrAssignS(&tmpline, tmpstr);
 	    }
 	    continue;
 	}
@@ -1140,7 +1147,8 @@ static AjBool dbiflat_ParseGenbank(AjPFile libr, AjPFile* alistfile,
 	    while(ajRegExec(regGbPhr, tmpline))
 	    {
 	        ajRegSubI(regGbPhr, 1, &tmpfd);
-		ajRegPost(regGbPhr, &tmpline);
+		ajRegPost(regGbPhr, &tmpstr);
+                ajStrAssignS(&tmpline, tmpstr);
 		ajStrTrimWhiteEnd(&tmpfd);
 		if(!ajStrGetLen(tmpfd))
 		    continue;
@@ -1166,7 +1174,8 @@ static AjBool dbiflat_ParseGenbank(AjPFile libr, AjPFile* alistfile,
 	    while(ajRegExec(regGbTax, tmpline))
 	    {
 	        ajRegSubI(regGbTax, 1, &tmpfd);
-		ajRegPost(regGbTax, &tmpline);
+		ajRegPost(regGbTax, &tmpstr);
+                ajStrAssignS(&tmpline, tmpstr);
 		ajStrTrimWhiteEnd(&tmpfd);
 		if(!ajStrGetLen(tmpfd))
 		    continue;
@@ -1223,7 +1232,7 @@ static AjBool dbiflat_ParseGenbank(AjPFile libr, AjPFile* alistfile,
 	    continue;
 	}
 
-	ipos = ajFileTell(libr);
+	ipos = ajFileResetPos(libr);
     }
 
     if(!done)
@@ -1349,9 +1358,9 @@ static AjBool dbiflat_ParseRefseq(AjPFile libr, AjPFile* alistfile,
     if(!regRefseqEnd)
 	regRefseqEnd = ajRegCompC("^//");
 
-    ipos = ajFileTell(libr);
+    ipos = ajFileResetPos(libr);
 
-    while(ajFileGets(libr, &rline))
+    while(ajReadline(libr, &rline))
     {
 	if(ajRegExec(regRefseqEnd, rline))
 	{
@@ -1414,7 +1423,8 @@ static AjBool dbiflat_ParseRefseq(AjPFile libr, AjPFile* alistfile,
 		    fd = ajCharNewS(tmpfd);
 		    ajListPushAppend(myfdl[accfield], fd);
 		}
-		ajRegPost(regRefseqWrd, &tmpline);
+		ajRegPost(regRefseqWrd, &tmpstr);
+                ajStrAssignS(&tmpline, tmpstr);
 	    }
 	    continue;
 	}
@@ -1436,7 +1446,8 @@ static AjBool dbiflat_ParseRefseq(AjPFile libr, AjPFile* alistfile,
 		    fd = ajCharNewS(tmpfd);
 		    ajListPushAppend(myfdl[desfield], fd);
 		}
-		ajRegPost(regRefseqWrd, &tmpline);
+		ajRegPost(regRefseqWrd, &tmpstr);
+                ajStrAssignS(&tmpline, tmpstr);
 	    }
 	    continue;
 	}
@@ -1446,7 +1457,8 @@ static AjBool dbiflat_ParseRefseq(AjPFile libr, AjPFile* alistfile,
 	    while(ajRegExec(regRefseqPhr, tmpline))
 	    {
 	        ajRegSubI(regRefseqPhr, 1, &tmpfd);
-		ajRegPost(regRefseqPhr, &tmpline);
+		ajRegPost(regRefseqPhr, &tmpstr);
+                ajStrAssignS(&tmpline, tmpstr);
 		ajStrTrimWhiteEnd(&tmpfd);
 		if(!ajStrGetLen(tmpfd))
 		    continue;
@@ -1471,7 +1483,8 @@ static AjBool dbiflat_ParseRefseq(AjPFile libr, AjPFile* alistfile,
 	    while(ajRegExec(regRefseqTax, tmpline))
 	    {
 	        ajRegSubI(regRefseqTax, 1, &tmpfd);
-		ajRegPost(regRefseqTax, &tmpline);
+		ajRegPost(regRefseqTax, &tmpstr);
+                ajStrAssignS(&tmpline, tmpstr);
 		ajStrTrimWhiteEnd(&tmpfd);
 		if(!ajStrGetLen(tmpfd))
 		    continue;
@@ -1526,7 +1539,7 @@ static AjBool dbiflat_ParseRefseq(AjPFile libr, AjPFile* alistfile,
 	    continue;
 	}
 
-	ipos = ajFileTell(libr);
+	ipos = ajFileResetPos(libr);
     }
 
     if(!done)

@@ -1,6 +1,6 @@
 application: tranalign [
-  documentation: "Align nucleic coding regions given the
-                  aligned proteins"
+  documentation: "Generate an aligment of nucleic coding regions
+                  from aligned proteins"
   groups: "Alignment:Multiple"
 ]
 

@@ -56,7 +56,7 @@ int main(int argc, char **argv)
 
     seq      = ajAcdGetSeq("sequence");
     regions  = ajAcdGetRange("regions");
-    separate = ajAcdGetBool("separate");
+    separate = ajAcdGetBoolean("separate");
     seqout   = ajAcdGetSeqoutall("outseq");
 
 

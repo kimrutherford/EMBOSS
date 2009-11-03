@@ -22,72 +22,7 @@ tfm
     Description
 </H2>
 
-This program displays the help documentation for an EMBOSS program.
-<P>
-
-The contributors of the EMBOSS programs do attempt to provide an adequate
-description of the programs. This documentation for your current
-release is included as HTML pages in the EMBOSS distribution and
-may be available at your site. The
-latest documentation for the next release is provided by the
-developers at
-<A HREF="/apps/">http://emboss.sourceforge.net/apps/</A>
-
-<P>
-The release documentation is also available however through the program
-<B>tfm</B> as normal text.
-
-<P>
-
-If you have problems understanding the function
-or usage of an EMBOSS program, then you should contact the EMBOSS mailing
-list (emboss@emboss.open-bio.org).
-
-<P>
-
-The unusual name of this program comes from the common computing science
-expression: <b>RTFM</B>. This acronym, as you probably already know, stands for
-<B>Read The Fine* Manual</B>; so this is <B>The Fine* Manual</B>.
-
-<P>
-
-* Insert the expletive of your choice here!
-
-<H3>Paged text output to the screen</H3>
-
-<B>tfm</B> is unusual for an EMBOSS program in that it expects to be used
-interactively and so it displays the documentation text a page at a time,
-pausing after every page for the user to press the <B>SPACE</B> bar on
-their keyboard. (i.e. it uses the UNIX program <B>more</B> to display the
-information). This behaviour can be turned off by using the qualifier
-<b>-nomore</b>.
-
-<P>
-
-The text is paged to the screen using the UNIX program 'more'.  The
-program 'more' is a very standard way for text files to be displayed in
-UNIX.  You might, however, prefer the text to be displayed using other
-programs, for example 'less' (which has more functionality than 'more'
-and is used by many people).  The UNIX environment variable 'PAGER'
-can be set to hold the name of your preferred program.  If you have
-PAGER set, then <b>tfm</b> will use this specified program instead of
-using the default 'more' program.  (If you want <b>tfm</b> to use a
-specified program that is different to the normal 'PAGER' program, then
-'PAGER' can be overriden by setting the environment variable
-'EMBOSS_PAGER' to hold the name of the program that should only be used
-to display text in <b>tfm</b>). 
-
-<p>
-
-'PAGER' can be set in UNIX by a command like:
-<br>
-setenv PAGER less
-
-<p>
-
-To get help on 'more' when using it to display text, press the '?' key.
-<BR>
-To get help on 'less' when using it to display text, press the 'h' key.
+<p><b>tfm</b> displays help information for the specified EMBOSS program.</p>
 
 <H2>
     Usage
@@ -158,7 +93,18 @@ nistalled somewhere on your system.
     Notes
 </H2>
 
-None.
+<p>The documentation for your own release is included as HTML pages in the EMBOSS distribution and may be available at your site.  The same documentation is also available however through the program <b>tfm</b> as plain text. The documentation for all current and some past releases is provided by the developers at <a href="http://emboss.sourceforge.net/apps/">http://emboss.sourceforge.net/apps/</a>. All EMBOSS programs should be adequately described.  If you have problems understanding the function or usage of an EMBOSS program, then you should contact the EMBOSS mailing list (emboss@emboss.open-bio.org).</p>
+
+
+<p>The unusual name of this program comes from the common computing science expression: RTFM. This acronym, as you probably already know, stands for Read The Fine* Manual; so this is The Fine* Manual.  (* Insert the expletive of your choice here!)</p>
+
+Paged text output to the screen
+<p><b>tfm</b> is unusual for an EMBOSS program in that it expects to be used interactively and so it displays the documentation text a page at a time, pausing after every page for the user to press the SPACE bar on their keyboard, i.e. it uses the UNIX program <tt>more</tt> to display the information. This behaviour can be turned off by using the qualifier -nomore.</p>
+
+The program <tt>more</tt> is a very standard way for text files to be displayed in UNIX. You might, however, prefer the text to be displayed using other programs, for example <tt>less</tt> (which has more functionality than <tt>more</tt> and is used by many people). The UNIX environment variable <tt>PAGER</tt> can be set to hold the name of your preferred program. If you have PAGER set, then <b>tfm</b> will use this specified program instead of using the default <tt>more</tt> program. (If you want <b>tfm</b> to use a specified program that is different to the normal <tt>PAGER</tt> program, then <tt>PAGER</tt> can be overriden by setting the environment variable <tt>EMBOSS_PAGER</tt> to hold the name of the program that should only be used to display text in <b>tfm</b>).  <tt>PAGER</tt> can be set in UNIX with <tt>setenv PAGER less</tt>.  </p>
+
+<p>To get help on <tt>more</tt> when using it to display text, press the <tt>?</tt> key. To get help on <tt>less</tt> when using it to display text, press the <tt>h</tt> key. </p>
+
 
 <H2>
     References

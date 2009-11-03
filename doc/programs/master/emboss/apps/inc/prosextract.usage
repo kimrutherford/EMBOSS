@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>prosextract </b>
-Build the PROSITE motif database for use by patmatmotifs
+Processes the PROSITE motif database for use by patmatmotifs
 PROSITE database directory [.]: <b></b>
 
 </pre></td></tr></table><p>

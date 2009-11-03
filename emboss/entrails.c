@@ -39,7 +39,7 @@ int main(int argc, char **argv)
     embInit("entrails", argc, argv);
 
     outf = ajAcdGetOutfile("outfile");
-    full = ajAcdGetBool("fullreport");
+    full = ajAcdGetBoolean("fullreport");
 
     ajAcdPrintType(outf, full);
     ajAcdPrintQual(outf, full);

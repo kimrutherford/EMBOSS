@@ -159,6 +159,7 @@ AjBool       ajSeqrefStandard(AjPSeqRef ref);
 void         ajSeqSetName(AjPSeq thys, const AjPStr setname);
 void         ajSeqSetNameMulti(AjPSeq thys, const AjPStr setname);
 void         ajSeqDel (AjPSeq* pthis);
+void         ajSeqDelarray(AjPSeq **PPseq);
 ajuint       ajSeqGetEnd (const AjPSeq seq);
 void         ajSeqExit(void);
 void         ajSeqGapFill (AjPSeq seq, ajuint len);

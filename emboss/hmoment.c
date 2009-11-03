@@ -82,7 +82,7 @@ int main(int argc, char **argv)
     aangle    = ajAcdGetInt("aangle");
     bangle    = ajAcdGetInt("bangle");
     baseline  = ajAcdGetFloat("baseline");
-    twin      = ajAcdGetBool("double");
+    twin      = ajAcdGetBoolean("double");
 
     /* only one will be used - see variable 'plot' */
 
@@ -127,7 +127,7 @@ int main(int argc, char **argv)
 		ymax = ymax > yb[i] ? ymax : yb[i];
 	}
 
-	if(!plot)
+	if(!plot && outf)
 	{
 	    ajFmtPrintF(outf,"HMOMENT of %s from %d to %d\n\n",sname,
 			beg+1,end+1);
@@ -151,7 +151,7 @@ int main(int argc, char **argv)
 	    }
 
 	}
-	else
+	else if (plot)
 	{
 	    if(twin)
 		ajGraphSetMulti(graph,2);
@@ -308,7 +308,7 @@ static float hmoment_calchm(const char *p, int pos, int window, ajint angle)
     for(i=0;i<window;++i)
     {
 	res = p[pos+i];
-	h   = hydata[ajAZToInt(res)];
+	h   = hydata[ajBasecodeToInt(res)];
 
 	sumsin  += (h * sin(ajDegToRad((float)tangle)));
 	sumcos  += (h * cos(ajDegToRad((float)tangle)));

@@ -81,6 +81,7 @@
    -raccshow3          boolean    Show accession number in the report
    -rdesshow3          boolean    Show description in the report
    -rscoreshow3        boolean    Show the score in the report
+   -rstrandshow3       boolean    Show the nucleotide strand in the report
    -rusashow3          boolean    Show the full USA in the report
    -rmaxall3           integer    Maximum total hits to report
    -rmaxseq3           integer    Maximum hits to report for one sequence
@@ -103,8 +104,9 @@
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options

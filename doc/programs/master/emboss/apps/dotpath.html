@@ -21,44 +21,14 @@ dotpath
     Description
 </H2>
 
-A dotplot is a graphical representation of the regions of similarity
-between two sequences. 
-<P>
-
-The two sequences are placed on the axes of a rectangular image and
-wherever there is a similarity between the sequences a dot is placed on
-the image. 
-<P>
-
-Where the two sequences have substantial regions of similarity, many
-dots align to form diagonal lines.  It is therefore possible to see at a
-glance where there are local regions of similarity. 
-<P>
-
-<b>dotpath</b> is very similar to the program <b>dottup</b> which looks
-for places where words (tuples) of a specified length have an exact
-match in both sequences and draws a diagonal line over the position of
-these words.
-<P>
+<p><b>dotpath</b> generates a dotplot from two input sequences.  The dotplot is an intuitive graphical representation of the regions of similarity between two sequences. Sequence "words" of a user-specified length are compared and all exact word matches between the two sequences are recorded.  The set of the longest possible but non-overlapping matches is identified. The two sequences are the axes of the rectangular dotplot.  Wherever there is an exact matching word in the two sequences a line is plotted.</p>
 
 
-Using a longer word size thus displays less random noise, runs
-extremely quickly, but is less sensitive. 
-<P>
+<H2>
+Algorithm
+</H2>
+<p><b>dotpath</b> uses the same algorithm as <b>diffseq</b> and <b>dottup</b> for finding a minimal set of exact matches between two sequences. It finds all identical words of size <tt>-wordsize</tt> or greater in the two sequences. It then reduces the matches found to the minimal set of matches that do not overlap.  This set is rendered as lines in the dotplot.</p>
 
-<b>dotpath</b> finds all matches of size <b>-wordsize</b> or greater
-between two sequences.  It then reduces the matches found to the minimal
-set of long matches that do not overlap.  This is a way of finding the
-(nearly) optimal path aligning two sequences.  It is not the true
-optimal path as produced by the algorithms used in <b>water</b> or
-<b>needle</b>, but for very closely related sequences it will produce
-the same result and will work well with very long sequences. 
-<P>
-
-If you wish to compare the path found by <b>dotpath</b> to the set of
-all matches found then the qualifier <b>-overlaps</b> will show all
-matches in red except for the matches in the minimal path which are
-shown in black, as normal. 
 
 <H2>
     Usage
@@ -101,7 +71,11 @@ matches in the minimal non-overlapping set of matches is output.
     Notes
 </H2>
 
-None
+<p>For similar sequences, <b>dotpath</b> provides a convenient way to find a path that aligns the two sequences well. It is not a true optimal path as produced by the dynamic programming algorithms used in <b>water</b> or <b>needle</b>, but for very closely related sequences it will produce the same result.  In contast to full alignment, it works very quickly with very long sequences.</p>
+
+<p>The entire set of matches found can be displayed with the -overlaps qualifier.  This shows all matches in red, except for those in the minimal path (non-overlapping set) which are shown in black, as normal.</p>
+
+<p>Using a longer word size will create a dottplot with relatively less noise; the matches are longer and therefore more likely to have biological meaning. Such runs will be much faster, but of course are less sensitive.</p>
 
 <H2>
     References

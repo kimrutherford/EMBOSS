@@ -19,47 +19,15 @@ tranalign
     Description
 </H2>
 
-<b>tranalign</b> is a re-implementation in EMBOSS of the program
-<b>mrtrans</b> by Bill Pearson. 
 
-<p>
-<b>tranalign</b> is a simple program that allows you to produce aligned
-cDNA sequences from aligned protein sequences.  This can be very useful
-for phylogeny programs, e.g.  in PHYLIP - dnadist, dnapars, dnaml, etc. 
-In general, it is better to use protein sequences for multiple
-alignments, but to use DNA sequences for phylogeny.  This can be time
-consuming when there are gaps in the aligned protein sequences. 
 
-<p>
+<p><b>tranalign</b> is a re-implementation in EMBOSS of the program mrtrans by Bill Pearson. It reads a set of (unaligned) nucleotide sequences and a corresponding set of aligned protein sequences which are the translations, and writes the coding regions to file as a nucleotide sequence alignment. The sequences must be in the same order in the input sets.  Each nucleotide sequence is translated in all three forward frames using the specified genetic code and the translations compared to the corresponding protein sequence from input the alignment.  The contiguous nucleotide sequence that coded the protein is written to file (it will not splice together different exons to produce a coding sequence).</p>
 
-<b>tranalign</b> takes a set of (unaligned) nucleic sequences and a set of
-<i>aligned</i> protein sequences.  It reads the first nucleic sequence
-and the first protein sequence, translates the nucleic sequence in each of the
-three forward frames, compares the protein sequence to the translated nucleic
-sequence to find the protein coding region, and then writes out the nucleic
-sequence that encoded the protein.  
 
-<p>
-
-The sequences must be in the same order in both sets of sequences.  A
-common problem you should be aware of is that some alignment program
-(including clustalw/<b>emma</b>) will re-order the aligned sequences to
-group similar sequences together. 
-
-<p>
-
-The protein library may include '-' characters to specify alignments. 
-Each '-' character in the protein library is ignored during the sequence
-comparison but replaced by '---' in the nucleic sequence output to form the aligned nucleic sequences. 
-
-<p>
-
-<b>tranalign</b> finds the coding regions for contiguous sequences only. 
-It will not splice together different exons to produce a coding
-sequence.  You should therefore use either mRNA sequences, or nucleic
-sequences which you have constructed to hold a contiguous coding region
-(maybe using <b>extractseq</b> or <b>yank</b> and <b>union</b>?). 
- 
+<H2>
+Algorithm
+</H2>
+<p>The protein sequences will typically include gap (<tt>-</tt>) characters. These are ignored during sequence comparison but replaced by <tt>---</tt> in the nucleotide sequence alignment output.</p>
 
 
 
@@ -136,10 +104,12 @@ None.
     Notes
 </H2>
 
-The sequences must be in the same order in both sets of sequences.  A
-common problem you should be aware of is that some alignment program
-(including clustalw/<b>emma</b>) will re-order the aligned sequences to
-group similar sequences together. 
+<p>In general, it is better to use protein sequences for multiple alignment, but to use DNA sequences for phylogeny, for example, when using the programs <b>dnadist</b>, <b>dnapars</b>, <b>dnaml</b>, etc in the PHYLIP package. Where one has a protein sequence alignment, it would be time consuming to remove gap characters before back-translating the proteins. <b>tranalign</b> helps by generating aligned cDNA sequences from a protein sequence alignment.</p>
+
+<p><b>tranalign</b> finds the coding regions for contiguous sequences only. It will not splice together different exons to produce a coding sequence. You should therefore use either mRNA sequences, or nucleic sequences which you have constructed to hold a contiguous coding region (maybe using <b>extractseq</b> or <b>yank</b> and <b>union</b>?).</p>
+
+
+
 
 <H2>
     References
@@ -151,7 +121,8 @@ None.
     Warnings
 </H2>
 
-None.
+<p>The sequences must be in the same order in both input sets of sequences. Some alignment program (including clustalw/emma) will re-order their input sequences so as to group similar sequences together.</p>
+
 
 <H2>
     Diagnostic Error Messages

@@ -73,9 +73,9 @@ int main(int argc, char **argv)
     seqall  = ajAcdGetSeqall("sequence");
     size    = ajAcdGetInt("size");
     overlap = ajAcdGetInt("overlap");
-    addover = ajAcdGetBool("addoverlap");
-    source  = ajAcdGetBool ("source");
-    feature = ajAcdGetBool ("feature");
+    addover = ajAcdGetBoolean("addoverlap");
+    source  = ajAcdGetBoolean("source");
+    feature = ajAcdGetBoolean("feature");
 
     if (!feature) {
       source = AJFALSE;

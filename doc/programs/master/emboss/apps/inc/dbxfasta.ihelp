@@ -10,26 +10,32 @@
                                   (>db:ID); gcgidacc (>db:ID ACC); dbid (>db
                                   ID); ncbi (| formats))
    -directory          directory  [.] Database directory
-   -filenames          string     [*.dat] Wildcard database filename (Any
+   -filenames          string     [*.fasta] Wildcard database filename (Any
                                   string is accepted)
-   -release            string     [0.0] Release number (Any string up to 9
-                                  characters)
-   -date               string     [00/00/00] Index date (Date string dd/mm/yy)
-
-   Additional (Optional) qualifiers: (none)
-   Advanced (Unprompted) qualifiers:
    -fields             menu       [id,acc] Index fields (Values: id (ID); acc
                                   (Accession number); sv (Sequence Version and
                                   GI); des (Description))
+   -outfile            outfile    [*.dbxfasta] General log output file
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -release            string     [0.0] Release number (Any string up to 9
+                                  characters)
+   -date               string     [00/00/00] Index date (Date string dd/mm/yy)
    -exclude            string     Wildcard filename(s) to exclude (Any string
                                   is accepted)
    -indexoutdir        outdir     [.] Index file output directory
 
-   Associated qualifiers: (none)
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options

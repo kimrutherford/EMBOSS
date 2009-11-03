@@ -18,68 +18,7 @@ yank
     Description
 </H2>
 
-<b>yank</b> is a simple utility to add a specified sequence name to a
-list file. 
-
-<p>
-
-In fact, it writes out not just the name of the sequence, but also the
-start and end position of a region within that sequence and, if the
-sequence is nucleic, if can specify whether the sequence is the reverse
-complement. 
-
-<p>
-
-Without the program <b>yank</b> you would need to use a text editor such
-as <i>pico</i> to create the appropriate list files.  <b>yank</b>
-makes this process easy. 
-
-
-<H3>List Files</H3>
-
-Many EMBOSS programs can read in a set of sequences.  (Some examples are
-<b>emma</b> and <b>union</b>) There are many ways of specifying these
-sequences, including wildcarded sequence file names, wildcarded database
-entry names and list files.  List files (files of file names) are the
-most flexible. <b>yank</b> is a utility to add sequences to a list file.
-
-<p>
-
-
-Instead of containing the sequences themselves, a List file contains
-"references" to sequences - so, for example, you might include database
-entries, the names of files containing sequences, or even the names of
-other list files.  For example, here's a valid list file, called
-<i>seq.list</i>:
-
-<p>
-<pre>
-unix % more seq.list 
-
-opsd_abyko.fasta
-sw:opsd_xenla
-sw:opsd_c*
-@another_list
-</pre>
-
-<p>
-
-This looks a bit odd, but it's really very straightforward; the file
-contains:
-
-<p>
-
-<ul>
-      <li><b>opsd_abyko.fasta</b> - this is the name of a sequence file. The file is read in from the current directory. 
-      <li><b>sw:opsd_xenla</b> - this is a reference to a specific sequence in the SwissProt database 
-      <li><b>sw:opsd_c*</b> - this represents all the sequences in SwissProt whose identifiers start with ``opsd_c'' 
-      <li><b>another_list</b> - this is the name of a second list file 
-</ul>
-
-<p>
-
-Notice the <b>@</b> in front of the last entry.  This is the way you tell
-EMBOSS that this file is a list file, not a regular sequence file. 
+<p><b>yank</b> adds the full Uniform Sequence Address (USA) of a specified sequence, or a region (subsequence) of a sequence, to a list file. The file is appended to by default but (optionally) is overwritten.A list file contains one or more sequence references (USAs).  For example, a database entry, the name of a file containing sequences, or even the names of another list file. In addition to the name of the sequence, it can write the start and end position of a region within that sequence and, if the sequence is nucleic, if can specify whether the sequence is the reverse complement.</p>
 
 
 
@@ -149,7 +88,26 @@ None.
     Notes
 </H2>
 
-None.
+<p>There are many ways of specifying input and output sequences for EMBOSS programs, including wildcarded sequence file names, wildcarded database entry names and list files. List files (files of file names) are the most flexible. Instead of containing the sequences themselves, a list file contains one or more sequence references (USAs).  For example, a database entry, the name of a file containing sequences, or even the names of another list file. For example, here's a valid list file:</p>
+<pre>
+opsd_abyko.fasta
+sw:opsd_xenla
+sw:opsd_c*
+@another_list
+</pre>
+
+<p>The file contains:</p>
+
+<pre>
+    * opsd_abyko.fasta - this is the name of a sequence file. The file is read in from the current directory.
+    * sw:opsd_xenla - this is a reference to a specific sequence in the SwissProt database
+    * sw:opsd_c* - this represents all the sequences in SwissProt whose identifiers start with ``opsd_c''
+    * another_list - this is the name of a second list file </pre>
+
+
+<p>Notice the <tt>@</tt> in front of the last entry. This is the way you tell EMBOSS that this file is a list file, not a regular sequence file.</p>
+
+<p>Without the program <b>yank</b> you would need to use a text editor such as pico to create the appropriate list files. <b>yank</b> makes this process easy.</p>
 
 
 <H2>

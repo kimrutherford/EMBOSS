@@ -52,7 +52,7 @@
 
 sub usage () {
   print STDERR "Usage:\n";
-  print STDERR "  qatest.pl [-kk | -ks | -ka]  [-t=60] [testnames...]\n";
+  print STDERR "  qatest.pl [-kk | -ks | -ka] [-t=60] [-wild] [-mcheck] [testnames...]\n";
   print STDERR "            defaults: -kk -t=60\n";
 }
 
@@ -86,6 +86,7 @@ sub runtest ($) {
   my %outfile = ();
   my %testdir = ();
   my %outdir = ();
+  my %outdirfiles = ();
   my $testq = 0;
   my $testa = 0;
   my $testpath="";
@@ -201,15 +202,29 @@ sub runtest ($) {
       $idir++;
     }
 
-# directoryfile - output file example
+# directoryfile - output file count
 
-    elsif ($line =~ /^DF\s+(\S+)/) {
+    elsif ($line =~ /^DC\s+(\d+)/) {
+      $dircount{$dirname} = $1;
       if (!$idir) {
 	$testerr = "$retcode{22} $testid/*/$1\n";
 	print STDERR $testerr;
 	print LOG $testerr;
 	return 20;
       }
+    }
+
+# directoryfile - output file example
+
+    elsif ($line =~ /^DF\s+(\S+)/) {
+      $dirfile = $1;
+      if (!$idir) {
+	$testerr = "$retcode{22} $testid/*/$1\n";
+	print STDERR $testerr;
+	print LOG $testerr;
+	return 20;
+      }
+      $outdirfiles{$dirname} .= "$dirfile;";
       print LOG "Known example in directory [$idir] <$dirname/$1>\n";
     }
 
@@ -279,7 +294,7 @@ sub runtest ($) {
 # fall through for any unknown lines (bad prefix, or failed to match regexp)
 
     else {
-      $testerr = "$retcode{1} $line: $line\n";
+      $testerr = "$retcode{1}: $line\n";
       print STDERR $testerr;
       print LOG $testerr;
       return 1;
@@ -287,7 +302,12 @@ sub runtest ($) {
   }
 
   if ($testq) {	# for "make check" apps (AQ lines) we can skip
-    $testpath = "../../emboss/"; #  up from the test/qa directory
+    if($packa eq "") {
+      $testpath = "../../emboss/"; #  up from the test/qa directory
+    }
+    else {
+      $testpath = "../../embassy/$packa/source/"; #  up from the test/qa directory
+    }
     if (! (-e "$testpath$testapp")) {$skipcheck++; return 0} # make check not run
     if ($testappname && defined($acdname{$testapp}) && $acdname{$testapp}) {
       print STDERR "Check application $testapp installed - possible old version\n";
@@ -328,7 +348,7 @@ sub runtest ($) {
   eval {
     $status = 0;
     alarm($timeout);
-    $sysstat = system("$ppcmd $testpath$testapp $cmdline > stdout 2> stderr $stdin $qqcmd");
+    $sysstat = system("$domcheck$ppcmd $testpath$testapp $cmdline > stdout 2> stderr $stdin $qqcmd");
     alarm(0);
     $status = $sysstat >> 8;
   };
@@ -408,6 +428,7 @@ sub runtest ($) {
     if ($file eq "..") {next}	# parent directory
     if ($file eq "stdin") {next} # stdin we created
     if ($file eq "testdef") {next} # test definition
+    if ($file eq "gmon.out") {next} # gccprofile file
 
     $testfile{$file} = 1;
 
@@ -426,6 +447,35 @@ sub runtest ($) {
 	print LOG "directory [$d] <$file>\n";
 # DC number of files
 # DP filename(s)
+	opendir(DDIR, $file);
+	$ndfiles = 0;
+	while($df = readdir(DDIR)) {
+	    if($df =~ /^[.]+$/){next}
+	    $ndfiles++;
+	    $adfiles{$df} = 1;
+	}
+	if(defined($dircount{$file})) {
+	    if($dircount{$file} != $ndfiles) {
+		print STDERR "$dirname: found $ndfiles/$dircount{$file} files\n";
+	    }
+	}
+	if(defined($outdirfiles{$file})) {
+	    $dfiles = $outdirfiles{$file};
+	    $dfiles =~ s/;$//;
+	    @dfiles = split(/;/,$dfiles);
+	    %dfiles = ();
+	    foreach $df (@dfiles) {
+		$dfiles{$df}=0;
+		if(!defined($adfiles{$df})) {
+		    print STDERR "$dirname/$df not found\n";
+		}
+	    }
+	    foreach $adf (@adfiles) {
+		if(!defined($dfiles{$adf})) {
+		    print STDERR "$dirname: $adf not expected\n";
+		}
+	    }
+	}
       }
       next;
     }
@@ -450,9 +500,10 @@ sub runtest ($) {
       }
     }
 
-# This file was not defined
+# This file was not defined (we let extra -debug files through)
 
     if (!defined($outfile{$file})) {
+      if($file eq "$testapp.dbg") {next}
       $testerr = "$retcode{3} $testid/$file\n";
       print STDERR $testerr;
       print LOG $testerr;
@@ -678,6 +729,7 @@ sub testnum ($$) {
 $defdelete="success";		# success, all, keep
 $timeoutdef=60;			# default timeout in seconds
 
+$domcheck="";
 $numtests = 0;
 $testappname=0;
 $misshtml=0;
@@ -690,14 +742,22 @@ $misssf=0;
 %packfail=();
 $mainfail=0;
 $packa="unknown";
-  
+$dowild=0;
 $logfile = "qatest.log";
+$testwild = "*";
 
 foreach $test (@ARGV) {
   if ($test =~ /^-(.*)/) {
     $opt=$1;
     if ($opt eq "kk") {$defdelete="keep"}
     elsif ($opt eq "ks") {$defdelete="success"}
+    elsif ($opt eq "wild") {
+	$dowild=1;
+	if(defined($testname)) {
+	    $testwild = $testname;
+	}
+    }
+    elsif ($opt eq "mcheck") {$domcheck="MALLOC_CHECK_=3;export MALLOC_CHECK_;"}
     elsif ($opt eq "ka") {$defdelete="all"}
     elsif ($opt =~ /without=(\S+)/) {$without{$1}=1}
     elsif ($opt =~ /t=([0-9]+)/) {$timeoutdef=int($1)}
@@ -705,6 +765,10 @@ foreach $test (@ARGV) {
     else {print STDERR "+++ unknown option '$opt'\n"; usage()}
   }
   else {
+    $testname=$test;
+    if($dowild) {
+	$testwild = $testname;
+    }
     $test =~ s/\/$//;
     $dotest{$test} = 1;
     $numtests++;
@@ -812,7 +876,8 @@ while (<IN>) {
 # end of definition - fire up the test
 
   if (/^\/\//) {
-    if (($numtests > 0) && !$dotest{$id}) {next}
+    if (($numtests > 0) && !$dowild && !$dotest{$id}) {next}
+    if (($numtests > 0) && $dowild && $id !~ /$testwild/) {next}
 
     $result = runtest ($testdef);
     $tcount++;

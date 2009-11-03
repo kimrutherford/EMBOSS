@@ -29,6 +29,7 @@ while (<>) {
     if (/^Valgrind test (\S+)/) {
 	$name = $1;
 	$leak = $status = 0;
+	if (/^Valgrind time /) {next}
 	if (/^Valgrind test (\S+) OK [\(]all clean[\)]/) {next}
 	elsif (/^Valgrind test (\S+) OK [\(]still reachable +([^\)]+)/) {
 	    $status = $2;

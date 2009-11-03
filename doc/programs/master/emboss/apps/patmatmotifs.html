@@ -22,78 +22,26 @@ patmatmotifs
 </H2>
 
 
-<b>patmatmotifs</b> takes a protein sequence and compares it to the
-PROSITE database of motifs. 
+<p><b>patmatmotifs</b> reads a protein sequence and searches it against the PROSITE database of motifs.  It writes a standard EMBOSS report file with details of the location and score of any matching motifs. Optionally, full documentation for matching patterns is given in the report.  Optionally, simple post-translational modification sites are not reported.  PROSITE must be processed by running prosextract before running <b>patmatmotifs</b>.</p>
 
-<p>
+<!-- Algorithm -->
+<p></p>
 
-For a description of PROSITE, we can do no better than to quote the
-PROSITE user's documentation:
+<!-- Notes -->
+<p>The home web page of PROSITE is: <a href="http://www.expasy.ch/prosite/">http://www.expasy.ch/prosite/</a>.  Quoting from the PROSITE user's documentation:</p>
+"PROSITE is a method of determining what is the function of uncharacterized proteins translated from genomic or cDNA sequences. It consists of a database of biologically significant sites and patterns formulated in such a way that with appropriate computational tools it can rapidly and reliably identify to which known family of protein (if any) the new sequence belongs.</p>
 
-<i>
-<p>
-   PROSITE is a method of determining what is the function of uncharacterized
-   proteins translated  from genomic  or cDNA  sequences. It  consists  of  a
-   database of biologically significant sites and patterns formulated in such
-   a way  that with  appropriate  computational  tools  it  can  rapidly  and
-   reliably identify  to which  known family  of protein  (if  any)  the  new
-   sequence belongs.
+<p>In some cases the sequence of an unknown protein is too distantly related to any protein of known structure to detect its resemblance by overall sequence alignment, but it can be identified by the occurrence in its sequence of a particular cluster of residue types which is variously known as a pattern, motif, signature, or fingerprint. These motifs arise because of particular requirements on the structure of specific region(s) of a protein which may be important, for example, for their binding properties or for their enzymatic activity. These requirements impose very tight constraints on the evolution of those limited (in size) but important portion(s) of a protein sequence. To paraphrase Orwell, in Animal Farm, we can say that "some regions of a protein sequence are more equal than others" !</p>
 
-<p>
-   In some  cases the sequence of an unknown protein is too distantly related
-   to any  protein of  known structure  to detect  its resemblance by overall
-   sequence alignment,  but it  can be  identified by  the occurrence  in its
-   sequence of a particular cluster of residue types which is variously known
-   as a pattern, motif, signature, or fingerprint. These motifs arise because
-   of particular  requirements on  the structure  of specific  region(s) of a
-   protein which  may be important, for example, for their binding properties
-   or for  their enzymatic  activity. These  requirements impose  very  tight
-   constraints on  the evolution  of those  limited (in  size) but  important
-   portion(s) of a protein sequence. To paraphrase Orwell, in Animal Farm, we
-   can say  that "some  regions of  a protein  sequence are  more equal  than
-   others" !
+<p>The use of protein sequence patterns (or motifs) to determine the function(s) of proteins is becoming very rapidly one of the essential tools of sequence analysis. This reality has been recognized by many authors, as it can be illustrated from the following citations from two of the most well known experts of protein sequence analysis, R.F. Doolittle and A.M. Lesk:</p>
 
-<p>
-   The use  of  protein  sequence  patterns  (or  motifs)  to  determine  the
-   function(s) of  proteins is  becoming very  rapidly one  of the  essential
-   tools of  sequence analysis.  This reality  has been  recognized  by  many
-   authors, as it can be illustrated from the following citations from two of
-   the most  well known  experts of protein sequence analysis, R.F. Doolittle
-   and A.M. Lesk:
+<p>      "There are  many short  sequences  that  are  often  (but  not  always) diagnostics of certain binding properties or active sites. These can be set into a small subcollection and searched against your sequence (1)".</p>
 
-<pre>
-      "There are  many short  sequences  that  are  often  (but  not  always)
-      diagnostics of certain binding properties or active sites. These can be
-      set into a small subcollection and searched against your sequence (1)".
+<p>      "In some  cases, the structure and function of an unknown protein which is too  distantly related  to any  protein of known structure to detect its affinity  by overall  sequence alignment  may be  identified by its possession of  a particular  cluster of  residues types classified as a motifs. The  motifs, or  templates, or  fingerprints, arise  because of particular  requirements  of  binding  sites  that  impose  very  tight constraint on the evolution of portions of a protein sequence (2)."</p>
 
-      "In some  cases, the structure and function of an unknown protein which
-      is too  distantly related  to any  protein of known structure to detect
-      its affinity  by overall  sequence alignment  may be  identified by its
-      possession of  a particular  cluster of  residues types classified as a
-      motifs. The  motifs, or  templates, or  fingerprints, arise  because of
-      particular  requirements  of  binding  sites  that  impose  very  tight
-      constraint on the evolution of portions of a protein sequence (2)."
-</pre>
-</i>
+<p>It is common to find that a search of the PROSITE database against a protein sequence will report many matches to the short motifs that are indicative of the post-translational modification sites, such as glycolsylation, myristylation and phosphorylation sites. These reports are often unwanted and are not normally reported. You can turn reporting of these short motifs on by giving the <tt>-noprune</tt> option on the command-line.</p>
 
-<p>
-The home web page of PROSITE is: <a
-href="http://www.expasy.ch/prosite/">http://www.expasy.ch/prosite/</a>
 
-<p>
-
-It is common to find that a search of the PROSITE database against a
-protein sequence will report many matches to the short motifs that are
-indicative of the post-translational modification sites, such as
-glycolsylation, myristylation and phosphorylation sites.  These reports
-are often unwanted and are not normally reported.  You can turn
-reporting of these short motifs on by giving the '-noprune' option on
-the command-line. 
-
-<p>
-
-Your EMBOSS administrator must have set up the local EMBOSS PROSITE
-database using the utility '<b>prosextract</b>' before this program will run. 
 
 <H2>
     Usage
@@ -146,9 +94,9 @@ By default <b>patmatmotifs</b> writes a 'dbmotif' report file.
 </H2>
 
 
-Data and documentation from PROSITE files is automatically read. This
-has been generated and formatted by running <b>prosextract</b> before running
-<b>patmatmotifs</b>.
+<p>Data and documentation from PROSITE files is automatically read. This must be generated and formatted by running prosextract before running <b>patmatmotifs</b>.</p>
+
+
 
 <H2>
     Notes
@@ -197,9 +145,7 @@ pp17-26, Oxford University Press, Oxford (1988).
     Warnings
 </H2>
 
-
-Your EMBOSS administrator must have set up the local EMBOSS PROSITE
-database using the utility '<b>prosextract</b>' before this program will run.
+<p>Your EMBOSS administrator must have set up the local EMBOSS PROSITE database using the utility <b>prosextract</b> before this program will run.</p>
 
 <H2>
     Diagnostic Error Messages

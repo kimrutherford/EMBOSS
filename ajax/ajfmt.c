@@ -726,10 +726,7 @@ static void cvt_f(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 
 	sprintf(buf, fmt, va_arg(VA_V(ap), double));
 	if(code == 'g')
-	{
-	    if(width == INT_MIN && (ajuint) precision > strlen(buf))
-		precision = strlen(buf);
-	}
+            precision = 0;
     }
 
     /* now write string and support width */
@@ -1996,8 +1993,9 @@ void ajFmtPutd(const char* str, ajint len, int put(int c, void* cl), void* cl,
 		put(sign, cl);
 	}
 
-	/* pad after end */
+	/* pad for precision - should be turned off for %g */
 	pad(precision - len, '0');
+
 	{
 	    ajint i;
 
@@ -2210,7 +2208,7 @@ ajint ajFmtScanF(AjPFile thys, const char* fmt, ...)
     if(!thys)
 	return 0;
 
-    file = ajFileFp(thys);
+    file = ajFileGetFileptr(thys);
 
     va_start(ap, fmt);
 

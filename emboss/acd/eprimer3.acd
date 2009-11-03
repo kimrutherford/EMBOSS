@@ -271,8 +271,8 @@ section: additional [
              EPrimer3 will try to pick primers with melting temperatures are
              close to this temperature. The oligo melting temperature formula
              in EPrimer3 is that given in Rychlik, Spencer and Rhoads,
-             Nucleic Acids Research, vol 18, num 12, pp 6409-6412 and
-             Breslauer, Frank, Bloeker and Marky, Proc. Natl. Acad. Sci. USA,
+             Nucleic Acids Research, vol 18, num 21, pp 6409-6412 and
+             Breslauer, Frank, Bloecker and Marky, Proc. Natl. Acad. Sci. USA,
              vol 83, pp 3746-3750. Please refer to the former paper for
              background discussion."
     ]
@@ -348,7 +348,7 @@ section: additional [
              dNTP, 1.5mM MgCl2, 50mM KCl, 10mM Tris-HCL (pH 9.3) using 35
              cycles with an annealing temperature of 56 degrees Celsius. This
              parameter corresponds to 'c' in Rychlik, Spencer and Rhoads'
-             equation (ii) (Nucleic Acids Research, vol 18, num 12) where a
+             equation (ii) (Nucleic Acids Research, vol 18, num 21) where a
              suitable value (for a lower initial concentration of template)
              is 'empirically determined'. The value of this parameter is less
              than the actual concentration of oligos in the reaction because
@@ -528,7 +528,7 @@ section: additional [
              temperatures that are close to this temperature. The oligo
              melting temperature formula in EPrimer3 is that given in
              Rychlik, Spencer and Rhoads, Nucleic Acids Research, vol 18, num
-             12, pp 6409-6412 and Breslauer, Frank, Bloeker and Marky, Proc.
+             21, pp 6409-6412 and Breslauer, Frank, Bloecker and Marky, Proc.
              Natl. Acad. Sci. USA, vol 83, pp 3746-3750. Please refer to the
              former paper for background discussion."
     ]
@@ -806,7 +806,7 @@ section: advanced [
              or reverse primer. Bigger numbers mean more stable 3' ends. The
              value is the maximum delta G for duplex disruption for the five
              3' bases as calculated using the nearest neighbor parameters
-             published in Breslauer, Frank, Bloeker and Marky, Proc. Natl.
+             published in Breslauer, Frank, Bloecker and Marky, Proc. Natl.
              Acad. Sci. USA, vol 83, pp 3746-3750. EPrimer3 uses a completely
              permissive default value for backward compatibility (which we
              may change in the next release). Rychlik recommends a maximum

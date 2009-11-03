@@ -1,6 +1,9 @@
 application: cutgextract [
-  documentation: "Extract data from CUTG"
+  documentation: "Extract codon usage tables from from CUTG database"
   groups: "Utils:Database creation"
+  gui: "no"
+  batch: "no"
+  cpu: "medium"
 ]
 
 section: input [

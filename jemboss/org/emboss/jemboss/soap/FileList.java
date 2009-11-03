@@ -71,7 +71,7 @@ public class FileList
      }
      catch (JembossSoapException e) 
      {
-       throw new JembossSoapException("Authentication Failed");
+       throw new JembossSoapException("Directory listing call failed: "+e.getMessage());
      }
 
      flist = eRun.getHash().get("list").toString();

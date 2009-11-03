@@ -32,7 +32,6 @@ import java.net.URL;
 import java.awt.*;
 import java.io.*;
 import javax.swing.*;
-import javax.swing.event.*;
 import java.awt.event.*;
 import java.util.Vector;
 
@@ -165,27 +164,7 @@ public class SetUpMenuBar
     {
       public void actionPerformed(ActionEvent e)
       {
-        Object[] options = { "APPLY", "CANCEL" };
-
-        int select = JOptionPane.showOptionDialog(null, 
-                    ao,"Advanced Options",
-                    JOptionPane.YES_NO_CANCEL_OPTION,
-                    JOptionPane.PLAIN_MESSAGE,
-                    null,
-                    options,
-                    options[0]);
-
-        if(select == 0)
-        {
-          if(!ao.getHomeDirectory().equals(mysettings.getUserHome()))
-            mysettings.setUserHome(ao.getHomeDirectory());
-
-          if(!withSoap && !ao.getResultsDirectory().equals(mysettings.getResultsHome()))
-            mysettings.setResultsHome(ao.getResultsDirectory()); 
-        }
-//      JOptionPane jao = new JOptionPane();
-//      jao.showMessageDialog(f,ao,"Advanced Options",
-//                            JOptionPane.PLAIN_MESSAGE);
+        ao.showDiaolog(mysettings, withSoap, f, f.getX()+70, f.getY()+50);
       }
     });
     prefsMenu.add(showAdvOpt);
@@ -387,7 +366,7 @@ public class SetUpMenuBar
      if(localAndRemoteTree == null)
        return null;
 
-     return localAndRemoteTree.getLocalDragTree();
+     return LocalAndRemoteFileTreeFrame.getLocalDragTree();
    }
 
   /**
@@ -453,11 +432,12 @@ public class SetUpMenuBar
     writeFavorites();
     String fs = new String(System.getProperty("file.separator"));
     String cwd = new String(System.getProperty("user.dir") + fs);
-    if(ao.isSaveUserHomeSelected())
-      ao.userHomeSave();
+
+    ao.userHomeSave();
 
     if(seqList.isStoreSequenceList())  //create a SequenceList file
       saveSequenceList();
+    seqList.saveBounds();
 
     deleteTmp(new File(cwd),".jembosstmp");
     System.exit(0);

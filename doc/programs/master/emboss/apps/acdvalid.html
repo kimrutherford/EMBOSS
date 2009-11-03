@@ -21,19 +21,10 @@ acdvalid
     Description
 </H2>
 
-Acdvalid processes the ACD file for an EMBOSS program and reports any
-errors or warnings caused by incorrect, deprecated or obsolete syntax.
+<p><b>acdvalid</b> processes an ACD file and reports any errors or warnings caused by incorrect, deprecated or obsolete syntax.  The tests go above and beyond those of <b>acdc</b> and <b>acdtrace</b>.  It highlights ACD syntax that might cause problems to third-party parsing software which wrap the EMBOSS applications.</p>
 
-<p>
-Acdvalid does not have its own command line. Instead, it will run the
-command line of any EMBOSS program by reading its ACD file and
-processing the command line and user responses in exactly the same way
-as the true program.
+<p><b>acdvalid</b> validates the ACD file, testing many features which will not prevent an application from running, but will create problems for the interfaces, whether on the command-line or some other type.</p>
 
-<p>
-Acdvalid uses a very simple method. The first command line parameter is
-the name of the EMBOSS program to be compiled. All other command line
-parameters and qualifiers are processed by that program's ACD file.
 
 <H2>
     Usage
@@ -82,6 +73,22 @@ directly by the program's code.
 <H2>
     Notes
 </H2>
+
+<p><b>acdvalid</b> does not have its own options, but takes a single parameter which is the name of the EMBOSS application that is being testsed.  It is invoked by specifying the name of the application to be tested along with any command-line options after the name of the utility application itself:</p>
+
+<p><b>acdvalid</b> ApplicationName Options</p>
+
+
+
+<p><b>acdvalid</b> will run the command line interface of any EMBOSS program by reading its ACD file and processing the command line and user responses in exactly the same way as if the true program itself were running.  The application proper is <emphasis>not</emphasis> run; it is only the ACD file that is read.Any command-line options for the application being called can be specified. The user is prompted for any required values for application parameters and any input files are read. Output files can be specified in any available format however they will be empty (the application code is not called so there will be no output).</p>
+
+<p><b>acdvalid</b> will use any data files specified in the ACD file of the specified program, but will ignore any data files that are only used directly by the program's code.  EMBOSS data files are distributed with the application and stored in the standard EMBOSS data directory (see EMBOSS Users Manual for further information).</p>
+
+<p><b>acdvalid</b> generates both error and warning messages.  If the message is an "Error" then the ACD file will not work and requires fixing.  Most of the messages from <b>acdvalid</b> are "Warnings" and do not prevent a program from running, however it is still worth trying to fix the problem. 
+
+<p>Although the warning messages are only advisory, as many warnings as possible are fixed for any application in the main release. Further validation tests will be added in future releases so it is worth running <b>acdvalid</b> on all local ACD files with each new version of EMBOSS</p>
+
+
 
 
 <H2>

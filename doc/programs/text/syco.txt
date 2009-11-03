@@ -5,21 +5,21 @@
 
 Function
 
-   Synonymous codon usage Gribskov statistic plot
+   Draw synonymous codon usage statictic plot for a nucleotide sequence
 
 Description
 
-   syco is a frame-specific gene finder that tries to recognize protein
-   coding sequences by virtue of the similarity of their codon usage to a
-   codon frequency table.
-
-   syco finds regions of each forward reading frame of a nucleic acid
-   sequence that show strong codon preference. syco is useful for
-   locating protein coding regions, determining their reading frames,
-   estimating the level of expression of a gene, and locating nucleic
-   acid sequencing errors.
-
-   It is essential to use the correct codon usage file for the species.
+   syco may is a frame-specific gene finder that tries to recognize
+   protein coding sequences by virtue of the similarity of their codon
+   usage to a codon frequency table. Given a codon usage file and an
+   input nucleotide sequence, syco draws a plot of the synonymous codon
+   usage Gribskov statistic calculated for windows over the sequence. The
+   same data may be written to an output file. syco finds regions of each
+   forward reading frame of a nucleic acid sequence that show strong
+   codon preference. syco is useful for locating protein coding regions,
+   determining their reading frames, estimating the level of expression
+   of a gene, and locating nucleic acid sequencing errors. It is
+   essential to use the correct codon usage file for the species.
 
 Usage
 
@@ -27,7 +27,7 @@ Usage
 
 
 % syco -plot -cfile Epseae.cut 
-Synonymous codon usage Gribskov statistic plot
+Draw synonymous codon usage statictic plot for a nucleotide sequence
 Input nucleotide sequence: tembl:x13776
 Graph type [x11]: ps
 
@@ -91,8 +91,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -326,18 +327,19 @@ Known bugs
 
 See also
 
-   Program name                        Description
-   cai          CAI codon adaptation index
-   chips        Codon usage statistics
-   codcmp       Codon usage table comparison
-   cusp         Create a codon usage table
-   getorf       Finds and extracts open reading frames (ORFs)
-   marscan      Finds MAR/SAR sites in nucleic sequences
-   plotorf      Plot potential open reading frames
-   showorf      Pretty output of DNA translations
-   sixpack      Display a DNA sequence with 6-frame translation and ORFs
-   tcode        Fickett TESTCODE statistic to identify protein-coding DNA
-   wobble       Wobble base plot
+   Program name Description
+   cai Calculate codon adaptation index
+   chips Calculates Nc codon usage statistic
+   codcmp Codon usage table comparison
+   cusp Create a codon usage table from nucleotide sequence(s)
+   getorf Finds and extracts open reading frames (ORFs)
+   marscan Finds matrix/scaffold recognition (MRS) signatures in DNA
+   sequences
+   plotorf Plot potential open reading frames in a nucleotide sequence
+   showorf Display a nucleotide sequence and translation in pretty format
+   sixpack Display a DNA sequence with 6-frame translation and ORFs
+   tcode Identify protein-coding regions using Fickett TESTCODE statistic
+   wobble Plot third base position variability in a nucleotide sequence
 
    wobble does the analysis of the third base.
 

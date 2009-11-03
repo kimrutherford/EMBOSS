@@ -5,112 +5,21 @@
 
 Function
 
-   Display a sequence with features, translation etc
+   Displays sequences with features in pretty format
 
 Description
 
-   showseq displays a protein or a nucleic acid sequence in a style
-   suitable for publication.
-
-   The output is sent to the screen by default for the user to view, but
-   it can write the results to a file.
-
-   The display style of the output is very flexible. The user can select
-   a style from the pre-set choice of formats, or can design a style to
-   suit their purposes and aesthetic tastes.
-
-   If designing a new format, you can choose the order in which things
-   are printed around the sequence. The things that you can display are:
-
-s       Sequence
-b       Blank line
-1       Frame 1 translation
-2       Frame 2 translation
-3       Frame 3 translation
--1      Frame -1 translation
--2      Frame -2 translation
--2      Frame -3 translation
-t       Ticks line
-n       Number ticks line
-c       Complement sequence
-f       Features (from the feature table or from a command line -ufo file)
-r       Restriction enzyme cut sites in the forward sense
--r      Restriction enzyme cut sites in the reverse sense
-a       User Annotation
-
-   The letters for these things can be in upper or lower case.
-   They can be displayed in any order.
-
-   You do not have to make your own format; there is a selection of
-   pre-defined standard formats for you to choose from.
-
-   The default standard format displays the following: for every new line
-   that the sequence starts to write, the output display will contain
-   first a blank line ('b'), then the position numbers of the ticks ('n')
-   then the ticks every 10 characters ('t') then the sequence itself
-   ('s') then any user-supplied annotation ('a') then the features from
-   the feature table ('f'). Subsequent lines of the sequence output will
-   repeat this format.
-
-   The 'thing' codes used in the list of standard formats are:
-
-Sequence only:                  S A
-Default sequence:               B N T S A F
-Pretty sequence:                B N T S A
-One frame translation:          B N T S B 1 A F
-Three frame translations:       B N T S B 1 2 3 A F
-Six frame translations:         B N T S B 1 2 3 T -3 -2 -1 A F
-Restriction enzyme map:         B R S N T C -R B 1 2 3 T -3 -2 -1 A
-Baroque:                        B 1 2 3 N T R S T C -R T -3 -2 -1 A F
-
-   The displayed sequence can be numbered either by numbering the start
-   and ending positions, or by placing a ruler with ticks above or below
-   the sequence.
-
-   The width of a line can be set. The width of a margin around the
-   sequence reserved for numbering can be set. The initial position to
-   start numbering from can be set.
-
-   The sequence can be translated, using the selectable genetic code
-   tables. The translation can be done in one, three or six frames. The
-   translation can be displayed in one-letter or three-letter amino acid
-   codes. The translation can optionally be displayed only when it is in
-   open reading frames (ORFs) of a specified minimum size. One or more
-   specified regions of the sequence can be individually translated.
-
-   Specified regions of the sequence can be displayed in uppercase to
-   highlight them.
-
-   The output can be formatted for HTML.
-
-   If the output is being formatted for HTML, then specified regions of
-   the sequence can be displayed in any valid HTML colours.
-
-   The Restriction Enzyme database (REBASE) is a collection of
-   information about restriction enzymes and related proteins. It
-   contains published and unpublished references, recognition and
-   cleavage sites, isoschizomers, commercial availability, methylation
-   sensitivity, crystal and sequence data. DNA methyltransferases, homing
-   endonucleases, nicking enzymes, specificity subunits and control
-   proteins are also included. Most recently, putative DNA
-   methyltransferases and restriction enzymes, as predicted from analysis
-   of genomic sequences, are also listed.
-
-   The home page of REBASE is: http://rebase.neb.com/
-
-   This program can use REBASE data to find the recognition sites and/or
-   cut sites of restriction enzymes in a nucleic acid sequence.
-
-   This program can display the cut sites on both strands.
-
-   One potentially very useful option is '-flatreformat' that displays
-   not only the cut sites which many other restriction cut-site programs
-   will show, but also shows the recognition site.
-
-   If the sequence is in EMBL, Genbank or SwissProt format, the feature
-   table of the sequence can be dispalyed with the sequence. GFF file
-   features can also be displayed if they are included on the command
-   line with the -ufo=file qualifier.
+   showseq displays one or more protein or nucleic acid sequences, with
+   features, in a style suitable for publication. The output is sent to
+   screen by default but can be written to file. You may pick a format
+   from a list, alternatively, use the many options to control what is
+   output and in what format. Optionally, the sequence feature table can
+   be displayed. Where the input sequence is a nucleic acid, the sequence
+   can be translated, using the specified genetic code tables. Also
+   recognition sites and/or cut sites of restriction enzymes from the
+   REBASE database may be displayed. There are various other options for
+   controlling how the sequence is displayed and numbered and the output
+   can be formatted for HTML.
 
 Usage
 
@@ -118,7 +27,7 @@ Usage
 
 
 % showseq tembl:x13776 -sbeg 1 -send 100 
-Display a sequence with features, translation etc..
+Displays sequences with features in pretty format
 Things to display
          0 : Enter your own list of things to display
          1 : Sequence only
@@ -146,7 +55,7 @@ Output file [x13776.showseq]:
 
 
 % showseq tembl:x13776 -sbeg 1 -send 120 
-Display a sequence with features, translation etc..
+Displays sequences with features in pretty format
 Things to display
          0 : Enter your own list of things to display
          1 : Sequence only
@@ -185,7 +94,7 @@ Output file [x13776.showseq]:
 
 
 % showseq tembl:x13776 -sbeg 1 -send 100 -noname -nodesc -format 0 -thing S 
-Display a sequence with features, translation etc..
+Displays sequences with features in pretty format
 Output file [x13776.showseq]: 
 
    Go to the output files for this example
@@ -197,7 +106,7 @@ Output file [x13776.showseq]:
 
 
 % showseq tsw:rs24_fugru -three -format 2 
-Display a sequence with features, translation etc..
+Displays sequences with features in pretty format
 Output file [rs24_fugru.showseq]: 
 
    Go to the input files for this example
@@ -209,7 +118,7 @@ Output file [rs24_fugru.showseq]:
 
 
 % showseq tembl:x13776 -sbeg 1 -send 100 -format 1 -number 
-Display a sequence with features, translation etc..
+Displays sequences with features in pretty format
 Output file [x13776.showseq]: 
 
    Go to the output files for this example
@@ -220,7 +129,7 @@ Output file [x13776.showseq]:
 
 
 % showseq tembl:x13776 -sbeg 1 -send 100 -format 1 -number -offset 123 
-Display a sequence with features, translation etc..
+Displays sequences with features in pretty format
 Output file [x13776.showseq]: 
 
    Go to the output files for this example
@@ -233,7 +142,7 @@ Output file [x13776.showseq]:
 
 % showseq tembl:x13776 -sbeg 1 -send 100 -format 1 -slower -upper '25-45,101-20
 3,333-362' 
-Display a sequence with features, translation etc..
+Displays sequences with features in pretty format
 Output file [x13776.showseq]: 
 
    Go to the output files for this example
@@ -244,7 +153,7 @@ Output file [x13776.showseq]:
 
 
 % showseq tembl:x13776 -sbeg 1 -send 120 -format 4 -trans 25-49,66-76 
-Display a sequence with features, translation etc..
+Displays sequences with features in pretty format
 Output file [x13776.showseq]: 
 
    Go to the output files for this example
@@ -256,7 +165,7 @@ Output file [x13776.showseq]:
 
 % showseq tembl:x13776 -sbeg 1 -send 100 -format 2 -send 120 -annotation '13-26
  binding site 15-15 SNP' 
-Display a sequence with features, translation etc..
+Displays sequences with features in pretty format
 Output file [x13776.showseq]: 
 
    Go to the output files for this example
@@ -589,8 +498,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -1225,7 +1135,7 @@ Base2  = TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG
 Base3  = TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG
 ------------------------------------------------------------------------------
 
-   The EMBOSS REBASE restriction enzyme data files are stored iin
+   The EMBOSS REBASE restriction enzyme data files are stored in
    directory 'data/REBASE/*' under the EMBOSS installation directory.
 
    These files must first be set up using the program 'rebaseextract'.
@@ -1253,7 +1163,84 @@ Base3  = TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG
 
 Notes
 
-   None.
+   One or more things may be selected for display from a menu (-things
+   option). The order of specified characters (upper or lower case)
+   determines the order in the output:
+s       Sequence
+b       Blank line
+1       Frame 1 translation
+2       Frame 2 translation
+3       Frame 3 translation
+-1      Frame -1 translation
+-2      Frame -2 translation
+-2      Frame -3 translation
+t       Ticks line
+n       Number ticks line
+c       Complement sequence
+f       Features (from the feature table or from a command line -ufo file)
+r       Restriction enzyme cut sites in the forward sense
+-r      Restriction enzyme cut sites in the reverse sense
+a       User Annotation
+
+   Alternatively, there is a selection of pre-defined formats to choose
+   from. The codes from above used in the list of standard formats are:
+Sequence only:                  S A
+Default sequence:               B N T S A F
+Pretty sequence:                B N T S A
+One frame translation:          B N T S B 1 A F
+Three frame translations:       B N T S B 1 2 3 A F
+Six frame translations:         B N T S B 1 2 3 T -3 -2 -1 A F
+Restriction enzyme map:         B R S N T C -R B 1 2 3 T -3 -2 -1 A
+Baroque:                        B 1 2 3 N T R S T C -R T -3 -2 -1 A F
+
+   The default standard format displays the following: for every new line
+   that the sequence starts to write, the output display will contain
+   first a blank line (b), then the position numbers of the ticks (n)
+   then the ticks every 10 characters (t) then the sequence itself (s)
+   then any user-supplied annotation (a) then the features from the
+   feature table (f). Subsequent lines of the sequence output will repeat
+   this format.
+
+   The sequence can be translated, using the specified genetic code
+   tables. The translation can be done in one, three or six frames. The
+   translation can be displayed in one-letter or three-letter amino acid
+   codes. The translation can optionally be displayed only when it is in
+   open reading frames (ORFs) of a specified minimum size. One or more
+   specified regions of the sequence can be individually translated.
+
+   The output can be formatted for HTML. If the output is being formatted
+   for HTML, then specified regions of the sequence can be displayed in
+   any valid HTML colours.
+
+   This program can use REBASE data to find the recognition sites and/or
+   cut sites of restriction enzymes in a nucleic acid sequence. This
+   program can display the cut sites on both strands. The -flatreformat
+   option displays not only the cut sites which many other restriction
+   cut-site programs will show, but also shows the recognition site.
+
+   The Restriction Enzyme database (REBASE) is a collection of
+   information about restriction enzymes and related proteins. It
+   contains published and unpublished references, recognition and
+   cleavage sites, isoschizomers, commercial availability, methylation
+   sensitivity, crystal and sequence data. DNA methyltransferases, homing
+   endonucleases, nicking enzymes, specificity subunits and control
+   proteins are also included. Most recently, putative DNA
+   methyltransferases and restriction enzymes, as predicted from analysis
+   of genomic sequences, are also listed. The home page of REBASE is:
+   http://rebase.neb.com/
+
+   If the sequence is in EMBL, Genbank or SwissProt format, the feature
+   table of the sequence can be dispalyed with the sequence. GFF file
+   features can also be displayed if they are included on the command
+   line using -ufo=file.
+
+   Other display options include: The displayed sequence can be numbered
+   either by numbering the start and ending positions, or by placing a
+   ruler with ticks above or below the sequence. An initial position to
+   start the numbering from can be set. The width of a line, and width of
+   a margin around the sequence reserved for numbering can be set.
+   Specified regions of the sequence can be displayed in uppercase to
+   highlight them.
 
 References
 
@@ -1284,32 +1271,37 @@ Known bugs
 
 See also
 
-   Program name                         Description
-   abiview       Reads ABI file and display the trace
-   backtranambig Back translate a protein sequence to ambiguous codons
-   backtranseq   Back translate a protein sequence
-   cirdna        Draws circular maps of DNA constructs
-   coderet       Extract CDS, mRNA and translations from feature tables
-   lindna        Draws linear maps of DNA constructs
-   pepnet        Displays proteins as a helical net
-   pepwheel      Shows protein sequences as helices
-   plotorf       Plot potential open reading frames
-   prettyplot    Displays aligned sequences, with colouring and boxing
-   prettyseq     Output sequence with translated ranges
-   recoder       Remove restriction sites but maintain same translation
-   redata        Search REBASE for enzyme name, references, suppliers etc
-   remap         Display sequence with restriction sites, translation etc
-   restover      Find restriction enzymes producing specific overhang
-   restrict      Finds restriction enzyme cleavage sites
-   seealso       Finds programs sharing group names
-   showalign     Displays a multiple sequence alignment
-   showdb        Displays information on the currently available databases
-   showfeat      Show features of a sequence
-   showorf       Pretty output of DNA translations
-   silent        Silent mutation restriction enzyme scan
-   sixpack       Display a DNA sequence with 6-frame translation and ORFs
-   textsearch    Search sequence documentation. Slow, use SRS and Entrez!
-   transeq       Translate nucleic acid sequences
+   Program name Description
+   abiview Display the trace in an ABI sequencer file
+   backtranambig Back-translate a protein sequence to ambiguous
+   nucleotide sequence
+   backtranseq Back-translate a protein sequence to a nucleotide sequence
+   cirdna Draws circular maps of DNA constructs
+   coderet Extract CDS, mRNA and translations from feature tables
+   lindna Draws linear maps of DNA constructs
+   pepnet Draw a helical net for a protein sequence
+   pepwheel Draw a helical wheel diagram for a protein sequence
+   plotorf Plot potential open reading frames in a nucleotide sequence
+   prettyplot Draw a sequence alignment with pretty formatting
+   prettyseq Write a nucleotide sequence and its translation to file
+   recoder Find restriction sites to remove (mutate) with no translation
+   change
+   redata Retrieve information from REBASE restriction enzyme database
+   remap Display restriction enzyme binding sites in a nucleotide
+   sequence
+   restover Find restriction enzymes producing a specific overhang
+   restrict Report restriction enzyme cleavage sites in a nucleotide
+   sequence
+   seealso Finds programs with similar function to a specified program
+   showalign Display a multiple sequence alignment in pretty format
+   showdb Displays information on configured databases
+   showfeat Display features of a sequence in pretty format
+   showorf Display a nucleotide sequence and translation in pretty format
+   silent Find restriction sites to insert (mutate) with no translation
+   change
+   sixpack Display a DNA sequence with 6-frame translation and ORFs
+   textsearch Search the textual description of sequence(s)
+   transeq Translate nucleic acid sequences
 
 Author(s)
 

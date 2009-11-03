@@ -57,12 +57,12 @@ int main(int argc, char **argv, char **env)
     search  = ajAcdGetString("search");
     outfile = ajAcdGetOutfile("outfile");
     html    = ajAcdGetToggle("html");
-    groups  = ajAcdGetBool("groups");
-    emboss  = ajAcdGetBool("emboss");
-    embassy = ajAcdGetBool("embassy");
+    groups  = ajAcdGetBoolean("groups");
+    emboss  = ajAcdGetBoolean("emboss");
+    embassy = ajAcdGetBoolean("embassy");
     showembassy = ajAcdGetString("showembassy");
-    explode = ajAcdGetBool("explode");
-    colon   = ajAcdGetBool("colon");
+    explode = ajAcdGetBoolean("explode");
+    colon   = ajAcdGetBoolean("colon");
     
     
     glist = ajListNew();

@@ -183,9 +183,9 @@ int main(int argc, char **argv)
 	    ++npoints;
 	}
 
-	if(!plot)
+	if(report)
 	    tcode_report(report, from, to, testcodes, npoints, ftable, seq);
-	else
+	if(plot)
 	{
 	    this = ajGraphPlpDataNewI(npoints);
 	    ajGraphPlpDataSetTypeC(this,"2D plot");
@@ -231,8 +231,7 @@ int main(int argc, char **argv)
 
     ajSeqallDel(&seqall);
     ajSeqDel(&seq);
-    if(!plot)
-	ajReportClose(report);
+    ajReportClose(report);
     ajReportDel(&report);
     ajFileClose(&datafile);
     ajFeattableDel(&ftable);
@@ -279,7 +278,7 @@ static AjBool tcode_readdata(AjPTestcode *table1, AjPFile datafile)
 
     while(val && ok)
     {
-	ok = ajFileReadLine(datafile,&line);
+	ok = ajReadlineTrim(datafile,&line);
 	c  = *ajStrGetPtr(line);
 
 	if(c=='#' || c=='\n')
@@ -294,7 +293,7 @@ static AjBool tcode_readdata(AjPTestcode *table1, AjPFile datafile)
 
     while(val && ok)
     {
-	ok = ajFileReadLine(datafile,&line);
+	ok = ajReadlineTrim(datafile,&line);
 	c = *ajStrGetPtr(line);
 
 	if(c=='#' || c=='\n')
@@ -308,7 +307,7 @@ static AjBool tcode_readdata(AjPTestcode *table1, AjPFile datafile)
     ok = ajTrue;
     while(ok && i != table->npositions)
     {
-	ok = ajFileReadLine(datafile,&line);
+	ok = ajReadlineTrim(datafile,&line);
 	c = *ajStrGetPtr(line);
 
 	if(c=='#' || c=='\n')
@@ -328,7 +327,7 @@ static AjBool tcode_readdata(AjPTestcode *table1, AjPFile datafile)
     ok = ajTrue;
     while(ok && i != table->ncontent)
     {
-	ok = ajFileReadLine(datafile,&line);
+	ok = ajReadlineTrim(datafile,&line);
 	c = *ajStrGetPtr(line);
 
 	if(c=='#' || c=='\n')
@@ -348,7 +347,7 @@ static AjBool tcode_readdata(AjPTestcode *table1, AjPFile datafile)
     ok = ajTrue;
     while(ok && i != 4)
     {
-	ok = ajFileReadLine(datafile,&line);
+	ok = ajReadlineTrim(datafile,&line);
 	c = *ajStrGetPtr(line);
 
 	if(c=='#' || c=='\n')
@@ -364,7 +363,7 @@ static AjBool tcode_readdata(AjPTestcode *table1, AjPFile datafile)
     ok = ajTrue;
     while(ok && i != 4)
     {
-	ok = ajFileReadLine(datafile,&line);
+	ok = ajReadlineTrim(datafile,&line);
 	c = *ajStrGetPtr(line);
 
 	if(c=='#' || c=='\n')

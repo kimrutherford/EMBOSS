@@ -55,7 +55,7 @@ int main(int argc, char **argv)
     wordlen = ajAcdGetInt("wordsize");
     seq1    = ajAcdGetSeq("asequence");
     seq2    = ajAcdGetSeq("bsequence");
-    prefer  = ajAcdGetBool("prefer");
+    prefer  = ajAcdGetBoolean("prefer");
     outfile = ajAcdGetOutfile("outfile");
     seqout  = ajAcdGetSeqout("outseq");
 

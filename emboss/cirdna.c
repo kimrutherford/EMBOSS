@@ -244,7 +244,7 @@ int main(int argc, char **argv)
     maxlabels = ajAcdGetInt("maxlabels");
 
     /* to draw or not to draw the ruler */
-    Ruler = ajAcdGetBool("ruler");
+    Ruler = ajAcdGetBoolean("ruler");
 
     /* get the type of blocks */
     BlockType = ajAcdGetListSingle("blocktype");
@@ -259,17 +259,17 @@ int main(int argc, char **argv)
     PosBlocks = ajAcdGetSelectSingle("posblocks");
 
     /* to draw or not to draw junctions to link blocks */
-    InterSymbol = ajAcdGetBool("intersymbol");
+    InterSymbol = ajAcdGetBoolean("intersymbol");
     /* get the colour of junctions used to link blocks */
     InterColour = ajAcdGetInt("intercolour");
 
     /* to draw or not to draw junctions between ticks */
-    InterTicks = ajAcdGetBool("interticks");
+    InterTicks = ajAcdGetBoolean("interticks");
 
     /* get the size of the intervals between the ruler's ticks */
     GapSize = ajAcdGetInt("gapsize");
     /* to draw or not to draw vertical lines at ruler's ticks */
-    TickLines = ajAcdGetBool("ticklines");
+    TickLines = ajAcdGetBoolean("ticklines");
 
 
     /* set the output graphical context */
@@ -331,7 +331,7 @@ int main(int argc, char **argv)
     Width *= (float)(640.0/480.0*1.1);	   /* to get a circle, not an oval */
     Height = DrawLength + 2*Border;
 
-    ajGraphSetTitlePlus(graph, ajFileGetName(infile));
+    ajGraphSetTitlePlus(graph, ajFileGetNameS(infile));
 
 /*    ajGraphOpenWin(graph, -5.0, Width+5.0, -5.0, Height+5.0);*/
 /*    ajGraphOpenWin(graph, 0, Width, 0, Height);*/
@@ -349,7 +349,7 @@ int main(int argc, char **argv)
     line = ajStrNew();
     ajFileSeek(infile, 0L, 0);
     i = 0;
-    while( ajFileReadLine(infile, &line) )
+    while( ajReadlineTrim(infile, &line) )
     {
 	if( ajStrPrefixC(line, "group") )
 	{
@@ -1543,7 +1543,7 @@ static void cirdna_ReadInput(AjPFile infile,
     AjPStr line;
 
     line = ajStrNew();
-    while(ajFileReadLine(infile, &line))
+    while(ajReadlineTrim(infile, &line))
     {
 	/* read the start and end positions */
 	if(ajStrPrefixC(line, "Start"))
@@ -1601,8 +1601,8 @@ static AjPStr cirdna_ReadGroup(AjPFile infile, ajint maxlabels,
     style = (char *)AJALLOC( 10*sizeof(char) );
 
     /* read the group's name */
-    pos = ajFileTell(infile);
-    while(ajFileReadLine(infile, &GroupName))
+    pos = ajFileResetPos(infile);
+    while(ajReadlineTrim(infile, &GroupName))
     {
 	token = ajStrParseC(GroupName, " \n\t\r\f");
 	if(ajStrGetLen(token)!=0)
@@ -1619,7 +1619,7 @@ static AjPStr cirdna_ReadGroup(AjPFile infile, ajint maxlabels,
 
     i = 0;
     ajFileSeek(infile, pos, 0);
-    while(ajFileReadLine(infile, &line))
+    while(ajReadlineTrim(infile, &line))
     {
 	token = ajStrParseC(line, " \n\t\r\f");
 	if(ajStrGetLen(token)!=0)
@@ -1631,7 +1631,7 @@ static AjPStr cirdna_ReadGroup(AjPFile infile, ajint maxlabels,
 		/* read the group's label(s) */
 		if(ajStrPrefixC(line, "label"))
 		{
-		    while(ajFileReadLine(infile, &line))
+		    while(ajReadlineTrim(infile, &line))
 		    {
 			if (i == maxlabels)
 			    ajWarn("Too many labels (maxlabels=%d) in input",
@@ -1665,7 +1665,7 @@ static AjPStr cirdna_ReadGroup(AjPFile infile, ajint maxlabels,
 		    j = 0;
 
 		    /* read the label's name(s) */
-		    while(ajFileReadLine(infile, &line))
+		    while(ajReadlineTrim(infile, &line))
 		    {
 			token = ajStrParseC(line, " \n\t\r\f");
 			if(ajStrGetLen(token)!=0)

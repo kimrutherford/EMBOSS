@@ -27,41 +27,6 @@ Description
    database type. If the answer is "unknown" dbiblast will test each
    possible set of file names until one is found.
 
-   Having created the EMBOSS indices for this file, a database can then
-   be defined in the file emboss.defaults as something like:
-
-DB swnew [
-   type: P
-   format: embl
-   method: blast
-   directory: /data/embl
-]
-
-  Fields Indexed
-
-   By default, dbiblast will index the ID name and the accession number
-   (if present).
-   If they are present in your database, you may specify that dbiblast
-   should index the Sequence Version and GI number and the words in the
-   description by using the '-fields' qualifier with the appropriate
-   values.
-
-  Indexing the Blast database
-
-   dbiblast can't use the new style of Blast indices. You must create the
-   old style of Blast indices by adding -A F to the formatdb command
-   line.
-
-   The reason is that NCBI have not documented the new format, so we
-   cannot extend dbiblast to read it.
-
-   If you have the original (fasta format) file you can build the
-   previous blast database format with:
-
-   formatdb -A F
-
-   This turns off the new "ASN.1" formatting. blastall will still work.
-
 Usage
 
    Here is a sample session with dbiblast
@@ -132,8 +97,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -177,10 +143,10 @@ Output file format
 
 ########################################
 # Program: dbiblast
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Dbname: swnew
 # Release: 0.0
-# Date: 15/07/07
+# Date: 15/07/08
 # CurrentDirectory: /homes/user/test/qa/dbiblast-ex-keep/
 # IndexDirectory: ./
 # IndexDirectoryPath: /homes/user/test/qa/dbiblast-ex-keep/
@@ -243,6 +209,41 @@ Notes
    old style of Blast indices by adding -A F to the formatdb command
    line.
 
+   Having created the EMBOSS indices for this file, a database can then
+   be defined in the file emboss.defaults as something like:
+
+DB swnew [
+   type: P
+   format: embl
+   method: blast
+   directory: /data/embl
+]
+
+  Fields Indexed
+
+   By default, dbiblast will index the ID name and the accession number
+   (if present).
+   If they are present in your database, you may specify that dbiblast
+   should index the Sequence Version and GI number and the words in the
+   description by using the '-fields' qualifier with the appropriate
+   values.
+
+  Indexing the Blast database
+
+   dbiblast can't use the new style of Blast indices. You must create the
+   old style of Blast indices by adding -A F to the formatdb command
+   line.
+
+   The reason is that NCBI have not documented the new format, so we
+   cannot extend dbiblast to read it.
+
+   If you have the original (fasta format) file you can build the
+   previous blast database format with:
+
+   formatdb -A F
+
+   This turns off the new "ASN.1" formatting. blastall will still work.
+
 References
 
    None.
@@ -266,12 +267,12 @@ Known bugs
 See also
 
    Program name                     Description
-   dbifasta     Database indexing for fasta file databases
+   dbifasta     Index a fasta file database
    dbiflat      Index a flat file database
    dbigcg       Index a GCG formatted database
-   dbxfasta     Database b+tree indexing for fasta file databases
-   dbxflat      Database b+tree indexing for flat file databases
-   dbxgcg       Database b+tree indexing for GCG formatted databases
+   dbxfasta     Index a fasta file database using b+tree indices
+   dbxflat      Index a flat file database using b+tree indices
+   dbxgcg       Index a GCG formatted database using b+tree indices
 
 Author(s)
 

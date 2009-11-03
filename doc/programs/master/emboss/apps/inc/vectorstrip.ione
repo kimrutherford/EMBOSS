@@ -1,1 +1,1 @@
-Strips out DNA between a pair of vector sequences
+Removes vectors from the ends of nucleotide sequence(s)

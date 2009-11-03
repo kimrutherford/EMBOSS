@@ -786,7 +786,7 @@ sub writeInput {
 
     my $out = "$incdir/$application.input";
     open (OUT, "> $out") || die "Can't open $out";
-    $input =~ s/DATE  [A-Z][a-z][a-z] [A-Z][a-z][a-z] +[0-9]+ [0-9:]+ 200[5-9]/DATE  Sat Jul 15 12:00:00 2006/go;
+    $input =~ s/DATE  [A-Z][a-z][a-z] [A-Z][a-z][a-z] +[0-9]+ [0-9:]+ 200[5-9]/DATE  Sun Jul 15 12:00:00 2007/go;
     print OUT $input;
     close(OUT);
     chmod 0664, $out;	# rw-rw-r--
@@ -804,10 +804,10 @@ sub writeOutput {
     my $out = "$incdir/$application.output";
     open (OUT, "> $out") || die "Can't open $out";
     $output =~ s/\/homes\/pmr\/cvsemboss/\/homes\/user/go;
-    $output =~ s/DATE  [A-Z][a-z][a-z] [A-Z][a-z][a-z] +[0-9]+ [0-9:]+ 200[5-9]/DATE  Sat Jul 15 12:00:00 2006/go;
-    $output =~ s/CreationDate: ... ... +\d+ [0-9:]+ 2[0-9][0-9][0-9]$/CreationDate: Sat Jul 15 12:00:00 2006/gom;
-    $output =~ s/Rundate: ... ... +\d+ 2[0-9][0-9][0-9] [0-9:]+$/Rundate: Sat Jul 15 2006 12:00:00/gom;
-    $output =~ s/\#\#date 2[0-9][0-9][0-9][-][0-9][0-9][-][0-9][0-9]$/\#\#date 2006-07-15/gom;
+    $output =~ s/DATE  [A-Z][a-z][a-z] [A-Z][a-z][a-z] +[0-9]+ [0-9:]+ 200[5-9]/DATE  Sun Jul 15 12:00:00 2007/go;
+    $output =~ s/CreationDate: ... ... +\d+ [0-9:]+ 2[0-9][0-9][0-9]$/CreationDate: Sun Jul 15 12:00:00 2007/gom;
+    $output =~ s/Rundate: ... ... +\d+ 2[0-9][0-9][0-9] [0-9:]+$/Rundate: Sun Jul 15 2007 12:00:00/gom;
+    $output =~ s/\#\#date 2[0-9][0-9][0-9][-][0-9][0-9][-][0-9][0-9]$/\#\#date 2007-07-15/gom;
     $output =~ s/domainalign\-[0-9]+[.][0-9]+[.]/domainalign-1234567890.1234./go;
     $output =~ s/domainrep\-[0-9]+[.][0-9]+[.]/domainrep-1234567890.1234./go;
     $output =~ s/seqalign\-[0-9]+[.][0-9]+[.]/seqalign-1234567890.1234./go;

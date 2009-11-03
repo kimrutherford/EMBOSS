@@ -99,7 +99,7 @@ AjPRange ajRangeNewI(ajuint n)
 
 /* @func ajRangeCopy **********************************************************
 **
-** Default constructor for AJAX range objects.
+** Copy constructor for AJAX range objects.
 **
 ** @param [r] src [const AjPRange] Source range
 **
@@ -522,10 +522,10 @@ AjPRange ajRangeFileLimits(const AjPStr name, ajuint imin, ajuint imax,
     textlist = ajListstrNew();
 
     
-    if((infile = ajFileNewIn(name)) == NULL)
+    if((infile = ajFileNewInNameS(name)) == NULL)
 	return NULL;
 
-    while(ajFileReadLine(infile, &line))
+    while(ajReadlineTrim(infile, &line))
     {
 	ajStrTrimWhite(&line);
 	
@@ -892,7 +892,7 @@ AjBool ajRangeSeqExtract(const AjPRange thys, AjPSeq seq)
 
     nr = ajRangeNumber(thys);
 
-    ajDebug("ajRangeStrExtract Number:%d\n", nr);
+    ajDebug("ajRangeSeqExtract Number:%d\n", nr);
 
     if (nr)
     {
@@ -1494,7 +1494,16 @@ AjBool ajRangeDefault(const AjPRange thys, const AjPSeq s)
     /* test the range - 1..end or empty means whole sequence */
 
     if(thys->n==0)
+    {
+        ajDebug("ajRangeDefault n:%d begin:%u end:%u\n",
+                thys->n,
+                ajSeqGetBegin(s),ajSeqGetEnd(s));
 	return ajTrue;
+    }
+
+    ajDebug("ajRangeDefault n:%d start:%d end:%d begin:%u end:%u\n",
+            thys->n, thys->start[0], thys->end[0],
+            ajSeqGetBegin(s),ajSeqGetEnd(s));
 
     if(thys->n==1 &&
        thys->start[0]==ajSeqGetBegin(s) &&

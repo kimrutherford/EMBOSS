@@ -1,5 +1,5 @@
 application: equicktandem [
-  documentation: "Finds tandem repeats"
+  documentation: "Finds tandem repeats in nucleotide sequences"
   groups: "Nucleic:Repeats"
 ]
 

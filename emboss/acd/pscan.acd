@@ -1,5 +1,6 @@
 application: pscan [
-  documentation: "Scans proteins using PRINTS"
+  documentation: "Scans protein sequence(s) with fingerprints from
+                  the PRINTS database"
   groups: "Protein:Motifs"
 ]
 

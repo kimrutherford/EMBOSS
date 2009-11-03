@@ -1,0 +1,116 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>Directory: JASPAR_CORE</h3>
+<p>This directory contains output files, for example MA0070.pfm MA0071.pfm MA0072.pfm MA0073.pfm MA0074.pfm MA0075.pfm MA0076.pfm MA0077.pfm MA0078.pfm MA0079.pfm and matrix_list.txt.
+<p><h3>File: JASPAR_CORE/MA0070.pfm</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+ 5  3 16  1  0 17 17  0  0 16 12  8
+ 6  9  1  1 18  1  0  0 18  1  0  2
+ 2  3  1  0  0  0  0  1  0  0  1  2
+ 5  3  0 16  0  0  1 17  0  1  5  6
+</pre>
+</td></tr></table><p>
+<p><h3>File: JASPAR_CORE/MA0071.pfm</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+15  9  6 11 21  0  0  0  0 25
+ 1  1 12  2  0  0  0  0 25  0
+ 2  0  4  5  4 25 25  0  0  0
+ 7 15  3  7  0  0  0 25  0  0
+</pre>
+</td></tr></table><p>
+<p><h3>File: JASPAR_CORE/MA0072.pfm</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+ 9 17 15 35 23  2  0 28  0  0  0  0 36 15
+ 8  2  0  1  0 12  0  0  0  0  0 36  0  6
+ 8  7  3  0  0 13  0  8 36 36  0  0  0 10
+11 10 18  0 13  9 36  0  0  0 36  0  0  5
+</pre>
+</td></tr></table><p>
+<p><h3>File: JASPAR_CORE/MA0073.pfm</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+ 3  1  3  0  7  9  8  4  0 11  4  1  3  4  2  4  4  4  1  4
+ 8 10  8 11  4  2  3  6 11  0  7 10  8  6  9  5  5  6  7  4
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  1  0  3  2
+ 0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  2  1  1  0  1
+</pre>
+</td></tr></table><p>
+<p><h3>File: JASPAR_CORE/MA0074.pfm</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+ 3  0  0  0  0  9  4  2  2  5  0  0  1  0  7
+ 0  0  0  0  9  0  2  4  0  0  0  0  0  9  1
+ 7 10  9  0  0  1  0  2  8  5 10  0  0  0  2
+ 0  0  1 10  1  0  4  2  0  0  0 10  9  1  0
+</pre>
+</td></tr></table><p>
+<p><h3>File: JASPAR_CORE/MA0075.pfm</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+52 59  0  0 58
+ 2  0  0  0  0
+ 4  0  1  0  1
+ 1  0 58 59  0
+</pre>
+</td></tr></table><p>
+<p><h3>File: JASPAR_CORE/MA0076.pfm</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+16  0  0  0  0 20 16  4  1
+ 1 20 20  0  0  0  0  1  6
+ 2  0  0 20 20  0  0 15  0
+ 1  0  0  0  0  0  4  0 13
+</pre>
+</td></tr></table><p>
+<p><h3>File: JASPAR_CORE/MA0077.pfm</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+24 54 59  0 65 71  4 24  9
+ 7  6  4 72  4  2  0  6  9
+31  7  0  2  0  1  1 38 55
+14  9 13  2  7  2 71  8  3
+</pre>
+</td></tr></table><p>
+<p><h3>File: JASPAR_CORE/MA0078.pfm</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+ 7  8  3 30  0  0  0  0  0
+ 9  8 18  0  1  0  0  0 17
+ 6  4  1  0  0  0 31  2 10
+ 9 11  9  1 30 31  0 29  4
+</pre>
+</td></tr></table><p>
+<p><h3>File: JASPAR_CORE/MA0079.pfm</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+1 2 0 0 0 2 0 0 1 2
+1 1 0 0 5 0 1 0 1 0
+4 4 8 8 2 4 5 6 6 0
+2 1 0 0 1 2 2 2 0 6
+</pre>
+</td></tr></table><p>
+<p><h3>File: JASPAR_CORE/matrix_list.txt</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+MA0073	22.2782723704014	RREB1	ZN-FINGER, C2H2	; acc "Q92766" ; medline "8816445" ; seqdb "SWISSPROT" ; species "Homo sapiens" ; sysgroup "vertebrate" ; total_ic "22.2800" ; type "SELEX" 
+MA0075	9.06306510239135	Prrx2	HOMEO	; acc "Q06348" ; medline "7901837" ; seqdb "SWISSPROT" ; species "Mus musculus" ; sysgroup "vertebrate" ; total_ic "9.0620" ; type "SELEX" 
+MA0070	14.6408952002356	Pbx	HOMEO	; acc "P40424" ; medline "7910944" ; seqdb "SWISSPROT" ; species "Homo sapiens" ; sysgroup "vertebrate" ; total_ic "14.6440" ; type "SELEX" 
+MA0079	9.7185757452318	SP1	ZN-FINGER, C2H2	; acc "P08047" ; medline "2192357" ; seqdb "SWISSPROT" ; species "Homo sapiens" ; sysgroup "vertebrate" ; total_ic "9.7160" ; type "SELEX" 
+MA0077	9.07881462267179	SOX9	HMG	; acc "P48436" ; medline "9973626" ; seqdb "SWISSPROT" ; species "Homo sapiens" ; sysgroup "vertebrate" ; total_ic "9.0810" ; type "SELEX" 
+MA0078	10.5018372361999	Sox17	HMG	; acc "Q61473" ; medline "8636240" ; seqdb "SWISSPROT" ; species "Mus musculus" ; sysgroup "vertebrate" ; total_ic "10.5030" ; type "SELEX" 
+MA0071	13.1897301896459	RORA	NUCLEAR RECEPTOR	; acc "P35397" ; medline "7926749" ; seqdb "SWISSPROT" ; species "Homo sapiens" ; sysgroup "vertebrate" ; total_ic "13.1920" ; type "SELEX" 
+MA0072	17.4248426117905	RORA1	NUCLEAR RECEPTOR	; acc "P35398" ; medline "7926749" ; seqdb "SWISSPROT" ; species "Homo sapiens" ; sysgroup "vertebrate" ; total_ic "17.4230" ; type "SELEX" 
+MA0074	20.4511671987138	RXR-VDR	NUCLEAR RECEPTOR	; acc "P11473" ; medline "8674817" ; seqdb "SWISSPROT" ; species "Homo sapiens" ; sysgroup "vertebrate" ; total_ic "20.4520" ; type "SELEX" 
+MA0076	14.123230134165	ELK4	ETS	; acc "P28324" ; medline "8524663" ; seqdb "SWISSPROT" ; species "Homo sapiens" ; sysgroup "vertebrate" ; total_ic "14.1230" ; type "SELEX" 
+</pre>
+</td></tr></table><p>
+<p><h3>Directory: JASPAR_FAM</h3>
+<p>This directory contains output files.
+<p>
+<p><h3>Directory: JASPAR_PHYLOFACTS</h3>
+<p>This directory contains output files.
+<p>

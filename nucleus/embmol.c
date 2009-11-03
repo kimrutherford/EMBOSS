@@ -18,8 +18,8 @@
 ******************************************************************************/
 
 #include "ajax.h"
-#include "embmol.h"
 #include "embprop.h"
+#include "embmol.h"
 #include "stdlib.h"
 #include "limits.h"
 #include "stdio.h"
@@ -41,11 +41,14 @@ static ajint embMolFragSort(const void* a, const void* b);
 ** @param [r] thys [const AjPStr] sequence
 ** @param [r] rno [ajint] 1=Trypsin 2=LysC 3=ArgC 4=AspN 5=V8b 6=V8p
 **                        7=Chy 8=CNBr
+** @param [r] mwdata [EmbPPropMolwt const *] molecular weight data
+** @param [r] mono [AjBool] true for monoisotopic data
 ** @param [w] l [AjPList*] list for results
 ** @return [ajint] number of fragments
 ******************************************************************************/
 
-ajint embMolGetFrags(const AjPStr thys, ajint rno, AjPList *l)
+ajint embMolGetFrags(const AjPStr thys, ajint rno, EmbPPropMolwt const *mwdata,
+		     AjBool mono, AjPList *l)
 {
     static struct enz
     {
@@ -117,7 +120,7 @@ ajint embMolGetFrags(const AjPStr thys, ajint rno, AjPList *l)
 	end = ajIntGet(defcut,i);
 	if(strchr(zyme[rno].type,(ajint)'N'))
 	    --end;
-	mw = embPropCalcMolwt(p,beg,end);
+	mw = embPropCalcMolwt(p,beg,end, mwdata, mono);
 	if(rno==7)
 	    mw -= (double)(17.0079 + 31.095);
 
@@ -131,7 +134,7 @@ ajint embMolGetFrags(const AjPStr thys, ajint rno, AjPList *l)
 
     if(defcnt)
     {
-	mw = embPropCalcMolwt(p,beg,len-1);
+	mw = embPropCalcMolwt(p,beg,len-1,mwdata,mono);
 	if(rno==7)
 	    mw -= (double)(17.0079 + 31.095);
 	AJNEW0(frag);
@@ -153,7 +156,7 @@ ajint embMolGetFrags(const AjPStr thys, ajint rno, AjPList *l)
 	    AJNEW0(frag);
 	    frag->begin = beg;
 	    frag->end   = end;
-	    mw = embPropCalcMolwt(p,beg-1,end-1);
+	    mw = embPropCalcMolwt(p,beg-1,end-1,mwdata,mono);
 	    frag->mwt = mw + EMBMOLPARDISP;
 	    ajListPush(*l,(void *)frag);
 	}

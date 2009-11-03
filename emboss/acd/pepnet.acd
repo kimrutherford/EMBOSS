@@ -1,5 +1,5 @@
 application: pepnet [
-  documentation: "Displays proteins as a helical net"
+  documentation: "Draw a helical net for a protein sequence"
   groups: "Display, Protein:2D Structure"
 ]
 

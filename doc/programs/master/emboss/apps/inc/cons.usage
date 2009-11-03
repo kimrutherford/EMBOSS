@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>cons </b>
-Creates a consensus from multiple alignments
+Create a consensus sequence from a multiple alignment
 Input (aligned) sequence set: <b>dna.msf</b>
 output sequence [dna.fasta]: <b>aligned.cons</b>
 

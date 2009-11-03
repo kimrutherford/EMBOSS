@@ -24,44 +24,22 @@ matcher
 <H2>
     Function
 </H2>
-Finds the best local alignments between two sequences
+Waterman-Eggert local alignment of two sequences
 
 <H2>
     Description
 </H2>
 
 
-<b>matcher</b> compares two sequences looking for local sequence similarities
-using a rigorous algorithm.
-
-<p>
-<b>matcher</b> is based on Bill Pearson's 'lalign' application, version 2.0u4
-Feb.  1996
-
-<p>
-
-Lalign uses code developed by X.  Huang and W.  Miller (Adv.  Appl. 
-Math.  (1991) 12:337-357) for the "sim" program, which is a linear-space
-version of an algorithm described by M.  S.  Waterman and M.  Eggert (J. 
-Mol.  Biol.  197:723-728).  
-
-<p>
-
-Like <b>water</b>, <b>matcher</b> is rigorous, but also very slow.  The
-advantage of <b>matcher</b> is that it uses far less memory than
-<b>water</b>, so you are much less likely to run out of memory when
-aligning large sequences. 
+<p><b>matcher</b> identifies local similarities in two input sequences using a rigorous algorithm based on Bill Pearson's <b>lalign</b> application, version 2.0u4 (Feb. 1996). The substitution matrix, gap insertion and extension penalty are specified. The specified number of top-scoring pair-wise local sequence alignments are written to file.</p>
 
 
-<p> 
+<H2>
+Algorithm
+</H2>
 
-<b>matcher</b> will also report a specified number of alignments between
-the two sequences showing the actual local alignments.  (<b>water</b>
-will only report the single best match.) The default number of
-alignments output is 1, but can be increased to (for example) the 10
-best alignments by using the '-alternatives 10' command-line qualifier. 
-In some cases, for example multidomain proteins or cDNA and genomic DNA
-comparisons, there may be many interesting and significant alignments. 
+
+<p><b>matcher</b> is based on Bill Pearson's <b>lalign</b> application, version 2.0u4 (Feb. 1996). lalign uses code developed by X. Huang and W. Miller (Adv. Appl. Math. (1991) 12:337-357) for the "sim" program, which is a linear-space version of an algorithm described by M. S. Waterman and M. Eggert (J. Mol. Biol. 197:723-728).</p>
 
 <H2>
     Usage
@@ -74,7 +52,7 @@ comparisons, there may be many interesting and significant alignments.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>matcher tsw:hba_human tsw:hbb_human </b>
-Finds the best local alignments between two sequences
+Waterman-Eggert local alignment of two sequences
 Output alignment [hba_human.matcher]: <b></b>
 
 </pre></td></tr></table><p>
@@ -90,7 +68,7 @@ To find the 10 best alignments:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>matcher tsw:hba_human tsw:hbb_human -alt 10 </b>
-Finds the best local alignments between two sequences
+Waterman-Eggert local alignment of two sequences
 Output alignment [hba_human.matcher]: <b></b>
 
 </pre></td></tr></table><p>
@@ -199,8 +177,9 @@ Output alignment [hba_human.matcher]: <b></b>
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -574,7 +553,7 @@ for further information on alignment formats.
 <pre>
 ########################################
 # Program: matcher
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: matcher
 #    [-asequence] tsw:hba_human
 #    [-bsequence] tsw:hbb_human
@@ -631,7 +610,7 @@ HBB_HU ENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKY
 <pre>
 ########################################
 # Program: matcher
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: matcher
 #    [-asequence] tsw:hba_human
 #    [-bsequence] tsw:hbb_human
@@ -774,7 +753,12 @@ The directories are searched in the following order:
     Notes
 </H2>
 
-None.
+<p><b>matcher</b> is rigorous but also very slow. The advantage of <b>matcher</b> over <b>water</b> (which is also rigorous) is that it uses far less memory, so you are much less likely to run out of memory when aligning large sequences.</p>
+<p><b>matcher</b> reports a specified number of alignments between the two sequences. <b>water</b> in contrast will only report only the single (optimal) match. The default number of alignments output is 1, but can be increased to (for example) the 10 best alignments by using the <tt>-alternatives 10</tt> command-line qualifier. In some cases, for example multidomain proteins or cDNA and genomic DNA comparisons, there may be many interesting and significant alignments.</p>
+
+<p><b>matcher</b> will not produce an alignment that is guaranteed to be optimal in the same way that <b>water</b> does, which implements the Needleman & Wunsch algorith.  <b>water</b> will generate the single, optimal local alignment and uses memory in the order of the product of the lengths of the sequences to be aligned. If you require an optimal alignment you should use <b>water</b>. If you run out of memory or want several possible good alignments, use <b>matcher</b>.</p>
+
+
 
 <H2>
     References
@@ -814,20 +798,21 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="seqmatchall.html">seqmatchall</a></td>
-<td>All-against-all comparison of a set of sequences</td>
+<td>All-against-all word comparison of a sequence set</td>
 </tr>
 
 <tr>
 <td><a href="supermatcher.html">supermatcher</a></td>
-<td>Match large sequences against one or more other sequences</td>
+<td>Calculate approximate local pair-wise alignments of larger sequences</td>
 </tr>
 
 <tr>
 <td><a href="water.html">water</a></td>
-<td>Smith-Waterman local alignment</td>
+<td>Smith-Waterman local alignment of sequences</td>
 </tr>
 
 <tr>
@@ -837,7 +822,7 @@ None.
 
 <tr>
 <td><a href="wordmatch.html">wordmatch</a></td>
-<td>Finds all exact matches of a given size between 2 sequences</td>
+<td>Finds regions of identity (exact matches) of two sequences</td>
 </tr>
 
 </table>

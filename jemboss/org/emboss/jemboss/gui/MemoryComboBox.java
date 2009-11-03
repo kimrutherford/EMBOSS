@@ -23,13 +23,9 @@
 package org.emboss.jemboss.gui;
 
 import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
 import java.util.Vector;
 import javax.swing.*;
-import javax.swing.event.*;
 import java.net.URL;
-import java.util.*;
 
 /**
 *

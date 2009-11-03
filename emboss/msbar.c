@@ -88,7 +88,7 @@ int main(int argc, char **argv)
     blocklist = ajAcdGetList("block");
 
     count   = ajAcdGetInt("count");
-    inframe = ajAcdGetBool("inframe");
+    inframe = ajAcdGetBoolean("inframe");
     min     = ajAcdGetInt("minimum");
     max     = ajAcdGetInt("maximum");
     other   = ajAcdGetSeqall("othersequence");
@@ -179,7 +179,16 @@ static void msbar_blockmutn(AjPStr *str, AjBool isnuc, AjPStr const *blocklist,
     double xlen;
     double xdiff;
     double td;
+    double tda;
+    double tdb;
+    ajint imax = max;
+    ajint imin = min;
     
+    if(inframe)
+        if(imin < 3) imin = 3;
+    if(imax < imin) imax = imin;
+    xlen = ajStrGetLen(*str)-1;
+
     while(blocklist[++i])
     {
 	ajDebug("Next block mutation operation = %S\n", blocklist[i]);
@@ -205,27 +214,23 @@ static void msbar_blockmutn(AjPStr *str, AjBool isnuc, AjPStr const *blocklist,
 	*/
 	if(inframe)
 	{
-	    if(min < 3) min = 3;
-	    xlen = ajStrGetLen(*str);
-	    td = ajRandomNumberD() * xlen/3.0;
-	    rposstart = (ajint) td;
-	    xdiff = max - min;
-	    td = ajRandomNumberD() * xdiff/3.0;
-	    rposend = rposstart + (min/3) + (ajint)td;
+	    tda = ajRandomNumberD() * xlen/3.0;
+	    rposstart = (ajint) tda;
+	    xdiff = imax - imin;
+	    tdb = ajRandomNumberD() * xdiff/3.0;
+	    rposend = rposstart + (imin/3) + (ajint)tdb - 1;
 	    rposstart *= 3;
 	    rposend *= 3;
 	    rposend--;
 	}
 	else
 	{
-	    xlen = ajStrGetLen(*str);
-	    td = ajRandomNumberD() * xlen;
-	    rposstart = (ajint) td;
-	    xdiff = max - min;
-	    td = ajRandomNumberD() * xdiff;
-	    rposend = rposstart + min + (ajint) td;
+	    tda = ajRandomNumberD() * xlen;
+	    rposstart = (ajint) tda;
+	    xdiff = imax - imin;
+	    tdb = ajRandomNumberD() * xdiff;
+	    rposend = rposstart + imin + (ajint) tdb - 1;
 	}
-
 
 	if(opt == 2)
 	{

@@ -1,6 +1,5 @@
 application: vectorstrip [
-  documentation: "Strips out DNA between a pair of vector
-                  sequences"
+  documentation: "Removes vectors from the ends of nucleotide sequence(s)"
   groups: "Edit"
 ]
 

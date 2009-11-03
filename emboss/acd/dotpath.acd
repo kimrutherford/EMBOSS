@@ -1,6 +1,5 @@
 application: dotpath [
-  documentation: "Non-overlapping wordmatch dotplot of two
-                  sequences"
+  documentation: "Draw a non-overlapping wordmatch dotplot of two sequences"
   groups: "Alignment:Dot plots"
   gui: "yes"
   batch: "yes"

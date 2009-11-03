@@ -1,0 +1,15 @@
+<b>Here is a sample session with featreport</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>featreport </b>
+Reads and writes a feature table
+Input sequence: <b>paamir.fasta</b>
+Input features: <b>paamir.gff</b>
+Output report [x13776.featreport]: <b>test.out</b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

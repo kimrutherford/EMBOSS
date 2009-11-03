@@ -262,7 +262,7 @@ AjBool ajDmxScopalgRead(AjPFile inf, AjPScopalg *thys)
 
 
     /* Read the rest of the file */
-    while(ajFileReadLine(inf,&line))
+    while(ajReadlineTrim(inf,&line))
     {
     	if(ajStrPrefixC(line,"# TY"))
 	{
@@ -282,7 +282,7 @@ AjBool ajDmxScopalgRead(AjPFile inf, AjPScopalg *thys)
 	else if(ajStrPrefixC(line,"# FO"))
 	{
 	    ajStrAssignC(&fold,ajStrGetPtr(line)+5);
-	    while((ajFileReadLine(inf,&line)))
+	    while((ajReadlineTrim(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"# XX"))
 		    break;
@@ -293,7 +293,7 @@ AjBool ajDmxScopalgRead(AjPFile inf, AjPScopalg *thys)
 	else if(ajStrPrefixC(line,"# SF"))
 	{
 	    ajStrAssignC(&super,ajStrGetPtr(line)+5);
-	    while((ajFileReadLine(inf,&line)))
+	    while((ajReadlineTrim(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"# XX"))
 		    break;
@@ -304,7 +304,7 @@ AjBool ajDmxScopalgRead(AjPFile inf, AjPScopalg *thys)
 	else if(ajStrPrefixC(line,"# FA"))
 	{
 	    ajStrAssignC(&family,ajStrGetPtr(line)+5);
-	    while((ajFileReadLine(inf,&line)))
+	    while((ajReadlineTrim(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"# XX"))
 		    break;
@@ -315,7 +315,7 @@ AjBool ajDmxScopalgRead(AjPFile inf, AjPScopalg *thys)
 	else if(ajStrPrefixC(line,"# AR"))
 	{
 	    ajStrAssignC(&arch,ajStrGetPtr(line)+5);
-	    while((ajFileReadLine(inf,&line)))
+	    while((ajReadlineTrim(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"# XX"))
 		    break;
@@ -326,7 +326,7 @@ AjBool ajDmxScopalgRead(AjPFile inf, AjPScopalg *thys)
 	else if(ajStrPrefixC(line,"# TP"))
 	{
 	    ajStrAssignC(&topo,ajStrGetPtr(line)+5);
-	    while((ajFileReadLine(inf,&line)))
+	    while((ajReadlineTrim(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"# XX"))
 		    break;
@@ -1576,7 +1576,7 @@ AjPScophit ajDmxScophitReadFasta(AjPFile inf)
     subline  = ajStrNew();
     type     = ajStrNew();
 
-    while((ajFileReadLine(inf,&line)))
+    while((ajReadlineTrim(inf,&line)))
     {
 	if(ajStrPrefixC(line,">"))
 	{

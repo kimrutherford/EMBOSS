@@ -26,7 +26,6 @@ import org.emboss.jemboss.soap.JembossSoapException;
 import org.emboss.jemboss.programs.ListFile;
 import org.emboss.jemboss.JembossParams;
 import org.emboss.jemboss.JembossJarUtil;
-import org.emboss.jemboss.gui.ShowResultSet;
 import java.security.Security; //ssl
 import java.net.*;
 import java.util.Hashtable;

@@ -24,16 +24,14 @@ cusp
 <H2>
     Function
 </H2>
-Create a codon usage table
+Create a codon usage table from nucleotide sequence(s)
 <H2>
     Description
 </H2>
 
-Reads one or more coding sequences (CDS sequence only) and calculates
-a codon frequency table.
+<p><b>cusp</b> calculates a codon usage table for one or more nucleotide coding sequences and writes the table to file.</p>
+<p>The codon usage table gives for each codon: i. Sequence of the codon.  ii. The encoded amino acid.  iii.  The proportion of usage of the codon among its redundant set, i.e. the set of codons which code for this codon's amino acid.  iv.  The expected number of codons, given the input sequence(s), per 1000 bases.  v. The observed number of codons in the input sequences.</p>
 
-<p>
-The output file can be used as a codon usage table in other applications.
 
 <H2>
     Usage
@@ -47,7 +45,7 @@ This example uses only one input sequence. The normal use would be to use a set 
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>cusp -sbeg 135 -send 1292 </b>
-Create a codon usage table
+Create a codon usage table from nucleotide sequence(s)
 Input nucleotide sequence(s): <b>tembl:x13776</b>
 Output file [x13776.cusp]: <b></b>
 
@@ -91,8 +89,9 @@ Output file [x13776.cusp]: <b></b>
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -357,37 +356,19 @@ TAG    *     0.000     0.000      0
 TGA    *     1.000     2.591      1
 </pre>
 </td></tr></table><p>
-<p>
-The example usage read in a
-single CDS from Pseudomonas aeruginosa which has a very high GC
-content ands a strong coding bias, as shown by the codons for Alanine
-where those ending with G or C are used almost exclusively.
 
-<p>
+<p>The example shown reads a single CDS from Pseudomonas aeruginosa which has a very high GC content ands a strong coding bias, as shown by the codons for Alanine where those ending with <tt>G</tt> or <tt>C</tt> are used almost exclusively.</p>
 
-The 'Fract' column gives that proportion of usage of a given codon among
-its redundant set (i.e. the set of codons which code for this codon's amino
-acid).  For example, the sum of the 6 codons representing serine will
-add up to 1.00. 
+<p>The columns are as follows: i. "Codon" (sequence of the codon).  ii. "AA" (the encoded amino acid).  iii.  "Fraction" (the proportion of usage of the codon among its redundant set, i.e. the set of codons which code for this codon's amino acid).  iv.  "Frequency" (the expected number of codons, given the input sequence(s), per 1000 bases). This will be an extrapolation if the sequence is shorter than 1000 bases. v. "Number" (the observed number of codons in the input sequences).</p>
 
-<p>
+<p>If multiple sequences are input then the statistics are given for all of the sequences together, not individually.</p>
 
-The /1000 column represents the number of codons, given the
-input sequence(s), there are per 1000 bases. This will be an
-extrapolation if the sequence is shorter than 1000 bases.
-
-<p>
-
-If multiple sequences are input then the statistics are given for all of
-the sequences together, not individually. 
 
 <H2>
     Data files
 </H2>
 
-cusp reads a codon usage file, but only as a template and does not use
-any of the data so any codon usage file from any species will give the
-same results.
+<p><b>cusp</b> reads a codon usage file as a template for it's output file.  The data in this table is ignored entirely.  This functionality is hard-coded and invisible to the user.</p>
 
 <p>
 EMBOSS data files are distributed with the application and stored
@@ -467,15 +448,16 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="cai.html">cai</a></td>
-<td>CAI codon adaptation index</td>
+<td>Calculate codon adaptation index</td>
 </tr>
 
 <tr>
 <td><a href="chips.html">chips</a></td>
-<td>Codon usage statistics</td>
+<td>Calculates Nc codon usage statistic</td>
 </tr>
 
 <tr>
@@ -485,7 +467,7 @@ None.
 
 <tr>
 <td><a href="syco.html">syco</a></td>
-<td>Synonymous codon usage Gribskov statistic plot</td>
+<td>Draw synonymous codon usage statictic plot for a nucleotide sequence</td>
 </tr>
 
 </table>

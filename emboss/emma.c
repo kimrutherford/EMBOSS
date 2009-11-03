@@ -117,7 +117,7 @@ int main(int argc, char **argv, char **env)
     use_dend  = ajAcdGetToggle("dend");
     dend_file = ajAcdGetInfile("dendfile");
     if (dend_file)
-	ajStrAssignS(&dend_filename, ajFileGetName(dend_file));
+	ajStrAssignS(&dend_filename, ajFileGetNameS(dend_file));
     ajFileClose(&dend_file);
 
     do_slow = ajAcdGetToggle("slow");
@@ -126,7 +126,7 @@ int main(int argc, char **argv, char **env)
     gapw      = ajAcdGetInt("gapw");
     topdiags  = ajAcdGetInt("topdiags");
     window    = ajAcdGetInt("window");
-    nopercent = ajAcdGetBool("nopercent");
+    nopercent = ajAcdGetBoolean("nopercent");
 
     pw_matrix = ajAcdGetListSingle("pwmatrix");
     pwmc = ajStrGetCharFirst(pw_matrix);
@@ -176,20 +176,20 @@ int main(int argc, char **argv, char **env)
     dna_matrix = ajAcdGetListSingle( "dnamatrix");
     m2c = ajStrGetCharFirst(dna_matrix);
 
-    if(m2c=='b')
+    if(m2c=='i')
 	ajStrAssignC(&m2str,"iub");
-    else if(m2c=='p')
+    else if(m2c=='c')
 	ajStrAssignC(&m2str,"clustalw");
-    else if(m2c=='g')
+    else if(m2c=='o')
 	ajStrAssignC(&m2str,"own");
 
 
     ma_matrix = ajAcdGetInfile("mamatrixfile");
     gapc      = ajAcdGetFloat("gapopen");
     gapv      = ajAcdGetFloat("gapextend");
-    endgaps   = ajAcdGetBool("endgaps");
-    norgap    = ajAcdGetBool("norgap");
-    nohgap    = ajAcdGetBool("nohgap");
+    endgaps   = ajAcdGetBoolean("endgaps");
+    norgap    = ajAcdGetBoolean("norgap");
+    nohgap    = ajAcdGetBoolean("nohgap");
     gap_dist  = ajAcdGetInt("gapdist");
     hgapres   = ajAcdGetString("hgapres");
     maxdiv    = ajAcdGetInt("maxdiv");
@@ -238,7 +238,7 @@ int main(int argc, char **argv, char **env)
     /* add out file name */
     tmp_aln_outfile = emma_getUniqueFileName();
     ajStrAppendC(&cmd, " -outfile=");
-    ajStrAppendS( &cmd, tmp_aln_outfile);
+    ajStrAppendS(&cmd, tmp_aln_outfile);
 
 
     /* calculating just the nj tree or doing full alignment */
@@ -288,7 +288,15 @@ int main(int argc, char **argv, char **env)
         }
         else
         {
-            if(!pairwise_matrix)
+            if(pairwise_matrix)
+            {
+		if(are_prot)
+		    ajStrAppendC(&cmd, " -pwmatrix=");
+		else
+		    ajStrAppendC(&cmd, " -pwdnamatrix=");
+		ajStrAppendS(&cmd, ajFileGetNameS(pairwise_matrix));
+            }
+            else
             {
 		if(are_prot)
 		{
@@ -300,14 +308,6 @@ int main(int argc, char **argv, char **env)
 		    ajStrAppendC(&cmd, " -pwdnamatrix=");
 		    ajStrAppendS(&cmd, pwdstr);
 		}
-            }
-            else
-            {
-		if(are_prot)
-		    ajStrAppendC(&cmd, " -pwmatrix=");
-		else
-		    ajStrAppendC(&cmd, " -pwdnamatrix=");
-		ajStrAppendS(&cmd, ajFileGetName(pairwise_matrix));
             }
             ajStrAppendC(&cmd, " -pwgapopen=");
             ajStrFromFloat(&tmp, pw_gapc, 3);
@@ -334,7 +334,15 @@ int main(int argc, char **argv, char **env)
         ajStrAppendS(&cmd, tmp_dendfilename);
     }
 
-    if(!ma_matrix)
+    if(ma_matrix)
+    {
+	if(are_prot)
+	    ajStrAppendC(&cmd, " -matrix=");
+	else
+	    ajStrAppendC(&cmd, " -pwmatrix=");
+	ajStrAppendS(&cmd, ajFileGetNameS(ma_matrix));
+    }
+    else
     {
 	if(are_prot)
 	{
@@ -346,14 +354,6 @@ int main(int argc, char **argv, char **env)
 	    ajStrAppendC(&cmd, " -dnamatrix=");
 	    ajStrAppendS(&cmd, m2str);
 	}
-    }
-    else
-    {
-	if(are_prot)
-	    ajStrAppendC(&cmd, " -matrix=");
-	else
-	    ajStrAppendC(&cmd, " -pwmatrix=");
-	ajStrAppendS(&cmd, ajFileGetName(ma_matrix));
     }
 
     ajStrAppendC(&cmd, " -gapopen=");
@@ -425,9 +425,9 @@ int main(int argc, char **argv, char **env)
     /* read in new tmp dend file (if produced) to output through EMBOSS */
     if(tmp_dendfilename!=NULL)
     {
-	tmp_dendfile = ajFileNewIn( tmp_dendfilename);
+	tmp_dendfile = ajFileNewInNameS( tmp_dendfilename);
 
-	while(ajFileReadLine(tmp_dendfile, &line))
+	while(ajReadlineTrim(tmp_dendfile, &line))
 	    ajFmtPrintF(dend_outfile, "%s\n", ajStrGetPtr( line));
 
 	ajFileClose(&tmp_dendfile);

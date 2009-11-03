@@ -19,34 +19,13 @@ garnier
     Description
 </H2>
 
-This is an implementation of the original Garnier Osguthorpe Robson
-algorithm (GOR I) for predicting protein secondary structure.
+<p><b>garnier</b> is an implementation of the original Garnier Osguthorpe Robson algorithm (GOR I) for predicting protein secondary structure.  It reads an input protein sequence and writes a standard EMBOSS report file with the predicted secondary structure.  The Garnier method is not regarded as the most accurate prediction, but is simple to calculate on most workstations.</p>
 
-<p>
+<H2>
+Algorithm
+</H2>
+<p>The '-idc' option sets offsets to the weights applied to the helix and sheet terms used in the GOR algorithm to assign a residue to a secondary structure state.  The option has a value from 0 - 6.  This gives an index into a set of arrays, <tt>dharr[]</tt> and <tt>dsarr[]</tt>, which provide 'decision constants' (<tt>dch</tt>, <tt>dcs</tt>), which are offsets that are applied to the weights for the helix and sheet (extend) terms. So, <tt>idc=0</tt> says don't use the decision constant offsets, and <tt>idc=1 to 6</tt> indicates that various combinations of <tt>dch</tt>,<tt>dcs</tt> offsets should be used.</p>
 
-Secondary structure prediction is notoriously difficult to do accurately.
-The GOR I alogorithm is one of the first semi-successful methods.
-
-<p>
-
-The Garnier method is not regarded as the most accurate prediction, but
-is simple to calculate on most workstations.
-
-<p>
-
-The accuracy of any secondary structure prediction program is not much
-better than 70% to 80% at best.  This is an early algorithm and will
-probably not predict with much better than about 65% accuracy. 
-
-<p>
-
-The Web servers for PHD, DSC, and others are generally preferred.
-
-<p>
-
-<b>Do not rely on this (or any other) program alone to make your
-predictions with.  Use several programs and take a consensus of the
-results.</b>
 
 <H2>
     Usage
@@ -188,15 +167,7 @@ J Mol Biol 1978 Mar 25;120(1):97-120
     Warnings
 </H2>
 
-
-The accuracy of any secondary structure prediction program is not much
-better than 70% to 80% at best.  This is an early algorithm and will
-probably not predict with much better than about 65% accuracy. 
-
-<p>
-You are advised to use several of the latest Web-based prediction sites
-and combine them to make a consensus prediction.
-
+<p>The accuracy of most stand-alone secondary structure prediction programs is not much better than 70% to 80% at best. The GOR I alogorithm is one of the first semi-successful methods, and will probably not predict with much better than about 65% accuracy.  Do not rely on this (or any other) program alone to make your predictions with. Use several programs and take a consensus of the results. The Web servers for PHD, DSC, and others are generally preferred.</p>
 
 <H2>
     Diagnostic Error Messages

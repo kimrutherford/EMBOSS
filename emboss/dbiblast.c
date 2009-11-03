@@ -434,13 +434,13 @@ int main(int argc, char **argv)
     dbname     = ajAcdGetString("dbname");
     release    = ajAcdGetString("release");
     datestr    = ajAcdGetString("date");
-    systemsort = ajAcdGetBool("systemsort");
-    cleanup    = ajAcdGetBool("cleanup");
+    systemsort = ajAcdGetBoolean("systemsort");
+    cleanup    = ajAcdGetBoolean("cleanup");
     sortopt    = ajAcdGetString("sortoptions");
     maxindex   = ajAcdGetInt("maxindex");
     version    = ajAcdGetListSingle("blastversion");
     seqtype    = ajAcdGetListSingle("seqtype");
-    usesrc     = ajAcdGetBool("sourcefile");
+    usesrc     = ajAcdGetBoolean("sourcefile");
     logfile    = ajAcdGetOutfile("outfile");
 
     while(fields[nfields])		/* array ends with a NULL */
@@ -516,7 +516,7 @@ int main(int argc, char **argv)
 
 
 	ajStrAssignS(&divfiles[jfile], db->TFile->Name);
-	ajFileNameTrim(&divfiles[jfile]);
+	ajFilenameTrimPath(&divfiles[jfile]);
 	if(ajStrGetLen(divfiles[jfile]) >= maxfilelen)
 	    maxfilelen = ajStrGetLen(divfiles[jfile]) + 1;
 
@@ -566,7 +566,7 @@ int main(int argc, char **argv)
     */
     
     ajStrAssignC(&tmpfname, "entrynam.idx");
-    entFile = ajFileNewOutD(indexdir, tmpfname);
+    entFile = ajFileNewOutNamePathS(tmpfname, indexdir);
     
     recsize = maxidlen+10;
     filesize = 300 + (idCount*(ajint)recsize);
@@ -1686,7 +1686,7 @@ static size_t dbiblast_memfread(void* dest, size_t size, size_t num_items,
 	return i;
     }
 
-    return ajFileRead(dest, size, num_items, mf->File);
+    return ajReadbinBinary(mf->File, num_items, size, dest);
 }
 
 
@@ -1840,7 +1840,7 @@ static PMemFile dbiblast_memfopenfile(const AjPStr name)
     PMemFile ret;
     AjPFile fp;
 
-    fp = ajFileNewIn(name);
+    fp = ajFileNewInNameS(name);
     if(!fp)
 	return NULL;
 
@@ -1892,7 +1892,7 @@ static ajint dbiblast_loadtable(ajuint* table, ajint isize, PBlastDb db,
 
     for(i=pos; i<=imax; i++)
     {
-	/* ajDebug("reading at %d\n", ajFileTell(db->TFile->File));*/
+	/* ajDebug("reading at %d\n", ajFileResetPos(db->TFile->File));*/
 	dbiblast_memreadUInt4(db->TFile,&table[j++]);
 	/* ajDebug("read i: %d j: %d value: %d\n", i, j-1, table[j-1]);*/
     }

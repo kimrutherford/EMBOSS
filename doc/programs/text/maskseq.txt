@@ -5,27 +5,14 @@
 
 Function
 
-   Mask off regions of a sequence
+   Write a sequence with masked regions
 
 Description
 
-   This simple editing program allows you to mask off regions of a
-   sequence with a specified letter.
-
-   Why would you wish to do this? It is common for database searches to
-   mask out low-complexity or biased composition regions of a sequence so
-   that spurious matches do not occur. It is just possible that you have
-   a program that has reported such biased regions but which has not
-   masked the sequence itself. In that case, you can use this program to
-   do the masking.
-
-   You may find other uses for it.
-
-   Some non-EMBOSS programs (for example FASTA) are capable of treating
-   lower-case regions as if they are masked. maskseq can mask a region to
-   lower-case instead of replacing the sequence with 'N's or 'X's if you
-   use the qualifier '-tolower' or use a space character as the masking
-   character.
+   maskseq reads a sequence and writes a masked version of it to file.
+   The sequence is masked in a specified set of regions such that
+   characters in that region are (optionally) converted to lower case and
+   / or (optionally) replaced with the specified mask character.
 
 Usage
 
@@ -36,7 +23,7 @@ Usage
 
 
 % maskseq prot.fasta prot2.seq -reg=10-12 
-Mask off regions of a sequence.
+Write a sequence with masked regions
 
    Go to the input files for this example
    Go to the output files for this example
@@ -48,7 +35,7 @@ Mask off regions of a sequence.
 
 
 % maskseq prot.fasta prot2.seq -reg=20-30 -mask=x 
-Mask off regions of a sequence.
+Write a sequence with masked regions
 
    Go to the output files for this example
 
@@ -58,7 +45,7 @@ Mask off regions of a sequence.
 
 
 % maskseq prot.fasta prot2.seq -reg=20-23,34-45,88-90 
-Mask off regions of a sequence.
+Write a sequence with masked regions
 
    Go to the output files for this example
 
@@ -69,7 +56,7 @@ Mask off regions of a sequence.
 
 
 % maskseq prot.fasta prot2.seq -reg=20-23,34-45,88-90 -tolower 
-Mask off regions of a sequence.
+Write a sequence with masked regions
 
    Go to the output files for this example
 
@@ -144,8 +131,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -238,7 +226,17 @@ Data files
 
 Notes
 
-   None.
+   It is common for database searches to mask out low-complexity or
+   biased composition regions of a sequence so that spurious matches do
+   not occur. It is possible that you have a program that has reported
+   such biased regions but which has not masked the sequence itself. In
+   that case, you can use this program to do the masking.
+
+   There are other uses for it. For example, some non-EMBOSS programs
+   (for example FASTA) are capable of treating lower-case regions as if
+   they are masked. maskseq can mask a region to lower-case instead of
+   replacing the sequence with N's or X's if you use the qualifier
+   -tolower or use a space character as the masking character.
 
 References
 
@@ -268,35 +266,50 @@ Known bugs
 
 See also
 
-   Program name                         Description
-   biosed       Replace or delete sequence sections
-   codcopy      Reads and writes a codon usage table
-   cutseq       Removes a specified section from a sequence
-   degapseq     Removes gap characters from sequences
-   descseq      Alter the name or description of a sequence
-   entret       Reads and writes (returns) flatfile entries
+   Program name Description
+   aligncopy Reads and writes alignments
+   aligncopypair Reads and writes pairs from alignments
+   biosed Replace or delete sequence sections
+   codcopy Copy and reformat a codon usage table
+   cutseq Removes a section from a sequence
+   degapseq Removes non-alphabetic (e.g. gap) characters from sequences
+   descseq Alter the name or description of a sequence
+   entret Retrieves sequence entries from flatfile databases and files
    extractalign Extract regions from a sequence alignment
-   extractfeat  Extract features from a sequence
-   extractseq   Extract regions from a sequence
-   listor       Write a list file of the logical OR of two sets of sequences
-   makenucseq   Creates random nucleotide sequences
-   makeprotseq  Creates random protein sequences
-   maskfeat     Mask off features of a sequence
-   newseq       Type in a short new sequence
-   noreturn     Removes carriage return from ASCII files
-   notseq       Exclude a set of sequences and write out the remaining ones
-   nthseq       Writes one sequence from a multiple set of sequences
-   pasteseq     Insert one sequence into another
-   revseq       Reverse and complement a sequence
-   seqret       Reads and writes (returns) sequences
-   seqretsplit  Reads and writes (returns) sequences in individual files
-   skipseq      Reads and writes (returns) sequences, skipping first few
-   splitter     Split a sequence into (overlapping) smaller sequences
-   trimest      Trim poly-A tails off EST sequences
-   trimseq      Trim ambiguous bits off the ends of sequences
-   union        Reads sequence fragments and builds one sequence
-   vectorstrip  Strips out DNA between a pair of vector sequences
-   yank         Reads a sequence range, appends the full USA to a list file
+   extractfeat Extract features from sequence(s)
+   extractseq Extract regions from a sequence
+   featcopy Reads and writes a feature table
+   featreport Reads and writes a feature table
+   listor Write a list file of the logical OR of two sets of sequences
+   makenucseq Create random nucleotide sequences
+   makeprotseq Create random protein sequences
+   maskambignuc Masks all ambiguity characters in nucleotide sequences
+   with N
+   maskambigprot Masks all ambiguity characters in protein sequences with
+   X
+   maskfeat Write a sequence with masked features
+   newseq Create a sequence file from a typed-in sequence
+   nohtml Remove mark-up (e.g. HTML tags) from an ASCII text file
+   noreturn Remove carriage return from ASCII files
+   nospace Remove all whitespace from an ASCII text file
+   notab Replace tabs with spaces in an ASCII text file
+   notseq Write to file a subset of an input stream of sequences
+   nthseq Write to file a single sequence from an input stream of
+   sequences
+   pasteseq Insert one sequence into another
+   revseq Reverse and complement a nucleotide sequence
+   seqret Reads and writes (returns) sequences
+   seqretsplit Reads sequences and writes them to individual files
+   sizeseq Sort sequences by size
+   skipredundant Remove redundant sequences from an input set
+   skipseq Reads and writes (returns) sequences, skipping first few
+   splitter Split sequence(s) into smaller sequences
+   trimest Remove poly-A tails from nucleotide sequences
+   trimseq Remove unwanted characters from start and end of sequence(s)
+   trimspace Remove extra whitespace from an ASCII text file
+   union Concatenate multiple sequences into a single sequence
+   vectorstrip Removes vectors from the ends of nucleotide sequence(s)
+   yank Add a sequence reference (a full USA) to a list file
 
 Author(s)
 

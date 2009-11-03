@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>silent </b>
-Silent mutation restriction enzyme scan
+Find restriction sites to insert (mutate) with no translation change
 Input nucleotide sequence: <b>tembl:x65923</b>
 Comma separated enzyme list [all]: <b>ecori,hindiii</b>
 Output report [x65923.silent]: <b></b>

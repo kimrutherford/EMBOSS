@@ -6,7 +6,7 @@
 <pre>
 ########################################
 # Program: dreg
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: dreg
 #    -sequence tembl:x13776
 #    -pattern ggtacc
@@ -23,8 +23,8 @@
 #
 #=======================================
 
-  Start     End Pattern_name Sequence
-      1       6 regex1       ggtacc
+  Start     End  Strand Pattern_name Sequence
+      1       6       + regex1       ggtacc
 
 #---------------------------------------
 #---------------------------------------

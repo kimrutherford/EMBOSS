@@ -408,12 +408,12 @@ AjPPhyloDist* ajPhyloDistRead(const AjPStr filename, ajint size,
 	    ajRegCompC("^\\s*([0-9]+[.]?[0-9]*)\\s+(([0-9]+)[^0-9.])?");
 
     distlist = ajListNew();
-    distfile = ajFileNewIn(filename);
+    distfile = ajFileNewInNameS(filename);
 
     if(!distfile)
 	return NULL;
 
-    ajFileGetsTrim(distfile, &rdline);
+    ajReadlineTrim(distfile, &rdline);
     if(!ajStrToInt(rdline, &count))
     {
 	ajErr("Distance file '%S' bad header record '%S'",
@@ -431,7 +431,7 @@ AjPPhyloDist* ajPhyloDistRead(const AjPStr filename, ajint size,
 
 
     done = ajTrue;
-    while(ajFileGets(distfile, &rdline))
+    while(ajReadline(distfile, &rdline))
     {
 	if(done) {
 	    irow = -1;
@@ -755,12 +755,12 @@ AjPPhyloFreq ajPhyloFreqRead(const AjPStr filename,
 	phyloRegFreqIndiv =
 	    ajRegCompC("^(\\S.........)\\s+([1-9][0-9]*)\\s*$");
 
-    freqfile = ajFileNewIn(filename);
+    freqfile = ajFileNewInNameS(filename);
 
     if(!freqfile)
 	return NULL;
 
-    ajFileGets(freqfile, &rdline);
+    ajReadline(freqfile, &rdline);
 
     /* process header */
 
@@ -793,7 +793,7 @@ AjPPhyloFreq ajPhyloFreqRead(const AjPStr filename,
 
     /* process alleles counts, if any */
 
-    ajFileGets(freqfile, &rdline);
+    ajReadline(freqfile, &rdline);
     if(ajRegExec(phyloRegFreqInt, rdline))	/* allele counts */
     {
 	if(contchar)
@@ -837,7 +837,7 @@ AjPPhyloFreq ajPhyloFreqRead(const AjPStr filename,
 	}
 	ncells = count*nfreq;
 	AJCNEW0(ret->Data,ncells);
-	ajFileGets(freqfile, &rdline);
+	ajReadline(freqfile, &rdline);
     }
     else
     {
@@ -910,7 +910,7 @@ AjPPhyloFreq ajPhyloFreqRead(const AjPStr filename,
 		ipos++;
 	    }
 
-	    if(!ajFileGets(freqfile, &rdline))
+	    if(!ajReadline(freqfile, &rdline))
 		break;
 	}
 
@@ -1017,7 +1017,7 @@ AjPPhyloFreq ajPhyloFreqRead(const AjPStr filename,
 	    ipos++;
 	}
 
-	if(!ajFileGets(freqfile, &rdline))
+	if(!ajReadline(freqfile, &rdline))
 	    break;
     }
 
@@ -1229,7 +1229,7 @@ AjPPhyloProp ajPhyloPropRead(const AjPStr filename, const AjPStr propchars,
     else
 	count = 1;
 
-    propfile = ajFileNewIn(filename);
+    propfile = ajFileNewInNameS(filename);
     if(!propfile)		/* read the filename string as data */
     {
 	if (size > 1)
@@ -1270,7 +1270,7 @@ AjPPhyloProp ajPhyloPropRead(const AjPStr filename, const AjPStr propchars,
 	    propstr = ajStrNewRes(len+1);
 	    propok = ajFalse;
 	    ilen = 0;
-	    while(!propok && ajFileGetsTrim(propfile, &rdline))
+	    while(!propok && ajReadlineTrim(propfile, &rdline))
 	    {
 		ajStrFmtUpper(&rdline);
 		cp = ajStrGetPtr(rdline);
@@ -1300,7 +1300,7 @@ AjPPhyloProp ajPhyloPropRead(const AjPStr filename, const AjPStr propchars,
 		    ajErr("End of properties file '%S':"
 			  " after %d sets, expected %d",
 			  filename, i, size);
-		else if (ajFileEof(propfile))
+		else if (ajFileIsEof(propfile))
 		    break;
 	    }
 	    ajListstrPushAppend(proplist, propstr);
@@ -1424,12 +1424,12 @@ AjPPhyloState* ajPhyloStateRead(const AjPStr filename, const AjPStr statechars)
 
     statelist = ajListNew();
 
-    statefile = ajFileNewIn(filename);
+    statefile = ajFileNewInNameS(filename);
 
     if(!statefile)
 	return NULL;
 
-    while(ajFileGets(statefile, &rdline))
+    while(ajReadline(statefile, &rdline))
     {
 	
 	if(!ajRegExec(phyloRegStateInt, rdline))
@@ -1462,7 +1462,7 @@ AjPPhyloState* ajPhyloStateRead(const AjPStr filename, const AjPStr statechars)
 	
 	ilen = 0;
 	i    = 0;
-	while(ajFileGets(statefile, &rdline))
+	while(ajReadline(statefile, &rdline))
 	{
 	    if(ilen == 0 && ajRegExec(phyloRegStateState, rdline))
 	    {
@@ -1563,7 +1563,62 @@ void ajPhyloStateTrace(const AjPPhyloState thys)
 
 /* @func ajPhyloTreeRead ******************************************************
 **
-** Reads phylogenetic trees from a file
+** Reads phylogenetic trees from a file.
+**
+** For background see the NESCent Hackathon Wiki
+** https://www.nescent.org/wg_phyloinformatics/Main_Page
+**
+** Programs using or producing trees include:
+**
+** Editors in http://bioinfo.unice.fr/biodiv/Tree_editors.html
+**
+** Packages PHYLIP, GARLI, MrBayes, PROTML, TREE-PUZZLE
+** PAUP
+**
+** Tree fomrats include:
+**
+** Newick (New Hampshire) is a simple string with parentheses
+** see http://evolution.genetics.washington.edu/phylip/newicktree.html
+** and http://evolution.genetics.washington.edu/phylip/newick_doc.html
+** Newick format is used by PHYLIP, GARLI, MrBayes, PROTML, TREE-PUZZLE
+** In PAUP the format is called "phylip"
+** Phylip includes weights for multiple input trees as a final comment
+** containing only a floating point number e.g. [0.5];
+**
+** Nexus files use Translate to define numbers, and then have a
+** Newick string using the numbers, or simply define the Newick string
+** with names. The branch lengths appear as in Newick.
+** http://workshop.molecularevolution.org/resources/fileformats/tree_formats.php
+** Test files (including malformed ones) are available from
+** https://www.nescent.org/wg_phyloinformatics/Supporting_NEXUS
+**
+** nhx (New Hampshire Extended) includes annotation using specially formatted
+** comments after the name:length in the form [&&NHX:code=value;code=value]
+** where codes are documented in
+** http://www.phylosoft.org/forester/NHX.html
+** according to some documentation, ATV and FORESTER can read NHX with the []
+** removed but this is deprecated (naturally, as this would be a valid Newick
+** tree with proper comments).
+** NHX also bans the use of empty nodes so names are required.
+** Apparently PHYLIP can read trees with no names.
+**
+** svggraph is an output format only
+** (or at least, no sign of anything reading it)
+**
+** tabtree is an ASCII text representation used for output only by
+** BioPerl::TreeIO
+**
+** lintree is a program output format. The program is available from
+** http://www.bio.psu.edu/People/Faculty/Nei/Lab/lintre/lintre.unix.tar.Z
+**
+** phyloXML is an effort to define an XML format, still in progress
+** http://www.phyloxml.org/
+**
+** TGF treegraph format
+** http://www.math.uni-bonn.de/people/jmueller/extra/treegraph/docu.pdf
+**
+** TGF TreeDyn format ... not the same as treegraph
+** http://www.treedyn.org/
 **
 ** @param [r] filename [const AjPStr] input filename
 ** @param [r] size [ajint] Number of trees expected
@@ -1576,6 +1631,7 @@ AjPPhyloTree* ajPhyloTreeRead(const AjPStr filename, ajint size)
 {
     AjPPhyloTree* ret = NULL;
     AjPPhyloTree tree = NULL;
+    AjPTree mytree = NULL;
     AjPFile treefile  = NULL;
     AjPList treelist  = NULL;
     AjBool treeok;
@@ -1608,7 +1664,7 @@ AjPPhyloTree* ajPhyloTreeRead(const AjPStr filename, ajint size)
     if(count < 1)
 	count = 1;
 
-    treefile = ajFileNewIn(filename);
+    treefile = ajFileNewInNameS(filename);
     if(!treefile)
 	return NULL;
 
@@ -1621,7 +1677,7 @@ AjPPhyloTree* ajPhyloTreeRead(const AjPStr filename, ajint size)
 	    ajDebug("ajPhyloTreeRead i: %d count: %d size: %d\n",
 		    i, count, size);
 	    tree = ajPhyloTreeNew();
-	    while(ajFileGetsTrim(treefile, &rdline))
+	    while(ajReadlineTrim(treefile, &rdline))
 	    {
 		if(!i && !ajStrGetLen(tree->Tree))
 		{
@@ -1639,7 +1695,7 @@ AjPPhyloTree* ajPhyloTreeRead(const AjPStr filename, ajint size)
 				      " required %d",
 				      filename, headcount, size);
 			}
-			ajFileGetsTrim(treefile, &rdline);
+			ajReadlineTrim(treefile, &rdline);
 			count = headcount;
 		    }
 		}
@@ -1716,7 +1772,7 @@ AjPPhyloTree* ajPhyloTreeRead(const AjPStr filename, ajint size)
 	    }
 	    else
 	    {
-		if(ajFileEof(treefile))
+		if(ajFileIsEof(treefile))
 		    treeok = ajTrue;
 		else
 		{
@@ -1742,7 +1798,13 @@ AjPPhyloTree* ajPhyloTreeRead(const AjPStr filename, ajint size)
 	/*ret = (AjPPhyloTree*) trees;*/
 	ajListFree(&treelist);
     }
-    
+    for(i=0;ret[i];i++)
+    {
+	mytree = ajTreeNewNewick(ret[i]->Tree);
+	ajTreeTrace(mytree);
+	ajTreeFree(&mytree);
+    }
+
     ajStrDel(&rdline);
     ajStrDel(&token);
     ajStrDel(&treecopy);

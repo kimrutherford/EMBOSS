@@ -1,5 +1,5 @@
 application: acdvalid [
-  documentation: "ACD file validation"
+  documentation: "Validate an application ACD file"
   gui: "no"
   groups: "Acd"
 ]

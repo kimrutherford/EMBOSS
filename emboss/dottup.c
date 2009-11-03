@@ -97,7 +97,7 @@ int main(int argc, char **argv)
     seq1    = ajAcdGetSeq("asequence");
     seq2    = ajAcdGetSeq("bsequence");
     graph   = ajAcdGetGraph("graph");
-    boxit   = ajAcdGetBool("boxit");
+    boxit   = ajAcdGetBoolean("boxit");
     stretch = ajAcdGetToggle("stretch");
     xygraph = ajAcdGetGraphxy("xygraph");
 

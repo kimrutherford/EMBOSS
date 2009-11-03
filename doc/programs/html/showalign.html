@@ -24,139 +24,13 @@ showalign
 <H2>
     Function
 </H2>
-Displays a multiple sequence alignment
+Display a multiple sequence alignment in pretty format
 <H2>
     Description
 </H2>
 
-<b>showalign</b> displays an aligned set of protein or a nucleic acid
-sequences in a style suitable for publication. 
 
-<p>
-
-The output is sent to the screen by default for the user to view, but it
-can write the results to a file.
-
-<p>
-
-
-The output highlights various differences or similarities between each
-of the sequences and a reference sequence by setting selected types of
-matches to a reference sequence to be '.' characters.
-
-<p>
-
-
-The reference sequence can be either the calculated consensus sequence
-(the default) or it can be one of the set of aligned sequences,
-specified by either the ordinal number of that sequence in the input
-file, or by its name. 
-
-<p>
-
-The output sequences can be displayed in either the input order (the
-default) or they can be sorted in order of their similarity to the
-reference sequence or sorted alphabetically by their names. 
-
-<p>
-
-By using the '-show' option, the displayed sequences can either be shown as:
-<UL>
-<LI>complete (-show=All), 
-<LI>only identical matches between
-the sequence and the reference sequence, all other positions being
-replaced by '.' characters (-show=Identities)
-<LI>non-identical matches, with identical matches being replaced by '.'
-characters, similar matches are shown in lower case (-show=Non-identities)
-<LI>similar matches, with non-similar matches being replaced by '.'  
-characters, similar matches are shown in lower case (-show=Similarities)
-<LI>dissimilar matches, with identical or similar matches being replaced by 
-'.' characters (-show=Dissimilarities)
-</UL>
-
-<p>
-
-A small table of the way these alignments are displayed illustrates this.
-
-<br>
-
-If we have a reference protein sequence of "III" and a sequence aligned
-to this of "ILW", then we have an identical matching residue, then a
-similar one, then a dissimilar one. 
-
-<br>
-
-The different methods of display would give the following:
-
-<p>
-
-<hr>
-<pre>
-Reference       III
-
-All             ILw
-Identical       I..
-Non-id          .lW
-Similar         Il.
-Dissimilar      ..W
-</pre>
-<hr>
-
-<p>
-
-Changing the similar matches to lowercase can optionally be disable by
-using the option -nosimilarcase.
-
-<p>
-
-The displayed sequence can be numbered by placing a ruler with ticks
-above the sequence. 
-
-<p>
-
-The width of a line can be set.  The width of a margin to the left of
-the sequences that shows the sequence names can be set. 
-
-<p>
-
-Specified regions of the sequence can be displayed in uppercase to
-highlight them.
-
-<p>
-
-The output can be formatted for HTML.
-
-<p>
-
-If the output is being formatted for HTML, then specified regions of the
-sequence can be displayed in any valid HTML colours.
-
-<p>
-
-<H3>The consensus line</H3>
-
-The consensus line can be displayed in a mixture of uppercase and
-lowercase symbols. 
-
-<p>
-
-The uppercase consensus symbol is indicates that the consensus
-is strong and lowercase indicates that it is weak.
-
-<p>
-
-The cutoff for setting the case of the consensus is set by the qualifier
-'-setcase'.  If the number of residues at that position that match the
-consensus value is greater than this, then the symbol is in uppercase,
-otherwise the symbol is in lowercase.  By default, the value of setcase
-is set so that if there are more than 50% of residues identical to the
-consunsus at that position, then the consensus is in uppercase. 
-
-<p>
-
-To put all of the consensus symbols into uppercase or lowercase, make
--setcase zero or very large (try 100000 ?).
-
+<p><b>showalign</b> reads a set of aligned protein or a nucleic acid sequences, and writes them to file (or screen) in a style suitable for publication. Similarities and differences of each sequence to a reference sequence are highlighted for specified types of matches. The reference sequence can be the calculated consensus sequence (default) or one of the input set (specified by name or the ordinal number of that sequence in the file). The output sequences can be displayed in either the input order (the default), sorted in order of their similarity to the reference sequence, or sorted alphabetically by their names. There are many other options to control the content and format of the output.</p>
 
 <H2>
     Usage
@@ -168,7 +42,7 @@ To put all of the consensus symbols into uppercase or lowercase, make
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showalign </b>
-Displays a multiple sequence alignment
+Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: <b>globins.msf</b>
 Output file [globins.showalign]: <b></b>
 
@@ -185,7 +59,7 @@ Display the sequences in order of similarity to the reference sequence
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showalign -order=s </b>
-Displays a multiple sequence alignment
+Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: <b>globins.msf</b>
 Output file [globins.showalign]: <b></b>
 
@@ -202,7 +76,7 @@ Format for HTML and highlight some interesting regions in different colours:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showalign -html -high '4-13 green 43-43 red 51-56 blue' </b>
-Displays a multiple sequence alignment
+Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: <b>globins.msf</b>
 Output file [globins.showalign]: <b></b>
 
@@ -219,7 +93,7 @@ No consensus line at the bottom No ruler line No numbers line Don't repeat the r
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showalign -nocon -norule -nonum -nobot -ref=1 -sb=10 -send=30 </b>
-Displays a multiple sequence alignment
+Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: <b>globins.msf</b>
 Output file [globins.showalign]: <b></b>
 
@@ -236,7 +110,7 @@ Show non-identities between the sequences
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showalign -show=n </b>
-Displays a multiple sequence alignment
+Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: <b>globins.msf</b>
 Output file [globins.showalign]: <b></b>
 
@@ -253,7 +127,7 @@ Show all of the sequences
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showalign -show=a </b>
-Displays a multiple sequence alignment
+Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: <b>globins.msf</b>
 Output file [globins.showalign]: <b></b>
 
@@ -270,7 +144,7 @@ Show identities between the sequences
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showalign -show=i </b>
-Displays a multiple sequence alignment
+Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: <b>globins.msf</b>
 Output file [globins.showalign]: <b></b>
 
@@ -287,7 +161,7 @@ Show similarities between the sequences
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showalign -show=s </b>
-Displays a multiple sequence alignment
+Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: <b>globins.msf</b>
 Output file [globins.showalign]: <b></b>
 
@@ -304,7 +178,7 @@ Show dissimilarities between the sequences
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showalign -show=d </b>
-Displays a multiple sequence alignment
+Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: <b>globins.msf</b>
 Output file [globins.showalign]: <b></b>
 
@@ -321,7 +195,7 @@ Use the first sequence as the reference to compare to:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showalign -ref=1 </b>
-Displays a multiple sequence alignment
+Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: <b>globins.msf</b>
 Output file [globins.showalign]: <b></b>
 
@@ -338,7 +212,7 @@ Show a range of sequences in uppercase, everything else in lowercase
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showalign -nocon -ref=1 -sl -upper 9-15 -nosimilarcase </b>
-Displays a multiple sequence alignment
+Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: <b>globins.msf</b>
 Output file [globins.showalign]: <b></b>
 
@@ -355,7 +229,7 @@ Display the sequences in alphabetic order:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showalign -order=a </b>
-Displays a multiple sequence alignment
+Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: <b>globins.msf</b>
 Output file [globins.showalign]: <b></b>
 
@@ -517,8 +391,9 @@ Output file [globins.showalign]: <b></b>
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -1365,7 +1240,37 @@ The directories are searched in the following order:
     Notes
 </H2>
 
-None.
+<p><b>showalign</b> reads in a scoring matrix to determine the consesnus sequence and to determine which matches are similar or not.</p>
+
+<p>By using the <tt>-show</tt> option, the displayed sequences can be shown as:</p>
+<ul>
+    <li> complete (-show=All),
+    <li> only identical matches between the sequence and the reference sequence, all other positions being replaced by '.' characters (-show=Identities)
+    <li> non-identical matches, with identical matches being replaced by '.' characters, similar matches are shown in lower case (-show=Non-identities)
+    <li> similar matches, with non-similar matches being replaced by '.' characters, similar matches are shown in lower case (-show=Similarities)
+    <li> dissimilar matches, with identical or similar matches being replaced by '.' characters (-show=Dissimilarities) 
+</ul>
+<p>Changing the similar matches to lowercase can optionally be disable by using the option -nosimilarcase.</p>
+
+<p>A small table of the way these alignments are displayed illustrates this. If we have a reference protein sequence of "III" and a sequence aligned to this of "ILW", then we have an identical matching residue, then a similar one, then a dissimilar one. The different methods of display would give the following:
+<pre>Reference       III
+
+All             ILw
+Identical       I..
+Non-id          .lW
+Similar         Il.
+Dissimilar      ..W</pre>
+</p>
+
+<p>The consensus line can be displayed in a mixture of uppercase and lowercase symbols. Uppercase indicates a strong consensus and lowercase a weak one. The cutoff for setting the consensus case is set by the qualifier <tt>-setcase</tt>. If the number of residues at that position that match the consensus value is greater than this, then the symbol is in uppercase, otherwise the symbol is in lowercase. By default, the value of <tt>-setcase</tt> is set so that if there are more than 50% of residues identical to the consunsus at that position, then the consensus is in uppercase. To put all of the consensus symbols into uppercase or lowercase, make <tt>-setcase</tt> zero or very large (try 100000 ?). </p>
+
+<p>Other display options include 
+Sequence numbering ruler with ticks above the sequence.
+The width of a line can be set. The width of a margin to the left of the sequences that shows the sequence names can be set.
+Specified regions of the sequence can be displayed in uppercase to highlight them.</p>
+
+<p>The output can be formatted for HTML. If the output is being formatted for HTML, then specified regions of the sequence can be displayed in any valid HTML colours.</p>
+
 
 <H2>
     References
@@ -1400,10 +1305,11 @@ None.
 <!--
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="abiview.html">abiview</a></td>
-<td>Reads ABI file and display the trace</td>
+<td>Display the trace in an ABI sequencer file</td>
 </tr>
 
 <tr>
@@ -1418,12 +1324,12 @@ None.
 
 <tr>
 <td><a href="emma.html">emma</a></td>
-<td>Multiple alignment program - interface to ClustalW program</td>
+<td>Multiple sequence alignment (ClustalW wrapper)</td>
 </tr>
 
 <tr>
 <td><a href="infoalign.html">infoalign</a></td>
-<td>Information on a multiple sequence alignment</td>
+<td>Display basic information about a multiple sequence alignment</td>
 </tr>
 
 <tr>
@@ -1433,52 +1339,52 @@ None.
 
 <tr>
 <td><a href="pepnet.html">pepnet</a></td>
-<td>Displays proteins as a helical net</td>
+<td>Draw a helical net for a protein sequence</td>
 </tr>
 
 <tr>
 <td><a href="pepwheel.html">pepwheel</a></td>
-<td>Shows protein sequences as helices</td>
+<td>Draw a helical wheel diagram for a protein sequence</td>
 </tr>
 
 <tr>
 <td><a href="plotcon.html">plotcon</a></td>
-<td>Plot quality of conservation of a sequence alignment</td>
+<td>Plot conservation of a sequence alignment</td>
 </tr>
 
 <tr>
 <td><a href="prettyplot.html">prettyplot</a></td>
-<td>Displays aligned sequences, with colouring and boxing</td>
+<td>Draw a sequence alignment with pretty formatting</td>
 </tr>
 
 <tr>
 <td><a href="prettyseq.html">prettyseq</a></td>
-<td>Output sequence with translated ranges</td>
+<td>Write a nucleotide sequence and its translation to file</td>
 </tr>
 
 <tr>
 <td><a href="remap.html">remap</a></td>
-<td>Display sequence with restriction sites, translation etc</td>
+<td>Display restriction enzyme binding sites in a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="seealso.html">seealso</a></td>
-<td>Finds programs sharing group names</td>
+<td>Finds programs with similar function to a specified program</td>
 </tr>
 
 <tr>
 <td><a href="showdb.html">showdb</a></td>
-<td>Displays information on the currently available databases</td>
+<td>Displays information on configured databases</td>
 </tr>
 
 <tr>
 <td><a href="showfeat.html">showfeat</a></td>
-<td>Show features of a sequence</td>
+<td>Display features of a sequence in pretty format</td>
 </tr>
 
 <tr>
 <td><a href="showseq.html">showseq</a></td>
-<td>Display a sequence with features, translation etc</td>
+<td>Displays sequences with features in pretty format</td>
 </tr>
 
 <tr>
@@ -1488,12 +1394,12 @@ None.
 
 <tr>
 <td><a href="textsearch.html">textsearch</a></td>
-<td>Search sequence documentation. Slow, use SRS and Entrez!</td>
+<td>Search the textual description of sequence(s)</td>
 </tr>
 
 <tr>
 <td><a href="tranalign.html">tranalign</a></td>
-<td>Align nucleic coding regions given the aligned proteins</td>
+<td>Generate an aligment of nucleic coding regions from aligned proteins</td>
 </tr>
 
 </table>

@@ -5,45 +5,34 @@
 
 Function
 
-   Scans proteins using PRINTS
+   Scans protein sequence(s) with fingerprints from the PRINTS database
 
 Description
 
-   PRINTS is a database of diagnostic protein signatures, or
-   fingerprints.
-
-   Fingerprints are groups of conserved motifs or elements that together
-   form a diagnostic signature for particular protein families.
-
-   An uncharacterised sequence matching all motifs or elements can then
-   be readily diagnosed as a true match to a particular family
-   fingerprint.
-
-   They can be used to diagnose family relationships in newly-determined
-   sequences (especially from genome projects).
-
-   Usually the motifs or elements do not overlap, but are separated along
-   a sequence, though they may be contiguous in 3D-space. Fingerprints
-   can encode protein folds and functionalities more flexibly and
-   powerfully than can single motifs, full diagnostic potency deriving
-   from the mutual context provided by motif neighbours.
-
-   Diagnostically, this is more powerful than using single motifs by
-   virtue of the biological context afforded by matching motif
-   neighbours.
-
-   pscan finds matches between a query protein sequence and the motifs or
-   elements in the PRINTS database. It reports various classes of
-   matches:
-
+   pscan reads one or more protein sequences and searches them against
+   the PRINTS database of diagnostic protein signatures (fingerprints). A
+   fingerprint is a group of conserved motifs or elements that together
+   form a diagnostic signature for a particular protein family. The
+   minimum and maximum number of elements per fingerprint may be
+   specified. pscan writes an output file with details of any matches
+   between each input sequence and the fingerprints. It reports various
+   classes of matches:
      * Matches where all elements of a motif exist in the correct order
      * Matches where all elements exist but some are in the incorrect
        order
      * Matches where some elements match and are in the correct order
      * Miscellaneous matches.
 
-   The home web page of the PRINTS database is:
-   http://www.bioinf.man.ac.uk/dbbrowser/PRINTS/
+Algorithm
+
+   The matrix information used to scan a sequence is derived from the
+   final motif sets in the PRINTS database. The matrices are of the
+   simple frequency type and contain the number of times a residue occurs
+   in each position of a PRINTS alignment. Each matrix therefore has a
+   highest possible score, being the sum of the maximum score of each
+   column. A match to a window over the input sequence is obtained if it
+   has a score equal to or greater than the percentage of the maximum
+   score of the lowest scoring sequence in the final motif set.
 
 Usage
 
@@ -51,7 +40,7 @@ Usage
 
 
 % pscan 
-Scans proteins using PRINTS
+Scans protein sequence(s) with fingerprints from the PRINTS database
 Input protein sequence(s): tsw:opsd_human
 Minimum number of elements per fingerprint [2]: 
 Maximum number of elements per fingerprint [20]: 
@@ -96,8 +85,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -296,19 +286,23 @@ Data files
 
 Notes
 
-   The matrix information used to scan a sequence is derived from the
-   final motif sets in the PRINTS database. The matrices are of the
-   simple frequency type and contain the number of times a residue occurs
-   in each position of the alignment. Each matrix therefore has a highest
-   possible score, being the sum of the maximum score of each column. A
-   match to the sequence window is obtained if it has a score equal to or
-   greater than the percentage of the maximum score of the lowest scoring
-   sequence in the final motif set.
+   Fingerprints are groups of conserved motifs or elements that together
+   form a diagnostic signature for particular protein families. An
+   uncharacterised sequence matching all motifs or elements can then be
+   readily diagnosed as a true match to a particular family fingerprint.
+   They can be used to diagnose family relationships in newly-determined
+   sequences (especially from genome projects).
 
-   The data files must have been created before running this program.
-   This is done by running the printsextract program with the
-   "prints.dat" file from a PRINTS release. You may have to ask your
-   system manager to do this.
+   Usually the motifs or elements do not overlap, but are separated along
+   a sequence, though they may be contiguous in 3D-space. Fingerprints
+   can encode protein folds and functionalities more flexibly and
+   powerfully than can single motifs, full diagnostic potency deriving
+   from the mutual context provided by motif neighbours. Diagnostically,
+   this is more powerful than using single motifs by virtue of the
+   biological context afforded by matching motif neighbours.
+
+   The home web page of the PRINTS database is:
+   http://www.bioinf.man.ac.uk/dbbrowser/PRINTS/
 
 References
 
@@ -354,7 +348,10 @@ References
 
 Warnings
 
-   The program will warn you if a DNA sequence is given.
+   The data files must have been created before running this program.
+   This is done by running the printsextract program with the prints.dat
+   file from a PRINTS release. You may have to ask your system manager to
+   do this.
 
 Diagnostic Error Messages
 
@@ -373,19 +370,21 @@ Known bugs
 
 See also
 
-    Program name                         Description
-   antigenic      Finds antigenic sites in proteins
-   digest         Protein proteolytic enzyme or reagent cleavage digest
-   epestfind      Finds PEST motifs as potential proteolytic cleavage sites
-   fuzzpro        Protein pattern search
-   fuzztran       Protein pattern search after translation
-   helixturnhelix Report nucleic acid binding motifs
-   oddcomp        Find protein sequence regions with a biased composition
-   patmatdb       Search a protein sequence with a motif
-   patmatmotifs   Search a PROSITE motif database with a protein sequence
-   pepcoil        Predicts coiled coil regions
-   preg           Regular expression search of a protein sequence
-   sigcleave      Reports protein signal cleavage sites
+   Program name Description
+   antigenic Finds antigenic sites in proteins
+   digest Reports on protein proteolytic enzyme or reagent cleavage sites
+   epestfind Finds PEST motifs as potential proteolytic cleavage sites
+   fuzzpro Search for patterns in protein sequences
+   fuzztran Search for patterns in protein sequences (translated)
+   helixturnhelix Identify nucleic acid-binding motifs in protein
+   sequences
+   oddcomp Identify proteins with specified sequence word composition
+   patmatdb Searches protein sequences with a sequence motif
+   patmatmotifs Scan a protein sequence with motifs from the PROSITE
+   database
+   pepcoil Predicts coiled coil regions in protein sequences
+   preg Regular expression search of protein sequence(s)
+   sigcleave Reports on signal cleavage sites in a protein sequence
 
      * printsextract - Extract data from PRINTS. pscan uses the PRINTS
        data. Until printsextract has been run to set up the PRINTS data,

@@ -23,90 +23,34 @@ needle
 <H2>
     Function
 </H2>
-Needleman-Wunsch global alignment
+Needleman-Wunsch global alignment of two sequences
 
 <H2>
     Description
 </H2>
 
 
-This program uses the Needleman-Wunsch global alignment algorithm to
-find the optimum alignment (including gaps) of two sequences when
-considering their entire length. 
-
-<p>
-
-What is the optimal alignment? Dynamic programming methods ensure the
-optimal global alignment by exploring all possible alignments and
-choosing the best.  It does this by reading in a scoring matrix that
-contains values for every possible residue or nucleotide match.  Needle
-finds an alignment with the maximum possible score where the score of an
-alignment is equal to the sum of the matches taken from the scoring
-matrix. 
+<p><b>needle</b> reads two input sequences and writes their optimal global sequence alignment to file. It uses the Needleman-Wunsch alignment algorithm to find the optimum alignment (including gaps) of two sequences along their entire length. The algorithm uses a dynamic programming method to ensure the alignment is optimum, by exploring all possible alignments and choosing the best. A scoring matrix is read that contains values for every possible residue or nucleotide match. Needle finds the alignment with the maximum possible score where the score of an alignment is equal to the sum of the matches taken from the scoring matrix, minus a penalties arising from opening and extending gaps in the aligned sequences.  The substitution matrix and gap opening and extension penalties are user-specified.</p>
 
 
 <H3>
     Algorithm
 </H3>
 
-The Needleman-Wunsch algorithm is a member of the class of algorithms
-that can calculate the best score and alignment in the order of mn
-steps, (where 'n' and 'm' are the lengths of the two sequences).  These
-dynamic programming algorithms were first developed for protein sequence
-comparison by Needleman and Wunsch, though similar methods were
-independently devised during the late 1960's and early 1970's for use in
-the fields of speech processing and computer science.
 
-<p>
+<p>The Needleman-Wunsch algorithm is a member of the class of algorithms that can calculate the best score and alignment of two sequences in the order of <tt>mn</tt> steps, where <tt>n</tt> and <tt>m</tt> are the sequence lengths.  These dynamic programming algorithms were first developed for protein sequence comparison by Needleman and Wunsch, though similar methods were independently devised during the late 1960's and early 1970's for use in the fields of speech processing and computer science.</p>
 
-An important problem is the treatment of gaps, i.e., spaces inserted to
-optimise the alignment score.  A penalty is subtracted from the score
-for each gap opened (the 'gap open' penalty) and a penalty is subtracted
-from the score for the total number of gap spaces multiplied by a cost
-(the 'gap extension' penalty).
+<p>An important problem is the treatment of gaps, i.e., spaces inserted to optimise the alignment score. A penalty is subtracted from the score for each gap opened (the 'gap open' penalty) and a penalty is subtracted from the score for the total number of gap spaces multiplied by a cost (the 'gap extension' penalty). Typically, the cost of extending a gap is set to be 5-10 times lower than the cost for opening a gap.</p>
 
-<p>
+<p>There are two ways to compute a penalty for a gap of n positions :
 
-Typically, the cost of extending a gap is set to be 5-10 times lower
-than the cost for opening a gap. 
+<pre>gap opening penalty + (n - 1) * gap extension penalty
+gap penalty + n * gap length penalty</pre>
 
-<p>
+The two methods are basically equivalent.  The first way is used by EMBOSS and WU-BLAST. The second way is used by NCBI-BLAST, GCG, Staden and CLUSTAL. Fasta for a long time used the first way, but recently shifted to the second.
+</p>
 
-There are two ways to compute a penalty for a gap of n positions :
-
-<p>
-
-<pre>
-gap opening penalty + (n - 1) * gap extension penalty
-gap penalty + n * gap length penalty
-</pre>
-
-<p>
-
-The first way is used by EMBOSS and WU-BLAST
-<br>
-The second way is used by NCBI-BLAST, GCG, Staden and CLUSTAL.
-Fasta used it for a long time the first way, but Prof. Pearson decided 
-recently to shift to the second.
-
-<p>
-
-The two methods are basically equivalent.
-
-<p>
-
-In a Needleman-Wunsch global alignment, the entire length of each 
-sequence is aligned. This can be thought of as an overlap between the 
-two sequences (one can be completely within the other, or their ends can 
-overlap).
-
-<p>
-
-This leaves no penalty for the hanging ends of the overlap. In 
-bioinformatics, it is usually reasonable to assume that the sequences 
-are incomplete and there should be no penalty for failing to align the 
-missing bases.
-
+<p>In a Needleman-Wunsch global alignment, the entire length of each sequence is aligned. The sequences might be partially overlapping or one sequence might be aligned entirely internally to the other.  There is no penalty for the hanging ends of the overlap. In bioinformatics, it is usually reasonable to assume that the sequences are incomplete and there should be no penalty for failing to align the missing bases.</p>
 
 <H2>
     Usage
@@ -118,7 +62,7 @@ missing bases.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>needle tsw:hba_human tsw:hbb_human </b>
-Needleman-Wunsch global alignment.
+Needleman-Wunsch global alignment of two sequences
 Gap opening penalty [10.0]: <b></b>
 Gap extension penalty [0.5]: <b></b>
 Output alignment [hba_human.needle]: <b></b>
@@ -221,8 +165,9 @@ Output alignment [hba_human.needle]: <b></b>
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -590,7 +535,7 @@ for further information on alignment formats.
 <pre>
 ########################################
 # Program: needle
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: needle
 #    [-asequence] tsw:hba_human
 #    [-bsequence] tsw:hbb_human
@@ -778,15 +723,16 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="est2genome.html">est2genome</a></td>
-<td>Align EST and genomic DNA sequences</td>
+<td>Align EST sequences to genomic DNA sequence</td>
 </tr>
 
 <tr>
 <td><a href="stretcher.html">stretcher</a></td>
-<td>Finds the best global alignment between two sequences</td>
+<td>Needleman-Wunsch rapid global alignment of two sequences</td>
 </tr>
 
 </table>

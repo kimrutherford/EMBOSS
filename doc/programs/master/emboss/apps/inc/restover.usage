@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>restover </b>
-Find restriction enzymes producing specific overhang
+Find restriction enzymes producing a specific overhang
 Input nucleotide sequence(s): <b>tembl:x65923</b>
 Overlap sequence: <b>cg</b>
 Output file [x65923.restover]: <b></b>

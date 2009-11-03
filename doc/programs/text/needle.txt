@@ -5,27 +5,28 @@
 
 Function
 
-   Needleman-Wunsch global alignment
+   Needleman-Wunsch global alignment of two sequences
 
 Description
 
-   This program uses the Needleman-Wunsch global alignment algorithm to
-   find the optimum alignment (including gaps) of two sequences when
-   considering their entire length.
-
-   What is the optimal alignment? Dynamic programming methods ensure the
-   optimal global alignment by exploring all possible alignments and
-   choosing the best. It does this by reading in a scoring matrix that
-   contains values for every possible residue or nucleotide match. Needle
-   finds an alignment with the maximum possible score where the score of
-   an alignment is equal to the sum of the matches taken from the scoring
-   matrix.
+   needle reads two input sequences and writes their optimal global
+   sequence alignment to file. It uses the Needleman-Wunsch alignment
+   algorithm to find the optimum alignment (including gaps) of two
+   sequences along their entire length. The algorithm uses a dynamic
+   programming method to ensure the alignment is optimum, by exploring
+   all possible alignments and choosing the best. A scoring matrix is
+   read that contains values for every possible residue or nucleotide
+   match. Needle finds the alignment with the maximum possible score
+   where the score of an alignment is equal to the sum of the matches
+   taken from the scoring matrix, minus a penalties arising from opening
+   and extending gaps in the aligned sequences. The substitution matrix
+   and gap opening and extension penalties are user-specified.
 
   Algorithm
 
    The Needleman-Wunsch algorithm is a member of the class of algorithms
-   that can calculate the best score and alignment in the order of mn
-   steps, (where 'n' and 'm' are the lengths of the two sequences). These
+   that can calculate the best score and alignment of two sequences in
+   the order of mn steps, where n and m are the sequence lengths. These
    dynamic programming algorithms were first developed for protein
    sequence comparison by Needleman and Wunsch, though similar methods
    were independently devised during the late 1960's and early 1970's for
@@ -35,32 +36,25 @@ Description
    to optimise the alignment score. A penalty is subtracted from the
    score for each gap opened (the 'gap open' penalty) and a penalty is
    subtracted from the score for the total number of gap spaces
-   multiplied by a cost (the 'gap extension' penalty).
-
-   Typically, the cost of extending a gap is set to be 5-10 times lower
-   than the cost for opening a gap.
+   multiplied by a cost (the 'gap extension' penalty). Typically, the
+   cost of extending a gap is set to be 5-10 times lower than the cost
+   for opening a gap.
 
    There are two ways to compute a penalty for a gap of n positions :
-
 gap opening penalty + (n - 1) * gap extension penalty
 gap penalty + n * gap length penalty
 
-   The first way is used by EMBOSS and WU-BLAST
-   The second way is used by NCBI-BLAST, GCG, Staden and CLUSTAL. Fasta
-   used it for a long time the first way, but Prof. Pearson decided
-   recently to shift to the second.
-
-   The two methods are basically equivalent.
+   The two methods are basically equivalent. The first way is used by
+   EMBOSS and WU-BLAST. The second way is used by NCBI-BLAST, GCG, Staden
+   and CLUSTAL. Fasta for a long time used the first way, but recently
+   shifted to the second.
 
    In a Needleman-Wunsch global alignment, the entire length of each
-   sequence is aligned. This can be thought of as an overlap between the
-   two sequences (one can be completely within the other, or their ends
-   can overlap).
-
-   This leaves no penalty for the hanging ends of the overlap. In
-   bioinformatics, it is usually reasonable to assume that the sequences
-   are incomplete and there should be no penalty for failing to align the
-   missing bases.
+   sequence is aligned. The sequences might be partially overlapping or
+   one sequence might be aligned entirely internally to the other. There
+   is no penalty for the hanging ends of the overlap. In bioinformatics,
+   it is usually reasonable to assume that the sequences are incomplete
+   and there should be no penalty for failing to align the missing bases.
 
 Usage
 
@@ -68,7 +62,7 @@ Usage
 
 
 % needle tsw:hba_human tsw:hbb_human 
-Needleman-Wunsch global alignment.
+Needleman-Wunsch global alignment of two sequences
 Gap opening penalty [10.0]: 
 Gap extension penalty [0.5]: 
 Output alignment [hba_human.needle]: 
@@ -167,8 +161,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -430,7 +425,7 @@ Output file format
 
 ########################################
 # Program: needle
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: needle
 #    [-asequence] tsw:hba_human
 #    [-bsequence] tsw:hbb_human
@@ -562,9 +557,9 @@ Known bugs
 
 See also
 
-   Program name                      Description
-   est2genome   Align EST and genomic DNA sequences
-   stretcher    Finds the best global alignment between two sequences
+   Program name                       Description
+   est2genome   Align EST sequences to genomic DNA sequence
+   stretcher    Needleman-Wunsch rapid global alignment of two sequences
 
    When you want an alignment that covers the whole length of both
    sequences, use needle. 

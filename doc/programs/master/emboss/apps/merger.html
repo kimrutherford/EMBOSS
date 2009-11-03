@@ -20,66 +20,30 @@ merger
 <H2>
     Description
 </H2>
+<p><b>merger</b> reads two overlapping input sequences of the same type (typically nucleotide) and uses a global alignment algorithm (Needleman & Wunsch) to optimally align the sequences.  A merged sequence is generated from the alignment and writen to the output file. The sequence alignment is also written.</p>
 
 
-This joins two overlapping nucleic acid sequences into one merged
-sequence. 
 
-<p>
-It uses a global alignment algorithm (Needleman & Wunsch) to optimally
-align the sequences and then it creates the merged sequence from the
-alignment.  When there is a mismatch in the alignment between the two
-sequences, the correct base to include in the resulting sequence is
-chosen by using the base from the sequence which has the best local
-sequence quality score.  The following heuristic is used to find the
-sequence quality score:
+<H2>
+Algorithm
+</H2>
 
-<p>
-If one of the bases is a 'N', then the other sequence's base is used,
-else:
+<p>It uses a global alignment algorithm (Needleman & Wunsch) to optimally align the sequences and then creates a merged sequence from the alignment. When there is a mismatch in the alignment between the two sequences, the base included in the merged sequence is the base from the sequence which has the best local sequence quality score.</p>
 
-<p>
-A window size around the disputed base is used to find the local quality
-score.  This window size is increased from 5, to 10 to 20 bases or until
-there is a clear decision on the best choice.  If there is no best
-choice after using a window of 20, then the base in the first sequence
-is used. 
+<p>The following heuristic is used to find the sequence quality score.  If one of the bases is a 'N', then the other sequence's base is used.  Otherwise, a window size around the disputed base is used to find the local quality score. This window size is increased from 5, to 10 to 20 bases or until there is a clear decision on the best choice. If there is no best choice after using a window of 20, then the base in the first sequence is used.</p>
 
-<p>
-To calculate the quality of a window of a sequence around a base:
+<p>To calculate the quality of a window of a sequence around a base:</p>
 
-<ul>
-<li>quality = sequence value/length under window either side of the base
-<li>sequence value = sum of points in that window
-<li>unambiguous bases (ACGTU) score 2 points
-<li>ambiguous bases (MRWSYKVHDB) score 1 point
-<li>Ns score 0 points
-<li>off end of the sequence scores 0 points
-</ul>
+<pre>    * quality = sequence value/length under window either side of the base
+    * sequence value = sum of points in that window
+    * unambiguous bases (ACGTU) score 2 points
+    * ambiguous bases (MRWSYKVHDB) score 1 point
+    * Ns score 0 points
+    * off end of the sequence scores 0 points 
+</pre>
+<p>This heavily discriminates against the iffy bits at the end of sequence reads.</p>
 
-<p>
-N.B.  This heavily discriminates against the iffy bits at the end of
-sequence reads. 
 
-<p>
-This program was originally written to aid in the reconstruction of mRNA
-sequences which had been sequenced from both ends as a 5' and 3' EST
-(cDNA). eg. joining two reads produced by primer walking sequencing.
-
-<p>
-Care should be taken to reverse one of the sequences (e.g.  using the
-qualifier '-sreverse2') if this is required to get them both in the
-correct orientation. 
-
-<p>
-Because it uses a Needleman & Wunsch alignment the required memory may
-be greater than the available memory when attempting to merge large
-(cosmid-sized or greater) sequences. 
-
-<p>
-The gap open and gap extension penalties have been set at a higher level
-than is usual (50 and 5).  This was experimentally determined to give
-the best results with a set of poor quality EST test sequences. 
 
 <H2>
     Usage
@@ -160,8 +124,9 @@ or the file 'EDNAFULL' (for nucleic sequences).
     Notes
 </H2>
 
+<p>This program was originally written to aid in the reconstruction of mRNA sequences which had been sequenced from both ends as a 5' and 3' EST (cDNA). eg. joining two reads produced by primer walking sequencing.</p>
 
-None.
+<p>The gap open and gap extension penalties have been set at a higher level than is usual (50 and 5). This was experimentally determined to give the best results with a set of poor quality EST test sequences.</p>
 
 <H2>
     References
@@ -173,7 +138,9 @@ None.
     Warnings
 </H2>
 
-None.
+<p>Care should be taken to reverse one of the sequences (e.g. using the qualifier <tt>-sreverse2</tt>) if this is required to get them both in the correct orientation..</p>
+<p><b>merger</b> uses the memory-hungry Needleman & Wunsch alignment.  The required memory may be greater than the available memory when attempting to merge large (cosmid-sized or greater) sequences.</p>
+
 
 <H2>
     Diagnostic Error Messages

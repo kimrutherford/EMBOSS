@@ -1,6 +1,6 @@
 application: nthseq [
-  documentation: "Writes one sequence from a multiple set of
-                  sequences"
+  documentation: "Write to file a single sequence from an input stream
+                  of sequences"
   groups: "Edit"
 ]
 

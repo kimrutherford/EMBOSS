@@ -110,7 +110,7 @@ int main(int argc, char **argv)
     octags      = ajAcdGetString("octags");
     squares     = ajAcdGetString("squares");
     diamonds    = ajAcdGetString("diamonds");
-    wheel       = ajAcdGetBool("wheel");
+    wheel       = ajAcdGetBoolean("wheel");
     amphipathic = ajAcdGetToggle("amphipathic");
 
     ajStrFmtUpper(&octags);

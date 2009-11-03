@@ -19,28 +19,13 @@ distmat
     Description
 </H2>
 
-<b>distmat</b> calculates the evolutionary distances between every pair of
-sequences in a multiple alignment. The sequences need to be aligned
-before running this program. The quality of the alignment is of
-paramount importance in obtaining meaningful information from this
-analysis. This application calculates a distance matrix for the set of
-sequences in the alignment. The distances are expressed in terms of the
-number of substitutions per 100 bases or amino acids.
+<p><b>distmat</b> calculates the evolutionary distance between every pair of sequences in a multiple sequence alignment. A variety of methods to estimate distance may be selected, and differ in how they correct the observed substitution rates to more accurately reflect the true evolutionary distance. An output file containing a distance matrix for the set of sequences is written. The distances are expressed in terms of the number of substitutions per 100 bases or amino acids.</p>
 
-<p>
+<H2>
+    Algorithm
+</H2>
 
-   As sequence diverge so does the probability of there being multiple
-substitutions at any one site in the alignment increase. The distance
-will then be an underestimate of the true evolutionary distance between
-the sequences. Therefore, there are a number of methods for correcting
-the observed substitution rate for the occurence of multiple
-substutions.
-
-<p>
-
-  For nucleotides, the "-position" flag allows the user to choose base
-positions to analyse in each codon, i.e. 123 (all bases), 12 (the first
-two bases), 1, 2, or 3 individual bases.
+<p>For more divergent sequences, the probability of there being multiple substitutions at an alignment site increases.  The distance will then be misestimate the true evolutionary distance between the sequences. A number of methods are available in <b>distmat</b> to correct the observed substitution rate to more accurately reflect the true evolutionary distance.</p>
 
 <h3>Uncorrected distances</h3>
 
@@ -313,8 +298,11 @@ None.
 <H2>
     Notes
 </H2>
+<p>The input sequences must of course be aligned before running this program. The quality of the alignment is of paramount importance in obtaining meaningful information from this analysis.</p>
 
-None.
+<p>For nucleotides, the <tt>-position</tt> flag selects base positions to analyse in each codon, i.e. 123 (all bases), 12 (the first two bases), 1, 2, or 3 individual bases.</p>
+
+
 
 <H2>
     References

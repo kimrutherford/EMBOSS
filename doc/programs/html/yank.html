@@ -22,73 +22,12 @@ yank
 <H2>
     Function
 </H2>
-Reads a sequence range, appends the full USA to a list file
+Add a sequence reference (a full USA) to a list file
 <H2>
     Description
 </H2>
 
-<b>yank</b> is a simple utility to add a specified sequence name to a
-list file. 
-
-<p>
-
-In fact, it writes out not just the name of the sequence, but also the
-start and end position of a region within that sequence and, if the
-sequence is nucleic, if can specify whether the sequence is the reverse
-complement. 
-
-<p>
-
-Without the program <b>yank</b> you would need to use a text editor such
-as <i>pico</i> to create the appropriate list files.  <b>yank</b>
-makes this process easy. 
-
-
-<H3>List Files</H3>
-
-Many EMBOSS programs can read in a set of sequences.  (Some examples are
-<b>emma</b> and <b>union</b>) There are many ways of specifying these
-sequences, including wildcarded sequence file names, wildcarded database
-entry names and list files.  List files (files of file names) are the
-most flexible. <b>yank</b> is a utility to add sequences to a list file.
-
-<p>
-
-
-Instead of containing the sequences themselves, a List file contains
-"references" to sequences - so, for example, you might include database
-entries, the names of files containing sequences, or even the names of
-other list files.  For example, here's a valid list file, called
-<i>seq.list</i>:
-
-<p>
-<pre>
-unix % more seq.list 
-
-opsd_abyko.fasta
-sw:opsd_xenla
-sw:opsd_c*
-@another_list
-</pre>
-
-<p>
-
-This looks a bit odd, but it's really very straightforward; the file
-contains:
-
-<p>
-
-<ul>
-      <li><b>opsd_abyko.fasta</b> - this is the name of a sequence file. The file is read in from the current directory. 
-      <li><b>sw:opsd_xenla</b> - this is a reference to a specific sequence in the SwissProt database 
-      <li><b>sw:opsd_c*</b> - this represents all the sequences in SwissProt whose identifiers start with ``opsd_c'' 
-      <li><b>another_list</b> - this is the name of a second list file 
-</ul>
-
-<p>
-
-Notice the <b>@</b> in front of the last entry.  This is the way you tell
-EMBOSS that this file is a list file, not a regular sequence file. 
+<p><b>yank</b> adds the full Uniform Sequence Address (USA) of a specified sequence, or a region (subsequence) of a sequence, to a list file. The file is appended to by default but (optionally) is overwritten.A list file contains one or more sequence references (USAs).  For example, a database entry, the name of a file containing sequences, or even the names of another list file. In addition to the name of the sequence, it can write the start and end position of a region within that sequence and, if the sequence is nucleic, if can specify whether the sequence is the reverse complement.</p>
 
 
 
@@ -104,7 +43,7 @@ This is an example of adding an entry for the part of tembl:x65921 between posit
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>yank </b>
-Reads a sequence range, appends the full USA to a list file
+Add a sequence reference (a full USA) to a list file
 Input (gapped) sequence: <b>tembl:x65921</b>
      Begin at position [start]: <b>1913</b>
        End at position [end]: <b>1915</b>
@@ -154,8 +93,9 @@ List of USAs output file [x65921.yank]: <b>cds.list</b>
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -391,7 +331,26 @@ None.
     Notes
 </H2>
 
-None.
+<p>There are many ways of specifying input and output sequences for EMBOSS programs, including wildcarded sequence file names, wildcarded database entry names and list files. List files (files of file names) are the most flexible. Instead of containing the sequences themselves, a list file contains one or more sequence references (USAs).  For example, a database entry, the name of a file containing sequences, or even the names of another list file. For example, here's a valid list file:</p>
+<pre>
+opsd_abyko.fasta
+sw:opsd_xenla
+sw:opsd_c*
+@another_list
+</pre>
+
+<p>The file contains:</p>
+
+<pre>
+    * opsd_abyko.fasta - this is the name of a sequence file. The file is read in from the current directory.
+    * sw:opsd_xenla - this is a reference to a specific sequence in the SwissProt database
+    * sw:opsd_c* - this represents all the sequences in SwissProt whose identifiers start with ``opsd_c''
+    * another_list - this is the name of a second list file </pre>
+
+
+<p>Notice the <tt>@</tt> in front of the last entry. This is the way you tell EMBOSS that this file is a list file, not a regular sequence file.</p>
+
+<p>Without the program <b>yank</b> you would need to use a text editor such as pico to create the appropriate list files. <b>yank</b> makes this process easy.</p>
 
 
 <H2>
@@ -431,7 +390,18 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="aligncopy.html">aligncopy</a></td>
+<td>Reads and writes alignments</td>
+</tr>
+
+<tr>
+<td><a href="aligncopypair.html">aligncopypair</a></td>
+<td>Reads and writes pairs from alignments</td>
+</tr>
+
 <tr>
 <td><a href="biosed.html">biosed</a></td>
 <td>Replace or delete sequence sections</td>
@@ -439,17 +409,17 @@ None.
 
 <tr>
 <td><a href="codcopy.html">codcopy</a></td>
-<td>Reads and writes a codon usage table</td>
+<td>Copy and reformat a codon usage table</td>
 </tr>
 
 <tr>
 <td><a href="cutseq.html">cutseq</a></td>
-<td>Removes a specified section from a sequence</td>
+<td>Removes a section from a sequence</td>
 </tr>
 
 <tr>
 <td><a href="degapseq.html">degapseq</a></td>
-<td>Removes gap characters from sequences</td>
+<td>Removes non-alphabetic (e.g. gap) characters from sequences</td>
 </tr>
 
 <tr>
@@ -459,7 +429,7 @@ None.
 
 <tr>
 <td><a href="entret.html">entret</a></td>
-<td>Reads and writes (returns) flatfile entries</td>
+<td>Retrieves sequence entries from flatfile databases and files</td>
 </tr>
 
 <tr>
@@ -469,12 +439,22 @@ None.
 
 <tr>
 <td><a href="extractfeat.html">extractfeat</a></td>
-<td>Extract features from a sequence</td>
+<td>Extract features from sequence(s)</td>
 </tr>
 
 <tr>
 <td><a href="extractseq.html">extractseq</a></td>
 <td>Extract regions from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="featcopy.html">featcopy</a></td>
+<td>Reads and writes a feature table</td>
+</tr>
+
+<tr>
+<td><a href="featreport.html">featreport</a></td>
+<td>Reads and writes a feature table</td>
 </tr>
 
 <tr>
@@ -484,42 +464,67 @@ None.
 
 <tr>
 <td><a href="makenucseq.html">makenucseq</a></td>
-<td>Creates random nucleotide sequences</td>
+<td>Create random nucleotide sequences</td>
 </tr>
 
 <tr>
 <td><a href="makeprotseq.html">makeprotseq</a></td>
-<td>Creates random protein sequences</td>
+<td>Create random protein sequences</td>
+</tr>
+
+<tr>
+<td><a href="maskambignuc.html">maskambignuc</a></td>
+<td>Masks all ambiguity characters in nucleotide sequences with N</td>
+</tr>
+
+<tr>
+<td><a href="maskambigprot.html">maskambigprot</a></td>
+<td>Masks all ambiguity characters in protein sequences with X</td>
 </tr>
 
 <tr>
 <td><a href="maskfeat.html">maskfeat</a></td>
-<td>Mask off features of a sequence</td>
+<td>Write a sequence with masked features</td>
 </tr>
 
 <tr>
 <td><a href="maskseq.html">maskseq</a></td>
-<td>Mask off regions of a sequence</td>
+<td>Write a sequence with masked regions</td>
 </tr>
 
 <tr>
 <td><a href="newseq.html">newseq</a></td>
-<td>Type in a short new sequence</td>
+<td>Create a sequence file from a typed-in sequence</td>
+</tr>
+
+<tr>
+<td><a href="nohtml.html">nohtml</a></td>
+<td>Remove mark-up (e.g. HTML tags) from an ASCII text file</td>
 </tr>
 
 <tr>
 <td><a href="noreturn.html">noreturn</a></td>
-<td>Removes carriage return from ASCII files</td>
+<td>Remove carriage return from ASCII files</td>
+</tr>
+
+<tr>
+<td><a href="nospace.html">nospace</a></td>
+<td>Remove all whitespace from an ASCII text file</td>
+</tr>
+
+<tr>
+<td><a href="notab.html">notab</a></td>
+<td>Replace tabs with spaces in an ASCII text file</td>
 </tr>
 
 <tr>
 <td><a href="notseq.html">notseq</a></td>
-<td>Exclude a set of sequences and write out the remaining ones</td>
+<td>Write to file a subset of an input stream of sequences</td>
 </tr>
 
 <tr>
 <td><a href="nthseq.html">nthseq</a></td>
-<td>Writes one sequence from a multiple set of sequences</td>
+<td>Write to file a single sequence from an input stream of sequences</td>
 </tr>
 
 <tr>
@@ -529,7 +534,7 @@ None.
 
 <tr>
 <td><a href="revseq.html">revseq</a></td>
-<td>Reverse and complement a sequence</td>
+<td>Reverse and complement a nucleotide sequence</td>
 </tr>
 
 <tr>
@@ -539,7 +544,17 @@ None.
 
 <tr>
 <td><a href="seqretsplit.html">seqretsplit</a></td>
-<td>Reads and writes (returns) sequences in individual files</td>
+<td>Reads sequences and writes them to individual files</td>
+</tr>
+
+<tr>
+<td><a href="sizeseq.html">sizeseq</a></td>
+<td>Sort sequences by size</td>
+</tr>
+
+<tr>
+<td><a href="skipredundant.html">skipredundant</a></td>
+<td>Remove redundant sequences from an input set</td>
 </tr>
 
 <tr>
@@ -549,27 +564,32 @@ None.
 
 <tr>
 <td><a href="splitter.html">splitter</a></td>
-<td>Split a sequence into (overlapping) smaller sequences</td>
+<td>Split sequence(s) into smaller sequences</td>
 </tr>
 
 <tr>
 <td><a href="trimest.html">trimest</a></td>
-<td>Trim poly-A tails off EST sequences</td>
+<td>Remove poly-A tails from nucleotide sequences</td>
 </tr>
 
 <tr>
 <td><a href="trimseq.html">trimseq</a></td>
-<td>Trim ambiguous bits off the ends of sequences</td>
+<td>Remove unwanted characters from start and end of sequence(s)</td>
+</tr>
+
+<tr>
+<td><a href="trimspace.html">trimspace</a></td>
+<td>Remove extra whitespace from an ASCII text file</td>
 </tr>
 
 <tr>
 <td><a href="union.html">union</a></td>
-<td>Reads sequence fragments and builds one sequence</td>
+<td>Concatenate multiple sequences into a single sequence</td>
 </tr>
 
 <tr>
 <td><a href="vectorstrip.html">vectorstrip</a></td>
-<td>Strips out DNA between a pair of vector sequences</td>
+<td>Removes vectors from the ends of nucleotide sequence(s)</td>
 </tr>
 
 </table>

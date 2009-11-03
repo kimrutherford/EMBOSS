@@ -29,6 +29,13 @@
 ** the biggest match and calculating start and ends for both sequences.
 */
 
+
+/*
+** possible speedup. The matching function is iterating through a
+** list of hits just to find the one with the right offset. Could we
+** use a table instead with the offset (as a string) as the key?
+ */
+
 #include "emboss.h"
 #include <limits.h>
 #include <math.h>
@@ -116,8 +123,8 @@ int main(int argc, char **argv)
     AjPMatrixf matrix;
     AjPSeqCvt cvt = 0;
     float **sub;
-    ajint *compass = 0;
-    float *path = 0;
+    ajint *compass = NULL;
+    float *path = NULL;
 
     float gapopen;
     float gapextend;
@@ -154,9 +161,9 @@ int main(int argc, char **argv)
     /* obsolete. Can be uncommented in acd file and here to reuse */
 
     /* outf      = ajAcdGetOutfile("originalfile"); */
-    /* show      = ajAcdGetBool("showinternals");*/
-    /* scoreonly = ajAcdGetBool("scoreonly"); */
-    /* showalign = ajAcdGetBool("showalign"); */
+    /* show      = ajAcdGetBoolean("showinternals");*/
+    /* scoreonly = ajAcdGetBoolean("scoreonly"); */
+    /* showalign = ajAcdGetBoolean("showalign"); */
 
     gapopen   = ajRoundF(gapopen, 8);
     gapextend = ajRoundF(gapextend, 8);
@@ -224,7 +231,7 @@ int main(int argc, char **argv)
 
 	    if(end1-start1 > oldmax)
 	    {
-		oldmax = ((end1-start1)+1)*width;
+		oldmax = ((end1-start1)+1)+width;
 		AJRESIZE(path,oldmax*width*sizeof(float));
 		AJRESIZE(compass,oldmax*width*sizeof(ajint));
 		ajDebug("++ resize to oldmax: %d\n", oldmax);
@@ -238,22 +245,18 @@ int main(int argc, char **argv)
 		     start1, end1, (end1 - start1 + 1), lena,
 		     start2, end2, (end2 - start2 + 1), lenb);
 
-	    embAlignPathCalcFast(&p[start1],&q[start2],
-				 end1-start1+1,end2-start2+1,
-				 gapopen,gapextend,path,sub,cvt,
-				 compass,show,width);
-
-
-	    ajDebug("Calling embAlignScoreSWMatrixFast\n");
-
-	    score = embAlignScoreSWMatrixFast(path,compass,gapopen,gapextend,
-					      a,b,end1-start1+1,end2-start2+1,
-					      sub,cvt,&start1,&start2,width);
+	    score = embAlignPathCalcSWFast(&p[start1],&q[start2],
+                                           end1-start1+1,end2-start2+1,
+                                           0,width,
+                                           gapopen,gapextend,
+                                           path,sub,cvt,
+                                           compass,show);
 
 	    if(scoreonly)
 	    {
 		if(outf)
-		    ajFmtPrintF(outf,"%s %s %.2f\n",ajSeqGetNameC(a),ajSeqGetNameC(b),
+		    ajFmtPrintF(outf,"%s %s %.2f\n",
+                                ajSeqGetNameC(a),ajSeqGetNameC(b),
 				score);
 	    }
 	    else
@@ -261,7 +264,8 @@ int main(int argc, char **argv)
 		ajDebug("Calling embAlignWalkSWMatrixFast\n");
 		embAlignWalkSWMatrixFast(path,compass,gapopen,gapextend,a,b,
 					 &m,&n,end1-start1+1,end2-start2+1,
-					 sub,cvt,&start1,&start2,width);
+					 0,width,
+                                         &start1,&start2);
 
 		ajDebug("Calling embAlignPrintLocal\n");
 		if(outf)
@@ -307,10 +311,13 @@ int main(int argc, char **argv)
 
 /* @funcstatic supermatcher_matchListOrder ************************************
 **
-** Undocumented.
+** Calculates the offset for the current match.
 **
-** @param [r] x [void**] Undocumented
-** @param [r] cl [void*] Undocumented
+** Steps through the ordered output list to find one item with the same offset.
+** Adds to it if found, otherwise creates a new item at the end.
+**
+** @param [r] x [void**] Word match item
+** @param [r] cl [void*] Ordered output lists
 ** @return [void]
 ** @@
 ******************************************************************************/
@@ -497,12 +504,15 @@ static ajint supermatcher_findstartpoints(AjPTable seq1MatchTable,
 
     supermatcher_orderandconcat(matchlist, ordered);
 
+    /* this sets global structure conmax to point to a matchlist element */
     ajListMap(ordered,supermatcher_findmax, &max);
 
     ajDebug("findstart conmax off:%d count:%d total:%d\n",
 	    conmax->offset, conmax->count, conmax->total,
 	    ajListGetLength(conmax->list));
     offset = conmax->offset;
+
+    /* the offset is all we needed! we can delete everything */
 
     ajListMap(ordered,supermatcher_removelists, NULL);
     ajListFree(&ordered);

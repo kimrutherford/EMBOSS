@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>helixturnhelix </b>
-Report nucleic acid binding motifs
+Identify nucleic acid-binding motifs in protein sequences
 Input protein sequence(s): <b>tsw:laci_ecoli</b>
 Output report [laci_ecoli.hth]: <b></b>
 

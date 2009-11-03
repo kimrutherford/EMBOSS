@@ -47,7 +47,7 @@ int main(int argc, char **argv)
 
     mult    = ajAcdGetGraphxy("graph");
     ipoints = ajAcdGetInt("points");
-    overlap = ajAcdGetBool("overlap");
+    overlap = ajAcdGetBoolean("overlap");
 
     ajUser("Plotting sin, cos and  tan for %d degrees",ipoints);
 

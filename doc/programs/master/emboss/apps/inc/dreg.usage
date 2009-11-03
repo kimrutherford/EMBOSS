@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>dreg </b>
-Regular expression search of a nucleotide sequence
+Regular expression search of nucleotide sequence(s)
 Input nucleotide sequence(s): <b>tembl:x13776</b>
 Regular expression pattern: <b>ggtacc</b>
 Output report [x13776.dreg]: <b></b>

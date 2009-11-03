@@ -1,0 +1,113 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: globins.aligncopypair</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: aligncopypair
+# Rundate: Tue 15 Jul 2008 12:00:00
+# Commandline: aligncopypair
+#    -sequences ../../data/globins.msf
+# Align_format: simple
+# Report_file: globins.aligncopypair
+########################################
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: HBB_HUMAN
+# 2: HBB_HORSE
+# Matrix: EBLOSUM62
+#
+# Length: 164
+# Identity:     122/164 (74.4%)
+# Similarity:   146/164 (89.0%)
+# Gaps:          18/164 (11.0%)
+# 
+#
+#=======================================
+
+HBB_HUMAN          1 --------VHLTPEEKSAVTALWGKVN-VDEVGGEALGR-LLVVYPWTQR     40
+                             |.|:.|||:||.|||.||| .:||||||||| ||||||||||
+HBB_HORSE          1 --------VQLSGEEKAAVLALWDKVN-EEEVGGEALGR-LLVVYPWTQR     40
+
+HBB_HUMAN         41 FFESFGDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSE     90
+                     ||:||||||.|.||||||||||||||||.:|.:|:.||||||||||.|||
+HBB_HORSE         41 FFDSFGDLSNPGAVMGNPKVKAHGKKVLHSFGEGVHHLDNLKGTFAALSE     90
+
+HBB_HUMAN         91 LHCDKLH--VDPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVA    138
+                     |||||||  ||||||||||||||.|||.||||:|||.:||:|||||||||
+HBB_HORSE         91 LHCDKLH--VDPENFRLLGNVLVVVLARHFGKDFTPELQASYQKVVAGVA    138
+
+HBB_HUMAN        139 NALAHKYH------    146
+                     ||||||||      
+HBB_HORSE        139 NALAHKYH------    146
+
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: HBB_HUMAN
+# 2: HBA_HUMAN
+# Matrix: EBLOSUM62
+#
+# Length: 164
+# Identity:      48/164 (29.3%)
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+MYG_PHYCA          1 -------VLSEGEWQLVLHVWAKVEAD-VAGHGQDILIR-LFKSHPETLE     41
+                             .:..|.|..|...:..|.: ........... :.:..|...:
+LGB2_LUPLU         1 --------GALTESQAALVKSSWEEFNANIPKHTHRFFILVLEIAPAAKD     42
+
+MYG_PHYCA         42 KFDRFKHLKTEAEMKASEDLKKHGVTVLTALGAILKKKGHHEAELKPLAQ     91
+                     .|...|......:...........|..|....||..:..........|..
+LGB2_LUPLU        43 LFSFLKGTSEVPQNNPELQAHAGKVFKLVYEAAIQLQVTGVVVTDATLKN     92
+
+MYG_PHYCA         92 SHATKHK--IPIKYLEFISEAIIHVLHSRHPGDFGADAQGAMNKALELFR    139
+                     ..:....  :...:...:.|||:..:.......:..:...|...|.:...
+LGB2_LUPLU        93 LGSVHVSKGVADAHFPVVKEAILKTIKEVVGAKWSEELNSAWTIAYDELA    142
+
+MYG_PHYCA        140 KDIAAKYKELGYQG    153
+                     ..|..:..:..   
+LGB2_LUPLU       143 IVIKKEMNDAA---    153
+
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: GLB5_PETMA
+# 2: LGB2_LUPLU
+# Matrix: EBLOSUM62
+#
+# Length: 164
+# Identity:      17/164 (10.4%)
+# Similarity:   149/164 (90.9%)
+# Gaps:          23/164 (14.0%)
+# 
+#
+#=======================================
+
+GLB5_PETMA         1 PIVDTGSVAPLSAAEKTKIRSAWAPVYSTYETSGVDILVKFFTSTPAAQE     50
+                             ..|:.::...::|:|....:..........:......|||::
+LGB2_LUPLU         1 --------GALTESQAALVKSSWEEFNANIPKHTHRFFILVLEIAPAAKD     42
+
+GLB5_PETMA        51 FFPKFKGLTTADQLKKSADVRWHAERIINAVNDAVASMDDTEKMSMKLRD    100
+                     .|...||.:...|..............:.........:.........|::
+LGB2_LUPLU        43 LFSFLKGTSEVPQNNPELQAHAGKVFKLVYEAAIQLQVTGVVVTDATLKN     92
+
+GLB5_PETMA       101 LSGKHAK--SFQVDPQYFKVLAAVIADTVAAGDAGFEKLMSMICILLRSA    148
+                     |...|..  .........|.........|.......|...:........|
+LGB2_LUPLU        93 LGSVHVSKGVADAHFPVVKEAILKTIKEVVGAKWSEELNSAWTIAYDELA    142
+
+GLB5_PETMA       149 Y-------------    149
+                     .             
+LGB2_LUPLU       143 IVIKKEMNDAA---    153
+
+
+#---------------------------------------
+#---------------------------------------
+</pre>
+</td></tr></table><p>

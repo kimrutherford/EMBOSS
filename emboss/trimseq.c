@@ -65,10 +65,10 @@ int main(int argc, char **argv)
     seqout  = ajAcdGetSeqoutall("outseq");
     window  = ajAcdGetInt("window");
     percent = ajAcdGetFloat("percent");
-    left    = ajAcdGetBool("left");
-    right   = ajAcdGetBool("right");
-    strict  = ajAcdGetBool("strict");
-    star    = ajAcdGetBool("star");
+    left    = ajAcdGetBoolean("left");
+    right   = ajAcdGetBoolean("right");
+    strict  = ajAcdGetBoolean("strict");
+    star    = ajAcdGetBoolean("star");
 
     str = ajStrNew();
 

@@ -64,7 +64,7 @@ int main(int argc, char **argv)
     line = ajStrNew();
 
     done = ajTrue;
-    while(ajFileGetsTrim(inf, &line))
+    while(ajReadlineTrim(inf, &line))
     {
 	/* process the ID for a new index */
 	if(ajRegExec(idexp, line))
@@ -74,7 +74,7 @@ int main(int argc, char **argv)
 	    ajRegSubI(idexp, 1, &id);
 	    ajStrFmtLower(&id);
 	    ajFmtPrintS(&outfname, "%S/%S", outdir, id);
-	    ajFileDataNewWrite(outfname,&outf);
+	    outf = ajDatafileNewOutNameS(outfname);
 	    done = ajFalse;
 	}
 	else

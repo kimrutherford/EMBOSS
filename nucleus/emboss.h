@@ -29,7 +29,7 @@
 #include "embindex.h"
 
 #ifdef WIN32
-#define VERSION "5.0.0"
+#define VERSION "6.0.1"
 #endif
 
 

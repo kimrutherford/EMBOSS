@@ -18,44 +18,9 @@ entret
     Description
 </H2>
 
-<b>entret</b> reads a sequence from a database or a file and writes the
-complete sequence entry to a text file.
-<p>
-
-The difference between <b>entret</b> and such programs as <a
-href="seqret.html">seqret</a> which also read entries from databases or
-files and write them to files, is that <b>entret</b> reads and writes
-the complete sequence entry together with the heading annotation
-(documentation) <i>without attempting to reformat or interpret the data
-in any way</i>.  <b>seqret</b> on the other hand will read in the entry
-data, determine which bit of it is the sequence, which is the
-description line and which is the feature table and will then write the
-sequence, description and features out in the way prescribed by the
-sequence format which has been requested for output. 
-
-<p>
 
 
-<b>entret</b> therefore is very useful for looking at the annotation of
-sequences from databases, which <a href="seqret.html">seqret</a> does
-not provide. 
-
-<p>
-
-The other main difference is that when it writes out the sequence entry
-to a file, the information is treated as text, not sequence, and so
-options that you would normally use to change the aspects of the
-sequence to be written will either not be recognised and will cause an
-error message to be written (e.g.  '-osformat') or will be quietly
-ignored (e.g.  '-sbegin', '-send'). 
-
-
-<p>
-
-In previous versions of EMBOSS, <b>entret</b> didn't return the sequence
-from entries held in GCG indexed databases.  This has now been fixed. 
-<b>entret</b> will now return the complete sequence entries with the
-annotation of GCG indexed databases. 
+<p><b>entret</b> reads one or more complete sequence entries from a database or a file and writes them to a text file.  Optionally, the first sequence from the input stream only can be retrieved.  The complete entry, including heading annotation, is retrieved and written and the data is not altered or reformatted in any way.</p>
 
 <H2>
     Usage
@@ -101,7 +66,16 @@ None.
     Notes
 </H2>
 
-None.
+<p>The difference between <b>entret</b> and such programs as <b>seqret</b> which also read entries from databases or files and write them to files, is that <b>entret</b> reads and writes the complete sequence entry together with the heading annotation (documentation) without attempting to reformat or interpret the data in any way. <b>seqret</b> on the other hand will read in the entry data, determine which bit of it is the sequence, which is the description line and which is the feature table and will then write the sequence, description and features out in the way prescribed by the sequence format which has been requested for output.</p>
+
+<p><b>entret</b> therefore is very useful for looking at the annotation of sequences from databases, which <b>seqret</b> does not provide.</p>
+
+<p>In writing sequence entries to file, <b>entret</b> treats the data as plain text, not sequence.  Therefore options (e.g. '-osformat') that would normally change aspects of the written sequence will either not be recognised and will cause an error message to be written, or will be quietly ignored (e.g. '-sbegin', '-send').</p>
+
+<p>In previous versions of EMBOSS, <b>entret</b> didn't return the sequence from entries held in GCG indexed databases. This has now been fixed. <b>entret</b> will now return the complete sequence entries with the annotation of GCG indexed databases.</p>
+
+
+
 
 <H2>
     References

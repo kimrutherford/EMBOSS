@@ -84,7 +84,7 @@ int main(int argc, char **argv)
     ajGraphDataAdd(mult,graphdata);
 
     for(i=0;i<ilen;i++)
-	ajStrAppendK(&aa0str,(char)ajAZToInt(*s1++));
+	ajStrAppendK(&aa0str,(char)ajBasecodeToInt(*s1++));
 
 
     if(!pepwindow_getnakaidata(datafile,&matrix[0]))
@@ -168,7 +168,7 @@ static AjBool pepwindow_getnakaidata(AjPFile file, float matrix[])
 	matrix[i] = FLT_MIN;
     }
 
-    while(ajFileGets(file,&buffer))
+    while(ajReadline(file,&buffer))
     {
 	ptr = ajStrGetPtr(buffer);
 	if(*ptr == 'D')			/* save description */

@@ -43,7 +43,7 @@ int main(int argc, char **argv)
     outf   = ajAcdGetOutfile("outfile");
     seqall = ajAcdGetSeqall("sequence");
 
-    firstonly = ajAcdGetBool("firstonly");
+    firstonly = ajAcdGetBoolean("firstonly");
     while(ajSeqallNext(seqall,&seq))
     {
 	ajFmtPrintF(outf,"%S",ajSeqGetEntryS(seq));

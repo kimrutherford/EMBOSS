@@ -22,8 +22,6 @@
 package org.emboss.jemboss.graphics;
 
 import javax.swing.*;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ChangeEvent;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -103,6 +101,7 @@ public class Graph2DPlot extends ScrollPanel
   private Image offscreen = null;
 
   private String maintitle = "";
+  private String subtitle = "";
   private String xtitle = "";
   private String ytitle = "";
   private String fileName = null;
@@ -203,6 +202,7 @@ public class Graph2DPlot extends ScrollPanel
   public JMenuBar getMenuBar(boolean bexit, final JFrame frame)
   {
     JMenuBar menubar = new JMenuBar();
+    menubar.add(Box.createRigidArea(new Dimension(5,24)));
     JMenu fileMenu = new JMenu("File");
     fileMenu.setMnemonic(KeyEvent.VK_F);
 
@@ -554,16 +554,20 @@ public class Graph2DPlot extends ScrollPanel
     });
     optionsMenu.add(axesOptions);
     menubar.add(optionsMenu);
-
+    return menubar;
+  }
+  
+  
+  public JToolBar getToolBar(){
+    JToolBar toolbar = new JToolBar();
 // font menu
     String sizes[] = {"10", "12", "14", "16", "18"};
     final JComboBox fntSize = new JComboBox(sizes);
+    fntSize.setMaximumSize(fntSize.getMinimumSize());
+    fntSize.setToolTipText("Font size");
     fntSize.setSelectedItem(Integer.toString(getFont().getSize()));
-    menubar.add(fntSize);
+    toolbar.add(fntSize);
     fntSize.setEditable(true);
-    Dimension dfont = new Dimension(50,20);
-    fntSize.setPreferredSize(dfont);
-    fntSize.setMaximumSize(dfont);
     fntSize.addActionListener(new ActionListener()
     {
       public void actionPerformed(ActionEvent e)
@@ -579,15 +583,16 @@ public class Graph2DPlot extends ScrollPanel
       }
     });
 
+    toolbar.addSeparator();
 
 // zoom
     String zoom[] = {"70", "80", "90", "100", "150", "200"};
     final JComboBox zoomSize = new JComboBox(zoom);
+    zoomSize.setMaximumSize(zoomSize.getMinimumSize());
+    zoomSize.setToolTipText("Zoom (%)");
     zoomSize.setSelectedItem("100");
-    menubar.add(zoomSize);
+    toolbar.add(zoomSize);
     zoomSize.setEditable(true);
-    zoomSize.setPreferredSize(dfont);
-    zoomSize.setMaximumSize(dfont);
     zoomSize.addActionListener(new ActionListener()
     {
       public void actionPerformed(ActionEvent e)
@@ -610,8 +615,8 @@ public class Graph2DPlot extends ScrollPanel
         setCursor(cdone);
       }
     });
-    menubar.add(new JLabel("%"));
-    return menubar;
+    toolbar.add(new JLabel("%"));
+    return toolbar;
   }
   
 
@@ -793,6 +798,8 @@ public class Graph2DPlot extends ScrollPanel
 
     if(offscreen == null)
     {
+      try
+      {
       offscreen = createImage(getWidth(),getHeight());
       Graphics og = offscreen.getGraphics();
      
@@ -806,8 +813,17 @@ public class Graph2DPlot extends ScrollPanel
         drawGraphics(og,fm);   
 
       og.setColor(Color.black);
+      
+      drawTitles(og);
+      
       if(draw_axes)
         drawAxes(og,tick_height);
+      } catch (OutOfMemoryError e) {
+          String msg ="Memory error: "+e+
+          "\nPlease check Jemboss JVM startup options";
+          JOptionPane.showMessageDialog(null, msg, "Error", JOptionPane.ERROR_MESSAGE);
+          throw e;
+      }
     }
     g.drawImage(offscreen, 0, 0, null);
   }
@@ -843,6 +859,30 @@ public class Graph2DPlot extends ScrollPanel
       drawAxes(g,tick_height);
   }
 
+  
+  /**
+  * 
+  * Draws main-title and sub-title
+  * 
+  */
+  private void drawTitles(Graphics g){
+      Graphics2D g2d = (Graphics2D)g;
+      FontMetrics fm = getFontMetrics(getFont());
+      int font_height = fm.getHeight();
+      
+      if(maintitle_field != null)
+          maintitle = maintitle_field.getText();
+
+        int title_width = fm.stringWidth(maintitle);
+        g2d.drawString(maintitle, (int)((getWidth()-title_width)/2),
+                       font_height+1);
+        
+        title_width = fm.stringWidth(subtitle);
+        g2d.drawString(subtitle,(int)((getWidth()-title_width)/2),
+                font_height*2+2);      
+  }
+  
+  
   /**
   *
   * Draw the x and y axes.
@@ -854,13 +894,6 @@ public class Graph2DPlot extends ScrollPanel
     FontMetrics fm = getFontMetrics(getFont());
     int font_height = fm.getHeight();
     int font_height2 = font_height/2;
-
-    if(maintitle_field != null)
-      maintitle = maintitle_field.getText();
-
-    int maintitle_width = fm.stringWidth(maintitle);
-    g2d.drawString(maintitle, (int)((getWidth()-maintitle_width)/2),
-                   font_height);
 
     // x-axis
     g2d.drawLine(xborder,getHeight()-yborder,
@@ -1228,19 +1261,8 @@ public class Graph2DPlot extends ScrollPanel
       }
       else if( ((Integer)emboss_data[0][i]).intValue() == TEXTLINE)
       {
-        boolean number = true;
-        try
-        {
-          String text = (String)emboss_data[6][i];
-          Float.parseFloat(text);
-        }
-        catch(NumberFormatException nfe)
-        {
-          number = false;
-        }
-
         if( x1 >= 0 && y1 <= 0 &&
-            x1 <= xendPoint && y1 >= -yendPoint )
+            x1 <= xendPoint && y1 >= -yendPoint && emboss_data[5][i] instanceof Float)
         {
           int colourID = (int) ((Float)emboss_data[5][i]).floatValue();
 //        int textWidth = justify((String)emboss_data[6][i],fm);
@@ -1248,12 +1270,12 @@ public class Graph2DPlot extends ScrollPanel
           g.setColor(plplot_colour[colourID]);
           g.drawString((String)emboss_data[6][i],(int)x1,(int)y1);
         }
-        else if(y1 > 0 && !number)  // looks like x-axis title
+        else if( emboss_data[6][i] instanceof String)  // looks like y-axis title
         {
           if(ytitle_field == null)
-            ytitle_field = new JTextField((String)emboss_data[5][i]);
+            ytitle_field = new JTextField((String)emboss_data[6][i]);
         }
-        else if(y1 < yendPoint && !number)  // looks like main title
+        else if(y1 < yendPoint && emboss_data[5][i] instanceof String)  // looks like main title
         {
           if(maintitle_field == null)
             maintitle_field = new JTextField((String)emboss_data[5][i]);
@@ -1329,8 +1351,8 @@ public class Graph2DPlot extends ScrollPanel
     float x2;
     float y2;
 
-    float xendPoint =  (float)(xend.getValue()-xstart.getValue())*xfactor;
-    float yendPoint = -(float)(yend.getValue()-ystart.getValue())*yfactor;
+    //float xendPoint =  (float)(xend.getValue()-xstart.getValue())*xfactor;
+    //float yendPoint = -(float)(yend.getValue()-ystart.getValue())*yfactor;
 
     g2d.translate(xborder, getHeight()-yborder);
     for(int i=1; i<xnum; i++)
@@ -1435,6 +1457,11 @@ public class Graph2DPlot extends ScrollPanel
       {
         int ind = line.indexOf(" ");
         maintitle = line.substring(ind).trim();
+      }
+      else if(line.startsWith("##Subtitle "))
+      {
+        int ind = line.indexOf(" ");
+        subtitle = line.substring(ind).trim();
       }
       else if(line.startsWith("Text"))
         vx.add(line);
@@ -1599,11 +1626,12 @@ public class Graph2DPlot extends ScrollPanel
     scroll.setPreferredSize(new Dimension(400,400));
     frame.getContentPane().add(scroll);
 //  gp.setData(emboss_data);
-    File filename = new File(arg[0]);
-    gp.setFileData(filename);
+    File file = new File(arg[0]);
+    gp.setFileData(file);
     frame.setJMenuBar(gp.getMenuBar(false, frame));
     frame.pack();
     frame.setVisible(true);
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
   }
 
 }

@@ -7,6 +7,7 @@
 ** @modified 1 Sept 2000 - GWW - Added embPropTransition embPropTranversion
 ** @modified 4 July 2001 - DMAM - Modified embPropAminoRead embPropCalcMolwt
 ** @modified 4 July 2001 - DMAM - Added embPropCalcMolwtMod
+** @modified 1 July 2008 - JISON - Added embPropGet* functions
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -55,9 +56,8 @@ float dayhoff[] = {
 
 #define AMINODATFILE "Eamino.dat"
 
-static AjBool propInit = 0;
 
-double *EmbPropTable[EMBPROPSIZE];
+/* static AjBool propInit = 0;*/
 
 static char propPurines[]     = "agrAGR";
 static char propPyrimidines[] = "ctuyCTUY";
@@ -70,66 +70,393 @@ static ajint propFragCompare(const void *a, const void *b);
 
 
 
-/* @func embPropAminoRead *****************************************************
+/* @func embPropEaminoRead ****************************************************
 **
 ** Read amino acid properties from Eamino.dat
 **
 ** @param [u] mfptr [AjPFile] Input file object
-** @return [void]
+** @return [EmbPPropAmino*] array of amino acid properties
 ** @@
 ******************************************************************************/
 
-void embPropAminoRead(AjPFile mfptr)
+EmbPPropAmino* embPropEaminoRead(AjPFile mfptr)
 {
     AjPStr  line  = NULL;
-    AjPStr  delim = NULL;
-#ifndef WIN32
-    static const char *delimstr=" :\t\n";
-#else
-    static const char *delimstr=" :\t\n\r";
-#endif
-
+    AjPStr  token = NULL;
+    
+    AjBool firstline;
+    
     const char *p;
     ajuint i;
-    ajint cols = 0;
-
-    if(propInit)
-	return;
-
-    for(i=0;i<EMBPROPSIZE;i++)
-	EmbPropTable[i] = 0;
+    ajint  n;
+    
+    EmbPPropAmino *ret;
 
     line  = ajStrNew();
-    delim = ajStrNewC(delimstr);
+    token = ajStrNew();
+    
+    firstline = ajTrue;
 
-    while(ajFileGets(mfptr, &line))
+    AJCNEW0(ret,EMBPROPSIZE);
+    for(i=0; i < EMBPROPSIZE; ++i)
+	AJNEW0(ret[i]);
+    
+    while(ajReadline(mfptr, &line))
     {
+	ajStrRemoveWhiteExcess(&line);
 	p = ajStrGetPtr(line);
 	if(*p=='#' || *p=='!' || !*p)
 	    continue;
 
-	while(*p && (*p<'A' || *p>'Z'))
-	    ++p;
+	if(firstline)
+	{
+	    if(!ajStrPrefixC(line,"aa"))
+		ajFatal("Incorrect (old?) format amino data file");
+	    firstline = ajFalse;
+	    continue;
+	}
 
-	cols = ajStrParseCountC(line,ajStrGetPtr(delim));
-	if(EmbPropTable[ajAZToInt(toupper((ajint)*p))])
-	    ajWarn("Amino acid property table duplicate record for '%c'",
-		   *p);
-	i = ajAZToInt(toupper((ajint)*p));
-	if(i >= EMBPROPSIZE)
-	    ajWarn("Amino acid property table bad code '%c', index %u",
-		   *p, i);
-	EmbPropTable[i] =
-	    ajArrDoubleLine(line,ajStrGetPtr(delim),2,cols);
+	ajFmtScanS(line,"%S",&token);
+	ajStrFmtUpper(&token);
+	if(ajStrGetLen(token) != 1)
+	    ajFatal("Amino file line doesn't begin with a single character");
+	i = ajBasecodeToInt((ajint) *ajStrGetPtr(token));
+	if(i == 27)
+	    ajFatal("Amino file line doesn't begin with a single A->Z (%S)",
+		    line);
+
+	n = ajFmtScanS(line,"%*s%d%d%d%d%d%d%f%d%d%d",
+		       &ret[i]->tiny,
+		       &ret[i]->sm_all,
+		       &ret[i]->aliphatic,
+		       &ret[i]->aromatic,
+		       &ret[i]->nonpolar,
+		       &ret[i]->polar,
+		       &ret[i]->charge,
+		       &ret[i]->pve,
+		       &ret[i]->nve,
+		       &ret[i]->extcoeff);
+	if(n!= 10)
+	    ajFatal("Only %d columns in amino file - expected %d",n+1,11);
     }
 
+    ajStrDel(&line);
+    ajStrDel(&token);
+
+    return ret;
+}
+
+/* @func embPropGetProperties **************************************************
+**
+** Returns a string containing a list of defined properties
+**
+** @param [r] prop [const EmbPPropAmino] Input properties object
+** @param [w] Pstr [AjPStr*] String of properties separated by commas
+** @return [AjBool] True if properties are defined
+** @@
+******************************************************************************/
+
+AjBool embPropGetProperties(const EmbPPropAmino prop, AjPStr* Pstr)
+{
+    ajStrAssignC(Pstr, "");
+    if(prop->tiny)
+        ajStrAppendC(Pstr, "tiny,");
+    if(prop->sm_all)
+        ajStrAppendC(Pstr, "small,");
+    if(prop->aliphatic)
+        ajStrAppendC(Pstr, "aliphatic,");
+    if(prop->aromatic)
+        ajStrAppendC(Pstr, "aromatic,");
+    if(prop->polar)
+        ajStrAppendC(Pstr, "polar,");
+    if(prop->nonpolar)
+        ajStrAppendC(Pstr, "nonpolar,");
+    ajStrTrimEndC(Pstr, ",");
+
+    if(!ajStrGetLen(*Pstr))
+        return ajFalse;
+
+    return ajTrue;
+}
+
+
+/* @func embPropEmolwtRead ****************************************************
+**
+** Read molecular weights from Emolwt.dat
+**
+** @param [u] mfptr [AjPFile] Input file object
+** @return [EmbPPropMolwt*] array of amino acid molecular weights
+** @@
+******************************************************************************/
+
+EmbPPropMolwt* embPropEmolwtRead(AjPFile mfptr)
+{
+    AjPStr  line  = NULL;
+    AjPStr  token = NULL;
+    
+    AjBool firstline;
+    
+    const char *p;
+    ajuint i;
+    ajint  n;
+    
+    EmbPPropMolwt *ret;
+
+    line  = ajStrNew();
+    token = ajStrNew();
+    
+    firstline = ajTrue;
+
+    AJCNEW0(ret,EMBPROPSIZE+2);
+    for(i=0; i < EMBPROPSIZE+2; ++i)
+	AJNEW0(ret[i]);
+    
+    while(ajReadline(mfptr, &line))
+    {
+	ajStrRemoveWhiteExcess(&line);
+	p = ajStrGetPtr(line);
+	if(*p=='#' || *p=='!' || !*p)
+	    continue;
+
+	if(firstline)
+	{
+	    if(!ajStrPrefixC(line,"Mol"))
+		ajFatal("Incorrect format molwt file: '%S'", line);
+	    firstline = ajFalse;
+	    continue;
+	}
+
+	ajFmtScanS(line,"%S",&token);
+	ajStrFmtUpper(&token);
+	if(ajStrGetLen(token) != 1)
+	{
+	    if(ajStrPrefixC(token,"HYDROGEN"))
+	    {
+		if(ajFmtScanS(line,"%*s%lf%lf",
+			      &ret[EMBPROPHINDEX]->average,
+			      &ret[EMBPROPHINDEX]->mono) != 2)
+		    ajFatal("Bad format hydrogen data line");
+	    }
+	    else if(ajStrPrefixC(token,"OXYGEN"))
+	    {
+		if(ajFmtScanS(line,"%*s%lf%lf",
+			      &ret[EMBPROPOINDEX]->average,
+			      &ret[EMBPROPOINDEX]->mono) != 2)
+		    ajFatal("Bad format oxygen data line");
+	    }
+	    else
+		ajFatal("Unknown molwt token %S",token);
+	    continue;
+	}
+
+
+	i = ajBasecodeToInt((ajint) *ajStrGetPtr(token));
+	if(i == 27)
+	    ajFatal("Molwt file line doesn't begin with a single A->Z (%S)",
+		    line);
+
+	n = ajFmtScanS(line,"%*s%lf%lf",
+		       &ret[i]->average,
+		       &ret[i]->mono);
+	if(n != 2)
+	    ajFatal("Only %d columns in amino file - expected %d",n,3);
+    }
 
     ajStrDel(&line);
-    ajStrDel(&delim);
+    ajStrDel(&token);
 
-    propInit = ajTrue;
+    return ret;
+}
 
-    return;
+
+
+
+/* @func embPropMolwtGetMolwt *************************************************
+**
+** Return charge value
+**
+** @param [r] prop [const EmbPPropMolwt] Input mOlecular weights object
+** @return [float] charge
+** @@
+******************************************************************************/
+
+float embPropMolwtGetMolwt(const EmbPPropMolwt prop)
+{
+    float ret;
+
+    ret = (float) prop->average; /* satisfy VC++ */
+    
+    return ret;
+}
+
+
+
+
+/* @func embPropGetCharge *****************************************************
+**
+** Return charge value
+**
+** @param [r] prop [const EmbPPropAmino] Input properties object
+** @return [float] charge
+** @@
+******************************************************************************/
+
+float embPropGetCharge(const EmbPPropAmino prop)
+{
+    return prop->charge;
+}
+
+
+
+
+/* @func embPropGetTiny *****************************************************
+**
+** Return tiny value
+**
+** @param [r] prop [const EmbPPropAmino] Input properties object
+** @return [ajint] tiny
+** @@
+******************************************************************************/
+
+ajint embPropGetTiny(const EmbPPropAmino prop)
+{
+    return prop->tiny;
+}
+
+
+
+
+/* @func embPropGetSmall *****************************************************
+**
+** Return small value
+**
+** @param [r] prop [const EmbPPropAmino] Input properties object
+** @return [ajint] small
+** @@
+******************************************************************************/
+
+ajint embPropGetSmall(const EmbPPropAmino prop)
+{
+    return prop->sm_all;
+}
+
+
+
+
+/* @func embPropGetAliphatic **************************************************
+**
+** Return aliphatic value
+**
+** @param [r] prop [const EmbPPropAmino] Input properties object
+** @return [ajint] aliphatic
+** @@
+******************************************************************************/
+
+ajint embPropGetAliphatic(const EmbPPropAmino prop)
+{
+    return prop->aliphatic;
+}
+
+
+
+
+/* @func embPropGetAromatic *****************************************************
+**
+** Return aromatic value
+**
+** @param [r] prop [const EmbPPropAmino] Input properties object
+** @return [ajint] aromatic
+** @@
+******************************************************************************/
+
+ajint embPropGetAromatic(const EmbPPropAmino prop)
+{
+    return prop->aromatic;
+}
+
+
+
+
+/* @func embPropGetNonpolar *****************************************************
+**
+** Return nonpolar value
+**
+** @param [r] prop [const EmbPPropAmino] Input properties object
+** @return [ajint] nonpolar
+** @@
+******************************************************************************/
+
+ajint embPropGetNonpolar(const EmbPPropAmino prop)
+{
+    return prop->nonpolar;
+}
+
+
+
+
+/* @func embPropGetPolar *****************************************************
+**
+** Return polar value
+**
+** @param [r] prop [const EmbPPropAmino] Input properties object
+** @return [ajint] polar
+** @@
+******************************************************************************/
+
+ajint embPropGetPolar(const EmbPPropAmino prop)
+{
+    return prop->polar;
+}
+
+
+
+
+/* @func embPropGetPve *****************************************************
+**
+** Return pve value
+**
+** @param [r] prop [const EmbPPropAmino] Input properties object
+** @return [ajint] pve
+** @@
+******************************************************************************/
+
+ajint embPropGetPve(const EmbPPropAmino prop)
+{
+    return prop->pve;
+}
+
+
+
+
+/* @func embPropGetNve *****************************************************
+**
+** Return nve value
+**
+** @param [r] prop [const EmbPPropAmino] Input properties object
+** @return [ajint] nve
+** @@
+******************************************************************************/
+
+ajint embPropGetNve(const EmbPPropAmino prop)
+{
+    return prop->nve;
+}
+
+
+
+
+/* @func embPropGetExtcoeff ***************************************************
+**
+** Return extcoeff value
+**
+** @param [r] prop [const EmbPPropAmino] Input properties object
+** @return [ajint] extcoeff
+** @@
+******************************************************************************/
+
+ajint embPropGetExtcoeff(const EmbPPropAmino prop)
+{
+    return prop->extcoeff;
 }
 
 
@@ -143,14 +470,27 @@ void embPropAminoRead(AjPFile mfptr)
 ** @param [r] s [const char *] sequence
 ** @param [r] start [ajint] start position
 ** @param [r] end [ajint] end position
+** @param [r] mwdata [EmbPPropMolwt const *] molecular weight data
+** @param [r] mono [AjBool] true for monoisotopic values
 **
 ** @return [double] molecular weight
 ** @@
 ******************************************************************************/
 
-double embPropCalcMolwt(const char *s, ajint start, ajint end)
+double embPropCalcMolwt(const char *s, ajint start, ajint end,
+			EmbPPropMolwt const *mwdata, AjBool mono)
 {
-    return embPropCalcMolwtMod(s,start,end,EMBPROPMSTN_H, EMBPROPMSTC_OH );
+    double nmass = 0.;
+    double cmass = 0.;
+
+    nmass = (mono) ? mwdata[EMBPROPHINDEX]->mono :
+	mwdata[EMBPROPHINDEX]->average;
+
+    cmass = (mono) ? mwdata[EMBPROPOINDEX]->mono + nmass :
+	mwdata[EMBPROPOINDEX]->average + nmass;
+    
+
+    return embPropCalcMolwtMod(s,start,end,mwdata,mono,nmass,cmass);
 }
 
 
@@ -164,6 +504,8 @@ double embPropCalcMolwt(const char *s, ajint start, ajint end)
 ** @param [r] s [const char *] sequence
 ** @param [r] start [ajint] start position
 ** @param [r] end [ajint] end position
+** @param [r] mwdata [EmbPPropMolwt const *] molecular weight data
+** @param [r] mono [AjBool] true for monoisotopic values
 ** @param [r] nmass [double] mass of the N-terminal group
 ** @param [r] cmass [double] mass of the C-terminal group
 **
@@ -171,25 +513,30 @@ double embPropCalcMolwt(const char *s, ajint start, ajint end)
 ** @@
 ******************************************************************************/
 
-double embPropCalcMolwtMod(const char *s, ajint start, ajint end, double nmass,
-			   double cmass)
+double embPropCalcMolwtMod(const char *s, ajint start, ajint end,
+			   EmbPPropMolwt const *mwdata, AjBool mono,
+			   double nmass, double cmass)
 {
     const char *p;
     double sum;
     ajint i;
     ajint len;
+    ajint idx;
+    double mw = 0.;
+    
+    len = end - start + 1;
 
-    if(!propInit)
-      ajFatal("Amino Acid data not initialised. Call embPropAminoRead");
-
-    len = end-start+1;
-
-    p = s+start;
+    p = s + start;
     sum = 0.0;
 
     for(i=0;i<len;++i)
-	sum += EmbPropTable[ajAZToInt(toupper((ajint)p[i]))][EMBPROPMOLWT];
-
+    {
+	idx = ajBasecodeToInt(toupper((ajint)p[i]));
+	mw = (mono) ? mwdata[idx]->mono : mwdata[idx]->average;
+	
+	sum += mw;
+    }
+    
     return sum + nmass + cmass;
 }
 
@@ -203,12 +550,14 @@ double embPropCalcMolwtMod(const char *s, ajint start, ajint end, double nmass,
 ** @param [r] s [const char *] sequence
 ** @param [r] start [ajint] start position
 ** @param [r] end [ajint] end position
+** @param [r] aadata [EmbPPropAmino const *] amino acid data
 **
 ** @return [double] molar extinction coefficient
 ** @@
 ******************************************************************************/
 
-double embPropCalcMolextcoeff(const char *s, ajint start, ajint end)
+double embPropCalcMolextcoeff(const char *s, ajint start, ajint end,
+			      EmbPPropAmino const *aadata)
 {
 
     const char *p;
@@ -216,17 +565,13 @@ double embPropCalcMolextcoeff(const char *s, ajint start, ajint end)
     ajint i;
     ajint len;
     
-    if(!propInit)
-	ajFatal("Amino Acid data not initialised. Call embPropAminoRead");
-
     len = end-start+1;
     
     p   = s+start;
     sum = 0.0;
 
     for(i=0;i<len;++i)
-	sum += EmbPropTable[ajAZToInt(toupper((ajint)p[i]))]
-	    [EMBPROPABSORBANCE];
+	sum += (double) aadata[ajBasecodeToInt(toupper((ajint)p[i]))]->extcoeff;
 
     return sum;
 }
@@ -246,7 +591,7 @@ double embPropCalcMolextcoeff(const char *s, ajint start, ajint end)
 
 const char* embPropCharToThree(char c)
 {
-    return embPropIntToThree(ajAZToInt(c));
+    return embPropIntToThree(ajBasecodeToInt(c));
 }
 
 
@@ -294,7 +639,8 @@ const char* embPropIntToThree(ajint c)
 ** @param [r] nterm [AjBool] nterm ragging
 ** @param [r] cterm [AjBool] cterm ragging
 ** @param [r] dorag [AjBool] true if ragging
-
+** @param [r] mwdata [EmbPPropMolwt const *] molecular weight data
+** @param [r] mono [AjBool] true for monoisotopic weights
 **
 ** @return [void]
 ** @@
@@ -305,7 +651,8 @@ void embPropCalcFragments(const char *s, ajint n,
 			  AjBool unfavoured, AjBool overlap,
 			  AjBool allpartials, ajint *ncomp, ajint *npart,
 			  AjPStr *rname, AjBool nterm, AjBool cterm,
-			  AjBool dorag)
+			  AjBool dorag, EmbPPropMolwt const *mwdata,
+			  AjBool mono)
 {
     static const char *PROPENZReagent[]=
     {
@@ -400,7 +747,7 @@ void embPropCalcFragments(const char *s, ajint n,
 	ewp = endsa[i];
 	if(strchr(PROPENZAminoCarboxyl[n],'N'))
 	    --ewp;
-	molwt=embPropCalcMolwt(s,bwp,ewp);
+	molwt=embPropCalcMolwt(s,bwp,ewp,mwdata,mono);
 
 	if(n==PROPENZCNBR)
 	    molwt -= (17.045 + 31.095);
@@ -414,7 +761,7 @@ void embPropCalcFragments(const char *s, ajint n,
 
     if(defcnt)		   /* Special treatment for last fragment   */
     {
-	molwt = embPropCalcMolwt(s,mark,len-1);
+	molwt = embPropCalcMolwt(s,mark,len-1,mwdata,mono);
 	if(n==PROPENZCNBR)
 	    molwt -= (17.045 + 31.095);
 	begsa[i]   = mark;
@@ -436,7 +783,7 @@ void embPropCalcFragments(const char *s, ajint n,
 		AJNEW0(fr);
 		fr->start = st;
 		fr->end   = it;
-		fr->molwt = embPropCalcMolwt(s,st,it);
+		fr->molwt = embPropCalcMolwt(s,st,it,mwdata,mono);
 		if(n == PROPENZCNBR)
 		    fr->molwt -= (17.045 + 31.095);
 		fr->isfrag = ajTrue;
@@ -457,7 +804,7 @@ void embPropCalcFragments(const char *s, ajint n,
 		AJNEW0(fr);
 		fr->start = it;
 		fr->end   = et;
-		fr->molwt = embPropCalcMolwt(s,it,et);
+		fr->molwt = embPropCalcMolwt(s,it,et,mwdata,mono);
 		if(n == PROPENZCNBR)
 		    fr->molwt -= (17.045 + 31.095);
 		fr->isfrag = ajTrue;
@@ -489,7 +836,7 @@ void embPropCalcFragments(const char *s, ajint n,
 			AJNEW0(fr);
 			fr->start = st;
 			fr->end   = it;
-			fr->molwt = embPropCalcMolwt(s,st,it);
+			fr->molwt = embPropCalcMolwt(s,st,it,mwdata,mono);
 			if(n == PROPENZCNBR)
 			    fr->molwt -= (17.045 + 31.095);
 			fr->isfrag = ajTrue;
@@ -499,7 +846,7 @@ void embPropCalcFragments(const char *s, ajint n,
 
 	    AJNEW0(fr);
 	    fr->isfrag = ajTrue;
-	    fr->molwt = embPropCalcMolwt(s,begsa[i],endsa[i+1]);
+	    fr->molwt = embPropCalcMolwt(s,begsa[i],endsa[i+1],mwdata,mono);
 	    if(n==PROPENZCNBR)
 		fr->molwt -= (17.045 + 31.095);
 	    fr->start = begsa[i];
@@ -513,7 +860,7 @@ void embPropCalcFragments(const char *s, ajint n,
 		    AJNEW0(fr);
 		    fr->start = it;
 		    fr->end   = et;
-		    fr->molwt = embPropCalcMolwt(s,it,et);
+		    fr->molwt = embPropCalcMolwt(s,it,et,mwdata,mono);
 		    if(n == PROPENZCNBR)
 			fr->molwt -= (17.045 + 31.095);
 		    fr->isfrag = ajTrue;
@@ -538,7 +885,7 @@ void embPropCalcFragments(const char *s, ajint n,
 	    {
 		AJNEW0(fr);
 		fr->isfrag = ajTrue;
-		fr->molwt = embPropCalcMolwt(s,begsa[i],endsa[j]);
+		fr->molwt = embPropCalcMolwt(s,begsa[i],endsa[j],mwdata,mono);
 		if(n==PROPENZCNBR)
 		    fr->molwt -= (17.045 + 31.095);
 		fr->start = begsa[i];
@@ -905,23 +1252,57 @@ void embPropFixF(float matrix[], float missing)
 
     return;
 }
-/* @func embPropExit *********************************************************
+
+
+
+
+/* @func embPropAminoDel ******************************************************
 **
-** Cleanup of properties data
+** Delete array of amino acid properties
 **
+** @param [w] thys [EmbPPropAmino**] amino acid properties
 ** @return [void]
 ******************************************************************************/
 
-void embPropExit(void)
+void embPropAminoDel(EmbPPropAmino **thys)
 {
-    ajint i;
-    if(propInit)
-    {
-	for(i=0;i<EMBPROPSIZE;i++)
-	{
-	    AJFREE(EmbPropTable[i]);
-	}
-    }
+    EmbPPropAmino *pthis = NULL;
+    ajuint i;
+    
+    pthis = *thys;
+
+    for(i=0; i < EMBPROPSIZE; ++i)
+	AJFREE(pthis[i]);
+    AJFREE(pthis);
+
+    *thys = NULL;
+
+    return;
+}
+
+
+
+
+/* @func embPropMolwtDel ******************************************************
+**
+** Delete array of molwts
+**
+** @param [w] thys [EmbPPropMolwt**] molwts
+** @return [void]
+******************************************************************************/
+
+void embPropMolwtDel(EmbPPropMolwt **thys)
+{
+    EmbPPropMolwt *pthis = NULL;
+    ajuint i;
+    
+    pthis = *thys;
+
+    for(i=0; i < EMBPROPSIZE + 2; ++i)
+	AJFREE(pthis[i]);
+    AJFREE(pthis);
+
+    *thys = NULL;
 
     return;
 }

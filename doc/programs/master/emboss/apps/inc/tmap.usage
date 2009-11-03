@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>tmap opsd.msf -out tmap.res -graph cps </b>
-Displays membrane spanning regions
+Predict and plot transmembrane segments in protein sequences
 
 Created tmap.ps
 

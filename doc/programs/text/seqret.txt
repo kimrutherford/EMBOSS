@@ -9,396 +9,31 @@ Function
 
 Description
 
-   The simplicity of the above description of this program greatly
-   understates the rich functionality of this program.
+   seqret reads in one or more sequences and writes them out again. The
+   sequence input may be a literal sequence or read from a database,
+   file, file of sequence names, or even the command-line or the output
+   of another programs. The sequence output can be written to screen, to
+   file, or passed to another program. A wide range of standard sequence
+   formats may be specified for input and output. If you don't specify
+   the input format, seqret will try a set of possible formats until it
+   reads it in successfully. The sequence input and output, as for all
+   EMBOSS programs, is described by a Uniform Sequence Address. This is
+   is a very flexible way of specifying one or more sequences from a
+   variety of sources and includes sequence files, database queries and
+   external applications.
 
-   Because EMBOSS programs can take a wide range of qualifiers that
-   slightly change the behaviour of the program when reading or writing a
-   sequence, this program can do many more things than simply "read and
-   write a sequence".
+   There are many options built-in into EMBOSS for detailed specification
+   of the input and output sequences, for example the sequence type, file
+   format. specification of sequence regions by begin and end positions,
+   or generation of the reverse complement of a nucleic acid sequence. On
+   output seqret can change the case of the sequence to upper or to lower
+   case.
 
-   seqret can read a sequence or many sequences from databases, files,
-   files of sequence names, the command-line or the output of other
-   programs and then can write them to files, the screen or pass them to
-   other programs. Because it can read in a sequence from a database and
-   write it to a file, seqret is a program for extracting sequences from
-   databases. Because it can write the sequence to the screen, seqret is
-   a program for displaying sequences.
-
-   seqret can read sequences in any of a wide range of standard sequence
-   formats. You can specify the input and output formats being used. If
-   you don't specify the input format, seqret will try a set of possible
-   formats until it reads it in successfully. Because you can specify the
-   output sequence format, seqret is a program to reformat a sequence.
-
-   seqret can read in the reverse complement of a nucleic acid sequence.
-   It therefore is a program for producing the reverse complement of a
-   sequence.
-
-   seqret can read in a sequence whose begin and end positions you have
-   specified and write out that fragment. It is therefore a utility for
-   doing simple extraction of a region of a sequence.
-
-   seqret can change the case of the sequence being read in to upper or
-   to lower case. It is therefore a simple sequence beautification
-   utility.
-
-   seqret can do any combination of the above functions.
-
-   The sequence input and output specification of this (and many other
-   EMBOSS programs) is described as being a Uniform Sequence Address.
-
-   The Uniform Sequence Address, or USA, is a somewhat tongue-in-cheek
-   reference to a URL-style sequence naming used by all EMBOSS
-   applications.
-
-   The USA is a very flexible way of specifying one or more sequences
-   from a variety of sources and includes sequence files, database
-   queries and external applications.
-
-   See the full specification of USA syntax at:
-   http://emboss.sourceforge.net/docs/themes/UniformSequenceAddress.html 
-
-   The basic USA syntax is one of:
-     * "file"
-     * "file:entry"
-     * "format::file"
-     * "format::file:entry"
-     * "database:entry"
-     * "database"
-     * "@file"
-
-   Note that ':' separates the name of a file containing many possible
-   entries from the specific name of a sequence entry in that file. It
-   also separates the name of a database from an entry in that database
-
-   Note also that '::' separates the specified format of a file from the
-   name of the file. Normally the format can be omitted, in which case
-   the program will attempt to identify the correct format when reading
-   the sequence in and will default to using FASTA format when writing
-   the sequence out.
-
-   Valid names of the databases set up in your local implementation of
-   EMBOSS can be seen by using the program 'showdb'.
-
-   Database queries, and individual entries in files that have more than
-   one sequence entry, use wildcards of "?" for any character and "*" for
-   any string of characters. There are some problems with the Unix shell
-   catching these characters so they do need to be hidden in quotes or
-   preceded by a backslash on the Unix command line, (for example
-   "embl:hs\*")
-
-   The output USA name 'stdout' is special. It makes the output go to the
-   device 'standard output'. This is the screen, by default.
-
-  Example USAs
-
-   The following are valid USAs for sequences:
-
-   USA Description
-   xxx.seq A sequence file "xxx.seq" in any format
-   fasta::xxx.seq A sequence file "xxx.seq" in fasta format
-   gcg::egmsmg.gcg A sequence file "egmsmg.gcg" in GCG 9 format
-   egmsmg.gcg -sformat=gcg A sequence file "egmsmg.gcg" in GCG 9 format
-   embl::paamir.em A sequence file "paamir.em" in EMBL format
-   embl:paamir EMBL entry PAAMIR, using whatever access method is defined
-   locally for the EMBL database
-   embl:X13776 EMBL entry X13776, using whatever access method is defined
-   locally for the EMBL database and searching by accession number and
-   entry name (X13776 is the accession number in this case)
-   embl-acc:X13776 EMBL entry X13776, using whatever access method is
-   defined locally for the EMBL database and searching by accession
-   number only
-   embl-id:paamir EMBL entry PAAMIR, using whatever access method is
-   defined locally for the EMBL database, and searching by ID only
-   embl:paami* EMBL entries PAAMIB, PAAMIE and so on, usually in
-   alphabetical order, using whatever access method is defined locally
-   for the EMBL database
-   embl or EMBL:* All sequences in the EMBL database
-   @mylist Reads file mylist and uses each line as a separate USA. This
-   is standard VMS list file syntax, also used in SRS 4.0 but missing in
-   SRS 5.0. The list file is a list of USAs (one per line). List files
-   can contain references to other lists files or any other standard USA.
-   list::mylist Same as "@mylist" above
-   'getz -e [embl-id:paamir] |' The pipe character "|" causes EMBOSS to
-   fire up getz (SRS 5.1) to extract entry PAAMIR from EMBL in EMBL
-   format. Any application or script which writes one or more sequences
-   to stdout can be used in this way.
-   asis::atacgcagttatctgaccat So far the shortest USA we could invent. In
-   'asis' format the name is the sequence so no file needs to be opened.
-   This is a special case. It was intended as a joke, but could be quite
-   useful for generating command lines.
-
-  Input sequence formats
-
-   To date, the following sequence formats are accepted as input.
-
-   By default, (i.e. if no format is explicitly specified) EMBOSS tries
-   each format in turn until one succeeds.
-
-   Input Format Comments
-   gcg GCG 9.x and 10.x format with the format and sequence type
-   identified on the first line of the file
-   gcg8 GCG 8.x format where anything up to the first line containing
-   ".." is considered as heading, and the remainder is sequence data.
-   This format is complicated by the header appearing to be in other
-   formats such as EMBL, and by the possibility of reading a large amount
-   of data in the wrong format before discovering that there is no ".."
-   line because it is not GCG format after all.
-   embl
-   em EMBL entry format, or at least a minimal subset of the fields. The
-   Staden package and others use EMBL or similar formats for sequence
-   data.
-   swiss
-   sw SWISSPROT entry format, or at least a minimal subset of the fields.
-   fasta
-   pearson FASTA format with an optional accession number after the
-   sequence identifier, eg:
-   >name description
-   or
-   >name accession description
-   and with an optional database name in GCG style fasta format included
-   as part of the sequence identifier, eg:
-   >database:name accession description
-   ncbi FASTA format with optional accession number and database name in
-   NCBI style included as part of the sequence identifier. eg
-   >database|accession|id description
-   (and other variants on this theme!)
-   genbank
-   gb GENBANK entry format, or at least a minimal subset of the fields.
-   nbrf
-   pir NBRF (PIR) format, as used in the PIR database sequence files.
-   codata CODATA format.
-   strider DNA strider format
-   clustal
-   aln ClustalW ALN (multiple alignment) format.
-   phylip PHYLIP interleaved multiple alignment format.
-   acedb ACeDB format
-   msf Wisconsin Package GCG's MSF multiple sequence format.
-   hennig86 Hennig86 format
-   jackknifer Jackknifer format
-   jackknifernon Jackknifernon format
-   nexus
-   paup Nexus/PAUP format
-   nexusnon
-   paupnon Nexusnon/PAUPnon format
-   treecon Treecon format
-   mega Mega format
-   meganon Meganon format
-   ig IntelliGenetics format.
-   staden
-   experiment The experiment file format used by the "gap" program in the
-   Staden package, where the sequence identifier is optional and the
-   remainer is plain text. Some alternative nucleotide ambiguity codes
-   are used and must be converted.
-   unknown
-   text
-   plain Plain text. This is the format with no format. The whole of the
-   file is read in as a sequence. No attempt is made to parse the file
-   contents in any way. Anything is acceptable in this format.
-   raw Like unknown/text/plain format except that it accepts only
-   alphanumeric and whitespace characters and rejects anything else.
-   asis This is not so much a sequence format as a quick way of entering
-   a sequence on the command line, but it is included here for
-   completeness. Where a filename would normally be given, in asis format
-   there is the sequence itself. An example would be:
-   asis::atacgcagttatctgaccat
-   In 'asis' format the name is the sequence so no file needs to be
-   opened. This is a special case. It was intended as a joke, but could
-   be quite useful for generating command lines.
-
-  Output sequence formats
-
-   To date, the following sequence formats are available as output.
-
-   Some sequence formats can hold multiple sequences in one file, these
-   are marked as multiple in the following table. The details of how many
-   sequences are held in one file differs between formats, but they
-   either allow many sequences to be concatenated one after the other, or
-   they hold the sequences together in some sort of aligned set of
-   sequences.
-
-   Other formats, such as GCG, plain and staden formats can only hold one
-   sequence per file, these are marked as single. An attempt to
-   concatenate several sequences in one file leaves the results as a mess
-   that makes it impossible to decide where the sequences start and end
-   or what is annotation and what is sequence.
-
-   These single formats therefore cause problems when there are multiple
-   sequences to write out because a single file containing multiple
-   sequences in that format is invalid. When these formats are specified
-   for output, an EMBOSS program will allow you to write many sequences
-   to one file, but EMBOSS programs will not be able to reliably read in
-   the resulting mess.
-
-   N.B This behaviour changed in EMBOSS version 1.7.0. (31 Oct 2000)
-   Previously, EMBOSS programs that were asked to write multiple
-   sequences in a single format would ignore the requested output file
-   name and would write each sequence into a separate file whose name was
-   constructed from the sequence name and the name of the format. This
-   resulted in ouput to files whose names could not be reliably
-   controlled. A decision was taken that EMBOSS users were intelligent
-   people who could live with the consequences of their actions and who
-   could learn not to write out multiple sequences to a file in formats
-   that could not cope with multiple sequences.
-
-   It you really wish to write multiple sequences out in formats that can
-   not cope with multiple sequences, you are advised to add the global
-   qualifier -ossingle on the command line. This will force the EMBOSS
-   program to ignore the given output file name and will generate its own
-   file names. One sequence will be written to each such file. These file
-   names are made from the sequence ID name, with the name of the format
-   as the extension (e.g. hsfau.gcg).
-
-   This is not ideal. Preferably, you should stay away from formats that
-   can't cope with multiple sequences in a file.
-
-   Output Format Single/
-   Multiple Comments
-   gcg single Wisconsin Package GCG 9.x and 10.x format with the sequence
-   type on the first line of the file.
-   gcg8 single GCG 8.x format where anything up to the first line
-   containing ".." is considered as heading, and the remainder is
-   sequence data.
-   embl
-   em multiple EMBL entry format with available fields filled in and
-   others with no infomation omitted. The EMBOSS command line allows
-   missing data such as accession numbers to be provided if they are not
-   obtainable from the input sequence.
-   swiss
-   sw multiple SwisProt entry format with available fields filled in and
-   others with no infomation omitted. The EMBOSS command line allows
-   missing data such as accession numbers to be provided if they are not
-   obtainable from the input sequence.
-   fasta multiple Standard Pearson FASTA format, but with the accession
-   number included after the identifier if available.
-   pearson multiple Simple Pearson FASTA format, an alias for "fasta"
-   format.
-   ncbi multiple NCBI style FASTA format with the database name, entry
-   name and accession number separated by pipe ("|") characters.
-   nbrf
-   pir multiple NBRF (PIR) format, as used in the PIR database sequence
-   files.
-   genbank
-   gb multiple GENBANK entry format with available fields filled in and
-   others with no infomation omitted. The EMBOSS command line allows
-   missing data such as accession numbers to be provided if they are not
-   obtainable from the input sequence.
-   ig multiple Intelligenetics format, as used by the Intelligenetics
-   package
-   codata multiple CODATA format.
-   strider multiple DNA strider format
-   acedb multiple ACeDB format
-   staden
-   experiment single The experiment file format used by the "gap" program
-   in the Staden package. Some alternative nucleotide ambiguity codes are
-   used and are converted.
-   text
-   plain
-   raw single Plain sequence, no annotation or heading.
-   fitch multiple Fitch format
-   msf multiple Wisconsin Package GCG's MSF multiple sequence format.
-   clustal
-   aln multiple Clustal multiple sequence format.
-   phylip multiple PHYLIP non-interleaved format.
-   phylip3 multiple PHYLIP interleaved format.
-   asn1 multiple A subset of ASN.1 containing entry name, accession
-   number, description and sequence, similar to the current ASN.1 output
-   of readseq
-   hennig86 multiple Hennig86 format
-   mega multiple Mega format
-   meganon multiple Meganon format
-   nexus
-   paup multiple Nexus/PAUP format
-   nexusnon
-   paupnon multiple Nexusnon/PAUPnon format
-   jackknifer multiple Jackknifer format
-   jackknifernon multiple Jackknifernon format
-   treecon multiple Treecon format
-   debug multiple EMBOSS sequence object report for debugging showing all
-   available fields. Not all fields will contain data - this depends very
-   much on the input format used.
-
-  Future directions
-
-   More formats, both for input and for output, can be easily added, so
-   suggestions are always welcome.
-
-  Associated qualifiers
-
-   As noted previously there are many 'associated' qualifiers that alter
-   the behaviour of seqret when it reads in or writes out a sequence. As
-   these are used in all EMBOSS programs that read in or write out
-   sequences, they are not reported by the '-help' qualifier. They are
-   however reported by the pair of qualifiers: '-help -verbose':
-
-   Some of the more useful associated qualifiers are:
-
-   Qualifier                        Description
-   -sbegin   The first position to be used in the sequence
-   -send     The last position to be used in the sequence
-   -sreverse Use the reverse complement of a nucleic acid sequence
-   -sask     Ask the user for begin/end/reverse information
-   -slower   Convert the sequence to lower case
-   -supper   Convert the sequence to upper case
-   -sformat  Specify the input sequence format
-   -osformat Specify the output sequence format
-   -ossingle Write each entry into a separate file
-   -auto     Turn off prompts and don't report the one-line description
-   -stdout   Write the results to 'standard output' (the screen)
-   -filter   Read input from another program, write to the screen
-   -options  Prompt for optional qualifiers
-   -help     Display a table of the command-line options
-
-   The set of associated qualifiers for sequences behave in different
-   ways depending on where they appear.
-
-   If these qualifiers immediately follow a parameter they apply only to
-   that parameter and not to all cases. If they occur before any
-   parameters, they apply to all following sequence parameters.
-
-   If there are no two parameters of equal type, the order of parameters
-   and their qualifiers is irrelevant.
-
-   Where a qualifier is defined more than once, for example "-sformat"
-   for 2 input sequences to be aligned, the qualifier name can have a
-   number to indicate which sequence is meant. "-sbegin2=25" will apply
-   only to the second sequence, no matter where it appears on the command
-   line.
-
-   The -sbegin and -send qualifiers take an integer number specifying the
-   position to begin or end reading a sequence. If the number is
-   positive, the number is the position counting from the first base or
-   residue of the sequence. If the number is negative the position is
-   counted from the end of the sequence, so position -1 is the last base
-   or residue of the sequence. (If -sbegin 0 is used, it is assumed to be
-   the same as -sbegin 1 and -send 0 is the same as -send -1.)
-
-   The filter qualifier makes the program behave like a filter, reading
-   its (first) input 'file' from the standard input, and writing its
-   (first) output 'file' to the standard output. The -filter qualifier
-   will also invoke the -auto qualifier, so the user is never prompted
-   for any missing values.
-
-   Example:
-
-% cat sequence.seq | seqret -filter | lpr
-
-   The example shows the application seqret being run with the -filter
-   qualifier. The input file is 'piped' into the program using the unix
-   command cat and the output is 'piped' directly to the unix program
-   lpr, which will print it on the printer.
-
-   When the -options qualifier is used and not all the parameters are
-   given on the command line, it will query the user for those
-   parameters. It will not only query the user for the required
-   parameters as it would do without the -options qualifier, but it will
-   also query the user for the optional parameters.
-
-   When the -stdout qualifier is used, the user will still be prompted
-   for all the info that is required, but will write to standard output
-   by default. The user will also still be prompted for an output
-   filename, in case the user wants to save the output to a file.
+   seqret is useful for a variety of tasks, including extracting
+   sequences from databases, displaying sequences, reformatting
+   sequences, producing the reverse complement of a sequence, extracting
+   fragments of a sequence, sequence case conversion or any combination
+   of the above functions.
 
 Usage
 
@@ -561,7 +196,7 @@ Command line arguments
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
    -feature            boolean    Use feature information
-   -firstonly          boolean    Read one sequence and stop
+   -firstonly          boolean    [N] Read one sequence and stop
 
    Associated qualifiers:
 
@@ -595,8 +230,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -1052,6 +688,399 @@ Notes
    libraries which the program calls and whose complexity is hidden, or
    "secret".
 
+   The simplicity of the above description of this program greatly
+   understates the rich functionality of this program.
+
+   Because EMBOSS programs can take a wide range of qualifiers that
+   slightly change the behaviour of the program when reading or writing a
+   sequence, this program can do many more things than simply "read and
+   write a sequence".
+
+   seqret can read a sequence or many sequences from databases, files,
+   files of sequence names, the command-line or the output of other
+   programs and then can write them to files, the screen or pass them to
+   other programs. Because it can read in a sequence from a database and
+   write it to a file, seqret is a program for extracting sequences from
+   databases. Because it can write the sequence to the screen, seqret is
+   a program for displaying sequences.
+
+   seqret can read sequences in any of a wide range of standard sequence
+   formats. You can specify the input and output formats being used. If
+   you don't specify the input format, seqret will try a set of possible
+   formats until it reads it in successfully. Because you can specify the
+   output sequence format, seqret is a program to reformat a sequence.
+
+   seqret can read in the reverse complement of a nucleic acid sequence.
+   It therefore is a program for producing the reverse complement of a
+   sequence.
+
+   seqret can read in a sequence whose begin and end positions you have
+   specified and write out that fragment. It is therefore a utility for
+   doing simple extraction of a region of a sequence.
+
+   seqret can change the case of the sequence being read in to upper or
+   to lower case. It is therefore a simple sequence beautification
+   utility.
+
+   seqret can do any combination of the above functions.
+
+   The sequence input and output specification of this (and many other
+   EMBOSS programs) is described as being a Uniform Sequence Address.
+
+   The Uniform Sequence Address, or USA, is a somewhat tongue-in-cheek
+   reference to a URL-style sequence naming used by all EMBOSS
+   applications.
+
+   The USA is a very flexible way of specifying one or more sequences
+   from a variety of sources and includes sequence files, database
+   queries and external applications.
+
+   See the full specification of USA syntax at:
+   http://emboss.sourceforge.net/docs/themes/UniformSequenceAddress.html 
+
+   The basic USA syntax is one of:
+     * "file"
+     * "file:entry"
+     * "format::file"
+     * "format::file:entry"
+     * "database:entry"
+     * "database"
+     * "@file"
+
+   Note that ':' separates the name of a file containing many possible
+   entries from the specific name of a sequence entry in that file. It
+   also separates the name of a database from an entry in that database
+
+   Note also that '::' separates the specified format of a file from the
+   name of the file. Normally the format can be omitted, in which case
+   the program will attempt to identify the correct format when reading
+   the sequence in and will default to using FASTA format when writing
+   the sequence out.
+
+   Valid names of the databases set up in your local implementation of
+   EMBOSS can be seen by using the program 'showdb'.
+
+   Database queries, and individual entries in files that have more than
+   one sequence entry, use wildcards of "?" for any character and "*" for
+   any string of characters. There are some problems with the Unix shell
+   catching these characters so they do need to be hidden in quotes or
+   preceded by a backslash on the Unix command line, (for example
+   "embl:hs\*")
+
+   The output USA name 'stdout' is special. It makes the output go to the
+   device 'standard output'. This is the screen, by default.
+
+  Example USAs
+
+   The following are valid USAs for sequences:
+
+   USA Description
+   xxx.seq A sequence file "xxx.seq" in any format
+   fasta::xxx.seq A sequence file "xxx.seq" in fasta format
+   gcg::egmsmg.gcg A sequence file "egmsmg.gcg" in GCG 9 format
+   egmsmg.gcg -sformat=gcg A sequence file "egmsmg.gcg" in GCG 9 format
+   embl::x13776.em A sequence file "x13776.em" in EMBL format
+   embl:x13776 EMBL entry X13776, using whatever access method is defined
+   locally for the EMBL database
+   embl:K01793 EMBL entry K01793, using whatever access method is defined
+   locally for the EMBL database and searching by accession number and
+   entry name (K01793 is a secondary accession number in this case for
+   entry J01636)
+   embl-acc:K01793 EMBL entry X13776, using whatever access method is
+   defined locally for the EMBL database and searching by accession
+   number only
+   embl-id:x13776 EMBL entry x13776, using whatever access method is
+   defined locally for the EMBL database, and searching by ID only
+   embl:v0029* EMBL entries V00290, V00291, and so on, usually in
+   alphabetical order, using whatever access method is defined locally
+   for the EMBL database
+   embl or EMBL:* All sequences in the EMBL database
+   @mylist Reads file mylist and uses each line as a separate USA. This
+   is standard VMS list file syntax, also used in SRS 4.0 but missing in
+   SRS 5.0 onwards. The list file is a list of USAs (one per line). List
+   files can contain references to other lists files or any other
+   standard USA.
+   list::mylist Same as "@mylist" above
+   'getz -e [embl-id:x13776] |' The pipe character "|" causes EMBOSS to
+   fire up getz (SRS) to extract entry x13776 from EMBL in EMBL format.
+   Any application or script which writes one or more sequences to stdout
+   can be used in this way.
+   asis::atacgcagttatctgaccat So far the shortest USA we could invent. In
+   'asis' format the name is the sequence so no file needs to be opened.
+   This is a special case. It was intended as a joke, but has proved
+   quite useful for generating command lines when testing.
+
+  Input sequence formats
+
+   To date, the following sequence formats are accepted as input.
+
+   By default, (i.e. if no format is explicitly specified) EMBOSS tries
+   each format in turn until one succeeds.
+
+   Input Format Comments
+   gcg GCG 9.x and 10.x format with the format and sequence type
+   identified on the first line of the file
+   gcg8 GCG 8.x format where anything up to the first line containing
+   ".." is considered as heading, and the remainder is sequence data.
+   This format is complicated by the header appearing to be in other
+   formats such as EMBL, and by the possibility of reading a large amount
+   of data in the wrong format before discovering that there is no ".."
+   line because it is not GCG format after all.
+   embl
+   em EMBL entry format, or at least a minimal subset of the fields. The
+   Staden package and others use EMBL or similar formats for sequence
+   data.
+   swiss
+   sw SWISSPROT entry format, or at least a minimal subset of the fields.
+   fasta
+   pearson FASTA format with an optional accession number after the
+   sequence identifier, eg:
+   >name description
+   or
+   >name accession description
+   and with an optional database name in GCG style fasta format included
+   as part of the sequence identifier, eg:
+   >database:name accession description
+   ncbi FASTA format with optional accession number and database name in
+   NCBI style included as part of the sequence identifier. eg
+   >database|accession|id description
+   (and other variants on this theme!)
+   genbank
+   gb GENBANK entry format, or at least a minimal subset of the fields.
+   nbrf
+   pir NBRF (PIR) format, as used in the PIR database sequence files.
+   codata CODATA format.
+   strider DNA strider format
+   clustal
+   aln ClustalW ALN (multiple alignment) format.
+   phylip PHYLIP interleaved multiple alignment format.
+   acedb ACeDB format
+   msf Wisconsin Package GCG's MSF multiple sequence format.
+   hennig86 Hennig86 format
+   jackknifer Jackknifer format
+   jackknifernon Jackknifernon format
+   nexus
+   paup Nexus/PAUP format
+   nexusnon
+   paupnon Nexusnon/PAUPnon format
+   treecon Treecon format
+   mega Mega format
+   meganon Meganon format
+   ig IntelliGenetics format.
+   staden
+   experiment The experiment file format used by the "gap" program in the
+   Staden package, where the sequence identifier is optional and the
+   remainer is plain text. Some alternative nucleotide ambiguity codes
+   are used and must be converted.
+   unknown
+   text
+   plain Plain text. This is the format with no format. The whole of the
+   file is read in as a sequence. No attempt is made to parse the file
+   contents in any way. Anything is acceptable in this format.
+   raw Like unknown/text/plain format except that it accepts only
+   alphanumeric and whitespace characters and rejects anything else.
+   asis This is not so much a sequence format as a quick way of entering
+   a sequence on the command line, but it is included here for
+   completeness. Where a filename would normally be given, in asis format
+   there is the sequence itself. An example would be:
+   asis::atacgcagttatctgaccat
+   In 'asis' format the name is the sequence so no file needs to be
+   opened. This is a special case. It was intended as a joke, but could
+   be quite useful for generating command lines.
+
+  Output sequence formats
+
+   To date, the following sequence formats are available as output.
+
+   Some sequence formats can hold multiple sequences in one file, these
+   are marked as multiple in the following table. The details of how many
+   sequences are held in one file differs between formats, but they
+   either allow many sequences to be concatenated one after the other, or
+   they hold the sequences together in some sort of aligned set of
+   sequences.
+
+   Other formats, such as GCG, plain and staden formats can only hold one
+   sequence per file, these are marked as single. An attempt to
+   concatenate several sequences in one file leaves the results as a mess
+   that makes it impossible to decide where the sequences start and end
+   or what is annotation and what is sequence.
+
+   These single formats therefore cause problems when there are multiple
+   sequences to write out because a single file containing multiple
+   sequences in that format is invalid. When these formats are specified
+   for output, an EMBOSS program will allow you to write many sequences
+   to one file, but EMBOSS programs will not be able to reliably read in
+   the resulting mess.
+
+   N.B This behaviour changed in EMBOSS version 1.7.0. (31 Oct 2000)
+   Previously, EMBOSS programs that were asked to write multiple
+   sequences in a single format would ignore the requested output file
+   name and would write each sequence into a separate file whose name was
+   constructed from the sequence name and the name of the format. This
+   resulted in ouput to files whose names could not be reliably
+   controlled. A decision was taken that EMBOSS users were intelligent
+   people who could live with the consequences of their actions and who
+   could learn not to write out multiple sequences to a file in formats
+   that could not cope with multiple sequences.
+
+   It you really wish to write multiple sequences out in formats that can
+   not cope with multiple sequences, you are advised to add the global
+   qualifier -ossingle on the command line. This will force the EMBOSS
+   program to ignore the given output file name and will generate its own
+   file names. One sequence will be written to each such file. These file
+   names are made from the sequence ID name, with the name of the format
+   as the extension (e.g. x65923.gcg).
+
+   This is not ideal. Preferably, you should stay away from formats that
+   can't cope with multiple sequences in a file.
+
+   Output Format Single/
+   Multiple Comments
+   gcg single Wisconsin Package GCG 9.x and 10.x format with the sequence
+   type on the first line of the file.
+   gcg8 single GCG 8.x format where anything up to the first line
+   containing ".." is considered as heading, and the remainder is
+   sequence data.
+   embl
+   em multiple EMBL entry format with available fields filled in and
+   others with no infomation omitted. The EMBOSS command line allows
+   missing data such as accession numbers to be provided if they are not
+   obtainable from the input sequence.
+   swiss
+   sw multiple SwisProt entry format with available fields filled in and
+   others with no infomation omitted. The EMBOSS command line allows
+   missing data such as accession numbers to be provided if they are not
+   obtainable from the input sequence.
+   fasta multiple Standard Pearson FASTA format, but with the accession
+   number included after the identifier if available.
+   pearson multiple Simple Pearson FASTA format, an alias for "fasta"
+   format.
+   ncbi multiple NCBI style FASTA format with the database name, entry
+   name and accession number separated by pipe ("|") characters.
+   nbrf
+   pir multiple NBRF (PIR) format, as used in the PIR database sequence
+   files.
+   genbank
+   gb multiple GENBANK entry format with available fields filled in and
+   others with no infomation omitted. The EMBOSS command line allows
+   missing data such as accession numbers to be provided if they are not
+   obtainable from the input sequence.
+   ig multiple Intelligenetics format, as used by the Intelligenetics
+   package
+   codata multiple CODATA format.
+   strider multiple DNA strider format
+   acedb multiple ACeDB format
+   staden
+   experiment single The experiment file format used by the "gap" program
+   in the Staden package. Some alternative nucleotide ambiguity codes are
+   used and are converted.
+   text
+   plain
+   raw single Plain sequence, no annotation or heading.
+   fitch multiple Fitch format
+   msf multiple Wisconsin Package GCG's MSF multiple sequence format.
+   clustal
+   aln multiple Clustal multiple sequence format.
+   phylip multiple PHYLIP non-interleaved format.
+   phylip3 multiple PHYLIP interleaved format.
+   asn1 multiple A subset of ASN.1 containing entry name, accession
+   number, description and sequence, similar to the current ASN.1 output
+   of readseq
+   hennig86 multiple Hennig86 format
+   mega multiple Mega format
+   meganon multiple Meganon format
+   nexus
+   paup multiple Nexus/PAUP format
+   nexusnon
+   paupnon multiple Nexusnon/PAUPnon format
+   jackknifer multiple Jackknifer format
+   jackknifernon multiple Jackknifernon format
+   treecon multiple Treecon format
+   debug multiple EMBOSS sequence object report for debugging showing all
+   available fields. Not all fields will contain data - this depends very
+   much on the input format used.
+
+  Future directions
+
+   More formats, both for input and for output, can be easily added, so
+   suggestions are always welcome.
+
+  Associated qualifiers
+
+   As noted previously there are many 'associated' qualifiers that alter
+   the behaviour of seqret when it reads in or writes out a sequence. As
+   these are used in all EMBOSS programs that read in or write out
+   sequences, they are not reported by the '-help' qualifier. They are
+   however reported by the pair of qualifiers: '-help -verbose':
+
+   Some of the more useful associated qualifiers are:
+
+   Qualifier                        Description
+   -sbegin   The first position to be used in the sequence
+   -send     The last position to be used in the sequence
+   -sreverse Use the reverse complement of a nucleic acid sequence
+   -sask     Ask the user for begin/end/reverse information
+   -slower   Convert the sequence to lower case
+   -supper   Convert the sequence to upper case
+   -sformat  Specify the input sequence format
+   -osformat Specify the output sequence format
+   -ossingle Write each entry into a separate file
+   -auto     Turn off prompts and don't report the one-line description
+   -stdout   Write the results to 'standard output' (the screen)
+   -filter   Read input from another program, write to the screen
+   -options  Prompt for optional qualifiers
+   -help     Display a table of the command-line options
+
+   The set of associated qualifiers for sequences behave in different
+   ways depending on where they appear.
+
+   If these qualifiers immediately follow a parameter they apply only to
+   that parameter and not to all cases. If they occur before any
+   parameters, they apply to all following sequence parameters.
+
+   If there are no two parameters of equal type, the order of parameters
+   and their qualifiers is irrelevant.
+
+   Where a qualifier is defined more than once, for example "-sformat"
+   for 2 input sequences to be aligned, the qualifier name can have a
+   number to indicate which sequence is meant. "-sbegin2=25" will apply
+   only to the second sequence, no matter where it appears on the command
+   line.
+
+   The -sbegin and -send qualifiers take an integer number specifying the
+   position to begin or end reading a sequence. If the number is
+   positive, the number is the position counting from the first base or
+   residue of the sequence. If the number is negative the position is
+   counted from the end of the sequence, so position -1 is the last base
+   or residue of the sequence. (If -sbegin 0 is used, it is assumed to be
+   the same as -sbegin 1 and -send 0 is the same as -send -1.)
+
+   The filter qualifier makes the program behave like a filter, reading
+   its (first) input 'file' from the standard input, and writing its
+   (first) output 'file' to the standard output. The -filter qualifier
+   will also invoke the -auto qualifier, so the user is never prompted
+   for any missing values.
+
+   Example:
+
+% cat sequence.seq | seqret -filter | lpr
+
+   The example shows the application seqret being run with the -filter
+   qualifier. The input file is 'piped' into the program using the unix
+   command cat and the output is 'piped' directly to the unix program
+   lpr, which will print it on the printer.
+
+   When the -options qualifier is used and not all the parameters are
+   given on the command line, it will query the user for those
+   parameters. It will not only query the user for the required
+   parameters as it would do without the -options qualifier, but it will
+   also query the user for the optional parameters.
+
+   When the -stdout qualifier is used, the user will still be prompted
+   for all the info that is required, but will write to standard output
+   by default. The user will also still be prompted for an output
+   filename, in case the user wants to save the output to a file.
+
 References
 
    None.
@@ -1074,35 +1103,50 @@ Known bugs
 
 See also
 
-   Program name                         Description
-   biosed       Replace or delete sequence sections
-   codcopy      Reads and writes a codon usage table
-   cutseq       Removes a specified section from a sequence
-   degapseq     Removes gap characters from sequences
-   descseq      Alter the name or description of a sequence
-   entret       Reads and writes (returns) flatfile entries
+   Program name Description
+   aligncopy Reads and writes alignments
+   aligncopypair Reads and writes pairs from alignments
+   biosed Replace or delete sequence sections
+   codcopy Copy and reformat a codon usage table
+   cutseq Removes a section from a sequence
+   degapseq Removes non-alphabetic (e.g. gap) characters from sequences
+   descseq Alter the name or description of a sequence
+   entret Retrieves sequence entries from flatfile databases and files
    extractalign Extract regions from a sequence alignment
-   extractfeat  Extract features from a sequence
-   extractseq   Extract regions from a sequence
-   listor       Write a list file of the logical OR of two sets of sequences
-   makenucseq   Creates random nucleotide sequences
-   makeprotseq  Creates random protein sequences
-   maskfeat     Mask off features of a sequence
-   maskseq      Mask off regions of a sequence
-   newseq       Type in a short new sequence
-   noreturn     Removes carriage return from ASCII files
-   notseq       Exclude a set of sequences and write out the remaining ones
-   nthseq       Writes one sequence from a multiple set of sequences
-   pasteseq     Insert one sequence into another
-   revseq       Reverse and complement a sequence
-   seqretsplit  Reads and writes (returns) sequences in individual files
-   skipseq      Reads and writes (returns) sequences, skipping first few
-   splitter     Split a sequence into (overlapping) smaller sequences
-   trimest      Trim poly-A tails off EST sequences
-   trimseq      Trim ambiguous bits off the ends of sequences
-   union        Reads sequence fragments and builds one sequence
-   vectorstrip  Strips out DNA between a pair of vector sequences
-   yank         Reads a sequence range, appends the full USA to a list file
+   extractfeat Extract features from sequence(s)
+   extractseq Extract regions from a sequence
+   featcopy Reads and writes a feature table
+   featreport Reads and writes a feature table
+   listor Write a list file of the logical OR of two sets of sequences
+   makenucseq Create random nucleotide sequences
+   makeprotseq Create random protein sequences
+   maskambignuc Masks all ambiguity characters in nucleotide sequences
+   with N
+   maskambigprot Masks all ambiguity characters in protein sequences with
+   X
+   maskfeat Write a sequence with masked features
+   maskseq Write a sequence with masked regions
+   newseq Create a sequence file from a typed-in sequence
+   nohtml Remove mark-up (e.g. HTML tags) from an ASCII text file
+   noreturn Remove carriage return from ASCII files
+   nospace Remove all whitespace from an ASCII text file
+   notab Replace tabs with spaces in an ASCII text file
+   notseq Write to file a subset of an input stream of sequences
+   nthseq Write to file a single sequence from an input stream of
+   sequences
+   pasteseq Insert one sequence into another
+   revseq Reverse and complement a nucleotide sequence
+   seqretsplit Reads sequences and writes them to individual files
+   sizeseq Sort sequences by size
+   skipredundant Remove redundant sequences from an input set
+   skipseq Reads and writes (returns) sequences, skipping first few
+   splitter Split sequence(s) into smaller sequences
+   trimest Remove poly-A tails from nucleotide sequences
+   trimseq Remove unwanted characters from start and end of sequence(s)
+   trimspace Remove extra whitespace from an ASCII text file
+   union Concatenate multiple sequences into a single sequence
+   vectorstrip Removes vectors from the ends of nucleotide sequence(s)
+   yank Add a sequence reference (a full USA) to a list file
 
    Valid names of the databases set up in your local implementation of
    EMBOSS can be seen by using the program 'showdb'.

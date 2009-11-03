@@ -24,91 +24,37 @@ water
 <H2>
     Function
 </H2>
-Smith-Waterman local alignment
+Smith-Waterman local alignment of sequences
 
 <H2>
     Description
 </H2>
 
-<b>water</b> uses the Smith-Waterman algorithm (modified for speed
-enhancments) to calculate the local alignment.
+<p><b>water</b> uses the Smith-Waterman algorithm (modified for speed enhancments) to calculate the local alignment of a sequence to one or more other sequences.  The gap insertion penalty, gap extension penalty and substitution matrix used to calculate the alignments are specified.  The output is a standard EMBOSS alignment file.</p>
 
-<P>
 
-A local alignment searches for regions of local similarity between two
-sequences and need not include the entire length of the sequences. 
-Local alignment methods are very useful for scanning databases or other
-circumsatnces when you wish to find matches between small regions of
-sequences, for example between protein domains. 
-<P>
 
 <H3>
     Algorithm
 </H3>
 
-The Smith-Waterman algorithm is a member of the class of algorithms
-that can calculate the best score and local alignment in the order of mn
-steps, (where 'n' and 'm' are the lengths of the two sequences).  These
-dynamic programming algorithms were first developed for protein sequence
-comparison by Smith and Waterman, though similar methods were
-independently devised during the late 1960's and early 1970's for use in
-the fields of speech processing and computer science. 
+<p>The Smith-Waterman algorithm is a member of the class of algorithms that can calculate the best score and local alignment in the order of mn steps, where <tt>n</tt> and <tt>m</tt> are the lengths of the two sequences. These dynamic programming algorithms were first developed for protein sequence comparison by Smith and Waterman, though similar methods were independently devised during the late 1960's and early 1970's for use in the fields of speech processing and computer science.</p>
 
-<P>
+<p>Dynamic programming methods ensure the optimal local alignment by exploring all possible alignments and choosing the best. It does this by reading in a scoring matrix that contains values for every possible residue or nucleotide match. <b>water</b> finds an alignment with the maximum possible score where the score of an alignment is equal to the sum of the matches taken from the scoring matrix.</p>
 
-Dynamic programming methods ensure
-the optimal local alignment by exploring all possible alignments and
-choosing the best.  It does this by reading in a scoring matrix that
-contains values for every possible residue or nucleotide match.  <b>water</b>
-finds an alignment with the maximum possible score where the score of an
-alignment is equal to the sum of the matches taken from the scoring
-matrix. 
+<p>An important problem is the treatment of gaps, i.e., spaces inserted to optimise the alignment score. A penalty is subtracted from the score for each gap opened (the 'gap open' penalty) and a penalty is subtracted from the score for the total number of gap spaces multiplied by a cost (the 'gap extension' penalty). Typically, the cost of extending a gap is set to be 5-10 times lower than the cost for opening a gap.</p>
 
-<P>
+<p>There are two ways to compute a penalty for a gap of n positions :
 
-An important problem is the treatment of gaps, i.e., spaces inserted to
-optimise the alignment score.  A penalty is subtracted from the score
-for each gap opened (the 'gap open' penalty) and a penalty is subtracted
-from the score for the total number of gap spaces multiplied by a cost
-(the 'gap extension' penalty). 
-
-<P>
-
-Typically, the cost of extending a gap is set to be 5-10 times lower
-than the cost for opening a gap. 
-
-<p>
-
-There are two ways to compute a penalty for a gap of n positions :
-
-<p>
-
-<pre>
 gap opening penalty + (n - 1) * gap extension penalty
 gap penalty + n * gap length penalty
-</pre>
+</p>
 
-<p>
+<p>The two methods are basically equivalent.  The first way is used by EMBOSS and WU-BLAST.  The second way is used by NCBI-BLAST, GCG, Staden and CLUSTAL. Fasta used it for a long time the first way, but Prof. Pearson decided recently to shift to the second.</p>
 
-The first way is used by EMBOSS and WU-BLAST
-<br>
-The second way is used by NCBI-BLAST, GCG, Staden and CLUSTAL.
-Fasta used it for a long time the first way, but Prof. Pearson decided
-recently to shift to the second.
- 
-<p>
+<p>The Smith-Waterman algorithm contains no negative scores in the path matrix it creates. The algorithm starts the alignment at the highest path matrix score and works backwards until a cell contains zero. See the Reference Smith et al. for details.</p>
 
-The two methods are basically equivalent.
 
-<p>      
-
-The Smith-Waterman algorithm contains no negative scores in the path
-matrix it creates. The algorithm starts the alignment at the highest
-path matrix score and works backwards until a cell contains zero.
-
-<p>
-
-See the Reference <b>Smith et al.</b> for details.
 
 <H2>
     Usage
@@ -120,7 +66,7 @@ See the Reference <b>Smith et al.</b> for details.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>water tsw:hba_human tsw:hbb_human </b>
-Smith-Waterman local alignment.
+Smith-Waterman local alignment of sequences
 Gap opening penalty [10.0]: <b></b>
 Gap extension penalty [0.5]: <b></b>
 Output alignment [hba_human.water]: <b></b>
@@ -224,8 +170,9 @@ Output alignment [hba_human.water]: <b></b>
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -592,7 +539,7 @@ for further information on alignment formats.
 <pre>
 ########################################
 # Program: water
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: water
 #    [-asequence] tsw:hba_human
 #    [-bsequence] tsw:hbb_human
@@ -700,10 +647,7 @@ The directories are searched in the following order:
     Notes
 </H2>
 
-<b>water</b> is a true implementation of the Smith-Waterman algorithm
-and so produces a full path matrix.  It therefore cannot be used with
-genome sized sequences unless you have a <b>lot</b> of memory and a lot
-of time. 
+<p>A local alignment searches for regions of local similarity between two sequences and need not include the entire length of the sequences. Local alignment methods are very useful for scanning databases or other circumsatnces when you wish to find matches between small regions of sequences, for example between protein domains.</p>
 
 <H2>
     References
@@ -720,37 +664,14 @@ of time.
     Warnings
 </H2>
 
-Local alignment methods only report the best matching areas between two
-sequences - there may be a large number of alternative local alignments
-that do not score as highly.  If two proteins share more than one common
-region, for example one has a single copy of a particular domain while
-the other has two copies, it may be possible to "miss" the second and
-subsequent alignments.  You will be able to see this situation if you
-have done a dotplot and your local alignment does not show all the
-features you expected to see. 
-<P>
+<p>Local alignment methods only report the best matching areas between two sequences - there may be a large number of alternative local alignments that do not score as highly. If two proteins share more than one common region, for example one has a single copy of a particular domain while the other has two copies, it may be possible to "miss" the second and subsequent alignments. You will be able to see this situation if you have done a dotplot and your local alignment does not show all the features you expected to see.</p>
 
-<b>water</b> is for aligning the best matching subsequences of two
-sequences.  It does not necessarily align whole sequences against each
-other; you should use <b>needle</b> if you wish to align closely related
-sequences along their whole lengths. 
-<P>
+<p><b>water</b> is for aligning the best matching subsequences of two sequences. It does not necessarily align whole sequences against each other; you should use <b>needle</b> if you wish to align closely related sequences along their whole lengths.</p>
 
-A true Smith Waterman implementation like <b>water</b> needs memory
-proportional to the product of the sequence lengths.  For two sequences
-of length 10,000,000 and 1,000 it therefore needs memory proportional to
-10,000,000,000 characters.  Two arrays of this size are produced, one of
-ints and one of floats so multiply that figure by 8 to get the memory
-usage in bytes.  That doesn't include other overheads.  Therefore only
-use water and needle for accurate alignment of reasonably short
-sequences. 
-
-<p>
+<p>A true Smith Waterman implementation like <b>water</b> needs memory proportional to the product of the sequence lengths. For two sequences of length 10,000,000 and 1,000 it therefore needs memory proportional to 10,000,000,000 characters. Two arrays of this size are produced, one of ints and one of floats so multiply that figure by 8 to get the memory usage in bytes. That doesn't include other overheads. Therefore only use <b>water</b> and <b>needle</b> for accurate alignment of reasonably short sequences. It should not be used with very large sequences unless you have a lot of memory and a lot of time. If you run out of memory, try using <b>supermatcher</b> or <b>matcher</b> instead.</p>
 
 
 
-If you run out of memory, try using <b>supermatcher</b> or
-<b>matcher</b>.
 
 <H2>
     Diagnostic Error Messages
@@ -781,20 +702,21 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="matcher.html">matcher</a></td>
-<td>Finds the best local alignments between two sequences</td>
+<td>Waterman-Eggert local alignment of two sequences</td>
 </tr>
 
 <tr>
 <td><a href="seqmatchall.html">seqmatchall</a></td>
-<td>All-against-all comparison of a set of sequences</td>
+<td>All-against-all word comparison of a sequence set</td>
 </tr>
 
 <tr>
 <td><a href="supermatcher.html">supermatcher</a></td>
-<td>Match large sequences against one or more other sequences</td>
+<td>Calculate approximate local pair-wise alignments of larger sequences</td>
 </tr>
 
 <tr>
@@ -804,7 +726,7 @@ None.
 
 <tr>
 <td><a href="wordmatch.html">wordmatch</a></td>
-<td>Finds all exact matches of a given size between 2 sequences</td>
+<td>Finds regions of identity (exact matches) of two sequences</td>
 </tr>
 
 </table>

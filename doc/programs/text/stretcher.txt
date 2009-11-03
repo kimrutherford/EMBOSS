@@ -5,24 +5,17 @@
 
 Function
 
-   Finds the best global alignment between two sequences
+   Needleman-Wunsch rapid global alignment of two sequences
 
 Description
 
-   stretcher calculates a global alignment of two sequences using a
-   modification of the classic dynamic programming algorithm which uses
-   linear space.
+   stretcher calculates an optimal global alignment of two sequences
+   using a modification of the classic dynamic programming algorithm
+   which uses linear space. The output is a standard alignment file. The
+   substitution matrix, gap insertion penalty and gap extension penalties
+   used to calculate the alignment may be specified.
 
-   A global pairwise alignment is one where it is assumed that the two
-   sequences have diverged from a common ancestor and that the program
-   should try to stretch the two sequences, introducing gaps where
-   necessary, in order to show the alignment over the whole length of the
-   two sequences that best illustrates their similarities.
-
-   In contrast, a local alignment program like matcher simply finds
-   local, small parts of the two sequences where there is some similarity
-   and makes no assumption about the whole length of the sequence needing
-   to be similar.
+Algorithm
 
    The standard sequence global alignment program using the Needleman &
    Wunsch algorithm, as implemented in the program needle, requires O(MN)
@@ -52,7 +45,7 @@ Usage
 
 
 % stretcher tsw:hba_human tsw:hbb_human 
-Finds the best global alignment between two sequences
+Needleman-Wunsch rapid global alignment of two sequences
 Output alignment [hba_human.stretcher]: 
 
    Go to the input files for this example
@@ -128,8 +121,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -393,7 +387,7 @@ Output file format
 
 ########################################
 # Program: stretcher
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: stretcher
 #    [-asequence] tsw:hba_human
 #    [-bsequence] tsw:hbb_human
@@ -464,7 +458,15 @@ Data files
 
 Notes
 
-   None.
+   A global pairwise alignment is one where it is assumed that the two
+   sequences have diverged from a common ancestor and that the program
+   should try to stretch the two sequences, introducing gaps where
+   necessary, in order to show the alignment over the whole length of the
+   two sequences that best illustrates their similarities. In contrast, a
+   local alignment program like matcher simply finds local, small parts
+   of the two sequences where there is some similarity and makes no
+   assumption about the whole length of the sequence needing to be
+   similar.
 
 References
 
@@ -473,11 +475,9 @@ References
 
 Warnings
 
-   This program will produce a global alignment even if there is no
-   biological justification for thinking that there might be a common
-   ancestor.
-
-   Demonstration of similarity is not evidence of homology!
+   Demonstration of similarity is not evidence of homology! This program
+   will produce a global alignment even if there is no biological
+   justification for thinking that there might be a common ancestor.
 
 Diagnostic Error Messages
 
@@ -493,9 +493,9 @@ Known bugs
 
 See also
 
-   Program name             Description
-   est2genome   Align EST and genomic DNA sequences
-   needle       Needleman-Wunsch global alignment
+   Program name                    Description
+   est2genome   Align EST sequences to genomic DNA sequence
+   needle       Needleman-Wunsch global alignment of two sequences
 
 Author(s)
 

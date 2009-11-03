@@ -109,20 +109,20 @@ int main(int argc, char **argv)
     onedbname  = ajAcdGetString("database");
     outfile = ajAcdGetOutfile("outfile");
 
-    html    = ajAcdGetBool("html");
-    protein = ajAcdGetBool("protein");
-    nucleic = ajAcdGetBool("nucleic");
+    html    = ajAcdGetBoolean("html");
+    protein = ajAcdGetBoolean("protein");
+    nucleic = ajAcdGetBoolean("nucleic");
 
-    doheader  = ajAcdGetBool("heading");
-    dotype    = ajAcdGetBool("type");
-    doid      = ajAcdGetBool("id");
-    doqry     = ajAcdGetBool("query");
-    doall     = ajAcdGetBool("all");
-    dofields  = ajAcdGetBool("fields");
-    dodefined = ajAcdGetBool("defined");
-    domethod  = ajAcdGetBool("methods");
-    docomment = ajAcdGetBool("comment");
-    dorelease = ajAcdGetBool("release");
+    doheader  = ajAcdGetBoolean("heading");
+    dotype    = ajAcdGetBoolean("type");
+    doid      = ajAcdGetBoolean("id");
+    doqry     = ajAcdGetBoolean("query");
+    doall     = ajAcdGetBoolean("all");
+    dofields  = ajAcdGetBoolean("fields");
+    dodefined = ajAcdGetBoolean("defined");
+    domethod  = ajAcdGetBoolean("methods");
+    docomment = ajAcdGetBoolean("comment");
+    dorelease = ajAcdGetBoolean("release");
     
     dbnames = ajListstrNew();
     

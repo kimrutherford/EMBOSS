@@ -22,37 +22,15 @@ matcher
 </H2>
 
 
-<b>matcher</b> compares two sequences looking for local sequence similarities
-using a rigorous algorithm.
-
-<p>
-<b>matcher</b> is based on Bill Pearson's 'lalign' application, version 2.0u4
-Feb.  1996
-
-<p>
-
-Lalign uses code developed by X.  Huang and W.  Miller (Adv.  Appl. 
-Math.  (1991) 12:337-357) for the "sim" program, which is a linear-space
-version of an algorithm described by M.  S.  Waterman and M.  Eggert (J. 
-Mol.  Biol.  197:723-728).  
-
-<p>
-
-Like <b>water</b>, <b>matcher</b> is rigorous, but also very slow.  The
-advantage of <b>matcher</b> is that it uses far less memory than
-<b>water</b>, so you are much less likely to run out of memory when
-aligning large sequences. 
+<p><b>matcher</b> identifies local similarities in two input sequences using a rigorous algorithm based on Bill Pearson's <b>lalign</b> application, version 2.0u4 (Feb. 1996). The substitution matrix, gap insertion and extension penalty are specified. The specified number of top-scoring pair-wise local sequence alignments are written to file.</p>
 
 
-<p> 
+<H2>
+Algorithm
+</H2>
 
-<b>matcher</b> will also report a specified number of alignments between
-the two sequences showing the actual local alignments.  (<b>water</b>
-will only report the single best match.) The default number of
-alignments output is 1, but can be increased to (for example) the 10
-best alignments by using the '-alternatives 10' command-line qualifier. 
-In some cases, for example multidomain proteins or cDNA and genomic DNA
-comparisons, there may be many interesting and significant alignments. 
+
+<p><b>matcher</b> is based on Bill Pearson's <b>lalign</b> application, version 2.0u4 (Feb. 1996). lalign uses code developed by X. Huang and W. Miller (Adv. Appl. Math. (1991) 12:337-357) for the "sim" program, which is a linear-space version of an algorithm described by M. S. Waterman and M. Eggert (J. Mol. Biol. 197:723-728).</p>
 
 <H2>
     Usage
@@ -135,7 +113,12 @@ The directories are searched in the following order:
     Notes
 </H2>
 
-None.
+<p><b>matcher</b> is rigorous but also very slow. The advantage of <b>matcher</b> over <b>water</b> (which is also rigorous) is that it uses far less memory, so you are much less likely to run out of memory when aligning large sequences.</p>
+<p><b>matcher</b> reports a specified number of alignments between the two sequences. <b>water</b> in contrast will only report only the single (optimal) match. The default number of alignments output is 1, but can be increased to (for example) the 10 best alignments by using the <tt>-alternatives 10</tt> command-line qualifier. In some cases, for example multidomain proteins or cDNA and genomic DNA comparisons, there may be many interesting and significant alignments.</p>
+
+<p><b>matcher</b> will not produce an alignment that is guaranteed to be optimal in the same way that <b>water</b> does, which implements the Needleman & Wunsch algorith.  <b>water</b> will generate the single, optimal local alignment and uses memory in the order of the product of the lengths of the sequences to be aligned. If you require an optimal alignment you should use <b>water</b>. If you run out of memory or want several possible good alignments, use <b>matcher</b>.</p>
+
+
 
 <H2>
     References

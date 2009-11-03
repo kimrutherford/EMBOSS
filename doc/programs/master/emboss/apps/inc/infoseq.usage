@@ -7,7 +7,7 @@ Display information on a sequence:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>infoseq tembl:x13776 </b>
-Displays some simple information about sequences
+Display basic information about sequences
 
 USA                      Database  Name           Accession      Type Length %GC    Description 
 tembl-id:X13776          tembl          X13776         X13776         N    2167   66.54  Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
@@ -25,7 +25,7 @@ Don't display the USA of a sequence:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>infoseq tembl:x13776 -nousa </b>
-Displays some simple information about sequences
+Display basic information about sequences
 
 Database  Name           Accession      Type Length %GC    Description 
 tembl          X13776         X13776         N    2167   66.54  Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
@@ -43,7 +43,7 @@ Display only the name and length of a sequence:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>infoseq tembl:x13776 -only -name -length </b>
-Displays some simple information about sequences
+Display basic information about sequences
 
 Name           Length 
 X13776         2167   
@@ -61,7 +61,7 @@ Display only the description of a sequence:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>infoseq tembl:x13776 -only -desc </b>
-Displays some simple information about sequences
+Display basic information about sequences
 
 Description 
 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
@@ -79,7 +79,7 @@ Display the type of a sequence:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>infoseq tembl:x13776 -only -type </b>
-Displays some simple information about sequences
+Display basic information about sequences
 
 Type 
 N    
@@ -97,7 +97,7 @@ Display information formatted with HTML:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>infoseq tembl:x13776 -html </b>
-Displays some simple information about sequences
+Display basic information about sequences
 
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>USA</th><th>Database</th><th>Name</th><th>Accession</th><th>Type</th><th>Length</th><th>%GC</th><th>Description</th></tr>

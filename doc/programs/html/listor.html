@@ -29,47 +29,14 @@ Write a list file of the logical OR of two sets of sequences
     Description
 </H2>
 
-<b>listor</b> reads in two sets of sequences and writes out a list file
-(file of file names) that result from the logical union of these two
-sets of sequences.  It is a simple way of manipulating and editing lists
-or sets of sequences to produce a list file.
-
-<p>
-
-When comparing sequences to see if they are the same between two sets of
-sequences, no use is made of the ID name or accession number of the
-sequences.  Only the sequences themselves are compared.  The comparison
-of the sequences is case-independent. 
-
-<p>
+<p><b>listor</b> reads in two sets of sequences (typically specified as list files) and writes out a list file that result from the logical union of the two sets.  A list file is a file with a list of Uniform Sequence Addresses (USAs), for example, a list of file names.  When comparing sequences from the input sets, no use is made of the ID name or accession number; only the sequence itself is compared. The comparison of the sequences is case-independent. The logical union is an OR operation by default. Other available operations are: <tt>AND</tt>, <tt>XOR</tt> and <tt>NOT</tt>.</p>
 
 
-The logical union is an OR operation by default.  Other available
-operations are: AND, XOR and NOT. 
+<H2>
+Algorithm
+</H2>
 
-<p>
-
-The (default) logical OR of the two sets of sequences is simply the
-result of merging the two sets of sequences, (without listing any
-shared sequences twice). 
-
-<p>
-
-A logical AND simply lists those sequences that occur in both sets of
-sequences. 
-
-<p>
-
-A logical XOR lists those sequences that ONLY occur in the first set or
-only occur in the second set - sequences occuring in both sets are
-ignored (the opposite of an AND). 
-
-<p>
-
-A logical NOT lists all those sequences in the first set except for
-those that also occur in the second set. 
-
-
+<p>All the input sequences are kept in memory while the logical unions of the two input sets of sequences is calculated. <b>listor</b> is therefore restricted by the available memory.  </p>
 
 <H2>
     Usage
@@ -209,8 +176,9 @@ List of USAs output file [file1.list]: <b></b>
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -396,12 +364,10 @@ None.
     Notes
 </H2>
 
-The program stores all of the input sequences in memory while it is
-working out the logical unions of the two sets of sequences.  This means
-that it is restricted by the available memory.  Doing logical unions
-involving all of the sequences in large databases, such as EMBL, is
-probably impractical unless you are lucky enough to have extraordinary
-amounts of memory on your machine. 
+<p>The inputs can be any valid USA but typically reference a list file.  Some other reference such as a wildcarded database entries or file name are equally valid.</p>
+<p>The (default) logical OR of the two sets of sequences is simply the result of merging the two sets of sequences.  A sequences appearing in both input sets is referenced once only in the output file. A logical <tt>AND</tt> simply lists those sequences that occur in both sets of sequences.</p>
+<p>A logical <tt>XOR</tt> lists those sequences that ONLY occur in the first set or only occur in the second set - sequences occuring in both sets are omitted (the opposite of an <tt>AND</tt>).</p>
+<p>A logical <tt>NOT</tt> lists all those sequences in the first set except for those that also occur in the second set. </p>
 
 <H2>
     References
@@ -412,10 +378,8 @@ None.
 <H2>
     Warnings
 </H2>
+<p><b>listor</b> is restricted by the available memory.  Doing logical unions involving all of the sequences in large databases, such as EMBL, is probably impractical unless you are lucky enough to have extraordinary amounts of memory on your machine.</p>
 
-If you try to do a logical union with all of the sequences in EMBL and
-another sequence set, this program will attempt to read all of the EMBL
-sequences into memory at once. This will probably not succeed.
 
 <H2>
     Diagnostic Error Messages
@@ -437,7 +401,18 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="aligncopy.html">aligncopy</a></td>
+<td>Reads and writes alignments</td>
+</tr>
+
+<tr>
+<td><a href="aligncopypair.html">aligncopypair</a></td>
+<td>Reads and writes pairs from alignments</td>
+</tr>
+
 <tr>
 <td><a href="biosed.html">biosed</a></td>
 <td>Replace or delete sequence sections</td>
@@ -445,17 +420,17 @@ None.
 
 <tr>
 <td><a href="codcopy.html">codcopy</a></td>
-<td>Reads and writes a codon usage table</td>
+<td>Copy and reformat a codon usage table</td>
 </tr>
 
 <tr>
 <td><a href="cutseq.html">cutseq</a></td>
-<td>Removes a specified section from a sequence</td>
+<td>Removes a section from a sequence</td>
 </tr>
 
 <tr>
 <td><a href="degapseq.html">degapseq</a></td>
-<td>Removes gap characters from sequences</td>
+<td>Removes non-alphabetic (e.g. gap) characters from sequences</td>
 </tr>
 
 <tr>
@@ -465,7 +440,7 @@ None.
 
 <tr>
 <td><a href="entret.html">entret</a></td>
-<td>Reads and writes (returns) flatfile entries</td>
+<td>Retrieves sequence entries from flatfile databases and files</td>
 </tr>
 
 <tr>
@@ -475,7 +450,7 @@ None.
 
 <tr>
 <td><a href="extractfeat.html">extractfeat</a></td>
-<td>Extract features from a sequence</td>
+<td>Extract features from sequence(s)</td>
 </tr>
 
 <tr>
@@ -484,43 +459,78 @@ None.
 </tr>
 
 <tr>
+<td><a href="featcopy.html">featcopy</a></td>
+<td>Reads and writes a feature table</td>
+</tr>
+
+<tr>
+<td><a href="featreport.html">featreport</a></td>
+<td>Reads and writes a feature table</td>
+</tr>
+
+<tr>
 <td><a href="makenucseq.html">makenucseq</a></td>
-<td>Creates random nucleotide sequences</td>
+<td>Create random nucleotide sequences</td>
 </tr>
 
 <tr>
 <td><a href="makeprotseq.html">makeprotseq</a></td>
-<td>Creates random protein sequences</td>
+<td>Create random protein sequences</td>
+</tr>
+
+<tr>
+<td><a href="maskambignuc.html">maskambignuc</a></td>
+<td>Masks all ambiguity characters in nucleotide sequences with N</td>
+</tr>
+
+<tr>
+<td><a href="maskambigprot.html">maskambigprot</a></td>
+<td>Masks all ambiguity characters in protein sequences with X</td>
 </tr>
 
 <tr>
 <td><a href="maskfeat.html">maskfeat</a></td>
-<td>Mask off features of a sequence</td>
+<td>Write a sequence with masked features</td>
 </tr>
 
 <tr>
 <td><a href="maskseq.html">maskseq</a></td>
-<td>Mask off regions of a sequence</td>
+<td>Write a sequence with masked regions</td>
 </tr>
 
 <tr>
 <td><a href="newseq.html">newseq</a></td>
-<td>Type in a short new sequence</td>
+<td>Create a sequence file from a typed-in sequence</td>
+</tr>
+
+<tr>
+<td><a href="nohtml.html">nohtml</a></td>
+<td>Remove mark-up (e.g. HTML tags) from an ASCII text file</td>
 </tr>
 
 <tr>
 <td><a href="noreturn.html">noreturn</a></td>
-<td>Removes carriage return from ASCII files</td>
+<td>Remove carriage return from ASCII files</td>
+</tr>
+
+<tr>
+<td><a href="nospace.html">nospace</a></td>
+<td>Remove all whitespace from an ASCII text file</td>
+</tr>
+
+<tr>
+<td><a href="notab.html">notab</a></td>
+<td>Replace tabs with spaces in an ASCII text file</td>
 </tr>
 
 <tr>
 <td><a href="notseq.html">notseq</a></td>
-<td>Exclude a set of sequences and write out the remaining ones</td>
+<td>Write to file a subset of an input stream of sequences</td>
 </tr>
 
 <tr>
 <td><a href="nthseq.html">nthseq</a></td>
-<td>Writes one sequence from a multiple set of sequences</td>
+<td>Write to file a single sequence from an input stream of sequences</td>
 </tr>
 
 <tr>
@@ -530,7 +540,7 @@ None.
 
 <tr>
 <td><a href="revseq.html">revseq</a></td>
-<td>Reverse and complement a sequence</td>
+<td>Reverse and complement a nucleotide sequence</td>
 </tr>
 
 <tr>
@@ -540,7 +550,17 @@ None.
 
 <tr>
 <td><a href="seqretsplit.html">seqretsplit</a></td>
-<td>Reads and writes (returns) sequences in individual files</td>
+<td>Reads sequences and writes them to individual files</td>
+</tr>
+
+<tr>
+<td><a href="sizeseq.html">sizeseq</a></td>
+<td>Sort sequences by size</td>
+</tr>
+
+<tr>
+<td><a href="skipredundant.html">skipredundant</a></td>
+<td>Remove redundant sequences from an input set</td>
 </tr>
 
 <tr>
@@ -550,32 +570,37 @@ None.
 
 <tr>
 <td><a href="splitter.html">splitter</a></td>
-<td>Split a sequence into (overlapping) smaller sequences</td>
+<td>Split sequence(s) into smaller sequences</td>
 </tr>
 
 <tr>
 <td><a href="trimest.html">trimest</a></td>
-<td>Trim poly-A tails off EST sequences</td>
+<td>Remove poly-A tails from nucleotide sequences</td>
 </tr>
 
 <tr>
 <td><a href="trimseq.html">trimseq</a></td>
-<td>Trim ambiguous bits off the ends of sequences</td>
+<td>Remove unwanted characters from start and end of sequence(s)</td>
+</tr>
+
+<tr>
+<td><a href="trimspace.html">trimspace</a></td>
+<td>Remove extra whitespace from an ASCII text file</td>
 </tr>
 
 <tr>
 <td><a href="union.html">union</a></td>
-<td>Reads sequence fragments and builds one sequence</td>
+<td>Concatenate multiple sequences into a single sequence</td>
 </tr>
 
 <tr>
 <td><a href="vectorstrip.html">vectorstrip</a></td>
-<td>Strips out DNA between a pair of vector sequences</td>
+<td>Removes vectors from the ends of nucleotide sequence(s)</td>
 </tr>
 
 <tr>
 <td><a href="yank.html">yank</a></td>
-<td>Reads a sequence range, appends the full USA to a list file</td>
+<td>Add a sequence reference (a full USA) to a list file</td>
 </tr>
 
 </table>

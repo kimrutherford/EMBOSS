@@ -20,13 +20,25 @@
 
 package org.emboss.jemboss.server;
 
-import org.emboss.jemboss.JembossParams;
-import org.emboss.jemboss.programs.RunEmbossApplication;
-import org.emboss.jemboss.programs.RunEmbossApplication2;
-import org.emboss.jemboss.parser.Ajax;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Random;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
-import java.io.*;
-import java.util.*;
+import org.emboss.jemboss.JembossParams;
+import org.emboss.jemboss.gui.SequenceList;
+import org.emboss.jemboss.programs.RunEmbossApplication2;
 
 /**
 *
@@ -268,11 +280,11 @@ public class JembossServer
 
   /**
   *
-  * Uses JNI to calculate sequence attributes using EMBOSS library call.
+  * Uses the infoseq application to calculate sequence length.
   * @param fileContent  sequence filename or database entry
   * @param seqtype      sequence type (seqset/sequence)
-  * @param userName     username
-  * @return     	sequence length, weight & type (protein/nucleotide)
+  * @param userName
+  * @return         sequence length
   *
   */
   public Vector call_ajax(String fileContent, String seqtype, String userName)
@@ -282,13 +294,41 @@ public class JembossServer
 
   /**
   *
+  * Uses the infoseq application to calculate sequence length.
+  * @param fileContent  sequence filename or database entry
+  * @param seqtype      sequence type (seqset/sequence)
+  * @return         sequence length
+  *
+  */
+  
+  public Vector call_ajax(String fileContent, String seqtype)
+  {
+        Vector vans = new Vector();
+        // TODO: better to have JembosParams has a method to return its instance
+        int ajaxLength = SequenceList.getSeqAttr(fileContent,
+                new JembossParams());
+        vans.add("status");
+        if (ajaxLength == -1)
+            vans.add("1");
+        else {
+            vans.add("0");
+            vans.add("length");
+            vans.add(new Integer(ajaxLength));
+        }
+        return vans;
+  }
+
+  /**
+  * @deprecated
   * Uses JNI to calculate sequence attributes using EMBOSS library call.
   * @param fileContent  sequence filename or database entry
   * @param seqtype      sequence type (seqset/sequence)
   * @return     	sequence length, weight & type (protein/nucleotide)
   *
   */
-  public Vector call_ajax(String fileContent, String seqtype)
+
+  /*
+  private Vector call_ajax_(String fileContent, String seqtype)
   {
     boolean afile = false;
     String fn = null;
@@ -350,11 +390,11 @@ public class JembossServer
     if(ok)
     {
       vans.add("length");
-      vans.add(new Integer(aj.length));
+      vans.add(new Integer(Ajax.length));
       vans.add("protein");
-      vans.add(new Boolean(aj.protein));
+      vans.add(new Boolean(Ajax.protein));
       vans.add("weight");
-      vans.add(new Float(aj.weight));
+      vans.add(new Float(Ajax.weight));
       vans.add("status");
       vans.add("0");
     }
@@ -369,6 +409,7 @@ public class JembossServer
 
     return vans;
   }
+  */
 
 
   /**
@@ -936,17 +977,20 @@ public class JembossServer
       String fc = new String("");
       String key = new String(outFiles[i]);
 
-
       if(inFiles != null)
       {
         if(!inFiles.containsKey(key))        // leave out input files
         {
           try
           {
-            BufferedReader in = new BufferedReader(new FileReader(project + fs +
-                                                                  outFiles[i]));
-            while((line = in.readLine()) != null)
-              fc = fc.concat(line + "\n");
+            File outfile = new File(project + fs + outFiles[i]);
+            BufferedReader in = new BufferedReader(new FileReader(outfile));
+            StringBuffer buf = new StringBuffer((int)outfile.length());
+            while((line = in.readLine()) != null){
+                buf.append(line);
+                buf.append("\n");
+            }
+            fc = buf.toString();
           }
           catch (IOException ioe){}
         }
@@ -955,10 +999,14 @@ public class JembossServer
       {
         try
         {
-          BufferedReader in = new BufferedReader(new FileReader(project + fs +
-                                                                outFiles[i]));
-          while((line = in.readLine()) != null)
-            fc = fc.concat(line + "\n");
+            File outfile = new File(project + fs + outFiles[i]);
+            BufferedReader in = new BufferedReader(new FileReader(outfile));
+            StringBuffer buf = new StringBuffer((int)outfile.length());
+            while((line = in.readLine()) != null){
+                buf.append(line);
+                buf.append("\n");
+            }
+            fc = buf.toString();
         }
         catch (IOException ioe){}
       }
@@ -999,9 +1047,6 @@ public class JembossServer
     for(int i=0;i<pngFiles.length;i++)
     {
       String key = new String(pngFiles[i]);
-      DataInputStream dis = null;
-      FileInputStream fis = null;
-      int nby = 0;
       byte data[] = readByteFile(project + fs + pngFiles[i]);
       if(data != null)
       {
@@ -1095,8 +1140,6 @@ public class JembossServer
     while (enumRes.hasMoreElements())
     {
       String thiskey = (String)enumRes.nextElement().toString();
-      String thiselm = (String)resToQuery.get(thiskey);
-//    System.out.println("KEY : "+thiskey+" ELEMENT: "+thiselm);
       File f = new File(tmproot+fs+thiskey+fs+".finished");
       if(f.exists())
       {

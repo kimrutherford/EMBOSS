@@ -1,5 +1,5 @@
 application: chips [
-  documentation: "Codon usage statistics"
+  documentation: "Calculates Nc codon usage statistic"
   groups: "Nucleic:Codon usage"
 ]
 

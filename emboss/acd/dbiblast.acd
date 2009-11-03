@@ -1,6 +1,6 @@
 application: dbiblast [
-  groups: "Utils:Database indexing"
   documentation: "Index a BLAST database"
+  groups: "Utils:Database indexing"
   gui: "yes"
   batch: "yes"
   cpu: "medium"

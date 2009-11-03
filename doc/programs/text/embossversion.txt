@@ -5,19 +5,12 @@
 
 Function
 
-   Writes the current EMBOSS version number
+   Writes the current EMBOSS version number to a file
 
 Description
 
-   This small utility writes out the current version of the EMBOSS
-   package.
-
-   It is expected that this may have a use in scripts which automatically
-   write descriptions of the state of the EMBOSS package that is set up
-   locally.
-
-   It will also be a useful way for people to ascertain what version is
-   being run if they are giving user-support to people in another site.
+   embossversion writes the version number of the EMBOSS package to to
+   screen (by default) or (optionally) to file.
 
 Usage
 
@@ -25,9 +18,9 @@ Usage
 
 
 % embossversion 
-Writes the current EMBOSS version number
+Writes the current EMBOSS version number to a file
 
-4.1.0
+6.0.0
 
 Command line arguments
 
@@ -44,8 +37,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -93,7 +87,10 @@ Data files
 
 Notes
 
-   None.
+   embossversion might be called by scripts in automated systems
+   requiring versioning information, or in user-support as a convenient
+   way to ascertain the version of an EMBOSS installation being used
+   remotely.
 
 References
 
@@ -117,8 +114,8 @@ Known bugs
 
 See also
 
-   Program name                     Description
-   embossdata   Finds or fetches data files read by EMBOSS programs
+   Program name             Description
+   embossdata   Find and retrieve EMBOSS data files
 
 Author(s)
 

@@ -24,41 +24,18 @@ chaos
 <H2>
     Function
 </H2>
-Create a chaos game representation plot for a sequence
+Draw a chaos game representation plot for a nucleotide sequence
 <H2>
     Description
 </H2>
 
+<p><b>chaos</b> creates a <b>chaos</b> game representation (CGR) plot for a nucleotide sequence.  A CGR plot represents a nucleotide sequence as a square box with an <tt>A</tt>, <tt>G</tt>, <tt>C</tt>, or <tt>T</tt> nucleotide at each corner. The box contains dots, each one representing a dinucleotide.  All overlapping dinucleotides from the start to the end of the sequence are plotted.  Regions which are devoid of dots (or heavily covered with dots) indicate short sequence motifs that are unusually infrequent (or frequent). CGR plots depict base composition and sequentiality and is a unique visual representation of a sequence that complements more traditional linear representations.</p>
 
-  A box is drawn and an AGCT is drawn at each corner.
-<P>
 
-  Starting from the middle, move half way to the corner of the box 
-  representing the first base in the sequence and draw a dot. 
-<P>
-  Then for each subsequent base move half way to the
-  corresponding box corner and draw a dot.
-<P>
-  Finally display the number and percentage values of AGCT bases.
-
-<p>
-
-The result is an image of a square sprinkled with dots.  Areas which are
-devoid of dots (or heavily covered with dots) indicate short sequence
-motifs that are unusually infrequent (or frequent).  The sequence of
-such motifs can be deduced by looking to see which quarter of the square
-the region is in - the letter that this quarter belongs to is the first
-base of the motif.  The quarter is then quartered again and the
-appropriate base letters are assigned to the corners of the quarter -
-the eigth part that the region is in gives the second base of the motif. 
-
-<p>
-
-The process continues until you have identified the 1/16th or 1/32nd,
-etc.  of the original square containing the unusual region and you now
-have the sequence of the motif. 
-
-<p>
+<H2>
+    Algorithm
+</H2>
+<p>The plot is generated as follows.  A box is drawn and an <tt>A</tt>, <tt>G</tt>, <tt>C</tt>, or <tt>T</tt> is drawn at each corner. Starting from the middle, move half way to the corner of the box representing the first base in the sequence and draw a dot. Then for each subsequent base move half way to the corresponding box corner and draw a dot. Finally display the number and percentage values of <tt>AGCT</tt> bases.  The result is an image of a square sprinkled with dots.</p>
 
 
 <H2>
@@ -71,7 +48,7 @@ have the sequence of the motif.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>chaos tembl:j01636 -graph cps </b>
-Create a chaos game representation plot for a sequence
+Draw a chaos game representation plot for a nucleotide sequence
 
 Created chaos.ps
 
@@ -123,8 +100,9 @@ Created chaos.ps
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -327,15 +305,21 @@ None.
     Notes
 </H2>
 
-None.
+<p>Regions which are devoid of dots (or heavily covered with dots) indicate short sequence motifs that are unusually infrequent (or frequent). The sequence of such motifs can be deduced by looking to see which quarter of the square the region is in - the letter that this quarter belongs to is the first base of the motif. The quarter is then quartered again and the appropriate base letters are assigned to the corners of the quarter - the part that the region is in gives the second base of the motif.</p>
+
+<p>The process continues until you have identified the 1/16th or 1/32nd, etc. of the original square containing the unusual region and you now have the sequence of the motif.</p>
 
 
 <H2>
     References
 </H2>
 
-None.
+<OL>
 
+<LI>Jeffrey (1990) Nucleic Acids Research 18: 2163-2170
+"Chaos game representation of gene structure"
+
+</OL>
 
 <H2>
     Warnings
@@ -366,35 +350,41 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="banana.html">banana</a></td>
-<td>Bending and curvature plot in B-DNA</td>
+<td>Plot bending and curvature data for B-DNA</td>
 </tr>
 
 <tr>
 <td><a href="btwisted.html">btwisted</a></td>
-<td>Calculates the twisting in a B-DNA sequence</td>
+<td>Calculate the twisting in a B-DNA sequence</td>
 </tr>
 
 <tr>
 <td><a href="compseq.html">compseq</a></td>
-<td>Count composition of dimer/trimer/etc words in a sequence</td>
+<td>Calculate the composition of unique words in sequences</td>
 </tr>
 
 <tr>
 <td><a href="dan.html">dan</a></td>
-<td>Calculates DNA RNA/DNA melting temperature</td>
+<td>Calculates nucleic acid melting temperature</td>
+</tr>
+
+<tr>
+<td><a href="density.html">density</a></td>
+<td>Draw a nucleic acid density plot</td>
 </tr>
 
 <tr>
 <td><a href="freak.html">freak</a></td>
-<td>Residue/base frequency table or plot</td>
+<td>Generate residue/base frequency table or plot</td>
 </tr>
 
 <tr>
 <td><a href="isochore.html">isochore</a></td>
-<td>Plots isochores in large DNA sequences</td>
+<td>Plots isochores in DNA sequences</td>
 </tr>
 
 <tr>
@@ -404,7 +394,7 @@ None.
 
 <tr>
 <td><a href="wordcount.html">wordcount</a></td>
-<td>Counts words of a specified size in a DNA sequence</td>
+<td>Count and extract unique words in DNA sequence(s)</td>
 </tr>
 
 </table>

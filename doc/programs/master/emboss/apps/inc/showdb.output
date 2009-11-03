@@ -6,6 +6,7 @@
 <pre>
 # Name           Type  ID  Qry All Comment
 # ============== ==== ==  === === =======
+twp              P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM index
 qapblast         P    OK  OK  OK  BLAST swissnew
 qapblastall      P    OK  OK  OK  BLAST swissnew, all fields indexed
 qapblastsplit    P    OK  OK  OK  BLAST swissnew split in 5 files
@@ -25,7 +26,6 @@ qaxpirinc        P    OK  OK  OK  PIR
 tpir             P    OK  OK  OK  PIR using NBRF access for 4 files
 tsw              P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
 tswnew           P    OK  OK  OK  SpTrEmbl as 3 files in native format with EMBL CD-ROM index
-twp              P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM index
 genbanksrs       N    OK  -   -   Genbank IDs
 qanfasta         N    OK  OK  OK  FASTA file EMBL rodents
 qanfastaall      N    OK  OK  OK  FASTA file EMBL rodents, all fields indexed

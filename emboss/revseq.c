@@ -45,8 +45,8 @@ int main(int argc, char **argv)
     seqall = ajAcdGetSeqall("sequence");
     seqout = ajAcdGetSeqoutall("outseq");
 
-    reverse    = ajAcdGetBool("reverse");
-    complement = ajAcdGetBool("complement");
+    reverse    = ajAcdGetBoolean("reverse");
+    complement = ajAcdGetBoolean("complement");
 
     while(ajSeqallNext(seqall, &seq))
     {

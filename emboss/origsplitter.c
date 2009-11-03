@@ -58,7 +58,7 @@ int main(int argc, char **argv)
     seqall  = ajAcdGetSeqall("sequence");
     size    = ajAcdGetInt("size");
     overlap = ajAcdGetInt("overlap");
-    addover = ajAcdGetBool("addoverlap");
+    addover = ajAcdGetBoolean("addoverlap");
 
     subseq = ajSeqNew();
     str    = ajStrNew();

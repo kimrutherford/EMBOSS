@@ -1,6 +1,5 @@
 application: pepinfo [
-  documentation: "Plots simple amino acid properties in
-                  parallel"
+  documentation: "Plot amino acid properties of a protein sequence in parallel."
   groups: "Protein:Composition"
 ]
 

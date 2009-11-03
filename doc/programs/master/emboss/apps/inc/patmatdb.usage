@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>patmatdb </b>
-Search a protein sequence with a motif
+Searches protein sequences with a sequence motif
 Input protein sequence(s): <b>tsw:*</b>
 Protein motif to search for: <b>st[ty]s</b>
 Output report [edd1_rat.patmatdb]: <b></b>

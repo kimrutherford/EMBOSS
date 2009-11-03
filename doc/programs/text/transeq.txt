@@ -9,23 +9,14 @@ Function
 
 Description
 
-   Transeq translates nucleic acid sequences to the corresponding peptide
-   sequence.
-
-   It can translate in any of the 3 forward or three reverse sense
-   frames, or in all three forward or reverse frames, or in all six
-   frames.
-
-   It can translate specified regions corresponding to the coding regions
-   of your sequences.
-
-   It can translate using the standard ('Universal') genetic code and
-   also with a selection of non-standard codes.
-
-   Termination (STOP) codons are translated as the character '*'.
-
-   The output peptide sequence is always in the standard one-letter IUPAC
-   code.
+   transeq reads one or more nucleotide sequences and writes the
+   corresponding protein sequence translations to file. It can translate
+   in any of the 3 forward or three reverse sense frames, or in all three
+   forward or reverse frames, or in all six frames. The translation may
+   be restricted to specified regions, for example, corresponding to the
+   coding regions of your sequences. It can translate using the standard
+   ('Universal') genetic code and also with a selection of non-standard
+   codes.
 
 Usage
 
@@ -214,8 +205,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -998,7 +990,7 @@ Data files
      * ~/ (your home directory)
      * ~/.embossdata
 
-   The EMBOSS REBASE restriction enzyme data files are stored iin
+   The EMBOSS REBASE restriction enzyme data files are stored in
    directory 'data/REBASE/*' under the EMBOSS installation directory.
 
    These files must first be set up using the program 'rebaseextract'.
@@ -1026,32 +1018,32 @@ Data files
 
 Notes
 
+   Termination (STOP) codons are translated as the character *. The -trim
+   option removes all all X and * characters from the right end of the
+   translation. This trimming process starts at the end and continues
+   until the next character is not an X or a *. The -clean option changes
+   all STOP codon positions from the * character to X (an unknown
+   residue). This is useful because some programs will not accept protein
+   sequences with * characters in them.
+
    The reverse frame '-1' is defined as the translation you get when you
    use the reverse-complement of the sequence with the same codon phase
-   as the codon in frame '1'.
-
-   Thus the sequence ACTGG in frame 1 is the translation of the codons
-   ACT,GG; the translation of frame -1 uses these same codons, reverse
-   complemented:
-
-  forward sense          ACT GG
-  reverse sense          TGA CC
-
-  reverse-complement     CC AGT
-  frame -1 translation       S
+   as the codon in frame '1'. Thus the sequence ACTGG in frame 1 is the
+   translation of the codons ACT,GG; the translation of frame -1 uses
+   these same codons, reverse complemented: forward sense ACT GG reverse
+   sense TGA CC reverse-complement CC AGT frame -1 translation S
 
    Frame -1 is the translation of CCAGT (the reverse complement of ACTGG)
-   using the codon 'AGT' (the first bases 'CC' are ignored). The result
-   is the peptide 'S'.
+   using the codon AGT (the first bases CC are ignored). The result is
+   the peptide S.
 
-   Similarly frame -2 is the phase used by frame 2, 'CAG T' (the first
-   base 'C' is ignored). The last base cannot be successfully translated
-   and is output as the unknown residue 'X'. The result is the peptide
-   'QX'.
+   Similarly frame -2 is the phase used by frame 2, CAG T (the first base
+   C is ignored). The last base cannot be successfully translated and is
+   output as the unknown residue X. The result is the peptide QX.
 
-   Frame -3 is the phase used by frame 3, 'CCA GT'. The last two bases
-   will translate to 'V' as it does not matter what the next base is.
-   (GTA, GTC, GTG, GTT all code for 'V'). The result is the peptide 'PV'.
+   Frame -3 is the phase used by frame 3, CCA GT. The last two bases will
+   translate to V as it does not matter what the next base is. (GTA, GTC,
+   GTG, GTT all code for V). The result is the peptide PV.
 
    The alternative way of generating the reverse translation frames used
    by some people is that frame -1 is made by taking the frame '1' of the
@@ -1060,14 +1052,12 @@ Notes
    length modulus 3.
 
    There does not appear to be a convention on which definition to use.
-   The Staden package uses the same convention as this program.
-   The GCG package sneakily avoids the problem by naming the frames using
-   letters (a, b, c, d, e, f)
-
-   If you really need to define frame -1 as the frame given when you
-   reverse complement the sequence and then start translating at the
-   first frame in the resulting sequence, then use the '-alternative'
-   qualifier.
+   The Staden package uses the same convention as this program. The GCG
+   package sneakily avoids the problem by naming the frames using letters
+   (a, b, c, d, e, f). If you really need to define frame -1 as the frame
+   given when you reverse complement the sequence and then start
+   translating at the first frame in the resulting sequence, then use the
+   -alternative qualifier.
 
 References
 
@@ -1075,14 +1065,14 @@ References
 
 Warnings
 
-   When translating using non-standard genetic code table, always check
+   When translating using a non-standard genetic code, you should check
    the table carefully for deviations from your particular organism's
    code.
 
-   When using the '-regions' option, you should always leave the
-   '-frames' option at the default of frame '1'. If you change the frame
-   while specifying a region to translate, then the regions will be
-   offset by 1 or 2 bases, which is not what you want.
+   When using the -regions option, you should always leave the -frames
+   option at the default of frame '1'. If you change the frame while
+   specifying a region to translate, then the regions will be offset by 1
+   or 2 bases, which is not what you want.
 
 Diagnostic Error Messages
 
@@ -1106,16 +1096,18 @@ Known bugs
 
 See also
 
-   Program name                        Description
-   backtranambig Back translate a protein sequence to ambiguous codons
-   backtranseq   Back translate a protein sequence
-   coderet       Extract CDS, mRNA and translations from feature tables
-   plotorf       Plot potential open reading frames
-   prettyseq     Output sequence with translated ranges
-   remap         Display sequence with restriction sites, translation etc
-   showorf       Pretty output of DNA translations
-   showseq       Display a sequence with features, translation etc
-   sixpack       Display a DNA sequence with 6-frame translation and ORFs
+   Program name Description
+   backtranambig Back-translate a protein sequence to ambiguous
+   nucleotide sequence
+   backtranseq Back-translate a protein sequence to a nucleotide sequence
+   coderet Extract CDS, mRNA and translations from feature tables
+   plotorf Plot potential open reading frames in a nucleotide sequence
+   prettyseq Write a nucleotide sequence and its translation to file
+   remap Display restriction enzyme binding sites in a nucleotide
+   sequence
+   showorf Display a nucleotide sequence and translation in pretty format
+   showseq Displays sequences with features in pretty format
+   sixpack Display a DNA sequence with 6-frame translation and ORFs
 
 Author(s)
 

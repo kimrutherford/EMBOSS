@@ -5,60 +5,82 @@
 
 Function
 
-   Align EST and genomic DNA sequences
+   Align EST sequences to genomic DNA sequence
 
 Description
 
-   est2genome is a software tool to aid the prediction of genes by
-   sequence homology. The program will align a set of spliced nucleotide
-   sequences (ESTs cDNAs or mRNAs) to an unspliced genomic DNA sequence,
-   inserting introns of arbitrary length when needed. In addition, where
-   feasible introns start and stop at the splice consensus dinucleotides
-   GT and AG.
+   est2genome aids the prediction of genes by sequence homology. It
+   aligns a set of spliced nucleotide sequences (ESTs cDNAs or mRNAs) to
+   an unspliced genomic DNA sequence, inserting introns of arbitrary
+   length when needed. Where feasible introns start and stop at the
+   splice consensus dinucleotides GT and AG.
 
-   Unless instructed otherwise, the program makes three alignments: First
-   it compares both stands of the spliced sequence against the forward
-   strand of the genomic, assuming the splice consensus GT/AG (ie in the
+   By default, est2genome makes three alignments: First it compares both
+   strands of the spliced sequence against the forward strand of the
+   genomic sequence, assuming the splice consensus GT/AG (ie in the
    forward gene direction). The maximum-scoring orientation is then
    realigned assuming the splice consensus CT/AC (ie in the reversed gene
-   direction). Only the overall maximum-scoring alignment is reported.
+   direction). By default, only the overall maximum-scoring alignment is
+   reported, and then if it scores higher than a specific minimum
+   threshold score. Optionally, all comparisons may be reported.
 
    The program outputs a list of the exons and introns it has found. The
    format is like that of MSPcrunch, ie a list of matching segments. This
    format is easy to parse into other software. The program also
    indicates, based on the splice site information, the gene's predicted
    direction of transcription. Optionally the full sequence alignment is
-   printed as well (see the example).
+   printed as well.
 
 Algorithm
 
    The program uses a linear-space divide-and-conquer strategy (Myers and
-   Miller, 1988; Huang, 1994) to limit memory use:
-
-   1. A first pass Smith-Waterman local alignment scan is done to find
-   the start and end of the maximally scoring segments.
-
-   2. Subsequences corresponding to these segments are extracted
-
-   3a. If the product of the subsequences' lengths is less than a
-   user-defined threshold (i.e. they will fit in memory) the segments are
+   Miller, 1988; Huang, 1994) to limit memory use: 1. A first pass
+   Smith-Waterman local alignment scan is done to find the start, end and
+   score of the maximally scoring segments (including introns of course).
+   No other alignment information is retained. 2. Subsequences
+   corresponding to these segments are extracted 3a. If the product of
+   the subsequences' lengths is less than a user-defined threshold
+   (-space parameter), i.e. they will fit in memory, the segments are
    realigned using the Needleman-Wunsch global alignment algorithm, which
    will give the same result as the Smith-Waterman since the subsequences
-   are guaranteed to align end-to-end.
+   are guaranteed to align end-to-end. 3b. If the product of the lengths
+   exceeds the threshold (a full alignment will not fit in memory) the
+   alignment is made recursively by splitting the spliced (EST) sequence
+   in half and finding the genome sequence position which aligns with the
+   EST mid-point. The process is repeated until the product of the
+   lengths is less than the threshold. The problem reduces to aligning
+   the left-hand and right-hand portions of the sequences separately and
+   merging the result. 4. The genome sequence is searched against the
+   forward and reverse strands of the spliced (EST) sequence, assuming a
+   forward gene splicing direction (i.e. GT/AG consensus). 5. Then the
+   best-scoring orientation is realigned assuming reverse splicing (CT/AC
+   consensus). The overall best alignment is reported. The worst-case
+   run-time for the algorithm is about 3 times as long as would be taken
+   to align using a quadratic-space program. In practice the
+   maximal-scoring segment is often much shorter than the full genome
+   length so the program runs only about 1.5 times slower.
 
-   3b. If the product of the lengths exceeds the threshold (a full
-   alignment will not fit in memory) the alignment is made recursively by
-   splitting the spliced (EST) sequence in half and finding the genome
-   sequence position which aligns with the mid-point. The process is
-   repeated until the product of gthe lengths is less than the threshold.
-   The divided sequences are aligned separately and then merged.
+   The algorithm has the following steps:
+    1. A first-pass Smith-Waterman scan is done to locate the score,
+       start and end of the maximal scoring segment (including introns of
+       course). No other alignment information is retained.
+    2. Subsequences corresponding to the maximal-scoring segments are
+       extracted. If the product of these subsequences' lengths is less
+       than the area parameter then the segments are re-aligned using the
+       Needleman-Wunsch algorithm, which in this instance will give the
+       same result as the Smith-Waterman since they are guaranteed to
+       align end-to-end.
+    3. If the product of lengths exceeds the area threshold then the
+       alignment is recursively broken down by splitting the EST in half
+       and finding the genome position which aligns with the EST
+       mid-point. The problem then reduces to aligning the left-hand and
+       right-hand portions of the sequences separately and merging the
+       result.
 
-   4. The genome sequence is searched against the forward and reverse
-   strands of the spliced (EST) sequence, assuming a forward gene
-   splicing direction (i.e. GT/AG consensus).
-
-   5. Then the best-scoring orientation is realigned assuming reverse
-   splicing (CT/AC consensus). The overall best alignment is reported.
+   The worst-case run-time for the algorithm is about 3 times as long as
+   would be taken to align using a quadratic-space program. In practice
+   the maximal-scoring segment is often much shorter than the full genome
+   length so the program runs only about 1.5 times slower.
 
 Usage
 
@@ -66,7 +88,7 @@ Usage
 
 
 % est2genome 
-Align EST and genomic DNA sequences
+Align EST sequences to genomic DNA sequence
 Spliced EST nucleotide sequence(s): tembl:h45989
 Unspliced genomic nucleotide sequence: tembl:z69719
 Output file [h45989.est2genome]: 
@@ -177,8 +199,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -618,27 +641,7 @@ G
    less than the splice_penalty, approx) which may be skipped. The intron
    penalties should not be set to less that the maximum expected random
    match between the sequences (typically 10-15 bp) in order to avoid
-   spurious matches. The algorithm has the following steps:
-    1. A first-pass Smith-Waterman scan is done to locate the score,
-       start and end of the maximal scoring segment (including introns of
-       course). No other alignment information is retained.
-    2. Subsequences corresponding to the maximal-scoring segments are
-       extracted. If the product of these subsequences' lengths is less
-       than the area parameter then the segments are re-aligned using the
-       Needleman-Wunsch algorithm, which in this instance will give the
-       same result as the Smith-Waterman since they are guaranteed to
-       align end-to-end.
-    3. If the product of lengths exceeds the area threshold then the
-       alignment is recursively broken down by splitting the EST in half
-       and finding the genome position which aligns with the EST
-       mid-point. The problem then reduces to aligning the left-hand and
-       right-hand portions of the sequences separately and merging the
-       result.
-
-   The worst-case run-time for the algorithm is about 3 times as long as
-   would be taken to align using a quadratic-space program. In practice
-   the maximal-scoring segment is often much shorter than the full genome
-   length so the program runs only about 1.5 times slower.
+   spurious matches.
 
 References
 
@@ -669,9 +672,9 @@ Known bugs
 
 See also
 
-   Program name                      Description
-   needle       Needleman-Wunsch global alignment
-   stretcher    Finds the best global alignment between two sequences
+   Program name                       Description
+   needle       Needleman-Wunsch global alignment of two sequences
+   stretcher    Needleman-Wunsch rapid global alignment of two sequences
 
 Author(s)
 

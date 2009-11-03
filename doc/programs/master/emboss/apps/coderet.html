@@ -18,90 +18,11 @@ coderet
 <H2>
     Description
 </H2>
-
-The feature table of sequence database entries often have sections like this:
-<p>
-
-This specifies that the coding sequence for the gene is constructed by
-joining several sections of code, many of which are in other entries in
-this database. 
-
-<p>
-<hr>
-<pre>
-FT   CDS             join(U21925.1:818..987,U21926.1:258..420,
-FT                   U21927.1:428..520,U21928.1:196..336,U21929.1:279..415,
-FT                   U21930.1:895..1014,516..708)
-</pre>
-<hr>
-<p>
-
-or:
-<p>
-
-This specifies that the messenger RNA sequence for the gene is constructed by 
-joining several sections of code, many of which are in other entries in
-this database.
+<p><b>coderet</b> extracts the coding nucleotide sequence (CDS), messenger RNA nucleotide sequence (mRNA) and translations specified by the feature tables of the input sequence(s).  If the sequences to be extracted are in other entries of that database, they are automatically fetched and incorporated correctly into the output.</p>
+<p>For each input sequence, an output sequence file is written containing any CDS, mRNA and protein translation sequences from the input feature table. Optionally, the CDS, mRNA, translated protein sequence and non-coding nucleotide sequence regions may be written to separate files.</p>
 
 
-<p>
-<hr>
-<pre>
-FT   mRNA            join(M88628.1:1006..1318,M88629.1:221..342,
-FT                   M88630.1:101..223,M88631.1:46..258,M88632.1:104..172,
-FT                   M88633.1:387..503,M88634.1:51..272,M88635.1:303..564,
-FT                   M88635.1:849..1020,M88636.1:282..375,M88637.1:39..253,
-FT                   M88638.1:91..241,M88639.1:168..377,M88640.1:627..3732,
-FT                   M88641.1:158..311,M88642.1:1051..1263,M88642.1:1550..1778,
-FT                   M88642.1:1986..2168,M88642.1:3904..4020,
-FT                   M88642.1:4627..4698,M88643.1:39..124,M88644.1:42..197,
-FT                   M88645.1:542..686,M88646.1:75..223,M88647.1:109..285,
-FT                   253..2211)
-</pre>
-<hr>
-<p>
 
-
-or:
-<p>
-
-This specifies that the translation of the coding region is as follows.
-
-<p>
-<hr>
-<pre>
-FT                   /translation="MAQDSVDLSCDYQFWMQKLSVWDQASTLETQQDTCLHVAQFQEFL
-FT                   RKMYEALKEMDSNTVIERFPTIGQLLAKACWNPFILAYDESQKILIWCLCCLINKEPQN
-FT                   SGQSKLNSWIQGVLSHILSALRFDKEVALFTQGLGYAPIDYYPGLLKNMVLSLASELRE
-FT                   NHLNGFNTQRRMAPERVASLSRVCVPLITLTDVDPLVEALLICHGREPQEILQPEFFEA
-FT                   VNEAILLKKISLPMSAVVCLWLRHLPSLEKAMLHLFEKLISSERNCLRRIECFIKDSSL
-FT                   PQAACHPAIFRVDEMFRCALLETDGALEIIATIQVFTQCFVEALEKASKQLRFALKTYF
-FT                   PYTSPSLAMVLLQDPQDIPRGHWLQTLKHISELLREAVEDQTHGSCGGPFESWFLFIHF
-FT                   GGWAEMVAEQLLMSAAEPPTALLWLLAFYYGPRDGRQQRAQTMVQVKAVLGHLLAMSRS
-FT                   SSLSAQDLQTVAGQGTDTDLRAPAQQLIRHLLLNFLLWAPGGHTIAWDVITLMAHTAEI
-FT                   THEIIGFLDQTLYRWNRLGIESPRSEKLARELLKELRTQV"
-</pre>
-<hr>
-<p>
-
-It is often a tedious and error-prone job to extract the several
-sections of these sequences from the database entries and to join them together
-to construct the indicated finished sequence. 
-<p>
-
-<b>coderet</b> does this job for you.
-<p>
-
-You specify the sequence containing the feature table and it extracts
-the required CDS, mRNA and/or protein sequences specified by this
-feature table.  If any sequences are in other entries of that database,
-they are automatically fetched and incorporated correctly into the final
-sequence. 
-
-<p>
-
-The translations are not made from the coding sequence, they are extracted
-directly from the translation sequence held in the feature table. 
 
 
 
@@ -154,7 +75,7 @@ the input sequence, the type of feature being output (i.e.  <b>cds</b>,
 <b>mrna</b>, <b>pro</b>) and a unique ordinal number for this type to
 distinguish it from others in this sequence.  The name, type and number
 of separated by underscore characters.  Thus the second CDS feature in
-the sequence 'HSXYZ' would be named 'HSXYZ_cds_2'. 
+the sequence 'A12345' would be named 'A12345_cds_2'. 
 
 <p>
 
@@ -174,8 +95,48 @@ None.
     Notes
 </H2>
 
-The translations are not made from the coding sequence, they are extracted
-directly from the translation sequence held in the feature table. 
+<p>One or more of CDS, mRNA, translation or non-coding regions can be excluded from output with the appropriate qualifiers; "no" is prepended to the qualifier name, for example <tt>-nocds</tt> would exclude the coding sequence.</p>
+
+<p>The translations are not made from the coding sequence, they are extracted directly from the translation sequence held in the feature table.</p>
+
+
+<p>The regions of the feature table that concern us are shown below.</p>
+
+<p>This specifies that the coding sequence for the gene is constructed by joining several sections of code, many of which are in other entries in this database:</p>
+<pre>
+FT   CDS             join(U21925.1:818..987,U21926.1:258..420,
+FT                   U21927.1:428..520,U21928.1:196..336,U21929.1:279..415,
+FT                   U21930.1:895..1014,516..708)
+</pre>
+<p>This specifies that the messenger RNA sequence for the gene is constructed by joining several sections of code, many of which are in other entries in this database.</p>
+<pre>
+FT   mRNA            join(M88628.1:1006..1318,M88629.1:221..342,
+FT                   M88630.1:101..223,M88631.1:46..258,M88632.1:104..172,
+FT                   M88633.1:387..503,M88634.1:51..272,M88635.1:303..564,
+FT                   M88635.1:849..1020,M88636.1:282..375,M88637.1:39..253,
+FT                   M88638.1:91..241,M88639.1:168..377,M88640.1:627..3732,
+FT                   M88641.1:158..311,M88642.1:1051..1263,M88642.1:1550..1778,
+FT                   M88642.1:1986..2168,M88642.1:3904..4020,
+FT                   M88642.1:4627..4698,M88643.1:39..124,M88644.1:42..197,
+FT                   M88645.1:542..686,M88646.1:75..223,M88647.1:109..285,
+FT                   253..2211)
+</pre>
+<p>This specifies that the translation of the coding region is as follows:</p>
+<pre>
+FT                   /translation="MAQDSVDLSCDYQFWMQKLSVWDQASTLETQQDTCLHVAQFQEFL
+FT                   RKMYEALKEMDSNTVIERFPTIGQLLAKACWNPFILAYDESQKILIWCLCCLINKEPQN
+FT                   SGQSKLNSWIQGVLSHILSALRFDKEVALFTQGLGYAPIDYYPGLLKNMVLSLASELRE
+FT                   NHLNGFNTQRRMAPERVASLSRVCVPLITLTDVDPLVEALLICHGREPQEILQPEFFEA
+FT                   VNEAILLKKISLPMSAVVCLWLRHLPSLEKAMLHLFEKLISSERNCLRRIECFIKDSSL
+FT                   PQAACHPAIFRVDEMFRCALLETDGALEIIATIQVFTQCFVEALEKASKQLRFALKTYF
+FT                   PYTSPSLAMVLLQDPQDIPRGHWLQTLKHISELLREAVEDQTHGSCGGPFESWFLFIHF
+FT                   GGWAEMVAEQLLMSAAEPPTALLWLLAFYYGPRDGRQQRAQTMVQVKAVLGHLLAMSRS
+FT                   SSLSAQDLQTVAGQGTDTDLRAPAQQLIRHLLLNFLLWAPGGHTIAWDVITLMAHTAEI
+FT                   THEIIGFLDQTLYRWNRLGIESPRSEKLARELLKELRTQV"
+</pre>
+
+
+
 
 <H2>
     References

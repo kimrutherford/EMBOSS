@@ -5,20 +5,19 @@
 
 Function
 
-   Protein pattern search after translation
+   Search for patterns in protein sequences (translated)
 
 Description
 
-   fuzztran uses PROSITE style protein patterns to search nucleic acid
-   sequences translated in the specified frame(s).
-
-   Patterns are specifications of a (typically short) length of sequence
-   to be found. They can specify a search for an exact sequence or they
-   can allow various ambiguities, matches to variable lengths of sequence
-   and repeated subsections of the sequence.
-
-   fuzztran intelligently selects the optimum searching algorithm to use,
-   depending on the complexity of the search pattern specified.
+   fuzztran searches for a specified PROSITE-style pattern in nucleic
+   acid sequences that are first translated to protein in the specified
+   frame(s) with a specified genetic code. Such patterns are
+   specifications of a (typically short) length of sequence to be found.
+   They can specify a search for an exact sequence or they can allow
+   various ambiguities, matches to variable lengths of sequence and
+   repeated subsections of the sequence. One or more nucleotide sequences
+   are read from file. The output is a standard EMBOSS report file that
+   includes data such as location and score of any matches.
 
 Usage
 
@@ -26,7 +25,7 @@ Usage
 
 
 % fuzztran -opt 
-Protein pattern search after translation
+Search for patterns in protein sequences (translated)
 Input nucleotide sequence(s): tembl:Z46957
 Search pattern: RA
 Translation frames
@@ -156,14 +155,16 @@ Command line arguments
    -raccshow2          boolean    Show accession number in the report
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
+   -rstrandshow2       boolean    Show the nucleotide strand in the report
    -rusashow2          boolean    Show the full USA in the report
    -rmaxall2           integer    Maximum total hits to report
    -rmaxseq2           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -371,7 +372,7 @@ Output file format
 
 ########################################
 # Program: fuzztran
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: fuzztran
 #    -options
 #    -sequence tembl:Z46957
@@ -393,16 +394,26 @@ Output file format
 #
 #=======================================
 
-  Start     End   Score Pattern_name Mismatch  Frame PStart   PEnd Translation
-     97     102       2 pattern1            .      1     33     34 RA
-    133     138       2 pattern1            .      1     45     46 RA
-    421     426       2 pattern1            .      1    141    142 RA
-    625     630       2 pattern1            .      1    209    210 RA
-    835     840       2 pattern1            .      1    279    280 RA
-    919     924       2 pattern1            .      1    307    308 RA
-    227     232       2 pattern1            .      2     76     77 RA
-    752     757       2 pattern1            .      2    251    252 RA
-     72      77       2 pattern1            .      3     24     25 RA
+  Start     End  Strand   Score Pattern_name Mismatch  Frame PStart   PEnd Tran
+slation
+     97     102       +       2 pattern1            .      1     33     34 RA
+
+    133     138       +       2 pattern1            .      1     45     46 RA
+
+    421     426       +       2 pattern1            .      1    141    142 RA
+
+    625     630       +       2 pattern1            .      1    209    210 RA
+
+    835     840       +       2 pattern1            .      1    279    280 RA
+
+    919     924       +       2 pattern1            .      1    307    308 RA
+
+    227     232       +       2 pattern1            .      2     76     77 RA
+
+    752     757       +       2 pattern1            .      2    251    252 RA
+
+     72      77       +       2 pattern1            .      3     24     25 RA
+
 
 #---------------------------------------
 #---------------------------------------
@@ -575,22 +586,26 @@ Known bugs
 
 See also
 
-    Program name                         Description
-   antigenic      Finds antigenic sites in proteins
-   digest         Protein proteolytic enzyme or reagent cleavage digest
-   dreg           Regular expression search of a nucleotide sequence
-   epestfind      Finds PEST motifs as potential proteolytic cleavage sites
-   fuzznuc        Nucleic acid pattern search
-   fuzzpro        Protein pattern search
-   helixturnhelix Report nucleic acid binding motifs
-   marscan        Finds MAR/SAR sites in nucleic sequences
-   oddcomp        Find protein sequence regions with a biased composition
-   patmatdb       Search a protein sequence with a motif
-   patmatmotifs   Search a PROSITE motif database with a protein sequence
-   pepcoil        Predicts coiled coil regions
-   preg           Regular expression search of a protein sequence
-   pscan          Scans proteins using PRINTS
-   sigcleave      Reports protein signal cleavage sites
+   Program name Description
+   antigenic Finds antigenic sites in proteins
+   digest Reports on protein proteolytic enzyme or reagent cleavage sites
+   dreg Regular expression search of nucleotide sequence(s)
+   epestfind Finds PEST motifs as potential proteolytic cleavage sites
+   fuzznuc Search for patterns in nucleotide sequences
+   fuzzpro Search for patterns in protein sequences
+   helixturnhelix Identify nucleic acid-binding motifs in protein
+   sequences
+   marscan Finds matrix/scaffold recognition (MRS) signatures in DNA
+   sequences
+   oddcomp Identify proteins with specified sequence word composition
+   patmatdb Searches protein sequences with a sequence motif
+   patmatmotifs Scan a protein sequence with motifs from the PROSITE
+   database
+   pepcoil Predicts coiled coil regions in protein sequences
+   preg Regular expression search of protein sequence(s)
+   pscan Scans protein sequence(s) with fingerprints from the PRINTS
+   database
+   sigcleave Reports on signal cleavage sites in a protein sequence
 
    Other EMBOSS programs allow you to search for regular expression
    patterns but may be less easy for the user who has never used regular

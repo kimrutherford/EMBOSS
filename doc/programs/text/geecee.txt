@@ -5,16 +5,14 @@
 
 Function
 
-   Calculates fractional GC content of nucleic acid sequences
+   Calculate fractional GC content of nucleic acid sequences
 
 Description
 
-   This calculates the fraction of G+C bases of the input nucleic acid
-   sequence(s).
-
-   It reads in nucleic acid sequences, sums the number of 'G' and 'C'
-   bases and writes out the result as the fraction (in the interval 0.0
-   to 1.0) of the length of the whole sequence.
+   geecee calculates the fraction of G+C bases of the input nucleic acid
+   sequence(s). It sums the number of G and C bases in the input
+   sequence(s) and writes the result to file as the fraction (in the
+   interval 0.0 to 1.0) of the length of the whole sequence.
 
 Usage
 
@@ -22,7 +20,7 @@ Usage
 
 
 % geecee tembl:L46634 
-Calculates fractional GC content of nucleic acid sequences
+Calculate fractional GC content of nucleic acid sequences
 Output file [l46634.geecee]: 
 
    Go to the input files for this example
@@ -60,8 +58,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -216,11 +215,13 @@ Known bugs
 
 See also
 
-   Program name         Description
-   cpgplot      Plot CpG rich areas
-   cpgreport    Reports all CpG rich regions
-   newcpgreport Report CpG rich areas
-   newcpgseek   Reports CpG rich regions
+   Program name Description
+   cpgplot Identify and plot CpG islands in nucleotide sequence(s)
+   cpgreport Identify and report CpG-rich regions in nucleotide
+   sequence(s)
+   newcpgreport Identify CpG islands in nucleotide sequence(s)
+   newcpgseek Identify and report CpG-rich regions in nucleotide
+   sequence(s)
 
 Author(s)
 

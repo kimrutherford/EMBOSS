@@ -1,4 +1,4 @@
-/* $Id: plbuf.c,v 1.4 2007/05/21 15:43:11 ajb Exp $
+/* $Id: plbuf.c,v 1.5 2008/01/14 15:04:01 ajb Exp $
 
     Handle plot buffer.
 
@@ -913,7 +913,7 @@ wr_command(PLStream *pls, U_CHAR c)
         pls->plbuf_buffer_size += pls->plbuf_buffer_grow;
 
         if (pls->verbose)
-            printf("Growing buffer to %d KB\n", pls->plbuf_buffer_size / 1024);
+            printf("Growing buffer to %d KB\n", (int)(pls->plbuf_buffer_size / 1024));
         if ((pls->plbuf_buffer = realloc(pls->plbuf_buffer, pls->plbuf_buffer_size)) == NULL) 
             plexit("plbuf wr_data:  Plot buffer grow failed");
     }

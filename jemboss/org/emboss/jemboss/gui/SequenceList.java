@@ -24,10 +24,11 @@ package org.emboss.jemboss.gui;
 import java.awt.*;
 import java.io.*;
 import java.util.*;
+import java.util.prefs.Preferences;
+
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
-import javax.swing.border.*;
 import java.awt.event.*;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -50,7 +51,7 @@ import org.emboss.jemboss.programs.RunEmbossApplication2;
 * fields of applications.
 *
 */
-public class SequenceList extends JFrame
+public class SequenceList extends JFrame implements TableModelListener
 {
 
   /** drag and drop table containing the list of sequences */
@@ -58,10 +59,22 @@ public class SequenceList extends JFrame
   /** model for the sequence table */
   private SequenceListTableModel seqModel;
   /** select to save the sequence list between sessions */
-  private JCheckBoxMenuItem storeSeqList;
-
+  protected static JCheckBoxMenuItem storeSeqList;
   final Cursor cbusy = new Cursor(Cursor.WAIT_CURSOR);
   final Cursor cdone = new Cursor(Cursor.DEFAULT_CURSOR);
+  final boolean withSoap;
+  final JembossParams mysettings;
+  Preferences myPreferences;
+  
+  protected static JCheckBoxMenuItem getSeqLength;
+  private final static String GET_SEQUENCE_LENGTH_AUTO ="GET_SEQUENCE_LENGTH_AUTOMATICALLY"; 
+  private final static String STORE_SEQUENCE_LIST ="STORE_SEQUENCE_LIST";
+  // Keys for this frame's preferences
+  private static final String WINDOW_X_KEY = "WINDOW_X";
+  private static final String WINDOW_Y_KEY = "WINDOW_Y";
+  private static final String WINDOW_WIDTH_KEY = "WINDOW_WIDTH";
+  private static final String WINDOW_HEIGHT_KEY = "WINDOW_HEIGHT";
+
 
   /**
   *
@@ -72,7 +85,28 @@ public class SequenceList extends JFrame
   public SequenceList(final boolean withSoap,final JembossParams mysettings)
   {
     super("Sequence List");
+    this.withSoap = withSoap;
+    this.mysettings = mysettings;
+    myPreferences = Preferences.userNodeForPackage(SequenceList.class);
     setSize(400,155);
+    getSeqLength = new JCheckBoxMenuItem("Get sequence lengths automatically");
+    if(myPreferences.getBoolean(GET_SEQUENCE_LENGTH_AUTO, false))
+        getSeqLength.setSelected(true);
+    getSeqLength.addItemListener(new ItemListener(){
+        public void itemStateChanged(ItemEvent e) {
+            myPreferences.putBoolean(GET_SEQUENCE_LENGTH_AUTO,
+                    getSeqLength.isSelected());
+        }
+    });
+    storeSeqList = new JCheckBoxMenuItem("Save Sequence List");
+    if(myPreferences.getBoolean(STORE_SEQUENCE_LIST, false))
+        storeSeqList.setSelected(true);
+    storeSeqList.addItemListener(new ItemListener(){
+        public void itemStateChanged(ItemEvent e) {
+            myPreferences.putBoolean(STORE_SEQUENCE_LIST,
+                    isStoreSequenceList());
+        }
+    });
     seqModel = new SequenceListTableModel();
     table = new DragJTable(seqModel);
     table.setModel(seqModel);
@@ -112,7 +146,7 @@ public class SequenceList extends JFrame
         String fileName = (String)table.getValueAt(nrow,
                 table.convertColumnIndexToView(SequenceListTableModel.COL_NAME));
 
-        SequenceData row = (SequenceData)seqModel.modelVector.elementAt(nrow);
+        SequenceData row = (SequenceData)SequenceListTableModel.modelVector.elementAt(nrow);
 
         if(!(row.s_remote.booleanValue()))
           DragTree.showFilePane(fileName,mysettings);        //local file
@@ -122,105 +156,10 @@ public class SequenceList extends JFrame
     });
     fileMenu.add(openMenuItem);
 
-    JMenuItem ajaxSeq = new JMenuItem("Calculate Sequence Attributes");
-    ajaxSeq.addActionListener(new ActionListener()
-    {
-      public void actionPerformed(ActionEvent e)
-      {
-
-        int row = table.getSelectedRow();
-        String fn = table.getFileName(row);
-
-        if(!fn.equals("") && fn!=null)
-        {
-          setCursor(cbusy);
-          if(table.isListFile(row).booleanValue())
-            fn = "list::"+fn;
-        
-          String fc = AjaxUtil.getFileOrDatabaseForAjax(fn,
-                      BuildProgramMenu.getDatabaseList(),
-                      null,withSoap);
-        
-          boolean ok = false;
-          int ajaxLength=0;
-          float ajaxWeight;
-          boolean ajaxProtein;
-
-          if(!withSoap && fc!=null)    //Ajax without SOAP
-          {
-            if(mysettings.isCygwin())
-            {
-              ajaxLength = cygwinSeqAttr(fc,mysettings);
-              if(ajaxLength > -1)
-                ok = true;
-            }
-            else
-            {
-              Ajax aj = new Ajax();
-              ok = aj.seqType(fc);
-              if(ok)
-              {
-                ajaxLength  = aj.length;
-                ajaxWeight  = aj.weight;
-                ajaxProtein = aj.protein;
-              }
-            }
-
-          }
-          else if(fc!=null)    //Ajax with SOAP
-          {
-            try
-            {  
-              CallAjax ca = new CallAjax(fc,"sequence",mysettings);
-              if(ca.getStatus().equals("0"))
-              {
-                ajaxLength  = ca.getLength();
-                ajaxWeight  = ca.getWeight();
-                ajaxProtein = ca.isProtein();
-                ok = true;
-              }
-            }
-            catch (JembossSoapException eae)
-            {
-              System.out.println("Call to Ajax library failed");
-              setCursor(cdone);
-            }
-          }
-
-          if(!ok && fc!=null)                          //Ajax failed
-          {
-            if( mysettings.getServicePasswdByte()!=null ||
-                mysettings.getUseAuth() == false )
-            {
-              JOptionPane.showMessageDialog(null,
-                     "Sequence not found!", "Error Message",
-                     JOptionPane.ERROR_MESSAGE);
-            }
-            else 
-            {
-              AuthPopup ap = new AuthPopup(mysettings,null);
-              ap.setBottomPanel();
-              ap.setSize(380,170);
-              ap.pack();
-              ap.setVisible(true);
-            }
-          }
-          else
-          {
-            seqModel.setValueAt(new Integer(1),row,
-                      SequenceListTableModel.COL_BEG);
-            seqModel.setValueAt(new Integer(ajaxLength),row,
-                      SequenceListTableModel.COL_END);
-            table.repaint();
-          }
-          setCursor(cdone);
-        }
-      }
-    });
-    toolMenu.add(ajaxSeq);
+    toolMenu.add(getSeqLength);
 
 
-    JMenuItem addSeq = new JMenuItem("Add Sequence");
+    JMenuItem addSeq = new JMenuItem("Add sequence");
     addSeq.addActionListener(new ActionListener()
     {
       public void actionPerformed(ActionEvent e)
@@ -233,7 +172,7 @@ public class SequenceList extends JFrame
     });
     toolMenu.add(addSeq);
 
-    JMenuItem deleteSeq = new JMenuItem("Delete Sequence");
+    JMenuItem deleteSeq = new JMenuItem("Delete sequence");
     deleteSeq.addActionListener(new ActionListener()
     {
       public void actionPerformed(ActionEvent e)
@@ -248,7 +187,7 @@ public class SequenceList extends JFrame
     toolMenu.add(deleteSeq);
  
 
-    JMenuItem reset = new JMenuItem("Remove All Sequences");
+    JMenuItem reset = new JMenuItem("Remove all sequences");
     reset.addActionListener(new ActionListener()
     {
       public void actionPerformed(ActionEvent e)
@@ -261,14 +200,21 @@ public class SequenceList extends JFrame
 
     toolMenu.addSeparator();
 
-    storeSeqList = new JCheckBoxMenuItem("Save Sequence List");
     File fseq = new File(System.getProperty("user.home")
                            + System.getProperty("file.separator")
                            + ".jembossSeqList");
-    if(fseq.canRead())
-      storeSeqList.setSelected(true);
-    else
+    if (!fseq.exists()){
+    	try {
+			fseq.createNewFile();
+		} catch (IOException e1) {
+			// 
+		}
+    }
+    if(!fseq.canWrite())
+    {
       storeSeqList.setSelected(false);
+      storeSeqList.setEnabled(false);
+    }
     toolMenu.add(storeSeqList);
 
     fileMenu.addSeparator();
@@ -312,22 +258,42 @@ public class SequenceList extends JFrame
     });
     helpMenu.add(fmh);
     menuPanel.add(helpMenu);
+    table.getModel().addTableModelListener(this);
+    setBounds();
   }
-
+  
+  
+  private void setBounds(){
+      int x = myPreferences.getInt(WINDOW_X_KEY, 10);
+      int y = myPreferences.getInt(WINDOW_Y_KEY, 10);
+      int width = myPreferences.getInt(WINDOW_WIDTH_KEY, 400);
+      int height = myPreferences.getInt(WINDOW_HEIGHT_KEY, 200);
+      this.setBounds(x,y,width, height);
+  }
+  
+  public void saveBounds(){
+      myPreferences.putInt(WINDOW_X_KEY, getX());
+      myPreferences.putInt(WINDOW_Y_KEY, getY());
+      myPreferences.putInt(WINDOW_WIDTH_KEY, getWidth());
+      myPreferences.putInt(WINDOW_HEIGHT_KEY, getHeight());
+  }
+  
   /**
-  *
-  * Look for first set to default in the table.
-  * @return 	index to row
-  *
-  */
-  private int getDefaultRow()
+     * 
+     * Look for first set to default in the table.
+     * 
+     * @return index to row
+     * 
+     */
+  private int getDefaultRow(int h)
   {
     int nrow = seqModel.getRowCount();
+    int j = 0;
     for(int i =0;i<nrow;i++)
     {
       Boolean isDef = (Boolean)seqModel.getValueAt(i,
                         SequenceListTableModel.COL_DEF);
-      if(isDef.booleanValue())
+      if(isDef.booleanValue() && (j++ == h) )
         return i;
     }
     return -1;
@@ -363,15 +329,45 @@ public class SequenceList extends JFrame
     return Integer.parseInt(stok.nextToken().trim());
   }
 
+
+  /**
+   * Returns length of the inputs sequence, fc,
+   * executes the infoseq application to retrieve the length
+   * @param fc is the input sequence
+   * @param mysettings is the jemboss configuration parameters
+   * @return length of the input sequence
+ */
+public static int getSeqAttr(String fc, JembossParams mysettings)
+  {
+
+    String[] envp = BuildProgramMenu.getEnvp();
+    String command = mysettings.getEmbossBin().concat(
+                "infoseq -only -type -length -nohead -auto "+fc);
+    RunEmbossApplication2 rea = new RunEmbossApplication2(command,envp,null);
+    rea.waitFor();
+
+    String stdout = rea.getProcessStdout();
+    if(stdout.trim().equals(""))
+      return -1;
+
+    StringTokenizer stok = new StringTokenizer(stdout,"\n ");
+    int l=0;
+    while (stok.hasMoreElements()){
+    stok.nextToken();
+    l += Integer.parseInt(stok.nextToken().trim());
+    }
+    return l;
+  }
+
   /**
   *
   * Get the default Sequence name
   * @return 	default sequence name or null if no default 
   *
   */
-  public String getDefaultSequenceName()
+  public String getDefaultSequenceName(int h)
   {
-    int ndef = getDefaultRow();
+    int ndef = getDefaultRow(h);
     if(ndef<0)
       return null;
 
@@ -408,16 +404,105 @@ public class SequenceList extends JFrame
     return seqModel.getSequenceData(nrow);
   }
 
+  private void getSequenceLength(){
+      int row = table.getSelectedRow();
+      String fileOrEntryName = (String)seqModel.getValueAt(row,
+                      SequenceListTableModel.COL_NAME);
+
+      if(fileOrEntryName!=null && !fileOrEntryName.equals("") && !(new File(fileOrEntryName).exists()))
+      {
+        setCursor(cbusy);
+      
+        String fc = AjaxUtil.getFileOrDatabaseForAjax(fileOrEntryName,
+                    BuildProgramMenu.getDatabaseList(),
+                    null,withSoap);
+      
+        boolean ok = false;
+        int length=0;
+
+        if(!withSoap && fc!=null)    //Ajax without SOAP
+        {
+          if(JembossParams.isCygwin())
+          {
+            length = cygwinSeqAttr(fc,mysettings);
+            if(length > -1)
+              ok = true;
+          }
+          else
+          {
+              length = getSeqAttr(fc, mysettings);
+              if (length > -1)
+                  ok = true;                
+          }
+        }
+        else if(fc!=null)    //Ajax with SOAP
+        {
+          try
+          {  
+            CallAjax ca = new CallAjax(fc,"sequence",mysettings);
+            if(ca.getStatus().equals("0"))
+            {
+              length  = ca.getLength();
+              ok = true;
+            }
+          }
+          catch (JembossSoapException eae)
+          {
+            System.out.println("Call to Ajax library failed");
+            setCursor(cdone);
+          }
+        }
+
+        if(!ok && fc!=null)                          //Ajax failed
+        {
+          if( mysettings.getServicePasswdByte()!=null ||
+              mysettings.getUseAuth() == false )
+          {
+            JOptionPane.showMessageDialog(null,
+                   "Sequence not found!", "Error Message",
+                   JOptionPane.ERROR_MESSAGE);
+          }
+          else 
+          {
+            AuthPopup ap = new AuthPopup(mysettings,null);
+            ap.setBottomPanel();
+            ap.setSize(380,170);
+            ap.pack();
+            ap.setVisible(true);
+          }
+        }
+        else
+        {
+          seqModel.setValueAt(new Integer(1),row,
+                    SequenceListTableModel.COL_BEG);
+          seqModel.setValueAt(new Integer(length),row,
+                    SequenceListTableModel.COL_END);
+          seqModel.fireTableDataChanged();
+        }
+        setCursor(cdone);
+      }    
+  }
+  
   /**
   *
-  * Determines if a sequence list has been stored
+  * Determines whether the 'store sequence list' menu item selected
   * ("~/.jembossSeqList")
-  * @return 	true if a sequence list has been stored
+  * @return 	true if the menu item was selected
   *
   */
   public boolean isStoreSequenceList()
   {
     return storeSeqList.isSelected();
+  }
+  
+  public void tableChanged(TableModelEvent e) {
+      if (getSeqLength.isSelected() == false)
+          return;
+      int row = e.getFirstRow();
+      int column = e.getColumn();
+      if ( row == -1 || column == -1 )
+          return;
+      getSequenceLength();
   }
 
 }
@@ -473,11 +558,6 @@ class DragJTable extends JTable implements DragGestureListener,
   public void dragOver(DragSourceDragEvent e) {}
   public void dropActionChanged(DragSourceDragEvent e) {}
 
-  public String getFileName(int row)
-  {
-    return (String)seqModel.getValueAt(row,
-                  SequenceListTableModel.COL_NAME);
-  }
 
   /**
   *
@@ -486,7 +566,7 @@ class DragJTable extends JTable implements DragGestureListener,
   * @return 	true if row contains a list file
   *
   */
-  public Boolean isListFile(int row)
+  protected Boolean isListFile(int row)
   {
     return (Boolean)seqModel.getValueAt(row,
                   SequenceListTableModel.COL_LIST);
@@ -543,7 +623,6 @@ class DragJTable extends JTable implements DragGestureListener,
         SequenceData seqData = (SequenceData)
            t.getTransferData(SequenceData.SEQUENCEDATA);
 
-        String seqName = seqData.s_name;
 
         insertData(seqModel,e.getLocation(),seqData.s_name,
                    seqData.s_beg,seqData.s_end,
@@ -574,7 +653,7 @@ class DragJTable extends JTable implements DragGestureListener,
                          Boolean lis, Boolean def, Boolean bremote)
   {
     int row = rowAtPoint(ploc);
-    seqModel.modelVector.insertElementAt(new SequenceData(fileName,
+    SequenceListTableModel.modelVector.insertElementAt(new SequenceData(fileName,
                                    sbeg,send,lis,def,bremote),row);
 
     tableChanged(new TableModelEvent(seqModel, row+1, row+1,
@@ -843,8 +922,11 @@ class SequenceListTableModel extends AbstractTableModel
     
     switch(nCol)
     {
-      case COL_NAME: 
-        row.s_name = svalue;
+      case COL_NAME:
+          if (!row.s_name.equals(svalue)){
+              row.s_name = svalue;
+              this.fireTableCellUpdated(nRow, nCol);              
+          }
         break;
       case COL_BEG: 
         row.s_beg = svalue;

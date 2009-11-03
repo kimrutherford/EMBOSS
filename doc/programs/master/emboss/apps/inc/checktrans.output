@@ -32,8 +32,8 @@ DQPGQGVADAAPWLGRARGAPAPVAGSDEAARADPEDRSGVAGKRAVRLSDPGRPEQ
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ##gff-version 2.0
-##date 2006-07-15
+##date 2007-07-15
 ##Type Protein PAAMIR_1
-PAAMIR_1	checktrans	misc_feature	278	634	0.000	+	.	Sequence "PAAMIR_1.1"
+PAAMIR_1	checktrans	region	278	634	0.000	+	.	Sequence "PAAMIR_1.1"
 </pre>
 </td></tr></table><p>

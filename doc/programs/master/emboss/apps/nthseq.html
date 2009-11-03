@@ -21,39 +21,7 @@ nthseq
 </H2>
 
 
-In EMBOSS, when an application has to write out many sequences, the
-normal style is to write them all into one file containing multiple
-sequences. 
-
-<p>
-This default behaviour can be changed by using the qualifier '-ossingle'
-which writes many sequences into many files, each containing one
-sequence.  
-
-<p>
-
-The program <a href="seqretsplit.html">seqretsplit</a> will take a file
-containing many sequences and will output many files, each containing
-one sequence.  However you have no choice over the naming of the files -
-they are named after the ID name fo the sequence they contain. 
-
-<p>
-
-If, however you have the situation where you have a file containing
-multiple sequences and you wish to extract one of them, then this
-application may be useful. 
-
-<p>
-
-<b>nthseq</b> allows you to specify the name of the output file, so you
-may find that it is useful to include this program in scripts where you
-need to be able to specify the name of the resulting sequence files you
-create. 
-
-<p>
-
-This application extracts the indicated sequence from a multiple set of
-sequences and writes it out. 
+<p><b>nthseq</b> writes to file a single sequence from an input stream of sequences. The sequence is specified by number, which is the order it appears in the input file. The output file name may be specified.</p>
 
 <H2>
     Usage
@@ -113,7 +81,12 @@ None.
     Notes
 </H2>
 
+<p>In EMBOSS, when an application has to write out many sequences, they are typically all written to a single file.  This default behaviour can be changed by using the qualifier <tt>-ossingle</tt> which forces each sequence to be written to its own file.</p>
 
+<p>The program <b>seqretsplit</b> will take a file containing many sequences and will output many files, each containing one sequence. However you have no choice over the naming of the files - they are named after the ID name fo the sequence they contain.</p>
+
+
+<p>
 It may be useful to use this application in a small script that extracts
 all sequences from a multiple sequence file and explicitly names the
 output files in the way that you require. 

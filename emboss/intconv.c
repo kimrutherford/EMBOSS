@@ -56,7 +56,7 @@ int main(int argc, char **argv)
 
     line = ajStrNew();
 
-    while(ajFileReadLine(inf, &line))
+    while(ajReadlineTrim(inf, &line))
     {
 	if(ajStrFindC(line,"int") == -1 && ajStrFindC(line,"long") == -1)
 	{

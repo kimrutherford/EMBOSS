@@ -91,9 +91,9 @@ int main(int argc, char **argv)
     mult = ajAcdGetGraphxy("graph");
     datafile  = ajAcdGetDatafile("datafile");
     llen = ajAcdGetInt("width");
-    iface  = ajAcdGetBool("interfaceplot");
-    octanol = ajAcdGetBool("octanolplot");
-    difference = ajAcdGetBool("differenceplot");
+    iface  = ajAcdGetBoolean("interfaceplot");
+    octanol = ajAcdGetBoolean("octanolplot");
+    difference = ajAcdGetBoolean("differenceplot");
 
     if(!octanol_getwhitewimbleydata(datafile,&matrix[0],&err[0],&matrix2[0],
 				    &err2[0]))
@@ -142,8 +142,8 @@ int main(int argc, char **argv)
 
     for(j=0;j<llen;j++)
     {
-	total += matrix[ajAZToInt(s1[j])];
-	total2 += matrix2[ajAZToInt(s1[j])];
+	total += matrix[ajBasecodeToInt(s1[j])];
+	total2 += matrix2[ajBasecodeToInt(s1[j])];
     }
 
     for(i=0;i<ilen-llen;i++)
@@ -181,10 +181,10 @@ int main(int argc, char **argv)
 	if(-total2 < min)
 	    min = -total2;
 
-	total -= matrix[ajAZToInt(s1[0])];
-	total += matrix[ajAZToInt(s1[llen])];
-	total2 -= matrix2[ajAZToInt(s1[0])];
-	total2 += matrix2[ajAZToInt(s1[llen])];
+	total -= matrix[ajBasecodeToInt(s1[0])];
+	total += matrix[ajBasecodeToInt(s1[llen])];
+	total2 -= matrix2[ajBasecodeToInt(s1[0])];
+	total2 += matrix2[ajBasecodeToInt(s1[llen])];
 
 
 	s1++;
@@ -243,7 +243,7 @@ static ajint octanol_getwhitewimbleydata(AjPFile file, float matrix[],
 
 
 
-    while(ajFileGets(file,&buffer))
+    while(ajReadline(file,&buffer))
     {
 	s1 = ajStrGetPtr(buffer);
 	if(*s1 == '#')			/* ignore lines */

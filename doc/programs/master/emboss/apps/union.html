@@ -19,17 +19,7 @@ union
     Description
 </H2>
 
-<b>union</b> reads in several sequences, concatenates them and writes
-them out as a single sequence.
-
-<p>
-
-It is most useful when the input sequences are specified in a List file. 
-The List file (file of sequence names) can be any set of sequences in
-files or database entries specified in the normal EMBOSS USA (which can
-include the spcification of sub-regions of the sequence, eg. 
-'em:hsfau[20,55]').  Specifying several such subregions in a sequence or
-sequences allows you to enter disjoint sequences to be joined. 
+<p><b>union</b> reads in several sequences, concatenates them and writes them out as a single sequence.  The input is typically a list file containing references to multiple sequences or subsequences (regions of a sequence). Optionally, feature information will be used.</p>
 
 <H2>
     Usage
@@ -87,7 +77,7 @@ None.
     Notes
 </H2>
 
-None.
+<p><b>union</b> is most useful when the input sequences are specified in a "list file". A list file contain references to any number of sequences which are retrieved from some other file or database.  Each sequence reference is a Uniform Sequence Address (USA) which can include the specification of sub-regions of the sequence, eg. <tt>em:x65923[20:55]</tt>). Specifying several such subregions in a sequence or sequences allows you to enter disjoint sequences to be joined.</p>
 
 <H2>
     References

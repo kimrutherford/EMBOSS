@@ -1,5 +1,5 @@
 application: tmap [
-  documentation: "Displays membrane spanning regions"
+  documentation: "Predict and plot transmembrane segments in protein sequences"
   groups: "Protein:2D Structure"
 ]
 

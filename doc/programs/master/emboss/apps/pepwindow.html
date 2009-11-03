@@ -22,8 +22,15 @@ pepwindow
     Description
 </H2>
 
-<b>pepwindow</b> reads in a protein sequence and displays a graph of the
-classic Kyte &amp; Doolittle hydropathy plot of that protein. 
+<p><b>pepwindow</b> draws a classic Kyte & Doolittle hydropathy plot for a protein sequence.</p>
+
+
+
+<H2>
+Algorithm
+</H2>
+
+<p><b>pepwindow</b> calculates hydropathy in windows of a specified size over the input sequence.</p>
 
 <H2>
     Usage
@@ -159,7 +166,7 @@ J. Mol. Biol. 157, 105-132 (1982)
     Warnings
 </H2>
 
-None.
+<p>In calculating hydropathy, <b>pepwindow</b> can use any of the amino acid parameters from the database of "Nakai et al." which are now included in the database AAINDEX. Before running <b>pepwindow</b>, you must first extract the required data files from AAINDEX (see "Data Files" section).</p>
 
 <H2>
     Diagnostic Error Messages

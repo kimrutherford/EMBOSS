@@ -110,7 +110,7 @@ int main(int argc, char **argv)
     saltConc  = ajAcdGetFloat("saltconc");
     doThermo  = ajAcdGetToggle("thermo");
     isProduct = ajAcdGetToggle("product");
-    isRNA     = ajAcdGetBool("rna");
+    isRNA     = ajAcdGetBoolean("rna");
     doplot    = ajAcdGetToggle("plot");
 
     formamide = ajAcdGetFloat("formamide");
@@ -179,8 +179,9 @@ int main(int argc, char **argv)
 
 	dan_reportgc(seq, TabRpt,
 		     window,shift,formamide,mismatch,
-		     (ajint)prodLen,DNAConc,saltConc, temperature, isDNA,
-		     isProduct, doThermo, doplot, xa, ta, tpa, cga, &npoints);
+		     (ajint)prodLen,DNAConc,saltConc, temperature,
+		     isDNA, isProduct, doThermo, doplot,
+		     xa, ta, tpa, cga, &npoints);
 
 	if(doplot)
 	    dan_plotit(seq,xa,ta,npoints,begin,end, mult,
@@ -189,7 +190,7 @@ int main(int argc, char **argv)
 	dan_unfmall(xa, ta, tpa, cga);
 	ajStrDel(&strand);
 
-	if(!doplot)
+	if(report)
 	    ajReportWrite(report, TabRpt, seq);
 	ajFeattableDel(&TabRpt);
     }

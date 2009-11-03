@@ -37,9 +37,16 @@
 
 <tr>
 <td>-aadata</td>
-<td>Molecular weight data for amino acids</td>
+<td>Amino acid properties</td>
 <td>Data file</td>
 <td>Eamino.dat</td>
+</tr>
+
+<tr>
+<td>-mwdata</td>
+<td>Molecular weight data for amino acids</td>
+<td>Data file</td>
+<td>Emolwt.dat</td>
 </tr>
 
 <tr>
@@ -47,6 +54,13 @@
 <td>Include charge at N and C terminus</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
+</tr>
+
+<tr>
+<td>-mono</td>
+<td>Use monoisotopic weights</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
 </tr>
 
 </table>

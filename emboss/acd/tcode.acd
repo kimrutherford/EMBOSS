@@ -1,6 +1,6 @@
 application: tcode [
-  documentation: "Fickett TESTCODE statistic to identify
-                  protein-coding DNA"
+  documentation: "Identify protein-coding regions using
+                  Fickett TESTCODE statistic"
   groups: "Nucleic:Gene finding"
 ]
 
@@ -83,6 +83,7 @@ section: output [
     precision: "3"
     taglist: "str:Estimation"
     nullok: "$(plot)"
+    nulldefault: "$(plot)"
   ]
 
   xygraph: graph [

@@ -1,0 +1,104 @@
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequences]<br>(Parameter 1)</td>
+<td>Sequence set filename and optional format, or reference (input USA)</td>
+<td>Readable set of sequences</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-mode</td>
+<td>This option specifies whether to remove redundancy at a single threshold percentage sequence similarity or remove redundancy outside a range of acceptable threshold percentage similarity. All permutations of pair-wise sequence alignments are calculated for each set of input sequences in turn using the EMBOSS implementation of the Needleman and Wunsch global alignment algorithm. Redundant sequences are removed in one of two modes as follows: (i) If a pair of proteins achieve greater than a threshold percentage sequence similarity (specified by the user) the shortest sequence is discarded. (ii) If a pair of proteins have a percentage sequence similarity that lies outside an acceptable range (specified by the user) the shortest sequence is discarded.</td>
+<td><table><tr><td>1</td> <td><i>(Single threshold percentage sequence similarity)</i></td></tr><tr><td>2</td> <td><i>(Outside a range of acceptable threshold percentage similarities)</i></td></tr></table></td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-threshold</td>
+<td>This option specifies the percentage sequence identity redundancy threshold. The percentage sequence identity redundancy threshold determines the redundancy calculation. If a pair of proteins achieve greater than this threshold the shortest sequence is discarded.</td>
+<td>Any numeric value</td>
+<td>95.0</td>
+</tr>
+
+<tr>
+<td>-minthreshold</td>
+<td>This option specifies the percentage sequence identity redundancy threshold (lower limit). The percentage sequence identity redundancy threshold determines the redundancy calculation. If a pair of proteins have a percentage sequence similarity that lies outside an acceptable range the shortest sequence is discarded.</td>
+<td>Any numeric value</td>
+<td>30.0</td>
+</tr>
+
+<tr>
+<td>-maxthreshold</td>
+<td>This option specifies the percentage sequence identity redundancy threshold (upper limit). The percentage sequence identity redundancy threshold determines the redundancy calculation. If a pair of proteins have a percentage sequence similarity that lies outside an acceptable range the shortest sequence is discarded.</td>
+<td>Any numeric value</td>
+<td>90.0</td>
+</tr>
+
+<tr>
+<td>-gapopen</td>
+<td>The gap open penalty is the score taken away when a gap is created. The best value depends on the choice of comparison matrix. The default value assumes you are using the EBLOSUM62 matrix for protein sequences, and the EDNAFULL matrix for nucleotide sequences.</td>
+<td>Floating point number from 1.0 to 100.0</td>
+<td>10.0 for any sequence</td>
+</tr>
+
+<tr>
+<td>-gapextend</td>
+<td>The gap extension, penalty is added to the standard gap penalty for each base or residue in the gap. This is how long gaps are penalized. Usually you will expect a few long gaps rather than many short gaps, so the gap extension penalty should be lower than the gap penalty. An exception is where one or both sequences are single reads with possible sequencing errors in which case you would expect many single base gaps. You can get this result by setting the gap open penalty to zero (or very low) and using the gap extension penalty to control gap scoring.</td>
+<td>Floating point number from 0.0 to 10.0</td>
+<td>0.5 for any sequence</td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 2)</td>
+<td>Sequence set(s) filename and optional format (output USA)</td>
+<td>Writeable sequence(s)</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr>
+<td>[-redundantoutseq]<br>(Parameter 3)</td>
+<td>Sequence set(s) filename and optional format (output USA)</td>
+<td>Writeable sequence(s)</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-datafile</td>
+<td>This is the scoring matrix file used when comparing sequences. By default it is the file 'EBLOSUM62' (for proteins) or the file 'EDNAFULL' (for nucleic sequences). These files are found in the 'data' directory of the EMBOSS installation.</td>
+<td>Comparison matrix file in EMBOSS data path</td>
+<td>EBLOSUM62 for protein<br>EDNAFULL for DNA</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-feature</td>
+<td>Sequence feature information will be retained if this option is set.</td>
+<td>Toggle value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-keepredundant</td>
+<td>This option specifies whether to retain redundant sequences. If this option is set a file of redundant sequences is written.</td>
+<td>Toggle value Yes/No</td>
+<td>No</td>
+</tr>
+
+</table>

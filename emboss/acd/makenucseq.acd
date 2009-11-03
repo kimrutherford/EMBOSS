@@ -1,5 +1,5 @@
 application: makenucseq [
-  documentation: "Creates random nucleotide sequences"
+  documentation: "Create random nucleotide sequences"
   groups: "Edit"
 ]
 

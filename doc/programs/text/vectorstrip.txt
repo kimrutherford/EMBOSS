@@ -5,47 +5,20 @@
 
 Function
 
-   Strips out DNA between a pair of vector sequences
+   Removes vectors from the ends of nucleotide sequence(s)
 
 Description
 
-   vectorstrip is intended to be useful for stripping vector sequence
-   from the ends of sequences of interest. For example, if a fragment has
-   been cloned into a vector and then sequenced, the sequence may contain
-   vector data eg from the cloning polylinker at the 5' and 3' ends of
-   the sequence. vectorstrip will remove these contaminating regions and
-   output trimmed sequence ready for input into another application.
-
-   vectorstrip is suitable for use with low quality sequence data as it
-   can allow for mismatches between the sequence and the vector patterns
-   provided. You can specify the maximum level of mismatch expected.
-
-   Vector data can either be provided in a file or interactively. If
-   presented in a file, vectorstrip will search all input sequences with
-   all vectors listed in that file. The intention is that the user can
-   maintain a single file for use with vectorstrip, containing all the
-   linker sequences commonly used in the laboratory.
-
-   The two patterns for each vector are searched separately against the
-   sequence. Once the search is completed, each of the hits of the 5'
-   sequence is paired with each of the hits of the 3' sequence and the
-   resulting subsequences are output. For example, if the 5' sequence
-   matches the sequence from (a) position 30-60, and(b)position 70-100,
-   and the 3' sequence matches from 150-175, then two subsequences will
-   be output: from 61-149, and from 101-149. The lower the quality of the
-   sequence, the more likely multiple hits become if nonzero mismatches
-   are accepted.
-
-   Default behaviour is to report only the best matches between the
-   vector patterns and the sequence. This means that if you specify a
-   maximum mismatch level of 10%, but the vector patterns match the
-   sequence with zero mismatches, the search will stop and the program
-   will output only these "best" matches. If there are no perfect
-   matches, the program will try searching again allowing 1 mismatch,
-   then 2, and so on until either the patterns match the sequence or the
-   maximum specified mismatch level is exceeded. You can tell vectorstrip
-   to show all possible matches up to your specified maximum level, as
-   illustrated in the examples below.
+   vectorstrip reads one or more nucleotide sequences and writes them out
+   again but with any of a specified set of vector sequences removed from
+   the 5' and 3' termini. An output file with a summary of the results if
+   also written. The vector sequences to strip out are (typically)
+   provided in an input file. The pair of 5' and 3' vector sequences are
+   searched against each input sequence allowing a specified maximum
+   level of mismatches. Each 5' hit is paired with each 3' hit and the
+   resulting subsequences output. By default only the best match between
+   the vector patterns and each sequence are reported. Optionally, all
+   matches up to the specified maximum mismatch level are reported.
 
 Usage
 
@@ -53,7 +26,7 @@ Usage
 
 
 % vectorstrip @vecseqs.list 
-Strips out DNA between a pair of vector sequences
+Removes vectors from the ends of nucleotide sequence(s)
 Are your vector sequences in a file? [Y]: 
 Cloning vector definition file (optional): vectors
 Max allowed % mismatch [10]: 
@@ -120,8 +93,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -267,7 +241,43 @@ Data files
 
 Notes
 
-   None.
+   vectorstrip is intended for stripping vector sequence from the ends of
+   sequences of interest. For example, if a fragment has been cloned into
+   a vector and then sequenced, the sequence may contain vector data eg
+   from the cloning polylinker at the 5' and 3' ends of the sequence.
+   vectorstrip will remove these contaminating regions and output trimmed
+   sequence ready for input into another application.
+
+   vectorstrip is suitable for use with low quality sequence data as it
+   can allow for mismatches between the sequence and the vector patterns
+   provided. You can specify the maximum level of mismatch expected.
+
+   Vector data can either be provided in a file or interactively. If
+   presented in a file, vectorstrip will search all input sequences with
+   all vectors listed in that file. The intention is that the user can
+   maintain a single file for use with vectorstrip, containing all the
+   linker sequences commonly used in the laboratory.
+
+   The two patterns for each vector are searched separately against the
+   sequence. Once the search is completed, each of the hits of the 5'
+   sequence is paired with each of the hits of the 3' sequence and the
+   resulting subsequences are output. For example, if the 5' sequence
+   matches the sequence from (a) position 30-60, and(b)position 70-100,
+   and the 3' sequence matches from 150-175, then two subsequences will
+   be output: from 61-149, and from 101-149. The lower the quality of the
+   sequence, the more likely multiple hits become if nonzero mismatches
+   are accepted.
+
+   Default behaviour is to report only the best matches between the
+   vector patterns and the sequence. This means that if you specify a
+   maximum mismatch level of 10%, but the vector patterns match the
+   sequence with zero mismatches, the search will stop and the program
+   will output only these "best" matches. If there are no perfect
+   matches, the program will try searching again allowing 1 mismatch,
+   then 2, and so on until either the patterns match the sequence or the
+   maximum specified mismatch level is exceeded. You can tell vectorstrip
+   to show all possible matches up to your specified maximum level, as
+   illustrated in the examples below.
 
 References
 
@@ -304,34 +314,49 @@ Known bugs
 
 See also
 
-   Program name                         Description
-   biosed       Replace or delete sequence sections
-   codcopy      Reads and writes a codon usage table
-   cutseq       Removes a specified section from a sequence
-   degapseq     Removes gap characters from sequences
-   descseq      Alter the name or description of a sequence
-   entret       Reads and writes (returns) flatfile entries
+   Program name Description
+   aligncopy Reads and writes alignments
+   aligncopypair Reads and writes pairs from alignments
+   biosed Replace or delete sequence sections
+   codcopy Copy and reformat a codon usage table
+   cutseq Removes a section from a sequence
+   degapseq Removes non-alphabetic (e.g. gap) characters from sequences
+   descseq Alter the name or description of a sequence
+   entret Retrieves sequence entries from flatfile databases and files
    extractalign Extract regions from a sequence alignment
-   extractfeat  Extract features from a sequence
-   extractseq   Extract regions from a sequence
-   listor       Write a list file of the logical OR of two sets of sequences
-   makenucseq   Creates random nucleotide sequences
-   makeprotseq  Creates random protein sequences
-   maskfeat     Mask off features of a sequence
-   maskseq      Mask off regions of a sequence
-   newseq       Type in a short new sequence
-   noreturn     Removes carriage return from ASCII files
-   notseq       Exclude a set of sequences and write out the remaining ones
-   nthseq       Writes one sequence from a multiple set of sequences
-   pasteseq     Insert one sequence into another
-   revseq       Reverse and complement a sequence
-   seqret       Reads and writes (returns) sequences
-   seqretsplit  Reads and writes (returns) sequences in individual files
-   skipseq      Reads and writes (returns) sequences, skipping first few
-   splitter     Split a sequence into (overlapping) smaller sequences
-   trimest      Trim poly-A tails off EST sequences
-   trimseq      Trim ambiguous bits off the ends of sequences
-   union        Reads sequence fragments and builds one sequence
-   yank         Reads a sequence range, appends the full USA to a list file
+   extractfeat Extract features from sequence(s)
+   extractseq Extract regions from a sequence
+   featcopy Reads and writes a feature table
+   featreport Reads and writes a feature table
+   listor Write a list file of the logical OR of two sets of sequences
+   makenucseq Create random nucleotide sequences
+   makeprotseq Create random protein sequences
+   maskambignuc Masks all ambiguity characters in nucleotide sequences
+   with N
+   maskambigprot Masks all ambiguity characters in protein sequences with
+   X
+   maskfeat Write a sequence with masked features
+   maskseq Write a sequence with masked regions
+   newseq Create a sequence file from a typed-in sequence
+   nohtml Remove mark-up (e.g. HTML tags) from an ASCII text file
+   noreturn Remove carriage return from ASCII files
+   nospace Remove all whitespace from an ASCII text file
+   notab Replace tabs with spaces in an ASCII text file
+   notseq Write to file a subset of an input stream of sequences
+   nthseq Write to file a single sequence from an input stream of
+   sequences
+   pasteseq Insert one sequence into another
+   revseq Reverse and complement a nucleotide sequence
+   seqret Reads and writes (returns) sequences
+   seqretsplit Reads sequences and writes them to individual files
+   sizeseq Sort sequences by size
+   skipredundant Remove redundant sequences from an input set
+   skipseq Reads and writes (returns) sequences, skipping first few
+   splitter Split sequence(s) into smaller sequences
+   trimest Remove poly-A tails from nucleotide sequences
+   trimseq Remove unwanted characters from start and end of sequence(s)
+   trimspace Remove extra whitespace from an ASCII text file
+   union Concatenate multiple sequences into a single sequence
+   yank Add a sequence reference (a full USA) to a list file
 
 Author(s)

@@ -5,10 +5,10 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>pepcoil </b>
-Predicts coiled coil regions
+Predicts coiled coil regions in protein sequences
 Input protein sequence(s): <b>tsw:gcn4_yeast</b>
 Window size [28]: <b></b>
-Output file [gcn4_yeast.pepcoil]: <b></b>
+Output report [gcn4_yeast.pepcoil]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

@@ -22,34 +22,8 @@ seealso
 </H2>
 
 
-This program takes the name of an existing program in EMBOSS (or a
-program in one the associated EMBASSY packages) and gives a list of the
-programs which share some functionality with it. 
 
-<p>
-It does this by noting the functional groups that the program belongs to
-and reporting any programs which share those functional groups.
-<p>
-
-The functional groups of a program are set in the ACD file (this is the
-part of the program in the EMBOSS system which specifies the required
-parameters, some help on the parameters, the one-line description of the
-program, etc.) Normally the names of the groups are fairly specific,
-such as: "NUCLEIC COMPOSITION", resulting in the reporting of only a
-tightly restricted set of other programs also dealing with the analysis
-of "NUCLEIC COMPOSITION".  The '-explode' qualifier will increase the
-number of groups that the program belongs to by splitting the group name
-at selected points to produce such groups as: "NUCLEIC", "NUCLEIC
-COMPOSITION" and "COMPOSITION".  All programs with the exploded group
-names which also include "NUCLEIC" and "COMPOSITION" will now be
-reported.  The result of this qualifier is thus a report of a larger
-number of programs with a more tenuous link to the specified program. 
-In other words, use the '-explode' qualifier to decrease the specificity
-of the search. 
-
-<p>
-The groups that the program belongs to can be output by using the
-'-groups' qualifier. 
+<p><b>seealso</b> takes the name of an EMBOSS or EMBASSY program and returns a list of applications in the same functional group.  Application names and short descriptions are listed. Optionally, the output is written to an HTML table.</p>
 
 <H2>
     Usage
@@ -108,7 +82,11 @@ None.
 </H2>
 
 
-None.
+<p>The functional group of a program is set in its ACD file; this is an EMBOSS system file which specifies the application command-line interface such as required parameters, help on the parameters, one-line description of the program and so on.  Normally the names of the groups are fairly specific.  For example "NUCLEIC COMPOSITION" is a small group of applications for nucleotide sequence composition analysis.</p>
+
+<p>The <tt>-explode</tt> qualifier will increase the number of groups that the program retrieves by splitting the group name at selected points to produce such groups as: "NUCLEIC", "NUCLEIC COMPOSITION" and "COMPOSITION". All programs with the exploded group names which also include "NUCLEIC" and "COMPOSITION" will now be reported. The result of this qualifier is thus a report of a larger number of programs with a more tenuous link to the specified program. </p>
+
+<p>The groups that the program belongs to can be output by using the <tt>-groups</tt> qualifier. </p>
 
 <H2>
     References
@@ -121,8 +99,7 @@ None.
     Warnings
 </H2>
 
-
-None.
+<p>The (optional) HTML-formatted table output lacks the HTML document structures such as <HTML>, <BODY>, </BODY>, </HTML>. It is expected the table will be included in the middle of a larger HTML document.</p>
 
 <H2>
     Diagnostic Error Messages

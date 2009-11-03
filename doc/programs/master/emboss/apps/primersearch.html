@@ -21,20 +21,16 @@ primersearch
     Description
 </H2>
 
-<b>primersearch</b> reads in primer pairs from an input file and searches
-them against sequence(s) specified by the user. Each of the primers in
-a pair is searched against the sequence and potential amplimers are
-reported.
-<p>
+<p><b>primersearch</b> reads in primer pairs from an input file and searches them against DNA sequence(s) specified by the user. Each of the primers in a pair is searched against the sequence and potential amplimers are reported.  The output file is in the format of Whitehead <b>primer3_core</b> program.  The user can specify a maximum percent mismatch level; for example, 10% mismatch on a primer of length 20bp means that the program will classify a primer as matching a sequence if 18 of the 20 base pairs matches.  It will only report matches if both primers in the pair have a match in opposite orientations.</p>
 
-The user can specify a maximum percent mismatch level; for example,
-10% mismatch on a primer of length 20bp means that the program will
-classify a primer as matching a sequence if 18 of the 20 base pairs
-matches.
-<p>
 
-It will only report matches if both primers in the pair have a match in
-opposite orientations. 
+<H2>
+Algorithm
+</H2>
+
+<p>Each primer pair is specified in the input file by a name, followed by two primer sequences, primerA and primerB. The program first compares primerA to the forward strand and if it matches, primerB is compared to the reverse strand. The approach is then reversed, with the primerB being compared to the forward strand and primerA to the reverse. In this way all possible amplimers are reported.</p>
+
+
 
 <H2>
     Usage
@@ -102,19 +98,8 @@ None.
     Notes
 </H2>
 
-Every potential amplimer will be reported; if one primer matches the
-forward strand twice and the other matches the reverse strand only
-once, two potential amplimers are reported. If the reverse primer
-matches twice, four potential amplimers are reported.
-<p>
 
-Each primer pair consists of a name, followed by two primer sequences,
-primerA and primerB. The program first compares primerA to the forward
-strand and if it matches, primerB is compared to the reverse
-strand. The approach is then reversed, with the primerB being compared
-to the forward strand and primerA to the reverse. In this way all
-possible amplimers are reported.
-
+<p>Every potential amplimer will be reported; if one primer matches the forward strand twice and the other matches the reverse strand only once, two potential amplimers are reported. If the reverse primer matches twice, four potential amplimers are reported.</p>
 <H2>
     References
 </H2>
@@ -125,20 +110,7 @@ None.
     Warnings
 </H2>
 
-This program is slow.
-
-<br>
-Don't try searching all of EMBL!
-
-<br>
-It might not be sensible to search all of the human section of EMBL -
-in 2000, this would take a day to do with one primer pair.
-
-<br>
-It will take longer with more primer pairs.
-
-<br>
-It will take longer if you allow mismatches.
+<p>This program is processor-intensive.  You should probably not use it, for example, to search the whole of EMBL or even the human section of EMBL. It will take longer with more primer pairs and if mismatches are allowed.</p>
 
 
 <H2>

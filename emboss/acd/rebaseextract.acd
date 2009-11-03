@@ -1,9 +1,10 @@
 application: rebaseextract [
-  documentation: "Extract data from REBASE"
+  documentation: "Process the REBASE database for use by
+                  restriction enzyme applications"
   groups: "Utils:Database creation"
-  gui: "yes"
-  batch: "yes"
-  cpu: "medium"
+  gui: "no"
+  batch: "no"
+  cpu: "low"
 ]
 
 section: input [

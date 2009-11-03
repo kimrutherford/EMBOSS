@@ -22,8 +22,6 @@ package org.emboss.jemboss;
 
 import java.util.*;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.net.InetAddress;
 
 
 /**
@@ -41,6 +39,8 @@ public class JembossParams
   static public final int SERVER_ERR = 1;
 /** denotes a server is not responding */
   static public final int SERVER_DOWN = 2;
+
+  static final String fs = System.getProperty("file.separator");
 
   // these are the things that could be set
   private boolean useHTTPSProxy = false;
@@ -217,7 +217,7 @@ public class JembossParams
   private String userHomeName = "user.home";
   
   /** standalone results directory           */
-  private String resultsHome = System.getProperty("user.home")+ "/jemboss";
+  private String resultsHome = System.getProperty("user.home")+ fs + "jemboss";
   private String resultsHomeName = "results.home";
 
 
@@ -345,7 +345,6 @@ public class JembossParams
     FileInputStream in = null;
     try
     {
-      String fs = System.getProperty("file.separator");
       in = new FileInputStream(folder + fs + "jemboss.properties");
       jembossSettings.load(in);
     }
@@ -391,6 +390,10 @@ public class JembossParams
       plplot = jembossSettings.getProperty(plplotName);
       embossData = jembossSettings.getProperty(embossDataName);
       embossBin = jembossSettings.getProperty(embossBinName);
+      if (embossBin.length()>0){
+          if(!embossBin.endsWith(fs))
+              embossBin += fs;
+      }      
       embossPath = jembossSettings.getProperty(embossPathName);
       embossEnvironment = jembossSettings.getProperty(embossEnvironmentName);
       acdDirToParse = jembossSettings.getProperty(acdDirToParseName);
@@ -795,8 +798,6 @@ public class JembossParams
 */
   public String getResultsHome()
   {
-    String fs = System.getProperty("file.separator");
-
     if(!resultsHome.endsWith(fs))
       resultsHome = resultsHome + fs;
     return resultsHome;

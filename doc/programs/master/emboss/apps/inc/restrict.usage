@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>restrict </b>
-Finds restriction enzyme cleavage sites
+Report restriction enzyme cleavage sites in a nucleotide sequence
 Input nucleotide sequence(s): <b>tembl:x65923</b>
 Minimum recognition site length [4]: <b></b>
 Comma separated enzyme list [all]: <b></b>
@@ -24,7 +24,7 @@ This gives the lengths of the restriction fragments produced by cutting with all
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>restrict -fragments </b>
-Finds restriction enzyme cleavage sites
+Report restriction enzyme cleavage sites in a nucleotide sequence
 Input nucleotide sequence(s): <b>tembl:x65923</b>
 Minimum recognition site length [4]: <b></b>
 Comma separated enzyme list [all]: <b></b>
@@ -43,7 +43,7 @@ This gives the lengths of the restriction fragments created by cutting with just
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>restrict -solofragment </b>
-Finds restriction enzyme cleavage sites
+Report restriction enzyme cleavage sites in a nucleotide sequence
 Input nucleotide sequence(s): <b>tembl:x65923</b>
 Minimum recognition site length [4]: <b></b>
 Comma separated enzyme list [all]: <b></b>

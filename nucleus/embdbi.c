@@ -442,9 +442,9 @@ AjPList embDbiFileList(const AjPStr dir, const AjPStr wildfile, AjBool trim)
 	dirsize++;
 	name = NULL;
 	ajFmtPrintS(&name, "%S%S", dbiDirFix, s2);
-	if(ajFileLength(name) > (ajlong) INT_MAX)
+	if(ajFilenameGetSize(name) > (ajlong) INT_MAX)
 	  ajDie("File '%S' too large for DBI indexing", name);
-	ajDebug("accept '%S' (%Ld)\n", s2, ajFileLength(name));
+	ajDebug("accept '%S' (%Ld)\n", s2, ajFilenameGetSize(name));
 	ajListstrPushAppend(retlist, name);
     }
 
@@ -523,16 +523,15 @@ AjPList embDbiFileListExc(const AjPStr dir, const AjPStr wildfile,
 
 	ajStrAssignC(&dbiInFname, de->d_name);
 
-	if(exclude && !ajFileTestSkip(dbiInFname, exclude, wildfile, ajFalse,
-				      ajFalse))
+	if(exclude && !ajFilenameTestExclude(dbiInFname, exclude, wildfile))
 	    continue;
 
 	dirsize++;
 	name = NULL;
 	ajFmtPrintS(&name, "%S%S", dbiDirFix, dbiInFname);
-	if(ajFileLength(name) > (ajlong) INT_MAX)
+	if(ajFilenameGetSize(name) > (ajlong) INT_MAX)
 	  ajDie("File '%S' too large for DBI indexing", name);
-	ajDebug("accept '%S' (%Ld)\n", dbiInFname, ajFileLength(name));
+	ajDebug("accept '%S' (%Ld)\n", dbiInFname, ajFilenameGetSize(name));
 	ajListstrPushAppend(retlist, name);
     }
 
@@ -559,7 +558,7 @@ AjBool embDbiFlatOpenlib(const AjPStr lname, AjPFile* libr)
 {
     ajFileClose(libr);
 
-    *libr = ajFileNewIn(lname);
+    *libr = ajFileNewInNameS(lname);
 
     if(!*libr)
 	ajFatal("Cannot open %S for reading",lname);
@@ -925,8 +924,8 @@ void embDbiHeaderSize(AjPFile file, ajuint filesize, ajuint recordcnt)
 {
     ajFileSeek(file, 0, 0);
 
-    ajFileWriteInt4(file, (ajint) filesize);	/* filesize */
-    ajFileWriteInt4(file, (ajint) recordcnt);	/* #records */
+    ajWritebinInt4(file, (ajint) filesize);	/* filesize */
+    ajWritebinInt4(file, (ajint) recordcnt);	/* #records */
 
     return;
 }
@@ -967,20 +966,20 @@ void embDbiHeader(AjPFile file, ajuint filesize, ajuint recordcnt,
 
     ajFileSeek(file, 0, 0);
 
-    ajFileWriteInt4(file, (ajint) filesize);	/* filesize */
+    ajWritebinInt4(file, (ajint) filesize);	/* filesize */
 
-    ajFileWriteInt4(file, (ajint) recordcnt);	/* #records */
+    ajWritebinInt4(file, (ajint) recordcnt);	/* #records */
 
-    ajFileWriteInt2(file, (ajint) recordlen);	/* recordsize */
+    ajWritebinInt2(file, (ajint) recordlen);	/* recordsize */
 
     /* rest of the header */
-    ajFileWriteStr (file, dbname,  20); /* dbname */
-    ajFileWriteStr (file, release, 10); /* release */
-    ajFileWriteByte(file, date[0]);	/* release date */
-    ajFileWriteByte(file, date[1]);	/* release date */
-    ajFileWriteByte(file, date[2]);	/* release date */
-    ajFileWriteByte(file, date[3]);	/* release date */
-    ajFileWrite(file, padding, 256, 1); /* padding 256 bytes */
+    ajWritebinStr(file, dbname,  20); /* dbname */
+    ajWritebinStr(file, release, 10); /* release */
+    ajWritebinByte(file, date[0]);	/* release date */
+    ajWritebinByte(file, date[1]);	/* release date */
+    ajWritebinByte(file, date[2]);	/* release date */
+    ajWritebinByte(file, date[3]);	/* release date */
+    ajWritebinBinary(file, 1, 256, padding); /* padding 256 bytes */
 
     return;
 }
@@ -1005,7 +1004,7 @@ AjPFile embDbiFileSingle(const AjPStr dbname, const char* extension, ajuint num)
     AjPFile ret;
 
     ajFmtPrintS(&dbiOutFname, "%S%03d.%s", dbname, num, extension);
-    ret = ajFileNewOut(dbiOutFname);
+    ret = ajFileNewOutNameS(dbiOutFname);
     if(!ret)
 	ajFatal("Cannot open %S for writing", dbiOutFname);
 
@@ -1031,7 +1030,7 @@ AjPFile embDbiFileIn(const AjPStr dbname, const char* extension)
     AjPFile ret;
 
     ajFmtPrintS(&dbiInFname, "%S.%s", dbname, extension);
-    ret = ajFileNewIn(dbiInFname);
+    ret = ajFileNewInNameS(dbiInFname);
 
     if(!ret)
 	ajFatal("Cannot open %S for reading", dbiInFname);
@@ -1058,7 +1057,7 @@ AjPFile embDbiFileOut(const AjPStr dbname, const char* extension)
     AjPFile ret;
 
     ajFmtPrintS(&dbiOutFname, "%S.%s", dbname, extension);
-    ret = ajFileNewOut(dbiOutFname);
+    ret = ajFileNewOutNameS(dbiOutFname);
 
     if(!ret)
 	ajFatal("Cannot open %S for writing", dbiOutFname);
@@ -1087,7 +1086,7 @@ AjPFile embDbiFileIndex(const AjPStr indexdir, const AjPStr field,
     AjPFile ret;
 
     ajFmtPrintS(&dbiOutFname, "%S.%s", field, extension);
-    ret = ajFileNewOutD(indexdir, dbiOutFname);
+    ret = ajFileNewOutNamePathS(dbiOutFname, indexdir);
 
     if(!ret)
 	ajFatal("Cannot open %S for writing", dbiOutFname);
@@ -1126,7 +1125,7 @@ void embDbiWriteDivision(const AjPStr indexdir,
     short recsize;
 
     ajStrAssignC(&tmpfname, "division.lkp");
-    divFile = ajFileNewOutD(indexdir, tmpfname);
+    divFile = ajFileNewOutNamePathS(tmpfname, indexdir);
 
     filesize = 256 + 44 + (nfiles * (maxfilelen+2));
     recsize = maxfilelen + 2;
@@ -1167,15 +1166,15 @@ void embDbiWriteDivision(const AjPStr indexdir,
 void embDbiWriteDivisionRecord(AjPFile file, ajuint maxnamlen, short recnum,
 			       const AjPStr datfile, const AjPStr seqfile)
 {
-    ajFileWriteInt2(file, recnum);
+    ajWritebinInt2(file, recnum);
 
     if(ajStrGetLen(seqfile))
     {
 	ajFmtPrintS(&dbiOutRecord, "%S %S", datfile, seqfile);
-	ajFileWriteStr(file, dbiOutRecord, maxnamlen);
+	ajWritebinStr(file, dbiOutRecord, maxnamlen);
     }
     else
-	ajFileWriteStr(file, datfile, maxnamlen);
+	ajWritebinStr(file, datfile, maxnamlen);
 
     return;
 }
@@ -1200,10 +1199,10 @@ void embDbiWriteEntryRecord(AjPFile file, ajuint maxidlen, const AjPStr id,
 			    ajint rpos, ajint spos, short filenum)
 {
 
-    ajFileWriteStr(file, id, maxidlen);
-    ajFileWriteInt4(file, rpos);
-    ajFileWriteInt4(file, spos);
-    ajFileWriteInt2(file, filenum);
+    ajWritebinStr(file, id, maxidlen);
+    ajWritebinInt4(file, rpos);
+    ajWritebinInt4(file, spos);
+    ajWritebinInt2(file, filenum);
 
     return;
 }
@@ -1223,7 +1222,7 @@ void embDbiWriteEntryRecord(AjPFile file, ajuint maxidlen, const AjPStr id,
 
 void embDbiWriteHit(AjPFile file, ajuint idnum)
 {
-    ajFileWriteInt4(file, (ajint) idnum);
+    ajWritebinInt4(file, (ajint) idnum);
 
     return;
 }
@@ -1248,9 +1247,9 @@ void embDbiWriteHit(AjPFile file, ajuint idnum)
 void embDbiWriteTrg(AjPFile file, ajuint maxfieldlen, ajuint idnum,
 		    ajuint idcnt, const AjPStr hitstr)
 {
-    ajFileWriteInt4(file, (ajint) idnum);
-    ajFileWriteInt4(file, (ajint) idcnt);
-    ajFileWriteStr(file, hitstr, maxfieldlen);
+    ajWritebinInt4(file, (ajint) idnum);
+    ajWritebinInt4(file, (ajint) idcnt);
+    ajWritebinStr(file, hitstr, maxfieldlen);
 
     return;
 }
@@ -1408,7 +1407,7 @@ ajuint embDbiSortWriteEntry(AjPFile entFile, ajuint maxidlen,
     embDbiSortFile(dbname, "list", "idsrt", nfiles, cleanup, sortopt);
     ajStrAssignC(&dbiLastId, " ");
     esortfile = embDbiFileIn(dbname, "idsrt");
-    while(ajFileGets(esortfile, &dbiRdLine))
+    while(ajReadline(esortfile, &dbiRdLine))
     {
 	ajRegExec(dbiRegEntryIdSort, dbiRdLine);
 	ajRegSubI(dbiRegEntryIdSort, 1, &dbiIdStr);
@@ -1564,7 +1563,7 @@ ajuint embDbiSortWriteFields(const AjPStr dbname, const AjPStr release,
     ient=0;
     ajStrAssignC(&dbiCurrentId, "");
 
-    while(ajFileGets(asortfile, &dbiRdLine))
+    while(ajReadline(asortfile, &dbiRdLine))
     {
 	ajRegExec(dbiRegFieldTokSort, dbiRdLine);
 	ajRegSubI(dbiRegFieldTokSort, 1, &dbiIdStr);
@@ -1572,7 +1571,7 @@ ajuint embDbiSortWriteFields(const AjPStr dbname, const AjPStr release,
 	while(!ajStrMatchS(dbiIdStr, dbiCurrentId))
 	{
 	    ajStrAssignS(&dbiFieldId, dbiCurrentId);
-	    if(!ajFileGets(elistfile, &dbiIdLine))
+	    if(!ajReadline(elistfile, &dbiIdLine))
 		ajFatal("Error in embDbiSortWriteFields, "
 			"expected entry %S not found",
 			dbiIdStr);
@@ -1613,7 +1612,7 @@ ajuint embDbiSortWriteFields(const AjPStr dbname, const AjPStr release,
     lastidnum = 999999999;
     ajStrAssignC(&dbiFieldId, "");
     asrt2file = embDbiFileIn(dbname, ajStrGetPtr(dbiFieldSort2));
-    while(ajFileGets(asrt2file, &dbiRdLine))
+    while(ajReadline(asrt2file, &dbiRdLine))
     {
 	ajRegExec(dbiRegFieldTokIdSort, dbiRdLine);
 	ajRegSubI(dbiRegFieldTokIdSort, 1, &dbiIdStr);
@@ -1711,7 +1710,7 @@ ajuint embDbiMemWriteFields(const AjPStr dbname,const  AjPStr release,
     ajuint itoken = 0;
     ajuint idup   = 0;
     EmbPField fieldData    = NULL;
-    static char* lastfd    = NULL;
+    static const char* lastfd    = "";
     ajuint lastidnum = 0;
 
     ajStrAssignC(&field, dbiFieldFile(fieldname));
@@ -1808,7 +1807,7 @@ ajuint embDbiMemWriteFields(const AjPStr dbname,const  AjPStr release,
 
     embDbiHeaderSize(trgFile, 300+itoken*(ajuint)alen, itoken);
 
-    ajDebug("finished...\n%%7d %F\n%7d %F\n",
+    ajDebug("finished...\n%7d %F\n%7d %F\n",
 	    itoken, trgFile,
 	    fieldCount, hitFile);
 
@@ -1912,11 +1911,10 @@ void embDbiLogHeader(AjPFile logfile, const AjPStr dbname,
     ajFmtPrintF(logfile, "# Dbname: %S\n", dbname);
     ajFmtPrintF(logfile, "# Release: %S\n", release);
     ajFmtPrintF(logfile, "# Date: %S\n", datestr);
-    ajFileGetwd(&dirname);
-    ajFmtPrintF(logfile, "# CurrentDirectory: %S\n", dirname);
+    ajFmtPrintF(logfile, "# CurrentDirectory: %S\n", ajFileValueCwd());
     ajFmtPrintF(logfile, "# IndexDirectory: %S\n", indexdir);
     ajStrAssignS(&dirname, indexdir);
-    ajFileDirPath(&dirname);
+    ajDirnameFillPath(&dirname);
     ajFmtPrintF(logfile, "# IndexDirectoryPath: %S\n", dirname);
     ajFmtPrintF(logfile, "# Maxindex: %d\n", maxindex);
 
@@ -1969,7 +1967,7 @@ void embDbiLogSource(AjPFile logfile, const AjPStr directory,
 
     ajFmtPrintF(logfile, "# Directory: %S\n", directory);
     ajStrAssignS(&dirname, directory);
-    ajFileDirPath(&dirname);
+    ajDirnameFillPath(&dirname);
     ajFmtPrintF(logfile, "# DirectoryPath: %S\n", dirname);
     ajFmtPrintF(logfile, "# Filenames: %S\n", filename);
     ajFmtPrintF(logfile, "# Exclude: %S\n", exclude);

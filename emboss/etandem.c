@@ -358,9 +358,9 @@ int main(int argc, char **argv)
 
     nmin     = ajAcdGetInt("minrepeat");
     nmax     = ajAcdGetInt("maxrepeat");
-    mismatch = ajAcdGetBool("mismatch");
+    mismatch = ajAcdGetBoolean("mismatch");
     thresh   = ajAcdGetInt("threshold");
-    uniform  = ajAcdGetBool("uniform");
+    uniform  = ajAcdGetBoolean("uniform");
     report   = ajAcdGetReport("outfile");
     outfile  = ajAcdGetOutfile("origfile");
     sequence = ajAcdGetSeq("sequence");

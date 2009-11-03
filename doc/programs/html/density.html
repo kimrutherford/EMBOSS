@@ -1,0 +1,791 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: density
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+density
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+    Function
+</H2>
+Draw a nucleic acid density plot
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+<b>density</b> produces a density plot of a nuleotide sequence.
+
+
+
+
+
+
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+<b>Here is a sample session with density</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>density tembl:x13776 </b>
+Draw a nucleic acid density plot
+Output report [x13776.density]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>density tembl:x13776 -quad -qgraph cps </b>
+Draw a nucleic acid density plot
+
+Created density.ps
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 3</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>density tembl:x13776 -dual -dgraph cps </b>
+Draw a nucleic acid density plot
+
+Created density.ps
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.3">Go to the output files for this example</a><p><p>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers (* if not always prompted):
+  [-seqall]            seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+*  -qgraph             xygraph    [$EMBOSS_GRAPHICS value, or x11] Quad
+                                  (A+C+G+T) graph (ps, hpgl, hp7470, hp7580,
+                                  meta, cps, x11, tekt, tek, none, data,
+                                  xterm, png, gif)
+*  -dgraph             xygraph    [$EMBOSS_GRAPHICS value, or x11] Dual
+                                  (AT+GC) graph (ps, hpgl, hp7470, hp7580,
+                                  meta, cps, x11, tekt, tek, none, data,
+                                  xterm, png, gif)
+*  -outfile            report     [*.density] Output report file name
+
+   Additional (Optional) qualifiers:
+   -window             integer    [100] Window length (Integer 1 or more)
+
+   Advanced (Unprompted) qualifiers:
+   -quad               toggle     [N] Produce graphic showing individual bases
+   -dual               toggle     [N] Produce AT vs GC graphic
+
+   Associated qualifiers:
+
+   "-seqall" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-qgraph" associated qualifiers
+   -gprompt            boolean    Graph prompting
+   -gdesc              string     Graph description
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
+
+   "-dgraph" associated qualifiers
+   -gprompt            boolean    Graph prompting
+   -gdesc              string     Graph description
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
+
+   "-outfile" associated qualifiers
+   -rformat            string     Report format
+   -rname              string     Base file name
+   -rextension         string     File name extension
+   -rdirectory         string     Output directory
+   -raccshow           boolean    Show accession number in the report
+   -rdesshow           boolean    Show description in the report
+   -rscoreshow         boolean    Show the score in the report
+   -rstrandshow        boolean    Show the nucleotide strand in the report
+   -rusashow           boolean    Show the full USA in the report
+   -rmaxall            integer    Maximum total hits to report
+   -rmaxseq            integer    Maximum hits to report for one sequence
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-seqall]<br>(Parameter 1)</td>
+<td>Nucleotide sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-qgraph</td>
+<td>Quad (A+C+G+T) graph</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, xterm, png, gif</td>
+<td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
+</tr>
+
+<tr>
+<td>-dgraph</td>
+<td>Dual (AT+GC) graph</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, xterm, png, gif</td>
+<td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
+</tr>
+
+<tr>
+<td>-outfile</td>
+<td>Output report file name</td>
+<td>Report output file</td>
+<td><i>&lt;*&gt;</i>.density</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-window</td>
+<td>Window length</td>
+<td>Integer 1 or more</td>
+<td>100</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-quad</td>
+<td>Produce graphic showing individual bases</td>
+<td>Toggle value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-dual</td>
+<td>Produce AT vs GC graphic</td>
+<td>Toggle value Yes/No</td>
+<td>No</td>
+</tr>
+
+</table>
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+<b>density</b> reads any normal sequence USAs.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:x13776' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:x13776</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   X13776; SV 1; linear; genomic DNA; STD; PRO; 2167 BP.
+XX
+AC   X13776; M43175;
+XX
+DT   19-APR-1989 (Rel. 19, Created)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 24)
+XX
+DE   Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+XX
+KW   aliphatic amidase regulator; amiC gene; amiR gene.
+XX
+OS   Pseudomonas aeruginosa
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadales;
+OC   Pseudomonadaceae; Pseudomonas.
+XX
+RN   [1]
+RP   1167-2167
+RA   Rice P.M.;
+RT   ;
+RL   Submitted (16-DEC-1988) to the EMBL/GenBank/DDBJ databases.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
+XX
+RN   [2]
+RP   1167-2167
+RX   DOI; 10.1016/0014-5793(89)80249-2.
+RX   PUBMED; 2495988.
+RA   Lowe N., Rice P.M., Drew R.E.;
+RT   "Nucleotide sequence of the aliphatic amidase regulator gene of Pseudomonas
+RT   aeruginosa";
+RL   FEBS Lett. 246(1-2):39-43(1989).
+XX
+RN   [3]
+RP   1-1292
+RX   PUBMED; 1907262.
+RA   Wilson S., Drew R.;
+RT   "Cloning and DNA seqence of amiC, a new gene regulating expression of the
+RT   Pseudomonas aeruginosa aliphatic amidase, and purification of the amiC
+RT   product.";
+RL   J. Bacteriol. 173(16):4914-4921(1991).
+XX
+RN   [4]
+RP   1-2167
+RA   Rice P.M.;
+RT   ;
+RL   Submitted (04-SEP-1991) to the EMBL/GenBank/DDBJ databases.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
+XX
+DR   GOA; Q51417.
+DR   UniProtKB/Swiss-Prot; Q51417; AMIS_PSEAE.
+XX
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+FT                   /replace=""
+FT                   /note="ClaI fragment deleted in pSW36,  constitutive
+FT                   phenotype"
+FT   misc_feature    1
+FT                   /note="last base of an XhoI site"
+FT   misc_feature    648..653
+FT                   /note="end of 658bp XhoI fragment, deletion in  pSW3 causes
+FT                   constitutive expression of amiE"
+FT   conflict        1281
+FT                   /replace="g"
+FT                   /citation=[3]
+XX
+SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
+     ggtaccgctg gccgagcatc tgctcgatca ccaccagccg ggcgacggga actgcacgat        60
+     ctacctggcg agcctggagc acgagcgggt tcgcttcgta cggcgctgag cgacagtcac       120
+     aggagaggaa acggatggga tcgcaccagg agcggccgct gatcggcctg ctgttctccg       180
+     aaaccggcgt caccgccgat atcgagcgct cgcacgcgta tggcgcattg ctcgcggtcg       240
+     agcaactgaa ccgcgagggc ggcgtcggcg gtcgcccgat cgaaacgctg tcccaggacc       300
+     ccggcggcga cccggaccgc tatcggctgt gcgccgagga cttcattcgc aaccgggggg       360
+     tacggttcct cgtgggctgc tacatgtcgc acacgcgcaa ggcggtgatg ccggtggtcg       420
+     agcgcgccga cgcgctgctc tgctacccga ccccctacga gggcttcgag tattcgccga       480
+     acatcgtcta cggcggtccg gcgccgaacc agaacagtgc gccgctggcg gcgtacctga       540
+     ttcgccacta cggcgagcgg gtggtgttca tcggctcgga ctacatctat ccgcgggaaa       600
+     gcaaccatgt gatgcgccac ctgtatcgcc agcacggcgg cacggtgctc gaggaaatct       660
+     acattccgct gtatccctcc gacgacgact tgcagcgcgc cgtcgagcgc atctaccagg       720
+     cgcgcgccga cgtggtcttc tccaccgtgg tgggcaccgg caccgccgag ctgtatcgcg       780
+     ccatcgcccg tcgctacggc gacggcaggc ggccgccgat cgccagcctg accaccagcg       840
+     aggcggaggt ggcgaagatg gagagtgacg tggcagaggg gcaggtggtg gtcgcgcctt       900
+     acttctccag catcgatacg cccgccagcc gggccttcgt ccaggcctgc catggtttct       960
+     tcccggagaa cgcgaccatc accgcctggg ccgaggcggc ctactggcag accttgttgc      1020
+     tcggccgcgc cgcgcaggcc gcaggcaact ggcgggtgga agacgtgcag cggcacctgt      1080
+     acgacatcga catcgacgcg ccacaggggc cggtccgggt ggagcgccag aacaaccaca      1140
+     gccgcctgtc ttcgcgcatc gcggaaatcg atgcgcgcgg cgtgttccag gtccgctggc      1200
+     agtcgcccga accgattcgc cccgaccctt atgtcgtcgt gcataacctc gacgactggt      1260
+     ccgccagcat gggcggggga ccgctcccat gagcgccaac tcgctgctcg gcagcctgcg      1320
+     cgagttgcag gtgctggtcc tcaacccgcc gggggaggtc agcgacgccc tggtcttgca      1380
+     gctgatccgc atcggttgtt cggtgcgcca gtgctggccg ccgccggaag ccttcgacgt      1440
+     gccggtggac gtggtcttca ccagcatttt ccagaatggc caccacgacg agatcgctgc      1500
+     gctgctcgcc gccgggactc cgcgcactac cctggtggcg ctggtggagt acgaaagccc      1560
+     cgcggtgctc tcgcagatca tcgagctgga gtgccacggc gtgatcaccc agccgctcga      1620
+     tgcccaccgg gtgctgcctg tgctggtatc ggcgcggcgc atcagcgagg aaatggcgaa      1680
+     gctgaagcag aagaccgagc agctccagga ccgcatcgcc ggccaggccc ggatcaacca      1740
+     ggccaaggtg ttgctgatgc agcgccatgg ctgggacgag cgcgaggcgc accagcacct      1800
+     gtcgcgggaa gcgatgaagc ggcgcgagcc gatcctgaag atcgctcagg agttgctggg      1860
+     aaacgagccg tccgcctgag cgatccgggc cgaccagaac aataacaaga ggggtatcgt      1920
+     catcatgctg ggactggttc tgctgtacgt tggcgcggtg ctgtttctca atgccgtctg      1980
+     gttgctgggc aagatcagcg gtcgggaggt ggcggtgatc aacttcctgg tcggcgtgct      2040
+     gagcgcctgc gtcgcgttct acctgatctt ttccgcagca gccgggcagg gctcgctgaa      2100
+     ggccggagcg ctgaccctgc tattcgcttt tacctatctg tgggtggccg ccaaccagtt      2160
+     cctcgag                                                                2167
+//
+</pre>
+</td></tr></table><p>
+
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<!-- 
+        This includes example output file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null output, errors etc. 
+
+        If you wish to include the standard description of the avalable
+	report formats, use:
+        #include file="inc/reportformats.ihtml"
+   -->
+
+<b>density</b> 
+outputs a graph to the specified graphics device. 
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: x13776.density</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: density
+# Rundate: Tue 15 Jul 2008 12:00:00
+# Commandline: density
+#    [-seqall] tembl:x13776
+# Report_format: table
+# Report_file: x13776.density
+########################################
+
+#=======================================
+#
+# Sequence: X13776     from: 1   to: 2167
+# HitCount: 2068
+#
+# Window size = 100
+#
+#=======================================
+
+  Start     End  Strand   Score      a      c      g      t     at     gc
+      1       1       +   0.000  0.180  0.330  0.330  0.160  0.340  0.660
+      2       2       +   0.000  0.180  0.340  0.320  0.160  0.340  0.660
+      3       3       +   0.000  0.180  0.340  0.320  0.160  0.340  0.660
+      4       4       +   0.000  0.180  0.340  0.330  0.150  0.330  0.670
+      5       5       +   0.000  0.170  0.350  0.330  0.150  0.320  0.680
+      6       6       +   0.000  0.170  0.340  0.340  0.150  0.320  0.680
+      7       7       +   0.000  0.170  0.340  0.340  0.150  0.320  0.680
+      8       8       +   0.000  0.170  0.340  0.330  0.160  0.330  0.670
+      9       9       +   0.000  0.170  0.330  0.340  0.160  0.330  0.670
+     10      10       +   0.000  0.180  0.330  0.340  0.150  0.330  0.670
+     11      11       +   0.000  0.180  0.330  0.340  0.150  0.330  0.670
+     12      12       +   0.000  0.180  0.340  0.330  0.150  0.330  0.670
+     13      13       +   0.000  0.180  0.330  0.340  0.150  0.330  0.670
+     14      14       +   0.000  0.190  0.320  0.340  0.150  0.340  0.660
+     15      15       +   0.000  0.190  0.330  0.330  0.150  0.340  0.660
+     16      16       +   0.000  0.190  0.330  0.330  0.150  0.340  0.660
+     17      17       +   0.000  0.190  0.330  0.330  0.150  0.340  0.660
+     18      18       +   0.000  0.190  0.320  0.330  0.160  0.350  0.650
+     19      19       +   0.000  0.180  0.330  0.330  0.160  0.340  0.660
+     20      20       +   0.000  0.190  0.330  0.330  0.150  0.340  0.660
+     21      21       +   0.000  0.190  0.330  0.330  0.150  0.340  0.660
+     22      22       +   0.000  0.200  0.330  0.330  0.140  0.340  0.660
+     23      23       +   0.000  0.200  0.330  0.330  0.140  0.340  0.660
+     24      24       +   0.000  0.200  0.320  0.340  0.140  0.340  0.660
+     25      25       +   0.000  0.210  0.320  0.340  0.130  0.340  0.660
+     26      26       +   0.000  0.210  0.310  0.350  0.130  0.340  0.660
+     27      27       +   0.000  0.220  0.310  0.340  0.130  0.350  0.650
+     28      28       +   0.000  0.210  0.310  0.350  0.130  0.340  0.660
+     29      29       +   0.000  0.210  0.310  0.360  0.120  0.330  0.670
+     30      30       +   0.000  0.220  0.300  0.360  0.120  0.340  0.660
+     31      31       +   0.000  0.220  0.300  0.360  0.120  0.340  0.660
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+   2026    2026       +   0.000  0.110  0.340  0.330  0.220  0.330  0.670
+   2027    2027       +   0.000  0.110  0.330  0.340  0.220  0.330  0.670
+   2028    2028       +   0.000  0.110  0.330  0.340  0.220  0.330  0.670
+   2029    2029       +   0.000  0.110  0.330  0.340  0.220  0.330  0.670
+   2030    2030       +   0.000  0.110  0.330  0.330  0.230  0.340  0.660
+   2031    2031       +   0.000  0.110  0.330  0.320  0.240  0.350  0.650
+   2032    2032       +   0.000  0.110  0.330  0.320  0.240  0.350  0.650
+   2033    2033       +   0.000  0.120  0.320  0.320  0.240  0.360  0.640
+   2034    2034       +   0.000  0.120  0.330  0.310  0.240  0.360  0.640
+   2035    2035       +   0.000  0.120  0.340  0.300  0.240  0.360  0.640
+   2036    2036       +   0.000  0.120  0.330  0.300  0.250  0.370  0.630
+   2037    2037       +   0.000  0.130  0.330  0.290  0.250  0.380  0.620
+   2038    2038       +   0.000  0.130  0.330  0.290  0.250  0.380  0.620
+   2039    2039       +   0.000  0.130  0.340  0.280  0.250  0.380  0.620
+   2040    2040       +   0.000  0.130  0.330  0.280  0.260  0.390  0.610
+   2041    2041       +   0.000  0.130  0.330  0.290  0.250  0.380  0.620
+   2042    2042       +   0.000  0.130  0.330  0.280  0.260  0.390  0.610
+   2043    2043       +   0.000  0.120  0.330  0.290  0.260  0.380  0.620
+   2044    2044       +   0.000  0.120  0.330  0.290  0.260  0.380  0.620
+   2045    2045       +   0.000  0.120  0.320  0.300  0.260  0.380  0.620
+   2046    2046       +   0.000  0.120  0.320  0.290  0.270  0.390  0.610
+   2047    2047       +   0.000  0.120  0.310  0.300  0.270  0.390  0.610
+   2048    2048       +   0.000  0.120  0.300  0.310  0.270  0.390  0.610
+   2049    2049       +   0.000  0.120  0.310  0.310  0.260  0.380  0.620
+   2050    2050       +   0.000  0.120  0.320  0.300  0.260  0.380  0.620
+   2051    2051       +   0.000  0.120  0.310  0.310  0.260  0.380  0.620
+   2052    2052       +   0.000  0.120  0.320  0.300  0.260  0.380  0.620
+   2053    2053       +   0.000  0.120  0.330  0.300  0.250  0.370  0.630
+   2054    2054       +   0.000  0.130  0.320  0.300  0.250  0.380  0.620
+   2055    2055       +   0.000  0.140  0.320  0.290  0.250  0.390  0.610
+   2056    2056       +   0.000  0.140  0.320  0.290  0.250  0.390  0.610
+   2057    2057       +   0.000  0.140  0.330  0.280  0.250  0.390  0.610
+   2058    2058       +   0.000  0.150  0.330  0.280  0.240  0.390  0.610
+   2059    2059       +   0.000  0.150  0.330  0.290  0.230  0.380  0.620
+   2060    2060       +   0.000  0.150  0.320  0.290  0.240  0.390  0.610
+   2061    2061       +   0.000  0.150  0.320  0.290  0.240  0.390  0.610
+   2062    2062       +   0.000  0.140  0.330  0.290  0.240  0.380  0.620
+   2063    2063       +   0.000  0.140  0.330  0.290  0.240  0.380  0.620
+   2064    2064       +   0.000  0.140  0.320  0.290  0.250  0.390  0.610
+   2065    2065       +   0.000  0.140  0.330  0.290  0.240  0.380  0.620
+   2066    2066       +   0.000  0.140  0.330  0.290  0.240  0.380  0.620
+   2067    2067       +   0.000  0.140  0.330  0.290  0.240  0.380  0.620
+   2068    2068       +   0.000  0.140  0.330  0.300  0.230  0.370  0.630
+
+#---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_hitcount: 2068
+#---------------------------------------
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>Graphics File: density.ps</h3>
+<p><img src="density.2.density.gif" alt="[density results]">
+
+<a name="output.3"></a>
+<h3>Output files for usage example 3</h3>
+<p><h3>Graphics File: density.ps</h3>
+<p><img src="density.3.density.gif" alt="[density results]">
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+None
+
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+<ol>
+
+<li>
+
+</ol>
+
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="banana.html">banana</a></td>
+<td>Plot bending and curvature data for B-DNA</td>
+</tr>
+
+<tr>
+<td><a href="btwisted.html">btwisted</a></td>
+<td>Calculate the twisting in a B-DNA sequence</td>
+</tr>
+
+<tr>
+<td><a href="chaos.html">chaos</a></td>
+<td>Draw a chaos game representation plot for a nucleotide sequence</td>
+</tr>
+
+<tr>
+<td><a href="compseq.html">compseq</a></td>
+<td>Calculate the composition of unique words in sequences</td>
+</tr>
+
+<tr>
+<td><a href="dan.html">dan</a></td>
+<td>Calculates nucleic acid melting temperature</td>
+</tr>
+
+<tr>
+<td><a href="freak.html">freak</a></td>
+<td>Generate residue/base frequency table or plot</td>
+</tr>
+
+<tr>
+<td><a href="isochore.html">isochore</a></td>
+<td>Plots isochores in DNA sequences</td>
+</tr>
+
+<tr>
+<td><a href="sirna.html">sirna</a></td>
+<td>Finds siRNA duplexes in mRNA</td>
+</tr>
+
+<tr>
+<td><a href="wordcount.html">wordcount</a></td>
+<td>Count and extract unique words in DNA sequence(s)</td>
+</tr>
+
+</table>
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+
+
+
+
+
+
+<H2>
+    History
+</H2>
+<!--
+        Date written and what changes have been made go in this file.
+   -->
+
+
+
+
+<H2>
+    Target users
+</H2>
+<!--
+        For general users, use this text
+   -->
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+<!--
+        User/developer/other comments go in this file.
+   -->
+None
+
+
+</BODY>
+</HTML>
+

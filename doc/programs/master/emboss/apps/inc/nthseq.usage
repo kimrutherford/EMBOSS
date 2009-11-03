@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>nthseq </b>
-Writes one sequence from a multiple set of sequences
+Write to file a single sequence from an input stream of sequences
 Input (gapped) sequence(s): <b>@eclac.list</b>
 The number of the sequence to output [1]: <b>2</b>
 output sequence [j01636.fasta]: <b></b>

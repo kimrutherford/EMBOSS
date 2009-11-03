@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>whichdb -showall </b>
-Search all databases for an entry
+Search all sequence databases for an entry and retrieve it
 ID or Accession number: <b>x65921</b>
 Output file [outfile.whichdb]: <b></b>
 

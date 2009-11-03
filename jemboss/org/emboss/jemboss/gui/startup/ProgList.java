@@ -79,7 +79,7 @@ public class ProgList
      {
        BufferedReader in;
        Vector allProgLines = new Vector();
-       while (numProgs == 0) 
+       //while (numProgs == 0) 
        {
          in = new BufferedReader(new StringReader(woss));
          while((line = in.readLine()) != null)
@@ -91,7 +91,7 @@ public class ProgList
              if(!line.equals(""))
              {
                numMenuItems++;
-               String progN = line.substring(0,line.indexOf(" ")+1);
+               //String progN = line.substring(0,line.indexOf(" ")+1);
                if(!allProgLines.contains(line))
                {
                  allProgLines.add(line);

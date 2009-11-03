@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>pepwheel tsw:hbb_human -send 30 </b>
-Shows protein sequences as helices
+Draw a helical wheel diagram for a protein sequence
 Graph type [x11]: <b>cps</b>
 
 Created pepwheel.ps

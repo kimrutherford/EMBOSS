@@ -24,40 +24,14 @@ palindrome
 <H2>
     Function
 </H2>
-Looks for inverted repeats in a nucleotide sequence
+Finds inverted repeats in nucleotide sequence(s)
 
 <H2>
     Description
 </H2>
 
 
-<b>palindrome</b> looks for inverted repeats (stem loops) in a
-nucleotide sequence. 
-
-<p>
-It will find inverted repeats that include a proportion of mismatches
-and gaps (bulges in the stem loop). 
-
-<p>
-
-It works by finding all possible inverted matches satisfying the
-specified conditions of minimum and maximum length of palindrome,
-maximum gap between repeated regions and number of mismatches allowed. 
-
-<p>
-
-Secondary structures like inverted repeats in genomic sequences may be
-implicated in initiation of DNA replication. 
-
-<p>
-
-Some genomic sequence entries in the databases are composed of
-unfinished, draft sequence with gaps of unknown size between contigs. 
-The positions of these gaps are often indicated by runs of 200 N
-characters.  To prevent <b>palindrome</b> producing large, uninformative
-outputs, any palindromes found that are composed only of N's will not be
-reported. 
-
+<p><b>palindrome</b> finds inverted repeats (stem loops) in nucleotide sequences. It will find inverted repeats that include a proportion of mismatches and gaps, that correspond to bulges in the stem loop.  It finds all possible inverted matches satisfying the specified conditions of minimum and maximum length of palindrome, maximum gap between repeated regions and number of mismatches allowed.</p>
 
 <H2>
     Usage
@@ -69,7 +43,7 @@ reported.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>palindrome </b>
-Looks for inverted repeats in a nucleotide sequence
+Finds inverted repeats in nucleotide sequence(s)
 Input nucleotide sequence(s): <b>tembl:d00596</b>
 Enter minimum length of palindrome [10]: <b>15</b>
 Enter maximum length of palindrome [100]: <b></b>
@@ -127,8 +101,9 @@ Report overlapping matches [Y]: <b></b>
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -440,13 +415,13 @@ None.
 <H2>
     Notes
 </H2>
+<p>Secondary structures-like inverted repeats in genomic sequences may be implicated in initiation of DNA replication.</p>
+
+<p>Some genomic sequence entries in the databases are composed of unfinished, draft sequence with gaps of unknown size between contigs. The positions of these gaps are often indicated by runs of 200 'N' characters. To prevent <b>palindrome</b> producing large, uninformative outputs, any palindromes found that are composed only of <tt>N</tt> will not be reported. </p>
+
+<p>Unless the qualifier <tt>-nooverlap</tt> is specified, <b>palindrome</b> makes no attempt to exclude subsets of previously found palindromes.</p>
 
 
-Unless the qualifier '-nooverlap' is specified, palindrome makes no
-attempt to exclude subsets of previously found palindromes. 
-
-<p>
-Several examples can be seen in the sample output above.
 
 <H2>
     References
@@ -508,20 +483,21 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="einverted.html">einverted</a></td>
-<td>Finds DNA inverted repeats</td>
+<td>Finds inverted repeats in nucleotide sequences</td>
 </tr>
 
 <tr>
 <td><a href="equicktandem.html">equicktandem</a></td>
-<td>Finds tandem repeats</td>
+<td>Finds tandem repeats in nucleotide sequences</td>
 </tr>
 
 <tr>
 <td><a href="etandem.html">etandem</a></td>
-<td>Looks for tandem repeats in a nucleotide sequence</td>
+<td>Finds tandem repeats in a nucleotide sequence</td>
 </tr>
 
 </table>

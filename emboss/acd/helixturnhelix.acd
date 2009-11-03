@@ -1,5 +1,5 @@
 application: helixturnhelix [
-  documentation: "Report nucleic acid binding motifs"
+  documentation: "Identify nucleic acid-binding motifs in protein sequences"
   groups: "Protein:2D Structure, Protein:Motifs"
 ]
 

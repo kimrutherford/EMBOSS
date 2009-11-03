@@ -25,24 +25,14 @@ pepnet
     Function
 </H2>
 
-Displays proteins as a helical net
+Draw a helical net for a protein sequence
 
 <H2>
     Description
 </H2>
 
 
-This is a method of displaying the residues of a protein in a simple
-3,4,3,4 repeating pattern that emulates at a simple level the
-arrangement of residues around an alpha helix. 
-
-<p>
-It is therefore easy to see patterns of amphipathicity that you may wish
-to investigate in more detail by using displays such as pepwheel. 
-
-<p>
-You can specify which residues to mark up in squares, diamonds and
-octagons. 
+<p><b>pepnet</b> draws a helical net for an input protein sequence.  This is a method of displaying the residues of a protein in a simple 3,4,3,4 repeating pattern that emulates at a simple level the arrangement of residues around an alpha helix. It is therefore easy to see patterns of amphipathicity that you may wish to investigate in more detail by using displays such as <b>pepwheel</b>. You can specify which residues to mark up in squares, diamonds and octagons. </p>
 
 <H2>
     Usage
@@ -54,7 +44,7 @@ octagons.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>pepnet -sask </b>
-Displays proteins as a helical net
+Draw a helical net for a protein sequence
 Input protein sequence: <b>tsw:gcn4_yeast</b>
      Begin at position [start]: <b>253</b>
        End at position [end]: <b>274</b>
@@ -128,8 +118,9 @@ Created pepnet.ps
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -388,10 +379,11 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="abiview.html">abiview</a></td>
-<td>Reads ABI file and display the trace</td>
+<td>Display the trace in an ABI sequencer file</td>
 </tr>
 
 <tr>
@@ -401,17 +393,17 @@ None.
 
 <tr>
 <td><a href="garnier.html">garnier</a></td>
-<td>Predicts protein secondary structure</td>
+<td>Predicts protein secondary structure using GOR method</td>
 </tr>
 
 <tr>
 <td><a href="helixturnhelix.html">helixturnhelix</a></td>
-<td>Report nucleic acid binding motifs</td>
+<td>Identify nucleic acid-binding motifs in protein sequences</td>
 </tr>
 
 <tr>
 <td><a href="hmoment.html">hmoment</a></td>
-<td>Hydrophobic moment calculation</td>
+<td>Calculate and plot hydrophobic moment for protein sequence(s)</td>
 </tr>
 
 <tr>
@@ -421,52 +413,52 @@ None.
 
 <tr>
 <td><a href="pepcoil.html">pepcoil</a></td>
-<td>Predicts coiled coil regions</td>
+<td>Predicts coiled coil regions in protein sequences</td>
 </tr>
 
 <tr>
 <td><a href="pepwheel.html">pepwheel</a></td>
-<td>Shows protein sequences as helices</td>
+<td>Draw a helical wheel diagram for a protein sequence</td>
 </tr>
 
 <tr>
 <td><a href="prettyplot.html">prettyplot</a></td>
-<td>Displays aligned sequences, with colouring and boxing</td>
+<td>Draw a sequence alignment with pretty formatting</td>
 </tr>
 
 <tr>
 <td><a href="prettyseq.html">prettyseq</a></td>
-<td>Output sequence with translated ranges</td>
+<td>Write a nucleotide sequence and its translation to file</td>
 </tr>
 
 <tr>
 <td><a href="remap.html">remap</a></td>
-<td>Display sequence with restriction sites, translation etc</td>
+<td>Display restriction enzyme binding sites in a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="seealso.html">seealso</a></td>
-<td>Finds programs sharing group names</td>
+<td>Finds programs with similar function to a specified program</td>
 </tr>
 
 <tr>
 <td><a href="showalign.html">showalign</a></td>
-<td>Displays a multiple sequence alignment</td>
+<td>Display a multiple sequence alignment in pretty format</td>
 </tr>
 
 <tr>
 <td><a href="showdb.html">showdb</a></td>
-<td>Displays information on the currently available databases</td>
+<td>Displays information on configured databases</td>
 </tr>
 
 <tr>
 <td><a href="showfeat.html">showfeat</a></td>
-<td>Show features of a sequence</td>
+<td>Display features of a sequence in pretty format</td>
 </tr>
 
 <tr>
 <td><a href="showseq.html">showseq</a></td>
-<td>Display a sequence with features, translation etc</td>
+<td>Displays sequences with features in pretty format</td>
 </tr>
 
 <tr>
@@ -476,12 +468,12 @@ None.
 
 <tr>
 <td><a href="textsearch.html">textsearch</a></td>
-<td>Search sequence documentation. Slow, use SRS and Entrez!</td>
+<td>Search the textual description of sequence(s)</td>
 </tr>
 
 <tr>
 <td><a href="tmap.html">tmap</a></td>
-<td>Displays membrane spanning regions</td>
+<td>Predict and plot transmembrane segments in protein sequences</td>
 </tr>
 
 </table>

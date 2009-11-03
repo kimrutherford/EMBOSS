@@ -23,52 +23,20 @@ hmoment
 <H2>
     Function
 </H2>
-Hydrophobic moment calculation
+Calculate and plot hydrophobic moment for protein sequence(s)
 <H2>
     Description
 </H2>
 
-<b>hmoment</b> plots or writes out the hydrophobic moment.  Hydrophic
-moment is the hydrophobicity of a peptide measured for a specified angle
-of rotation per residue. 
+<p><b>hmoment</b> plots or writes out the hydrophobic moment calculated for overlapping windows over one or more input protein sequences. The hydrophic moment reflects the periodicity of hydrophobicity of a peptide, as measured per residue for a specified angle of rotation. The window size, alpha helix angle, and beta sheet angle are user-specified.  The alpha helix moment and beta sheet moment may be plotted or output.</p>
 
-<p>
 
-Periodicities in the polar/apolar character of the amino acid sequence
-of a protein can be examined by assigning to each residue a numerical
-hydrophobicity and searching for periodicity in the resulting
-one-dimensional function.  The strength of each periodic component is
-the quantity that has been termed the hydrophobic moment. 
+<H2>
+Algorithm
+</H2>
 
-<p>
 
-When proteins of known three-dimensional structure are examined, it is
-found that sequences that form alpha helices tend to have, on average, a
-strong periodicity in the hydrophobicity of af 3.6 residues, the period
-of the alpha helix. The angle of rotation per residue in alpha helices is 
-100 degrees.
-
-Similarly, many sequences that form strands of beta sheets tend to have
-a periodicity in their hydrophobicity of about 2.3 residues, the period
-typical of beta structure.  The angle of rotation per residue in beta
-sheets is 160 degrees. 
-
-This means that many protein sequences tend to form the periodic
-structure that maximizes their amphiphilicity. 
-
-<p>
-
-The hydrophobic moment is measured within a moving window using the method
-of Eisenberg et al.  The default angle of 100 degrees is used for the
-alpha-helix results and the default of 160 degrees is used for the
-beta-sheet results.  These angles can be changed if required using the
-appropriate options. 
-
-<p>
-
-<b>hmoment</b> can plot two graphs when the option '-double' is given,
-one for the alpha helix moment and one for the beta sheet moment. 
-Otherwise it just plots the alpha helix moment.
+<p>The hydrophobic moment is measured within a moving window using the method of Eisenberg et al. The default angle of 100 degrees is used for the alpha-helix results and the default of 160 degrees is used for the beta-sheet results. These angles can be changed if required using the appropriate options.</p>
 
 <H2>
     Usage
@@ -80,7 +48,7 @@ Otherwise it just plots the alpha helix moment.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>hmoment tsw:hbb_human </b>
-Hydrophobic moment calculation
+Calculate and plot hydrophobic moment for protein sequence(s)
 Output file [hbb_human.hmoment]: <b></b>
 
 </pre></td></tr></table><p>
@@ -147,8 +115,9 @@ Output file [hbb_human.hmoment]: <b></b>
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -514,7 +483,11 @@ None.
     Notes
 </H2>
 
-None.
+<p>When proteins of known three-dimensional structure are examined, it is found that sequences that form alpha helices tend to have, on average, a strong periodicity in the hydrophobicity of af 3.6 residues, the period of the alpha helix. The angle of rotation per residue in alpha helices is 100 degrees. Similarly, many sequences that form strands of beta sheets tend to have a periodicity in their hydrophobicity of about 2.3 residues, the period typical of beta structure. The angle of rotation per residue in beta sheets is 160 degrees. This means that many protein sequences tend to form the periodic structure that maximizes their amphiphilicity.</p>
+<p>Periodicities in the polar/apolar character of the amino acid sequence of a protein can be examined by assigning to each residue a numerical hydrophobicity and searching for periodicity in the resulting one-dimensional function. The strength of each periodic component is the quantity that has been termed the hydrophobic moment.</p>
+
+<p>The <tt>-plot</tt> option must be specified to produce a plot. <b>hmoment</b> can plot two graphs when the option <tt>-double</tt> is given, one for the alpha helix moment and one for the beta sheet moment. Otherwise it just plots the alpha helix moment.</p>
+
 
 <H2>
     References
@@ -555,35 +528,36 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="garnier.html">garnier</a></td>
-<td>Predicts protein secondary structure</td>
+<td>Predicts protein secondary structure using GOR method</td>
 </tr>
 
 <tr>
 <td><a href="helixturnhelix.html">helixturnhelix</a></td>
-<td>Report nucleic acid binding motifs</td>
+<td>Identify nucleic acid-binding motifs in protein sequences</td>
 </tr>
 
 <tr>
 <td><a href="pepcoil.html">pepcoil</a></td>
-<td>Predicts coiled coil regions</td>
+<td>Predicts coiled coil regions in protein sequences</td>
 </tr>
 
 <tr>
 <td><a href="pepnet.html">pepnet</a></td>
-<td>Displays proteins as a helical net</td>
+<td>Draw a helical net for a protein sequence</td>
 </tr>
 
 <tr>
 <td><a href="pepwheel.html">pepwheel</a></td>
-<td>Shows protein sequences as helices</td>
+<td>Draw a helical wheel diagram for a protein sequence</td>
 </tr>
 
 <tr>
 <td><a href="tmap.html">tmap</a></td>
-<td>Displays membrane spanning regions</td>
+<td>Predict and plot transmembrane segments in protein sequences</td>
 </tr>
 
 </table>

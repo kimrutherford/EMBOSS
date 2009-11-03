@@ -24,57 +24,24 @@ oddcomp
 <H2>
     Function
 </H2>
-Find protein sequence regions with a biased composition
+Identify proteins with specified sequence word composition
 
 <H2>
     Description
 </H2>
 
+<p><b>oddcomp</b> reads one or more protein sequences, identifies proteins containing regions with a specific sequence word composition, then writes a list of sequence identifiers of those proteins to an output file. The word composition is read from an input file which gives the minimum word occurence for any number of sequence words. For an input sequence to be listed in the output file, each word must be found at least the stated number of times in any window over the input sequence. The window size may be set to any value or the length of the current protein (<tt>-fullwindow</tt> option).</p>
 
-<b>oddcomp</b> searches a series of protein files, reporting the identifier for
-those that exceed a certain amino acid composition threshold in a
-portion of the sequence. 
 
-<p>
-<b>oddcomp</b> was written to answer the question 'which proteins contain at
-least n X and m Y in p residues'. 
+<H2>
+Algorithm
+</H2>
 
-<p>
-One could search for serine rich or polyglutamine rich, collagen helix,
-or similar proteins using this program. 
+<p>The input file of sequence word composition data is in the same format as the output from <b>compseq</b>. Only one word size (of any length) can be used and is specified at the top of the file. The search for words is a boolean AND meaning all words given in the file must be found in a sequence for it to be reported. </p>
 
-<p>
-<b>oddcomp</b> takes as input an amino acid composition data file in the same
-format as the output from compseq.  It can tolerate any word length
-within reason for the memory capacity of the machine in question.  Only
-the first two fields in the composition data file are used: the word and
-the number of occurrences.  Any word not mentioned is initialised to a
-threshold of zero. 
+<p>Each word must occur at least the stated number of times in a window over an input sequence for the sequence to be reported. The word size given in the input data file must be less than the specified window size; you will not get any hits otherwise.</p>
 
-<p>
-<b>oddcomp</b> measures the amino acid composition (this can be dimers etc as
-well as monomers) in a sliding window.  If and when composition meets or
-exceeds all the specified thresholds, the sequence is reported and
-<b>oddcomp</b> moves to the next sequence.  It does not report where in the
-sequence it found the matching region, merely the sequence ID. 
 
-<p>
-<b>oddcomp</b> was originally written to identify SR/RS containing proteins. 
-eg.  specifying a window of forty amino acids containing at least 3 SR
-and 4 RS words. 
-
-<p>
-To search for a specific set of words in a sequence, edit the input
-composition data file to delete any words from the input file in which
-you are not interested.  The search is a boolean AND so there must be
-(from the short example above) at least 3 SR AND at least 4 RS for the
-sequence to be reported.  If your total words specified exceeds
-window-wordlength+1 you will never get any hits. 
-
-<p>
-
-Only one word size can be used and is specified at the top of the file
-in compseq-style output. 
 
 <H2>
     Usage
@@ -88,7 +55,7 @@ To search for entries in swissprot with at least 1 SR AND at least 2 RS:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>oddcomp </b>
-Find protein sequence regions with a biased composition
+Identify proteins with specified sequence word composition
 Input protein sequence(s): <b>tsw:*</b>
 Program compseq output file: <b>oddcomp.comp</b>
 Window size to consider (e.g. 30 aa) [30]: <b></b>
@@ -156,8 +123,9 @@ Output file [edd1_rat.oddcomp]: <b>out.odd</b>
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -358,7 +326,9 @@ None.
     Notes
 </H2>
 
-None.
+<p><b>oddcomp</b> was originally written to identify proteins with <tt>SR</tt>/<tt>RS</tt> dimers, for example, windows of forty amino acids containing at least 3 <tt>SR</tt> and 4 <tt>RS</tt> words. More generally, it will help answer questions of the type 'which proteins contain at least x occurrences of word X and y occurences of word Y in regions of n residues'.  For example, one could search for serine rich or polyglutamine rich, collagen helix, or similar proteins using this program.</p>
+
+<p><b>oddcomp</b> does not report the location of the word matches in the sequence, merely the sequence ID. To search for a specific set of words in a sequence, you should edit the input file of sequence word composition data.</p>
 
 <H2>
     References
@@ -392,7 +362,8 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="antigenic.html">antigenic</a></td>
 <td>Finds antigenic sites in proteins</td>
@@ -400,7 +371,7 @@ None.
 
 <tr>
 <td><a href="digest.html">digest</a></td>
-<td>Protein proteolytic enzyme or reagent cleavage digest</td>
+<td>Reports on protein proteolytic enzyme or reagent cleavage sites</td>
 </tr>
 
 <tr>
@@ -410,47 +381,47 @@ None.
 
 <tr>
 <td><a href="fuzzpro.html">fuzzpro</a></td>
-<td>Protein pattern search</td>
+<td>Search for patterns in protein sequences</td>
 </tr>
 
 <tr>
 <td><a href="fuzztran.html">fuzztran</a></td>
-<td>Protein pattern search after translation</td>
+<td>Search for patterns in protein sequences (translated)</td>
 </tr>
 
 <tr>
 <td><a href="helixturnhelix.html">helixturnhelix</a></td>
-<td>Report nucleic acid binding motifs</td>
+<td>Identify nucleic acid-binding motifs in protein sequences</td>
 </tr>
 
 <tr>
 <td><a href="patmatdb.html">patmatdb</a></td>
-<td>Search a protein sequence with a motif</td>
+<td>Searches protein sequences with a sequence motif</td>
 </tr>
 
 <tr>
 <td><a href="patmatmotifs.html">patmatmotifs</a></td>
-<td>Search a PROSITE motif database with a protein sequence</td>
+<td>Scan a protein sequence with motifs from the PROSITE database</td>
 </tr>
 
 <tr>
 <td><a href="pepcoil.html">pepcoil</a></td>
-<td>Predicts coiled coil regions</td>
+<td>Predicts coiled coil regions in protein sequences</td>
 </tr>
 
 <tr>
 <td><a href="preg.html">preg</a></td>
-<td>Regular expression search of a protein sequence</td>
+<td>Regular expression search of protein sequence(s)</td>
 </tr>
 
 <tr>
 <td><a href="pscan.html">pscan</a></td>
-<td>Scans proteins using PRINTS</td>
+<td>Scans protein sequence(s) with fingerprints from the PRINTS database</td>
 </tr>
 
 <tr>
 <td><a href="sigcleave.html">sigcleave</a></td>
-<td>Reports protein signal cleavage sites</td>
+<td>Reports on signal cleavage sites in a protein sequence</td>
 </tr>
 
 </table>

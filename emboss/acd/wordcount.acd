@@ -1,7 +1,6 @@
 application: wordcount [
-  documentation: "Counts words of a specified size in a DNA
-                  sequence"
-  groups: "Nucleic:Composition"
+  documentation: "Count and extract unique words in DNA sequence(s)"
+  groups: "Nucleic:Composition,Protein:Composition "
 ]
 
 section: input [
@@ -11,7 +10,7 @@ section: input [
 
   seqall: sequence [
     parameter: "Y"
-    type: "dna"
+    type: "any"
   ]
 
 endsection: input
@@ -23,8 +22,8 @@ section: required [
 
   integer: wordsize [
     standard: "Y"
-    default: "4"
-    minimum: "2"
+    default: "@($(acdprotein)? 2 : 4)"
+    minimum: "1"
     information: "Word size"
   ]
 

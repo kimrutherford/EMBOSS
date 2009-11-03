@@ -246,7 +246,7 @@ int main(int argc, char **argv)
     targetend   = ajAcdGetInt("targetend");
 
     overlap = ajAcdGetInt("overlap");
-    dolist  = ajAcdGetBool("list");
+    dolist  = ajAcdGetBoolean("list");
 
     seqstr = ajSeqGetSeqCopyS(sequence);
     ajStrFmtUpper(&seqstr);

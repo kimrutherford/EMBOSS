@@ -19,20 +19,16 @@ charge
     Description
 </H2>
 
-<b>charge</b> reads a protein sequence and writes a file (or plots a
-graph) of the charges of the amino acids within a window of specified
-length as the window is moved along the sequence. 
-
+<p><b>charge</b> reads a protein sequence and writes a file (or plots a graph) of the mean charge of the amino acids within a window of specified length as the window is moved along the sequence.</p>
 
 <H2>
    Algorithm
 </H2>
 
 
-<b>charge</b> uses the column "charge" from the datafile
-<i>Eamino.dat</i>.  It gives the residues 'D' and 'E' a charge of -1,
-'K' and 'R' a charge of +1, and the residue 'H' a charge of +0.5.  Then
-it calculates the mean charge across -window (default is 5). 
+<p><b>charge</b> uses the column "charge" from a datafile (Eamino.dat) of amino acid properties. It gives the residues 'D' and 'E' a charge of -1, 'K' and 'R' a charge of +1, and the residue 'H' a charge of +0.5. Then it calculates the mean charge across the window, which by default is 5 residues.</p>
+
+
 
 <H2>
     Usage

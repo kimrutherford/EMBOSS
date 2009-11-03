@@ -5,21 +5,18 @@
 
 Function
 
-   Fickett TESTCODE statistic to identify protein-coding DNA
+   Identify protein-coding regions using Fickett TESTCODE statistic
 
 Description
 
-   tcode tests DNA sequences for protein coding regions using an
-   algorithm which looks for simple and universal differences between
-   protein-coding and noncoding DNA.The original paper reports that the
-   test had been thoroughly proven on 400,000 bases of sequence data: it
-   misclassifies 5% of the regions tested and gives an answer of "No
-   Opinion" one fifth of the time.
+   tcode identifies protein-coding regions in one or more DNA sequences
+   using the fickett TESTCODE statistic. This is based on simple and
+   universal differences between protein-coding and noncoding DNA. The
+   TESTCODE statistic is calculated for windows of a specified size over
+   each input sequence. The results can be output as a standard EMBOSS
+   report file or displayed graphically.
 
-   The program slides a window of user-selectable size over the DNA
-   sequence. For each window the TESTCODE statistic is applied. The
-   results can be output as a text report or displayed graphically. The
-   text output reports each window as "Coding", "Noncoding" or "No
+   The output reports each window as "Coding", "Noncoding" or "No
    opinion". Entries marked "No opinion" have a TESTCODE value that falls
    between the maximum and minimum values required to report a region as
    noncoding or coding. For the graphical plot, all points above a green
@@ -81,7 +78,7 @@ Usage
 
 
 % tcode 
-Fickett TESTCODE statistic to identify protein-coding DNA
+Identify protein-coding regions using Fickett TESTCODE statistic
 Input nucleotide sequence(s): tembl:x65921
 Length of sliding window [200]: 
 Output report [x65921.tcode]: 
@@ -95,7 +92,7 @@ Output report [x65921.tcode]:
 
 
 % tcode -plot -graph cps 
-Fickett TESTCODE statistic to identify protein-coding DNA
+Identify protein-coding regions using Fickett TESTCODE statistic
 Input nucleotide sequence(s): tembl:x65921
 Length of sliding window [200]: 
 
@@ -165,6 +162,7 @@ Command line arguments
    -raccshow           boolean    Show accession number in the report
    -rdesshow           boolean    Show description in the report
    -rscoreshow         boolean    Show the score in the report
+   -rstrandshow        boolean    Show the nucleotide strand in the report
    -rusashow           boolean    Show the full USA in the report
    -rmaxall            integer    Maximum total hits to report
    -rmaxseq            integer    Maximum hits to report for one sequence
@@ -181,8 +179,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -385,7 +384,7 @@ Output file format
 
 ########################################
 # Program: tcode
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: tcode
 #    -sequence tembl:x65921
 # Report_format: table
@@ -401,85 +400,85 @@ Output file format
 #
 #=======================================
 
-  Start     End   Score Estimation
-      1     200   0.673 Non-coding
-      4     203   0.681 Non-coding
-      7     206   0.649 Non-coding
-     10     209   0.649 Non-coding
-     13     212   0.649 Non-coding
-     16     215   0.657 Non-coding
-     19     218   0.687 Non-coding
-     22     221   0.767 No opinion
-     25     224   0.800 No opinion
-     28     227   0.782 No opinion
-     31     230   0.779 No opinion
-     34     233   0.839 No opinion
-     37     236   0.951 Coding
-     40     239   0.916 No opinion
-     43     242   0.900 No opinion
-     46     245   0.839 No opinion
-     49     248   0.835 No opinion
-     52     251   0.926 No opinion
-     55     254   0.887 No opinion
-     58     257   0.927 No opinion
-     61     260   0.873 No opinion
-     64     263   0.873 No opinion
-     67     266   0.927 No opinion
-     70     269   1.033 Coding
-     73     272   1.044 Coding
-     76     275   1.012 Coding
-     79     278   1.105 Coding
-     82     281   1.022 Coding
-     85     284   1.098 Coding
-     88     287   0.976 Coding
-     91     290   0.962 Coding
+  Start     End  Strand   Score Estimation
+      1     200       +   0.673 Non-coding
+      4     203       +   0.681 Non-coding
+      7     206       +   0.649 Non-coding
+     10     209       +   0.649 Non-coding
+     13     212       +   0.649 Non-coding
+     16     215       +   0.657 Non-coding
+     19     218       +   0.687 Non-coding
+     22     221       +   0.767 No opinion
+     25     224       +   0.800 No opinion
+     28     227       +   0.782 No opinion
+     31     230       +   0.779 No opinion
+     34     233       +   0.839 No opinion
+     37     236       +   0.951 Coding
+     40     239       +   0.916 No opinion
+     43     242       +   0.900 No opinion
+     46     245       +   0.839 No opinion
+     49     248       +   0.835 No opinion
+     52     251       +   0.926 No opinion
+     55     254       +   0.887 No opinion
+     58     257       +   0.927 No opinion
+     61     260       +   0.873 No opinion
+     64     263       +   0.873 No opinion
+     67     266       +   0.927 No opinion
+     70     269       +   1.033 Coding
+     73     272       +   1.044 Coding
+     76     275       +   1.012 Coding
+     79     278       +   1.105 Coding
+     82     281       +   1.022 Coding
+     85     284       +   1.098 Coding
+     88     287       +   0.976 Coding
+     91     290       +   0.962 Coding
 
 
   [Part of this file has been deleted for brevity]
 
-   1690    1889   0.907 No opinion
-   1693    1892   1.005 Coding
-   1696    1895   0.985 Coding
-   1699    1898   0.907 No opinion
-   1702    1901   0.985 Coding
-   1705    1904   0.985 Coding
-   1708    1907   0.988 Coding
-   1711    1910   0.981 Coding
-   1714    1913   1.001 Coding
-   1717    1916   1.001 Coding
-   1720    1919   1.004 Coding
-   1723    1922   0.975 Coding
-   1726    1925   0.975 Coding
-   1729    1928   0.927 No opinion
-   1732    1931   0.939 No opinion
-   1735    1934   0.930 No opinion
-   1738    1937   0.860 No opinion
-   1741    1940   0.876 No opinion
-   1744    1943   0.876 No opinion
-   1747    1946   0.836 No opinion
-   1750    1949   0.883 No opinion
-   1753    1952   0.934 No opinion
-   1756    1955   0.965 Coding
-   1759    1958   1.012 Coding
-   1762    1961   1.025 Coding
-   1765    1964   0.940 No opinion
-   1768    1967   0.978 Coding
-   1771    1970   0.978 Coding
-   1774    1973   1.012 Coding
-   1777    1976   1.023 Coding
-   1780    1979   1.023 Coding
-   1783    1982   1.023 Coding
-   1786    1985   1.012 Coding
-   1789    1988   0.972 Coding
-   1792    1991   0.943 No opinion
-   1795    1994   1.031 Coding
-   1798    1997   1.031 Coding
-   1801    2000   0.926 No opinion
-   1804    2003   0.845 No opinion
-   1807    2006   0.804 No opinion
-   1810    2009   0.765 No opinion
-   1813    2012   0.765 No opinion
-   1816    2015   0.765 No opinion
+   1690    1889       +   0.907 No opinion
+   1693    1892       +   1.005 Coding
+   1696    1895       +   0.985 Coding
+   1699    1898       +   0.907 No opinion
+   1702    1901       +   0.985 Coding
+   1705    1904       +   0.985 Coding
+   1708    1907       +   0.988 Coding
+   1711    1910       +   0.981 Coding
+   1714    1913       +   1.001 Coding
+   1717    1916       +   1.001 Coding
+   1720    1919       +   1.004 Coding
+   1723    1922       +   0.975 Coding
+   1726    1925       +   0.975 Coding
+   1729    1928       +   0.927 No opinion
+   1732    1931       +   0.939 No opinion
+   1735    1934       +   0.930 No opinion
+   1738    1937       +   0.860 No opinion
+   1741    1940       +   0.876 No opinion
+   1744    1943       +   0.876 No opinion
+   1747    1946       +   0.836 No opinion
+   1750    1949       +   0.883 No opinion
+   1753    1952       +   0.934 No opinion
+   1756    1955       +   0.965 Coding
+   1759    1958       +   1.012 Coding
+   1762    1961       +   1.025 Coding
+   1765    1964       +   0.940 No opinion
+   1768    1967       +   0.978 Coding
+   1771    1970       +   0.978 Coding
+   1774    1973       +   1.012 Coding
+   1777    1976       +   1.023 Coding
+   1780    1979       +   1.023 Coding
+   1783    1982       +   1.023 Coding
+   1786    1985       +   1.012 Coding
+   1789    1988       +   0.972 Coding
+   1792    1991       +   0.943 No opinion
+   1795    1994       +   1.031 Coding
+   1798    1997       +   1.031 Coding
+   1801    2000       +   0.926 No opinion
+   1804    2003       +   0.845 No opinion
+   1807    2006       +   0.804 No opinion
+   1810    2009       +   0.765 No opinion
+   1813    2012       +   0.765 No opinion
+   1816    2015       +   0.765 No opinion
 
 #---------------------------------------
 #---------------------------------------
@@ -494,8 +493,6 @@ Output file format
   Graphics File: tcode.ps
 
    [tcode results]
-
-  File: x65921.tcode
 
 Data files
 
@@ -610,17 +607,19 @@ Data files
 
 Notes
 
+   The TESTCODE statistic reflects the fact that codons are used with
+   unequal frequency and that oligonucleotides and nucleotides tend to be
+   repeated with a periodicity of three. The original paper reports that
+   the test had been thoroughly proven on 400,000 bases of sequence data:
+   it misclassifies 5% of the regions tested and gives an answer of "No
+   Opinion" one fifth of the time.
+
    In the GCG package, the current (version 10.3) TESTCODE application's
-   apparent interpretation of the algorithm is:
-
-        MAX(A1,A2,A3) / MIN(A1,A2,A3)
-
-   The EMBOSS tcode program uses the correct Fickett algorithm equation:
-
-        MAX(A1,A2,A3) / MIN(A1,A2,A3) + 1
-
-   thus any plot using the GCG TESTCODE aplication will be slightly
-   higher than the tcode equivalent.
+   apparent interpretation of the algorithm is: MAX(A1,A2,A3) /
+   MIN(A1,A2,A3) The EMBOSS tcode program uses the correct Fickett
+   algorithm equation: MAX(A1,A2,A3) / MIN(A1,A2,A3) + 1 thus any plot
+   using the GCG TESTCODE aplication will be slightly higher than the
+   tcode equivalent.
 
 References
 
@@ -629,7 +628,9 @@ References
 
 Warnings
 
-   None.
+   The program will ignore ambiguity codes in the nucleic acid sequence
+   and just accept the four common bases. This is a function of the
+   algorithm, and the data tables.
 
 Diagnostic Error Messages
 
@@ -641,14 +642,16 @@ Exit status
 
 See also
 
-   Program name                       Description
-   getorf       Finds and extracts open reading frames (ORFs)
-   marscan      Finds MAR/SAR sites in nucleic sequences
-   plotorf      Plot potential open reading frames
-   showorf      Pretty output of DNA translations
-   sixpack      Display a DNA sequence with 6-frame translation and ORFs
-   syco         Synonymous codon usage Gribskov statistic plot
-   wobble       Wobble base plot
+   Program name Description
+   getorf Finds and extracts open reading frames (ORFs)
+   marscan Finds matrix/scaffold recognition (MRS) signatures in DNA
+   sequences
+   plotorf Plot potential open reading frames in a nucleotide sequence
+   showorf Display a nucleotide sequence and translation in pretty format
+   sixpack Display a DNA sequence with 6-frame translation and ORFs
+   syco Draw synonymous codon usage statictic plot for a nucleotide
+   sequence
+   wobble Plot third base position variability in a nucleotide sequence
 
   See Elsewhere
 

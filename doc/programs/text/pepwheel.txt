@@ -5,17 +5,17 @@
 
 Function
 
-   Shows protein sequences as helices
+   Draw a helical wheel diagram for a protein sequence
 
 Description
 
-   pepwheel displays peptide sequences in a helical representation.
-
-   This gives a view of a helix from a protein sequence looking down the
-   axis of the helix.
-
-   It is useful for highlighting amphipathicity and other properties of
-   residues around a helix.
+   pepwheel draws a helical wheel diagram for a protein sequence. This
+   displays the sequence in a helical representation as if looking down
+   the axis of the helix. It is useful for highlighting amphipathicity
+   and other properties of residues around a helix. By default, aliphatic
+   residues are marked with squares, hydrophilic residues are marked with
+   diamonds, and positively charged residues with octagons, although this
+   can be changed.
 
 Usage
 
@@ -23,7 +23,7 @@ Usage
 
 
 % pepwheel tsw:hbb_human -send 30 
-Shows protein sequences as helices
+Draw a helical wheel diagram for a protein sequence
 Graph type [x11]: cps
 
 Created pepwheel.ps
@@ -96,8 +96,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -242,10 +243,12 @@ Data files
 
 Notes
 
+   The number of residues plotted per turn is the specified "steps" value
+   (-steps) divided by the specified "turns" value (-turns).
+
    The default settings for turn (5) and steps (18) apply to alpha
    helices. For other possible secondary structures, see the following
    table:
-
 helix       phi   psi  omega  res/turn  transl.  turns  steps
 alpha       -57   -47    180       3.6     1.50      5     18
 3-10        -49   -26    180       3.0     2.00      1      3
@@ -258,6 +261,12 @@ para Beta  -119   113    180       2.0     3.2       4      9
 
 PP is polyproline
 PG II is polyGlycine.
+
+   When you specify the number of turns and steps, be aware that you
+   should remove common factors from these two numbers. For example, if
+   you (for some improbable reason) wished to plot a wheel with 8 turns
+   in 18 steps (2.25 residues per turn) you should remove the common
+   factor (i.e. 2) and specify 4 turns in 9 steps.
 
 References
 
@@ -287,26 +296,28 @@ Known bugs
 
 See also
 
-    Program name                         Description
-   abiview        Reads ABI file and display the trace
-   cirdna         Draws circular maps of DNA constructs
-   garnier        Predicts protein secondary structure
-   helixturnhelix Report nucleic acid binding motifs
-   hmoment        Hydrophobic moment calculation
-   lindna         Draws linear maps of DNA constructs
-   pepcoil        Predicts coiled coil regions
-   pepnet         Displays proteins as a helical net
-   prettyplot     Displays aligned sequences, with colouring and boxing
-   prettyseq      Output sequence with translated ranges
-   remap          Display sequence with restriction sites, translation etc
-   seealso        Finds programs sharing group names
-   showalign      Displays a multiple sequence alignment
-   showdb         Displays information on the currently available databases
-   showfeat       Show features of a sequence
-   showseq        Display a sequence with features, translation etc
-   sixpack        Display a DNA sequence with 6-frame translation and ORFs
-   textsearch     Search sequence documentation. Slow, use SRS and Entrez!
-   tmap           Displays membrane spanning regions
+   Program name Description
+   abiview Display the trace in an ABI sequencer file
+   cirdna Draws circular maps of DNA constructs
+   garnier Predicts protein secondary structure using GOR method
+   helixturnhelix Identify nucleic acid-binding motifs in protein
+   sequences
+   hmoment Calculate and plot hydrophobic moment for protein sequence(s)
+   lindna Draws linear maps of DNA constructs
+   pepcoil Predicts coiled coil regions in protein sequences
+   pepnet Draw a helical net for a protein sequence
+   prettyplot Draw a sequence alignment with pretty formatting
+   prettyseq Write a nucleotide sequence and its translation to file
+   remap Display restriction enzyme binding sites in a nucleotide
+   sequence
+   seealso Finds programs with similar function to a specified program
+   showalign Display a multiple sequence alignment in pretty format
+   showdb Displays information on configured databases
+   showfeat Display features of a sequence in pretty format
+   showseq Displays sequences with features in pretty format
+   sixpack Display a DNA sequence with 6-frame translation and ORFs
+   textsearch Search the textual description of sequence(s)
+   tmap Predict and plot transmembrane segments in protein sequences
 
 Author(s)
 

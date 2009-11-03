@@ -22,51 +22,17 @@ stretcher
 </H2>
 
 
-<b>stretcher</b> calculates a global alignment of two sequences using a
-modification of the classic dynamic programming algorithm which uses
-linear space. 
+<p><b>stretcher</b> calculates an optimal global alignment of two sequences using a modification of the classic dynamic programming algorithm which uses linear space.  The output is a standard alignment file.  The substitution matrix, gap insertion penalty and gap extension penalties used to calculate the alignment may be specified.</p>
 
-<p>
+<H2>
+Algorithm
+</H2>
+<p>The standard sequence global alignment program using the Needleman & Wunsch algorithm, as implemented in the program <b>needle</b>, requires O(MN) space and O(N) time. This is standard computer-science language for it needing an amount of computer memory that is proportional to the product of the two sequences being aligned and taking an amount of time that is proportional to the shorter of the two sequences. So if a 1 kb and a 10 kb sequence take 10 Mega-words of memory and 10 minutes to align, you should expect that in order to align a 10 kb sequence and a 1 Mb sequence you will need appoximately 10 Giga-words of memory and 100 minutes. Computer memory will rapidly be exhausted as the size of the aligned sequences increases.</p>
 
-A <b>global</b> pairwise alignment is one where it is assumed that the
-two sequences have diverged from a common ancestor and that the program
-should try to stretch the two sequences, introducing gaps where
-necessary, in order to show the alignment over the whole length of the
-two sequences that best illustrates their similarities.
+<p>This program implements the Myers and Miller algorithm for finding an optimal global alignment in an amount of computer memory that is only proportional to the size of the smaller sequence - O(N).</p>
 
-<p>
+<p>In computing, a benefit is seldom gained without a cost elsewhere. The cost of gaining a memory-efficient alignment is that it takes about twice the amount of time to do the alignment as the Needleman & Wunsch algorithm. In computer-science language the time is approximately O(2N). </p>
 
-In contrast, a <b>local</b> alignment program like <b>matcher</b> simply
-finds local, small parts of the two sequences where there is some
-similarity and makes no assumption about the whole length of the
-sequence needing to be similar. 
-
-<p>
-
-The standard sequence global alignment program using the Needleman &
-Wunsch algorithm, as implemented in the program <b>needle</b>, requires
-O(MN) space and O(N) time.  This is standard computer-science language
-for it needing an amount of computer memory that is proportional to the
-product of the two sequences being aligned and taking an amount of time
-that is proportional to the shorter of the two sequences.  So if a 1 kb
-and a 10 kb sequence take 10 Mega-words of memory and 10 minutes to
-align, you should expect that in order to align a 10 kb sequence and a 1
-Mb sequence you will need appoximately 10 Giga-words of memory and 100
-minutes.  Computer memory will rapidly be exhausted as the size of the
-aligned sequences increases. 
-
-<p>
-
-This program implements the Myers and Miller algorithm for finding an
-optimal global alignment in an amount of computer memory that is only
-proportional to the size of the smaller sequence - O(N). 
-
-<p>
-
-In computing, a benefit is seldom gained without a cost elsewhere.  The
-cost of gaining a memory-efficient alignment is that it takes about
-twice the amount of time to do the alignment as the Needleman & Wunsch
-algorithm. In computer-science language the time is approximately O(2N).
 
 <H2>
     Usage
@@ -150,8 +116,7 @@ The directories are searched in the following order:
     Notes
 </H2>
 
-
-None.
+<p>A global pairwise alignment is one where it is assumed that the two sequences have diverged from a common ancestor and that the program should try to stretch the two sequences, introducing gaps where necessary, in order to show the alignment over the whole length of the two sequences that best illustrates their similarities. In contrast, a local alignment program like <b>matcher</b> simply finds local, small parts of the two sequences where there is some similarity and makes no assumption about the whole length of the sequence needing to be similar.</p>
 
 <H2>
     References
@@ -170,13 +135,9 @@ E.  Myers and W.  Miller, "Optimal Alignments in Linear Space," CABIOS
     Warnings
 </H2>
 
-This program will produce a global alignment even if there is no
-biological justification for thinking that there might be a common
-ancestor. 
+<p>Demonstration of similarity is not evidence of homology!  This program will produce a global alignment even if there is no biological justification for thinking that there might be a common ancestor.</p>
 
-<p>
 
-Demonstration of similarity is not evidence of homology!
 
 <H2>
     Diagnostic Error Messages

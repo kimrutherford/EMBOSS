@@ -1,5 +1,5 @@
 application: fuzzpro [
-  documentation: "Protein pattern search"
+  documentation: "Search for patterns in protein sequences"
   groups: "Protein:Motifs"
   gui: "yes"
   batch: "yes"

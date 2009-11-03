@@ -1,6 +1,5 @@
 application: prophecy [
-  documentation: "Creates matrices/profiles from multiple
-                  alignments"
+  documentation: "Create frequency matrix or profile from a multiple alignment"
   groups: "Nucleic:Profiles, Protein:Profiles"
 ]
 

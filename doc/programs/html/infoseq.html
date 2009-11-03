@@ -24,26 +24,13 @@ infoseq
 <H2>
     Function
 </H2>
-Displays some simple information about sequences
+Display basic information about sequences
 
 <H2>
     Description
 </H2>
 
-
-This is a small utility to list the sequences' USA, name, accession
-number, type (nucleic or protein), length, percentage C+G, and/or
-description. 
-
-<p>
-Any combination of these types of information can be easily selected or
-unselected. 
-
-<p>
-By default, the output file starts each line with the USA of the
-sequence being described, so the output file is a list file that can be
-manually edited and read in by any other EMBOSS program that can read in
-one or more sequence to be analysed. 
+<p><b>infoseq</b> displays on screen basic information about one or more input sequences.  This includes the Uniform Sequence Address (USA), name, accession number, type (nucleic or protein), length, percentage C+G and description.  Any combination of these records is easily selected or unselected for display. The same information may be written to an output file which (optionally) may be formatted in an HTML table.</p>
 
 <H2>
     Usage
@@ -57,7 +44,7 @@ Display information on a sequence:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>infoseq tembl:x13776 </b>
-Displays some simple information about sequences
+Display basic information about sequences
 
 USA                      Database  Name           Accession      Type Length %GC    Description 
 tembl-id:X13776          tembl          X13776         X13776         N    2167   66.54  Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
@@ -75,7 +62,7 @@ Don't display the USA of a sequence:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>infoseq tembl:x13776 -nousa </b>
-Displays some simple information about sequences
+Display basic information about sequences
 
 Database  Name           Accession      Type Length %GC    Description 
 tembl          X13776         X13776         N    2167   66.54  Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
@@ -93,7 +80,7 @@ Display only the name and length of a sequence:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>infoseq tembl:x13776 -only -name -length </b>
-Displays some simple information about sequences
+Display basic information about sequences
 
 Name           Length 
 X13776         2167   
@@ -111,7 +98,7 @@ Display only the description of a sequence:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>infoseq tembl:x13776 -only -desc </b>
-Displays some simple information about sequences
+Display basic information about sequences
 
 Description 
 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
@@ -129,7 +116,7 @@ Display the type of a sequence:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>infoseq tembl:x13776 -only -type </b>
-Displays some simple information about sequences
+Display basic information about sequences
 
 Type 
 N    
@@ -147,7 +134,7 @@ Display information formatted with HTML:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>infoseq tembl:x13776 -html </b>
-Displays some simple information about sequences
+Display basic information about sequences
 
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>USA</th><th>Database</th><th>Name</th><th>Accession</th><th>Type</th><th>Length</th><th>%GC</th><th>Description</th></tr>
@@ -235,8 +222,9 @@ Displays some simple information about sequences
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -581,24 +569,9 @@ None.
 </H2>
 
 
-This program was written to make it easier to get some specific bits
-of information on a sequence for use in small perl scripts.
+<p>There are many qualifiers to control exactly what information on the sequence is output and how it is formatted.  If you only want a few fields in the output file, the command line may be shortended by preceding the appropriate qualifier with <tt>-only</tt>.  For example, instead of specifying <tt>-nohead -noname -noacc -notype -nopgc -nodesc</tt> to get only the length output, you can specify <tt>-only -length</tt>.</p>
+<p>By default, the output file starts each line with the USA of the sequence being described, so the output file is a list file that can be manually edited and read in by any other EMBOSS program that can read in one or more sequence to be analysed.</p>
 
-This Perl code fragment to get the type of a sequence is typical:
-
-<pre>
-$type = `$PATH_TO_EMBOSS/infoseq $sequence -auto -only -type`;
-chomp $type;
-</pre>
-
-<p>
-You may find other uses for it, of course.
-	
-<p>
-By default, the output file starts each line with the USA of the
-sequence being described, so the output file is a list file that can be
-manually edited and read in by other EMBOSS programs using the list-file
-specification of '@filename'. 
 
 <H2>
     References
@@ -637,40 +610,51 @@ None noted.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="infoalign.html">infoalign</a></td>
-<td>Information on a multiple sequence alignment</td>
+<td>Display basic information about a multiple sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="infobase.html">infobase</a></td>
+<td>Return information on a given nucleotide base</td>
+</tr>
+
+<tr>
+<td><a href="inforesidue.html">inforesidue</a></td>
+<td>Return information on a given amino acid residue</td>
 </tr>
 
 <tr>
 <td><a href="seealso.html">seealso</a></td>
-<td>Finds programs sharing group names</td>
+<td>Finds programs with similar function to a specified program</td>
 </tr>
 
 <tr>
 <td><a href="showdb.html">showdb</a></td>
-<td>Displays information on the currently available databases</td>
+<td>Displays information on configured databases</td>
 </tr>
 
 <tr>
 <td><a href="textsearch.html">textsearch</a></td>
-<td>Search sequence documentation. Slow, use SRS and Entrez!</td>
+<td>Search the textual description of sequence(s)</td>
 </tr>
 
 <tr>
 <td><a href="tfm.html">tfm</a></td>
-<td>Displays a program's help documentation manual</td>
+<td>Displays full documentation for an application</td>
 </tr>
 
 <tr>
 <td><a href="whichdb.html">whichdb</a></td>
-<td>Search all databases for an entry</td>
+<td>Search all sequence databases for an entry and retrieve it</td>
 </tr>
 
 <tr>
 <td><a href="wossname.html">wossname</a></td>
-<td>Finds programs by keywords in their one-line documentation</td>
+<td>Finds programs by keywords in their short description</td>
 </tr>
 
 </table>

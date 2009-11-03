@@ -22,13 +22,61 @@ preg
 </H2>
 
 
-This searches for matches of a regular expression to a protein sequence.
+<p><b>preg</b> searches for matches of the supplied regular expression to the input protein sequence(s).  A regular expression is a way of specifying an ambiguous pattern to search for.  The output is a standard EMBOSS report file with details of any matches.</p>
+
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/preg.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/preg.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/preg.itable" -->
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+
+<b>preg</b> reads any protein sequence USA.
 
 <p>
-A regular expression is a way of specifying an ambiguous pattern to
-search for.  Regular expressions are commonly used in some computer
-programming languages and may be more familiar to some users than to
-others. 
+
+<!--#include file="inc/preg.input" -->
+
+
+<H2>
+    Output file format
+</H2>
+
+
+<!--#include file="inc/preg.output" -->
+
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
 
 <p>
 The following is a short guide to regular expressions in EMBOSS:
@@ -142,57 +190,6 @@ converted to upper-case.
 
 <!--#include file="inc/pcre.inc" -->
 
-
-<H2>
-    Usage
-</H2>
-<!--#include file="inc/preg.usage" -->
-
-
-<H2>
-    Command line arguments
-</H2>
-<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
-<pre>
-<!--#include file="inc/preg.ihelp" -->
-</pre>
-</td></tr></table>
-<P>
-
-<!--#include file="inc/preg.itable" -->
-
-
-<H2>
-    Input file format
-</H2>
-
-
-<b>preg</b> reads any protein sequence USA.
-
-<p>
-
-<!--#include file="inc/preg.input" -->
-
-
-<H2>
-    Output file format
-</H2>
-
-
-<!--#include file="inc/preg.output" -->
-
-
-<H2>
-    Data files
-</H2>
-
-None.
-
-<H2>
-    Notes
-</H2>
-
-None.
 
 <H2>
     References

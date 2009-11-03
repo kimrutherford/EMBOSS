@@ -28,6 +28,305 @@ and Gibson, T.J. (1994).
 This is an interface to the ClustalW distribution.
 
 
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/emma.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/emma.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/emma.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+The input is two or more sequences.
+
+<p>
+<!--#include file="inc/emma.input" -->
+<p>
+
+EMBOSS programs do not allow you to simply type the names of two or more
+files or database entries - they try to interpret this as all one
+file-name and complain that a file of that name does not exist. 
+
+<p>
+
+In order to enter the sequences that you wish to align, you must group
+them in one of three ways: either make a 'list file' or place several
+sequences in a single sequence file or specify the sequences using
+wildcards. 
+
+<p>
+
+
+<H3>Making a List file</H3>
+
+A list file is a text file that holds the names of database entries
+and/or sequence files. 
+
+<p>
+
+You should use a text editor such as <b>pico</b> or <b>nedit</b> to edit
+a file to contain the names of the sequence files or database entries. 
+There must be one sequence per line. 
+
+<p>
+
+An example is the file 'fred' which contains:
+
+<p>
+<pre>
+<hr>
+opsd_abyko.fasta
+sw:opsd_xenla
+sw:opsd_c*
+@another_list
+<hr>
+</pre>
+<p>
+
+This List files contains:
+
+<p>
+<ul>
+
+<li>opsd_abyko.fasta - this is the name of a sequence file. The file
+is read in from the current directory.
+
+<li>sw:opsd_xenla - this is a reference to a specific sequence in the
+SwissProt database
+
+<li>sw:opsd_c* - this represents all the sequences in SwissProt whose
+identifiers start with ``opsd_c''
+
+<li>another_list - this is the name of a second list file. List files
+can be nested!
+
+</ul>
+<p>
+
+Notice the @ in front of the last entry.  This is the way you tell
+EMBOSS that this file is a List file, not a regular sequence file.  That
+last line was put there both as an indication of the way you tell EMBOSS
+that a file is a List file and to emphasise that List files can contain
+other List files. 
+
+<p>
+
+When <b>emma</b> asks for the sequences to align, you should type
+'@fred'.  The '@' character tells EMBOSS that this is the name
+of a List file.
+
+<p>
+
+An alternative to editing a file and laboriously typing in all of the
+names you require is to make a list of a directory containing the
+sequence files and then to edit the list file to remove the names of the
+sequences files than you do not require. 
+
+<p>
+
+To make a list of all the files in the current directory that end in
+'.pep', type:
+
+<p>
+
+ls *.pep &gt; listfile
+
+<H3>Several sequences in one file</H3>
+
+EMBOSS can read in a single file which contains many sequences.
+
+<p>
+
+Each of the sequences in the file must be in the same format - if the
+first sequence is in EMBL format, then all the others must be in EMBL
+format. 
+
+<p>
+
+There are some sequence formats that cannot be used when placing many
+sequences in the same file.  These are sequence formats that have no
+clear indication of where the sequence ends and the annotation of the
+next sequence starts.  These formats include: plain or text format (no
+real format, just the sequence), staden, gcg. 
+
+<p>
+
+If your sequences are not already in a single file, you can place them
+in one using <b>seqret</b>.  The following example takes all the files
+ending in '.pep' and places them in the file 'mystuff' in Fasta format. 
+
+<p>
+
+seqret "*.pep" mystuff
+
+<p>
+
+When <b>emma</b> asks for the sequences to align, you should type
+'mystuff'.
+
+<H3>Using wildcards</H3>
+
+'Wildcard' characters are characters that are expanded to match all
+possible matching files or entries in a database. 
+
+<p>
+
+By far the most commonly used wildcard character is '*' which matches
+any number (or zero) of possible characters at that position in the name. 
+
+<p>
+
+A less commonly used wildcard character is '?' which matches any one
+character at that position. 
+
+<p>
+
+For example, when <b>emma</b> asks for sequences to align, you could answer:
+<br>
+abc*.pep
+
+This would select any files whose name starts with 'abc' and then ends
+in '.pep'; the centre of the name where there is a '*' can be anything. 
+
+<p>
+
+Both file names and database entry names can be wildcarded.
+
+<p>
+
+There is a slightly irritating problem that occurs when wildcards are
+used one the Unix command line (This is the line that you type against
+the 'Unix' prompt together with the program name.)
+
+<p>
+
+In this case the Unix session gets the command line first, runs the
+program, expands the wildcards and passes the program parameters to the
+program.  When Unix expands the wildcards, two things go wrong.  You may
+have specified wildcarded database entries - the Unix system tries to
+file files that match that specification, it fails and refuses to run
+the program.  Alternatively, you may have specified wildcarded files -
+Unix fileds them and gives the name of each of them to the program as a
+separate parameter - emma gets the wrong number of parameters and
+refuses to run. 
+
+<p>
+
+You get round this by quoting the wildcard.  You can either put the
+whole wildcarded name in quotes:
+
+<br>
+"abc*.pep"
+<br>
+
+or you can quote just the '*' using a '\' as:
+<br>
+abc\*.pep
+<br>  
+
+<p>
+
+This problem does not occur when you reply to the prompt from the
+program for the input sequences, or when you are typing the wildcard
+files name in a web browser of GUI (such as Jemboss or SPIN) field
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/emma.output" -->
+<p>
+
+<h3>Sequences</h3>
+
+<b>emma</b> writes the aligned sequences and a dendrogram file showing how
+the sequences were clustered during the progressive alignments.
+
+<p>
+
+The clustalw output sequences are reformatted into the default EMBOSS
+output format instead of being left as Clustal-format '.aln' files. 
+
+
+<h3>Trees</h3>
+
+Believe it or not, we now use the New Hampshire (nested parentheses)
+format as default for our trees.  This format is compatible with e.g. the
+PHYLIP package.  If you want to view a tree, you can use the RETREE or 
+DRAWGRAM/DRAWTREE programs of PHYLIP.  This format is used for all our 
+trees, even the initial guide trees for deciding the order of multiple
+alignment.  The output trees from the phylogenetic tree menu can also be
+requested in our old verbose/cryptic format.  This may be more useful
+if, for example, you wish to see the bootstrap figures.  The bootstrap
+trees in the default New Hampshire format give the bootstrap figures
+as extra labels which can be viewed very easily using TREETOOL which is
+available as part of the GDE package.  TREETOOL is available from the
+RDP project by ftp from rdp.life.uiuc.edu.  
+
+<p>
+
+The New Hampshire format is only useful if you have software to display
+or manipulate the trees.  The PHYLIP package is highly recommended if
+you intend to do much work with trees and includes programs for doing
+this.  WE DO NOT PROVIDE ANY DIRECT MEANS FOR VIEWING TREES GRAPHICALLY. 
+
+
+
+<H2>
+    Data files
+</H2>
+
+
+The comparison matrices available for clustalw are not EMBOSS matrix
+files, as they are defined in the clustalw code. The matrices
+available for carrying out a protein sequence alignment are:
+
+<ul>
+
+<li>blosum
+
+<li>pam
+
+<li>gonnet
+
+<li>id
+
+<li>user defined
+
+</ul>
+
+The comparison matrices available in clustalw for carrying out a
+nucleotide sequence alignment are:
+
+<ul>
+
+<li>iub
+
+<li>clustalw
+
+<li>user defined
+
+</ul>
+
+
+<H2>
+    Notes
+</H2>
+
 <h3>The basic alignment method</h3>
 
 The basic multiple alignment algorithm consists of three main stages: 1) all 
@@ -550,305 +849,6 @@ of your sequences between each bootstrap sample.
 
 
 
-
-<H2>
-    Usage
-</H2>
-<!--#include file="inc/emma.usage" -->
-
-
-<H2>
-    Command line arguments
-</H2>
-<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
-<pre>
-<!--#include file="inc/emma.ihelp" -->
-</pre>
-</td></tr></table>
-<P>
-<!--#include file="inc/emma.itable" -->
-
-<H2>
-    Input file format
-</H2>
-
-The input is two or more sequences.
-
-<p>
-<!--#include file="inc/emma.input" -->
-<p>
-
-EMBOSS programs do not allow you to simply type the names of two or more
-files or database entries - they try to interpret this as all one
-file-name and complain that a file of that name does not exist. 
-
-<p>
-
-In order to enter the sequences that you wish to align, you must group
-them in one of three ways: either make a 'list file' or place several
-sequences in a single sequence file or specify the sequences using
-wildcards. 
-
-<p>
-
-
-<H3>Making a List file</H3>
-
-A list file is a text file that holds the names of database entries
-and/or sequence files. 
-
-<p>
-
-You should use a text editor such as <b>pico</b> or <b>nedit</b> to edit
-a file to contain the names of the sequence files or database entries. 
-There must be one sequence per line. 
-
-<p>
-
-An example is the file 'fred' which contains:
-
-<p>
-<pre>
-<hr>
-opsd_abyko.fasta
-sw:opsd_xenla
-sw:opsd_c*
-@another_list
-<hr>
-</pre>
-<p>
-
-This List files contains:
-
-<p>
-<ul>
-
-<li>opsd_abyko.fasta - this is the name of a sequence file. The file
-is read in from the current directory.
-
-<li>sw:opsd_xenla - this is a reference to a specific sequence in the
-SwissProt database
-
-<li>sw:opsd_c* - this represents all the sequences in SwissProt whose
-identifiers start with ``opsd_c''
-
-<li>another_list - this is the name of a second list file. List files
-can be nested!
-
-</ul>
-<p>
-
-Notice the @ in front of the last entry.  This is the way you tell
-EMBOSS that this file is a List file, not a regular sequence file.  That
-last line was put there both as an indication of the way you tell EMBOSS
-that a file is a List file and to emphasise that List files can contain
-other List files. 
-
-<p>
-
-When <b>emma</b> asks for the sequences to align, you should type
-'@fred'.  The '@' character tells EMBOSS that this is the name
-of a List file.
-
-<p>
-
-An alternative to editing a file and laboriously typing in all of the
-names you require is to make a list of a directory containing the
-sequence files and then to edit the list file to remove the names of the
-sequences files than you do not require. 
-
-<p>
-
-To make a list of all the files in the current directory that end in
-'.pep', type:
-
-<p>
-
-ls *.pep &gt; listfile
-
-<H3>Several sequences in one file</H3>
-
-EMBOSS can read in a single file which contains many sequences.
-
-<p>
-
-Each of the sequences in the file must be in the same format - if the
-first sequence is in EMBL format, then all the others must be in EMBL
-format. 
-
-<p>
-
-There are some sequence formats that cannot be used when placing many
-sequences in the same file.  These are sequence formats that have no
-clear indication of where the sequence ends and the annotation of the
-next sequence starts.  These formats include: plain or text format (no
-real format, just the sequence), staden, gcg. 
-
-<p>
-
-If your sequences are not already in a single file, you can place them
-in one using <b>seqret</b>.  The following example takes all the files
-ending in '.pep' and places them in the file 'mystuff' in Fasta format. 
-
-<p>
-
-seqret "*.pep" mystuff
-
-<p>
-
-When <b>emma</b> asks for the sequences to align, you should type
-'mystuff'.
-
-<H3>Using wildcards</H3>
-
-'Wildcard' characters are characters that are expanded to match all
-possible matching files or entries in a database. 
-
-<p>
-
-By far the most commonly used wildcard character is '*' which matches
-any number (or zero) of possible characters at that position in the name. 
-
-<p>
-
-A less commonly used wildcard character is '?' which matches any one
-character at that position. 
-
-<p>
-
-For example, when <b>emma</b> asks for sequences to align, you could answer:
-<br>
-abc*.pep
-
-This would select any files whose name starts with 'abc' and then ends
-in '.pep'; the centre of the name where there is a '*' can be anything. 
-
-<p>
-
-Both file names and database entry names can be wildcarded.
-
-<p>
-
-There is a slightly irritating problem that occurs when wildcards are
-used one the Unix command line (This is the line that you type against
-the 'Unix' prompt together with the program name.)
-
-<p>
-
-In this case the Unix session gets the command line first, runs the
-program, expands the wildcards and passes the program parameters to the
-program.  When Unix expands the wildcards, two things go wrong.  You may
-have specified wildcarded database entries - the Unix system tries to
-file files that match that specification, it fails and refuses to run
-the program.  Alternatively, you may have specified wildcarded files -
-Unix fileds them and gives the name of each of them to the program as a
-separate parameter - emma gets the wrong number of parameters and
-refuses to run. 
-
-<p>
-
-You get round this by quoting the wildcard.  You can either put the
-whole wildcarded name in quotes:
-
-<br>
-"abc*.pep"
-<br>
-
-or you can quote just the '*' using a '\' as:
-<br>
-abc\*.pep
-<br>  
-
-<p>
-
-This problem does not occur when you reply to the prompt from the
-program for the input sequences, or when you are typing the wildcard
-files name in a web browser of GUI (such as Jemboss or SPIN) field
-
-<H2>
-    Output file format
-</H2>
-
-<!--#include file="inc/emma.output" -->
-<p>
-
-<h3>Sequences</h3>
-
-<b>emma</b> writes the aligned sequences and a dendrogram file showing how
-the sequences were clustered during the progressive alignments.
-
-<p>
-
-The clustalw output sequences are reformatted into the default EMBOSS
-output format instead of being left as Clustal-format '.aln' files. 
-
-
-<h3>Trees</h3>
-
-Believe it or not, we now use the New Hampshire (nested parentheses)
-format as default for our trees.  This format is compatible with e.g. the
-PHYLIP package.  If you want to view a tree, you can use the RETREE or 
-DRAWGRAM/DRAWTREE programs of PHYLIP.  This format is used for all our 
-trees, even the initial guide trees for deciding the order of multiple
-alignment.  The output trees from the phylogenetic tree menu can also be
-requested in our old verbose/cryptic format.  This may be more useful
-if, for example, you wish to see the bootstrap figures.  The bootstrap
-trees in the default New Hampshire format give the bootstrap figures
-as extra labels which can be viewed very easily using TREETOOL which is
-available as part of the GDE package.  TREETOOL is available from the
-RDP project by ftp from rdp.life.uiuc.edu.  
-
-<p>
-
-The New Hampshire format is only useful if you have software to display
-or manipulate the trees.  The PHYLIP package is highly recommended if
-you intend to do much work with trees and includes programs for doing
-this.  WE DO NOT PROVIDE ANY DIRECT MEANS FOR VIEWING TREES GRAPHICALLY. 
-
-
-
-<H2>
-    Data files
-</H2>
-
-
-The comparison matrices available for clustalw are not EMBOSS matrix
-files, as they are defined in the clustalw code. The matrices
-available for carrying out a protein sequence alignment are:
-
-<ul>
-
-<li>blosum
-
-<li>pam
-
-<li>gonnet
-
-<li>id
-
-<li>user defined
-
-</ul>
-
-The comparison matrices available in clustalw for carrying out a
-nucleotide sequence alignment are:
-
-<ul>
-
-<li>iub
-
-<li>clustalw
-
-<li>user defined
-
-</ul>
-
-
-<H2>
-    Notes
-</H2>
-
-None
 
 <H2>
     References

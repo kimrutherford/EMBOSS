@@ -47,10 +47,10 @@
 </tr>
 
 <tr>
-<td>-aadata</td>
-<td>Amino acids properties and molecular weight data file</td>
+<td>-mwdata</td>
+<td>Molecular weights data file</td>
 <td>Data file</td>
-<td>Eamino.dat</td>
+<td>Emolwt.dat</td>
 </tr>
 
 <tr>
@@ -64,6 +64,13 @@
 <th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-mono</td>
+<td>Use monoisotopic weights</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
 </tr>
 
 <tr>

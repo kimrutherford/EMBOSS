@@ -1,6 +1,5 @@
 application: matcher [
-  documentation: "Finds the best local alignments between two
-                  sequences"
+  documentation: "Waterman-Eggert local alignment of two sequences"
   groups: "Alignment:Local"
 ]
 

@@ -24,20 +24,242 @@ preg
 <H2>
     Function
 </H2>
-Regular expression search of a protein sequence
+Regular expression search of protein sequence(s)
 
 <H2>
     Description
 </H2>
 
 
-This searches for matches of a regular expression to a protein sequence.
+<p><b>preg</b> searches for matches of the supplied regular expression to the input protein sequence(s).  A regular expression is a way of specifying an ambiguous pattern to search for.  The output is a standard EMBOSS report file with details of any matches.</p>
+
+
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with preg</b>
+<p>
 
 <p>
-A regular expression is a way of specifying an ambiguous pattern to
-search for.  Regular expressions are commonly used in some computer
-programming languages and may be more familiar to some users than to
-others. 
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>preg </b>
+Regular expression search of protein sequence(s)
+Input protein sequence(s): <b>tsw:*_rat</b>
+Regular expression pattern: <b>IA[QWF]A</b>
+Output report [edd1_rat.preg]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Protein sequence(s) filename and optional
+                                  format, or reference (input USA)
+  [-pattern]           regexp     Any regular expression pattern is accepted)
+  [-outfile]           report     [*.preg] Output report file name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-pattern" associated qualifiers
+   -pformat2           string     File format
+   -pname2             string     Pattern base name
+
+   "-outfile" associated qualifiers
+   -rformat3           string     Report format
+   -rname3             string     Base file name
+   -rextension3        string     File name extension
+   -rdirectory3        string     Output directory
+   -raccshow3          boolean    Show accession number in the report
+   -rdesshow3          boolean    Show description in the report
+   -rscoreshow3        boolean    Show the score in the report
+   -rstrandshow3       boolean    Show the nucleotide strand in the report
+   -rusashow3          boolean    Show the full USA in the report
+   -rmaxall3           integer    Maximum total hits to report
+   -rmaxseq3           integer    Maximum hits to report for one sequence
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Protein sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-pattern]<br>(Parameter 2)</td>
+<td>Regular expression pattern</td>
+<td>Any regular expression pattern is accepted</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 3)</td>
+<td>Output report file name</td>
+<td>Report output file</td>
+<td><i>&lt;*&gt;</i>.preg</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+
+<b>preg</b> reads any protein sequence USA.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tsw:*_rat' is a sequence entry in the example protein database 'tsw'
+<p>
+
+
+<H2>
+    Output file format
+</H2>
+
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: edd1_rat.preg</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: preg
+# Rundate: Tue 15 Jul 2008 12:00:00
+# Commandline: preg
+#    -sequence "tsw:*_rat"
+#    -pattern "IA[QWF]A"
+# Report_format: seqtable
+# Report_file: edd1_rat.preg
+########################################
+
+#=======================================
+#
+# Sequence: EDD1_RAT     from: 1   to: 920
+# HitCount: 1
+#
+# Pattern: IA[QWF]A
+#
+#=======================================
+
+  Start     End Pattern_name Sequence
+    421     424 regex1       IAQA
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: ARF3_RAT     from: 1   to: 181
+# HitCount: 0
+#
+# Pattern: IA[QWF]A
+#
+#=======================================
+
+  Start     End Pattern_name Sequence
+
+#---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 2
+# Total_hitcount: 1
+#---------------------------------------
+</pre>
+</td></tr></table><p>
+
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
 
 <p>
 The following is a short guide to regular expressions in EMBOSS:
@@ -976,229 +1198,6 @@ does two things:
 
 
 <H2>
-    Usage
-</H2>
-<b>Here is a sample session with preg</b>
-<p>
-
-<p>
-<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
-
-% <b>preg </b>
-Regular expression search of a protein sequence
-Input protein sequence(s): <b>tsw:*_rat</b>
-Regular expression pattern: <b>IA[QWF]A</b>
-Output report [edd1_rat.preg]: <b></b>
-
-</pre></td></tr></table><p>
-<p>
-<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
-
-
-<H2>
-    Command line arguments
-</H2>
-<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
-<pre>
-   Standard (Mandatory) qualifiers:
-  [-sequence]          seqall     Protein sequence(s) filename and optional
-                                  format, or reference (input USA)
-  [-pattern]           regexp     Any regular expression pattern is accepted)
-  [-outfile]           report     [*.preg] Output report file name
-
-   Additional (Optional) qualifiers: (none)
-   Advanced (Unprompted) qualifiers: (none)
-   Associated qualifiers:
-
-   "-sequence" associated qualifiers
-   -sbegin1            integer    Start of each sequence to be used
-   -send1              integer    End of each sequence to be used
-   -sreverse1          boolean    Reverse (if DNA)
-   -sask1              boolean    Ask for begin/end/reverse
-   -snucleotide1       boolean    Sequence is nucleotide
-   -sprotein1          boolean    Sequence is protein
-   -slower1            boolean    Make lower case
-   -supper1            boolean    Make upper case
-   -sformat1           string     Input sequence format
-   -sdbname1           string     Database name
-   -sid1               string     Entryname
-   -ufo1               string     UFO features
-   -fformat1           string     Features format
-   -fopenfile1         string     Features file name
-
-   "-pattern" associated qualifiers
-   -pformat2           string     File format
-   -pname2             string     Pattern base name
-
-   "-outfile" associated qualifiers
-   -rformat3           string     Report format
-   -rname3             string     Base file name
-   -rextension3        string     File name extension
-   -rdirectory3        string     Output directory
-   -raccshow3          boolean    Show accession number in the report
-   -rdesshow3          boolean    Show description in the report
-   -rscoreshow3        boolean    Show the score in the report
-   -rusashow3          boolean    Show the full USA in the report
-   -rmaxall3           integer    Maximum total hits to report
-   -rmaxseq3           integer    Maximum hits to report for one sequence
-
-   General qualifiers:
-   -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
-   -options            boolean    Prompt for standard and additional values
-   -debug              boolean    Write debug output to program.dbg
-   -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
-                                  information on associated and general
-                                  qualifiers can be found with -help -verbose
-   -warning            boolean    Report warnings
-   -error              boolean    Report errors
-   -fatal              boolean    Report fatal errors
-   -die                boolean    Report dying program messages
-
-</pre>
-</td></tr></table>
-<P>
-
-<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
-<tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
-</tr>
-
-<tr>
-<td>[-sequence]<br>(Parameter 1)</td>
-<td>Protein sequence(s) filename and optional format, or reference (input USA)</td>
-<td>Readable sequence(s)</td>
-<td><b>Required</b></td>
-</tr>
-
-<tr>
-<td>[-pattern]<br>(Parameter 2)</td>
-<td>Regular expression pattern</td>
-<td>Any regular expression pattern is accepted</td>
-<td><b>Required</b></td>
-</tr>
-
-<tr>
-<td>[-outfile]<br>(Parameter 3)</td>
-<td>Output report file name</td>
-<td>Report output file</td>
-<td><i>&lt;*&gt;</i>.preg</td>
-</tr>
-
-<tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Additional (Optional) qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
-</tr>
-
-<tr>
-<td colspan=4>(none)</td>
-</tr>
-
-<tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
-</tr>
-
-<tr>
-<td colspan=4>(none)</td>
-</tr>
-
-</table>
-
-
-<H2>
-    Input file format
-</H2>
-
-
-<b>preg</b> reads any protein sequence USA.
-
-<p>
-
-
-<a name="input.1"></a>
-<h3>Input files for usage example </h3>
-
-'tsw:*_rat' is a sequence entry in the example protein database 'tsw'
-<p>
-
-
-<H2>
-    Output file format
-</H2>
-
-
-
-<a name="output.1"></a>
-<h3>Output files for usage example </h3>
-<p><h3>File: edd1_rat.preg</h3>
-<table width="90%"><tr><td bgcolor="#CCFFCC">
-<pre>
-########################################
-# Program: preg
-# Rundate: Sun 15 Jul 2007 12:00:00
-# Commandline: preg
-#    -sequence "tsw:*_rat"
-#    -pattern "IA[QWF]A"
-# Report_format: seqtable
-# Report_file: edd1_rat.preg
-########################################
-
-#=======================================
-#
-# Sequence: EDD1_RAT     from: 1   to: 920
-# HitCount: 1
-#
-# Pattern: IA[QWF]A
-#
-#=======================================
-
-  Start     End Pattern_name Sequence
-    421     424 regex1       IAQA
-
-#---------------------------------------
-#---------------------------------------
-#=======================================
-#
-# Sequence: ARF3_RAT     from: 1   to: 181
-# HitCount: 0
-#
-# Pattern: IA[QWF]A
-#
-#=======================================
-
-  Start     End Pattern_name Sequence
-
-#---------------------------------------
-#---------------------------------------
-
-#---------------------------------------
-# Total_sequences: 2
-# Total_hitcount: 1
-#---------------------------------------
-</pre>
-</td></tr></table><p>
-
-
-<H2>
-    Data files
-</H2>
-
-None.
-
-<H2>
-    Notes
-</H2>
-
-None.
-
-<H2>
     References
 </H2>
 
@@ -1236,7 +1235,8 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="antigenic.html">antigenic</a></td>
 <td>Finds antigenic sites in proteins</td>
@@ -1244,7 +1244,7 @@ None.
 
 <tr>
 <td><a href="digest.html">digest</a></td>
-<td>Protein proteolytic enzyme or reagent cleavage digest</td>
+<td>Reports on protein proteolytic enzyme or reagent cleavage sites</td>
 </tr>
 
 <tr>
@@ -1254,47 +1254,47 @@ None.
 
 <tr>
 <td><a href="fuzzpro.html">fuzzpro</a></td>
-<td>Protein pattern search</td>
+<td>Search for patterns in protein sequences</td>
 </tr>
 
 <tr>
 <td><a href="fuzztran.html">fuzztran</a></td>
-<td>Protein pattern search after translation</td>
+<td>Search for patterns in protein sequences (translated)</td>
 </tr>
 
 <tr>
 <td><a href="helixturnhelix.html">helixturnhelix</a></td>
-<td>Report nucleic acid binding motifs</td>
+<td>Identify nucleic acid-binding motifs in protein sequences</td>
 </tr>
 
 <tr>
 <td><a href="oddcomp.html">oddcomp</a></td>
-<td>Find protein sequence regions with a biased composition</td>
+<td>Identify proteins with specified sequence word composition</td>
 </tr>
 
 <tr>
 <td><a href="patmatdb.html">patmatdb</a></td>
-<td>Search a protein sequence with a motif</td>
+<td>Searches protein sequences with a sequence motif</td>
 </tr>
 
 <tr>
 <td><a href="patmatmotifs.html">patmatmotifs</a></td>
-<td>Search a PROSITE motif database with a protein sequence</td>
+<td>Scan a protein sequence with motifs from the PROSITE database</td>
 </tr>
 
 <tr>
 <td><a href="pepcoil.html">pepcoil</a></td>
-<td>Predicts coiled coil regions</td>
+<td>Predicts coiled coil regions in protein sequences</td>
 </tr>
 
 <tr>
 <td><a href="pscan.html">pscan</a></td>
-<td>Scans proteins using PRINTS</td>
+<td>Scans protein sequence(s) with fingerprints from the PRINTS database</td>
 </tr>
 
 <tr>
 <td><a href="sigcleave.html">sigcleave</a></td>
-<td>Reports protein signal cleavage sites</td>
+<td>Reports on signal cleavage sites in a protein sequence</td>
 </tr>
 
 </table>

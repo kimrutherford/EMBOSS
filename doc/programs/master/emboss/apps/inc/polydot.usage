@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>polydot globins.fasta -gtitle="Polydot of globins.fasta" -graph cps </b>
-Displays all-against-all dotplots of a set of sequences
+Draw dotplots for all-against-all comparison of a sequence set
 Word size [6]: <b></b>
 
 Created polydot.ps

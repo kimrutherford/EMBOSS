@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>plotorf </b>
-Plot potential open reading frames
+Plot potential open reading frames in a nucleotide sequence
 Input nucleotide sequence: <b>tembl:x13776</b>
 Graph type [x11]: <b>cps</b>
 
@@ -24,7 +24,7 @@ An example of specifying your own START and STOP codons with a mitochondrial seq
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>plotorf -start ATT,ATC,ATA,ATG,GTG -stop TAA,TAG,AGA,AGG </b>
-Plot potential open reading frames
+Plot potential open reading frames in a nucleotide sequence
 Input nucleotide sequence: <b>mito.seq</b>
 Graph type [x11]: <b>cps</b>
 

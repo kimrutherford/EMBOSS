@@ -61,7 +61,7 @@ int main(int argc, char **argv)
     entry   = ajAcdGetString("entry");
     outf    = ajAcdGetOutfile("outfile");
     get     = ajAcdGetToggle("get");
-    showall = ajAcdGetBool("showall");
+    showall = ajAcdGetBoolean("showall");
     
     if(!ajStrGetLen(entry))
     {
@@ -100,12 +100,12 @@ int main(int argc, char **argv)
 	else
 	    pro = ajFalse;
 
-	if(showall && !get)
+	if(showall && outf)
 	    ajFmtPrintF(outf,"# Trying '%S'\n",idqry);
 
 	if(!ajSeqGetFromUsa(idqry,pro,&seq))
 	{
-	    if(showall && !get)
+	    if(showall && outf)
 		ajFmtPrintF(outf,"# Failed '%S'\n",idqry);
 	    continue;
 	}
@@ -122,7 +122,7 @@ int main(int argc, char **argv)
 	    ajSeqoutClose(seqout);
 	    ajSeqoutDel(&seqout);
 	}
-	else
+	else if (outf)
 	    ajFmtPrintF(outf,"%S\n",idqry);
     }
     

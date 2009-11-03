@@ -43,35 +43,6 @@ the EMBL database CD-ROM distribution and by the Staden package in
 addition to EMBOSS, and appears to be the most generally used and
 publicly available index file format for these databases.
 
-<p>
-
-Having created the EMBOSS indices for this file, a database can then be
-defined in the file <b>emboss.defaults</b> as something like:
-
-<p>
-
-<pre>
-DB embl [
-   type: N
-   format: embl
-   method: gcg
-   directory: /data/gcg/gcgembl
-]
-</pre>  
-
-
-
-<h3>Fields Indexed</H3>
-
-By default, <b>dbigcg</b> will index the ID name and the accession
-number (if present).
-
-<br>
-
-If they are present in your database, you may also specify that <b>dbiflat</b>
-should index the Sequence Version and GI number, the Keywords and
-Taxonomy names and the words in the description by using the '-fields'
-qualifier with the appropriate values. 
                         
 
 
@@ -150,8 +121,9 @@ General log output file [outfile.dbigcg]: <b></b>
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -318,10 +290,10 @@ files are used.  The data in these is often compressed.
 <pre>
 ########################################
 # Program: dbigcg
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Dbname: EMBL
 # Release: 0.0
-# Date: 15/07/07
+# Date: 15/07/08
 # CurrentDirectory: /homes/user/test/qa/dbigcg-ex-keep/
 # IndexDirectory: ./
 # IndexDirectoryPath: /homes/user/test/qa/dbigcg-ex-keep/
@@ -428,8 +400,35 @@ None.
     Notes
 </H2>
 
+<p>
 
-None.
+Having created the EMBOSS indices for this file, a database can then be
+defined in the file <b>emboss.defaults</b> as something like:
+
+<p>
+
+<pre>
+DB embl [
+   type: N
+   format: embl
+   method: gcg
+   directory: /data/gcg/gcgembl
+]
+</pre>  
+
+
+
+<h3>Fields Indexed</H3>
+
+By default, <b>dbigcg</b> will index the ID name and the accession
+number (if present).
+
+<br>
+
+If they are present in your database, you may also specify that <b>dbiflat</b>
+should index the Sequence Version and GI number, the Keywords and
+Taxonomy names and the words in the description by using the '-fields'
+qualifier with the appropriate values. 
 
 <H2>
     References
@@ -466,7 +465,8 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="dbiblast.html">dbiblast</a></td>
 <td>Index a BLAST database</td>
@@ -474,7 +474,7 @@ None.
 
 <tr>
 <td><a href="dbifasta.html">dbifasta</a></td>
-<td>Database indexing for fasta file databases</td>
+<td>Index a fasta file database</td>
 </tr>
 
 <tr>
@@ -484,17 +484,17 @@ None.
 
 <tr>
 <td><a href="dbxfasta.html">dbxfasta</a></td>
-<td>Database b+tree indexing for fasta file databases</td>
+<td>Index a fasta file database using b+tree indices</td>
 </tr>
 
 <tr>
 <td><a href="dbxflat.html">dbxflat</a></td>
-<td>Database b+tree indexing for flat file databases</td>
+<td>Index a flat file database using b+tree indices</td>
 </tr>
 
 <tr>
 <td><a href="dbxgcg.html">dbxgcg</a></td>
-<td>Database b+tree indexing for GCG formatted databases</td>
+<td>Index a GCG formatted database using b+tree indices</td>
 </tr>
 
 </table>

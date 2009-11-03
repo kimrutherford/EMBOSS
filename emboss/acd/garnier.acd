@@ -1,5 +1,5 @@
 application: garnier [
-  documentation: "Predicts protein secondary structure"
+  documentation: "Predicts protein secondary structure using GOR method"
   groups: "Protein:2D Structure"
 ]
 
@@ -45,7 +45,7 @@ section: output [
   report: outfile [
     parameter: "Y"
     rformat: "tagseq"
-    taglist: "str:helix str:sheet str:turns str:coil"
+    taglist: "str:garnier"
   ]
 
 endsection: output

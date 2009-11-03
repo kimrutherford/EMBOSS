@@ -7,7 +7,7 @@ The file 'cds.list' contains a list of the regions making up the coding sequence
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>union </b>
-Reads sequence fragments and builds one sequence
+Concatenate multiple sequences into a single sequence
 Input (gapped) sequence(s): <b>@cds.list</b>
 output sequence [x65921.fasta]: <b></b>
 

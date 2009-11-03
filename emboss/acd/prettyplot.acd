@@ -1,6 +1,5 @@
 application: prettyplot [
-  documentation: "Displays aligned sequences, with colouring
-                  and boxing"
+  documentation: "Draw a sequence alignment with pretty formatting"
   groups: "Alignment:Multiple, Display"
 ]
 

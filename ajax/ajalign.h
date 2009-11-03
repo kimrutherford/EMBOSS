@@ -96,6 +96,9 @@ typedef struct AjSAlign {
 */
 
 void         ajAlignClose (AjPAlign thys);
+AjBool       ajAlignConsAmbig(const AjPSeqset thys, AjPStr *cons);
+AjBool       ajAlignConsAmbigNuc(const AjPSeqset thys, AjPStr *cons);
+AjBool       ajAlignConsAmbigProt(const AjPSeqset thys, AjPStr *cons);
 AjBool       ajAlignConsStats(const AjPSeqset thys, AjPMatrix mymatrix,
 			      AjPStr *cons, ajint* retident, 
 			      ajint* retsim, ajint* retgap,

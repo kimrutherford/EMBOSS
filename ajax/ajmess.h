@@ -114,6 +114,10 @@ void              ajErr (const char *format, ...) ; /* error message and
 ajint             ajUserGet (AjPStr *pthis, const char *fmt, ...);
 void              ajUser (const char *format, ...) ;  /* simple msg with
 							 newline */
+void              ajUserDumpC (const char* txt) ;  /* simple msg with string
+						   and newline */
+void              ajUserDumpS (const AjPStr str) ;  /* simple msg with string
+						   and newline */
 void              ajVDie (const char *format, va_list args) ; /* error message
 								 and
 								 write to log

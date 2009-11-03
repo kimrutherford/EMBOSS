@@ -5,22 +5,16 @@
 
 Function
 
-   Plots isochores in large DNA sequences
+   Plots isochores in DNA sequences
 
 Description
 
-   The nuclear genomes of vertebrates are mosaics of isochores, very long
-   stretches (>300kb) of DNA that are homogeneous in base composition and
-   are compositionally correlated with the coding sequences that they
-   embed. Isochores can be partitioned in a small number of families that
-   cover a range of GC levels (GC is the molar ratio of guanine+cytosine
-   in DNA), which is narrow in cold-blooded vertebrates, but broad in
-   warm-blooded vertebrates.
-
-   This application plots GC content over a sequence. It is intended for
-   large sequences such as complete chromosomes or large genomic contigs,
-   although interesting results can also be obtained from shorter
-   sequences.
+   isochore plots GC content in windows over a DNA sequence. The data may
+   also be written to output file. The window wize and shift increment
+   (the number of bases separating the start of each window) may be
+   specified. isochore is suitable for use with large sequences such as
+   complete chromosomes or large genomic contigs, although interesting
+   results can also be obtained from shorter sequences.
 
 Usage
 
@@ -28,7 +22,7 @@ Usage
 
 
 % isochore tembl:AF129756  -graph cps 
-Plots isochores in large DNA sequences
+Plots isochores in DNA sequences
 Output file [af129756.iso]: 
 
 Created isochore.ps
@@ -84,8 +78,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -389,7 +384,13 @@ Data files
 
 Notes
 
-   None.
+   The nuclear genomes of vertebrates are mosaics of isochores, very long
+   stretches (>300kb) of DNA that are homogeneous in base composition and
+   are compositionally correlated with the coding sequences that they
+   embed. Isochores can be partitioned in a small number of families that
+   cover a range of GC levels (GC is the molar ratio of guanine+cytosine
+   in DNA), which is narrow in cold-blooded vertebrates, but broad in
+   warm-blooded vertebrates.
 
 References
 
@@ -419,15 +420,16 @@ Known bugs
 
 See also
 
-   Program name                        Description
-   banana       Bending and curvature plot in B-DNA
-   btwisted     Calculates the twisting in a B-DNA sequence
-   chaos        Create a chaos game representation plot for a sequence
-   compseq      Count composition of dimer/trimer/etc words in a sequence
-   dan          Calculates DNA RNA/DNA melting temperature
-   freak        Residue/base frequency table or plot
+   Program name                           Description
+   banana       Plot bending and curvature data for B-DNA
+   btwisted     Calculate the twisting in a B-DNA sequence
+   chaos        Draw a chaos game representation plot for a nucleotide sequence
+   compseq      Calculate the composition of unique words in sequences
+   dan          Calculates nucleic acid melting temperature
+   density      Draw a nucleic acid density plot
+   freak        Generate residue/base frequency table or plot
    sirna        Finds siRNA duplexes in mRNA
-   wordcount    Counts words of a specified size in a DNA sequence
+   wordcount    Count and extract unique words in DNA sequence(s)
 
 Author(s)
 

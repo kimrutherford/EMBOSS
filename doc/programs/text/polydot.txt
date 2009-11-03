@@ -5,25 +5,29 @@
 
 Function
 
-   Displays all-against-all dotplots of a set of sequences
+   Draw dotplots for all-against-all comparison of a sequence set
 
 Description
 
-   A dotplot is a graphical representation of the regions of similarity
-   between two sequences.
+   polydot generates a dotplot for each of an all-against-all comparison
+   of a set of sequences. The dotplots are rendered on a single diagram.
+   The dotplot is an intuitive graphical representation of the regions of
+   similarity between two sequences. All positions from the first input
+   sequence are compared with all positions from the second input
+   sequence searching for exact matches between sequence regions
+   ("words"). The two sequences are the axes of the rectangular dotplot.
+   Wherever there is "similarity" between a word from each sequences a
+   dot is plotted. The wordsize is specified by the user. Optionally,
+   information on the sequence and location of all the exact matching
+   regions may be written to file as a feature file.
 
-   The two sequences are placed on the axes of a rectangular image and
-   (subject to threshold conditions) wherever there is a similarity
-   between the sequences a dot is placed on the image.
+Algorithm
 
-   Where the two sequences have substantial regions of similarity, many
-   dots align to form diagonal lines. It is therefore possible to see at
-   a glance where there are local regions of similarity.
-
-   polydot compares all sequences in a set of sequences, draws a dotplot
-   for each pair of sequences by marking where words (tuples) of a
-   specified length have an exact match in both sequences and optionally
-   reports all identical matches to feature files.
+   All sequence words of the specified size from the first input sequence
+   are compared with all words from the second input sequence and exact
+   matches identified. A line is plotted on the dotplot corresponding to
+   any exact matching words. Thus any local regions of identity
+   correspond to diagonals in the dotplot.
 
 Usage
 
@@ -31,7 +35,7 @@ Usage
 
 
 % polydot globins.fasta -gtitle="Polydot of globins.fasta" -graph cps 
-Displays all-against-all dotplots of a set of sequences
+Draw dotplots for all-against-all comparison of a sequence set
 Word size [6]: 
 
 Created polydot.ps
@@ -98,8 +102,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -166,7 +171,12 @@ Data files
 
 Notes
 
-   None.
+   Where the two sequences have substantial regions of identity, longer
+   diagonal lines appear in the plot. It is possible to see at a glance
+   such local regions of identity. It is also easy to see other features
+   such as repeats (which form parallel diagonal lines), and insertions
+   or deletions (which form breaks or discontinuities in the diagonal
+   lines).
 
 References
 
@@ -190,9 +200,9 @@ Known bugs
 
 See also
 
-   Program name                    Description
-   dotmatcher   Displays a thresholded dotplot of two sequences
-   dotpath      Non-overlapping wordmatch dotplot of two sequences
+   Program name                        Description
+   dotmatcher   Draw a threshold dotplot of two sequences
+   dotpath      Draw a non-overlapping wordmatch dotplot of two sequences
    dottup       Displays a wordmatch dotplot of two sequences
 
 Author(s)

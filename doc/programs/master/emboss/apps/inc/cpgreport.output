@@ -20,14 +20,16 @@ U68037                 1183   1193    26          2  72.7   2.00
 <p><h3>File: u68037.gff</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-##gff-version 2.0
-##date 2006-07-15
-##Type DNA U68037
-U68037	cpgreport	misc_feature	12	13	17.000	+	.	Sequence "U68037.1"
-U68037	cpgreport	misc_feature	47	48	17.000	+	.	Sequence "U68037.2"
-U68037	cpgreport	misc_feature	96	1032	630.000	+	.	Sequence "U68037.3"
-U68037	cpgreport	misc_feature	1072	1100	26.000	+	.	Sequence "U68037.4"
-U68037	cpgreport	misc_feature	1139	1140	17.000	+	.	Sequence "U68037.5"
-U68037	cpgreport	misc_feature	1183	1193	26.000	+	.	Sequence "U68037.6"
+##gff-version 3
+##sequence-region U68037 1 1193
+#!Date 2008-07-15
+#!Type DNA
+#!Source-version EMBOSS 6.0.0
+U68037	cpgreport	located_sequence_feature	12	13	17.000	+	.	ID="U68037.1"
+U68037	cpgreport	located_sequence_feature	47	48	17.000	+	.	ID="U68037.2"
+U68037	cpgreport	located_sequence_feature	96	1032	630.000	+	.	ID="U68037.3"
+U68037	cpgreport	located_sequence_feature	1072	1100	26.000	+	.	ID="U68037.4"
+U68037	cpgreport	located_sequence_feature	1139	1140	17.000	+	.	ID="U68037.5"
+U68037	cpgreport	located_sequence_feature	1183	1193	26.000	+	.	ID="U68037.6"
 </pre>
 </td></tr></table><p>

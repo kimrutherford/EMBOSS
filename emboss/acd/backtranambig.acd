@@ -1,6 +1,6 @@
 application: backtranambig [
-  documentation: "Back translate a protein sequence to
-                  ambiguous codons"
+  documentation: "Back-translate a protein sequence to ambiguous
+                  nucleotide sequence"
   groups: "Nucleic:Translation, Protein:Composition"
 ]
 

@@ -110,6 +110,7 @@ my @embassylist = ("appendixd",
 		   "hmmernew",
 		   "meme",
 		   "memenew",
+		   "mira",
 		   "mse",
 		   "myemboss", # we avoid documenting these examples
 		   "phylip",

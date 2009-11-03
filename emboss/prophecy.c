@@ -175,7 +175,7 @@ static void prophecy_simple_matrix(const AjPSeqset seqset, AjPFile outf,
 	for(j=0;j<len;++j)
 	{
 	    x = toupper((ajint)*p++);
-	    ++matrix[ajAZToInt(x)][j];
+	    ++matrix[ajBasecodeToInt(x)][j];
 	}
     }
 
@@ -307,16 +307,16 @@ static void prophecy_gribskov_profile(const AjPSeqset seqset,
 	    if(i>=strlen(p))
 		continue;
 
-	    if(ajAZToInt(p[i])!=27)	  /* if not a gap */
+	    if(ajBasecodeToInt(p[i])!=27)	  /* if not a gap */
 		continue;
 	    pos = i;
 
-	    while(pos>=0 && ajAZToInt(p[pos])==27)
+	    while(pos>=0 && ajBasecodeToInt(p[pos])==27)
 		--pos;
 	    start = ++pos;
 	    pos = i;
 
-	    while(pos<(ajint)mlen && ajAZToInt(p[pos])==27)
+	    while(pos<(ajint)mlen && ajBasecodeToInt(p[pos])==27)
 		++pos;
 	    end  = pos-1;
 	    gsum = AJMAX(gsum,(end-start)+1);
@@ -360,7 +360,7 @@ static void prophecy_gribskov_profile(const AjPSeqset seqset,
 	    p = ajSeqsetGetseqSeqC(seqset,j);
 	    if(i>=strlen(p))
 		continue;
-	    weights[i][ajAZToInt(p[i])] += ajSeqsetGetseqWeight(seqset,j);
+	    weights[i][ajBasecodeToInt(p[i])] += ajSeqsetGetseqWeight(seqset,j);
 	}
 
 
@@ -398,12 +398,12 @@ static void prophecy_gribskov_profile(const AjPSeqset seqset,
 	    q = valid;
 	    while(*q)
 	    {
-		score = weights[i][ajAZToInt(*q)];
+		score = weights[i][ajBasecodeToInt(*q)];
 		score *= (float)(sub[ajSeqcvtGetCodeK(cvt,*p)][ajSeqcvtGetCodeK(cvt,*q)]);
 		sum += score;
 		++q;
 	    }
-	    mat[i][ajAZToInt(*p)] = sum;
+	    mat[i][ajBasecodeToInt(*p)] = sum;
 	}
 
     /* Calculate gap penalties */
@@ -538,16 +538,16 @@ static void prophecy_henikoff_profile(const AjPSeqset seqset,
 	    if(i>=strlen(p))
 		continue;
 
-	    if(ajAZToInt(p[i])!=27)
+	    if(ajBasecodeToInt(p[i])!=27)
 		continue; /* if not a gap */
 
 	    pos = i;
-	    while(pos>=0 && ajAZToInt(p[pos])==27)
+	    while(pos>=0 && ajBasecodeToInt(p[pos])==27)
 		--pos;
 	    start = ++pos;
 
 	    pos = i;
-	    while(pos<(ajint)mlen && ajAZToInt(p[pos])==27)
+	    while(pos<(ajint)mlen && ajBasecodeToInt(p[pos])==27)
 		++pos;
 	    end = pos-1;
 	    gsum = AJMAX(gsum,(end-start)+1);
@@ -586,7 +586,8 @@ static void prophecy_henikoff_profile(const AjPSeqset seqset,
 	    p = ajSeqsetGetseqSeqC(seqset,j);
 	    if(i>=strlen(p))
 		continue;
-	    weights[i][ajAZToInt(p[i])] += ajSeqsetGetseqWeight(seqset,j);
+	    weights[i][ajBasecodeToInt(p[i])] +=
+                ajSeqsetGetseqWeight(seqset,j);
 	}
 
     px = -INT_MAX;
@@ -633,12 +634,13 @@ static void prophecy_henikoff_profile(const AjPSeqset seqset,
 	    q   = valid;
 	    while(*q)
 	    {
-		score = weights[i][ajAZToInt(*q)];
-		score *= sub[ajSeqcvtGetCodeK(cvt,*p)][ajSeqcvtGetCodeK(cvt,*q)];
+		score = weights[i][ajBasecodeToInt(*q)];
+		score *= sub[ajSeqcvtGetCodeK(cvt,*p)]
+                            [ajSeqcvtGetCodeK(cvt,*q)];
 		sum += score;
 		++q;
 	    }
-	    mat[i][ajAZToInt(*p)] = sum;
+	    mat[i][ajBasecodeToInt(*p)] = sum;
 	}
 
     /* Calculate gap penalties */

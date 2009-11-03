@@ -29,7 +29,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -117,7 +116,7 @@ public class BuildJembossForm implements ActionListener
   private String helptext = "";
   private boolean withSoap;
   private JFrame f;
-  private ScrollPanel p2;
+  private JPanel p2;
   private String embossBin;
 
   private int numofFields;
@@ -125,7 +124,7 @@ public class BuildJembossForm implements ActionListener
   
   public BuildJembossForm(String appDescription, String db[],
         final String applName, String[] envp, String cwd, 
-        String acdText, final boolean withSoap, ScrollPanel p2, 
+        String acdText, final boolean withSoap, JPanel p2, 
         final JembossParams mysettings, final JFrame f)
   {
 
@@ -187,14 +186,14 @@ public class BuildJembossForm implements ActionListener
           String urlEmbassyPrefix = parseAcd.getUrlPrefix();
           url = mysettings.getembURL();
           if(urlEmbassyPrefix != null)
-            url = url + "apps/release/4.0/embassy/" +applName+ "/" ;
+            url = url + "apps/release/6.0/embassy/" +applName+ "/" ;
           else
-            url = url + "apps/release/4.0/emboss/apps/";
+            url = url + "apps/release/6.0/emboss/apps/";
 
           url = url+applName+".html";
         }
 
-        JEditorPane htmlPane = null;
+        //JEditorPane htmlPane = null;
         if(url == null)
         {
           try
@@ -298,7 +297,7 @@ public class BuildJembossForm implements ActionListener
                      String appDescription)
   {
 
-    String appN = "";
+    //String appN = "";
 
 // get total number of Swing components
     int ntextf = parseAcd.getNumTextf();
@@ -446,7 +445,7 @@ public class BuildJembossForm implements ActionListener
   public void actionPerformed(ActionEvent ae)
   {
 
-    String line;
+    ShowResultSet resultSetFrame = null;
 
     if( ae.getActionCommand().startsWith("Advanced Option"))
     {
@@ -461,9 +460,10 @@ public class BuildJembossForm implements ActionListener
     else if ( ae.getActionCommand().startsWith("GO"))
     {
       f.setCursor(cbusy);
+      try{
       if(!withSoap)
       {
-        final Hashtable filesToMove = new Hashtable();
+        Hashtable filesToMove = new Hashtable();
         final String embossCommand = getCommand(filesToMove);
 
         if(!embossCommand.equals("NOT OK"))
@@ -476,10 +476,18 @@ public class BuildJembossForm implements ActionListener
           }
           else
           {
-            final JembossServer js = new JembossServer(mysettings.getResultsHome());
-            final Vector result = js.run_prog(embossCommand, 
-			    		mysettings.getCurrentMode(), filesToMove);
-		    new ShowResultSet(convert(result,false),filesToMove,mysettings);
+              JembossServer js = new JembossServer(mysettings.getResultsHome());
+              Vector result = js.run_prog(embossCommand, 
+                      mysettings.getCurrentMode(), filesToMove);
+              Hashtable r = convert(result,false);
+              try {
+                  resultSetFrame = new ShowResultSet(r,filesToMove,mysettings);
+              } catch (OutOfMemoryError e) {
+                  result.clear();
+                  filesToMove.clear();
+                  r.clear();
+                  throw e;
+              }
           }
         }
       }
@@ -505,7 +513,7 @@ public class BuildJembossForm implements ActionListener
             {
               JembossRun thisrun = new JembossRun(embossCommand,"",
                                            filesToMove,mysettings);
-              new ShowResultSet(thisrun.hash(),filesToMove,mysettings);
+              resultSetFrame = new ShowResultSet(thisrun.hash(),filesToMove,mysettings);
             }
           }
           catch (JembossSoapException eae)
@@ -515,11 +523,22 @@ public class BuildJembossForm implements ActionListener
             ap.setSize(380,170);
             ap.pack();
             ap.setVisible(true);
-            f.setCursor(cdone);
           }
         }
       }
+      }
+      catch (OutOfMemoryError e){
+          if (resultSetFrame != null){
+              resultSetFrame.dispose();
+          }
+          String msg ="Memory error: "+e+
+          "\nPlease check Jemboss JVM startup options";
+          e.printStackTrace();
+          JOptionPane.showMessageDialog(f, msg, "Error", JOptionPane.ERROR_MESSAGE);
+      }
+      finally {
       f.setCursor(cdone);
+      }
     }
     else if( ae.getActionCommand().startsWith("Show Alignment"))
     {
@@ -748,9 +767,9 @@ public class BuildJembossForm implements ActionListener
                                  Hashtable filesToMove)
   {
 
-    String params = new String("");
-    String appN = "";
-    String file = "";
+    //String params = new String("");
+    //String appN = "";
+    //String file = "";
     String options = "";
     String fn = "";
     String sfn;
@@ -764,9 +783,8 @@ public class BuildJembossForm implements ActionListener
       String val = parseAcd.getParamValueStr(j,0).toLowerCase();
       int h = parseAcd.getGuiHandleNumber(j);
 
-      if(att.startsWith("appl"))
-        appN = new String(att);
-      else if (parseAcd.isOutputGraph(j))
+      if(!att.startsWith("appl") &&
+          parseAcd.isOutputGraph(j))
       {
         if(graphics == null)
           System.out.println("graphics is NULL");
@@ -991,7 +1009,7 @@ public class BuildJembossForm implements ActionListener
             String fna = System.getProperty("user.dir")+
                          System.getProperty("file.separator")+"seq.list";
 
-            boolean ok = inSeq[h].writeListFile(fna);
+            /*boolean ok = */inSeq[h].writeListFile(fna);
             options = options.concat(" -" + val + " list::" +  fna);
           }
         } 
@@ -1016,8 +1034,8 @@ public class BuildJembossForm implements ActionListener
               File tf;
               try
               {
-                if(mysettings.isCygwin())
-                  tmp = mysettings.getCygwinRoot()+System.getProperty("file.separator")+"tmp";
+                if(JembossParams.isCygwin())
+                  tmp = JembossParams.getCygwinRoot()+System.getProperty("file.separator")+"tmp";
                 else
                   tmp = System.getProperty("java.io.tmpdir");
 

@@ -1,5 +1,5 @@
 application: plotorf [
-  documentation: "Plot potential open reading frames"
+  documentation: "Plot potential open reading frames in a nucleotide sequence"
   groups: "Nucleic:Gene finding, Nucleic:Translation"
 ]
 

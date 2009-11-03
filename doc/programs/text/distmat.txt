@@ -5,28 +5,26 @@
 
 Function
 
-   Creates a distance matrix from multiple alignments
+   Create a distance matrix from a multiple sequence alignment
 
 Description
 
-   distmat calculates the evolutionary distances between every pair of
-   sequences in a multiple alignment. The sequences need to be aligned
-   before running this program. The quality of the alignment is of
-   paramount importance in obtaining meaningful information from this
-   analysis. This application calculates a distance matrix for the set of
-   sequences in the alignment. The distances are expressed in terms of
-   the number of substitutions per 100 bases or amino acids.
+   distmat calculates the evolutionary distance between every pair of
+   sequences in a multiple sequence alignment. A variety of methods to
+   estimate distance may be selected, and differ in how they correct the
+   observed substitution rates to more accurately reflect the true
+   evolutionary distance. An output file containing a distance matrix for
+   the set of sequences is written. The distances are expressed in terms
+   of the number of substitutions per 100 bases or amino acids.
 
-   As sequence diverge so does the probability of there being multiple
-   substitutions at any one site in the alignment increase. The distance
-   will then be an underestimate of the true evolutionary distance
-   between the sequences. Therefore, there are a number of methods for
-   correcting the observed substitution rate for the occurence of
-   multiple substutions.
+Algorithm
 
-   For nucleotides, the "-position" flag allows the user to choose base
-   positions to analyse in each codon, i.e. 123 (all bases), 12 (the
-   first two bases), 1, 2, or 3 individual bases.
+   For more divergent sequences, the probability of there being multiple
+   substitutions at an alignment site increases. The distance will then
+   be misestimate the true evolutionary distance between the sequences. A
+   number of methods are available in distmat to correct the observed
+   substitution rate to more accurately reflect the true evolutionary
+   distance.
 
   Uncorrected distances
 
@@ -186,7 +184,7 @@ Usage
 
 
 % distmat pax.align 
-Creates a distance matrix from multiple alignments
+Create a distance matrix from a multiple sequence alignment
 Multiple substitution correction methods for proteins
          0 : Uncorrected
          1 : Jukes-Cantor
@@ -256,8 +254,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -431,7 +430,13 @@ Data files
 
 Notes
 
-   None.
+   The input sequences must of course be aligned before running this
+   program. The quality of the alignment is of paramount importance in
+   obtaining meaningful information from this analysis.
+
+   For nucleotides, the -position flag selects base positions to analyse
+   in each codon, i.e. 123 (all bases), 12 (the first two bases), 1, 2,
+   or 3 individual bases.
 
 References
 

@@ -1,24 +1,25 @@
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="cai.html">cai</a></td>
-<td>CAI codon adaptation index</td>
+<td>Calculate codon adaptation index</td>
 </tr>
 
 <tr>
 <td><a href="chips.html">chips</a></td>
-<td>Codon usage statistics</td>
+<td>Calculates Nc codon usage statistic</td>
 </tr>
 
 <tr>
 <td><a href="cusp.html">cusp</a></td>
-<td>Create a codon usage table</td>
+<td>Create a codon usage table from nucleotide sequence(s)</td>
 </tr>
 
 <tr>
 <td><a href="syco.html">syco</a></td>
-<td>Synonymous codon usage Gribskov statistic plot</td>
+<td>Draw synonymous codon usage statictic plot for a nucleotide sequence</td>
 </tr>
 
 </table>

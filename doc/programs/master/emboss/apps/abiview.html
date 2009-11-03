@@ -19,17 +19,7 @@ abiview
     Description
 </H2>
 
-<b>abiview</b> reads in an ABI sequence trace file and graphically
-displays the results. 
-
-<p>
-
-The data for each nucleotide is plotted and the assigned nucleotide (G,
-A, T, C or N) in the ABI file is overlayed on the graphs. 
-
-<p>
-
-It also writes out the sequence to an output sequence file. 
+<p><b>abiview</b> reads in an ABI sequencer trace file and graphically displays the data.  The probabilities of each of the 4 nucleotide bases along the sequencing run is plotted and the assigned nucleotide (<tt>G</tt>, <tt>A</tt>, <tt>T</tt>, <tt>C</tt> or <tt>N</tt>) from the ABI file is overlayed on the graphs.  The complete sequence is written to an output file.</p>
 
 
 
@@ -90,7 +80,7 @@ None.
     Notes
 </H2>
 
-None.
+<p>An ABI file (<tt>*.abi</tt>) contains sequence trace data and base calls from a run of an ABI nucleotide sequencer machine.  A trace data file is what you get back from having some DNA sequenced, for example, by a 3730XL sequencer.  The files are in "binary" format and so cannot be viewed directly on screen.  To inspect the sequencing data you must use a trace viewer such as <b>abiview</b>.  Another good trace viewer is FinchTV (<a href="http://www.geospiza.com/finchtv/">http://www.geospiza.com/finchtv/</a>).  It is stand-alone program and is freely available.</p>
 
 <H2>
     References

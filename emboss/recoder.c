@@ -162,8 +162,8 @@ int main(int argc, char **argv)
 
     seq     = ajAcdGetSeq("sequence");          /* sequence to investigate */
     enzymes = ajAcdGetString("enzymes");   /* enzyme list             */
-    sshow   = ajAcdGetBool("sshow");       /* display seq             */
-    tshow   = ajAcdGetBool("tshow");       /* display translated seq  */
+    sshow   = ajAcdGetBoolean("sshow");       /* display seq             */
+    tshow   = ajAcdGetBoolean("tshow");       /* display translated seq  */
     report = ajAcdGetReport ("outfile");     /* report filename         */
 
 
@@ -421,7 +421,7 @@ static ajint recoder_readRE(AjPList *relist, const AjPStr enzymes)
 
     *relist = ajListNew();              /* list the RS code and info */
 
-    ajFileDataNew(refilename,&fin);
+    fin = ajDatafileNewInNameS(refilename);
     if(!fin)
 	ajFatal("Aborting...restriction file not found");
 
@@ -687,20 +687,20 @@ static ajint recoder_changebase(char pbase, char* tbase)
     ajint i;
     ajint nb;
 
-    bt = ajBaseCodes((ajint)pbase);
+    bt = ajBaseGetCodes((ajint)pbase);
     splits = ajStrIterNew(bt);
 
     while(!ajStrIterDone(splits))
     {
       bs = ajStrIterGetK(splits);
 
-      if( ajAZToBin(bs) & ajAZToBin('G') )
+      if( ajBaseAlphaToBin(bs) & ajBaseAlphaToBin('G') )
 	  setBase[0] = 0;
-      if( ajAZToBin(bs) & ajAZToBin('A') )
+      if( ajBaseAlphaToBin(bs) & ajBaseAlphaToBin('A') )
 	  setBase[1] = 0;
-      if( ajAZToBin(bs) & ajAZToBin('T') )
+      if( ajBaseAlphaToBin(bs) & ajBaseAlphaToBin('T') )
 	  setBase[2] = 0;
-      if( ajAZToBin(bs) & ajAZToBin('C') )
+      if( ajBaseAlphaToBin(bs) & ajBaseAlphaToBin('C') )
 	  setBase[3] = 0;
 
       ajStrIterNext(splits);

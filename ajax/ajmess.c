@@ -441,6 +441,54 @@ void ajUser(const char *format,...)
 
 
 
+/* @func ajUserDumpC ***********************************************************
+**
+** Prints a string unchanged. Calls the defined output function (if any).
+** Otherwise prints the message to standard error with an extra newline.
+**
+** @param [r] txt [const char*] String to print unchanged
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajUserDumpC(const char* txt)
+{
+    if(outRoutine)
+	(*outRoutine)(txt);
+    else
+	fprintf(stderr, "%s\n", txt);
+
+    return;
+}
+
+
+
+
+/* @func ajUserDumpS ***********************************************************
+**
+** Prints a string unchanged. Calls the defined output function (if any).
+** Otherwise prints the message to standard error with an extra newline.
+**
+** @param [r] str [const AjPStr] String to print unchanged
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajUserDumpS(const AjPStr str)
+{
+    const char *mesg_buf = ajStrGetPtr(str);
+
+    if(outRoutine)
+	(*outRoutine)(mesg_buf);
+    else
+	fprintf(stderr, "%s\n", mesg_buf);
+
+    return;
+}
+
+
+
+
 /* @func ajMessOut ************************************************************
 **
 ** Formats a message. Calls the defined output function (if any).
@@ -1570,7 +1618,7 @@ void ajDebug(const char* fmt, ...)
 	if(fileDebug)
 	{
 	    ajFmtPrintS(&fileDebugName, "%s.dbg", ajStrGetPtr(acdProgram));
-	    fileDebugFile = ajFileNewOut(fileDebugName);
+	    fileDebugFile = ajFileNewOutNameS(fileDebugName);
 	    if(!fileDebugFile)
 		ajFatal("Cannot open debug file %S",fileDebugName);
 	    if(ajNamGetValueC("debugbuffer", &bufstr))
@@ -1578,7 +1626,7 @@ void ajDebug(const char* fmt, ...)
 		ajStrToBool(bufstr, &acdDebugBuffer);
 	    }
 	    if(!acdDebugBuffer)
-		ajFileUnbuffer(fileDebugFile);
+		ajFileSetUnbuffer(fileDebugFile);
 	    ajFmtPrintF(fileDebugFile, "Debug file %F buffered:%B\n",
 			 fileDebugFile, acdDebugBuffer);
 	    ajStrDel(&bufstr);
@@ -1614,7 +1662,7 @@ FILE* ajDebugFile(void)
     if(!fileDebugFile)
 	return NULL;
 
-    return ajFileFp(fileDebugFile);
+    return ajFileGetFileptr(fileDebugFile);
 }
 
 
@@ -1641,11 +1689,18 @@ ajint ajUserGet(AjPStr* pthis, const char* fmt, ...)
     ajint isize;
     ajint ilen;
     ajint jlen;
-    ajint fileBuffSize = ajFileBuffSize();
+    ajint fileBuffSize = ajFileValueBuffsize();
 
     va_start(args, fmt);
     ajFmtVError(fmt, args);
     va_end(args);
+
+    if(ajFileValueRedirectStdin())
+    {
+	ajUser("(Standard input in use: using default)");
+	ajStrAssignC(pthis, "");
+	return ajStrGetLen(*pthis);
+    }
 
     ajStrSetRes(pthis, fileBuffSize);
     buff  = ajStrGetuniquePtr(pthis);
@@ -1657,9 +1712,6 @@ ajint ajUserGet(AjPStr* pthis, const char* fmt, ...)
 
     /*ajDebug("ajUserGet buffer len: %d res: %d ptr: %x\n",
 	     ajStrGetLen(thys), ajStrGetRes(thys), thys->Ptr);*/
-
-    if(feof(stdin))
-	ajFatal("END-OF-FILE reading from user\n");
 
     while(buff)
     {
@@ -1673,9 +1725,13 @@ ajint ajUserGet(AjPStr* pthis, const char* fmt, ...)
         if(!cp && !ipos)
 	{
 	    if(feof(stdin))
-		ajFatal("END-OF-FILE reading from user\n");
+	    {
+		ajErr("Unable to get reply from user - end of standard input");
+		ajExitBad();
+	    }
 	    else
-		ajFatal("Error reading from user\n");
+		ajFatal("Error reading from user: '%s'\n",
+			strerror(errno));
 	}
 
 	jlen = strlen(&buff[ipos]);

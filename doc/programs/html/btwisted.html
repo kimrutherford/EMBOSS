@@ -23,14 +23,13 @@ btwisted
 <H2>
     Function
 </H2>
-Calculates the twisting in a B-DNA sequence
+Calculate the twisting in a B-DNA sequence
 <H2>
     Description
 </H2>
 
-<b>btwisted</b> takes a region of a pure DNA sequence and calculates
-by simple arithmetic the probable overall twist of the sequence and
-the stacking energy.
+<p><b>btwisted</b> reads a pure DNA sequence and calculates by simple arithmetic the probable overall twist of the sequence and the stacking energy.</p>
+
 
 <H2>
     Usage
@@ -88,8 +87,9 @@ the stacking energy.
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -304,18 +304,10 @@ Average stacking energy per dinucleotide: -8.97
 <H2>
     Data files
 </H2>
+<p>The program requires two data files.  A file (<tt>Eangles.dat</tt> by default) containing base pair twist angles, and another (<tt>Eenergy.dat</tt>) containing base pair stacking energies. No check is made that all dinucleotides are listed in the files and so read for their energy and twist. Attempting to run <b>btwisted</b> with an incomplete data file will result a fatal error if the sequence contains a dinucleotide not in the data files.</p>
 
-The program reads in two data files.
-<P>
-The first is prompted for by:
-<P>
-"File containing base pair twist angles"
-<P>
-<br>
-This is the data file 'Eangles.dat' by default.
-<P>
-This consists of the data:
-<P>
+
+<P><tt>Eangles.dat</tt> consists of the data:</P>
 <pre>
 aa      35.6    0.1
 ac      34.4    1.3
@@ -334,19 +326,9 @@ tc      36.9    0.9
 tg      34.5    0.9
 tt      35.6    0.1
 </pre>
-<p>
 
 
-
-
-The second is prompted for by:
-<P>
-"File containing base pair stacking energies"
-<br>
-This is the data file 'Eenergy.dat' by default.
-<P>
-This consists of the data:
-<P>
+<p><tt>'Eenergy.dat'</tt> consists of the data:</P>
 <pre>
 #base pair stacking energy for B-DNA
 aa      -5.37
@@ -368,9 +350,7 @@ tt      -5.37
 </pre>
 <P>
 
-  No check is made that all dinucleotides have been read for the energy and 
-  twist. Attempting to run btwisted with an incomplete data file will result
-  a fatal error if the sequence contains a dinucleotide not in the data files. 
+
  
 
 <P>
@@ -470,35 +450,41 @@ in the data files.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="banana.html">banana</a></td>
-<td>Bending and curvature plot in B-DNA</td>
+<td>Plot bending and curvature data for B-DNA</td>
 </tr>
 
 <tr>
 <td><a href="chaos.html">chaos</a></td>
-<td>Create a chaos game representation plot for a sequence</td>
+<td>Draw a chaos game representation plot for a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="compseq.html">compseq</a></td>
-<td>Count composition of dimer/trimer/etc words in a sequence</td>
+<td>Calculate the composition of unique words in sequences</td>
 </tr>
 
 <tr>
 <td><a href="dan.html">dan</a></td>
-<td>Calculates DNA RNA/DNA melting temperature</td>
+<td>Calculates nucleic acid melting temperature</td>
+</tr>
+
+<tr>
+<td><a href="density.html">density</a></td>
+<td>Draw a nucleic acid density plot</td>
 </tr>
 
 <tr>
 <td><a href="freak.html">freak</a></td>
-<td>Residue/base frequency table or plot</td>
+<td>Generate residue/base frequency table or plot</td>
 </tr>
 
 <tr>
 <td><a href="isochore.html">isochore</a></td>
-<td>Plots isochores in large DNA sequences</td>
+<td>Plots isochores in DNA sequences</td>
 </tr>
 
 <tr>
@@ -508,7 +494,7 @@ in the data files.
 
 <tr>
 <td><a href="wordcount.html">wordcount</a></td>
-<td>Counts words of a specified size in a DNA sequence</td>
+<td>Count and extract unique words in DNA sequence(s)</td>
 </tr>
 
 </table>

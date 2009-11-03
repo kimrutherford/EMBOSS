@@ -41,11 +41,13 @@ void   ajNamListOrigin (void);
 void   ajNamPrintDbAttr (AjPFile outf, AjBool full);
 void   ajNamPrintRsAttr (AjPFile outf, AjBool full);
 AjBool ajNamResolve (AjPStr* name);
-AjBool ajNamRoot (AjPStr* root);
-AjBool ajNamRootBase (AjPStr* rootbase);
-AjBool ajNamRootInstall (AjPStr* root);
-AjBool ajNamRootPack (AjPStr* pack);
-AjBool ajNamRootVersion (AjPStr* version);
+
+const AjPStr ajNamValueRootdir(void);
+const AjPStr ajNamValueBasedir(void);
+const AjPStr ajNamValueInstalldir(void);
+const AjPStr ajNamValuePackage(void);
+const AjPStr ajNamValueVersion(void);
+
 AjBool ajNamRsAttrValue(const AjPStr name, const AjPStr attribute,
 			 AjPStr *value);
 AjBool ajNamRsAttrValueC(const char *name, const char *attribute,
@@ -53,6 +55,12 @@ AjBool ajNamRsAttrValueC(const char *name, const char *attribute,
 AjBool ajNamRsListValue(const AjPStr name, AjPStr *value);
 AjBool ajNamSetControl (const char* optionName);
 void   ajNamVariables (void); /* "" "" may want to delete later */
+
+__deprecated AjBool ajNamRootInstall (AjPStr* root);
+__deprecated AjBool ajNamRoot (AjPStr* root);
+__deprecated AjBool ajNamRootBase (AjPStr* rootbase);
+__deprecated AjBool ajNamRootPack (AjPStr* pack);
+__deprecated AjBool ajNamRootVersion (AjPStr* version);
 
 /*
 ** End of prototype definitions

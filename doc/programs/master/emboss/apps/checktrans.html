@@ -21,21 +21,7 @@ checktrans
 </H2>
 
 
-Reads in a protein sequence containing stops, and writes a report of any
-open reading frames (continuous protein sequence with no stops) that are
-greater than a minimum size.  The default minimum ORF size is 100
-residues. It writes out any ORF sequences.
-
-<p>
-
-The input sequence might typically have been produced by <b>transeq</b>.
-
-<p>
-
-Note that if you have only translated a nucleic sequence in one frame,
-<b>checktrans</b> will miss possible ORFs in other frames.  You have to
-give <b>checktrans</b> translations in all three (six?) frames in order
-for it to be effective at finding all possible ORFs. 
+<p><b>checktrans</b> reads a protein sequence containing stop characters and writes a statistical report of any open reading frames (ORFs) that are greater than a minimum size. An open reading frame is defined as a continuous region of protein sequence with no stop characters.   The default minimum ORF size is 100 residues. In addition to the report output, any ORF sequences are written to file and features of those sequences written to a separate file.</p>
 
 
 <H2>
@@ -69,8 +55,8 @@ This program reads the USA of a protein sequence with STOP codons in it.
 
 
 This program writes three files: the ORF report file
-(paamir_1.checktrans), the output sequence file (paamir_1.fasta) and the
-feature file (paamir_1.out3) which is in GFF format by default. 
+(x13776_1.checktrans), the output sequence file (x13776_1.fasta) and the
+feature file (x13776_1.out3) which is in GFF format by default. 
 
 <p>
 
@@ -82,7 +68,7 @@ positions and the name of the sequence it has been written out as.
 
 The name of the output sequences is constructed from the name of the
 input sequence followed by an underscore and then the numeric count of
-the ORF (e.g. 'PAAMIR_1_7').
+the ORF (e.g. 'X13776_1_7').
 
 <!--#include file="inc/checktrans.output" -->
 
@@ -97,7 +83,11 @@ None.
     Notes
 </H2>
 
-None.
+<p>A reading frame is a relative position in DNA or RNA from which contiguous, non-overlapping codons are read during transcription. There are 3 possible reading frames in mRNA strand and six in a double stranded DNA where transcription is possible from either strand. An open reading frame (ORF) is a reading frame that begins with a start codon and includes the subsequent transcribed region, stopping immediately before the first stop codon.</p>
+
+<p>Where you have a nucleotide sequence for analysis, it should first be translated by using <b>transeq</b>.  The <b>transeq</b> output file will then serve as the input to <b>checktrans</b>. Note that if you have only translated a nucleic sequence in one frame, <b>checktrans</b> will miss possible ORFs in the other frames. You must provide <b>checktrans</b> with translations in all three (six?) frames in order for it to be effective at finding all possible ORFs.</p>
+
+
 
 <H2>
     References

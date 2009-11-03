@@ -25,7 +25,6 @@ package org.emboss.jemboss.gui;
 import java.awt.*;
 import java.io.*;
 import javax.swing.*;
-import javax.swing.event.*;
 import java.awt.event.*;
 import org.emboss.jemboss.gui.form.TextFieldSink;
 import jalview.AlignFrame;
@@ -145,7 +144,7 @@ public class LaunchJalView extends JFrame
               af.setSize(700,500);
               setCursor(cdone);
               setVisible(false);
-              af.show();
+              af.setVisible(true);
             }
             catch(Exception npe)
             {

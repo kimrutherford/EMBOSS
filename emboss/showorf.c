@@ -102,9 +102,9 @@ int main(int argc, char **argv)
     width     = ajAcdGetInt("width");
     outf      = ajAcdGetOutfile("outfile");
     frames    = ajAcdGetList("frames");
-    isrule    = ajAcdGetBool("ruler");
-    isp       = ajAcdGetBool("plabel");
-    isn       = ajAcdGetBool("nlabel");
+    isrule    = ajAcdGetBoolean("ruler");
+    isp       = ajAcdGetBoolean("plabel");
+    isn       = ajAcdGetBoolean("nlabel");
 
     ajStrToInt(codestr, &gcode);
     codon     = ajCodNewCode(gcode);

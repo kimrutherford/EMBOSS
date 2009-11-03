@@ -334,9 +334,7 @@ EmbPPatMatch embPatMatchFindC(const AjPStr regexp, const char *sptr,
 	AJNEW(len);
 	*len = ajRegLenI(regcomp,0);
 	*pos += (ajuint) (sptr-ptr);
-/*	node = ajListNodesNew(pos, NULL);*/
 	ajListPush(poslist, pos);
-/*	node = ajListNodesNew(len, NULL);*/
 	ajListPush(lenlist, len);
 	sptr += posi+1;
 	if(nterm)
@@ -392,7 +390,7 @@ EmbPPatMatch embPatMatchFindC(const AjPStr regexp, const char *sptr,
 
 
 
-/* @func embPatMatchGetLen****************************************************
+/* @func embPatMatchGetLen ****************************************************
 **
 ** Returns the length from the pattern match structure for index'th item.
 **
@@ -414,7 +412,7 @@ ajuint embPatMatchGetLen(const EmbPPatMatch data, ajuint indexnum)
 
 
 
-/* @func embPatMatchGetEnd****************************************************
+/* @func embPatMatchGetEnd ****************************************************
 **
 ** Returns the End point for the pattern match structure for index'th item.
 **
@@ -436,7 +434,7 @@ ajuint embPatMatchGetEnd(const EmbPPatMatch data, ajuint indexnum)
 
 
 
-/* @func embPatMatchGetNumber************************************************
+/* @func embPatMatchGetNumber ************************************************
 **
 ** Returns the number of pattern matches in the structure.
 **
@@ -454,7 +452,7 @@ ajuint embPatMatchGetNumber(const EmbPPatMatch data)
 
 
 
-/* @func embPatMatchGetStart**************************************************
+/* @func embPatMatchGetStart **************************************************
 **
 ** Returns the start position from the pattern match structure for
 ** index'th item.
@@ -761,7 +759,7 @@ AjBool embPatRestrictReadEntry(EmbPPatRestrict re, AjPFile inf)
     ajuint i;
 
     line = ajStrNew();
-    while((ret=ajFileReadLine(inf,&line)))
+    while((ret=ajReadlineTrim(inf,&line)))
     {
 	p = ajStrGetPtr(line);
 	if(!(!*p || *p=='#' || *p=='!'))
@@ -797,7 +795,7 @@ AjBool embPatRestrictReadEntry(EmbPPatRestrict re, AjPFile inf)
     sscanf(p,"%d",&re->cut4);
 
     for(i=0,q=ajStrGetuniquePtr(&re->bin);i<re->len;++i)
-	*(q+i)=ajAZToBinC(*(q+i));
+	*(q+i)=(char)ajBaseAlphaToBin((int)*(q+i));
 
     ajStrDel(&line);
 
@@ -3835,8 +3833,8 @@ ajuint embPatRestrictMatch(const AjPSeq seq, ajuint begin, ajuint end,
     p = ajStrGetuniquePtr(&binstr);
     for(i=0;i<plen;++i,++p,++q)
     {
-	*p = (char)ajAZToBin(*p);
-	*q = (char)ajAZToBin(*q);
+	*p = (char)ajBaseAlphaToBin(*p);
+	*q = (char)ajBaseAlphaToBin(*q);
     }
 
 
@@ -4440,10 +4438,11 @@ ajuint embPatGetTypeII (AjPPatComp thys, const AjPStr pattern, ajuint mismatch,
     AjBool compl;
     AjBool dontcare;
     AjBool range;
+    AjBool isany = ajFalse;
     ajuint plen;
     ajuint type;
     const char *p;
-    const char *q;
+    char *q;
 
     ajStrAssignS(&thys->pattern,pattern);
     if(!embPatClassify(pattern,&thys->pattern,&thys->amino,&thys->carboxyl,
@@ -4502,10 +4501,19 @@ ajuint embPatGetTypeII (AjPPatComp thys, const AjPStr pattern, ajuint mismatch,
     }
     else if(!mismatch && (range || thys->m>AJWORD))
     {
-        q = ajStrGetPtr(pattern);
-	while(*q && *q!='?')
-	    ++q;
-	if(*q=='?')
+        q = ajStrGetuniquePtr(&thys->pattern);
+        isany = ajFalse;
+	while(*q)
+        {
+            if((protein && *q == 'X') || (!protein && *q=='N'))
+            {
+                *q = '?';
+                isany = ajTrue;
+            }
+            ++q;
+        }
+
+	if(isany)
 	    type=7;
 	else
 	    type = 5;

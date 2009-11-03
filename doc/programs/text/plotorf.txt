@@ -5,28 +5,22 @@
 
 Function
 
-   Plot potential open reading frames
+   Plot potential open reading frames in a nucleotide sequence
 
 Description
 
-   Plot potential open reading frames.
+   plotorf plots potential open reading frames (ORFs) for an input
+   nucleotide sequence. ORFs in this program are defined as being regions
+   between the specified START and STOP codons. A graphical
+   representation of where the open reading frames are in all 6 reading
+   frames is shown. The ORFs are displayed as blue boxes.
 
-   A graphical representation of where the open reading frames are in all
-   6 reading frames is shown. The ORFs are displayed as blue boxes.
+Algorithm
 
    ORFs in this program are defined as being regions between START and
-   STOP codons.
-
-   Note that this definition of an ORF would miss those exons in
-   eukaryotic genomic sequences which do not contain a START codon.
-   plotorf is only really useful when dealing with prokaryotic or mRNA
-   eukaryotic sequences.
-
-   The default START codon is: "ATG".
-   The default STOP codons are: "TAA,TAG,TGA".
-
-   You can specify your own set of start and stop codons using the -start
-   and -stop qualifiers.
+   STOP codons. The default START codon is: ATG. The default STOP codons
+   are: TAA,TAG,TGA. You can specify your own set of start and stop
+   codons using the -start and -stop qualifiers.
 
 Usage
 
@@ -34,7 +28,7 @@ Usage
 
 
 % plotorf 
-Plot potential open reading frames
+Plot potential open reading frames in a nucleotide sequence
 Input nucleotide sequence: tembl:x13776
 Graph type [x11]: cps
 
@@ -50,7 +44,7 @@ Created plotorf.ps
 
 
 % plotorf -start ATT,ATC,ATA,ATG,GTG -stop TAA,TAG,AGA,AGG 
-Plot potential open reading frames
+Plot potential open reading frames in a nucleotide sequence
 Input nucleotide sequence: mito.seq
 Graph type [x11]: cps
 
@@ -104,8 +98,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -505,9 +500,6 @@ Data files
 
 Notes
 
-   ORFs in this program are defined as being regions between START and
-   STOP codons.
-
    Note that this definition of an ORF would miss those exons in
    eukaryotic genomic sequences which do not contain a START codon.
    plotorf is only really useful when dealing with prokaryotic or mRNA
@@ -519,7 +511,11 @@ References
 
 Warnings
 
-   See the Notes section.
+   ORFs in this program are defined as being regions between START and
+   STOP codons. This definition would miss those exons in eukaryotic
+   genomic sequences which do not contain a START codon. plotorf is
+   therefore only really useful when dealing with prokaryotic or mRNA
+   eukaryotic sequences.
 
 Diagnostic Error Messages
 
@@ -535,21 +531,25 @@ Known bugs
 
 See also
 
-   Program name                         Description
-   backtranambig Back translate a protein sequence to ambiguous codons
-   backtranseq   Back translate a protein sequence
-   coderet       Extract CDS, mRNA and translations from feature tables
-   getorf        Finds and extracts open reading frames (ORFs)
-   marscan       Finds MAR/SAR sites in nucleic sequences
-   prettyseq     Output sequence with translated ranges
-   remap         Display sequence with restriction sites, translation etc
-   showorf       Pretty output of DNA translations
-   showseq       Display a sequence with features, translation etc
-   sixpack       Display a DNA sequence with 6-frame translation and ORFs
-   syco          Synonymous codon usage Gribskov statistic plot
-   tcode         Fickett TESTCODE statistic to identify protein-coding DNA
-   transeq       Translate nucleic acid sequences
-   wobble        Wobble base plot
+   Program name Description
+   backtranambig Back-translate a protein sequence to ambiguous
+   nucleotide sequence
+   backtranseq Back-translate a protein sequence to a nucleotide sequence
+   coderet Extract CDS, mRNA and translations from feature tables
+   getorf Finds and extracts open reading frames (ORFs)
+   marscan Finds matrix/scaffold recognition (MRS) signatures in DNA
+   sequences
+   prettyseq Write a nucleotide sequence and its translation to file
+   remap Display restriction enzyme binding sites in a nucleotide
+   sequence
+   showorf Display a nucleotide sequence and translation in pretty format
+   showseq Displays sequences with features in pretty format
+   sixpack Display a DNA sequence with 6-frame translation and ORFs
+   syco Draw synonymous codon usage statictic plot for a nucleotide
+   sequence
+   tcode Identify protein-coding regions using Fickett TESTCODE statistic
+   transeq Translate nucleic acid sequences
+   wobble Plot third base position variability in a nucleotide sequence
 
 Author(s)
 

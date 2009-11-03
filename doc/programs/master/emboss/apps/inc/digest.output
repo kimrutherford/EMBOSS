@@ -6,7 +6,7 @@
 <pre>
 ########################################
 # Program: digest
-# Rundate: Sun 15 Jul 2007 12:00:00
+# Rundate: Tue 15 Jul 2008 12:00:00
 # Commandline: digest
 #    -seqall tsw:opsd_human
 # Report_format: seqtable
@@ -23,20 +23,20 @@
 #=======================================
 
   Start     End Mol_Weight Cterm  Nterm  Sequence
-     70     135   7129.319 R      Y      TPLNYILLNLAVADLFMVLGGFTSTLYTSLHGYFVFGPTGCNLEGFFATLGGEIALWSLVVLAIER
-    178     231   6335.495 R      E      YIPEGLQCSCGIDYYTLKPEVNNESFVIYMFVVHFTIPMIIIFFCYGQLVFTVK
-     22      69   5788.873 R      T      SPFEYPQYYLAEPWQFSMLAAYMFLLIVLGFPINFLTLYVTVQHKKLR
-    253     296   5004.085 R      S      MVIIMVIAFLICWVPYASVAFYIFTHQGSNFGPIFMTIPAFFAK
-    136     177   4600.460 R      Y      YVVVCKPMSNFRFGENHAIMGVAFTWVMALACAAPPLAGWSR
-      1      21   2257.495 .      S      MNGTEGPNFYVPFSNATGVVR
-    297     311   1728.089 K      Q      SAAIYNPVIYIMMNK
-    232     245   1490.538 K      A      EAAAQQQESATTQK
-    326     339   1403.457 K      T      NPLGDDEASATVSK
-    315     325   1186.476 R      N      NCMLTTICCGK
-    340     348    902.950 K      .      TETSQVAPA
-    249     252    503.550 K      M      EVTR
-    312     314    449.504 K      N      QFR
-    246     248    346.378 K      E      AEK
+     70     135   7129.324 R      Y      TPLNYILLNLAVADLFMVLGGFTSTLYTSLHGYFVFGPTGCNLEGFFATLGGEIALWSLVVLAIER
+    178     231   6335.500 R      E      YIPEGLQCSCGIDYYTLKPEVNNESFVIYMFVVHFTIPMIIIFFCYGQLVFTVK
+     22      69   5788.878 R      T      SPFEYPQYYLAEPWQFSMLAAYMFLLIVLGFPINFLTLYVTVQHKKLR
+    253     296   5004.090 R      S      MVIIMVIAFLICWVPYASVAFYIFTHQGSNFGPIFMTIPAFFAK
+    136     177   4600.464 R      Y      YVVVCKPMSNFRFGENHAIMGVAFTWVMALACAAPPLAGWSR
+      1      21   2257.500 .      S      MNGTEGPNFYVPFSNATGVVR
+    297     311   1728.093 K      Q      SAAIYNPVIYIMMNK
+    232     245   1490.543 K      A      EAAAQQQESATTQK
+    326     339   1403.462 K      T      NPLGDDEASATVSK
+    315     325   1186.480 R      N      NCMLTTICCGK
+    340     348    902.954 K      .      TETSQVAPA
+    249     252    503.554 K      M      EVTR
+    312     314    449.509 K      N      QFR
+    246     248    346.383 K      E      AEK
 
 #---------------------------------------
 #---------------------------------------

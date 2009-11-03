@@ -1,5 +1,5 @@
 application: msbar [
-  documentation: "Mutate sequence beyond all recognition"
+  documentation: "Mutate a sequence"
   groups: "Nucleic:Mutation, Protein:Mutation"
 ]
 

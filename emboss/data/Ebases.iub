@@ -1,20 +1,20 @@
 # IUB codes for nucleotides
 # Substitution is for OR'd A=1, C=2, G=4 and T=8
-#
-A	1	A
-B	14	TGC
-C	2	C
-D	13	TGA
-G	4	G
-H	11	TCA
-K	12	TG
-M	3	CA
-N	15	TGCA
-R	5	GA
-S	6	GC
-T	8	T
-U	8	T
-V	7	GCA
-W	9	TA
-X	15	TGCA
-Y	10	TC
+#Code   Num     Include Mnemonic
+A	1	A	adenine
+B	14	CGT	not_adenine
+C	2	C	cytosine
+D	13	AGT	not_cytosine
+G	4	G	guanine
+H	11	ACT	not_guanine
+K	12	GT	keto_base
+M	3	AC	amino_base
+N	15	ACGT	any_base
+R	5	AG	purine_base
+S	6	CG	strong_bond
+T	8	T	thymine
+U	8	T	uracil
+V	7	ACG	not_thymine/uracil
+W	9	AT	weak_bond
+X	15	ACGT	unknown
+Y	10	CT	pyrimidine

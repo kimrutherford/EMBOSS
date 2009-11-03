@@ -58,19 +58,19 @@ int main(int argc, char **argv)
     inf = ajAcdGetInfile("infile");
 
     pfname = ajStrNewC("tffungi");
-    ajFileDataNewWrite(pfname,&fout);
+    fout = ajDatafileNewOutNameS(pfname);
 
     ajStrAssignC(&pfname,"tfinsect");
-    ajFileDataNewWrite(pfname,&iout);
+    iout = ajDatafileNewOutNameS(pfname);
 
     ajStrAssignC(&pfname,"tfvertebrate");
-    ajFileDataNewWrite(pfname,&vout);
+    vout = ajDatafileNewOutNameS(pfname);
 
     ajStrAssignC(&pfname,"tfplant");
-    ajFileDataNewWrite(pfname,&pout);
+    pout = ajDatafileNewOutNameS(pfname);
 
     ajStrAssignC(&pfname,"tfother");
-    ajFileDataNewWrite(pfname,&oout);
+    oout = ajDatafileNewOutNameS(pfname);
 
     ajStrDel(&pfname);
 
@@ -81,7 +81,7 @@ int main(int argc, char **argv)
     pattern = ajStrNew();
 
 
-    while(ajFileReadLine(inf,&line))
+    while(ajReadlineTrim(inf,&line))
     {
 	p = ajStrGetPtr(line);
 	

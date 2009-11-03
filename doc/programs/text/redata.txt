@@ -5,27 +5,15 @@
 
 Function
 
-   Search REBASE for enzyme name, references, suppliers etc
+   Retrieve information from REBASE restriction enzyme database
 
 Description
 
-   The Restriction Enzyme database (REBASE) is a collection of
-   information about restriction enzymes and related proteins. It
-   contains published and unpublished references, recognition and
-   cleavage sites, isoschizomers, commercial availability, methylation
-   sensitivity, crystal and sequence data. DNA methyltransferases, homing
-   endonucleases, nicking enzymes, specificity subunits and control
-   proteins are also included. Most recently, putative DNA
-   methyltransferases and restriction enzymes, as predicted from analysis
-   of genomic sequences, are also listed.
-
-   The home page of REBASE is: http://rebase.neb.com/
-
-   This program searches the REBASE database for information on a
-   specified restriction enzyme.
-
-   It outputs a report including the cut site, isoschizomers, references
-   and commercial suppliers of the enzyme.
+   redata searches the REBASE database for information on a specified
+   restriction enzyme. It writes an output file with information on the
+   cut site and (optionally) the full list of isoschizomers (enzymes with
+   the same target sequence), commercial suppliers of the enzyme and
+   literature references.
 
 Usage
 
@@ -33,7 +21,7 @@ Usage
 
 
 % redata 
-Search REBASE for enzyme name, references, suppliers etc.
+Retrieve information from REBASE restriction enzyme database
 Restriction enzyme name [BamHI]: BamHI
 Output file [outfile.redata]: 
 
@@ -64,8 +52,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -182,7 +171,7 @@ Data files
      * ~/ (your home directory)
      * ~/.embossdata
 
-   The EMBOSS REBASE restriction enzyme data files are stored iin
+   The EMBOSS REBASE restriction enzyme data files are stored in
    directory 'data/REBASE/*' under the EMBOSS installation directory.
 
    These files must first be set up using the program 'rebaseextract'.
@@ -210,7 +199,17 @@ Data files
 
 Notes
 
-   None.
+   The Restriction Enzyme database (REBASE) is a collection of
+   information about restriction enzymes and related proteins. It
+   contains published and unpublished references, recognition and
+   cleavage sites, isoschizomers, commercial availability, methylation
+   sensitivity, crystal and sequence data. DNA methyltransferases, homing
+   endonucleases, nicking enzymes, specificity subunits and control
+   proteins are also included. More recently, putative DNA
+   methyltransferases and restriction enzymes, as predicted from analysis
+   of genomic sequences, are also listed.
+
+   The home page of REBASE is: http://rebase.neb.com/
 
 References
 
@@ -218,7 +217,10 @@ References
 
 Warnings
 
-   None.
+   redata uses the EMBOSS REBASE restriction enzyme data files stored in
+   directory data/REBASE/* under the EMBOSS installation directory. These
+   files must first be set up using the program rebaseextract. Running
+   rebaseextract may be the job of your system manager.
 
 Diagnostic Error Messages
 
@@ -234,13 +236,17 @@ Known bugs
 
 See also
 
-   Program name                       Description
-   recoder      Remove restriction sites but maintain same translation
-   remap        Display sequence with restriction sites, translation etc
-   restover     Find restriction enzymes producing specific overhang
-   restrict     Finds restriction enzyme cleavage sites
-   showseq      Display a sequence with features, translation etc
-   silent       Silent mutation restriction enzyme scan
+   Program name Description
+   recoder Find restriction sites to remove (mutate) with no translation
+   change
+   remap Display restriction enzyme binding sites in a nucleotide
+   sequence
+   restover Find restriction enzymes producing a specific overhang
+   restrict Report restriction enzyme cleavage sites in a nucleotide
+   sequence
+   showseq Displays sequences with features in pretty format
+   silent Find restriction sites to insert (mutate) with no translation
+   change
 
 Author(s)
 

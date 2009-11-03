@@ -1,0 +1,79 @@
+application: nospace
+[
+  documentation: "Remove all whitespace from an ASCII text file"
+  groups: "Edit"
+  gui: "yes"
+  batch: "yes"
+  cpu: "low"
+]
+
+
+
+
+
+section: input 
+[
+  information: "Input section"
+  type: "page"
+]
+
+infile: infile 
+[
+    parameter: "Y"
+    knowntype: "ascii text"
+    information: "ASCII text file"
+]
+
+endsection: input
+
+
+
+
+
+section: required 
+[
+  information: "Required section"
+  type: "page"
+]
+endsection: required
+
+
+
+
+
+section: additional
+[
+  information: "Additional section"
+  type: "page"
+]
+endsection: additional
+
+
+
+
+
+section: advanced
+[
+  information: "Advanced section"
+  type: "page"
+]
+endsection: advanced
+
+
+
+
+
+section: output 
+[
+  information: "Output section"
+  type: "page"
+]
+
+outfile: outfile 
+[
+    parameter: "Y"
+    knowntype: "ascii text"
+    information: "ASCII text output file"
+]
+
+endsection: output

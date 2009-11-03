@@ -9,15 +9,12 @@ Function
 
 Description
 
-   stssearch searches a DNA sequence database with a set of STS primers
-   and reports expected matches.
-
-   stssearchs reads in one or more sequences to be searched. For each
-   pair of primers, it looks for matches between a the primers and the
-   query sequence in either orientation.
-
-   Any matches found will be reported. Only one primer need match for it
-   to be reported..
+   stssearch searches one or more DNA sequences with a set of STS primers
+   and reports expected matches. The database to search, the input primer
+   pairs file and an output file for matches are specified. For each pair
+   of primers, it looks for matches between the primers and the query
+   sequence in either orientation. Details of any matches are written to
+   the output file. Only one primer need match for it to be reported.
 
 Usage
 
@@ -66,8 +63,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -179,9 +177,9 @@ Known bugs
 
 See also
 
-   Program name                     Description
+   Program name                    Description
    eprimer3     Picks PCR primers and hybridization oligos
-   primersearch Searches DNA sequences for matches with primer pairs
+   primersearch Search DNA sequences for matches with primer pairs
 
    If you want something that only reports matches of both primer pairs
    and can find mismatches, use primersearch.

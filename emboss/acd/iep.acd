@@ -1,6 +1,5 @@
 application: iep [
-  documentation: "Calculates the isoelectric point of a
-                  protein"
+  documentation: "Calculate the isoelectric point of proteins"
   groups: "Protein:Composition"
 ]
 
@@ -87,6 +86,7 @@ section: output [
     standard: "$(report)"
     knowntype: "iep output"
     nullok: "@(!$(report))"
+    nulldefault: "@(!$(report))"
   ]
 
 endsection: output

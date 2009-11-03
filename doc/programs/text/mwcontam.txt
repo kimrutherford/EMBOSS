@@ -5,17 +5,17 @@
 
 Function
 
-   Shows molwts that match across a set of files
+   Find weights common to multiple molecular weights files
 
 Description
 
    mwcontam finds molecular weights that are common between a set of mass
-   spectrometry result files. Such molecular weights are usually a form
-   of contamination resulting from autolysis of a protease, degradation
-   of the matrix or presence of keratin from the sample preparer.
-
-   The output of mwcontam, with minimal editing, can be added to the data
-   file for the mwfilter program ('Emwfilter.dat').
+   spectrometry result files at a specified ppm tolerance. Such molecular
+   weights are usually a form of contamination resulting from autolysis
+   of a protease, degradation of the matrix or presence of keratin from
+   the sample preparer. The input is a comma-separated list of files each
+   containing a list of experimental molecular weights. The output is a
+   file with a list of the molecular weights common to all files.
 
 Usage
 
@@ -23,7 +23,7 @@ Usage
 
 
 % mwcontam 
-Shows molwts that match across a set of files
+Find weights common to multiple molecular weights files
 Molecular weights file list: ../data/mw2.dat,mw3.dat
 Ppm tolerance [50.0]: 
 Molecular weights output file [outfile.mwcontam]: 
@@ -47,8 +47,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -131,7 +132,13 @@ mwcontam        415.000
 
 Notes
 
-   None.
+   The output of mwcontam, with minimal editing, can be added to the data
+   file for the mwfilter program (Emwfilter.dat), which will then remove
+   these weights from its input file of molecular weights. For example
+   you might like to fetch Emwfilter.dat using embossdata (as described
+   in the mwfilter documentation) and edit it to include the lines: #
+   data produced from the program mwcontam mwcontam 67.000 mwcontam
+   415.000
 
 References
 
@@ -155,21 +162,24 @@ Known bugs
 
 See also
 
-   Program name                         Description
-   backtranambig Back translate a protein sequence to ambiguous codons
-   backtranseq   Back translate a protein sequence
-   charge        Protein charge plot
-   checktrans    Reports STOP codons and ORF statistics of a protein
-   compseq       Count composition of dimer/trimer/etc words in a sequence
-   emowse        Protein identification by mass spectrometry
-   freak         Residue/base frequency table or plot
-   iep           Calculates the isoelectric point of a protein
-   mwfilter      Filter noisy molwts from mass spec output
-   octanol       Displays protein hydropathy
-   pepinfo       Plots simple amino acid properties in parallel
-   pepstats      Protein statistics
-   pepwindow     Displays protein hydropathy
-   pepwindowall  Displays protein hydropathy of a set of sequences
+   Program name Description
+   backtranambig Back-translate a protein sequence to ambiguous
+   nucleotide sequence
+   backtranseq Back-translate a protein sequence to a nucleotide sequence
+   charge Draw a protein charge plot
+   checktrans Reports STOP codons and ORF statistics of a protein
+   compseq Calculate the composition of unique words in sequences
+   emowse Search protein sequences by digest fragment molecular weight
+   freak Generate residue/base frequency table or plot
+   iep Calculate the isoelectric point of proteins
+   mwfilter Filter noisy data from molecular weights file
+   octanol Draw a White-Wimley protein hydropathy plot
+   pepinfo Plot amino acid properties of a protein sequence in parallel
+   pepstats Calculates statistics of protein properties
+   pepwindow Draw a Kyte-Doolittle hydropathy plot for a protein sequence
+   pepwindowall Draw Kyte-Doolittle hydropathy plot for a protein
+   alignment
+   wordcount Count and extract unique words in DNA sequence(s)
 
 Author(s)
 

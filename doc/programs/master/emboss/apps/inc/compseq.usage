@@ -7,7 +7,7 @@ To count the frequencies of dinucleotides in a file:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>compseq tembl:x65923 -word 2 result3.comp </b>
-Count composition of dimer/trimer/etc words in a sequence
+Calculate the composition of unique words in sequences
 
 </pre></td></tr></table><p>
 <p>
@@ -22,7 +22,7 @@ To count the frequencies of hexanucleotides, without outputting the results of h
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>compseq tembl:x65923 -word 6 result6.comp -nozero </b>
-Count composition of dimer/trimer/etc words in a sequence
+Calculate the composition of unique words in sequences
 
 </pre></td></tr></table><p>
 <p>
@@ -37,7 +37,7 @@ To count the frequencies of trinucleotides in frame 2 of a sequence and use a pr
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>compseq tembl:x65923 -word 3 result3.comp -frame 2 -in prev.comp </b>
-Count composition of dimer/trimer/etc words in a sequence
+Calculate the composition of unique words in sequences
 
 </pre></td></tr></table><p>
 <p>

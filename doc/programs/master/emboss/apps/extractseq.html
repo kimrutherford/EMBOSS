@@ -20,24 +20,7 @@ extractseq
     Description
 </H2>
 
-<b>extractseq</b> allows you to specify one or more regions of a sequence to
-extract sub-sequences from to build up a contiguous resulting sequence. 
-
-<p>
-
-This is modelled on the cell's process of splicing out exons from
-mRNA, but the program is generally applicable to any cutting and
-splicing or editing operation on a single sequence. 
-
-<p>
-
-<b>extractseq</b> reads in a sequence and a set of regions of that
-sequence as specified by pairs of start and end positions (either on the
-command-line or contained in a file) and writes out the specified
-regions of the input sequence in the order in which they have been
-specified.  Thus, if the sequence "AAAGGGTTT" has been input and the
-regions: "7-9, 3-4" have been specified, then the output sequence will
-be: "TTTAG". 
+<p><b>extractseq</b> reads a sequence and writes sub-sequences from it to file. The set of regions to extract is specified on the command-line or in a file as pairs of start and end positions.  The regions are written in the order in which they are specified. Thus, if the sequence <tt>AAAGGGTTT</tt> has been input and the regions: <tt>7-9, 3-4</tt> have been specified, then the output sequence will be: <tt>TTTAG</tt>. Optionally, each region may be written out as a separate sequence.</p>
 
 <H2>
     Usage
@@ -132,8 +115,9 @@ None.
     Notes
 </H2>
 
+<p><b>extractseq</b> allows you to specify one or more regions of a sequence to extract sub-sequences from to build up a contiguous output sequence.  This is modelled on the cell's process of splicing out exons from mRNA, but the program is generally applicable to any cutting and splicing or editing operation on a single sequence.</p>
+<p>Where the <tt>-regions</tt> option is used to specify output as separate sequences, the name of the sequence is created from the name of the original sequence with the start and end positions of the range appended with underscore characters between them, eg: XYZ region 2 to 34 is written as: <tt>XYZ_2_34</tt>.  In such cases the output sequence foramt must be capable of supporting multiple sequences.</p>
 
-None.
 	
 <H2>
     References

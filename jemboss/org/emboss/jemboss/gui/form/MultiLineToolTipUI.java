@@ -26,7 +26,6 @@ package org.emboss.jemboss.gui.form;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
 
 import javax.swing.*;
 import javax.swing.plaf.ToolTipUI;
@@ -93,7 +92,6 @@ public class MultiLineToolTipUI extends ToolTipUI
     String lines[] = PlafMacros.breakupLines(tipText);
     int num_lines = lines.length;
 
-    Dimension dimension;
     int width, height, onewidth;
     height = num_lines * fontHeight;
     width = 0;
@@ -174,7 +172,7 @@ public class MultiLineToolTipUI extends ToolTipUI
       // in swing1.1beta3 and onward
       if (postTip.equals(keys[i])) 
         continue;
-      char c = (char)keys[i].getKeyCode();
+      //char c = (char)keys[i].getKeyCode();
       int mod = keys[i].getModifiers();
       if ( mod == InputEvent.CTRL_MASK ) 
       {

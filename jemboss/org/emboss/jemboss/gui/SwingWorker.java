@@ -34,7 +34,6 @@ import javax.swing.SwingUtilities;
 */
 public abstract class SwingWorker {
     private Object value;  // see getValue(), setValue()
-    private Thread thread;
 
     /** 
     * Class to maintain reference to current worker thread

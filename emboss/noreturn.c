@@ -58,7 +58,7 @@ int main(int argc, char **argv)
     line = ajStrNew();
 
     ajDebug("Characters \\n %%%02x \\r %%%02x\n", '\n', '\r');
-    while(ajFileReadLine(inf,&line))
+    while(ajReadlineTrim(inf,&line))
     {
 	iline++;
 	p   = MAJSTRGETPTR(line);

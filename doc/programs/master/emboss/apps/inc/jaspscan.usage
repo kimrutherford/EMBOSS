@@ -1,0 +1,24 @@
+<b>Here is a sample session with jaspscan</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>jaspscan -both </b>
+Scans DNA sequences for transcription factors
+Input nucleotide sequence(s): <b>tembl:m23100</b>
+Jaspar matrix set
+         C : Core
+         F : Fam
+         P : Phylofacts
+         N : CNE
+         O : POLII
+         S : SPLICE
+Matrix set [C]: <b></b>
+Comma separated matrix list [all]: <b>ma0079</b>
+Threshold percentage [80.0]: <b></b>
+Output report [m23100.jaspscan]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

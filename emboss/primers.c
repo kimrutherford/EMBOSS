@@ -208,9 +208,9 @@ int main(int argc, char **argv)
 
 
 /* Global details */
-  explain_flag        = ajAcdGetBool("explainflag");
+  explain_flag        = ajAcdGetBoolean("explainflag");
 /*
- *   file_flag           = ajAcdGetBool("fileflag");
+ *   file_flag           = ajAcdGetBoolean("fileflag");
  *   task                = ajAcdGetList("task");
  */
   num_return          = ajAcdGetInt("numreturn");
@@ -232,7 +232,7 @@ int main(int argc, char **argv)
 
 /* Primer details */
 /*
- *   pick_anyway         = ajAcdGetBool("pickanyway");
+ *   pick_anyway         = ajAcdGetBoolean("pickanyway");
  *   mispriming_library  = ajAcdGetInfile("mispriminglibrary");
  *   max_mispriming      = ajAcdGetFloat("maxmispriming");
  *   pair_max_mispriming = ajAcdGetFloat("pairmaxmispriming");

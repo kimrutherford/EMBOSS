@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>recoder </b>
-Remove restriction sites but maintain same translation
+Find restriction sites to remove (mutate) with no translation change
 Input nucleotide sequence: <b>tembl:x65923</b>
 Comma separated enzyme list [all]: <b>EcoRII</b>
 Output report [x65923.recoder]: <b></b>

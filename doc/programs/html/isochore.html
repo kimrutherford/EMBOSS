@@ -23,26 +23,13 @@ isochore
 <H2>
     Function
 </H2>
-Plots isochores in large DNA sequences
+Plots isochores in DNA sequences
 
 <H2>
     Description
 </H2>
 
-
-The nuclear genomes of vertebrates are mosaics of isochores, very long
-stretches (&gt;300kb) of DNA that are homogeneous in base composition and
-are compositionally correlated with the coding sequences that they
-embed.  Isochores can be partitioned in a small number of families that
-cover a range of GC levels (GC is the molar ratio of guanine+cytosine in
-DNA), which is narrow in cold-blooded vertebrates, but broad in
-warm-blooded vertebrates. 
-
-<p>
-This application plots GC content over a sequence.  It is intended for
-large sequences such as complete chromosomes or large genomic contigs,
-although interesting results can also be obtained from shorter
-sequences. 
+<p><b>isochore</b> plots GC content in windows over a DNA sequence. The data may also be written to output file.  The window wize and shift increment (the number of bases separating the start of each window) may be specified. <b>isochore</b> is suitable for use with large sequences such as complete chromosomes or large genomic contigs, although interesting results can also be obtained from shorter sequences.</p>
 
 <H2>
     Usage
@@ -54,7 +41,7 @@ sequences.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>isochore tembl:AF129756  -graph cps </b>
-Plots isochores in large DNA sequences
+Plots isochores in DNA sequences
 Output file [af129756.iso]: <b></b>
 
 Created isochore.ps
@@ -115,8 +102,9 @@ Created isochore.ps
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -449,7 +437,7 @@ None.
     Notes
 </H2>
 
-None.
+<p>The nuclear genomes of vertebrates are mosaics of isochores, very long stretches (>300kb) of DNA that are homogeneous in base composition and are compositionally correlated with the coding sequences that they embed. Isochores can be partitioned in a small number of families that cover a range of GC levels (GC is the molar ratio of guanine+cytosine in DNA), which is narrow in cold-blooded vertebrates, but broad in warm-blooded vertebrates.</p>
 
 
 <H2>
@@ -506,35 +494,41 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="banana.html">banana</a></td>
-<td>Bending and curvature plot in B-DNA</td>
+<td>Plot bending and curvature data for B-DNA</td>
 </tr>
 
 <tr>
 <td><a href="btwisted.html">btwisted</a></td>
-<td>Calculates the twisting in a B-DNA sequence</td>
+<td>Calculate the twisting in a B-DNA sequence</td>
 </tr>
 
 <tr>
 <td><a href="chaos.html">chaos</a></td>
-<td>Create a chaos game representation plot for a sequence</td>
+<td>Draw a chaos game representation plot for a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="compseq.html">compseq</a></td>
-<td>Count composition of dimer/trimer/etc words in a sequence</td>
+<td>Calculate the composition of unique words in sequences</td>
 </tr>
 
 <tr>
 <td><a href="dan.html">dan</a></td>
-<td>Calculates DNA RNA/DNA melting temperature</td>
+<td>Calculates nucleic acid melting temperature</td>
+</tr>
+
+<tr>
+<td><a href="density.html">density</a></td>
+<td>Draw a nucleic acid density plot</td>
 </tr>
 
 <tr>
 <td><a href="freak.html">freak</a></td>
-<td>Residue/base frequency table or plot</td>
+<td>Generate residue/base frequency table or plot</td>
 </tr>
 
 <tr>
@@ -544,7 +538,7 @@ None.
 
 <tr>
 <td><a href="wordcount.html">wordcount</a></td>
-<td>Counts words of a specified size in a DNA sequence</td>
+<td>Count and extract unique words in DNA sequence(s)</td>
 </tr>
 
 </table>

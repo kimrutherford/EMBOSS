@@ -22,9 +22,7 @@ package org.emboss.jemboss.editor;
 
 import java.io.*;
 import java.util.StringTokenizer;
-import java.util.Vector;
 import java.util.Hashtable;
-import java.util.Enumeration;
 import java.util.Arrays;
 import javax.swing.JOptionPane;
 
@@ -48,7 +46,7 @@ public class Matrix
   /** hashtable of the residue positions in the table */
   private Hashtable residueMatrixPosition;
   private Object[] keys = null;
-  private String cons = "";
+  //private String cons = "";
   private String matrixString = null;
   private String matrixFileName = null;
 
@@ -362,7 +360,7 @@ public class Matrix
   */
   private int[][] matrixRead(File matrixFile)
   {
-    String delim = " :\t\n";
+    //String delim = " :\t\n";
     String line  = "";
     BufferedReader in;
     residueMatrixPosition = new Hashtable();
@@ -410,7 +408,7 @@ public class Matrix
   */
   private int[][] matrixReadString(String matrixString)
   {
-    String delim = " :\t\n";
+    //String delim = " :\t\n";
     String line  = "";
     BufferedReader in;
     residueMatrixPosition = new Hashtable();

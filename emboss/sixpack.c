@@ -94,19 +94,19 @@ int main(int argc, char **argv)
     tablename   = ajAcdGetListSingle("table");
     uppercase   = ajAcdGetRange("uppercase");
     highlight   = ajAcdGetRange("highlight");
-    numberseq   = ajAcdGetBool("number");
+    numberseq   = ajAcdGetBoolean("number");
     width       = ajAcdGetInt("width");
     length      = ajAcdGetInt("length");
     margin      = ajAcdGetInt("margin");
-    nameseq     = ajAcdGetBool("name");
-    description = ajAcdGetBool("description");
+    nameseq     = ajAcdGetBoolean("name");
+    description = ajAcdGetBoolean("description");
     offset      = ajAcdGetInt("offset");
-    html        = ajAcdGetBool("html");
+    html        = ajAcdGetBoolean("html");
     orfminsize  = ajAcdGetInt("orfminsize");
-    reverse     = ajAcdGetBool("reverse");
-    addlast     = ajAcdGetBool("lastorf");
-    firstorf    = ajAcdGetBool("firstorf");
-    mstart      = ajAcdGetBool("mstart");
+    reverse     = ajAcdGetBoolean("reverse");
+    addlast     = ajAcdGetBoolean("lastorf");
+    firstorf    = ajAcdGetBoolean("firstorf");
+    mstart      = ajAcdGetBoolean("mstart");
     
     
     /* get the number of the genetic code used */

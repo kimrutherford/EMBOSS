@@ -5,43 +5,30 @@
 
 Function
 
-   Reports CpG rich regions
+   Identify and report CpG-rich regions in nucleotide sequence(s)
 
 Description
 
-   newcpgseek reports CpG rich regions of a sequence as candidate CpG
-   islands.
+   newcpgseek identifies in a nucleotide sequence regions with higher
+   than expected frequency of the dinucleotide CG.
+   Each position in the sequence is scored using a running sum calculated
+   from all positions in the sequence. This is a different method to that
+   typically used for identifying CpG islands, for example by
+   newcpgreport and cpgplot. This method overpredicts islands but finds
+   the smaller ones around primary exons. An output file is written with
+   information on the CpG-rich regions that are found. A feature table of
+   sequence features in these regions is also written.
 
-   CpG refers to a C nucleotide immediately followed by a G. The 'p' in
-   'CpG' refers to the phosphate group linking the two bases.
+Algorithm
 
-   Detection of regions of genomic sequences that are rich in the CpG
-   pattern is important because such regions are resistant to methylation
-   and tend to be associated with genes which are frequently switched on.
-   Regions rich in the CpG pattern are known as CpG islands.
-
-   It has been estimated that about half of all mammalian genes have a
-   CpG-rich region around their 5' end. It is said that all mammalian
-   house-keeping genes have a CpG island!
-
-   Non-mammalian vertebrates have some CpG islands that are associated
-   with genes, but the association gets equivocal in the farther
-   taxonomic groups.
-
-   Finding a CpG island upstream of predicted exons or genes is good
-   contributory evidence.
-
-   CpG islands are usually defined as "length over 200bp with %GC over
-   50% and obs/ervedexpexted CpG more than 0.6". However this program
-   uses a running sum rather than a window to produce a score: if there
-   is not a CpG at position i, then decrement runSum counter, but if CpG
-   then runSum += CPGSCORE. Spans above the threshold are searched for
-   recursively. If the score is higher than a threshold (17 at the
-   moment) then a putative island is declared.
-
-   This program reads in one or more sequences and finds regions where
-   there is a high absolute frequency of CpG dimers as well as a high
-   proportion of CpG compared to GpC.
+   newcpgseek scores each position in the sequence using a running sum
+   calculated from all positions in the sequence, starting with the first
+   and ending in the last. If there is not a CG dinucleotide at a
+   position, the score is decremented, if there is one, the score is
+   incremented by a constant (user-defined) value. If the score for a
+   region in the sequence is higher than a threshold (17 at the moment)
+   then a putative island is declared. Sequence regions scoring above the
+   threshold are searched for recursively.
 
 Usage
 
@@ -49,7 +36,7 @@ Usage
 
 
 % newcpgseek 
-Reports CpG rich regions
+Identify and report CpG-rich regions in nucleotide sequence(s)
 Input nucleotide sequence(s): tembl:u68037
 CpG score [17]: 
 Output file [u68037.newcpgseek]: 
@@ -90,8 +77,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -247,7 +235,52 @@ Data files
 
 Notes
 
-   None.
+   "CpG" refers to a C nucleotide immediately followed by a G. The 'p' in
+   'CpG' refers to the phosphate group linking the two bases. Regions of
+   genomic sequences rich in the CpG pattern or "CpG islands" are
+   resistant to methylation and tend to be associated with genes which
+   are frequently switched on. It's been estimated that about half of all
+   mammalian genes, and, possibly all mammalian house-keeping genes, have
+   a CpG-rich region around their 5' end. Non-mammalian vertebrates have
+   some CpG islands that are associated with genes, but the association
+   gets equivocal in the farther taxonomic groups. The detection of CpG
+   island upstream of predicted exons or genes is evidence in support of
+   a highly expressed gene.
+
+   As there is no official definition of what is a CpG island is or how
+   to identify where they begin and end, we work with two definitions and
+   thus two methods. These are:
+
+   1. cpgplot and newcpgreport use a sliding window within which the
+   Observed/Expected ratio of CpG is calculated. For a sequence region to
+   reported as a CpG island, it must satisfy the following contraints:
+   Observed/Expected ratio > 0.6
+   % C + % G > 50%
+   Sequence Length > 200
+
+   2. newcpgseek and cpgreport use a running sum calculated from all
+   positions in a sequence rather than a window to produce a score. If
+   there is not a CG dinucleotide at a position, the score is
+   decremented, if there is one, the score is incremented by a constant
+   (user-defined) value. If the score for a region in the sequence is
+   higher than a threshold (17 at the moment) then a putative island is
+   declared. Sequence regions scoring above the threshold are searched
+   for recursively.
+
+   This method overpredicts islands but finds the smaller ones around
+   primary exons. newcpgseek uses the same method as cpgreport but the
+   output is different and more readable. For most purposes you should
+   probably use newcpgreport rather than cpgreport. It is used to produce
+   the human cpgisland database you can find on the EBI's ftp server as
+   well as on the EBI's SRS server.
+
+   newcpgseek and cpgreport both now display the actual CpG count, the
+   (%C + %G) and the Observed/Expected ratio in the region where the
+   score is above the threshold.
+
+   The geecee program measures CG content in the entire input sequence
+   and is not to be used to detect CpG islands. It can be useful for
+   detecting sequences that MIGHT contain an island.
 
 References
 
@@ -271,11 +304,12 @@ Known bugs
 
 See also
 
-   Program name                        Description
-   cpgplot      Plot CpG rich areas
-   cpgreport    Reports all CpG rich regions
-   geecee       Calculates fractional GC content of nucleic acid sequences
-   newcpgreport Report CpG rich areas
+   Program name Description
+   cpgplot Identify and plot CpG islands in nucleotide sequence(s)
+   cpgreport Identify and report CpG-rich regions in nucleotide
+   sequence(s)
+   geecee Calculate fractional GC content of nucleic acid sequences
+   newcpgreport Identify CpG islands in nucleotide sequence(s)
 
    As there is no official definition of what is a cpg island is, and
    worst where they begin and end, we have to live with 2 definitions and

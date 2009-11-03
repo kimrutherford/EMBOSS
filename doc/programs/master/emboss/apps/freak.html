@@ -19,14 +19,13 @@ freak
     Description
 </H2>
 
-<b>freak</b> takes one or more sequences as input and a set of bases or
-residues to search for. It then calculates the frequency of these
-bases/residues in a window as it moves along the sequence.  The
-frequency is output to a data file or (optionally) plotted.
-<P>
+<p><b>freak</b> reads one or more sequences and a set of bases or residues to search for. It then calculates the frequency of these bases/residues in a window as it moves along the sequence. The frequency is output to a data file or (optionally) plotted.</p>
 
-The default set of bases is 'cg' which will calculate the frequency of
-'G' + 'C' bases within the default moving window of 30 bases. 
+<H2>
+Algorithm
+</H2>
+
+<p>The frequency of bases/residues is calculated in a window that is moved along the sequence.  The window size and stepping value (number of positions the window is moved along each time) may be specified.</p>
 
 <H2>
     Usage
@@ -75,7 +74,7 @@ None.
     Notes
 </H2>
 
-None.
+<p>The default set of bases is <tt>cg</tt> which will calculate the frequency of <tt>G</tt> + <tt>C</tt> bases within the default moving window of 30 bases.</p>
 
 
 <H2>

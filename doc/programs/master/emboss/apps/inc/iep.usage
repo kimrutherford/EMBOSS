@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>iep tsw:laci_ecoli </b>
-Calculates the isoelectric point of a protein
+Calculate the isoelectric point of proteins
 Output file [laci_ecoli.iep]: <b></b>
 
 </pre></td></tr></table><p>
@@ -19,7 +19,7 @@ Output file [laci_ecoli.iep]: <b></b>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>iep tsw:ifna2_human -disulphide 2 -lysinemodified 2  </b>
-Calculates the isoelectric point of a protein
+Calculate the isoelectric point of proteins
 Output file [ifna2_human.iep]: <b></b>
 
 </pre></td></tr></table><p>

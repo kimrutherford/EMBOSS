@@ -22,7 +22,6 @@
 package org.emboss.jemboss.gui.filetree;
 
 import java.io.*;
-import java.util.*;
 import javax.swing.*;
 
 /**
@@ -77,7 +76,6 @@ public class FileSave
       }
     }
 
-    this.canDo = canDo;
   }
 
   /**

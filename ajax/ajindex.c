@@ -1364,7 +1364,7 @@ static void btreeWriteBucket(AjPBtcache cache, const AjPBucket bucket,
     {
 	id = bucket->Ids[i];
 	len = BT_BUCKIDLEN(id->id);
-	if((lptr-buf+1)+len > cache->pagesize) /* overflow */
+	if((lptr-buf+1) + (len+1+BT_DDOFFROFF) > (ajuint) cache->pagesize) /* overflow */
 	{
     	    ajDebug("WriteBucket: Overflow\n");
 	    if(!overflow)		/* No overflow buckets yet */
@@ -1986,6 +1986,9 @@ static void btreeInsertKey(AjPBtcache cache, AjPBtpage page,
     ajlong blockno  = 0L;
     ajlong rblockno = 0L;
     ajlong lblockno = 0L;
+    ajlong ibn      = 0L;
+    
+
     AjPStr mediankey  = NULL;
     ajlong medianless = 0L;
     ajlong mediangtr  = 0L;
@@ -2139,10 +2142,12 @@ static void btreeInsertKey(AjPBtcache cache, AjPBtpage page,
     }
 
 
-    ipage = rpage;
+    ibn = rblockno;
     if(strcmp(key->Ptr,mediankey->Ptr)<0)
-	ipage = lpage;
+	ibn = lblockno;
 
+    ipage = ajBtreeCacheRead(cache,ibn);
+    
     btreeInsertNonFull(cache,ipage,key,less,greater);
 
 
@@ -2516,7 +2521,14 @@ static ajint btreeIdCompare(const void *a, const void *b)
 
 static ajint btreeNumIdCompare(const void *a, const void *b)
 {
-    return (*(AjPBtNumId const *)a)->offset - (*(AjPBtNumId const *)b)->offset;
+  ajlong val;
+
+    val = (*(AjPBtNumId const *)a)->offset - (*(AjPBtNumId const *)b)->offset;
+
+    if(!val)
+      return 0;
+
+    return (val < 0L) ? -1 : 1;
 }
 
 
@@ -2965,7 +2977,7 @@ void ajBtreeWriteParams(const AjPBtcache cache, const char *fn,
     fname = ajStrNew();
     ajFmtPrintS(&fname,"%s/%s.p%s",idir,fn,ext);
 
-    if(!(outf = ajFileNewOut(fname)))
+    if(!(outf = ajFileNewOutNameS(fname)))
 	ajFatal("Cannot open param file %S\n",fname);
 
     ajFmtPrintF(outf,"Order     %d\n",cache->order);
@@ -3023,10 +3035,10 @@ void ajBtreeReadParams(const char *fn, const char *ext,
     fname = ajStrNew();
     ajFmtPrintS(&fname,"%s/%s.p%s",idir,fn,ext);
     
-    if(!(inf = ajFileNewIn(fname)))
+    if(!(inf = ajFileNewInNameS(fname)))
 	ajFatal("Cannot open param file %S\n",fname);
 
-    while(ajFileReadLine(inf,&line))
+    while(ajReadlineTrim(inf,&line))
     {
 	if(ajStrPrefixC(line,"Order2"))
 	{
@@ -6547,11 +6559,11 @@ ajint ajBtreeReadEntries(const char *filename, const char *indexdir,
     
     ajStrAppendC(&fn,".ent");
     
-    inf = ajFileNewIn(fn);
+    inf = ajFileNewInNameS(fn);
     if(!inf)
 	ajFatal("Cannot open database entries file %S",fn);
 
-    while(ajFileReadLine(inf, &line))
+    while(ajReadlineTrim(inf, &line))
     {
 	p = *(line->Ptr);
 	if(p == '#' || !ajStrGetLen(line))
@@ -6564,7 +6576,7 @@ ajint ajBtreeReadEntries(const char *filename, const char *indexdir,
 
     if(!do_ref)
     {
-	while(ajFileReadLine(inf, &line))
+	while(ajReadlineTrim(inf, &line))
 	{
 	    seqname = ajStrNew();
 	    ajFmtScanS(line,"%S",&tseqname);
@@ -6577,7 +6589,7 @@ ajint ajBtreeReadEntries(const char *filename, const char *indexdir,
     }
     else
     {
-	while(ajFileReadLine(inf, &line))
+	while(ajReadlineTrim(inf, &line))
 	{
 	    seqname = ajStrNew();
 	    refname = ajStrNew();
@@ -9895,7 +9907,7 @@ static void btreeSplitRootSec(AjPBtcache cache)
 
 /* @funcstatic btreeInsertKeySec *****************************************
 **
-** Insert a secpndary key into a potentially full node
+** Insert a secondary key into a potentially full node
 **
 ** @param [u] cache [AjPBtcache] cache
 ** @param [u] page [AjPBtpage] original page
@@ -9936,7 +9948,8 @@ static void btreeInsertKeySec(AjPBtcache cache, AjPBtpage page,
     ajlong blockno  = 0L;
     ajlong rblockno = 0L;
     ajlong lblockno = 0L;
-
+    ajlong ibn      = 0L;
+    
     AjPStr mediankey  = NULL;
     ajlong medianless = 0L;
     ajlong mediangtr  = 0L;
@@ -10090,10 +10103,12 @@ static void btreeInsertKeySec(AjPBtcache cache, AjPBtpage page,
     }
 
 
-    ipage = rpage;
+    ibn = rblockno;
     if(strcmp(key->Ptr,mediankey->Ptr)<0)
-	ipage = lpage;
+	ibn = lblockno;
 
+    ipage = ajBtreeCacheRead(cache,ibn);
+    
     btreeInsertNonFullSec(cache,ipage,key,less,greater);
 
 
@@ -10258,7 +10273,7 @@ static ajlong btreeInsertShiftSec(AjPBtcache cache, AjPBtpage *retpage,
 	btreeWriteNode(cache,spage,kSarray,pSarray,skeys);
 	btreeWriteNode(cache,tpage,kTarray,pTarray,tkeys);
 	btreeWriteNode(cache,ppage,kParray,pParray,pkeys);
-	if(!ppage->pageno)
+	if(ppage->pageno == cache->secrootblock)
 	    ppage->dirty = BT_LOCK;
 
 	i = 0;
@@ -10355,7 +10370,7 @@ static ajlong btreeInsertShiftSec(AjPBtcache cache, AjPBtpage *retpage,
 	btreeWriteNode(cache,spage,kSarray,pSarray,skeys);
 	btreeWriteNode(cache,tpage,kTarray,pTarray,tkeys);
 	btreeWriteNode(cache,ppage,kParray,pParray,pkeys);
-	if(!ppage->pageno)
+	if(ppage->pageno == cache->secrootblock)
 	    ppage->dirty = BT_LOCK;
 
 	i = 0;
@@ -10668,7 +10683,7 @@ static void btreeKeyShiftSec(AjPBtcache cache, AjPBtpage tpage)
 	btreeWriteNode(cache,spage,kSarray,pSarray,skeys);
 	btreeWriteNode(cache,tpage,kTarray,pTarray,tkeys);
 	btreeWriteNode(cache,ppage,kParray,pParray,pkeys);
-	if(!ppage->pageno)
+	if(ppage->pageno == cache->secrootblock)
 	    ppage->dirty = BT_LOCK;
 
 	page = ajBtreeCacheRead(cache,pSarray[skeys]);
@@ -10726,7 +10741,7 @@ static void btreeKeyShiftSec(AjPBtcache cache, AjPBtpage tpage)
 	btreeWriteNode(cache,spage,kSarray,pSarray,skeys);
 	btreeWriteNode(cache,tpage,kTarray,pTarray,tkeys);
 	btreeWriteNode(cache,ppage,kParray,pParray,pkeys);
-	if(!ppage->pageno)
+	if(ppage->pageno == cache->secrootblock)
 	    ppage->dirty = BT_LOCK;
 
 	page = ajBtreeCacheRead(cache,pSarray[0]);
@@ -11956,8 +11971,14 @@ static void btreeIdDelFromList(void** pentry, void* cl)
 
 static ajint btreeOffsetCompare(const void *a, const void *b)
 {
-    return (*(AjPBtId const *)a)->offset -
-		  (*(AjPBtId const *)b)->offset;
+  ajlong val;
+
+    val = (*(AjPBtId const *)a)->offset - (*(AjPBtId const *)b)->offset;
+
+    if(!val)
+      return 0;
+
+    return (val < 0L) ? -1 : 1;
 }
 
 
@@ -13386,6 +13407,8 @@ static void btreeHybInsertKey(AjPBtcache cache, AjPBtpage page,
     ajlong blockno  = 0L;
     ajlong rblockno = 0L;
     ajlong lblockno = 0L;
+    ajlong ibn      = 0L;
+
     AjPStr mediankey  = NULL;
     ajlong medianless = 0L;
     ajlong mediangtr  = 0L;
@@ -13534,13 +13557,15 @@ static void btreeHybInsertKey(AjPBtcache cache, AjPBtpage page,
     }
 
 
-    ipage = rpage;
+    ibn = rblockno;
     if(strcmp(key->Ptr,mediankey->Ptr)<0)
-	ipage = lpage;
+	ibn = lblockno;
 
     lpage->dirty = BT_DIRTY;
     rpage->dirty = BT_DIRTY;
 
+    ipage = ajBtreeCacheRead(cache,ibn);
+    
     btreeInsertNonFull(cache,ipage,key,less,greater);
 
 
@@ -15020,6 +15045,8 @@ static void btreeNumInsertKey(AjPBtcache cache, AjPBtpage page,
     ajlong blockno  = 0L;
     ajlong rblockno = 0L;
     ajlong lblockno = 0L;
+    ajlong ibn      = 0L;
+
     ajlong mediankey  = 0L;
     ajlong medianless = 0L;
     ajlong mediangtr  = 0L;
@@ -15162,12 +15189,14 @@ static void btreeNumInsertKey(AjPBtcache cache, AjPBtpage page,
     }
 
 
-    ipage = rpage;
+    ibn = rblockno;
     if(key < mediankey)
-	ipage = lpage;
+	ibn = lblockno;
 
     lpage->dirty = BT_DIRTY;
     rpage->dirty = BT_DIRTY;
+
+    ipage = ajBtreeCacheRead(cache,ibn);
     
     btreeNumInsertNonFull(cache,ipage,key,less,greater);
 
@@ -15502,7 +15531,7 @@ static void btreeNumKeyShift(AjPBtcache cache, AjPBtpage tpage)
 	btreeWriteNumNode(cache,spage,kSarray,pSarray,skeys);
 	btreeWriteNumNode(cache,tpage,kTarray,pTarray,tkeys);
 	btreeWriteNumNode(cache,ppage,kParray,pParray,pkeys);
-	if(!ppage->pageno)
+	if(ppage->pageno == cache->secrootblock)
 	    ppage->dirty = BT_LOCK;
 
 	page = ajBtreeCacheRead(cache,pSarray[skeys]);
@@ -15551,7 +15580,7 @@ static void btreeNumKeyShift(AjPBtcache cache, AjPBtpage tpage)
 	btreeWriteNumNode(cache,spage,kSarray,pSarray,skeys);
 	btreeWriteNumNode(cache,tpage,kTarray,pTarray,tkeys);
 	btreeWriteNumNode(cache,ppage,kParray,pParray,pkeys);
-	if(!ppage->pageno)
+	if(ppage->pageno == cache->secrootblock)
 	    ppage->dirty = BT_LOCK;
 
 	page = ajBtreeCacheRead(cache,pSarray[0]);
@@ -15727,7 +15756,7 @@ static ajlong btreeNumInsertShift(AjPBtcache cache, AjPBtpage *retpage,
 	btreeWriteNumNode(cache,spage,kSarray,pSarray,skeys);
 	btreeWriteNumNode(cache,tpage,kTarray,pTarray,tkeys);
 	btreeWriteNumNode(cache,ppage,kParray,pParray,pkeys);
-	if(!ppage->pageno)
+	if(ppage->pageno == cache->secrootblock)
 	    ppage->dirty = BT_LOCK;
 
 	i = 0;
@@ -15817,7 +15846,7 @@ static ajlong btreeNumInsertShift(AjPBtcache cache, AjPBtpage *retpage,
 	btreeWriteNumNode(cache,spage,kSarray,pSarray,skeys);
 	btreeWriteNumNode(cache,tpage,kTarray,pTarray,tkeys);
 	btreeWriteNumNode(cache,ppage,kParray,pParray,pkeys);
-	if(!ppage->pageno)
+	if(ppage->pageno == cache->secrootblock)
 	    ppage->dirty = BT_LOCK;
 
 	i = 0;

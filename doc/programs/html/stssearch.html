@@ -30,20 +30,9 @@ Search a DNA database for matches with a set of STS primers
     Description
 </H2>
 
+<p><b>stssearch</b> searches one or more DNA sequences with a set of STS primers and reports expected matches.  The database to search, the input primer pairs file and an output file for matches are specified.  For each pair of primers, it looks for matches between the primers and the query sequence in either orientation.  Details of any matches are written to the output file. Only one primer need match for it to be reported.</p>
 
-<b>stssearch</b> searches a DNA sequence database with a set of STS
-primers and reports expected matches.
 
-<p>
-
-<b>stssearch</b>s reads in one or more sequences to be searched.  For
-each pair of primers, it looks for matches between a the primers
-and the query sequence in either orientation. 
-
-<p>
-
-Any matches found will be reported.  Only one primer need match for it
-to be reported.. 
 
 <H2>
     Usage
@@ -102,8 +91,9 @@ Output file [j01636.stssearch]: <b></b>
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -316,7 +306,8 @@ None.
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
+<tr><th>Program name</th>
+<th>Description</th></tr>
 <tr>
 <td><a href="eprimer3.html">eprimer3</a></td>
 <td>Picks PCR primers and hybridization oligos</td>
@@ -324,7 +315,7 @@ None.
 
 <tr>
 <td><a href="primersearch.html">primersearch</a></td>
-<td>Searches DNA sequences for matches with primer pairs</td>
+<td>Search DNA sequences for matches with primer pairs</td>
 </tr>
 
 </table>

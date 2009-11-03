@@ -1,0 +1,57 @@
+ID   14KD_DAUCA     STANDARD;      PRT;   137 AA.
+AC   P14009;
+DT   01-JAN-1990 (Rel. 13, Created)
+DT   01-JAN-1990 (Rel. 13, Last sequence update)
+DT   01-NOV-1997 (Rel. 35, Last annotation update)
+DE   14 kDa proline-rich protein DC2.15 precursor.
+OS   Daucus carota (Carrot).
+OC   Eukaryota; Viridiplantae; Streptophyta; Embryophyta; Tracheophyta;
+OC   Spermatophyta; Magnoliophyta; eudicotyledons; core eudicots; asterids;
+OC   campanulids; Apiales; Apiaceae; Apioideae; Scandiceae; Daucinae;
+OC   Daucus.
+OX   NCBI_TaxID=4039;
+RN   [1]
+RP   SEQUENCE FROM N.A.
+RA   Aleith F., Richter G.;
+RT   "Gene expression during induction of somatic embryogenesis in carrot
+RT   cell suspensions.";
+RL   Planta 183:17-24(1990).
+RN   [2]
+RP   SEQUENCE OF 1-8 FROM N.A.
+RA   Kaldenhoff R., Holk A., Richter G.;
+RL   Submitted (NOV-1993) to the EMBL/GenBank/DDBJ databases.
+CC   -!- FUNCTION: May be connected with the initiation of embryogenesis
+CC       or with the metabolic changes produced by the removal of auxins.
+CC   -!- DEVELOPMENTAL STAGE: Transiently expressed during early
+CC       embryogenesis.
+CC   -!- INDUCTION: By the removal of auxins.
+CC   --------------------------------------------------------------------------
+CC   This SWISS-PROT entry is copyright. It is produced through a collaboration
+CC   between  the Swiss Institute of Bioinformatics  and the  EMBL outstation -
+CC   the European Bioinformatics Institute.  There are no  restrictions on  its
+CC   use  by  non-profit  institutions as long  as its content  is  in  no  way
+CC   modified and this statement is not removed.  Usage  by  and for commercial
+CC   entities requires a license agreement (See http://www.isb-sib.ch/announce/
+CC   or send an email to license@isb-sib.ch).
+CC   --------------------------------------------------------------------------
+DR   EMBL; X15436; CAA33476.1; -.
+DR   EMBL; X75806; CAA53441.1; -.
+DR   EMBL; X75807; CAA53442.1; -.
+DR   EMBL; X75808; CAA53443.1; -.
+DR   EMBL; X75809; CAA53444.1; -.
+DR   EMBL; X75810; CAA53445.1; -.
+DR   PIR; S35714; S35714.
+DR   HSSP; P24337; 1HYP.
+DR   InterPro; IPR003612; AAI.
+DR   Pfam; PF00234; tryp_alpha_amyl; 1.
+DR   SMART; SM00499; AAI; 1.
+KW   Transmembrane; Signal.
+FT   SIGNAL        1     25       Potential.
+FT   CHAIN        26    137       14 kDa proline-rich protein DC2.15.
+FT   TRANSMEM     88    104       Potential.
+FT   DOMAIN       30     49       Pro-rich.
+SQ   SEQUENCE   137 AA;  14392 MW;  CAED1BDB3949F890 CRC64;
+     MGSKNSASVA LFFTLNILFF ALVSSTEKCP DPYKPKPKPT PKPTPTPYPS AGKCPRDALK
+     LGVCADVLNL VHNVVIGSPP TLPCCSLLEG LVNLEAAVCL CTAIKANILG KNLNLPIALS
+     LVLNNCGKQV PNGFECT
+//

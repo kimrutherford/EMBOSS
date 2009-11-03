@@ -22,7 +22,6 @@
 
 package org.emboss.jemboss.programs;
 
-import java.util.Hashtable;
 
 /**
 *

@@ -5,44 +5,34 @@
 
 Function
 
-   Trim poly-A tails off EST sequences
+   Remove poly-A tails from nucleotide sequences
 
 Description
 
-   EST and mRNA sequences often have poly-A tails at the end of them.
-   This utility removes those poly-A tails.
+   trimest reads one or more nucleotide sequences and writes them out
+   again but with any 3' poly-A tail (or, optionally, 5' poly-T tail)
+   removed. It detect any poly-A and poly-T tails in the input sequences
+   that are at least the specified minimum length. The tails may continue
+   a defined num of non-A or non-T bases. If both a 5' poly-T tail and a
+   3' poly-A tail is identified, it removes the longest of the two. The
+   output is a set of sequences with the poly-A (or poly-T) tails
+   removed. If a sequence had a 5' poly-T tail then the resulting
+   sequence is reverse-complemented by default. The description line has
+   a comment appended about the changes made to the sequence.
 
-   EST sequences are often the reverse complement of the corresponding
-   mRNA's forward sense and have poly-T tails at their 5' end. By
-   default, this program also detects and removes these and writes out
-   the reverse complement of the sequence.
+Algorithm
 
-   trimest is not infallible. There are often repeats of 'A' (or 'T') in
-   a sequence that just happen by chance to occur at the 3' (or 5') end
-   of the EST sequence. trimest has no way of determining if the A's it
-   finds are part of a real poly-A tail or are a part of the transcribed
-   genomic sequence. It removes any apparent poly-A tails that match its
-   criteria for a poly-A tail.
-
-   trimest looks for a repeat of at least '-minlength' A's at the 3' end
-   (and, by default, '-minlength' T's at the 5' end). If there are an
+   trimest looks for a repeat of at least -minlength A's at the 3' end
+   (and, by default, -minlength T's at the 5' end). If there are an
    apparent 5' poly-T tail and a poly-A tail, then it removes whichever
    is the longer of the two.
 
-   By default, it will allow '-mismatches' non-A (or non-T) bases in the
-   tail. If a mismatch is found, then there has to be at least
-   '-minlength' A's (or T's) past the mismatch (working from the end) for
-   the mismatch to be considered part of the tail. If '-mismatches' is
-   greater than 1 then that number of contiguous non-A (or non-T) bases
-   will be allowed as part of the tail.
-
-   If a 5' poly-T tail is found, then the sequence will be optionally
-   reverse-complemented when it is written out.
-
-   If a poly-A tail is reomved then '[poly-A tail removed]' is appended
-   to the description of the sequence. If poly-T is removed, then
-   '[poly-T tail removed]' is appended and if the sequence is reversed,
-   '[reverse complement]' is appended.
+   By default, it will allow -mismatches non-A (or non-T) bases in the
+   tail. If a mismatch is found, then there has to be at least -minlength
+   A's (or T's) past the mismatch (working from the end) for the mismatch
+   to be considered part of the tail. If -mismatches is greater than 1
+   then that number of contiguous non-A (or non-T) bases will be allowed
+   as part of the tail.
 
 Usage
 
@@ -50,7 +40,7 @@ Usage
 
 
 % trimest tembl:x65923 x65923.seq 
-Trim poly-A tails off EST sequences
+Remove poly-A tails from nucleotide sequences
 
    Go to the input files for this example
    Go to the output files for this example
@@ -142,8 +132,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -258,6 +249,11 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
 
 Output file format
 
+   If a poly-A tail is reomved then [poly-A tail removed] is appended to
+   the description of the sequence. If poly-T is removed, then [poly-T
+   tail removed] is appended and if the sequence is reversed, [reverse
+   complement] is appended.
+
   Output files for usage example
 
   File: x65923.seq
@@ -284,7 +280,16 @@ Data files
 
 Notes
 
-   None.
+   EST and mRNA sequences often have poly-A tails at their 3' end. Where
+   an EST sequences is the reverse complement of a corresponding mRNA's
+   forward sense it may have a poly-T tail at its 5' end.
+
+   trimest is not infallible. There are often repeats of A (or T) in a
+   sequence that just happen by chance to occur at the 3' (or 5') end of
+   the EST sequence. trimest has no way of determining if the A's it
+   finds are part of a real poly-A tail or are a part of the transcribed
+   genomic sequence. It removes any apparent poly-A tails that match its
+   criteria for a poly-A tail (see "Algorithm").
 
 References
 
@@ -292,8 +297,9 @@ References
 
 Warnings
 
-   It will trim any run of more than -minlength A's or T's at the 3' or
-   5' end, whether or not they are a true poly-A tail.
+   trimest can make no guarantee that the tails removed have biologic
+   significance or not. They may in fact be part of the transcribed
+   sequence.
 
 Diagnostic Error Messages
 
@@ -309,35 +315,50 @@ Known bugs
 
 See also
 
-   Program name                         Description
-   biosed       Replace or delete sequence sections
-   codcopy      Reads and writes a codon usage table
-   cutseq       Removes a specified section from a sequence
-   degapseq     Removes gap characters from sequences
-   descseq      Alter the name or description of a sequence
-   entret       Reads and writes (returns) flatfile entries
+   Program name Description
+   aligncopy Reads and writes alignments
+   aligncopypair Reads and writes pairs from alignments
+   biosed Replace or delete sequence sections
+   codcopy Copy and reformat a codon usage table
+   cutseq Removes a section from a sequence
+   degapseq Removes non-alphabetic (e.g. gap) characters from sequences
+   descseq Alter the name or description of a sequence
+   entret Retrieves sequence entries from flatfile databases and files
    extractalign Extract regions from a sequence alignment
-   extractfeat  Extract features from a sequence
-   extractseq   Extract regions from a sequence
-   listor       Write a list file of the logical OR of two sets of sequences
-   makenucseq   Creates random nucleotide sequences
-   makeprotseq  Creates random protein sequences
-   maskfeat     Mask off features of a sequence
-   maskseq      Mask off regions of a sequence
-   newseq       Type in a short new sequence
-   noreturn     Removes carriage return from ASCII files
-   notseq       Exclude a set of sequences and write out the remaining ones
-   nthseq       Writes one sequence from a multiple set of sequences
-   pasteseq     Insert one sequence into another
-   revseq       Reverse and complement a sequence
-   seqret       Reads and writes (returns) sequences
-   seqretsplit  Reads and writes (returns) sequences in individual files
-   skipseq      Reads and writes (returns) sequences, skipping first few
-   splitter     Split a sequence into (overlapping) smaller sequences
-   trimseq      Trim ambiguous bits off the ends of sequences
-   union        Reads sequence fragments and builds one sequence
-   vectorstrip  Strips out DNA between a pair of vector sequences
-   yank         Reads a sequence range, appends the full USA to a list file
+   extractfeat Extract features from sequence(s)
+   extractseq Extract regions from a sequence
+   featcopy Reads and writes a feature table
+   featreport Reads and writes a feature table
+   listor Write a list file of the logical OR of two sets of sequences
+   makenucseq Create random nucleotide sequences
+   makeprotseq Create random protein sequences
+   maskambignuc Masks all ambiguity characters in nucleotide sequences
+   with N
+   maskambigprot Masks all ambiguity characters in protein sequences with
+   X
+   maskfeat Write a sequence with masked features
+   maskseq Write a sequence with masked regions
+   newseq Create a sequence file from a typed-in sequence
+   nohtml Remove mark-up (e.g. HTML tags) from an ASCII text file
+   noreturn Remove carriage return from ASCII files
+   nospace Remove all whitespace from an ASCII text file
+   notab Replace tabs with spaces in an ASCII text file
+   notseq Write to file a subset of an input stream of sequences
+   nthseq Write to file a single sequence from an input stream of
+   sequences
+   pasteseq Insert one sequence into another
+   revseq Reverse and complement a nucleotide sequence
+   seqret Reads and writes (returns) sequences
+   seqretsplit Reads sequences and writes them to individual files
+   sizeseq Sort sequences by size
+   skipredundant Remove redundant sequences from an input set
+   skipseq Reads and writes (returns) sequences, skipping first few
+   splitter Split sequence(s) into smaller sequences
+   trimseq Remove unwanted characters from start and end of sequence(s)
+   trimspace Remove extra whitespace from an ASCII text file
+   union Concatenate multiple sequences into a single sequence
+   vectorstrip Removes vectors from the ends of nucleotide sequence(s)
+   yank Add a sequence reference (a full USA) to a list file
 
 Author(s)
 

@@ -5,13 +5,12 @@
 
 Function
 
-   Protein statistics
+   Calculates statistics of protein properties
 
 Description
 
-   pepstats outputs a report of simple protein sequence information
-   including:
-
+   pepstats reads one or more protein sequences and writes an output file
+   with various statistics on the protein properties. This includes:
      * Molecular weight
      * Number of residues
      * Average residue weight
@@ -24,34 +23,13 @@ Description
      * Molar extinction coefficient (A280)
      * Extinction coefficient at 1 mg/ml (A280)
 
-   DayhoffStat is the amino acid's molar percentage divided by the
-   Dayhoff statistic. The Dayhoff statistic is the amino acid's relative
-   occurence per 1000 aa normalised to 100 by rls@ebi.ac.uk (original
-   work from 1993)
-
-   The probability of expression in inclusion bodies is sometimes
-   referred to as a type of solubility measure. If, however, a
-   recombinant protein is expressed in Escherichia coli, it can be
-   expressed as soluble in the cytosol or insoluble in inclusion bodies.
-   If the Harrison model predicts a given protein to be probably
-   expressed in includion bodies, this doesn't mean that it is not
-   possible to get it soluble in the cytosol. One example: Thermatoga
-   maritima cell divison protein FtsA with a C-terminal His-Tag has a 58%
-   Harrison probability of being expressed in inclusion bodies. However,
-   there was plenty of soluble protein in the E. coli cytosol (F. van den
-   Ent and J. Lowe, EMBO J. 19, 5300-5307 2000). If the protein is
-   expressed in inclusion bodies or not is not only dependent on the
-   sequence, but also on many other factors, such as E. coli strain,
-   incubation temperature, type of expression vector, strength of
-   promoter and medium.
-
 Usage
 
    Here is a sample session with pepstats
 
 
 % pepstats 
-Protein statistics
+Calculates statistics of protein properties
 Input protein sequence(s): tsw:laci_ecoli
 Pepstats program output file [laci_ecoli.pepstats]: 
 
@@ -67,9 +45,11 @@ Command line arguments
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
-   -aadata             datafile   [Eamino.dat] Molecular weight data for amino
+   -aadata             datafile   [Eamino.dat] Amino acid properties
+   -mwdata             datafile   [Emolwt.dat] Molecular weight data for amino
                                   acids
    -[no]termini        boolean    [Y] Include charge at N and C terminus
+   -mono               boolean    [N] Use monoisotopic weights
 
    Associated qualifiers:
 
@@ -94,8 +74,9 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
@@ -232,7 +213,7 @@ Output file format
 
 PEPSTATS of LACI_ECOLI from 1 to 360
 
-Molecular weight = 38590.05             Residues = 360
+Molecular weight = 38590.06             Residues = 360
 Average Residue Weight  = 107.195       Charge   = 1.5
 Isoelectric Point = 6.8820
 A280 Molar Extinction Coefficient  = 21620
@@ -311,7 +292,26 @@ Data files
 
 Notes
 
-   None.
+   DayhoffStat is the amino acid's molar percentage divided by the
+   Dayhoff statistic. The Dayhoff statistic is read from the EMBOSS data
+   file Edayhoff.freq and is the amino acid's relative occurence per 1000
+   aa normalised to 100.
+
+   The probability of expression in inclusion bodies is sometimes
+   referred to as a type of solubility measure. If, however, a
+   recombinant protein is expressed in Escherichia coli, it can be
+   expressed as soluble in the cytosol or insoluble in inclusion bodies.
+   If the Harrison model predicts a given protein to be probably
+   expressed in includion bodies, this doesn't mean that it is not
+   possible to get it soluble in the cytosol. One example: Thermatoga
+   maritima cell divison protein FtsA with a C-terminal His-Tag has a 58%
+   Harrison probability of being expressed in inclusion bodies. However,
+   there was plenty of soluble protein in the E. coli cytosol (F. van den
+   Ent and J. Lowe, EMBO J. 19, 5300-5307 2000). If the protein is
+   expressed in inclusion bodies or not is not only dependent on the
+   sequence, but also on many other factors, such as E. coli strain,
+   incubation temperature, type of expression vector, strength of
+   promoter and medium.
 
 References
 
@@ -336,21 +336,24 @@ Known bugs
 
 See also
 
-   Program name                         Description
-   backtranambig Back translate a protein sequence to ambiguous codons
-   backtranseq   Back translate a protein sequence
-   charge        Protein charge plot
-   checktrans    Reports STOP codons and ORF statistics of a protein
-   compseq       Count composition of dimer/trimer/etc words in a sequence
-   emowse        Protein identification by mass spectrometry
-   freak         Residue/base frequency table or plot
-   iep           Calculates the isoelectric point of a protein
-   mwcontam      Shows molwts that match across a set of files
-   mwfilter      Filter noisy molwts from mass spec output
-   octanol       Displays protein hydropathy
-   pepinfo       Plots simple amino acid properties in parallel
-   pepwindow     Displays protein hydropathy
-   pepwindowall  Displays protein hydropathy of a set of sequences
+   Program name Description
+   backtranambig Back-translate a protein sequence to ambiguous
+   nucleotide sequence
+   backtranseq Back-translate a protein sequence to a nucleotide sequence
+   charge Draw a protein charge plot
+   checktrans Reports STOP codons and ORF statistics of a protein
+   compseq Calculate the composition of unique words in sequences
+   emowse Search protein sequences by digest fragment molecular weight
+   freak Generate residue/base frequency table or plot
+   iep Calculate the isoelectric point of proteins
+   mwcontam Find weights common to multiple molecular weights files
+   mwfilter Filter noisy data from molecular weights file
+   octanol Draw a White-Wimley protein hydropathy plot
+   pepinfo Plot amino acid properties of a protein sequence in parallel
+   pepwindow Draw a Kyte-Doolittle hydropathy plot for a protein sequence
+   pepwindowall Draw Kyte-Doolittle hydropathy plot for a protein
+   alignment
+   wordcount Count and extract unique words in DNA sequence(s)
 
 Author(s)
 

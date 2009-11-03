@@ -56,16 +56,16 @@ int main(int argc, char **argv, char **env)
     search     = ajAcdGetString("search");
     outfile    = ajAcdGetOutfile("outfile");
     html       = ajAcdGetToggle("html");
-    matchall   = ajAcdGetBool("allmatch");
-    showkey    = ajAcdGetBool("showkeywords");
-    groups     = ajAcdGetBool("groups");
-    alphabetic = ajAcdGetBool("alphabetic");
-    emboss     = ajAcdGetBool("emboss");
-    embassy    = ajAcdGetBool("embassy");
+    matchall   = ajAcdGetBoolean("allmatch");
+    showkey    = ajAcdGetBoolean("showkeywords");
+    groups     = ajAcdGetBoolean("groups");
+    alphabetic = ajAcdGetBoolean("alphabetic");
+    emboss     = ajAcdGetBoolean("emboss");
+    embassy    = ajAcdGetBoolean("embassy");
     showembassy = ajAcdGetString("showembassy");
-    explode    = ajAcdGetBool("explode");
-    colon      = ajAcdGetBool("colon");
-    gui        = ajAcdGetBool("gui");
+    explode    = ajAcdGetBoolean("explode");
+    colon      = ajAcdGetBoolean("colon");
+    gui        = ajAcdGetBoolean("gui");
     
     
     glist = ajListNew();
