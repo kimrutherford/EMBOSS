@@ -1,0 +1,74 @@
+LOCUS       H45989                   495 bp    mRNA    linear   EST 31-JUL-1995
+DEFINITION  yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone
+            IMAGE:177794 3', mRNA sequence.
+ACCESSION   H45989
+VERSION     H45989.1  GI:922041
+KEYWORDS    EST.
+SOURCE      Homo sapiens (human)
+  ORGANISM  Homo sapiens
+            Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+            Mammalia; Eutheria; Euarchontoglires; Primates; Haplorrhini;
+            Catarrhini; Hominidae; Homo.
+REFERENCE   1  (bases 1 to 495)
+  AUTHORS   Hillier,L., Clark,N., Dubuque,T., Elliston,K., Hawkins,M.,
+            Holman,M., Hultman,M., Kucaba,T., Le,M., Lennon,G., Marra,M.,
+            Parsons,J., Rifkin,L., Rohlfing,T., Soares,M., Tan,F.,
+            Trevaskis,E., Waterston,R., Williamson,A., Wohldmann,P. and
+            Wilson,R.
+  TITLE     The WashU-Merck EST Project
+  JOURNAL   Unpublished (1995)
+COMMENT     Contact: Wilson RK
+            Washington University School of Medicine
+            4444 Forest Park Parkway, Box 8501, St. Louis, MO 63108
+            Tel: 314 286 1800
+            Fax: 314 286 1810
+            Email: est@watson.wustl.edu
+            Insert Size: 544
+            High quality sequence stops: 265
+            Source: IMAGE Consortium, LLNL
+            This clone is available royalty-free through LLNL ; contact the
+            IMAGE Consortium (info@image.llnl.gov) for further information.
+            Possible reversed clone: polyT not found
+            Insert Length: 544   Std Error: 0.00
+            Seq primer: SP6
+            High quality sequence stop: 265.
+FEATURES             Location/Qualifiers
+     source          1. .495
+                     /organism="Homo sapiens"
+                     /mol_type="mRNA"
+                     /db_xref="GDB:3839990"
+                     /db_xref="taxon:9606"
+                     /clone="IMAGE:177794"
+                     /sex="Male"
+                     /dev_stage="55-year old"
+                     /lab_host="DH10B (ampicillin resistant)"
+                     /clone_lib="Soares adult brain N2b5HB55Y"
+                     /note="Organ: brain; Vector: pT7T3D (Pharmacia) with a
+                     modified polylinker; Site_1: Not I; Site_2: Eco RI; 1st
+                     strand cDNA was primed with a Not I - oligo(dT) primer [5'
+                     TGTTACCAATCTGAAGTGGGAGCGGCCGCGCTTTTTTTTTTTTTTTTTTT 3'],
+                     double-stranded cDNA was size selected, ligated to Eco RI
+                     adapters (Pharmacia), digested with Not I and cloned into
+                     the Not I and Eco RI sites of a modified pT7T3 vector
+                     (Pharmacia). Library went through one round of
+                     normalization to a Cot = 53. Library constructed by Bento
+                     Soares and M.Fatima Bonaldo. The adult brain RNA was
+                     provided by Dr. Donald H. Gilden. Tissue was acquired
+                     17-18 hours after death which occurred in consequence of a
+                     ruptured aortic aneurysm. RNA was prepared from a pool of
+                     tissues representing the following areas of the brain:
+                     frontal, parietal, temporal and occipital cortex from the
+                     left and right hemispheres, subcortical white matter,
+                     basal ganglia, thalamus, cerebellum, midbrain, pons and
+                     medulla."
+ORIGIN
+       1  CCGGNAAGCT CANCTTGGAC CACCGACTCT CGANTGNNTC GCCGCGGGAG CCGGNTGGAN
+      61  AACCTGAGCG GGACTGGNAG AAGGAGCAGA GGGAGGCAGC ACCCGGCGTG ACGGNAGTGT
+     121  GTGGGGCACT CAGGCCTTCC GCAGTGTCAT CTGCCACACG GAAGGCACGG CCACGGGCAG
+     181  GGGGGTCTAT GATCTTCTGC ATGCCCAGCT GGCATGGCCC CACGTAGAGT GGNNTGGCGT
+     241  CTCGGTGCTG GTCAGCGACA CGTTGTCCTG GCTGGGCAGG TCCAGCTCCC GGAGGACCTG
+     301  GGGCTTCAGC TTCCCGTAGC GCTGGCTGCA GTGACGGATG CTCTTGCGCT GCCATTTCTG
+     361  GGTGCTGTCA CTGTCCTTGC TCACTCCAAA CCAGTTCGGC GGTCCCCCTG CGGATGGTCT
+     421  GTGTTGATGG ACGTTTGGGC TTTGCAGCAC CGGCCGCCGA GTTCATGGTN GGGTNAAGAG
+     481  ATTTGGGTTT TTTCN
+//

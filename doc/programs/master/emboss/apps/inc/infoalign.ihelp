@@ -1,0 +1,104 @@
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqset     The sequence alignment to be displayed.
+  [-outfile]           outfile    [*.infoalign] If you enter the name of a
+                                  file here then this program will write the
+                                  sequence details into that file.
+
+   Additional (Optional) qualifiers:
+   -matrix             matrix     [EBLOSUM62 for protein, EDNAFULL for DNA]
+                                  This is the scoring matrix file used when
+                                  comparing sequences. By default it is the
+                                  file 'EBLOSUM62' (for proteins) or the file
+                                  'EDNAFULL' (for nucleic sequences). These
+                                  files are found in the 'data' directory of
+                                  the EMBOSS installation.
+   -refseq             string     [0] If you give the number in the alignment
+                                  or the name of a sequence, it will be taken
+                                  to be the reference sequence. The reference
+                                  sequence is the one against which all the
+                                  other sequences are compared. If this is set
+                                  to 0 then the consensus sequence will be
+                                  used as the reference sequence. By default
+                                  the consensus sequence is used as the
+                                  reference sequence. (Any string is accepted)
+   -html               boolean    [N] Format output as an HTML table
+
+   Advanced (Unprompted) qualifiers:
+   -plurality          float      [50.0] Set a cut-off for the % of positive
+                                  scoring matches below which there is no
+                                  consensus. The default plurality is taken as
+                                  50% of the total weight of all the
+                                  sequences in the alignment. (Number from
+                                  0.000 to 100.000)
+   -identity           float      [0.0] Provides the facility of setting the
+                                  required number of identities at a position
+                                  for it to give a consensus. Therefore, if
+                                  this is set to 100% only columns of
+                                  identities contribute to the consensus.
+                                  (Number from 0.000 to 100.000)
+   -only               boolean    [N] This is a way of shortening the command
+                                  line if you only want a few things to be
+                                  displayed. Instead of specifying:
+                                  '-nohead -nousa -noname -noalign -nogaps
+                                  -nogapcount -nosimcount -noidcount
+                                  -nodiffcount -noweight'
+                                  to get only the sequence length output, you
+                                  can specify
+                                  '-only -seqlength'
+   -heading            boolean    [@(!$(only))] Display column headings
+   -usa                boolean    [@(!$(only))] Display the USA of the
+                                  sequence
+   -name               boolean    [@(!$(only))] Display 'name' column
+   -seqlength          boolean    [@(!$(only))] Display 'seqlength' column
+   -alignlength        boolean    [@(!$(only))] Display 'alignlength' column
+   -gaps               boolean    [@(!$(only))] Display number of gaps
+   -gapcount           boolean    [@(!$(only))] Display number of gap
+                                  positions
+   -idcount            boolean    [@(!$(only))] Display number of identical
+                                  positions
+   -simcount           boolean    [@(!$(only))] Display number of similar
+                                  positions
+   -diffcount          boolean    [@(!$(only))] Display number of different
+                                  positions
+   -change             boolean    [@(!$(only))] Display % number of changed
+                                  positions
+   -weight             boolean    [@(!$(only))] Display 'weight' column
+   -description        boolean    [@(!$(only))] Display 'description' column
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+

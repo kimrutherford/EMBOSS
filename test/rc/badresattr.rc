@@ -1,0 +1,3 @@
+# "Bad attribute for resource" error
+
+resource badresource [ release: "1.0" badattr: "fred" ]

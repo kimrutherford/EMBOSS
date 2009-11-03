@@ -1,0 +1,6 @@
+application: acdtable [
+  documentation: "Generate an HTML table of parameters from an application
+                  ACD file"
+  gui: "no"
+  groups: "Acd"
+]

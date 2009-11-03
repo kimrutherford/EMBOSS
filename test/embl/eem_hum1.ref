@@ -1,0 +1,2491 @@
+>>>>X59796
+ 
+ID   X59796     standard; RNA; HUM; 3170 BP.
+XX
+AC   X59796;
+XX
+SV   X59796.1
+XX
+DT   12-FEB-1992 (Rel. 30, Created)
+DT   24-JAN-1995 (Rel. 42, Last updated, Version 6)
+XX
+DE   H.sapiens mRNA for cadherin-5
+XX
+KW   cadherin.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia; Eutheria;
+OC   Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-3169
+RA   Suzuki S.;
+RT   ;
+RL   Submitted (16-MAY-1991) to the EMBL/GenBank/DDBJ databases.
+RL   S. Suzuki, Doheny Eye Institute, 1355 San Pablo St, Los Angeles, CA 90033,
+RL   USA
+XX
+RN   [2]
+RP   1-3169
+RX   MEDLINE; 91283540.
+RA   Suzuki S., Sano K., Tanihara H.;
+RT   "Diversity of the cadherin family: evidence for eight new cadherins in
+RT   nervous tissue";
+RL   Cell Regul. 2:261-270(1991).
+XX
+RN   [3]
+RP   1-3170
+RA   Suzuki S.;
+RT   ;
+RL   Submitted (24-JAN-1995) to the EMBL/GenBank/DDBJ databases.
+RL   S. Suzuki, Doheny Eye Institute, 1355 San Pablo St, Los Angeles, CA 90033,
+RL   USA
+XX
+DR   SWISS-PROT; P33151; CAD5_HUMAN.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1. .3170
+FT                   /db_xref="taxon:9606"
+FT                   /organism="Homo sapiens"
+FT                   /dev_stage="fetus, 15-20 weeks"
+FT                   /tissue_type="brain"
+FT   CDS             104. .2446
+FT                   /db_xref="SWISS-PROT:P33151"
+FT                   /product="cadherin-5"
+FT                   /protein_id="CAA42468.1"
+FT                   /translation="MMLLATSGACLGLLAVAAVAAAGANPAQRDTHSLLPTHRRQKRDW
+FT                   IWNQMHIDEEKNTSLPHHVGKIKSSVSRKNAKYLLKGEYVGKVFRVDAETGDVFAIERL
+FT                   DRENISEYHLTAVIVDKDTGENLETPSSFTIKVHDVNDNWPVFTHRLFNASVPESSAVG
+FT                   TSVISVTAVDADDPTVGDHASVMYQILKGKEYFAIDNSGRIITITKSLDREKQARYEIV
+FT                   VEARDAQGLRGDSGTATVLVTLQDINDNFPFFTQTKYTFVVPEDTRVGTSVGSLFVEDP
+FT                   DEPQNRMTKYSILRGDYQDAFTIETNPAHNEGIIKPMKPLDYEYIQQYSFIVEATDPTI
+FT                   DLRYMSPPAGNRAQVIINITDVDEPPIFQQPFYHFQLKENQKKPLIGTVLAMDPDAARH
+FT                   SIGYSIRRTSDKGQFFRVTKKGDIYNEKELDREVYPWYNLTVEAKELDSTGTPTGKESI
+FT                   VQVHIEVLDENDNAPEFAKPYQPKVCENAVHGQLVLQISAIDKDITPRNVKFKFILNTE
+FT                   NNFTLTDNHDNTANITVKYGQFDREHTKVHFLPVVISDNGMPSRTGTSTLTVAVCKCNE
+FT                   QGEFTFCEDMAAQVGVSIQAVVAILLCILTITVITLLIFLRRRLRKQARAHGKSVPEIH
+FT                   EQLVTYDEEGGGEMDTTSYDVSVLNSVRRGGAKPPRPALDARPSLYAQVQKPPRHAPGA
+FT                   HGGPGEMAAMIEVKKDEADHDGDGPPYDTLHIYGYEGSESIAESLSSLGTDSSDSDVDY
+FT                   DFLNDWGPRFKMLAELYGSDPREELLY"
+XX
+SQ   Sequence 3170 BP; 773 A; 962 C; 844 G; 588 T; 3 other;
+>>>>L22968
+ 
+ID   L22968     standard; DNA; HUM; 781 BP.
+XX
+AC   L22968;
+XX
+SV   L22968.1
+XX
+DT   15-DEC-1993 (Rel. 38, Created)
+DT   02-JUL-1999 (Rel. 60, Last updated, Version 2)
+XX
+DE   Homo sapiens acidic growth fibroblast growth factor (aFGF) gene
+DE   sequence.
+XX
+KW   acidic fibroblast growth factor.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia; Eutheria;
+OC   Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-781
+RA   Chiu I.-M., Gilmore E.C., Liu Y., Payson R.A.;
+RT   "Construction of a yeast artificial chromosome contig encompassing the
+RT   human acidic fibroblast growth factor (aFGF) gene: Toward the cloning of
+RT   the ANLL/MDS tumor suppressor gene";
+RL   Unpublished.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1. .781
+FT                   /db_xref="taxon:9606"
+FT                   /germline
+FT                   /organism="Homo sapiens"
+FT                   /cell_type="lymphoblast"
+XX
+SQ   Sequence 781 BP; 207 A; 179 C; 213 G; 182 T; 0 other;
+>>>>V00508
+ 
+ID   V00508     standard; DNA; HUM; 3919 BP.
+XX
+AC   V00508;
+XX
+SV   V00508.1
+XX
+DT   09-JUN-1982 (Rel. 01, Created)
+DT   10-FEB-1999 (Rel. 58, Last updated, Version 3)
+XX
+DE   Human gene for epsilon-globin.
+XX
+KW   epsilon-globin; germ line; globin.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia; Eutheria;
+OC   Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1640-3919
+RX   MEDLINE; 81064664.
+RA   Baralle F.E., Shoulders C.C., Proudfoot N.J.;
+RT   "The primary structure of the human epsilon-globin gene";
+RL   Cell 21:621-626(1980).
+XX
+RN   [2]
+RP   1-2160
+RX   MEDLINE; 81053776.
+RA   Baralle F.E., Shoulders C.C., Goodbourn S., Jeffreys A., Proudfoot N.J.;
+RT   "The 5' flanking region of human epsilon-globin gene";
+RL   Nucleic Acids Res. 8:4393-4404(1980).
+XX
+DR   SWISS-PROT; P02100; HBE_HUMAN.
+DR   TRANSFAC; R03113; HS$EG_01.
+DR   TRANSFAC; R03114; HS$EG_02.
+DR   TRANSFAC; R03115; HS$EG_03.
+DR   TRANSFAC; R03116; HS$EG_04.
+DR   TRANSFAC; R03117; HS$EG_05.
+DR   TRANSFAC; R03118; HS$EG_06.
+DR   TRANSFAC; R03119; HS$EG_07.
+DR   TRANSFAC; R03120; HS$EG_08.
+DR   TRANSFAC; R03121; HS$EG_09.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1. .3919
+FT                   /db_xref="taxon:9606"
+FT                   /organism="Homo sapiens"
+FT   CDS             join(2079. .2171,2294. .2515,3371. .3499)
+FT                   /db_xref="SWISS-PROT:P02100"
+FT                   /protein_id="CAA23766.1"
+FT                   /translation="MVHFTAEEKAAVTSLWSKMNVEEAGGEALGRLLVVYPWTQRFFDS
+FT                   FGNLSSPSAILGNPKVKAHGKKVLTSFGDAIKNMDNLKPAFAKLSELHCDKLHVDPENF
+FT                   KLLGNVMVIILATHFGKEFTPEVQAAWQKLVSAVAIALAHKYH"
+XX
+SQ   Sequence 3919 BP; 1203 A; 703 C; 937 G; 1072 T; 4 other;
+>>>>X65923
+ 
+ID   X65923     standard; RNA; HUM; 518 BP.
+XX
+AC   X65923;
+XX
+NI   g31302
+XX
+DT   13-MAY-1992 (Rel. 31, Created)
+DT   23-SEP-1993 (Rel. 37, Last updated, Version 10)
+XX
+DE   H.sapiens fau mRNA
+XX
+KW   fau gene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Vertebrata; Mammalia; Eutheria; Primates;
+OC   Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-518
+RA   Michiels L.M.R.;
+RT   ;
+RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   L.M.R. Michiels, University of Antwerp, Dept of Biochemistry,
+RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
+XX
+RN   [2]
+RP   1-518
+RX   MEDLINE; 93368957.
+RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K.,
+RA   Merregaert J.;
+RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed
+RT   as an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma
+RT   virus";
+RL   Oncogene 8:2537-2546(1993).
+XX
+DR   SWISS-PROT; P35544; UBIM_HUMAN.
+DR   SWISS-PROT; Q05472; RS30_HUMAN.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1. .518
+FT                   /organism="Homo sapiens"
+FT                   /chromosome="11q"
+FT                   /tissue_type="placenta"
+FT                   /clone_lib="cDNA"
+FT                   /clone="pUIA 631"
+FT                   /map="13"
+FT   misc_feature    57. .278
+FT                   /note="ubiquitin like part"
+FT   CDS             57. .458
+FT                   /db_xref="PID:g31303"
+FT                   /db_xref="SWISS-PROT:P35544"
+FT                   /db_xref="SWISS-PROT:Q05472"
+FT                   /gene="fau"
+FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLAG
+FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKTG
+FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
+FT   misc_feature    98. .102
+FT                   /note="nucleolar localization signal"
+FT   misc_feature    279. .458
+FT                   /note="S30 part"
+FT   polyA_signal    484. .489
+FT   polyA_site      509
+XX
+SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
+>>>>K00650
+ 
+ID   K00650     standard; DNA; HUM; 6210 BP.
+XX
+AC   K00650; M16287;
+XX
+NI   g182734
+XX
+DT   26-JUL-1991 (Rel. 28, Created)
+DT   15-NOV-1994 (Rel. 41, Last updated, Version 2)
+XX
+DE   Human fos proto-oncogene (c-fos), complete cds.
+XX
+KW   c-myc proto-oncogene; fos oncogene; proto-oncogene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Vertebrata; Mammalia; Eutheria; Primates;
+OC   Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-4165
+RX   MEDLINE; 83221560.
+RA   van Straaten F., Muller R., Curran T., Van Beveren C., Verma I.M.;
+RT   "Complete nucleotide sequence of a human c-onc gene: deduced amino acid
+RT   sequence of the human c-fos protein";
+RL   Proc. Natl. Acad. Sci. U.S.A. 80:3183-3187(1983).
+XX
+RN   [2]
+RX   MEDLINE; 86028185.
+RA   Treisman R.;
+RT   "Transient accumulation of c-fos RNA following serum stimulation
+RT   requires a conserved 5' element and c-fos 3' sequences";
+RL   Cell 42:889-902(1985).
+XX
+RN   [3]
+RP   4166-6210
+RX   MEDLINE; 87217118.
+RA   Verma I.M., Deschamps J., Van Beveren C., Sassone-Corsi P.;
+RT   "Human fos gene";
+RL   Cold Spring Harb. Symp. Quant. Biol. 51:949-958(1986).
+XX
+DR   CPGISLE; HSFOS; Release 3.0.
+DR   GDB; 119917; FOS.
+DR   SWISS-PROT; P01100; FOS_HUMAN.
+DR   TFD; C00625; Release 7.0.
+DR   TRANSFAC; R00458; HS$CFOS_01.
+DR   TRANSFAC; R00459; HS$CFOS_02.
+DR   TRANSFAC; R00460; HS$CFOS_03.
+DR   TRANSFAC; R00461; HS$CFOS_04.
+DR   TRANSFAC; R00463; HS$CFOS_06.
+DR   TRANSFAC; R00464; HS$CFOS_07.
+DR   TRANSFAC; R00465; HS$CFOS_08.
+DR   TRANSFAC; R00466; HS$CFOS_09.
+DR   TRANSFAC; R00467; HS$CFOS_10.
+DR   TRANSFAC; R00468; HS$CFOS_11.
+DR   TRANSFAC; R00470; HS$CFOS_13.
+DR   TRANSFAC; R00471; HS$CFOS_14.
+DR   TRANSFAC; R01640; HS$CFOS_15.
+DR   TRANSFAC; R01889; HS$CFOS_16.
+DR   TRANSFAC; R03425; HS$CFOS_17.
+DR   TRANSFAC; R04046; HS$CFOS_18.
+DR   TRANSFAC; R04047; HS$CFOS_19.
+DR   TRANSFAC; T00123; T00123.
+XX
+CC   [2] sites; promoter region. C-fos is the human cellular homolog of
+CC   the v-fos oncogene of Finkel-Biskis-Jinkins murine osteosarcoma
+CC   virus (FBJ-MuSV). [2] It was found that both human and murine c-fos
+CC   genes contained an enhancer-like element in their 5' noncoding
+CC   regions that was necessary for increased transcription following
+CC   serum activation. The FBJ-MuSV v-fos oncogene contains a deletion
+CC   relative to murine and human c-fos proto-oncogenes that causes
+CC   complete divergence of the COOH terminal protein sequences encoded.
+CC   That deletion corresponds to positions 3182-3285 inclusive of this
+CC   sequence. The FBJ-MuSV v-fos sequence is more closely related to
+CC   murine than human c-fos sequences. The FBJ-MuSV v-fos coding
+CC   sequence ends at a 'tag' stop codon coresponding to positions
+CC   3434-2436 of this sequence [1]. [1] notes two alu repeats beginning
+CC   aproximately 500 and 1700 nucleotides downstream of the last base
+CC   in this sequence. A TATA box is located at positions 701-707. Two
+CC   potential polyadenylation signals are present in the 3'
+CC   untranslated region. NCBI gi: 182734
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1. .6210
+FT                   /organism="Homo sapiens"
+FT   misc_feature    402. .453
+FT                   /note="transcriptional activator region [2]"
+FT   prim_transcript 734. .>3329
+FT                   /note="c-fos mRNA [1]"
+FT   CDS             join(889. .1029,1783. .2034,2466. .2573,2688. .3329)
+FT                   /codon_start=1
+FT                   /db_xref="PID:g182735"
+FT                   /db_xref="SWISS-PROT:P01100"
+FT                   /note="c-fos protein;  NCBI gi: 182735"
+FT                   /translation="MMFSGFNADYEASSSRCSSASPAGDSLSYYHSPADSFSSMGSPVN
+FT                   AQDFCTDLAVSSANFIPTVTAISTSPDLQWLVQPALVSSVAPSQTRAPHPFGVPAPSAG
+FT                   AYSRAGVVKTMTGGRAQSIGRRGKVEQLSPEEEEKRRIRRERNKMAAAKCRNRRRELTD
+FT                   TLQAETDQLEDEKSALQTEIANLLKEKEKLEFILAAHRPACKIPDDLGFPEEMSVASLD
+FT                   LTGGLPEVATPESEEAFTLPLLNDPEPKPSVEPVKSISSMELKTEPFDDFLFPASSRPS
+FT                   GSETARSVPDMDLSGSFYAADWEPLHSGSLGMGPMATELEPLCTPVVTCTPSCTAYTSS
+FT                   FVFTYPEADSFPSCAAAHRKGSSSNEPSSDSLSSPTLLAL"
+FT   exon            <889. .1029
+FT                   /note="c-fos protein; G00-119-917"
+FT                   /number=1
+FT                   /gene="FOS"
+FT                   /map="14q24.3"
+FT   intron          1030. .1782
+FT                   /note="c-fos intron A"
+FT   exon            1783. .2034
+FT                   /number=2
+FT   intron          2035. .2465
+FT                   /note="c-fos intron B"
+FT   exon            2466. .2573
+FT                   /number=3
+FT   intron          2574. .2687
+FT                   /note="c-fos intron C"
+FT   exon            2688. .>3329
+FT                   /note="c-fos protein"
+FT                   /number=4
+XX
+SQ   Sequence 6210 BP; 1497 A; 1571 C; 1619 G; 1523 T; 0 other;
+>>>>X51466
+ 
+ID   X51466     standard; RNA; HUM; 3075 BP.
+XX
+AC   X51466; M30456;
+XX
+NI   g31105
+XX
+DT   28-JUN-1990 (Rel. 24, Created)
+DT   12-SEP-1993 (Rel. 36, Last updated, Version 8)
+XX
+DE   Human mRNA for elongation factor 2
+XX
+KW   elongation factor; elongation factor 2.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Vertebrata; Mammalia; Eutheria; Primates;
+OC   Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-3075
+RA   Scheit K.H.;
+RT   ;
+RL   Submitted (18-JAN-1990) to the EMBL/GenBank/DDBJ databases.
+RL   Scheit K.H., MPI fuer Biophysikalische Chemie, 3400 Goettingen.
+XX
+RN   [2]
+RP   1-3075
+RX   MEDLINE; 90121741.
+RA   Rapp G.G., Klaudiny J.J., Hagendorff G.G., Luck M.M., Scheit K.K.;
+RT   "Complete sequence of the coding region of human elongation factor
+RT   2(EF-2) by enzymatic amplification of cDNA from human ovarian granulosa
+RT   cells";
+RL   Biol. Chem. Hoppe-Seyler 370:1071-1075(1989).
+XX
+DR   GDB; 119104; EEF2.
+DR   SWISS-PROT; P13639; EF2_HUMAN.
+XX
+CC   See also <M19997> for partial elongation factor 2 mRNA.
+XX
+CC   Data kindly reviewed (16-JUL-1990) by Sheit K.H.
+XX
+CC   entry is replaced by Z11692
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1. .3075
+FT                   /organism="Homo sapiens"
+FT                   /dev_stage="adult"
+FT                   /tissue_type="ovary"
+FT                   /cell_type="granulosa"
+FT   CDS             1. .2577
+FT                   /db_xref="PID:g31106"
+FT                   /db_xref="SWISS-PROT:P13639"
+FT                   /product="elongation factor 2"
+FT                   /translation="MVNFTVDQIRAIMDKKANIRNMSVIAHVDHGKSTLTDSLVCKAGI
+FT                   IASARAGETRFTDTRKDEQERCITIKSTAISLFYELSENDLNFIKQSKDGAGFLINLID
+FT                   SPGHVDFSSEVTAALRVTDGALVVVDCVSGVCVQTETVLRQAIAERIKPVLMMNKMDRA
+FT                   LLELQLEPEELYQTFQRIVENVNVIISTYGEGESGPMGNIMIDPVLGTVGFGSGLHGWA
+FT                   FTLKQFAEMYVAKFAAKGEGQLGPAERAKKVEDMMKKLWGDRYFDPANGKFSKSATSPE
+FT                   GKKLPRTFCQLILDPIFKVFDAIMNFKKEETAKLIEKLDIKLDSEDKDKEGKPLLKAVM
+FT                   RRWLPAGDALLQMITIHLPSPVTAQKYRCELLYEGPPDDEAAMGIKSCDPKGPLMMYIS
+FT                   KMVPTSDKGRFYAFGRVFSGLVSTGLKVRIMGPNYTPGKKEDLYLKPIQRTILMMGRYV
+FT                   EPIEDVPCGNIVGLVGVDQFLVKTGTITTFEHAHNMRVMKFSVSPVVRVAVEAKNPADL
+FT                   PKLVEGLKRLAKSDPMVQCIIEESGEHIIAGAGELHLEICLKDLEEDHACIPIKKSDPV
+FT                   VSYRETVSEESNVLCLSKSPNKHNRLYMKARPFPDGLAEDIDKGEVSARQELKQRARYL
+FT                   AEKYEWDVAEARKIWCFGPDGTGPNILTDITKGVQYLNEIKDSVVAGFQWATKEGALCE
+FT                   ENMRGVRFDVHDVTLHADAIHRGGGQIIPTARRCLYASVLTAQPRLMEPIYLVEIQCPE
+FT                   QVVGGIYGVLNRKRGHVFEESQVAGTPMFVVKAYLPVNESFGFTADLRSNTGGQAFPQC
+FT                   VFDHWQILPGDPFDNSSRPSQVVAETRKRKGLKEGIPALDNFLDKL"
+XX
+SQ   Sequence 3075 BP; 678 A; 906 C; 924 G; 567 T; 0 other;
+>>>>X07523
+ 
+ID   X07523     standard; RNA; HUM; 1658 BP.
+XX
+AC   X07523; Y00716;
+XX
+NI   g32492
+XX
+DT   16-JUL-1988 (Rel. 16, Created)
+DT   31-MAR-1995 (Rel. 43, Last updated, Version 2)
+XX
+DE   Human mRNA for truncated form of complement factor H
+XX
+KW   complement factor H.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Vertebrata; Mammalia; Eutheria; Primates;
+OC   Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-1658
+RA   Day A.J.;
+RT   ;
+RL   Submitted (03-MAY-1988) to the EMBL/GenBank/DDBJ databases.
+RL   Day A.J., Dept. of Biochemistry, University of Oxford, MRC
+RL   Immunochemistry Unit, South Parks Road, Oxford OX1 3QU .
+XX
+RN   [2]
+RX   MEDLINE; 88134059.
+RA   Ripoche J., Day A.J., Harris T.J.R., Sim R.B.;
+RT   "The complete amino acid sequence of human complement factor H";
+RL   Biochem. J. 249:593-602(1988).
+XX
+DR   SPTREMBL; Q14570; Q14570.
+XX
+CC   Data kindly reviewed (06-JUN-1988) by Day A.J.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1. .1658
+FT                   /organism="Homo sapiens"
+FT                   /clone_lib="pat153/PvuII/8"
+FT                   /clone="B-38-1 tissue=liver"
+FT   misc_feature    1. .1408
+FT                   /note="seq. identical to full-length factor H"
+FT   misc_feature    <1. .73
+FT                   /note="5'-UT region"
+FT   sig_peptide     74. .127
+FT                   /note="put. signal peptide"
+FT   CDS             74. .1423
+FT                   /db_xref="PID:g758073"
+FT                   /db_xref="SPTREMBL:Q14570"
+FT                   /product="complement factor H"
+FT                   /translation="MRLLAKIICLMLWAICVAEDCNELPPRRNTEILTGSWSDQTYPEG
+FT                   TQAIYKCRPGYRSLGNVIMVCRKGEWVALNPLRKCQKRPCGHPGDTPFGTFTLTGGNVF
+FT                   EYGVKAVYTCNEGYQLLGEINYRECDTDGWTNDIPICEVVKCLPVTAPENGKIVSSAME
+FT                   PDREYHFGQAVRFVCNSGYKIEGDEEMHCSDDGFWSKEKPKCVEISCKSPDVINGSPIS
+FT                   QKIIYKENERFQYKCNMGYEYSERGDAVCTESGWRPLPSCEEKSCDNPYIPNGDYSPLR
+FT                   IKHRTGDEITYQCRNGFYPATRGNTAKCTSTGWIPAPRCTLKPCDYPDIKHGGLYHENM
+FT                   RRPYFPVAVGKYYSYYCDEHFETPSGSYWDHIHCTQDGWSPAVPCLRKCYFPYLENGYN
+FT                   QNYGRKFVQGKSIDVACHPGYALPKAQTTVTCMENGWSPTPRCIRVSFTL"
+FT   mat_peptide     128. .1420
+FT                   /note="translated region"
+FT   misc_feature    1409. .1420
+FT                   /note="unique coding seq. not found in full-length factor
+FT                   H"
+FT   misc_feature    1421. .1423
+FT                   /note="stop codon"
+FT   misc_feature    1424. .1658
+FT                   /note="3'-UT region"
+FT   misc_feature    1634. .1639
+FT                   /note="pot. polyA signal"
+XX
+SQ   Sequence 1658 BP; 513 A; 296 C; 383 G; 466 T; 0 other;
+>>>>D00596
+ 
+ID   D00596     standard; DNA; HUM; 18596 BP.
+XX
+AC   D00596;
+XX
+SV   D00596.1
+XX
+DT   17-JUL-1991 (Rel. 28, Created)
+DT   27-OCT-1998 (Rel. 57, Last updated, Version 2)
+XX
+DE   Homo sapiens gene for thymidylate synthase, exons 1, 2, 3, 4, 5,
+DE   6, 7, complete cds.
+XX
+KW   thymidylate syntase.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia; Eutheria;
+OC   Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-18596
+RX   MEDLINE; 91056070.
+RA   Kaneda S., Nalbantoglu J., Takeishi K., Shimizu K., Gotoh O., Seno T.,
+RA   Ayusawa D.;
+RT   "Structural and Functional Analysis of the Human Thymidylate Synthase
+RT   Gene";
+RL   J. Biol. Chem. 265:20277-20284(1990).
+XX
+DR   SWISS-PROT; P04818; TYSY_HUMAN.
+XX
+CC   These data kindly submitted in computer readable form by:
+CC   Sumiko Kaneda
+CC   National Institute of Genetics
+CC   1111 Yata
+CC   Mishima 411
+CC   Japan
+CC   Phone:  +81-559-72-2732
+CC   Fax:    +81-559-71-3651
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1. .18596
+FT                   /chromosome="18"
+FT                   /db_xref="taxon:9606"
+FT                   /sequenced_mol="DNA"
+FT                   /organism="Homo sapiens"
+FT                   /clone="lambdaHTS-1 and lambdaHTS-3"
+FT                   /map="18p11.32"
+FT   repeat_unit     1. .148
+FT                   /note="Alu sequence"
+FT   repeat_unit     202. .477
+FT                   /note="Alu sequence"
+FT   prim_transcript 822. .16246
+FT                   /note="thymidylate synthase mRNA and introns"
+FT   prim_transcript 824. .16246
+FT                   /note="thymidylate synthase mRNA and introns"
+FT   prim_transcript 828. .16246
+FT                   /note="thymidylate synthase mRNA and introns"
+FT   prim_transcript 841. .16246
+FT                   /note="thymidylate synthase mRNA and introns"
+FT   repeat_unit     862. .889
+FT                   /note="inverted repeat"
+FT   repeat_unit     904. .993
+FT                   /note="triple tandem repeats"
+FT   CDS             join(1001. .1205,2895. .2968,5396. .5570,11843. .11944,
+FT                   13449. .13624,14133. .14204,15613. .15750)
+FT                   /db_xref="SWISS-PROT:P04818"
+FT                   /EC_number="2.1.1.45"
+FT                   /product="thymidylate synthase"
+FT                   /protein_id="BAA00472.1"
+FT                   /translation="MPVAGSELPRRPLPPAAQERDAEPRPPHGELQYLGQIQHILRCGV
+FT                   RKDDRTGTGTLSVFGMQARYSLRDEFPLLTTKRVFWKGVLEELLWFIKGSTNAKELSSK
+FT                   GVKIWDANGSRDFLDSLGFSTREEGDLGPVYGFQWRHFGAEYRDMESDYSGQGVDQLQR
+FT                   VIDTIKTNPDDRRIIMCAWNPRDLPLMALPPCHALCQFYVVNSELSCQLYQRSGDMGLG
+FT                   VPFNIASYALLTYMIAHITGLKPGDFIHTLGDAHIYLNHIEPLKIQLQREPRPFPKLRI
+FT                   LRKVEKIDDFKAEDFQIEGYNPHPTIKMEMAV"
+FT   exon            <1001. .1205
+FT                   /number=1
+FT   intron          1206. .2894
+FT                   /number=1
+FT   protein_bind    1660. .1665
+FT                   /bound_moiety="Sp1"
+FT   protein_bind    1890. .1895
+FT                   /bound_moiety="Sp1"
+FT   protein_bind    1895. .1900
+FT                   /bound_moiety="Sp1"
+FT   exon            2895. .2968
+FT                   /number=2
+FT   intron          2969. .5395
+FT                   /number=2
+FT   repeat_unit     3049. .3347
+FT                   /note="Alu sequence"
+FT   repeat_unit     4953. .5245
+FT                   /note="Alu sequence"
+FT   exon            5396. .5570
+FT                   /number=3
+FT   intron          5571. .11842
+FT                   /number=3
+FT   repeat_unit     5768. .9405
+FT                   /note="L1 sequence"
+FT   repeat_unit     10125. .10389
+FT                   /note="reiterated motif of GGA/TGAT"
+FT   exon            11843. .11944
+FT                   /number=4
+FT   intron          11945. .13448
+FT                   /number=4
+FT   repeat_unit     12135. .12397
+FT                   /note="Alu sequence"
+FT   repeat_unit     12567. .12743
+FT                   /note="Alu sequence"
+FT   repeat_unit     12807. .13084
+FT                   /note="Alu sequence"
+FT   exon            13449. .13624
+FT                   /number=5
+FT   intron          13625. .14132
+FT                   /number=5
+FT   repeat_unit     13875. .14010
+FT                   /note="Alu sequence"
+FT   exon            14133. .14204
+FT                   /number=6
+FT   intron          14205. .15612
+FT                   /number=6
+FT   repeat_unit     14531. .14832
+FT                   /note="Alu sequence"
+FT   exon            15613. .>15750
+FT                   /number=7
+FT   polyA_signal    15934. .15939
+FT   polyA_signal    16228. .16233
+FT   repeat_unit     17262. .17553
+FT                   /note="Alu sequence"
+XX
+SQ   Sequence 18596 BP; 4521 A; 3991 C; 4479 G; 5605 T; 0 other;
+>>>>Z69719
+ 
+ID   Z69719     standard; DNA; HUM; 33760 BP.
+XX
+AC   Z69719;
+XX
+SV   Z69719.1
+XX
+DT   26-FEB-1996 (Rel. 46, Created)
+DT   22-NOV-1999 (Rel. 61, Last updated, Version 3)
+XX
+DE   Human DNA sequence from cosmid NFG9 from a contig from the tip
+DE   of the short arm of chromosome 16, spanning 2Mb of 16p13.3.
+DE   Contains Interleukin 9 Receptor Pseudogene, repeat polymorphism,
+DE   ESTs, CpG islands and endogenous retroviral DNA.
+XX
+KW   16p13.3; CpG island; Interleukin 9 Receptor Pseudogene;
+KW   repeat polymorphism.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Teleostomi;
+OC   Euteleostomi; Mammalia; Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-33760
+RA   Kershaw J.;
+RT   ;
+RL   Submitted (22-FEB-1996) to the EMBL/GenBank/DDBJ databases.
+RL   Sanger Centre, Hinxton, Cambridgeshire, CB10 1RQ, England. E-mail enquires:
+RL   humquery@sanger.ac.uk
+XX
+CC   IMPORTANT:  This sequence is not the entire insert of clone
+CC   NFG9.  It may be shorter because we only sequence overlapping
+CC   sections once, or longer because we arrange for a small
+CC   overlap between neighbouring submissions.
+XX
+CC   The true left end of clone NFG9 is at 1 in this sequence.
+CC   The true left end of clone RA36 is at 25872.
+XX
+CC   NFG9 is from a 280kb clone contig extending from the telomere of 16p.
+CC   Higgs D.R., Flint J. unpublished. MRC Molecular Haematology Unit,
+CC   Institute of Molecular Medicine, Oxford.
+CC   NFG9 is from the library CV007K. Choo et al.,(1986) Gene 46. 277-286.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1. .33760
+FT                   /chromosome="16"
+FT                   /db_xref="taxon:9606"
+FT                   /organism="Homo sapiens"
+FT                   /map="16p13.3"
+FT                   /clone_lib="CV007K"
+FT                   /clone="XX-CNFG9"
+FT   misc_feature    <1. .2455
+FT                   /note="Interleukin 9 Receptor Pseudogene"
+FT   misc_feature    18189. .18928
+FT                   /note="expressed region - matched by multiple ESTs"
+FT   misc_feature    19221. .20145
+FT                   /note="expressed region - matched by multiple ESTs"
+FT   misc_feature    21315. .21782
+FT                   /note="expressed region - matched by multiple ESTs"
+FT   misc_feature    25685. .27491
+FT                   /note="expressed region - matched by multiple ESTs"
+FT   misc_feature    15707. .16924
+FT                   /note="putative CpG island"
+FT   misc_feature    23690. .25856
+FT                   /note="putative CpG island"
+FT   misc_feature    3706. .4408
+FT                   /note="match: M64936 retinoic acid-inducible endogenous
+FT                   retroviral DNA"
+FT   misc_feature    6936. .7220
+FT                   /note="match: Z24661 DNA segment containing (CA) repeat"
+FT   repeat_region   4625. .4816
+FT                   /note="2 copies of 96 mer 89 % conserved"
+FT   repeat_region   7010. .7035
+FT                   /note="13 copies of CA 100% conserved"
+FT                   /note="Polymorphic by comparison with Z24661"
+FT   repeat_region   10544. .10565
+FT                   /note="11 copies of 2 mer 100 % conserved"
+FT   repeat_region   15151. .15180
+FT                   /note="15 copies of 2 mer 100 % conserved"
+FT   repeat_region   15470. .15509
+FT                   /note="20 copies of 2 mer 90 % conserved"
+FT   repeat_region   30618. .30801
+FT                   /note="4 copies of 46 mer 81 % conserved"
+FT   repeat_region   13518. .13568
+FT                   /note="THE1B element fragment"
+FT   repeat_region   13651. .13824
+FT                   /note="THE1B element fragment"
+FT   repeat_region   27971. .28069
+FT                   /note="MIR2 element fragment"
+FT   repeat_region   1. .62
+FT                   /note="Alu repeat: matches 62. .1 of consensus"
+FT                   /partial
+FT   repeat_region   518. .772
+FT                   /note="Alu repeat: matches 272. .1 of consensus"
+FT                   /partial
+FT   repeat_region   2181. .2337
+FT                   /note="Alu repeat: matches 149. .308 of consensus"
+FT                   /partial
+FT   repeat_region   2551. .2705
+FT                   /note="Alu repeat: matches 308. .152 of consensus"
+FT                   /partial
+FT   repeat_region   2706. .2858
+FT                   /note="Alu repeat: matches 170. .1 of consensus"
+FT                   /partial
+FT   repeat_region   3216. .3273
+FT                   /note="Alu repeat: matches 84. .151 of consensus"
+FT                   /partial
+FT   repeat_region   3274. .3565
+FT                   /note="Alu repeat: matches 1. .308 of consensus"
+FT   repeat_region   3567. .3704
+FT                   /note="Alu repeat: matches 121. .255 of consensus"
+FT                   /partial
+FT   repeat_region   6722. .7015
+FT                   /note="Alu repeat: matches 1. .308 of consensus"
+FT   repeat_region   9137. .9426
+FT                   /note="Alu repeat: matches 1. .308 of consensus"
+FT   repeat_region   10333. .10543
+FT                   /note="Alu repeat: matches 40. .266 of consensus"
+FT                   /partial
+FT   repeat_region   10593. .10883
+FT                   /note="Alu repeat: matches 308. .1 of consensus"
+FT   repeat_region   11224. .11514
+FT                   /note="Alu repeat: matches 1. .308 of consensus"
+FT   repeat_region   11566. .11851
+FT                   /note="Alu repeat: matches 1. .308 of consensus"
+FT   repeat_region   11852. .12100
+FT                   /note="Alu repeat: matches 1. .266 of consensus"
+FT                   /partial
+FT   repeat_region   12188. .12340
+FT                   /note="Alu repeat: matches 308. .136 of consensus"
+FT                   /partial
+FT   repeat_region   12341. .12629
+FT                   /note="Alu repeat: matches 308. .1 of consensus"
+FT   repeat_region   12660. .12952
+FT                   /note="Alu repeat: matches 308. .1 of consensus"
+FT   repeat_region   13224. .13517
+FT                   /note="Alu repeat: matches 308. .1 of consensus"
+FT   repeat_region   14433. .14723
+FT                   /note="Alu repeat: matches 1. .308 of consensus"
+FT   repeat_region   14859. .15150
+FT                   /note="Alu repeat: matches 1. .308 of consensus"
+FT   repeat_region   15182. .15469
+FT                   /note="Alu repeat: matches 1. .308 of consensus"
+FT   repeat_region   17007. .17048
+FT                   /note="Alu repeat: matches 296. .254 of consensus"
+FT                   /partial
+FT   repeat_region   17049. .17241
+FT                   /note="Alu repeat: matches 210. .1 of consensus"
+FT                   /partial
+FT   repeat_region   17421. .17510
+FT                   /note="Alu repeat: matches 308. .216 of consensus"
+FT                   /partial
+FT   repeat_region   17511. .17673
+FT                   /note="Alu repeat: matches 178. .1 of consensus"
+FT                   /partial
+XX
+SQ   Sequence 33760 BP; 8532 A; 9139 C; 9245 G; 6844 T; 0 other;
+>>>>AB000095
+ 
+ID   AB000095   standard; RNA; HUM; 2399 BP.
+XX
+AC   AB000095;
+XX
+SV   AB000095.1
+XX
+DT   10-MAR-1998 (Rel. 54, Created)
+DT   10-MAR-1998 (Rel. 54, Last updated, Version 1)
+XX
+DE   Homo sapiens mRNA for hepatocyte growth factor activator
+DE   inhibitor, complete cds.
+XX
+KW   hepatocyte growth factor activator inhibitor.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia; Eutheria;
+OC   Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-2399
+RA   Denda K.;
+RT   ;
+RL   Submitted (24-DEC-1996) to the EMBL/GenBank/DDBJ databases.
+RL   Kimitoshi Denda, Tokyo Institute of Technology, Department of Life Science;
+RL   4259 Nagatsuta, Midori-ku, Yokohama, Kanagawa 227, Japan
+RL   (E-mail:kdenda@bio.titech.ac.jp, Tel:45-924-5702, Fax:45-924-5771)
+XX
+RN   [2]
+RA   Shimomura T., Denda K., Kitamura A., Kawaguchi T., Kito M., Kondo J.,
+RA   Kagaya S., Qin L., Takata H., Miyazawa K., Kitamura N.;
+RT   "Hepatocyte growth factor activator inhibitor, a novel Kunitz-type serine
+RT   protease inhibitor";
+RL   J. Biol. Chem. 272:6370-6376(1997).
+XX
+DR   SPTREMBL; O43278; O43278.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1. .2399
+FT                   /db_xref="taxon:9606"
+FT                   /sequenced_mol="cDNA to mRNA"
+FT                   /organism="Homo sapiens"
+FT   CDS             176. .1717
+FT                   /db_xref="SPTREMBL:O43278"
+FT                   /product="hepatocyte growth factor activator inhibitor"
+FT                   /protein_id="BAA25014.1"
+FT                   /translation="MAPARTMARARLAPAGIPAVALWLLCTLGLQGTQAGPPPAPPGLP
+FT                   AGADCLNSFTAGVPGFVLDTNASVSNGATFLESPTVRRGWDCVRACCTTQNCNLALVEL
+FT                   QPDRGEDAIAACFLINCLYEQNFVCKFAPREGFINYLTREVYRSYRQLRTQGFGGSGIP
+FT                   KAWAGIDLKVQPQEPLVLKDVENTDWRLLRGDTDVRVERKDPNQVELWGLKEGTYLFQL
+FT                   TVTSSDHPEDTANVTVTVLSTKQTEDYCLASNKVGRCRGSFPRWYYDPTEQICKSFVYG
+FT                   GCLGNKNNYLREEECILACRGVQGPSMERRHPVCSGTCQPTQFRCSNGCCIDSFLECDD
+FT                   TPNCPDASDEAACEKYTSGFDELQRIHFPSDKGHCVDLPDTGLCKESIPRWYYNPFSEH
+FT                   CARFTYGGCYGNKNNFEEEQQCLESCRGISKKDVFGLRREIPIPSTGSVEMAVAVFLVI
+FT                   CIVVVVAILGYCFFKNQRKDFHGHHHHPPPTPASSTVSTTEDTEHLVYNHTTRPL"
+FT   polyA_signal    2379. .2384
+XX
+SQ   Sequence 2399 BP; 490 A; 777 C; 684 G; 448 T; 0 other;
+>>>>AB009062
+ 
+ID   AB009062   standard; DNA; HUM; 532 BP.
+XX
+AC   AB009062;
+XX
+SV   AB009062.1
+XX
+DT   15-JAN-1999 (Rel. 58, Created)
+DT   24-MAR-1999 (Rel. 59, Last updated, Version 2)
+XX
+DE   Homo sapiens HERG gene, exon 6.
+XX
+KW   HERG.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia; Eutheria;
+OC   Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-532
+RA   Tanaka T.;
+RT   ;
+RL   Submitted (21-NOV-1997) to the EMBL/GenBank/DDBJ databases.
+RL   Toshihiro Tanaka, Institute of Medical Science, University of Tokyo,
+RL   Laboratory of Molecular Medicine; 4-6-1 Shirokanedai, Minato-ku, Tokyo
+RL   108-8639, Japan (E-mail:toshitan@ims.u-tokyo.ac.jp, Tel:81-3-5449-5374,
+RL   Fax:81-3-5449-5406)
+XX
+RN   [2]
+RA   Itoh T., Tanaka T., Nagai R., Kamiya T., Sawayama T., Nakayama T.,
+RA   Tomoike H., Sakurada H., Yazaki Y., Nakamura Y.;
+RT   "Genomic organization and mutational analysis of HERG, a gene responsible
+RT   for familial long QT syndrome";
+RL   Hum. Genet. 102:435-439(1998).
+XX
+DR   SPTREMBL; Q12809; Q12809.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1. .532
+FT                   /db_xref="taxon:9606"
+FT                   /sequenced_mol="DNA"
+FT                   /organism="Homo sapiens"
+FT   exon            75. .503
+FT                   /number=6
+FT                   /gene="HERG"
+XX
+SQ   Sequence 532 BP; 87 A; 187 C; 146 G; 112 T; 0 other;
+>>>>X03487
+ 
+ID   X03487    standard; DNA; HUM; 512 BP.
+XX
+AC   X03487;
+XX
+SV   X03487.1
+XX
+DT   02-JUL-1986 (Rel. 09, Created)
+DT   04-APR-1995 (Rel. 43, Last updated, Version 2)
+XX
+DE   Human apoferritin H gene exon 1
+XX
+KW   ferritin.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-512
+RX   MEDLINE; 86120367.
+RA   Costanzo F., Colombo M., Staempfli S., Santoro C., Marone M., Frank R.,
+RA   Delius H., Cortese R.;
+RT   "Structure of gene and pseudogenes of human apoferritin H";
+RL   Nucleic Acids Res. 14:721-736(1986).
+XX
+DR   EPD; EP11112; HS_FRIH.
+DR   SWISS-PROT; P02794; FRIH_HUMAN.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1. .512
+FT                   /db_xref="taxon:9606"
+FT                   /organism="Homo sapiens"
+FT   misc_feature    65. .70
+FT                   /note="GGGCGG box"
+FT   misc_feature    103. .108
+FT                   /note="GGGCGG box"
+FT   misc_feature    126. .131
+FT                   /note="GGGCGG box"
+FT   promoter        150. .154
+FT                   /note="put. TATA box"
+FT   mRNA            179. .500
+FT                   /note="exon 1"
+FT   CDS             join(387. .500,X03488.1:50. .196,X03488.1:453. .578,
+FT                   X03488.1:674. .838)
+FT                   /db_xref="SWISS-PROT:P02794"
+FT                   /label=apoh_cds
+FT                   /product="apoferritin H subunit"
+FT                   /protein_id="CAA27205.1"
+FT                   /translation="MTTASTSQVRQNYHQDSEAAINRQINLELYASYVYLSMSYYFDRD
+FT                   DVALKNFAKYFLHQSHEEREHAEKLMKLQNQRGGRIFLQDIKKPDCDDWESGLNAMECA
+FT                   LHLEKNVNQSLLELHKLATDKNDPHLCDFIETHYLNEQVKAIKELGDHVTNLRKMGAPE
+FT                   SGLAEYLFDKHTLGDSDNES"
+FT   intron          501. .>512
+FT                   /note="intron I"
+XX
+SQ   Sequence 512 BP; 80 A; 212 C; 152 G; 64 T; 4 other;
+>>>>X03488
+ 
+ID   X03488     standard; DNA; HUM; 1132 BP.
+XX
+AC   X03488;
+XX
+SV   X03488.1
+XX
+DT   02-JUL-1986 (Rel. 09, Created)
+DT   04-APR-1995 (Rel. 43, Last updated, Version 2)
+XX
+DE   Human apoferritin H gene exons 2-4
+XX
+KW   ferritin.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-1132
+RX   MEDLINE; 86120367.
+RA   Costanzo F., Colombo M., Staempfli S., Santoro C., Marone M., Frank R.,
+RA   Delius H., Cortese R.;
+RT   "Structure of gene and pseudogenes of human apoferritin H";
+RL   Nucleic Acids Res. 14:721-736(1986).
+XX
+DR   SWISS-PROT; P02794; FRIH_HUMAN.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1. .1132
+FT                   /db_xref="taxon:9606"
+FT                   /organism="Homo sapiens"
+FT   intron          <1. .49
+FT                   /note="intron I"
+FT   exon            50. .196
+FT                   /note="apoferritin H subunit (aa 39-87) (exon 2)"
+FT                   /usedin=X03487:apoh_cds
+FT   intron          197. .452
+FT                   /note="intron II"
+FT   exon            453. .578
+FT                   /note="apoferritin H subunit (exon 3) (aa 88-129)"
+FT                   /usedin=X03487:apoh_cds
+FT   intron          579. .673
+FT                   /note="intron III"
+FT   exon            674. .999
+FT                   /note="exon 4"
+FT   -               674. .838
+FT                   /note="apoferritin H subunit (aa 130-183)"
+FT                   /usedin=X03487:apoh_cds
+FT   intron          1000. .>1132
+FT                   /note="intron IV"
+XX
+SQ   Sequence 1132 BP; 315 A; 235 C; 250 G; 320 T; 12 other;
+>>>>AP000504
+ 
+ID   AP000504   standard; DNA; HUM; 100000 BP.
+XX
+AC   AP000504;
+XX
+SV   AP000504.1
+XX
+DT   28-SEP-1999 (Rel. 61, Created)
+DT   30-MAR-2000 (Rel. 63, Last updated, Version 2)
+XX
+DE   Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section
+DE   3/20.
+XX
+KW   .
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-100000
+RA   Hirakawa M., Yamaguchi H., Imai K., Shimada J.;
+RT   ;
+RL   Submitted (21-SEP-1999) to the EMBL/GenBank/DDBJ databases.
+RL   Mika Hirakawa, Japan Science and Technology Corporation (JST), Advanced
+RL   Databases Department; 5-3, Yonbancho, Chiyoda-ku, Tokyo 102-0081, Japan
+RL   (E-mail:mika@tokyo.jst.go.jp, URL:http://www-alis.tokyo.jst.go.jp/,
+RL   Tel:81-3-5214-8491, Fax:81-3-5214-8470)
+XX
+RN   [2]
+RA   Shiina S., Tamiya G., Oka A., Inoko H.;
+RT   "Homo sapiens 2,229,817bp genomic DNA of 6p21.3 HLA class I region";
+RL   Unpublished.
+XX
+CC   This sequence is conducted by Tokai University as a JST sequencing
+CC   Team.
+CC   Principal Investigator: Hidetoshi Inoko Ph.D
+CC   Phone:+81-463-93-1121, Fax:+81-463-94-8884,
+CC   The sequence is submitted by Human Genome Sequencing in ALIS
+CC   project of JST
+CC   Japan Science and Technology Corporation (JST)
+CC   5-3, Yonbancyo, Chiyoda-ku, Tokyo, 102-0081 Japan
+CC   For further infomation about this sequences, please visit our
+CC   sequence archive Web site (http://www-alis.tokyo.jst.go.jp/HGS/top.
+CC   html) or send email to webmaster@www-alis.tokyo.jst.go.jp
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1. .100000
+FT                   /chromosome="6"
+FT                   /db_xref="taxon:9606"
+FT                   /sequenced_mol="DNA"
+FT                   /organism="Homo sapiens"
+FT                   /map="6p21.3"
+FT   STS             complement(27976. .28119)
+FT                   /note="142.3/142.5;The location is between each flanking
+FT                   site of PCR primers."
+FT                   /standard_name="D6S273"
+FT   STS             27986. .28119
+FT                   /note="AFM142xh6;Genethon Marker;The location is between
+FT                   each flanking site of PCR primers."
+FT                   /standard_name="D6S273"
+FT   STS             complement(56785. .57036)
+FT                   /note="WI-6920;The location is between each flanking site
+FT                   of PCR primers."
+FT                   /standard_name="D6S1938"
+FT   STS             56833. .57013
+FT                   /note="Cda0tg07;The location is between each flanking site
+FT                   of PCR primers."
+FT   STS             complement(56842. .56985)
+FT                   /note="stSG1709;The location is between each flanking site
+FT                   of PCR primers."
+FT   STS             complement(56851. .57019)
+FT                   /note="RH20292;The location is between each flanking site
+FT                   of PCR primers."
+FT   STS             complement(63189. .63342)
+FT                   /note="stSG2609;The location is between each flanking site
+FT                   of PCR primers."
+FT   STS             71948. .72053
+FT                   /note="SHGC-7078;The location is between each flanking site
+FT                   of PCR primers."
+FT                   /standard_name="D6S2007"
+FT   STS             complement(79567. .79695)
+FT                   /note="stSG8393;The location is between each flanking site
+FT                   of PCR primers."
+FT   STS             85833. .85947
+FT                   /note="TIGR-A007I39;The location is between each flanking
+FT                   site of PCR primers."
+XX
+SQ   Sequence 100000 BP; 23515 A; 25717 C; 26015 G; 24753 T; 0 other;
+>>>>AF129756
+ 
+ID   AF129756   standard; DNA; HUM; 184666 BP.
+XX
+AC   AF129756;
+XX
+SV   AF129756.1
+XX
+DT   12-MAR-1999 (Rel. 59, Created)
+DT   29-OCT-1999 (Rel. 61, Last updated, Version 2)
+XX
+DE   Homo sapiens MSH55 gene, partial cds; and CLIC1, DDAH, G6b, G6c, G5b, G6d,
+DE   G6e, G6f, BAT5, G5b, CSK2B, BAT4, G4, Apo M, BAT3, BAT2, AIF-1, 1C7, LST-1,
+DE   LTB, TNF, and LTA genes, complete cds.
+XX
+KW   .
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-184666
+RA   Rowen L., Madan A., Qin S., Shaffer T., James R., Ratcliffe A., Abbasi N.,
+RA   Dickhoff R., Loretz C., Madan A., Dors M., Young J., Lasky S., Hood L.;
+RT   "Sequence of the human major histocompatibility complex class III region";
+RL   Unpublished.
+XX
+RN   [2]
+RP   1-184666
+RA   Rowen L.;
+RT   ;
+RL   Submitted (22-FEB-1999) to the EMBL/GenBank/DDBJ databases.
+RL   Department of Molecular Biotechnology, Box 357730 University of Washington,
+RL   Seattle, WA 98195, USA
+XX
+RN   [3]
+RP   1-184666
+RA   Rowen L.;
+RT   ;
+RL   Submitted (28-OCT-1999) to the EMBL/GenBank/DDBJ databases.
+RL   Multimegabase Sequencing Center, University of Washington, PO Box 357730,
+RL   Seattle, WA 98195, USA
+XX
+DR   EPD; EP11158; HS_TNFA.
+DR   EPD; EP11159; HS_TNFB.
+DR   SPTREMBL; O00452; O00452.
+DR   SPTREMBL; O14931; O14931.
+DR   SPTREMBL; O95445; O95445.
+DR   SPTREMBL; O95866; O95866.
+DR   SPTREMBL; O95868; O95868.
+DR   SPTREMBL; O95869; O95869.
+DR   SPTREMBL; O95870; O95870.
+DR   SPTREMBL; O95871; O95871.
+DR   SPTREMBL; O95872; O95872.
+DR   SPTREMBL; O95873; O95873.
+DR   SPTREMBL; O95874; O95874.
+DR   SPTREMBL; O95875; O95875.
+DR   SPTREMBL; Q9UKS8; Q9UKS8.
+DR   SPTREMBL; Q9UKS9; Q9UKS9.
+DR   SPTREMBL; Q9UKT0; Q9UKT0.
+DR   SPTREMBL; Q9UKT1; Q9UKT1.
+DR   SWISS-PROT; O00299; CLI1_HUMAN.
+DR   SWISS-PROT; O43196; MSH5_HUMAN.
+DR   SWISS-PROT; O95865; DDH2_HUMAN.
+DR   SWISS-PROT; O95867; NG24_HUMAN.
+DR   SWISS-PROT; P01375; TNFA_HUMAN.
+DR   SWISS-PROT; P13862; KC2B_HUMAN.
+DR   SWISS-PROT; Q06643; TNFC_HUMAN.
+XX
+CC   Sequencing Methodology: high redundancy shotgun using plasmid
+CC   templates.  Interspersed Repeats were identified with RepeatMasker
+CC   (available from
+CC   http://ftp.genome.washington.edu/RM/RepeatMasker.html).  This
+CC   sequence overlaps BAC 215O24, Accession AF134726 and cosmid M9A
+CC   (AC004181), thereby joining to the 2 Mb HLA class I region.  It
+CC   also overlaps the entry found in Y14768.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1. .184666
+FT                   /chromosome="6"
+FT                   /db_xref="taxon:9606"
+FT                   /note="Major histocompatibility complex class III region."
+FT                   /organism="Homo sapiens"
+FT                   /clone="BAC 201G24"
+FT                   /clone_lib="RPCI11"
+FT                   /map="6p21.3"
+FT   repeat_region   complement(517. .812)
+FT                   /rpt_family="AluSx"
+FT   repeat_region   859. .1156
+FT                   /rpt_family="AluSg"
+FT   unsure          1087. .1130
+FT                   /note="low quality data"
+FT   repeat_region   1430. .1725
+FT                   /rpt_family="AluSq"
+FT   repeat_region   complement(1774. .1984)
+FT                   /rpt_family="LINE2"
+FT   repeat_region   complement(2054. .2346)
+FT                   /rpt_family="AluSx"
+FT   mRNA            join(complement(9848. .10040),complement(9455. .9614),
+FT                   complement(8782. .8905),complement(7116. .7196),
+FT                   complement(6903. .6965),complement(6048. .6169),
+FT                   complement(5774. .5883),complement(5492. .5527),
+FT                   complement(4757. .4839),complement(<2638. .2683))
+FT                   /note="Intron-exon boundaries defined in relation to
+FT                   AF048096."
+FT                   /product="MSH5"
+FT   CDS             join(complement(9455. .9601),complement(8782. .8905),
+FT                   complement(7116. .7196),complement(6903. .6965),
+FT                   complement(6048. .6169),complement(5774. .5883),
+FT                   complement(5492. .5527),complement(4757. .4839),
+FT                   complement(<2638. .2683))
+FT                   /codon_start=1
+FT                   /db_xref="SWISS-PROT:O43196"
+FT                   /note="mismatch repair; Intron-exon boundaries defined in
+FT                   relation to AF048096.  MSH5 is the human ortholog to S.
+FT                   cerevisiae MSH5 gene"
+FT                   /product="MSH5"
+FT                   /protein_id="AAD18072.1"
+FT                   /translation="MASLGANPRRTPQGPRPGAASSGFPSPAPVPGPREAEEEEVEEEE
+FT                   ELAEIHLCVLWNSGYLGIAYYDTSDSTIHFMPDAPDHESLKLLQRVLDEINPQSVVTSA
+FT                   KQDENMTRFLGKLASQEHREPKRPEIIFLPSVDFGLEISKQRLLSGNYSFIPDAMTATE
+FT                   KILFLSSIIPFDCLLTVRALGGLLKFLGRRRIGVELEDYNVSVPILGFKKFMLTHLVNI
+FT                   DQDTYSVLQIFKSESHPSVYKVASGLKEGLSLFGILNRCHCKWGEKLL"
+FT   repeat_region   2952. .3247
+FT                   /rpt_family="AluY"
+FT   repeat_region   3320. .3633
+FT                   /rpt_family="AluSx"
+FT   repeat_region   3674. .3957
+FT                   /rpt_family="AluSq"
+FT   repeat_region   3958. .3997
+FT                   /rpt_family="(CA)n"
+FT   repeat_region   4013. .4310
+FT                   /rpt_family="AluY"
+FT   repeat_region   complement(4950. .5241)
+FT                   /rpt_family="AluSx"
+FT   repeat_region   complement(6221. .6295)
+FT                   /rpt_family="MIR"
+FT   repeat_region   7419. .7493
+FT                   /rpt_family="LINE2"
+FT   repeat_region   7516. .7818
+FT                   /rpt_family="AluSx"
+FT   repeat_region   7920. .8351
+FT                   /rpt_family="MSTB"
+FT   repeat_region   8391. .8686
+FT                   /rpt_family="AluSg"
+FT   repeat_region   complement(8687. .8731)
+FT                   /rpt_family="(CA)n"
+FT   repeat_region   complement(9088. .9388)
+FT                   /rpt_family="AluSx"
+FT   repeat_region   complement(9454. .9500)
+FT                   /rpt_family="(GGA)n"
+FT   repeat_region   10481. .10541
+FT                   /rpt_family="MIR"
+FT   repeat_region   complement(10814. .10907)
+FT                   /rpt_family="LINE2"
+FT   repeat_region   complement(10910. .10972)
+FT                   /rpt_family="(CA)n"
+FT   repeat_region   complement(10991. .11020)
+FT                   /rpt_family="AT_rich"
+FT   repeat_region   complement(12628. .12930)
+FT                   /rpt_family="AluSq"
+FT   repeat_region   12960. .13116
+FT                   /rpt_family="L143_5end"
+FT   mRNA            join(13554. .13810,15809. .15918,16111. .16236,16400. .16506,
+FT                   17674. .17855,19069. .19477)
+FT                   /note="Intron-exon boundaries defined in relation to cDNA
+FT                   in U93205."
+FT                   /product="CLIC1"
+FT   CDS             join(13772. .13810,15809. .15918,16111. .16236,16400. .16506,
+FT                   17674. .17855,19069. .19230)
+FT                   /codon_start=1
+FT                   /db_xref="SWISS-PROT:O00299"
+FT                   /note="nuclear chloride ion channel protein; Intron-exon
+FT                   boundaries defined in relation to cDNA in U93205.  This
+FT                   gene is also known as NCC27 and G6"
+FT                   /product="CLIC1"
+FT                   /protein_id="AAD18073.1"
+FT                   /translation="MAEEQPQVELFVKAGSDGAKIGNCPFSQRLFMVLWLKGVTFNVTT
+FT                   VDTKRRTETVQKLCPGGQLPFLLYGTEVHTDTNKIEEFLEAVLCPPRYPKLAALNPESN
+FT                   TAGLDIFAKFSAYIKNSNPALNDNLEKGLLKALKVLDNYLTSPLPEEVDETSAEDEGVS
+FT                   QRKFLDGNELTLADCNLLPKLHIVQVVCKKYRGFTIPEAFRGVHRYLSNAYAREEFAST
+FT                   CPDDEEIELAYEQVAKALK"
+FT   repeat_region   complement(14222. .14264)
+FT                   /rpt_family="(CA)n"
+FT   repeat_region   complement(14837. .14918)
+FT                   /rpt_family="(GAAA)n"
+FT   unsure          15914. .15947
+FT                   /note="low quality data"
+FT   repeat_region   16767. .16930
+FT                   /rpt_family="MIR"
+FT   repeat_region   complement(16933. .17231)
+FT                   /rpt_family="AluSx"
+FT   repeat_region   17264. .17521
+FT                   /rpt_family="AluSx"
+FT   repeat_region   18471. .18762
+FT                   /rpt_family="AluSx"
+FT   mRNA            join(20893. .21207,21327. .21426,21548. .21621,21780. .21899,
+FT                   22380. .22529,22719. .23030)
+FT                   /note="Intron-exon boundaries defined by an EST contig."
+FT                   /product="DDAH"
+FT   CDS             join(20911. .21207,21327. .21426,21548. .21621,21780. .21899,
+FT                   22380. .22529,22719. .22835)
+FT                   /codon_start=1
+FT                   /db_xref="SWISS-PROT:O95865"
+FT                   /note="NG-dimethylarginine dimethylamino hydrolase homolog;
+FT                   Intron-exon boundaries defined by an EST contig including
+FT                   AA188111, AA311681 and AI080469.  There is a mouse cDNA
+FT                   orthologue in AF004106.  This protein is most similar to
+FT                   NG-dimethylarginine dimethyl amino hydrolase by BLAST X. 
+FT                   BLAST N shows little nucleotide similarity with AB001915,
+FT                   the cDNA for this.  This gene is also known as NG30 and
+FT                   G6a"
+FT                   /product="DDAH"
+FT                   /protein_id="AAD18074.1"
+FT                   /translation="MGTPGEGLGRCSHALIRGVPESLASGEGAGAGLPALDLAKAQREH
+FT                   GVLGGKLRQRLGLQLLELPPEESLPLGPLLGDTAVIQGDTALITRPWSPARRPEVDGVR
+FT                   KALQDLGLRIVEIGDENATLDGTDVLFTGREFFVGLSKWTNHRGAEIVADTFRDFAVST
+FT                   VPVSGPSHLRGLCGMGGPRTVVAGSSDAAQKAVRAMAVLTDHPYASLTLPDDAAADCLF
+FT                   LRPGLPGVPPFLLHRGGGDLPNSQEALQKLSDVTLVPVSCSELEKAGAGLSSLCLVLST
+FT                   RPHS"
+FT   repeat_region   24446. .24741
+FT                   /rpt_family="AluY"
+FT   mRNA            join(complement(26628. .>26688),complement(26086. .26433),
+FT                   complement(25840. .25930),complement(25445. .25485),
+FT                   complement(25228. .25307),complement(<24998. .25102))
+FT                   /product="G6b"
+FT   CDS             join(complement(26628. .26688),complement(26086. .26433),
+FT                   complement(25840. .25930),complement(25445. .25485),
+FT                   complement(25228. .25307),complement(24998. .25102))
+FT                   /codon_start=1
+FT                   /db_xref="SPTREMBL:O95866"
+FT                   /note="unknown; This gene is predicted by Genscan.  There
+FT                   are no BLAST N hits to ESTs or significant BLAST X hits.
+FT                   However, there might be an orthologue in the mouse sequence
+FT                   found in AF109905.  This gene is also known as NG31"
+FT                   /product="G6b"
+FT                   /protein_id="AAD18075.1"
+FT                   /translation="MAVFLQLLPLLLSRAQGNPGASLDGRPGDRVNLSCGGVSHPIRWV
+FT                   WAPSFPACKGLSKGRRPILWASSSGTPTVPPLQPFVGRLRSLDSGIRRLELLLSAGDSG
+FT                   TFFCKGRHEDESRTVLHVLGDRTYCKAPGPTHGSVYPQLLIPLLGAGLVLGLGALGLVW
+FT                   WLHRRLPPQPIRPLPRFAPLVKTEPQRPVKEEEPKIPGDLDQEPSLLYADLDHLALSRP
+FT                   RRLSTADPADASTIYAVVV"
+FT   repeat_region   26941. .27095
+FT                   /rpt_family="AluJo"
+FT   repeat_region   complement(27208. .27494)
+FT                   /rpt_family="AluSc"
+FT   mRNA            join(28336. .28441,29866. .29976,30759. .31022)
+FT                   /note="Intron-exon boundaries defined in relation to ESTs
+FT                   H03135 and AA930440."
+FT                   /product="G6c"
+FT   CDS             join(28390. .28441,29866. .29976,30759. .30973)
+FT                   /codon_start=1
+FT                   /db_xref="SWISS-PROT:O95867"
+FT                   /note="ly6 family member; Intron-exon boundaries defined in
+FT                   relation to ESTs H03135 and AA930440.  The closest
+FT                   similarity found with BLAST X is to rat Ly-6 (lymphocyte
+FT                   differentiation) antigen.  This gene is also known as NG24"
+FT                   /product="G6c"
+FT                   /protein_id="AAD18076.1"
+FT                   /translation="MKALMLLTLSVLLCWVSADIRCHSCYKVPVLGCVDRQSCRLEPGQ
+FT                   QCLTTHAYLGKMWVFSNLRCGTPEEPCQEAFNQTNRKLGLTYNTTCCNKDNCNSAGPRP
+FT                   TPALGLVFLTSLAGLGLWLLH"
+FT   repeat_region   complement(30111. .30197)
+FT                   /rpt_family="MIR"
+FT   repeat_region   30234. .30532
+FT                   /rpt_family="AluSx"
+FT   mRNA            join(complement(34655. .>34709),complement(34441. .34563),
+FT                   complement(<32150. .32488))
+FT                   /note="Intron-exon boundaries defined in part by EST
+FT                   AA535815 and AA794551."
+FT                   /product="G6d"
+FT   mRNA            join(complement(34655. .>34709),complement(34441. .34563),
+FT                   complement(<32265. .32609))
+FT                   /note="putative; contains alternative exon 3; based on
+FT                   AA535815"
+FT                   /product="G6d"
+FT   CDS             join(complement(34655. .34709),complement(34441. .34563),
+FT                   complement(32265. .32488))
+FT                   /codon_start=1
+FT                   /db_xref="SPTREMBL:O95868"
+FT                   /note="Ly6 family member; This is the orthologue to NG25
+FT                   defined in mouse AF109905.  Human EST AA535815 splices
+FT                   differently than mouse EST AA794551.  No similarities to
+FT                   this gene are found using BLAST X"
+FT                   /product="G6d"
+FT                   /protein_id="AAD18077.1"
+FT                   /translation="MKPQFVGILLSSLLGAALGNRMRCYNCGGSPSSSCKEAVTTCGEG
+FT                   RPQPGLEQIKLPGNPPVTLIHQHPACVAAHHCNQVETESVGDVTYPAHRDCYLGDLCNS
+FT                   AVASHVAPAGILAAAATALTCLLPGLWSG"
+FT   repeat_region   32600. .32780
+FT                   /rpt_family="L1MC4"
+FT   repeat_region   complement(32804. .33099)
+FT                   /rpt_family="AluSp"
+FT   repeat_region   complement(33128. .33430)
+FT                   /rpt_family="AluJo"
+FT   repeat_region   complement(33437. .33755)
+FT                   /rpt_family="AluJb"
+FT   repeat_region   33787. .33909
+FT                   /rpt_family="L1MD3"
+FT   repeat_region   33912. .34065
+FT                   /rpt_family="L1MD3"
+FT   repeat_region   34073. .34114
+FT                   /rpt_family="(CA)n"
+FT   repeat_region   complement(34952. .34995)
+FT                   /rpt_family="MER64B"
+FT   repeat_region   complement(34998. .35400)
+FT                   /rpt_family="MER64"
+FT   CDS             join(36253. .36304,37276. .37401,37524. .>37729)
+FT                   /codon_start=1
+FT                   /db_xref="SPTREMBL:Q9UKT1"
+FT                   /note="Intron-exon boundaries defined in relation to
+FT                   AJ245419"
+FT                   /product="G6e"
+FT                   /protein_id="AAF04398.1"
+FT                   /translation="MGTSSIFLCVLFLCGALGLTMSPARGRLRCYICGFTKPCHPVPTE
+FT                   CRDDEACGISIGTSVKKLPLKGPVPSARLCHLLAALLHSVAPLLRAGPVQHSRFPTAAH
+FT                   QPPRLPAPLCGQLRWERTPPPLAS"
+FT   repeat_region   complement(36823. .37113)
+FT                   /rpt_family="AluY"
+FT   repeat_region   complement(38187. .38239)
+FT                   /rpt_family="(CA)n"
+FT   repeat_region   complement(38967. .39071)
+FT                   /rpt_family="(GA)n"
+FT   mRNA            join(complement(43110. .43183),complement(42281. .42610),
+FT                   complement(41934. .42197),complement(39886. .40041),
+FT                   complement(<39645. .39715))
+FT                   /note="This gene is predicted by Genscan.  Only 1 EST
+FT                   (AA318501) matches part of the predicted CDS."
+FT                   /product="G6f"
+FT   CDS             join(complement(43110. .43161),complement(42281. .42610),
+FT                   complement(41934. .42197),complement(39886. .40041),
+FT                   complement(39645. .39715))
+FT                   /codon_start=1
+FT                   /db_xref="SPTREMBL:O95869"
+FT                   /note="unknown; The closest similarity to this gene by
+FT                   BLAST X is mouse immunoglobulin kappa chain.  There is a
+FT                   mouse orthologue to this predicted gene that gives an
+FT                   in-frame translation, found in AF109905.  This gene is also
+FT                   known as NG32"
+FT                   /product="G6f"
+FT                   /protein_id="AAD18078.1"
+FT                   /translation="MAVLFLLLFLCGTPQAADNMQAIYVALGEAVELPCPSPSTLHGDE
+FT                   HLSWFCSPAAGSFTTLVAQVQVGRPAPDPGKPGRESRLRLLGNYSLWLEGSKEEDAGRY
+FT                   WCAVLGQHHNYQNWRVYDVLVLKGSQLSARAADGSPCNVLLCSVVPSRRMDSVTWQEGK
+FT                   GPVRGRVQSFWGSEAALLLVCPGEGLSEPRSRRPRIIRCLMTHNKGVSFSLAASIDASP
+FT                   ALCAPSTGWDMPWILMLLLTMGQGVVILALSIVLWRQRVRGAPGRDASIPQFKPEIQVY
+FT                   ENIHLARLG"
+FT   repeat_region   40237. .40456
+FT                   /rpt_family="AluSx"
+FT   repeat_region   40510. .40806
+FT                   /rpt_family="AluSc"
+FT   repeat_region   40820. .40996
+FT                   /rpt_family="AluSg"
+FT   repeat_region   41004. .41131
+FT                   /rpt_family="AluSc"
+FT   repeat_region   complement(41132. .41423)
+FT                   /rpt_family="AluSp"
+FT   repeat_region   41425. .41457
+FT                   /rpt_family="(TAAAA)n"
+FT   repeat_region   41713. .41903
+FT                   /rpt_family="AluSq"
+FT   repeat_region   43541. .43796
+FT                   /rpt_family="AluSx"
+FT   repeat_region   43797. .43825
+FT                   /rpt_family="(GAAAA)n"
+FT   repeat_region   complement(44093. .44119)
+FT                   /rpt_family="AT_rich"
+FT   repeat_region   44278. .44398
+FT                   /rpt_family="FLAM_C"
+FT   repeat_region   44399. .44695
+FT                   /rpt_family="AluSc"
+FT   repeat_region   44696. .44722
+FT                   /rpt_family="(TAAA)n"
+FT   repeat_region   44728. .45029
+FT                   /rpt_family="AluSp"
+FT   repeat_region   45046. .45334
+FT                   /rpt_family="AluJb"
+FT   repeat_region   complement(45449. .45559)
+FT                   /rpt_family="L1MD2"
+FT   repeat_region   complement(45678. .45962)
+FT                   /rpt_family="AluJo"
+FT   repeat_region   complement(45963. .46046)
+FT                   /rpt_family="FLAM_C"
+FT   repeat_region   complement(46055. .46353)
+FT                   /rpt_family="AluSx"
+FT   mRNA            join(46759. .46912,47932. .47988,48720. .48786,49032. .49118,
+FT                   53030. .53115,56637. .56710,56920. .57042,58151. .58265,
+FT                   58389. .58490,59467. .59530,59942. .59991,60365. .60488,
+FT                   60950. .61054,61283. .61346,61764. .61820,61966. .62028,
+FT                   62169. .62245,62329. .62427,62525. .62571,62774. .63096)
+FT                   /note="Intron-exon boundaries defined in relation to a
+FT                   contig of ESTs."
+FT                   /product="BAT5"
+FT   CDS             join(46781. .46912,47932. .47988,48720. .48786,49032. .49118,
+FT                   53030. .53115,56637. .56710,56920. .57042,58151. .58265,
+FT                   58389. .58490,59467. .59530,59942. .59991,60365. .60488,
+FT                   60950. .61054,61283. .61346,61764. .61820,61966. .62028,
+FT                   62169. .62245,62329. .62427,62525. .62571,62774. .62857)
+FT                   /codon_start=1
+FT                   /db_xref="SPTREMBL:O95870"
+FT                   /note="unknown; Intron-exon boundaries defined by an EST
+FT                   contig containing ESTs AA322366, H29422, AA323699, T09123,
+FT                   AA319071, AA352959, H70804, AA478983 and others.  The
+FT                   closest match by BLASTX is to a hypothetical protein
+FT                   encoded by a gene named F37A4.1.  This gene is also known
+FT                   as NG26"
+FT                   /product="BAT5"
+FT                   /protein_id="AAD18079.1"
+FT                   /translation="MAKLLSCVLGPRLYKIYRERDSERAPASVPETPTAVTAPHSSSWD
+FT                   TYYQPRALEKHADSILALASVFWSISYYSSPFAFFYLYRKGYLSLSKVVPFSHYAGTLL
+FT                   LLLAGVACLRGIGRWTNPQYRQFITILEATHRNQSSENKRQLANYNFDFRSWPVDFHWE
+FT                   EPSSRKESRGGPSRRGVALLRPEPLHRGTADTLLNRVKKLPCQITSYLVAHTLGRRMLY
+FT                   PGSVYLLQKALMPVLLQGQARLVEECNGRRAKLLACDGNEIDTMFVDRRGTAEPQGQKL
+FT                   VICCEGNAGFYEVGCVSTPLEAGYSVLGWNHPGFAGSTGVPFPQNEANAMDVVVQFAIH
+FT                   RLGFQPQDIIIYAWSIGGFTATWAAMSYPDVSAMILDASFDDLVPLALKVMPDSWRGLV
+FT                   TRTVRQHLNLNNAEQLCRYQGPVLLIRRTKDEIITTTVPEDIMSNRGNDLLLKLLQHRY
+FT                   PRVMAEEGLRVVRQWLEASSQLEEASIYSRWEVEEDWCLSVLRSYQAEHGPDFPWSVGE
+FT                   DMSADGRRQLALFLARKHLHNFEATHCTPLPAQNFQMPWHL"
+FT   repeat_region   complement(49315. .49444)
+FT                   /rpt_family="FLAM_C"
+FT   repeat_region   49459. .49623
+FT                   /rpt_family="L1ME3A"
+FT   repeat_region   49637. .49930
+FT                   /rpt_family="AluSg"
+FT   repeat_region   50014. .50318
+FT                   /rpt_family="AluSx"
+FT   repeat_region   50319. .50486
+FT                   /rpt_family="AluSx"
+FT   repeat_region   50491. .50580
+FT                   /rpt_family="L1ME1"
+FT   repeat_region   complement(50632. .50934)
+FT                   /rpt_family="AluY"
+FT   repeat_region   51296. .51383
+FT                   /rpt_family="LINE2"
+FT   repeat_region   51392. .51577
+FT                   /rpt_family="AluSq"
+FT   repeat_region   52093. .52241
+FT                   /rpt_family="LINE2"
+FT   repeat_region   complement(53411. .53712)
+FT                   /rpt_family="AluSq"
+FT   repeat_region   complement(53715. .53881)
+FT                   /rpt_family="AluSx"
+FT   repeat_region   complement(53882. .54179)
+FT                   /rpt_family="AluY"
+FT   repeat_region   complement(54180. .54314)
+FT                   /rpt_family="AluSx"
+FT   repeat_region   complement(54322. .54621)
+FT                   /rpt_family="AluSp"
+FT   repeat_region   complement(55024. .55162)
+FT                   /rpt_family="MIR"
+FT   repeat_region   55373. .55674
+FT                   /rpt_family="AluY"
+FT   repeat_region   55718. .56011
+FT                   /rpt_family="AluJo"
+FT   repeat_region   57422. .57558
+FT                   /rpt_family="MIR"
+FT   repeat_region   complement(58774. .58923)
+FT                   /rpt_family="MIR"
+FT   repeat_region   complement(59442. .59494)
+FT                   /rpt_family="L180_5end"
+FT   repeat_region   complement(63879. .64178)
+FT                   /rpt_family="AluSx"
+FT   repeat_region   complement(64253. .64279)
+FT                   /rpt_family="(CAAAA)n"
+FT   repeat_region   complement(64288. .64541)
+FT                   /rpt_family="AluSx"
+FT   repeat_region   complement(64552. .64851)
+FT                   /rpt_family="AluY"
+FT   repeat_region   65341. .65645
+FT                   /rpt_family="AluJb"
+FT   mRNA            join(<66034. .66086,69757. .69818,70803. .70970,72951. .73387)
+FT                   /note="Predicted by Genscan.  Exon 4 confirmed by EST
+FT                   AI160056,"
+FT                   /product="G5c"
+FT   CDS             join(66034. .66086,69757. .69818,70803. .70970,72951. .73114)
+FT                   /codon_start=1
+FT                   /db_xref="SPTREMBL:O95871"
+FT                   /note="unknown; There is a mouse orthologue to this
+FT                   predicted gene in AF109905.  This gene is also known as
+FT                   NG33"
+FT                   /product="G5c"
+FT                   /protein_id="AAD18080.1"
+FT                   /translation="MQTFPVAGALDPAILDTSSPQALYTVLLIVLVMMSLVFGKFVPVN
+FT                   WEPPQPLPFPKYLRCYRCLLETKELGCLLGSDICLTPAGSSCITLHKKNSSGSDVMVSD
+FT                   CRSKEQMSDCSNTRTSPVSGFWIFSQYCFLDFCNDPQNRGLYTP"
+FT   repeat_region   complement(66425. .66519)
+FT                   /rpt_family="(TGGA)n"
+FT   repeat_region   complement(67272. .67570)
+FT                   /rpt_family="AluSc"
+FT   repeat_region   complement(67685. .67987)
+FT                   /rpt_family="AluSx"
+FT   repeat_region   complement(67988. .68125)
+FT                   /rpt_family="AluSq"
+FT   repeat_region   69068. .69326
+FT                   /rpt_family="LINE2"
+FT   repeat_region   complement(70005. .70305)
+FT                   /rpt_family="AluSx"
+FT   repeat_region   complement(71089. .71374)
+FT                   /rpt_family="AluSx"
+FT   unsure          71460. .71503
+FT                   /note="low quality data"
+FT   repeat_region   complement(71882. .72060)
+FT                   /rpt_family="MIR"
+FT   repeat_region   complement(72419. .72496)
+FT                   /rpt_family="L1MC1"
+FT   repeat_region   complement(73713. .73993)
+FT                   /rpt_family="AluSx"
+FT   repeat_region   74315. .74540
+FT                   /rpt_family="L1ME3A"
+FT   repeat_region   74580. .74696
+FT                   /rpt_family="FLAM_A"
+FT   repeat_region   complement(75324. .75622)
+FT                   /rpt_family="AluSg"
+FT   repeat_region   complement(75625. .75920)
+FT                   /rpt_family="AluSp"
+FT   repeat_region   complement(76157. .76457)
+FT                   /rpt_family="AluSp"
+FT   repeat_region   complement(76798. .77088)
+FT                   /rpt_family="AluSx"
+FT   repeat_region   77330. .77624
+FT                   /rpt_family="AluSg"
+FT   mRNA            join(complement(78788. .79693),complement(77785. .78208))
+FT                   /note="This gene is identified in AJ245417"
+FT                   /product="G5b"
+FT   CDS             join(complement(78788. .78809),complement(77790. .78208))
+FT                   /codon_start=1
+FT                   /db_xref="SPTREMBL:Q9UKT0"
+FT                   /note="unknown"
+FT                   /product="G5b"
+FT                   /protein_id="AAF04397.1"
+FT                   /translation="MVITIYYDVKVRFIVRGCGQYISYRCQEKRNTYFAEYWYQAQCCQ
+FT                   YNYCNSWSSPQLQSSLPEPHDRPLALPLSDSQIQWFYQALNLSLPLPNFHAGTEPDGLD
+FT                   PMVTLSLNLGLSFAELRRMYLFLNSSGLLVLPQAGLLTPHPS"
+FT   repeat_region   complement(78389. .78678)
+FT                   /rpt_family="AluJb"
+FT   mRNA            join(complement(83857. .83980),complement(83162. .83244),
+FT                   complement(82095. .82197),complement(81418. .81533),
+FT                   complement(80900. .80975),complement(80564. .80753),
+FT                   complement(80006. .80236))
+FT                   /note="Intron-exon boundaries defined in relation to cDNA
+FT                   in X16312."
+FT                   /product="casein kinase II beta subunit"
+FT   CDS             join(complement(83162. .83233),complement(82095. .82197),
+FT                   complement(81418. .81533),complement(80900. .80975),
+FT                   complement(80564. .80753),complement(80146. .80236))
+FT                   /codon_start=1
+FT                   /db_xref="SWISS-PROT:P13862"
+FT                   /note="CSK2B"
+FT                   /product="casein kinase II beta subunit"
+FT                   /protein_id="AAD18081.1"
+FT                   /translation="MSSSEEVSWISWFCGLRGNEFFCEVDEDYIQDKFNLTGLNEQVPH
+FT                   YRQALDMILDLEPDEELEDNPNQSDLIEQAAEMLYGLIHARYILTNRGIAQMLEKYQQG
+FT                   DFGYCPRVYCENQPMLPIGLSDIPGEAMVKLYCPKCMDVYTPKSSRHHHTDGAYFGTGF
+FT                   PHMLFMVHPEYRPKRPANQFVPRLYGFKIHPMAYQLQLQAASNFKSPVKTIR"
+FT   repeat_region   complement(80384. .80444)
+FT                   /rpt_family="MIR"
+FT   repeat_region   82634. .82931
+FT                   /rpt_family="AluSx"
+FT   repeat_region   complement(82936. .83000)
+FT                   /rpt_family="MIR"
+FT   mRNA            join(85060. .85224,85488. .86212,87359. .87984)
+FT                   /note="Definition of the intron-exon boundaries for this
+FT                   gene is unclear.  EST AA424367 supports exons 1 and 2.
+FT                   Comparison to mouse cDNA in L76155 supports exons 2 and 3."
+FT                   /product="BAT4"
+FT   CDS             join(85587. .86212,87359. .87803)
+FT                   /codon_start=1
+FT                   /db_xref="SPTREMBL:O95872"
+FT                   /note="This is the in-frame translation that best
+FT                   corresponds to the mouse orthologue.  However, the mouse
+FT                   CDS begins at an earlier start site (23 amino acids). This
+FT                   translation is most similar by BLAST X to an ankyrin motif
+FT                   in C. elegans (Z46934).  This gene is also known as G5."
+FT                   /product="BAT4"
+FT                   /protein_id="AAD18082.1"
+FT                   /translation="MSRPLLITFTPATDPSDLWKDGQQQPQPEKPESTLDGAAARAFYE
+FT                   ALIGDESSAPDSQRSQTEPARERKRKKRRIMKAPAAEAVAEGASGRHGQGRSLEAEDKM
+FT                   THRILRAAQEGDLPELRRLLEPHEAGGAGGNINARDAFWWTPLMCAARAGQGAAVSYLL
+FT                   GRGAAWVGVCELSGRDAAQLAEEAGFPEVARMVRESHGETRSPENRSPTPSLQYCENCD
+FT                   THFQDSNHRTSTAHLLSLSQGPQPPNLPLGVPISSPGFKLLLRGGWEPGMGLGPRGEGR
+FT                   ANPIPTVLKRDQEGLGYRSAPQPRVTHFPAWDTRAVAGRERPPRVATLSWREERRREEK
+FT                   DRAWERDLRTYMNLEF"
+FT   repeat_region   85782. .85869
+FT                   /rpt_family="(GAA)n"
+FT   repeat_region   86398. .86549
+FT                   /rpt_family="MIR"
+FT   repeat_region   complement(86666. .86777)
+FT                   /rpt_family="HY1"
+FT   repeat_region   complement(86825. .86938)
+FT                   /rpt_family="AluSg"
+FT   repeat_region   86961. .87121
+FT                   /rpt_family="AluSx"
+FT   repeat_region   complement(87125. .87233)
+FT                   /rpt_family="FLAM_C"
+FT   repeat_region   complement(88351. .88650)
+FT                   /rpt_family="AluSp"
+FT   repeat_region   89323. .89397
+FT                   /rpt_family="GC_rich"
+FT   mRNA            89929. .91292
+FT                   /product="G4"
+FT   CDS             90127. .91011
+FT                   /codon_start=1
+FT                   /db_xref="SPTREMBL:O95873"
+FT                   /note="unknown; This ORF is defined in relation to ESTs
+FT                   AA283116, AA282852, and AA826428, and by Genscan.  There is
+FT                   an orthologue to this gene in mouse AF109719.  See also
+FT                   AJ245433.  This gene is also known as NG34"
+FT                   /product="G4"
+FT                   /protein_id="AAD18083.1"
+FT                   /translation="MFLRRLGGWLPRPWGRRKPMRPDPPYPEPRRVDSSSENSGSDWDS
+FT                   APETMEDVGHPKTKDSGALRVSRAASEPSKEEPQVEQLGSKRMDSLKWDQPISSTQESG
+FT                   RLEAGGASPKLRWDHVDSGGTRRPGVSPEGGLSVPGPGAPLEKPGRREKLLGWLRGEPG
+FT                   APSRYLGGPEECLQISTNLTLHLLELLASALLALCSRPLRAALDTLGLRGPLGLWLHGL
+FT                   LSFLAALHGLHAVLSLLTAHPLHFACLFGLLQALVLAVSLREPNGDEAATDWESEGLER
+FT                   EGEEQRGDPGKGL"
+FT   mRNA            join(complement(93995. .94412),complement(93449. .93603),
+FT                   complement(92777. .92850),complement(92597. .92695),
+FT                   complement(92352. .92450),complement(<91986. .92011))
+FT                   /note="Intron-exon boundaries defined in relation to cDNA
+FT                   in AF118393."
+FT                   /product="Apo M"
+FT   CDS             join(complement(93995. .94108),complement(93449. .93603),
+FT                   complement(92777. .92850),complement(92597. .92695),
+FT                   complement(92352. .92450),complement(91986. .92011))
+FT                   /codon_start=1
+FT                   /db_xref="SPTREMBL:O95445"
+FT                   /note="NG20; apolipoprotein; This gene was annotated as
+FT                   NG20 in mouse AF109719.  Subsequent to this, AF118393
+FT                   suggests that the gene is a novel apolipoprotein.  This
+FT                   gene is also known as NG20 and G3a, see AJ245434"
+FT                   /product="Apo M"
+FT                   /protein_id="AAD18084.1"
+FT                   /translation="MFHQIWAALLYFYGIILNSIYQCPEHSQLTTLGVDGKEFPEVHLG
+FT                   QWYFIAGAAPTKEELATFDPVDNIVFNMAAGSAPMQLHLRATIRMKDGLCVPRKWIYHL
+FT                   TEGSTDLRTEGRPDMKTELFSSSCPGGIMLNETGQGYQRFLLYNRSPHPPEKCVEEFKS
+FT                   LTSCLDSKAFLLTPRNQEACELSNN"
+FT   unsure          92690. .92940
+FT                   /note="low quality data"
+FT   repeat_region   complement(92913. .93210)
+FT                   /rpt_family="AluY"
+FT   repeat_region   94836. .95124
+FT                   /rpt_family="AluJb"
+FT   repeat_region   95149. .95271
+FT                   /rpt_family="MIR"
+FT   repeat_region   complement(95423. .95471)
+FT                   /rpt_family="AluJo"
+FT   repeat_region   complement(95501. .95668)
+FT                   /rpt_family="AluJb"
+FT   repeat_region   complement(95811. .96093)
+FT                   /rpt_family="AluSg1"
+FT   repeat_region   96129. .96391
+FT                   /rpt_family="AluJo"
+FT   mRNA            join(<97381. .97678,98296. .98414,100443. .100560,
+FT                   100675. .100871,101106. .101159,101319. .101393,
+FT                   102244. .102479,103546. .103675,104465. .104662,
+FT                   104871. .105123,105467. .105544,105875. .105987,
+FT                   106092. .106179,106957. .107243,107669. .107960,
+FT                   108127. .108296,108480. .108533,108650. .108752,
+FT                   108844. .108968,109134. .109280,109368. .109427,
+FT                   109544. .109687,109766. .109873,110426. .110572,
+FT                   110846. .111031)
+FT                   /note="Intron-exon boundaries defined in relation to cDNA
+FT                   in M33519 and EST AA406012, which gives a proper splice for
+FT                   exon 7."
+FT                   /product="BAT3"
+FT   CDS             join(97381. .97678,98296. .98414,100443. .100560,
+FT                   100675. .100871,101106. .101159,101319. .101393,
+FT                   102244. .102479,103546. .103675,104465. .104662,
+FT                   104871. .105123,105467. .105544,105875. .105987,
+FT                   106092. .106179,106957. .107243,107669. .107960,
+FT                   108127. .108296,108480. .108533,108650. .108752,
+FT                   108844. .108968,109134. .109280,109368. .109427,
+FT                   109544. .109687,109766. .109873,110426. .110572,
+FT                   110846. .110941)
+FT                   /codon_start=1
+FT                   /db_xref="SPTREMBL:O95874"
+FT                   /note="unknown; This gene is also known as G3"
+FT                   /product="BAT3"
+FT                   /protein_id="AAD18085.1"
+FT                   /translation="MLKCPRIRSATHAGVVRSPGRQRWRLLGVLGSLPPRPAPARLALR
+FT                   NSLFGAADFLVVPHKSKAWGPGGSRKYRFEIPKYYRGNGSGRRWQVWGRPEVTVHLSAM
+FT                   EPNDSTSTAVEEPDSLEVLVKTLDSQTRTFIVGAQMNVKEFKEHIAASVSIPSEKQRLI
+FT                   YQGRVLQDDKKLQEYNVGGKVIHLVERAPPQTHLPSGASSGTGSASATHGGGSPPGTRG
+FT                   PGASVHDRNANSYVMVGTFNLPSDGSAVDVHINMEQAPIQSEPRVRLVMAQHMIRDIQT
+FT                   LLSRMECRGGPQPQHSQPPPQPPAVTPEPVALSSQTSEPVESEAPPREPMEAEEVEERA
+FT                   PAQNPELTPGPAPAGPTPAPETNAPNHPSPAEYVEVLQELQRLESRLQPFLQRYYEVLG
+FT                   AAATTDYNNNHEGREEDQRLINLVGESLRLLGNTFVALSDLRCNLACTPPRHLHVVRPM
+FT                   SHYTTPMVLQQAAIPIQINVGTTVTMTGNGTRPPPTPNAEAPPPGPGQASSVAPSSTNV
+FT                   ESSAEGAPPPGPAPPPATSHPRVIRISHQSVEPVVMMHMNIQDSGTQPGGVPSAPTGPL
+FT                   GPPGHGQTLGQQVPGFPTAPTRVVIARPTPPQARPSHPGGPPVSGTLQGAGLGTNASLA
+FT                   QMVSGLVGQLLMQPVLVAQGTPGMAPPPAPATASASAGTTNTATTAGPAPGGPAQPPPT
+FT                   PQPSMADLQFSQLLGNLLGPAGPGAGGSGVASPTITVAMPGVPAFLQGMTDFLQATQTA
+FT                   PPPPPPPPPPPPAPEQQTMPPPGSPSGGAGSPGGLGLESLSPEFFTSVVQGVLSSLLGS
+FT                   LGARAGSSESIAAFIQRLSGSSNIFEPGADGALGFFGALLSLLCQNFSMVDVVMLLHGH
+FT                   FQPLQRLQPQLRSFFHQHYLGGQEPTPSNIRMATHTLITGLEEYVRESFSLVQVQPGVD
+FT                   IIRTNLEFLQEQFNSIAAHVLHCTDSGFGARLLELCNQGLFECLALNLHCLGGQQMELA
+FT                   AVINGRIRRMSRGVNPSLVSWLTTMMGLRLQVVLEHMPVGPDAILRYVRRVGDPPQPLP
+FT                   EEPMEVQGAERASPEPQRENASPAPGTTAEEAMSRGPPPAPEGGSRDEQDGASAETEPW
+FT                   AAAVPPEWVPIIQQDIQSQRKVKPQPPLSDAYLSGMPAKRRKTMQGEGPQLLLSEAVSR
+FT                   AAKAAGARPLTSPESLSRDLEAPEVQESYRQQLRSDIQKRLQEDPNYSPQRFPNAQRAF
+FT                   ADDP"
+FT   repeat_region   complement(97710. .97761)
+FT                   /rpt_family="(CA)n"
+FT   repeat_region   complement(98512. .98813)
+FT                   /rpt_family="AluSx"
+FT   repeat_region   complement(99385. .99684)
+FT                   /rpt_family="AluSq"
+FT   repeat_region   complement(99951. .100250)
+FT                   /rpt_family="AluSx"
+FT   repeat_region   101755. .102053
+FT                   /rpt_family="AluSx"
+FT   repeat_region   102868. .102997
+FT                   /rpt_family="AluSq"
+FT   repeat_region   102998. .103298
+FT                   /rpt_family="AluY"
+FT   repeat_region   103299. .103402
+FT                   /rpt_family="AluSq"
+FT   repeat_region   103784. .104083
+FT                   /rpt_family="AluSx"
+FT   repeat_region   complement(106331. .106630)
+FT                   /rpt_family="AluSc"
+FT   repeat_region   complement(106634. .106929)
+FT                   /rpt_family="AluJo"
+FT   repeat_region   complement(107670. .107718)
+FT                   /rpt_family="(TGG)n"
+FT   repeat_region   complement(111164. .111470)
+FT                   /rpt_family="AluSg"
+FT   mRNA            join(complement(129214. .129252),
+FT                   complement(127171. .127345),complement(126162. .126339),
+FT                   complement(125711. .125810),complement(125549. .125621),
+FT                   complement(124757. .124900),complement(124460. .124611),
+FT                   complement(124200. .124279),complement(123909. .124051),
+FT                   complement(123209. .123299),complement(122873. .123089),
+FT                   complement(121832. .122306),complement(120737. .120927),
+FT                   complement(120226. .120523),complement(119270. .119480),
+FT                   complement(117079. .118932),complement(116424. .116692),
+FT                   complement(116082. .116212),complement(115706. .115835),
+FT                   complement(115514. .115599),complement(115094. .115318),
+FT                   complement(114799. .114939),complement(114606. .114677),
+FT                   complement(114322. .114489),complement(114022. .114104),
+FT                   complement(113652. .113862),complement(113463. .113561),
+FT                   complement(113126. .113338),complement(112935. .113029),
+FT                   complement(112747. .112837),complement(112311. .112625))
+FT                   /note="Intron-exon boundaries defined in relation to cDNA
+FT                   in M33509."
+FT                   /product="BAT2"
+FT   CDS             join(complement(127171. .127282),
+FT                   complement(126162. .126339),complement(125711. .125810),
+FT                   complement(125549. .125621),complement(124757. .124900),
+FT                   complement(124460. .124611),complement(124200. .124279),
+FT                   complement(123909. .124051),complement(123209. .123299),
+FT                   complement(122873. .123089),complement(121832. .122306),
+FT                   complement(120737. .120927),complement(120226. .120523),
+FT                   complement(119270. .119480),complement(117079. .118932),
+FT                   complement(116424. .116692),complement(116082. .116212),
+FT                   complement(115706. .115835),complement(115514. .115599),
+FT                   complement(115094. .115318),complement(114799. .114939),
+FT                   complement(114606. .114677),complement(114322. .114489),
+FT                   complement(114022. .114104),complement(113652. .113862),
+FT                   complement(113463. .113561),complement(113126. .113338),
+FT                   complement(112935. .113029),complement(112747. .112837),
+FT                   complement(112485. .112625))
+FT                   /codon_start=1
+FT                   /db_xref="SPTREMBL:O95875"
+FT                   /note="unknown; This gene is also known as G2"
+FT                   /product="BAT2"
+FT                   /protein_id="AAD18086.1"
+FT                   /translation="MSDRSGPTAKGKDGKKYSSLNLFDTYKGKSLEIQKPAVAPRHGLQ
+FT                   SLGKVAIARRMPPPANLPSLKAENKGNDPNVSLVPKDGTGWASKQEQSDPKSSDASTAQ
+FT                   PPESQPLPASQTPASNQPKRPPAAPENTPLVPSGVKSWAQASVTHGAHGDGGRASSLLS
+FT                   RFSREEFPTLQAAGDQDKAAKERESAEQSSGPGPSLRPQNSTTWRDGGGRGPDELEGPD
+FT                   SKLHHGHDPRGGLQPSGPPQFPPYRGMMPPFMYPPYLPFPPPYGPQGPYRYPTPDGPSR
+FT                   FPRVAGPRGSGPPMRLVEPVGRPSILKEDNLKEFDQLDQENDDGWAGAHEEVDYTEKLK
+FT                   FSDEEDGRDSDEEGAEGHRDSQSASGEERPPEADGKKGNSPNSEPPTPKTAWAETSRPP
+FT                   ETEPGPPAPKPPLPPPHRGPAGNWGPPGDYPDRGGPPCKPPAPEDEDEAWRQRRKQSSS
+FT                   EISLAVERARRRREEEERRMQEERRAACAEKLKRLDEKFGAPDKRLKAEPAAPPAAPST
+FT                   PAPPPAVPKELPAPPAPPPASAPTPEKEPEEPAQAPPAQSTPTPGVAAAPTLVSGGGST
+FT                   SSTSSGSFEASPVEPQLPSKEGPEPPEEVPPPTTPPVPKVEPKGDGIGPTRQPPSQGLG
+FT                   YPKYQKSLPPRFQRQQQEQLLKQQQQHQWQQHQQGSAPPTPVPPSPPQPVTLGAVPAPQ
+FT                   APPPPPKALYPGALGRPPPMPPMNFDPRWMMIPPYVDPRLLQGRPPLDFYPPGVHPSGL
+FT                   VPRERSDSGGSSSEPFDRHAPAMLRERGTPPVDPKLAWVGDVFTATPAEPRPLTSPLRQ
+FT                   AADEDDKGMRSETPPVPPPPPYLASYPGFPENGAPGPPISRFPLEEPGPRPLPWPPGSD
+FT                   EVAKIQTPPPKKEPPKEETAQLTGPEAGRKPARGVGSGGQGPPPPRRESRTETRWGPRP
+FT                   GSSRRGIPPEEPGAPPRRAGPIKKPPPPTKVEELPPKPLEQGDETPKPPKPDPLKITKG
+FT                   KLGGPKETPPNGNLSPAPRLRRDYSYERVGPTSCRGRGRGEYFARGRGFRGTYGGRGRG
+FT                   ARSREFRSYREFRGDDGRGGGTGGPNHPPAPRGRTASETRSEGSEYEEIPKRRRQRGSE
+FT                   TGSETHESDLAPSDKEAPTPKEGTLTQVPLAPPPPGAPPSPAPARFTARGGRVFTPRGV
+FT                   PSRRGRGGGRPPPQVCPGWSPPAKSLAPKKPPTGPLPPSKEPLKEKLIPGPLSPVARGG
+FT                   SNGGSNVGMEDGERPRRRRHGRAQQQDKPPRFRRLKQERENAARGSEGKPSLTLPASAP
+FT                   APEEALTTVTVAPAPRRAAAKSPDLSNQNSDQANEEWETASESSDFTSERRGDKEAPPP
+FT                   VLLTPKAVGTPGGGGGGAVPGISAMSRGDLSQRAKDLSKRSFSSQRPGMERQNRRPGPG
+FT                   GKAGSSGSSSGGGGGGPGGRTGPGRGDKRSWPSPKNRSRPPEERPPGLPLPPPPPSSSA
+FT                   VFRLDQVIHSNPAGIQQALAQLSSRQGSVTAPGGHPRHKPGPPQAPQGPSPRPPTRYEP
+FT                   QRVNSGLSSDPHFEEPGPMVRGVGGTPRDSAGVSPFPPKRRERPPRKPELLQEESLPPP
+FT                   HSSGFLGSKPEGPGPQAESRDTGTEALTPHIWNRLHTATSRKSYRPSSMEPWMEPLSPF
+FT                   EDVAGTEMSQSDSGVDLSGDSQVSSGPCSQRSSPDGGLKGAAEGPPKRPGGSSPLNAVP
+FT                   CEGPPGSEPPRRPPPAPHDGDRKELPREQPLPPGPIGTERSQHTDRGTEPGPIRPSHRP
+FT                   GPPVQFGTSDKDSDLRLVVGDSLKAEKELTASVTEAIPVSRDWELLPSAAASAEPQSKN
+FT                   LDSGHCVPEPSSSGQRLYPEVFYGSAGPSSSQISGGAMDSQLHPNSGGFRPGTPSLHPY
+FT                   RSQPLYLPPGPAPPSALLSGVALKGQFLDFSTMQATELGKLPAGGVLYPPPSFLYSPAF
+FT                   CPSPLPDTSLLQVRQDLPSPSDFYSTPLQPGGQSGFLPSGAPAQQMLLPMVDSQLPVVN
+FT                   FGSLPPAPPPAPPPLSLLPVGPALQPPSLAVRPPPAPATRVLPSPARPFPASLGRAELH
+FT                   PVELKPFQDYQKLSSNLGGPGSSRTPPTGRSFSGLNSRLKATPSTYSGVFRTQRVDLYQ
+FT                   QASPPDALRWIPKPWERTGLPPREGPSRRAEEPGSRGDKEPGLPPPR"
+FT   repeat_region   complement(119034. .119162)
+FT                   /rpt_family="AluJb"
+FT   repeat_region   complement(119739. .120036)
+FT                   /rpt_family="AluSq"
+FT   repeat_region   complement(120473. .120525)
+FT                   /rpt_family="(CAG)n"
+FT   repeat_region   complement(121222. .121509)
+FT                   /rpt_family="AluSg"
+FT   repeat_region   complement(121510. .121624)
+FT                   /rpt_family="AluJo"
+FT   repeat_region   complement(122461. .122564)
+FT                   /rpt_family="FLAM_A"
+FT   repeat_region   complement(123499. .123800)
+FT                   /rpt_family="AluJo"
+FT   repeat_region   124974. .125267
+FT                   /rpt_family="AluSc"
+FT   repeat_region   126512. .126806
+FT                   /rpt_family="AluSp"
+FT   repeat_region   128575. .128679
+FT                   /rpt_family="(GAA)n"
+FT   repeat_region   complement(129125. .129177)
+FT                   /rpt_family="(CGG)n"
+FT   repeat_region   complement(130173. .130227)
+FT                   /rpt_family="AT_rich"
+FT   repeat_region   130421. .130695
+FT                   /rpt_family="AluSg"
+FT   misc_feature    130479. .184666
+FT                   /note="Overlap with GenBank entry Y14768."
+FT   variation       130699
+FT                   /note="201G24: a; Y14678: aaaaag"
+FT                   /replace="aaaaag"
+FT   repeat_region   130706. .131000
+FT                   /rpt_family="AluSp"
+FT   variation       130994
+FT                   /note="201G24: a; Y14768: aaaag"
+FT                   /replace="aaaag"
+FT   repeat_region   131076. .131373
+FT                   /rpt_family="AluSc"
+FT   repeat_region   131397. .131523
+FT                   /rpt_family="AluSx"
+FT   variation       131746
+FT                   /note="201G24: a; Y14768: g"
+FT                   /replace="g"
+FT   repeat_region   131813. .131918
+FT                   /rpt_family="LINE2"
+FT   variation       131939. .131940
+FT                   /note="201G24: tt; Y14768: t"
+FT                   /replace="t"
+FT   repeat_region   complement(131945. .132246)
+FT                   /rpt_family="AluSq"
+FT   variation       132149
+FT                   /note="201G24: c; Y14768: t"
+FT                   /replace="t"
+FT   repeat_region   complement(132331. .132625)
+FT                   /rpt_family="AluSp"
+FT   variation       132331. .132332
+FT                   /note="201G24: tt; Y14768: t"
+FT                   /replace="t"
+FT   repeat_region   complement(132689. .132763)
+FT                   /rpt_family="MIR"
+FT   variation       132842
+FT                   /note="201G24: t; Y14768: a"
+FT                   /replace="a"
+FT   mRNA            join(complement(134711. .134761),
+FT                   complement(134483. .134544),complement(134329. .134395),
+FT                   complement(133920. .133961),complement(133559. .133721),
+FT                   complement(133142. .133249))
+FT                   /note="Intron-exon boundaries defined in relation to cDNA
+FT                   in U19713."
+FT                   /product="AIF-1"
+FT   CDS             join(complement(134711. .134735),
+FT                   complement(134483. .134544),complement(134329. .134395),
+FT                   complement(133920. .133961),complement(133559. .133721),
+FT                   complement(133165. .133249))
+FT                   /codon_start=1
+FT                   /db_xref="SPTREMBL:Q9UKS9"
+FT                   /note="anti-inflammatory factor; This gene is also known as
+FT                   G1"
+FT                   /product="AIF-1"
+FT                   /protein_id="AAD18087.1"
+FT                   /translation="MSQTRDLQGGKAFRLLKAQQEERLDEINKQFLDDPKYSSDEDLPS
+FT                   KLEGFKEKYMEFDLNGNGDIDIMSLKRMLEKLGVPKTHLELKKLIGEVSSGSGETFSYP
+FT                   DFLRMMLGKRSAILKMILMYEEKAREKEKPTGPPAKKAISELP"
+FT   repeat_region   134049. .134117
+FT                   /rpt_family="(GGA)n"
+FT   variation       134530
+FT                   /note="201G24: t; Y14768: c"
+FT                   /replace="c"
+FT   variation       135555
+FT                   /note="201G24: g; Y14768: a"
+FT                   /replace="a"
+FT   repeat_region   complement(135926. .136220)
+FT                   /rpt_family="AluSc"
+FT   repeat_region   complement(136340. .136484)
+FT                   /rpt_family="LINE2"
+FT   variation       136464. .136465
+FT                   /note="201G24: ta; Y14768: tca"
+FT                   /replace="tca"
+FT   repeat_region   136497. .136796
+FT                   /rpt_family="AluSg"
+FT   variation       136857. .136861
+FT                   /note="201G24: ttatt; Y14768: ctctactct"
+FT                   /replace="ctctactct"
+FT   variation       136870. .136872
+FT                   /note="201G24: tcc; Y14768: tc"
+FT                   /replace="tc"
+FT   repeat_region   complement(136887. .137186)
+FT                   /rpt_family="AluSx"
+FT   repeat_region   complement(137187. .137463)
+FT                   /rpt_family="AluSg"
+FT   variation       137303
+FT                   /note="201G24: t; Y14768: c"
+FT                   /replace="c"
+FT   repeat_region   137495. .137661
+FT                   /rpt_family="AluJo"
+FT   repeat_region   complement(137667. .137719)
+FT                   /rpt_family="LINE2"
+FT   repeat_region   complement(137720. .138020)
+FT                   /rpt_family="AluSg"
+FT   repeat_region   complement(138336. .138630)
+FT                   /rpt_family="AluSc"
+FT   repeat_region   138758. .138785
+FT                   /rpt_family="(GGA)n"
+FT   repeat_region   complement(139335. .139633)
+FT                   /rpt_family="AluY"
+FT   repeat_region   139638. .140152
+FT                   /rpt_family="MER21B"
+FT   repeat_region   140299. .140379
+FT                   /rpt_family="MER21B"
+FT   repeat_region   140380. .140422
+FT                   /rpt_family="(CA)n"
+FT   repeat_region   complement(140441. .140722)
+FT                   /rpt_family="AluJb"
+FT   repeat_region   complement(140731. .141025)
+FT                   /rpt_family="AluJo"
+FT   variation       140744
+FT                   /note="201G24: a; Y14768: t"
+FT                   /replace="t"
+FT   repeat_region   complement(141040. .141338)
+FT                   /rpt_family="AluY"
+FT   repeat_region   complement(141339. .141632)
+FT                   /rpt_family="AluY"
+FT   repeat_region   141637. .141659
+FT                   /rpt_family="AT_rich"
+FT   repeat_region   complement(141671. .141799)
+FT                   /rpt_family="LINE2"
+FT   repeat_region   complement(141809. .141850)
+FT                   /rpt_family="LINE2"
+FT   repeat_region   141987. .142266
+FT                   /rpt_family="AluSp"
+FT   repeat_region   complement(142631. .142790)
+FT                   /rpt_family="AluJb"
+FT   repeat_region   complement(142796. .143099)
+FT                   /rpt_family="AluSx"
+FT   repeat_region   complement(143114. .143328)
+FT                   /rpt_family="AluSg"
+FT   repeat_region   complement(143329. .143383)
+FT                   /rpt_family="AluYa5"
+FT   repeat_region   complement(143388. .143512)
+FT                   /rpt_family="AluSg"
+FT   repeat_region   complement(143516. .143815)
+FT                   /rpt_family="AluSc"
+FT   repeat_region   143819. .143842
+FT                   /rpt_family="AT_rich"
+FT   repeat_region   complement(144093. .144384)
+FT                   /rpt_family="AluSx"
+FT   variation       144318
+FT                   /note="201G24: t; Y14768: c"
+FT                   /replace="c"
+FT   repeat_region   complement(144420. .144472)
+FT                   /rpt_family="MER80"
+FT   repeat_region   complement(144575. .144871)
+FT                   /rpt_family="AluY"
+FT   variation       144886
+FT                   /note="201G24: g; Y14768: t"
+FT                   /replace="t"
+FT   repeat_region   complement(144972. .145256)
+FT                   /rpt_family="AluSg"
+FT   variation       145198
+FT                   /note="201G24: c: Y14768: g"
+FT                   /replace="g"
+FT   variation       145361
+FT                   /note="201G24: g; Y14768: a"
+FT                   /replace="a"
+FT   repeat_region   145456. .145556
+FT                   /rpt_family="(GA)n"
+FT   variation       145509
+FT                   /note="201G24: t; Y14768: c"
+FT                   /replace="c"
+FT   repeat_region   145560. .145798
+FT                   /rpt_family="AluSx"
+FT   repeat_region   145831. .145872
+FT                   /rpt_family="LINE2"
+FT   repeat_region   145927. .146216
+FT                   /rpt_family="MER35"
+FT   repeat_region   complement(146238. .146621)
+FT                   /rpt_family="LINE2"
+FT   repeat_region   146655. .146781
+FT                   /rpt_family="FLAM_A"
+FT   repeat_region   146817. .147118
+FT                   /rpt_family="AluSq"
+FT   unsure          146832. .146932
+FT                   /note="low quality data"
+FT   repeat_region   147380. .147649
+FT                   /rpt_family="L1MB8"
+FT   variation       147507. .147508
+FT                   /note="201G24: ca; Y14768: caa"
+FT                   /replace="caa"
+FT   repeat_region   147650. .147777
+FT                   /rpt_family="FLAM_C"
+FT   repeat_region   complement(147778. .148086)
+FT                   /rpt_family="AluY"
+FT   variation       147778. .147779
+FT                   /note="201G24: tt: Y14768: t"
+FT                   /replace="t"
+FT   variation       147943. .147944
+FT                   /note="201G24: tt; Y14768: t"
+FT                   /replace="t"
+FT   variation       147977
+FT                   /note="201G24: t; Y14768: c"
+FT                   /replace="c"
+FT   repeat_region   148087. .148265
+FT                   /rpt_family="AluJo"
+FT   repeat_region   148267. .148480
+FT                   /rpt_family="L1ME3"
+FT   repeat_region   148491. .148792
+FT                   /rpt_family="AluY"
+FT   repeat_region   148855. .149149
+FT                   /rpt_family="AluSq"
+FT   variation       149129. .149130
+FT                   /note="201G24: ca; Y14768: caa"
+FT                   /replace="caa"
+FT   variation       149373
+FT                   /note="201G24: t; Y14768: c"
+FT                   /replace="c"
+FT   repeat_region   149554. .149856
+FT                   /rpt_family="AluSx"
+FT   repeat_region   149974. .150269
+FT                   /rpt_family="AluSg"
+FT   variation       150420
+FT                   /note="201G24: a; Y14768: c"
+FT                   /replace="c"
+FT   repeat_region   complement(150750. .151049)
+FT                   /rpt_family="AluSq"
+FT   repeat_region   151483. .151794
+FT                   /rpt_family="AluJo"
+FT   variation       151781. .151784
+FT                   /note="201G24: caaa; Y14768: ca"
+FT                   /replace="ca"
+FT   repeat_region   152000. .152298
+FT                   /rpt_family="AluSx"
+FT   repeat_region   152329. .152629
+FT                   /rpt_family="AluSg"
+FT   repeat_region   152646. .152880
+FT                   /rpt_family="AluJo"
+FT   repeat_region   153032. .153230
+FT                   /rpt_family="TIGGER1"
+FT   repeat_region   complement(153231. .153391)
+FT                   /rpt_family="AluJo"
+FT   repeat_region   complement(153392. .153683)
+FT                   /rpt_family="AluSp"
+FT   repeat_region   153716. .154006
+FT                   /rpt_family="AluJb"
+FT   repeat_region   complement(154010. .154165)
+FT                   /rpt_family="FAM"
+FT   repeat_region   154166. .154222
+FT                   /rpt_family="TIGGER1"
+FT   repeat_region   154223. .154523
+FT                   /rpt_family="AluSx"
+FT   variation       154415
+FT                   /note="201G24: g; Y14768: a"
+FT                   /replace="a"
+FT   repeat_region   154527. .154587
+FT                   /rpt_family="TIGGER1"
+FT   repeat_region   complement(154602. .154831)
+FT                   /rpt_family="AluJb"
+FT   variation       154616
+FT                   /note="201G24: g; Y14768: t"
+FT                   /replace="t"
+FT   repeat_region   complement(154832. .155132)
+FT                   /rpt_family="AluY"
+FT   variation       155080
+FT                   /note="201G24: a; Y14768: g"
+FT                   /replace="g"
+FT   repeat_region   complement(155133. .155219)
+FT                   /rpt_family="AluSx"
+FT   repeat_region   complement(155267. .155562)
+FT                   /rpt_family="AluJo"
+FT   repeat_region   155563. .155707
+FT                   /rpt_family="TIGGER1"
+FT   repeat_region   complement(155710. .156010)
+FT                   /rpt_family="AluSp"
+FT   variation       155714. .155715
+FT                   /note="201G24: tt; Y14768: t"
+FT                   /replace="t"
+FT   repeat_region   156013. .156119
+FT                   /rpt_family="TIGGER1"
+FT   repeat_region   156132. .156400
+FT                   /rpt_family="AluJb"
+FT   repeat_region   156399. .156674
+FT                   /rpt_family="AluSx"
+FT   variation       156634
+FT                   /note="201G24: g; Y14768: a"
+FT                   /replace="a"
+FT   repeat_region   156686. .156739
+FT                   /rpt_family="(CA)n"
+FT   variation       156688. .156689
+FT                   /note="201G24: aa; Y14768: aacacaca"
+FT                   /replace="aacacaca"
+FT   variation       156933
+FT                   /note="201G24: c; Y14768: g"
+FT                   /replace="g"
+FT   mRNA            join(157081. .157387,159919. .160263,160412. .160519,
+FT                   160869. .161150)
+FT                   /note="Intron-exon boundaries defined in relation to cDNA
+FT                   in AF031337.  This gene has alternative splice forms."
+FT                   /product="1C7"
+FT   CDS             join(157345. .157387,159919. .160263,160412. .160519,
+FT                   160869. .160978)
+FT                   /codon_start=1
+FT                   /db_xref="SPTREMBL:O14931"
+FT                   /product="1C7"
+FT                   /protein_id="AAD18088.1"
+FT                   /translation="MAWMLLLILIMVHPGSCALWVSQPPEIRTLEGSSAFLPCSFNASQ
+FT                   GRLAIGSVTWFRDEVVPGKEVRNGTPEFRGRLAPLASSRFLHDHQAELHIRDVRGHDAS
+FT                   IYVCRVEVLGLGVGTGNGTRLVVEKEHPQLGAGTVLLLRAGFYAVSFLSVAVGSTVYYQ
+FT                   GKCLTWKGPRRQLPAVVPAPLPPPCGSSAHLLPPVPGG"
+FT   repeat_region   complement(157637. .157802)
+FT                   /rpt_family="AluSc"
+FT   repeat_region   complement(157803. .158098)
+FT                   /rpt_family="AluSx"
+FT   repeat_region   complement(158099. .158229)
+FT                   /rpt_family="AluSq"
+FT   repeat_region   complement(158244. .158532)
+FT                   /rpt_family="AluSx"
+FT   variation       158490
+FT                   /note="201G24: c; Y14768: t"
+FT                   /replace="t"
+FT   repeat_region   158615. .158727
+FT                   /rpt_family="MER5A"
+FT   variation       158660. .158661
+FT                   /note="201G24: ag; Y14768: agtcaaaaactcggggggtagg"
+FT                   /replace="agtcaaaaactcggggggtagg"
+FT   repeat_region   158913. .159208
+FT                   /rpt_family="AluSx"
+FT   repeat_region   complement(159426. .159726)
+FT                   /rpt_family="AluSg"
+FT   variation       159791. .159792
+FT                   /note="201G24: cc; Y14768: cac"
+FT                   /replace="cac"
+FT   repeat_region   complement(161159. .161195)
+FT                   /rpt_family="AT_rich"
+FT   mRNA            join(complement(163238. .163346),
+FT                   complement(162727. .162845),complement(162312. .162404),
+FT                   complement(161235. .161548))
+FT                   /note="Intron-exon boundaries defined in relation to cDNA
+FT                   in AF000424."
+FT                   /product="LST-1"
+FT   CDS             join(complement(162727. .162729),
+FT                   complement(162312. .162404),complement(161369. .161548))
+FT                   /codon_start=1
+FT                   /db_xref="SPTREMBL:O00452"
+FT                   /product="LST-1"
+FT                   /protein_id="AAD18090.1"
+FT                   /translation="MIYVSTGAWGWAGSCFWQWSFCPPACVGCIEEHLLSWSQAQGSSE
+FT                   QELHYASLQRLPVPSSEGPDLRGRDKRGTKEDPRADYACIAENKPT"
+FT   repeat_region   complement(161606. .161653)
+FT                   /rpt_family="(GA)n"
+FT   variation       161642
+FT                   /note="201G24: t; Y14768: c"
+FT                   /replace="c"
+FT   variation       161646
+FT                   /note="201G24: c; Y14768: t"
+FT                   /replace="t"
+FT   repeat_region   complement(161664. .161793)
+FT                   /rpt_family="FLAM_A"
+FT   repeat_region   complement(161804. .161926)
+FT                   /rpt_family="(GA)n"
+FT   repeat_region   complement(161940. .162069)
+FT                   /rpt_family="(GA)n"
+FT   variation       162430
+FT                   /note="201G24: t; Y14768: g"
+FT                   /replace="g"
+FT   variation       162692
+FT                   /note="201G24: c; Y14768: t"
+FT                   /replace="t"
+FT   repeat_region   162829. .162858
+FT                   /rpt_family="MIR"
+FT   repeat_region   complement(164770. .165055)
+FT                   /rpt_family="AluJo"
+FT   repeat_region   complement(165257. .165552)
+FT                   /rpt_family="AluSx"
+FT   repeat_region   complement(165566. .165867)
+FT                   /rpt_family="AluSq"
+FT   repeat_region   165902. .165997
+FT                   /rpt_family="MIR"
+FT   repeat_region   166027. .166319
+FT                   /rpt_family="AluJb"
+FT   repeat_region   complement(166490. .166790)
+FT                   /rpt_family="AluSx"
+FT   variation       166508. .166509
+FT                   /note="201G24: tt; Y14768: ga"
+FT                   /replace="ga"
+FT   variation       166756
+FT                   /note="201G24: c; Y14768: g"
+FT                   /replace="g"
+FT   repeat_region   complement(166858. .166902)
+FT                   /rpt_family="(TAAA)n"
+FT   repeat_region   167301. .167377
+FT                   /rpt_family="MIR"
+FT   mRNA            join(167620. .167789,168186. .168231,168415. .168486,
+FT                   168882. .169488)
+FT                   /note="Intron-exon boundaries defined in relation to cDNA
+FT                   in L11015."
+FT                   /product="lymphotoxin beta"
+FT   CDS             join(167628. .167789,168186. .168231,168415. .168486,
+FT                   168882. .169336)
+FT                   /codon_start=1
+FT                   /db_xref="SWISS-PROT:Q06643"
+FT                   /note="LTB"
+FT                   /product="lymphotoxin beta"
+FT                   /protein_id="AAD18089.1"
+FT                   /translation="MGALGLEGRGGRLQGRGSLLLAVAGATSLVTLLLAVPITVLAVLA
+FT                   LVPQDQGGLVTETADPGAQAQQGLGFQKLPEEEPETDLSPGLPAAHLIGAPLKGQGLGW
+FT                   ETTKEQAFLTSGTQFSDAEGLALPQDGLYYLYCLVGYRGRAPPGGGDPQGRSVTLRSSL
+FT                   YRAGGAYGPGTPELLLEGAETVTPVLDPARRQGYGPLWYTSVGFGGLVQLRRGERVYVN
+FT                   ISHPDMVDFARGKTFFGAVMVG"
+FT   repeat_region   complement(169024. .169066)
+FT                   /rpt_family="GC_rich"
+FT   repeat_region   complement(170465. .170756)
+FT                   /rpt_family="AluJo"
+FT   repeat_region   complement(170919. .171055)
+FT                   /rpt_family="FLAM_C"
+FT   mRNA            join(complement(174118. .174455),
+FT                   complement(173466. .173511),complement(173231. .173278),
+FT                   complement(171719. .172929))
+FT                   /note="Intron-exon boundaries defined in relation to cDNA
+FT                   in X01394."
+FT                   /product="tumor necrosis factor"
+FT   repeat_region   171994. .172068
+FT                   /rpt_family="(TAAA)n"
+FT   CDS             join(complement(174118. .174303),
+FT                   complement(173466. .173511),complement(173231. .173278),
+FT                   complement(172508. .172929))
+FT                   /codon_start=1
+FT                   /db_xref="SWISS-PROT:P01375"
+FT                   /note="TNF"
+FT                   /product="tumor necrosis factor"
+FT                   /protein_id="AAD18091.1"
+FT                   /translation="MSTESMIRDVELAEEALPKKTGGPQGSRRCLFLSLFSFLIVAGAT
+FT                   TLFCLLHFGVIGPQREEFPRDLSLISPLAQAVRSSSRTPSDKPVAHVVANPQAEGQLQW
+FT                   LNRRANALLANGVELRDNQLVVPSEGLYLIYSQVLFKGQGCPSTHVLLTHTISRIAVSY
+FT                   QTKVNLLSAIKSPCQRETPEGAEAKPWYEPIYLGGVFQLEKGDRLSAEINRPDYLDFAE
+FT                   SGQVYFGIIAL"
+FT   repeat_region   complement(173653. .173823)
+FT                   /rpt_family="MER35"
+FT   repeat_region   complement(173870. .173918)
+FT                   /rpt_family="LINE2"
+FT   repeat_region   complement(173924. .174061)
+FT                   /rpt_family="(GA)n"
+FT   mRNA            join(complement(177599. .177646),
+FT                   complement(177204. .177311),complement(177012. .177117),
+FT                   complement(175726. .176764))
+FT                   /note="Intron-exon boundaries defined in relation to cDNA
+FT                   in D00102."
+FT                   /product="lymphotoxin alpha"
+FT   repeat_region   175958. .175981
+FT                   /rpt_family="AT_rich"
+FT   CDS             join(complement(177204. .177302),
+FT                   complement(177012. .177117),complement(176352. .176764))
+FT                   /codon_start=1
+FT                   /db_xref="SPTREMBL:Q9UKS8"
+FT                   /note="LTA"
+FT                   /product="lymphotoxin alpha"
+FT                   /protein_id="AAD18092.1"
+FT                   /translation="MTPPERLFLPRVCGTTLHLLLLGLLLVLLPGAQGLPGVGLTPSAA
+FT                   QTARQHPKMHLAHSNLKPAAHLIGDPSKQNSLLWRANTDRAFLQDGFSLSNNSLLVPTS
+FT                   GIYFVYSQVVFSGKAYSPKATSSPLYLAHEVQLFSSQYPFHVPLLSSQKMVYPGLQEPW
+FT                   LHSMYHGAAFQLTQGDQLSTHTDGIPHLVLSPSTVFFGAFAL"
+FT   variation       177038
+FT                   /note="201G24: t; Y14768: g"
+FT                   /replace="g"
+FT   repeat_region   177316. .177351
+FT                   /rpt_family="(GA)n"
+FT   variation       177393
+FT                   /note="201G24: c; Y14768: g"
+FT                   /replace="g"
+FT   repeat_region   177469. .177582
+FT                   /rpt_family="(GA)n"
+FT   variation       177509
+FT                   /note="201G24: c; Y14768: t"
+FT                   /replace="t"
+FT   variation       177681
+FT                   /note="201G24: g; Y14768: t"
+FT                   /replace="t"
+FT   variation       177751
+FT                   /note="201G24: t; Y14768: c"
+FT                   /replace="c"
+FT   variation       178054
+FT                   /note="201G24: c; Y14768: t"
+FT                   /replace="t"
+FT   repeat_region   178686. .178982
+FT                   /rpt_family="AluSx"
+FT   variation       178966. .178967
+FT                   /note="201G24: ca; Y14768: caa"
+FT                   /replace="caa"
+FT   repeat_region   complement(179002. .179448)
+FT                   /rpt_family="L1ME2"
+FT   repeat_region   179818. .180228
+FT                   /rpt_family="MER39"
+FT   repeat_region   complement(180229. .180531)
+FT                   /rpt_family="AluSx"
+FT   variation       180234. .180235
+FT                   /note="201G24: ct; Y14768: cttt"
+FT                   /replace="cttt"
+FT   repeat_region   180734. .181033
+FT                   /rpt_family="AluY"
+FT   misc_feature    180792. .184666
+FT                   /note="Overlap with cosmid M9A (AC004181)."
+FT   variation       181023
+FT                   /note="201G24: c; M9A and Y14768: a"
+FT                   /replace="a"
+FT   variation       181595
+FT                   /note="201G24 and M9A: c; Y14768: t"
+FT                   /replace="t"
+FT   repeat_region   complement(181795. .182333)
+FT                   /rpt_family="LINE2"
+FT   repeat_region   complement(182342. .182382)
+FT                   /rpt_family="(CA)n"
+FT   variation       182349. .182350
+FT                   /note="201G24: gt; M9A: gtgcgtgcat"
+FT                   /replace="gtgcgtgcat"
+FT   variation       182356. .182357
+FT                   /note="201G24 and M9A: cg; Y14768: catgcgtgcgtgtgtg"
+FT                   /replace="catgcgtgcgtgtgtg"
+FT   repeat_region   182388. .182433
+FT                   /rpt_family="(GA)n"
+FT   variation       182423. .182424
+FT                   /note="201G24: ag; M9A and Y14768: a"
+FT                   /replace="a"
+FT   repeat_region   complement(182453. .182719)
+FT                   /rpt_family="AluJo"
+FT   repeat_region   complement(182720. .183015)
+FT                   /rpt_family="AluSq"
+FT   variation       182732
+FT                   /note="201G24: a; M9A and Y14768: t"
+FT                   /replace="t"
+FT   repeat_region   complement(183017. .183057)
+FT                   /rpt_family="FLAM_C"
+FT   repeat_region   complement(183070. .183368)
+FT                   /rpt_family="AluSx"
+FT   variation       183368. .183369
+FT                   /note="201G24: ct; M9A and Y14768: ctttt"
+FT                   /replace="ctttt"
+FT   repeat_region   complement(183369. .183665)
+FT                   /rpt_family="AluSx"
+FT   variation       183597
+FT                   /note="201G24: c; M9A and Y14768: t"
+FT                   /replace="t"
+FT   repeat_region   complement(183669. .183822)
+FT                   /rpt_family="FRAM"
+FT   variation       183789. .183790
+FT                   /note="201G24: ca; M9A and Y14768: caaa"
+FT                   /replace="caaa"
+FT   repeat_region   complement(183833. .184125)
+FT                   /rpt_family="AluSg"
+FT   variation       183931
+FT                   /note="210G24: c; M9A and Y14768: t"
+FT                   /replace="t"
+FT   repeat_region   complement(184218. .184319)
+FT                   /rpt_family="LINE2"
+FT   repeat_region   complement(184316. .184524)
+FT                   /rpt_family="LINE2"
+FT   variation       184423
+FT                   /note="201G24: t; M9A and Y14768: c"
+FT                   /replace="c"
+XX
+SQ   Sequence 184666 BP; 43878 A; 47035 C; 47743 G; 46010 T; 0 other;

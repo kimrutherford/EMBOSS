@@ -1,0 +1,146 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: recoder
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+recoder
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/recoder.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<p><b>recoder</b> finds restriction enzyme sites in a nucleotide sequence which can be removed without changing the translation. <b>recoder</b> scans a nucleotide sequence for restriction sites for a supplied set of restriction enzymes.  It writes a standard EMBOSS report of single base positions which, when mutated, remove the restriction site whilst maintaining the same translation in frame 1 of the input sequence. One or more restriction enzymes can be specified or alternatively all the enzymes in the REBASE database can be investigated. Optionally, the untranslated and translated sequence may be reported.</p>
+
+
+
+
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/recoder.usage" -->
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/recoder.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/recoder.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+<b>recoder</b> reads a normal nucleic acid sequence USA.
+
+<p>
+
+<!--#include file="inc/recoder.input" -->
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/recoder.output" -->
+
+
+
+<H2>
+    Data files
+</H2>
+
+<!--#include file="inc/localfiles.ihtml" -->
+<p>
+<!--#include file="inc/refiles.ihtml" -->
+
+<H2>
+    Notes
+</H2>
+
+<p>To find out whether the single point mutations found by <b>recoder</b> introduce new restriction sites, <b>silent</b> should be run on the original sequence. <b>silent</b> does the opposite to <b>recoder</b>. <b>silent</b> finds sites where a restriction enzyme site can be introduced without changing the translation in frame 1 of the sequence.</p>
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+<p><b>recoder</b> uses the EMBOSS REBASE restriction enzyme data files stored in directory <tt>data/REBASE/*</tt> under the EMBOSS installation directory. These files must first be set up using the program <b>rebaseextract</b>. Running <b>rebaseextract</b> may be the job of your system manager.</p>
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/recoder.isee" -->
+<p>
+
+<b>silent</b> does the opposite to <b>recoder</b>.  <b>silent</b> finds
+sites where a restriction enzyme site can be introduced without changing
+the translation in frame 1 of the sequence.  <b>recoder</b> finds sites
+where a restriction enzyme site can be removed without changing the
+translation in frame 1 of the sequence. 
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/tcarver.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/recoder.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/recoder.comment" -->
+
+</BODY>
+</HTML>
+

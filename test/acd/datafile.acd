@@ -1,0 +1,15 @@
+application: datafile [
+  documentation: "Testing"
+  groups: "Testing"
+]
+
+section: advanced [ info: "advanced Section" type: page ]
+
+datafile: pepdatafile  [
+  additional: "Y"
+  information: "Aaindex database file"
+  directory: "AAINDEX"
+  default: "Enakai.dat"
+]
+
+endsection: advanced

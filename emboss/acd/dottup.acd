@@ -1,0 +1,67 @@
+application: dottup [
+  documentation: "Displays a wordmatch dotplot of two
+                  sequences"
+  groups: "Alignment:Dot plots"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  sequence: asequence [
+    parameter: "y"
+    type: "any"
+  ]
+
+  sequence: bsequence [
+    parameter: "y"
+    type: "@($(acdprotein) ? stopprotein : nucleotide)"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  integer: wordsize [
+    standard: "Y"
+    default: "10"
+    minimum: "2"
+    information: "Word size"
+  ]
+
+endsection: required
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  toggle: stretch [
+    default: "N"
+    information: "Stretch axes"
+    help: "Use non-proportional axes"
+  ]
+
+  graph: graph [
+    standard: "@(!$(stretch))"
+    gtitle: "Dottup: $(asequence.usa) vs $(bsequence.usa)"
+    gxtitle: "$(bsequence.name)"
+    gytitle: "$(asequence.name)"
+  ]
+
+  xygraph: xygraph [
+    gtitle: "Dottup (stretched): $(asequence.usa) vs $(bsequence.usa)"
+    standard: "$(stretch)"
+  ]
+
+  boolean: boxit [
+    default: "Y"
+    additional: "@(!$(stretch))"
+    information: "Draw a box around dotplot"
+  ]
+
+endsection: output

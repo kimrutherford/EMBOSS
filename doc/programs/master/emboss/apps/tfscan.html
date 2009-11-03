@@ -1,0 +1,229 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: tfscan
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+tfscan
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/tfscan.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+<p><b>tfscan</b> scans one or more DNA sequences for transcription
+factor binding sites from the TRANSFAC database.  The taxonomic group
+(Fungi, Insects, ,Plants, Vertebrates or Other) is specified.  Matches
+are searched for using fast sequence word-matching, optionally
+allowing mismatches.  Because the binding sites are so small, there
+will be many spurious (false positive) matches. Optionally, the
+minimum length of a match to be reported may be specified.</p>
+
+<p>An output file is written with information on the matches,
+including sequence ID and accession number, the start and end
+positions of the match in an input sequence and the sequence of the
+region where a match has been found. Binding factor information, where
+available, is given at the end of the matches for each matching
+entry.</p>
+
+
+
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/tfscan.usage" -->
+
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/tfscan.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/tfscan.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>tfscan</b> reads normal nucleic acid sequence USAs.
+
+<p>
+
+<!--#include file="inc/tfscan.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+
+<!--#include file="inc/tfscan.output" -->
+
+<p>
+
+The output consists of a title line then 5 columns separated by whitespace.
+
+<p>
+
+The first column is the identifier of the entry.
+
+<p>
+
+The second column is the Accession Number of the entry.
+
+<p>
+
+The third and fourth columns are the start and end positions of the
+match in your input sequence.
+
+<p>
+
+The fifth column is the sequence of the region where a match has been found.
+
+<p>
+
+Binding factor information, where available, is given at the end
+of the matches for each matching entry.
+
+
+
+<H2>
+    Data files
+</H2>
+
+<b>tfscan</b> reads the TRANSFAC SITE data held in the EMBOSS data files:
+<p>
+<ul>
+<li>tffungi 
+<li>tfinsect 
+<li>tfplant 
+<li>tfvertebrate 
+<li>tfother
+</ul>
+<p>
+
+Your EMBOSS administrator will have to run the EMBOSS program <b>tfextract</b>
+in order to set these files up from the TRANSFAC distribution files.
+<p>
+
+<!--#include file="inc/localfiles.ihtml" -->
+
+
+<H2>
+    Notes
+</H2>
+
+<p>The TRANSFAC Database is a commercial database of eukaryotic cis-acting regulatory DNA elements and trans-acting factors. It covers the whole range from yeast to human.  The <tt>site.dat</tt> data file from TRANSFAC contains information on individual (putatively) regulatory protein binding sites. It has been divided into the following taxonomic groups.</p>
+<ul>
+<li>Fungi
+<li>Insects
+<li>Plants
+<li>Vertebrates
+<li>Other
+</ul>
+<p>An old public domain version of  TRANSFAC is available at: <a href="ftp://ftp.ebi.ac.uk/pub/databases/transfac/transfac32.tar.Z">ftp://ftp.ebi.ac.uk/pub/databases/transfac/transfac32.tar.Z</a></p>
+
+
+
+
+<H2>
+    References
+</H2>
+
+<ul>
+
+<li>Nucleic Acids Res. 16: 1879-1902, 1988
+
+<li>BioTechForum - Advances in Molecular Genetics
+(J. Collins,A.J. Driesel, eds.) 4:95-108, 1991
+
+<li>Nucleic Acids Res. 20:3-26, 1992 
+
+</ul>
+
+
+<H2>
+    Warnings
+</H2>
+
+Your EMBOSS administrator will have to run the EMBOSS program <b>tfextract</b>
+in order to set up the data files from the TRANSFAC distribution files.
+<p>
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+"EMBOSS An error in tfscan.c at line 82:
+<br>
+Either EMBOSS_DATA undefined or TFEXTRACT needs running"
+<p>
+
+This means that you should contact your EMBOSS administrator and ask
+them to run the <b>tfextract</b> program to set up the TRANSFAC data for
+EMBOSS. 
+<p>
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+
+<!--#include file="inc/tfscan.isee" -->
+<p>
+
+Your EMBOSS administrator will have to run the EMBOSS program <b>tfextract</b>
+in order to set up the data files from the TRANSFAC distribution files.
+<p>
+
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/ableasby.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/tfscan.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/tfscan.comment" -->
+
+</BODY>
+</HTML>
+

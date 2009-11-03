@@ -1,0 +1,588 @@
+FEATURES             Location/Qualifiers
+     source          1..32987
+                     /db_xref="taxon:77818"
+                     /focus
+                     /mol_type="genomic DNA"
+                     /organism="Wolbachia sp. wKue"
+     CDS             <1..2169
+                     /codon_start=1
+                     /db_xref="SPTREMBL:Q9JMP0"
+                     /transl_table=11
+                     /gene="gp1"
+                     /product="hypothetical protein"
+                     /protein_id="BAA89627.1"
+                     /translation="HYYFSRDILGQSILINKIGQDQSNIKKYIYSYGEYPLNWPQGTEY
+                     TLSNSPVTTLIFVQGNEGQEKTAFIFHIRESNTKEFYADKKIPVLNIPKIGKVGNAVEI
+                     KMSLKKYETGLSFEDLFEIEQISKYESSGNDQQFTDGKFIEIPNSDELKAKFDQAITSQ
+                     HASDGEVSLQAYKVLLTEVADTIYPIKDLITNEARLQAVLNGLLSSYSDLKLQETSAKT
+                     VIIPEFQVGAGGRVDMVIQGIGPSSQGTKEYTPIALEFKLINKNLDEEGMKKEVDKLTK
+                     EQNIRYAKGAALKAITDSDKMLFMGVVVNVKAKDKNSLILTSDKFVPALVVHSSIHMIH
+                     PDTVAQSLGKLNLNDCVGHSSRSKRSNNDCLFSKGDVEEFSKGKVDENNVDKVIIDSEK
+                     FLTYVKSSQDKGKNAQLVEFIGNKNIEGDYKYLVDKVIGDQGYERYIQNERIKDLQSDV
+                     LQQNSGLTKNPKLKSRLMNAAGRIQLIRGIHGAIVSCTDGTATDCGLNLGGIGWSFASQ
+                     PIGNAMVRITPKVVASTGNIVGKIIPGTLGRQTKFAIELAGVKFGSTLAKGAAGAVAGA
+                     FDIIFIGISANNLIDCKNRENSDNPCGEKEIRDNIATISFSGVSFVSGIALTAASMPVV
+                     GIAVGFGLMVGQGVYSGISNIVEYEKKYDTTYGENWSIFWRTILFQDMASDVQHLADRK
+                     NTVDSLAKEVWEALNNASKKLFLLVALF"
+     CDS             complement(1548..1895)
+                     /codon_start=1
+                     /db_xref="SPTREMBL:Q9JMN9"
+                     /transl_table=11
+                     /gene="gp2"
+                     /protein_id="BAA89628.1"
+                     /translation="MLAAVRAIPETNDTPEKDIVAILSLISFSPHGLSLFSLFLQSIRL
+                     FADMPIKIISNAPATAPAAPFASVLPNFTPANSIANFVCLPKVPGIIFPTMFPVDATTF
+                     GVILTIAFPIG"
+     CDS             complement(2135..3481)
+                     /codon_start=1
+                     /db_xref="SPTREMBL:Q9JMN8"
+                     /note="similar to hypothetical protein Rv2424c of
+                     Mycobacterium tuberculosis"
+                     /transl_table=11
+                     /gene="gp3"
+                     /protein_id="BAA89629.1"
+                     /translation="MIKAKSKLEIVNPDTAGIDIGSAVHYVCVPEGRDEQRVKKFGCFT
+                     VDLHNLAGWLKKCKVRTVAMESTGVYWIPLFQILESYGFEVKLVNARYIKNVPGRKSDV
+                     QDCQWLQQLHSYGLLHGSFRPDDQMCVLRNYVRQRSNLIESASTHILRMQKALIQMNVQ
+                     LHKVISDITGVTGMQIIKAIIEGERNPEKLSELRDVRIRNDRSTMAKALKGDYRKELLF
+                     VLKQEFELYNIYQEKIAECDKSIEQYYKTFETKSDENKRCSKIKNRFSKNRPDFPLHEE
+                     LYRVTGIDFTKVPGLDVLTIQTIISEVGLNHDKWPSEKHFTSWLGLSPANKVTGEKVFG
+                     TRTRKVIARAANAFRMAAQCVSRSNSGIGAYCRRLKKRLGAPKAITATARKLACIFYSM
+                     LKYGQEYVEKGIDYYEKLYKEKIVKTLSKKASEFGYVLIKKELLAERVS"
+     CDS             2298..2738
+                     /codon_start=1
+                     /db_xref="SPTREMBL:Q9JMN7"
+                     /transl_table=11
+                     /gene="gp4"
+                     /product="hypothetical protein"
+                     /protein_id="BAA89630.1"
+                     /translation="MHANFLAVAVIAFGAPSRFFNLLQYAPIPLLLLDTHWAAILKAFA
+                     ARAITLRVLVPNTFSPVTLLAGLSPNQEVKCFSDGHLSWFKPTSEIIVCIVSTSSPGTL
+                     VKSIPVTLYSSSCKGKSGLFFENLFFILLHRLFSSDFVSNVL"
+     source          (3481.3740)..(29173.29458)
+                     /db_xref="taxon:112596"
+                     /note="putative"
+                     /organism="bacteriophage WO"
+     CDS             3741..5453
+                     /codon_start=1
+                     /db_xref="SPTREMBL:Q9JMN6"
+                     /note="similar to RepA of plasmid RSF1010"
+                     /transl_table=11
+                     /gene="gp5"
+                     /protein_id="BAA89631.1"
+                     /translation="MFDAPKGKKQYKPFDVKQSRYGAPKVRPLYNIPSILKSDKVVLVE
+                     GEKCAEALIEQGITATTAMSGANAPIDKTDWSPLKGKHIIIWPDNDEAGNKYAKNAEKK
+                     LLEIGVASLAVLEIPRGKPEKWDAADCVEEGIDVKEFLASTPLLTIDTPATDTSNMKSL
+                     ERSTKQPLNILDWSAERFVGPVPEQKFLVEGLFPLGVTSIIAAMGDTGKGMLLLDLALK
+                     VASDKDQMCGFGSLVTEHGSVVIFSAEDDASEIHRRLERLDPKCERLKHKDKLFIVPLP
+                     NVRGSLTILRNVRGKIVEVSPEFESVMKQLEEIKDLKLIVFDPLASFIHADINADPAVG
+                     DYLMCLLSDLACSTGASIITAHHMRKPKGEKPILTAEQARDAIRGTSALVNGVRCSYAF
+                     WPIENTARLEIFKAVGETPRQNALFHGAVVKANGLADRTVRTYLRNQETGLLEDITIQL
+                     TVKNASEKDLKICLTDAITRSAVAGHPFTHTGSTGVYKQRHRLPEIFHSMGRDRLERIV
+                     QELLQAKQLVKGMSTGAKEDKWLDIPTGPFACGIGKFTLGAEDFSYRQNLMLG"
+     CDS             complement(3827..4375)
+                     /codon_start=1
+                     /db_xref="SPTREMBL:Q9JMN5"
+                     /transl_table=11
+                     /gene="gp6"
+                     /product="hypothetical protein"
+                     /protein_id="BAA89632.1"
+                     /translation="MPVSPIAAIIEVTPKGNRPSTRNFCSGTGPTKRSALQSKMLSGCF
+                     VDLSKLFIFEVSVAGVSIVSNGVEAKNSLTSIPSSTQSAASHFSGLPRGISSTASDATP
+                     ISKSFFSAFFAYLLPASSLSGQMIICLPLSGDQSVLSIGAFAPDIAVVAVIPCSISASA
+                     HFSPSTRTTLSDFKILGML"
+     CDS             complement(5568..5921)
+                     /codon_start=1
+                     /db_xref="SPTREMBL:Q9JMN4"
+                     /transl_table=11
+                     /gene="gp7"
+                     /product="hypothetical protein"
+                     /protein_id="BAA89633.1"
+                     /translation="MYFSLNVNILIIFCGSLSGLLSFCCLSYCTLFVFYYYFILSIIIY
+                     YYYIYIIYKGFRNAESAILADFRHIITRNTFRNRGQKVRIQAIFSFLVSHYLFSNQGIR
+                     NIIQPFDVLSLFN"
+     CDS             complement(6578..7597)
+                     /codon_start=1
+                     /db_xref="SPTREMBL:Q9JMN3"
+                     /note="similar to RhuM of Salmonella typhimurium"
+                     /transl_table=11
+                     /gene="gp8"
+                     /protein_id="BAA89634.1"
+                     /translation="MDENKIVFYTTPGGNIEIEVLCRDENLWLTQKRMAELFDVQLPAI
+                     SKHIKNIFESGELQEKEVVSTFEVTAADGKNYPTQFYNVDTIIAVGYRVNSKKATSFRV
+                     WATKVLRDFIIKGFALNSERLKNGPKFGKDYFNELLEKIREIRASERRFYQKITDIYAE
+                     CSADYDPHSDITRQFYAKVQNKLYWAIYGLTAAELICSRVDHEKPHMGLTTWKDGSGNK
+                     IHKSDVSTAKNYLTEKELSELNHIVSMYLDYAELQARKHRLMKMQNWVEKLDAFLLFND
+                     YEVLKDAGKVSAEVAKALAEGEYEKYRVIQDKLHESDFDELIKASKESEKITTTKTSL"
+     CDS             complement(8167..9273)
+                     /codon_start=1
+                     /db_xref="SPTREMBL:Q9JMN2"
+                     /transl_table=11
+                     /gene="gp9"
+                     /product="hypothetical protein"
+                     /protein_id="BAA89635.1"
+                     /translation="MVLQSCQEQISDLLNSGSSWVNPNQNYIEAARYLSNLELIKMQER
+                     SYIICSRRQDKLDWPNIVDPYCNNEIFIDEDFNEACDNIICENCNRDILPNTYKKQRFH
+                     RLSVYFNPEKFMNWFEGQLSDTNFMWQKVESGVYHVGGQGKIVSLIILDFCTNPTFLTI
+                     DKLKANPTVLIILRKNPSNIPLDLPIVKMVDLFFQHKTLIEVFQEAAQRGVLEFIPNTS
+                     MQILHTALNLIEPSKEKELLKLQLIEGSLYVNNIEILNKKAVACMKVLRVLFEQFLNDC
+                     KKELPPEKHMLLRITEIEKRLNLDPEADPEHHIRKPLNTIQRTIKTTLAKKLGLNIERN
+                     DVIQTVGWPGSSRRDYGYRINPFTVVVR"
+     CDS             complement(9239..10471)
+                     /codon_start=1
+                     /db_xref="SPTREMBL:Q9JMN1"
+                     /transl_table=11
+                     /gene="gp10"
+                     /product="hypothetical protein"
+                     /protein_id="BAA89636.1"
+                     /translation="MNIYPNRKFWEDDLEVPVNHLLDRFHNTKIRQSWIDSLSGKQLNI
+                     IFQNSFKDKLNAQLFDDESYDNTSVQYKRKVIANYSDSLVTYYLITCFDRAKLEVTVSE
+                     IARSALTTELMKSYLVKNNNKYDKKSLLFLLFHADYNLLKSVYHFEKIQRKSFMSFALQ
+                     KIPRRPSTPFKDFISEEIIQQILKEDNIKRNDSFENQLQGFFYHQNRLYVLIRKASDID
+                     LLLNSNKVIHGHKAEWMILDFLLNGTQVDLGARNIDQAIEIANSIASCYFGCECIFVDV
+                     QDKNFAEQVHKFIETCINESDSNIRVFELKFQSNRFNYSYTNITLTVAPYDPIAPELHV
+                     LKPFVGDIVPLIESIKVIFQGKKIGLFFKRSDEYIAIYYSEHPLNKREREDFKAYIKQF
+                     YGLTILPRANL"
+     CDS             10689..11144
+                     /codon_start=1
+                     /db_xref="SPTREMBL:Q9JMN0"
+                     /transl_table=11
+                     /gene="gp11"
+                     /product="hypothetical protein"
+                     /protein_id="BAA89637.1"
+                     /translation="MSILTLDLGKQTGWAILTNGVIKSGSKSFHGSRFSGGGMCFLNFR
+                     NWLNSLKDISAVYFEEVRRHLGTDAAHCYGGFLAVLSAWCEENNIPYQGVNVKTIKRFI
+                     AGKGNASKSEVIEAIREKSFSPRDDNEADALALMFYISKDINKTKNP"
+     CDS             12431..12967
+                     /codon_start=1
+                     /db_xref="SPTREMBL:Q9JMM9"
+                     /transl_table=11
+                     /gene="gp13"
+                     /product="unknown protein"
+                     /protein_id="BAA89638.1"
+                     /translation="MQKFKKEIRKKEQKERRKRVEKITQTEWAREIGVSKQYVCYLVKK
+                     GIVKLEDGLINREQANEAVAAIRDPSQPLRRKNPENENTTNLSTMLLKTRIKNEMERGK
+                     LLEAKAKAEIGELVAVEEVKRDAFNVARVVRNNLLNIPNRVSALLASLSDTEKIHMALT
+                     EEITNSLQELSNIKF"
+     CDS             12971..14452
+                     /codon_start=1
+                     /db_xref="SPTREMBL:Q9JMM8"
+                     /note="containing ankyrin-like repeat"
+                     /transl_table=11
+                     /gene="gp14"
+                     /product="hypothetical protein"
+                     /protein_id="BAA89639.1"
+                     /translation="MSANLSLELIKCLINQPGVDVNVRGLNGKTPLHYAVEINELSMVA
+                     LLLNRKNINPLITDDDGKSALDCAREEILQALINHKYGSEGDSLLHLAAMLNEANAVRF
+                     LLNKGVNVNEQNALLHTPLHLAAGAGHEEIVEILIREGNADKDVLDVRNHAAMHYAVNN
+                     KKLEVVKLLSNLGADVNIAGSGRNAMKLSSLHVAVSSSNYDERDLCLDIVRCLINAPNS
+                     KVNLQDYENKTPLHYAERLKTIEVLLTREDIDPLVKDDSGKTPFDYAKPEIKKILMNNK
+                     YGPEKNSLLHLAAQRGEIEIVDAILKEEIDIDIVNNKGLSPIYLAAEKGHLHVVKLLLK
+                     KGTNYTPVLHLAIKSNNLELLKVLFTEKNGALLCRDTVINFPTLHNKYIAQREMADKRM
+                     KKHNNIICICITVSAIAVAVYIGLTAATISNAIIFATITGILALIIAIMISEMSKRYIE
+                     NEFQKKMFMELEECGGINSTVNNIEIEPIMSRCRQ"
+     CDS             14449..16278
+                     /codon_start=1
+                     /db_xref="SPTREMBL:Q9JMM7"
+                     /note="similar to terminase large subunit of phage lambda"
+                     /transl_table=11
+                     /gene="gp15"
+                     /protein_id="BAA89640.1"
+                     /translation="MIYARAFSEGLRPDPQLKVSEWANEYRVLAPTAASEPGKWRTERT
+                     PYLKEIMDSLSPSSPTEKVVFMKGAQIGGTEAGNNWIGYIIDQTPGPMLVVQPTVEMGK
+                     RWSKGRFAPLIESTPCLKSKVKDPRSRDSGNTVQSKEFPGGIVVITGANSSVALRSMPV
+                     KYLFLDEIDAYPGDSGGEGDPVLLSIARTNTFARRKIFLVSTPTIHGISRIEKEFEATD
+                     KRYFFVPCPHCNYYQVLKWSQIKWENSDSRTAHYVCTECSGKIENHQKTEMLDRGEWRP
+                     TNRVKGEKKGFHLSSLYSPVGWYSWQQAVEDFLHAKESEQLLKVWINTTLGETWVDKGE
+                     VPDWKQLFNRREFFQIGTVPRREVVLTAGVDVQKDRLEVEVVAWGKSRESWSIDYQVFE
+                     GDTGGGEVWGKLSELLNHHFIGENGLEYMISMMAVDAGYATQEVYNWVRGHQGSGRVMA
+                     VKGVNKALVPLSSPSRVDITVGGQKLKRGIKLWPVGVSILKSELFQLLNILKEEEGKAL
+                     PGYCHFPEYAPEYFKQLTAEQLVSKVVKGYTKQEWQKVRERNEVLDCRIYARAASIALG
+                     IDRWPESKWNSLSEKPESKKSKKIVKSKWMRNV"
+     CDS             16522..17304
+                     /codon_start=1
+                     /db_xref="SPTREMBL:Q9JMM6"
+                     /note="similar to hypothetical protein 0375 of Escherichia
+                     coli"
+                     /transl_table=11
+                     /gene="gp17"
+                     /protein_id="BAA89641.1"
+                     /translation="MTKIIAKEYTEFLEQLKEQIATSRYKAALAVNSKLIVLYHHIGTE
+                     ILKRQKEHGWGAKIIDQLSKDLRSAFPEMKGFSARNLTYMRQFAVEYQDTEFTQQVAAQ
+                     LPWFHIVVILDKVKDPKERLFYFQKAIEHGWSRSIMVMQIERELYKRQGKAVTNFKDKL
+                     PSPQSDLAHYTLKDPYIFDFLSIGDDAHEREVEKGLVGHVEKFLLELGEGFAFVGRQFH
+                     LDVGNKDFYIDLLFYHLKLRCFVVIELKDKEFQARICR"
+     CDS             17554..18972
+                     /codon_start=1
+                     /db_xref="SPTREMBL:Q9JMM5"
+                     /note="similar to portal protein GPB of phage lambda"
+                     /transl_table=11
+                     /gene="gp17"
+                     /protein_id="BAA89642.1"
+                     /translation="MLLKSFKQLFSKPKIKSSAWDAAGSGRRFFHFQPELGSINNLLSQ
+                     SLETLRSRSRDMVRKNPYAANIIDTIVSNSIGTGIKPQSKARDGEFRKKVQELWLKWTD
+                     EADSCGISDFYGLQALVCRSMIEGGECFVRLRTRKLEDRFSVPLQLQVLESEHLDNKTN
+                     QTLGNGNVIRNGIEFNRLGQREAYYLFREHPGEGSFGESVRVPANDVLHIYKPLRPGQI
+                     RGEPWLSSILLKLYELDQYDDAELVRKKTAAMFAGFITRLDPEANIMGEGEASEQGVAL
+                     SGLEPGTMQLLDPGEDIKFSEPSDVGGSYEAFIRQQLRAIAIGTGITYEQLTGDLTGVN
+                     YSSIRAGLIEFRRRCAMLQHNIMVFQFCRPVWSRWLELAVLCGELSIDEKVVKAAKEEV
+                     KWIPQGFDWVDPLKDQQAQQMAVRNGFKSRSEVVSEMGYDVEEIDQEIAEDQKRANSLN
+                     LIFDSDVGGNNVSK"
+     CDS             18935..19987
+                     /codon_start=1
+                     /db_xref="SPTREMBL:Q9JMM4"
+                     /note="similar to minor capsid protein GPC of phage lambda"
+                     /transl_table=11
+                     /gene="gp18"
+                     /protein_id="BAA89643.1"
+                     /translation="MILMSGETMFLSRPLMLEAKSFELLSLHSQKQPIFKNVKHYVKNN
+                     IEKTAIIPIHGILTKKPEAFDDFLGMTSYEKMQEEIEEALEDEKVEIILLDIDSPGGEV
+                     NGIFDLADFIYNARSKKRIIAIANDDAYSAAYAIASSAEKIFLTRTSGVGSIGVIASHI
+                     DQSGFDEKQGIKYSTIFAGSRKNDLNPHEPITSESLENLKSEVNRLYGMLVELIARNRS
+                     LSIEAIKSTEAGLYFGEKAVEIGLADGVTTFFEFINNHRSVSMTTNELTEEGYENCRRE
+                     IVEIIRLCNVSKMPEKIGEFIEQGVSIEQAREVLMELLAERTKKTEILSAIPQNSGEEL
+                     MMQVAKSRCI"
+     CDS             20129..20500
+                     /codon_start=1
+                     /db_xref="SPTREMBL:Q9JMM3"
+                     /transl_table=11
+                     /gene="gp19"
+                     /product="hypothetical protein"
+                     /protein_id="BAA89644.1"
+                     /translation="MTSITEQNNLGDLLKYEASSLYSRDQITVAKGQNIKLGAVVAKKT
+                     DDGFIKVLNPAGTDGTQTAIGVITSDVNATENTKAVIITRIAMLADYAVVWPANITEEQ
+                     KAEAIKQLEGRGIIIRKGV"
+     CDS             20526..21524
+                     /codon_start=1
+                     /db_xref="SPTREMBL:Q9JMM2"
+                     /note="similar to unknown protein of phage Felix 01"
+                     /transl_table=11
+                     /gene="gp20"
+                     /protein_id="BAA89645.1"
+                     /translation="MQNPFTNTAFSMTALTNAMNILPINYGRIENLNLFPSRSVRFRHI
+                     TIEEHNGVLSLLPTQVPGAPATVGKRGKRKVRTFTIPHIPHDDVVLPEEVQGIRAFGSE
+                     NELKALADVITDHLQLMRNKHAITLEHLRMGALKGIILDADGSELLNLYNEFEITPKVV
+                     NFALGTATTDVKRKCIEVLRHIEDNLSGEYMTGIHALVSPEFFDALTSHNKVKEAYERW
+                     QEGAALRNDMRSGFTFCGITFEEYRGQATDPEGTVRRFIEKDTGHCFPLGTASTFTTYF
+                     APADFNETVNTLGQPLYAKQEPRRFDRGTDLHTQSNPLPMCHRPGILVKVM"
+     CDS             21621..21968
+                     /codon_start=1
+                     /db_xref="SPTREMBL:Q9JMM1"
+                     /transl_table=11
+                     /gene="gp21"
+                     /product="hypothetical protein"
+                     /protein_id="BAA89646.1"
+                     /translation="MTKIEPFRKRIEIGVQENIKRLLEDCLVYLGELALYKSKSKSYMV
+                     QVLKQQPDKLYEIGEGQFVGEMLILEVSVFDVLQPMVGDIFVIGDCKYKIHTPPLRDKS
+                     GMVWRIEAYGV"
+     CDS             21886..22359
+                     /codon_start=1
+                     /db_xref="SPTREMBL:Q9JMM0"
+                     /transl_table=11
+                     /gene="gp22"
+                     /product="hypothetical protein"
+                     /protein_id="BAA89647.1"
+                     /translation="MIANTKYTHHHLEINLEWSGESKRMGCKMSVHIEVNSIESINAKR
+                     GKIELAMVKALNKTALWLKAQAAKEISEEKKIKLSLIRKRLRIFKAKTSRLEVLIRANL
+                     YDIRASTIGKIQKTRRGSKVGKHEFIGGFAAVMPKGNSGILSVKEEQHCQYKK"
+     CDS             22472..22948
+                     /codon_start=1
+                     /db_xref="SPTREMBL:Q9JML9"
+                     /note="similar to hypothetical protein of Pseudomonas
+                     aeruginosa"
+                     /transl_table=11
+                     /gene="gp23"
+                     /protein_id="BAA89648.1"
+                     /translation="MTKFWIDLHQAICTTLKKEILTIQTCEVYPTIRKELLAPAVLVEL
+                     SSLEKGSDPGTGELALRVRFEARIVVDSTIENAPIIVRTLAAEVARVVNKNTWEKNVSP
+                     AEFLSAEPDGFRPELDAYLVWMVDWSHQLHLGKSIWTENKIKPHTIIIEENVRE"
+     CDS             22935..23399
+                     /codon_start=1
+                     /db_xref="SPTREMBL:Q9JML8"
+                     /note="similar to GPV of phage P2"
+                     /transl_table=11
+                     /gene="gp24"
+                     /protein_id="BAA89649.1"
+                     /translation="MLESNFAISELQRKLANIVRIGVVKEVDYEKAKVRVKIGEFLTDY
+                     LPWITSKAGKDRDWSPPDINEQVVVFSPLGELSLGVVLAGIYQEKYPTLENKKEINSVK
+                     FQDGTRLLYDKEKHHLEIEVVDKITLKAGGSSIEMTKSGIKLKAERIDLN"
+     CDS             23662..23988
+                     /codon_start=1
+                     /db_xref="SPTREMBL:Q9JML7"
+                     /note="similar to GPW of phage P2"
+                     /transl_table=11
+                     /gene="gp25"
+                     /protein_id="BAA89650.1"
+                     /translation="MDAKTGKALEGIEHLKQSIIDILTTPINSRVMRRDYGSRLFELVD
+                     KPINRDLTLEIYAATAEALGKFEKRFKLEKVKVEGVKEGRVTLNLEGVYLSEGKFININ
+                     GVVV"
+     CDS             23991..24791
+                     /codon_start=1
+                     /db_xref="SPTREMBL:Q9JML6"
+                     /note="similar to GPJ of phage P2"
+                     /transl_table=11
+                     /gene="gp26"
+                     /protein_id="BAA89651.1"
+                     /translation="MQQPNIIEPLNFEEIFSRMKEELVNRDETFSALVESDPAIKILEV
+                     AAWRELLLRQRINEAVKSNLLKFATGEDLDNLAEFYGVERQKEEEDERFRKRIKAKIKG
+                     WSTGGSKEYYRYHALSADKRVKDALVESKVPGSVEISILSTELSTVPEDLLEIVKKQVT
+                     RDDIRVLTDTITVIGCNITEIDIHSRISVNSQALPEIIEIAKKQFIEKFELAKRLGWSV
+                     TRSWIIANLFVDGVENVELIEPKEDVVVLGNECAALRNLEIELN"
+     CDS             24797..25951
+                     /codon_start=1
+                     /db_xref="SPTREMBL:Q9JML5"
+                     /transl_table=11
+                     /gene="gp27"
+                     /product="hypothetical protein"
+                     /protein_id="BAA89652.1"
+                     /translation="MPPNATKQEKALVDATDYKVDPSCIRGFKFSLKEETLPWLIEEYE
+                     LGEILRWVKDKRRAIVEGVKFQRLRGTPASLKIALKWANIEDITIIEEPPGKHFFELQV
+                     GIKEVPNDFFVDAVVELAKLSLPVRSRLMRIFNDNYNVQRFILDESLFGDLLSDYSGVK
+                     IEKDGPVLSFGRVNFFRSSGPVIRIIENYLRDHYERALSNDIYRLDVAILGETEPHTRD
+                     YKGIYERDHLWYNLKALYPLPQSLLPSIKFAKAQIVLSDSWKLGEINSCFPVGRIEEEG
+                     NEFVLGSDKLSGQYWNLKHKPILERFSVTHNYKVENYTDQKVRKYVLAEHNVYYKNDLD
+                     SEQKDSIHELEKHILVFYPGVLKWHEHRHLHRSWKNSQVISLIS"
+     CDS             26120..26719
+                     /codon_start=1
+                     /db_xref="SPTREMBL:Q9JML4"
+                     /note="hypothetical protein containig ankyrin-like repeat"
+                     /transl_table=11
+                     /gene="gp28"
+                     /protein_id="BAA89653.1"
+                     /translation="MSFSKSKFFKEVSSKNINKRNEEGETILHQAVEISNYKTVKLLIK
+                     KGAEVNARDKNGYTPLHSACKIGGAGVEIIKELVKAGAEVNQLNKYGATPMYYIWESEK
+                     YRLCDSKESEKASKFLREKGGITKSRELTCYGIERLVGEIADMLNRSYMPELKIIEIGE
+                     IRKRDKSLIKKECQNLASKIISQVNEMIDEVVRKKA"
+     CDS             26734..27219
+                     /codon_start=1
+                     /db_xref="SPTREMBL:Q9JML3"
+                     /note="hypothetical protein containing ankyrin-like repeat"
+                     /transl_table=11
+                     /gene="gp29"
+                     /protein_id="BAA89654.1"
+                     /translation="MRWIMLKLGKFNKSAKELLENSFKSIYARDKKERTDLHYAVEAKT
+                     VKLLVEKGANVNAADVEGYTALHLAVTEKRLEIVRELIKSGADINAAEYGNKCTPLHLA
+                     CMVGKVEIVKELVEAGAEIEQADTFGMTAMDYAKNSKEITEILKKEIDRIEKLFMRG"
+     CDS             27224..27655
+                     /codon_start=1
+                     /db_xref="SPTREMBL:Q9JML2"
+                     /transl_table=11
+                     /gene="gp30"
+                     /product="hypothetical protein"
+                     /protein_id="BAA89655.1"
+                     /translation="MEEEIEKKVMNLERKPLGELRKIWKKVYGEEAPKHSKKYLIPRLA
+                     YRIQEEAYGEMSRKGSKRLDYLADRLEKGKRISSDKLPVEGTELILERGEETHAVMVTD
+                     KGLIYKEEFYTSLSAVAGKIMGMSYNGPLLFGMRDKNGS"
+     CDS             27627..29171
+                     /codon_start=1
+                     /db_xref="SPTREMBL:Q9JML1"
+                     /note="similar to integrase of resolvase family"
+                     /transl_table=11
+                     /gene="gp31"
+                     /protein_id="BAA89656.1"
+                     /translation="MECVIKMGAEEEKMLKEVRCAIYTRKSNEDGLEQKFNSLDAQRVA
+                     CEKYIKSKEGWVVLAKRYDDGGFSGKNLERPAIKELFEDVKKGEVDCVVVYTLDRLSRE
+                     TKDSIEVTSFFRRHRVNFVAVTQIFDNNTPMGKFVQTVLSGAAQLEREMIVERVKNKIA
+                     TSKEQGLWMGGTLPLGYDVKDKELIINEKEAKTVKHIFERYVELKSMAELARELNSQGY
+                     RTKSDIFKKATVRRIITNPIYMGKIRHYEKEYEGKHEAIIEEEKWQKAQELIRNQPYRK
+                     ARYEEALLKGIIKCKSCDVNMTLTYSKKENKRYRYYVCNNHLRGKGCESENRNVIAGEV
+                     EKEVMKRAEQLYENWKEKTEEKIEKLWENLSFGKQKEVVKKLIRTVLVKEDGIEMSLEN
+                     KVEFIPIWLKKKGNKCTVVEPEGKTNNALLKAVVRAHLWKRQLEEGKYESVKELSAKIN
+                     IGTRRVQQILRLNYLAPKIKEDIVNGRQPRDLKLVDLREIPMLWSEQREKFYGSAS"
+     CDS             complement(29459..31399)
+                     /codon_start=1
+                     /db_xref="SPTREMBL:Q9JML0"
+                     /note="hypothetical protein containing ankyrin-like repeat"
+                     /transl_table=11
+                     /gene="gp32"
+                     /protein_id="BAA89657.1"
+                     /translation="MGESNGIVKSIINLLKPKSKPEPSDFEYESIIEHLSSKEHLLNEL
+                     MNDMWYSGDLPSVRNYNEPSSLIDSKLALREQVCIWSALEYDLTPNQKKLNEELFKTLE
+                     CLTSYYSSFDNTESLKKFLHDNKNNKDLKVILNLKRGTSESTVLHAIAGAKIDEVCPLG
+                     NRAIDLLLDAGSDPNIKNNAGKTPLHLAVAIGYGYSIDSLLSKGANPSIVDRKGRTPQQ
+                     IAVNNHRYDIEVFFLTDKQKKMNKELYDLLALDSDCTKNLKEFLSKHKRDSDLKVVLNI
+                     RHGMGESKVFSYVERFAWDNEDLAQELRKIFLEAGALDYDKNIIYRQQKKGQVSKLLIN
+                     LTSNQKEKLNKFSDKVFQAQNMAELEEIVNDAIKSGVRLNYSLSQDFFSGNEYTFTDYV
+                     MKKISELEKNPKVASNIICQLVSKGAVFGNTVDANTLTSEFKEHKTNLKKAYRDYISNS
+                     HKFIEIAKSATNSELKDVRVDNSVFYLEYSKDSKIDIIKITDGVRDLGLTDGDVKCGRN
+                     IVKIGNSEVEIKTEDGIRNYTDLTEGSSIVLTFYTSLGELEVRLYPDENNKKLIRVEVS
+                     DEDLFEEIASHEEIGQNCLLGGLSVIEAIDQGVFARSGGLMRPEVISESNNKWTGREEL
+                     RRTSDSRGRSF"
+     CDS             complement(32260..>32987)
+                     /codon_start=3
+                     /db_xref="SPTREMBL:Q9JMK9"
+                     /transl_table=11
+                     /gene="gp33"
+                     /product="hypothetical protein"
+                     /protein_id="BAA89658.1"
+                     /translation="QKRPEAAKESIEDCVTTIVLTLGKKVLILNINEKNEFALRVPDNK
+                     GIPIENIRGIQNVNDIKIQEITCNLYSTPSNKNPFDQYCNKNKGITVNTYDSLDKYKRG
+                     KEILQGNFTRIVENKKFKAALSKAIESGKYDDYKKLFEEISHILHPFKSLISNEATFQA
+                     VLHGLFSSYGEDNIKVITEFQIGGGEKLDVMLVINATDQKKEYPPVGIELKFAKKGELD
+                     KKEKDAKDQLKRYKVKRIR"
+     misc_feature    1..9999
+                     /note="@@@The following are for testing purposes@@@"
+     misc_feature    (3481.3740)..(29173.29458)
+                     /note="Testing the (num.num) location"
+     rRNA            <1..>318
+                     /note="16S rRNA"
+     primer_bind     complement(1353..1373)
+                     /note="PCR primer"
+     mRNA            join(<871..2354,2414..>3143)
+                     /gene="Amy I"
+                     /product="amylase"
+     CDS             join(AB042975.1:884..1057,AB042976.1:99..197,
+                     AB042977.1:406..582,AB042978.1:371..497,
+                     AB042979.1:460..634,AB042980.1:353..472,
+                     AB042980.1:857..1052,AB042981.1:444..539,
+                     AB042981.1:1368..1536,174..352)
+                     /gene="CYP51"
+                     /product="lanosterol 14 alpha-demethylase"
+                     /protein_id="BAA96092.1"
+                     /citation=[5]
+                     /translation="MVLLGLLQAGGSVLGQAMEQVTGVNLLSSLLLACAFTLILVYLFR
+                     QAIGHLAPLPAGAKSPPYIFSPIPFLGHAIAFGKSPIEFLENAYEKYGPVFSFTMVGKT
+                     FTYLLGSDAAALLFNSKNEDLNAEDVYSRLTTPVFGKGVAYDVPNPVFLEQKKMLKSGL
+                     NIAHFRQHVSIIEKETKEYFQSWGESGERNLFEALSELIILTASHCLHGKEIRSQLNEK
+                     VAQLYADLDGGFSHAAWLLPGWLPLPSFRRRDRAHREIKNIFYKAIQKRRQSEEKIDDI
+                     LQTLLDSTYKDGRPLTDDEVAGMLIGLLLAGQHTSSTTSAWMGFFLARDKTLQEKCYLE
+                     QKTVCGEDLPPLTYDQLKDLNLLDRCIKETLRLRPPIMTMMRMAKTPQTVAGYTIPPGH
+                     QVCVSPTVNQRLKDSWVERLDFNPDRYLQDNPASGEKFAYVPFGAGRHRCIGENFAYVQ
+                     IKTIWSTMLRLYEFDLIDGYFPTVNYTTMIHTPENPVIRYKRRSK"
+     CDS             join(871..2354,2414..3143)
+                     /codon_start=1
+                     /db_xref="SPTREMBL:O02413"
+                     /gene="Amy I"
+                     /product="amylase"
+                     /protein_id="AAB60935.1"
+                     /translation="MKQLLVILYSALVVTNAQLPGFSFGPSGFGGFSLSNPLFNASFAP
+                     ANPVDRISDIASRFRDVANNVQRNLPKIPQFTNPLSAFSRFARPTSSSGSTNANSNNNQ
+                     NFNSNQANEGTSGARNAINEVLNRIPGLSGVPRVPEIPKVPEIPSFGNPSDVFGPFVNS
+                     LRNMTNQGIKDPGQIFNQVNTFLPDVSRIANSVANYAKSAANSGIWKNISNDIKHEMQN
+                     RIESMTQILSNITSAMKNIAQSVPNLMQDQSLNTTLRNQPFFFPGHSGIVHLFEWKFSD
+                     IAEECEKVLGPNGYGGVQVSPINEYLVSPSRAWWERYQPISFEIKSRSGNEKQFSDMVK
+                     RCMKAGVRIYVDVVVNHMAAPGASAPLYGTAGSTCDPLARDYPGVPFNRSHFHADCQIN
+                     DYNNATNVRNCELAALPDLDQSNRFVQNKIIQYLNHLLDLGVAGFRMDACKHMRPEDLK
+                     SIYDRLKPVNAMFLFPPGARPFIFQEVIDLGTEGVSAKEYTNLGVVTEFNWCIVVGGVF
+                     RGTTNADALELLTKNGSAGVLLPSSQALVFVDNHDNQRGHGAGGDSILTYKTKPQYIQA
+                     VAFTLATDYGIARVMSSYNFSDPDQGPPQDTVQVIRSPGFAVNNSCSTGWVCEHRWPEI
+                     RKMIQFKNFVAGSSLDHIQATQNTFAFCRGEKGFIVFNNSENTITQQYHTCLPQGQYCD
+                     IISGEVSQSTCTGTVVNVDANGDAEITLPKNSVVAIYIPSRLS"
+     variation       912..1167
+                     /note="ClaI fragment deleted in pSW36,  constitutive
+                     phenotype"
+                     /replace=""
+                     /gene="amiC"
+     polyA_signal    complement(598..603)
+                     /gene="hsp82"
+     exon            complement(<1130..3295)
+                     /number=2
+                     /gene="hsp82"
+     intron          complement(3296..3854)
+                     /number=1
+                     /gene="hsp82"
+     exon            complement(3855..3977)
+                     /number=1
+                     /gene="hsp82"
+     mRNA            join(complement(3855..3977),complement(1130..3295))
+                     /partial
+                     /gene="hsp82"
+     mRNA            complement(join(1130..3295,3855..3977))
+                     /partial
+                     /gene="hsp82"
+     mRNA            join(4904..5028,5260..>7425)
+                     /gene="hsp82"
+     misc_feature    754^755
+                     /note="putative nicking site"
+     misc_feature    32987^1
+                     /note="circular sequence join"
+     rep_origin      755
+     enhancer        order(220..225,230..236)
+                     /note="putative"
+                     /standard_name="NtrC binding site"
+     polyA_signal    one_of(368..373,459..464)
+                     /note="Did we save the note?"
+     polyA_site      one_of(514,534,542)
+     primer_bind     order(54..73,complement(206..225))
+     STS             54..225
+                     /note="STS49"
+     mRNA            1..542
+     misc_feature    group(226..288,688..754)
+                     /note="encodes putative transmembrane helices which enclose
+                     a presumably periplasmic domain"
+                     /gene="citA"
+     Cds             1289..1879
+                     /db_xref="SWISS-PROT:P10932"
+                     /note="aliphatic amidase regulator, positive  regulator of
+                     ""amiE"" gene"
+                     /transl_table=11
+                     /gene="amiR"
+                     /protein_id="CAA32023.1"
+                     /TransLation="MSANSLLGSLRELQVLVLNPPGEVSDALVLQLIRIGCSVRQCWPP
+                     PEAFDVPVDVVFTSIFQNGHHDEIAALLAAGTPRTTLVALVEYESPAVLSQIIELECHG
+                     VITQPLDAHRVLPVLVSARRISEEMAKLKQKTEQLQDRIAGQARINQAKVLLMQRHGWD
+                     EREAHQHLSREAMKRREPILKIAQELLGNEPSA"
+     CODS            135..1292
+                     /db_xref="SWISS-PROT:P27017"
+                     /note="negative regulator of amiR"
+                     /transl_table=11
+                     /gene="amiC"
+                     /protein_id="CAA32024.1"
+                     /translation="MGSHQERPLIGLLFSETGVTADIERSHAYGALLAVEQLNREGGVG
+                     GRPIETLSQDPGGDPDRYRLCAEDFIRNRGVRFLVGCYMSHTRKAVMPVVERADALLCY
+                     PTPYEGFEYSPNIVYGGPAPNQNSAPLAAYLIRHYGERVVFIGSDYIYPRESNHVMRHL
+                     YRQHGGTVLEEIYIPLYPSDDDLQRAVERIYQARADVVFSTVVGTGTAELYRAIARRYG
+                     DGRRPPIASLTTSEAEVAKMESDVAEGQVVVAPYFSSIDTPASRAFVQACHGFFPENAT
+                     ITAWAEAAYWQTLLLGRAAQAAGNWRVEDVQRHLYDIDIDAPQGPVRVERQNNHSRLSS
+                     RIAEIDARGVFQVRWQSPEPIRPDPYVVVHNLDDWSASMGGGPLP"
+     source          1..18085
+                     /db_xref="taxon:562"
+                     /note="Nucleotide position 2327544-2345628 from the
+                     initiation site of ThrA (0 min.)."
+                     /note="This clone is from Kohara lambda miniset library"
+                     /mol_type="genomic DNA"
+                     /organism="Escherichia coli"
+                     /clone="Kohara clone #376"
+                     /clone_lib="Kohara lambda miniset library"
+                     /map="50.2 min"
+                     /strain="K12"
+     CDS             <1..534
+                     /codon_start=1
+                     /db_xref="SWISS-PROT:P76461"
+                     /note="ORF_ID:o374#7"
+                     /note="similar to [SwissProt Accession Number P44873]"
+                     /transl_table=11
+                     /product="Acetyl-CoA:acetyltransferase (EC 2.3.1.9)
+                     (Acetoacetyl-CoA thiolase)."
+                     /protein_id="BAA16046.1"
+                     /translation="EFPKANSTAEALGALRPAFDKAGTVTAGNASGINDGAAALVIMEE
+                     SAALAAGLTPLARIKSYASGGVPPALMGMGPVPATQKALQLAGLQLADIDLIEANEAFA
+                     AQFLAVGKNLGFDSEKVNVNGGAIALGHPIGASGARILVTLLHAMQARDKTLGLATLCI
+                     GGGQGIAMVIERLN"
+     CDS             complement(10034..12661)
+                     /codon_start=1
+                     /db_xref="SWISS-PROT:P09097"
+                     /note="similar to [SwissProt Accession Number P09097]"
+                     /transl_table=11
+                     /gene="gyrA"
+                     /gene="hisW"
+                     /gene="nalA"
+                     /gene="parD"
+                     /product="DNA GYRASE SUBUNIT A (EC 5.99.1.3)."
+                     /protein_id="BAA16048.1"
+                     /translation="MSDLAREITPVNIEEELKSSYLDYAMSVIVGRALPDVRDGLKPVH
+                     RRVLYAMNVLGNDWNKAYKKSARVVGDVIGKYHPHGDSAVYDTIVRMAQPFSLRYMLVD
+                     GQGNFGSIDGDSAAAMRYTEIRLAKIAHELMADLEKETVDFVDNYDGTEKIPDVMPTKI
+                     PNLLVNGSSGIAVGMATNIPPHNLTEVINGCLAYIDDEDISIEGLMEHIPGPDFPTAAI
+                     INGRRGIEEAYRTGRGKVYIRARAEVEVDAKTGRETIIVHEIPYQVNKARLIEKIAELV
+                     KEKRVEGISALRDESDKDGMRIVIEVKRDAVGEVVLNNLYSQTQLQVSFGINMVALHHG
+                     QPKIMNLKDIIAAFVRHRREVVTRRTIFELRKARDRAHILEALAVALANIDPIIELIRH
+                     APTPAEAKTALVANPWQLGNVAAMLERAGDDAARPEWLEPEFGVRDGLYYLTEQQAQAI
+                     LDLRLQKLTGLEHEKLLDEYKELLDQIAELLRILGSADRLMEVIREELELVREQFGDKR
+                     RTEITANSADINLEDLITQEDVVVTLSHQGYVKYQPLSEYEAQRRGGKGKSAARIKEED
+                     FIDRLLVANTHDHILCFSSRGRVYSMKVYQLPEATRGARGRPIVNLLPLEQDERITAIL
+                     PVTEFEEGVKVFMATANGTVKKTVLTEFNRLRTAGKVAIKLVDGDELIGVDLTSGEDEV
+                     MLFSAEGKVVRFKESSVRAMGCNTTGVRGIRLGEGDKVVSLIVPRGDGAILTATQNGYG
+                     KRTAVAEYPTKSRATKGVISIKVTERNGLVVGAVQVDDCDQIMMITDAGTLVRTRVSEI
+                     SIVGRNTQGVILIRTAEDENVVGLQRVAEPVDEEDLDTIDGSAAEGDDEIAPEVDVDDE
+                     PEEE"

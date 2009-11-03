@@ -1,0 +1,528 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: pepnet
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+pepnet
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
+    Function
+</H2>
+
+Draw a helical net for a protein sequence
+
+<H2>
+    Description
+</H2>
+
+
+<p><b>pepnet</b> draws a helical net for an input protein sequence.  This is a method of displaying the residues of a protein in a simple 3,4,3,4 repeating pattern that emulates at a simple level the arrangement of residues around an alpha helix. It is therefore easy to see patterns of amphipathicity that you may wish to investigate in more detail by using displays such as <b>pepwheel</b>. You can specify which residues to mark up in squares, diamonds and octagons. </p>
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with pepnet</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>pepnet -sask </b>
+Draw a helical net for a protein sequence
+Input protein sequence: <b>tsw:gcn4_yeast</b>
+     Begin at position [start]: <b>253</b>
+       End at position [end]: <b>274</b>
+Graph type [x11]: <b>cps</b>
+
+Created pepnet.ps
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-sequence]          sequence   Protein sequence filename and optional
+                                  format, or reference (input USA)
+   -graph              graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, das, xterm, png, gif)
+
+   Additional (Optional) qualifiers (* if not always prompted):
+*  -squares            string     [ILVM] By default the aliphatic residues
+                                  ILVM are marked with squares. (Any string is
+                                  accepted)
+*  -diamonds           string     [DENQST] By default the residues DENQST are
+                                  marked with diamonds. (Any string is
+                                  accepted)
+*  -octags             string     [HKR] By default the positively charged
+                                  residues HKR are marked with octagons. (Any
+                                  string is accepted)
+
+   Advanced (Unprompted) qualifiers:
+   -amphipathic        toggle     If this is true then the residues ACFGILMVWY
+                                  are marked as squares and all other
+                                  residues are unmarked. This overrides any
+                                  other markup that you may have specified
+                                  using the qualifiers '-squares', '-diamonds'
+                                  and '-octags'.
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-graph" associated qualifiers
+   -gprompt            boolean    Graph prompting
+   -gdesc              string     Graph description
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Protein sequence filename and optional format, or reference (input USA)</td>
+<td>Readable sequence</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-graph</td>
+<td>Graph type</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, das, xterm, png, gif</td>
+<td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-squares</td>
+<td>By default the aliphatic residues ILVM are marked with squares.</td>
+<td>Any string is accepted</td>
+<td>ILVM</td>
+</tr>
+
+<tr>
+<td>-diamonds</td>
+<td>By default the residues DENQST are marked with diamonds.</td>
+<td>Any string is accepted</td>
+<td>DENQST</td>
+</tr>
+
+<tr>
+<td>-octags</td>
+<td>By default the positively charged residues HKR are marked with octagons.</td>
+<td>Any string is accepted</td>
+<td>HKR</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-amphipathic</td>
+<td>If this is true then the residues ACFGILMVWY are marked as squares and all other residues are unmarked. This overrides any other markup that you may have specified using the qualifiers '-squares', '-diamonds' and '-octags'.</td>
+<td>Toggle value Yes/No</td>
+<td>No</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>pepnet</b> reads any protein sequence USA.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tsw:gcn4_yeast' is a sequence entry in the example protein database 'tsw'
+<p>
+<p><h3>Database entry: tsw:gcn4_yeast</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   GCN4_YEAST              Reviewed;         281 AA.
+AC   P03069; P03068; Q70D88; Q70D91; Q70D96; Q70D99; Q70DA0; Q96UT3;
+DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
+DT   21-JUL-1986, sequence version 1.
+DT   16-JUN-2009, entry version 105.
+DE   RecName: Full=General control protein GCN4;
+DE   AltName: Full=Amino acid biosynthesis regulatory protein;
+GN   Name=GCN4; Synonyms=AAS3, ARG9; OrderedLocusNames=YEL009C;
+OS   Saccharomyces cerevisiae (Baker's yeast).
+OC   Eukaryota; Fungi; Dikarya; Ascomycota; Saccharomycotina;
+OC   Saccharomycetes; Saccharomycetales; Saccharomycetaceae; Saccharomyces.
+OX   NCBI_TaxID=4932;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RX   MEDLINE=85038531; PubMed=6387704; DOI=10.1073/pnas.81.20.6442;
+RA   Hinnebusch A.G.;
+RT   "Evidence for translational regulation of the activator of general
+RT   amino acid control in yeast.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 81:6442-6446(1984).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RX   MEDLINE=84298088; PubMed=6433345; DOI=10.1073/pnas.81.16.5096;
+RA   Thireos G., Penn M.D., Greer H.;
+RT   "5' untranslated sequences are required for the translational control
+RT   of a yeast regulatory gene.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 81:5096-5100(1984).
+RN   [3]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA], AND VARIANTS PRO-24; SER-62;
+RP   ALA-82; ALA-91; ALA-125 AND GLU-196.
+RC   STRAIN=CLIB 219, CLIB 382, CLIB 388, CLIB 410, CLIB 413, CLIB 556,
+RC   CLIB 630, CLIB 95, K1, R12, R13, Sigma 1278B, YIIc12, and YIIc17;
+RX   PubMed=15087486; DOI=10.1093/nar/gkh529;
+RA   Leh-Louis V., Wirth B., Despons L., Wain-Hobson S., Potier S.,
+RA   Souciet J.-L.;
+RT   "Differential evolution of the Saccharomyces cerevisiae DUP240
+RT   paralogs and implication of recombination in phylogeny.";
+RL   Nucleic Acids Res. 32:2069-2078(2004).
+RN   [4]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+RC   STRAIN=ATCC 204511 / S288c / AB972;
+RX   MEDLINE=97313264; PubMed=9169868;
+RA   Dietrich F.S., Mulligan J.T., Hennessy K.M., Yelton M.A., Allen E.,
+RA   Araujo R., Aviles E., Berno A., Brennan T., Carpenter J., Chen E.,
+RA   Cherry J.M., Chung E., Duncan M., Guzman E., Hartzell G.,
+RA   Hunicke-Smith S., Hyman R.W., Kayser A., Komp C., Lashkari D., Lew H.,
+RA   Lin D., Mosedale D., Nakahara K., Namath A., Norgren R., Oefner P.,
+RA   Oh C., Petel F.X., Roberts D., Sehl P., Schramm S., Shogren T.,
+RA   Smith V., Taylor P., Wei Y., Botstein D., Davis R.W.;
+RT   "The nucleotide sequence of Saccharomyces cerevisiae chromosome V.";
+RL   Nature 387:78-81(1997).
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+FT                                /FTId=PRO_0000076490.
+FT   DOMAIN      253    274       Leucine-zipper.
+FT   DNA_BIND    231    249       Basic motif.
+FT   REGION       89    100       Required for transcriptional activation.
+FT   REGION      106    125       Required for transcriptional activation.
+FT   MOD_RES      17     17       Phosphoserine.
+FT   MOD_RES     165    165       Phosphothreonine; by PHO85.
+FT   MOD_RES     218    218       Phosphoserine.
+FT   VARIANT      24     24       S -&gt; P (in strain: CLIB 219).
+FT   VARIANT      62     62       P -&gt; S (in strain: CLIB 630 haplotype
+FT                                Ha2).
+FT   VARIANT      82     82       T -&gt; A (in strain: CLIB 556 haplotype
+FT                                Ha1).
+FT   VARIANT      91     91       D -&gt; A (in strain: CLIB 95, CLIB 219,
+FT                                CLIB 382, CLIB 388, CLIB 410, CLIB 413,
+FT                                CLIB 556, CLIB 630, K1, R12, R13
+FT                                haplotype Ha2, Sigma 1278B haplotype Ha1,
+FT                                YIIc12 and YIIc17).
+FT   VARIANT     125    125       D -&gt; A (in strain: CLIB 556 haplotype
+FT                                Ha1).
+FT   VARIANT     196    196       D -&gt; E (in strain: CLIB 388, CLIB 410,
+FT                                CLIB 413, CLIB 630 haplotype Ha1, K1,
+FT                                YIIc12 haplotype Ha2 and YIIc17 haplotype
+FT                                Ha1).
+FT   MUTAGEN      97     98       FF-&gt;AA: Reduces transcriptional
+FT                                activation activity; when associated with
+FT                                A-107; A-110; A-113; A-120; A-123 and A-
+FT                                124.
+FT   MUTAGEN     107    107       M-&gt;A: Reduces transcriptional activation
+FT                                activity; when associated with A-97; A-
+FT                                98; A-110; A-113; A-120; A-123 and A-124.
+FT   MUTAGEN     110    110       Y-&gt;A: Reduces transcriptional activation
+FT                                activity; when associated with A-97; A-
+FT                                98; A-107; A-113; A-120; A-123 and A-124.
+FT   MUTAGEN     113    113       L-&gt;A: Reduces transcriptional activation
+FT                                activity; when associated with A-97; A-
+FT                                98; A-107; A-110; A-120; A-123 and A-124.
+FT   MUTAGEN     120    124       WTSLF-&gt;ATSAA: Reduces transcriptional
+FT                                activation activity; when associated with
+FT                                A-97; A-98; A-107; A-110 and A-113.
+FT   CONFLICT    239    281       ARRSRARKLQRMKQLEDKVEELLSKNYHLENEVARLKKLVG
+FT                                ER -&gt; PGVLVRESCKE (in Ref. 2; AAA65521).
+FT   HELIX       230    248
+FT   HELIX       251    280
+SQ   SEQUENCE   281 AA;  31310 MW;  2ED1B8E35D509578 CRC64;
+     MSEYQPSLFA LNPMGFSPLD GSKSTNENVS ASTSTAKPMV GQLIFDKFIK TEEDPIIKQD
+     TPSNLDFDFA LPQTATAPDA KTVLPIPELD DAVVESFFSS STDSTPMFEY ENLEDNSKEW
+     TSLFDNDIPV TTDDVSLADK AIESTEEVSL VPSNLEVSTT SFLPTPVLED AKLTQTRKVK
+     KPNSVVKKSH HVGKDDESRL DHLGVVAYNR KQRSIPLSPI VPESSDPAAL KRARNTEAAR
+     RSRARKLQRM KQLEDKVEEL LSKNYHLENE VARLKKLVGE R
+//
+</pre>
+</td></tr></table><p>
+
+<H2>
+    Output file format
+</H2>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>Graphics File: pepnet.ps</h3>
+<p><img src="pepnet.1.pepnet.gif" alt="[pepnet results]">
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="abiview.html">abiview</a></td>
+<td>Display the trace in an ABI sequencer file</td>
+</tr>
+
+<tr>
+<td><a href="cirdna.html">cirdna</a></td>
+<td>Draws circular maps of DNA constructs</td>
+</tr>
+
+<tr>
+<td><a href="garnier.html">garnier</a></td>
+<td>Predicts protein secondary structure using GOR method</td>
+</tr>
+
+<tr>
+<td><a href="helixturnhelix.html">helixturnhelix</a></td>
+<td>Identify nucleic acid-binding motifs in protein sequences</td>
+</tr>
+
+<tr>
+<td><a href="hmoment.html">hmoment</a></td>
+<td>Calculate and plot hydrophobic moment for protein sequence(s)</td>
+</tr>
+
+<tr>
+<td><a href="lindna.html">lindna</a></td>
+<td>Draws linear maps of DNA constructs</td>
+</tr>
+
+<tr>
+<td><a href="pepcoil.html">pepcoil</a></td>
+<td>Predicts coiled coil regions in protein sequences</td>
+</tr>
+
+<tr>
+<td><a href="pepwheel.html">pepwheel</a></td>
+<td>Draw a helical wheel diagram for a protein sequence</td>
+</tr>
+
+<tr>
+<td><a href="prettyplot.html">prettyplot</a></td>
+<td>Draw a sequence alignment with pretty formatting</td>
+</tr>
+
+<tr>
+<td><a href="prettyseq.html">prettyseq</a></td>
+<td>Write a nucleotide sequence and its translation to file</td>
+</tr>
+
+<tr>
+<td><a href="remap.html">remap</a></td>
+<td>Display restriction enzyme binding sites in a nucleotide sequence</td>
+</tr>
+
+<tr>
+<td><a href="seealso.html">seealso</a></td>
+<td>Finds programs with similar function to a specified program</td>
+</tr>
+
+<tr>
+<td><a href="showalign.html">showalign</a></td>
+<td>Display a multiple sequence alignment in pretty format</td>
+</tr>
+
+<tr>
+<td><a href="showdb.html">showdb</a></td>
+<td>Displays information on configured databases</td>
+</tr>
+
+<tr>
+<td><a href="showfeat.html">showfeat</a></td>
+<td>Display features of a sequence in pretty format</td>
+</tr>
+
+<tr>
+<td><a href="showpep.html">showpep</a></td>
+<td>Displays protein sequences with features in pretty format</td>
+</tr>
+
+<tr>
+<td><a href="showseq.html">showseq</a></td>
+<td>Displays sequences with features in pretty format</td>
+</tr>
+
+<tr>
+<td><a href="sixpack.html">sixpack</a></td>
+<td>Display a DNA sequence with 6-frame translation and ORFs</td>
+</tr>
+
+<tr>
+<td><a href="textsearch.html">textsearch</a></td>
+<td>Search the textual description of sequence(s)</td>
+</tr>
+
+<tr>
+<td><a href="tmap.html">tmap</a></td>
+<td>Predict and plot transmembrane segments in protein sequences</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Author(s)
+</H2>
+Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+
+
+<H2>
+    History
+</H2>
+
+Written (2000) - Alan Bleasby
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+
+<H2>
+    Comments
+</H2>
+None
+
+</BODY>
+</HTML>
+

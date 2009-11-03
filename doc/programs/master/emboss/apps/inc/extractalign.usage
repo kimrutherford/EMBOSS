@@ -1,0 +1,14 @@
+<b>Here is a sample session with extractalign</b>
+<p>
+Extract the region from position 10 to 20: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>extractalign dna.msf result.seq -regions '11-30' </b>
+Extract regions from a sequence alignment
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

@@ -1,0 +1,46 @@
+>>>>L46634
+ 
+ID   L46634     standard; DNA; VRL; 1272 BP.
+XX
+AC   L46634; L46689;
+XX
+SV   L46634.1
+XX
+DT   06-NOV-1995 (Rel. 45, Created)
+DT   30-APR-1996 (Rel. 47, Last updated, Version 2)
+XX
+DE   Human herpesvirus 7 (clone ED132'1.2) telomeric repeat region.
+XX
+KW   telomeric repeat.
+XX
+OS   Human herpesvirus 7
+OC   Viruses; dsDNA viruses, no RNA stage; Herpesviridae; Betaherpesvirinae.
+XX
+RN   [1]
+RP   1-1272
+RX   MEDLINE; 96079055.
+RA   Secchiero P., Nicholas J., Deng H., Xiaopeng T., van Loon N., Ruvolo V.R.,
+RA   Berneman Z.N., Reitz M.S., Dewhurst S.;
+RT   "Identification of human telomeric repeat motifs at the genome termini of
+RT   human herpesvirus 7: structural analysis and heterogeneity";
+RL   J. Virol. 69:8041-8045(1995).
+XX
+CC   NCBI gi: 1019148
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1. .1272
+FT                   /db_xref="taxon:10372"
+FT                   /organism="Human herpesvirus 7"
+FT                   /strain="JI"
+FT                   /clone="ED132'1.2"
+FT   repeat_region   207. .928
+FT                   /note="long and complex repeat region composed of various
+FT                   direct repeats, including TAACCC (TRS), degenerate copies
+FT                   of TRS motifs and a 14-bp repeat, TAGGGCTGCGGCCC"
+FT   misc_signal     938. .998
+FT                   /note="pac2 motif"
+FT   misc_feature    1009
+FT                   /note="right genome terminus (. . .ACA)"
+XX
+SQ   Sequence 1272 BP; 346 A; 455 C; 222 G; 249 T; 0 other;

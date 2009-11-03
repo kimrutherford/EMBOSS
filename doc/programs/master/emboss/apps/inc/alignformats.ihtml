@@ -1,0 +1,30 @@
+<p>
+
+The output is a standard EMBOSS alignment file. 
+
+<p>
+
+The results can be output in one of several styles by using the
+command-line qualifier <b>-aformat xxx</b>, where 'xxx' is replaced by
+the name of the required format.  Some of the alignment formats can cope
+with an unlimited number of sequences, while others are only for pairs
+of sequences.  
+
+<p>
+
+The available multiple alignment format names are: unknown, multiple,
+simple, fasta, msf, trace, srs
+
+<p>
+
+The available pairwise alignment format names are: pair, markx0, markx1,
+markx2, markx3, markx10, srspair, score
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/AlignFormats.html">
+http://emboss.sf.net/docs/themes/AlignFormats.html</A>
+for further information on alignment formats.
+
+<p>

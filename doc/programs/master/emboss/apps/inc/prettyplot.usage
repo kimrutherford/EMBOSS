@@ -1,0 +1,32 @@
+<b>Here is a sample session with prettyplot</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>prettyplot -resbreak=10 -boxcol -consensus -plurality=3 </b>
+Draw a sequence alignment with pretty formatting
+Input (aligned) sequence set: <b>globins.msf</b>
+Graph type [x11]: <b>cps</b>
+
+Created prettyplot.ps
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>prettyplot globins.msf -plurality=3 -docolour </b>
+Draw a sequence alignment with pretty formatting
+Graph type [x11]: <b>cps</b>
+
+Created prettyplot.ps
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>

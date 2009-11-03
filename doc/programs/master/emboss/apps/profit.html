@@ -1,0 +1,201 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: profit
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+profit
+<!--#include file="header2.inc" -->
+
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/profit.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+<p>profit scans one or more sequences with a simple frequency matrix and writes an output file with any high-scoring matches.  All possible ungapped alignments of each sequence to the matrix are scored and any matches with a score higher than the specified threshold are written to the output file.  The output file includes the name of any matching sequence found, the start position in the sequence of the match and the percentage of the maximum possible score.</p>
+
+
+<H2>
+Algorithm
+</H2>
+<p>All possible ungapped alignments of each sequence to the frequency matrix are scored. The first alignment has the first positions of the sequence and matrix in the same register.  If the sequence is larger than the matrix, there will be more than one alignment.  Otherwise, there will be just one.</p>
+<p>The score for a match is simply the sum of scores at each position of the matrix for the corresponding residue from the sequence.  The percentage of the maximum possible score reported in the output file is the sum of the highest value at each position in the frequency matrix. Where the match score is above the threshold percentage of the maximum possible score for that matrix, then a hit is reported.</p>
+
+
+
+<H2>
+    Usage
+</H2>
+
+
+Before running the example, we need to make a simple frequency matrix
+using <b>prophecy</b>
+
+<p>
+
+This is the ungapped aligned set of sequences used to make the matrix:
+
+<p>
+
+<pre>
+% more m.seq
+>one
+DEVGGEALGRLLVVYPWTQR
+>two
+DEVGREALGRLLVVYPWTQR
+>three
+DEVGGEALGRILVVYPWTQR
+>four
+DEVGGEAAGRVLVVYPWTQR
+
+<p>
+
+% prophecy
+Creates matrices/profiles from multiple alignments
+Input sequence set: m.seq
+Profile type
+         F : Frequency
+         G : Gribskov
+         H : Henikoff
+Select type [F]: 
+Enter a name for the profile [mymatrix]: 
+Enter threshold reporting percentage [75]: 
+Output file [outfile.prophecy]: 
+</pre>
+
+<p>
+
+<!--#include file="inc/profit.usage" -->
+
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/profit.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/profit.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>profit</b> reads a simple frequency matrix produced by
+<b>prophecy</b> and uses it to search searches one or more protein or
+nucleic acid sequence USAs. 
+
+<p>
+
+<!--#include file="inc/profit.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/profit.output" -->
+
+<p>
+
+The ouput is a list of three columns.
+
+<p>
+
+The first column is the name of the matching sequence found.
+<br>
+The second is the start position in the sequence of the match.
+<br>
+The third column (after the word 'Percentage:') is the percentage of the
+maximum possible score  (sum of the highest value at each
+position in the frequency matrix). 
+
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+<p>A 'simple frequency matrix' is simply a table containing a count of the number of times any particular amino acid occurs at each position in the sequence alignment from which it was derived. Simple frequency matrices are created using the program prophecy with the option <tt>-type F</tt> to create the correct type of matrix. The input alignment should not have gaps in it.</p>
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+The aligned set of sequences used to make the simple frquency matrix
+should not have gaps in it.  <b>profit</b> will let you use a matrix
+made from a gapped alignment, but the results will probably not be
+sensible. 
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/profit.isee" -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+<!--#include file="inc/ableasby.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/profit.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/profit.comment" -->
+
+</BODY>
+</HTML>
+

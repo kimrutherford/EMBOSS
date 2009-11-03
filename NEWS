@@ -1,0 +1,67 @@
+15/07/2009	Version 6.1.0  See ChangeLog
+16/07/2008	Version 6.0.1  See ChangeLog
+15/07/2008	Version 6.0.0  See ChangeLog
+15/07/2007	Version 5.0.0  See ChangeLog
+04/03/2007	Version 4.1.0  See ChangeLog
+15/07/2006	Version 4.0.0  See ChangeLog
+15/07/2005	Version 3.0.0  See ChangeLog
+03/01/2005	Version 2.10.0  See ChangeLog
+15/07/2004	Version 2.9.0  See ChangeLog
+30/11/2003	Version 2.8.0  See ChangeLog
+03/06/2003	Version 2.7.1  See ChangeLog
+01/06/2003	Version 2.7.0  See ChangeLog
+20/09/2002	Version 2.5.2  See ChangeLog
+12/05/2002	Version 2.5.1  See ChangeLog
+25/05/2002	Version 2.5.0  See ChangeLog
+14/05/2002	Version 2.4.1  See ChangeLog
+11/04/2002	Version 2.4.0  See ChangeLog
+07/03/2002	Version 2.3.1  Genbank feature reading fixed
+03/03/2002      Version 2.3.0  Interface added. See ChangeLog
+12/01/2002      Version 2.2.0  Biosed, Contacts, Dichet, Psiblasts,
+                               Scopalign, Sigscan, Siggen. Configure tidy.
+                               Alignment report fixes.
+24/12/2001      Version 2.1.0  Jemboss. More reports, alignments.
+29/07/2001      Version 2.0.1  Release of HMMER as embassy pkg. DBIGCG bugfix
+15/07/2001      Version 2.0.0  New feature table handling etc
+25/05/2001      Version 1.13.1 Fix emboss.default.template problem
+24/05/2001      Version 1.13.0 SHOWALIGN and EMBOSSVERSION added. Prophet fixed
+17/04/2001      Version 1.12.0 DISTMAT and CAI added
+10/03/2001      Version 1.11.0 CHARGE and DEGAPSEQ added.
+26/02/2001      Version 1.10.1 Bug fixes of marscan, getorf and garnier
+18/02/2001      Version 1.10.0 SCOPE, NRSCOPE, DOMAINER added.
+                               Initial large file model support.
+22/01/2001      Version 1.9.0 ABIVIEW RECODE added. Linked list and
+                              string iterator code rewritten.
+20/11/2000      Version 1.8.0 CODERET added. Corba test routines
+31/10/2000      Version 1.7.0 ENTRET added. GCG osf style changed.
+                              Fixed -slower & -supper for multiple
+                              sequences
+25/10/2000      Version 1.6.3 Further mods for seqed files.
+                              Rewrite of profile core routines.
+                              Added %id, %sim and fasta output to
+                              NEEDLE and WATER
+23/10/2000	Version 1.6.2 Now reads GCG seqed mangled files. Phylip
+                              output fixed. Numerous minor changes.
+11/10/2000      Version 1.6.1 RedHat Linux 7.0 fpos_t fix
+06/10/2000      Version 1.6.0 Addition of CONS application
+03/10/2000      Version 1.5.6 URL access handles new SRS6.07* format.
+                              Library and applications leak-free.
+                              Error messages made less daunting.
+28/09/2000      Version 1.5.5 dbigcg changes for genbank. Memory leaks plugged.
+23/09/2000      Version 1.5.4 Added blast multi-volume support. More gui.
+18/09/2000      Version 1.5.3 LinuxPPC support added
+15/09/2000      Version 1.5.2 dbigcg changes for embl
+09/09/2000      Version 1.5.1 Changes to graphics data output for GUIs
+07/09/2000      Version 1.5.0 EMOWSE added
+03/09/2000      Version 1.4.3 TFM corrected. HTML corrected. More GUI work
+29/08/2000      Version 1.4.2 Changes to graphics data output for GUIs
+25/08/2000      Version 1.4.1 Minor library changes
+20/08/2000      Version 1.4.0 SILENT plus RESTRICT additions
+18/08/2000      Version 1.3.1 Indexing filenamelen fix + diffseq mod
+17/08/2000      Version 1.3.0 Addition of VECTORSTRIP and DIFFSEQ
+15/08/2000      Version 1.2.0 released
+09/08/2000      Version 1.1.0 released
+08/08/2000      Version 1.0.2 released
+07/2000		Version 1.0.0 released
+12/1998		Version 0.0.4 released
+

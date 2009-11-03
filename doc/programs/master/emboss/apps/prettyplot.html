@@ -1,0 +1,172 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: prettyplot
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+prettyplot
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/prettyplot.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+
+<p><b>prettyplot</b> draws a plot of the input sequence alignment.
+The sequences are rendered in pretty formatting on the specified
+graphics device.  Drawing options control the appearance of the image,
+such as boxes, colour and shading for highlighting conserved
+regions.</p>
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/prettyplot.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/prettyplot.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/prettyplot.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>prettyplot</b> reads any sequence USA.
+
+<p>
+
+<!--#include file="inc/prettyplot.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+An image of the alignment is displayed on the specified graphics device.
+
+<p>
+
+<!--#include file="inc/prettyplot.output" -->
+
+<H2>
+    Data files
+</H2>
+
+
+Prettyplot uses a comparison matrix file to calculate similarity to
+the consensus.
+
+<p>
+For protein sequences EBLOSUM62 is used for the substitution matrix.
+For nucleotide sequence, EDNAFULL is used.
+
+<!--#include file="inc/localfiles.ihtml" -->
+
+<H2>
+    Notes
+</H2>
+
+<p>A consesnsus sequence is calculated for the alignment and
+individual sequences compared to the consensus using the specified
+comparison matrix file. The default matrix for protein sequences
+is <tt>EBLOSUM62</tt> and for nucleotide sequences
+is <tt>EDNAFULL</tt>. The drawing options render conserved sites and
+regions identified from the comparisons.  For example, residues in a
+sequence are classed as "identical", "similar" or "other" to the
+consensus depending on user-specified thresholds of sequence
+similarity (<tt>-pair</tt> option).  Residues in each class are
+rendered red, green and black by default (this can be changed).</p>
+
+<p>There are other more general drawing options, for example,
+controlling the number of residues displayed per line, background
+shading and whether to display sequence names or not.</p>
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It exits with status 0 unless an error is reported.
+
+<H2>
+    Known bugs
+</H2>
+
+
+Portrait mode does not cover the whole page! This is a "feature" in
+plplot.
+
+<!--#include file="inc/prettyplot.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/ilongden.address" -->
+
+
+<p>
+
+Many features were first implemented in the EGCG program "prettyplot" by
+<!--#include file="inc/price.address" -->
+
+
+<p> 
+
+The original suggestions for the PrettyPlot program were from Denis
+Duboule and Sigfried Labeit at EMBL. Gert Vriend added the star
+marking. Rita Grandori suggested the -NOCOLLISION option. 
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/prettyplot.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/prettyplot.comment" -->
+
+</BODY>
+</HTML>
+

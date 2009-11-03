@@ -1,0 +1,21 @@
+application: tfextract [
+  documentation: "Process TRANSFAC transcription factor database
+                  for use by tfscan"
+  groups: "Utils:Database creation"
+  gui: "no"
+  batch: "no"
+  cpu: "low"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  infile: infile [
+    parameter: "Y"
+    information: "Transfac database sites file"
+    knowntype: "transfac site"
+  ]
+
+endsection: input

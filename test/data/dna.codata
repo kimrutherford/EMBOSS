@@ -1,0 +1,10 @@
+ENTRY           CODATA 
+TITLE           CODATA FORMAT DNA SEQUENCE, 100 bases
+ACCESSION       C10002
+SEQUENCE        
+                 5        10        15        20        25        30
+      1 A C G T A C G T A C G T A C G T A C G T A C G T A C G T A C
+     31 G T A C G T A C G T A C G T A C G T A C G T A C G T A C G T
+     61 A C G T A C G T A C G T A C G T A C G T A C G T A C G T A C
+     91 G T A C G T A C G T
+///

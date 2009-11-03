@@ -1,0 +1,191 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: showdb
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+showdb
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/showdb.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+<p><b>showdb</b> displays a table with the names, contents and access methods of the sequence databases configured for your EMBOSS installation.</p>
+
+
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/showdb.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/showdb.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/showdb.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+    None.
+
+<p>
+
+<!--#include file="inc/showdb.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+
+<!--#include file="inc/showdb.output" -->
+
+<p>
+
+The output is a simple table.
+
+<p>
+
+Type 'P' indicates that this is a Protein database.
+
+<p>
+
+Type 'N' indicates that this is a Nucleic database.
+
+<p>
+
+'OK' under ID, Qry or All indicates that that access method can be
+used on this database.  A '-' indicates that you cannot access this
+database in that way.
+
+<p>
+
+Note that 'OK' does not mean that the database is working correctly.  It
+simply means that <b>showdb</b> has read the database definition
+correctly and that this method of access to the database should be
+possible. 
+
+<p>
+
+If you are setting up a new database, then you should check that it
+works correctly by extracting entries from it using <b>seqret</b>. 
+
+<p>
+
+When the -html qualifier is specified, then the output will be wrapped
+in HTML tags, ready for inclusion in a Web page.  Note that tags such
+as &lt;HTML&gt;, &lt;BODY&gt;, &lt;/BODY&gt; and &lt;/HTML&gt; are not
+output by this program as the table of databases is expected to form
+only part of the contents of a web page - the rest of the web page
+must be supplied by the user.
+
+
+<H2>
+    Data files
+</H2>
+
+
+The databases are specified in the files <i>"emboss.defaults"</i> for
+site wide definitions, and <i>"~/.embossrc"</i> for the user's own
+settings.
+	
+<H2>
+    Notes
+</H2>
+
+<p>EMBOSS provides excellent database support.  All the common sequence formats you are likely to come across are supported.  There are three basic levels of database query with different ways to search for and retrieve entries:
+
+<tt>entry</tt>  A single entry specified by database ID or accession number is retrieved.  For example "embl:x13776". 
+<tt>query</tt>  One or more entries matching a wildcard string in the USA are retrieved (this can be slow for some methods). For example you can specify all of the human PAX proteins in SWISS_PROT by: <tt>swissprot:pax*_human</tt>.
+<tt>all</tt>      All entries are read sequentially from a database. For example to specify all entries in the database use <tt>embl:*</tt>.</p>
+
+<p>One or more query levels may be available for a database depending on the database in question and how it has been setup and indexed.  Each database and access method must be configured for it to be available for use.  This involves editing one of the EMBOSS configuration files, either your own personal <tt>.embossrc</tt> or the installation-wide <tt>emboss.default</tt> file. The <tt>emboss.default</tt> file will typically contain the definitions of the test databases (<tt>tsw</tt>, <tt>tembl</tt>, <tt>tpir</tt>, etc) used in the usage examples for the application documentation and serve as example database definitions.  For more information, see the EMBOSS Administrators Manual.  You can run <b>showdb</b> to see the databases and access methods that have been configured successfully.</p>
+
+<H2>
+    References
+</H2>
+
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+<p>Where the string <tt>OK</tt> is given next to a database is listed in <b>showdb</b> output, this means <b>showdb</b> has read the database definition correctly and that this access method is in principle possible, in other words, the database has been configured correctly..  It does not mean that the database or access method are available or working correctly. You should check things are ok by running, for example, <b>seqret</b> to retrieve an entry.</p>
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+"The database 'xyz' does not exist" You have supplied the name of a
+database with the -database qualifier, but that database does not
+exist as far as EMBOSS is concerned.
+
+<H2>
+    Exit status
+</H2>
+
+
+It always exits with status 0, unless the above diagnostic message is
+displayed.
+
+<H2>
+    Known bugs
+</H2>
+
+
+None noted.
+
+<!--#include file="inc/showdb.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/gwilliam.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/showdb.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/showdb.comment" -->
+
+</BODY>
+</HTML>
+

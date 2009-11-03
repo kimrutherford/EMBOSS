@@ -1,0 +1,62 @@
+application: pepnet [
+  documentation: "Draw a helical net for a protein sequence"
+  groups: "Display, Protein:2D Structure"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  sequence: sequence [
+    parameter: "Y"
+    type: "Protein"
+  ]
+
+endsection: input
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  toggle: amphipathic [
+    information: "Prompt for amphipathic residue marking"
+    help: "If this is true then the residues ACFGILMVWY are marked as
+           squares and all other residues are unmarked. This overrides any
+           other markup that you may have specified using the qualifiers
+           '-squares', '-diamonds' and '-octags'."
+  ]
+
+  string: squares [
+    additional: "@(!$(amphipathic))"
+    default: "ILVM"
+    information: "Mark as squares"
+    help: "By default the aliphatic residues ILVM are marked with
+           squares."
+    knowntype: "protein codes"
+  ]
+
+  string: diamonds [
+    additional: "@(!$(amphipathic))"
+    default: "DENQST"
+    information: "Mark as diamonds"
+    help: "By default the residues DENQST are marked with diamonds."
+    knowntype: "protein codes"
+  ]
+
+  string: octags [
+    additional: "@(!$(amphipathic))"
+    default: "HKR"
+    information: "Mark as octagons"
+    help: "By default the positively charged residues HKR are marked
+           with octagons."
+    knowntype: "protein codes"
+  ]
+
+  graph: graph [
+    standard: "Y"
+    gdesc: "Helical net"
+  ]
+
+endsection: output

@@ -1,0 +1,41 @@
+# with a comment
+application: maskambigprot [
+  documentation: "Masks all ambiguity characters in protein sequences with X"
+  groups: "Edit"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  boolean: feature [
+    information: "Use feature information"
+  ]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "gapproteinsimple"
+    features: "$(feature)"
+  ]
+
+endsection: input
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  seqoutall: outseq [
+    parameter: "Y"
+    features: "$(feature)"
+  ]
+
+endsection: output

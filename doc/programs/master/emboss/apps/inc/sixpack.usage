@@ -1,0 +1,15 @@
+<b>Here is a sample session with sixpack</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>sixpack </b>
+Display a DNA sequence with 6-frame translation and ORFs
+Input nucleotide sequence: <b>tembl:x13776</b>
+Output file [x13776.sixpack]: <b></b>
+protein output sequence(s) [x13776.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

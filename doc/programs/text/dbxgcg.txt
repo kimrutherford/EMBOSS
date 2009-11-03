@@ -1,0 +1,292 @@
+
+                                  dbxgcg 
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Index a GCG formatted database using b+tree indices
+
+Description
+
+   dbxgcg indexes a flat file database of one or more files, and builds
+   EMBOSS B+tree format index files. These indexes allow access of flat
+   files larger than 2Gb.
+
+Usage
+
+   Here is a sample session with dbxgcg
+
+
+% dbxgcg 
+Index a GCG formatted database using b+tree indices
+Basename for index files: embl
+Resource name: emblresource
+      EMBL : EMBL
+     SWISS : Swiss-Prot, SpTrEMBL, TrEMBLnew
+   GENBANK : Genbank, DDBJ
+       PIR : NBRF
+Entry format [SWISS]: embl
+Database directory [.]: embl
+Wildcard database filename [*.seq]: 
+        id : ID
+       acc : Accession number
+        sv : Sequence Version and GI
+       des : Description
+       key : Keywords
+       org : Taxonomy
+Index fields [id,acc]: 
+General log output file [outfile.dbxgcg]: 
+
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-dbname]            string     Basename for index files (Any string from 2
+                                  to 19 characters, matching regular
+                                  expression /[A-z][A-z0-9_]+/)
+  [-dbresource]        string     Resource name (Any string from 2 to 19
+                                  characters, matching regular expression
+                                  /[A-z][A-z0-9_]+/)
+   -idformat           menu       [SWISS] Entry format (Values: EMBL (EMBL);
+                                  SWISS (Swiss-Prot, SpTrEMBL, TrEMBLnew);
+                                  GENBANK (Genbank, DDBJ); PIR (NBRF))
+   -directory          directory  [.] Database directory
+   -filenames          string     [*.seq] Wildcard database filename (Any
+                                  string is accepted)
+   -fields             menu       [id,acc] Index fields (Values: id (ID); acc
+                                  (Accession number); sv (Sequence Version and
+                                  GI); des (Description); key (Keywords); org
+                                  (Taxonomy))
+   -outfile            outfile    [*.dbxgcg] General log output file
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -release            string     [0.0] Release number (Any string up to 9
+                                  characters)
+   -date               string     [00/00/00] Index date (Date string dd/mm/yy)
+   -exclude            string     Wildcard filename(s) to exclude (Any string
+                                  is accepted)
+   -indexoutdir        outdir     [.] Index file output directory
+
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   dbxgcg reads any normal sequence USAs.
+
+Output file format
+
+   dbxgcg creates one summary file for the database and two files for
+   each field indexed.
+
+     * dbalias.ent is the master file containing the names of the files
+       that have been indexed. It is an ASCII file. This file also
+       contains the database release and date information.
+     * dbalias.xid is the B+tree index file for the ID names. It is a
+       binary file.
+     * dbalias.pxid is an ASCII file containing information regarding the
+       structure of the ID name index.
+
+  Output files for usage example
+
+  File: outfile.dbxgcg
+
+Processing directory: /homes/user/test/embl/
+Processing file: eem_ba1.seq entries: 10 (10) time: 0.0s (0.0s)
+Processing file: eem_est.seq entries: 11 (1) time: 0.0s (0.0s)
+Processing file: eem_fun.seq entries: 12 (1) time: 0.0s (0.0s)
+Processing file: eem_htginv1.seq entries: 17 (5) time: 0.0s (0.0s)
+Processing file: eem_hum1.seq entries: 32 (15) time: 0.0s (0.0s)
+Processing file: eem_in.seq entries: 34 (2) time: 0.0s (0.0s)
+Processing file: eem_ov.seq entries: 36 (2) time: 0.0s (0.0s)
+Processing file: eem_ro.seq entries: 39 (3) time: 0.0s (0.0s)
+Processing file: eem_vi.seq entries: 40 (1) time: 0.0s (0.0s)
+Total time: 0.0s
+
+  File: embl.ent
+
+# Number of files: 9
+# Release: 0.0
+# Date:    00/00/00
+Dual filename database
+eem_ba1.seq eem_ba1.ref
+eem_est.seq eem_est.ref
+eem_fun.seq eem_fun.ref
+eem_htginv1.seq eem_htginv1.ref
+eem_hum1.seq eem_hum1.ref
+eem_in.seq eem_in.ref
+eem_ov.seq eem_ov.ref
+eem_ro.seq eem_ro.ref
+eem_vi.seq eem_vi.ref
+
+  File: embl.pxac
+
+Order     71
+Fill      46
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    99
+Fill2     101
+Count     47
+Kwlimit   15
+
+  File: embl.pxid
+
+Order     71
+Fill      46
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    99
+Fill2     101
+Count     39
+Kwlimit   15
+
+  File: embl.xac
+
+   This file contains non-printing characters and so cannot be displayed
+   here.
+
+  File: embl.xid
+
+   This file contains non-printing characters and so cannot be displayed
+   here.
+
+Data files
+
+   None.
+
+Notes
+
+   The indexing system has been designed to allow on-the-fly updating of
+   indexes. This feature is, however, not implemented in the current
+   version. It will be made available in future releases.
+
+   Having created the EMBOSS indexes for this file, a database can then
+   be defined in the file emboss.defaults as something like:
+DB embl [
+   type: N
+   dbalias: embl   (see below)
+   format: embl
+   method: embossgcg
+   directory: /data/gcg/embl
+   file: *.seq
+   indexdirectory: /data/gcg/embl/indexes
+]
+
+   The index file 'basename' given to dbxgcg must match the DB name in
+   the definition. If not, then a 'dbalias' line must be given which
+   specifies the basename of the indexes.
+
+  Fields Indexed
+
+   By default, dbxgcg will index the ID name and the accession number (if
+   present).
+   If they are present in your database, you may also specify that dbxgcg
+   should index the Sequence Version and GI, the words in the
+   description, the keywords and the organism words using the '-fields'
+   qualifier with the appropriate values.
+
+Global Parameters
+
+   dbxgcg requires that two global parameters be defined in the file
+   emboss.defaults. These are:
+SET PAGESIZE 2048
+SET CACHESIZE 200
+
+   The above values are recommended for most systems. The PAGESIZE is a
+   multiple of the size of disc pages the operating system buffers. The
+   CACHESIZE is the number of disc pages dbxgcg is allowed to cache.
+
+Resources
+
+   dbxgcg will ask you for the name of a resource definition in the file
+   emboss.defaults. This will be something like:
+RES embl [
+   type: Index
+   idlen:  15
+   acclen: 15
+   svlen:  20
+   keylen: 25
+   deslen: 25
+   orglen: 25
+]
+
+   The length definitions are the maximum lengths of 'words' in the field
+   being indexed. Longer words will be truncated to the value set.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+                    Program name                   Description
+                    dbiblast     Index a BLAST database
+                    dbifasta     Index a fasta file database
+                    dbiflat      Index a flat file database
+                    dbigcg       Index a GCG formatted database
+                    dbxfasta     Index a fasta file database using b+tree indices
+                    dbxflat      Index a flat file database using b+tree indices
+
+Author(s)
+
+   Alan             Bleasby (ajb © ebi.ac.uk)
+   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton,         Cambridge CB10 1SD, UK
+
+History
+
+Target users
+
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
+
+Comments
+
+                    None

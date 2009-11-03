@@ -1,0 +1,67 @@
+application: extractseq [
+  documentation: "Extract regions from a sequence"
+  groups: "Edit"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  sequence: sequence [
+    parameter: "Y"
+    type: "any"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  range: regions [
+    standard: "Y"
+    default: "$(sequence.begin)-$(sequence.end)"
+    information: "Regions to extract (eg: 4-57,78-94)"
+    help: "Regions to extract. \
+           A set of regions is specified by a set of pairs of positions. \
+           The positions are integers. \
+           They are separated by any non-digit, non-alpha character. \
+           Examples of region specifications are: \
+           24-45, 56-78 \
+           1:45, 67=99;765..888 \
+           1,5,8,10,23,45,57,99"
+    expected: "Whole sequence"
+  ]
+
+endsection: required
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  boolean: separate [
+    additional: "Y"
+    default: "N"
+    information: "Write regions to separate sequences"
+    help: "If this is set true then each specified region is written
+           out as a separate sequence. The name of the sequence is created
+           from the name of the original sequence with the start and end
+           positions of the range appended with underscore characters between
+           them, eg: XYZ region 2 to 34 is written as: XYZ_2_34"
+  ]
+
+endsection: additional
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  seqoutall: outseq [
+    parameter: "Y"
+  ]
+
+endsection: output

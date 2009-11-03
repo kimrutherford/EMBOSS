@@ -1,0 +1,60 @@
+application: charge [
+  documentation: "Draw a protein charge plot"
+  groups: "Protein:Composition"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: seqall [
+    parameter: "Y"
+    type: "protein"
+  ]
+
+  datafile: aadata [
+    default: "Eamino.dat"
+    information: "Amino acids properties and molecular weight
+                  data file"
+    knowntype: "amino acid properties"
+  ]
+
+endsection: input
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  integer: window [
+    additional: "Y"
+    minimum: "1"
+    default: "5"
+    information: "Window length"
+  ]
+
+endsection: additional
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  toggle: plot [
+    default: "N"
+    information: "Produce graphic"
+  ]
+
+  xygraph: graph [
+    standard: "$(plot)"
+  ]
+
+  outfile: outfile [
+    standard: "@(!$(plot))"
+    knowntype: "charge output"
+    nullok: "Y"
+    nulldefault: "$(plot)"
+  ]
+
+endsection: output

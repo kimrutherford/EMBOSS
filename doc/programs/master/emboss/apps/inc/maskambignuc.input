@@ -1,0 +1,11 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: ambignuc.fasta</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+&gt;AMBIGNUC
+ABCDGHKMNRSTUVWY
+abcdghkmnrstuvwy
+</pre>
+</td></tr></table><p>

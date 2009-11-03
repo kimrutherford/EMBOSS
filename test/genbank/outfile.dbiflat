@@ -1,0 +1,119 @@
+########################################
+# Program: dbiflat
+# Rundate: Wed 15 Jul 2009 12:00:00
+# Dbname: GENBANK
+# Release: 0.0
+# Date: 15/07/09
+# CurrentDirectory: /data2/users/pmr/cvsemboss/test/genbank/
+# IndexDirectory: ./
+# IndexDirectoryPath: /data2/users/pmr/cvsemboss/test/genbank/
+# Maxindex: 0
+# Fields: 6
+#   Field 1: id
+#   Field 2: acc
+#   Field 3: sv
+#   Field 4: des
+#   Field 5: key
+#   Field 6: org
+# Directory: ./
+# DirectoryPath: /data2/users/pmr/cvsemboss/test/genbank/
+# Filenames: *.seq
+# Exclude: 
+# Files: 10
+#   File 1: ./gbbct1.seq
+#   File 2: ./gbest1.seq
+#   File 3: ./gbinv1.seq
+#   File 4: ./gbpln1.seq
+#   File 5: ./gbpln2.seq
+#   File 6: ./gbpri1.seq
+#   File 7: ./gbrod1.seq
+#   File 8: ./gbsts1.seq
+#   File 9: ./gbvrl1.seq
+#   File 10: ./gbvrt.seq
+########################################
+# Commandline: dbiflat
+#    -fields acnum,seqvn,des,keyword,taxon
+#    -dbname GENBANK
+#    -idformat gb
+#    -filenames "*.seq"
+#    -auto
+########################################
+
+filename: 'gbbct1.seq'
+    id: 9
+   acc: 13
+    sv: 9
+   des: 76
+   key: 27
+   org: 63
+filename: 'gbest1.seq'
+    id: 1
+   acc: 1
+    sv: 1
+   des: 15
+   key: 1
+   org: 15
+filename: 'gbinv1.seq'
+    id: 2
+   acc: 2
+    sv: 2
+   des: 10
+   key: 2
+   org: 22
+filename: 'gbpln1.seq'
+    id: 1
+   acc: 1
+    sv: 1
+   des: 8
+   key: 1
+   org: 10
+filename: 'gbpln2.seq'
+    id: 1
+   acc: 3
+    sv: 1
+   des: 9
+   key: 2
+   org: 17
+filename: 'gbpri1.seq'
+    id: 18
+   acc: 52
+    sv: 18
+   des: 163
+   key: 39
+   org: 270
+filename: 'gbrod1.seq'
+    id: 3
+   acc: 3
+    sv: 3
+   des: 28
+   key: 1
+   org: 51
+filename: 'gbsts1.seq'
+    id: 1
+   acc: 1
+    sv: 1
+   des: 15
+   key: 7
+   org: 15
+filename: 'gbvrl1.seq'
+    id: 1
+   acc: 2
+    sv: 1
+   des: 10
+   key: 1
+   org: 7
+filename: 'gbvrt.seq'
+    id: 2
+   acc: 2
+    sv: 2
+   des: 12
+   key: 6
+   org: 32
+
+Index acc: maxlen 8 items 80
+Index sv: maxlen 10 items 78
+Index des: maxlen 19 items 176
+Index key: maxlen 44 items 76
+Index org: maxlen 27 items 95
+
+Total 10 files 39 entries (0 duplicates)

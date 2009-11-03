@@ -1,0 +1,135 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: entret
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+entret
+<!--#include file="header2.inc" -->
+<H2>
+    Function
+</H2>
+<!--#include file="inc/entret.ione" -->
+
+<H2>
+    Description
+</H2>
+
+
+
+<p><b>entret</b> reads one or more complete sequence entries from a database or a file and writes them to a text file.  Optionally, the first sequence from the input stream only can be retrieved.  The complete entry, including heading annotation, is retrieved and written and the data is not altered or reformatted in any way.</p>
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/entret.usage" -->
+
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/entret.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/entret.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+<b>entret</b> reads a normal sequence USA.
+
+<p>
+<!--#include file="inc/entret.input" -->
+
+
+<H2>
+    Output file format
+</H2>
+<!--#include file="inc/entret.output" -->
+
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+<p>The difference between <b>entret</b> and such programs as <b>seqret</b> which also read entries from databases or files and write them to files, is that <b>entret</b> reads and writes the complete sequence entry together with the heading annotation (documentation) without attempting to reformat or interpret the data in any way. <b>seqret</b> on the other hand will read in the entry data, determine which bit of it is the sequence, which is the description line and which is the feature table and will then write the sequence, description and features out in the way prescribed by the sequence format which has been requested for output.</p>
+
+<p><b>entret</b> therefore is very useful for looking at the annotation of sequences from databases, which <b>seqret</b> does not provide.</p>
+
+<p>In writing sequence entries to file, <b>entret</b> treats the data as plain text, not sequence.  Therefore options (e.g. '-osformat') that would normally change aspects of the written sequence will either not be recognised and will cause an error message to be written, or will be quietly ignored (e.g. '-sbegin', '-send').</p>
+
+<p>In previous versions of EMBOSS, <b>entret</b> didn't return the sequence from entries held in GCG indexed databases. This has now been fixed. <b>entret</b> will now return the complete sequence entries with the annotation of GCG indexed databases.</p>
+
+
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/entret.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/ableasby.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/entret.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/entret.comment" -->
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,143 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: acdlog
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+acdlog
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/acdlog.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+<p><b>acdlog</b> processes an ACD file and user input, while logging the contents of internal data structures.  For the time being it's use is deprecated and the entrails application should be used instead.</p>
+<p><b>acdlog</b> works the same as <b>acdc</b> but reports on the data structures used to process the ACD file.</p>
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/acdlog.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+The first parameter is the name of the program to compile.
+
+All other command line parameters and qualifiers are defined for that
+program - see the documentation for the program of choice.
+
+<P>
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<p>
+
+The output file of the program being logged is empty, but any format
+available to the specified program can be used.
+
+<p>
+The processing output is written to a file with the extension ".acdlog"
+<p>
+<!--#include file="inc/acdlog.output" -->
+
+
+<H2>
+    Data files
+</H2>
+
+
+Acdlog will use any data files specified in the ACD file of the
+specified program, but will ignore any data files that are only used
+directly by the program's code.
+
+<!--#include file="inc/localfiles.ihtml" -->
+
+<H2>
+    Notes
+</H2>
+<p><b>acdlog</b> does not have its own options, but takes a single parameter which is the name of the EMBOSS application that is being testsed.  It is invoked by specifying the name of the application to be tested along with any command-line options after the name of the utility application itself:</p>
+
+<p><tt><b>acdlog</b> ApplicationName  Options</tt></p>
+
+<p><b>acdlog</b> will run the command line interface of any EMBOSS program by reading its ACD file and processing the command line and user responses in exactly the same way as if the true program itself were running.  The application proper is not run; it is only the ACD file that is read.  Any command-line options for the application being called can be specified. The user is prompted for any required values for application parameters and any input files are read. Output files can be specified in any available format however they will be empty (the application code is not called so there will be no output).</p>
+
+
+<H2>
+    References
+</H2>
+
+
+<H2>
+    Warnings
+</H2>
+
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+
+<H2>
+    Exit status
+</H2>
+
+
+It exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+
+None.
+
+
+<!--#include file="inc/acdlog.isee" -->
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/price.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/acdlog.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/targetdev.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/acdlog.comment" -->
+
+
+
+</BODY>
+</HTML>
+

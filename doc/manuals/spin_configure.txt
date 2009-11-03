@@ -1,0 +1,20 @@
+Staden Package SPIN and EMBOSS
+
+EMBOSS applications can be run from the Staden Package under the SPIN
+interface.
+
+The configurations are stored in the following text files:
+
+tables/emboss_menu
+
+Builds the menus by adding each EMBOSS program with its group and
+documentation string.
+
+lib/spin2_emboss/acd2tcl.tcl
+
+Converts the ACD file into a tcl script
+
+Includes the code to run graph with the -data and possibly -outfile
+fix.
+
+Has a hack for alternative -data options.

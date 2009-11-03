@@ -1,0 +1,6 @@
+   Mandatory qualifiers:
+  [-sequence]          sequence   Sequence USA
+  [-expression]        string     Regular expression to search sequence for.
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)

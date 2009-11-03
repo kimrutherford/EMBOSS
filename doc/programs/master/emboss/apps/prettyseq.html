@@ -1,0 +1,192 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: prettyseq
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+prettyseq
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/prettyseq.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+
+<p><b>prettyseq</b> reads a nucleotide sequence and writes an output file containing in a clean format the sequence with the translation (within specified ranges) displayed beneath it.  The translated nucleic acid region is given lower-case letters with the rest of the input sequence left in the input case. A specified codon usage table is used to translate the codons.</p>
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/prettyseq.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/prettyseq.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/prettyseq.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>prettyseq</b> reads any nucleic acid sequence USA.
+
+<p>
+
+<!--#include file="inc/prettyseq.input" -->
+
+<p>
+
+
+You can specifiy a file of ranges to extract by giving the '-range'
+qualifier the value '@' followed by the name of the file containing
+the ranges. (eg: '-range @myfile').
+
+<p>
+The format of the range file is: 
+
+<ul>
+
+<li> Comment lines start with '#' in the first column.
+
+<li> Comment lines and blank lines are ignored.
+
+<li> The line may start with white-space.
+
+<li> There are two positive (integer) numbers per line separated by
+one or more space or TAB characters.
+
+<li> The second number must be greater or equal to the first number.
+
+<li> There can be optional text after the two numbers to annotate the
+line.
+
+<li> White-space before or after the text is removed.
+
+</ul>
+
+<p>
+An example range file is: 
+
+<pre>
+
+# this is my set of ranges
+12   23
+ 4   5       this is like 12-23, but smaller
+67   10348   interesting region
+
+</pre>
+
+<H2>
+    Output file format
+</H2>
+
+
+<!--#include file="inc/prettyseq.output" -->
+
+
+<H2>
+    Data files
+</H2>
+
+The codon usage table is read by default from "Ehum.cut" in the 'data/CODONS'
+directory of the EMBOSS distribution.  If the name of a codon usage file
+is specified on the command line, then this file will first be searched
+for in the current directory and then in the 'data/CODONS' directory of
+the EMBOSS distribution. 
+
+<p>
+<!--#include file="inc/localfiles.ihtml" -->
+
+<H2>
+    Notes
+</H2>
+
+<p>By default, the base and residue numbers of the sequence and its translation are shown beside the sequences in the output. There are options to change this behaviour.</p>
+
+<p>The translation will be shown in a number of sequence regions only.  The ranges are specified with the <tt>-range</tt> qualifier.  As an alternative to specifying a set of ranges at the command-line, a range file containing such range data may be specified (see "Input File Format").</p>
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+"Range outside length of sequence" - this is self explanatory.  You
+should specify a range of sequences to translate that is within the
+length of the input sequence. 
+
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/prettyseq.isee" -->
+<p>
+
+<a href="showseq.html"><b>showseq</b></a> has more options for
+specifying various ways of displaying a sequence, with or without
+various ways of translating it. 
+
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/ableasby.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/prettyseq.history" -->
+
+<H2>
+    Target users
+</H2>
+
+<!--#include file="inc/target.itxt" -->
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/prettyseq.comment" -->
+
+</BODY>
+</HTML>
+

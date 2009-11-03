@@ -1,0 +1,48 @@
+# Amino acid properties file.
+#
+#  Tiny, Small, Aliphatic, Aromatic, Non-polar, Polar, Charge, +ve, -ve Ext
+#
+# Extinction coefficients are based on the values of Gill and von Hippel
+# (1989) _Anal_Biochem_ 182 319-326.
+# They are for proteins with full reduced cysteine residues.  If all
+# cysteines are oxidized to cystine, use
+# a value of 60 for C.
+#
+# Value for Selenocysteine calculated from Cysteine by replacing S
+# with Se.
+#
+# J is an ambiguity code for Isoleucine or Leucine for Mass Spec data
+# These have identical properties in this file.
+#
+# O is pyrrolysine in Archaea. Molecular weight from Expasy FindMod.
+# Properties assumed to be the same as lysine
+#
+
+aa    Tiny  Small Aliphatic Aromatic Non-Polar Polar Charge +ve -ve ExtCoeff
+
+A     1     1      1        0        1         0     0      0   0   0
+B     0     1      0        0        0         0     -.5    0   1   0
+C     1     1      0        0        1         0     0      0   0   0
+D     0     1      0        0        0         1     -1     0   1   0
+E     0     0      0        0        0         1     -1     0   1   0
+F     0     0      0        1        1         0     0      0   0   0
+G     1     1      0        0        1         0     0      0   0   0
+H     0     0      0        1        0         1     .5     1   0   0
+I     0     0      1        0        1         0     0      0   0   0
+J     0     0      1        0        1         0     0      0   0   0
+K     0     0      0        0        0         1     1      1   0   0
+L     0     0      1        0        1         0     0      0   0   0
+M     0     0      0        0        1         0     0      0   0   0
+N     0     1      0        0        0         1     0      0   0   0
+O     0     0      0        0        0         1     1      1   0   0
+P     0     1      0        0        1         0     0      0   0   0
+Q     0     0      0        0        0         1     0      0   0   0
+R     0     0      0        0        0         1     1      1   0   0
+S     1     1      0        0        0         1     0      0   0   0
+T     1     1      0        0        0         1     0      0   0   0
+U     1     1      0        0        1         0     0      0   0   0
+V     0     1      1        0        1         0     0      0   0   0
+W     0     0      0        1        1         0     0      0   0   5690
+X     0     0      0        0        0         0     0      0   0   0
+Y     0     0      0        1        1         0     0      0   0   1280
+Z     0     0      0        0        0         1     -.5    0   1   0

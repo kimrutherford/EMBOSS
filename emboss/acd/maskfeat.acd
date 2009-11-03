@@ -1,0 +1,79 @@
+application: maskfeat [
+  documentation: "Write a sequence with masked features"
+  groups: "Edit, Feature tables"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "any"
+    features: "Y"
+  ]
+
+endsection: input
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  string: type [
+    additional: "Y"
+    default: "repeat*"
+    information: "Type of feature to mask"
+    help: "By default any feature in the feature table with a type
+           starting 'repeat' is masked. You can set this to be any feature
+           type you wish to mask. \
+           See http://www3.ebi.ac.uk/Services/WebFeat/ for a list of the EMBL
+           feature types and see Appendix A of the Swissprot user manual in
+           http://www.expasy.ch/txt/userman.txt for a list of the Swissprot
+           feature types. \
+           The type may be wildcarded by using '*'. \
+           If you wish to mask more than one type, separate their names with
+           spaces or commas, eg: \
+           *UTR repeat*"
+    knowntype: "feature key list"
+  ]
+
+  toggle: tolower [
+    additional: "Y"
+    default: "N"
+    information: "Change masked region to lower-case"
+    help: "The region can be 'masked' by converting the sequence
+           characters to lower-case, some non-EMBOSS programs e.g. fasta can
+           interpret this as a masked region. The sequence is unchanged apart
+           from the case change. You might like to ensure that the whole
+           sequence is in upper-case before masking the specified regions to
+           lower-case by using the '-supper' flag."
+  ]
+
+  string: maskchar [
+    additional: "@(!$(tolower))"
+    default: "@($(acdprotein)?X:N)"
+    information: "Character to mask with"
+    maxlength: "1"
+    help: "Character to use when masking. \
+           Default is 'X' for protein sequences, 'N' for nucleic sequences. \
+           If the mask character is set to be the SPACE character or a null
+           character, then the sequence is 'masked' by changing it to
+           lower-case, just as with the '-lowercase' flag."
+    expected: "'X' for protein, 'N' for nucleic"
+    knowntype: "sequence"
+  ]
+
+endsection: additional
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  seqout: outseq [
+    parameter: "Y"
+  ]
+
+endsection: output

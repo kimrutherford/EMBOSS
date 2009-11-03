@@ -1,0 +1,45 @@
+application: seqmatchall [
+  documentation: "All-against-all word comparison of a sequence set"
+  groups: "Alignment:Local"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqset: sequence [
+    parameter: "Y"
+    type: "any"
+    aligned: "N"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  integer: wordsize [
+    standard: "Y"
+    default: "4"
+    minimum: "2"
+    information: "Word size"
+  ]
+
+endsection: required
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  align: outfile [
+    parameter: "Y"
+    aformat: "match"
+    minseqs: "2"
+    maxseqs: "2"
+  ]
+
+endsection: output

@@ -1,0 +1,20 @@
+<b>Here is a sample session with cpgplot</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>cpgplot tembl:u68037 -graph cps </b>
+Identify and plot CpG islands in nucleotide sequence(s)
+Window size [100]: <b></b>
+Minimum length of an island [200]: <b></b>
+Minimum observed/expected [0.6]: <b></b>
+Minimum percentage [50.]: <b></b>
+Output file [u68037.cpgplot]: <b></b>
+Features output [u68037.gff]: <b></b>
+
+Created cpgplot.ps
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

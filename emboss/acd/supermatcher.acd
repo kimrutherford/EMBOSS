@@ -1,0 +1,104 @@
+application: supermatcher [
+  documentation: "Calculate approximate local pair-wise alignments of
+                  larger sequences"
+  groups: "Alignment:Local"
+  gui: "yes"
+  batch: "yes"
+  cpu: "medium"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: asequence [
+    parameter: "Y"
+    type: "any"
+  ]
+
+  seqset: bsequence [
+    parameter: "Y"
+    type: "@($(acdprotein) ? stopprotein : nucleotide)"
+    aligned: "N"
+  ]
+
+  matrixf: datafile [
+    additional: "Y"
+    information: "Matrix file"
+    protein: "$(acdprotein)"
+    help: "This is the scoring matrix file used when comparing
+           sequences. By default it is the file 'EBLOSUM62' (for proteins) or
+           the file 'EDNAFULL' (for nucleic sequences). These files are
+           found in the 'data' directory of the EMBOSS installation."
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  float: gapopen [
+    standard: "Y"
+    information: "Gap opening penalty"
+    minimum: "0.0"
+    maximum: "100.0"
+    default: "@($(acdprotein)? 10.0 : 10.0)"
+    expected: "10.0 for any sequence type"
+  ]
+
+  float: gapextend [
+    standard: "Y"
+    information: "Gap extension penalty"
+    minimum: "0.0"
+    maximum: "10.0"
+    default: "@($(acdprotein)? 0.5 : 0.5)"
+    expected: "0.5 for any sequence type"
+  ]
+
+endsection: required
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  integer: width [
+    additional: "Y"
+    default: "16"
+    minimum: "1"
+    information: "Alignment width"
+  ]
+
+  integer: wordlen [
+    additional: "Y"
+    default: "6"
+    minimum: "3"
+    information: "Word length for initial matching"
+  ]
+
+endsection: additional
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  align: outfile [
+    parameter: "Y"
+    aformat: "simple"
+    minseqs: "2"
+    maxseqs: "2"
+  ]
+
+  outfile: errorfile [
+    additional: "Y"
+    default: "supermatcher.error"
+    help: "Error file to be written to"
+    knowntype: "supermatcher error"
+    information: "Program supermatcher errors output file for failed alignments"
+  ]
+
+endsection: output

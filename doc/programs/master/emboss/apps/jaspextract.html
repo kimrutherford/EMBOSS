@@ -1,0 +1,316 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: jaspextract
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+jaspextract
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/jaspextract.ione" -->
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+
+   JASPAR is a collection of transcription factor DNA-binding preferences,
+   modelled as matrices. These can be converted into Position Weight
+   Matrices (PWMs or PSSMs), used for scanning genomic sequences.
+
+<p>
+   JASPAR is the only database with this scope where the data can be used
+   with no restrictions (open-source).
+
+<p>
+   This program copies the 3 JASPAR matrix sets into the EMBOSS
+   data directories, performing any necessary conversions.
+
+<p>
+   The home page of JASPAR
+   is: <a href="http://jaspar.genereg.net/">http://jaspar.genereg.net/</a>
+
+<p>
+   The EMBOSS program jaspscan will not work unless this program is run.
+
+<p>
+   Running this program may be the job of your system manager.
+
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+<!--#include file="inc/jaspextract.usage" -->
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/jaspextract.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/jaspextract.itable" -->
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+
+<!--#include file="inc/jaspextract.input" -->
+
+
+   The input files are the uncompressed and extracted JASPAR_CORE.tgz,
+   JASPAR_FAM.tgz and JASPAR_PHYLOFACTS.tgz files provided in the JASPAR
+   MatrixDir download directory of the JASPAR homepage
+   <a href="http://jaspar.genereg.net">(http://jaspar.genereg.net).</a>
+<p>
+   The files will usually be extracted in the same directory thereby
+   creating a directory containing subdirectories JASPAR_CORE,
+   JASPAR_FAM and JASPAR_PHYLOFACTS. Given a directory specification,
+   jasparextract will search for these subdirectories and process the
+   files in any that exist. jasparextract will warn the user if any
+   of the three subdirectories do not exist.
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<!-- 
+        This includes example output file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null output, errors etc. 
+
+        If you wish to include the standard description of the avalable
+	report formats, use:
+        #include file="inc/reportformats.ihtml"
+   -->
+
+  The output file format is currently the same as the JASPAR
+  distribution format.
+
+<!--#include file="inc/jaspextract.output" -->
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+None
+
+
+
+
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+   The home page of REBASE
+   is: <a href="http://jaspar.genereg.net/">http://jaspar.genereg.net/<a>
+<p>
+   Running this program may be the job of your system manager.
+
+
+
+
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+<ol>
+
+<li>
+
+</ol>
+
+   -->
+
+<OL>
+
+<LI>DNA binding sites: representation and discovery Bioinformatics. 2000
+      Jan;16(1):16-23
+
+<LI>Applied bioinformatics for the identification of regulatory elements
+      Nat Rev Genet. 2004 Apr;5(4):276-87 
+
+</OL>
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+  The program will warn you if any of the JASPAR_CORE, JASPAR_FAM or
+   JASPAR_PHYLOFACTS subdirectories do not exist.
+
+
+
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0 unless an error is reported
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>See also</H2>
+-->
+<!--#include file="inc/jaspextract.isee" -->
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/ableasby.address" -->
+
+
+
+
+
+<H2>
+    History
+</H2>
+<!--
+        Date written and what changes have been made go in this file.
+   -->
+<!--#include file="inc/jaspextract.history" -->
+
+
+
+<H2>
+    Target users
+</H2>
+
+<!--#include file="inc/targetadmin.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--
+        User/developer/other comments go in this file.
+   -->
+<!--#include file="inc/jaspextract.comment" -->
+
+
+</BODY>
+</HTML>
+

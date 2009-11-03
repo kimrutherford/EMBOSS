@@ -1,0 +1,20 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: result.seq</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;X65923 X65923.1 H.sapiens fau mRNA
+ctcgactccat
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: result2.seq</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;X65921 X65921.1 H.sapiens fau 1 gene
+tccctctcgatacactcgggacaagttagggc
+</pre>
+</td></tr></table><p>

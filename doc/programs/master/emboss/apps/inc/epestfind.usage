@@ -1,0 +1,22 @@
+<b>Here is a sample session with epestfind</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>epestfind -graph cps -invalid </b>
+Finds PEST motifs as potential proteolytic cleavage sites
+Input protein sequence: <b>exu2_drops.embl</b>
+Window length [10]: <b></b>
+Sort order of results
+      1 : length
+      2 : position
+      3 : score
+Sort order of results [score]: <b></b>
+Output file [exu2_drops.epestfind]: <b></b>
+
+Created epestfind.ps
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

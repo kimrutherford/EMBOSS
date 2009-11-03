@@ -1,0 +1,15 @@
+<b>Here is a sample session with cpgreport</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>cpgreport tembl:u68037 </b>
+Identify and report CpG-rich regions in nucleotide sequence(s)
+CpG score [17]: <b></b>
+Output file [u68037.cpgreport]: <b></b>
+Features output [u68037.gff]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

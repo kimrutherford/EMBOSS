@@ -1,0 +1,451 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: whichdb
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+whichdb
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
+    Function
+</H2>
+Search all sequence databases for an entry and retrieve it
+<H2>
+    Description
+</H2>
+
+<p><b>whichdb</b> searches all available sequence databases for sequences with a specified ID name or accession number.  The uniform sequence address (USA) of matching database entries is written to an output file. <b>whichdb</b> will, optionally, write out the sequences it finds to files.  An "available" database is one that has been defined in the EMBOSS system file (<tt>.embossrc</tt> or <tt>emboss.login</tt>) and is available from the system you are running EMBOSS. If you do not know which database(s) contain the entry you are interested in, <b>whichdb</b> will tell you.</p>
+
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with whichdb</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>whichdb -showall </b>
+Search all sequence databases for an entry and retrieve it
+ID or Accession number: <b>x65921</b>
+Output file [outfile.whichdb]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers (* if not always prompted):
+  [-entry]             string     ID or Accession number (Any string is
+                                  accepted)
+*  -outfile            outfile    [*.whichdb] Output file name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -get                toggle     [N] Retrieve sequences
+   -showall            boolean    [N] Show failed attempts
+
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-entry]<br>(Parameter 1)</td>
+<td>ID or Accession number</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr>
+<td>-outfile</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.whichdb</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-get</td>
+<td>Retrieve sequences</td>
+<td>Toggle value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-showall</td>
+<td>Show failed attempts</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+</table>
+
+<H2>
+    Input file format
+</H2>
+
+None.
+
+<p>
+
+
+<H2>
+    Output file format
+</H2>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: outfile.whichdb</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+# Trying 'qanflatall:x65921'
+qanflatall:x65921
+# Trying 'qangcgall:x65921'
+# Failed 'qangcgall:x65921'
+# Trying 'twp:x65921'
+# Failed 'twp:x65921'
+# Trying 'qapblast:x65921'
+# Failed 'qapblast:x65921'
+# Trying 'tsw:x65921'
+# Failed 'tsw:x65921'
+# Trying 'qanflatinc:x65921'
+# Failed 'qanflatinc:x65921'
+# Trying 'qapblastsplit:x65921'
+# Failed 'qapblastsplit:x65921'
+# Trying 'qangcginc:x65921'
+# Failed 'qangcginc:x65921'
+# Trying 'qanflatexc:x65921'
+qanflatexc:x65921
+# Trying 'qangcgexc:x65921'
+# Failed 'qangcgexc:x65921'
+# Trying 'qapir:x65921'
+# Failed 'qapir:x65921'
+# Trying 'tgenbank:x65921'
+tgenbank:x65921
+# Trying 'qanfasta:x65921'
+# Failed 'qanfasta:x65921'
+# Trying 'qanxflat:x65921'
+# Failed 'qanxflat:x65921'
+# Trying 'qanxgcg:x65921'
+# Failed 'qanxgcg:x65921'
+# Trying 'qapflat:x65921'
+# Failed 'qapflat:x65921'
+# Trying 'qapblastsplitinc:x65921'
+# Failed 'qapblastsplitinc:x65921'
+# Trying 'qapblastsplitexc:x65921'
+# Failed 'qapblastsplitexc:x65921'
+# Trying 'qapflatall:x65921'
+# Failed 'qapflatall:x65921'
+# Trying 'qanxflatall:x65921'
+qanxflatall:x65921
+# Trying 'qanxflatinc:x65921'
+# Failed 'qanxflatinc:x65921'
+# Trying 'qanxflatexc:x65921'
+qanxflatexc:x65921
+# Trying 'testdb:x65921'
+# Failed 'testdb:x65921'
+# Trying 'genbanksrs:x65921'
+# Failed 'genbanksrs:x65921'
+# Trying 'tpir:x65921'
+# Failed 'tpir:x65921'
+# Trying 'qasrswww:x65921'
+qasrswww:x65921
+# Trying 'qanxfasta:x65921'
+# Failed 'qanxfasta:x65921'
+# Trying 'qanxgcgall:x65921'
+# Failed 'qanxgcgall:x65921'
+# Trying 'qangcg:x65921'
+# Failed 'qangcg:x65921'
+# Trying 'qanfastaall:x65921'
+# Failed 'qanfastaall:x65921'
+# Trying 'qapirall:x65921'
+# Failed 'qapirall:x65921'
+# Trying 'qanxgcginc:x65921'
+# Failed 'qanxgcginc:x65921'
+# Trying 'qanxgcgexc:x65921'
+# Failed 'qanxgcgexc:x65921'
+# Trying 'qapirinc:x65921'
+# Failed 'qapirinc:x65921'
+# Trying 'qanflat:x65921'
+# Failed 'qanflat:x65921'
+# Trying 'qanxfastaall:x65921'
+# Failed 'qanxfastaall:x65921'
+# Trying 'qapfasta:x65921'
+# Failed 'qapfasta:x65921'
+# Trying 'qawxfasta:x65921'
+# Failed 'qawxfasta:x65921'
+# Trying 'qapirexc:x65921'
+# Failed 'qapirexc:x65921'
+# Trying 'tswnew:x65921'
+# Failed 'tswnew:x65921'
+# Trying 'qaxpirall:x65921'
+# Failed 'qaxpirall:x65921'
+# Trying 'qapxflat:x65921'
+# Failed 'qapxflat:x65921'
+# Trying 'qaxpirinc:x65921'
+# Failed 'qaxpirinc:x65921'
+# Trying 'qapxfasta:x65921'
+# Failed 'qapxfasta:x65921'
+# Trying 'tembl:x65921'
+tembl:x65921
+# Trying 'qaxpirexc:x65921'
+# Failed 'qaxpirexc:x65921'
+# Trying 'qapblastall:x65921'
+# Failed 'qapblastall:x65921'
+# Trying 'tgb:x65921'
+tgb:x65921
+# Trying 'qaxpir:x65921'
+# Failed 'qaxpir:x65921'
+# Trying 'qawfasta:x65921'
+# Failed 'qawfasta:x65921'
+</pre>
+</td></tr></table><p>
+
+<p>
+
+The reported database entries are written out to the specified output file.
+
+<p>
+
+Each database that is defined in the local implementation of EMBOSS
+which contains an entry called 'x65923' is reported.
+
+<p>
+
+Note that where a database is defined under several names ('embl',
+'em'), each definition of that database containing the entry is
+reported. 
+
+<p>
+
+When the '-get' option is used to output the sequences, they are written
+to separate files.  The sequence format they are written in is always
+'Fasta' format.  The normal command-line qualifiers for changing the
+output formats etc.  will not work in this program. 
+
+<p>
+
+The names of the files that the sequences are written to is reported as
+they are written, for example:
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Writing x65923.embl
+Writing x65923.human
+Writing x65923.tembl
+Writing x65923.em
+Writing x65923.genbank
+Writing x65923.gb
+</td></tr></table><p>
+
+
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+<p>The Uniform Sequence Addresss (USA) method used by EMBOSS for referencing sequences does not allow database entries to be specified by just the ID name or accession number. You must specify both the name of the database and the entry, for example <tt>embl:x65923</tt>, not just <tt>x65923</tt>.  <b>whichdb</b> is useful where you do not know the database that a sequence entry is found in.</p>
+
+
+<h3>IDs and Accessions</h3>
+<p>An entry in a database must have some way of being uniquely identified in that database. Most sequence databases have two such identifiers for each sequence - an ID name and an Accession number.</p>
+
+<p>Why are there two such identifiers? The ID name was originally intended to be a human-readable name that had some indication of the function of its sequence. In the early years of EMBL and GenBank the first two (or three) letters indicated the species and the rest indicated the function, for example <tt>HSFAU</tt> was the <tt>Homo Sapiens FAU pseudogene</tt>. This naming scheme started to be a problem when the number of entries added each day was so vast that people could not make up the ID names fast enough. Instead, the Accession numbers were used as the ID name. Therefore you will now find ID names like <tt>X65923</tt>, the same as the Accession number for that sequence in EMBL. The protein sequence databases continue to use recognizable names for entries (for example <tt>AMIR_PSEAE</tt> for the AmiR gene product of Pseudomonas aeruginosa in UniProt/SwissProt).</p>
+
+<p>ID names are not guaranteed to remain the same between different versions of a database (although in practice they usually do). In contrast, accession numbers are unique alphanumeric identifiers that are guaranteed to remain with that sequence through the rest of the life of the database. If two sequences are merged into one, then the new sequence will get a new Accession number and the Accession numbers of the merged sequences will be retained as 'secondary' Accession numbers. EMBL, GenBank and UniProt/SwissProt share an Accession numbering scheme - an Accession number uniquely identifies a sequence within these three databases. </p>
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="infoalign.html">infoalign</a></td>
+<td>Display basic information about a multiple sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="infobase.html">infobase</a></td>
+<td>Return information on a given nucleotide base</td>
+</tr>
+
+<tr>
+<td><a href="inforesidue.html">inforesidue</a></td>
+<td>Return information on a given amino acid residue</td>
+</tr>
+
+<tr>
+<td><a href="infoseq.html">infoseq</a></td>
+<td>Display basic information about sequences</td>
+</tr>
+
+<tr>
+<td><a href="seealso.html">seealso</a></td>
+<td>Finds programs with similar function to a specified program</td>
+</tr>
+
+<tr>
+<td><a href="showdb.html">showdb</a></td>
+<td>Displays information on configured databases</td>
+</tr>
+
+<tr>
+<td><a href="textsearch.html">textsearch</a></td>
+<td>Search the textual description of sequence(s)</td>
+</tr>
+
+<tr>
+<td><a href="tfm.html">tfm</a></td>
+<td>Displays full documentation for an application</td>
+</tr>
+
+<tr>
+<td><a href="wossname.html">wossname</a></td>
+<td>Finds programs by keywords in their short description</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Author(s)
+</H2>
+Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+
+<H2>
+    History
+</H2>
+
+Written (Jan 2002) - Alan Bleasby.
+
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+None
+
+</BODY>
+</HTML>
+

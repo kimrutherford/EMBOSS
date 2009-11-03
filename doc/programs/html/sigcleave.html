@@ -1,0 +1,693 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: sigcleave
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+sigcleave
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
+    Function
+</H2>
+Reports on signal cleavage sites in a protein sequence
+
+<H2>
+    Description
+</H2>
+
+<p><b>sigcleave</b> predicts the site of cleavage between a signal sequence and the mature exported protein using the method of von Heijne. It reads one or more protein sequences and writes a standard EMBOSS report with the position, length and score of each predicted signal sequence. Optionally, you may specify the sequence is prokaryotic and this will change the default scoring data file used. The predictive accuracy is estimated to be around 75-80% for both prokaryotic and eukaryotic proteins.</p>
+
+
+<H2>
+Algorithm
+</H2>
+
+<p><b>sigcleave</b> uses the method of von Heijne as modified by von Heijne in his later book where treatment of positions -1 and -3 in the matrix is slightly altered (see references). The minimum scoring weight value (<tt>-minweight</tt>) for the predicted cleavage site is specified.  The value of <tt>-minweight</tt> should be at least 3.5. At this level, the method should correctly identify 95% of signal peptides, and reject 95% of non-signal peptides. The cleavage site should be correctly predicted in 75-80% of cases.</p>
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with sigcleave</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>sigcleave </b>
+Reports on signal cleavage sites in a protein sequence
+Input protein sequence(s): <b>tsw:ach2_drome</b>
+Minimum weight [3.5]: <b></b>
+Output report [ach2_drome.sig]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Protein sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -minweight          float      [3.5] Minimum scoring weight value for the
+                                  predicted cleavage site (Number from 0.000
+                                  to 100.000)
+  [-outfile]           report     [*.sigcleave] Output report file name
+
+   Additional (Optional) qualifiers:
+   -prokaryote         boolean    Specifies the sequence is prokaryotic and
+                                  changes the default scoring data file name
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -rformat2           string     Report format
+   -rname2             string     Base file name
+   -rextension2        string     File name extension
+   -rdirectory2        string     Output directory
+   -raccshow2          boolean    Show accession number in the report
+   -rdesshow2          boolean    Show description in the report
+   -rscoreshow2        boolean    Show the score in the report
+   -rstrandshow2       boolean    Show the nucleotide strand in the report
+   -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Protein sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-minweight</td>
+<td>Minimum scoring weight value for the predicted cleavage site</td>
+<td>Number from 0.000 to 100.000</td>
+<td>3.5</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output report file name</td>
+<td>Report output file</td>
+<td><i>&lt;*&gt;</i>.sigcleave</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-prokaryote</td>
+<td>Specifies the sequence is prokaryotic and changes the default scoring data file name</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Input file format
+</H2>
+
+
+<b>sigcleave</b> reads one or more protein sequence USAs.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tsw:ach2_drome' is a sequence entry in the example protein database 'tsw'
+<p>
+<p><h3>Database entry: tsw:ach2_drome</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   ACH2_DROME              Reviewed;         576 AA.
+AC   P17644; Q0KI18; Q9VC73;
+DT   01-AUG-1990, integrated into UniProtKB/Swiss-Prot.
+DT   01-AUG-1990, sequence version 1.
+DT   16-JUN-2009, entry version 98.
+DE   RecName: Full=Acetylcholine receptor subunit alpha-like 2;
+DE   Flags: Precursor;
+GN   Name=nAcRalpha-96Ab; Synonyms=Acr96Ab, AcrE, sad; ORFNames=CG6844;
+OS   Drosophila melanogaster (Fruit fly).
+OC   Eukaryota; Metazoa; Arthropoda; Hexapoda; Insecta; Pterygota;
+OC   Neoptera; Endopterygota; Diptera; Brachycera; Muscomorpha;
+OC   Ephydroidea; Drosophilidae; Drosophila; Sophophora.
+OX   NCBI_TaxID=7227;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA], TISSUE SPECIFICITY, AND
+RP   DEVELOPMENTAL STAGE.
+RC   TISSUE=Head;
+RX   MEDLINE=90353591; PubMed=2117557; DOI=10.1016/0014-5793(90)81170-S;
+RA   Jonas P., Baumann A., Merz B., Gundelfinger E.D.;
+RT   "Structure and developmental expression of the D alpha 2 gene encoding
+RT   a novel nicotinic acetylcholine receptor protein of Drosophila
+RT   melanogaster.";
+RL   FEBS Lett. 269:264-268(1990).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE [MRNA].
+RX   MEDLINE=90360975; PubMed=1697262;
+RA   Sawruk E., Schloss P., Betz H., Schmitt B.;
+RT   "Heterogeneity of Drosophila nicotinic acetylcholine receptors: SAD, a
+RT   novel developmentally regulated alpha-subunit.";
+RL   EMBO J. 9:2671-2677(1990).
+RN   [3]
+RP   NUCLEOTIDE SEQUENCE [MRNA], TISSUE SPECIFICITY, AND DEVELOPMENTAL
+RP   STAGE.
+RC   TISSUE=Head;
+RX   MEDLINE=90301489; PubMed=2114015; DOI=10.1093/nar/18.12.3640;
+RA   Baumann A., Jonas P., Gundelfinger E.D.;
+RT   "Sequence of D alpha 2, a novel alpha-like subunit of Drosophila
+RT   nicotinic acetylcholine receptors.";
+RL   Nucleic Acids Res. 18:3640-3640(1990).
+RN   [4]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+RC   STRAIN=Berkeley;
+RX   MEDLINE=20196006; PubMed=10731132; DOI=10.1126/science.287.5461.2185;
+RA   Adams M.D., Celniker S.E., Holt R.A., Evans C.A., Gocayne J.D.,
+RA   Amanatides P.G., Scherer S.E., Li P.W., Hoskins R.A., Galle R.F.,
+RA   George R.A., Lewis S.E., Richards S., Ashburner M., Henderson S.N.,
+RA   Sutton G.G., Wortman J.R., Yandell M.D., Zhang Q., Chen L.X.,
+RA   Brandon R.C., Rogers Y.-H.C., Blazej R.G., Champe M., Pfeiffer B.D.,
+RA   Wan K.H., Doyle C., Baxter E.G., Helt G., Nelson C.R., Miklos G.L.G.,
+RA   Abril J.F., Agbayani A., An H.-J., Andrews-Pfannkoch C., Baldwin D.,
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+DR   GO; GO:0045211; C:postsynaptic membrane; IEA:UniProtKB-SubCell.
+DR   GO; GO:0030594; F:neurotransmitter receptor activity; IEA:InterPro.
+DR   GO; GO:0004889; F:nicotinic acetylcholine-activated cation-se...; IEA:InterPro.
+DR   GO; GO:0005515; F:protein binding; IPI:IntAct.
+DR   GO; GO:0006811; P:ion transport; IEA:UniProtKB-KW.
+DR   InterPro; IPR006029; Neu_channel_TM.
+DR   InterPro; IPR006202; Neur_chan_lig_bd.
+DR   InterPro; IPR006201; Neur_channel.
+DR   InterPro; IPR018000; Neurotransmitter_ion_chnl_CS.
+DR   InterPro; IPR002394; Nicotinic_acetylcholine_rcpt_N.
+DR   Gene3D; G3DSA:2.70.170.10; Neur_chan_lig_bd; 1.
+DR   PANTHER; PTHR18945; Neur_channel; 1.
+DR   Pfam; PF02931; Neur_chan_LBD; 1.
+DR   Pfam; PF02932; Neur_chan_memb; 1.
+DR   PRINTS; PR00254; NICOTINICR.
+DR   PRINTS; PR00252; NRIONCHANNEL.
+DR   TIGRFAMs; TIGR00860; LIC; 1.
+DR   PROSITE; PS00236; NEUROTR_ION_CHANNEL; 1.
+PE   1: Evidence at protein level;
+KW   Cell junction; Cell membrane; Complete proteome; Disulfide bond;
+KW   Glycoprotein; Ion transport; Ionic channel; Membrane;
+KW   Postsynaptic cell membrane; Receptor; Signal; Synapse; Transmembrane;
+KW   Transport.
+FT   SIGNAL        1     21       Probable.
+FT   CHAIN        22    576       Acetylcholine receptor subunit alpha-like
+FT                                2.
+FT                                /FTId=PRO_0000000300.
+FT   TOPO_DOM     22    261       Extracellular (Potential).
+FT   TRANSMEM    262    285       Potential.
+FT   TRANSMEM    293    311       Potential.
+FT   TRANSMEM    327    346       Potential.
+FT   TOPO_DOM    347    526       Cytoplasmic (Potential).
+FT   TRANSMEM    527    545       Potential.
+FT   CARBOHYD     65     65       N-linked (GlcNAc...) (Potential).
+FT   CARBOHYD    254    254       N-linked (GlcNAc...) (Potential).
+FT   CARBOHYD    570    570       N-linked (GlcNAc...) (Potential).
+FT   DISULFID    169    183       By similarity.
+FT   DISULFID    243    244       Associated with receptor activation (By
+FT                                similarity).
+SQ   SEQUENCE   576 AA;  65506 MW;  97D6A46CADC3F42F CRC64;
+     MAPGCCTTRP RPIALLAHIW RHCKPLCLLL VLLLLCETVQ ANPDAKRLYD DLLSNYNRLI
+     RPVSNNTDTV LVKLGLRLSQ LIDLNLKDQI LTTNVWLEHE WQDHKFKWDP SEYGGVTELY
+     VPSEHIWLPD IVLYNNADGE YVVTTMTKAI LHYTGKVVWT PPAIFKSSCE IDVRYFPFDQ
+     QTCFMKFGSW TYDGDQIDLK HISQKNDKDN KVEIGIDLRE YYPSVEWDIL GVPAERHEKY
+     YPCCAEPYPD IFFNITLRRK TLFYTVNLII PCVGISYLSV LVFYLPADSG EKIALCISIL
+     LSQTMFFLLI SEIIPSTSLA LPLLGKYLLF TMLLVGLSVV ITIIILNIHY RKPSTHKMRP
+     WIRSFFIKRL PKLLLMRVPK DLLRDLAANK INYGLKFSKT KFGQALMDEM QMNSGGSSPD
+     SLRRMQGRVG AGGCNGMHVT TATNRFSGLV GALGGGLSTL SGYNGLPSVL SGLDDSLSDV
+     AARKKYPFEL EKAIHNVMFI QHHMQRQDEF NAEDQDWGFV AMVMDRLFLW LFMIASLVGT
+     FVILGEAPSL YDDTKAIDVQ LSDVAKQIYN LTEKKN
+//
+</pre>
+</td></tr></table><p>
+
+<H2>
+    Output file format
+</H2>
+
+
+<p>
+
+The output is a standard EMBOSS report file. 
+
+<p>
+
+The results can be output in one of several styles by using the
+command-line qualifier <b>-rformat xxx</b>, where 'xxx' is replaced by
+the name of the required format.  The available format names are: embl,
+genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+feattable, motif, regions, seqtable, simple, srs, table, tagseq
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/ReportFormats.html">
+http://emboss.sf.net/docs/themes/ReportFormats.html</A>
+for further information on report formats.
+
+<p>
+
+<p>
+
+By default <b>sigcleave</b> writes a 'motif' report file.
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: ach2_drome.sig</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: sigcleave
+# Rundate: Tue 15 Jul 2008 12:00:00
+# Commandline: sigcleave
+#    -sequence tsw:ach2_drome
+# Report_format: motif
+# Report_file: ach2_drome.sig
+########################################
+
+#=======================================
+#
+# Sequence: ACH2_DROME     from: 1   to: 576
+# HitCount: 9
+#
+# Reporting scores over 3.50
+#
+#=======================================
+
+(1) Score 13.739 length 13 at residues 29-&gt;41
+           
+ Sequence: LLVLLLLCETVQA
+           |           |
+          29           41
+ mature_peptide: NPDAKRLYDDLLSNYNRLIRPVSNNTDTVLVKLGLRLSQLIDLNLKDQIL
+
+(2) Score 12.135 length 13 at residues 26-&gt;38
+           
+ Sequence: LCLLLVLLLLCET
+           |           |
+          26           38
+ mature_peptide: VQANPDAKRLYDDLLSNYNRLIRPVSNNTDTVLVKLGLRLSQLIDLNLKD
+
+(3) Score 10.465 length 13 at residues 28-&gt;40
+           
+ Sequence: LLLVLLLLCETVQ
+           |           |
+          28           40
+ mature_peptide: ANPDAKRLYDDLLSNYNRLIRPVSNNTDTVLVKLGLRLSQLIDLNLKDQI
+
+(4) Score 7.360 length 13 at residues 528-&gt;540
+           
+ Sequence: FLWLFMIASLVGT
+           |           |
+         528           540
+ mature_peptide: FVILGEAPSLYDDTKAIDVQLSDVAKQIYNLTEKKN
+
+(5) Score 6.981 length 13 at residues 330-&gt;342
+           
+ Sequence: FTMLLVGLSVVIT
+           |           |
+         330           342
+ mature_peptide: IIILNIHYRKPSTHKMRPWIRSFFIKRLPKLLLMRVPKDLLRDLAANKIN
+
+(6) Score 5.057 length 13 at residues 24-&gt;36
+           
+ Sequence: KPLCLLLVLLLLC
+           |           |
+          24           36
+ mature_peptide: ETVQANPDAKRLYDDLLSNYNRLIRPVSNNTDTVLVKLGLRLSQLIDLNL
+
+(7) Score 4.026 length 13 at residues 31-&gt;43
+           
+ Sequence: VLLLLCETVQANP
+           |           |
+          31           43
+ mature_peptide: DAKRLYDDLLSNYNRLIRPVSNNTDTVLVKLGLRLSQLIDLNLKDQILTT
+
+(8) Score 3.751 length 13 at residues 527-&gt;539
+           
+ Sequence: LFLWLFMIASLVG
+           |           |
+         527           539
+ mature_peptide: TFVILGEAPSLYDDTKAIDVQLSDVAKQIYNLTEKKN
+
+(9) Score 3.632 length 13 at residues 308-&gt;320
+           
+ Sequence: LLISEIIPSTSLA
+           |           |
+         308           320
+ mature_peptide: LPLLGKYLLFTMLLVGLSVVITIIILNIHYRKPSTHKMRPWIRSFFIKRL
+
+
+#---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_length: 576
+# Reported_sequences: 1
+# Reported_hitcount: 9
+#---------------------------------------
+</pre>
+</td></tr></table><p>
+
+<H2>
+    Data files
+</H2>
+
+
+<p>
+EMBOSS data files are distributed with the application and stored
+in the standard EMBOSS data directory, which is defined
+by the EMBOSS environment variable EMBOSS_DATA.
+
+<p>
+
+To see the available EMBOSS data files, run:
+<p>
+<pre>
+% embossdata -showall
+</pre>
+<p>
+To fetch one of the data files (for example 'Exxx.dat') into your
+current directory for you to inspect or modify, run:
+
+<pre>
+
+% embossdata -fetch -file Exxx.dat
+
+</pre>
+<p>
+
+Users can provide their own data files in their own directories.
+Project specific files can be put in the current directory, or for
+tidier directory listings in a subdirectory called
+".embossdata". Files for all EMBOSS runs can be put in the user's home
+directory, or again in a subdirectory called ".embossdata".
+
+<p>
+The directories are searched in the following order:
+
+<ul>
+   <li> . (your current directory)
+   <li> .embossdata (under your current directory)
+   <li> ~/ (your home directory)
+   <li> ~/.embossdata
+</ul>
+<p>
+
+<p>
+Here is the default file for eukaryotic signals:
+
+<p>
+
+<pre>
+# Amino acid counts for 161 Eukaryotic Signal Peptides,
+# from von Heijne (1986), Nucl. Acids. Res. 14:4683-4690
+#
+# The cleavage site is between +1 and -1
+#
+Sample: 161 aligned sequences
+#
+# R -13 -12 -11 -10  -9  -8  -7  -6  -5  -4  -3  -2  -1  +1  +2 Expect
+# - --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ------
+  A  16  13  14  15  20  18  18  17  25  15  47   6  80  18   6  14.5
+  C   3   6   9   7   9  14   6   8   5   6  19   3   9   8   3   4.5
+  D   0   0   0   0   0   0   0   0   5   3   0   5   0  10  11   8.9
+  E   0   0   0   1   0   0   0   0   3   7   0   7   0  13  14  10.0
+  F  13   9  11  11   6   7  18  13   4   5   0  13   0   6   4   5.6
+  G   4   4   3   6   3  13   3   2  19  34   5   7  39  10   7  12.1
+  H   0   0   0   0   0   1   1   0   5   0   0   6   0   4   2   3.4
+  I  15  15   8   6  11   5   4   8   5   1  10   5   0   8   7   7.4
+  K   0   0   0   1   0   0   1   0   0   4   0   2   0  11   9  11.3
+  L  71  68  72  79  78  45  64  49  10  23   8  20   1   8   4  12.1
+  M   0   3   7   4   1   6   2   2   0   0   0   1   0   1   2   2.7
+  N   0   1   0   1   1   0   0   0   3   3   0  10   0   4   7   7.1
+  P   2   0   2   0   0   4   1   8  20  14   0   1   3   0  22   7.4
+  Q   0   0   0   1   0   6   1   0  10   8   0  18   3  19  10   6.3
+  R   2   0   0   0   0   1   0   0   7   4   0  15   0  12   9   7.6
+  S   9   3   8   6  13  10  15  16  26  11  23  17  20  15  10  11.4
+  T   2  10   5   4   5  13   7   7  12   6  17   8   6   3  10   9.7
+  V  20  25  15  18  13  15  11  27   0  12  32   3   0   8  17  11.1
+  W   4   3   3   1   1   2   6   3   1   3   0   9   0   2   0   1.8
+  Y   0   1   4   0   0   1   3   1   1   2   0   5   0   1   7   5.6
+</pre>
+
+<H2>
+    Notes
+</H2>
+
+<p>Signal peptides mediate translocation across the endoplasmic reticulum (ER) membrane in eukaryotes. In prokaryotes signal peptides mediate translocation across the inner and outer membranes.</p>
+
+<p><b>sigcleave</b> may predict any number of cleavage sites in a protein sequence but not all of these will be biologically relevant; the prediction algorithm is not perfect.  There is no cutoff to eliminate sites because it is down to human expertise to decide what is relevant or not.  Although the end of a protein sequence is usually easy to predict from a nucleotide sequence, the same cannot be said for the start which depends on such things as promoters, transcriptional control and splicing.  This is why all predicted cleavage sites are reported.</p>
+
+<p>It is often useful to specify to use just the starting region of the input sequence using the in-built qualifier <tt>-send</tt>.  For example, adding <tt>-send 50</tt> to the command-line will check only the first 50 residues.</p>
+
+
+
+<H2>
+    References
+</H2>
+
+<ol>
+
+<li> von Heijne, G.  "A new method for predicting signal sequence
+cleavage sites" Nucleic Acids Res.: 14:4683 (1986)
+
+
+<li>
+von Heijne, G. "Sequence Analysis in Molecular Biology: Treasure Trove or
+  Trivial Pursuit" (Acad. Press, (1987), 113-117)
+
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+
+The program will warn you if a nucleic acid sequence is given or if the
+data file is not mathematically accurate.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<H2>
+    Exit status
+</H2>
+
+
+It exits with status 0 unless an error is reported.
+
+<H2>
+    Known bugs
+</H2>
+
+
+None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="antigenic.html">antigenic</a></td>
+<td>Finds antigenic sites in proteins</td>
+</tr>
+
+<tr>
+<td><a href="digest.html">digest</a></td>
+<td>Reports on protein proteolytic enzyme or reagent cleavage sites</td>
+</tr>
+
+<tr>
+<td><a href="epestfind.html">epestfind</a></td>
+<td>Finds PEST motifs as potential proteolytic cleavage sites</td>
+</tr>
+
+<tr>
+<td><a href="fuzzpro.html">fuzzpro</a></td>
+<td>Search for patterns in protein sequences</td>
+</tr>
+
+<tr>
+<td><a href="fuzztran.html">fuzztran</a></td>
+<td>Search for patterns in protein sequences (translated)</td>
+</tr>
+
+<tr>
+<td><a href="helixturnhelix.html">helixturnhelix</a></td>
+<td>Identify nucleic acid-binding motifs in protein sequences</td>
+</tr>
+
+<tr>
+<td><a href="oddcomp.html">oddcomp</a></td>
+<td>Identify proteins with specified sequence word composition</td>
+</tr>
+
+<tr>
+<td><a href="patmatdb.html">patmatdb</a></td>
+<td>Searches protein sequences with a sequence motif</td>
+</tr>
+
+<tr>
+<td><a href="patmatmotifs.html">patmatmotifs</a></td>
+<td>Scan a protein sequence with motifs from the PROSITE database</td>
+</tr>
+
+<tr>
+<td><a href="pepcoil.html">pepcoil</a></td>
+<td>Predicts coiled coil regions in protein sequences</td>
+</tr>
+
+<tr>
+<td><a href="preg.html">preg</a></td>
+<td>Regular expression search of protein sequence(s)</td>
+</tr>
+
+<tr>
+<td><a href="pscan.html">pscan</a></td>
+<td>Scans protein sequence(s) with fingerprints from the PRINTS database</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+
+
+<p>
+Original program "SIGCLEAVE" (EGCG 1989) by
+Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+
+<H2>
+    History
+</H2>
+
+Completed 10th March 1999
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+None
+
+</BODY>
+</HTML>
+

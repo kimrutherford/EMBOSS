@@ -1,0 +1,17 @@
+   Mandatory qualifiers:
+   -sets               integer    Number of sets of data
+   -points             integer    Number of data points per set
+   -bins               integer    Number of bars
+   -graph              xygraph    Graph type
+
+   Optional qualifiers:
+   -sidebyside         integer    Display sets next to each other
+   -xstart             integer    start value for x axis
+   -xend               integer    end value for x axis
+
+   Advanced qualifiers: (none)
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+

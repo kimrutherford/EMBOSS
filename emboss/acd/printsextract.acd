@@ -1,0 +1,20 @@
+application: printsextract [
+  documentation: "Extract data from PRINTS database for use by pscan"
+  groups: "Utils:Database creation"
+  gui: "no"
+  batch: "no"
+  cpu: "low"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  infile: infile [
+    parameter: "Y"
+    information: "PRINTS database file"
+    knowntype: "prints database"
+  ]
+
+endsection: input

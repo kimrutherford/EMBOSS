@@ -1,0 +1,16 @@
+<b>Here is a sample session with shuffleseq</b>
+<p>
+This makes two randomised copies of the input sequence: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>shuffleseq -shuffle 2 </b>
+Shuffles a set of sequences maintaining composition
+Input sequence(s): <b>tembl:L48662</b>
+output sequence(s) [l48662.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

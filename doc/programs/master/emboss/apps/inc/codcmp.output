@@ -1,0 +1,17 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: eecoli.codcmp</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+# CODCMP codon usage table comparison
+# Eecoli.cut vs Ehaein.cut
+
+Sum Squared Difference = 2.178
+Mean Squared Difference = 0.034
+Root Mean Squared Difference = 0.184
+Sum Difference         = 9.504
+Mean Difference         = 0.148
+Codons not appearing   = 0
+</pre>
+</td></tr></table><p>

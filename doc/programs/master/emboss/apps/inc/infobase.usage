@@ -1,0 +1,14 @@
+<b>Here is a sample session with infobase</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>infobase </b>
+Return information on a given nucleotide base
+Nucleotide base code [ABCDGHKMNRSTUVWXY]: <b></b>
+Output file [outfile.infobase]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>

@@ -1,0 +1,167 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tsw:amir_pseae' is a sequence entry in the example protein database 'tsw'
+<p>
+<p><h3>Database entry: tsw:amir_pseae</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   AMIR_PSEAE              Reviewed;         196 AA.
+AC   P10932;
+DT   01-JUL-1989, integrated into UniProtKB/Swiss-Prot.
+DT   08-DEC-2000, sequence version 2.
+DT   16-JUN-2009, entry version 72.
+DE   RecName: Full=Aliphatic amidase regulator;
+GN   Name=amiR; OrderedLocusNames=PA3363;
+OS   Pseudomonas aeruginosa.
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadales;
+OC   Pseudomonadaceae; Pseudomonas.
+OX   NCBI_TaxID=287;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RC   STRAIN=PAC433;
+RX   MEDLINE=89211409; PubMed=2495988; DOI=10.1016/0014-5793(89)80249-2;
+RA   Lowe N., Rice P.M., Drew R.E.;
+RT   "Nucleotide sequence of the aliphatic amidase regulator gene (amiR) of
+RT   Pseudomonas aeruginosa.";
+RL   FEBS Lett. 246:39-43(1989).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+RC   STRAIN=ATCC 15692 / PAO1 / 1C / PRS 101 / LMG 12228;
+RX   MEDLINE=20437337; PubMed=10984043; DOI=10.1038/35023079;
+RA   Stover C.K., Pham X.-Q.T., Erwin A.L., Mizoguchi S.D., Warrener P.,
+RA   Hickey M.J., Brinkman F.S.L., Hufnagle W.O., Kowalik D.J., Lagrou M.,
+RA   Garber R.L., Goltry L., Tolentino E., Westbrock-Wadman S., Yuan Y.,
+RA   Brody L.L., Coulter S.N., Folger K.R., Kas A., Larbig K., Lim R.M.,
+RA   Smith K.A., Spencer D.H., Wong G.K.-S., Wu Z., Paulsen I.T.,
+RA   Reizer J., Saier M.H. Jr., Hancock R.E.W., Lory S., Olson M.V.;
+RT   "Complete genome sequence of Pseudomonas aeruginosa PAO1, an
+RT   opportunistic pathogen.";
+RL   Nature 406:959-964(2000).
+RN   [3]
+RP   CHARACTERIZATION.
+RX   MEDLINE=95286483; PubMed=7539417;
+RA   Wilson S.A., Drew R.E.;
+RT   "Transcriptional analysis of the amidase operon from Pseudomonas
+RT   aeruginosa.";
+RL   J. Bacteriol. 177:3052-3057(1995).
+RN   [4]
+RP   X-RAY CRYSTALLOGRAPHY (2.25 ANGSTROMS) OF COMPLEX WITH AMIC.
+RC   STRAIN=PAC1;
+RX   MEDLINE=99437995; PubMed=10508151; DOI=10.1093/emboj/18.19.5175;
+RA   O'Hara B.P., Norman R.A., Wan P.T., Roe S.M., Barrett T.E., Drew R.E.,
+RA   Pearl L.H.;
+RT   "Crystal structure and induction mechanism of AmiC-AmiR: a ligand-
+RT   regulated transcription antitermination complex.";
+RL   EMBO J. 18:5175-5186(1999).
+CC   -!- FUNCTION: Positive controlling element of amiE, the gene for
+CC       aliphatic amidase. Acts as a transcriptional antitermination
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+DR   RefSeq; NP_252053.1; -.
+DR   PDB; 1QO0; X-ray; 2.25 A; D/E=1-196.
+DR   PDBsum; 1QO0; -.
+DR   GeneID; 880573; -.
+DR   GenomeReviews; AE004091_GR; PA3363.
+DR   KEGG; pae:PA3363; -.
+DR   PseudoCAP; PA3363; -.
+DR   HOGENOM; P10932; -.
+DR   OMA; P10932; QLQRIGC.
+DR   BioCyc; PAER208964:PA3363-MON; -.
+DR   GO; GO:0006350; P:transcription; IEA:UniProtKB-KW.
+DR   GO; GO:0031564; P:transcription antitermination; IEA:UniProtKB-KW.
+DR   InterPro; IPR005561; AmiR_NasR_reg.
+DR   InterPro; IPR008327; Sig_transdc_resp-reg_antiterm.
+DR   InterPro; IPR011991; Wing_hlx_DNA_bd.
+DR   Gene3D; G3DSA:1.10.10.10; Wing_hlx_DNA_bd; 1.
+DR   Pfam; PF03861; ANTAR; 1.
+DR   PIRSF; PIRSF036382; RR_antiterm; 1.
+DR   PROSITE; PS50921; ANTAR; 1.
+PE   1: Evidence at protein level;
+KW   3D-structure; Complete proteome; Transcription;
+KW   Transcription antitermination; Transcription regulation.
+FT   CHAIN         1    196       Aliphatic amidase regulator.
+FT                                /FTId=PRO_0000064582.
+FT   DOMAIN      129    190       ANTAR.
+FT   CONFLICT     48     48       S -&gt; A (in Ref. 1; CAA32023).
+FT   CONFLICT     64     64       R -&gt; G (in Ref. 1; CAA32023).
+FT   CONFLICT    141    141       E -&gt; D (in Ref. 1; CAA32023).
+FT   CONFLICT    154    154       A -&gt; V (in Ref. 1; CAA32023).
+FT   CONFLICT    170    170       Y -&gt; H (in Ref. 1; CAA32023).
+FT   HELIX         3      8
+FT   HELIX         9     12
+FT   STRAND       14     19
+FT   HELIX        23     35
+FT   STRAND       38     42
+FT   STRAND       54     59
+FT   HELIX        65     75
+FT   STRAND       81     86
+FT   HELIX        91    100
+FT   STRAND      103    109
+FT   HELIX       112    114
+FT   HELIX       115    160
+FT   HELIX       164    175
+FT   TURN        176    179
+FT   HELIX       182    189
+SQ   SEQUENCE   196 AA;  21903 MW;  306A4F30E8E4C6C0 CRC64;
+     MSANSLLGSL RELQVLVLNP PGEVSDALVL QLIRIGCSVR QCWPPPESFD VPVDVVFTSI
+     FQNRHHDEIA ALLAAGTPRT TLVALVEYES PAVLSQIIEL ECHGVITQPL DAHRVLPVLV
+     SARRISEEMA KLKQKTEQLQ ERIAGQARIN QAKALLMQRH GWDEREAHQY LSREAMKRRE
+     PILKIAQELL GNEPSA
+//
+</pre>
+</td></tr></table><p>
+<p><h3>Database entry: tsw:flav_nossm</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   FLAV_NOSSM              Reviewed;          35 AA.
+AC   P35707;
+DT   01-JUN-1994, integrated into UniProtKB/Swiss-Prot.
+DT   01-JUN-1994, sequence version 1.
+DT   25-NOV-2008, entry version 37.
+DE   RecName: Full=Flavodoxin;
+DE   Flags: Fragment;
+OS   Nostoc sp. (strain MAC).
+OC   Bacteria; Cyanobacteria; Nostocales; Nostocaceae; Nostoc.
+OX   NCBI_TaxID=35822;
+RN   [1]
+RP   PROTEIN SEQUENCE.
+RA   Takruri I.A.H., Boulter D., Fitzgerald M.P., Hutber G.N., Rogers L.J.;
+RT   "N-terminal amino acid sequences of flavodoxins from Chondrus crispus
+RT   and Nostoc strain MAC.";
+RL   Phytochemistry 25:2113-2115(1986).
+CC   -!- FUNCTION: Low-potential electron donor to a number of redox
+CC       enzymes.
+CC   -!- COFACTOR: FMN.
+CC   -!- SIMILARITY: Belongs to the flavodoxin family.
+CC   -!- SIMILARITY: Contains 1 flavodoxin-like domain.
+CC   -----------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution-NoDerivs License
+CC   -----------------------------------------------------------------------
+DR   HSSP; P11241; 1RCF.
+DR   GO; GO:0009055; F:electron carrier activity; IEA:InterPro.
+DR   GO; GO:0010181; F:FMN binding; IEA:InterPro.
+DR   GO; GO:0016491; F:oxidoreductase activity; IEA:InterPro.
+DR   GO; GO:0022900; P:electron transport chain; IEA:UniProtKB-KW.
+DR   GO; GO:0006810; P:transport; IEA:UniProtKB-KW.
+DR   InterPro; IPR008254; Flavodoxin/NO_synth.
+DR   InterPro; IPR001226; Flavodoxin_CS.
+DR   Pfam; PF00258; Flavodoxin_1; 1.
+DR   PROSITE; PS00201; FLAVODOXIN; 1.
+DR   PROSITE; PS50902; FLAVODOXIN_LIKE; 1.
+PE   1: Evidence at protein level;
+KW   Direct protein sequencing; Electron transport; Flavoprotein; FMN;
+KW   Transport.
+FT   CHAIN         1    &gt;35       Flavodoxin.
+FT                                /FTId=PRO_0000171640.
+FT   DOMAIN        4    &gt;35       Flavodoxin-like.
+FT   NON_TER      35     35
+SQ   SEQUENCE   35 AA;  3820 MW;  B6EEB5CA7A45DDA6 CRC64;
+     SKKIGLFYGT ZTGKTESVAE IIDEFGDEVV TLDID
+//
+</pre>
+</td></tr></table><p>

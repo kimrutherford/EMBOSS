@@ -1,0 +1,15 @@
+<b>Here is a sample session with restover</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>restover </b>
+Find restriction enzymes producing a specific overhang
+Input nucleotide sequence(s): <b>tembl:x65923</b>
+Overlap sequence: <b>cg</b>
+Output file [x65923.restover]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

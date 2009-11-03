@@ -1,0 +1,134 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: cusp
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+cusp
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/cusp.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<p><b>cusp</b> calculates a codon usage table for one or more nucleotide coding sequences and writes the table to file.</p>
+<p>The codon usage table gives for each codon: i. Sequence of the codon.  ii. The encoded amino acid.  iii.  The proportion of usage of the codon among its redundant set, i.e. the set of codons which code for this codon's amino acid.  iv.  The expected number of codons, given the input sequence(s), per 1000 bases.  v. The observed number of codons in the input sequences.</p>
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/cusp.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/cusp.ihelp" -->
+</pre>
+</td></tr></table>
+<!--#include file="inc/cusp.itable" -->
+<P>
+
+
+<H2>
+    Input file format
+</H2>
+<!--#include file="inc/cusp.input" -->
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/cusp.output" -->
+
+<p>The example shown reads a single CDS from Pseudomonas aeruginosa which has a very high GC content ands a strong coding bias, as shown by the codons for Alanine where those ending with <tt>G</tt> or <tt>C</tt> are used almost exclusively.</p>
+
+<p>The columns are as follows: i. "Codon" (sequence of the codon).  ii. "AA" (the encoded amino acid).  iii.  "Fraction" (the proportion of usage of the codon among its redundant set, i.e. the set of codons which code for this codon's amino acid).  iv.  "Frequency" (the expected number of codons, given the input sequence(s), per 1000 bases). This will be an extrapolation if the sequence is shorter than 1000 bases. v. "Number" (the observed number of codons in the input sequences).</p>
+
+<p>If multiple sequences are input then the statistics are given for all of the sequences together, not individually.</p>
+
+
+<H2>
+    Data files
+</H2>
+
+<p><b>cusp</b> reads a codon usage file as a template for it's output file.  The data in this table is ignored entirely.  This functionality is hard-coded and invisible to the user.</p>
+
+<!--#include file="inc/localfiles.ihtml" -->
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+Always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/cusp.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/ableasby.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/cusp.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/cusp.comment" -->
+
+</BODY>
+</HTML>
+

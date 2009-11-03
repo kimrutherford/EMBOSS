@@ -1,0 +1,44 @@
+#!/bin/csh -x
+
+#######################################
+cd ~emboss/CURRENT/$1/EMBOSS-0.0.4
+
+mkdir ~emboss/CURRENT/$1/EMBOSS-0.0.4/embassy
+cd ~emboss/CURRENT/$1/EMBOSS-0.0.4/embassy
+
+cp ~emboss/CURRENT/OSF/emboss/embassy/mse/MSE*.tar.gz .
+cp ~emboss/CURRENT/OSF/emboss/embassy/phylip/PHYLIP*.tar.gz .
+cp ~emboss/CURRENT/OSF/emboss/embassy/topo/TOPO*.tar.gz .
+
+gunzip MSE*.tar.gz
+tar xvf MSE*
+rm -f MSE*.tar
+
+gunzip PHYLIP*.tar.gz
+tar xvf PHYLIP*
+rm -f PHYLIP*.tar
+
+gunzip TOPO*.tar.gz
+tar xvf TOPO*
+rm -f TOPO*.tar
+
+
+foreach t (MSE-0.0.4 PHYLIP-3.573c TOPO-0.1)
+    cd $t
+
+    if($1 == "SGI-PURE") then
+        setenv CC cc
+	./configure --disable-shared --enable-purify
+    else
+	./configure --disable-shared --enable-debug
+    endif
+
+    if ( ! { make } ) then
+      echo "Failed $t-build on `hostname` in `pwd`"
+      make |& \
+      rsh europa fold -w 77 "|"  Mail -s \"$t make failed on $1\" il@sanger.ac.uk
+    endif
+
+    cd ..
+
+end

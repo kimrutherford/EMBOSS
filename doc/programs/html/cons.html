@@ -1,0 +1,467 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: cons
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+cons
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
+    Function
+</H2>
+Create a consensus sequence from a multiple alignment
+<H2>
+    Description
+</H2>
+
+<p><b>cons</b> calculates a consensus sequence from a multiple
+sequence alignment. To obtain the consensus, the sequence weights and
+a scoring matrix are used to calculate a score for each amino acid
+residue or nucleotide at each position in the alignment.  The highest
+scoring residue goes into the consensus sequence if the score is
+higher than a user-specified "plurality" value, otherwise, there is no
+consensus at that position.</p>
+
+
+<H2>
+    Algorithm
+</H2>
+<p>To obtain the consensus, the sequence weights and a scoring matrix
+are used to calculate a score at each position in the alignment as
+follows. The residue (or nucleotide) i in an alignment column, is
+compared to all other residues (j) in the same column. The score for i
+is the sum over all residues j (not i=j) of the score(ij)*weight(j),
+where score(ij) is taken from a nucleotide or protein scoring matrix
+(see -datafile qualifier) and the "weight(j)" is the weighting given
+to the sequence j, which is given in the alignment file.</p>
+
+q<p>The highest scoring type of residue is then found in the column. If
+the number of "positive matches" (see below) for this residue is
+greater than the "plurality value" (see below), then this residue is
+the consensus residue.  Otherwise there is no consensus for that
+position and an 'n' (nucleotide sequence alignment) or an 'x' (protein
+sequence alignment) character is written to the consensus
+sequence.</p>
+
+<p>The positive matches for a residue i are calculated as being the
+sum of the corresponding sequence weights for all the residues that
+increase the score of residue i (i.e. that have a positive score). The
+"plurality" qualifier sets the cut-off for the number of positive
+matches (weighted) below which there is no consensus.</p>
+
+
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with cons</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>cons </b>
+Create a consensus sequence from a multiple alignment
+Input (aligned) sequence set: <b>dna.msf</b>
+output sequence [dna.fasta]: <b>aligned.cons</b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqset     File containing a sequence alignment.
+  [-outseq]            seqout     [<sequence>.<format>] Sequence filename and
+                                  optional format (output USA)
+
+   Additional (Optional) qualifiers:
+   -datafile           matrix     [EBLOSUM62 for protein, EDNAFULL for DNA]
+                                  This is the scoring matrix file used when
+                                  comparing sequences. By default it is the
+                                  file 'EBLOSUM62' (for proteins) or the file
+                                  'EDNAFULL' (for nucleic sequences). These
+                                  files are found in the 'data' directory of
+                                  the EMBOSS installation.
+   -plurality          float      [Half the total sequence weighting] Set a
+                                  cut-off for the number of positive matches
+                                  below which there is no consensus. The
+                                  default plurality is taken as half the total
+                                  weight of all the sequences in the
+                                  alignment. (Any numeric value)
+   -identity           integer    [0] Provides the facility of setting the
+                                  required number of identities at a site for
+                                  it to give a consensus at that position.
+                                  Therefore, if this is set to the number of
+                                  sequences in the alignment only columns of
+                                  identities contribute to the consensus.
+                                  (Integer 0 or more)
+   -setcase            float      [@( $(sequence.totweight) / 2)] Sets the
+                                  threshold for the positive matches above
+                                  which the consensus is is upper-case and
+                                  below which the consensus is in lower-case.
+                                  (Any numeric value)
+   -name               string     Name of the consensus sequence (Any string
+                                  is accepted)
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outseq" associated qualifiers
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>File containing a sequence alignment.</td>
+<td>Readable set of sequences</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 2)</td>
+<td>Sequence filename and optional format (output USA)</td>
+<td>Writeable sequence</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-datafile</td>
+<td>This is the scoring matrix file used when comparing sequences. By default it is the file 'EBLOSUM62' (for proteins) or the file 'EDNAFULL' (for nucleic sequences). These files are found in the 'data' directory of the EMBOSS installation.</td>
+<td>Comparison matrix file in EMBOSS data path</td>
+<td>EBLOSUM62 for protein<br>EDNAFULL for DNA</td>
+</tr>
+
+<tr>
+<td>-plurality</td>
+<td>Set a cut-off for the number of positive matches below which there is no consensus. The default plurality is taken as half the total weight of all the sequences in the alignment.</td>
+<td>Any numeric value</td>
+<td>Half the total sequence weighting</td>
+</tr>
+
+<tr>
+<td>-identity</td>
+<td>Provides the facility of setting the required number of identities at a site for it to give a consensus at that position. Therefore, if this is set to the number of sequences in the alignment only columns of identities contribute to the consensus.</td>
+<td>Integer 0 or more</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-setcase</td>
+<td>Sets the threshold for the positive matches above which the consensus is is upper-case and below which the consensus is in lower-case.</td>
+<td>Any numeric value</td>
+<td>@( $(sequence.totweight) / 2)</td>
+</tr>
+
+<tr>
+<td>-name</td>
+<td>Name of the consensus sequence</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Input file format
+</H2>
+
+The USA of a set of aligned sequences.
+
+<p>
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: dna.msf</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+!!NA_MULTIPLE_ALIGNMENT
+
+ dna.msf  MSF: 120  Type: N  January 01, 1776  12:00  Check: 3196 ..
+
+ Name: MSFM1          Len:   120  Check:  8587  Weight:  1.00
+ Name: MSFM2          Len:   120  Check:  6178  Weight:  1.00
+ Name: MSFM3          Len:   120  Check:  8431  Weight:  1.00
+
+//
+
+        MSFM1  ACGTACGTAC GTACGTACGT ACGTACGTAC GTACGTACGT ACGTACGTAC
+        MSFM2  ACGTACGTAC GTACGTACGT ....ACGTAC GTACGTACGT ACGTACGTAC
+        MSFM3  ACGTACGTAC GTACGTACGT ACGTACGTAC GTACGTACGT CGTACGTACG
+
+        MSFM1  GTACGTACGT ACGTACGTAC GTACGTACGT ACGTACGTAC GTACGTACGT
+        MSFM2  GTACGTACGT ACGTACGTAC GTACGTACGT ACGTACGTAC GTACGTACGT
+        MSFM3  TACGTACGTA CGTACGTACG TACGTACGTA ACGTACGTAC GTACGTACGT
+
+        MSFM1  ACGTACGTAC GTACGTACGT
+        MSFM2  ACGTACGTTG CAACGTACGT
+        MSFM3  ACGTACGTAC GTACGTACGT
+
+</pre>
+</td></tr></table><p>
+
+<H2>
+    Output file format
+</H2>
+The output consists of a sequence file holding the consensus sequence. 
+
+<p>
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: aligned.cons</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;EMBOSS_001
+ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGT
+ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGT
+</pre>
+</td></tr></table><p>
+
+
+
+<H2>
+    Data files
+</H2>
+
+<p><b>cons</b> uses the standard set of scoring matrix data files in
+the EMBOSS data directory.</p>
+
+
+<P>
+<p>
+EMBOSS data files are distributed with the application and stored
+in the standard EMBOSS data directory, which is defined
+by the EMBOSS environment variable EMBOSS_DATA.
+
+<p>
+
+To see the available EMBOSS data files, run:
+<p>
+<pre>
+% embossdata -showall
+</pre>
+<p>
+To fetch one of the data files (for example 'Exxx.dat') into your
+current directory for you to inspect or modify, run:
+
+<pre>
+
+% embossdata -fetch -file Exxx.dat
+
+</pre>
+<p>
+
+Users can provide their own data files in their own directories.
+Project specific files can be put in the current directory, or for
+tidier directory listings in a subdirectory called
+".embossdata". Files for all EMBOSS runs can be put in the user's home
+directory, or again in a subdirectory called ".embossdata".
+
+<p>
+The directories are searched in the following order:
+
+<ul>
+   <li> . (your current directory)
+   <li> .embossdata (under your current directory)
+   <li> ~/ (your home directory)
+   <li> ~/.embossdata
+</ul>
+<p>
+
+
+<H2>
+    Notes
+</H2>
+
+<p>The "identity" qualifier provides an additional constrain to
+"plurality" when determining a consensus residue at an alignment
+site. "identity" sets the required number of identities at a site for
+it to be included in the consensus.  If for example this is set to the
+number of sequences in the alignment, then only a site with the same
+residue in all sequences would be included in the consensus.</p>
+
+<p>The "setcase" qualifier sets the threshold for the positive matches
+above which the consensus residue is given is upper-case and below
+which it is in lower-case.</p>
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="consambig.html">consambig</a></td>
+<td>Create an ambiguous consensus sequence from a multiple alignment</td>
+</tr>
+
+<tr>
+<td><a href="megamerger.html">megamerger</a></td>
+<td>Merge two large overlapping DNA sequences</td>
+</tr>
+
+<tr>
+<td><a href="merger.html">merger</a></td>
+<td>Merge two overlapping sequences</td>
+</tr>
+
+</table>
+
+<H2>
+    Author(s)
+</H2>
+Tim Carver (tcarver&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+<br>
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+<H2>
+    History
+</H2>
+
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+None
+
+
+</BODY>
+</HTML>
+

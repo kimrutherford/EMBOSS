@@ -1,0 +1,142 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: redata
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+redata
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/redata.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+
+<p><b>redata</b> searches the REBASE database for information on a specified restriction enzyme. It writes an output file with information on the cut site and (optionally) the full list of isoschizomers (enzymes with the same target sequence), commercial suppliers of the enzyme and literature references.</p>
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/redata.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/redata.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/redata.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+
+<!--#include file="inc/redata.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+
+<!--#include file="inc/redata.output" -->
+
+<p>
+
+This includes the full list of isoschizomers (enzymes with the same
+target sequence), suppliers and references from the REBASE database. 
+
+<H2>
+    Data files
+</H2>
+
+<!--#include file="inc/localfiles.ihtml" -->
+<p>
+<!--#include file="inc/refiles.ihtml" -->
+
+<H2>
+    Notes
+</H2>
+
+<p>The Restriction Enzyme database (REBASE) is a collection of information about restriction enzymes and related proteins. It contains published and unpublished references, recognition and cleavage sites, isoschizomers, commercial availability, methylation sensitivity, crystal and sequence data. DNA methyltransferases, homing endonucleases, nicking enzymes, specificity subunits and control proteins are also included. More recently, putative DNA methyltransferases and restriction enzymes, as predicted from analysis of genomic sequences, are also listed.</p>
+
+<p>The home page of REBASE is: <a href="http://rebase.neb.com/">http://rebase.neb.com/</a></p>
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+<p><b>redata</b> uses the EMBOSS REBASE restriction enzyme data files stored in directory <tt>data/REBASE/*</tt> under the EMBOSS installation directory. These files must first be set up using the program <b>rebaseextract</b>. Running <b>rebaseextract</b> may be the job of your system manager.</p>
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+
+None.
+
+<!--#include file="inc/redata.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+
+<!--#include file="inc/ableasby.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/redata.history" -->
+
+<H2>
+    Target users
+</H2>
+
+
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/redata.comment" -->
+
+
+</BODY>
+</HTML>
+

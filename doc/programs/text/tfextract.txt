@@ -1,0 +1,348 @@
+
+                                 tfextract 
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Process TRANSFAC transcription factor database for use by tfscan
+
+Description
+
+   tfextract extracts data from the TRANSFAC transcription factor
+   database file site.dat (available from
+   ftp://ftp.ebi.ac.uk/pub/databases/transfac/) for other EMBOSS
+   programs, such as tfscan, that use these data. The data is split up by
+   taxonomic groups and placed in individual files that are stored in the
+   EMBOSS data directory.
+
+Usage
+
+   Here is a sample session with tfextract
+
+
+% tfextract 
+Process TRANSFAC transcription factor database for use by tfscan
+Transfac database sites file: site.dat
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-infile]            infile     Transfac database sites file
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers: (none)
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   It reads in the TRANSFAC file site.dat available from:
+
+   ftp://ftp.ebi.ac.uk/pub/databases/transfac/ 
+
+  Input files for usage example
+
+  File: site.dat
+
+AC  R00077
+XX
+ID  HS$ALBU_01
+XX
+DT  20.06.90 (created); ewi.
+DT  24.08.95 (updated); hiwi.
+XX
+TY  D
+XX
+DE  albumin; Gene: G000188.
+XX
+SQ  tGGTTAGtaattactaa.
+XX
+SF  -363
+ST  -338
+XX
+BF  T00368; HNF-1A;Quality: 1; Species: human, Homo sapiens.
+BF  T00369; HNF-1;Quality: 1; Species: rat, Rattus norvegicus.
+BF  T01950; HNF-1B;Quality: 1; Species: human, Homo sapiens.
+BF  T01951; HNF-1C;Quality: 1; Species: human, Homo sapiens.
+XX
+OS  human, Homo sapiens
+OC  eukaryota; animalia; metazoa; chordata; vertebrata;
+OC  tetrapoda; mammalia; eutheria; primates
+XX
+SO  0103; Hep3B
+SO  0289; rl
+XX
+MM  gel retardation
+MM  direct gel shift
+MM  DNase I footprinting
+MM  gel shift competition
+MM  affinity chromatography
+MM  methylation interference
+XX
+DR  EMBL: M13075; HSALBEX1(695:711).
+XX
+RN  [1]
+RA  Frain M., Swart G., Monaci P., Nicosia A., Staempfli
+RA  S., Frank R., Cortese R.
+RT  The liver-specific transcription factor LF-B1 contains
+RT  a highly diverged homeobox DNA binding domain
+RL  Cell 59:145-157 (1989).
+RN  [2]
+RA  Frain M., Hardon E., Ciliberto G., Sala-Trepat J. M.
+RT  Binding of a liver-specific factor to the human albumin
+RT  gene promoter and enhancer
+RL  Mol. Cell. Biol. 10:991-999 (1990).
+XX
+//
+
+
+  [Part of this file has been deleted for brevity]
+
+DR  EMBL: U11854; MM11854(1931:1941).
+XX
+RN  [1]
+RA  Feinman R., Qiu W. Q., Pearse R. N., Nikolajczyk B.
+RA  S., Sen R., Sheffery M., Ravetch J. V.
+RT  PU.1 and an HLH family member contribute to the myeloid-specific
+RT  transcription of the FcgammaRIIIA promoter
+RL  EMBO J. 13:3852-3860 (1994).
+XX
+//
+AC  R04413
+XX
+ID  MOUSE$FCGR3A_02
+XX
+DT  14.05.97 (created); ewi.
+DT  14.05.97 (updated); ewi.
+XX
+TY  D
+XX
+DE  FcgammaRIIIA (low-affinity Fc receptor IIIA for IgG); Gene: G001014.
+XX
+SQ  TTCCTC.
+XX
+EL  MRR
+XX
+SF  -48
+ST  -43
+XX
+BF  T00702; PU.1;Quality: 3; Species: mouse, Mus musculus.
+XX
+OS  mouse, Mus musculus
+OC  eukaryota; animalia; metazoa; chordata; vertebrata;
+OC  tetrapoda; mammalia; eutheria; rodentia; myomorpha; muridae; murinae
+XX
+SO  0495; A20
+SO  0848; RAW264.7
+XX
+MM  direct gel shift
+MM  methylation interference
+MM  supershift (antibody binding)
+XX
+DR  EMBL: U11854; MM11854(1971:1976).
+XX
+RN  [1]
+RA  Feinman R., Qiu W. Q., Pearse R. N., Nikolajczyk B.
+RA  S., Sen R., Sheffery M., Ravetch J. V.
+RT  PU.1 and an HLH family member contribute to the myeloid-specific
+RT  transcription of the FcgammaRIIIA promoter
+RL  EMBO J. 13:3852-3860 (1994).
+XX
+//
+
+Output file format
+
+  Output files for usage example
+
+  File: tffungi
+
+Y$ADH1_02            ACAATATGGACTTCCTCTTTTCTGG R04140 T00322; GCR1;Quality: 2;
+Species: yeast, Saccharomyces cerevisiae.
+
+  File: tfinsect
+
+  File: tfvertebrate
+
+HS$ALBU_01           tGGTTAGtaattactaa R00077 T01951; HNF-1C;Quality: 1; Specie
+s: human, Homo sapiens.
+HS$ALBU_02           TTGGCA R00078 T00599; NF-1/L;Quality: 6; Species: rat, Rat
+tus norvegicus.
+HS$ALBU_03           TGGCA R00079 T00599; NF-1/L;Quality: 6; Species: rat, Ratt
+us norvegicus.
+HS$ALBU_04           TTAATAAT R00080 T00015; AFP1;Quality: 6; Species: human, H
+omo sapiens.
+HS$ALBU_05           TCTAGTTAATAATCTACAAT R00081 T00369; HNF-1;Quality: 4; Spec
+ies: rat, Rattus norvegicus.
+MOUSE$FCGR3A_01      GTCTGCTGACC R04412 T00874; USF;Quality: 2; Species: human,
+ Homo sapiens.
+MOUSE$FCGR3A_02      TTCCTC R04413 T00702; PU.1;Quality: 3; Species: mouse, Mus
+ musculus.
+
+  File: tfplant
+
+  File: tfother
+
+   The output from tfextract is a set of files in the emboss/data
+   directory containing reformatted sites from the transfac database.
+
+   These files are used by the tfscan program to search for TRANSFAC
+   sites in sequences.
+
+Data files
+
+   EMBOSS data files are distributed with the application and stored in
+   the standard EMBOSS data directory, which is defined by the EMBOSS
+   environment variable EMBOSS_DATA.
+
+   To see the available EMBOSS data files, run:
+
+% embossdata -showall
+
+   To fetch one of the data files (for example 'Exxx.dat') into your
+   current directory for you to inspect or modify, run:
+
+% embossdata -fetch -file Exxx.dat
+
+   Users can provide their own data files in their own directories.
+   Project specific files can be put in the current directory, or for
+   tidier directory listings in a subdirectory called ".embossdata".
+   Files for all EMBOSS runs can be put in the user's home directory, or
+   again in a subdirectory called ".embossdata".
+
+   The directories are searched in the following order:
+     * . (your current directory)
+     * .embossdata (under your current directory)
+     * ~/ (your home directory)
+     * ~/.embossdata
+
+Notes
+
+   The TRANSFAC Database is a commercial database of eukaryotic
+   cis-acting regulatory DNA elements and trans-acting factors. It covers
+   the whole range from yeast to human. An old public domain version is
+   available at:
+   ftp://ftp.ebi.ac.uk/pub/databases/transfac/transfac32.tar.Z
+
+   TRANSFAC started in 1988 with a printed compilation (Nucleic Acids
+   Res. 16: 1879-1902, 1988) and was transferred into computer-readable
+   format in 1990 (BioTechForum - Advances in Molecular Genetics (J.
+   Collins, A.J. Driesel, eds.) 4:95-108, 1991). The basic structures of
+   Table 1 and 2 of the compilation were taken as the core of the
+   emergent database. The aim of the early compilation as well as of the
+   TRANSFAC database is: 1. to guide through a meanwhile overwhelming
+   amount of data in a field which is connected to nearly all areas of
+   modern molecular biology; 2. to map the regulatory sites in the
+   individual genes and, ultimately, in the genome(s) as a whole; 3. to
+   develop a tool for the identification of regulatory elements in newly
+   unravelled genomic sequences; 4. to provide a basis for a more
+   comprehensive understanding of how the genome governs transcriptional
+   control.
+
+   The program tfextract extracts data from the TRANSFAC database file
+   site.dat. This file contains information on individual (putatively)
+   regulatory protein binding sites. About half of these refer to sites
+   within eukaryotic genes. Just under half of them resulted from
+   mutagenesis studies, in vitro selection procedures starting from
+   random oligonucleotide mixtures or from specific theoretical
+   considerations. And finally, there are about 5% with consensus binding
+   sequences given in the IUPAC code, many of them being taken from the
+   compilation of Faisst and Meyer (Nucleic Acids Res. 20:3-26, 1992). A
+   number of consensi have been generated by the TRANSFAC team, generally
+   derived from the profiles stored in the MATRIX table.
+
+   The data is split up by taxonomic groups:
+
+     * Fungi
+     * Insects
+     * Plants
+     * Vertebrates
+     * Other
+
+   and placed in individual files:
+     * tffungi
+     * tfinsect
+     * tfplant
+     * tfvertebrate
+     * tfother
+
+   These files are stored in the EMBOSS data directory, see Data Files
+   below.
+
+References
+
+     * Nucleic Acids Res. 16: 1879-1902, 1988
+     * BioTechForum - Advances in Molecular Genetics (J. Collins,A.J.
+       Driesel, eds.) 4:95-108, 1991
+     * Nucleic Acids Res. 20:3-26, 1992
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with a status of 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name     Description
+   aaindexextract   Extract amino acid property data from AAINDEX
+   cutgextract      Extract codon usage tables from from CUTG database
+   jaspextract      Extract data from JASPAR
+   printsextract    Extract data from PRINTS database for use by pscan
+   prosextract      Processes the PROSITE motif database for use by
+                    patmatmotifs
+   rebaseextract    Process the REBASE database for use by restriction
+                    enzyme applications
+
+Author(s)
+
+   Alan Bleasby (ajb © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
+
+History
+
+   Written Summer 2000 - Alan Bleasby.
+
+Target users
+
+   This program is intended to be used by administrators responsible for
+   software and database installation and maintenance.
+
+Comments
+
+   None

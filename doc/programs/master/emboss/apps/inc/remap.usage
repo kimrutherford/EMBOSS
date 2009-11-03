@@ -1,0 +1,75 @@
+<b>Here is a sample session with remap</b>
+<p>
+This example uses only a small region of the input sequence to save space. This is run with a small test version of the restriction enzyme database and so you will probably see more enzymes when you run this. 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>remap -notran -sbeg 1 -send 60 </b>
+Display restriction enzyme binding sites in a nucleotide sequence
+Input nucleotide sequence(s): <b>tembl:j01636</b>
+Comma separated enzyme list [all]: <b>taqi,bsu6i,acii,bsski</b>
+Minimum recognition site length [4]: <b></b>
+Output file [j01636.remap]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+This is an example where all enzymes in the REBASE database are used, (but only the prototypes of the isoschizomers are reported by default). This is run with a small test version of the restriction enzyme database and so you will probably see more enzymes when you run this. 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>remap -notran -sbeg 1 -send 60 </b>
+Display restriction enzyme binding sites in a nucleotide sequence
+Input nucleotide sequence(s): <b>tembl:j01636</b>
+Comma separated enzyme list [all]: <b></b>
+Minimum recognition site length [4]: <b></b>
+Output file [j01636.remap]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 3</b>
+<p>
+This is an example where all enzymes in the REBASE database are used but the -limit qualifier is not set so that all of the enzymes are displayed and not just only the prototypes of the isoschizomers. This is run with a small test version of the restriction enzyme database and so you will probably see more enzymes when you run this. 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>remap -notran -sbeg 1 -send 60 -nolimit </b>
+Display restriction enzyme binding sites in a nucleotide sequence
+Input nucleotide sequence(s): <b>tembl:j01636</b>
+Comma separated enzyme list [all]: <b></b>
+Minimum recognition site length [4]: <b></b>
+Output file [j01636.remap]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.3">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 4</b>
+<p>
+This shows the 'flat' format: This is run with a small test version of the restriction enzyme database and so you will probably see more enzymes when you run this. 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>remap -notran -sbeg 1 -send 60 -flat </b>
+Display restriction enzyme binding sites in a nucleotide sequence
+Input nucleotide sequence(s): <b>tembl:j01636</b>
+Comma separated enzyme list [all]: <b></b>
+Minimum recognition site length [4]: <b></b>
+Output file [j01636.remap]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.4">Go to the output files for this example</a><p><p>

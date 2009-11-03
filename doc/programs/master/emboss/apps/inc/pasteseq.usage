@@ -1,0 +1,45 @@
+<b>Here is a sample session with pasteseq</b>
+<p>
+To insert the sequence 'tsw:flav_nossm' after position 67 in sequence 'tsw:amir_pseae' and write the results to the file 'amir_pseae.fasta':  
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>pasteseq tsw:amir_pseae tsw:flav_nossm -pos=67 </b>
+Insert one sequence into another
+output sequence [amir_pseae.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+This does the same thing, but the output qualifier is explicitly used: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>pasteseq tsw:amir_pseae tsw:flav_nossm -out=amirplus.seq -pos=67 </b>
+Insert one sequence into another
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 3</b>
+<p>
+To insert the sequence 'tsw:flav_nossm' before the start of sequence 'tsw:amir_pseae' use -pos=0: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>pasteseq tsw:amir_pseae tsw:flav_nossm -out=amirplus.seq -pos=0 </b>
+Insert one sequence into another
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.3">Go to the output files for this example</a><p><p>

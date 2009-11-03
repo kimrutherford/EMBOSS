@@ -1,0 +1,111 @@
+
+<a name="output.5"></a>
+<h3>Output files for usage example 5</h3>
+<p><h3>File: wossname.html</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+&lt;h2&gt;&lt;a name="ACD"&gt;ACD&lt;/a&gt;&lt;/h2&gt;
+&lt;table border cellpadding=4 bgcolor="#FFFFF0"&gt;
+&lt;tr&gt;&lt;th&gt;Program name&lt;/th&gt;
+&lt;th&gt;Description&lt;/th&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="acdc.html"&gt;acdc&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Test an application ACD file&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="acdpretty.html"&gt;acdpretty&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Correctly reformat an application ACD file&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="acdtable.html"&gt;acdtable&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Generate an HTML table of parameters from an application ACD file&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="acdtrace.html"&gt;acdtrace&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Trace processing of an application ACD file (for testing)&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="acdvalid.html"&gt;acdvalid&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Validate an application ACD file&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;/table&gt;
+&lt;h2&gt;&lt;a name="ALIGNMENT CONSENSUS"&gt;ALIGNMENT CONSENSUS&lt;/a&gt;&lt;/h2&gt;
+&lt;table border cellpadding=4 bgcolor="#FFFFF0"&gt;
+&lt;tr&gt;&lt;th&gt;Program name&lt;/th&gt;
+&lt;th&gt;Description&lt;/th&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="cons.html"&gt;cons&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Create a consensus sequence from a multiple alignment&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="consambig.html"&gt;consambig&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Create an ambiguous consensus sequence from a multiple alignment&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="megamerger.html"&gt;megamerger&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Merge two large overlapping DNA sequences&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="dbiblast.html"&gt;dbiblast&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Index a BLAST database&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="dbifasta.html"&gt;dbifasta&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Index a fasta file database&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="dbiflat.html"&gt;dbiflat&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Index a flat file database&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="dbigcg.html"&gt;dbigcg&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Index a GCG formatted database&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="dbxfasta.html"&gt;dbxfasta&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Index a fasta file database using b+tree indices&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="dbxflat.html"&gt;dbxflat&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Index a flat file database using b+tree indices&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="dbxgcg.html"&gt;dbxgcg&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Index a GCG formatted database using b+tree indices&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;/table&gt;
+&lt;h2&gt;&lt;a name="UTILS MISC"&gt;UTILS MISC&lt;/a&gt;&lt;/h2&gt;
+&lt;table border cellpadding=4 bgcolor="#FFFFF0"&gt;
+&lt;tr&gt;&lt;th&gt;Program name&lt;/th&gt;
+&lt;th&gt;Description&lt;/th&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="embossdata.html"&gt;embossdata&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Find and retrieve EMBOSS data files&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="embossversion.html"&gt;embossversion&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Reports the current EMBOSS version number&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;/table&gt;
+</td></tr></table><p>

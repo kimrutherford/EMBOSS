@@ -1,0 +1,439 @@
+
+                                  charge 
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Draw a protein charge plot
+
+Description
+
+   charge reads a protein sequence and writes a file (or plots a graph)
+   of the mean charge of the amino acids within a window of specified
+   length as the window is moved along the sequence.
+
+Algorithm
+
+   charge uses the column "charge" from a datafile (Eamino.dat) of amino
+   acid properties. It gives the residues 'D' and 'E' a charge of -1, 'K'
+   and 'R' a charge of +1, and the residue 'H' a charge of +0.5. Then it
+   calculates the mean charge across the window, which by default is 5
+   residues.
+
+Usage
+
+   Here is a sample session with charge
+
+
+% charge tsw:hbb_human 
+Draw a protein charge plot
+Output file [hbb_human.charge]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers (* if not always prompted):
+  [-seqall]            seqall     Protein sequence(s) filename and optional
+                                  format, or reference (input USA)
+*  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, das, xterm, png, gif)
+*  -outfile            outfile    [*.charge] Output file name
+
+   Additional (Optional) qualifiers:
+   -window             integer    [5] Window length (Integer 1 or more)
+
+   Advanced (Unprompted) qualifiers:
+   -aadata             datafile   [Eamino.dat] Amino acids properties and
+                                  molecular weight data file
+   -plot               toggle     [N] Produce graphic
+
+   Associated qualifiers:
+
+   "-seqall" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-graph" associated qualifiers
+   -gprompt            boolean    Graph prompting
+   -gdesc              string     Graph description
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   charge reads in a protein sequence.
+
+  Input files for usage example
+
+   'tsw:hbb_human' is a sequence entry in the example protein database
+   'tsw'
+
+  Database entry: tsw:hbb_human
+
+ID   HBB_HUMAN               Reviewed;         147 AA.
+AC   P68871; A4GX73; B2ZUE0; P02023; Q13852; Q14481; Q14510; Q45KT0;
+AC   Q549N7; Q6FI08; Q6R7N2; Q8IZI1; Q9BX96; Q9UCD6; Q9UCP8; Q9UCP9;
+DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
+DT   23-JAN-2007, sequence version 2.
+DT   16-JUN-2009, entry version 76.
+DE   RecName: Full=Hemoglobin subunit beta;
+DE   AltName: Full=Hemoglobin beta chain;
+DE   AltName: Full=Beta-globin;
+DE   Contains:
+DE     RecName: Full=LVV-hemorphin-7;
+GN   Name=HBB;
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Mammalia; Eutheria; Euarchontoglires; Primates; Haplorrhini;
+OC   Catarrhini; Hominidae; Homo.
+OX   NCBI_TaxID=9606;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RX   MEDLINE=77126403; PubMed=1019344;
+RA   Marotta C., Forget B., Cohen-Solal M., Weissman S.M.;
+RT   "Nucleotide sequence analysis of coding and noncoding regions of human
+RT   beta-globin mRNA.";
+RL   Prog. Nucleic Acid Res. Mol. Biol. 19:165-175(1976).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RX   MEDLINE=81064667; PubMed=6254664; DOI=10.1016/0092-8674(80)90428-6;
+RA   Lawn R.M., Efstratiadis A., O'Connell C., Maniatis T.;
+RT   "The nucleotide sequence of the human beta-globin gene.";
+RL   Cell 21:647-651(1980).
+RN   [3]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA], AND VARIANT LYS-7.
+RX   PubMed=16175509; DOI=10.1086/491748;
+RA   Wood E.T., Stover D.A., Slatkin M., Nachman M.W., Hammer M.F.;
+RT   "The beta-globin recombinational hotspot reduces the effects of strong
+RT   selection around HbC, a recently arisen mutation providing resistance
+RT   to malaria.";
+RL   Am. J. Hum. Genet. 77:637-642(2005).
+RN   [4]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RA   Lu L., Hu Z.H., Du C.S., Fu Y.S.;
+RT   "DNA sequence of the human beta-globin gene isolated from a healthy
+RT   Chinese.";
+RL   Submitted (JUN-1997) to the EMBL/GenBank/DDBJ databases.
+RN   [5]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA], AND VARIANT ARG-113.
+RA   Cabeda J.M., Correia C., Estevinho A., Cardoso C., Amorim M.L.,
+RA   Cleto E., Vale L., Coimbra E., Pinho L., Justica B.;
+RT   "Unexpected patterns of globin mutations in thalassemia patients from
+RT   north of Portugal.";
+
+
+  [Part of this file has been deleted for brevity]
+
+FT   VARIANT     141    141       A -> V (in Puttelange; polycythemia; O(2)
+FT                                affinity up).
+FT                                /FTId=VAR_003082.
+FT   VARIANT     142    142       L -> R (in Olmsted; unstable).
+FT                                /FTId=VAR_003083.
+FT   VARIANT     143    143       A -> D (in Ohio; O(2) affinity up).
+FT                                /FTId=VAR_003084.
+FT   VARIANT     144    144       H -> D (in Rancho Mirage).
+FT                                /FTId=VAR_003085.
+FT   VARIANT     144    144       H -> P (in Syracuse; O(2) affinity up).
+FT                                /FTId=VAR_003087.
+FT   VARIANT     144    144       H -> Q (in Little Rock; O(2) affinity
+FT                                up).
+FT                                /FTId=VAR_003086.
+FT   VARIANT     144    144       H -> R (in Abruzzo; O(2) affinity up).
+FT                                /FTId=VAR_003088.
+FT   VARIANT     145    145       K -> E (in Mito; O(2) affinity up).
+FT                                /FTId=VAR_003089.
+FT   VARIANT     146    146       Y -> C (in Rainier; O(2) affinity up).
+FT                                /FTId=VAR_003090.
+FT   VARIANT     146    146       Y -> H (in Bethesda; O(2) affinity up).
+FT                                /FTId=VAR_003091.
+FT   VARIANT     147    147       H -> D (in Hiroshima; O(2) affinity up).
+FT                                /FTId=VAR_003092.
+FT   VARIANT     147    147       H -> L (in Cowtown; O(2) affinity up).
+FT                                /FTId=VAR_003093.
+FT   VARIANT     147    147       H -> P (in York; O(2) affinity up).
+FT                                /FTId=VAR_003094.
+FT   VARIANT     147    147       H -> Q (in Kodaira; O(2) affinity up).
+FT                                /FTId=VAR_003095.
+FT   CONFLICT     26     26       Missing (in Ref. 15; ACD39349).
+FT   CONFLICT     42     42       F -> L (in Ref. 13; AAR96398).
+FT   HELIX         6     16
+FT   TURN         21     23
+FT   HELIX        24     35
+FT   HELIX        37     42
+FT   HELIX        44     46
+FT   HELIX        52     57
+FT   HELIX        59     77
+FT   TURN         78     80
+FT   HELIX        82     94
+FT   TURN         95     97
+FT   HELIX       102    119
+FT   HELIX       120    122
+FT   HELIX       125    142
+FT   HELIX       144    146
+SQ   SEQUENCE   147 AA;  15998 MW;  A31F6D621C6556A1 CRC64;
+     MVHLTPEEKS AVTALWGKVN VDEVGGEALG RLLVVYPWTQ RFFESFGDLS TPDAVMGNPK
+     VKAHGKKVLG AFSDGLAHLD NLKGTFATLS ELHCDKLHVD PENFRLLGNV LVCVLAHHFG
+     KEFTPPVQAA YQKVVAGVAN ALAHKYH
+//
+
+Output file format
+
+   If the option '-plot' is specified then charge displays a graph of the
+   charge along the sequence otherwise it writes out a file containing
+   the charges within a window starting at each position along the
+   sequence.
+
+   The output file contains two columns separated by space or TAB
+   characters. The first column is the position of the start of the
+   window. The second column is the charge of the amino acids within that
+   window.
+
+  Output files for usage example
+
+  File: hbb_human.charge
+
+CHARGE of HBB_HUMAN from 1 to 147: window 5
+
+Position        Residue Charge
+1               M       0.100
+2               V       0.100
+3               H       -0.100
+4               L       -0.400
+5               T       -0.200
+6               P       -0.200
+7               E       -0.200
+8               E       0.000
+9               K       0.200
+10              S       0.000
+11              A       0.000
+12              V       0.000
+13              T       0.000
+14              A       0.200
+15              L       0.200
+16              W       0.200
+17              G       0.200
+18              K       0.000
+19              V       -0.400
+20              N       -0.400
+21              V       -0.400
+22              D       -0.400
+23              E       -0.400
+24              V       -0.200
+25              G       -0.200
+26              G       -0.200
+27              E       0.000
+28              A       0.200
+29              L       0.200
+30              G       0.200
+31              R       0.200
+32              L       0.000
+33              L       0.000
+34              V       0.000
+35              V       0.000
+36              Y       0.000
+37              P       0.200
+38              W       0.200
+39              T       0.200
+40              Q       0.000
+41              R       0.000
+42              F       -0.200
+43              F       -0.200
+44              E       -0.400
+45              S       -0.200
+46              F       -0.200
+47              G       -0.200
+
+
+  [Part of this file has been deleted for brevity]
+
+93              H       0.100
+94              C       0.100
+95              D       0.100
+96              K       0.100
+97              L       -0.100
+98              H       -0.300
+99              V       -0.400
+100             D       -0.400
+101             P       0.000
+102             E       0.000
+103             N       0.200
+104             F       0.200
+105             R       0.200
+106             L       0.000
+107             L       0.000
+108             G       0.000
+109             N       0.000
+110             V       0.000
+111             L       0.000
+112             V       0.000
+113             C       0.100
+114             V       0.200
+115             L       0.200
+116             A       0.200
+117             H       0.400
+118             H       0.100
+119             F       0.000
+120             G       0.000
+121             K       0.000
+122             E       -0.200
+123             F       0.000
+124             T       0.000
+125             P       0.000
+126             P       0.000
+127             V       0.000
+128             Q       0.000
+129             A       0.200
+130             A       0.200
+131             Y       0.200
+132             Q       0.200
+133             K       0.200
+134             V       0.000
+135             V       0.000
+136             A       0.000
+137             G       0.000
+138             V       0.000
+139             A       0.000
+140             N       0.100
+141             A       0.300
+142             L       0.300
+143             A       0.400
+
+Data files
+
+   charge reads the data file 'Eamino.dat' to find the charge of the
+   amino acids in the protein.
+
+   EMBOSS data files are distributed with the application and stored in
+   the standard EMBOSS data directory, which is defined by the EMBOSS
+   environment variable EMBOSS_DATA.
+
+   To see the available EMBOSS data files, run:
+
+% embossdata -showall
+
+   To fetch one of the data files (for example 'Exxx.dat') into your
+   current directory for you to inspect or modify, run:
+
+% embossdata -fetch -file Exxx.dat
+
+   Users can provide their own data files in their own directories.
+   Project specific files can be put in the current directory, or for
+   tidier directory listings in a subdirectory called ".embossdata".
+   Files for all EMBOSS runs can be put in the user's home directory, or
+   again in a subdirectory called ".embossdata".
+
+   The directories are searched in the following order:
+     * . (your current directory)
+     * .embossdata (under your current directory)
+     * ~/ (your home directory)
+     * ~/.embossdata
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name     Description
+   backtranambig    Back-translate a protein sequence to ambiguous
+                    nucleotide sequence
+   backtranseq      Back-translate a protein sequence to a nucleotide sequence
+   checktrans       Reports STOP codons and ORF statistics of a protein
+   compseq          Calculate the composition of unique words in sequences
+   emowse           Search protein sequences by digest fragment molecular weight
+   freak            Generate residue/base frequency table or plot
+   iep              Calculate the isoelectric point of proteins
+   mwcontam         Find weights common to multiple molecular weights files
+   mwfilter         Filter noisy data from molecular weights file
+   octanol          Draw a White-Wimley protein hydropathy plot
+   pepinfo          Plot amino acid properties of a protein sequence in parallel
+   pepstats         Calculates statistics of protein properties
+   pepwindow        Draw a hydropathy plot for a protein sequence
+   pepwindowall     Draw Kyte-Doolittle hydropathy plot for a protein
+                    alignment
+   wordcount        Count and extract unique words in DNA sequence(s)
+
+Author(s)
+
+   Alan Bleasby (ajb © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
+
+History
+
+   Written (March 2001) - Alan Bleasby.
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

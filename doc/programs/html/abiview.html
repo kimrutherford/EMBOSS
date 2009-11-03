@@ -1,0 +1,456 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: abiview
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+abiview
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
+    Function
+</H2>
+Display the trace in an ABI sequencer file
+<H2>
+    Description
+</H2>
+
+<p><b>abiview</b> reads in an ABI sequencer trace file and graphically displays the data.  The probabilities of each of the 4 nucleotide bases along the sequencing run is plotted and the assigned nucleotide (<tt>G</tt>, <tt>A</tt>, <tt>T</tt>, <tt>C</tt> or <tt>N</tt>) from the ABI file is overlayed on the graphs.  The complete sequence is written to an output file.</p>
+
+
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with abiview</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>abiview -graph cps </b>
+Display the trace in an ABI sequencer file
+ABI sequencing trace file: <b>abiview.abi</b>
+nucleotide output sequence [abiview.fasta]: <b></b>
+
+Created abiview.ps
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-infile]            infile     ABI sequencing trace file
+  [-outseq]            seqout     [<sequence>.<format>] Nucleotide sequence
+                                  filename and optional format (output USA)
+   -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, das, xterm, png, gif)
+
+   Additional (Optional) qualifiers:
+   -startbase          integer    [0] First base to report or display (Integer
+                                  0 or more)
+   -endbase            integer    [0] Last sequence base to report or display.
+                                  If the default is set to zero then the
+                                  value of this is taken as the maximum number
+                                  of bases. (Any integer value)
+   -yticks             boolean    [N] Display y-axis ticks
+   -[no]sequence       boolean    [Y] Display the sequence on the graph
+   -window             integer    [40] Sequence display window size (Any
+                                  integer value)
+   -bases              string     [GATC] Base graphs to be displayed (Any
+                                  string is accepted, matching regular
+                                  expression /[GATC]+/)
+
+   Advanced (Unprompted) qualifiers:
+   -separate           boolean    [N] Separate the trace graphs for the 4
+                                  bases
+
+   Associated qualifiers:
+
+   "-outseq" associated qualifiers
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
+
+   "-graph" associated qualifiers
+   -gprompt            boolean    Graph prompting
+   -gdesc              string     Graph description
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-infile]<br>(Parameter 1)</td>
+<td>ABI sequencing trace file</td>
+<td>Input file</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 2)</td>
+<td>Nucleotide sequence filename and optional format (output USA)</td>
+<td>Writeable sequence</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr>
+<td>-graph</td>
+<td>Graph type</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, das, xterm, png, gif</td>
+<td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-startbase</td>
+<td>First base to report or display</td>
+<td>Integer 0 or more</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-endbase</td>
+<td>Last sequence base to report or display. If the default is set to zero then the value of this is taken as the maximum number of bases.</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-yticks</td>
+<td>Display y-axis ticks</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]sequence</td>
+<td>Display the sequence on the graph</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-window</td>
+<td>Sequence display window size</td>
+<td>Any integer value</td>
+<td>40</td>
+</tr>
+
+<tr>
+<td>-bases</td>
+<td>Base graphs to be displayed</td>
+<td>Any string is accepted, matching regular expression /[GATC]+/</td>
+<td>GATC</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-separate</td>
+<td>Separate the trace graphs for the 4 bases</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+This reads in a standard ABI trace file.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: abiview.abi</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: abiview.abi</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+
+<H2>
+    Output file format
+</H2>
+
+It outputs a file holding a normal nucleotide sequence.
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: abiview.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;../../data/abiview.abi
+GNNNNNNNNNGNGNNGGGGTTTNANNNTNNNAGAACCCCCCTTNGAAAANNNCCACCCCA
+NNATAGTNGTANGAATAGTNCCCAGGCCANGCCTATCTGTGATGATTACATAGGCTAACA
+CATGACAAACATTTAAAAACACTAAACAATTGTTATTTATTCTTTGTTCCTATAAACCAC
+ACCCATTAAGCCCTTACTATATATAAGAGTTTTCAAGCCAAGAACCTGCTGCTTGGGAGG
+CTGATGCAGGAGAATTGCCAAGTACAAACCCTGCCTGGACTGTAAAGTGAAACCAAGGCT
+AGTTGTCTCACAATAAAAGATGAAGGGCAAGTGGGATCAATGCATAAAGGAGCTTGTGCC
+CAAGCCTGTTAGCCTTAGTTCAATTCCTGAGTACCATGAAAAGGTAGAAGGAGAGAAATG
+ATTTGGTACAATTTTTCTCTGTGCTGTGACACAGTACCACCCTCCTACTAATAACAAATA
+AAATAATGTTTAAAACAAAATAAAATAAAAATGGACTGGGATGTAGCACAATGGTAGGGT
+ACTTGCATAGCATGTACAAGGACCTGATTTCAATCCCCTGTGATAAAAGAAAATAAGGAA
+GGGAGGAAGCGTTAGGAGGAAAAATGGAATACAGAAGACACAGTGCATGGGAAGGATATG
+TATGTTATGAACACCAGAAATTCACTTGAAAATGAGTAAAATTTTTTTATTATTATATCA
+TTATTATTGGGGGGGATGTGGGCGGGGCTTGCAGAGGTATCTTTTAGAGGANGATCATTT
+TCCGGTTGTTGAGCAGGGCTCTGTTATGTAGGATATCTCAGANTAACAGACCCCAGGT
+</pre>
+</td></tr></table><p>
+<p><h3>Graphics File: abiview.ps</h3>
+<p><img src="abiview.1.abiview.gif" alt="[abiview results]">
+<p>
+
+The horizontal scale of the output image labelled 'Residue Position' is
+only a very approximate indication of the spacing of residues in the
+image.  The real residue spacing is variable, as it relies on the speed
+with which the oligo-nucleotides are eluted in the ABI sequencer.  Do
+not be surprised to see the nucleotide signals spaced at a much greater
+distance than the horizontal scale might suggest. 
+
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+<p>An ABI file (<tt>*.abi</tt>) contains sequence trace data and base calls from a run of an ABI nucleotide sequencer machine.  A trace data file is what you get back from having some DNA sequenced, for example, by a 3730XL sequencer.  The files are in "binary" format and so cannot be viewed directly on screen.  To inspect the sequencing data you must use a trace viewer such as <b>abiview</b>.  Another good trace viewer is FinchTV (<a href="http://www.geospiza.com/finchtv/">http://www.geospiza.com/finchtv/</a>).  It is stand-alone program and is freely available.</p>
+
+<H2>
+    References
+</H2>
+
+None.
+
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+None.
+
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="cirdna.html">cirdna</a></td>
+<td>Draws circular maps of DNA constructs</td>
+</tr>
+
+<tr>
+<td><a href="lindna.html">lindna</a></td>
+<td>Draws linear maps of DNA constructs</td>
+</tr>
+
+<tr>
+<td><a href="pepnet.html">pepnet</a></td>
+<td>Draw a helical net for a protein sequence</td>
+</tr>
+
+<tr>
+<td><a href="pepwheel.html">pepwheel</a></td>
+<td>Draw a helical wheel diagram for a protein sequence</td>
+</tr>
+
+<tr>
+<td><a href="prettyplot.html">prettyplot</a></td>
+<td>Draw a sequence alignment with pretty formatting</td>
+</tr>
+
+<tr>
+<td><a href="prettyseq.html">prettyseq</a></td>
+<td>Write a nucleotide sequence and its translation to file</td>
+</tr>
+
+<tr>
+<td><a href="remap.html">remap</a></td>
+<td>Display restriction enzyme binding sites in a nucleotide sequence</td>
+</tr>
+
+<tr>
+<td><a href="seealso.html">seealso</a></td>
+<td>Finds programs with similar function to a specified program</td>
+</tr>
+
+<tr>
+<td><a href="showalign.html">showalign</a></td>
+<td>Display a multiple sequence alignment in pretty format</td>
+</tr>
+
+<tr>
+<td><a href="showdb.html">showdb</a></td>
+<td>Displays information on configured databases</td>
+</tr>
+
+<tr>
+<td><a href="showfeat.html">showfeat</a></td>
+<td>Display features of a sequence in pretty format</td>
+</tr>
+
+<tr>
+<td><a href="showpep.html">showpep</a></td>
+<td>Displays protein sequences with features in pretty format</td>
+</tr>
+
+<tr>
+<td><a href="showseq.html">showseq</a></td>
+<td>Displays sequences with features in pretty format</td>
+</tr>
+
+<tr>
+<td><a href="sixpack.html">sixpack</a></td>
+<td>Display a DNA sequence with 6-frame translation and ORFs</td>
+</tr>
+
+<tr>
+<td><a href="textsearch.html">textsearch</a></td>
+<td>Search the textual description of sequence(s)</td>
+</tr>
+
+</table>
+
+<H2>
+    Author(s)
+</H2>
+
+
+Tim Carver (tcarver&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+<br>
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+
+
+<H2>
+    History
+</H2>
+
+
+Written (January 2001) - Tim Carver
+
+
+<H2>
+    Target users
+</H2>
+
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+<H2>
+    Comments
+</H2>
+
+None
+
+</BODY>
+</HTML>
+

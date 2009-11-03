@@ -1,0 +1,166 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: embossdata
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+embossdata
+<!--#include file="header2.inc" -->
+
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/embossdata.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<p><b>embossdata</b> searches for a specified data file in all the directories which can hold them and writes the results of the search to screen or (optionally) to file.  Optionally, all the files in the searched directories can be displayed. Optionally, it will also copy the file from the EMBOSS standard data directory to the current directory so that you can safely edit and use it.</p>
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/embossdata.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/embossdata.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/embossdata.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+
+None.
+
+<p>
+<!--#include file="inc/embossdata.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+
+All output is to stdout by default.
+
+<p>
+<!--#include file="inc/embossdata.output" -->
+
+<H2>
+    Data files
+</H2>
+
+
+No data files are read by this program.
+	
+<H2>
+    Notes
+</H2>
+
+<p>Many EMBOSS programs use a data file.  The data files are typically kept in a standard directory in the EMBOSS installation (<tt>.../emboss/emboss/data/</tt>).  When an EMBOSS programs require a data file, it search for it in the following order of directories:</p>
+<ul>
+    <li> The current directory
+    <li> <tt>.embossdata</tt> subdirectory in the current directory
+    <li> Your home directory
+    <li> <tt>.embossdata</tt> subdirectory in your home directory
+    <li> The EMBOSS standard data directory 
+</ul>
+
+
+<p>EMBOSS will use the data file it finds first from the above directories.  For example, a data file in the current directory is used in preference to a file of the same name in the EMBOSS standard data directory.</p>
+
+<p>It is sometimes necessary to modify a data file to change the behaviour of an EMBOSS program.  To do this safely, you should copy the data file from the EMBOSS standard data directory to one of the other directories, such as the current directory or your home directory, before editing it.  <b>embossdata</b> helps here by displaying the names of data files in all the directories which could hold them, and copying a data file from the EMBOSS standard data directory to the current directory.</p>
+
+<p>By convention, all EMBOSS data file names start with the character 'E', to distinguish them from other files on your system. For example genetic codes to translate codons to amino acids are held in data files called "EGC.0", "EGC.1", "EGC.2", etc. </p>
+
+<h3> -filename option </h3>
+Name of data file to search for or copy into the current directory from the EMBOSS standard data directory. The name of the file is not altered when it is fetched. (Any string is accepted).
+
+<h3>-outfile option</h3>
+Name of file containing the results of searching the data directories.    By default this is written to the screen (<tt>stdout</tt>).
+
+<h3> -reject option </h3>
+The names of sub-directories of the EMBOSS data directory that should be ignored when displaying data directories.
+
+
+
+<H2>
+    References
+</H2>
+
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+When copying a file, this program will report if the file has
+been copied successfully, e.g.:
+
+<pre>
+"'Epepcoil.dat' has been copied successfully."
+</pre>
+
+<H2>
+    Exit status
+</H2>
+
+
+It always exits with status 0
+
+<H2>
+    Known bugs
+</H2>
+
+
+None noted.
+
+<!--#include file="inc/embossdata.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/gwilliam.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/embossdata.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/embossdata.comment" -->
+
+</BODY>
+</HTML>
+

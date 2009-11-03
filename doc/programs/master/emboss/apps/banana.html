@@ -1,0 +1,406 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: banana
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+banana
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/banana.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+<p><b>banana</b> predicts bending of a normal (B) DNA double helix,
+using the method of Goodsell & Dickerson, NAR 1994
+11;22(24):5497-5503.  The program calculates the magnitude of local
+bending and macroscopic curvature at each point along an arbitrary
+B-DNA sequence, using any desired bending model that specifies values
+of twist, roll and tilt as a function of sequence.  The program
+outputs both a graphical display and a text file of the results.</p>
+
+<p>The default model (model 'a' from the Goodsell & Dickerson paper)
+is based on the nucleosome positioning data of Satchwell et al 1986
+(J. Mol. Biol. 191, 659-675).  It correctly predicts experimental
+A-tract curvature as measured by gel retardation and cyclization
+kinetics and successfully predicts curvature in regions containing
+phased <tt>GGGCCC</tt> sequences. The model shows local bending at
+mixed sequence DNA, strong bends at the sequence <tt>GGC</tt>, and
+straight, rigid A-tracts.  It is the only model out of the six
+investigated that is consistent with both solution data from gel
+retardation and cyclization kinetics and structural data from x-ray
+crystallography.</p>
+
+
+<H2>
+     Algorithm
+</H2>
+<p><b>banana</b> reads a sequence and a matrix of standard twist, roll
+and tilt angles for each type of base pair step. The default matrix is
+described below (see "Bending Model") but some other can be specified
+(see "Data Files" below).  The program creates a table or a graphical
+image of the bending and the curvature at each base step.</p>
+
+<p>The indicated twist, roll and tilt angles are applied at each step
+along the sequence, and the resulting base pair normal vector
+calculated. The first base pair is aligned normal to the z axis, with
+a twist value of 0.0 degrees. The specified twist is applied to the
+second base pair, and roll and tilt values are use to calculate its
+normal vector relative to the first. If either roll or tilt is
+non-zero, the new normal vector will be angled away from the z axis,
+producing the first 'bend'. The process is continued along the
+sequence, applying the appropriate twist, roll and tilt to each new
+base pair relative to its predecessor. The result is a list of normal
+vectors for all base pairs in the sequence.</p>
+
+<p>Local bends are then calculated from the normal vectors. The bend
+for base N is calculated across a window from N-1 to N+1.</p>
+
+<p>Curvature is calculated in two steps. Base pair normals are first
+averaged over a 10-base-pair window to filter out the local writhing
+of the helix. The normals of the nine base pairs from N-4 to N+4, and
+the two base pairs N-5 and N+5 at half weight, are averaged and
+assigned to base pair N. Curvature then is calculated from these
+averaged normal vector values, using a bracket value, nc, with a value
+of 15. That is, the curvature at base pair N is the angle between
+averaged normal vectors at base pairs N-nc and N+nc.</p>
+
+
+<h3>Bending Model</h3>
+<p><b>banana</b> reads by default a data file (Eangles_tri.dat) of
+twist, roll and tilt angles, as in Goodsell & Dickerson, NAR 1994
+11;22(24):5497-503 and Drew and Travers (1986) JMB 191, 659.  The
+roll-tilt-twist parameters of this bending model are objective and
+unbiased.  They are derived purely from experimental observations of
+sequence location preferences of base trimers in small circles of DNA,
+without reference to solution techniques that measure curvature per
+se.</p>
+
+<p>Satchwell, Drew and Travers studied the positioning of DNA
+sequences wrappped around nucleosome cores, and in closed circles of
+double-helical DNA of comparable size. From the sequence data they
+calculated a fractional preference of each base pair triplet for a
+position 'facing out', or with the major groove on the concave side of
+the curved helix.</p>
+<p>The sequence GGC, for example, has a 45% preference for locations
+on a bent double helix in which its major groove faces inward and is
+compressed by the curvature (tending towards positive roll), whereas
+sequence AAA has a 36% preference for the opposite orientation, with
+major groove facing outward and with minor groove facing inward and
+compressed (tending toward negative roll).</p>
+<p>These fractional variances are converted into roll angles in the
+following manner: Because x-ray cyrstal structure analysis uniformly
+indicates that AA steps are unbent, a zero roll is assigned to the AAA
+triplet; an arbitrary maximum roll of 10 degrees is asigned to GGC,
+and all other triplets are scaled in a lenear manner. Where % is the
+percent-out figure, then:
+
+         Roll = 10 degrees * (% + 36)/(45 + 36)
+</p>
+
+<p>Changing the maximum roll value will scale the entire profile up or
+down proportionately, but will not change the shape of the
+profile. Peaks will remain peaks, and valleys, valleys. The absolute
+magnitude of all the roll values is less important than their relative
+magnitude, or the order of roll preference. Twist angles were set to
+zero. Because these values correspond to base trimers, the values of
+roll, tilt and twist were applied to the first two bases for the
+calculation.</p>
+
+
+
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/banana.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/banana.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/banana.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+
+Any DNA sequence USA.
+
+<p>
+<!--#include file="inc/banana.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+The output is to both a graphical display and to a text file with the
+default name 'banana.profile'.
+
+<p>
+
+The graphical display shows the sequence together with the local local
+bending (solid line) and macroscopic curvature (dotted line). 
+
+<p>
+<!--#include file="inc/banana.output" -->
+<p>
+
+The data file consists of three columns separated by blanks or tab
+characters. 
+
+<p>
+
+The first column is the sequence.  
+<br> 
+The second column is the local bending.
+<br>
+The third is the curvature. 
+
+
+<H2>
+    Data files
+</H2>
+
+<b>banana</b> requires a data file in the EMBOSS data directory
+containing the twist, roll and tilt angles. By
+default <tt>Eangles_tri.dat</tt> is used, as in Goodsell & Dickerson,
+NAR 1994 11;22(24):5497-503 and Drew and Travers (1986) JMB 191, 659.
+Some other file may be specified with the <tt>-anglesfile</tt> option.
+
+
+
+<p>
+
+The description of this bending model is as follows:
+
+<p>
+
+The roll-tilt-twist parameters of this model are derived purely from
+experimental observations of sequence location preferences of base
+trimers in small circles of DNA, without reference to solution
+techniques that measure curvature <i>per se</i>.  For this reason,
+they may be the most objective and unbiased parameters of all.
+Satchwell, Drew and Travers studied the positioning of DNA sequences
+wrappped around nucleosome cores, and in closed circles of
+double-helical DNA of comparable size.  From the sequence data they
+calculated a fractional preference of each base pair triplet for a
+position 'facing out', or with the major groove on the concave side of
+the curved helix.  The sequence GGC, for example, has a 45% preference
+for locations on a bent double helix in which its major groove faces
+inward and is compressed by the curvature (tending towards positive
+roll), whereas sequence AAA has a 36% preference for the opposite
+orientation, with major groove facing outward and with minor groove
+facing inward and compressed (tending toward negative roll).  These
+fractional variances have been converted into roll angles in the
+following manner: Because x-ray cyrstal structure analysis uniformly
+indicates that AA steps are unbent, a zero roll is assigned to the AAA
+triplet; an arbitrary maximum roll of 10 degrees is asigned to GGC,
+and all other triplets are scaled in a lenear manner.  Where % is the
+percent-out figure, then:
+
+<p>
+
+<pre>
+         Roll = 10 degrees * (% + 36)/(45 + 36)
+</pre>
+
+<p>
+
+Changing the maximum roll value will scale the entire profile up or
+down proportionately, but will not change the shape of the profile.
+Peaks will remain peaks, and valleys, valleys.  The absolute magnitide
+of all the roll values is less important than their relative
+magnitude, or the order of roll preference.  Twist angles were set to
+zero.  Because these values correspond to base trimers, the values of
+roll, tilt and twist were applied to the first two bases for the
+calculation.
+
+
+
+<H2>
+    Notes
+</H2>
+
+<p>DNA bending is vital for the winding of DNA in nucleosomes, and the
+recognition of particular DNA loci by restriction enzymes, repressors
+and other control proteins. For example, the binding of the catabolite
+gene activator protein and of the TATA-box recognition protein to a
+double DNA helix both rely on major bends in the helix induced at
+specific sequence loci. Whether the particular recognition sequences
+are bent even in the absence of proteins is not always clear: a
+preformed bend in the DNA would form a custom site for protein
+binding, or an enhanced bendability of a given sequence would
+facilitate protein-induced bending. Sadly, the rules of
+sequence-dependent DNA bending remain elusive.</p>
+
+<p>Two models of sequence-dependent bending in free DNA have been
+proposed. Nearest neighbor models propose that large-scale measurable
+curvature may arise by the accumulation of many small local
+deformations in helical twist, roll, tilt and slide at individual
+steps between base pairs. In contrast, junction models propose that
+bending occurs at the interface between two different structural
+variants of the B-DNA double helix.</p>
+<p>In both models, sequences which are anisotropically bendable - for
+instance, sequences with steps that preferentially bend only to
+compress the major groove - will lead to an average structure which is
+similar to a sequence with a rigid, intrinsic bend. The default
+bending model (see below) used by <b>banana</b> does not distinguish
+between these two possibilities.</p>
+
+<p>B-DNA has the special property of having its base pairs very nearly
+perpendicular to the overall helix axis. Hence the normal vector to
+each base pair can be taken as representing the local helix at that
+point, and curvature and bending can be studied simply by observing
+the behaviour of the normal vectors from one base to another along the
+helix. This is both easy to calculate and simple to interpret. This
+program display the magnitude of bending and curvature at each point
+along the sequence. It is not intended as a substitute for more
+elaborate three-dimensional trajectory calculations, but only to
+express bending tendencies as a function of sequence. This affords
+easy screening for regions of a given DNA sequence where phased local
+bends add constructively to form an overall curve.</p>
+
+<p>The terms bending and curvature are used in a restricted sense
+here. Bending of DNA describes the tendency for successive base pairs
+to be non-parallel in an additive manner over several base pair
+steps. Bending most commonly is produced by a rolling of adjacent base
+pairs over one another about thir long axis, although in principle,
+tilting of base pairs about their short axis could make a
+contribution. In contrast curvature of DNA represents the tendency of
+the helix axis to follow a non-linear pathway over an appreciable
+length, in a manner that contributes to macroscopic behaviour such as
+gel retardation or ease of cyclization into DNA minicircles.</p>
+
+<p>The distinction between local bending and macroscopic curvature is
+illustrated (poorly) in the following figure (see figure 1 of the
+Goodsell & Dickerson paper for a better view).</p>
+
+
+<pre>
+                       bend   bend   bend
+                         -     -     -
+  uncurved              / \   / \   / \
+                  -----/   \-/   \-/   \-----
+                          bend   bend
+                  
+
+
+                      
+                    bend    bend
+                     /-------\
+                   /          \
+  curved          |bend        |bend
+                  |            |
+                  |            |
+
+
+</pre>
+
+<p>X-ray crystal structure analysis cannot show curvature, but can and
+often does show local bending. Conversely, gel electrophoresis and
+cyclization kinetics can detect macroscopic curvature, but not
+bending. A complete knowledge of local bending would permit the
+precise calculation of curvature, but a knowledge of macroscopic
+curvature alone does not allow one to specify precisely the local
+bending elements that produce it. This paradox has plagued the DNA
+conformation field resembles the familiar problem of classical
+statistical mechanics, where a complete knowledge of positions and
+velocities of all molecules of a gas would allow one to calculate bulk
+properties such as temperature, pressure and volume, but knowledge of
+bulk properties cannot lead one to precise molecular positions. Many
+molecular arrangements can produce identical bulk properties, and in
+the present case, many bending combinations can produce identical
+macroscopic curvature.</p>
+
+<p>The consensus sequence for DNA bending is 5 As and 5 non-As
+alternating. "N" is an ambiguity code for any base, and "B" is the
+ambiguity code for "not A" so "BANANA" is itself a bent sequence -
+hence the name of this program.</p>
+
+
+<H2>
+    References
+</H2>
+
+<ol>
+
+<li> Goodsell, D.S. & Dickerson, R.E. (1994) "Bending and Curvature
+Calculations in B-DNA" Nucl. Acids. Res. 22, 5497-5503.
+
+<li>Drew and
+Travers (1986) JMB 191, 659
+
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+Only ACTG allowed, if sequence contains a non ACTG character then the
+    program will exit with a fatal error message.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+    0 if successful.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/banana.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+
+<!--#include file="inc/ilongden.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/banana.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/banana.comment" -->
+
+</BODY>
+</HTML>
+

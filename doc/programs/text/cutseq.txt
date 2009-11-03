@@ -1,0 +1,480 @@
+
+                                  cutseq 
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Removes a section from a sequence
+
+Description
+
+   This simple editing program allows you to cut out a region from your
+   sequence by specifying the begin and end positions of the region to
+   remove. It removes the sequence from the specified start to the end
+   positions (inclusive) and writes the remaining sequence to the output
+   file.
+
+Usage
+
+   Here is a sample session with cutseq
+
+   To remove bases 10 to 12 from a database entry and write to the new
+   sequence file 'gatta2.seq':
+
+
+% cutseq tembl:x13776 gatta2.seq -from=10 -to=12 
+Removes a section from a sequence
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+   Example 2
+
+   To remove the first 20 bases from 'tembl:x13776' and write it to
+   'jsh.seq':
+
+
+% cutseq tembl:x13776 -from=1 -to=20 -out=jsh.seq 
+Removes a section from a sequence
+
+   Go to the output files for this example
+
+   Example 3
+
+   If the default start and end positions are accepted, then all of the
+   sequence is removed!
+
+
+% cutseq tembl:x13776 starta.seq -sbeg=-1000 -send=1290 
+Removes a section from a sequence
+Start of region to delete [1168]: 
+End of region to delete [1290]: 
+
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-sequence]          sequence   (Gapped) sequence filename and optional
+                                  format, or reference (input USA)
+   -from               integer    [Start of sequence (0)] This is the start
+                                  position (inclusive) of the section of the
+                                  sequence that you wish to remove. (Any
+                                  integer value)
+   -to                 integer    [End of sequence (0)] This is the end
+                                  position (inclusive) of the section of the
+                                  sequence that you wish to remove. (Any
+                                  integer value)
+  [-outseq]            seqout     [.] Sequence filename and
+                                  optional format (output USA)
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outseq" associated qualifiers
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   cutseq reads a single sequence USA.
+
+  Input files for usage example
+
+   'tembl:x13776' is a sequence entry in the example nucleic acid
+   database 'tembl'
+
+  Database entry: tembl:x13776
+
+ID   X13776; SV 1; linear; genomic DNA; STD; PRO; 2167 BP.
+XX
+AC   X13776; M43175;
+XX
+DT   19-APR-1989 (Rel. 19, Created)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 24)
+XX
+DE   Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+XX
+KW   aliphatic amidase regulator; amiC gene; amiR gene.
+XX
+OS   Pseudomonas aeruginosa
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadales;
+OC   Pseudomonadaceae; Pseudomonas.
+XX
+RN   [1]
+RP   1167-2167
+RA   Rice P.M.;
+RT   ;
+RL   Submitted (16-DEC-1988) to the EMBL/GenBank/DDBJ databases.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG
+.
+XX
+RN   [2]
+RP   1167-2167
+RX   DOI; 10.1016/0014-5793(89)80249-2.
+RX   PUBMED; 2495988.
+RA   Lowe N., Rice P.M., Drew R.E.;
+RT   "Nucleotide sequence of the aliphatic amidase regulator gene (amiR) of
+RT   Pseudomonas aeruginosa";
+RL   FEBS Lett. 246(1-2):39-43(1989).
+XX
+RN   [3]
+RP   1-1292
+RX   PUBMED; 1907262.
+RA   Wilson S., Drew R.;
+RT   "Cloning and DNA sequence of amiC, a new gene regulating expression of the
+RT   Pseudomonas aeruginosa aliphatic amidase, and purification of the amiC
+RT   product";
+RL   J. Bacteriol. 173(16):4914-4921(1991).
+XX
+RN   [4]
+RP   1-2167
+RA   Rice P.M.;
+RT   ;
+RL   Submitted (04-SEP-1991) to the EMBL/GenBank/DDBJ databases.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG
+.
+XX
+DR   GOA; Q51417.
+DR   InterPro; IPR003211; AmiSUreI_transpt.
+DR   UniProtKB/Swiss-Prot; Q51417; AMIS_PSEAE.
+
+
+  [Part of this file has been deleted for brevity]
+
+FT                   /replace=""
+FT                   /note="ClaI fragment deleted in pSW36,  constitutive
+FT                   phenotype"
+FT   misc_feature    1
+FT                   /note="last base of an XhoI site"
+FT   misc_feature    648..653
+FT                   /note="end of 658bp XhoI fragment, deletion in  pSW3 cause
+s
+FT                   constitutive expression of amiE"
+FT   conflict        1281
+FT                   /replace="g"
+FT                   /citation=[3]
+XX
+SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
+     ggtaccgctg gccgagcatc tgctcgatca ccaccagccg ggcgacggga actgcacgat        6
+0
+     ctacctggcg agcctggagc acgagcgggt tcgcttcgta cggcgctgag cgacagtcac       12
+0
+     aggagaggaa acggatggga tcgcaccagg agcggccgct gatcggcctg ctgttctccg       18
+0
+     aaaccggcgt caccgccgat atcgagcgct cgcacgcgta tggcgcattg ctcgcggtcg       24
+0
+     agcaactgaa ccgcgagggc ggcgtcggcg gtcgcccgat cgaaacgctg tcccaggacc       30
+0
+     ccggcggcga cccggaccgc tatcggctgt gcgccgagga cttcattcgc aaccgggggg       36
+0
+     tacggttcct cgtgggctgc tacatgtcgc acacgcgcaa ggcggtgatg ccggtggtcg       42
+0
+     agcgcgccga cgcgctgctc tgctacccga ccccctacga gggcttcgag tattcgccga       48
+0
+     acatcgtcta cggcggtccg gcgccgaacc agaacagtgc gccgctggcg gcgtacctga       54
+0
+     ttcgccacta cggcgagcgg gtggtgttca tcggctcgga ctacatctat ccgcgggaaa       60
+0
+     gcaaccatgt gatgcgccac ctgtatcgcc agcacggcgg cacggtgctc gaggaaatct       66
+0
+     acattccgct gtatccctcc gacgacgact tgcagcgcgc cgtcgagcgc atctaccagg       72
+0
+     cgcgcgccga cgtggtcttc tccaccgtgg tgggcaccgg caccgccgag ctgtatcgcg       78
+0
+     ccatcgcccg tcgctacggc gacggcaggc ggccgccgat cgccagcctg accaccagcg       84
+0
+     aggcggaggt ggcgaagatg gagagtgacg tggcagaggg gcaggtggtg gtcgcgcctt       90
+0
+     acttctccag catcgatacg cccgccagcc gggccttcgt ccaggcctgc catggtttct       96
+0
+     tcccggagaa cgcgaccatc accgcctggg ccgaggcggc ctactggcag accttgttgc      102
+0
+     tcggccgcgc cgcgcaggcc gcaggcaact ggcgggtgga agacgtgcag cggcacctgt      108
+0
+     acgacatcga catcgacgcg ccacaggggc cggtccgggt ggagcgccag aacaaccaca      114
+0
+     gccgcctgtc ttcgcgcatc gcggaaatcg atgcgcgcgg cgtgttccag gtccgctggc      120
+0
+     agtcgcccga accgattcgc cccgaccctt atgtcgtcgt gcataacctc gacgactggt      126
+0
+     ccgccagcat gggcggggga ccgctcccat gagcgccaac tcgctgctcg gcagcctgcg      132
+0
+     cgagttgcag gtgctggtcc tcaacccgcc gggggaggtc agcgacgccc tggtcttgca      138
+0
+     gctgatccgc atcggttgtt cggtgcgcca gtgctggccg ccgccggaag ccttcgacgt      144
+0
+     gccggtggac gtggtcttca ccagcatttt ccagaatggc caccacgacg agatcgctgc      150
+0
+     gctgctcgcc gccgggactc cgcgcactac cctggtggcg ctggtggagt acgaaagccc      156
+0
+     cgcggtgctc tcgcagatca tcgagctgga gtgccacggc gtgatcaccc agccgctcga      162
+0
+     tgcccaccgg gtgctgcctg tgctggtatc ggcgcggcgc atcagcgagg aaatggcgaa      168
+0
+     gctgaagcag aagaccgagc agctccagga ccgcatcgcc ggccaggccc ggatcaacca      174
+0
+     ggccaaggtg ttgctgatgc agcgccatgg ctgggacgag cgcgaggcgc accagcacct      180
+0
+     gtcgcgggaa gcgatgaagc ggcgcgagcc gatcctgaag atcgctcagg agttgctggg      186
+0
+     aaacgagccg tccgcctgag cgatccgggc cgaccagaac aataacaaga ggggtatcgt      192
+0
+     catcatgctg ggactggttc tgctgtacgt tggcgcggtg ctgtttctca atgccgtctg      198
+0
+     gttgctgggc aagatcagcg gtcgggaggt ggcggtgatc aacttcctgg tcggcgtgct      204
+0
+     gagcgcctgc gtcgcgttct acctgatctt ttccgcagca gccgggcagg gctcgctgaa      210
+0
+     ggccggagcg ctgaccctgc tattcgcttt tacctatctg tgggtggccg ccaaccagtt      216
+0
+     cctcgag                                                                216
+7
+//
+
+Output file format
+
+   cutseq writes a single sequence file.
+
+  Output files for usage example
+
+  File: gatta2.seq
+
+>X13776 X13776.1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidas
+e regulation
+ggtaccgctcgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgatcta
+cctggcgagcctggagcacgagcgggttcgcttcgtacggcgctgagcgacagtcacagg
+agaggaaacggatgggatcgcaccaggagcggccgctgatcggcctgctgttctccgaaa
+ccggcgtcaccgccgatatcgagcgctcgcacgcgtatggcgcattgctcgcggtcgagc
+aactgaaccgcgagggcggcgtcggcggtcgcccgatcgaaacgctgtcccaggaccccg
+gcggcgacccggaccgctatcggctgtgcgccgaggacttcattcgcaaccggggggtac
+ggttcctcgtgggctgctacatgtcgcacacgcgcaaggcggtgatgccggtggtcgagc
+gcgccgacgcgctgctctgctacccgaccccctacgagggcttcgagtattcgccgaaca
+tcgtctacggcggtccggcgccgaaccagaacagtgcgccgctggcggcgtacctgattc
+gccactacggcgagcgggtggtgttcatcggctcggactacatctatccgcgggaaagca
+accatgtgatgcgccacctgtatcgccagcacggcggcacggtgctcgaggaaatctaca
+ttccgctgtatccctccgacgacgacttgcagcgcgccgtcgagcgcatctaccaggcgc
+gcgccgacgtggtcttctccaccgtggtgggcaccggcaccgccgagctgtatcgcgcca
+tcgcccgtcgctacggcgacggcaggcggccgccgatcgccagcctgaccaccagcgagg
+cggaggtggcgaagatggagagtgacgtggcagaggggcaggtggtggtcgcgccttact
+tctccagcatcgatacgcccgccagccgggccttcgtccaggcctgccatggtttcttcc
+cggagaacgcgaccatcaccgcctgggccgaggcggcctactggcagaccttgttgctcg
+gccgcgccgcgcaggccgcaggcaactggcgggtggaagacgtgcagcggcacctgtacg
+acatcgacatcgacgcgccacaggggccggtccgggtggagcgccagaacaaccacagcc
+gcctgtcttcgcgcatcgcggaaatcgatgcgcgcggcgtgttccaggtccgctggcagt
+cgcccgaaccgattcgccccgacccttatgtcgtcgtgcataacctcgacgactggtccg
+ccagcatgggcgggggaccgctcccatgagcgccaactcgctgctcggcagcctgcgcga
+gttgcaggtgctggtcctcaacccgccgggggaggtcagcgacgccctggtcttgcagct
+gatccgcatcggttgttcggtgcgccagtgctggccgccgccggaagccttcgacgtgcc
+ggtggacgtggtcttcaccagcattttccagaatggccaccacgacgagatcgctgcgct
+gctcgccgccgggactccgcgcactaccctggtggcgctggtggagtacgaaagccccgc
+ggtgctctcgcagatcatcgagctggagtgccacggcgtgatcacccagccgctcgatgc
+ccaccgggtgctgcctgtgctggtatcggcgcggcgcatcagcgaggaaatggcgaagct
+gaagcagaagaccgagcagctccaggaccgcatcgccggccaggcccggatcaaccaggc
+caaggtgttgctgatgcagcgccatggctgggacgagcgcgaggcgcaccagcacctgtc
+gcgggaagcgatgaagcggcgcgagccgatcctgaagatcgctcaggagttgctgggaaa
+cgagccgtccgcctgagcgatccgggccgaccagaacaataacaagaggggtatcgtcat
+catgctgggactggttctgctgtacgttggcgcggtgctgtttctcaatgccgtctggtt
+gctgggcaagatcagcggtcgggaggtggcggtgatcaacttcctggtcggcgtgctgag
+cgcctgcgtcgcgttctacctgatcttttccgcagcagccgggcagggctcgctgaaggc
+cggagcgctgaccctgctattcgcttttacctatctgtgggtggccgccaaccagttcct
+cgag
+
+  Output files for usage example 2
+
+  File: jsh.seq
+
+>X13776 X13776.1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidas
+e regulation
+tgctcgatcaccaccagccgggcgacgggaactgcacgatctacctggcgagcctggagc
+acgagcgggttcgcttcgtacggcgctgagcgacagtcacaggagaggaaacggatggga
+tcgcaccaggagcggccgctgatcggcctgctgttctccgaaaccggcgtcaccgccgat
+atcgagcgctcgcacgcgtatggcgcattgctcgcggtcgagcaactgaaccgcgagggc
+ggcgtcggcggtcgcccgatcgaaacgctgtcccaggaccccggcggcgacccggaccgc
+tatcggctgtgcgccgaggacttcattcgcaaccggggggtacggttcctcgtgggctgc
+tacatgtcgcacacgcgcaaggcggtgatgccggtggtcgagcgcgccgacgcgctgctc
+tgctacccgaccccctacgagggcttcgagtattcgccgaacatcgtctacggcggtccg
+gcgccgaaccagaacagtgcgccgctggcggcgtacctgattcgccactacggcgagcgg
+gtggtgttcatcggctcggactacatctatccgcgggaaagcaaccatgtgatgcgccac
+ctgtatcgccagcacggcggcacggtgctcgaggaaatctacattccgctgtatccctcc
+gacgacgacttgcagcgcgccgtcgagcgcatctaccaggcgcgcgccgacgtggtcttc
+tccaccgtggtgggcaccggcaccgccgagctgtatcgcgccatcgcccgtcgctacggc
+gacggcaggcggccgccgatcgccagcctgaccaccagcgaggcggaggtggcgaagatg
+gagagtgacgtggcagaggggcaggtggtggtcgcgccttacttctccagcatcgatacg
+cccgccagccgggccttcgtccaggcctgccatggtttcttcccggagaacgcgaccatc
+accgcctgggccgaggcggcctactggcagaccttgttgctcggccgcgccgcgcaggcc
+gcaggcaactggcgggtggaagacgtgcagcggcacctgtacgacatcgacatcgacgcg
+ccacaggggccggtccgggtggagcgccagaacaaccacagccgcctgtcttcgcgcatc
+gcggaaatcgatgcgcgcggcgtgttccaggtccgctggcagtcgcccgaaccgattcgc
+cccgacccttatgtcgtcgtgcataacctcgacgactggtccgccagcatgggcggggga
+ccgctcccatgagcgccaactcgctgctcggcagcctgcgcgagttgcaggtgctggtcc
+tcaacccgccgggggaggtcagcgacgccctggtcttgcagctgatccgcatcggttgtt
+cggtgcgccagtgctggccgccgccggaagccttcgacgtgccggtggacgtggtcttca
+ccagcattttccagaatggccaccacgacgagatcgctgcgctgctcgccgccgggactc
+cgcgcactaccctggtggcgctggtggagtacgaaagccccgcggtgctctcgcagatca
+tcgagctggagtgccacggcgtgatcacccagccgctcgatgcccaccgggtgctgcctg
+tgctggtatcggcgcggcgcatcagcgaggaaatggcgaagctgaagcagaagaccgagc
+agctccaggaccgcatcgccggccaggcccggatcaaccaggccaaggtgttgctgatgc
+agcgccatggctgggacgagcgcgaggcgcaccagcacctgtcgcgggaagcgatgaagc
+ggcgcgagccgatcctgaagatcgctcaggagttgctgggaaacgagccgtccgcctgag
+cgatccgggccgaccagaacaataacaagaggggtatcgtcatcatgctgggactggttc
+tgctgtacgttggcgcggtgctgtttctcaatgccgtctggttgctgggcaagatcagcg
+gtcgggaggtggcggtgatcaacttcctggtcggcgtgctgagcgcctgcgtcgcgttct
+acctgatcttttccgcagcagccgggcagggctcgctgaaggccggagcgctgaccctgc
+tattcgcttttacctatctgtgggtggccgccaaccagttcctcgag
+
+  Output files for usage example 3
+
+  File: starta.seq
+
+>X13776 X13776.1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidas
+e regulation
+
+Data files
+
+   None.
+
+Notes
+
+   Qualifiers that are in-built for sequence datatypes allow the input
+   and output files to be specified in more detail, for example, the
+   format for the output files.
+
+References
+
+   None.
+
+Warnings
+
+   You can delete a complete sequence and write out an empty sequence
+   file.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name     Description
+   aligncopy        Reads and writes alignments
+   aligncopypair    Reads and writes pairs from alignments
+   biosed           Replace or delete sequence sections
+   codcopy          Copy and reformat a codon usage table
+   degapseq         Removes non-alphabetic (e.g. gap) characters from sequences
+   descseq          Alter the name or description of a sequence
+   entret           Retrieves sequence entries from flatfile databases and files
+   extractalign     Extract regions from a sequence alignment
+   extractfeat      Extract features from sequence(s)
+   extractseq       Extract regions from a sequence
+   featcopy         Reads and writes a feature table
+   featreport       Reads and writes a feature table
+   listor           Write a list file of the logical OR of two sets of sequences
+   makenucseq       Create random nucleotide sequences
+   makeprotseq      Create random protein sequences
+   maskambignuc     Masks all ambiguity characters in nucleotide sequences
+   with             N
+   maskambigprot    Masks all ambiguity characters in protein sequences with
+                    X
+   maskfeat         Write a sequence with masked features
+   maskseq          Write a sequence with masked regions
+   newseq           Create a sequence file from a typed-in sequence
+   nohtml           Remove mark-up (e.g. HTML tags) from an ASCII text file
+   noreturn         Remove carriage return from ASCII files
+   nospace          Remove all whitespace from an ASCII text file
+   notab            Replace tabs with spaces in an ASCII text file
+   notseq           Write to file a subset of an input stream of sequences
+   nthseq           Write to file a single sequence from an input stream of
+                    sequences
+   nthseqset        Reads and writes (returns) one set of sequences from many
+   pasteseq         Insert one sequence into another
+   revseq           Reverse and complement a nucleotide sequence
+   seqret           Reads and writes (returns) sequences
+   seqretsetall     Reads and writes (returns) many sets of sequences
+   seqretsplit      Reads sequences and writes them to individual files
+   sizeseq          Sort sequences by size
+   skipredundant    Remove redundant sequences from an input set
+   skipseq          Reads and writes (returns) sequences, skipping first few
+   splitsource      Split sequence(s) into original source sequences
+   splitter         Split sequence(s) into smaller sequences
+   trimest          Remove poly-A tails from nucleotide sequences
+   trimseq          Remove unwanted characters from start and end of sequence(s)
+   trimspace        Remove extra whitespace from an ASCII text file
+   union            Concatenate multiple sequences into a single sequence
+   vectorstrip      Removes vectors from the ends of nucleotide sequence(s)
+   yank             Add a sequence reference (a full USA) to a list file
+
+Author(s)
+
+   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+History
+
+   Completed 26 Jan 1999
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

@@ -1,0 +1,14 @@
+<b>Here is a sample session with embossversion</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>embossversion </b>
+Reports the current EMBOSS version number
+
+6.1.0
+
+</pre></td></tr></table><p>
+<p>
+<p>

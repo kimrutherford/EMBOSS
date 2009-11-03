@@ -1,0 +1,18 @@
+<b>Here is a sample session with equicktandem</b>
+<p>
+The input sequence is the human herpesvirus tandem repeat. 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>equicktandem -noorigfile </b>
+Finds tandem repeats in nucleotide sequences
+Input nucleotide sequence: <b>tembl:L46634</b>
+Maximum repeat size [600]: <b></b>
+Threshold score [20]: <b></b>
+Output report [l46634.qtan]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

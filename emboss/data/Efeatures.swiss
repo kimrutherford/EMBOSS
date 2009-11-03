@@ -1,0 +1,462 @@
+# Feature types for SwissProt output
+
+# From the Swiss-Prot users manual
+# http://www.expasy.org/sprot/userman.html#FT_keys
+# Last checked 2 Jun 2006
+
+# Many features are plain text with a final qualifier in brackets We
+# can represent these with /note plus a /comment for the part in
+# brackets. 
+
+# We could also implement specific qualifiers for each special format
+# so we can parser the details for each feature, But what to do about
+# new GFF versions of the same features with possibly bad formatting?
+
+#############################################################
+# The first type is used as the default if no match is found
+#############################################################
+
+
+# The introduction of these new feature keys allows to establish a clear
+# sorting order for feature tables. The following order is used:
+#
+# 1. Molecule processing
+#      * INIT_MET, SIGNAL, PROPEP, TRANSIT, CHAIN, PEPTIDE
+# 2. Regions
+#      * TOPO_DOM, TRANSMEM
+#      * DOMAIN, REPEAT
+#      * CA_BIND, ZN_FING, DNA_BIND, NP_BIND
+#      * REGION
+#      * COILED
+#      * MOTIF
+#      * COMPBIAS
+# 3. Sites
+#      * ACT_SITE
+#      * METAL
+#      * BINDING
+#      * SITE
+# 4. Amino acid modifications (pre and PTM)
+#      * SE_CYS
+#      * MOD_RES
+#      * LIPID
+#      * CARBOHYD
+#      * DISULFID
+#      * CROSSLNK
+# 5. Natural variations
+#      * VARSPLIC
+#      * VARIANT
+# 6. Experimental info
+#      * MUTAGEN
+#      * UNSURE
+#      * CONFLICT
+#      * NON_CONS
+#      * NON_STD
+#      * NON_TER
+# 7. Secondary structure
+#       * HELIX, TURN, STRAND
+#
+# Keys of equal priority (listed on one line above) are ordered
+# according to sequence positions.
+
+# REGION - Extent of a region of interest in the sequence
+
+REGION  SO:0000839
+	/note
+	/comment
+
+# ACT_SITE - Amino acid(s) involved in the activity of an enzyme.
+
+ACT_SITE SO:0001104
+	/note
+	/comment
+
+# BINDING  -  Binding  site  for any chemical group  (co-enzyme,  prosthetic
+# group, etc.).
+# The chemical nature of the group is given in the description field
+
+BINDING SO:0000409
+	/note
+	/comment
+
+# CA_BIND - Extent of a calcium-binding region.
+
+CA_BIND SO:0001094
+	/note
+	/comment
+
+# CARBOHYD - Glycosylation site.
+# This key describes the occurrence of the attachment of a  glycan (mono- or
+# polysaccharide) to a residue of the protein:
+# 
+# o The type of linkage (C- N- or O-linked) to the protein is indicated.
+# o If  the nature of the reducing terminal sugar is known, its abbreviation
+#   is   shown   between   parenthesis.  If  three  dots  "..."  follow  the
+#   abbreviation this indicates extension of the carbohydrate chain.
+#   Conversely the absence of the dots indicate that a single monosaccharide
+#   is linked.
+# Examples of CARBOHYD key feature lines:
+# 
+# FT   CARBOHYD     52     52       N-LINKED (GLCNAC...) (POTENTIAL).
+# FT   CARBOHYD    162    162       O-LINKED (GLCNAC).
+# FT   CARBOHYD     10     10       O-LINKED (GALNAC...) (BY SIMILARITY).
+# FT   CARBOHYD     34     34       C-LINKED (MAN).
+
+CARBOHYD MOD:00693
+	/note
+	/comment
+	/ftid
+
+# CHAIN - Extent of a polypeptide chain in the mature protein.
+
+# In Swiss-Prot, it is present:
+# For proteins that are not processed
+# (those for which the mature protein sequence corresponds to the
+# translated cDNA sequence) the CHAIN covers the whole protein
+# sequence
+# For processed proteins, it describes the mature part of the protein
+# once preprotein parts such as propeptides and signal sequences have
+# been removed
+#
+# For TrEMBL, it is present only in those entries where the submitters
+# to the nucleotide sequence databases have provided this information
+# for processed proteins.
+
+CHAIN   SO:0000419
+	/note
+	/comment
+	/ftid
+
+
+# COILED - Extent of a coiled-coil region
+
+COILED  SO:0001080
+	/note
+	/comment
+
+# COMPBIAS - Extent of a compositionally biased region
+
+COMPBIAS SO:0001066
+	/note
+	/comment
+
+# CONFLICT - Different papers report differing sequences.
+# note usually begins MISSING or SEQ -> NEW (description optional)
+
+CONFLICT SO:0001085
+	/note
+	/comment
+
+# CROSSLNK - Posttranslationally formed amino acid bonds.
+# The 'FROM' and 'TO' endpoints designate the two residues, which are
+# linked by an intrachain bond, and the description field indicates
+# the nature of the cross-link. If the 'FROM' and 'TO' endpoints are
+# identical, the amino acid bond is an interchain one. The name of the
+# linked peptide is indicated in the description field.
+ 
+CROSSLNK SO:0001087
+	/note
+	/comment
+
+# DISULFID - Disulfide bond.
+# The 'FROM' and 'TO' endpoints represent the two residues which are
+# linked by an intra-chain disulfide bond. If the 'FROM' and 'TO'
+# endpoints are identical, the disulfide bond is an interchain one and
+# the description field indicates the nature of the cross-link.
+
+DISULFID SO:0001088
+	/note
+	/comment
+
+# DNA_BIND - Extent of a DNA-binding region.
+# The nature of the DNA-binding region is given in the description field. 
+
+DNA_BIND SO:0100020
+	/note
+	/comment
+
+# DOMAIN - Extent of a domain, which is defined as a specific
+# combination of secondary structures organized into a characteristic
+# three-dimensional structure or fold.
+#
+# The domain type is given in the description field. If there exist
+#   several copies of a domain, the domains are numbered.
+
+DOMAIN  SO:0000417 SO:0001081
+	/note
+	/comment
+
+# HELIX -  DSSP secondary structure
+
+HELIX   SO:0001117
+	/note
+	/comment
+
+# INIT_MET - Initiator methionine.
+
+# This feature key is usually associated with a zero value in the 'FROM'
+# and 'TO' fields to indicate that the initiator methionine has been
+# cleaved off and is not shown in the sequence. Usually there is no
+# annotation in such cases.
+
+# It is not used when the initiator methionine is not cleaved off except
+# in the event of internal alternative initiation sites. Example:
+# annotation "For isoform Cytoplasmic."
+
+
+INIT_MET SO:0000691
+	/note
+	/comment
+
+# LIPID  - Covalent binding of a lipidic moiety
+# note is attached group name (optional comment)
+# known names are:
+
+#MYRISTATE          Myristate group attached through an amide bond to the
+#                   N-terminal glycine residue of the mature form of a
+#                   protein [1,2] or to an internal lysine residue
+#
+#PALMITATE          Palmitate group attached through a thioether bond to a
+#                   cysteine residue or through an ester bond to a serine
+#                   or threonine residue [1,2]
+#
+#FARNESYL           Farnesyl group attached through a thioether bond to a
+#                   cysteine residue [3,4]
+#
+#GERANYL-GERANYL    Geranyl-geranyl group attached through a thioether bond
+#                   to a cysteine residue [3,4]
+#
+#GPI-ANCHOR         Glycosyl-phosphatidylinositol (GPI) group linked to the
+#                   alpha-carboxyl group of the C-terminal residue of the
+#                   mature form of a protein [5,6]
+#
+#DIACYLGLYCERIDE    Glyceryl group bearing two ester-linked fatty acids
+#                   attached through a thioether bond to the
+#                   N-terminal cysteine of the mature form of a
+#                   prokaryotic lipoprotein
+#
+#ARCHAEOL           Archaeol (2,3-di-O-phytanyl-sn-glycerol) lipid
+#                   group attached through an thioether bond to the
+#                   N-terminal cysteine of the mature form of a
+#                   archaeal lipoprotein     
+#
+#N-OCTANOATE        n-octanoate group linked through an ester bond to
+#                   a serine residue
+#
+#CHOLESTEROL        Cholesterol group attached through an ester bond
+#                   to the C-terminal glycine of the mature form of a protein
+
+LIPID   MOD:01155
+	/note
+	/comment
+
+# METAL - Binding site for a metal ion.
+# The description field indicates the nature of the metal
+
+METAL   SO:0001092
+	/note
+	/comment
+
+# MOD_RES  Post-translational modification of a residue.
+# note usually <modification> (description)
+# Most common codes are:
+
+#ACETYLATION                 N-terminal or other
+#AMIDATION                   Generally at the C-terminal of a mature active
+#                            peptide
+#BLOCKED                     Undetermined N- or C-terminal blocking group
+#FORMYLATION                 Of the N-terminal methionine
+#GAMMA-CARBOXYGLUTAMIC ACID  Of glutamate
+#HYDROXYLATION               Of asparagine, aspartic acid, proline or lysine
+#METHYLATION                 Generally of lysine or arginine
+#PHOSPHORYLATION             Of serine, threonine, tyrosine, aspartic acid
+#                            of histidine
+#PYRROLIDONE CARBOXYLIC ACID N-terminal glutamate which has formed an
+#                            internal cyclic lactam
+#SULFATATION                 Generally of tyrosine
+
+MOD_RES MOD:01156
+	/note
+	/comment
+
+# MOTIF - Short (up to 20 amino acids) sequence motif of biological interest
+
+MOTIF   SO:0001067_motif
+	/note
+	/comment
+
+# MUTAGEN - Site which has been experimentally altered.
+# mutagen note usually SEQ ->NEW: description or "Missing: functional change"
+
+MUTAGEN SO:0001148
+	/note
+	/comment
+
+# NON_CONS - Non-consecutive residues.
+# Indicates  that  two residues in a sequence are not consecutive  and  that
+# there  are  a  number of unsequenced residues between  them.
+
+NON_CONS SO:0001083
+	/note
+	/comment
+
+# NON_STD - Non-standard aminoacid used for pyrrolysine
+
+NON_STD  SO:0000884
+	/note
+	/comment
+
+# NON_TER  - The residue at an extremity of the sequence is not the terminal
+# residue.
+
+NON_TER SO:0001084
+	/note
+	/comment
+
+# NP_BIND - Extent of a nucleotide phosphate binding region.
+
+# The nature of the nucleotide phosphate is indicated in the
+# description field.
+
+NP_BIND SO:0100018_np_bind
+	/note
+	/comment
+
+# PEPTIDE - Extent of a released active peptide.
+
+PEPTIDE SO:0001064
+	/note
+	/comment
+	/ftid
+
+# PROPEP - Extent of a propeptide.
+
+PROPEP  SO:0001062
+	/note
+	/comment
+	/ftid
+
+# REPEAT - Extent of an internal sequence repetition.
+
+REPEAT  SO:0001068
+	/note
+	/comment
+
+# SE_CYS - Selenocysteine
+# This key describes the occurrence of a selenocysteine in the sequence record
+
+SE_CYS  SO:0000885 MOD:00031
+	/note
+	/comment
+
+# SIGNAL - Extent of a signal sequence (prepeptide).
+
+SIGNAL  SO:0000418
+	/note
+	/comment
+
+# SIMILAR - Extent of a similarity with another protein sequence.
+
+SIMILAR SO:0000857
+	/note
+	/comment
+
+
+# SITE - Any interesting single amino-acid site on the sequence, that
+# is not defined by another feature key. It can also apply to an amino
+# acid bond which is represented by the positions of the two flanking
+# amino acids.
+
+
+SITE    SO:0000839_site
+	/note
+	/comment
+
+# STRAND -  DSSP secondary structure
+
+STRAND  SO:0001111
+	/note
+	/comment
+
+# THIOETH - Thioether bond.
+# The  'FROM' and 'TO' endpoints represent the two residues which are linked
+# by the thioether bond.
+
+THIOETH MOD:00687
+	/note
+	/comment
+
+# THIOLEST - Thiolester bond.
+# The  'FROM' and 'TO' endpoints represent the two residues which are linked
+# by the thiolester bond.
+
+THIOLEST MOD:00395
+	/note
+	/comment
+
+# TRANSIT  -  Extent  of  a  transit peptide (mitochondrial, chloroplastic,
+# thylakoid, cyanelle or for a microbody).
+
+
+# TOPO_DOM - Topological domain
+# New added 26-May-06
+
+# Annotated with cellular component where domain is normally located
+# e.g. "Cytoplasmic" or "Mitochondrial matrix (potential)"
+
+TOPO_DOM SO:0001072
+	/note
+	/comment
+
+TRANSIT SO:0000725
+	/note
+	/comment
+
+# TRANSMEM - Extent of a transmembrane region.
+
+TRANSMEM SO:0001077
+	/note
+	/comment
+
+# TURN -  DSSP secondary structure
+
+TURN    SO:0001128
+	/note
+	/comment
+
+# UNSURE - Uncertainties in the sequence
+# Used  to describe region(s) of a sequence for which the authors are unsure
+# about the sequence assignment.
+
+UNSURE  SO:0001086
+	/note
+	/comment
+
+# VARIANT - Authors report that sequence variants exist.
+# replaced by VAR_SEQ, except for RNA editing recorded in the note
+
+VARIANT SO:0001147_variant
+	/note
+	/comment
+	/ftid
+
+# VAR_SEQ - Description  of  sequence variants  produced  by  alternative
+# splicing, alternative promoter usage, ribosomal frameshifting
+
+VAR_SEQ SO:0001147_var_seq
+	/note
+	/comment
+	/ftid
+
+# VARSPLIC - Description  of  sequence variants  produced  by  alternative
+# splicing.
+
+VARSPLIC SO:0001147_varsplic
+	/note
+	/comment
+
+# ZN_FING - Extent of a zinc finger region.
+# The zinc finger 'category' is indicated in the description field.
+
+ZN_FING  SO:0100020_zn_fing
+	/note
+	/comment

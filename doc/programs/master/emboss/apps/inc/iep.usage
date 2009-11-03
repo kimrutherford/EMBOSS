@@ -1,0 +1,27 @@
+<b>Here is a sample session with iep</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>iep tsw:laci_ecoli </b>
+Calculate the isoelectric point of proteins
+Output file [laci_ecoli.iep]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>iep tsw:ifna2_human -disulphide 2 -lysinemodified 2  </b>
+Calculate the isoelectric point of proteins
+Output file [ifna2_human.iep]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.2">Go to the input files for this example</a><br><a href="#output.2">Go to the output files for this example</a><p><p>

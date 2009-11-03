@@ -1,0 +1,69 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: outfile.dbxgcg</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Processing directory: /homes/user/test/embl/
+Processing file: eem_ba1.seq entries: 10 (10) time: 0.0s (0.0s)
+Processing file: eem_est.seq entries: 11 (1) time: 0.0s (0.0s)
+Processing file: eem_fun.seq entries: 12 (1) time: 0.0s (0.0s)
+Processing file: eem_htginv1.seq entries: 17 (5) time: 0.0s (0.0s)
+Processing file: eem_hum1.seq entries: 32 (15) time: 0.0s (0.0s)
+Processing file: eem_in.seq entries: 34 (2) time: 0.0s (0.0s)
+Processing file: eem_ov.seq entries: 36 (2) time: 0.0s (0.0s)
+Processing file: eem_ro.seq entries: 39 (3) time: 0.0s (0.0s)
+Processing file: eem_vi.seq entries: 40 (1) time: 0.0s (0.0s)
+Total time: 0.0s
+</pre>
+</td></tr></table><p>
+<p><h3>File: embl.ent</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+# Number of files: 9
+# Release: 0.0
+# Date:    00/00/00
+Dual filename database
+eem_ba1.seq eem_ba1.ref
+eem_est.seq eem_est.ref
+eem_fun.seq eem_fun.ref
+eem_htginv1.seq eem_htginv1.ref
+eem_hum1.seq eem_hum1.ref
+eem_in.seq eem_in.ref
+eem_ov.seq eem_ov.ref
+eem_ro.seq eem_ro.ref
+eem_vi.seq eem_vi.ref
+</pre>
+</td></tr></table><p>
+<p><h3>File: embl.pxac</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Order     71
+Fill      46
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    99
+Fill2     101
+Count     47
+Kwlimit   15
+</pre>
+</td></tr></table><p>
+<p><h3>File: embl.pxid</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Order     71
+Fill      46
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    99
+Fill2     101
+Count     39
+Kwlimit   15
+</pre>
+</td></tr></table><p>
+<p><h3>File: embl.xac</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: embl.xid</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.

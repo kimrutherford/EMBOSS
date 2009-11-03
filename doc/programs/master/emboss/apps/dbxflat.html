@@ -1,0 +1,408 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: dbxflat
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+dbxflat
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/dbxflat.ione" -->
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+<!-- 
+	This is the main part of the document.
+        This is what the user looks at to find out if this program will do what he wants. 
+        Long description.
+        Why it is useful.
+        When it should/shouldn't be used.
+  -->
+
+<b>dbxflat</b> indexes a flat file database of one or more files, and builds
+EMBOSS B+tree format index files. These indexes allow access of flat
+files larger than 2Gb.
+
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+<!--#include file="inc/dbxflat.usage" -->
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/dbxflat.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/dbxflat.itable" -->
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+<b>dbxflat</b> reads any normal sequence USAs.
+
+<p>
+
+<!--#include file="inc/dbxflat.input" -->
+
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+
+<b>dbxflat</b> creates one summary file for the database and two files
+for each field indexed.
+
+<p>
+
+<ul>
+
+<li>dbalias.ent is the master file containing the names of the files
+that have been indexed. It is an ASCII file. This file also contains
+the database release and date information.
+
+<li>dbalias.xid is the B+tree index file for the ID names. It is a binary
+file.
+
+<li>dbalias.pxid is an ASCII file containing information regarding the
+structure of the ID name index.
+
+</ul>
+
+
+<p>
+
+<!--#include file="inc/dbxflat.output" -->
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+
+None.
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+The indexing system has been designed to allow on-the-fly updating
+of indexes. This feature is, however, not implemented in the current
+version. It will be made available in future releases.
+
+
+
+<p>
+
+Having created the EMBOSS indexes for this file, a database can then be
+defined in the file <b>emboss.defaults</b> as something like:
+
+<pre>
+DB embl [
+   type: N
+   dbalias: embl   (see below)
+   format: embl
+   method: emboss
+   directory: /data/embl
+   file: *.dat
+   indexdirectory: /data/embl/indexes
+]
+</pre>
+
+The index file 'basename' given to <b>dbxflat</b> must match the DB name
+in the definition. If not, then a 'dbalias' line must be given which
+specifies the basename of the indexes. 
+
+<h3>Fields Indexed</H3>
+
+By default, <b>dbxflat</b> will index the ID name and the accession
+number (if present).
+
+<br>
+
+If they are present in your database, you may also specify that
+<b>dbxflat</b> should index the Sequence Version and GI, the words
+in the description, the keywords and the organism words using the
+'-fields' qualifier with the appropriate values.   
+
+
+
+
+
+<H2>
+    Global Parameters
+</H2>
+
+<b>dbxflat</b> requires that two global parameters be defined in
+the file <b>emboss.defaults</b>. These are:
+
+<pre>
+SET PAGESIZE 2048
+SET CACHESIZE 200
+</pre>
+
+The above values are recommended for most systems. The PAGESIZE is
+a multiple of the size of disc pages the operating system buffers.
+The CACHESIZE is the number of disc pages <b>dbxflat</b> is
+allowed to cache.
+
+
+<H2>
+    Resources
+</H2>
+
+
+<b>dbxflat</b> will ask you for the name of a resource definition
+in the file <b>emboss.defaults</b>. This will be something like:
+
+<pre>
+RES embl [
+   type: Index
+   idlen:  15
+   acclen: 15
+   svlen:  20
+   keylen: 25
+   deslen: 25
+   orglen: 25
+]
+</pre>
+
+The length definitions are the maximum lengths of 'words' in the
+field being indexed. Longer words will be truncated to the
+value set.
+
+
+
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+<ol>
+
+<li>
+
+</ol>
+
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<!--#include file="inc/dbxflat.isee" -->
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/ableasby.address" -->
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    History
+</H2>
+<!--
+        Date written and what changes have been made go in this file.
+   -->
+<!--#include file="inc/dbxflat.history" -->
+
+
+
+<H2>
+    Target users
+</H2>
+<!--
+        For general users, use this text
+   -->
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--
+        User/developer/other comments go in this file.
+   -->
+<!--#include file="inc/dbxflat.comment" -->
+
+
+</BODY>
+</HTML>

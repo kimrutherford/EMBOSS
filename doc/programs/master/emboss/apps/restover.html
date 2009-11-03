@@ -1,0 +1,146 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: restover
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+restover
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/restover.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<p><b>restover</b> identifies restriction enzymes from the REBASE database that create the specified overhang sequence when they cut the input nucleotide sequence(s). It writes an output file which shows the base number, restriction enzyme name, recognition site and cut positions.  There are several options to control exactly what sites are reported and the format of the output file. Optionally, output in HTML may be generated.</p>
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/restover.usage" -->
+
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/restover.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/restover.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+<b>restover</b> reads in a normal nucleic acid sequence USA.
+
+<p>
+
+<!--#include file="inc/restover.input" -->
+
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/restover.output" -->
+
+<p>
+
+The output from <b>restover</b> is a simple text one.  The base number,
+restriction enzyme name, recognition site and cut positions are shown. 
+Note that cuts are always to the right of the residue shown and that 5'
+cuts are referred to by their associated 3' number sequence.  The
+program reports enzymes that cut at two or four sites.
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+<!--#include file="inc/localfiles.ihtml" -->
+
+<p>
+
+<!--#include file="inc/refiles.ihtml" -->
+
+<H2>
+    Notes
+</H2>
+<p>The Restriction Enzyme database (REBASE) is a collection of information about restriction enzymes and related proteins. It contains published and unpublished references, recognition and cleavage sites, isoschizomers, commercial availability, methylation sensitivity, crystal and sequence data. DNA methyltransferases, homing endonucleases, nicking enzymes, specificity subunits and control proteins are also included. Most recently, putative DNA methyltransferases and restriction enzymes, as predicted from analysis of genomic sequences, are also listed.</p>
+
+<p>The home page of REBASE is: <a href="http://rebase.neb.com/">http://rebase.neb.com/</a></p>
+
+<p>Several criteria may be set to control what sites are reported: <tt>-min</tt>, <tt>-max</tt>, <tt>-single</tt> (minimum or maximum number of cuts, or single site cuts only.  <tt>-blunt</tt> (enzymes which cut at the same position on the forward and reverse strands). <tt>-sticky</tt> (enzymes which cut at different positions on the forward and reverse strands, leaving an overhang). <tt>-ambiguity</tt> (enzymes which have one or more <tt>N</tt> ambiguity codes in their pattern).  <tt>-commercial</tt> (enzymes with a commercial supplier).  <tt>-plasmid</tt> (allows searches for restriction enzyme recognition site and cut postions that span the end of the sequence).</p>
+
+<p>By default, only one enzyme of any group of isoschizomers (enzymes that have the same recognition site and cut positions) is reported. This behaviour can be changed by specifying '-nolimit', in which case all isoschizomers are reported.  The default behaviour uses the representative enzyme of an isoschizomer group (the prototype) which is specified in the EMBOSS data file <tt>embossre.equ</tt>.  This file is generated from the REBASE database by running <b>rebaseextract</b>. You may edit this file to set your own preferred prototype,if you wish.</p> 
+
+<H2>
+    References
+</H2>
+None.
+<H2>
+    Warnings
+</H2>
+
+<p><b>restover</b> uses the EMBOSS REBASE restriction enzyme data files stored in directory <tt>data/REBASE/*</tt> under the EMBOSS installation directory. These files must first be set up using the program <b>rebaseextract</b>. Running <b>rebaseextract</b> may be the job of your system manager.</p>
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/restover.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/bjagla.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/restover.history" -->
+
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/restover.comment" -->
+
+
+</BODY>
+</HTML>
+

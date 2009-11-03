@@ -1,0 +1,450 @@
+
+                                  infoseq 
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Display basic information about sequences
+
+Description
+
+   infoseq displays on screen basic information about one or more input
+   sequences. This includes the Uniform Sequence Address (USA), name,
+   accession number, type (nucleic or protein), length, percentage C+G
+   and description. Any combination of these records is easily selected
+   or unselected for display. The same information may be written to an
+   output file which (optionally) may be formatted in an HTML table.
+
+Usage
+
+   Here is a sample session with infoseq
+
+   Display information on a sequence:
+
+
+% infoseq tembl:x13776 
+Display basic information about sequences
+
+USA                      Database  Name           Accession      Type Length %G
+C    Description
+tembl-id:X13776          tembl          X13776         X13776         N    2167
+   66.54  Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regul
+ation
+
+   Go to the input files for this example
+
+   Example 2
+
+   Don't display the USA of a sequence:
+
+
+% infoseq tembl:x13776 -nousa 
+Display basic information about sequences
+
+Database  Name           Accession      Type Length %GC    Description
+tembl          X13776         X13776         N    2167   66.54  Pseudomonas aer
+uginosa amiC and amiR gene for aliphatic amidase regulation
+
+   Example 3
+
+   Display only the name and length of a sequence:
+
+
+% infoseq tembl:x13776 -only -name -length 
+Display basic information about sequences
+
+Name           Length
+X13776         2167
+
+   Example 4
+
+   Display only the description of a sequence:
+
+
+% infoseq tembl:x13776 -only -desc 
+Display basic information about sequences
+
+Description
+Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+
+   Example 5
+
+   Display the type of a sequence:
+
+
+% infoseq tembl:x13776 -only -type 
+Display basic information about sequences
+
+Type
+N
+
+   Example 6
+
+   Display information formatted with HTML:
+
+
+% infoseq tembl:x13776 -html 
+Display basic information about sequences
+
+
+ USA Database Name Accession Type Length %GC Description
+
+ tembl-id:X13776 tembl X13776 X13776 N 2167 66.54 Pseudomonas aeruginosa amiC a
+nd amiR gene for aliphatic amidase regulation
+
+
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     (Gapped) sequence(s) filename and optional
+                                  format, or reference (input USA)
+
+   Additional (Optional) qualifiers:
+   -outfile            outfile    [stdout] If you enter the name of a file
+                                  here then this program will write the
+                                  sequence details into that file.
+   -html               boolean    [N] Format output as an HTML table
+
+   Advanced (Unprompted) qualifiers:
+   -[no]columns        boolean    [Y] Set this option on (Y) to print the
+                                  sequence information into neat, aligned
+                                  columns in the output file. Alternatively,
+                                  leave it unset (N), in which case the
+                                  information records will be delimited by a
+                                  character, which you may specify by using
+                                  the -delimiter option. In other words, if
+                                  -columns is set on, the -delimiter option is
+                                  overriden.
+   -delimiter          string     [|] This string, which is usually a single
+                                  character only, is used to delimit
+                                  individual records in the text output file.
+                                  It could be a space character, a tab
+                                  character, a pipe character or any other
+                                  character or string. (Any string is
+                                  accepted)
+   -only               boolean    [N] This is a way of shortening the command
+                                  line if you only want a few things to be
+                                  displayed. Instead of specifying:
+                                  '-nohead -noname -noacc -notype -nopgc
+                                  -nodesc'
+                                  to get only the length output, you can
+                                  specify
+                                  '-only -length'
+   -[no]heading        boolean    [Y] Display column headings
+   -usa                boolean    [@(!$(only))] Display the USA of the
+                                  sequence
+   -database           boolean    [@(!$(only))] Display 'database' column
+   -name               boolean    [@(!$(only))] Display 'name' column
+   -accession          boolean    [@(!$(only))] Display 'accession' column
+   -gi                 boolean    [N] Display 'GI' column
+   -version            boolean    [N] Display 'version' column
+   -type               boolean    [@(!$(only))] Display 'type' column
+   -length             boolean    [@(!$(only))] Display 'length' column
+   -pgc                boolean    [@(!$(only))] Display 'percent GC content'
+                                  column
+   -description        boolean    [@(!$(only))] Display 'description' column
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   infoseq reads any sequence USAs.
+
+  Input files for usage example
+
+   'tembl:x13776' is a sequence entry in the example nucleic acid
+   database 'tembl'
+
+  Database entry: tembl:x13776
+
+ID   X13776; SV 1; linear; genomic DNA; STD; PRO; 2167 BP.
+XX
+AC   X13776; M43175;
+XX
+DT   19-APR-1989 (Rel. 19, Created)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 24)
+XX
+DE   Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+XX
+KW   aliphatic amidase regulator; amiC gene; amiR gene.
+XX
+OS   Pseudomonas aeruginosa
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadales;
+OC   Pseudomonadaceae; Pseudomonas.
+XX
+RN   [1]
+RP   1167-2167
+RA   Rice P.M.;
+RT   ;
+RL   Submitted (16-DEC-1988) to the EMBL/GenBank/DDBJ databases.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG
+.
+XX
+RN   [2]
+RP   1167-2167
+RX   DOI; 10.1016/0014-5793(89)80249-2.
+RX   PUBMED; 2495988.
+RA   Lowe N., Rice P.M., Drew R.E.;
+RT   "Nucleotide sequence of the aliphatic amidase regulator gene (amiR) of
+RT   Pseudomonas aeruginosa";
+RL   FEBS Lett. 246(1-2):39-43(1989).
+XX
+RN   [3]
+RP   1-1292
+RX   PUBMED; 1907262.
+RA   Wilson S., Drew R.;
+RT   "Cloning and DNA sequence of amiC, a new gene regulating expression of the
+RT   Pseudomonas aeruginosa aliphatic amidase, and purification of the amiC
+RT   product";
+RL   J. Bacteriol. 173(16):4914-4921(1991).
+XX
+RN   [4]
+RP   1-2167
+RA   Rice P.M.;
+RT   ;
+RL   Submitted (04-SEP-1991) to the EMBL/GenBank/DDBJ databases.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG
+.
+XX
+DR   GOA; Q51417.
+DR   InterPro; IPR003211; AmiSUreI_transpt.
+DR   UniProtKB/Swiss-Prot; Q51417; AMIS_PSEAE.
+
+
+  [Part of this file has been deleted for brevity]
+
+FT                   /replace=""
+FT                   /note="ClaI fragment deleted in pSW36,  constitutive
+FT                   phenotype"
+FT   misc_feature    1
+FT                   /note="last base of an XhoI site"
+FT   misc_feature    648..653
+FT                   /note="end of 658bp XhoI fragment, deletion in  pSW3 cause
+s
+FT                   constitutive expression of amiE"
+FT   conflict        1281
+FT                   /replace="g"
+FT                   /citation=[3]
+XX
+SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
+     ggtaccgctg gccgagcatc tgctcgatca ccaccagccg ggcgacggga actgcacgat        6
+0
+     ctacctggcg agcctggagc acgagcgggt tcgcttcgta cggcgctgag cgacagtcac       12
+0
+     aggagaggaa acggatggga tcgcaccagg agcggccgct gatcggcctg ctgttctccg       18
+0
+     aaaccggcgt caccgccgat atcgagcgct cgcacgcgta tggcgcattg ctcgcggtcg       24
+0
+     agcaactgaa ccgcgagggc ggcgtcggcg gtcgcccgat cgaaacgctg tcccaggacc       30
+0
+     ccggcggcga cccggaccgc tatcggctgt gcgccgagga cttcattcgc aaccgggggg       36
+0
+     tacggttcct cgtgggctgc tacatgtcgc acacgcgcaa ggcggtgatg ccggtggtcg       42
+0
+     agcgcgccga cgcgctgctc tgctacccga ccccctacga gggcttcgag tattcgccga       48
+0
+     acatcgtcta cggcggtccg gcgccgaacc agaacagtgc gccgctggcg gcgtacctga       54
+0
+     ttcgccacta cggcgagcgg gtggtgttca tcggctcgga ctacatctat ccgcgggaaa       60
+0
+     gcaaccatgt gatgcgccac ctgtatcgcc agcacggcgg cacggtgctc gaggaaatct       66
+0
+     acattccgct gtatccctcc gacgacgact tgcagcgcgc cgtcgagcgc atctaccagg       72
+0
+     cgcgcgccga cgtggtcttc tccaccgtgg tgggcaccgg caccgccgag ctgtatcgcg       78
+0
+     ccatcgcccg tcgctacggc gacggcaggc ggccgccgat cgccagcctg accaccagcg       84
+0
+     aggcggaggt ggcgaagatg gagagtgacg tggcagaggg gcaggtggtg gtcgcgcctt       90
+0
+     acttctccag catcgatacg cccgccagcc gggccttcgt ccaggcctgc catggtttct       96
+0
+     tcccggagaa cgcgaccatc accgcctggg ccgaggcggc ctactggcag accttgttgc      102
+0
+     tcggccgcgc cgcgcaggcc gcaggcaact ggcgggtgga agacgtgcag cggcacctgt      108
+0
+     acgacatcga catcgacgcg ccacaggggc cggtccgggt ggagcgccag aacaaccaca      114
+0
+     gccgcctgtc ttcgcgcatc gcggaaatcg atgcgcgcgg cgtgttccag gtccgctggc      120
+0
+     agtcgcccga accgattcgc cccgaccctt atgtcgtcgt gcataacctc gacgactggt      126
+0
+     ccgccagcat gggcggggga ccgctcccat gagcgccaac tcgctgctcg gcagcctgcg      132
+0
+     cgagttgcag gtgctggtcc tcaacccgcc gggggaggtc agcgacgccc tggtcttgca      138
+0
+     gctgatccgc atcggttgtt cggtgcgcca gtgctggccg ccgccggaag ccttcgacgt      144
+0
+     gccggtggac gtggtcttca ccagcatttt ccagaatggc caccacgacg agatcgctgc      150
+0
+     gctgctcgcc gccgggactc cgcgcactac cctggtggcg ctggtggagt acgaaagccc      156
+0
+     cgcggtgctc tcgcagatca tcgagctgga gtgccacggc gtgatcaccc agccgctcga      162
+0
+     tgcccaccgg gtgctgcctg tgctggtatc ggcgcggcgc atcagcgagg aaatggcgaa      168
+0
+     gctgaagcag aagaccgagc agctccagga ccgcatcgcc ggccaggccc ggatcaacca      174
+0
+     ggccaaggtg ttgctgatgc agcgccatgg ctgggacgag cgcgaggcgc accagcacct      180
+0
+     gtcgcgggaa gcgatgaagc ggcgcgagcc gatcctgaag atcgctcagg agttgctggg      186
+0
+     aaacgagccg tccgcctgag cgatccgggc cgaccagaac aataacaaga ggggtatcgt      192
+0
+     catcatgctg ggactggttc tgctgtacgt tggcgcggtg ctgtttctca atgccgtctg      198
+0
+     gttgctgggc aagatcagcg gtcgggaggt ggcggtgatc aacttcctgg tcggcgtgct      204
+0
+     gagcgcctgc gtcgcgttct acctgatctt ttccgcagca gccgggcagg gctcgctgaa      210
+0
+     ggccggagcg ctgaccctgc tattcgcttt tacctatctg tgggtggccg ccaaccagtt      216
+0
+     cctcgag                                                                216
+7
+//
+
+Output file format
+
+   The output is displayed on the screen (stdout) by default.
+
+   The first non-blank line is the heading. This is followed by one line
+   per sequence containing the following columns of data separated by one
+   of more space or TAB characters:
+     * The USA (Uniform Sequence Address) that EMBOSS can use to read in
+       the sequence.
+     * The name or ID of the sequence. If this is not known then '-' is
+       output.
+     * The accession number. If this is not known then '-' is output.
+     * The type ('N' is nucleic, 'P' is protein).
+     * The sequence length.
+     * The description line of the sequence. This may be blank.
+
+   If qualifiers to inhibit various columns of information are used, then
+   the remaining columns of information are output in the same order as
+   shown above, so if '-nolength' is used, the order of output is: usa,
+   name, accession, type, description.
+
+   When the -html qualifier is specified, then the output will be wrapped
+   in HTML tags, ready for inclusion in a Web page. Note that tags such
+   as <HTML> and <BODY> are not output by this program as the table of
+   databases is expected to form only part of the contents of a web page
+   - the rest of the web page must be supplier by the user.
+
+   The lines of out information are guaranteed not to have trailing
+   white-space at the end.
+
+Data files
+
+   None.
+
+Notes
+
+   There are many qualifiers to control exactly what information on the
+   sequence is output and how it is formatted. If you only want a few
+   fields in the output file, the command line may be shortended by
+   preceding the appropriate qualifier with -only. For example, instead
+   of specifying -nohead -noname -noacc -notype -nopgc -nodesc to get
+   only the length output, you can specify -only -length.
+
+   By default, the output file starts each line with the USA of the
+   sequence being described, so the output file is a list file that can
+   be manually edited and read in by any other EMBOSS program that can
+   read in one or more sequence to be analysed.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0
+
+Known bugs
+
+   None noted.
+
+See also
+
+   Program name     Description
+   infoalign        Display basic information about a multiple sequence
+                    alignment
+   infobase         Return information on a given nucleotide base
+   inforesidue      Return information on a given amino acid residue
+   seealso          Finds programs with similar function to a specified program
+   showdb           Displays information on configured databases
+   textsearch       Search the textual description of sequence(s)
+   tfm              Displays full documentation for an application
+   whichdb          Search all sequence databases for an entry and retrieve it
+   wossname         Finds programs by keywords in their short description
+
+     * geecee - Calculates the fractional GC content of a nucleic acid
+       sequence
+
+Author(s)
+
+   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

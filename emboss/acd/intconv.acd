@@ -1,0 +1,33 @@
+application: intconv [
+  documentation: "Convert ints to ajints and longs to
+                  ajlongs"
+  groups: "Test"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  infile: infile [
+    parameter: "Y"
+    knowntype: "integer long data"
+    information: "Standard format information on int and long
+                  data file"
+  ]
+
+endsection: input
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    parameter: "Y"
+    knowntype: "ajint ajlong data"
+    information: "Standard format info on ajint and ajlong
+                  output file"
+  ]
+
+endsection: output

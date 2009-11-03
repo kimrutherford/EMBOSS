@@ -1,0 +1,345 @@
+
+                                  listor 
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Write a list file of the logical OR of two sets of sequences
+
+Description
+
+   listor reads in two sets of sequences (typically specified as list
+   files) and writes out a list file that result from the logical union
+   of the two sets. A list file is a file with a list of Uniform Sequence
+   Addresses (USAs), for example, a list of file names. When comparing
+   sequences from the input sets, no use is made of the ID name or
+   accession number; only the sequence itself is compared. The comparison
+   of the sequences is case-independent. The logical union is an OR
+   operation by default. Other available operations are: AND, XOR and
+   NOT.
+
+Algorithm
+
+   All the input sequences are kept in memory while the logical unions of
+   the two input sets of sequences is calculated. listor is therefore
+   restricted by the available memory.
+
+Usage
+
+   Here is a sample session with listor
+
+   Write the logical OR of two lists:
+
+
+% listor ../data/file2 
+Write a list file of the logical OR of two sets of sequences
+List of USAs output file [file1.list]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+   Example 2
+
+   Write the logical AND of two lists:
+
+
+% listor ../data/file2 -operator and 
+Write a list file of the logical OR of two sets of sequences
+List of USAs output file [file1.list]: 
+
+   Go to the output files for this example
+
+   Example 3
+
+   Write the logical XOR of two lists:
+
+
+% listor ../data/file2 -operator xor 
+Write a list file of the logical OR of two sets of sequences
+List of USAs output file [file1.list]: 
+
+   Go to the output files for this example
+
+   Example 4
+
+   Write the logical NOT of two lists:
+
+
+% listor ../data/file2 -operator not 
+Write a list file of the logical OR of two sets of sequences
+List of USAs output file [file1.list]: 
+
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-firstsequences]    seqset     Sequence set filename and optional format,
+                                  or reference (input USA)
+  [-secondsequences]   seqset     Sequence set filename and optional format,
+                                  or reference (input USA)
+  [-outfile]           outfile    [*.listor] The list of sequence names will
+                                  be written to this list file
+
+   Additional (Optional) qualifiers:
+   -operator           menu       [OR] The following logical operators combine
+                                  the sequences in the following ways:
+                                  OR - gives all that occur in one set or the
+                                  other
+                                  AND - gives only those which occur in both
+                                  sets
+                                  XOR - gives those which only occur in one
+                                  set or the other, but not in both
+                                  NOT - gives those which occur in the first
+                                  set except for those that also occur in the
+                                  second (Values: O (OR - merger of both
+                                  sets); A (AND - only those in both sets); X
+                                  (XOR - only those not in both sets); N (NOT
+                                  - those of the first set that are not in the
+                                  second))
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-firstsequences" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-secondsequences" associated qualifiers
+   -sbegin2            integer    Start of each sequence to be used
+   -send2              integer    End of each sequence to be used
+   -sreverse2          boolean    Reverse (if DNA)
+   -sask2              boolean    Ask for begin/end/reverse
+   -snucleotide2       boolean    Sequence is nucleotide
+   -sprotein2          boolean    Sequence is protein
+   -slower2            boolean    Make lower case
+   -supper2            boolean    Make upper case
+   -sformat2           string     Input sequence format
+   -sdbname2           string     Database name
+   -sid2               string     Entryname
+   -ufo2               string     UFO features
+   -fformat2           string     Features format
+   -fopenfile2         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory3        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   The input sets of sequences can be of any valid USAs. The program was
+   written to perform logical operations on list files, but in practice,
+   wildcarded database entries and file names are also perfectly legal
+   specifications of the input sequences.
+
+  Input files for usage example
+
+  File: file1
+
+>one
+tagctagcg
+>two
+tagctagcggctacgt
+>three
+tagctattttatgctacgtcagtgac
+
+  File: file2
+
+>two
+tagctagcggctacgt
+>three
+tagctattttatgctacgtcagtgac
+>four
+gcgcggcgcgcgtgcgtcgttgctggggccc
+
+Output file format
+
+   The ouput is simply a list of the USAs (format and sequence
+   specification) resulting from the required logical union of the two
+   sets of input sequence.
+
+   The order that the USAs are written out is not necessarily the same as
+   the order of either of the input sets of sequences.
+
+   The results of the four types of logical union follows. Note that the
+   duplicated sequences in these two files have been given the same name.
+   This is not necessary for the operation of listor as it compares the
+   sequences themselves, not the ID names of the sequences.
+
+  Output files for usage example
+
+  File: file1.list
+
+fasta::../../data/file1:one
+fasta::../../data/file1:two
+fasta::../../data/file1:three
+fasta::../../data/file2:four
+
+  Output files for usage example 2
+
+  File: file1.list
+
+fasta::../../data/file1:two
+fasta::../../data/file1:three
+
+  Output files for usage example 3
+
+  File: file1.list
+
+fasta::../../data/file1:one
+fasta::../../data/file2:four
+
+  Output files for usage example 4
+
+  File: file1.list
+
+   fasta::../../data/file1:one
+
+Data files
+
+   None.
+
+Notes
+
+   The inputs can be any valid USA but typically reference a list file.
+   Some other reference such as a wildcarded database entries or file
+   name are equally valid.
+
+   The (default) logical OR of the two sets of sequences is simply the
+   result of merging the two sets of sequences. A sequences appearing in
+   both input sets is referenced once only in the output file. A logical
+   AND simply lists those sequences that occur in both sets of sequences.
+
+   A logical XOR lists those sequences that ONLY occur in the first set
+   or only occur in the second set - sequences occuring in both sets are
+   omitted (the opposite of an AND).
+
+   A logical NOT lists all those sequences in the first set except for
+   those that also occur in the second set.
+
+References
+
+   None.
+
+Warnings
+
+   listor is restricted by the available memory. Doing logical unions
+   involving all of the sequences in large databases, such as EMBL, is
+   probably impractical unless you are lucky enough to have extraordinary
+   amounts of memory on your machine.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name     Description
+   aligncopy        Reads and writes alignments
+   aligncopypair    Reads and writes pairs from alignments
+   biosed           Replace or delete sequence sections
+   codcopy          Copy and reformat a codon usage table
+   cutseq           Removes a section from a sequence
+   degapseq         Removes non-alphabetic (e.g. gap) characters from sequences
+   descseq          Alter the name or description of a sequence
+   entret           Retrieves sequence entries from flatfile databases and files
+   extractalign     Extract regions from a sequence alignment
+   extractfeat      Extract features from sequence(s)
+   extractseq       Extract regions from a sequence
+   featcopy         Reads and writes a feature table
+   featreport       Reads and writes a feature table
+   makenucseq       Create random nucleotide sequences
+   makeprotseq      Create random protein sequences
+   maskambignuc     Masks all ambiguity characters in nucleotide sequences
+   with             N
+   maskambigprot    Masks all ambiguity characters in protein sequences with
+                    X
+   maskfeat         Write a sequence with masked features
+   maskseq          Write a sequence with masked regions
+   newseq           Create a sequence file from a typed-in sequence
+   nohtml           Remove mark-up (e.g. HTML tags) from an ASCII text file
+   noreturn         Remove carriage return from ASCII files
+   nospace          Remove all whitespace from an ASCII text file
+   notab            Replace tabs with spaces in an ASCII text file
+   notseq           Write to file a subset of an input stream of sequences
+   nthseq           Write to file a single sequence from an input stream of
+                    sequences
+   nthseqset        Reads and writes (returns) one set of sequences from many
+   pasteseq         Insert one sequence into another
+   revseq           Reverse and complement a nucleotide sequence
+   seqret           Reads and writes (returns) sequences
+   seqretsetall     Reads and writes (returns) many sets of sequences
+   seqretsplit      Reads sequences and writes them to individual files
+   sizeseq          Sort sequences by size
+   skipredundant    Remove redundant sequences from an input set
+   skipseq          Reads and writes (returns) sequences, skipping first few
+   splitsource      Split sequence(s) into original source sequences
+   splitter         Split sequence(s) into smaller sequences
+   trimest          Remove poly-A tails from nucleotide sequences
+   trimseq          Remove unwanted characters from start and end of sequence(s)
+   trimspace        Remove extra whitespace from an ASCII text file
+   union            Concatenate multiple sequences into a single sequence
+   vectorstrip      Removes vectors from the ends of nucleotide sequence(s)
+   yank             Add a sequence reference (a full USA) to a list file
+
+Author(s)
+
+   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+History
+
+   Written (1 Aug 2001) - Gary Williams
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

@@ -1,0 +1,616 @@
+
+                                  fuzznuc 
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Search for patterns in nucleotide sequences
+
+Description
+
+   fuzznuc searches for a specified PROSITE-style pattern in nucleotide
+   sequences. Such patterns are specifications of a (typically short)
+   length of sequence to be found. They can specify a search for an exact
+   sequence or they can allow various ambiguities, matches to variable
+   lengths of sequence and repeated subsections of the sequence. One or
+   more nucleotide sequences are read from file. The output is a standard
+   EMBOSS report file that includes data such as location and score of
+   any matches.
+
+Algorithm
+
+   fuzznuc intelligently selects the optimum searching algorithm to use,
+   depending on the complexity of the search pattern specified.
+
+Usage
+
+   Here is a sample session with fuzznuc
+
+
+% fuzznuc 
+Search for patterns in nucleotide sequences
+Input nucleotide sequence(s): tembl:L46634
+Search pattern: AAGCTT
+Output report [l46634.fuzznuc]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+   Example 2
+
+
+% fuzznuc 
+Search for patterns in nucleotide sequences
+Input nucleotide sequence(s): tembl:L46634
+Search pattern: @nucseq.pat
+Output report [l46634.fuzznuc]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+   Example 3
+
+
+% fuzznuc -pname test 
+Search for patterns in nucleotide sequences
+Input nucleotide sequence(s): tembl:L46634
+Search pattern: @nucsimple.pat
+Output report [l46634.fuzznuc]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+   Example 4
+
+
+% fuzznuc 
+Search for patterns in nucleotide sequences
+Input nucleotide sequence(s): tembl:L46634
+Search pattern: @nuc.pat
+Output report [l46634.fuzznuc]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -pattern            pattern    The standard IUPAC one-letter codes for the
+                                  nucleotides are used.
+                                  The symbol 'n' is used for a position where
+                                  any nucleotide is accepted.
+                                  Ambiguities are indicated by listing the
+                                  acceptable nucleotides for a given position,
+                                  between square parentheses '[ ]'. For
+                                  example: [ACG] stands for A or C or G.
+                                  Ambiguities are also indicated by listing
+                                  between a pair of curly brackets '{ }' the
+                                  nucleotides that are not accepted at a given
+                                  position. For example: {AG} stands for any
+                                  nucleotides except A and G.
+                                  Each element in a pattern is separated from
+                                  its neighbor by a '-'. (Optional in
+                                  fuzznuc).
+                                  Repetition of an element of the pattern can
+                                  be indicated by following that element with
+                                  a numerical value or a numerical range
+                                  between parenthesis. Examples: N(3)
+                                  corresponds to N-N-N, N(2,4) corresponds to
+                                  N-N or N-N-N or N-N-N-N.
+                                  When a pattern is restricted to either the
+                                  5' or 3' end of a sequence, that pattern
+                                  either starts with a '<' symbol or
+                                  respectively ends with a '>' symbol.
+                                  A period ends the pattern. (Optional in
+                                  fuzznuc).
+                                  For example, [CG](5)TG{A}N(1,5)C
+  [-outfile]           report     [*.fuzznuc] Output report file name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -complement         boolean    [N] Search complementary strand
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-pattern" associated qualifiers
+   -pformat            string     File format
+   -pmismatch          integer    Pattern mismatch
+   -pname              string     Pattern base name
+
+   "-outfile" associated qualifiers
+   -rformat2           string     Report format
+   -rname2             string     Base file name
+   -rextension2        string     File name extension
+   -rdirectory2        string     Output directory
+   -raccshow2          boolean    Show accession number in the report
+   -rdesshow2          boolean    Show description in the report
+   -rscoreshow2        boolean    Show the score in the report
+   -rstrandshow2       boolean    Show the nucleotide strand in the report
+   -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   fuzznuc reads in normal nucleic acid sequence USAs.
+
+  Input files for usage example
+
+   'tembl:L46634' is a sequence entry in the example nucleic acid
+   database 'tembl'
+
+  Database entry: tembl:L46634
+
+ID   L46634; SV 1; linear; genomic DNA; STD; VRL; 1272 BP.
+XX
+AC   L46634; L46689;
+XX
+DT   06-NOV-1995 (Rel. 45, Created)
+DT   04-MAR-2000 (Rel. 63, Last updated, Version 3)
+XX
+DE   Human herpesvirus 7 (clone ED132'1.2) telomeric repeat region.
+XX
+KW   telomeric repeat.
+XX
+OS   Human herpesvirus 7
+OC   Viruses; dsDNA viruses, no RNA stage; Herpesvirales; Herpesviridae;
+OC   Betaherpesvirinae; Roseolovirus.
+XX
+RN   [1]
+RP   1-1272
+RX   PUBMED; 7494318.
+RA   Secchiero P., Nicholas J., Deng H., Xiaopeng T., van Loon N., Ruvolo V.R.,
+RA   Berneman Z.N., Reitz M.S.Jr., Dewhurst S.;
+RT   "Identification of human telomeric repeat motifs at the genome termini of
+RT   human herpesvirus 7: structural analysis and heterogeneity";
+RL   J. Virol. 69(12):8041-8045(1995).
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1272
+FT                   /organism="Human herpesvirus 7"
+FT                   /strain="JI"
+FT                   /mol_type="genomic DNA"
+FT                   /clone="ED132'1.2"
+FT                   /db_xref="taxon:10372"
+FT   repeat_region   207..928
+FT                   /note="long and complex repeat region composed of various
+FT                   direct repeats, including TAACCC (TRS), degenerate copies
+FT                   of TRS motifs and a 14-bp repeat, TAGGGCTGCGGCCC"
+FT   misc_signal     938..998
+FT                   /note="pac2 motif"
+FT   misc_feature    1009
+FT                   /note="right genome terminus (...ACA)"
+XX
+SQ   Sequence 1272 BP; 346 A; 455 C; 222 G; 249 T; 0 other;
+     aagcttaaac tgaggtcaca cacgacttta attacggcaa cgcaacagct gtaagctgca        6
+0
+     ggaaagatac gatcgtaagc aaatgtagtc ctacaatcaa gcgaggttgt agacgttacc       12
+0
+     tacaatgaac tacacctcta agcataacct gtcgggcaca gtgagacacg cagccgtaaa       18
+0
+     ttcaaaactc aacccaaacc gaagtctaag tctcacccta atcgtaacag taaccctaca       24
+0
+     actctaatcc tagtccgtaa ccgtaacccc aatcctagcc cttagcccta accctagccc       30
+0
+     taaccctagc tctaacctta gctctaactc tgaccctagg cctaacccta agcctaaccc       36
+0
+     taaccgtagc tctaagttta accctaaccc taaccctaac catgaccctg accctaaccc       42
+0
+     tagggctgcg gccctaaccc tagccctaac cctaacccta atcctaatcc tagccctaac       48
+0
+     cctagggctg cggccctaac cctagcccta accctaaccc taaccctagg gctgcggccc       54
+0
+     taaccctaac cctagggctg cggcccgaac cctaacccta accctaaccc taaccctagg       60
+0
+     gctgcggccc taaccctaac cctagggctg cggccctaac cctaacccta gggctgcggc       66
+0
+     ccgaacccta accctaaccc taaccctagg gctgcggccc taaccctaac cctagggctg       72
+0
+     cggccctaac cctaacccta actctagggc tgcggcccta accctaaccc taaccctaac       78
+0
+     cctagggctg cggcccgaac cctagcccta accctaaccc tgaccctgac cctaacccta       84
+0
+     accctaaccc taaccctaac cctaacccta accctaaccc taaccctaac cctaacccta       90
+0
+     accctaaccc taaccctaac cctaaccccg cccccactgg cagccaatgt cttgtaatgc       96
+0
+     cttcaaggca ctttttctgc gagccgcgcg cagcactcag tgaaaaacaa gtttgtgcac      102
+0
+     gagaaagacg ctgccaaacc gcagctgcag catgaaggct gagtgcacaa ttttggcttt      108
+0
+     agtcccataa aggcgcggct tcccgtagag tagaaaaccg cagcgcggcg cacagagcga      114
+0
+     aggcagcggc tttcagactg tttgccaagc gcagtctgca tcttaccaat gatgatcgca      120
+0
+     agcaagaaaa atgttctttc ttagcatatg cgtggttaat cctgttgtgg tcatcactaa      126
+0
+     gttttcaagc tt                                                          127
+2
+//
+
+  Input files for usage example 2
+
+  File: nucseq.pat
+
+>targetseq
+cg(2)c(3)taac
+cctagc(3)ta
+
+  Input files for usage example 3
+
+  File: nucsimple.pat
+
+cg(2)c(3)taac
+cctagc(3)ta
+
+  Input files for usage example 4
+
+  File: nuc.pat
+
+>pat1
+cggccctaaccctagcccta
+>pat2 <mismatch=1>
+cg(2)c(3)taac
+cctagc(3)ta
+>pat3
+cggc(2,4)taac(2,5)
+
+  Pattern specification
+
+   Patterns for fuzznuc are based on the format of pattern used in the
+   PROSITE database, with the difference that the terminating dot '.' and
+   the hyphens, '-', between the characters are optional.
+
+   The PROSITE pattern definition from the PROSITE documentation (amended
+   to refer to nucleic acid sequences, not proteins) follows.
+     * The standard IUPAC one-letter codes for the nucleotides are used.
+     * The symbol `n' is used for a position where any nucleotide is
+       accepted.
+     * Ambiguities are indicated by listing the acceptable nucleotides
+       for a given position, between square parentheses `[ ]'. For
+       example: [ACG] stands for A or C or G.
+     * Ambiguities are also indicated by listing between a pair of curly
+       brackets `{ }' the nucleotides that are not accepted at a given
+       position. For example: {AG} stands for any nucleotides except A
+       and G.
+     * Each element in a pattern is separated from its neighbor by a `-'.
+       (Optional in fuzznuc).
+     * Repetition of an element of the pattern can be indicated by
+       following that element with a numerical value or a numerical range
+       between parenthesis. Examples: N(3) corresponds to N-N-N, N(2,4)
+       corresponds to N-N or N-N-N or N-N-N-N.
+     * When a pattern is restricted to either the 5' or 3' end of a
+       sequence, that pattern either starts with a `<' symbol or
+       respectively ends with a `>' symbol.
+     * A period ends the pattern. (Optional in fuzznuc).
+     * All other characters, including spaces are not allowed.
+
+   For example, in the EMBL entry J01636 you can look for the pattern:
+
+[CG](5)TG{A}N(1,5)C
+
+   This searches for "C or G" 5 times, followed by T and G, then anything
+   except A, then any base (1 to 5 times) before a C.
+
+   You can use ambiguity codes for nucleic acid searches but not within
+   [] or {} as they expand to bracketed counterparts. For example, "s" is
+   expanded to "[GC]" therefore [S] would be expanded to [[GC]] which is
+   illegal.
+
+   Note the use of X is reserved for proteins. You must use N for nucleic
+   acids to refer to any base.
+
+   The search is case-independent, so 'AAA' matches 'aaa'.
+
+Output file format
+
+   The output is a standard EMBOSS report file.
+
+   The results can be output in one of several styles by using the
+   command-line qualifier -rformat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: embl,
+   genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+   feattable, motif, regions, seqtable, simple, srs, table, tagseq
+
+   See: http://emboss.sf.net/docs/themes/ReportFormats.html for further
+   information on report formats.
+
+   By default fuzznuc writes a 'seqtable' report file.
+
+  Output files for usage example
+
+  File: l46634.fuzznuc
+
+########################################
+# Program: fuzznuc
+# Rundate: Tue 15 Jul 2008 12:00:00
+# Commandline: fuzznuc
+#    -sequence tembl:L46634
+#    -pattern AAGCTT
+# Report_format: seqtable
+# Report_file: l46634.fuzznuc
+########################################
+
+#=======================================
+#
+# Sequence: L46634     from: 1   to: 1272
+# HitCount: 2
+#
+# Pattern_name Mismatch Pattern
+# pattern             0 AAGCTT
+#
+# Complement: No
+#
+#=======================================
+
+  Start     End  Strand Pattern_name Mismatch Sequence
+      1       6       + pattern             . aagctt
+   1267    1272       + pattern             . aagctt
+
+#---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_length: 1272
+# Reported_sequences: 1
+# Reported_hitcount: 2
+#---------------------------------------
+
+  Output files for usage example 2
+
+  File: l46634.fuzznuc
+
+########################################
+# Program: fuzznuc
+# Rundate: Tue 15 Jul 2008 12:00:00
+# Commandline: fuzznuc
+#    -sequence tembl:L46634
+#    -pattern @../../data/nucseq.pat
+# Report_format: seqtable
+# Report_file: l46634.fuzznuc
+########################################
+
+#=======================================
+#
+# Sequence: L46634     from: 1   to: 1272
+# HitCount: 2
+#
+# Pattern_name Mismatch Pattern
+# targetseq           0 cg(2)c(3)taaccctagc(3)ta
+#
+# Complement: No
+#
+#=======================================
+
+  Start     End  Strand Pattern_name Mismatch Sequence
+    429     448       + targetseq           . cggccctaaccctagcccta
+    491     510       + targetseq           . cggccctaaccctagcccta
+
+#---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_length: 1272
+# Reported_sequences: 1
+# Reported_hitcount: 2
+#---------------------------------------
+
+  Output files for usage example 3
+
+  File: l46634.fuzznuc
+
+########################################
+# Program: fuzznuc
+# Rundate: Tue 15 Jul 2008 12:00:00
+# Commandline: fuzznuc
+#    -pname test
+#    -sequence tembl:L46634
+#    -pattern @../../data/nucsimple.pat
+# Report_format: seqtable
+# Report_file: l46634.fuzznuc
+########################################
+
+#=======================================
+#
+# Sequence: L46634     from: 1   to: 1272
+# HitCount: 13
+#
+# Pattern_name Mismatch Pattern
+# test1               0 cg(2)c(3)taac
+# test2               0 cctagc(3)ta
+#
+# Complement: No
+#
+#=======================================
+
+  Start     End  Strand Pattern_name Mismatch Sequence
+    429     438       + test1               . cggccctaac
+    491     500       + test1               . cggccctaac
+    535     544       + test1               . cggccctaac
+    605     614       + test1               . cggccctaac
+    631     640       + test1               . cggccctaac
+    695     704       + test1               . cggccctaac
+    721     730       + test1               . cggccctaac
+    753     762       + test1               . cggccctaac
+    293     302       + test2               . cctagcccta
+    439     448       + test2               . cctagcccta
+    469     478       + test2               . cctagcccta
+    501     510       + test2               . cctagcccta
+    801     810       + test2               . cctagcccta
+
+#---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_length: 1272
+# Reported_sequences: 1
+# Reported_hitcount: 13
+#---------------------------------------
+
+  Output files for usage example 4
+
+  File: l46634.fuzznuc
+
+########################################
+# Program: fuzznuc
+# Rundate: Tue 15 Jul 2008 12:00:00
+# Commandline: fuzznuc
+#    -sequence tembl:L46634
+#    -pattern @../../data/nuc.pat
+# Report_format: seqtable
+# Report_file: l46634.fuzznuc
+########################################
+
+#=======================================
+#
+# Sequence: L46634     from: 1   to: 1272
+# HitCount: 19
+#
+# Pattern_name Mismatch Pattern
+# pat1                0 cggccctaaccctagcccta
+# pat2                1 cg(2)c(3)taaccctagc(3)ta
+# pat3                0 cggc(2,4)taac(2,5)
+#
+# Complement: No
+#
+#=======================================
+
+  Start     End  Strand Pattern_name Mismatch Sequence
+    429     448       + pat1                . cggccctaaccctagcccta
+    491     510       + pat1                . cggccctaaccctagcccta
+    429     448       + pat2                . cggccctaaccctagcccta
+    491     510       + pat2                . cggccctaaccctagcccta
+    535     554       + pat2                1 cggccctaaccctaacccta
+    605     624       + pat2                1 cggccctaaccctaacccta
+    631     650       + pat2                1 cggccctaaccctaacccta
+    695     714       + pat2                1 cggccctaaccctaacccta
+    721     740       + pat2                1 cggccctaaccctaacccta
+    753     772       + pat2                1 cggccctaaccctaacccta
+    791     810       + pat2                1 cggcccgaaccctagcccta
+    753     764       + pat3                . cggccctaaccc
+    721     732       + pat3                . cggccctaaccc
+    695     706       + pat3                . cggccctaaccc
+    631     642       + pat3                . cggccctaaccc
+    605     616       + pat3                . cggccctaaccc
+    535     546       + pat3                . cggccctaaccc
+    491     502       + pat3                . cggccctaaccc
+    429     440       + pat3                . cggccctaaccc
+
+#---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_length: 1272
+# Reported_sequences: 1
+# Reported_hitcount: 19
+#---------------------------------------
+
+Data files
+
+   None.
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with a status of 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name     Description
+   dreg             Regular expression search of nucleotide sequence(s)
+   fuzztran         Search for patterns in protein sequences (translated)
+   marscan          Finds matrix/scaffold recognition (MRS) signatures in DNA
+                    sequences
+
+   Other EMBOSS programs allow you to search for regular expression
+   patterns but may be less easy for the user who has never used regular
+   expressions before:
+
+     * dreg - Regular expression search of a nucleotide sequence
+     * preg - Regular expression search of a protein sequence
+
+Author(s)
+
+   Alan Bleasby (ajb © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
+
+History
+
+   Written (2000) - Alan Bleasby
+   '-usa' added (13 March 2001) - Gary Williams
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

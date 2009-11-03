@@ -1,0 +1,163 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: twofeat
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+twofeat
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/twofeat.ione" -->
+
+<H2>
+    Description
+</H2>
+
+
+
+<p><b>twofeat</b> finds neighbouring pairs of specified features in one or more input sequences. Each feature may be specified by type, name, sense, score, tag/value pairs etc.  Their relationship, e.g. their sequence separation or overlap, relative sense and order may also be specified. It writes a standard EMBOSS report file with any such feature pairs identified.  By default each pair is written as a single feature but (optionally) they are written in their original form.</p>
+
+
+
+<H2>
+    Algorithm
+</H2>
+
+<p>For each of the pair of features, you can specify its type name, its sense, its score and any tag/value pairs, amongst other things.</p></p>
+
+<p>You can then specify the type of relationship that the two features should have as follows:</p>
+
+<p>Minimum and maximum distance between each feature. </p>
+<p>Distance measurement (measure from the nearest ends of the two features, from the left ends, from right ends, from the furthest ends.)</p>
+<p>Type of overlap (any type of overlap or no overlap is allowed, Overlap required, No overlaps are allowed, Overlap required but one feature must not be completely within the other, Feature A must be completely enclosed within feature B, Feature B must be completely enclosed within feature A). </p>
+<p>Feature sense (any sense, in the same sense or in opposite senses)</p>
+<p>Feature order (any order, Feature A then feature B, Feature B then feature A)</p>
+
+<p>The program proceeds as follows.  For eachs sequence:
+	Identify the features that match the criteria for Feature A
+	Identify the features that match the criteria for Feature B
+	Compare all pairs of features
+	If they satisfy the requirements output them to the report file</p>
+
+<p>By default the resulting pairs of features found are then written to a report file as a single feature from the first postion of the left-most feature to the last position of the right-most feature. You can modify the output to report the pairs of features with no changes made to them.</p> 
+
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/twofeat.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/twofeat.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/twofeat.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+<b>twofeat</b> reads any normal sequence USAs.
+
+<p>
+
+<!--#include file="inc/twofeat.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/reportformats.ihtml" -->
+
+<b>twofeat</b> 
+outputs a report format file. The default format is <b>table</b>
+
+
+<p>
+
+<!--#include file="inc/twofeat.output" -->
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+
+<H2>
+    Notes
+</H2>
+
+<p><b>twofeat</b> is intended for use as a simple data-mining tool to enable you to look for instances of pairs of features that occur near to each other in the same sequence entry.</p>
+
+<H2>
+    References
+</H2>
+
+None.
+
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+There is a slight memory leak that must be fixed at some time.
+This does no affect the results.
+
+<!--#include file="inc/twofeat.isee" -->
+
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/gwilliam.address" -->
+
+<H2>
+    History
+</H2>
+
+<!--#include file="inc/twofeat.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/twofeat.comment" -->
+
+</BODY>
+</HTML>
+

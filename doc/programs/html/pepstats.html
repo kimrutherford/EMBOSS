@@ -1,0 +1,604 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: pepstats
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+pepstats
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+
+<H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
+    Function
+</H2>
+Calculates statistics of protein properties
+
+<H2>
+    Description
+</H2>
+
+<p><b>pepstats</b> reads one or more protein sequences and writes an output file with various statistics on the protein properties.  This includes:</p>
+<ul>
+<li>Molecular weight
+<li>Number of residues
+<li>Average residue weight
+<li>Charge
+<li>Isoelectric point
+<li>For each type of amino acid: number, molar percent, DayhoffStat
+<li>For each physico-chemical class of amino acid: number, molar percent
+<li>Probability of protein expression in E. coli inclusion bodies
+<li>Molar extinction coefficient (A280)
+<li>Extinction coefficient at 1 mg/ml (A280)
+</ul>
+
+
+
+
+
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with pepstats</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>pepstats </b>
+Calculates statistics of protein properties
+Input protein sequence(s): <b>tsw:laci_ecoli</b>
+Pepstats program output file [laci_ecoli.pepstats]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Protein sequence(s) filename and optional
+                                  format, or reference (input USA)
+  [-outfile]           outfile    [*.pepstats] Pepstats program output file
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -aadata             datafile   [Eamino.dat] Amino acid properties
+   -mwdata             datafile   [Emolwt.dat] Molecular weight data for amino
+                                  acids
+   -[no]termini        boolean    [Y] Include charge at N and C terminus
+   -mono               boolean    [N] Use monoisotopic weights
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Protein sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Pepstats program output file</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.pepstats</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-aadata</td>
+<td>Amino acid properties</td>
+<td>Data file</td>
+<td>Eamino.dat</td>
+</tr>
+
+<tr>
+<td>-mwdata</td>
+<td>Molecular weight data for amino acids</td>
+<td>Data file</td>
+<td>Emolwt.dat</td>
+</tr>
+
+<tr>
+<td>-[no]termini</td>
+<td>Include charge at N and C terminus</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-mono</td>
+<td>Use monoisotopic weights</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>pepstats</b> reads a normal protein sequence USA.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tsw:laci_ecoli' is a sequence entry in the example protein database 'tsw'
+<p>
+<p><h3>Database entry: tsw:laci_ecoli</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   LACI_ECOLI              Reviewed;         360 AA.
+AC   P03023; O09196; P71309; Q2MC79; Q47338;
+DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
+DT   19-JUL-2003, sequence version 3.
+DT   16-JUN-2009, entry version 105.
+DE   RecName: Full=Lactose operon repressor;
+GN   Name=lacI; OrderedLocusNames=b0345, JW0336;
+OS   Escherichia coli (strain K12).
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
+OC   Enterobacteriaceae; Escherichia.
+OX   NCBI_TaxID=83333;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RX   MEDLINE=78246991; PubMed=355891; DOI=10.1038/274765a0;
+RA   Farabaugh P.J.;
+RT   "Sequence of the lacI gene.";
+RL   Nature 274:765-769(1978).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RA   Chen J., Matthews K.K.S.M.;
+RL   Submitted (MAY-1991) to the EMBL/GenBank/DDBJ databases.
+RN   [3]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RA   Marsh S.;
+RL   Submitted (JAN-1997) to the EMBL/GenBank/DDBJ databases.
+RN   [4]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+RC   STRAIN=K12 / MG1655 / ATCC 47076;
+RA   Chung E., Allen E., Araujo R., Aparicio A.M., Davis K., Duncan M.,
+RA   Federspiel N., Hyman R., Kalman S., Komp C., Kurdi O., Lew H., Lin D.,
+RA   Namath A., Oefner P., Roberts D., Schramm S., Davis R.W.;
+RT   "Sequence of minutes 4-25 of Escherichia coli.";
+RL   Submitted (JAN-1997) to the EMBL/GenBank/DDBJ databases.
+RN   [5]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+RC   STRAIN=K12 / MG1655 / ATCC 47076;
+RX   MEDLINE=97426617; PubMed=9278503; DOI=10.1126/science.277.5331.1453;
+RA   Blattner F.R., Plunkett G. III, Bloch C.A., Perna N.T., Burland V.,
+RA   Riley M., Collado-Vides J., Glasner J.D., Rode C.K., Mayhew G.F.,
+RA   Gregor J., Davis N.W., Kirkpatrick H.A., Goeden M.A., Rose D.J.,
+RA   Mau B., Shao Y.;
+RT   "The complete genome sequence of Escherichia coli K-12.";
+RL   Science 277:1453-1474(1997).
+RN   [6]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+RC   STRAIN=K12 / W3110 / ATCC 27325 / DSM 5911;
+RX   PubMed=16738553; DOI=10.1038/msb4100049;
+RA   Hayashi K., Morooka N., Yamamoto Y., Fujita K., Isono K., Choi S.,
+RA   Ohtsubo E., Baba T., Wanner B.L., Mori H., Horiuchi T.;
+RT   "Highly accurate genome sequences of Escherichia coli K-12 strains
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+FT   CHAIN         1    360       Lactose operon repressor.
+FT                                /FTId=PRO_0000107963.
+FT   DOMAIN        1     58       HTH lacI-type.
+FT   DNA_BIND      6     25       H-T-H motif.
+FT   VARIANT     282    282       Y -&gt; D (in T41 mutant).
+FT   MUTAGEN      17     17       Y-&gt;H: Broadening of specificity.
+FT   MUTAGEN      22     22       R-&gt;N: Recognizes an operator variant.
+FT   CONFLICT    286    286       L -&gt; S (in Ref. 1, 4 and 7).
+FT   HELIX         6     11
+FT   TURN         12     14
+FT   HELIX        17     24
+FT   HELIX        33     45
+FT   HELIX        51     56
+FT   STRAND       63     69
+FT   HELIX        74     89
+FT   STRAND       93     98
+FT   STRAND      101    103
+FT   HELIX       104    115
+FT   TURN        116    118
+FT   STRAND      122    126
+FT   HELIX       130    139
+FT   TURN        140    142
+FT   STRAND      145    150
+FT   STRAND      154    156
+FT   STRAND      158    161
+FT   HELIX       163    177
+FT   STRAND      181    186
+FT   HELIX       192    207
+FT   STRAND      213    217
+FT   HELIX       222    234
+FT   STRAND      240    246
+FT   HELIX       247    259
+FT   TURN        265    267
+FT   STRAND      268    271
+FT   HELIX       277    281
+FT   STRAND      282    284
+FT   STRAND      287    290
+FT   HELIX       293    308
+FT   STRAND      314    319
+FT   STRAND      322    324
+FT   STRAND      334    338
+FT   HELIX       343    353
+FT   HELIX       354    356
+SQ   SEQUENCE   360 AA;  38590 MW;  347A8DEE92D736CB CRC64;
+     MKPVTLYDVA EYAGVSYQTV SRVVNQASHV SAKTREKVEA AMAELNYIPN RVAQQLAGKQ
+     SLLIGVATSS LALHAPSQIV AAIKSRADQL GASVVVSMVE RSGVEACKAA VHNLLAQRVS
+     GLIINYPLDD QDAIAVEAAC TNVPALFLDV SDQTPINSII FSHEDGTRLG VEHLVALGHQ
+     QIALLAGPLS SVSARLRLAG WHKYLTRNQI QPIAEREGDW SAMSGFQQTM QMLNEGIVPT
+     AMLVANDQMA LGAMRAITES GLRVGADISV VGYDDTEDSS CYIPPLTTIK QDFRLLGQTS
+     VDRLLQLSQG QAVKGNQLLP VSLVKRKTTL APNTQTASPR ALADSLMQLA RQVSRLESGQ
+//
+</pre>
+</td></tr></table><p>
+
+<H2>
+    Output file format
+</H2>
+
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: laci_ecoli.pepstats</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+PEPSTATS of LACI_ECOLI from 1 to 360
+
+Molecular weight = 38590.16  		Residues = 360   
+Average Residue Weight  = 107.195 	Charge   = 1.5   
+Isoelectric Point = 6.8820
+A280 Molar Extinction Coefficient  = 21620   
+A280 Extinction Coefficient 1mg/ml = 0.56      
+Improbability of expression in inclusion bodies = 0.660
+
+Residue		Number		Mole%		DayhoffStat
+A = Ala		44		12.222 		1.421  	
+B = Asx		0		0.000  		0.000  	
+C = Cys		3		0.833  		0.287  	
+D = Asp		17		4.722  		0.859  	
+E = Glu		15		4.167  		0.694  	
+F = Phe		4		1.111  		0.309  	
+G = Gly		22		6.111  		0.728  	
+H = His		7		1.944  		0.972  	
+I = Ile		18		5.000  		1.111  	
+J = ---		0		0.000  		0.000  	
+K = Lys		11		3.056  		0.463  	
+L = Leu		41		11.389 		1.539  	
+M = Met		10		2.778  		1.634  	
+N = Asn		12		3.333  		0.775  	
+O = ---		0		0.000  		0.000  	
+P = Pro		14		3.889  		0.748  	
+Q = Gln		28		7.778  		1.994  	
+R = Arg		19		5.278  		1.077  	
+S = Ser		32		8.889  		1.270  	
+T = Thr		19		5.278  		0.865  	
+U = ---		0		0.000  		0.000  	
+V = Val		34		9.444  		1.431  	
+W = Trp		2		0.556  		0.427  	
+X = Xaa		0		0.000  		0.000  	
+Y = Tyr		8		2.222  		0.654  	
+Z = Glx		0		0.000  		0.000  	
+
+Property	Residues		Number		Mole%
+Tiny		(A+C+G+S+T)		120		33.333
+Small		(A+B+C+D+G+N+P+S+T+V)	197		54.722
+Aliphatic	(A+I+L+V)		137		38.056
+Aromatic	(F+H+W+Y)		21		 5.833
+Non-polar	(A+C+F+G+I+L+M+P+V+W+Y)	200		55.556
+Polar		(D+E+H+K+N+Q+R+S+T+Z)	160		44.444
+Charged		(B+D+E+H+K+R+Z)		69		19.167
+Basic		(H+K+R)			37		10.278
+Acidic		(B+D+E+Z)		32		 8.889
+
+</pre>
+</td></tr></table><p>
+
+
+<H2>
+    Data files
+</H2>
+
+
+The Dayhoff statistic is read from the EMBOSS data file 'Edayhoff.freq'. 
+You can inspect and modify this file by copying it into your current
+directory with the command: 'embossdata -fetch'. 
+
+<p>
+<p>
+EMBOSS data files are distributed with the application and stored
+in the standard EMBOSS data directory, which is defined
+by the EMBOSS environment variable EMBOSS_DATA.
+
+<p>
+
+To see the available EMBOSS data files, run:
+<p>
+<pre>
+% embossdata -showall
+</pre>
+<p>
+To fetch one of the data files (for example 'Exxx.dat') into your
+current directory for you to inspect or modify, run:
+
+<pre>
+
+% embossdata -fetch -file Exxx.dat
+
+</pre>
+<p>
+
+Users can provide their own data files in their own directories.
+Project specific files can be put in the current directory, or for
+tidier directory listings in a subdirectory called
+".embossdata". Files for all EMBOSS runs can be put in the user's home
+directory, or again in a subdirectory called ".embossdata".
+
+<p>
+The directories are searched in the following order:
+
+<ul>
+   <li> . (your current directory)
+   <li> .embossdata (under your current directory)
+   <li> ~/ (your home directory)
+   <li> ~/.embossdata
+</ul>
+<p>
+
+<H2>
+    Notes
+</H2>
+
+<p>DayhoffStat is the amino acid's molar percentage divided by the Dayhoff statistic. The Dayhoff statistic is read from the EMBOSS data file <tt>Edayhoff.freq</tt> and is the amino acid's relative occurence per 1000 aa normalised to 100.</p>
+
+<p>The probability of expression in inclusion bodies is sometimes referred to as a type of solubility measure. If, however, a recombinant protein is expressed in Escherichia coli, it can be expressed as soluble in the cytosol or insoluble in inclusion bodies. If the Harrison model predicts a given protein to be probably expressed in includion bodies, this doesn't mean that it is not possible to get it soluble in the cytosol. One example: Thermatoga maritima cell divison protein FtsA with a C-terminal His-Tag has a 58% Harrison probability of being expressed in inclusion bodies. However, there was plenty of soluble protein in the E. coli cytosol (F. van den Ent and J. Lowe, EMBO J. 19, 5300-5307 2000). If the protein is expressed in inclusion bodies or not is not only dependent on the sequence, but also on many other factors, such as E. coli strain, incubation temperature, type of expression vector, strength of promoter and medium. </p>
+
+
+
+<H2>
+    References
+</H2>
+
+<ol>
+<li>Roger G. Harrison "Expression of soluble heterologous proteins via
+fusion with NusA protein" in inNovations 11, June 2000, p 4 - 7.
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="backtranambig.html">backtranambig</a></td>
+<td>Back-translate a protein sequence to ambiguous nucleotide sequence</td>
+</tr>
+
+<tr>
+<td><a href="backtranseq.html">backtranseq</a></td>
+<td>Back-translate a protein sequence to a nucleotide sequence</td>
+</tr>
+
+<tr>
+<td><a href="charge.html">charge</a></td>
+<td>Draw a protein charge plot</td>
+</tr>
+
+<tr>
+<td><a href="checktrans.html">checktrans</a></td>
+<td>Reports STOP codons and ORF statistics of a protein</td>
+</tr>
+
+<tr>
+<td><a href="compseq.html">compseq</a></td>
+<td>Calculate the composition of unique words in sequences</td>
+</tr>
+
+<tr>
+<td><a href="emowse.html">emowse</a></td>
+<td>Search protein sequences by digest fragment molecular weight</td>
+</tr>
+
+<tr>
+<td><a href="freak.html">freak</a></td>
+<td>Generate residue/base frequency table or plot</td>
+</tr>
+
+<tr>
+<td><a href="iep.html">iep</a></td>
+<td>Calculate the isoelectric point of proteins</td>
+</tr>
+
+<tr>
+<td><a href="mwcontam.html">mwcontam</a></td>
+<td>Find weights common to multiple molecular weights files</td>
+</tr>
+
+<tr>
+<td><a href="mwfilter.html">mwfilter</a></td>
+<td>Filter noisy data from molecular weights file</td>
+</tr>
+
+<tr>
+<td><a href="octanol.html">octanol</a></td>
+<td>Draw a White-Wimley protein hydropathy plot</td>
+</tr>
+
+<tr>
+<td><a href="pepinfo.html">pepinfo</a></td>
+<td>Plot amino acid properties of a protein sequence in parallel</td>
+</tr>
+
+<tr>
+<td><a href="pepwindow.html">pepwindow</a></td>
+<td>Draw a hydropathy plot for a protein sequence</td>
+</tr>
+
+<tr>
+<td><a href="pepwindowall.html">pepwindowall</a></td>
+<td>Draw Kyte-Doolittle hydropathy plot for a protein alignment</td>
+</tr>
+
+<tr>
+<td><a href="wordcount.html">wordcount</a></td>
+<td>Count and extract unique words in DNA sequence(s)</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+
+<H2>
+    History
+</H2>
+
+
+Written (1999) - Alan Bleasby
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+<H2>
+    Comments
+</H2>
+None
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,81 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: division.lkp</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: entrynam.idx</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: acnum.hit</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: acnum.trg</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: outfile.dbigcg</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: dbigcg
+# Rundate: Tue 15 Jul 2008 12:00:00
+# Dbname: EMBL
+# Release: 0.0
+# Date: 15/07/08
+# CurrentDirectory: /homes/user/test/qa/dbigcg-ex-keep/
+# IndexDirectory: ./
+# IndexDirectoryPath: /homes/user/test/qa/dbigcg-ex-keep/
+# Maxindex: 0
+# Fields: 2
+#   Field 1: id
+#   Field 2: acc
+# Directory: /homes/user/test/embl/
+# DirectoryPath: /homes/user/test/embl/
+# Filenames: *.seq
+# Exclude: 
+# Files: 9
+#   File 1: /homes/user/test/embl/eem_ba1.seq
+#   File 2: /homes/user/test/embl/eem_est.seq
+#   File 3: /homes/user/test/embl/eem_fun.seq
+#   File 4: /homes/user/test/embl/eem_htginv1.seq
+#   File 5: /homes/user/test/embl/eem_hum1.seq
+#   File 6: /homes/user/test/embl/eem_in.seq
+#   File 7: /homes/user/test/embl/eem_ov.seq
+#   File 8: /homes/user/test/embl/eem_ro.seq
+#   File 9: /homes/user/test/embl/eem_vi.seq
+########################################
+# Commandline: dbigcg
+#    -dbname EMBL
+#    -idformat EMBL
+#    -directory ../../embl
+########################################
+
+filename: '/homes/user/test/embl/eem_ba1.seq'
+    id: 10
+   acc: 14
+filename: '/homes/user/test/embl/eem_est.seq'
+    id: 1
+   acc: 1
+filename: '/homes/user/test/embl/eem_fun.seq'
+    id: 1
+   acc: 1
+filename: '/homes/user/test/embl/eem_htginv1.seq'
+    id: 5
+   acc: 5
+filename: '/homes/user/test/embl/eem_hum1.seq'
+    id: 15
+   acc: 18
+filename: '/homes/user/test/embl/eem_in.seq'
+    id: 2
+   acc: 2
+filename: '/homes/user/test/embl/eem_ov.seq'
+    id: 2
+   acc: 2
+filename: '/homes/user/test/embl/eem_ro.seq'
+    id: 3
+   acc: 3
+filename: '/homes/user/test/embl/eem_vi.seq'
+    id: 1
+   acc: 2
+
+Index acc: maxlen 8 items 48
+
+Total 9 files 40 entries (0 duplicates)
+</pre>
+</td></tr></table><p>

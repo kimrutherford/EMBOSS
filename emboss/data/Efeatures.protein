@@ -1,0 +1,39 @@
+# ===================================================================
+# PROTEIN FEATURES
+# ===================================================================
+#
+# Syntax:
+# output_name internal_name internal_alias
+#             /tag
+#             /tag=type
+#
+# The first type is the default used if the internal and output names
+# are not found.
+#
+# output_name = internal_name
+#   (obsolete) defines an alias for an internal name
+#   replaced by the list of aliases above
+#   this syntax was used for gff2 nucleotide types
+#   but not for any others.
+#   If the type is '.' this becomes the new default.
+#
+# '#include file' includes a file and any #includes it countains
+#
+# '#includeonly file' includes only the file and ignores any
+# '#include' and '#includeonly' lines
+#
+#
+#
+# ===================================================================
+
+# GFF 3.0 feature keys
+# ====================
+
+#includeonly Efeatures.gff3protein
+
+
+# SwissProt/UniProt feature keys
+# ===============================
+
+#includeonly Efeatures.swiss
+

@@ -1,0 +1,693 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: dbxflat
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+dbxflat
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
+    Function
+</H2>
+Index a flat file database using b+tree indices
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+<!-- 
+	This is the main part of the document.
+        This is what the user looks at to find out if this program will do what he wants. 
+        Long description.
+        Why it is useful.
+        When it should/shouldn't be used.
+  -->
+
+<b>dbxflat</b> indexes a flat file database of one or more files, and builds
+EMBOSS B+tree format index files. These indexes allow access of flat
+files larger than 2Gb.
+
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+<b>Here is a sample session with dbxflat</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>dbxflat </b>
+Index a flat file database using b+tree indices
+Basename for index files: <b>embl</b>
+Resource name: <b>emblresource</b>
+      EMBL : EMBL
+     SWISS : Swiss-Prot, SpTrEMBL, TrEMBLnew
+        GB : Genbank, DDBJ
+    REFSEQ : Refseq
+Entry format [SWISS]: <b>embl</b>
+Wildcard database filename [*.dat]: <b>rod.dat</b>
+Database directory [.]: <b>embl</b>
+        id : ID
+       acc : Accession number
+        sv : Sequence Version and GI
+       des : Description
+       key : Keywords
+       org : Taxonomy
+Index fields [id,acc]: <b></b>
+General log output file [outfile.dbxflat]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-dbname]            string     Basename for index files (Any string from 2
+                                  to 19 characters, matching regular
+                                  expression /[A-z][A-z0-9_]+/)
+  [-dbresource]        string     Resource name (Any string from 2 to 19
+                                  characters, matching regular expression
+                                  /[A-z][A-z0-9_]+/)
+   -idformat           menu       [SWISS] Entry format (Values: EMBL (EMBL);
+                                  SWISS (Swiss-Prot, SpTrEMBL, TrEMBLnew); GB
+                                  (Genbank, DDBJ); REFSEQ (Refseq))
+   -filenames          string     [*.dat] Wildcard database filename (Any
+                                  string is accepted)
+   -directory          directory  [.] Database directory
+   -fields             menu       [id,acc] Index fields (Values: id (ID); acc
+                                  (Accession number); sv (Sequence Version and
+                                  GI); des (Description); key (Keywords); org
+                                  (Taxonomy))
+   -outfile            outfile    [*.dbxflat] General log output file
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -release            string     [0.0] Release number (Any string up to 9
+                                  characters)
+   -date               string     [00/00/00] Index date (Date string dd/mm/yy)
+   -exclude            string     Wildcard filename(s) to exclude (Any string
+                                  is accepted)
+   -indexoutdir        outdir     [.] Index file output directory
+
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-dbname]<br>(Parameter 1)</td>
+<td>Basename for index files</td>
+<td>Any string from 2 to 19 characters, matching regular expression /[A-z][A-z0-9_]+/</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-dbresource]<br>(Parameter 2)</td>
+<td>Resource name</td>
+<td>Any string from 2 to 19 characters, matching regular expression /[A-z][A-z0-9_]+/</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-idformat</td>
+<td>Entry format</td>
+<td><table><tr><td>EMBL</td> <td><i>(EMBL)</i></td></tr><tr><td>SWISS</td> <td><i>(Swiss-Prot, SpTrEMBL, TrEMBLnew)</i></td></tr><tr><td>GB</td> <td><i>(Genbank, DDBJ)</i></td></tr><tr><td>REFSEQ</td> <td><i>(Refseq)</i></td></tr></table></td>
+<td>SWISS</td>
+</tr>
+
+<tr>
+<td>-filenames</td>
+<td>Wildcard database filename</td>
+<td>Any string is accepted</td>
+<td>*.dat</td>
+</tr>
+
+<tr>
+<td>-directory</td>
+<td>Database directory</td>
+<td>Directory</td>
+<td>.</td>
+</tr>
+
+<tr>
+<td>-fields</td>
+<td>Index fields</td>
+<td><table><tr><td>id</td> <td><i>(ID)</i></td></tr><tr><td>acc</td> <td><i>(Accession number)</i></td></tr><tr><td>sv</td> <td><i>(Sequence Version and GI)</i></td></tr><tr><td>des</td> <td><i>(Description)</i></td></tr><tr><td>key</td> <td><i>(Keywords)</i></td></tr><tr><td>org</td> <td><i>(Taxonomy)</i></td></tr></table></td>
+<td>id,acc</td>
+</tr>
+
+<tr>
+<td>-outfile</td>
+<td>General log output file</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.dbxflat</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-release</td>
+<td>Release number</td>
+<td>Any string up to 9 characters</td>
+<td>0.0</td>
+</tr>
+
+<tr>
+<td>-date</td>
+<td>Index date</td>
+<td>Date string dd/mm/yy</td>
+<td>00/00/00</td>
+</tr>
+
+<tr>
+<td>-exclude</td>
+<td>Wildcard filename(s) to exclude</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr>
+<td>-indexoutdir</td>
+<td>Index file output directory</td>
+<td>Output directory</td>
+<td>.</td>
+</tr>
+
+</table>
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+<b>dbxflat</b> reads any normal sequence USAs.
+
+<p>
+
+
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+
+<b>dbxflat</b> creates one summary file for the database and two files
+for each field indexed.
+
+<p>
+
+<ul>
+
+<li>dbalias.ent is the master file containing the names of the files
+that have been indexed. It is an ASCII file. This file also contains
+the database release and date information.
+
+<li>dbalias.xid is the B+tree index file for the ID names. It is a binary
+file.
+
+<li>dbalias.pxid is an ASCII file containing information regarding the
+structure of the ID name index.
+
+</ul>
+
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: outfile.dbxflat</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Processing directory: /homes/user/test/embl/
+Processing file: rod.dat entries: 6 (6) time: 0.0s (0.0s)
+Total time: 0.0s
+</pre>
+</td></tr></table><p>
+<p><h3>File: embl.ent</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+# Number of files: 1
+# Release: 0.0
+# Date:    00/00/00
+Single filename database
+rod.dat
+</pre>
+</td></tr></table><p>
+<p><h3>File: embl.pxac</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Order     71
+Fill      46
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    99
+Fill2     101
+Count     8
+Kwlimit   15
+</pre>
+</td></tr></table><p>
+<p><h3>File: embl.pxid</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Order     71
+Fill      46
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    99
+Fill2     101
+Count     5
+Kwlimit   15
+</pre>
+</td></tr></table><p>
+<p><h3>File: embl.xac</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: embl.xid</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+
+None.
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+The indexing system has been designed to allow on-the-fly updating
+of indexes. This feature is, however, not implemented in the current
+version. It will be made available in future releases.
+
+
+
+<p>
+
+Having created the EMBOSS indexes for this file, a database can then be
+defined in the file <b>emboss.defaults</b> as something like:
+
+<pre>
+DB embl [
+   type: N
+   dbalias: embl   (see below)
+   format: embl
+   method: emboss
+   directory: /data/embl
+   file: *.dat
+   indexdirectory: /data/embl/indexes
+]
+</pre>
+
+The index file 'basename' given to <b>dbxflat</b> must match the DB name
+in the definition. If not, then a 'dbalias' line must be given which
+specifies the basename of the indexes. 
+
+<h3>Fields Indexed</H3>
+
+By default, <b>dbxflat</b> will index the ID name and the accession
+number (if present).
+
+<br>
+
+If they are present in your database, you may also specify that
+<b>dbxflat</b> should index the Sequence Version and GI, the words
+in the description, the keywords and the organism words using the
+'-fields' qualifier with the appropriate values.   
+
+
+
+
+
+<H2>
+    Global Parameters
+</H2>
+
+<b>dbxflat</b> requires that two global parameters be defined in
+the file <b>emboss.defaults</b>. These are:
+
+<pre>
+SET PAGESIZE 2048
+SET CACHESIZE 200
+</pre>
+
+The above values are recommended for most systems. The PAGESIZE is
+a multiple of the size of disc pages the operating system buffers.
+The CACHESIZE is the number of disc pages <b>dbxflat</b> is
+allowed to cache.
+
+
+<H2>
+    Resources
+</H2>
+
+
+<b>dbxflat</b> will ask you for the name of a resource definition
+in the file <b>emboss.defaults</b>. This will be something like:
+
+<pre>
+RES embl [
+   type: Index
+   idlen:  15
+   acclen: 15
+   svlen:  20
+   keylen: 25
+   deslen: 25
+   orglen: 25
+]
+</pre>
+
+The length definitions are the maximum lengths of 'words' in the
+field being indexed. Longer words will be truncated to the
+value set.
+
+
+
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+<ol>
+
+<li>
+
+</ol>
+
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="dbiblast.html">dbiblast</a></td>
+<td>Index a BLAST database</td>
+</tr>
+
+<tr>
+<td><a href="dbifasta.html">dbifasta</a></td>
+<td>Index a fasta file database</td>
+</tr>
+
+<tr>
+<td><a href="dbiflat.html">dbiflat</a></td>
+<td>Index a flat file database</td>
+</tr>
+
+<tr>
+<td><a href="dbigcg.html">dbigcg</a></td>
+<td>Index a GCG formatted database</td>
+</tr>
+
+<tr>
+<td><a href="dbxfasta.html">dbxfasta</a></td>
+<td>Index a fasta file database using b+tree indices</td>
+</tr>
+
+<tr>
+<td><a href="dbxgcg.html">dbxgcg</a></td>
+<td>Index a GCG formatted database using b+tree indices</td>
+</tr>
+
+</table>
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    History
+</H2>
+<!--
+        Date written and what changes have been made go in this file.
+   -->
+
+
+
+
+<H2>
+    Target users
+</H2>
+<!--
+        For general users, use this text
+   -->
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+<!--
+        User/developer/other comments go in this file.
+   -->
+None
+
+
+</BODY>
+</HTML>

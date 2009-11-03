@@ -1,0 +1,577 @@
+
+                                  plotorf 
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Plot potential open reading frames in a nucleotide sequence
+
+Description
+
+   plotorf plots potential open reading frames (ORFs) for an input
+   nucleotide sequence. ORFs in this program are defined as being regions
+   between the specified START and STOP codons. A graphical
+   representation of where the open reading frames are in all 6 reading
+   frames is shown. The ORFs are displayed as blue boxes.
+
+Algorithm
+
+   ORFs in this program are defined as being regions between START and
+   STOP codons. The default START codon is: ATG. The default STOP codons
+   are: TAA,TAG,TGA. You can specify your own set of start and stop
+   codons using the -start and -stop qualifiers.
+
+Usage
+
+   Here is a sample session with plotorf
+
+
+% plotorf 
+Plot potential open reading frames in a nucleotide sequence
+Input nucleotide sequence: tembl:x13776
+Graph type [x11]: cps
+
+Created plotorf.ps
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+   Example 2
+
+   An example of specifying your own START and STOP codons with a
+   mitochondrial sequence would be:
+
+
+% plotorf -start ATT,ATC,ATA,ATG,GTG -stop TAA,TAG,AGA,AGG 
+Plot potential open reading frames in a nucleotide sequence
+Input nucleotide sequence: mito.seq
+Graph type [x11]: cps
+
+Created plotorf.ps
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-sequence]          sequence   Nucleotide sequence filename and optional
+                                  format, or reference (input USA)
+   -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, das, xterm, png, gif)
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -start              string     [ATG] Start codons (Any string is accepted)
+   -stop               string     [TAA,TAG,TGA] Stop codons (Any string is
+                                  accepted)
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-graph" associated qualifiers
+   -gprompt            boolean    Graph prompting
+   -gdesc              string     Graph description
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   Any nucleic acid sequence.
+
+  Input files for usage example
+
+   'tembl:x13776' is a sequence entry in the example nucleic acid
+   database 'tembl'
+
+  Database entry: tembl:x13776
+
+ID   X13776; SV 1; linear; genomic DNA; STD; PRO; 2167 BP.
+XX
+AC   X13776; M43175;
+XX
+DT   19-APR-1989 (Rel. 19, Created)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 24)
+XX
+DE   Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+XX
+KW   aliphatic amidase regulator; amiC gene; amiR gene.
+XX
+OS   Pseudomonas aeruginosa
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadales;
+OC   Pseudomonadaceae; Pseudomonas.
+XX
+RN   [1]
+RP   1167-2167
+RA   Rice P.M.;
+RT   ;
+RL   Submitted (16-DEC-1988) to the EMBL/GenBank/DDBJ databases.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG
+.
+XX
+RN   [2]
+RP   1167-2167
+RX   DOI; 10.1016/0014-5793(89)80249-2.
+RX   PUBMED; 2495988.
+RA   Lowe N., Rice P.M., Drew R.E.;
+RT   "Nucleotide sequence of the aliphatic amidase regulator gene (amiR) of
+RT   Pseudomonas aeruginosa";
+RL   FEBS Lett. 246(1-2):39-43(1989).
+XX
+RN   [3]
+RP   1-1292
+RX   PUBMED; 1907262.
+RA   Wilson S., Drew R.;
+RT   "Cloning and DNA sequence of amiC, a new gene regulating expression of the
+RT   Pseudomonas aeruginosa aliphatic amidase, and purification of the amiC
+RT   product";
+RL   J. Bacteriol. 173(16):4914-4921(1991).
+XX
+RN   [4]
+RP   1-2167
+RA   Rice P.M.;
+RT   ;
+RL   Submitted (04-SEP-1991) to the EMBL/GenBank/DDBJ databases.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG
+.
+XX
+DR   GOA; Q51417.
+DR   InterPro; IPR003211; AmiSUreI_transpt.
+DR   UniProtKB/Swiss-Prot; Q51417; AMIS_PSEAE.
+
+
+  [Part of this file has been deleted for brevity]
+
+FT                   /replace=""
+FT                   /note="ClaI fragment deleted in pSW36,  constitutive
+FT                   phenotype"
+FT   misc_feature    1
+FT                   /note="last base of an XhoI site"
+FT   misc_feature    648..653
+FT                   /note="end of 658bp XhoI fragment, deletion in  pSW3 cause
+s
+FT                   constitutive expression of amiE"
+FT   conflict        1281
+FT                   /replace="g"
+FT                   /citation=[3]
+XX
+SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
+     ggtaccgctg gccgagcatc tgctcgatca ccaccagccg ggcgacggga actgcacgat        6
+0
+     ctacctggcg agcctggagc acgagcgggt tcgcttcgta cggcgctgag cgacagtcac       12
+0
+     aggagaggaa acggatggga tcgcaccagg agcggccgct gatcggcctg ctgttctccg       18
+0
+     aaaccggcgt caccgccgat atcgagcgct cgcacgcgta tggcgcattg ctcgcggtcg       24
+0
+     agcaactgaa ccgcgagggc ggcgtcggcg gtcgcccgat cgaaacgctg tcccaggacc       30
+0
+     ccggcggcga cccggaccgc tatcggctgt gcgccgagga cttcattcgc aaccgggggg       36
+0
+     tacggttcct cgtgggctgc tacatgtcgc acacgcgcaa ggcggtgatg ccggtggtcg       42
+0
+     agcgcgccga cgcgctgctc tgctacccga ccccctacga gggcttcgag tattcgccga       48
+0
+     acatcgtcta cggcggtccg gcgccgaacc agaacagtgc gccgctggcg gcgtacctga       54
+0
+     ttcgccacta cggcgagcgg gtggtgttca tcggctcgga ctacatctat ccgcgggaaa       60
+0
+     gcaaccatgt gatgcgccac ctgtatcgcc agcacggcgg cacggtgctc gaggaaatct       66
+0
+     acattccgct gtatccctcc gacgacgact tgcagcgcgc cgtcgagcgc atctaccagg       72
+0
+     cgcgcgccga cgtggtcttc tccaccgtgg tgggcaccgg caccgccgag ctgtatcgcg       78
+0
+     ccatcgcccg tcgctacggc gacggcaggc ggccgccgat cgccagcctg accaccagcg       84
+0
+     aggcggaggt ggcgaagatg gagagtgacg tggcagaggg gcaggtggtg gtcgcgcctt       90
+0
+     acttctccag catcgatacg cccgccagcc gggccttcgt ccaggcctgc catggtttct       96
+0
+     tcccggagaa cgcgaccatc accgcctggg ccgaggcggc ctactggcag accttgttgc      102
+0
+     tcggccgcgc cgcgcaggcc gcaggcaact ggcgggtgga agacgtgcag cggcacctgt      108
+0
+     acgacatcga catcgacgcg ccacaggggc cggtccgggt ggagcgccag aacaaccaca      114
+0
+     gccgcctgtc ttcgcgcatc gcggaaatcg atgcgcgcgg cgtgttccag gtccgctggc      120
+0
+     agtcgcccga accgattcgc cccgaccctt atgtcgtcgt gcataacctc gacgactggt      126
+0
+     ccgccagcat gggcggggga ccgctcccat gagcgccaac tcgctgctcg gcagcctgcg      132
+0
+     cgagttgcag gtgctggtcc tcaacccgcc gggggaggtc agcgacgccc tggtcttgca      138
+0
+     gctgatccgc atcggttgtt cggtgcgcca gtgctggccg ccgccggaag ccttcgacgt      144
+0
+     gccggtggac gtggtcttca ccagcatttt ccagaatggc caccacgacg agatcgctgc      150
+0
+     gctgctcgcc gccgggactc cgcgcactac cctggtggcg ctggtggagt acgaaagccc      156
+0
+     cgcggtgctc tcgcagatca tcgagctgga gtgccacggc gtgatcaccc agccgctcga      162
+0
+     tgcccaccgg gtgctgcctg tgctggtatc ggcgcggcgc atcagcgagg aaatggcgaa      168
+0
+     gctgaagcag aagaccgagc agctccagga ccgcatcgcc ggccaggccc ggatcaacca      174
+0
+     ggccaaggtg ttgctgatgc agcgccatgg ctgggacgag cgcgaggcgc accagcacct      180
+0
+     gtcgcgggaa gcgatgaagc ggcgcgagcc gatcctgaag atcgctcagg agttgctggg      186
+0
+     aaacgagccg tccgcctgag cgatccgggc cgaccagaac aataacaaga ggggtatcgt      192
+0
+     catcatgctg ggactggttc tgctgtacgt tggcgcggtg ctgtttctca atgccgtctg      198
+0
+     gttgctgggc aagatcagcg gtcgggaggt ggcggtgatc aacttcctgg tcggcgtgct      204
+0
+     gagcgcctgc gtcgcgttct acctgatctt ttccgcagca gccgggcagg gctcgctgaa      210
+0
+     ggccggagcg ctgaccctgc tattcgcttt tacctatctg tgggtggccg ccaaccagtt      216
+0
+     cctcgag                                                                216
+7
+//
+
+  Input files for usage example 2
+
+  File: mito.seq
+
+>gi|5819095|ref|NC_001321.1| Balaenoptera physalus mitochondrion, complete geno
+me
+GTTAATTACTAATCAGCCCATGATCATAACATAACTGAGGTTTCATACATTTGGTATTTTTTTATTTTTTTTGGGGGGC
+T
+TGCACGGACTCCCCTATGACCCTAAAGGGTCTCGTCGCAGTCAGATAAATTGTAGCTGGGCCTGGATGTATTTGTTATT
+T
+GACTAGCACAACCAACATGTGCAGTTAAATTAATGGTTACAGGACATAGTACTCCACTATTCCCCCCGGGCTCAAAAAA
+C
+TGTATGTCTTAGAGGACCAAACCCCCCTCCTTCCATACAATACTAACCCTCTGCTTAGATATTCACCACCCCCCTAGAC
+A
+GGCTCGTCCCTAGATTTAAAAGCCATTTTATTTATAAATCAATACTAAATCTGACACAAGCCCAATAATGAAAATACAT
+G
+AACGCCATCCCTATCCAATACGTTGATGTAGCTTAAACACTTACAAAGCAAGACACTGAAAATGTCTAGATGGGTCTAG
+C
+CAACCCCATTGACATTAAAGGTTTGGTCCCAGCCTTTCTATTAGTTCTTAACAGACTTACACATGCAAGTATCCACATC
+C
+CAGTGAGAACGCCCTCTAAATCATAAAGATTAAAAGGAGCGGGTATCAAGCACGCTAGCACTAGCAGCTCACAACGCCT
+C
+GCTTAGCCACGCCCCCACGGGACACAGCAGTGATAAAAATTAAGCTATAAACGAAAGTTCGACTAAGTCATGTTAATTT
+A
+AGGGTTGGTAAACTTCGTGCCAGCCACCGCGGTCATACGATCGACCCAAATTAATAGAAGCACGGCGTAAAGAGTGTTA
+A
+GGAGCCACATGAAATAAAGTCAAACCTTAATTAAGCTGTAAAAAGCCCTAATTAAAATTAAGCCAAACTACGAAAGTGA
+C
+TTTAATATAATCTGATCACACGACAGCTAAGATCCAAACTGGGATTAGATACCCCACTATGCTTAGTCGTAAACCCCAA
+T
+AGTCACAAAACAAGACTATTCGCCAGAGTACTACTAGCAACAGCCTAAAACTCAAAGGACTTGGCGGTGCCTCATACCC
+A
+TCTAGAGGAGCCTGTTCTGTAACCGATAAACCCCGATCAACCTCACCAACCCTTGCTACTTCAGTCTATATACCGCCAT
+C
+TTCAGCAAACCCTAAAGGGAGAAAAGTAAGCATAACCATCCTACATAAAAACGTTAGGTCAAGGTGTAACCCATGGGTT
+G
+GGAAGTAATGGGCTACATTTTCTAAGCTAAGAACATCCCCTATACTCACACGAAAGTTTTTATGAAACTTAAAAACTAA
+A
+GGAGGATTTAGTAGTAAATCAAGAGCAGAGTGCTTGATTGAATAAGGCCATGAGGGCACGCACACACCGCCCGTCACCC
+T
+CCTCAAGTACCCCAGCTATAAACCCCAGTTCGTTAACTCAGGCCAAGCAATTATACGAGAGGAGACAAGTCGTAACAAG
+G
+TAAGCATACCGGAAGGTGTGCTTGGACAAAACAAGATATAGCTTAAACAAAGCATGTAGTTTACACCTAGAAGATTCCA
+C
+AGCCCGTGTATATCTTGAACTAGCCCTAGCCCACACCCTCCCCACCTCTACTACCACAAATCAATCAAATAAAACATTT
+A
+CCATCCCTTCAAAGTATAGGAGATAGAAATTTAAATATCAGTGGCGCTATAGAGATAGTACCGTAAGGAAAGATGAAAG
+A
+AAAACCTAAAAGTAATAAAAAGCAAAGCTTACCACTTGTACCTTTTGCATAATGACTTAACTAGTAATAAATTAGCAAA
+G
+AGACCTTAAGTTAAATTACCCGAAACCAGACGAGCTACTTATGAGCAGCACCTAGAACGAACTCATCTATGTGGCAAAA
+T
+AGTGAGAAGACTTATAAGTAGAGGTGAAAAGCCTAACGAGCCTGGTGATAGCTGGTTGTCCCTGAAAAGAATCTCAGTT
+C
+AACATTAAATAATACTAAAAGCCCATGCCAAGCCTTAACGTATATTTAACTGTTAATCTAAAAAGGTACAGCTTTTTAG
+A
+AATGGGTACAACCTTGACTAGAGAGTAAAATCAAACATAAACATAGTTGGCCTAAAAGCAGCCATCAATTAAGAAAGCG
+T
+TCAAGCTCGACAACAAAATAATGTTTTAATTCCAACATTAAGTAAATCAACTCCTAGCCTGACTATTGGACTAATCTAT
+A
+CAAATATAGAAGCAATACTGTTAATATGAGTAACAAGAAATTTTTCTCCTAGCACAAGCTTACACCAGTAACTGATAAT
+A
+TACTGATAATTAACAGCAAATAAATAAAACCCAACACTAAATTATTTATTAAAATACTGTTAACCCAACACAGGCGTGC
+A
+TTAAGGAAAGATTAAAAAAAGTAAAAGGAACTCGGCAAACACAAACCCCGCCTGTTTACCAAAAACATCACCTCTAGCA
+T
+AACCAGTATTAGAGCACTGCCTGCCCGGTGACTAATCGTTAAACGGCCGCGGTATCCTGACCGTGCAAAGGTAGCATAA
+T
+CACTTGTTCTCTAATTAGGGACTTGTATGAATGGCCACACGAGGGTTTTACTGTCTCTTACTTTTAATCAGTGAAATTG
+A
+CCTCTCCGTGAAGAGGCGGAGATAACAAAATAAGACGAGAAGACCCTATGGAGCTTCAATTAATCAACCCAAAAACCAT
+A
+ACCTTAAACCACCAAGGGATAACAAAACCTTATATGGGCTGACAATTTCGGTTGGGGTGACCTCGGAGTACAAAAAACC
+C
+TCCGAGTGATTAAAACTTAGGCCCACTAGCCAAAGTACAATATCACTTATTGATCCAATCCTTTGATCAACGGAACAAG
+T
+TACCCTAGGGATAACAGCGCAATCCTATTCTAGAGTCCATATCGACAATAGGGTTTACGACCTCGATGTTGGATCAGGA
+C
+ATCCTAATGGTGCAGCTGCTATTAAGGGTTCGTTTGTTCAACGATTAAAGTCCTACGTGATCTGAGTTCAGACCGGAGT
+A
+ATCCAGGTCGGTTTCTATCTATTACGCATTTCTCCCAGTACGAAAGGACAAGAGAAATAAGGCCAACTTCAAACAAGCG
+C
+CTTCAAACAATTAATGACCTAGTCTCAACTTAATAATTAAGCGCAAACAAACCTGCCCAAGACCAGGGCCTTGTTGAGG
+T
+GGCAGAGTTCGGTAATTGCATAAAACTTAAACTTTTACACCCAGAGGTTCAAATCCTCTCCCCAACAAAATGTTTATAA
+T
+TAACATTCTAACACTCATTCTCCCCATCCTCCTAGCCGTAGCATTCCTAACGCTAGTAGAACGCAAAATTCTAGGCTAT
+A
+TGCAGTTCCGAAAGGGGCCAAACATCGTAGGCCCACATGGCTTACTCCAACCCTTTGCCGATGCAATTAAATTATTCAC
+T
+AAAGAACCCCTACGGCCAGCTACATCCTCAACTACTATGTTTATCATTGCACCAGTACTAGCCCTAACCCTGGCCCTCA
+C
+TATATGAAGCCCCCTACCCATACCATACCCCCTCATTAACATAAACCTAGGAGTATTATTCATATTAGCAATATCCAGC
+C
+TAGCCGTCTACTCCATCCTATGATCAGGCTGAGCCTCCAACTCAAAATACGCACTAATTGGAGCCCTACGAGCAGTAGC
+A
+CAAACAATCTCATATGAGGTAACACTAGCCATTATCCTCCTATCAGTACTCCTAATAAACGGCTCCTACACCTTATCAA
+C
+ATTAGCCACAACACAAGAACAACTATGATTACTATTCCCATCATGACCCTTAGCCATAATGTGATTCATCTCCACCCTA
+G
+CAGAAACTAATCGAGCTCCTTTTGATCTAACAGAGGGAGAATCAGAACTCGTATCAGGCTTCAACGTAGAATATGCAGC
+A
+GGCCCTTTCGCCCTATTCTTCCTGGCAGAATACGCCAACATCATTATAATGAATATACTCACAGCCATTTTATTCCTAG
+G
+
+
+  [Part of this file has been deleted for brevity]
+
+CATTGTCTTCTGCGCCTTCATCACTAGTCTAGTTCCCGCAATAGTATATCTTCACACAAACCAAGAAACACTCATCTCA
+A
+ACTGACACTGAATCACAATCCAAACCCTCAAACTAACACTTAGCTTTAAAATAGATTACTTTTCACTTATATTTATACC
+A
+GTAGCACTATTCATTACATGATCCATCATAGAATTCTCAATATGATATATGCACTCCGACCCCTACATCAACCAATTTT
+T
+TAAATACTTACTCCTCTTCCTCATCACCATACTAATCCTTGTTACAGCTAACAATCTCTTCCAACTTTTCATCGGATGA
+G
+AAGGAGTAGGAATTATATCCTTCTTACTAATTGGCTGATGATTCGGACGAACAGATGCAAATACAGCCGCCCTCCAAGC
+A
+ATCCTATACAATCGTATCGGAGACATTGGACTCCTTGCATCAATAGCATGATTTCTCTCTAATATAAACACATGAGACC
+T
+AGAACAAATCTTTATACTCAACCAAAACCCCTTAAATTTCCCCCTCATAGGACTCGTACTAGCCGCAGCAGGAAAATCG
+G
+CTCAATTCGGACTCCACCCTTGACTCCCATCAGCAATAGAAGGTCCTACCCCAGTCTCAGCCCTACTCCACTCAAGCAC
+A
+ATAGTTGTAGCAGGAATCTTCTTGCTTGTCCGCTTCTACCCATTAATAGAAAATAACAAGCTAATCCAAACAGTAACCC
+T
+CTGCTTAGGCGCTATCACAACTCTATTTACAGCCATCTGTGCCCTCACCCAAAACGACATCAAAAAAATTATTGCTTTC
+T
+CCACCTCCAGCCAGCTAGGCCTAATAATAGTAACAATCGGCCTTAACCAACCTTACCTAGCATTCCTACACATTTGCAC
+A
+CACGCCTTCTTTAAAGCTATACTATTCCTATGTTCTGGCTCCATCATCCATAACCTAAACAACGAACAAGATATCCGAA
+A
+AATAGGAGGGCTATTTAAGGCCCTCCCATTCACCACAACCGCCCTTATCATCGGATGTCTTGCACTAACAGGAATGCCA
+T
+TCCTGACCGGATTCTACTCCAAAGATCCCATTATTGAAGCCGCCACTTCGTCTTATACCAACGCCTGAGCCCTATTACT
+G
+ACCTTAATCGCCACCTCCCTTACGGCCGTCTATAGCACCCGCATCATTTTCTTTGCACTACTAGGACAACCCCGCTTCC
+C
+TCCCTCCACAACCATTAACGAAAATAATCCACTGTTAATCAACCCTATCAAACGACTACTCGTCGGAAGTATCTTCGCT
+G
+GCTTCATCCTATCCAACAGTATTCCCCCAATAACTACACCTTTAATAACCATACCCCTGCACTTAAAATTAACCGCCCT
+T
+GCAATAACAACCCTAGGCTTCATCATCGCATTCGAAATTAACCTTGACACACAAAATCTAAAGCACAAGCACCCATCAA
+A
+CTCCTTTAAATTCTCCACCTTACTAGGTTATTTCCCCACAATCATACATCGCCTACCCCCTCACCTTGACCTGTTAATA
+A
+GCCAAAAACTAGCAACTTCCCTACTAGATCTAACTTGACTAGAAACTATTTTACCAAAAACCACAGCCCTTATCCAACT
+A
+AAAGCCTCTACACTAACCTCTAACCAACAAGGCCTCATCAAACTCTACTTCTTATCTTTCCTCATCACCATCACCCTCA
+G
+CATAATCTTATTTAACTACCCCGAGTAATCTCCATAATAATTACAACACTAATAAATAAAGACCAACCCGTAACAATCA
+C
+CAACCAAACACCATAACTATATAATGCCGCAATCCCTGTAGCCTCCTCACTAAAAACCCCAGAACCCCCAGTATCATAA
+A
+CAACCCAGTCCCCTAGTCCATCAAACTCAAACATAATCTTCACCTCCCCACTCTTCAAAGCATAAATCACAATTAAAAA
+C
+TCCACCACCAACCCTAAAACAAATGCTCCTAGTACAACTTTATTAGAAACCCAAACCTCAGGATACTGTTCAGTAGCCA
+T
+AGCTGTTGTATAACCAAATACTACCAGCATTCCCCCCAAATAAATCAAAAACACCATTAACCCCAAAAACGAACCACCA
+A
+AACTCAAAATAACTCCACATCCAACACCACCACCCACAATCAACCCTAAACCCCCATAAATAGGTGAAGGCTTTGAAGA
+A
+ACCCCCACAAAACTAATTACAAAAATAATACTTAAAATGAAAACAATATACATTATCATTATTCTCACATGGACTTCAA
+C
+CATGACCAATGACATGAAAAATCATCGTTGTTATTCAACTACAAGAACACCAATGACCAACATCCGAAAAACACACCCA
+C
+TAATAAAAATCGTCAACGACGCATTCGTCGATCTCCCCACCCCATCAAATATCTCTTCATGATGGAACTTCGGCTCCCT
+A
+CTCGGCCTCTGCTTAATTATACAAATCCTAACAGGCCTATTCCTAGCAATACACTACACACCAGACACAACAACCGCCT
+T
+CTCATCAGTCACACACATCTGCCGAGACGTGAATTACGGCTGAATTATCCGATACCTACATGCAAATGGGGCTTCTATA
+T
+TCTTCATCTGCCTCTACGCTCACATAGGACGAGGCCTATACTACGGCTCCTACGCCTTCCGAGAAACATGAAATATTGG
+A
+GTTATTCTACTATTCACAGTTATAGCCACCGCATTCGTAGGCTACGTCCTGCCCTGAGGACAAATATCATTCTGAGGCG
+C
+AACTGTAATCACTAACCTCCTATCAGCAATCCCATACATTGGTACCACCCTAGTCGAATGAATCTGAGGCGGTTTCTCT
+G
+TAGATAAAGCAACACTAACACGCTTTTTTGCCTTTCACTTTATCCTCCCCTTCATCATCCTAGCATTAGCAATTGTCCA
+C
+CTTATTTTCCTTCACGAAACAGGATCCAACAACCCCACAGGCATCCCATCCGACATAGATAAAATCCCATTCCACCCCT
+A
+CCACACAATTAAAGACATTCTAGGTGCCCTATTACTAATCCTAATCCTACTAATACTAACCCTATTCGCACCCGACCTA
+C
+TTGGAGACCCAGACAACTATACCCCAGCAAACCCACTCAGTACCCCAGCACACATTAAACCAGAATGGTATTTTCTATT
+C
+GCATACGCAATCCTACGATCAATCCCCAACAAACTAGGCGGAGTCTTAGCCCTACTACTCTCAATCCTAATCCTAGCCT
+T
+CATCCCAATACTCCACACATCCAATCAACGAAGCATAATATTTCGACCCTTTAGCCAGTTCTTGTTCTGAGTCCTAGTC
+G
+CAGATCTACTAACCCTAACATGGATCGGCGGCCAACCAGTAGAACACCCCTACATAATTGTAGGCCAACTCGCATCCAT
+C
+CTCTATTTCCTCTTAATTCTAGTATTAATACCAGTAACTAGTCTTATCGAGAACAAACTTATAAAATGAAGAGTCTTTG
+T
+AGTATAATTAAATACCCCGGTTTTGTAAACCGGAAAAGGAGACAAGACACACCTCCCTAAGACTCAAGGAAGAAGTATT
+A
+CACTCCACCATCAGCACCCAAAGCTGAAGTTCTACATAAACTATTCCCTGAAAAAGTATATTGTACAATAACCACAGGA
+C
+CACAGTACTATGTCCGTATTGAAAATAACTTGCCTTATTAGATATTATTATGTAACTCGTGCATGCATGTACTTCCACA
+T
+AATTAATAGCGTCTTTCCATGGGTATGAACAGATATACATGCTATGTATAATTGTGCATTCAATTATTTTCACCACGAG
+C
+AGTTGAAGCTCGTATTAAATTTTATTAATTTTACATATTACATAATATGTATTAATAGTACAATAGCGCATGTTCTTAT
+G
+CATCCCCAGATCTATTTAAATCAAATGATTCCTATGGCCGCTCCATTAGATCACGAGCTTAGTCAGCATGCCGCGTGAA
+A
+CCAGCAACCCGCTTGGCAGGGATCCCTCTTCTCGCACCGGGCCCATCACTCGTGGGGGTAGCTATTTAATGATCTTTAT
+A
+AGACATCTGGTTCTTACTTCAGGACCATATTAACTTAAAATCGCCCACTCGTTCCCCTTAAATAAGACATCTCGATGG
+
+Output file format
+
+  Output files for usage example
+
+  Graphics File: plotorf.ps
+
+   [plotorf results]
+
+  Output files for usage example 2
+
+  Graphics File: plotorf.ps
+
+   [plotorf results]
+
+Data files
+
+   None.
+
+Notes
+
+   Note that this definition of an ORF would miss those exons in
+   eukaryotic genomic sequences which do not contain a START codon.
+   plotorf is only really useful when dealing with prokaryotic or mRNA
+   eukaryotic sequences.
+
+References
+
+   None.
+
+Warnings
+
+   ORFs in this program are defined as being regions between START and
+   STOP codons. This definition would miss those exons in eukaryotic
+   genomic sequences which do not contain a START codon. plotorf is
+   therefore only really useful when dealing with prokaryotic or mRNA
+   eukaryotic sequences.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with a status of 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name     Description
+   backtranambig    Back-translate a protein sequence to ambiguous
+                    nucleotide sequence
+   backtranseq      Back-translate a protein sequence to a nucleotide sequence
+   coderet          Extract CDS, mRNA and translations from feature tables
+   getorf           Finds and extracts open reading frames (ORFs)
+   marscan          Finds matrix/scaffold recognition (MRS) signatures in DNA
+                    sequences
+   prettyseq        Write a nucleotide sequence and its translation to file
+   remap            Display restriction enzyme binding sites in a nucleotide
+                    sequence
+   showorf          Display a nucleotide sequence and translation in pretty format
+   showseq          Displays sequences with features in pretty format
+   sixpack          Display a DNA sequence with 6-frame translation and ORFs
+   syco             Draw synonymous codon usage statictic plot for a nucleotide
+                    sequence
+   tcode            Identify protein-coding regions using Fickett TESTCODE statistic
+   transeq          Translate nucleic acid sequences
+   wobble           Plot third base position variability in a nucleotide sequence
+
+Author(s)
+
+   Alan Bleasby (ajb © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
+
+History
+
+   Written (1999) - Alan Bleasby
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

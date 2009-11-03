@@ -1,0 +1,149 @@
+   Standard (Mandatory) qualifiers (* if not always prompted):
+  [-sequences]         seqset     Sequence set filename and optional format,
+                                  or reference (input USA)
+   -mode               menu       [1] This option specifies whether to remove
+                                  redundancy at a single threshold percentage
+                                  sequence similarity or remove redundancy
+                                  outside a range of acceptable threshold
+                                  percentage similarity. All permutations of
+                                  pair-wise sequence alignments are calculated
+                                  for each set of input sequences in turn
+                                  using the EMBOSS implementation of the
+                                  Needleman and Wunsch global alignment
+                                  algorithm. Redundant sequences are removed
+                                  in one of two modes as follows: (i) If a
+                                  pair of proteins achieve greater than a
+                                  threshold percentage sequence similarity
+                                  (specified by the user) the shortest
+                                  sequence is discarded. (ii) If a pair of
+                                  proteins have a percentage sequence
+                                  similarity that lies outside an acceptable
+                                  range (specified by the user) the shortest
+                                  sequence is discarded. (Values: 1 (Single
+                                  threshold percentage sequence similarity); 2
+                                  (Outside a range of acceptable threshold
+                                  percentage similarities))
+*  -threshold          float      [95.0] This option specifies the percentage
+                                  sequence identity redundancy threshold. The
+                                  percentage sequence identity redundancy
+                                  threshold determines the redundancy
+                                  calculation. If a pair of proteins achieve
+                                  greater than this threshold the shortest
+                                  sequence is discarded. (Any numeric value)
+*  -minthreshold       float      [30.0] This option specifies the percentage
+                                  sequence identity redundancy threshold
+                                  (lower limit). The percentage sequence
+                                  identity redundancy threshold determines the
+                                  redundancy calculation. If a pair of
+                                  proteins have a percentage sequence
+                                  similarity that lies outside an acceptable
+                                  range the shortest sequence is discarded.
+                                  (Any numeric value)
+*  -maxthreshold       float      [90.0] This option specifies the percentage
+                                  sequence identity redundancy threshold
+                                  (upper limit). The percentage sequence
+                                  identity redundancy threshold determines the
+                                  redundancy calculation. If a pair of
+                                  proteins have a percentage sequence
+                                  similarity that lies outside an acceptable
+                                  range the shortest sequence is discarded.
+                                  (Any numeric value)
+   -gapopen            float      [10.0 for any sequence] The gap open penalty
+                                  is the score taken away when a gap is
+                                  created. The best value depends on the
+                                  choice of comparison matrix. The default
+                                  value assumes you are using the EBLOSUM62
+                                  matrix for protein sequences, and the
+                                  EDNAFULL matrix for nucleotide sequences.
+                                  (Floating point number from 1.0 to 100.0)
+   -gapextend          float      [0.5 for any sequence] The gap extension,
+                                  penalty is added to the standard gap penalty
+                                  for each base or residue in the gap. This
+                                  is how long gaps are penalized. Usually you
+                                  will expect a few long gaps rather than many
+                                  short gaps, so the gap extension penalty
+                                  should be lower than the gap penalty. An
+                                  exception is where one or both sequences are
+                                  single reads with possible sequencing
+                                  errors in which case you would expect many
+                                  single base gaps. You can get this result by
+                                  setting the gap open penalty to zero (or
+                                  very low) and using the gap extension
+                                  penalty to control gap scoring. (Floating
+                                  point number from 0.0 to 10.0)
+  [-outseq]            seqoutall  [<sequence>.<format>] Sequence set(s)
+                                  filename and optional format (output USA)
+  [-redundantoutseq]   seqoutall  [<sequence>.<format>] Redundant sequences
+                                  (optional)
+
+   Additional (Optional) qualifiers:
+   -datafile           matrixf    [EBLOSUM62 for protein, EDNAFULL for DNA]
+                                  This is the scoring matrix file used when
+                                  comparing sequences. By default it is the
+                                  file 'EBLOSUM62' (for proteins) or the file
+                                  'EDNAFULL' (for nucleic sequences). These
+                                  files are found in the 'data' directory of
+                                  the EMBOSS installation.
+
+   Advanced (Unprompted) qualifiers:
+   -feature            toggle     Sequence feature information will be
+                                  retained if this option is set.
+
+   Associated qualifiers:
+
+   "-sequences" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outseq" associated qualifiers
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
+
+   "-redundantoutseq" associated qualifiers
+   -osformat3          string     Output seq format
+   -osextension3       string     File name extension
+   -osname3            string     Base file name
+   -osdirectory3       string     Output directory
+   -osdbname3          string     Database name to add
+   -ossingle3          boolean    Separate file for each entry
+   -oufo3              string     UFO features
+   -offormat3          string     Features format
+   -ofname3            string     Features file name
+   -ofdirectory3       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+

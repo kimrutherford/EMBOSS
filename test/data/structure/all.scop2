@@ -1,0 +1,104 @@
+ID   D1CS4A_
+XX
+EN   1CS4
+XX
+TY   SCOP
+XX
+SI   53931 CL; 54861 FO; 55073 SF; 55074 FA; 55077 DO; 55078 SO; 39418 DD;
+XX
+CL   Alpha and beta proteins (a+b)
+XX
+FO   Ferredoxin-like
+XX
+SF   Adenylyl and guanylyl cyclase catalytic domain
+XX
+FA   Adenylyl and guanylyl cyclase catalytic domain
+XX
+DO   Adenylyl cyclase VC1, domain C1a
+XX
+OS   Dog (Canis familiaris)
+XX
+NC   1
+XX
+CN   [1]
+XX
+CH   A CHAIN; . START; . END;
+//
+ID   D1FX2A_
+XX
+EN   1FX2
+XX
+TY   SCOP
+XX
+SI   53931 CL; 54861 FO; 55073 SF; 55074 FA; 55081 DO; 55082 SO; 39430 DD;
+XX
+CL   Alpha and beta proteins (a+b)
+XX
+FO   Ferredoxin-like
+XX
+SF   Adenylyl and guanylyl cyclase catalytic domain
+XX
+FA   Adenylyl and guanylyl cyclase catalytic domain
+XX
+DO   Receptor-type monomeric adenylyl cyclase
+XX
+OS   Trypanosome (Trypanosoma brucei), different isoform
+XX
+NC   1
+XX
+CN   [1]
+XX
+CH   A CHAIN; . START; . END;
+//
+ID   D4AT1B1
+XX
+EN   4AT1
+XX
+TY   SCOP
+XX
+SI   53931 CL; 54861 FO; 54893 SF; 54894 FA; 54895 DO; 54896 SO; 39019 DD;
+XX
+CL   Alpha and beta proteins (a+b)
+XX
+FO   Ferredoxin-like
+XX
+SF   Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain
+XX
+FA   Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain
+XX
+DO   Aspartate carbamoyltransferase
+XX
+OS   Escherichia coli
+XX
+NC   1
+XX
+CN   [1]
+XX
+CH   B CHAIN; 8 START; 100 END;
+//
+ID   D4AT1D1
+XX
+EN   4AT1
+XX
+TY   SCOP
+XX
+SI   53931 CL; 54861 FO; 54893 SF; 54894 FA; 54895 DO; 54896 SO; 39020 DD;
+XX
+CL   Alpha and beta proteins (a+b)
+XX
+FO   Ferredoxin-like
+XX
+SF   Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain
+XX
+FA   Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain
+XX
+DO   Aspartate carbamoyltransferase
+XX
+OS   Escherichia coli
+XX
+NC   1
+XX
+CN   [1]
+XX
+CH   D CHAIN; 8 START; 100 END;
+//

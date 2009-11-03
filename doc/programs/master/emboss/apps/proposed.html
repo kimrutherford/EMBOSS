@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Areas requiring software development </title> 
+    <meta name="keywords" lang="en-uk" content="EMBOSS, European
+    Molecular Biology Open Source Software Suite, bioinformatics, 
+    EBI, European Bioinformatics Institute, Molecular Biology, 
+    Computational Biology, Open Source, Software, Database" />
+  </head>
+
+<body bgcolor="#ffffff" style="background-color=#ffffff; body-background-color=#ffffff">
+<link rel="stylesheet" href="../stylesheets/EMBOSS.css" type="text/css" >
+
+<!-- BEGIN PAGE HEADING -->
+<div id="container">
+<div id="header">  <a href="../index.html"> <img border="0" src="../images/emboss.jpg" > </a> </div>
+<!--#include file="header1.inc" -->
+<!-- END PAGE HEADING -->
+<!--#include file="header2.inc" -->
+    
+<!--BEGIN MAIN CONTENT -->
+<h1>Areas requiring software development </h1>
+
+ 
+
+
+<hr>
+
+
+
+The table below includes libraries, applications or areas of research which have been suggested as being useful additions to EMBOSS or EMBASSY.
+</p><p>
+
+This is a list of things that you might like to volunteer to work on. If you do decide to work on one or more of these areas, please let the <a href="mailto:emboss@emboss.open-bio.org">mailing list</a>  know - many people may wish to collaborate with you or suggest easier ways of doing things. 
+</p><p>
+
+If you have an idea for a library or an application, but do not have the
+time to work on it yourself, let the 
+<a href="mailto:emboss@emboss.open-bio.org">mailing list</a>
+know and it will be added to this web page.
+
+</p><p>
+
+
+<table border="1" cellpadding="4" bgcolor="#fffff0">
+<tbody><tr><th>Name</th>
+<th>Priority</th>
+<th>Status</th>
+<th>Description</th>
+<th>Comments</th>
+</tr>
+
+
+
+<tr>
+<td>AJAX code refactoring</td>
+<td>High</td>
+<td>Active</td>
+<td>Function & parameter renaming and major documentation revision</td>
+<td>
+In preparation for future EMBOSS developments.
+</td>
+</tr>
+
+
+
+<tr>
+<td>BLAST wrapper</td>
+<td>High</td>
+<td>Inactive</td>
+<td>
+Wrapper to the BLAST suite of programs
+</td>
+<td>
+Probably individual applications for BLASTP, BLASTN etc.
+</td>
+</tr>
+
+
+
+<tr>
+<td>fasta</td>
+<td>High</td>
+<td>Inactive</td>
+<td>
+Integration of Bill Pearson's FASTA, TFASTA, etc as EMBASSY wrapper.
+</td>
+<td>
+Bill Pearson mentioned he would like to do this, but it needs some
+way for sequences to be fetched again (e.g. saving file number and offset
+for 'any' sequence access method). The code is part of the way there. 
+</td>
+</tr>
+
+
+<tr>
+<td>rnafolding</td>
+<td>High</td>
+<td>Inactive</td>
+<td>
+Integration of external RNA folding applications.
+</td>
+<td>
+The Zuker package may still be about the best.
+</td>
+</tr>
+
+
+
+
+
+
+<tr>
+<td>hitmatch</td>
+<td>Medium</td>
+<td>Inactive</td>
+<td>
+Replacement for EGCG's equickmatch, using blastn output
+</td>
+<td>
+Needs a blast or fasta output parser. Should read in the query and
+database sequences, and perform a full NW or SW alignment, word-based
+if possible as they should be near-perfect matches. The aim is to
+report only those matches above a given threshold, and report the full
+alignments. If possible, with only the *differences* marked instead of
+the similarities.
+<br><br>No documentation for equickmatch is available.
+</td>
+</tr>
+
+
+<tr>
+<td>alignutils</td>
+<td>Medium</td>
+<td>Inactive</td>
+<td>
+Sequence alignment utilities, to replace EGCG sortconsensus.
+</td>
+<td>
+<a href="http://www.cmbi.kun.nl/bioinf/EGCGdoc/Multiple_Sequence_Analysis/sortconsensus.html">alignutils documentation </a> is available.
+Could implement various alignment site-scoring algorithms..
+</td>
+</tr>
+
+<tr>
+<td>dodayhoffstat</td>
+<td>Medium</td>
+<td>Inactive</td>
+<td>
+Replacement for EGCG's dodayhoffstat
+</td>
+<td>
+<a href="http://www.cmbi.kun.nl/bioinf/EGCGdoc/Protein_Analysis/dodayhoffstat.html">dodayhoffstat documentation </a> is available.
+Relatively easy to do. 
+</td>
+</tr>
+
+<tr>
+<td>mapplot</td>
+<td>Medium</td>
+<td>Inactive</td>
+<td>
+For displaying restriction plots.
+</td>
+<td>
+mapplot was specifically requested.  
+</td>
+</tr>
+
+
+<tr>
+<td>dottie</td>
+<td>Medium</td>
+<td>Inactive</td>
+<td>
+A general interactive dot plot application.
+</td>
+<td>
+Could use what's available, e.g. Erik Sonnhammer's <a href="http://www.cgb.ki.se/cgb/groups/sonnhammer/Dotter.html">dotter.</a>
+A new implementation would requires interactive graphics. 
+</td>
+</tr>
+
+
+
+<tr>
+<td>nucstats</td>
+<td>Medium</td>
+<td>Inactive</td>
+<td>
+To report nucleic acid "vital statistics", e.g. ACGT composition etc.
+</td>
+<td>
+See pepstats for ideas.
+</td>
+</tr>
+
+
+
+
+<tr>
+<td>plasmid drawing</td>
+<td>Medium</td>
+<td>Inactive</td>
+<td>
+To draw plasmids with restriction sites. 
+</td>
+<td>
+As a replacement for MapPlot from GCG. 
+Perhaps modify cirdna?  See TACG (http://tacg.sourceforge.net/) for ideas.
+</td>
+</tr>
+
+
+<tr>
+<td>fastacheck</td>
+<td>Low - maybe remove</td>
+<td>Inactive</td>
+<td>
+Replacement for EGCG's fastacheck
+</td>
+<td>
+<a href="http://www.cmbi.kun.nl/bioinf/EGCGdoc/Database_Searching/fastacheck.html">fastacheck documentation </a> is available.
+
+Simple to do, but now FASTA has better statistics probably not needed.  Functionality to read FASTA statistics and select hits might be useful regardless though.
+</td>
+</tr>
+
+<tr>
+<td>gapframe</td>
+<td>Low</td>
+<td>Inactive</td>
+<td>
+Adjust gap positions to be only at codon boundaries
+in a DNA sequence with known CDS position(s).
+</td>
+<td>
+Easy to do but requirement might be too low to justify it.
+</td>
+</tr>
+
+
+
+<tr>
+<td>homologies</td>
+<td>Medium</td>
+<td>Inactive</td>
+<td>
+Table of the pairwise distances of aligned sequences.  The EMBASSY <a href="">allversusall application</a> does this and could be moved to EMBOSS.
+</td>
+<td>
+</td>
+</tr>
+
+
+<tr>
+<td>neural-nets</td>
+<td>Low</td>
+<td>Inactive</td>
+<td>
+Neural net routines and applications.
+</td>
+<td>
+Lots of free packages; Jose Valverde was working on this and recommended using XNN in 2002.  Might be better alternatives now.
+Neureka is available from <a href="ftp://ftp.ii.uib.no/pub/neureka/">ftp://ftp.ii.uib.no/pub/neureka/</a>.  Not a high priority.
+<br>
+
+</td>
+</tr>
+
+<tr>
+<td>GAs</td>
+<td>Low</td>
+<td>Inactive</td>
+<td>
+Genetic Algorithm routines and applications.
+</td>
+<td>
+</td>
+</tr>
+
+<tr>
+<td>Feature display</td>
+<td>Medium</td>
+<td>Inactive</td>
+<td>
+Graphical display of selected features from a feature table.
+</td>
+<td>
+Possible with plplot but probably better with a new graphics library. 
+</td>
+</tr>
+
+<tr>
+<td>Feature utilities</td>
+<td>Medium</td>
+<td>Inactive</td>
+<td>
+Operation on a feature table file to extract selected features to another file.
+</td>
+<td>
+Should be turned into a quite extensive set of library functions.
+</td>
+</tr>
+
+
+<tr>
+<td>Cluster</td>
+<td>Low</td>
+<td>Inactive</td>
+<td>
+This program is still in the 'test' set of programs.
+</td>
+<td>
+Sanger stopped using it therefore probably not needed.  
+Easiest route to get clustering functionality at application level might be to use e.g. SANBI's stuff (but what about license?)  AJAX clustering routines would be useful.
+</td>
+</tr>
+
+<tr>
+<td>ALIEN</td>
+<td>Medium</td>
+<td>Inactive</td>
+<td>
+Multiple alignment program.
+</td>
+<td>
+Many multiple alignment programs are available and could be wrapped.
+</td>
+</tr>
+
+<tr>
+<td>Gene ID programs</td>
+<td>Medium</td>
+<td>Inactive</td>
+<td>
+Would be useful.
+</td>
+<td>
+Is there non-commercial code for this?
+</td>
+</tr>
+
+
+
+<tr>
+<td>genetrans</td>
+<td>Medium</td>
+<td>Inactive</td>
+<td>
+Replacement for EGCG's genetrans
+</td>
+<td>
+<a href="http://www.cmbi.kun.nl/bioinf/EGCGdoc/Nucleotide_Analysis/genetrans.html">genetrans documentation</a> is available.
+Functionality possibly redundant with existing EMBOSS apps though - check !
+</td>
+</tr>
+
+
+<!-- In progress -->
+
+<!-- Completed  -->
+
+<tr>
+<td>QA tests</td>
+<td>Complete</td>
+<td>Complete</td>
+<td>QA application testing using set of standard outputs and simple parsing of the results.</td>
+<td>Scripts to test output of expected results of EMBOSS programs.</td>
+</tr>
+
+</tbody></table>
+
+<hr>
+</div>
+</body></html>

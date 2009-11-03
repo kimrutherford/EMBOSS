@@ -1,0 +1,370 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: shuffleseq
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+shuffleseq
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+
+<H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
+    Function
+</H2>
+Shuffles a set of sequences maintaining composition
+
+<H2>
+    Description
+</H2>
+
+<p><b>shuffleseq</b> reads one or more sequences and writes them out again in a random (shuffled) order.  The number of shuffles may be specified.  Only the order of sequences is changed, no bases or residues are changed.</p>
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with shuffleseq</b>
+<p>
+This makes two randomised copies of the input sequence: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>shuffleseq -shuffle 2 </b>
+Shuffles a set of sequences maintaining composition
+Input sequence(s): <b>tembl:L48662</b>
+output sequence(s) [l48662.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Sequence(s) filename and optional format, or
+                                  reference (input USA)
+  [-outseq]            seqoutall  [<sequence>.<format>] Sequence set(s)
+                                  filename and optional format (output USA)
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -shuffle            integer    [1] Number of shuffles (Any integer value)
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outseq" associated qualifiers
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 2)</td>
+<td>Sequence set(s) filename and optional format (output USA)</td>
+<td>Writeable sequence(s)</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-shuffle</td>
+<td>Number of shuffles</td>
+<td>Any integer value</td>
+<td>1</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>shuffleseq</b> reads one or more sequence USAs.
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:L48662' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:L48662</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   L48662; SV 1; linear; mRNA; STD; MUS; 366 BP.
+XX
+AC   L48662;
+XX
+DT   04-NOV-1995 (Rel. 45, Created)
+DT   04-MAR-2000 (Rel. 63, Last updated, Version 4)
+XX
+DE   Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antibody heavy
+DE   chain mRNA.
+XX
+KW   .
+XX
+OS   Mus musculus (house mouse)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea;
+OC   Muridae; Murinae; Mus.
+XX
+RN   [1]
+RP   1-366
+RX   DOI; 10.1002/eji.1830260939.
+RX   PUBMED; 8814271.
+RA   Wloch M.K., Alexander A.L., Pippen A.M., Pisetsky D.S., Gilkeson G.S.;
+RT   "Differences in V kappa gene utilization and VH CDR3 sequence among
+RT   anti-DNA from C3H-lpr mice and lupus mice with nephritis";
+RL   Eur. J. Immunol. 26(9):2225-2233(1996).
+XX
+DR   IMGT/LIGM; L48662.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..366
+FT                   /organism="Mus musculus"
+FT                   /strain="C3H/HeJ-lpr/lpr"
+FT                   /mol_type="mRNA"
+FT                   /cell_line="C3H/F2-11"
+FT                   /cell_type="hybridoma"
+FT                   /tissue_type="spleen"
+FT                   /db_xref="taxon:10090"
+XX
+SQ   Sequence 366 BP; 100 A; 90 C; 85 G; 89 T; 2 other;
+     gagnnccagc tgcagcagtc tggacctgag ctggtaaagc ctggggcttc agtgaagatg        60
+     tcctgcaagg cttctggata cacattcact agctatgtta tgcactgggt gaatcagaag       120
+     cctgggcagg gccttgagtg gattggatat attaatcctt acaatgatgg tactaactac       180
+     aatgagaagt tcaaaggcaa ggccacactg acttcagaca aatcctccag cacagcctac       240
+     atggagttca gcagcctgac ctctgaggac tctgcggtct attactgtgc aagaaaaact       300
+     tcctactata gtaacctata ttactttgac tactggggcc aaggcaccac tctcacagtc       360
+     tcctca                                                                  366
+//
+</pre>
+</td></tr></table><p>
+
+<H2>
+    Output file format
+</H2>
+
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: l48662.fasta </h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;L48662 L48662.1 Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antibody heavy chain mRNA.
+aggtttttatattacaagcatactaagagactcgcgatgatcgcacaattccaaatgtgc
+tcatgggtgtagcaagaacctcaaataaaagggcaaccatgagggtaaagtctccgcatg
+agcccctgggacgcgagagactttctcccgctagtgggtcgaacctgcagtgtcgataat
+tggagttaaaatcgcagcatttacggccatgaattgtgtcgatanacgattcacgcaatc
+gttaagatcaggttcattgggntcacaaaccgtaggccccccgttgcctgacgcgtaacg
+ttcggatttccgtgacttcatctgactactctgtcacattcttacacgacaagctcaaca
+agccgg
+&gt;L48662 L48662.1 Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antibody heavy chain mRNA.
+gtggatggtatccctaacccatgacttgcgattccattgactaataccgatttcgctatg
+cgaataatactgcacaataagcgctgggggttggtttaaanttgcgatgtattatcaggt
+gcatcatacgcgtgtcttcaatcgcaggagaatacaaactcagtcccaagcctaaggcgc
+gtgagacttcattagggcaacggatactgctaactagttaaactcgcatgtaacaactca
+cctgagcggtcgtacatgggcctctcttcccgaagggttgttcgaaaaaagcattgatac
+aggccaggcaagcaccacgtgtcagcactacgatggccgttntcaaagtagctcatacag
+cctcgc
+</pre>
+</td></tr></table><p>
+
+<p>
+
+Each run will produce a different sequence.
+
+<p>
+
+Note that these two sequences have the same name.
+
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+<p><b>shuffleseq</b> is useful for producing sets of sequences with randomised order which can be used for checking the statistics of sequence similarity searches.</p>
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+        It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="msbar.html">msbar</a></td>
+<td>Mutate a sequence</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Author(s)
+</H2>
+Michael Schmitz (mschmitz&nbsp;&copy;&nbsp;lbl.gov)
+<br>
+Lawrence Berkeley Labs, USA
+
+<H2>
+    History
+</H2>
+
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+<H2>
+    Comments
+</H2>
+None
+
+
+</BODY>
+</HTML>
+

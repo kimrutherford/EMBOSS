@@ -1,0 +1,35 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: u68037.cpgreport</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+
+
+CPGREPORT of U68037 from 1 to 1218
+
+Sequence              Begin    End Score        CpG   %CG  CG/GC
+U68037                   12     13    17          1 100.0    -
+U68037                   47     48    17          1 100.0    -
+U68037                   96   1032   630         87  66.1   0.65
+U68037                 1072   1100    26          3  62.1   0.00
+U68037                 1139   1140    17          1 100.0    -
+U68037                 1183   1193    26          2  72.7   2.00
+</pre>
+</td></tr></table><p>
+<p><h3>File: u68037.gff</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+##gff-version 3
+##sequence-region U68037 1 1193
+#!Date 2008-07-15
+#!Type DNA
+#!Source-version EMBOSS 6.1.0
+U68037	cpgreport	sequence_feature	12	13	17.000	+	.	ID="U68037.1"
+U68037	cpgreport	sequence_feature	47	48	17.000	+	.	ID="U68037.2"
+U68037	cpgreport	sequence_feature	96	1032	630.000	+	.	ID="U68037.3"
+U68037	cpgreport	sequence_feature	1072	1100	26.000	+	.	ID="U68037.4"
+U68037	cpgreport	sequence_feature	1139	1140	17.000	+	.	ID="U68037.5"
+U68037	cpgreport	sequence_feature	1183	1193	26.000	+	.	ID="U68037.6"
+</pre>
+</td></tr></table><p>

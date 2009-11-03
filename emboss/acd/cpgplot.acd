@@ -1,0 +1,118 @@
+application: cpgplot [
+  documentation: "Identify and plot CpG islands in nucleotide sequence(s)"
+  groups: "Nucleic:CpG Islands"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "DNA"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  integer: window [
+    standard: "Y"
+    minimum: "1"
+    maximum: "$(sequence.end)"
+    default: "100"
+    information: "Window size"
+    help: "The percentage CG content and the Observed frequency of CG
+           is calculated within a window whose size is set by this parameter.
+           The window is moved down the sequence and these statistics are
+           calculated at each postition that the window is moved to."
+  ]
+
+  integer: minlen [
+    standard: "Y"
+    minimum: "1"
+    maximum: "$(sequence.end)"
+    default: "200"
+    information: "Minimum length of an island"
+    help: "This sets the minimum length that a CpG island has to be
+           before it is reported."
+  ]
+
+  float: minoe [
+    standard: "Y"
+    minimum: "0."
+    maximum: "10."
+    default: "0.6"
+    information: "Minimum observed/expected"
+    help: "This sets the minimum average observed to expected ratio of
+           C plus G to CpG in a set of 10 windows that are required before a
+           CpG island is reported."
+  ]
+
+  float: minpc [
+    standard: "Y"
+    minimum: "0."
+    maximum: "100."
+    default: "50."
+    information: "Minimum percentage"
+    help: "This sets the minimum average percentage of G plus C a set
+           of 10 windows that are required before a CpG island is reported."
+  ]
+
+endsection: required
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    parameter: "Y"
+    help: "This sets the name of the file holding the report of the
+           input sequence name, CpG island parameters and the output details
+           of any CpG islands that are found."
+    knowntype: "cpgplot output"
+  ]
+
+  toggle: plot [
+    default: "Y"
+    information: "Plot CpG island score"
+  ]
+
+  xygraph: graph [
+    standard: "$(plot)"
+    multiple: "3"
+  ]
+
+  boolean: obsexp [
+    default: "Y"
+    information: "Show observed/expected threshold line"
+    help: "If this is set to true then the graph of the observed to
+           expected ratio of C plus G to CpG within a window is displayed."
+  ]
+
+  boolean: cg [
+    default: "Y"
+    information: "Show CpG rich regions"
+    help: "If this is set to true then the graph of the regions which
+           have been determined to be CpG islands is displayed."
+  ]
+
+  boolean: pc [
+    default: "Y"
+    information: "Show percentage line"
+    help: "If this is set to true then the graph of the percentage C
+           plus G within a window is displayed."
+  ]
+
+  featout: outfeat [
+    parameter: "Y"
+    help: "File for output features"
+    type: "nucleotide"
+  ]
+
+endsection: output

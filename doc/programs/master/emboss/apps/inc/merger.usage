@@ -1,0 +1,16 @@
+<b>Here is a sample session with merger</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>merger </b>
+Merge two overlapping sequences
+Input sequence: <b>tembl:v00295</b>
+Second sequence: <b>tembl:x51872</b>
+Output alignment [v00295.merger]: <b></b>
+output sequence [v00295.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

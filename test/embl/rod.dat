@@ -1,0 +1,467 @@
+ID   L48662; SV 1; linear; mRNA; STD; MUS; 366 BP.
+XX
+AC   L48662;
+XX
+DT   04-NOV-1995 (Rel. 45, Created)
+DT   04-MAR-2000 (Rel. 63, Last updated, Version 4)
+XX
+DE   Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antibody heavy
+DE   chain mRNA.
+XX
+KW   .
+XX
+OS   Mus musculus (house mouse)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea;
+OC   Muridae; Murinae; Mus.
+XX
+RN   [1]
+RP   1-366
+RX   DOI; 10.1002/eji.1830260939.
+RX   PUBMED; 8814271.
+RA   Wloch M.K., Alexander A.L., Pippen A.M., Pisetsky D.S., Gilkeson G.S.;
+RT   "Differences in V kappa gene utilization and VH CDR3 sequence among
+RT   anti-DNA from C3H-lpr mice and lupus mice with nephritis";
+RL   Eur. J. Immunol. 26(9):2225-2233(1996).
+XX
+DR   IMGT/LIGM; L48662.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..366
+FT                   /organism="Mus musculus"
+FT                   /strain="C3H/HeJ-lpr/lpr"
+FT                   /mol_type="mRNA"
+FT                   /cell_line="C3H/F2-11"
+FT                   /cell_type="hybridoma"
+FT                   /tissue_type="spleen"
+FT                   /db_xref="taxon:10090"
+XX
+SQ   Sequence 366 BP; 100 A; 90 C; 85 G; 89 T; 2 other;
+     gagnnccagc tgcagcagtc tggacctgag ctggtaaagc ctggggcttc agtgaagatg        60
+     tcctgcaagg cttctggata cacattcact agctatgtta tgcactgggt gaatcagaag       120
+     cctgggcagg gccttgagtg gattggatat attaatcctt acaatgatgg tactaactac       180
+     aatgagaagt tcaaaggcaa ggccacactg acttcagaca aatcctccag cacagcctac       240
+     atggagttca gcagcctgac ctctgaggac tctgcggtct attactgtgc aagaaaaact       300
+     tcctactata gtaacctata ttactttgac tactggggcc aaggcaccac tctcacagtc       360
+     tcctca                                                                  366
+//
+ID   Z46957; SV 1; linear; mRNA; STD; ROD; 1493 BP.
+XX
+AC   Z46957;
+XX
+DT   20-DEC-1994 (Rel. 42, Created)
+DT   18-APR-2005 (Rel. 83, Last updated, Version 9)
+XX
+DE   R.norvegicus mRNA for rhodopsin.
+XX
+KW   rhodopsin.
+XX
+OS   Rattus norvegicus (Norway rat)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea;
+OC   Muridae; Murinae; Rattus.
+XX
+RN   [1]
+RP   1-1493
+RX   DOI; 10.1074/jbc.271.20.11710.
+RX   PUBMED; 8662634.
+RA   Huber A., Sander P.H., Paulsen R.;
+RT   "Phosphorylation of the InaD gene product, a photoreceptor membrane protein
+RT   required for recovery of visual excitation";
+RL   J. Biol. Chem. 271(20):11710-11717(1996).
+XX
+RN   [2]
+RP   1-1493
+RA   Huber A.;
+RT   ;
+RL   Submitted (20-DEC-1994) to the EMBL/GenBank/DDBJ databases.
+RL   Huber A., Universitaet Karlsruhe, Zoologie I, Kornblumenstr. 13, 76128
+RL   Karlsruhe, Germany
+XX
+DR   ASTD; TRAN00000023010.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1493
+FT                   /organism="Rattus norvegicus"
+FT                   /strain="Sprague-Dawley"
+FT                   /mol_type="mRNA"
+FT                   /dev_stage="adult"
+FT                   /clone_lib="rat retinal library"
+FT                   /clone="pRO4"
+FT                   /cell_type="rod"
+FT                   /tissue_type="retina"
+FT                   /db_xref="taxon:10116"
+FT   5'UTR           1..83
+FT   CDS             84..1130
+FT                   /product="rhodopsin"
+FT                   /function="phototransduction"
+FT                   /db_xref="GOA:P51489"
+FT                   /db_xref="HSSP:1EDS"
+FT                   /db_xref="InterPro:IPR017452"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P51489"
+FT                   /citation=[1]
+FT                   /protein_id="CAA87081.1"
+FT                   /translation="MNGTEGPNFYVPFSNITGVVRSPFEQPQYYLAEPWQFSMLAAYMF
+FT                   LLIVLGFPINFLTLYVTVQHKKLRTPLNYILLNLAVADLFMVFGGFTTTLYTSLHGYFV
+FT                   FGPTGCNLEGFFATLGGEIGLWSLVVLAIERYVVVCKPMSNFRFGENHAIMGVAFTWVM
+FT                   ALACAAPPLVGWSRYIPEGMQCSCGIDYYTLKPEVNNESFVIYMFVVHFTIPMIVIFFC
+FT                   YGQLVFTVKEAAAQQQESATTQKAEKEVTRMVIIMVIFFLICWLPYASVAMYIFTHQGS
+FT                   NFGPIFMTLPAFFAKTASIYNPIIYIMMNKQFRNCMLTTLCCGKNPLGDDEASATASKT
+FT                   ETSQVAPA"
+FT   3'UTR           1128..1493
+XX
+SQ   Sequence 1493 BP; 309 A; 475 C; 365 G; 344 T; 0 other;
+     ggagccgtag gtagctgagc tcgccaggca gccttggtct ctgtctacga acagcccgtg        60
+     gggcagcctc aagggccgca gccatgaacg gcacagaggg ccccaatttt tatgtgccct       120
+     tctccaacat cacgggcgtg gtgcgcagcc cctttgagca gccgcagtac tacctggcgg       180
+     agccatggca gttctccatg ctggcagcct acatgttcct gctcatcgtg ctgggcttcc       240
+     ccatcaactt cctcacgctc tacgtcaccg tacagcacaa gaagctgcgc acaccactca       300
+     actacatcct gctcaacttg gctgtggctg acctcttcat ggtcttcgga ggattcacca       360
+     ccaccctcta cacctcactg catggctact ttgtctttgg gcccacaggc tgcaaccttg       420
+     agggcttctt tgccaccctt ggaggtgaaa tcggcctgtg gtccctggta gtcctggcca       480
+     ttgagcgcta cgtggtggtc tgcaagccca tgagcaactt ccgctttggg gagaatcatg       540
+     ccattatggg tgtggccttc acctgggtca tggcgttggc ctgtgctgct cccccactgg       600
+     ttggctggtc caggtacatc cccgagggca tgcagtgttc atgtgggatt gactactata       660
+     cactcaagcc tgaggtcaac aatgagtcct tcgtcatcta catgttcgtg gtccacttca       720
+     ccatccccat gatcgtcatc ttcttctgct acgggcagct ggtcttcacc gtcaaggagg       780
+     ccgccgccca gcaacaggag tcggctacca ctcagaaggc agagaaggaa gtcacgcgca       840
+     tggtcatcat catggtcatc ttcttcctga tctgctggct tccctatgcc agtgtggcca       900
+     tgtacatctt tacccaccag ggctccaact tcggccccat cttcatgacc cttcccgctt       960
+     tctttgctaa gaccgcctcc atctacaacc caatcatcta catcatgatg aacaagcagt      1020
+     tccggaactg catgctcacc acgctctgct gcggcaagaa tccactggga gatgatgagg      1080
+     cctctgccac tgcctccaag acggagacca gccaggtggc tccagcctaa gcctggccag      1140
+     agactgtggc tgactgtagg agtctcctgt ccccactcac cccagccaca gcccccacca      1200
+     ggagcagcac ccgttggaat gaggtcatgc aggctccctc agtgttcttt tctttgtttt      1260
+     taatgaattc atgaaagcaa aatgaggctc cccactcaac agggacagcc tgacaaagga      1320
+     catccatcca ccaagacccc cagcctggag tccccaattc ccgggggcca gcgggatctg      1380
+     tacccctccc ctcagcttgt gtctcaggaa catgacaagt gtcccggctt acggctaagt      1440
+     gtctaggaca gaatggaaca catagtagct gattaataaa tgctacctgg atg             1493
+//
+ID   U68037; SV 1; linear; mRNA; STD; ROD; 1218 BP.
+XX
+AC   U68037;
+XX
+DT   23-SEP-1996 (Rel. 49, Created)
+DT   04-MAR-2000 (Rel. 63, Last updated, Version 2)
+XX
+DE   Rattus norvegicus EP1 prostanoid receptor mRNA, complete cds.
+XX
+KW   .
+XX
+OS   Rattus norvegicus (Norway rat)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea;
+OC   Muridae; Murinae; Rattus.
+XX
+RN   [1]
+RP   1-1218
+RA   Abramovitz M., Boie Y.;
+RT   "Cloning of the rat EP1 prostanoid receptor";
+RL   Unpublished.
+XX
+RN   [2]
+RP   1-1218
+RA   Abramovitz M., Boie Y.;
+RT   ;
+RL   Submitted (26-AUG-1996) to the EMBL/GenBank/DDBJ databases.
+RL   Biochemistry & Molecular Biology, Merck Frosst Center for Therapeutic
+RL   Research, P. O. Box 1005, Pointe Claire - Dorval, Quebec H9R 4P8, Canada
+XX
+DR   ASTD; TRAN00000010928.
+DR   Ensembl-Gn; ENSRNOG00000004094; Rattus_norvegicus.
+DR   Ensembl-Tr; ENSRNOT00000005470; Rattus_norvegicus.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1218
+FT                   /organism="Rattus norvegicus"
+FT                   /strain="Sprague-Dawley"
+FT                   /mol_type="mRNA"
+FT                   /db_xref="taxon:10116"
+FT   CDS             1..1218
+FT                   /codon_start=1
+FT                   /product="EP1 prostanoid receptor"
+FT                   /note="family 1 G-protein coupled receptor"
+FT                   /db_xref="GOA:P70597"
+FT                   /db_xref="InterPro:IPR017452"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P70597"
+FT                   /protein_id="AAB07735.1"
+FT                   /translation="MSPYGLNLSLVDEATTCVTPRVPNTSVVLPTGGNGTSPALPIFSM
+FT                   TLGAVSNVLALALLAQVAGRLRRRRSTATFLLFVASLLAIDLAGHVIPGALVLRLYTAG
+FT                   RAPAGGACHFLGGCMVFFGLCPLLLGCGMAVERCVGVTQPLIHAARVSVARARLALALL
+FT                   AAMALAVALLPLVHVGHYELQYPGTWCFISLGPPGGWRQALLAGLFAGLGLAALLAALV
+FT                   CNTLSGLALLRARWRRRRSRRFRENAGPDDRRRWGSRGLRLASASSASSITSTTAALRS
+FT                   SRGGGSARRVHAHDVEMVGQLVGIMVVSCICWSPLLVLVVLAIGGWNSNSLQRPLFLAV
+FT                   RLASWNQILDPWVYILLRQAMLRQLLRLLPLRVSAKGGPTELSLTKSAWEASSLRSSRH
+FT                   SGFSHL"
+XX
+SQ   Sequence 1218 BP; 162 A; 397 C; 387 G; 272 T; 0 other;
+     atgagcccct acgggcttaa cctgagccta gtggatgagg caacaacgtg tgtaacaccc        60
+     agggtcccca atacatctgt ggtgctgcca acaggcggta acggcacatc accagcgctg       120
+     cctatcttct ccatgacgct gggtgctgtg tccaacgtgc tggcgctggc gctgctggcc       180
+     caggttgcag gcagactgcg gcgccgccgc tcgactgcca ccttcctgtt gttcgtcgcc       240
+     agcctgcttg ccatcgacct agcaggccat gtgatcccgg gcgccttggt gcttcgcctg       300
+     tatactgcag gacgtgcgcc cgctggcggg gcctgtcatt tcctgggcgg ctgtatggtc       360
+     ttctttggcc tgtgcccact tttgcttggc tgtggcatgg ccgtggagcg ctgcgtgggt       420
+     gtcacgcagc cgctgatcca cgcggcgcgc gtgtccgtag cccgcgcacg cctggcacta       480
+     gccctgctgg ccgccatggc tttggcagtg gcgctgctgc cactagtgca cgtgggtcac       540
+     tacgagctac agtaccctgg cacttggtgt ttcattagcc ttgggcctcc tggaggttgg       600
+     cgccaggcgt tgcttgcggg cctcttcgcc ggccttggcc tggctgcgct ccttgccgca       660
+     ctagtgtgta atacgctcag cggcctggcg ctccttcgtg cccgctggag gcggcgtcgc       720
+     tctcgacgtt tccgagagaa cgcaggtccc gatgatcgcc ggcgctgggg gtcccgtgga       780
+     ctccgcttgg cctccgcctc gtctgcgtca tccatcactt caaccacagc tgccctccgc       840
+     agctctcggg gaggcggctc cgcgcgcagg gttcacgcac acgacgtgga aatggtgggc       900
+     cagctcgtgg gcatcatggt ggtgtcgtgc atctgctgga gccccctgct ggtattggtg       960
+     gtgttggcca tcgggggctg gaactctaac tccctgcagc ggccgctctt tctggctgta      1020
+     cgcctcgcgt cgtggaacca gatcctggac ccatgggtgt acatcctgct gcgccaggct      1080
+     atgctgcgcc aacttcttcg cctcctaccc ctgagggtta gtgccaaggg tggtccaacg      1140
+     gagctgagcc taaccaagag tgcctgggag gccagttcac tgcgtagctc ccggcacagt      1200
+     ggcttcagcc acttgtga                                                    1218
+//
+ID   M11903; SV 1; linear; genomic DNA; STD; ROD; 724 BP.
+XX
+AC   M11903; X01958;
+XX
+DT   31-JUL-1991 (Rel. 28, Created)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 6)
+XX
+DE   Rattus norvegicus androgen-responsive protein precursor (Svf) gene, exons 1
+DE   and 1A, alternatively spliced.
+XX
+KW   .
+XX
+OS   Rattus norvegicus (Norway rat)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea;
+OC   Muridae; Murinae; Rattus.
+XX
+RN   [1]
+RP   1-724
+RX   DOI; 10.1093/nar/13.3.659.
+RX   PUBMED; 2987804.
+RA   Williams L., McDonald C., Higgins S.;
+RT   "Sequence organisation of rat seminal vesicle F gene: location of
+RT   transcriptional start point and sequence comparison with six other
+RT   androgen-regulated genes";
+RL   Nucleic Acids Res. 13(3):659-672(1985).
+XX
+DR   EMBL-JOIN; M11904.
+DR   EMBL-JOIN; M11905.
+DR   EPD; EP14078; RN_SVS5.
+XX
+CC   On Sep 11, 2002 this sequence version replaced gi:57308.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..724
+FT                   /organism="Rattus norvegicus"
+FT                   /mol_type="genomic DNA"
+FT                   /clone="pgF9E2"
+FT                   /db_xref="taxon:10116"
+FT   stem_loop       156..183
+FT                   /inference="non-experimental evidence, no additional
+FT                   details recorded"
+FT   repeat_region   156..164
+FT                   /rpt_type=INVERTED
+FT                   /note="A"
+FT   repeat_region   173..183
+FT                   /rpt_type=INVERTED
+FT                   /note="A'"
+FT   stem_loop       247..278
+FT                   /inference="non-experimental evidence, no additional
+FT                   details recorded"
+FT   repeat_region   247..257
+FT                   /rpt_type=INVERTED
+FT                   /note="B"
+FT   repeat_region   264..278
+FT                   /rpt_type=INVERTED
+FT                   /note="B'"
+FT   stem_loop       282..306
+FT                   /inference="non-experimental evidence, no additional
+FT                   details recorded"
+FT   repeat_region   282..286
+FT                   /rpt_type=INVERTED
+FT                   /note="C"
+FT   repeat_region   302..306
+FT                   /rpt_type=INVERTED
+FT                   /note="C'"
+FT   CAAT_signal     310..318
+FT                   /gene="Svf"
+FT                   /inference="non-experimental evidence, no additional
+FT                   details recorded"
+FT   TATA_signal     321..324
+FT                   /gene="Svf"
+FT                   /note="T2"
+FT                   /inference="non-experimental evidence, no additional
+FT                   details recorded"
+FT   CAAT_signal     329..336
+FT                   /gene="Svf"
+FT                   /inference="non-experimental evidence, no additional
+FT                   details recorded"
+FT   exon            351..499
+FT                   /gene="Svf"
+FT                   /number=1
+FT                   /note="alternatively spliced"
+FT   TATA_signal     372..378
+FT                   /gene="Svf"
+FT                   /inference="non-experimental evidence, no additional
+FT                   details recorded"
+FT   exon            401..499
+FT                   /gene="Svf"
+FT                   /number=1A
+FT                   /note="alternatively spliced"
+FT   sig_peptide     424..486
+FT                   /gene="SVF"
+XX
+SQ   Sequence 724 BP; 196 A; 159 C; 193 G; 176 T; 0 other;
+     cctttcaaat agaaactctc gtgaaggctg tctgagaaca caagctcaag gttgtgactg        60
+     atttcagtga tgccgtcttg aagagggata ccgtgctaga gaatgactcc tgatcaaccc       120
+     tgaagacttc tgcaagcccg aagtcgtgct tccccactct gaactgacat atgttcagga       180
+     agtagagacg tgcaccgttg gatgttctca aggtaaaaag gaagatttgg aagaatgctc       240
+     tagtgttgtt gccttggaga ggaccaggga acagtacaag actcctactg agcagagaga       300
+     aaggagcctg acatttaccg ataagaaagg tcatttgcct tccaacctgt aggcaaggcc       360
+     agacaaggaa atatataaag gagaacctca gatcagctct cagtcaagac ccttcctgac       420
+     aagatgagtc ccaccgggtt cttcctcctt acggtgctcc ttgttctggt gacagaagca       480
+     gcctcgaggg ggccccgagg tgagtggcaa ttttgtgcta tgggaaagat gtttgagaac       540
+     tatgttctca aaagggagtc tgcagaatgc tgtgttccca gggcttctcc atgaaggaaa       600
+     cttgagtctt ttcaagcttt aaccatagtc ctactgtgag tctctgtgac ttgacaagca       660
+     acattgctgg taaggagggc tgagggggaa tgcgggcaac ggcctcgggt aacatcctca       720
+     ttgt                                                                    724
+//
+ID   M11904; SV 1; linear; genomic DNA; STD; ROD; 590 BP.
+XX
+AC   M11904; X01958;
+XX
+DT   31-JUL-1991 (Rel. 28, Created)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 6)
+XX
+DE   Rattus norvegicus androgen-responsive protein precursor (Svf) gene, exon 2
+DE   and complete cds.
+XX
+KW   .
+XX
+OS   Rattus norvegicus (Norway rat)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea;
+OC   Muridae; Murinae; Rattus.
+XX
+RN   [1]
+RP   1-590
+RX   DOI; 10.1093/nar/13.3.659.
+RX   PUBMED; 2987804.
+RA   Williams L., McDonald C., Higgins S.;
+RT   "Sequence organisation of rat seminal vesicle F gene: location of
+RT   transcriptional start point and sequence comparison with six other
+RT   androgen-regulated genes";
+RL   Nucleic Acids Res. 13(3):659-672(1985).
+XX
+DR   EMBL-JOIN; M11905.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..590
+FT                   /organism="Rattus norvegicus"
+FT                   /mol_type="genomic DNA"
+FT                   /clone="pgF9E2"
+FT                   /db_xref="taxon:10116"
+FT   CDS             join(M11903.1:424..499,109..404)
+FT                   /codon_start=1
+FT                   /gene="Svf"
+FT                   /product="androgen-responsive protein precursor"
+FT                   /note="seminal vesicle secretion"
+FT                   /db_xref="GOA:P04812"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P04812"
+FT                   /protein_id="AAA42191.1"
+FT                   /translation="MSPTGFFLLTVLLVLVTEAASRGPREKFSQSAEDPYSENMNLKIL
+FT                   ASGRGSSSTFGAFSRSENSRSNFKSKSPSSITREKVNEESRSEMSSTSSHFGLKMRRSH
+FT                   GGGEMNPFETKVKTRITRK"
+FT   mat_peptide     join(M11903.1:487..499,109..401)
+FT                   /gene="SVF"
+FT                   /product="androgen-responsive protein"
+FT                   /note="androgen-responsive protein F"
+FT   exon            109..445
+FT                   /gene="Svf"
+FT                   /number=2
+XX
+SQ   Sequence 590 BP; 201 A; 120 C; 144 G; 125 T; 0 other;
+     ggtatctcca aacacagcag ctggctctca acagagagtc ctcatgcaca actaatccaa        60
+     gatacagaaa gtggatatag agaatgagac attgttttct ctcaacagaa aaattctcac       120
+     agtcagctga agacccttat agtgaaaaca tgaatctaaa gattctggcg agcgggaggg       180
+     gatcaagttc tacctttggg gcattcagcc gaagtgagaa ctctcggagt aacttcaaat       240
+     caaaaagtcc aagcagtatc accagggaga aagtgaatga ggaaagcagg agtgaaatga       300
+     gtagtaccag cagccatttt ggtctcaaaa tgagaagatc tcatggagga ggagaaatga       360
+     atccctttga aaccaaagta aagacccgga tcactcgcaa ataatgtgtt ccccggccaa       420
+     ctgaagactt gagcccaata ggcaggtaag tgttatcacc aggtgagggc ttacaaacta       480
+     ctcgtgccta atccctaggc cattgtagga ttgtgcacgc agtaaagttg ctataagggg       540
+     aggtatggaa acgacctaca aggcagacaa agatacgagc tatactgtgt                  590
+//
+ID   M11905; SV 1; linear; genomic DNA; STD; ROD; 551 BP.
+XX
+AC   M11905; X01958;
+XX
+DT   31-JUL-1991 (Rel. 28, Created)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 6)
+XX
+DE   Rattus norvegicus androgen-responsive protein precursor (Svf) gene, exon 3.
+XX
+KW   .
+XX
+OS   Rattus norvegicus (Norway rat)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea;
+OC   Muridae; Murinae; Rattus.
+XX
+RN   [1]
+RP   1-551
+RX   DOI; 10.1093/nar/13.3.659.
+RX   PUBMED; 2987804.
+RA   Williams L., McDonald C., Higgins S.;
+RT   "Sequence organisation of rat seminal vesicle F gene: location of
+RT   transcriptional start point and sequence comparison with six other
+RT   androgen-regulated genes";
+RL   Nucleic Acids Res. 13(3):659-672(1985).
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..551
+FT                   /organism="Rattus norvegicus"
+FT                   /mol_type="genomic DNA"
+FT                   /clone="pgF9E2"
+FT                   /db_xref="taxon:10116"
+FT   mRNA            join(M11903.1:351..499,M11904.1:109..445,233..420)
+FT                   /gene="Svf"
+FT                   /product="androgen-responsive protein precursor"
+FT                   /note="alternatively spliced"
+FT   mRNA            join(M11903.1:401..499,M11904.1:109..445,233..420)
+FT                   /gene="Svf"
+FT                   /product="androgen-responsive protein precursor"
+FT                   /note="alternatively spliced"
+FT   exon            233..420
+FT                   /gene="Svf"
+FT                   /number=3
+FT   polyA_signal    398..403
+FT                   /gene="Svf"
+FT   stem_loop       467..510
+FT                   /inference="non-experimental evidence, no additional
+FT                   details recorded"
+FT   repeat_region   467..479
+FT                   /rpt_type=INVERTED
+FT                   /note="D"
+FT   repeat_region   495..510
+FT                   /rpt_type=INVERTED
+FT                   /note="D'"
+XX
+SQ   Sequence 551 BP; 134 A; 151 C; 110 G; 156 T; 0 other;
+     ccgtgcaatc tcttcctgtg tccacacagc cctgttagaa gcaactctct cgttctcaag        60
+     gccctacctg caagaactac ctttctcttc ctccgcccaa caaaggagga atgtttctgc       120
+     ttgtgaccca ccagagatga aatatagcag tgtcctgcag taaagggggg ccccagaggc       180
+     atgggacata cacgcattaa tccctccacg tcttccctgt cctacctcac aggttgtcct       240
+     cgttccctgg gtgtcactga actaagagaa gtctatgatg tcttcaggat gcaggatccc       300
+     acaggtgccc cggaaatagt ccgtgcttct tatttcctcc ttacacttgt tttctttaag       360
+     attccggaac ctgacaagat tcaaatttaa ccttttcaat aaaaaagata ctattctgca       420
+     tcattatctc ctgaaatctc ttgcttctgc agtacagggg ctgggtggga ttcctaaact       480
+     tgaccagttc tgccgttaaa ggaagatccc ttctgtgccg tatcagagac tatttccaga       540
+     ctctggatag a                                                            551
+//

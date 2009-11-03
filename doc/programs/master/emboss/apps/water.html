@@ -1,0 +1,216 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: water
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+water
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/water.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+<p><b>water</b> uses the Smith-Waterman algorithm (modified for speed enhancments) to calculate the local alignment of a sequence to one or more other sequences.  The gap insertion penalty, gap extension penalty and substitution matrix used to calculate the alignments are specified.  The output is a standard EMBOSS alignment file.</p>
+
+
+
+<H3>
+    Algorithm
+</H3>
+
+<p>The Smith-Waterman algorithm is a member of the class of algorithms that can calculate the best score and local alignment in the order of mn steps, where <tt>n</tt> and <tt>m</tt> are the lengths of the two sequences. These dynamic programming algorithms were first developed for protein sequence comparison by Smith and Waterman, though similar methods were independently devised during the late 1960's and early 1970's for use in the fields of speech processing and computer science.</p>
+
+<p>Dynamic programming methods ensure the optimal local alignment by exploring all possible alignments and choosing the best. It does this by reading in a scoring matrix that contains values for every possible residue or nucleotide match. <b>water</b> finds an alignment with the maximum possible score where the score of an alignment is equal to the sum of the matches taken from the scoring matrix.</p>
+
+<p>An important problem is the treatment of gaps, i.e., spaces inserted to optimise the alignment score. A penalty is subtracted from the score for each gap opened (the 'gap open' penalty) and a penalty is subtracted from the score for the total number of gap spaces multiplied by a cost (the 'gap extension' penalty). Typically, the cost of extending a gap is set to be 5-10 times lower than the cost for opening a gap.</p>
+
+<p>There are two ways to compute a penalty for a gap of n positions :
+
+gap opening penalty + (n - 1) * gap extension penalty
+gap penalty + n * gap length penalty
+</p>
+
+<p>The two methods are basically equivalent.  The first way is used by EMBOSS and WU-BLAST.  The second way is used by NCBI-BLAST, GCG, Staden and CLUSTAL. Fasta used it for a long time the first way, but Prof. Pearson decided recently to shift to the second.</p>
+
+<p>The Smith-Waterman algorithm contains no negative scores in the path matrix it creates. The algorithm starts the alignment at the highest path matrix score and works backwards until a cell contains zero. See the Reference Smith et al. for details.</p>
+
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/water.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/water.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/water.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+
+<b>water</b> reads any two sequence USAs of the same type (DNA or protein).
+
+<p>
+
+<!--#include file="inc/water.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/alignformats.ihtml" -->
+
+<p>
+
+<!--#include file="inc/water.output" -->
+
+<p>
+
+The <b>Identity:</b> is the percentage of identical matches between the two
+sequences over the reported aligned region (including any gaps in the length).
+
+<p>
+
+The <b>Similarity:</b> is the percentage of matches between the two
+sequences over the reported aligned region (including any gaps in the length).
+
+
+<H2>
+    Data files
+</H2>
+
+
+For protein sequences EBLOSUM62 is used for the substitution
+matrix. For nucleotide sequence, EDNAFULL is used. Others can be specified.
+
+<p>
+<!--#include file="inc/localfiles.ihtml" -->
+
+<H2>
+    Notes
+</H2>
+
+<p>A local alignment searches for regions of local similarity between two sequences and need not include the entire length of the sequences. Local alignment methods are very useful for scanning databases or other circumsatnces when you wish to find matches between small regions of sequences, for example between protein domains.</p>
+
+<H2>
+    References
+</H2>
+
+<OL>
+
+<LI>Smith TF, Waterman MS (1981) J. Mol. Biol 147(1);195-7
+
+</OL>
+
+
+<H2>
+    Warnings
+</H2>
+
+<p>Local alignment methods only report the best matching areas between two sequences - there may be a large number of alternative local alignments that do not score as highly. If two proteins share more than one common region, for example one has a single copy of a particular domain while the other has two copies, it may be possible to "miss" the second and subsequent alignments. You will be able to see this situation if you have done a dotplot and your local alignment does not show all the features you expected to see.</p>
+
+<p><b>water</b> is for aligning the best matching subsequences of two sequences. It does not necessarily align whole sequences against each other; you should use <b>needle</b> if you wish to align closely related sequences along their whole lengths.</p>
+
+<p>A true Smith Waterman implementation like <b>water</b> needs memory proportional to the product of the sequence lengths. For two sequences of length 10,000,000 and 1,000 it therefore needs memory proportional to 10,000,000,000 characters. Two arrays of this size are produced, one of ints and one of floats so multiply that figure by 8 to get the memory usage in bytes. That doesn't include other overheads. Therefore only use <b>water</b> and <b>needle</b> for accurate alignment of reasonably short sequences. It should not be used with very large sequences unless you have a lot of memory and a lot of time. If you run out of memory, try using <b>supermatcher</b> or <b>matcher</b> instead.</p>
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<PRE>
+Uncaught exception
+ Assertion failed
+ raised at ajmem.c:xxx
+</PRE>
+<P>
+
+Probably means you have run out of memory.  Try using
+<b>supermatcher</b> or <b>matcher</b> if this happens. 
+
+<H2>
+    Exit status
+</H2>
+
+    0 if successful.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+
+<!--#include file="inc/water.isee" -->
+<p>
+
+<b>matcher</b> is a local alignment program that gives as good an
+alignment as <p>water</p> but it uses far less memory.  However,
+<p>water</p> runs twice as fast as <b>matcher</b>. 
+
+<p>
+
+<b>supermatcher</b> is designed for local alignments of very large
+sequences.  It gives good results as long as there is not significant
+amounts of insertion or deletion in the alignment. 
+
+
+<p>
+
+<a href="supermatcher.html">supermatcher</a> Finds a match of a large
+sequence against one or more sequences
+
+<a href="matcher.html">matcher</a> Finds the best local alignments
+between two sequences
+
+<H2>
+    Author(s)
+</H2>
+
+
+<!--#include file="inc/ableasby.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/water.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/water.comment" -->
+
+</BODY>
+</HTML>
+

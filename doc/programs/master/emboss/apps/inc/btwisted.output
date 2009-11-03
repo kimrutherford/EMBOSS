@@ -1,0 +1,15 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: ab000095.btwisted</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+# Output from BTWISTED
+# Twisting calculated from 100 to 120 of AB000095
+Total twist (degrees): 681.1
+Total turns : 1.89
+Average bases per turn: 11.10
+Total stacking energy : -179.34
+Average stacking energy per dinucleotide: -8.97
+</pre>
+</td></tr></table><p>

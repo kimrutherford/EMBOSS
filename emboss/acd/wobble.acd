@@ -1,0 +1,60 @@
+application: wobble [
+  documentation: "Plot third base position variability in a nucleotide sequence"
+  groups: "Nucleic:Gene finding"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  sequence: sequence [
+    parameter: "Y"
+    type: "dna"
+  ]
+
+endsection: input
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  integer: window [
+    additional: "Y"
+    default: "30"
+    minimum: "1"
+    information: "Window size in codons"
+  ]
+
+endsection: additional
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  string: bases [
+    default: "GC"
+    information: "Bases used"
+    knowntype: "nucleotide codes"
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  xygraph: graph [
+    standard: "Y"
+    multiple: "6"
+  ]
+
+  outfile: outfile [
+    parameter: "Y"
+    knowntype: "wobble output"
+  ]
+
+endsection: output

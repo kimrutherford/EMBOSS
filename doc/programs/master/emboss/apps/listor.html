@@ -1,0 +1,165 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: listor
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+listor
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/listor.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+<p><b>listor</b> reads in two sets of sequences (typically specified as list files) and writes out a list file that result from the logical union of the two sets.  A list file is a file with a list of Uniform Sequence Addresses (USAs), for example, a list of file names.  When comparing sequences from the input sets, no use is made of the ID name or accession number; only the sequence itself is compared. The comparison of the sequences is case-independent. The logical union is an OR operation by default. Other available operations are: <tt>AND</tt>, <tt>XOR</tt> and <tt>NOT</tt>.</p>
+
+
+<H2>
+Algorithm
+</H2>
+
+<p>All the input sequences are kept in memory while the logical unions of the two input sets of sequences is calculated. <b>listor</b> is therefore restricted by the available memory.  </p>
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/listor.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/listor.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/listor.itable" -->
+
+
+
+<H2>
+    Input file format
+</H2>
+
+The input sets of sequences can be of any valid USAs.  The program was
+written to perform logical operations on list files, but in practice,
+wildcarded database entries and file names are also perfectly legal
+specifications of the input sequences. 
+
+<p>
+
+<!--#include file="inc/listor.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+The ouput is simply a list of the USAs (format and sequence
+specification) resulting from the required logical union of the two sets
+of input sequence. 
+
+<p>
+
+The order that the USAs are written out is not necessarily the same as
+the order of either of the input sets of sequences. 
+
+<p>
+
+The results of the four types of logical union follows.  Note that the
+duplicated sequences in these two files have been given the same name. 
+This is not necessary for the operation of <b>listor</b> as it compares
+the sequences themselves, not the ID names of the sequences. 
+
+<p>
+
+<!--#include file="inc/listor.output" -->
+
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+<p>The inputs can be any valid USA but typically reference a list file.  Some other reference such as a wildcarded database entries or file name are equally valid.</p>
+<p>The (default) logical OR of the two sets of sequences is simply the result of merging the two sets of sequences.  A sequences appearing in both input sets is referenced once only in the output file. A logical <tt>AND</tt> simply lists those sequences that occur in both sets of sequences.</p>
+<p>A logical <tt>XOR</tt> lists those sequences that ONLY occur in the first set or only occur in the second set - sequences occuring in both sets are omitted (the opposite of an <tt>AND</tt>).</p>
+<p>A logical <tt>NOT</tt> lists all those sequences in the first set except for those that also occur in the second set. </p>
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+<p><b>listor</b> is restricted by the available memory.  Doing logical unions involving all of the sequences in large databases, such as EMBL, is probably impractical unless you are lucky enough to have extraordinary amounts of memory on your machine.</p>
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/listor.isee" -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/gwilliam.address" -->
+
+<H2>
+    History
+</H2>
+
+<!--#include file="inc/listor.history" -->
+
+
+<H2>
+    Target users
+</H2>
+
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+
+
+<!--#include file="inc/listor.comment" -->
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,29 @@
+<b>Here is a sample session with splitter</b>
+<p>
+Split a sequence into sub-sequences of 10,000 bases (the default size) with no overlap between the sub-sequences: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>splitter tembl:BA000025 ba000025.split </b>
+Split sequence(s) into smaller sequences
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+Split a sequence into sub-sequences of 50,000 bases with an overlap of 3,000 bases on each sub-sequence: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>splitter tembl:BA000025 ba000025.split -size=50000 -over=3000 </b>
+Split sequence(s) into smaller sequences
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>

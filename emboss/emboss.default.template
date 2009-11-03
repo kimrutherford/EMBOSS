@@ -1,0 +1,532 @@
+# tempdata - this is the directory used by the test databases TEMBL, TSW, etc.
+# If you use these databases for testing you must uncomment this line and set
+# the definition to the directory where the databases are installed.
+# By default this is /usr/local/share/EMBOSS/test but the directory can
+# be changed with --prefix when you configure EMBOSS.
+
+# SET emboss_tempdata path_to_directory_$EMBOSS/test
+
+# Proxy - set this if any databases are accessed through a proxy web server.
+# Turn off in the DB definition with proxy: ":" for any
+# databases that are internal and should not go through the proxy.
+
+# SET emboss_proxy "proxy.mydomain.ac.uk:8080"
+
+# Logfile - set this to a file that any user can append to
+# and EMBOSS applications will automatically write log information
+
+# SET emboss_logfile /packages/emboss/emboss/log
+
+# Pagesize - this is the size of disc page blocks and is
+# required by the 'dbx' indexing programs and 'method: emboss'
+# We recommend a value of 2048
+
+SET PAGESIZE 2048
+
+# Cachesize - a cache of disc pages to be used by the 'dbx'
+# indexing system and is required for 'method emboss'. It is
+# the number of PAGESIZE blocks to cache. We recommend
+# a value of 200
+
+SET CACHESIZE 200
+
+##################################################################
+# Test Databases
+# Used by the qatest.pl scriupt to test an EMBOSS installation.
+# Comment them out if you do not want your users to use them.
+# Examples in the EMBOSS documentation should all run by using
+# TEMBL: in place of EMBL:, TSW: in place of SW:, and so on.
+##################################################################
+
+
+# swissprot (Puffer fish entries)
+# =========
+
+DB tsw [ type: P dir: $emboss_tempdata/swiss
+   method: emblcd format: swiss release: 36
+   fields: "sv des org key"
+   comment: "Swissprot native format with EMBL CD-ROM index" ]
+
+# swnew (Puffer fish entries)
+# =====
+
+DB tswnew [ type: P dir: $emboss_tempdata/swnew
+   method: emblcd format: swiss release: 37 
+   fields: "sv des org key"
+   comment: "Swissnew as 3 files in native format with EMBL CD-ROM index" ]
+
+# wormpep (cosmid ZK637)
+# =======
+
+DB twp [ type: P dir: $emboss_tempdata/wormpep
+   method: emblcd format: fasta release: 16 
+   fields: "des"
+   comment: "EMBL new in native format with EMBL CD-ROM index" ]
+
+# embl (worm cosmid ZK637 and a few other entries)
+# ====
+
+DB tembl [ type: N dir: $emboss_tempdata/embl
+   method: emblcd format: embl release: 57 
+   fields: "sv des org key"
+   comment: "EMBL in native format with EMBL CD-ROM index" ]
+
+# pir (cytochrome C plus first entries in other divisions)
+# ===
+
+DB tpir [ type: P dir: $emboss_tempdata/pir
+   method: gcg
+   file: pir*.seq
+   format: nbrf
+   fields: "des org key"
+   comment: "PIR using NBRF access for 4 files" ]
+
+# Genbank (Canadian EMBnet node - so long as they are running SRS version 6)
+# =======
+
+DB tgb [ type: N method: srswww format: genbank
+   url: "http://cbr-rbc.nrc-cnrc.gc.ca/srs6bin/cgi-bin/wgetz"
+   dbalias: genbankrelease
+   fields: "sv des org key"
+   comment: "Genbank IDs" ]
+
+# Genbank (local copy of the TEMBL entries from Genbank)
+# =======
+
+DB tgenbank [ type: N dir: $emboss_tempdata/genbank
+   method: emblcd format: genbank release: 01 
+   fields: "sv des org key"
+   comment: "GenBank in native format with EMBL CD-ROM index" ]
+
+#############################################
+# DATABASE SETTING EXAMPLES
+#
+# Modify these for your own
+# local and remote database definitions
+#
+# See the EMBOSS Administrators Guide 3.0.0
+# for full documentation on DB definitions.
+#############################################
+
+#######################################################################
+# GENBANK from the Canadian EMBnet node SRSWWW server
+#######################################################################
+
+
+#DB genbank [ type: N method: url format: genbank
+#   url: "http://www.ca.embnet.org/srs6bin/cgi-bin/wgetz?-id+-e+[genbank-id:'%s']+-vn+2"
+#   comment: "Genbank IDs" ]
+
+#DB gb [ type: N method: url format: genbank
+#   url: "http://www.ca.embnet.org/srs6bin/cgi-bin/wgetz?-id+-e+[genbank-id:'%s']+-vn+2"
+#   comment: "Genbank IDs" ]
+
+#DB genbanka [ type: N method: url format: genbank
+#   url: "http://www.ca.embnet.org/srs6bin/cgi-bin/wgetz?-id+-e+[genbank-acc:'%s']+-vn+2"
+#   comment: "Genbank ACs" ]
+
+#DB gba [ type: N method: url format: genbank
+#   url: "http://www.ca.embnet.org/srs6bin/cgi-bin/wgetz?-id+-e+[genbank-acc:'%s']+-vn+2"
+#   comment: "Genbank ACs" ]
+
+## N.B.
+# For older SRS servers use e.g.
+#DB gb [ type: N method: url format: genbank
+#   url: "http://srs.csc.fi:8002/srs6bin/cgi-bin/wgetz?-e+[genbank-id:%s]"
+#   comment: "Genbank IDs" ]
+
+
+
+
+#######################################################################
+# PIR/NBRF indexed with dbigcg
+#######################################################################
+
+# Set the directory to where the database is stored
+# Assumed the dbigcg index files are in the same directory
+
+# DB pir [ type: P dir: /data/pir
+#    method: gcg
+#    file: pir*.seq
+#    format: nbrf
+#    comment: "PIR/NBRF" ]
+
+# DB nbrf [ type: P dir: /data/pir
+#    method: gcg
+#    file: pir*.seq
+#    format: nbrf
+#    comment: "PIR/NBRF" ]
+
+
+
+
+##########################################################################
+# SWISSPROT indexed with dbiflat
+##########################################################################
+
+# SWISSPROT: Set the directory to where the database is stored
+# Assumed the dbiflat index files are in the same directory
+
+# DB swissprot [ 
+#         type: P 
+#         comment: "SWISSPROT sequences"
+#         method: emblcd
+#         format: swiss 
+#         dbalias: swissprot
+#         dir: /data/swissprot/ 
+#         file: seq.dat
+# ]
+
+# SWISSNEW: Set the directory to where the database is stored
+# Assumed the dbiflat index files are in the same directory
+
+# DB sw [ 
+#         type: P 
+#         comment: "SWISSPROT sequences"
+#         method: emblcd
+#         format: swiss 
+#         dbalias: swissprot
+#         dir: /data/swissprot/ 
+#         file: seq.dat
+# ]
+
+
+
+#########################################################
+# EMBL indexed with dbiflat
+#########################################################
+
+# EMBL: Set the directory to where the database is stored
+# Assumed the dbiflat index files are in the same directory
+# Second definition is another name for the first.
+
+#DB embl [ type: N method: emblcd release: "61.0"
+#         format: embl dir: /data/embl/
+#         file: *.dat comment: "EMBL sequences"
+#]
+
+#DB em [ type: N method: emblcd release: "61.0"
+#         format: embl dir: /data/embl/
+#         file: *.dat comment: "EMBL sequences"
+#]
+
+
+## Old EMBL definitions (for historical reasons) using SRSWWW
+##DB embla [ type: N method: url format: embl
+##  url: "http://srs.hgmp.mrc.ac.uk/srs6bin/cgi-bin/wgetz?-e+[embl-acc:%s]"
+##  comment: "Use embl instead!" ]
+##
+##DB ema [ type: N method: url format: embl
+##  url: "http://srs.hgmp.mrc.ac.uk/srs6bin/cgi-bin/wgetz?-e+[embl-acc:%s]"
+##  comment: "Use embl instead!" ]
+
+#########################################################
+# EMBL NEW
+#########################################################
+
+# EMBLNEW: Set the directory to where the database is stored
+# Assumed the dbiflat index files are in the same directory
+
+# DB emblnew [ type: N method: emblcd release: "0.0"
+#          format: embl dir: /data/embl/newdata/
+#          file: *.dat comment: "New EMBL sequences"
+# ]
+
+
+
+##########################################################
+# EMBL subdivisions using the original EMBL dbiflat indices
+##########################################################
+
+# Simply redefine EMBL with exclude:  and file: to limit
+# the database files available
+
+# DB fungal [ type: N method: emblcd release: "61.0"
+#          format: embl dir: /data/embl/ exclude: *.dat
+#          file: */fun*.dat comment: "EMBL fungal sequences"
+# ]
+
+# DB est [ type: N method: emblcd release: "61.0"
+#          format: embl dir: /data/embl/ exclude: *.dat
+#          file: */est*.dat comment: "EMBL EST sequences"
+# ]
+
+# DB gss [ type: N method: emblcd release: "61.0"
+#          format: embl dir: /data/embl/ exclude: *.dat
+#          file: */gss*.dat comment: "EMBL GSS sequences"
+# ]
+
+# DB htg [ type: N method: emblcd release: "61.0"
+#          format: embl dir: /data/embl/ exclude: *.dat
+#          file: */htg*.dat comment: "EMBL HTG sequences"
+# ]
+
+# DB human [ type: N method: emblcd release: "61.0"
+#          format: embl dir: /data/embl/ exclude: *.dat
+#          file: */hum?.dat comment: "EMBL human sequences"
+# ]
+
+# DB humanest [ type: N method: emblcd release: "61.0"
+#          format: embl dir: /data/embl/est/ exclude: *.dat
+#          file: */humanest*.dat comment: "EMBL human EST sequences"
+# ]
+
+# DB invertebrate [ type: N method: emblcd release: "61.0"
+#          format: embl dir: /data/embl/ exclude: *.dat
+#          file: */inv*.dat comment: "EMBL invertebrate sequences"
+# ]
+
+# DB mammalian [ type: N method: emblcd release: "61.0"
+#          format: embl dir: /data/embl/ exclude: *.dat
+#          file: */mam*.dat comment: "EMBL mammalian sequences"
+# ]
+
+# DB mouseest [ type: N method: emblcd release: "61.0"
+#          format: embl dir: /data/embl/est/ exclude: *.dat
+#          file: */mouseest*.dat comment: "EMBL mouse EST sequences"
+# ]
+
+# DB organelle [ type: N method: emblcd release: "61.0"
+#          format: embl dir: /data/embl/ exclude: *.dat
+#          file: */org*.dat comment: "EMBL organelle sequences"
+# ]
+
+# DB otherest [ type: N method: emblcd release: "61.0"
+#          format: embl dir: /data/embl/est/ exclude: *.dat
+#          file: */otherest*.dat comment: "EMBL other EST sequences"
+# ]
+
+# DB patent [ type: N method: emblcd release: "61.0"
+#          format: embl dir: /data/embl/ exclude: *.dat
+#          file: */patent*.dat comment: "EMBL patented sequences"
+# ]
+
+# DB phage [ type: N method: emblcd release: "61.0"
+#          format: embl dir: /data/embl/ exclude: *.dat
+#          file: */phg*.dat comment: "EMBL phage sequences"
+# ]
+
+# DB plant [ type: N method: emblcd release: "61.0"
+#          format: embl dir: /data/embl/ exclude: *.dat
+#          file: */pln*.dat comment: "EMBL plant sequences"
+# ]
+
+# DB prokaryotic [ type: N method: emblcd release: "61.0"
+#          format: embl dir: /data/embl/ exclude: *.dat
+#          file: */pro*.dat comment: "EMBL prokaryotic sequences"
+# ]
+
+# DB rodent [ type: N method: emblcd release: "61.0"
+#          format: embl dir: /data/embl/ exclude: *.dat
+#          file: */rod*.dat comment: "EMBL rodent sequences"
+# ]
+
+# DB sts [ type: N method: emblcd release: "61.0"
+#          format: embl dir: /data/embl/ exclude: *.dat
+#          file: */sts*.dat comment: "EMBL STS sequences"
+# ]
+
+# DB synthetic [ type: N method: emblcd release: "61.0"
+#          format: embl dir: /data/embl/ exclude: *.dat
+#          file: */syn*.dat comment: "EMBL synthetic sequences"
+# ]
+
+# DB unclassified [ type: N method: emblcd release: "61.0"
+#          format: embl dir: /data/embl/ exclude: *.dat
+#          file: */unc*.dat comment: "EMBL unclassified sequences"
+# ]
+
+# DB viral [ type: N method: emblcd release: "61.0"
+#          format: embl dir: /data/embl/ exclude: *.dat
+#          file: */vrl*.dat comment: "EMBL viral sequences"
+# ]
+
+# DB othervertebrate [ type: N method: emblcd release: "61.0"
+#          format: embl dir: /data/embl/ exclude: *.dat
+#          file: */vrt*.dat comment: "EMBL other vertebrate sequences"
+# ]
+
+# DB vertebrate [ type: N method: emblcd release: "61.0"
+#          format: embl dir: /data/embl/ exclude: *.dat
+#          file: "*/vrt*.dat */mam*.dat */rod*.dat"
+#          comment: "EMBL vertebrate sequences"
+# ]
+
+
+####################################################################
+# TREMBL databases indexed with dbiflat
+####################################################################
+
+# TREMBL: Set the directory to where the database is stored
+# Assumed the dbiflat index files are in the same directory
+
+# DB trembl [ 
+#         type: P 
+#         comment: "TREMBL sequences"
+#         method: emblcd
+#         format: swiss 
+#         dir: /data/trembl/ 
+#         file: tr_*.dat
+# ]
+
+# SPTREMBL: Set the directory to where the database is stored
+# Assumed the dbiflat index files are in the same directory
+
+# DB sptrembl [ 
+#         type: P 
+#         comment: "SPTREMBL sequences"
+#         method: emblcd
+#         format: swiss 
+#         dir: /data/trembl/sptrembl/
+#         file: tr_*.dat
+# ]
+
+# DB remtrembl [ 
+#         type: P 
+#         comment: "REMTREMBL sequences"
+#         method: emblcd
+#         format: swiss 
+#         dir: /data/trembl/sptrembl/
+#         file: tr_*.dat
+# ]
+
+
+
+####################################################################
+# New TREMBL
+####################################################################
+
+# TREMBLNEW: Set the directory to where the database is stored
+# Assumed the dbiflat index files are in the same directory
+
+# DB tremblnew [ 
+#         type: P
+#         comment: "New TREMBL sequences"
+#         method: emblcd
+#         format: swiss 
+#         dir: /data/trembl/emboss/ 
+#         file: tremblnew*.dat
+# ]
+
+
+
+####################################################################
+# Trembl subsections
+####################################################################
+
+# Simply redefine TREMBL with exclude:  and file: to limit
+# the database files available
+
+# DB trarc [ type: P method: emblcd release: "61.0"
+#          format: swiss dir: /data/trembl/ exclude: *.dat
+#          file: */tr_arc*.dat comment: "TREMBL ARC sequences"
+# ]
+
+# DB trfungal [ type: P method: emblcd release: "61.0"
+#          format: swiss dir: /data/trembl/ exclude: *.dat
+#          file: */tr_fun*.dat comment: "TREMBL fungal sequences"
+# ]
+
+# DB trhuman [ type: P method: emblcd release: "61.0"
+#          format: swiss dir: /data/trembl/ exclude: *.dat
+#          file: */tr_hum*.dat comment: "TREMBL human sequences"
+# ]
+
+# DB trimmuno [ type: P method: emblcd release: "61.0"
+#          format: swiss dir: /data/trembl/ exclude: *.dat
+#          file: */tr_immuno*.dat comment: "TREMBL immunological sequences"
+# ]
+
+# DB trinvertebrate [ type: P method: emblcd release: "61.0"
+#          format: swiss dir: /data/trembl/ exclude: *.dat
+#          file: */tr_inv*.dat comment: "TREMBL invertebrate sequences"
+# ]
+
+# DB trmammalian [ type: P method: emblcd release: "61.0"
+#          format: swiss dir: /data/trembl/ exclude: *.dat
+#          file: */tr_mam*.dat comment: "TREMBL mammalian sequences"
+# ]
+
+# DB trmhc [ type: P method: emblcd release: "61.0"
+#          format: swiss dir: /data/trembl/ exclude: *.dat
+#          file: */tr_mhc*.dat comment: "TREMBL MHC sequences"
+# ]
+
+# DB trorganelle [ type: P method: emblcd release: "61.0"
+#          format: swiss dir: /data/trembl/ exclude: *.dat
+#          file: */tr_org*.dat comment: "TREMBL organelle sequences"
+# ]
+
+# DB trpatent [ type: P method: emblcd release: "61.0"
+#          format: swiss dir: /data/trembl/ exclude: *.dat
+#          file: */tr_patent*.dat comment: "TREMBL patented sequences"
+# ]
+
+# DB trphage [ type: P method: emblcd release: "61.0"
+#          format: swiss dir: /data/trembl/ exclude: *.dat
+#          file: */tr_phg*.dat comment: "TREMBL phage sequences"
+# ]
+
+# DB trplant [ type: P method: emblcd release: "61.0"
+#          format: swiss dir: /data/trembl/ exclude: *.dat
+#          file: */tr_pln*.dat comment: "TREMBL plant sequences"
+# ]
+
+# DB trprokaryotic [ type: P method: emblcd release: "61.0"
+#          format: swiss dir: /data/embl/ exclude: *.dat
+#          file: */tr_pro*.dat comment: "TREMBL prokaryotic sequences"
+# ]
+
+# DB trpseudo [ type: P method: emblcd release: "61.0"
+#          format: embl dir: /data/trembl/ exclude: *.dat
+#          file: */tr_pseudo*.dat comment: "TREMBL pseudo sequences"
+# ]
+
+# DB trrodent [ type: P method: emblcd release: "61.0"
+#          format: swiss dir: /data/trembl/ exclude: *.dat
+#          file: */tr_rod*.dat comment: "TREMBL rodent sequences"
+# ]
+
+# DB trsmall [ type: P method: emblcd release: "61.0"
+#          format: swiss dir: /data/trembl/ exclude: *.dat
+#          file: */tr_smalls*.dat comment: "TREMBL small sequences"
+# ]
+
+# DB trsynthetic [ type: P method: emblcd release: "61.0"
+#          format: swiss dir: /data/trembl/ exclude: *.dat
+#          file: */tr_syn*.dat comment: "TREMBL synthetic sequences"
+# ]
+
+# DB trtruncated [ type: P method: emblcd release: "61.0"
+#          format: swiss dir: /data/trembl/ exclude: *.dat
+#          file: */tr_truncated*.dat comment: "TREMBL truncated sequences"
+# ]
+
+# DB trunclassified [ type: P method: emblcd release: "61.0"
+#          format: swiss dir: /data/trembl/ exclude: *.dat
+#          file: */tr_unc*.dat comment: "TREMBL unclassified sequences"
+# ]
+
+# DB trviral [ type: P method: emblcd release: "61.0"
+#          format: swiss dir: /data/trembl/ exclude: *.dat
+#          file: */tr_vrl*.dat comment: "TREMBL viral sequences"
+# ]
+
+# DB trothervertebrate [ type: P method: emblcd release: "61.0"
+#          format: swiss dir: /data/trembl/ exclude: *.dat
+#          file: */tr_vrt*.dat comment: "TREMBL other vertebrate sequences"
+# ]
+
+
+##################################################################
+# Resource definitions for the dbx indexing system.
+##################################################################
+
+RES embl [ type: Index
+  idlen:  15
+  acclen: 15
+  svlen:  15
+  keylen: 15
+  deslen: 15
+  orglen: 15
+]

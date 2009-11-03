@@ -1,0 +1,360 @@
+
+                                  etandem 
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Finds tandem repeats in a nucleotide sequence
+
+Description
+
+   etandem identifies tandem repeats in a nucleotide sequence. It
+   calculates a consensus sequence for a putative repeat region and
+   scores potential repeats based on the number of matches and mismatches
+   there are to the consensus. For a repeat to be identified, it must be
+   within the specified minimum and maximum size and must score higher
+   than the specified threshold score. The output is a standard EMBOSS
+   report file with details of the location and score of any tandem
+   repeats. Optionally, the output can be written in the format of the
+   Sanger Centre quicktandem program.
+
+   Running etandem with a wide range of repeat sizes is inefficient. It
+   is normally used after equicktandem has been run to identify putative
+   sizes and locations of repeats.
+
+Algorithm
+
+   The input sequence is first converted so that it contains the
+   characters ACGT or N only, i.e. any ambiguity codes are converted to
+   N. etandem looks for sequence segments which match well to a consensus
+   sequence calculated from non-overlapping windows over the sequence.
+   For a given start point in the sequence and repeat size, a consensus
+   sequence is built from contiguous sequence segments of that size.
+
+   The score for a segment (except the first segment which is not scored)
+   is based on the number of matches and mismatches there are to the
+   consensus: the score is incremented (+1) for a match and decremented
+   (-1) for a mismatch. By default, an "N" can never mismatch with a
+   nucleotide but this behaviour can be changed with the -mismatch
+   option. The highest scoring segment is kept for each start position
+   and repeat size.
+
+   Immediately adjacent segments that score higher than the specified
+   threshold score are reported as a tandem repeat. The threshold score
+   can be set on the command-line using the -threshold qualifier, the
+   default is 20. For perfect repeats, the score is the equal to the
+   length of the repeat. To allow for mismatches, the threshold score can
+   be reduced. Each mismatch scores -1 instead of +1 so it scores 2 less
+   than a perfect match of the same number of bases.
+
+Usage
+
+   Here is a sample session with etandem
+
+   The input sequence is the human herpesvirus tandem repeat.
+
+
+% etandem -noorigfile 
+Finds tandem repeats in a nucleotide sequence
+Input nucleotide sequence: tembl:L46634
+Minimum repeat size [10]: 6
+Maximum repeat size [6]: 
+Output report [l46634.tan]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-sequence]          sequence   Nucleotide sequence filename and optional
+                                  format, or reference (input USA)
+   -minrepeat          integer    [10] Minimum repeat size (Integer, 2 or
+                                  higher)
+   -maxrepeat          integer    [Same as -minrepeat] Maximum repeat size
+                                  (Integer, same as -minrepeat or higher)
+  [-outfile]           report     [*.etandem] Output report file name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -threshold          integer    [20] Threshold score (Any integer value)
+   -mismatch           boolean    Allow N as a mismatch
+   -uniform            boolean    Allow uniform consensus
+   -origfile           outfile    [*.etandem] Sanger Centre program tandem
+                                  output file (optional)
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -rformat2           string     Report format
+   -rname2             string     Base file name
+   -rextension2        string     File name extension
+   -rdirectory2        string     Output directory
+   -raccshow2          boolean    Show accession number in the report
+   -rdesshow2          boolean    Show description in the report
+   -rscoreshow2        boolean    Show the score in the report
+   -rstrandshow2       boolean    Show the nucleotide strand in the report
+   -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
+
+   "-origfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   The input for etandem is a nucleotide sequence USA.
+
+  Input files for usage example
+
+   'tembl:L46634' is a sequence entry in the example nucleic acid
+   database 'tembl'
+
+  Database entry: tembl:L46634
+
+ID   L46634; SV 1; linear; genomic DNA; STD; VRL; 1272 BP.
+XX
+AC   L46634; L46689;
+XX
+DT   06-NOV-1995 (Rel. 45, Created)
+DT   04-MAR-2000 (Rel. 63, Last updated, Version 3)
+XX
+DE   Human herpesvirus 7 (clone ED132'1.2) telomeric repeat region.
+XX
+KW   telomeric repeat.
+XX
+OS   Human herpesvirus 7
+OC   Viruses; dsDNA viruses, no RNA stage; Herpesvirales; Herpesviridae;
+OC   Betaherpesvirinae; Roseolovirus.
+XX
+RN   [1]
+RP   1-1272
+RX   PUBMED; 7494318.
+RA   Secchiero P., Nicholas J., Deng H., Xiaopeng T., van Loon N., Ruvolo V.R.,
+RA   Berneman Z.N., Reitz M.S.Jr., Dewhurst S.;
+RT   "Identification of human telomeric repeat motifs at the genome termini of
+RT   human herpesvirus 7: structural analysis and heterogeneity";
+RL   J. Virol. 69(12):8041-8045(1995).
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1272
+FT                   /organism="Human herpesvirus 7"
+FT                   /strain="JI"
+FT                   /mol_type="genomic DNA"
+FT                   /clone="ED132'1.2"
+FT                   /db_xref="taxon:10372"
+FT   repeat_region   207..928
+FT                   /note="long and complex repeat region composed of various
+FT                   direct repeats, including TAACCC (TRS), degenerate copies
+FT                   of TRS motifs and a 14-bp repeat, TAGGGCTGCGGCCC"
+FT   misc_signal     938..998
+FT                   /note="pac2 motif"
+FT   misc_feature    1009
+FT                   /note="right genome terminus (...ACA)"
+XX
+SQ   Sequence 1272 BP; 346 A; 455 C; 222 G; 249 T; 0 other;
+     aagcttaaac tgaggtcaca cacgacttta attacggcaa cgcaacagct gtaagctgca        6
+0
+     ggaaagatac gatcgtaagc aaatgtagtc ctacaatcaa gcgaggttgt agacgttacc       12
+0
+     tacaatgaac tacacctcta agcataacct gtcgggcaca gtgagacacg cagccgtaaa       18
+0
+     ttcaaaactc aacccaaacc gaagtctaag tctcacccta atcgtaacag taaccctaca       24
+0
+     actctaatcc tagtccgtaa ccgtaacccc aatcctagcc cttagcccta accctagccc       30
+0
+     taaccctagc tctaacctta gctctaactc tgaccctagg cctaacccta agcctaaccc       36
+0
+     taaccgtagc tctaagttta accctaaccc taaccctaac catgaccctg accctaaccc       42
+0
+     tagggctgcg gccctaaccc tagccctaac cctaacccta atcctaatcc tagccctaac       48
+0
+     cctagggctg cggccctaac cctagcccta accctaaccc taaccctagg gctgcggccc       54
+0
+     taaccctaac cctagggctg cggcccgaac cctaacccta accctaaccc taaccctagg       60
+0
+     gctgcggccc taaccctaac cctagggctg cggccctaac cctaacccta gggctgcggc       66
+0
+     ccgaacccta accctaaccc taaccctagg gctgcggccc taaccctaac cctagggctg       72
+0
+     cggccctaac cctaacccta actctagggc tgcggcccta accctaaccc taaccctaac       78
+0
+     cctagggctg cggcccgaac cctagcccta accctaaccc tgaccctgac cctaacccta       84
+0
+     accctaaccc taaccctaac cctaacccta accctaaccc taaccctaac cctaacccta       90
+0
+     accctaaccc taaccctaac cctaaccccg cccccactgg cagccaatgt cttgtaatgc       96
+0
+     cttcaaggca ctttttctgc gagccgcgcg cagcactcag tgaaaaacaa gtttgtgcac      102
+0
+     gagaaagacg ctgccaaacc gcagctgcag catgaaggct gagtgcacaa ttttggcttt      108
+0
+     agtcccataa aggcgcggct tcccgtagag tagaaaaccg cagcgcggcg cacagagcga      114
+0
+     aggcagcggc tttcagactg tttgccaagc gcagtctgca tcttaccaat gatgatcgca      120
+0
+     agcaagaaaa atgttctttc ttagcatatg cgtggttaat cctgttgtgg tcatcactaa      126
+0
+     gttttcaagc tt                                                          127
+2
+//
+
+Output file format
+
+   The output is a standard EMBOSS report file.
+
+   The results can be output in one of several styles by using the
+   command-line qualifier -rformat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: embl,
+   genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+   feattable, motif, regions, seqtable, simple, srs, table, tagseq
+
+   See: http://emboss.sf.net/docs/themes/ReportFormats.html for further
+   information on report formats.
+
+   By default etandem writes a 'table' report file.
+
+  Output files for usage example
+
+  File: l46634.tan
+
+########################################
+# Program: etandem
+# Rundate: Tue 15 Jul 2008 12:00:00
+# Commandline: etandem
+#    -noorigfile
+#    -sequence tembl:L46634
+#    -minrepeat 6
+# Report_format: table
+# Report_file: l46634.tan
+########################################
+
+#=======================================
+#
+# Sequence: L46634     from: 1   to: 1272
+# HitCount: 5
+#
+# Threshold: 20
+# Minrepeat: 6
+# Maxrepeat: 6
+# Mismatch: No
+# Uniform: No
+#
+#=======================================
+
+  Start     End  Strand   Score   Size  Count Identity Consensus
+    793     936       +     120      6     24     93.8 acccta
+    283     420       +      90      6     23     84.8 taaccc
+    432     485       +      38      6      9     90.7 ccctaa
+    494     529       +      26      6      6     94.4 ccctaa
+    568     597       +      24      6      5    100.0 aaccct
+
+#---------------------------------------
+#---------------------------------------
+
+Data files
+
+   None
+
+Notes
+
+   Running etandem with a wide range of repeat sizes is inefficient. It
+   is normally used after equicktandem has been run to identify putative
+   sizes and locations of repeats.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostics
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+                    Program name                   Description
+                    einverted    Finds inverted repeats in nucleotide sequences
+   equicktandem     Finds tandem repeats in nucleotide sequences
+                    palindrome   Finds inverted repeats in nucleotide sequence(s)
+
+                    Running with a wide range of repeat sizes is inefficient. That is why
+                    equicktandem was written - to give a rapid estimate of the major
+                    repeat sizes.
+
+Authors
+
+   This program was originally written by Richard Durbin
+   (rd © sanger.ac.uk)
+   Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
+   CB10 1SA, UK.
+
+   This application was modified for inclusion in EMBOSS by Peter Rice
+   (pmr © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
+
+History
+
+   Completed 25 May 1999
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

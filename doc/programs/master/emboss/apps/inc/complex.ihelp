@@ -1,0 +1,82 @@
+   Standard (Mandatory) qualifiers (* if not always prompted):
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -lwin               integer    [100] Window length (Any integer value)
+   -step               integer    [5] Displacement of the window over the
+                                  sequence (Any integer value)
+   -jmin               integer    [4] Minimum word length (Integer from 2 to
+                                  20)
+   -jmax               integer    [6] Maximum word length (Integer from 2 to
+                                  50)
+  [-outfile]           outfile    [*.complex] Output file name
+*  -outseq             seqoutall  [<sequence>.<format>] Sequence set(s)
+                                  filename and optional format (output USA)
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -omnia              toggle     [N] Calculate over a set of sequences
+   -sim                integer    [0] Calculate the linguistic complexity by
+                                  comparison with a number of simulations
+                                  having a uniform distribution of bases (Any
+                                  integer value)
+   -freq               boolean    [N] Execute the simulation of a sequence
+                                  based on the base frequency of the original
+                                  sequence
+   -print              boolean    [N] Generate a file named UjTable containing
+                                  the values of Uj for each word j in the
+                                  real sequence(s) and in any simulated
+                                  sequences
+   -ujtablefile        outfile    [complex.ujtable] Program complex temporary
+                                  output file
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   "-ujtablefile" associated qualifiers
+   -odirectory         string     Output directory
+
+   "-outseq" associated qualifiers
+   -osformat           string     Output seq format
+   -osextension        string     File name extension
+   -osname             string     Base file name
+   -osdirectory        string     Output directory
+   -osdbname           string     Database name to add
+   -ossingle           boolean    Separate file for each entry
+   -oufo               string     UFO features
+   -offormat           string     Features format
+   -ofname             string     Features file name
+   -ofdirectory        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+

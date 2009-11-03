@@ -1,0 +1,40 @@
+   Standard (Mandatory) qualifiers:
+  [-features]          features   (no help text) features value
+  [-outfeat]           featout    [unknown.gff] Output features UFO
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-features" associated qualifiers
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+   -fask1              boolean    Prompt for begin/end/reverse
+   -fbegin1            integer    Start of the features to be used
+   -fend1              integer    End of the features to be used
+   -freverse1          boolean    Reverse (if DNA)
+
+   "-outfeat" associated qualifiers
+   -offormat2          string     Output feature format
+   -ofopenfile2        string     Features file name
+   -ofextension2       string     File name extension
+   -ofdirectory2       string     Output directory
+   -ofname2            string     Base file name
+   -ofsingle2          boolean    Separate file for each entry
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+

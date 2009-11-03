@@ -1,0 +1,39 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: x13776.dreg</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: dreg
+# Rundate: Tue 15 Jul 2008 12:00:00
+# Commandline: dreg
+#    -sequence tembl:x13776
+#    -pattern ggtacc
+# Report_format: seqtable
+# Report_file: x13776.dreg
+########################################
+
+#=======================================
+#
+# Sequence: X13776     from: 1   to: 2167
+# HitCount: 1
+#
+# Pattern: ggtacc
+#
+#=======================================
+
+  Start     End  Strand Pattern_name Sequence
+      1       6       + regex        ggtacc
+
+#---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_length: 2167
+# Reported_sequences: 1
+# Reported_hitcount: 1
+#---------------------------------------
+</pre>
+</td></tr></table><p>

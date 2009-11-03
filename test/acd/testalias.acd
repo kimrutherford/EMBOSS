@@ -1,0 +1,24 @@
+# ACD file for QA testing - attribute alias definitions
+#
+
+appl: testalias [ doc: "testing" group: "testing" ]
+
+section: advanced [ info: "Advanced section" type: "page" ]
+
+string: astring [ info: "a string" standard: "Y" knowntype: "wet" ]
+
+string: bstring [ info: "b string" additional: "Y" ]
+
+string: cstring [ info: "c string" required: "Y" ]
+
+string: dstring [ info: "d string" req: "Y" ]
+
+string: estring [ info: "e string" optional: "Y" ]
+
+string: fstring [ info: "f string" opt: "Y" ]
+
+string: gstring [ info: "g string" standardtype: "wet" ]
+
+string: hstring [ info: "h string" requ: "Y" ]
+
+endsection: advanced

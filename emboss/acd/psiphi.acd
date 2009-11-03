@@ -1,0 +1,70 @@
+application: psiphi [
+  documentation: "Calculates phi and psi torsion angles from
+                  protein coordinates"
+  groups: "protein:3D structure"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  infile: infile [
+    parameter: "Y"
+    information: "Clean protein structure coordinates file"
+    knowntype: "protein clean coordinates"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  integer: chainnumber [
+    standard: "Y"
+    information: "Number of the chain for which torsion angles
+                  should be calculated"
+    default: "1"
+    minimum: "1"
+  ]
+
+  integer: startresiduenumber [
+    standard: "Y"
+    information: "First residue in chain for which torsion
+                  angles should be calculated"
+    default: "1"
+    minimum: "1"
+  ]
+
+  integer: finishresiduenumber [
+    standard: "Y"
+    information: "Last residue in chain for which torsion
+                  angles should be calculated (1 = last residue)"
+    default: "1"
+  ]
+
+endsection: required
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  report: outfile [
+    parameter: "Y"
+    rformat: "table"
+    multiple: "N"
+    precision: "1"
+    taglist: "float:phi float:psi"
+  ]
+
+endsection: output

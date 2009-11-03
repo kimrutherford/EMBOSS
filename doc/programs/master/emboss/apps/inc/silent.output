@@ -1,0 +1,47 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: x65923.silent </h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: silent
+# Rundate: Tue 15 Jul 2008 12:00:00
+# Commandline: silent
+#    -sequence tembl:x65923
+#    -enzymes ecori,hindiii
+# Report_format: table
+# Report_file: x65923.silent
+########################################
+
+#=======================================
+#
+# Sequence: X65923     from: 1   to: 518
+# HitCount: 1
+#
+# KEY:
+# EnzymeName: Enzyme name
+# RS-Pattern: Restriction enzyme recognition site pattern
+# Base-Posn: Position of base to be mutated
+# AAs: Amino acid. Original sequence(.)After mutation
+# Silent: Yes for unchanged amino acid
+# Mutation: The base mutation to perform
+# 
+# Creating silent and non-silent mutations
+#
+#=======================================
+
+  Start     End  Strand EnzymeName RS-Pattern Base-Posn    AAs Silent Mutation
+    267     272       - HindIII    AAGCTT           268    A.A    Yes     A-&gt;T
+
+#---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_length: 518
+# Reported_sequences: 1
+# Reported_hitcount: 1
+#---------------------------------------
+</pre>
+</td></tr></table><p>

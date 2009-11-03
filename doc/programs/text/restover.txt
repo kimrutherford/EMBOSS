@@ -1,0 +1,393 @@
+
+                                 restover 
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Find restriction enzymes producing a specific overhang
+
+Description
+
+   restover identifies restriction enzymes from the REBASE database that
+   create the specified overhang sequence when they cut the input
+   nucleotide sequence(s). It writes an output file which shows the base
+   number, restriction enzyme name, recognition site and cut positions.
+   There are several options to control exactly what sites are reported
+   and the format of the output file. Optionally, output in HTML may be
+   generated.
+
+Usage
+
+   Here is a sample session with restover
+
+
+% restover 
+Find restriction enzymes producing a specific overhang
+Input nucleotide sequence(s): tembl:x65923
+Overlap sequence: cg
+Output file [x65923.restover]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+  [-seqcomp]           string     Overlap sequence (Any string is accepted)
+  [-outfile]           outfile    [*.restover] Output file name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -datafile           datafile   Restriction enzyme data file (optional)
+   -mfile              datafile   [Emethylsites.dat] Restriction enzyme data
+                                  file (optional)
+   -min                integer    [1] Minimum cuts per RE (Integer from 1 to
+                                  1000)
+   -max                integer    [2000000000] Maximum cuts per RE (Integer up
+                                  to 2000000000)
+   -single             boolean    [N] Force single site only cuts
+   -threeprime         boolean    [N] Use 3' overhang e.g. BamHI has CTAG as a
+                                  5' overhang, and ApaI has CCGG as 3'
+                                  overhang.
+   -[no]blunt          boolean    [Y] Allow blunt end cutters
+   -[no]sticky         boolean    [Y] Allow sticky end cutters
+   -[no]ambiguity      boolean    [Y] Allow ambiguous matches
+   -plasmid            boolean    [N] Allow circular DNA
+   -methylation        boolean    [N] If this is set then RE recognition sites
+                                  will not match methylated bases.
+   -[no]commercial     boolean    [Y] Only enzymes with suppliers
+   -html               boolean    [N] Create HTML output
+   -[no]limit          boolean    [Y] Limits reports to one isoschizomer
+   -alphabetic         boolean    [N] Sort output alphabetically
+   -fragments          boolean    [N] Show fragment lengths
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory3        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   restover reads in a normal nucleic acid sequence USA.
+
+  Input files for usage example
+
+   'tembl:x65923' is a sequence entry in the example nucleic acid
+   database 'tembl'
+
+  Database entry: tembl:x65923
+
+ID   X65923; SV 1; linear; mRNA; STD; HUM; 518 BP.
+XX
+AC   X65923;
+XX
+DT   13-MAY-1992 (Rel. 31, Created)
+DT   18-APR-2005 (Rel. 83, Last updated, Version 11)
+XX
+DE   H.sapiens fau mRNA
+XX
+KW   fau gene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
+;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-518
+RA   Michiels L.M.R.;
+RT   ;
+RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   L.M.R. Michiels, University of Antwerp, Dept of Biochemistry,
+RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
+XX
+RN   [2]
+RP   1-518
+RX   PUBMED; 8395683.
+RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
+RT   "fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
+RT   an antisense sequence in the Finkel-Biskis-Reilly murine sarcoma virus";
+RL   Oncogene 8(9):2537-2546(1993).
+XX
+DR   H-InvDB; HIT000322806.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..518
+FT                   /organism="Homo sapiens"
+FT                   /chromosome="11q"
+FT                   /map="13"
+FT                   /mol_type="mRNA"
+FT                   /clone_lib="cDNA"
+FT                   /clone="pUIA 631"
+FT                   /tissue_type="placenta"
+FT                   /db_xref="taxon:9606"
+FT   misc_feature    57..278
+FT                   /note="ubiquitin like part"
+FT   CDS             57..458
+FT                   /gene="fau"
+FT                   /db_xref="GDB:135476"
+FT                   /db_xref="GOA:P62861"
+FT                   /db_xref="HGNC:3597"
+FT                   /db_xref="HSSP:1GJZ"
+FT                   /db_xref="InterPro:IPR006846"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
+FT                   /protein_id="CAA46716.1"
+FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLA
+G
+FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKT
+G
+FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
+FT   misc_feature    98..102
+FT                   /note="nucleolar localization signal"
+FT   misc_feature    279..458
+FT                   /note="S30 part"
+FT   polyA_signal    484..489
+FT   polyA_site      509
+XX
+SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
+     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        6
+0
+     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       12
+0
+     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       18
+0
+     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       24
+0
+     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       30
+0
+     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       36
+0
+     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       42
+0
+     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       48
+0
+     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               51
+8
+//
+
+Output file format
+
+  Output files for usage example
+
+  File: x65923.restover
+
+# Restrict of X65923 from 1 to 518
+#
+# Minimum cuts per enzyme: 1
+# Maximum cuts per enzyme: 2000000000
+# Minimum length of recognition site: 2
+# Number of hits with any overlap: 54
+# Base Number   Enzyme          Site            5'      3'      [5'     3']
+        11      TaqI            TCGA            11      13
+        28      AciI            CCGC            25      27
+        38      AciI            CCGC            38      40
+        44      BceAI           ACGGC           25      27
+        71      AciI            CCGC            71      73
+        73      Hin6I           GCGC            73      75
+        94      TaqI            TCGA            94      96
+        103     HpaII           CCGG            103     105
+        162     HpaII           CCGG            162     164
+        190     Hin6I           GCGC            190     192
+        192     Hin6I           GCGC            192     194
+        225     BsrI            ACTGG           221     219
+        229     AciI            CCGC            226     228
+        263     AciI            CCGC            263     265
+        380     AciI            CCGC            377     379
+        383     AciI            CCGC            380     382
+        395     HpaII           CCGG            395     397
+        398     Hin6I           GCGC            398     400
+        408     AclI            AACGTT          409     411
+        409     MaeII           ACGT            409     411
+
+   The output from restover is a simple text one. The base number,
+   restriction enzyme name, recognition site and cut positions are shown.
+   Note that cuts are always to the right of the residue shown and that
+   5' cuts are referred to by their associated 3' number sequence. The
+   program reports enzymes that cut at two or four sites.
+
+Data files
+
+   EMBOSS data files are distributed with the application and stored in
+   the standard EMBOSS data directory, which is defined by the EMBOSS
+   environment variable EMBOSS_DATA.
+
+   To see the available EMBOSS data files, run:
+
+% embossdata -showall
+
+   To fetch one of the data files (for example 'Exxx.dat') into your
+   current directory for you to inspect or modify, run:
+
+% embossdata -fetch -file Exxx.dat
+
+   Users can provide their own data files in their own directories.
+   Project specific files can be put in the current directory, or for
+   tidier directory listings in a subdirectory called ".embossdata".
+   Files for all EMBOSS runs can be put in the user's home directory, or
+   again in a subdirectory called ".embossdata".
+
+   The directories are searched in the following order:
+     * . (your current directory)
+     * .embossdata (under your current directory)
+     * ~/ (your home directory)
+     * ~/.embossdata
+
+   The EMBOSS REBASE restriction enzyme data files are stored in
+   directory 'data/REBASE/*' under the EMBOSS installation directory.
+
+   These files must first be set up using the program 'rebaseextract'.
+   Running 'rebaseextract' may be the job of your system manager.
+
+   The data files are stored in the REBASE directory of the standard
+   EMBOSS data directory. The names are:
+     * embossre.enz Cleavage information
+     * embossre.ref Reference/methylation information
+     * embossre.sup Supplier information
+
+   The column information is described at the top of the data files
+
+   The reported enzyme from any one group of isoschizomers (the
+   prototype) is specified in the REBASE database and the information is
+   held in the data file 'embossre.equ'. You may edit this file to set
+   your own preferred prototype, if you wish.
+
+   The format of the file "embossre.equ" is
+   Enzyme-name Prototype-name
+
+   i.e. two columns of enzyme names separated by a space. The first name
+   of the pair of enzymes is the name that is not preferred and the
+   second is the preferred (prototype) name.
+
+Notes
+
+   The Restriction Enzyme database (REBASE) is a collection of
+   information about restriction enzymes and related proteins. It
+   contains published and unpublished references, recognition and
+   cleavage sites, isoschizomers, commercial availability, methylation
+   sensitivity, crystal and sequence data. DNA methyltransferases, homing
+   endonucleases, nicking enzymes, specificity subunits and control
+   proteins are also included. Most recently, putative DNA
+   methyltransferases and restriction enzymes, as predicted from analysis
+   of genomic sequences, are also listed.
+
+   The home page of REBASE is: http://rebase.neb.com/
+
+   Several criteria may be set to control what sites are reported: -min,
+   -max, -single (minimum or maximum number of cuts, or single site cuts
+   only. -blunt (enzymes which cut at the same position on the forward
+   and reverse strands). -sticky (enzymes which cut at different
+   positions on the forward and reverse strands, leaving an overhang).
+   -ambiguity (enzymes which have one or more N ambiguity codes in their
+   pattern). -commercial (enzymes with a commercial supplier). -plasmid
+   (allows searches for restriction enzyme recognition site and cut
+   postions that span the end of the sequence).
+
+   By default, only one enzyme of any group of isoschizomers (enzymes
+   that have the same recognition site and cut positions) is reported.
+   This behaviour can be changed by specifying '-nolimit', in which case
+   all isoschizomers are reported. The default behaviour uses the
+   representative enzyme of an isoschizomer group (the prototype) which
+   is specified in the EMBOSS data file embossre.equ. This file is
+   generated from the REBASE database by running rebaseextract. You may
+   edit this file to set your own preferred prototype,if you wish.
+
+References
+
+   None.
+
+Warnings
+
+   restover uses the EMBOSS REBASE restriction enzyme data files stored
+   in directory data/REBASE/* under the EMBOSS installation directory.
+   These files must first be set up using the program rebaseextract.
+   Running rebaseextract may be the job of your system manager.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name     Description
+   recoder          Find restriction sites to remove (mutate) with no translation
+                    change
+   redata           Retrieve information from REBASE restriction enzyme database
+   remap            Display restriction enzyme binding sites in a nucleotide
+                    sequence
+   restrict         Report restriction enzyme cleavage sites in a nucleotide
+                    sequence
+   showseq          Displays sequences with features in pretty format
+   silent           Find restriction sites to insert (mutate) with no translation
+                    change
+
+Author(s)
+
+   Bernd Jagla (bernd © golgi.ski.mskcc.org)
+   Cellular Biochemistry and Biophysics Program, Rockefeller Research
+   Laboratories, Memorial Sloan-Kettering Cancer Center, 1275 York
+   Avenue, Box 251,New York, NY 10021.
+
+History
+
+   Written (Jan 2001) - Bernd Jagla
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

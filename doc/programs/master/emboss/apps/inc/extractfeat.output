@@ -1,0 +1,220 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: x65921.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;X65921_408_504 [exon] H.sapiens fau 1 gene
+cagtgacgtgacacgcagcccacggtctgtactgacgcgccctcgcttcttcctctttct
+cgactccatcttcgcggtagctgggaccgccgttcag
+&gt;X65921_774_856 [exon] H.sapiens fau 1 gene
+tcgccaatatgcagctctttgtccgcgcccaggagctacacaccttcgaggtgaccggcc
+aggaaacggtcgcccagatcaag
+&gt;X65921_951_1095 [exon] H.sapiens fau 1 gene
+gctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgctcctggcaggc
+gcgcccctggaggatgaggccactctgggccagtgcggggtggaggccctgactaccctg
+gaagtagcaggccgcatgcttggag
+&gt;X65921_1557_1612 [exon] H.sapiens fau 1 gene
+gtaaagtccatggttccctggcccgtgctggaaaagtgagaggtcagactcctaag
+&gt;X65921_1787_1912 [exon] H.sapiens fau 1 gene
+gtggccaaacaggagaagaagaagaagaagacaggtcgggctaagcggcggatgcagtac
+aaccggcgctttgtcaacgttgtgcccacctttggcaagaagaagggccccaatgccaac
+tcttaa
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: x65921.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;X65921_408_504 [exon] H.sapiens fau 1 gene
+ggtcgctcagcagtgacgtgacacgcagcccacggtctgtactgacgcgccctcgcttct
+tcctctttctcgactccatcttcgcggtagctgggaccgccgttcaggtaagaatgg
+&gt;X65921_774_856 [exon] H.sapiens fau 1 gene
+ctttactcagtcgccaatatgcagctctttgtccgcgcccaggagctacacaccttcgag
+gtgaccggccaggaaacggtcgcccagatcaaggtaaggctgc
+&gt;X65921_951_1095 [exon] H.sapiens fau 1 gene
+ttccctgtaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgct
+cctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccct
+gactaccctggaagtagcaggccgcatgcttggaggtgagtgaga
+&gt;X65921_1557_1612 [exon] H.sapiens fau 1 gene
+cccactacaggtaaagtccatggttccctggcccgtgctggaaaagtgagaggtcagact
+cctaaggtgagtgaga
+&gt;X65921_1787_1912 [exon] H.sapiens fau 1 gene
+ccttctccaggtggccaaacaggagaagaagaagaagaagacaggtcgggctaagcggcg
+gatgcagtacaaccggcgctttgtcaacgttgtgcccacctttggcaagaagaagggccc
+caatgccaactcttaagtcttttgta
+</pre>
+</td></tr></table><p>
+
+<a name="output.3"></a>
+<h3>Output files for usage example 3</h3>
+<p><h3>File: h45989.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;X65921_408_504 [exon] H.sapiens fau 1 gene
+ctcagcagtg
+&gt;X65921_774_856 [exon] H.sapiens fau 1 gene
+ctcagtcgcc
+&gt;X65921_951_1095 [exon] H.sapiens fau 1 gene
+tgtaggctca
+&gt;X65921_1557_1612 [exon] H.sapiens fau 1 gene
+tacaggtaaa
+&gt;X65921_1787_1912 [exon] H.sapiens fau 1 gene
+tccaggtggc
+&gt;K00650_889_1029 [exon] Human fos proto-oncogene (c-fos), complete cds.
+ccacgatgat
+&gt;K00650_1783_2034 [exon] Human fos proto-oncogene (c-fos), complete cds.
+tctaggactt
+&gt;K00650_2466_2573 [exon] Human fos proto-oncogene (c-fos), complete cds.
+tctagttatc
+&gt;K00650_2688_3329 [exon] Human fos proto-oncogene (c-fos), complete cds.
+tacaggagac
+&gt;D00596_1001_1205 [exon] Homo sapiens gene for thymidylate synthase, complete cds.
+gcgccatgcc
+&gt;D00596_2895_2968 [exon] Homo sapiens gene for thymidylate synthase, complete cds.
+ttcagatgaa
+&gt;D00596_5396_5570 [exon] Homo sapiens gene for thymidylate synthase, complete cds.
+tccagggatc
+&gt;D00596_11843_11944 [exon] Homo sapiens gene for thymidylate synthase, complete cds.
+tacagattat
+&gt;D00596_13449_13624 [exon] Homo sapiens gene for thymidylate synthase, complete cds.
+ctcagatctt
+&gt;D00596_14133_14204 [exon] Homo sapiens gene for thymidylate synthase, complete cds.
+tatagccagg
+&gt;D00596_15613_15750 [exon] Homo sapiens gene for thymidylate synthase, complete cds.
+tttagcttca
+&gt;AB009071_67_155 [exon] Homo sapiens HERG gene, complete cds.
+cccgcccatg
+&gt;AB009071_356_586 [exon] Homo sapiens HERG gene, complete cds.
+cctaggccgt
+&gt;AB009071_768_932 [exon] Homo sapiens HERG gene, complete cds.
+tgcagggagc
+&gt;AB009071_1137_1580 [exon] Homo sapiens HERG gene, complete cds.
+cgcaggccgc
+&gt;AB009071_1742_1953 [exon] Homo sapiens HERG gene, complete cds.
+cctaggggcc
+&gt;AB009071_2168_2596 [exon] Homo sapiens HERG gene, complete cds.
+tgcaggtcct
+&gt;AB009071_2765_3152 [exon] Homo sapiens HERG gene, complete cds.
+cccagctgat
+&gt;AB009071_3332_3531 [exon] Homo sapiens HERG gene, complete cds.
+cccagccctc
+&gt;AB009071_3716_3968 [exon] Homo sapiens HERG gene, complete cds.
+cccaggtgct
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+aacagctcct
+&gt;U01317_39414_39558 [exon] Human beta globin region on chromosome 11.
+tccacacact
+&gt;U01317_39681_39903 [exon] Human beta globin region on chromosome 11.
+cacaggctcc
+&gt;U01317_40770_40985 [exon] Human beta globin region on chromosome 11.
+aacagctcct
+&gt;U01317_45710_45800 [exon] Human beta globin region on chromosome 11.
+acactgtagt
+&gt;U01317_45922_46145 [exon] Human beta globin region on chromosome 11.
+cacagtctcc
+&gt;U01317_46997_47124 [exon] Human beta globin region on chromosome 11.
+cccagctctt
+&gt;U01317_54740_54881 [exon] Human beta globin region on chromosome 11.
+tgcttacact
+&gt;U01317_55010_55232 [exon] Human beta globin region on chromosome 11.
+ctcagattac
+&gt;U01317_56131_56389 [exon] Human beta globin region on chromosome 11.
+cgcagctctt
+&gt;U01317_62137_62278 [exon] Human beta globin region on chromosome 11.
+tgcttacatt
+&gt;U01317_62187_62278 [exon] Human beta globin region on chromosome 11.
+acaccatggt
+&gt;U01317_62390_62408 [exon] Human beta globin region on chromosome 11.
+attggtctat
+&gt;U01317_62409_62631 [exon] Human beta globin region on chromosome 11.
+cttaggctgc
+&gt;U01317_63482_63742 [exon] Human beta globin region on chromosome 11.
+cacagctcct
+&gt;M23100_1541_1923 [exon] Human insulin receptor (INSR) gene, exon 1, clones lambda-hINSR-(1-13).
+ctccgggccc
+&gt;M23100_1542_1923 [exon] Human insulin receptor (INSR) gene, exon 1, clones lambda-hINSR-(1-13).
+tccgggcccc
+&gt;M23100_1548_1923 [exon] Human insulin receptor (INSR) gene, exon 1, clones lambda-hINSR-(1-13).
+ccccgagatc
+&gt;V00451_363_460 [exon] Glycine max leghemoglobin gene or pseudogene (no mRNA detected).
+gaaatatggg
+&gt;V00451_555_663 [exon] Glycine max leghemoglobin gene or pseudogene (no mRNA detected).
+aataggatat
+&gt;V00451_2182_2286 [exon] Glycine max leghemoglobin gene or pseudogene (no mRNA detected).
+tgtaggtgcg
+&gt;V00451_3065_3208 [exon] Glycine max leghemoglobin gene or pseudogene (no mRNA detected).
+cgtaggtggt
+&gt;M11903_351_499 [exon] Rattus norvegicus androgen-responsive protein precursor (Svf) gene, exons 1 and 1A, alternatively spliced.
+cctgtaggca
+&gt;M11903_401_499 [exon] Rattus norvegicus androgen-responsive protein precursor (Svf) gene, exons 1 and 1A, alternatively spliced.
+gctctcagtc
+&gt;M11904_109_445 [exon] Rattus norvegicus androgen-responsive protein precursor (Svf) gene, exon 2 and complete cds.
+aacagaaaaa
+&gt;M11905_233_420 [exon] Rattus norvegicus androgen-responsive protein precursor (Svf) gene, exon 3.
+cacaggttgt
+</pre>
+</td></tr></table><p>
+
+<a name="output.4"></a>
+<h3>Output files for usage example 4</h3>
+<p><h3>File: x65921.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;X65921_782_1912 [CDS] H.sapiens fau 1 gene
+atgcagctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacg
+gtcgcccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtc
+gtgctcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggag
+gccctgactaccctggaagtagcaggccgcatgcttggaggtaaagtccatggttccctg
+gcccgtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaag
+aagaagacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtg
+cccacctttggcaagaagaagggccccaatgccaactcttaa
+</pre>
+</td></tr></table><p>
+
+<a name="output.5"></a>
+<h3>Output files for usage example 5</h3>
+<p><h3>File: 12s1_arath.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;AQP1_HUMAN_247_247 [protein_modification_categorized_by_chemical_process] Aquaporin-1 (AQP-1) (Aquaporin-CHIP) (Water channel protein for red blood cells and kidney proximal tubule) (Urine water channel)
+VWTSGQV
+&gt;AQP1_HUMAN_262_262 [protein_modification_categorized_by_chemical_process] Aquaporin-1 (AQP-1) (Aquaporin-CHIP) (Water channel protein for red blood cells and kidney proximal tubule) (Urine water channel)
+DINSRVE
+&gt;GCN4_YEAST_17_17 [protein_modification_categorized_by_chemical_process] General control protein GCN4 (Amino acid biosynthesis regulatory protein)
+MGFSPLD
+&gt;GCN4_YEAST_218_218 [protein_modification_categorized_by_chemical_process] General control protein GCN4 (Amino acid biosynthesis regulatory protein)
+IPLSPIV
+&gt;OPSD_HUMAN_334_334 [protein_modification_categorized_by_chemical_process] Rhodopsin (Opsin-2)
+DEASATV
+&gt;OPSD_HUMAN_338_338 [protein_modification_categorized_by_chemical_process] Rhodopsin (Opsin-2)
+ATVSKTE
+&gt;OPSD_HUMAN_343_343 [protein_modification_categorized_by_chemical_process] Rhodopsin (Opsin-2)
+TETSQVA
+&gt;PAXI_HUMAN_83_83 [protein_modification_categorized_by_chemical_process] Paxillin
+QPQSSSP
+&gt;PAXI_HUMAN_85_85 [protein_modification_categorized_by_chemical_process] Paxillin
+QSSSPVY
+&gt;PAXI_HUMAN_106_106 [protein_modification_categorized_by_chemical_process] Paxillin
+SVGSPCS
+&gt;PAXI_HUMAN_109_109 [protein_modification_categorized_by_chemical_process] Paxillin
+SPCSRVG
+&gt;PAXI_HUMAN_126_126 [protein_modification_categorized_by_chemical_process] Paxillin
+KQKSAEP
+&gt;PAXI_HUMAN_130_130 [protein_modification_categorized_by_chemical_process] Paxillin
+AEPSPTV
+&gt;PAXI_HUMAN_137_137 [protein_modification_categorized_by_chemical_process] Paxillin
+MSTSLGS
+&gt;PAXI_HUMAN_303_303 [protein_modification_categorized_by_chemical_process] Paxillin
+GRSSPGG
+&gt;UBR5_RAT_193_193 [protein_modification_categorized_by_chemical_process] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog) (100 kDa protein) (Fragment)
+GRPSQGL
+&gt;UBR5_RAT_607_607 [protein_modification_categorized_by_chemical_process] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog) (100 kDa protein) (Fragment)
+SSRSVVD
+</pre>
+</td></tr></table><p>

@@ -1,0 +1,558 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: jaspextract
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+jaspextract
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
+    Function
+</H2>
+Extract data from JASPAR
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+
+   JASPAR is a collection of transcription factor DNA-binding preferences,
+   modelled as matrices. These can be converted into Position Weight
+   Matrices (PWMs or PSSMs), used for scanning genomic sequences.
+
+<p>
+   JASPAR is the only database with this scope where the data can be used
+   with no restrictions (open-source).
+
+<p>
+   This program copies the 3 JASPAR matrix sets into the EMBOSS
+   data directories, performing any necessary conversions.
+
+<p>
+   The home page of JASPAR
+   is: <a href="http://jaspar.genereg.net/">http://jaspar.genereg.net/</a>
+
+<p>
+   The EMBOSS program jaspscan will not work unless this program is run.
+
+<p>
+   Running this program may be the job of your system manager.
+
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+<b>Here is a sample session with jaspextract</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>jaspextract </b>
+Extract data from JASPAR
+JASPAR database directory [.]: <b>jaspar</b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-directory]         directory  The directory containing the unzipped and
+                                  untarred JASPAR_CORE, JASPAR_FAM and
+                                  JASPAR_PHYLOFACTS subdirectories
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers: (none)
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-directory]<br>(Parameter 1)</td>
+<td>The directory containing the unzipped and untarred JASPAR_CORE, JASPAR_FAM and JASPAR_PHYLOFACTS subdirectories</td>
+<td>Directory</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+
+
+
+   The input files are the uncompressed and extracted JASPAR_CORE.tgz,
+   JASPAR_FAM.tgz and JASPAR_PHYLOFACTS.tgz files provided in the JASPAR
+   MatrixDir download directory of the JASPAR homepage
+   <a href="http://jaspar.genereg.net">(http://jaspar.genereg.net).</a>
+<p>
+   The files will usually be extracted in the same directory thereby
+   creating a directory containing subdirectories JASPAR_CORE,
+   JASPAR_FAM and JASPAR_PHYLOFACTS. Given a directory specification,
+   jasparextract will search for these subdirectories and process the
+   files in any that exist. jasparextract will warn the user if any
+   of the three subdirectories do not exist.
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<!-- 
+        This includes example output file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null output, errors etc. 
+
+        If you wish to include the standard description of the avalable
+	report formats, use:
+        #include file="inc/reportformats.ihtml"
+   -->
+
+  The output file format is currently the same as the JASPAR
+  distribution format.
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>Directory: JASPAR_CORE</h3>
+<p>This directory contains output files, for example MA0070.pfm MA0071.pfm MA0072.pfm MA0073.pfm MA0074.pfm MA0075.pfm MA0076.pfm MA0077.pfm MA0078.pfm MA0079.pfm and matrix_list.txt.
+<p><h3>File: JASPAR_CORE/MA0070.pfm</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+ 5  3 16  1  0 17 17  0  0 16 12  8
+ 6  9  1  1 18  1  0  0 18  1  0  2
+ 2  3  1  0  0  0  0  1  0  0  1  2
+ 5  3  0 16  0  0  1 17  0  1  5  6
+</pre>
+</td></tr></table><p>
+<p><h3>File: JASPAR_CORE/MA0071.pfm</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+15  9  6 11 21  0  0  0  0 25
+ 1  1 12  2  0  0  0  0 25  0
+ 2  0  4  5  4 25 25  0  0  0
+ 7 15  3  7  0  0  0 25  0  0
+</pre>
+</td></tr></table><p>
+<p><h3>File: JASPAR_CORE/MA0072.pfm</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+ 9 17 15 35 23  2  0 28  0  0  0  0 36 15
+ 8  2  0  1  0 12  0  0  0  0  0 36  0  6
+ 8  7  3  0  0 13  0  8 36 36  0  0  0 10
+11 10 18  0 13  9 36  0  0  0 36  0  0  5
+</pre>
+</td></tr></table><p>
+<p><h3>File: JASPAR_CORE/MA0073.pfm</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+ 3  1  3  0  7  9  8  4  0 11  4  1  3  4  2  4  4  4  1  4
+ 8 10  8 11  4  2  3  6 11  0  7 10  8  6  9  5  5  6  7  4
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  1  0  3  2
+ 0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  2  1  1  0  1
+</pre>
+</td></tr></table><p>
+<p><h3>File: JASPAR_CORE/MA0074.pfm</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+ 3  0  0  0  0  9  4  2  2  5  0  0  1  0  7
+ 0  0  0  0  9  0  2  4  0  0  0  0  0  9  1
+ 7 10  9  0  0  1  0  2  8  5 10  0  0  0  2
+ 0  0  1 10  1  0  4  2  0  0  0 10  9  1  0
+</pre>
+</td></tr></table><p>
+<p><h3>File: JASPAR_CORE/MA0075.pfm</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+52 59  0  0 58
+ 2  0  0  0  0
+ 4  0  1  0  1
+ 1  0 58 59  0
+</pre>
+</td></tr></table><p>
+<p><h3>File: JASPAR_CORE/MA0076.pfm</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+16  0  0  0  0 20 16  4  1
+ 1 20 20  0  0  0  0  1  6
+ 2  0  0 20 20  0  0 15  0
+ 1  0  0  0  0  0  4  0 13
+</pre>
+</td></tr></table><p>
+<p><h3>File: JASPAR_CORE/MA0077.pfm</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+24 54 59  0 65 71  4 24  9
+ 7  6  4 72  4  2  0  6  9
+31  7  0  2  0  1  1 38 55
+14  9 13  2  7  2 71  8  3
+</pre>
+</td></tr></table><p>
+<p><h3>File: JASPAR_CORE/MA0078.pfm</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+ 7  8  3 30  0  0  0  0  0
+ 9  8 18  0  1  0  0  0 17
+ 6  4  1  0  0  0 31  2 10
+ 9 11  9  1 30 31  0 29  4
+</pre>
+</td></tr></table><p>
+<p><h3>File: JASPAR_CORE/MA0079.pfm</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+1 2 0 0 0 2 0 0 1 2
+1 1 0 0 5 0 1 0 1 0
+4 4 8 8 2 4 5 6 6 0
+2 1 0 0 1 2 2 2 0 6
+</pre>
+</td></tr></table><p>
+<p><h3>File: JASPAR_CORE/matrix_list.txt</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+MA0073	22.2782723704014	RREB1	ZN-FINGER, C2H2	; acc "Q92766" ; medline "8816445" ; seqdb "SWISSPROT" ; species "Homo sapiens" ; sysgroup "vertebrate" ; total_ic "22.2800" ; type "SELEX" 
+MA0075	9.06306510239135	Prrx2	HOMEO	; acc "Q06348" ; medline "7901837" ; seqdb "SWISSPROT" ; species "Mus musculus" ; sysgroup "vertebrate" ; total_ic "9.0620" ; type "SELEX" 
+MA0070	14.6408952002356	Pbx	HOMEO	; acc "P40424" ; medline "7910944" ; seqdb "SWISSPROT" ; species "Homo sapiens" ; sysgroup "vertebrate" ; total_ic "14.6440" ; type "SELEX" 
+MA0079	9.7185757452318	SP1	ZN-FINGER, C2H2	; acc "P08047" ; medline "2192357" ; seqdb "SWISSPROT" ; species "Homo sapiens" ; sysgroup "vertebrate" ; total_ic "9.7160" ; type "SELEX" 
+MA0077	9.07881462267179	SOX9	HMG	; acc "P48436" ; medline "9973626" ; seqdb "SWISSPROT" ; species "Homo sapiens" ; sysgroup "vertebrate" ; total_ic "9.0810" ; type "SELEX" 
+MA0078	10.5018372361999	Sox17	HMG	; acc "Q61473" ; medline "8636240" ; seqdb "SWISSPROT" ; species "Mus musculus" ; sysgroup "vertebrate" ; total_ic "10.5030" ; type "SELEX" 
+MA0071	13.1897301896459	RORA	NUCLEAR RECEPTOR	; acc "P35397" ; medline "7926749" ; seqdb "SWISSPROT" ; species "Homo sapiens" ; sysgroup "vertebrate" ; total_ic "13.1920" ; type "SELEX" 
+MA0072	17.4248426117905	RORA1	NUCLEAR RECEPTOR	; acc "P35398" ; medline "7926749" ; seqdb "SWISSPROT" ; species "Homo sapiens" ; sysgroup "vertebrate" ; total_ic "17.4230" ; type "SELEX" 
+MA0074	20.4511671987138	RXR-VDR	NUCLEAR RECEPTOR	; acc "P11473" ; medline "8674817" ; seqdb "SWISSPROT" ; species "Homo sapiens" ; sysgroup "vertebrate" ; total_ic "20.4520" ; type "SELEX" 
+MA0076	14.123230134165	ELK4	ETS	; acc "P28324" ; medline "8524663" ; seqdb "SWISSPROT" ; species "Homo sapiens" ; sysgroup "vertebrate" ; total_ic "14.1230" ; type "SELEX" 
+</pre>
+</td></tr></table><p>
+<p><h3>Directory: JASPAR_FAM</h3>
+<p>This directory contains output files.
+<p>
+<p><h3>Directory: JASPAR_PHYLOFACTS</h3>
+<p>This directory contains output files.
+<p>
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+None
+
+
+
+
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+   The home page of REBASE
+   is: <a href="http://jaspar.genereg.net/">http://jaspar.genereg.net/<a>
+<p>
+   Running this program may be the job of your system manager.
+
+
+
+
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+<ol>
+
+<li>
+
+</ol>
+
+   -->
+
+<OL>
+
+<LI>DNA binding sites: representation and discovery Bioinformatics. 2000
+      Jan;16(1):16-23
+
+<LI>Applied bioinformatics for the identification of regulatory elements
+      Nat Rev Genet. 2004 Apr;5(4):276-87 
+
+</OL>
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+  The program will warn you if any of the JASPAR_CORE, JASPAR_FAM or
+   JASPAR_PHYLOFACTS subdirectories do not exist.
+
+
+
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0 unless an error is reported
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>See also</H2>
+-->
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="aaindexextract.html">aaindexextract</a></td>
+<td>Extract amino acid property data from AAINDEX</td>
+</tr>
+
+<tr>
+<td><a href="cutgextract.html">cutgextract</a></td>
+<td>Extract codon usage tables from from CUTG database</td>
+</tr>
+
+<tr>
+<td><a href="printsextract.html">printsextract</a></td>
+<td>Extract data from PRINTS database for use by pscan</td>
+</tr>
+
+<tr>
+<td><a href="prosextract.html">prosextract</a></td>
+<td>Processes the PROSITE motif database for use by patmatmotifs</td>
+</tr>
+
+<tr>
+<td><a href="rebaseextract.html">rebaseextract</a></td>
+<td>Process the REBASE database for use by restriction enzyme applications</td>
+</tr>
+
+<tr>
+<td><a href="tfextract.html">tfextract</a></td>
+<td>Process TRANSFAC transcription factor database for use by tfscan</td>
+</tr>
+
+</table>
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+
+
+
+
+
+<H2>
+    History
+</H2>
+<!--
+        Date written and what changes have been made go in this file.
+   -->
+   Completed 23rd July 2007
+
+
+
+<H2>
+    Target users
+</H2>
+
+This program is intended to be used by administrators responsible
+for software and database installation and maintenance. 
+
+<H2>
+    Comments
+</H2>
+<!--
+        User/developer/other comments go in this file.
+   -->
+None
+
+
+</BODY>
+</HTML>
+

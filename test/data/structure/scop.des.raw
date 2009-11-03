@@ -1,0 +1,17 @@
+# dir.des.scop.txt 
+# SCOP release 1.57 (January 2002)  [File format version 1.00]
+# http://scop.mrc-lmb.cam.ac.uk/scop/
+# Copyright (c) 1994-2002 the scop authors; see http://scop.mrc-lmb.cam.ac.uk/scop/lic/copy.html
+53931	cl	d	-	Alpha and beta proteins (a+b)
+54861	cf	d.58	-	Ferredoxin-like
+55073	sf	d.58.29	-	Adenylyl and guanylyl cyclase catalytic domain
+55074	fa	d.58.29.1	-	Adenylyl and guanylyl cyclase catalytic domain
+55077	dm	d.58.29.1	-	Adenylyl cyclase VC1, domain C1a
+55078	sp	d.58.29.1	-	Dog (Canis familiaris)
+39418	px	d.58.29.1	d1cs4a_	1cs4 A:
+56299	cf	d.159	-	Metallo-dependent phosphatases
+56300	sf	d.159.1	-	Metallo-dependent phosphatases
+64427	fa	d.159.1.4	-	DNA double-strand break repair nuclease
+64428	dm	d.159.1.4	-	Mre11
+64429	sp	d.159.1.4	-	Archaeon Pyrococcus furiosus
+62415	px	d.159.1.4	d1ii7a_	1ii7 A:

@@ -1,0 +1,48 @@
+embossdoc.csh
+	Script to run embossdatadoc.pl and embossdoc.pl
+	These create the SRS data for browsing the ajax, nucleus and application
+	source routine code.
+
+embossdatadoc.pl
+	Script run by embossdoc.csh.
+	Createsthe edata SRS data for browsing the ajax, nucleus and
+	application source routine code.
+
+embossdoc.pl
+	Script run by embossdoc.csh.
+	Createsthe efunc SRS data for browsing the ajax, nucleus and
+	application source routine code.
+
+autodoc
+	makes the Apps/index.html web page
+	creates the command lines include files
+	warns of missing documentation pages
+
+edithtml.pl
+	Simple script for setting up the html doc for a new application
+	Like autodoc in many ways except that it only works on the
+	single applications files and asks before doing many operations
+	especially cvs commits. 
+
+doctree
+
+	Converts the EMBOSS Web pages on the HGMP Web server to a
+	version that is easy to distribute and can be included in the
+	CVS source tree
+
+	Files are copied, replaced or converted.  If they would change the
+	current CVS version of the file then the change is committed. 
+
+	Copied:
+	   Selected files (*.gif) are simply copied
+
+	Replaced:
+	   Header files of various kinds are replaced by an alternative version
+	   Include file (*.ihelp *.itable *.iauth) are merged with the
+	   .shtml files
+
+	Converted:
+	   For most HTML files:
+	      #include files are replaced with the full file contents
+	      Links are made relative even if they were absolute
+

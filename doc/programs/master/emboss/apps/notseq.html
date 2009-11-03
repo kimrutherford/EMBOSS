@@ -1,0 +1,166 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: notseq
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+notseq
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/notseq.ione" -->
+
+
+
+<H2>
+    Description
+</H2>
+
+<p><b>notseq</b> writes to file a subset of an input stream of sequences. The list of sequence names or accession numbers to exclude from output is provided as a string.  Optionally, the excluded sequences are also written to file.</p>
+
+
+
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/notseq.usage" -->
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/notseq.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/notseq.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+<b>notseq</b> reads normal sequence USAs.
+
+<p>
+
+<!--#include file="inc/notseq.input" -->
+
+<p>
+
+The names (or accession numbers) of the sequences to be excluded can be
+entered as a file of such names by specifying an '@' followed by the
+name of the file containing the sequence names.  For example:
+'@names.dat'. 
+
+<p>
+
+The names or accession numbers of the sequences to be
+excluded are not standard EMBOSS USAs.  Only the ID name or accession
+number can be specified, you cannot specify the sequences as
+'database:ID', 'file:accession', 'format::file', etc. 
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<b>notseq</b> writes normal a sequence file.
+
+<p>
+
+<!--#include file="inc/notseq.output" -->
+
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+<p><b>notseq</b> was written for the case where a file containing several sequences was being used as a small database, but some of the sequences were no longer required. <b>notseq</b> splits the input sequences into those that you wish to keep and those you wish to exclude.</p>
+
+<p>Wildcarded names and accession numbers may be specified in the input string by using <tt>*</tt>.</p>
+
+<p>The names (or accession numbers) of the sequences to be excluded can be entered as a file of such names by specifying an <tt>@</tt> followed by the name of the file containing the sequence names. For example: <tt>@names.dat</tt>.</p>
+
+
+<H2>
+    References
+</H2>
+
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+<p>The input string does not support the full USA syntax; only the name or accession number should be specified, not the database or file that these entries may occur in.</p>
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+If no matches are found to any of the specified sequence names, the message
+"This is a warning: No matches found." is displayed.
+
+
+<H2>
+    Exit status
+</H2>
+
+It exits with a status of 0 unless no matches are found to any of the
+input sequences name, in which case it exits with a status of -1. 
+
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/notseq.isee" -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/gwilliam.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/notseq.history" -->
+
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/notseq.comment" -->
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,646 @@
+
+                                 fuzztran 
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Search for patterns in protein sequences (translated)
+
+Description
+
+   fuzztran searches for a specified PROSITE-style pattern in nucleic
+   acid sequences that are first translated to protein in the specified
+   frame(s) with a specified genetic code. Such patterns are
+   specifications of a (typically short) length of sequence to be found.
+   They can specify a search for an exact sequence or they can allow
+   various ambiguities, matches to variable lengths of sequence and
+   repeated subsections of the sequence. One or more nucleotide sequences
+   are read from file. The output is a standard EMBOSS report file that
+   includes data such as location and score of any matches.
+
+Usage
+
+   Here is a sample session with fuzztran
+
+
+% fuzztran -opt 
+Search for patterns in protein sequences (translated)
+Input nucleotide sequence(s): tembl:Z46957
+Search pattern: RA
+Translation frames
+         1 : 1
+         2 : 2
+         3 : 3
+         F : Forward three frames
+        -1 : -1
+        -2 : -2
+        -3 : -3
+         R : Reverse three frames
+         6 : All six frames
+Frame(s) to translate [1]: f
+Genetic codes
+         0 : Standard
+         1 : Standard (with alternative initiation codons)
+         2 : Vertebrate Mitochondrial
+         3 : Yeast Mitochondrial
+         4 : Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiropl
+asma
+         5 : Invertebrate Mitochondrial
+         6 : Ciliate Macronuclear and Dasycladacean
+         9 : Echinoderm Mitochondrial
+        10 : Euplotid Nuclear
+        11 : Bacterial
+        12 : Alternative Yeast Nuclear
+        13 : Ascidian Mitochondrial
+        14 : Flatworm Mitochondrial
+        15 : Blepharisma Macronuclear
+        16 : Chlorophycean Mitochondrial
+        21 : Trematode Mitochondrial
+        22 : Scenedesmus obliquus
+        23 : Thraustochytrium Mitochondrial
+Code to use [0]: 
+Output report [z46957.fuzztran]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -pattern            pattern    The standard IUPAC one-letter codes for the
+                                  amino acids are used.
+                                  The symbol 'x' is used for a position where
+                                  any amino acid is accepted.
+                                  Ambiguities are indicated by listing the
+                                  acceptable amino acids for a given position,
+                                  between square parentheses '[ ]'. For
+                                  example: [ALT] stands for Ala or Leu or Thr.
+                                  Ambiguities are also indicated by listing
+                                  between a pair of curly brackets '{ }' the
+                                  amino acids that are not accepted at a gven
+                                  position. For example: {AM} stands for any
+                                  amino acid except Ala and Met.
+                                  Each element in a pattern is separated from
+                                  its neighbor by a '-'. (Optional in
+                                  fuzztran)
+                                  Repetition of an element of the pattern can
+                                  be indicated by following that element with
+                                  a numerical value or a numerical range
+                                  between parenthesis. Examples: x(3)
+                                  corresponds to x-x-x, x(2,4) corresponds to
+                                  x-x or x-x-x or x-x-x-x.
+                                  When a pattern is restricted to either the
+                                  N- or C-terminal of a sequence, that pattern
+                                  either starts with a '<' symbol or
+                                  respectively ends with a '>' symbol.
+                                  A period ends the pattern. (Optional in
+                                  fuzztran).
+                                  For example, [DE](2)HS{P}X(2)PX(2,4)C
+  [-outfile]           report     [*.fuzztran] Output report file name
+
+   Additional (Optional) qualifiers:
+   -frame              menu       [1] Frame(s) to translate (Values: 1 (1); 2
+                                  (2); 3 (3); F (Forward three frames); -1
+                                  (-1); -2 (-2); -3 (-3); R (Reverse three
+                                  frames); 6 (All six frames))
+   -table              menu       [0] Code to use (Values: 0 (Standard); 1
+                                  (Standard (with alternative initiation
+                                  codons)); 2 (Vertebrate Mitochondrial); 3
+                                  (Yeast Mitochondrial); 4 (Mold, Protozoan,
+                                  Coelenterate Mitochondrial and
+                                  Mycoplasma/Spiroplasma); 5 (Invertebrate
+                                  Mitochondrial); 6 (Ciliate Macronuclear and
+                                  Dasycladacean); 9 (Echinoderm
+                                  Mitochondrial); 10 (Euplotid Nuclear); 11
+                                  (Bacterial); 12 (Alternative Yeast Nuclear);
+                                  13 (Ascidian Mitochondrial); 14 (Flatworm
+                                  Mitochondrial); 15 (Blepharisma
+                                  Macronuclear); 16 (Chlorophycean
+                                  Mitochondrial); 21 (Trematode
+                                  Mitochondrial); 22 (Scenedesmus obliquus);
+                                  23 (Thraustochytrium Mitochondrial))
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-pattern" associated qualifiers
+   -pformat            string     File format
+   -pmismatch          integer    Pattern mismatch
+   -pname              string     Pattern base name
+
+   "-outfile" associated qualifiers
+   -rformat2           string     Report format
+   -rname2             string     Base file name
+   -rextension2        string     File name extension
+   -rdirectory2        string     Output directory
+   -raccshow2          boolean    Show accession number in the report
+   -rdesshow2          boolean    Show description in the report
+   -rscoreshow2        boolean    Show the score in the report
+   -rstrandshow2       boolean    Show the nucleotide strand in the report
+   -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   fuzztran reads in normal nucleic acid sequence USAs.
+
+  Input files for usage example
+
+   'tembl:Z46957' is a sequence entry in the example nucleic acid
+   database 'tembl'
+
+  Database entry: tembl:Z46957
+
+ID   Z46957; SV 1; linear; mRNA; STD; ROD; 1493 BP.
+XX
+AC   Z46957;
+XX
+DT   20-DEC-1994 (Rel. 42, Created)
+DT   18-APR-2005 (Rel. 83, Last updated, Version 9)
+XX
+DE   R.norvegicus mRNA for rhodopsin.
+XX
+KW   rhodopsin.
+XX
+OS   Rattus norvegicus (Norway rat)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
+;
+OC   Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea;
+OC   Muridae; Murinae; Rattus.
+XX
+RN   [1]
+RP   1-1493
+RX   DOI; 10.1074/jbc.271.20.11710.
+RX   PUBMED; 8662634.
+RA   Huber A., Sander P.H., Paulsen R.;
+RT   "Phosphorylation of the InaD gene product, a photoreceptor membrane protei
+n
+RT   required for recovery of visual excitation";
+RL   J. Biol. Chem. 271(20):11710-11717(1996).
+XX
+RN   [2]
+RP   1-1493
+RA   Huber A.;
+RT   ;
+RL   Submitted (20-DEC-1994) to the EMBL/GenBank/DDBJ databases.
+RL   Huber A., Universitaet Karlsruhe, Zoologie I, Kornblumenstr. 13, 76128
+RL   Karlsruhe, Germany
+XX
+DR   ASTD; TRAN00000023010.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1493
+FT                   /organism="Rattus norvegicus"
+FT                   /strain="Sprague-Dawley"
+FT                   /mol_type="mRNA"
+FT                   /dev_stage="adult"
+FT                   /clone_lib="rat retinal library"
+FT                   /clone="pRO4"
+FT                   /cell_type="rod"
+FT                   /tissue_type="retina"
+FT                   /db_xref="taxon:10116"
+FT   5'UTR           1..83
+FT   CDS             84..1130
+FT                   /product="rhodopsin"
+FT                   /function="phototransduction"
+FT                   /db_xref="GOA:P51489"
+FT                   /db_xref="HSSP:1EDS"
+FT                   /db_xref="InterPro:IPR017452"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P51489"
+FT                   /citation=[1]
+FT                   /protein_id="CAA87081.1"
+FT                   /translation="MNGTEGPNFYVPFSNITGVVRSPFEQPQYYLAEPWQFSMLAAYM
+F
+FT                   LLIVLGFPINFLTLYVTVQHKKLRTPLNYILLNLAVADLFMVFGGFTTTLYTSLHGYF
+V
+FT                   FGPTGCNLEGFFATLGGEIGLWSLVVLAIERYVVVCKPMSNFRFGENHAIMGVAFTWV
+M
+FT                   ALACAAPPLVGWSRYIPEGMQCSCGIDYYTLKPEVNNESFVIYMFVVHFTIPMIVIFF
+C
+FT                   YGQLVFTVKEAAAQQQESATTQKAEKEVTRMVIIMVIFFLICWLPYASVAMYIFTHQG
+S
+FT                   NFGPIFMTLPAFFAKTASIYNPIIYIMMNKQFRNCMLTTLCCGKNPLGDDEASATASK
+T
+FT                   ETSQVAPA"
+FT   3'UTR           1128..1493
+XX
+SQ   Sequence 1493 BP; 309 A; 475 C; 365 G; 344 T; 0 other;
+     ggagccgtag gtagctgagc tcgccaggca gccttggtct ctgtctacga acagcccgtg        6
+0
+     gggcagcctc aagggccgca gccatgaacg gcacagaggg ccccaatttt tatgtgccct       12
+0
+     tctccaacat cacgggcgtg gtgcgcagcc cctttgagca gccgcagtac tacctggcgg       18
+0
+     agccatggca gttctccatg ctggcagcct acatgttcct gctcatcgtg ctgggcttcc       24
+0
+     ccatcaactt cctcacgctc tacgtcaccg tacagcacaa gaagctgcgc acaccactca       30
+0
+     actacatcct gctcaacttg gctgtggctg acctcttcat ggtcttcgga ggattcacca       36
+0
+     ccaccctcta cacctcactg catggctact ttgtctttgg gcccacaggc tgcaaccttg       42
+0
+     agggcttctt tgccaccctt ggaggtgaaa tcggcctgtg gtccctggta gtcctggcca       48
+0
+     ttgagcgcta cgtggtggtc tgcaagccca tgagcaactt ccgctttggg gagaatcatg       54
+0
+     ccattatggg tgtggccttc acctgggtca tggcgttggc ctgtgctgct cccccactgg       60
+0
+     ttggctggtc caggtacatc cccgagggca tgcagtgttc atgtgggatt gactactata       66
+0
+     cactcaagcc tgaggtcaac aatgagtcct tcgtcatcta catgttcgtg gtccacttca       72
+0
+     ccatccccat gatcgtcatc ttcttctgct acgggcagct ggtcttcacc gtcaaggagg       78
+0
+     ccgccgccca gcaacaggag tcggctacca ctcagaaggc agagaaggaa gtcacgcgca       84
+0
+     tggtcatcat catggtcatc ttcttcctga tctgctggct tccctatgcc agtgtggcca       90
+0
+     tgtacatctt tacccaccag ggctccaact tcggccccat cttcatgacc cttcccgctt       96
+0
+     tctttgctaa gaccgcctcc atctacaacc caatcatcta catcatgatg aacaagcagt      102
+0
+     tccggaactg catgctcacc acgctctgct gcggcaagaa tccactggga gatgatgagg      108
+0
+     cctctgccac tgcctccaag acggagacca gccaggtggc tccagcctaa gcctggccag      114
+0
+     agactgtggc tgactgtagg agtctcctgt ccccactcac cccagccaca gcccccacca      120
+0
+     ggagcagcac ccgttggaat gaggtcatgc aggctccctc agtgttcttt tctttgtttt      126
+0
+     taatgaattc atgaaagcaa aatgaggctc cccactcaac agggacagcc tgacaaagga      132
+0
+     catccatcca ccaagacccc cagcctggag tccccaattc ccgggggcca gcgggatctg      138
+0
+     tacccctccc ctcagcttgt gtctcaggaa catgacaagt gtcccggctt acggctaagt      144
+0
+     gtctaggaca gaatggaaca catagtagct gattaataaa tgctacctgg atg             149
+3
+//
+
+  Pattern specification
+
+   Patterns for fuzztran are based on the format of pattern used in the
+   PROSITE database, with the difference that the terminating dot '.' and
+   the hyphens, '-', between the characters are optional.
+
+   The PROSITE pattern definition from the PROSITE documentation follows.
+     * The standard IUPAC one-letter codes for the amino acids are used.
+     * The symbol `x' is used for a position where any amino acid is
+       accepted.
+     * Ambiguities are indicated by listing the acceptable amino acids
+       for a given position, between square parentheses `[ ]'. For
+       example: [ALT] stands for Ala or Leu or Thr.
+     * Ambiguities are also indicated by listing between a pair of curly
+       brackets `{ }' the amino acids that are not accepted at a given
+       position. For example: {AM} stands for any amino acid except Ala
+       and Met.
+     * Each element in a pattern is separated from its neighbor by a `-'.
+       (Optional in fuzztran).
+     * Repetition of an element of the pattern can be indicated by
+       following that element with a numerical value or a numerical range
+       between parenthesis. Examples: x(3) corresponds to x-x-x, x(2,4)
+       corresponds to x-x or x-x-x or x-x-x-x.
+     * When a pattern is restricted to either the N- or C-terminal of a
+       sequence, that pattern either starts with a `<' symbol or
+       respectively ends with a `>' symbol.
+     * A period ends the pattern. (Optional in fuzztran).
+     * All other characters, including spaces are not allowed.
+
+   For example, you can look for the pattern:
+
+[DE](2)HS{P}X(2)PX(2,4)C
+
+   This means: Two Asps or Glus in any order followed by His, Ser, any
+   residue other then Pro, then two of any residue followed by Pro
+   followed by two to four of any residue followed by Cys.
+
+   The search is case-independent, so 'AAA' matches 'aaa'.
+
+Output file format
+
+   The output is a standard EMBOSS report file.
+
+   The results can be output in one of several styles by using the
+   command-line qualifier -rformat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: embl,
+   genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+   feattable, motif, regions, seqtable, simple, srs, table, tagseq
+
+   See: http://emboss.sf.net/docs/themes/ReportFormats.html for further
+   information on report formats.
+
+   By default fuzztran writes a 'table' report file.
+
+  Output files for usage example
+
+  File: z46957.fuzztran
+
+########################################
+# Program: fuzztran
+# Rundate: Tue 15 Jul 2008 12:00:00
+# Commandline: fuzztran
+#    -options
+#    -sequence tembl:Z46957
+#    -pattern RA
+#    -frame f
+# Report_format: table
+# Report_file: z46957.fuzztran
+########################################
+
+#=======================================
+#
+# Sequence: Z46957     from: 1   to: 1493
+# HitCount: 9
+#
+# Pattern_name Mismatch Pattern
+# pattern             0 RA
+# TransTable: 0
+# Frames: F
+#
+#=======================================
+
+  Start     End  Strand   Score Pattern_name Mismatch  Frame PStart   PEnd Tran
+slation
+     97     102       +       2 pattern             .      1     33     34 RA
+
+    133     138       +       2 pattern             .      1     45     46 RA
+
+    421     426       +       2 pattern             .      1    141    142 RA
+
+    625     630       +       2 pattern             .      1    209    210 RA
+
+    835     840       +       2 pattern             .      1    279    280 RA
+
+    919     924       +       2 pattern             .      1    307    308 RA
+
+    227     232       +       2 pattern             .      2     76     77 RA
+
+    752     757       +       2 pattern             .      2    251    252 RA
+
+     72      77       +       2 pattern             .      3     24     25 RA
+
+
+#---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_length: 1493
+# Reported_sequences: 1
+# Reported_hitcount: 9
+#---------------------------------------
+
+   The columns of data are as follows:
+
+    1. Start - the start position of the pattern in the nucleic acids
+       sequence.
+    2. End - the end position of the pattern in the nucleic acids
+       sequence.
+    3. Score - the score of the match.
+    4. Mismatch - the number of mismatches .
+    5. Frame - the translation frame that the pattern match occurs in.
+    6. PStart - the start position of the match in the resulting protein
+       sequence.
+    7. PEnd - the end position of the match in the resulting protein
+       sequence.
+    8. Translation - the protein sequence that is matched.
+
+Data files
+
+   EMBOSS data files are distributed with the application and stored in
+   the standard EMBOSS data directory, which is defined by the EMBOSS
+   environment variable EMBOSS_DATA.
+
+   To see the available EMBOSS data files, run:
+
+% embossdata -showall
+
+   To fetch one of the data files (for example 'Exxx.dat') into your
+   current directory for you to inspect or modify, run:
+
+% embossdata -fetch -file Exxx.dat
+
+   Users can provide their own data files in their own directories.
+   Project specific files can be put in the current directory, or for
+   tidier directory listings in a subdirectory called ".embossdata".
+   Files for all EMBOSS runs can be put in the user's home directory, or
+   again in a subdirectory called ".embossdata".
+
+   The directories are searched in the following order:
+     * . (your current directory)
+     * .embossdata (under your current directory)
+     * ~/ (your home directory)
+     * ~/.embossdata
+
+   The Genetic Code data files are based on the NCBI genetic code tables.
+   Their names and descriptions are:
+
+   EGC.0
+          Standard (Differs from GC.1 in that it only has initiation site
+          'AUG')
+
+   EGC.1
+          Standard
+
+   EGC.2
+          Vertebrate Mitochodrial
+
+   EGC.3
+          Yeast Mitochondrial
+
+   EGC.4
+          Mold, Protozoan, Coelenterate Mitochondrial and
+          Mycoplasma/Spiroplasma
+
+   EGC.5
+          Invertebrate Mitochondrial
+
+   EGC.6
+          Ciliate Macronuclear and Dasycladacean
+
+   EGC.9
+          Echinoderm Mitochondrial
+
+   EGC.10
+          Euplotid Nuclear
+
+   EGC.11
+          Bacterial
+
+   EGC.12
+          Alternative Yeast Nuclear
+
+   EGC.13
+          Ascidian Mitochondrial
+
+   EGC.14
+          Flatworm Mitochondrial
+
+   EGC.15
+          Blepharisma Macronuclear
+
+   EGC.16
+          Chlorophycean Mitochondrial
+
+   EGC.21
+          Trematode Mitochondrial
+
+   EGC.22
+          Scenedesmus obliquus
+
+   EGC.23
+          Thraustochytrium Mitochondrial
+
+   The format of these files is very simple.
+
+   It consists of several lines of optional comments, each starting with
+   a '#' character.
+
+   These are followed the line: 'Genetic Code [n]', where 'n' is the
+   number of the genetic code file.
+
+   This is followed by the description of the code and then by four lines
+   giving the IUPAC one-letter code of the translated amino acid, the
+   start codons (indicdated by an 'M') and the three bases of the codon,
+   lined up one on top of the other.
+
+   For example:
+
+------------------------------------------------------------------------------
+# Genetic Code Table
+#
+# Obtained from: http://www.ncbi.nlm.nih.gov/collab/FT/genetic_codes.html
+# and: http://www3.ncbi.nlm.nih.gov/htbin-post/Taxonomy/wprintgc?mode=c
+#
+# Differs from Genetic Code [1] only in that the initiation sites have been
+# changed to only 'AUG'
+
+Genetic Code [0]
+Standard
+
+AAs  =   FFLLSSSSYY**CC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG
+Starts = -----------------------------------M----------------------------
+Base1  = TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG
+Base2  = TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG
+Base3  = TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG
+------------------------------------------------------------------------------
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   When translating using non-standard genetic code table, always check
+   the table carefully for deviations from your particular organism's
+   code.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name     Description
+   antigenic        Finds antigenic sites in proteins
+   digest           Reports on protein proteolytic enzyme or reagent cleavage sites
+   dreg             Regular expression search of nucleotide sequence(s)
+   epestfind        Finds PEST motifs as potential proteolytic cleavage sites
+   fuzznuc          Search for patterns in nucleotide sequences
+   fuzzpro          Search for patterns in protein sequences
+   helixturnhelix   Identify nucleic acid-binding motifs in protein
+                    sequences
+   marscan          Finds matrix/scaffold recognition (MRS) signatures in DNA
+                    sequences
+   oddcomp          Identify proteins with specified sequence word composition
+   patmatdb         Searches protein sequences with a sequence motif
+   patmatmotifs     Scan a protein sequence with motifs from the PROSITE
+                    database
+   pepcoil          Predicts coiled coil regions in protein sequences
+   preg             Regular expression search of protein sequence(s)
+   pscan            Scans protein sequence(s) with fingerprints from the PRINTS
+                    database
+   sigcleave        Reports on signal cleavage sites in a protein sequence
+
+   Other EMBOSS programs allow you to search for regular expression
+   patterns but may be less easy for the user who has never used regular
+   expressions before:
+
+     * dreg - Regular expression search of a nucleotide sequence
+     * preg - Regular expression search of a protein sequence
+
+Author(s)
+
+   Alan Bleasby (ajb © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
+
+History
+
+   Written (2000) - Alan Bleasby
+   '-usa' added (13 March 2001) - Gary Williams
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

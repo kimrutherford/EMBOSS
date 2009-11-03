@@ -1,0 +1,483 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+primersearch
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
+    Function
+</H2>
+Search DNA sequences for matches with primer pairs
+
+<H2>
+    Description
+</H2>
+
+<p><b>primersearch</b> reads in primer pairs from an input file and searches them against DNA sequence(s) specified by the user. Each of the primers in a pair is searched against the sequence and potential amplimers are reported.  The output file is in the format of Whitehead <b>primer3_core</b> program.  The user can specify a maximum percent mismatch level; for example, 10% mismatch on a primer of length 20bp means that the program will classify a primer as matching a sequence if 18 of the 20 base pairs matches.  It will only report matches if both primers in the pair have a match in opposite orientations.</p>
+
+
+<H2>
+Algorithm
+</H2>
+
+<p>Each primer pair is specified in the input file by a name, followed by two primer sequences, primerA and primerB. The program first compares primerA to the forward strand and if it matches, primerB is compared to the reverse strand. The approach is then reversed, with the primerB being compared to the forward strand and primerA to the reverse. In this way all possible amplimers are reported.</p>
+
+
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with primersearch</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>primersearch tembl:z52466 </b>
+Search DNA sequences for matches with primer pairs
+Primer pairs file: <b>primers</b>
+Allowed percent mismatch [0]: <b></b>
+Whitehead primer3_core program output file [z52466.primersearch]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+Here we run the same example but allowing 20% mismatch between the primers and the sequence: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>primersearch tembl:z52466 </b>
+Search DNA sequences for matches with primer pairs
+Primer pairs file: <b>primers</b>
+Allowed percent mismatch [0]: <b>20</b>
+Whitehead primer3_core program output file [z52466.primersearch]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-seqall]            seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+  [-infile]            infile     Primer pairs file
+  [-mismatchpercent]   integer    [0] Allowed percent mismatch (Any integer
+                                  value)
+  [-outfile]           outfile    [*.primersearch] Whitehead primer3_core
+                                  program output file
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-seqall" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory4        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-seqall]<br>(Parameter 1)</td>
+<td>Nucleotide sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-infile]<br>(Parameter 2)</td>
+<td>Primer pairs file</td>
+<td>Input file</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-mismatchpercent]<br>(Parameter 3)</td>
+<td>Allowed percent mismatch</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 4)</td>
+<td>Whitehead primer3_core program output file</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.primersearch</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>primersearch</b> reads in any nucleic acid sequence USAs.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:z52466' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>File: primers</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+# This is my primer file
+D1S243  cacacaggctcacatgcc      gctccagcgtcatggact
+D1S468 aattaaccgttttggtcct     gcgacacacacttccc 
+D1S2845 ccaaagggtgcttctc        gtggcattccaacctc
+D1S1608 gatggcttttggggactatt    cactgagccaagtgacacag
+D1S2893 aaaacatcaactctcccctg    ctcaaaccccaataagcctt
+D1S2660 cacacatgcacatgcac       agtgacaccagcaggg
+</pre>
+</td></tr></table><p>
+<p><h3>Database entry: tembl:z52466</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   Z52466; SV 1; linear; genomic DNA; STS; HUM; 389 BP.
+XX
+AC   Z52466;
+XX
+DT   18-MAR-1996 (Rel. 47, Created)
+DT   09-SEP-2004 (Rel. 81, Last updated, Version 4)
+XX
+DE   H.sapiens (D1S2660) DNA segment containing (CA) repeat; clone AFMa203yc1;
+DE   single read.
+XX
+KW   CA repeat; dinucleotide repeat; GT repeat; microsatellite DNA;
+KW   microsatellite marker; repeat polymorphism; STS.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-389
+RA   Weissenbach J.;
+RT   ;
+RL   Submitted (01-SEP-1995) to the EMBL/GenBank/DDBJ databases.
+RL   Genethon, B.P. 60, 91002 Evry Cedex France. E-mail:
+RL   Jean.Weissenbach@genethon.fr
+XX
+RN   [2]
+RP   1-389
+RX   DOI; 10.1038/380152a0.
+RX   PUBMED; 8600387.
+RA   Dib C., Faure S., Fizames C., Samson D., Drouot N., Vignal A.,
+RA   Millasseau P., Marc S., Hazan J., Seboun E., Lathrop M., Gyapay G.,
+RA   Morissette J., Weissenbach J.;
+RT   "A comprehensive genetic map of the human genome based on 5,264
+RT   microsatellites";
+RL   Nature 380(6570):152-154(1996).
+XX
+DR   GDB; 606855.
+XX
+CC   full automatic;
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..389
+FT                   /organism="Homo sapiens"
+FT                   /chromosome="1"
+FT                   /mol_type="genomic DNA"
+FT                   /clone_lib="genomic DNA"
+FT                   /cell_line="CEPH 134702"
+FT                   /note="cloning vector is M13mp18"
+FT                   /db_xref="taxon:9606"
+XX
+SQ   Sequence 389 BP; 118 A; 124 C; 86 G; 57 T; 4 other;
+     agctgtgtgc acacaacatg anggggcaca catgcacatg cacacatgcc cacatgcata        60
+     tgcacacaca cacacacaca cacacacaca ttcatgccca agcacgccca ccctcatgtc       120
+     tcaccatgtg cacataacac acagtcacat ataccctggc acacatgccc acatgcagac       180
+     acgaaacaca ggcccacgnt tncatgcaca caggtatggg cacacatacc atgcacacat       240
+     aangacaaat accaggccag acatgatttg cccctgctgg tgtcactgtt aagtgtgaca       300
+     gacaagcaga ggacacacac ccacctggga cgcggggctt caggagagag gcagacctaa       360
+     tagggcccgg attcggggct ggggaggct                                         389
+//
+</pre>
+</td></tr></table><p>
+
+<p>
+
+The input primer file has the following format:
+
+<p>
+Comment lines start with a '#'
+<br>
+Lines with primer information have three fields separated by spaces or TAB characters. The columns contain:
+<br>
+<ol>
+<li>The name of the primer pair - this is reported in the output.
+<li>The sequence of the first primer.
+<li>The sequence of the second primer.
+</ol>
+
+<p>
+
+Empty files will cause primersearch to note that no primers have 
+been found, and to exit.
+
+
+<H2>
+    Output file format
+</H2>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: z52466.primersearch</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+
+Primer name D1S243
+
+Primer name D1S468
+
+Primer name D1S2845
+
+Primer name D1S1608
+
+Primer name D1S2893
+
+Primer name D1S2660
+Amplimer 1
+	Sequence: Z52466 Z52466 
+	H.sapiens (D1S2660) DNA segment containing (CA) repeat; clone AFMa203yc1; single read.
+	CACACATGCACATGCAC hits forward strand at 27 with 0 mismatches
+	AGTGACACCAGCAGGG hits reverse strand at [103] with 0 mismatches
+	Amplimer length: 261 bp
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: z52466.primersearch</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+
+Primer name D1S243
+
+Primer name D1S468
+
+Primer name D1S2845
+
+Primer name D1S1608
+
+Primer name D1S2893
+
+Primer name D1S2660
+Amplimer 1
+	Sequence: Z52466 Z52466 
+	H.sapiens (D1S2660) DNA segment containing (CA) repeat; clone AFMa203yc1; single read.
+	CACACATGCACATGCAC hits forward strand at 49 with 2 mismatches
+	AGTGACACCAGCAGGG hits reverse strand at [103] with 0 mismatches
+	Amplimer length: 239 bp
+Amplimer 2
+	Sequence: Z52466 Z52466 
+	H.sapiens (D1S2660) DNA segment containing (CA) repeat; clone AFMa203yc1; single read.
+	CACACATGCACATGCAC hits forward strand at 27 with 0 mismatches
+	AGTGACACCAGCAGGG hits reverse strand at [103] with 0 mismatches
+	Amplimer length: 261 bp
+</pre>
+</td></tr></table><p>
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+
+<p>Every potential amplimer will be reported; if one primer matches the forward strand twice and the other matches the reverse strand only once, two potential amplimers are reported. If the reverse primer matches twice, four potential amplimers are reported.</p>
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+<p>This program is processor-intensive.  You should probably not use it, for example, to search the whole of EMBL or even the human section of EMBL. It will take longer with more primer pairs and if mismatches are allowed.</p>
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+"No suitable primers found - exiting" means that either the primers
+file was empty or there were no compilable primer pairs contained in it.
+
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="eprimer3.html">eprimer3</a></td>
+<td>Picks PCR primers and hybridization oligos</td>
+</tr>
+
+<tr>
+<td><a href="stssearch.html">stssearch</a></td>
+<td>Search a DNA database for matches with a set of STS primers</td>
+</tr>
+
+</table>
+
+<p>
+
+<a href="stssearch.html">stssearch</a> does something similar, but doesn't
+allow you to find mismatches and will report any match in any
+orientation and doesn't require you to have both primers matching. 
+
+
+<H2>
+    Author(s)
+</H2>
+
+Val Curwen (vac&nbsp;&copy;&nbsp;sanger.ac.uk)
+<br>
+Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
+Cambridge, CB10 1SA, UK. 
+
+
+<H2>
+    History
+</H2>
+
+Written Aug 2000 - Val Curwen
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+<H2>
+    Comments
+</H2>
+None
+
+</BODY>
+</HTML>
+

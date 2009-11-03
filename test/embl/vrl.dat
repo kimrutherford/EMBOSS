@@ -1,0 +1,65 @@
+ID   L46634; SV 1; linear; genomic DNA; STD; VRL; 1272 BP.
+XX
+AC   L46634; L46689;
+XX
+DT   06-NOV-1995 (Rel. 45, Created)
+DT   04-MAR-2000 (Rel. 63, Last updated, Version 3)
+XX
+DE   Human herpesvirus 7 (clone ED132'1.2) telomeric repeat region.
+XX
+KW   telomeric repeat.
+XX
+OS   Human herpesvirus 7
+OC   Viruses; dsDNA viruses, no RNA stage; Herpesvirales; Herpesviridae;
+OC   Betaherpesvirinae; Roseolovirus.
+XX
+RN   [1]
+RP   1-1272
+RX   PUBMED; 7494318.
+RA   Secchiero P., Nicholas J., Deng H., Xiaopeng T., van Loon N., Ruvolo V.R.,
+RA   Berneman Z.N., Reitz M.S.Jr., Dewhurst S.;
+RT   "Identification of human telomeric repeat motifs at the genome termini of
+RT   human herpesvirus 7: structural analysis and heterogeneity";
+RL   J. Virol. 69(12):8041-8045(1995).
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1272
+FT                   /organism="Human herpesvirus 7"
+FT                   /strain="JI"
+FT                   /mol_type="genomic DNA"
+FT                   /clone="ED132'1.2"
+FT                   /db_xref="taxon:10372"
+FT   repeat_region   207..928
+FT                   /note="long and complex repeat region composed of various
+FT                   direct repeats, including TAACCC (TRS), degenerate copies
+FT                   of TRS motifs and a 14-bp repeat, TAGGGCTGCGGCCC"
+FT   misc_signal     938..998
+FT                   /note="pac2 motif"
+FT   misc_feature    1009
+FT                   /note="right genome terminus (...ACA)"
+XX
+SQ   Sequence 1272 BP; 346 A; 455 C; 222 G; 249 T; 0 other;
+     aagcttaaac tgaggtcaca cacgacttta attacggcaa cgcaacagct gtaagctgca        60
+     ggaaagatac gatcgtaagc aaatgtagtc ctacaatcaa gcgaggttgt agacgttacc       120
+     tacaatgaac tacacctcta agcataacct gtcgggcaca gtgagacacg cagccgtaaa       180
+     ttcaaaactc aacccaaacc gaagtctaag tctcacccta atcgtaacag taaccctaca       240
+     actctaatcc tagtccgtaa ccgtaacccc aatcctagcc cttagcccta accctagccc       300
+     taaccctagc tctaacctta gctctaactc tgaccctagg cctaacccta agcctaaccc       360
+     taaccgtagc tctaagttta accctaaccc taaccctaac catgaccctg accctaaccc       420
+     tagggctgcg gccctaaccc tagccctaac cctaacccta atcctaatcc tagccctaac       480
+     cctagggctg cggccctaac cctagcccta accctaaccc taaccctagg gctgcggccc       540
+     taaccctaac cctagggctg cggcccgaac cctaacccta accctaaccc taaccctagg       600
+     gctgcggccc taaccctaac cctagggctg cggccctaac cctaacccta gggctgcggc       660
+     ccgaacccta accctaaccc taaccctagg gctgcggccc taaccctaac cctagggctg       720
+     cggccctaac cctaacccta actctagggc tgcggcccta accctaaccc taaccctaac       780
+     cctagggctg cggcccgaac cctagcccta accctaaccc tgaccctgac cctaacccta       840
+     accctaaccc taaccctaac cctaacccta accctaaccc taaccctaac cctaacccta       900
+     accctaaccc taaccctaac cctaaccccg cccccactgg cagccaatgt cttgtaatgc       960
+     cttcaaggca ctttttctgc gagccgcgcg cagcactcag tgaaaaacaa gtttgtgcac      1020
+     gagaaagacg ctgccaaacc gcagctgcag catgaaggct gagtgcacaa ttttggcttt      1080
+     agtcccataa aggcgcggct tcccgtagag tagaaaaccg cagcgcggcg cacagagcga      1140
+     aggcagcggc tttcagactg tttgccaagc gcagtctgca tcttaccaat gatgatcgca      1200
+     agcaagaaaa atgttctttc ttagcatatg cgtggttaat cctgttgtgg tcatcactaa      1260
+     gttttcaagc tt                                                          1272
+//

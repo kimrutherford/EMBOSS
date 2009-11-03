@@ -1,0 +1,291 @@
+application: showpep [
+  documentation: "Displays protein sequences with features in pretty format"
+  groups: "Display"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    features: "Y"
+    type: "gapprotein"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  list: format [
+    standard: "Y"
+    default: "2"
+    minimum: "1"
+    maximum: "1"
+    header: "Things to display"
+    values: "0:Enter your own list of things to display, 1:Sequence
+             only, 2:Default sequence with features, 3:Pretty sequence
+             4:Baroque"
+    delimiter: ","
+    codedelimiter: ":"
+    information: "Display format"
+  ]
+
+  list: things [
+    standard: "@($(format)==0)"
+    default: "B,N,T,S,A,F"
+    minimum: "1"
+    maximum: "100"
+    header: "Specify your own things to display"
+    values: "S:Sequence, B:Blank line, T:Ticks line, N:Number ticks line,
+             F:Features, A:Annotation"
+    delimiter: ","
+    codedelimiter: ":"
+    information: "Enter a list of things to display"
+    help: "Specify a list of one or more code characters in the order
+           in which you wish things to be displayed one above the other down
+           the page. For example if you wish to see things displayed in the
+           order: sequence, ticks line, blank line; then you should enter
+           'S,T,B'."
+  ]
+
+endsection: required
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  range: uppercase [
+    additional: "Y"
+    default: ""
+    information: "Regions to put in uppercase (eg: 4-57,78-94)"
+    help: "Regions to put in uppercase. \
+           If this is left blank, then the sequence case is left alone. \
+           A set of regions is specified by a set of pairs of positions. \
+           The positions are integers. \
+           They are separated by any non-digit, non-alpha character. \
+           Examples of region specifications are: \
+           24-45, 56-78 \
+           1:45, 67=99;765..888 \
+           1,5,8,10,23,45,57,99"
+    expected: "If this is left blank, then the sequence case is
+               left alone."
+  ]
+
+  range: highlight [
+    additional: "Y"
+    default: ""
+    information: "Regions to colour in HTML (eg: 4-57 red 78-94
+                  green)"
+    help: "Regions to colour if formatting for HTML. \
+           If this is left blank, then the sequence is left alone. \
+           A set of regions is specified by a set of pairs of positions. \
+           The positions are integers. \
+           They are followed by any valid HTML font colour. \
+           Examples of region specifications are: \
+           24-45 blue 56-78 orange \
+           1-100 green 120-156 red \
+           A file of ranges to colour (one range per line) can be specified
+           as '@filename'."
+  ]
+
+  range: annotation [
+    additional: "Y"
+    default: ""
+    information: "Regions to mark (eg: 4-57 promoter region
+                  78-94 first exon)"
+    help: "Regions to annotate by marking. \
+           If this is left blank, then no annotation is added. \
+           A set of regions is specified by a set of pairs of positions
+           followed by optional text. \
+           The positions are integers. \
+           They are followed by any text (but not digits when on the
+           command-line). \
+           Examples of region specifications are: \
+           24-45 new domain 56-78 match to Mouse \
+           1-100 First part 120-156 oligo \
+           A file of ranges to annotate (one range per line) can be specified
+           as '@filename'."
+    expected: "If this is left blank, then no annotation is
+               added."
+  ]
+
+  section: featuresection [
+    information: "Feature display options"
+    type: "frame"
+  ]
+
+    string: sourcematch [
+      additional: "Y"
+      default: "*"
+      information: "Source of feature to display"
+      help: "By default any feature source in the feature table is
+             shown. You can set this to match any feature source you wish to
+             show. \
+             The source name is usually either the name of the program that
+             detected the feature or it is the feature table (eg: EMBL) that
+             the feature came from. \
+             The source may be wildcarded by using '*'. \
+             If you wish to show more than one source, separate their names
+             with the character '|', eg: \
+             gene* | embl"
+      knowntype: "feature source list"
+    ]
+
+    string: typematch [
+      additional: "Y"
+      default: "*"
+      information: "Type of feature to display"
+      help: "By default any feature type in the feature table is
+             shown. You can set this to match any feature type you wish to
+             show. \
+             See http://www3.ebi.ac.uk/Services/WebFeat/ for a list of the
+             EMBL feature types and see Appendix A of the Swissprot user
+             manual in http://www.expasy.ch/txt/userman.txt for a list of the
+             Swissprot feature types. \
+             The type may be wildcarded by using '*'. \
+             If you wish to show more than one type, separate their names
+             with the character '|', eg: \
+             *UTR | intron"
+      knowntype: "feature key list"
+    ]
+
+    float: minscore [
+      additional: "Y"
+      default: "0.0"
+      information: "Minimum score of feature to display"
+      help: "Minimum score of feature to display (see also maxscore)"
+    ]
+
+    float: maxscore [
+      additional: "Y"
+      default: "0.0"
+      information: "Maximum score of feature to display"
+      help: "Maximum score of feature to display. \
+             If both minscore and maxscore are zero (the default),
+             then any score is ignored"
+    ]
+
+    string: tagmatch [
+      additional: "Y"
+      default: "*"
+      information: "Tag of feature to display"
+      help: "Tags are the types of extra values that a feature may
+             have.
+             By default any feature tag in the feature table is shown. You
+             can set this to match any feature tag you wish to show. \
+             The tag may be wildcarded by using '*'. \
+             If you wish to show more than one tag, separate their names with
+             the character '|', eg: \
+             gene | label"
+      knowntype: "feature tag list"
+    ]
+
+    string: valuematch [
+      additional: "Y"
+      default: "*"
+      information: "Value of feature tags to display"
+      help: "Tag values are the values associated with a feature tag.
+             Tags are the types of extra values that a feature may have.
+             By default any feature tag value in the
+             feature table is shown. You can set this to match any feature
+             tag valueyou wish to show. \
+             The tag value may be wildcarded by using '*'. \
+             If you wish to show more than one tag value, separate their
+             names with the character '|', eg: \
+             pax* | 10"
+      knowntype: "feature tagvalue list"
+    ]
+
+    boolean: stricttags [
+      additional: "Y"
+      default: "N"
+      information: "Only display the matching tags"
+      help: "By default if any tag/value pair in a feature matches the
+             specified tag and value, then all the tags/value pairs of that
+             feature will be displayed. If this is set to be true, then only
+             those tag/value pairs in a feature that match the specified tag
+             and value will be displayed."
+    ]
+
+  endsection: featuresection
+
+endsection: additional
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  boolean: threeletter [
+    default: "N"
+    information: "Display protein sequences in three-letter
+                  code"
+  ]
+
+  boolean: number [
+    default: "N"
+    information: "Number the sequences"
+  ]
+
+  integer: width [
+    default: "60"
+    minimum: "1"
+    information: "Width of sequence to display"
+  ]
+
+  integer: length [
+    default: "0"
+    minimum: "0"
+    information: "Line length of page (0 for indefinite)"
+  ]
+
+  integer: margin [
+    default: "10"
+    minimum: "0"
+    information: "Margin around sequence for numbering"
+  ]
+
+  boolean: name [
+    default: "Y"
+    information: "Show sequence ID"
+    help: "Set this to be false if you do not wish to display the ID
+           name of the sequence"
+  ]
+
+  boolean: description [
+    default: "Y"
+    information: "Show description"
+    help: "Set this to be false if you do not wish to display the
+           description of the sequence"
+  ]
+
+  integer: offset [
+    default: "1"
+    information: "Offset to start numbering the sequence from"
+  ]
+
+  boolean: html [
+    default: "N"
+    information: "Use HTML formatting"
+    outputmodifier: "Y"
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    parameter: "Y"
+    knowntype: "showpep output"
+  ]
+
+endsection: output

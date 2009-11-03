@@ -1,0 +1,105 @@
+application: fuzztran [
+  documentation: "Search for patterns in protein sequences (translated)"
+  groups: "Nucleic:Motifs, Protein:Motifs"
+  gui: "yes"
+  batch: "yes"
+  cpu: "medium"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "dna"
+  ]
+
+  pattern: pattern [
+    standard: "Y"
+    information: "Search pattern"
+    help: "The standard IUPAC one-letter codes for the amino acids are
+           used. \
+           The symbol 'x' is used for a position where any amino acid is
+           accepted. \
+           Ambiguities are indicated by listing the acceptable amino acids
+           for a given position, between square parentheses '[ ]'. For
+           example: [ALT] stands for Ala or Leu or Thr. \
+           Ambiguities are also indicated by listing between a pair of curly
+           brackets '{ }' the amino acids that are not accepted at a gven
+           position. For example: {AM} stands for any amino acid except Ala
+           and Met. \
+           Each element in a pattern is separated from its neighbor by a '-'.
+           (Optional in fuzztran) \
+           Repetition of an element of the pattern can be indicated by
+           following that element with a numerical value or a numerical range
+           between parenthesis. Examples: x(3) corresponds to x-x-x, x(2,4)
+           corresponds to x-x or x-x-x or x-x-x-x. \
+           When a pattern is restricted to either the N- or C-terminal of a
+           sequence, that pattern either starts with a '<' symbol or
+           respectively ends with a '>' symbol. \
+           A period ends the pattern. (Optional in fuzztran). \
+           For example, [DE](2)HS{P}X(2)PX(2,4)C"
+    type: "protein"
+    pmismatch: "0"
+  ]
+
+endsection: input
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  list: frame [
+    additional: "Y"
+    default: "1"
+    minimum: "1"
+    maximum: "1"
+    header: "Translation frames"
+    values: "1:1, 2:2, 3:3, F:Forward three frames, -1:-1, -2:-2,
+             -3:-3, R:Reverse three frames, 6:All six frames"
+    delimiter: ","
+    codedelimiter: ":"
+    information: "Frame(s) to translate"
+  ]
+
+  list: table [
+    additional: "Y"
+    default: "0"
+    minimum: "1"
+    maximum: "1"
+    header: "Genetic codes"
+    values: "0:Standard; 1:Standard (with alternative initiation
+             codons); 2:Vertebrate Mitochondrial; 3:Yeast Mitochondrial;
+             4:Mold, Protozoan, Coelenterate Mitochondrial and
+             Mycoplasma/Spiroplasma; 5:Invertebrate Mitochondrial; 6:Ciliate
+             Macronuclear and Dasycladacean; 9:Echinoderm Mitochondrial;
+             10:Euplotid Nuclear; 11:Bacterial; 12:Alternative Yeast Nuclear;
+             13:Ascidian Mitochondrial; 14:Flatworm Mitochondrial;
+             15:Blepharisma Macronuclear; 16:Chlorophycean Mitochondrial;
+             21:Trematode Mitochondrial; 22:Scenedesmus obliquus;
+             23:Thraustochytrium Mitochondrial"
+    delimiter: ";"
+    codedelimiter: ":"
+    information: "Code to use"
+  ]
+
+endsection: additional
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  report: outfile [
+    parameter: "Y"
+    taglist: "str:pat=Pattern_name int:mismatch=Mismatch
+              int:frame=Frame int:start=PStart int:end=PEnd
+              str:translation=Translation"
+    rformat: "table"
+    precision: "0"
+  ]
+
+endsection: output

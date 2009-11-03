@@ -1,0 +1,495 @@
+
+                                 wordmatch 
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Finds regions of identity (exact matches) of two sequences
+
+Description
+
+   wordmatch finds all regions of identity (exact matches) of a specified
+   minimum size of two input sequences. These regions are reported in a
+   standard EMBOSS alignment file and in standard EMBOSS sequence feature
+   files.
+
+Usage
+
+   Here is a sample session with wordmatch
+
+
+% wordmatch tsw:hba_human tsw:hbb_human 
+Finds regions of identity (exact matches) of two sequences
+Word size [4]: 
+Output alignment [hba_human.wordmatch]: 
+Features output [HBA_HUMAN.gff]: 
+Second features output [HBB_HUMAN.gff]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-asequence]         sequence   Sequence filename and optional format, or
+                                  reference (input USA)
+  [-bsequence]         sequence   Sequence filename and optional format, or
+                                  reference (input USA)
+   -wordsize           integer    [4] Word size (Integer 2 or more)
+  [-outfile]           align      [*.wordmatch] Output alignment file name
+  [-aoutfeat]          featout    [unknown.gff] Output features UFO
+  [-boutfeat]          featout    [unknown.gff] Output features UFO
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-asequence" associated qualifiers
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-bsequence" associated qualifiers
+   -sbegin2            integer    Start of the sequence to be used
+   -send2              integer    End of the sequence to be used
+   -sreverse2          boolean    Reverse (if DNA)
+   -sask2              boolean    Ask for begin/end/reverse
+   -snucleotide2       boolean    Sequence is nucleotide
+   -sprotein2          boolean    Sequence is protein
+   -slower2            boolean    Make lower case
+   -supper2            boolean    Make upper case
+   -sformat2           string     Input sequence format
+   -sdbname2           string     Database name
+   -sid2               string     Entryname
+   -ufo2               string     UFO features
+   -fformat2           string     Features format
+   -fopenfile2         string     Features file name
+
+   "-outfile" associated qualifiers
+   -aformat3           string     Alignment format
+   -aextension3        string     File name extension
+   -adirectory3        string     Output directory
+   -aname3             string     Base file name
+   -awidth3            integer    Alignment width
+   -aaccshow3          boolean    Show accession number in the header
+   -adesshow3          boolean    Show description in the header
+   -ausashow3          boolean    Show the full USA in the alignment
+   -aglobal3           boolean    Show the full sequence in alignment
+
+   "-aoutfeat" associated qualifiers
+   -offormat4          string     Output feature format
+   -ofopenfile4        string     Features file name
+   -ofextension4       string     File name extension
+   -ofdirectory4       string     Output directory
+   -ofname4            string     Base file name
+   -ofsingle4          boolean    Separate file for each entry
+
+   "-boutfeat" associated qualifiers
+   -offormat5          string     Output feature format
+   -ofopenfile5        string     Features file name
+   -ofextension5       string     File name extension
+   -ofdirectory5       string     Output directory
+   -ofname5            string     Base file name
+   -ofsingle5          boolean    Separate file for each entry
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   wordmatch reads any two sequence USAs of the same type (DNA or
+   protein).
+
+  Input files for usage example
+
+   'tsw:hba_human' is a sequence entry in the example protein database
+   'tsw'
+
+  Database entry: tsw:hba_human
+
+ID   HBA_HUMAN               Reviewed;         142 AA.
+AC   P69905; P01922; Q1HDT5; Q3MIF5; Q53F97; Q96KF1; Q9NYR7; Q9UCM0;
+DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
+DT   23-JAN-2007, sequence version 2.
+DT   16-JUN-2009, entry version 73.
+DE   RecName: Full=Hemoglobin subunit alpha;
+DE   AltName: Full=Hemoglobin alpha chain;
+DE   AltName: Full=Alpha-globin;
+GN   Name=HBA1;
+GN   and
+GN   Name=HBA2;
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Mammalia; Eutheria; Euarchontoglires; Primates; Haplorrhini;
+OC   Catarrhini; Hominidae; Homo.
+OX   NCBI_TaxID=9606;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA] (HBA1).
+RX   MEDLINE=81088339; PubMed=7448866; DOI=10.1016/0092-8674(80)90347-5;
+RA   Michelson A.M., Orkin S.H.;
+RT   "The 3' untranslated regions of the duplicated human alpha-globin
+RT   genes are unexpectedly divergent.";
+RL   Cell 22:371-377(1980).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE [MRNA] (HBA2).
+RX   MEDLINE=80137531; PubMed=6244294;
+RA   Wilson J.T., Wilson L.B., Reddy V.B., Cavallesco C., Ghosh P.K.,
+RA   Deriel J.K., Forget B.G., Weissman S.M.;
+RT   "Nucleotide sequence of the coding portion of human alpha globin
+RT   messenger RNA.";
+RL   J. Biol. Chem. 255:2807-2815(1980).
+RN   [3]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA] (HBA2).
+RX   MEDLINE=81175088; PubMed=6452630; DOI=10.1073/pnas.77.12.7054;
+RA   Liebhaber S.A., Goossens M.J., Kan Y.W.;
+RT   "Cloning and complete nucleotide sequence of human 5'-alpha-globin
+RT   gene.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 77:7054-7058(1980).
+RN   [4]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RX   PubMed=6946451; DOI=10.1073/pnas.78.8.5041;
+RA   Orkin S.H., Goff S.C., Hechtman R.L.;
+RT   "Mutation in an intervening sequence splice junction in man.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 78:5041-5045(1981).
+RN   [5]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA], AND VARIANT LYS-32.
+RX   MEDLINE=21303311; PubMed=11410421;
+RA   Zhao Y., Xu X.;
+RT   "Alpha2(CD31 AGG-->AAG, Arg-->Lys) causing non-deletional alpha-
+RT   thalassemia in a Chinese family with HbH disease.";
+
+
+  [Part of this file has been deleted for brevity]
+
+FT                                /FTId=VAR_002841.
+FT   VARIANT     132    132       S -> P (in Questembert; highly unstable;
+FT                                causes alpha-thalassemia).
+FT                                /FTId=VAR_002843.
+FT   VARIANT     134    134       S -> R (in Val de Marne; O(2) affinity
+FT                                up).
+FT                                /FTId=VAR_002844.
+FT   VARIANT     136    136       V -> E (in Pavie).
+FT                                /FTId=VAR_002845.
+FT   VARIANT     137    137       L -> M (in Chicago).
+FT                                /FTId=VAR_002846.
+FT   VARIANT     137    137       L -> P (in Bibba; unstable; causes alpha-
+FT                                thalassemia).
+FT                                /FTId=VAR_002847.
+FT   VARIANT     137    137       L -> R (in Toyama).
+FT                                /FTId=VAR_035242.
+FT   VARIANT     139    139       S -> P (in Attleboro; O(2) affinity up).
+FT                                /FTId=VAR_002848.
+FT   VARIANT     140    140       K -> E (in Hanamaki; O(2) affinity up).
+FT                                /FTId=VAR_002849.
+FT   VARIANT     140    140       K -> T (in Tokoname; O(2) affinity up).
+FT                                /FTId=VAR_002850.
+FT   VARIANT     141    141       Y -> H (in Rouen/Ethiopia; O(2) affinity
+FT                                up).
+FT                                /FTId=VAR_002851.
+FT   VARIANT     142    142       R -> C (in Nunobiki; O(2) affinity up).
+FT                                /FTId=VAR_002852.
+FT   VARIANT     142    142       R -> H (in Suresnes; O(2) affinity up).
+FT                                /FTId=VAR_002854.
+FT   VARIANT     142    142       R -> L (in Legnano; O(2) affinity up).
+FT                                /FTId=VAR_002853.
+FT   VARIANT     142    142       R -> P (in Singapore).
+FT                                /FTId=VAR_002855.
+FT   CONFLICT     10     10       N -> H (in Ref. 13; BAD97112).
+FT   HELIX         5     16
+FT   HELIX        17     21
+FT   HELIX        22     36
+FT   HELIX        38     43
+FT   HELIX        54     72
+FT   HELIX        74     76
+FT   HELIX        77     80
+FT   HELIX        82     90
+FT   HELIX        97    113
+FT   TURN        115    117
+FT   HELIX       120    137
+FT   TURN        138    140
+SQ   SEQUENCE   142 AA;  15258 MW;  15E13666573BBBAE CRC64;
+     MVLSPADKTN VKAAWGKVGA HAGEYGAEAL ERMFLSFPTT KTYFPHFDLS HGSAQVKGHG
+     KKVADALTNA VAHVDDMPNA LSALSDLHAH KLRVDPVNFK LLSHCLLVTL AAHLPAEFTP
+     AVHASLDKFL ASVSTVLTSK YR
+//
+
+  Database entry: tsw:hbb_human
+
+ID   HBB_HUMAN               Reviewed;         147 AA.
+AC   P68871; A4GX73; B2ZUE0; P02023; Q13852; Q14481; Q14510; Q45KT0;
+AC   Q549N7; Q6FI08; Q6R7N2; Q8IZI1; Q9BX96; Q9UCD6; Q9UCP8; Q9UCP9;
+DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
+DT   23-JAN-2007, sequence version 2.
+DT   16-JUN-2009, entry version 76.
+DE   RecName: Full=Hemoglobin subunit beta;
+DE   AltName: Full=Hemoglobin beta chain;
+DE   AltName: Full=Beta-globin;
+DE   Contains:
+DE     RecName: Full=LVV-hemorphin-7;
+GN   Name=HBB;
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Mammalia; Eutheria; Euarchontoglires; Primates; Haplorrhini;
+OC   Catarrhini; Hominidae; Homo.
+OX   NCBI_TaxID=9606;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RX   MEDLINE=77126403; PubMed=1019344;
+RA   Marotta C., Forget B., Cohen-Solal M., Weissman S.M.;
+RT   "Nucleotide sequence analysis of coding and noncoding regions of human
+RT   beta-globin mRNA.";
+RL   Prog. Nucleic Acid Res. Mol. Biol. 19:165-175(1976).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RX   MEDLINE=81064667; PubMed=6254664; DOI=10.1016/0092-8674(80)90428-6;
+RA   Lawn R.M., Efstratiadis A., O'Connell C., Maniatis T.;
+RT   "The nucleotide sequence of the human beta-globin gene.";
+RL   Cell 21:647-651(1980).
+RN   [3]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA], AND VARIANT LYS-7.
+RX   PubMed=16175509; DOI=10.1086/491748;
+RA   Wood E.T., Stover D.A., Slatkin M., Nachman M.W., Hammer M.F.;
+RT   "The beta-globin recombinational hotspot reduces the effects of strong
+RT   selection around HbC, a recently arisen mutation providing resistance
+RT   to malaria.";
+RL   Am. J. Hum. Genet. 77:637-642(2005).
+RN   [4]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RA   Lu L., Hu Z.H., Du C.S., Fu Y.S.;
+RT   "DNA sequence of the human beta-globin gene isolated from a healthy
+RT   Chinese.";
+RL   Submitted (JUN-1997) to the EMBL/GenBank/DDBJ databases.
+RN   [5]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA], AND VARIANT ARG-113.
+RA   Cabeda J.M., Correia C., Estevinho A., Cardoso C., Amorim M.L.,
+RA   Cleto E., Vale L., Coimbra E., Pinho L., Justica B.;
+RT   "Unexpected patterns of globin mutations in thalassemia patients from
+RT   north of Portugal.";
+
+
+  [Part of this file has been deleted for brevity]
+
+FT   VARIANT     141    141       A -> V (in Puttelange; polycythemia; O(2)
+FT                                affinity up).
+FT                                /FTId=VAR_003082.
+FT   VARIANT     142    142       L -> R (in Olmsted; unstable).
+FT                                /FTId=VAR_003083.
+FT   VARIANT     143    143       A -> D (in Ohio; O(2) affinity up).
+FT                                /FTId=VAR_003084.
+FT   VARIANT     144    144       H -> D (in Rancho Mirage).
+FT                                /FTId=VAR_003085.
+FT   VARIANT     144    144       H -> P (in Syracuse; O(2) affinity up).
+FT                                /FTId=VAR_003087.
+FT   VARIANT     144    144       H -> Q (in Little Rock; O(2) affinity
+FT                                up).
+FT                                /FTId=VAR_003086.
+FT   VARIANT     144    144       H -> R (in Abruzzo; O(2) affinity up).
+FT                                /FTId=VAR_003088.
+FT   VARIANT     145    145       K -> E (in Mito; O(2) affinity up).
+FT                                /FTId=VAR_003089.
+FT   VARIANT     146    146       Y -> C (in Rainier; O(2) affinity up).
+FT                                /FTId=VAR_003090.
+FT   VARIANT     146    146       Y -> H (in Bethesda; O(2) affinity up).
+FT                                /FTId=VAR_003091.
+FT   VARIANT     147    147       H -> D (in Hiroshima; O(2) affinity up).
+FT                                /FTId=VAR_003092.
+FT   VARIANT     147    147       H -> L (in Cowtown; O(2) affinity up).
+FT                                /FTId=VAR_003093.
+FT   VARIANT     147    147       H -> P (in York; O(2) affinity up).
+FT                                /FTId=VAR_003094.
+FT   VARIANT     147    147       H -> Q (in Kodaira; O(2) affinity up).
+FT                                /FTId=VAR_003095.
+FT   CONFLICT     26     26       Missing (in Ref. 15; ACD39349).
+FT   CONFLICT     42     42       F -> L (in Ref. 13; AAR96398).
+FT   HELIX         6     16
+FT   TURN         21     23
+FT   HELIX        24     35
+FT   HELIX        37     42
+FT   HELIX        44     46
+FT   HELIX        52     57
+FT   HELIX        59     77
+FT   TURN         78     80
+FT   HELIX        82     94
+FT   TURN         95     97
+FT   HELIX       102    119
+FT   HELIX       120    122
+FT   HELIX       125    142
+FT   HELIX       144    146
+SQ   SEQUENCE   147 AA;  15998 MW;  A31F6D621C6556A1 CRC64;
+     MVHLTPEEKS AVTALWGKVN VDEVGGEALG RLLVVYPWTQ RFFESFGDLS TPDAVMGNPK
+     VKAHGKKVLG AFSDGLAHLD NLKGTFATLS ELHCDKLHVD PENFRLLGNV LVCVLAHHFG
+     KEFTPPVQAA YQKVVAGVAN ALAHKYH
+//
+
+Output file format
+
+   The output is a standard EMBOSS alignment file.
+
+   The results can be output in one of several styles by using the
+   command-line qualifier -aformat xxx, where 'xxx' is replaced by the
+   name of the required format. Some of the alignment formats can cope
+   with an unlimited number of sequences, while others are only for pairs
+   of sequences.
+
+   The available multiple alignment format names are: unknown, multiple,
+   simple, fasta, msf, trace, srs
+
+   The available pairwise alignment format names are: pair, markx0,
+   markx1, markx2, markx3, markx10, srspair, score
+
+   See: http://emboss.sf.net/docs/themes/AlignFormats.html for further
+   information on alignment formats.
+
+  Output files for usage example
+
+  File: hba_human.wordmatch
+
+########################################
+# Program: wordmatch
+# Rundate: Tue 15 Jul 2008 12:00:00
+# Commandline: wordmatch
+#    [-asequence] tsw:hba_human
+#    [-bsequence] tsw:hbb_human
+# Align_format: match
+# Report_file: hba_human.wordmatch
+########################################
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: HBA_HUMAN
+# 2: HBB_HUMAN
+#=======================================
+
+     5 HBA_HUMAN       +       59..63       HBB_HUMAN       +       64..68
+     4 HBA_HUMAN       +       15..18       HBB_HUMAN       +       16..19
+     4 HBA_HUMAN       +      117..120      HBB_HUMAN       +      122..125
+
+#---------------------------------------
+#---------------------------------------
+
+  File: HBA_HUMAN.gff
+
+##gff-version 3
+##sequence-region HBA_HUMAN 1 142
+#!Date 2008-07-15
+#!Type Protein
+#!Source-version EMBOSS 6.1.0
+HBA_HUMAN       wordmatch       polypeptide_region      59      63      1.000
++       .       ID="HBA_HUMAN.1";note="HBB_HUMAN"
+HBA_HUMAN       wordmatch       polypeptide_region      15      18      1.000
++       .       ID="HBA_HUMAN.2";note="HBB_HUMAN"
+HBA_HUMAN       wordmatch       polypeptide_region      117     120     1.000
++       .       ID="HBA_HUMAN.3";note="HBB_HUMAN"
+
+  File: HBB_HUMAN.gff
+
+##gff-version 3
+##sequence-region HBB_HUMAN 1 147
+#!Date 2008-07-15
+#!Type Protein
+#!Source-version EMBOSS 6.1.0
+HBB_HUMAN       wordmatch       polypeptide_region      64      68      1.000
++       .       ID="HBB_HUMAN.1";note="HBA_HUMAN"
+HBB_HUMAN       wordmatch       polypeptide_region      16      19      1.000
++       .       ID="HBB_HUMAN.2";note="HBA_HUMAN"
+HBB_HUMAN       wordmatch       polypeptide_region      122     125     1.000
++       .       ID="HBB_HUMAN.3";note="HBA_HUMAN"
+
+   The normal 'report' header is output. It contains the details of the
+   program run and the input sequences.
+
+   The data lines consist of five columns separated by spaces or TAB
+   characters. Each line contains the information on one identical
+   region. The first column is the length of the match. The second column
+   is the name of the first sequence. The third column is the start and
+   end position of the match. The next two columns are the name and
+   positions of the second sequence.
+
+Data files
+
+   None.
+
+Notes
+
+   wormatch will only report identical regions that are at least as long
+   as the specified wordsize.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   0 if successful.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name     Description
+   matcher          Waterman-Eggert local alignment of two sequences
+   seqmatchall      All-against-all word comparison of a sequence set
+   supermatcher     Calculate approximate local pair-wise alignments of
+                    larger sequences
+   water            Smith-Waterman local alignment of sequences
+   wordfinder       Match large sequences against one or more other sequences
+
+Author(s)
+
+   Ian Longden (il © sanger.ac.uk)
+   Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
+   CB10 1SA, UK.
+
+History
+
+   Completed 27th November 1998.
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments

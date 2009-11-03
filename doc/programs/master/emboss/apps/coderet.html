@@ -1,0 +1,197 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: coderet
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+coderet
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/coderet.ione" -->
+
+<H2>
+    Description
+</H2>
+<p><b>coderet</b> extracts the coding nucleotide sequence (CDS), messenger RNA nucleotide sequence (mRNA) and translations specified by the feature tables of the input sequence(s).  If the sequences to be extracted are in other entries of that database, they are automatically fetched and incorporated correctly into the output.</p>
+<p>For each input sequence, an output sequence file is written containing any CDS, mRNA and protein translation sequences from the input feature table. Optionally, the CDS, mRNA, translated protein sequence and non-coding nucleotide sequence regions may be written to separate files.</p>
+
+
+
+
+
+
+<H2>
+    Usage
+</H2>
+
+<!--#include file="inc/coderet.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/coderet.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/coderet.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>coderet</b> reads one or more nucleic sequence USAs having CDS, mRNA
+or translation headings in their feature tables. 
+
+<p>
+<!--#include file="inc/coderet.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+The output is a sequence file containing any CDS, mRNA and protein
+translation sequences as specified by the feature table of the sequence(s).
+
+<p>
+
+One or more of CDS, mRNA, translation can be excluded from the output by
+using the appropriate qualifiers to the program (i.e.  <b>-nocds</b>,
+etc.)
+
+<p>
+
+The ID names of the output sequences are constructed from the name of
+the input sequence, the type of feature being output (i.e.  <b>cds</b>,
+<b>mrna</b>, <b>pro</b>) and a unique ordinal number for this type to
+distinguish it from others in this sequence.  The name, type and number
+of separated by underscore characters.  Thus the second CDS feature in
+the sequence 'A12345' would be named 'A12345_cds_2'. 
+
+<p>
+
+The translations are not made from the coding sequence, they are extracted
+directly from the translation sequence held in the feature table. 
+
+<p>
+<!--#include file="inc/coderet.output" -->
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+<p>One or more of CDS, mRNA, translation or non-coding regions can be excluded from output with the appropriate qualifiers; "no" is prepended to the qualifier name, for example <tt>-nocds</tt> would exclude the coding sequence.</p>
+
+<p>The translations are not made from the coding sequence, they are extracted directly from the translation sequence held in the feature table.</p>
+
+
+<p>The regions of the feature table that concern us are shown below.</p>
+
+<p>This specifies that the coding sequence for the gene is constructed by joining several sections of code, many of which are in other entries in this database:</p>
+<pre>
+FT   CDS             join(U21925.1:818..987,U21926.1:258..420,
+FT                   U21927.1:428..520,U21928.1:196..336,U21929.1:279..415,
+FT                   U21930.1:895..1014,516..708)
+</pre>
+<p>This specifies that the messenger RNA sequence for the gene is constructed by joining several sections of code, many of which are in other entries in this database.</p>
+<pre>
+FT   mRNA            join(M88628.1:1006..1318,M88629.1:221..342,
+FT                   M88630.1:101..223,M88631.1:46..258,M88632.1:104..172,
+FT                   M88633.1:387..503,M88634.1:51..272,M88635.1:303..564,
+FT                   M88635.1:849..1020,M88636.1:282..375,M88637.1:39..253,
+FT                   M88638.1:91..241,M88639.1:168..377,M88640.1:627..3732,
+FT                   M88641.1:158..311,M88642.1:1051..1263,M88642.1:1550..1778,
+FT                   M88642.1:1986..2168,M88642.1:3904..4020,
+FT                   M88642.1:4627..4698,M88643.1:39..124,M88644.1:42..197,
+FT                   M88645.1:542..686,M88646.1:75..223,M88647.1:109..285,
+FT                   253..2211)
+</pre>
+<p>This specifies that the translation of the coding region is as follows:</p>
+<pre>
+FT                   /translation="MAQDSVDLSCDYQFWMQKLSVWDQASTLETQQDTCLHVAQFQEFL
+FT                   RKMYEALKEMDSNTVIERFPTIGQLLAKACWNPFILAYDESQKILIWCLCCLINKEPQN
+FT                   SGQSKLNSWIQGVLSHILSALRFDKEVALFTQGLGYAPIDYYPGLLKNMVLSLASELRE
+FT                   NHLNGFNTQRRMAPERVASLSRVCVPLITLTDVDPLVEALLICHGREPQEILQPEFFEA
+FT                   VNEAILLKKISLPMSAVVCLWLRHLPSLEKAMLHLFEKLISSERNCLRRIECFIKDSSL
+FT                   PQAACHPAIFRVDEMFRCALLETDGALEIIATIQVFTQCFVEALEKASKQLRFALKTYF
+FT                   PYTSPSLAMVLLQDPQDIPRGHWLQTLKHISELLREAVEDQTHGSCGGPFESWFLFIHF
+FT                   GGWAEMVAEQLLMSAAEPPTALLWLLAFYYGPRDGRQQRAQTMVQVKAVLGHLLAMSRS
+FT                   SSLSAQDLQTVAGQGTDTDLRAPAQQLIRHLLLNFLLWAPGGHTIAWDVITLMAHTAEI
+FT                   THEIIGFLDQTLYRWNRLGIESPRSEKLARELLKELRTQV"
+</pre>
+
+
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/coderet.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/ableasby.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/coderet.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/coderet.comment" -->
+
+</BODY>
+</HTML>
+

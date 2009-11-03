@@ -1,0 +1,478 @@
+RESIDUE   061     58
+CONECT      N1     2 N2   C5  
+CONECT      N2     2 N1   N3  
+CONECT      N3     2 N2   N4  
+CONECT      N4     3 N3   C5   HN4 
+CONECT      C5     3 N1   N4   C6  
+CONECT      C6     3 C5   C7   C11 
+CONECT      C7     3 C6   C8   C12 
+CONECT      C8     3 C7   C9   H8  
+CONECT      C9     3 C8   C10  H9  
+CONECT      C10    3 C9   C11  H10 
+CONECT      C11    3 C6   C10  H11 
+CONECT      C12    3 C7   C13  C17 
+CONECT      C13    3 C12  C14  H13 
+CONECT      C14    3 C13  C15  H14 
+CONECT      C15    3 C14  C16  C18 
+CONECT      C16    3 C15  C17  H16 
+CONECT      C17    3 C12  C16  H17 
+CONECT      C18    4 C15  N19 1H18 2H18 
+CONECT      N19    3 C18  C20  C33 
+CONECT      C20    3 N19  C21  N25 
+CONECT      C21    4 C20  C22 1H21 2H21 
+CONECT      C22    4 C21  C23 1H22 2H22 
+CONECT      C23    4 C22  C24 1H23 2H23 
+CONECT      C24    4 C23 1H24 2H24 3H24 
+CONECT      N25    2 C20  C26 
+CONECT      C26    3 N25  C27  C32 
+CONECT      C27    3 C26  C28  H27 
+CONECT      C28    3 C27  C29  H28 
+CONECT      C29    3 C28  O30  C31 
+CONECT      O30    2 C29  HOU 
+CONECT      C31    3 C29  C32  H31 
+CONECT      C32    3 C26  C31  C33 
+CONECT      C33    3 N19  C32  O34 
+CONECT      O34    1 C33 
+CONECT      HN4    1 N4  
+CONECT      H8     1 C8  
+CONECT      H9     1 C9  
+CONECT      H10    1 C10 
+CONECT      H11    1 C11 
+CONECT      H13    1 C13 
+CONECT      H14    1 C14 
+CONECT      H16    1 C16 
+CONECT      H17    1 C17 
+CONECT     1H18    1 C18 
+CONECT     2H18    1 C18 
+CONECT     1H21    1 C21 
+CONECT     2H21    1 C21 
+CONECT     1H22    1 C22 
+CONECT     2H22    1 C22 
+CONECT     1H23    1 C23 
+CONECT     2H23    1 C23 
+CONECT     1H24    1 C24 
+CONECT     2H24    1 C24 
+CONECT     3H24    1 C24 
+CONECT      H27    1 C27 
+CONECT      H28    1 C28 
+CONECT      HOU    1 O30 
+CONECT      H31    1 C31 
+END
+HET    061             58
+HETSYN     061 L-159,061
+HETNAM     061 2-BUTYL-6-HYDROXY-3-[2'-(1H-TETRAZOL-5-YL)-BIPHENYL-4-
+HETNAM   2 061 YLMETHYL]-3H-QUINAZOLIN-4-ONE
+FORMUL      061    C26 H24 N6 O2
+
+RESIDUE   072     90
+CONECT      S1B    2 C1B  C2A 
+CONECT      C1A    3 C1B  O1A  N3A 
+CONECT      C1B    4 S1B  C1A  C1C  H1B 
+CONECT      O1A    1 C1A 
+CONECT      C1C    4 C1B  C1D 1H1C 2H1C 
+CONECT      C1D    3 C1C  O1D  N4A 
+CONECT      O1D    1 C1D 
+CONECT      C2A    4 S1B  C2B  N3A  H2A 
+CONECT      C2B    4 C2A  C2C 1H2B 2H2B 
+CONECT      C2C    4 C2B  C2D 1H2C 2H2C 
+CONECT      C2D    4 C2C  C2E 1H2D 2H2D 
+CONECT      C2E    4 C2D  C2F 1H2E 2H2E 
+CONECT      C2F    4 C2E  C2G 1H2F 2H2F 
+CONECT      C2G    4 C2F  C2H 1H2G 2H2G 
+CONECT      C2H    4 C2G 1H2H 2H2H 3H2H 
+CONECT      N3A    3 C1A  C2A  C3B 
+CONECT      C3B    4 N3A  C3C 1H3B 2H3B 
+CONECT      C3C    4 C3B  C3D 1H3C 2H3C 
+CONECT      C3D    4 C3C  C3E 1H3D 2H3D 
+CONECT      C3E    4 C3D  C3F 1H3E 2H3E 
+CONECT      C3F    3 C3E  C3G  C3H 
+CONECT      C3G    3 C3F  C3I  H3G 
+CONECT      C3H    3 C3F  C3J  H3H 
+CONECT      C3I    3 C3G  C3K  H3I 
+CONECT      C3J    3 C3H  C3K  H3J 
+CONECT      C3K    3 C3I  C3J  C3L 
+CONECT      C3L    3 C3K  O3M  O3N 
+CONECT      O3M    2 C3L 3HOM 
+CONECT      O3N    1 C3L 
+CONECT      N4A    3 C1D  C4B  C5B 
+CONECT      C4B    4 N4A  C4C 1H4B 2H4B 
+CONECT      C4C    3 C4B  C4E  C4D 
+CONECT      C4E    3 C4C  C4G  H4E 
+CONECT      C4D    3 C4C  C4F  H4D 
+CONECT      C4G    3 C4E  C4H  H4G 
+CONECT      C4F    3 C4D  C4H  H4F 
+CONECT      C4H    3 C4G  C4F  H4H 
+CONECT      C5B    4 N4A  C5C 1H5B 2H5B 
+CONECT      C5C    3 C5B  C5D  C5E 
+CONECT      C5D    3 C5C  C5F  H5D 
+CONECT      C5E    3 C5C  C5G  H5E 
+CONECT      C5F    3 C5D  C5H  H5F 
+CONECT      C5G    3 C5E  C5H  H5G 
+CONECT      C5H    3 C5F  C5G  H5H 
+CONECT      H1B    1 C1B 
+CONECT     1H1C    1 C1C 
+CONECT     2H1C    1 C1C 
+CONECT      H2A    1 C2A 
+CONECT     1H2B    1 C2B 
+CONECT     2H2B    1 C2B 
+CONECT     1H2C    1 C2C 
+CONECT     2H2C    1 C2C 
+CONECT     1H2D    1 C2D 
+CONECT     2H2D    1 C2D 
+CONECT     1H2E    1 C2E 
+CONECT     2H2E    1 C2E 
+CONECT     1H2F    1 C2F 
+CONECT     2H2F    1 C2F 
+CONECT     1H2G    1 C2G 
+CONECT     2H2G    1 C2G 
+CONECT     1H2H    1 C2H 
+CONECT     2H2H    1 C2H 
+CONECT     3H2H    1 C2H 
+CONECT     1H3B    1 C3B 
+CONECT     2H3B    1 C3B 
+CONECT     1H3C    1 C3C 
+CONECT     2H3C    1 C3C 
+CONECT     1H3D    1 C3D 
+CONECT     2H3D    1 C3D 
+CONECT     1H3E    1 C3E 
+CONECT     2H3E    1 C3E 
+CONECT      H3G    1 C3G 
+CONECT      H3H    1 C3H 
+CONECT      H3I    1 C3I 
+CONECT      H3J    1 C3J 
+CONECT     3HOM    1 O3M 
+CONECT     1H4B    1 C4B 
+CONECT     2H4B    1 C4B 
+CONECT      H4D    1 C4D 
+CONECT      H4E    1 C4E 
+CONECT      H4F    1 C4F 
+CONECT      H4G    1 C4G 
+CONECT      H4H    1 C4H 
+CONECT     1H5B    1 C5B 
+CONECT     2H5B    1 C5B 
+CONECT      H5D    1 C5D 
+CONECT      H5E    1 C5E 
+CONECT      H5F    1 C5F 
+CONECT      H5G    1 C5G 
+CONECT      H5H    1 C5H 
+END
+HET    072             90
+HETSYN     072 THIAZOLIDINONE; GW0072
+HETNAM     072 (+/-)(2S,5S)-3-(4-(4-CARBOXYPHENYL)BUTYL)-2-HEPTYL-4-
+HETNAM   2 072 OXO-5-THIAZOLIDINE
+FORMUL      072    C37 H46 N2 O4 S1
+
+RESIDUE   074     58
+CONECT      C1     4 C2  1H1  2H1  3H1  
+CONECT      C2     4 C1   C3  1H2  2H2  
+CONECT      C3     4 C2   N1  1H3  2H3  
+CONECT      N1     3 C3   C4  1HN1 
+CONECT      C4     3 N1   O1   C5  
+CONECT      O1     1 C4  
+CONECT      C5     4 C4   C6   O2  1H5  
+CONECT      C6     4 C5   C7  1H6  2H6  
+CONECT      O2     2 C5  1HO2 
+CONECT      C7     3 C6   O3   N2  
+CONECT      O3     1 C7  
+CONECT      N2     3 C7   C8  1HN2 
+CONECT      C8     4 N2   C9   C13 1H8  
+CONECT      C9     4 C8   C10  C11 1H9  
+CONECT      C10    4 C9  1H10 2H10 3H10 
+CONECT      C11    4 C9   C12 1H11 2H11 
+CONECT      C12    4 C11 1H12 2H12 3H12 
+CONECT      C13    3 C8   O4   N3  
+CONECT      O4     1 C13 
+CONECT      N3     3 C13  C14  C17 
+CONECT      C14    4 N3   C15 1H14 2H14 
+CONECT      C15    4 C14  C16 1H15 2H15 
+CONECT      C16    4 C15  C17 1H16 2H16 
+CONECT      C17    4 N3   C16  C18 1H17 
+CONECT      C18    3 C17  O    OT  
+CONECT      O      1 C18 
+CONECT      OT     2 C18  HXT 
+CONECT     1H17    1 C17 
+CONECT     1H16    1 C16 
+CONECT     2H16    1 C16 
+CONECT     1H15    1 C15 
+CONECT     2H15    1 C15 
+CONECT     1H14    1 C14 
+CONECT     2H14    1 C14 
+CONECT     1H10    1 C10 
+CONECT     2H10    1 C10 
+CONECT     3H10    1 C10 
+CONECT     1H11    1 C11 
+CONECT     2H11    1 C11 
+CONECT     1H12    1 C12 
+CONECT     2H12    1 C12 
+CONECT     3H12    1 C12 
+CONECT      HXT    1 OT  
+CONECT     1H8     1 C8  
+CONECT     1H9     1 C9  
+CONECT     1H6     1 C6  
+CONECT     2H6     1 C6  
+CONECT     1H5     1 C5  
+CONECT     1H3     1 C3  
+CONECT     2H3     1 C3  
+CONECT     1H2     1 C2  
+CONECT     2H2     1 C2  
+CONECT     1H1     1 C1  
+CONECT     2H1     1 C1  
+CONECT     3H1     1 C1  
+CONECT     1HN2    1 N2  
+CONECT     1HO2    1 O2  
+CONECT     1HN1    1 N1  
+END
+HET    074             58
+HETSYN     074 CA-074; [N-(L-3-TRANS-PROPYLCARBAMOYL-OXIRANE-2-
+HETSYN   2 074 CARBONYL)-L-ISOLEUCYL-L-PROLINE]
+HETNAM     074 [PROPYLAMINO-3-HYDROXY-BUTAN-1,4-DIONYL]-ISOLEUCYL-
+HETNAM   2 074 PROLINE
+FORMUL      074    C18 H31 N3 O6
+
+RESIDUE   100     28
+CONECT      N1     3 N3   N2   HN1 
+CONECT      N3     2 N1   C3  
+CONECT      C3     3 N3   N4   C8  
+CONECT      N4     2 C3   N2  
+CONECT      N2     2 N1   N4  
+CONECT      C8     3 C3   C9   O1  
+CONECT      C9     3 C8   C11  H9  
+CONECT      O1     2 C8   HO1 
+CONECT      C1     3 C2   C6   H1  
+CONECT      C2     3 C1   C10 CL1  
+CONECT      C10    3 C2   C4   H10 
+CONECT      C4     3 C10  C5   C7  
+CONECT      C5     3 C4   C6   N9  
+CONECT      C6     3 C1   C5   H6  
+CONECT      C7     3 C4   C12  C11 
+CONECT      C12    3 C7   N9   H12 
+CONECT      N9     3 C5   C12  HN9 
+CONECT      C11    3 C9   C7   O2  
+CONECT      O2     1 C11 
+CONECT     CL1     1 C2  
+CONECT      H1     1 C1  
+CONECT      H6     1 C6  
+CONECT      H10    1 C10 
+CONECT      HN9    1 N9  
+CONECT      H12    1 C12 
+CONECT      H9     1 C9  
+CONECT      HO1    1 O1  
+CONECT      HN1    1 N1  
+END
+HET    100             28
+HETNAM     100 1-(5-CHLOROINDOL-3-YL)-3-HYDROXY-3-(2H-TETRAZOL-5-YL)-
+HETNAM   2 100 PROPENONE
+FORMUL      100    C12 H8 N5 O2 CL1
+
+RESIDUE   101     36
+CONECT      P      4 O1P  O2P  O3P  O3* 
+CONECT      O1P    1 P   
+CONECT      O2P    2 P   2HOP 
+CONECT      O3P    2 P   3HOP 
+CONECT      O5*    2HO5*  C5* 
+CONECT      C5*    4 O5*  C4* 1H5* 2H5* 
+CONECT      C4*    4 C5*  O4*  C3*  H4* 
+CONECT      O4*    2 C4*  C1* 
+CONECT      C3*    4 C4*  O3*  C2*  H3* 
+CONECT      O3*    2 P    C3* 
+CONECT      C2*    4 C3*  C1* 1H2* 2H2* 
+CONECT      C1*    4 O4*  C2*  N9   H1* 
+CONECT      N9     3 C1*  C8   C4  
+CONECT      C8     3 N9   N7   H8  
+CONECT      N7     2 C8   C5  
+CONECT      C5     3 N7   C6   C4  
+CONECT      C6     3 C5   N6   N1  
+CONECT      N6     3 C6  1HN6 2HN6 
+CONECT      N1     2 C6   C2  
+CONECT      C2     3 N1   N3   H2  
+CONECT      N3     2 C2   C4  
+CONECT      C4     3 N9   C5   N3  
+CONECT     2HOP    1 O2P 
+CONECT     3HOP    1 O3P 
+CONECT     1H5*    1 C5* 
+CONECT     2H5*    1 C5* 
+CONECT      H4*    1 C4* 
+CONECT      H3*    1 C3* 
+CONECT     HO5*    1 O5* 
+CONECT     1H2*    1 C2* 
+CONECT     2H2*    1 C2* 
+CONECT      H1*    1 C1* 
+CONECT      H8     1 C8  
+CONECT      H2     1 C2  
+CONECT     1HN6    1 N6  
+CONECT     2HN6    1 N6  
+END
+HET    101             36
+HETNAM     101 2'-DEOXY-ADENOSINE 3'-MONOPHOSPHATE
+FORMUL      101    C10 H14 N5 O6 P1
+
+RESIDUE   102     48
+CONECT      PG     4 S1G  O2G  O3G  O3B 
+CONECT      S1G    1 PG  
+CONECT      O2G    2 PG  2HOG 
+CONECT      O3G    2 PG  3HOG 
+CONECT      O3B    2 PG   PB  
+CONECT      PB     4 O3B  O1B  O2B  O3A 
+CONECT      O1B    1 PB  
+CONECT      O2B    2 PB  2HOB 
+CONECT      O3A    2 PB   PA  
+CONECT      PA     4 O3A  O1A  O2A  O5* 
+CONECT      O1A    1 PA  
+CONECT      O2A    2 PA  2HOA 
+CONECT      O5*    2 PA   C5* 
+CONECT      C5*    4 O5*  C4* 1H5* 2H5* 
+CONECT      C4*    4 C5*  O4*  C3*  H4* 
+CONECT      O4*    2 C4*  C1* 
+CONECT      C3*    4 C4*  O3*  C2*  H3* 
+CONECT      O3*    2 C3* *HO3 
+CONECT      C2*    4 C3*  O2*  C1*  H2* 
+CONECT      O2*    2 C2* *HO2 
+CONECT      C1*    4 O4*  C2*  N9   H1* 
+CONECT      N9     3 C1*  C8   C4  
+CONECT      C8     3 N9   N7   H8  
+CONECT      N7     2 C8   C5  
+CONECT      C5     3 N7   C6   C4  
+CONECT      C6     3 C5   O6   N1  
+CONECT      O6     1 C6  
+CONECT      N1     3 C6   C2   HN1 
+CONECT      C2     3 N1   N2   N3  
+CONECT      N2     3 C2  1HN2 2HN2 
+CONECT      N3     2 C2   C4  
+CONECT      C4     3 N9   C5   N3  
+CONECT     2HOG    1 O2G 
+CONECT     3HOG    1 O3G 
+CONECT     2HOB    1 O2B 
+CONECT     2HOA    1 O2A 
+CONECT     1H5*    1 C5* 
+CONECT     2H5*    1 C5* 
+CONECT      H4*    1 C4* 
+CONECT      H3*    1 C3* 
+CONECT     *HO3    1 O3* 
+CONECT      H2*    1 C2* 
+CONECT     *HO2    1 O2* 
+CONECT      H1*    1 C1* 
+CONECT      H8     1 C8  
+CONECT      HN1    1 N1  
+CONECT     1HN2    1 N2  
+CONECT     2HN2    1 N2  
+END
+HET    102             48
+HETNAM     102 GAMMA-DEOXY-GAMMA-SULFO-GUANOSINE-5'-TRIPHOSPHATE
+FORMUL      102    C10 H16 N5 O13 P3 S1
+
+RESIDUE   103     35
+CONECT      P      4 O1P  O2P  O3P  O3* 
+CONECT      O1P    1 P   
+CONECT      O2P    2 P   2HOP 
+CONECT      O3P    2 P   3HOP 
+CONECT      C5*    4 C4* 1H5* 2H5* 3H5* 
+CONECT      C4*    4 C5*  O4*  C3*  H4* 
+CONECT      O4*    2 C4*  C1* 
+CONECT      C3*    4 C4*  O3*  C2*  H3* 
+CONECT      O3*    2 P    C3* 
+CONECT      C2*    4 C3*  C1* 1H2* 2H2* 
+CONECT      C1*    4 O4*  C2*  N9   H1* 
+CONECT      N9     3 C1*  C8   C4  
+CONECT      C8     3 N9   N7   H8  
+CONECT      N7     2 C8   C5  
+CONECT      C5     3 N7   C6   C4  
+CONECT      C6     3 C5   N6   N1  
+CONECT      N6     3 C6  1HN6 2HN6 
+CONECT      N1     2 C6   C2  
+CONECT      C2     3 N1   N3   H2  
+CONECT      N3     2 C2   C4  
+CONECT      C4     3 N9   C5   N3  
+CONECT     2HOP    1 O2P 
+CONECT     3HOP    1 O3P 
+CONECT     1H5*    1 C5* 
+CONECT     2H5*    1 C5* 
+CONECT     3H5*    1 C5* 
+CONECT      H4*    1 C4* 
+CONECT      H3*    1 C3* 
+CONECT     1H2*    1 C2* 
+CONECT     2H2*    1 C2* 
+CONECT      H1*    1 C1* 
+CONECT      H8     1 C8  
+CONECT      H2     1 C2  
+CONECT     1HN6    1 N6  
+CONECT     2HN6    1 N6  
+END
+HET    103             35
+HETNAM     103 2',5'-DIDEOXY-ADENOSINE 3'-MONOPHOSPHATE
+FORMUL      103    C10 H14 N5 O5 P1
+
+RESIDUE   104     28
+CONECT      N1     3 C2  1H1  2H1  
+CONECT      C2     4 N1   C3  1H2  2H2  
+CONECT      C3     4 C2   N4  1H3  2H3  
+CONECT      N4     3 C3   C5   HN4 
+CONECT      C5     4 N4   C6  1H5  2H5  
+CONECT      C6     4 C5   N7  1H6  2H6  
+CONECT      N7     3 C6   C8   HN7 
+CONECT      C8     4 N7   C9  1H8  2H8  
+CONECT      C9     4 C8   N10 1H9  2H9  
+CONECT      N10    3 C9  1H10 2H10 
+CONECT     1H1     1 N1  
+CONECT     2H1     1 N1  
+CONECT     1H10    1 N10 
+CONECT     2H10    1 N10 
+CONECT      HN4    1 N4  
+CONECT      HN7    1 N7  
+CONECT     1H2     1 C2  
+CONECT     2H2     1 C2  
+CONECT     1H3     1 C3  
+CONECT     2H3     1 C3  
+CONECT     1H5     1 C5  
+CONECT     2H5     1 C5  
+CONECT     1H6     1 C6  
+CONECT     2H6     1 C6  
+CONECT     1H8     1 C8  
+CONECT     2H8     1 C8  
+CONECT     1H9     1 C9  
+CONECT     2H9     1 C9  
+END
+HET    104             28
+HETSYN     104 TRIENTINE
+HETNAM     104 N,N'-BIS(2-AMINOETHYL)-1,2-ETHANEDIAMINE
+FORMUL      104    C6 H18 N4
+
+RESIDUE   105     32
+CONECT      B      3 O1   O2   C3  
+CONECT      O1     2 B    H1  
+CONECT      O2     2 B    H2  
+CONECT      C3     4 B    N4  1H3  2H3  
+CONECT      N4     3 C3   C5   H4  
+CONECT      C5     3 N4   O6   C7  
+CONECT      O6     1 C5  
+CONECT      C7     3 C5   C8   C12 
+CONECT      N11    2 O10  C12 
+CONECT      O10    2 N11  C8  
+CONECT      C8     3 C7   O10  C9  
+CONECT      C12    3 C7   N11  C13 
+CONECT      C9     4 C8  1H9  2H9  3H9  
+CONECT      C13    3 C12  C14  C18 
+CONECT      C14    3 C13  C15 CL1  
+CONECT     CL1     1 C14 
+CONECT      C15    3 C14  C16  H15 
+CONECT      C16    3 C15  C17  H16 
+CONECT      C17    3 C16  C18  H17 
+CONECT      C18    3 C13  C17  H18 
+CONECT      H1     1 O1  
+CONECT      H2     1 O2  
+CONECT     1H3     1 C3  
+CONECT     2H3     1 C3  
+CONECT      H4     1 N4  
+CONECT     1H9     1 C9  
+CONECT     2H9     1 C9  
+CONECT     3H9     1 C9  
+CONECT      H15    1 C15 
+CONECT      H16    1 C16 
+CONECT      H17    1 C17 
+CONECT      H18    1 C18 
+END
+HET    105             32
+HETSYN     105 CLOXACILLIN DERIVATIVE
+HETNAM     105 N-[5-METHYL-3-O-TOLYL-ISOXAZOLE-4-CARBOXYLIC ACID
+HETNAM   2 105 AMIDE] BORONIC ACID
+FORMUL      105    C12 H12 N2 O4 B1 CL1
+

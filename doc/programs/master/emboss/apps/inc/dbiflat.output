@@ -1,0 +1,50 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: division.lkp</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: entrynam.idx</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: acnum.hit</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: acnum.trg</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: outfile.dbiflat</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: dbiflat
+# Rundate: Tue 15 Jul 2008 12:00:00
+# Dbname: EMBL
+# Release: 0.0
+# Date: 15/07/08
+# CurrentDirectory: /homes/user/test/qa/dbiflat-ex-keep/
+# IndexDirectory: ./
+# IndexDirectoryPath: /homes/user/test/qa/dbiflat-ex-keep/
+# Maxindex: 0
+# Fields: 2
+#   Field 1: id
+#   Field 2: acc
+# Directory: /homes/user/test/embl/
+# DirectoryPath: /homes/user/test/embl/
+# Filenames: rod.dat
+# Exclude: 
+# Files: 1
+#   File 1: /homes/user/test/embl/rod.dat
+########################################
+# Commandline: dbiflat
+#    -dbname EMBL
+#    -idformat EMBL
+#    -directory ../../embl
+#    -filenames rod.dat
+########################################
+
+filename: 'rod.dat'
+    id: 6
+   acc: 9
+
+Index acc: maxlen 6 items 7
+
+Total 1 files 6 entries (0 duplicates)
+</pre>
+</td></tr></table><p>

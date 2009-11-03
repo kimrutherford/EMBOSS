@@ -1,0 +1,35 @@
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="dbiblast.html">dbiblast</a></td>
+<td>Index a BLAST database</td>
+</tr>
+
+<tr>
+<td><a href="dbifasta.html">dbifasta</a></td>
+<td>Index a fasta file database</td>
+</tr>
+
+<tr>
+<td><a href="dbiflat.html">dbiflat</a></td>
+<td>Index a flat file database</td>
+</tr>
+
+<tr>
+<td><a href="dbxfasta.html">dbxfasta</a></td>
+<td>Index a fasta file database using b+tree indices</td>
+</tr>
+
+<tr>
+<td><a href="dbxflat.html">dbxflat</a></td>
+<td>Index a flat file database using b+tree indices</td>
+</tr>
+
+<tr>
+<td><a href="dbxgcg.html">dbxgcg</a></td>
+<td>Index a GCG formatted database using b+tree indices</td>
+</tr>
+
+</table>

@@ -1,0 +1,28 @@
+# Data values for DNA melting
+#
+# Allawi H.T. and SantaLucia J. Jr. (1997), Biochemistry 36:10581-10594 
+#
+# Original publication uses figures at 310K
+# Recalculated deltaG = deltaH - t*deltaS
+# (note deltaS figures in cal, others in kcal)
+#
+# pH 7.0, 1.0M NaCl 10mM sodium cacodylate 0.5mM disodium EDTA
+# Temperature: 25C (298.15K)
+#
+#             deltaH       deltaS     deltaG
+#             kcal/mol   cal/K/mol  kcal/mol  
+#Bases        Enthalpy    Entropy     Energy
+#
+AA TT		7.9        22.2       1.28
+AC GT           8.4        22.4       1.72   
+AG CT           7.8        21.0       1.54   
+AT AT           7.2        20.4       1.12 
+#
+CA TG           8.5        22.7       1.73
+CC GG           8.0        19.9       2.07   
+CG CG          10.6        27.2       2.49 
+#
+GA TC           8.2        22.2       1.58 
+GC GC           9.8        24.4       2.53   
+#
+TA TA           7.2        21.3       0.85

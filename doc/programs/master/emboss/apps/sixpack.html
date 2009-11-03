@@ -1,0 +1,172 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: sixpack
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+
+
+<!--#include file="header1.inc" -->
+sixpack
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/sixpack.ione" -->
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+<p><b>sixpack</b> reads a DNA sequence and writes an output file
+giving out the forward and reverse sense sequences with the three
+forward and (optionally) three reverse translations in a pretty
+display format.  A genetic code may be specified for the translation.
+There are various options to control the appearance of the output
+file.  It also writes a file of protein sequences corresponding to any
+open reading frames that are larger than the specified minimum size:
+the default of 1 base shows all possible open reading frames.</p>
+
+<H2>
+    Algorithm
+</H2>
+
+<p>The program takes the following steps:</p>
+<pre>
+ The nucleic acid sequence is read in.
+ The required genetic code is read in from the EGC* data files.
+ The three forward and three reverse translations are created.
+ The name and description are written to the ouput display file.
+ Any required regions to be changed to upper case are changed.
+ Any required regions to be highlighted in HTML colour tags are changed.
+ The reverse sense sequence is placed below the forward sequence.
+ The forward translations are placed above the sequences.
+ The reverse translation are placed below the sequences.
+ The display is written out, split at the ends of lines.
+ Any ORFs that are longer than the specified minimum size are written to the output sequence file.
+</pre>
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/sixpack.usage" -->
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/sixpack.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/sixpack.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+<b>sixpack</b> reads any normal sequence USAs.
+
+<p>
+
+<!--#include file="inc/sixpack.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/sixpack.output" -->
+
+<H2>
+    Data files
+</H2>
+
+<!--#include file="inc/localfiles.ihtml" -->
+
+<p>
+<!--#include file="inc/gcfiles.ihtml" -->
+
+
+<H2>
+    Notes
+</H2>
+
+<p>An open reading frame is defined in this program as any possible
+translation between two STOP codons. Optionally, the beginning or end
+of a sequence may be counted as an ORF even if it's less than the
+minimal ORF size or (end only) lacking a STOP codon.  See the
+-firstorf and -lastorf options.</p>
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/sixpack.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/tlaurent.address" -->
+
+<H2>
+    History
+</H2>
+
+<!--#include file="inc/sixpack.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/sixpack.comment" -->
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,45 @@
+application: seqretsplit [
+  documentation: "Reads sequences and writes them to individual files"
+  groups: "Edit"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  boolean: feature [
+    information: "Use feature information"
+  ]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "gapany"
+    features: "$(feature)"
+  ]
+
+endsection: input
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  boolean: firstonly [
+    information: "Read one sequence and stop"
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  seqoutall: outseq [
+    parameter: "Y"
+    ossingle: "Y"
+    features: "$(feature)"
+  ]
+
+endsection: output

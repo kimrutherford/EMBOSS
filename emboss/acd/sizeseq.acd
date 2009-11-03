@@ -1,0 +1,94 @@
+application: sizeseq
+[
+  documentation: "Sort sequences by size"
+  groups: "Edit"
+  gui: "yes"
+  batch: "yes"
+  cpu: "low"
+]
+
+
+
+
+
+section: input 
+[
+  information: "Input section"
+  type: "page"
+]
+
+boolean: feature 
+[
+    information: "Use feature information"
+    help: "Sequence feature information will be retained if this option is set."
+]
+
+seqset: sequences 
+[
+    parameter: "Y"
+    type: "gapany"
+    features: "$(feature)"
+    aligned: "N"
+]
+
+endsection: input
+
+
+
+
+
+section: required 
+[
+  information: "Required section"
+  type: "page"
+]
+
+boolean: descending
+[
+    standard: "Y"
+    default: "N"
+    information: "Return longest sequence first"
+    help: "By default the shortest sequence is given first."
+]
+
+endsection: required
+
+
+
+
+
+section: additional
+[
+  information: "Additional section"
+  type: "page"
+]
+endsection: additional
+
+
+
+
+
+section: advanced
+[
+  information: "Advanced section"
+  type: "page"
+]
+endsection: advanced
+
+
+
+
+
+section: output 
+[
+  information: "Output section"
+  type: "page"
+]
+
+seqoutall: outseq 
+[
+    parameter: "Y"
+    features: "$(feature)"
+]
+
+endsection: output

@@ -1,0 +1,18 @@
+<b>Here is a sample session with distmat</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>distmat pax.align </b>
+Create a distance matrix from a multiple sequence alignment
+Multiple substitution correction methods for proteins
+         0 : Uncorrected
+         1 : Jukes-Cantor
+         2 : Kimura Protein
+Method to use [0]: <b>2</b>
+Phylip distance matrix output file [pax.distmat]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

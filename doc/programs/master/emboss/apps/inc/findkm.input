@@ -1,0 +1,18 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: enztest.dat</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+  0.10   2
+  0.20   4
+  0.50   9
+  1.00  17
+  2.00  29
+  5.00  50
+ 10.00  67
+ 20.00  80
+ 50.00  91
+100.00  95
+</pre>
+</td></tr></table><p>

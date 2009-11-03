@@ -1,0 +1,23 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: vecseqs.list</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+../../data/bluescript.seq
+../../data/litmus.seq
+../../data/pTYB1.seq
+</pre>
+</td></tr></table><p>
+<p><h3>File: vectors</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+# Example vector file for use by vectorstrip
+
+# Vector	5'			3'
+
+pTYB1   GACGGCGGCCGCGAATTCC     TCGAGGGCTCTTCCTGC
+pBS_KS+ GGGTACCGGGCCCCCCC       TCGAGGTCGACGGTA         
+pLITMUS GATATCCTGCAGGAATTCC     TCGAGACCGTACGTGCG
+</pre>
+</td></tr></table><p>

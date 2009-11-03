@@ -1,0 +1,178 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: equicktandem
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+equicktandem
+<!--#include file="header2.inc" -->
+<H2>
+    Function
+</H2>
+<!--#include file="inc/equicktandem.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<p><b>equicktandem</b> identifies regions in a nucleotide sequence
+which are likely to contain tanden repeats.  For a region to be
+reported, it must be no larger than a specified maximum repeat size
+and must score higher than a threshold score, which is also
+user-specified. The output is a standard EMBOSS report file with
+details of the location and score of any potential tandem repeats.
+Optionally, the output can be written in the format of the Sanger
+Centre quicktandem program.</p>
+
+
+<H2>
+Algorithm
+</H2>
+
+<p><b>equicktandem</b> looks for sequence segments in which each base
+tends to match the base a fixed number ('repeatsize') of nucleotides
+back in the sequence, i.e. with an autocorrelation peak at
+'repeatsize'.  The score for a segment is the sum of the scores for
+each position in that segment: the score is incremented (+1) for a
+match to the corresponding base 'repeatsize' back and decremented (-1)
+for a mismatch.  The algorithm allows for drift in the repeating
+sequence, i.e. exact matches are not required, nor is a consensus
+sequence for the whole repeat block used (that is what <b>etandem</b>
+does).  The algorithm does not account for gaps but it is much quicker
+than <b>etandem</b>.</p>
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/equicktandem.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/equicktandem.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/equicktandem.itable" -->
+<H2>
+    Input file format
+</H2>
+
+
+The input for equicktandem is a nucleotide sequence USA.
+
+<p>
+<!--#include file="inc/equicktandem.input" -->
+
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/reportformats.ihtml" -->
+<p>
+
+By default <b>equicktandem</b> writes a 'table' report file.
+
+<p>
+<!--#include file="inc/equicktandem.output" -->
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+<p>A tandem repeat in a DNA sequence is where a sequence of two or
+more nucleotides is repeated without any intervening nucleotides.  For
+example "GATACAGATACAGATACA" is a tandem repeat of "GATACA".  A short
+tandem repeat is typically 2 to 10 base pairs and occur in introns.
+The sequence and number of repeats at a given locus tend to be
+characteristic of an individual.  Where enough STR loci are examined,
+a unique genetic profile of an individual can be built.  Thus, tandem
+repeats are useful for genotyping, for example, in determining
+parentage and in forensic cases.</p>
+
+<p>To identify genuine tandem repeats, the repeat sizes and / or
+sequence regions identified by <b>equicktandem</b> can be used as
+input to <b>etandem</b>.  <b>etandem</b> will confirm which regions
+are true tandem repeats and give an accurate specification of the
+repeats.</p>
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/equicktandem.isee" -->
+<p>
+
+<H2>
+    Author(s)
+</H2>
+
+
+This program was originally written by 
+<!--#include file="inc/rdurbin.address" -->
+
+<p>
+
+This application was modified for inclusion in EMBOSS by 
+<!--#include file="inc/price.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/equicktandem.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/equicktandem.comment" -->
+
+
+</BODY>
+</HTML>
+

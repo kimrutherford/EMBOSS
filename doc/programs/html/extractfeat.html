@@ -1,0 +1,1287 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: extractfeat
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+extractfeat
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+<H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
+    Function
+</H2>
+Extract features from sequence(s)
+<H2>
+    Description
+</H2>
+
+<p><b>extractfeat</b> is a simple utility for extracting regions of a
+sequence that are annotated as being a specified type of feature. It
+reads one or more sequences, and writes out the sequences and features
+of interest to an output sequence file.  'joined' features can either
+be extracted as individual sequences, or as a single concatenated
+sequence if the <tt>-join</tt> qualifier is used. If the feature is
+annotated as being in the reverse sense of a nucleic acid sequence,
+then that feature's sub-sequence is reverse-complemented before it is
+written.</p>
+
+<p>There are many options control exactly what parts of the feature
+table are given in the output file.  In addition, it is often useful
+to have contextual information about a feature.  There are options to
+specify a number of positions before and/or after the specified
+feature which will be reported in the output file.</p>
+
+
+
+
+
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with extractfeat</b>
+<p>
+To write out the exons of a sequence:  
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>extractfeat tembl:x65921 -type exon </b>
+Extract features from sequence(s)
+output sequence [x65921.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+To write out the exons with 10 extra bases at the start and end so that you can inspect the splice sites: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>extractfeat tembl:x65921 -type exon -before 10 -after 10 </b>
+Extract features from sequence(s)
+output sequence [x65921.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 3</b>
+<p>
+To write out the 10 bases around the start of all 'exon' features in the tembl database:  
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>extractfeat 'tembl:*'  -type exon -before 5 -after -5 </b>
+Extract features from sequence(s)
+output sequence [h45989.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.3">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 4</b>
+<p>
+To extract the CDS region with the exons joined into one sequence: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>extractfeat tembl:x65921 -type CDS -join </b>
+Extract features from sequence(s)
+output sequence [x65921.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.4">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 5</b>
+<p>
+To write out the 7 residues around all phosphorylated serine residues 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>extractfeat 'tsw:*' -type MOD_RES -value 'phosphoserine*' -before 3 -after -4 </b>
+Extract features from sequence(s)
+output sequence [12s1_arath.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.5">Go to the output files for this example</a><p><p>
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Sequence(s) filename and optional format, or
+                                  reference (input USA)
+  [-outseq]            seqout     [<sequence>.<format>] Sequence filename and
+                                  optional format (output USA)
+
+   Additional (Optional) qualifiers:
+   -before             integer    [0] If this value is greater than 0 then
+                                  that number of bases or residues before the
+                                  feature are included in the extracted
+                                  sequence. This allows you to get the context
+                                  of the feature. If this value is negative
+                                  then the start of the extracted sequence
+                                  will be this number of bases/residues before
+                                  the end of the feature. So a value of '10'
+                                  will start the extraction 10 bases/residues
+                                  before the start of the sequence, and a
+                                  value of '-10' will start the extraction 10
+                                  bases/residues before the end of the
+                                  feature. The output sequence will be padded
+                                  with 'N' or 'X' characters if the sequence
+                                  starts after the required start of the
+                                  extraction. (Any integer value)
+   -after              integer    [0] If this value is greater than 0 then
+                                  that number of bases or residues after the
+                                  feature are included in the extracted
+                                  sequence. This allows you to get the context
+                                  of the feature. If this value is negative
+                                  then the end of the extracted sequence will
+                                  be this number of bases/residues after the
+                                  start of the feature. So a value of '10'
+                                  will end the extraction 10 bases/residues
+                                  after the end of the sequence, and a value
+                                  of '-10' will end the extraction 10
+                                  bases/residues after the start of the
+                                  feature. The output sequence will be padded
+                                  with 'N' or 'X' characters if the sequence
+                                  ends before the required end of the
+                                  extraction. (Any integer value)
+   -source             string     [*] By default any feature source in the
+                                  feature table is shown. You can set this to
+                                  match any feature source you wish to show.
+                                  The source name is usually either the name
+                                  of the program that detected the feature or
+                                  it is the feature table (eg: EMBL) that the
+                                  feature came from.
+                                  The source may be wildcarded by using '*'.
+                                  If you wish to show more than one source,
+                                  separate their names with the character '|',
+                                  eg:
+                                  gene* | embl (Any string is accepted)
+   -type               string     [*] By default every feature in the feature
+                                  table is extracted. You can set this to be
+                                  any feature type you wish to extract.
+                                  See http://www.ebi.ac.uk/Services/WebFeat/
+                                  for a list of the EMBL feature types and see
+                                  the Uniprot user manual in
+                                  http://www.uniprot.org/manual/sequence_annotation
+                                  for a list of the Uniprot feature types.
+                                  The type may be wildcarded by using '*'.
+                                  If you wish to extract more than one type,
+                                  separate their names with the character '|',
+                                  eg:
+                                  *UTR | intron (Any string is accepted)
+   -sense              integer    [0 - any sense, 1 - forward sense, -1 -
+                                  reverse sense] By default any feature type
+                                  in the feature table is extracted. You can
+                                  set this to match any feature sense you
+                                  wish. 0 - any sense, 1 - forward sense, -1 -
+                                  reverse sense (Any integer value)
+   -minscore           float      [0.0] Minimum score of feature to extract
+                                  (see also maxscore) (Any numeric value)
+   -maxscore           float      [0.0] Maximum score of feature to extract.
+                                  If both minscore and maxscore are zero (the
+                                  default), then any score is ignored (Any
+                                  numeric value)
+   -tag                string     [*] Tags are the types of extra values that
+                                  a feature may have. For example in the EMBL
+                                  feature table, a 'CDS' type of feature may
+                                  have the tags '/codon', '/codon_start',
+                                  '/db_xref', '/EC_number', '/evidence',
+                                  '/exception', '/function', '/gene',
+                                  '/label', '/map', '/note', '/number',
+                                  '/partial', '/product', '/protein_id',
+                                  '/pseudo', '/standard_name', '/translation',
+                                  '/transl_except', '/transl_table', or
+                                  '/usedin'. Some of these tags also have
+                                  values, for example '/gene' can have the
+                                  value of the gene name.
+                                  By default any feature tag in the feature
+                                  table is extracted. You can set this to
+                                  match any feature tag you wish to show.
+                                  The tag may be wildcarded by using '*'.
+                                  If you wish to extract more than one tag,
+                                  separate their names with the character '|',
+                                  eg:
+                                  gene | label (Any string is accepted)
+   -value              string     [*] Tag values are the values associated
+                                  with a feature tag. Tags are the types of
+                                  extra values that a feature may have. For
+                                  example in the EMBL feature table, a 'CDS'
+                                  type of feature may have the tags '/codon',
+                                  '/codon_start', '/db_xref', '/EC_number',
+                                  '/evidence', '/exception', '/function',
+                                  '/gene', '/label', '/map', '/note',
+                                  '/number', '/partial', '/product',
+                                  '/protein_id', '/pseudo', '/standard_name',
+                                  '/translation', '/transl_except',
+                                  '/transl_table', or '/usedin'. Only some of
+                                  these tags can have values, for example
+                                  '/gene' can have the value of the gene name.
+                                  By default any feature tag value in the
+                                  feature table is shown. You can set this to
+                                  match any feature tag valueyou wish to show.
+                                  The tag value may be wildcarded by using
+                                  '*'.
+                                  If you wish to show more than one tag value,
+                                  separate their names with a space or the
+                                  character '|', eg:
+                                  pax* | 10 (Any string is accepted)
+   -join               boolean    [N] Some features, such as CDS (coding
+                                  sequence) and mRNA are composed of introns
+                                  concatenated together. There may be other
+                                  forms of 'joined' sequence, depending on the
+                                  feature table. If this option is set TRUE,
+                                  then any group of these features will be
+                                  output as a single sequence. If the 'before'
+                                  and 'after' qualifiers have been set, then
+                                  only the sequence before the first feature
+                                  and after the last feature are added.
+   -featinname         boolean    [N] To aid you in identifying the type of
+                                  feature that has been output, the type of
+                                  feature is added to the start of the
+                                  description of the output sequence.
+                                  Sometimes the description of a sequence is
+                                  lost in subsequent processing of the
+                                  sequences file, so it is useful for the type
+                                  to be a part of the sequence ID name. If
+                                  you set this to be TRUE then the name is
+                                  added to the ID name of the output sequence.
+   -describe           string     To aid you in identifying some further
+                                  properties of a feature that has been
+                                  output, this lets you specify one or more
+                                  tag names that should be added to the output
+                                  sequence Description text, together with
+                                  their values (if any). For example, if this
+                                  is set to be 'gene', then if any output
+                                  feature has the tag (for example)
+                                  '/gene=BRCA1' associated with it, then the
+                                  text '(gene=BRCA1)' will be added to the
+                                  Description line. Tags are the types of
+                                  extra values that a feature may have. For
+                                  example in the EMBL feature table, a 'CDS'
+                                  type of feature may have the tags '/codon',
+                                  '/codon_start', '/db_xref', '/EC_number',
+                                  '/evidence', '/exception', '/function',
+                                  '/gene', '/label', '/map', '/note',
+                                  '/number', '/partial', '/product',
+                                  '/protein_id', '/pseudo', '/standard_name',
+                                  '/translation', '/transl_except',
+                                  '/transl_table', or '/usedin'. Some of these
+                                  tags also have values, for example '/gene'
+                                  can have the value of the gene name.
+                                  By default no feature tag is displayed. You
+                                  can set this to match any feature tag you
+                                  wish to show.
+                                  The tag may be wildcarded by using '*'.
+                                  If you wish to extract more than one tag,
+                                  separate their names with the character '|',
+                                  eg:
+                                  gene | label (Any string is accepted)
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outseq" associated qualifiers
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 2)</td>
+<td>Sequence filename and optional format (output USA)</td>
+<td>Writeable sequence</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-before</td>
+<td>If this value is greater than 0 then that number of bases or residues before the feature are included in the extracted sequence. This allows you to get the context of the feature. If this value is negative then the start of the extracted sequence will be this number of bases/residues before the end of the feature. So a value of '10' will start the extraction 10 bases/residues before the start of the sequence, and a value of '-10' will start the extraction 10 bases/residues before the end of the feature. The output sequence will be padded with 'N' or 'X' characters if the sequence starts after the required start of the extraction.</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-after</td>
+<td>If this value is greater than 0 then that number of bases or residues after the feature are included in the extracted sequence. This allows you to get the context of the feature. If this value is negative then the end of the extracted sequence will be this number of bases/residues after the start of the feature. So a value of '10' will end the extraction 10 bases/residues after the end of the sequence, and a value of '-10' will end the extraction 10 bases/residues after the start of the feature. The output sequence will be padded with 'N' or 'X' characters if the sequence ends before the required end of the extraction.</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-source</td>
+<td>By default any feature source in the feature table is shown. You can set this to match any feature source you wish to show.
+The source name is usually either the name of the program that detected the feature or it is the feature table (eg: EMBL) that the feature came from.
+The source may be wildcarded by using '*'.
+If you wish to show more than one source, separate their names with the character '|', eg:
+gene* | embl</td>
+<td>Any string is accepted</td>
+<td>*</td>
+</tr>
+
+<tr>
+<td>-type</td>
+<td>By default every feature in the feature table is extracted. You can set this to be any feature type you wish to extract.
+See http://www.ebi.ac.uk/Services/WebFeat/ for a list of the EMBL feature types and see the Uniprot user manual in http://www.uniprot.org/manual/sequence_annotation for a list of the Uniprot feature types.
+The type may be wildcarded by using '*'.
+If you wish to extract more than one type, separate their names with the character '|', eg:
+*UTR | intron</td>
+<td>Any string is accepted</td>
+<td>*</td>
+</tr>
+
+<tr>
+<td>-sense</td>
+<td>By default any feature type in the feature table is extracted. You can set this to match any feature sense you wish. 0 - any sense, 1 - forward sense, -1 - reverse sense</td>
+<td>Any integer value</td>
+<td>0 - any sense, 1 - forward sense, -1 - reverse sense</td>
+</tr>
+
+<tr>
+<td>-minscore</td>
+<td>Minimum score of feature to extract (see also maxscore)</td>
+<td>Any numeric value</td>
+<td>0.0</td>
+</tr>
+
+<tr>
+<td>-maxscore</td>
+<td>Maximum score of feature to extract.
+If both minscore and maxscore are zero (the default), then any score is ignored</td>
+<td>Any numeric value</td>
+<td>0.0</td>
+</tr>
+
+<tr>
+<td>-tag</td>
+<td>Tags are the types of extra values that a feature may have. For example in the EMBL feature table, a 'CDS' type of feature may have the tags '/codon', '/codon_start', '/db_xref', '/EC_number', '/evidence', '/exception', '/function', '/gene', '/label', '/map', '/note', '/number', '/partial', '/product', '/protein_id', '/pseudo', '/standard_name', '/translation', '/transl_except', '/transl_table', or '/usedin'. Some of these tags also have values, for example '/gene' can have the value of the gene name.
+By default any feature tag in the feature table is extracted. You can set this to match any feature tag you wish to show.
+The tag may be wildcarded by using '*'.
+If you wish to extract more than one tag, separate their names with the character '|', eg:
+gene | label</td>
+<td>Any string is accepted</td>
+<td>*</td>
+</tr>
+
+<tr>
+<td>-value</td>
+<td>Tag values are the values associated with a feature tag. Tags are the types of extra values that a feature may have. For example in the EMBL feature table, a 'CDS' type of feature may have the tags '/codon', '/codon_start', '/db_xref', '/EC_number', '/evidence', '/exception', '/function', '/gene', '/label', '/map', '/note', '/number', '/partial', '/product', '/protein_id', '/pseudo', '/standard_name', '/translation', '/transl_except', '/transl_table', or '/usedin'. Only some of these tags can have values, for example '/gene' can have the value of the gene name. By default any feature tag value in the feature table is shown. You can set this to match any feature tag valueyou wish to show.
+The tag value may be wildcarded by using '*'.
+If you wish to show more than one tag value, separate their names with a space or the character '|', eg:
+pax* | 10</td>
+<td>Any string is accepted</td>
+<td>*</td>
+</tr>
+
+<tr>
+<td>-join</td>
+<td>Some features, such as CDS (coding sequence) and mRNA are composed of introns concatenated together. There may be other forms of 'joined' sequence, depending on the feature table. If this option is set TRUE, then any group of these features will be output as a single sequence. If the 'before' and 'after' qualifiers have been set, then only the sequence before the first feature and after the last feature are added.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-featinname</td>
+<td>To aid you in identifying the type of feature that has been output, the type of feature is added to the start of the description of the output sequence. Sometimes the description of a sequence is lost in subsequent processing of the sequences file, so it is useful for the type to be a part of the sequence ID name. If you set this to be TRUE then the name is added to the ID name of the output sequence.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-describe</td>
+<td>To aid you in identifying some further properties of a feature that has been output, this lets you specify one or more tag names that should be added to the output sequence Description text, together with their values (if any). For example, if this is set to be 'gene', then if any output feature has the tag (for example) '/gene=BRCA1' associated with it, then the text '(gene=BRCA1)' will be added to the Description line. Tags are the types of extra values that a feature may have. For example in the EMBL feature table, a 'CDS' type of feature may have the tags '/codon', '/codon_start', '/db_xref', '/EC_number', '/evidence', '/exception', '/function', '/gene', '/label', '/map', '/note', '/number', '/partial', '/product', '/protein_id', '/pseudo', '/standard_name', '/translation', '/transl_except', '/transl_table', or '/usedin'. Some of these tags also have values, for example '/gene' can have the value of the gene name.
+By default no feature tag is displayed. You can set this to match any feature tag you wish to show.
+The tag may be wildcarded by using '*'.
+If you wish to extract more than one tag, separate their names with the character '|', eg:
+gene | label</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+<H2>
+    Input file format
+</H2>
+
+<b>extractfeat</b> reads normal sequences with features.
+
+<p>
+
+Feature tables in Swissprot, EMBL, GFF, etc.  format can be added using
+'-ufo featurefile' on the command line. 
+<p>
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:x65921' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:x65921</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   X65921; SV 1; linear; genomic DNA; STD; HUM; 2016 BP.
+XX
+AC   X65921; S45242;
+XX
+DT   13-MAY-1992 (Rel. 31, Created)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 7)
+XX
+DE   H.sapiens fau 1 gene
+XX
+KW   fau 1 gene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-2016
+RA   Kas K.;
+RT   ;
+RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   K. Kas, University of Antwerp, Dept of Biochemistry T3.22,
+RL   Universiteitsplein 1, 2610 Wilrijk, BELGIUM
+XX
+RN   [2]
+RP   1-2016
+RX   DOI; 10.1016/0006-291X(92)91286-Y.
+RX   PUBMED; 1326960.
+RA   Kas K., Michiels L., Merregaert J.;
+RT   "Genomic structure and expression of the human fau gene: encoding the
+RT   ribosomal protein S30 fused to a ubiquitin-like protein";
+RL   Biochem. Biophys. Res. Commun. 187(2):927-933(1992).
+XX
+DR   GDB; 191789.
+DR   GDB; 191790.
+DR   GDB; 354872.
+DR   GDB; 4590236.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..2016
+FT                   /organism="Homo sapiens"
+FT                   /mol_type="genomic DNA"
+FT                   /clone_lib="CML cosmid"
+FT                   /clone="15.1"
+FT                   /db_xref="taxon:9606"
+FT   mRNA            join(408..504,774..856,951..1095,1557..1612,1787..&gt;1912)
+FT                   /gene="fau 1"
+FT   exon            408..504
+FT                   /number=1
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
+FT   intron          857..950
+FT                   /number=2
+FT   exon            951..1095
+FT                   /number=3
+FT   intron          1096..1556
+FT                   /number=3
+FT   exon            1557..1612
+FT                   /number=4
+FT   intron          1613..1786
+FT                   /number=4
+FT   exon            1787..&gt;1912
+FT                   /number=5
+FT   polyA_signal    1938..1943
+XX
+SQ   Sequence 2016 BP; 421 A; 562 C; 538 G; 495 T; 0 other;
+     ctaccatttt ccctctcgat tctatatgta cactcgggac aagttctcct gatcgaaaac        60
+     ggcaaaacta aggccccaag taggaatgcc ttagttttcg gggttaacaa tgattaacac       120
+     tgagcctcac acccacgcga tgccctcagc tcctcgctca gcgctctcac caacagccgt       180
+     agcccgcagc cccgctggac accggttctc catccccgca gcgtagcccg gaacatggta       240
+     gctgccatct ttacctgcta cgccagcctt ctgtgcgcgc aactgtctgg tcccgccccg       300
+     tcctgcgcga gctgctgccc aggcaggttc gccggtgcga gcgtaaaggg gcggagctag       360
+     gactgccttg ggcggtacaa atagcaggga accgcgcggt cgctcagcag tgacgtgaca       420
+     cgcagcccac ggtctgtact gacgcgccct cgcttcttcc tctttctcga ctccatcttc       480
+     gcggtagctg ggaccgccgt tcaggtaaga atggggcctt ggctggatcc gaagggcttg       540
+     tagcaggttg gctgcggggt cagaaggcgc ggggggaacc gaagaacggg gcctgctccg       600
+     tggccctgct ccagtcccta tccgaactcc ttgggaggca ctggccttcc gcacgtgagc       660
+     cgccgcgacc accatcccgt cgcgatcgtt tctggaccgc tttccactcc caaatctcct       720
+     ttatcccaga gcatttcttg gcttctctta caagccgtct tttctttact cagtcgccaa       780
+     tatgcagctc tttgtccgcg cccaggagct acacaccttc gaggtgaccg gccaggaaac       840
+     ggtcgcccag atcaaggtaa ggctgcttgg tgcgccctgg gttccatttt cttgtgctct       900
+     tcactctcgc ggcccgaggg aacgcttacg agccttatct ttccctgtag gctcatgtag       960
+     cctcactgga gggcattgcc ccggaagatc aagtcgtgct cctggcaggc gcgcccctgg      1020
+     aggatgaggc cactctgggc cagtgcgggg tggaggccct gactaccctg gaagtagcag      1080
+     gccgcatgct tggaggtgag tgagagagga atgttctttg aagtaccggt aagcgtctag      1140
+     tgagtgtggg gtgcatagtc ctgacagctg agtgtcacac ctatggtaat agagtacttc      1200
+     tcactgtctt cagttcagag tgattcttcc tgtttacatc cctcatgttg aacacagacg      1260
+     tccatgggag actgagccag agtgtagttg tatttcagtc acatcacgag atcctagtct      1320
+     ggttatcagc ttccacacta aaaattaggt cagaccaggc cccaaagtgc tctataaatt      1380
+     agaagctgga agatcctgaa atgaaactta agatttcaag gtcaaatatc tgcaactttg      1440
+     ttctcattac ctattgggcg cagcttctct ttaaaggctt gaattgagaa aagaggggtt      1500
+     ctgctgggtg gcaccttctt gctcttacct gctggtgcct tcctttccca ctacaggtaa      1560
+     agtccatggt tccctggccc gtgctggaaa agtgagaggt cagactccta aggtgagtga      1620
+     gagtattagt ggtcatggtg ttaggacttt ttttcctttc acagctaaac caagtccctg      1680
+     ggctcttact cggtttgcct tctccctccc tggagatgag cctgagggaa gggatgctag      1740
+     gtgtggaaga caggaaccag ggcctgatta accttccctt ctccaggtgg ccaaacagga      1800
+     gaagaagaag aagaagacag gtcgggctaa gcggcggatg cagtacaacc ggcgctttgt      1860
+     caacgttgtg cccacctttg gcaagaagaa gggccccaat gccaactctt aagtcttttg      1920
+     taattctggc tttctctaat aaaaaagcca cttagttcag tcatcgcatt gtttcatctt      1980
+     tacttgcaag gcctcaggga gaggtgtgct tctcgg                                2016
+//
+</pre>
+</td></tr></table><p>
+
+
+<H2>
+    Output file format
+</H2>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: x65921.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;X65921_408_504 [exon] H.sapiens fau 1 gene
+cagtgacgtgacacgcagcccacggtctgtactgacgcgccctcgcttcttcctctttct
+cgactccatcttcgcggtagctgggaccgccgttcag
+&gt;X65921_774_856 [exon] H.sapiens fau 1 gene
+tcgccaatatgcagctctttgtccgcgcccaggagctacacaccttcgaggtgaccggcc
+aggaaacggtcgcccagatcaag
+&gt;X65921_951_1095 [exon] H.sapiens fau 1 gene
+gctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgctcctggcaggc
+gcgcccctggaggatgaggccactctgggccagtgcggggtggaggccctgactaccctg
+gaagtagcaggccgcatgcttggag
+&gt;X65921_1557_1612 [exon] H.sapiens fau 1 gene
+gtaaagtccatggttccctggcccgtgctggaaaagtgagaggtcagactcctaag
+&gt;X65921_1787_1912 [exon] H.sapiens fau 1 gene
+gtggccaaacaggagaagaagaagaagaagacaggtcgggctaagcggcggatgcagtac
+aaccggcgctttgtcaacgttgtgcccacctttggcaagaagaagggccccaatgccaac
+tcttaa
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: x65921.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;X65921_408_504 [exon] H.sapiens fau 1 gene
+ggtcgctcagcagtgacgtgacacgcagcccacggtctgtactgacgcgccctcgcttct
+tcctctttctcgactccatcttcgcggtagctgggaccgccgttcaggtaagaatgg
+&gt;X65921_774_856 [exon] H.sapiens fau 1 gene
+ctttactcagtcgccaatatgcagctctttgtccgcgcccaggagctacacaccttcgag
+gtgaccggccaggaaacggtcgcccagatcaaggtaaggctgc
+&gt;X65921_951_1095 [exon] H.sapiens fau 1 gene
+ttccctgtaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgct
+cctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccct
+gactaccctggaagtagcaggccgcatgcttggaggtgagtgaga
+&gt;X65921_1557_1612 [exon] H.sapiens fau 1 gene
+cccactacaggtaaagtccatggttccctggcccgtgctggaaaagtgagaggtcagact
+cctaaggtgagtgaga
+&gt;X65921_1787_1912 [exon] H.sapiens fau 1 gene
+ccttctccaggtggccaaacaggagaagaagaagaagaagacaggtcgggctaagcggcg
+gatgcagtacaaccggcgctttgtcaacgttgtgcccacctttggcaagaagaagggccc
+caatgccaactcttaagtcttttgta
+</pre>
+</td></tr></table><p>
+
+<a name="output.3"></a>
+<h3>Output files for usage example 3</h3>
+<p><h3>File: h45989.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;X65921_408_504 [exon] H.sapiens fau 1 gene
+ctcagcagtg
+&gt;X65921_774_856 [exon] H.sapiens fau 1 gene
+ctcagtcgcc
+&gt;X65921_951_1095 [exon] H.sapiens fau 1 gene
+tgtaggctca
+&gt;X65921_1557_1612 [exon] H.sapiens fau 1 gene
+tacaggtaaa
+&gt;X65921_1787_1912 [exon] H.sapiens fau 1 gene
+tccaggtggc
+&gt;K00650_889_1029 [exon] Human fos proto-oncogene (c-fos), complete cds.
+ccacgatgat
+&gt;K00650_1783_2034 [exon] Human fos proto-oncogene (c-fos), complete cds.
+tctaggactt
+&gt;K00650_2466_2573 [exon] Human fos proto-oncogene (c-fos), complete cds.
+tctagttatc
+&gt;K00650_2688_3329 [exon] Human fos proto-oncogene (c-fos), complete cds.
+tacaggagac
+&gt;D00596_1001_1205 [exon] Homo sapiens gene for thymidylate synthase, complete cds.
+gcgccatgcc
+&gt;D00596_2895_2968 [exon] Homo sapiens gene for thymidylate synthase, complete cds.
+ttcagatgaa
+&gt;D00596_5396_5570 [exon] Homo sapiens gene for thymidylate synthase, complete cds.
+tccagggatc
+&gt;D00596_11843_11944 [exon] Homo sapiens gene for thymidylate synthase, complete cds.
+tacagattat
+&gt;D00596_13449_13624 [exon] Homo sapiens gene for thymidylate synthase, complete cds.
+ctcagatctt
+&gt;D00596_14133_14204 [exon] Homo sapiens gene for thymidylate synthase, complete cds.
+tatagccagg
+&gt;D00596_15613_15750 [exon] Homo sapiens gene for thymidylate synthase, complete cds.
+tttagcttca
+&gt;AB009071_67_155 [exon] Homo sapiens HERG gene, complete cds.
+cccgcccatg
+&gt;AB009071_356_586 [exon] Homo sapiens HERG gene, complete cds.
+cctaggccgt
+&gt;AB009071_768_932 [exon] Homo sapiens HERG gene, complete cds.
+tgcagggagc
+&gt;AB009071_1137_1580 [exon] Homo sapiens HERG gene, complete cds.
+cgcaggccgc
+&gt;AB009071_1742_1953 [exon] Homo sapiens HERG gene, complete cds.
+cctaggggcc
+&gt;AB009071_2168_2596 [exon] Homo sapiens HERG gene, complete cds.
+tgcaggtcct
+&gt;AB009071_2765_3152 [exon] Homo sapiens HERG gene, complete cds.
+cccagctgat
+&gt;AB009071_3332_3531 [exon] Homo sapiens HERG gene, complete cds.
+cccagccctc
+&gt;AB009071_3716_3968 [exon] Homo sapiens HERG gene, complete cds.
+cccaggtgct
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+aacagctcct
+&gt;U01317_39414_39558 [exon] Human beta globin region on chromosome 11.
+tccacacact
+&gt;U01317_39681_39903 [exon] Human beta globin region on chromosome 11.
+cacaggctcc
+&gt;U01317_40770_40985 [exon] Human beta globin region on chromosome 11.
+aacagctcct
+&gt;U01317_45710_45800 [exon] Human beta globin region on chromosome 11.
+acactgtagt
+&gt;U01317_45922_46145 [exon] Human beta globin region on chromosome 11.
+cacagtctcc
+&gt;U01317_46997_47124 [exon] Human beta globin region on chromosome 11.
+cccagctctt
+&gt;U01317_54740_54881 [exon] Human beta globin region on chromosome 11.
+tgcttacact
+&gt;U01317_55010_55232 [exon] Human beta globin region on chromosome 11.
+ctcagattac
+&gt;U01317_56131_56389 [exon] Human beta globin region on chromosome 11.
+cgcagctctt
+&gt;U01317_62137_62278 [exon] Human beta globin region on chromosome 11.
+tgcttacatt
+&gt;U01317_62187_62278 [exon] Human beta globin region on chromosome 11.
+acaccatggt
+&gt;U01317_62390_62408 [exon] Human beta globin region on chromosome 11.
+attggtctat
+&gt;U01317_62409_62631 [exon] Human beta globin region on chromosome 11.
+cttaggctgc
+&gt;U01317_63482_63742 [exon] Human beta globin region on chromosome 11.
+cacagctcct
+&gt;M23100_1541_1923 [exon] Human insulin receptor (INSR) gene, exon 1, clones lambda-hINSR-(1-13).
+ctccgggccc
+&gt;M23100_1542_1923 [exon] Human insulin receptor (INSR) gene, exon 1, clones lambda-hINSR-(1-13).
+tccgggcccc
+&gt;M23100_1548_1923 [exon] Human insulin receptor (INSR) gene, exon 1, clones lambda-hINSR-(1-13).
+ccccgagatc
+&gt;V00451_363_460 [exon] Glycine max leghemoglobin gene or pseudogene (no mRNA detected).
+gaaatatggg
+&gt;V00451_555_663 [exon] Glycine max leghemoglobin gene or pseudogene (no mRNA detected).
+aataggatat
+&gt;V00451_2182_2286 [exon] Glycine max leghemoglobin gene or pseudogene (no mRNA detected).
+tgtaggtgcg
+&gt;V00451_3065_3208 [exon] Glycine max leghemoglobin gene or pseudogene (no mRNA detected).
+cgtaggtggt
+&gt;M11903_351_499 [exon] Rattus norvegicus androgen-responsive protein precursor (Svf) gene, exons 1 and 1A, alternatively spliced.
+cctgtaggca
+&gt;M11903_401_499 [exon] Rattus norvegicus androgen-responsive protein precursor (Svf) gene, exons 1 and 1A, alternatively spliced.
+gctctcagtc
+&gt;M11904_109_445 [exon] Rattus norvegicus androgen-responsive protein precursor (Svf) gene, exon 2 and complete cds.
+aacagaaaaa
+&gt;M11905_233_420 [exon] Rattus norvegicus androgen-responsive protein precursor (Svf) gene, exon 3.
+cacaggttgt
+</pre>
+</td></tr></table><p>
+
+<a name="output.4"></a>
+<h3>Output files for usage example 4</h3>
+<p><h3>File: x65921.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;X65921_782_1912 [CDS] H.sapiens fau 1 gene
+atgcagctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacg
+gtcgcccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtc
+gtgctcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggag
+gccctgactaccctggaagtagcaggccgcatgcttggaggtaaagtccatggttccctg
+gcccgtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaag
+aagaagacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtg
+cccacctttggcaagaagaagggccccaatgccaactcttaa
+</pre>
+</td></tr></table><p>
+
+<a name="output.5"></a>
+<h3>Output files for usage example 5</h3>
+<p><h3>File: 12s1_arath.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;AQP1_HUMAN_247_247 [protein_modification_categorized_by_chemical_process] Aquaporin-1 (AQP-1) (Aquaporin-CHIP) (Water channel protein for red blood cells and kidney proximal tubule) (Urine water channel)
+VWTSGQV
+&gt;AQP1_HUMAN_262_262 [protein_modification_categorized_by_chemical_process] Aquaporin-1 (AQP-1) (Aquaporin-CHIP) (Water channel protein for red blood cells and kidney proximal tubule) (Urine water channel)
+DINSRVE
+&gt;GCN4_YEAST_17_17 [protein_modification_categorized_by_chemical_process] General control protein GCN4 (Amino acid biosynthesis regulatory protein)
+MGFSPLD
+&gt;GCN4_YEAST_218_218 [protein_modification_categorized_by_chemical_process] General control protein GCN4 (Amino acid biosynthesis regulatory protein)
+IPLSPIV
+&gt;OPSD_HUMAN_334_334 [protein_modification_categorized_by_chemical_process] Rhodopsin (Opsin-2)
+DEASATV
+&gt;OPSD_HUMAN_338_338 [protein_modification_categorized_by_chemical_process] Rhodopsin (Opsin-2)
+ATVSKTE
+&gt;OPSD_HUMAN_343_343 [protein_modification_categorized_by_chemical_process] Rhodopsin (Opsin-2)
+TETSQVA
+&gt;PAXI_HUMAN_83_83 [protein_modification_categorized_by_chemical_process] Paxillin
+QPQSSSP
+&gt;PAXI_HUMAN_85_85 [protein_modification_categorized_by_chemical_process] Paxillin
+QSSSPVY
+&gt;PAXI_HUMAN_106_106 [protein_modification_categorized_by_chemical_process] Paxillin
+SVGSPCS
+&gt;PAXI_HUMAN_109_109 [protein_modification_categorized_by_chemical_process] Paxillin
+SPCSRVG
+&gt;PAXI_HUMAN_126_126 [protein_modification_categorized_by_chemical_process] Paxillin
+KQKSAEP
+&gt;PAXI_HUMAN_130_130 [protein_modification_categorized_by_chemical_process] Paxillin
+AEPSPTV
+&gt;PAXI_HUMAN_137_137 [protein_modification_categorized_by_chemical_process] Paxillin
+MSTSLGS
+&gt;PAXI_HUMAN_303_303 [protein_modification_categorized_by_chemical_process] Paxillin
+GRSSPGG
+&gt;UBR5_RAT_193_193 [protein_modification_categorized_by_chemical_process] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog) (100 kDa protein) (Fragment)
+GRPSQGL
+&gt;UBR5_RAT_607_607 [protein_modification_categorized_by_chemical_process] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog) (100 kDa protein) (Fragment)
+SSRSVVD
+</pre>
+</td></tr></table><p>
+<p>
+
+The sequences of the specified features are written out.
+
+<p>
+
+The ID name of the sequence is formed from the original sequence name
+with the start and end positions of the feature appended to it.  So if
+the feature came from a sequence with an ID name of 'XYZ' from positions
+10 to 22, then the resulting ID name of the feature sequence will be
+'XYZ_10_22'
+
+<p>
+
+The name of the type of feature is added to the start of the description
+of the sequence in brackets, e.g.: '[exon]'. 
+
+<p>
+
+The sequence is written out as a normal sequence.
+
+<p>
+
+If the feature is in the reverse sense of a nucleic acid sequence, then
+it is reverse-complemented before being written.
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+<p>Bear in mind that database annotation cannot always be trusted to
+be reliable.  If you rely upon annotation written by other people or
+another program and do not independently verify such annotation, then
+there is a chance that some of the reported features will be
+erreneous.</p>
+
+<h3>Controlling the output</h3>
+
+<p>There are many options to control exactly what parts of the feature
+table are written to file.</p>
+
+<p>By default every feature in the feature table is
+extracted. <tt>-type</tt> will set the specific feature type to
+extract. See <a href="http://www.ebi.ac.uk/Services/WebFeat/">
+http://www.ebi.ac.uk/Services/WebFeat/</a> for a list of the EMBL
+feature types and see Appendix A of the Swissprot user manual
+in <a href="http://www.uniprot.org/manual/sequence_annotation">
+http://www.uniprot.org/manual/sequence_annotation</a> for a list of
+the Swissprot feature types.</p>
+
+<p>By default any feature tag in the feature table is
+extracted. <tt>-tag</tt> specifies a feature tag reuired in any
+feature extracted. Tags are the types of extra values that a feature
+may have. For example in the EMBL feature table, a 'CDS' type of
+feature may have the
+tags <tt>/codon</tt>, <tt>/codon_start</tt>, <tt>/db_xref</tt>,
+<tt>/EC_number</tt>, <tt>/evidence</tt>, <tt>/exception</tt>,
+<tt>/function</tt>, <tt>/gene</tt>, <tt>/label</tt>, <tt>/map</tt>,
+<tt>/note</tt>, <tt>/number</tt>, <tt>/partial</tt>, <tt>/product</tt>,
+<tt>/protein_id</tt>,<tt>/pseudo</tt>, <tt>/standard_name</tt>,
+<tt>/translation</tt>, <tt>/transl_except</tt>, <tt>/transl_table</tt>,
+or <tt>/usedin</tt>. Some of these tags also have values, for
+example <tt>/gene</tt> can have the value of the gene name.</p>
+
+<p>By default any feature tag value in the feature table is shown. You
+can set this using <tt>-tag</tt> to match any specific feature tag value you
+wish to show. Tag values are the values associated with a feature tag,
+for example <tt>/gene</tt> can have the value of the gene name. Bear
+in mind only some of these tags can have values.</p>
+
+<p>By default any feature source in the feature table is
+shown. <tt>-source</tt> is used to set this to match a specific feature
+source.</p>
+
+<p>By default features in either sense are extracted. The -sense
+option specifies a particular sense.</p>
+
+<p>The minimum and maximum score of features to be reported may be
+specified with -minscore and -maxscore.</p>
+
+<p>To aid you in identifying the type of feature that has been output,
+the type of feature is added to the start of the description of the
+output sequence. Sometimes the description of a sequence is lost in
+subsequent processing of the sequences file, so it is useful for the
+type to be a part of the output sequence ID name. The -featinname
+option specifies this behaviour. </p>
+
+<p>To aid you in identifying the properties of a feature that has been
+output, -describe specifies one or more tag names that will be added
+to the output sequence "Description" text, together with their values
+(if any). For example, if this is set to be <tt>gene</tt>, then if any
+output feature has the tag (for example) <tt>/gene=BRCA1</tt>
+associated with it, then the text <tt>(gene=BRCA1)</tt> will be added
+to the Description line. By default no feature tag is given in the
+"Description" text. You can set -describe to specify any feature tag
+you wish to show. </p>
+
+
+<h3> "Joined" features </h3>
+
+<p>Some features, such as CDS (coding sequence) and mRNA are composed
+of introns concatenated together. There may be other forms of 'joined'
+sequence, depending on the feature table. By default, 'joined'
+features are extracted as individual sequences.  If the -join option
+is specified, then any group of these features will be output as a
+single sequence. If the <tt>-before</tt> and <tt>-after</tt>
+qualifiers have been set, then only the sequence before the first
+feature and after the last feature are added.</p>
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+If the end position of the sequence to be written is less than the start
+position, then the warning message "Extraction region end less than
+start for feature type [start-end] in ID name" is written and no
+sequence is output. 
+
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="aligncopy.html">aligncopy</a></td>
+<td>Reads and writes alignments</td>
+</tr>
+
+<tr>
+<td><a href="aligncopypair.html">aligncopypair</a></td>
+<td>Reads and writes pairs from alignments</td>
+</tr>
+
+<tr>
+<td><a href="biosed.html">biosed</a></td>
+<td>Replace or delete sequence sections</td>
+</tr>
+
+<tr>
+<td><a href="codcopy.html">codcopy</a></td>
+<td>Copy and reformat a codon usage table</td>
+</tr>
+
+<tr>
+<td><a href="coderet.html">coderet</a></td>
+<td>Extract CDS, mRNA and translations from feature tables</td>
+</tr>
+
+<tr>
+<td><a href="cutseq.html">cutseq</a></td>
+<td>Removes a section from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="degapseq.html">degapseq</a></td>
+<td>Removes non-alphabetic (e.g. gap) characters from sequences</td>
+</tr>
+
+<tr>
+<td><a href="descseq.html">descseq</a></td>
+<td>Alter the name or description of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="entret.html">entret</a></td>
+<td>Retrieves sequence entries from flatfile databases and files</td>
+</tr>
+
+<tr>
+<td><a href="extractalign.html">extractalign</a></td>
+<td>Extract regions from a sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="extractseq.html">extractseq</a></td>
+<td>Extract regions from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="featcopy.html">featcopy</a></td>
+<td>Reads and writes a feature table</td>
+</tr>
+
+<tr>
+<td><a href="featreport.html">featreport</a></td>
+<td>Reads and writes a feature table</td>
+</tr>
+
+<tr>
+<td><a href="listor.html">listor</a></td>
+<td>Write a list file of the logical OR of two sets of sequences</td>
+</tr>
+
+<tr>
+<td><a href="makenucseq.html">makenucseq</a></td>
+<td>Create random nucleotide sequences</td>
+</tr>
+
+<tr>
+<td><a href="makeprotseq.html">makeprotseq</a></td>
+<td>Create random protein sequences</td>
+</tr>
+
+<tr>
+<td><a href="maskambignuc.html">maskambignuc</a></td>
+<td>Masks all ambiguity characters in nucleotide sequences with N</td>
+</tr>
+
+<tr>
+<td><a href="maskambigprot.html">maskambigprot</a></td>
+<td>Masks all ambiguity characters in protein sequences with X</td>
+</tr>
+
+<tr>
+<td><a href="maskfeat.html">maskfeat</a></td>
+<td>Write a sequence with masked features</td>
+</tr>
+
+<tr>
+<td><a href="maskseq.html">maskseq</a></td>
+<td>Write a sequence with masked regions</td>
+</tr>
+
+<tr>
+<td><a href="newseq.html">newseq</a></td>
+<td>Create a sequence file from a typed-in sequence</td>
+</tr>
+
+<tr>
+<td><a href="nohtml.html">nohtml</a></td>
+<td>Remove mark-up (e.g. HTML tags) from an ASCII text file</td>
+</tr>
+
+<tr>
+<td><a href="noreturn.html">noreturn</a></td>
+<td>Remove carriage return from ASCII files</td>
+</tr>
+
+<tr>
+<td><a href="nospace.html">nospace</a></td>
+<td>Remove all whitespace from an ASCII text file</td>
+</tr>
+
+<tr>
+<td><a href="notab.html">notab</a></td>
+<td>Replace tabs with spaces in an ASCII text file</td>
+</tr>
+
+<tr>
+<td><a href="notseq.html">notseq</a></td>
+<td>Write to file a subset of an input stream of sequences</td>
+</tr>
+
+<tr>
+<td><a href="nthseq.html">nthseq</a></td>
+<td>Write to file a single sequence from an input stream of sequences</td>
+</tr>
+
+<tr>
+<td><a href="nthseqset.html">nthseqset</a></td>
+<td>Reads and writes (returns) one set of sequences from many</td>
+</tr>
+
+<tr>
+<td><a href="pasteseq.html">pasteseq</a></td>
+<td>Insert one sequence into another</td>
+</tr>
+
+<tr>
+<td><a href="revseq.html">revseq</a></td>
+<td>Reverse and complement a nucleotide sequence</td>
+</tr>
+
+<tr>
+<td><a href="seqret.html">seqret</a></td>
+<td>Reads and writes (returns) sequences</td>
+</tr>
+
+<tr>
+<td><a href="seqretsetall.html">seqretsetall</a></td>
+<td>Reads and writes (returns) many sets of sequences</td>
+</tr>
+
+<tr>
+<td><a href="seqretsplit.html">seqretsplit</a></td>
+<td>Reads sequences and writes them to individual files</td>
+</tr>
+
+<tr>
+<td><a href="showfeat.html">showfeat</a></td>
+<td>Display features of a sequence in pretty format</td>
+</tr>
+
+<tr>
+<td><a href="sizeseq.html">sizeseq</a></td>
+<td>Sort sequences by size</td>
+</tr>
+
+<tr>
+<td><a href="skipredundant.html">skipredundant</a></td>
+<td>Remove redundant sequences from an input set</td>
+</tr>
+
+<tr>
+<td><a href="skipseq.html">skipseq</a></td>
+<td>Reads and writes (returns) sequences, skipping first few</td>
+</tr>
+
+<tr>
+<td><a href="splitsource.html">splitsource</a></td>
+<td>Split sequence(s) into original source sequences</td>
+</tr>
+
+<tr>
+<td><a href="splitter.html">splitter</a></td>
+<td>Split sequence(s) into smaller sequences</td>
+</tr>
+
+<tr>
+<td><a href="trimest.html">trimest</a></td>
+<td>Remove poly-A tails from nucleotide sequences</td>
+</tr>
+
+<tr>
+<td><a href="trimseq.html">trimseq</a></td>
+<td>Remove unwanted characters from start and end of sequence(s)</td>
+</tr>
+
+<tr>
+<td><a href="trimspace.html">trimspace</a></td>
+<td>Remove extra whitespace from an ASCII text file</td>
+</tr>
+
+<tr>
+<td><a href="twofeat.html">twofeat</a></td>
+<td>Finds neighbouring pairs of features in sequence(s)</td>
+</tr>
+
+<tr>
+<td><a href="union.html">union</a></td>
+<td>Concatenate multiple sequences into a single sequence</td>
+</tr>
+
+<tr>
+<td><a href="vectorstrip.html">vectorstrip</a></td>
+<td>Removes vectors from the ends of nucleotide sequence(s)</td>
+</tr>
+
+<tr>
+<td><a href="yank.html">yank</a></td>
+<td>Add a sequence reference (a full USA) to a list file</td>
+</tr>
+
+</table>
+
+<H2>
+    Author(s)
+</H2>
+
+Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+<br>
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+
+<H2>
+    History
+</H2>
+
+Written (Dec 12 2001) - Gary Williams
+
+<p>
+
+Added '-join' parameter (June 2002) - Gary Williams
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+None
+
+</BODY>
+</HTML>
+

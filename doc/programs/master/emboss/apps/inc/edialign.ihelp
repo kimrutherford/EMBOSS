@@ -1,0 +1,90 @@
+   Standard (Mandatory) qualifiers:
+  [-sequences]         seqset     Sequence set filename and optional format,
+                                  or reference (input USA)
+  [-outfile]           outfile    [*.edialign] Output file name
+  [-outseq]            seqoutall  [<sequence>.<format>] (Aligned) sequence
+                                  set(s) filename and optional format (output
+                                  USA)
+
+   Additional (Optional) qualifiers (* if not always prompted):
+*  -nucmode            menu       [n] Nucleic acid sequence alignment mode
+                                  (simple, translated or mixed) (Values: n
+                                  (simple); nt (translation); ma (mixed
+                                  alignments))
+*  -revcomp            boolean    [N] Also consider the reverse complement
+   -overlapw           selection  [default (when Nseq =< 35)] By default
+                                  overlap weights are used when Nseq =<35 but
+                                  you can set this to 'yes' or 'no'
+   -linkage            menu       [UPGMA] Clustering method to construct
+                                  sequence tree (UPGMA, minimum linkage or
+                                  maximum linkage) (Values: UPGMA (UPGMA); max
+                                  (maximum linkage); min (minimum linkage))
+   -maxfragl           integer    [40] Maximum fragment length (Integer 0 or
+                                  more)
+*  -fragmat            boolean    [N] Consider only N-fragment pairs that
+                                  start with two matches
+*  -fragsim            integer    [4] Consider only P-fragment pairs if first
+                                  amino acid or codon pair has similarity
+                                  score of at least n (Integer 0 or more)
+   -itscore            boolean    [N] Use iterative score
+   -threshold          float      [0.0] Threshold for considering diagonal for
+                                  alignment (Number 0.000 or more)
+
+   Advanced (Unprompted) qualifiers:
+   -mask               boolean    [N] Replace unaligned characters by stars
+                                  '*' rather then putting them in lowercase
+   -dostars            boolean    [N] Activate writing of stars instead of
+                                  numbers
+   -starnum            integer    [4] Put up to n stars '*' instead of digits
+                                  0-9 to indicate level of conservation
+                                  (Integer 0 or more)
+
+   Associated qualifiers:
+
+   "-sequences" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   "-outseq" associated qualifiers
+   -osformat3          string     Output seq format
+   -osextension3       string     File name extension
+   -osname3            string     Base file name
+   -osdirectory3       string     Output directory
+   -osdbname3          string     Database name to add
+   -ossingle3          boolean    Separate file for each entry
+   -oufo3              string     UFO features
+   -offormat3          string     Features format
+   -ofname3            string     Features file name
+   -ofdirectory3       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+

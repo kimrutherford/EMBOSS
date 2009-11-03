@@ -1,0 +1,90 @@
+application: trimseq [
+  documentation: "Remove unwanted characters from start and end of sequence(s)"
+  groups: "Edit"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "gapany"
+  ]
+
+endsection: input
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  integer: window [
+    additional: "Y"
+    default: "1"
+    information: "Window size"
+    help: "This determines the size of the region that is considered
+           when deciding whether the percentage of ambiguity is greater than
+           the threshold. A value of 5 means that a region of 5 letters in
+           the sequence is shifted along the sequence from the ends and
+           trimming is done only if there is a greater or equal percentage of
+           ambiguity than the threshold percentage."
+  ]
+
+  float: percent [
+    additional: "Y"
+    default: "100.0"
+    information: "Percent threshold of ambiguity in window"
+    help: "This is the threshold of the percentage ambiguity in the
+           window required in order to trim a sequence."
+  ]
+
+  boolean: strict [
+    additional: "Y"
+    default: "N"
+    information: "Trim off all ambiguity codes, not just N or
+                  X"
+    help: "In nucleic sequences, trim off not only N's and X's, but
+           also the nucleotide IUPAC ambiguity codes M, R, W, S, Y, K, V, H,
+           D and B. In protein sequences, trim off not only X's but also B
+           and Z."
+  ]
+
+  boolean: star [
+    additional: "Y"
+    default: "N"
+    information: "Trim off asterisks"
+    help: "In protein sequences, trim off not only X's, but also the
+           *'s"
+  ]
+
+endsection: additional
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  boolean: left [
+    default: "Y"
+    information: "Trim at the start"
+  ]
+
+  boolean: right [
+    default: "Y"
+    information: "Trim at the end"
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  seqoutall: outseq [
+    parameter: "Y"
+  ]
+
+endsection: output

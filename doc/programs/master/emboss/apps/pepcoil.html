@@ -1,0 +1,150 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: pepcoil
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+pepcoil
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/pepcoil.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+
+<p><b>pepcoil</b> calculates the probability of a coiled-coil structure for windows of (by default) 28  residues through a protein sequence using the method of Lupas A, van Dyke M & Stock J (1991); Science 252:1162-4.  It reads one or more sequences and writes a standard EMBOSS report file including the location and score of the putative coiled-coil structures and their score for each input sequence.  Optionally, coiled coil regions, non-coiled coil regions and coil frameshifts are reported.</p>
+
+
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/pepcoil.usage" -->
+
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/pepcoil.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/pepcoil.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>pepcoil</b> reads in a protein sequence USA.
+
+<!--#include file="inc/pepcoil.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+
+<!--#include file="inc/pepcoil.output" -->
+
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+<p>Coiled coils are formed by two or three alpha helices in parallel and in register that cross at an angle of approximately 20 degrees, are strongly amphipathic and display a pattern of hydrophilic and hydrophobic residues that is repeated every seven residues. The seven positions of the heptad repeat are designated a through g, a and d being generally hydrophobic, while the others are hydrophilic.</p>
+
+<p>The parallel two-stranded alpha-helical coiled coil is the most frequently encountered subunit-oligomerization motif in proteins.</p>
+
+
+<H2>
+    References
+</H2>
+
+
+<ol>
+
+<li>
+Lupas A, van Dyke M & Stock J; 
+Predicting Coiled Coils from Protein Sequences.
+Science 252:1162-4 (1991)
+
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/pepcoil.isee" -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+<!--#include file="inc/ableasby.address" -->
+
+
+<p>
+Original program "PEPCOIL" by Peter Rice (EGCG 1991)
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/pepcoil.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/pepcoil.comment" -->
+
+</BODY>
+</HTML>
+

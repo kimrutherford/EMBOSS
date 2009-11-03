@@ -1,0 +1,26 @@
+#!/bin/csh -x
+
+#######################################
+~/cvsscripts/createcvstree $1
+
+cd ~emboss/CURRENT/$1/emboss
+
+aclocal -I m4
+automake -a
+autoconf
+automake
+
+./configure --disable-shared --enable-warnings
+
+if ( ! { make } ) then
+  echo "Failed AJAX-build on `hostname` in `pwd`"
+  make |& \
+     rsh europa fold -w 77 "|"  Mail -s \"emboss make failed on `ostype`\" emboss-bug@sanger.ac.uk
+endif
+
+make dist
+cp -f ./EMBOSS*.gz ~emboss
+
+cd ~emboss/CURRENT/$1/emboss/emboss/
+
+cp  acd/emboss.default .

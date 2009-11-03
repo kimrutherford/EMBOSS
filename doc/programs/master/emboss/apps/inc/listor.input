@@ -1,0 +1,25 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: file1</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+&gt;one
+tagctagcg
+&gt;two
+tagctagcggctacgt
+&gt;three
+tagctattttatgctacgtcagtgac
+</pre>
+</td></tr></table><p>
+<p><h3>File: file2</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+&gt;two
+tagctagcggctacgt
+&gt;three
+tagctattttatgctacgtcagtgac
+&gt;four
+gcgcggcgcgcgtgcgtcgttgctggggccc
+</pre>
+</td></tr></table><p>

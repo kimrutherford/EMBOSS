@@ -1,0 +1,113 @@
+ID   V00451; SV 1; linear; genomic DNA; STD; PLN; 3400 BP.
+XX
+AC   V00451; L00005-L00006;
+XX
+DT   13-JUL-1983 (Rel. 03, Created)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 7)
+XX
+DE   Glycine max leghemoglobin gene or pseudogene (no mRNA detected).
+XX
+KW   leghemoglobin; pseudogene.
+XX
+OS   Glycine max (soybean)
+OC   Eukaryota; Viridiplantae; Streptophyta; Embryophyta; Tracheophyta;
+OC   Spermatophyta; Magnoliophyta; eudicotyledons; core eudicotyledons; rosids;
+OC   eurosids I; Fabales; Fabaceae; Papilionoideae; Phaseoleae; Glycine.
+XX
+RN   [1]
+RP   1-3400
+RX   PUBMED; 11894962.
+RA   Wiborg O., Hyldig-Nielsen J.J., Jensen E.O., Paludan K., Marcker K.A.;
+RT   "The structure of an unusual leghemoglobin gene from soybean";
+RL   EMBO J. 2(3):449-452(1983).
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..3400
+FT                   /organism="Glycine max"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:3847"
+FT   CDS             join(363..460,555..663,2182..2286,3065..3208)
+FT                   /product="leghemoglobin"
+FT                   /db_xref="GOA:Q42801"
+FT                   /db_xref="HSSP:1FSL"
+FT                   /db_xref="InterPro:IPR012292"
+FT                   /db_xref="UniProtKB/TrEMBL:Q42801"
+FT                   /protein_id="CAA23729.1"
+FT                   /translation="MGAFTEKQEALVNSSFEAFKANLPHHSVVFFNSILEKAPAAKNMF
+FT                   SFLGDAVDPKNPKLAGHAEKLFGLVRDSAVQLQTKGLVVADATLGPIHTQKGVTDLQFA
+FT                   VVKEALLKTIKEAVGDKWSEELSNPWEVAYDEIAAAIKKAMAIGSLV"
+FT   exon            <363..460
+FT                   /number=1
+FT   intron          461..554
+FT                   /number=1
+FT   exon            555..663
+FT                   /number=2
+FT   intron          664..2181
+FT                   /number=2
+FT   exon            2182..2286
+FT                   /number=3
+FT   intron          2287..3064
+FT                   /number=3
+FT   exon            3065..>3208
+FT                   /number=4
+XX
+SQ   Sequence 3400 BP; 931 A; 310 C; 334 G; 975 T; 850 other;
+     ttttactcaa atcaatgata tatattttgg taactttttt tcttttactt ataattttgt        60
+     ttacgttaaa agtcaaaaaa gaatacatta aaaaattaaa aattcaccga acaacttaaa       120
+     ttatttattt actttgacta agtgaaaaat tacttgatta agtttttgaa aaggtcgttg       180
+     tgtcttcata atgccgattg atacgctcca cattcaataa gccaagagag acatattcaa       240
+     taacaatcgc aacaaatttt ttttcagtct ccaaaccatc tatataaaca agtattggat       300
+     gtgaacttat aactggattg aaaatagaaa ttaaataaca gaaaattaca aaagatcgaa       360
+     atatgggtgc ttttacagag aagcaagagg ctttggtgaa tagctcgttt gaagcattca       420
+     aggcaaacct tcctcaccac agcgttgtat tcttcaattc gtaatttttc tctctcaccc       480
+     tatgtttccc ttgagttgaa aagaggtagt gtacataata gtgtctttgg tttgattaaa       540
+     aaacaaaata ataggatatt ggagaaagca ccagcagcaa agaacatgtt ctcattttta       600
+     ggtgatgcag tagatccgaa aaatcctaag ctcgcgggcc atgctgaaaa gctttttgga       660
+     ttggtaagtg ttagtcaact aaaattatag ttattttatg tgattttagg gatgtatact       720
+     ggattagatt ttaaaagatt attttagtgt ttgtatattt taaaaattat ataagaatat       780
+     tatgatttat taaatttttt tataagaatt ttatgatagt ttaaatttta atgtatttat       840
+     atcataaaat ttnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn       900
+     nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn       960
+     nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn      1020
+     nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn      1080
+     nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn      1140
+     nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn      1200
+     nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn      1260
+     nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn      1320
+     nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn      1380
+     nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn      1440
+     nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn      1500
+     nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn      1560
+     nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn      1620
+     nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn      1680
+     nnnnnnnnnn nnnnnnnnnn nntagaaagg gtttgataga catttaatac taaaaagtca      1740
+     tataaaatcc atcaaattta tcttaaaaag tagtctatcg aaatttgtat attttttaaa      1800
+     tgtttcaaaa ctttttttta aagttataaa aaacttaatt gaataccacc aaattttgtt      1860
+     gaattcatta aaaaaaattt aaaaatatta attgaatatt ataagactta tttatagcat      1920
+     ttaaaaattc tcattaaata ccagaaaaaa aaatttataa ttttttttta aaatgttaat      1980
+     ccagtatact ccgctcttaa aattaaacat gcacttatat aatactctta aaatatcaat      2040
+     gaacatttgt taaattgtat tttatatctt taacatatct cgtactaggg attaataatg      2100
+     tataaaatta tattagtatt tcttgattag ttttctttaa tgatcatctt atcatatatt      2160
+     atgatatttt tcaaattgta ggtgcgtgac tcagctgttc aacttcaaac aaagggatta      2220
+     gtggtggctg atgccacact tggtcctatc cacacccaaa aaggagttac cgatcttcaa      2280
+     tttgcggtat gataaataaa ttgttataat aaatgcatac ttaaatctaa catggtgtat      2340
+     tctgtaatga tcatcacttc ttttgtttag taatgaattt actaaacata taacatttaa      2400
+     tgtcctcaat attatattat tgtaattttc aatgattttt ttaattaata attctttgag      2460
+     caatgtttaa agaaattgat ttaacactgc aataactagc ttcctctttc tcaattttta      2520
+     tataaattat cacatatact atggaaataa aataagctaa actatgtgat tatttatttt      2580
+     tggattaggt tattaatagc attttataat ctattggcta ttgcaacgtt gattgattac      2640
+     tcaaaaaaaa aaaactttga ttgattatta attatcattt ctttttgcat tgattctcgc      2700
+     ctgtcgacat ttttctttga agttaagatt caattcaaat attttcattt atttattcat      2760
+     atttattaaa gtcaacttaa ttttgtttat aaatactatt attttttttc tatttattgt      2820
+     attagtatga agtaggtctc gtaaaaaaca gacaaattat ttcatagtca accagtattt      2880
+     tatttaattt taaattattt aattaaaaaa cacaaaacct tattacttgt atcaacagtt      2940
+     gctgatttat aaacattact actacaactt cttgggatat taatagcatt actgcgaaac      3000
+     tttaatatga aaatttaatt ataaggaaaa atgtaagagc taaaacatca ttattgattc      3060
+     gtaggtggtt aaagaagcac tgcttaaaac aataaaggaa gcagttgggg acaaatggag      3120
+     cgaagaattg agcaatcctt gggaagtagc ctacgatgaa attgcagccg caattaagaa      3180
+     ggcaatggct ataggatcat tagtataaag tctagtagta ataaataaat tttgtttcac      3240
+     taaaatttgt tattaacttc ttgatataaa tgtcggttac attaggtaaa atacagtact      3300
+     tgtctttgaa taaacaatat taaattattt gcctcagggt ttatgtttat gaatcacaat      3360
+     cgatacttta tacatgtttt aaaattattt taataagctt                            3400
+//

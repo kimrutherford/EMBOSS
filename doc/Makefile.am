@@ -1,0 +1,1 @@
+SUBDIRS = manuals programs tutorials

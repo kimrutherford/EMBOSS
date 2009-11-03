@@ -1,0 +1,25 @@
+<b>Here is a sample session with dbifasta</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>dbifasta </b>
+Index a fasta file database
+Database name: <b>EMROD</b>
+              simple : >ID
+               idacc : >ID ACC
+  or >ID (ACC) gcgid : >db:ID
+            gcgidacc : >db:ID ACC
+                dbid : >db ID
+                ncbi : | formats
+ID line format [idacc]: <b>idacc</b>
+Database directory [.]: <b>data</b>
+Wildcard database filename [*.dat]: <b>emrod</b>
+Release number [0.0]: <b></b>
+Index date [00/00/00]: <b></b>
+General log output file [outfile.dbifasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>

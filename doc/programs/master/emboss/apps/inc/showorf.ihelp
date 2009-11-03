@@ -1,0 +1,69 @@
+   Standard (Mandatory) qualifiers:
+  [-sequence]          sequence   Nucleotide sequence filename and optional
+                                  format, or reference (input USA)
+   -frames             menu       [1,2,3,4,5,6] Select one or more values
+                                  (Values: 0 (None); 1 (F1); 2 (F2); 3 (F3); 4
+                                  (R1); 5 (R2); 6 (R3))
+  [-outfile]           outfile    [*.showorf] Output file name
+
+   Additional (Optional) qualifiers:
+   -table              menu       [0] Genetic code to use (Values: 0
+                                  (Standard); 1 (Standard (with alternative
+                                  initiation codons)); 2 (Vertebrate
+                                  Mitochondrial); 3 (Yeast Mitochondrial); 4
+                                  (Mold, Protozoan, Coelenterate Mitochondrial
+                                  and Mycoplasma/Spiroplasma); 5
+                                  (Invertebrate Mitochondrial); 6 (Ciliate
+                                  Macronuclear and Dasycladacean); 9
+                                  (Echinoderm Mitochondrial); 10 (Euplotid
+                                  Nuclear); 11 (Bacterial); 12 (Alternative
+                                  Yeast Nuclear); 13 (Ascidian Mitochondrial);
+                                  14 (Flatworm Mitochondrial); 15
+                                  (Blepharisma Macronuclear); 16
+                                  (Chlorophycean Mitochondrial); 21 (Trematode
+                                  Mitochondrial); 22 (Scenedesmus obliquus);
+                                  23 (Thraustochytrium Mitochondrial))
+   -[no]ruler          boolean    [Y] Add a ruler
+   -[no]plabel         boolean    [Y] Number translations
+   -[no]nlabel         boolean    [Y] Number DNA sequence
+
+   Advanced (Unprompted) qualifiers:
+   -width              integer    [50] Width of screen (Integer 10 or more)
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+

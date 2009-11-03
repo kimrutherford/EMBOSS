@@ -1,0 +1,19 @@
+<b>Here is a sample session with wobble</b>
+<p>
+Here is a sample session with wobble. The example sequence is from Pseudomonas aeruginosa, which has a high G+C content and a very biased third codon position (if it can be G or C, it usually is). 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>wobble </b>
+Plot third base position variability in a nucleotide sequence
+Input nucleotide sequence: <b>tembl:x13776</b>
+Graph type [x11]: <b>cps</b>
+Output file [x13776.wobble]: <b></b>
+
+Created wobble.ps
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

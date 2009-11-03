@@ -1,0 +1,145 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: acdtrace
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+acdtrace
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/acdtrace.ione" -->
+
+
+<H2>
+    Description
+</H2>
+<p><b>acdtrace</b> reads and processes an ACD file, prompting the user as necessary in exactly the same way as if the application itself was running.  If it encounters an error it will terminate.  This allows the behaviour of the command-line interface to be tested under different conditions, even if the application itself has not yet been written.</p>
+<p><b>acdtrace</b> works the same as <b>acdc</b> but reports on the processing of lines in an ACD file.  It also also prints the results of evaluating any variables and operations in the ACD file.</p>
+
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/acdtrace.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+The first parameter is the name of the program to compile.
+
+All other command line parameters and qualifiers are defined for that
+program - see the documentation for the program of choice.
+
+<P>
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<p>
+
+The output file is empty, but any format available to the specified
+program can be used.
+
+<p>
+<!--#include file="inc/acdtrace.output" -->
+
+
+<H2>
+    Data files
+</H2>
+
+
+Acdtrace will use any data files specified in the ACD file of the
+specified program, but will ignore any data files that are only used
+directly by the program's code.
+
+<!--#include file="inc/localfiles.ihtml" -->
+
+<H2>
+    Notes
+</H2>
+<p><b>acdtrace</b> does not have its own options, but takes a single parameter which is the name of the EMBOSS application that is being testsed.  It is invoked by specifying the name of the application to be tested along with any command-line options after the name of the utility application itself:</p>
+
+<p><tt><b>acdtrace</b> ApplicationName Options</tt></p>
+
+
+<p><b>acdtrace</b> will run the command line interface of any EMBOSS program by reading its ACD file and processing the command line and user responses in exactly the same way as if the true program itself were running.  The application proper is not run; it is only the ACD file that is read.  Any command-line options for the application being called can be specified. The user is prompted for any required parameter values not given on the command line and any input files are read. Output files can be specified in any available format however they will be empty (the application code is not called so there will be no output).
+
+<p><b>acdtrace</b> will use any data files specified in the ACD file of the specified program, but will ignore any data files that are only used directly by the program's code.  EMBOSS data files are distributed with the application and stored in the standard EMBOSS data directory (see EMBOSS Users Manual for further information).</p>
+
+
+<H2>
+    References
+</H2>
+
+
+<H2>
+    Warnings
+</H2>
+
+<p>The output on screen can look a little confusing but is by far the best way to see how variables and operations work in your ACD file.</p>
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+
+<H2>
+    Exit status
+</H2>
+
+
+It exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+
+None.
+
+
+<!--#include file="inc/acdtrace.isee" -->
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/price.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/acdtrace.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/targetdev.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/acdtrace.comment" -->
+
+
+
+</BODY>
+</HTML>
+

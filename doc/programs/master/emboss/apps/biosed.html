@@ -1,0 +1,168 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: biosed
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+biosed
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/biosed.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<p><b>biosed</b> is a simple sequence editing utility that searches
+for a target subsequence in one or more input sequences and replaces
+it with an insert subsequence, or optionally, just deletes the target
+subsequence where found.  If the target subsequence occurs more than
+once, then each instance of the target is replaced or deleted.</p>
+
+<p>The <tt>-position</tt> option allows a sequence position to be
+specified as an additional constraint for the match: a replacement /
+deletion only occurs if the start of a match is at the
+specified <tt>-position</tt> position.</p>
+
+
+<H2>
+    Algorithm
+</H2>
+<p>The target subsequence is just a short, literal sequence of
+characters.  <b>biosed</b> cannot interpret cannot any sort of an
+ambiguity pattern such as a regular expression.  A simple string match
+is done between the target and input sequences.  If there is an exact
+matches then the replacement or deletion is done. The matching is case
+insensitive, independent of the case of both the input sequences and
+target. </p>
+
+
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/biosed.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/biosed.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/biosed.itable" -->
+
+<H2>
+    Input file format
+</H2>
+It reads the USA of one or more nucleic acid or protein sequences.
+
+<p>
+<!--#include file="inc/biosed.input" -->
+
+<H2>
+    Output file format
+</H2>
+The edited sequence is output.
+
+<P>
+
+The sequence will be in uppercase.
+
+
+<p>
+<!--#include file="inc/biosed.output" -->
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+<p><b>biosed</b> was inspired by the useful UNIX utility sed which
+searches for a pattern in text and can replace or delete the found
+pattern.</p>
+
+
+
+<H2>
+    References
+</H2>
+
+
+None.
+
+
+<H2>
+    Warnings
+</H2>
+
+<p>No check for correct type (protein, nucleic, gapped etc) is made on
+the replacement sequence so you must ensure it is of the type
+required.  Any text can be used, including characters only used in
+proteins (e.g. <tt>D</tt>, <tt>E</tt>, <tt>F</tt>, etc.), characters
+rarely used in proteins (e.g. <tt>U</tt>, <tt>J</tt>, <tt>O</tt>,
+etc), digits and punctuation characters.</p>
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/biosed.isee" -->
+
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/ableasby.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/biosed.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/biosed.comment" -->
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,173 @@
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Nucleotide sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-sitelen</td>
+<td>This sets the minimum length of the restriction enzyme recognition site. Any enzymes with sites shorter than this will be ignored.</td>
+<td>Integer from 2 to 20</td>
+<td>4</td>
+</tr>
+
+<tr>
+<td>-enzymes</td>
+<td>The name 'all' reads in all enzyme names from the REBASE database. You can specify enzymes by giving their names with commas between then, such as: 'HincII,hinfI,ppiI,hindiii'.
+The case of the names is not important. You can specify a file of enzyme names to read in by giving the name of the file holding the enzyme names with a '@' character in front of it, for example, '@enz.list'.
+Blank lines and lines starting with a hash character or '!' are ignored and all other lines are concatenated together with a comma character ',' and then treated as the list of enzymes to search for.
+An example of a file of enzyme names is:
+! my enzymes
+HincII, ppiII
+! other enzymes
+hindiii
+HinfI
+PpiI</td>
+<td>Any string is accepted</td>
+<td>all</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output report file name</td>
+<td>Report output file</td>
+<td><i>&lt;*&gt;</i>.restrict</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-datafile</td>
+<td>Restriction enzyme data file (optional)</td>
+<td>Data file</td>
+<td><i>File in the data file path</i></td>
+</tr>
+
+<tr>
+<td>-mfile</td>
+<td>Restriction enzyme data file (optional)</td>
+<td>Data file</td>
+<td>Emethylsites.dat</td>
+</tr>
+
+<tr>
+<td>-min</td>
+<td>This sets the minimum number of cuts for any restriction enzyme that will be considered. Any enzymes that cut fewer times than this will be ignored.</td>
+<td>Integer from 1 to 1000</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-max</td>
+<td>This sets the maximum number of cuts for any restriction enzyme that will be considered. Any enzymes that cut more times than this will be ignored.</td>
+<td>Integer up to 2000000000</td>
+<td>2000000000</td>
+</tr>
+
+<tr>
+<td>-solofragment</td>
+<td>This gives the fragment lengths of the forward sense strand produced by complete restriction by each restriction enzyme on its own. Results are added to the tail section of the report.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-single</td>
+<td>If this is set then this forces the values of the mincuts and maxcuts qualifiers to both be 1. Any other value you may have set them to will be ignored.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]blunt</td>
+<td>This allows those enzymes which cut at the same position on the forward and reverse strands to be considered.</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]sticky</td>
+<td>This allows those enzymes which cut at different positions on the forward and reverse strands, leaving an overhang, to be considered.</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]ambiguity</td>
+<td>This allows those enzymes which have one or more 'N' ambiguity codes in their pattern to be considered</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-plasmid</td>
+<td>If this is set then this allows searches for restriction enzyme recognition site and cut postions that span the end of the sequence to be considered.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-methylation</td>
+<td>If this is set then RE recognition sites will not match methylated bases.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]commercial</td>
+<td>If this is set, then only those enzymes with a commercial supplier will be searched for. This qualifier is ignored if you have specified an explicit list of enzymes to search for, rather than searching through 'all' the enzymes in the REBASE database. It is assumed that, if you are asking for an explicit enzyme, then you probably know where to get it from and so all enzymes names that you have asked to be searched for, and which cut, will be reported whether or not they have a commercial supplier.</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]limit</td>
+<td>This limits the reporting of enzymes to just one enzyme from each group of isoschizomers. The enzyme chosen to represent an isoschizomer group is the prototype indicated in the data file 'embossre.equ', which is created by the program 'rebaseextract'. If you prefer different prototypes to be used, make a copy of embossre.equ in your home directory and edit it. If this value is set to be false then all of the input enzymes will be reported. You might like to set this to false if you are supplying an explicit set of enzymes rather than searching 'all' of them.</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-alphabetic</td>
+<td>Sort output alphabetically</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-fragments</td>
+<td>This gives the fragment lengths of the forward sense strand produced by complete restriction using all of the input enzymes together. Results are added to the tail section of the report.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-name</td>
+<td>Show sequence name</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+</table>

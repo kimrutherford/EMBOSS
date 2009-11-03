@@ -1,0 +1,116 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:ab000095' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:ab000095</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   AB000095; SV 1; linear; mRNA; STD; HUM; 2399 BP.
+XX
+AC   AB000095;
+XX
+DT   10-MAR-1998 (Rel. 54, Created)
+DT   07-OCT-2008 (Rel. 97, Last updated, Version 3)
+XX
+DE   Homo sapiens mRNA for hepatocyte growth factor activator inhibitor,
+DE   complete cds.
+XX
+KW   hepatocyte growth factor activator inhibitor.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-2399
+RA   Denda K.;
+RT   ;
+RL   Submitted (24-DEC-1996) to the EMBL/GenBank/DDBJ databases.
+RL   Kimitoshi Denda, Tokyo Institute of Technology, Department of Life Science;
+RL   4259 Nagatsuta, Midori-ku, Yokohama, Kanagawa 227, Japan
+RL   (E-mail:kdenda@bio.titech.ac.jp, Tel:45-924-5702, Fax:45-924-5771)
+XX
+RN   [2]
+RX   DOI; 10.1074/jbc.272.10.6370.
+RX   PUBMED; 9045658.
+RA   Shimomura T., Denda K., Kitamura A., Kawaguchi T., Kito M., Kondo J.,
+RA   Kagaya S., Qin L., Takata H., Miyazawa K., Kitamura N.;
+RT   "Hepatocyte growth factor activator inhibitor, a novel Kunitz-type serine
+RT   protease inhibitor";
+RL   J. Biol. Chem. 272(10):6370-6376(1997).
+XX
+DR   ASTD; TRAN00000068509.
+DR   Ensembl-Gn; ENSG00000166145; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000344051; Homo_sapiens.
+DR   H-InvDB; HIT000057890.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..2399
+FT                   /organism="Homo sapiens"
+FT                   /mol_type="mRNA"
+FT                   /db_xref="taxon:9606"
+FT   CDS             176..1717
+FT                   /product="hepatocyte growth factor activator inhibitor"
+FT                   /db_xref="GDB:118879"
+FT                   /db_xref="GOA:O43278"
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+FT                   QPDRGEDAIAACFLINCLYEQNFVCKFAPREGFINYLTREVYRSYRQLRTQGFGGSGIP
+FT                   KAWAGIDLKVQPQEPLVLKDVENTDWRLLRGDTDVRVERKDPNQVELWGLKEGTYLFQL
+FT                   TVTSSDHPEDTANVTVTVLSTKQTEDYCLASNKVGRCRGSFPRWYYDPTEQICKSFVYG
+FT                   GCLGNKNNYLREEECILACRGVQGPSMERRHPVCSGTCQPTQFRCSNGCCIDSFLECDD
+FT                   TPNCPDASDEAACEKYTSGFDELQRIHFPSDKGHCVDLPDTGLCKESIPRWYYNPFSEH
+FT                   CARFTYGGCYGNKNNFEEEQQCLESCRGISKKDVFGLRREIPIPSTGSVEMAVAVFLVI
+FT                   CIVVVVAILGYCFFKNQRKDFHGHHHHPPPTPASSTVSTTEDTEHLVYNHTTRPL"
+FT   polyA_signal    2379..2384
+XX
+SQ   Sequence 2399 BP; 490 A; 777 C; 684 G; 448 T; 0 other;
+     cggccgagcc cagctctccg agcaccgggt cggaagccgc gacccgagcc gcgcaggaag        60
+     ctgggaccgg aacctcggcg gacccggccc cacccaactc acctgcgcag gtcaccagca       120
+     ccctcggaac ccagaggccc gcgctctgaa ggtgaccccc ctggggagga aggcgatggc       180
+     ccctgcgagg acgatggccc gcgcccgcct cgccccggcc ggcatccctg ccgtcgcctt       240
+     gtggcttctg tgcacgctcg gcctccaggg cacccaggcc gggccaccgc ccgcgccccc       300
+     tgggctgccc gcgggagccg actgcctgaa cagctttacc gccggggtgc ctggcttcgt       360
+     gctggacacc aacgcctcgg tcagcaacgg agctaccttc ctggagtccc ccaccgtgcg       420
+     ccggggctgg gactgcgtgc gcgcctgctg caccacccag aactgcaact tggcgctagt       480
+     ggagctgcag cccgaccgcg gggaggacgc catcgccgcc tgcttcctca tcaactgcct       540
+     ctacgagcag aacttcgtgt gcaagttcgc gcccagggag ggcttcatca actacctcac       600
+     gagggaagtg taccgctcct accgccagct gcggacccag ggctttggag ggtctgggat       660
+     ccccaaggcc tgggcaggca tagacttgaa ggtacaaccc caggaacccc tggtgctgaa       720
+     ggatgtggaa aacacagatt ggcgcctact gcggggtgac acggatgtca gggtagagag       780
+     gaaagaccca aaccaggtgg aactgtgggg actcaaggaa ggcacctacc tgttccagct       840
+     gacagtgact agctcagacc acccagagga cacggccaac gtcacagtca ctgtgctgtc       900
+     caccaagcag acagaagact actgcctcgc atccaacaag gtgggtcgct gccggggctc       960
+     tttcccacgc tggtactatg accccacgga gcagatctgc aagagtttcg tttatggagg      1020
+     ctgcttgggc aacaagaaca actaccttcg ggaagaagag tgcattctag cctgtcgggg      1080
+     tgtgcaaggc ccctccatgg aaaggcgcca tccagtgtgc tctggcacct gtcagcccac      1140
+     ccagttccgc tgcagcaatg gctgctgcat cgacagtttc ctggagtgtg acgacacccc      1200
+     caactgcccc gacgcctccg acgaggctgc ctgtgaaaaa tacacgagtg gctttgacga      1260
+     gctccagcgc atccatttcc ccagtgacaa agggcactgc gtggacctgc cagacacagg      1320
+     actctgcaag gagagcatcc cgcgctggta ctacaacccc ttcagcgaac actgcgcccg      1380
+     ctttacctat ggtggttgtt atggcaacaa gaacaacttt gaggaagagc agcagtgcct      1440
+     cgagtcttgt cgcggcatct ccaagaagga tgtgtttggc ctgaggcggg aaatccccat      1500
+     tcccagcaca ggctctgtgg agatggctgt cgcagtgttc ctggtcatct gcattgtggt      1560
+     ggtggtagcc atcttgggtt actgcttctt caagaaccag agaaaggact tccacggaca      1620
+     ccaccaccac ccaccaccca cccctgccag ctccactgtc tccactaccg aggacacgga      1680
+     gcacctggtc tataaccaca ccacccggcc cctctgagcc tgggtctcac cggctctcac      1740
+     ctggccctgc ttcctgcttg ccaaggcaga ggcctgggct gggaaaaact ttggaaccag      1800
+     actcttgcct gtttcccagg cccactgtgc ctcagagacc agggctccag cccctcttgg      1860
+     agaagtctca gctaagctca cgtcctgaga aagctcaaag gtttggaagg agcagaaaac      1920
+     ccttgggcca gaagtaccag actagatgga cctgcctgca taggagtttg gaggaagttg      1980
+     gagttttgtt tcctctgttc aaagctgcct gtccctaccc catggtgcta ggaagaggag      2040
+     tggggtggtg tcagaccctg gaggccccaa ccctgtcctc ccgagctcct cttccatgct      2100
+     gtgcgcccag ggctgggagg aaggacttcc ctgtgtagtt tgtgctgtaa agagttgctt      2160
+     tttgtttatt taatgctgtg gcatgggtga agaggagggg aagaggcctg tttggcctct      2220
+     ctgtcctctc ttcctcttcc cccaagattg agctctctgc ccttgatcag ccccaccctg      2280
+     gcctagacca gcagacagag ccaggagagg ctcagctgca ttccgcagcc cccaccccca      2340
+     aggttctcca acatcacagc ccagcccacc cactgggtaa taaaagtggt ttgtggaaa       2399
+//
+</pre>
+</td></tr></table><p>

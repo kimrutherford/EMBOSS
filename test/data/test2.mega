@@ -1,0 +1,12 @@
+#mega
+TITLE: Noninterleaved sequence data
+       with seqeunce starting on a new line
+#mouse
+            AATTTTTACCCCGGGGGG
+            AGGGGGGACCCCGGGGGG
+#human
+            AACCCTTACCCCGGGGGG
+            AGGGGGGACCCCGGGGGG
+#cat
+            AATTTTTACAAAGGGGGG
+            AGGGGGGACCCCGGGGGG

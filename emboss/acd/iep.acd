@@ -1,0 +1,99 @@
+application: iep [
+  documentation: "Calculate the isoelectric point of proteins"
+  groups: "Protein:Composition"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "protein"
+  ]
+
+endsection: input
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  integer: amino [
+    additional: "Y"
+    information: "Number of N-termini"
+    default: "1"
+    minimum: "0"
+  ]
+
+  integer: carboxyl [
+    additional: "Y"
+    information: "Number of C-termini"
+    default: "1"
+    minimum: "0"
+  ]
+
+  boolean: termini [
+    additional: "Y"
+    information: "Include charge at N and C terminus"
+    default: "Y"
+  ]
+
+  integer: lysinemodified [
+    additional: "Y"
+    information: "Number of modified lysines"
+    default: "0"
+    minimum: "0"
+  ]
+
+  integer: disulphides [
+    additional: "Y"
+    information: "Number of disulphide bridges"
+    default: "0"
+    minimum: "0"
+  ]
+
+endsection: additional
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  float: step [
+    information: "Step value for pH"
+    minimum: ".01"
+    maximum: "1."
+    default: ".5"
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  toggle: plot [
+    default: "N"
+    information: "Plot charge vs pH"
+  ]
+
+  toggle: report [
+    default: "Y"
+    information: "Write results to a file"
+  ]
+
+  xygraph: graph [
+    standard: "$(plot)"
+  ]
+
+  outfile: outfile [
+    standard: "$(report)"
+    knowntype: "iep output"
+    nullok: "@(!$(report))"
+    nulldefault: "@(!$(report))"
+  ]
+
+endsection: output

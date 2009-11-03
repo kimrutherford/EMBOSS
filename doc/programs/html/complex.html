@@ -1,0 +1,568 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: complex
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+complex
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+    Function
+</H2>
+Find the linguistic complexity in nucleotide sequences
+<H2>
+    Description
+</H2>
+
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with complex</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>complex -omnia </b>
+Find the linguistic complexity in nucleotide sequences
+Input nucleotide sequence(s): <b>tembl:*</b>
+Window length [100]: <b></b>
+Step size [5]: <b></b>
+Minimum word length [4]: <b></b>
+Maximum word length [6]: <b></b>
+Output file [hs989235.complex]: <b></b>
+output sequence(s) [hs989235.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers (* if not always prompted):
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -lwin               integer    [100] Window length (Any integer value)
+   -step               integer    [5] Displacement of the window over the
+                                  sequence (Any integer value)
+   -jmin               integer    [4] Minimum word length (Integer from 2 to
+                                  20)
+   -jmax               integer    [6] Maximum word length (Integer from 2 to
+                                  50)
+  [-outfile]           outfile    [*.complex] Output file name
+*  -outseq             seqoutall  [<sequence>.<format>] Sequence set(s)
+                                  filename and optional format (output USA)
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -omnia              toggle     [N] Calculate over a set of sequences
+   -sim                integer    [0] Calculate the linguistic complexity by
+                                  comparison with a number of simulations
+                                  having a uniform distribution of bases (Any
+                                  integer value)
+   -freq               boolean    [N] Execute the simulation of a sequence
+                                  based on the base frequency of the original
+                                  sequence
+   -print              boolean    [N] Generate a file named UjTable containing
+                                  the values of Uj for each word j in the
+                                  real sequence(s) and in any simulated
+                                  sequences
+   -ujtablefile        outfile    [complex.ujtable] Program complex temporary
+                                  output file
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   "-ujtablefile" associated qualifiers
+   -odirectory         string     Output directory
+
+   "-outseq" associated qualifiers
+   -osformat           string     Output seq format
+   -osextension        string     File name extension
+   -osname             string     Base file name
+   -osdirectory        string     Output directory
+   -osdbname           string     Database name to add
+   -ossingle           boolean    Separate file for each entry
+   -oufo               string     UFO features
+   -offormat           string     Features format
+   -ofname             string     Features file name
+   -ofdirectory        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<p>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Nucleotide sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-lwin</td>
+<td>Window length</td>
+<td>Any integer value</td>
+<td>100</td>
+</tr>
+
+<tr>
+<td>-step</td>
+<td>Displacement of the window over the sequence</td>
+<td>Any integer value</td>
+<td>5</td>
+</tr>
+
+<tr>
+<td>-jmin</td>
+<td>Minimum word length</td>
+<td>Integer from 2 to 20</td>
+<td>4</td>
+</tr>
+
+<tr>
+<td>-jmax</td>
+<td>Maximum word length</td>
+<td>Integer from 2 to 50</td>
+<td>6</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>-outseq</td>
+<td>Sequence set(s) filename and optional format (output USA)</td>
+<td>Writeable sequence(s)</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-omnia</td>
+<td>Calculate over a set of sequences</td>
+<td>Toggle value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-sim</td>
+<td>Calculate the linguistic complexity by comparison with a number of simulations having a uniform distribution of bases</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-freq</td>
+<td>Execute the simulation of a sequence based on the base frequency of the original sequence</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-print</td>
+<td>Generate a file named UjTable containing the values of Uj for each word j in the real sequence(s) and in any simulated sequences</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-ujtablefile</td>
+<td>Program complex temporary output file</td>
+<td>Output file</td>
+<td>complex.ujtable</td>
+</tr>
+
+</table>
+
+<H2>
+    Input file format
+</H2>
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:*' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+
+
+<H2>
+    Output file format
+</H2>
+
+Sequence TEMBL:HHTETRA contains repeats and is included in the test
+database for repeat analysis.
+<p>
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: complex.ujtable</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+</pre>
+</td></tr></table><p>
+<p><h3>File: hs989235.complex</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Length of window : 100 
+jmin : 4 
+jmax : 6 
+step : 5 
+Execution without simulation 
+----------------------------------------------------------------------------
+|                  |                  |                  |                  |
+|     number of    |      name of     |     length of    |      value of    |
+|     sequence     |     sequence     |     sequence     |     complexity   |
+|                  |                  |                  |                  |
+----------------------------------------------------------------------------
+         1                    HS989235            495             0.7210 
+         2                    AB009602            561             0.6688 
+         3                      HSCAD5           3170             0.6921 
+         4                         HSD            781             0.6991 
+         5                      HSEGL1           3919             0.6618 
+         6                       HSFAU            518             0.6739 
+         7                      HSFAU1           2016             0.7105 
+         8                       HSFOS           6210             0.6681 
+         9                       HSEF2           3075             0.6925 
+        10                        HSHT           1658             0.7314 
+        11                       HSTS1          18596             0.6668 
+        12                      HSNFG9          33760             0.6661 
+        13                    AB000095           2399             0.6569 
+        14                    AB009062            532             0.6465 
+        15                     HSFERG1            512             0.5609 
+        16                     HSFERG2           1132             0.7217 
+        17                    AC004629         116019             0.6478 
+        18                    AP000504         100000             0.6611 
+        19                    AF129756         184666             0.6562 
+        20                    AB000360           2582             0.6710 
+        21                       HSHBB          73308             0.6544 
+        22                     CEZK637          40699             0.6307 
+        23                      PDRHOD           1675             0.6201 
+        24                    AAHSP70B           4712             0.7110 
+        25                      GMGL01           3400             0.3981 
+        26                    GMLLBPS1            852             0.5986 
+        27                    GMLLBPS2           1698             0.5225 
+        28                       ECLAC           7477             0.7137 
+        29                      ECLACA           1832             0.6916 
+        30                      ECLACI           1113             0.7480 
+        31                      ECLACY           1500             0.6801 
+        32                      ECLACZ           3078             0.7278 
+        33                      PAAMIB           1212             0.6596 
+        34                      PAAMIE           1065             0.6418 
+        35                      PAAMIR           2167             0.6562 
+        36                      PAAMIS           1130             0.6989 
+        37                        MMAM            366             0.7163 
+        38                       RNOPS           1493             0.6571 
+        39                    RNU68037           1218             0.6381 
+        40                   HSA203YC1            389             0.4327 
+        41                     HHTETRA           1272             0.3114 
+        42                    XLRHODOP           1684             0.7193 
+        43                     XL23808           4734             0.7180 
+        44                    AF123456           1510             0.5913 
+        45                    AF123457           1634             0.7254 
+</pre>
+</td></tr></table><p>
+<p><h3>File: hs989235.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;HS989235 H45989.1 yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+ccggnaagctcancttggaccaccgactctcgantgnntcgccgcgggagccggntggan
+aacctgagcgggactggnagaaggagcagagggaggcagcacccggcgtgacggnagtgt
+gtggggcactcaggccttccgcagtgtcatctgccacacggaaggcacggccacgggcag
+gggggtctatgatcttctgcatgcccagctggcatggccccacgtagagtggnntggcgt
+ctcggtgctggtcagcgacacgttgtcctggctgggcaggtccagctcccggaggacctg
+gggcttcagcttcccgtagcgctggctgcagtgacggatgctcttgcgctgccatttctg
+ggtgctgtcactgtccttgctcactccaaaccagttcggcggtccccctgcggatggtct
+gtgttgatggacgtttgggctttgcagcaccggccgccgagttcatggtngggtnaagag
+atttgggttttttcn
+&gt;AB009602 AB009602.1 Schizosaccharomyces pombe mRNA for MET1 homolog, partial cds.
+gttcgatgcctaaaataccttcttttgtccctacacagaccacagttttcctaatggctt
+tacaccgactagaaattcttgtgcaagcactaattgaaagcggttggcctagagtgttac
+cggtttgtatagctgagcgcgtctcttgccctgatcaaaggttcattttctctactttgg
+aagacgttgtggaagaatacaacaagtacgagtctctcccccctggtttgctgattactg
+gatacagttgtaatacccttcgcaacaccgcgtaactatctatatgaattattttccctt
+tattatatgtagtaggttcgtctttaatcttcctttagcaagtcttttactgttttcgac
+ctcaatgttcatgttcttaggttgttttggataatatgcggtcagtttaatcttcgttgt
+ttcttcttaaaatatttattcatggtttaatttttggtttgtacttgttcaggggccagt
+tcattatttactctgtttgtatacagcagttcttttatttttagtatgattttaatttaa
+aacaattctaatggtcaaaaa
+&gt;HSCAD5 X59796.1 H.sapiens mRNA for cadherin-5
+ctccactcacgctcagccctggacggacaggcagtccaacggaacagaaacatccctcag
+cccacaggcacgatctgttcctcctgggaagatgcagaggctcatgatgctcctcgccac
+atcgggcgcctgcctgggcctgctggcagtggcagcagtggcagcagcaggtgctaaccc
+tgcccaacgggacacccacagcctgctgcccacccaccggcgccaaaagagagattggat
+ttggaaccagatgcacattgatgaagagaaaaacacctcacttccccatcatgtaggcaa
+gatcaagtcaagcgtgagtcgcaagaatgccaagtacctgctcaaaggagaatatgtggg
+caaggtcttccgggtcgatgcagagacaggagacgtgttcgccattgagaggctggaccg
+ggagaatatctcagagtaccacctcactgctgtcattgtggacaaggacactggcgaaaa
+cctggagactccttccagcttcaccatcaaagttcatgacgtgaacgacaactggcctgt
+gttcacgcatcggttgttcaatgcgtccgtgcctgagtcgtcggctgtggggacctcagt
+catctctgtgacagcagtggatgcagacgaccccactgtgggagaccacgcctctgtcat
+gtaccaaatcctgaaggggaaagagtattttgccatcgataattctggacgtattatcac
+aataacgaaaagcttggaccgagagaagcaggccaggtatgagatcgtggtggaagcgcg
+agatgcccagggcctccggggggactcgggcacggccaccgtgctggtcactctgcaaga
+catcaatgacaacttccccttcttcacccagaccaagtacacatttgtcgtgcctgaaga
+cacccgtgtgggcacctctgtgggctctctgtttgttgaggacccagatgagccccagaa
+ccggatgaccaagtacagcatcttgcggggcgactaccaggacgctttcaccattgagac
+aaaccccgcccacaacgagggcatcatcaagcccatgaagcctctggattatgaatacat
+ccagcaatacagcttcatagtcgaggccacagaccccaccatcgacctccgatacatgag
+ccctcccgcgggaaacagagcccaggtcattatcaacatcacagatgtggacgagccccc
+cattttccagcagcctttctaccacttccagctgaaggaaaaccagaagaagcctctgat
+tggcacagtgctggccatggaccctgatgcggctaggcatagcattggatactccatccg
+caggaccagtgacaagggccagttcttccgagtcacaaaaaagggggacatttacaatga
+gaaagaactggacagagaagtctacccctggtataacctgactgtggaggccaaagaact
+ggattccactggaacccccacaggaaaagaatccattgtgcaagtccacattgaagtttt
+ggatgagaatgacaatgccccggagtttgccaagccctaccagcccaaagtgtgtgagaa
+cgctgtccatggccagctggtcctgcagatctccgcaatagacaaggacataacaccacg
+aaacgtgaagttcaaattcatcttgaatactgagaacaactttaccctcacggataatca
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+gagccagttgtcaagaagagcagcagcagcagctcctgtctcctgcaggacagcagcagc
+cctgctcactccacgagcacggtggcagcagcagcagcgagcgcaccaccagagggacgg
+atgctcattcaggacatcccttccatccccagcagagggcacttggagagcacgtctgat
+ttggttgtggactccacctactacagcagtttttaccagccatccctgtatccttactat
+aacaacctgtacaactactcccagtaccaaatggcagtggccactgagtcttcctcaagt
+gagacagggggtacgtttgtagggtcagccatgaaaaacagccttcgaagcctcccagca
+acatacatgtcaagccagtcaggaaaacagtggcagatgaagggaatggagaaccgccat
+gccatgagctcccagtaccggatgtgctcctactacccgcccacctcatacctgggccag
+ggggttggcagtcccacctgcgtcacacagatactggcctcggaggacaccccctcctac
+tcagagtcgaaagcgagagtgttttcgccgcccagcagccaggactcgggcctggggtgc
+ctgtcgagcagcgagagcaccaagggagacctggagtgcgagccccaccaagagcccggc
+gccttcgcggtgagcccggttcttgagggcgagtaggcgcggcgtcgggcggctgctgcg
+cggcgttcactgttgccttgttctgttggggttgcgggggggcgttgggtttcttctttc
+cggggcggggggggcacggcggggccgcggccgggccggcggggcggggcggggcgggac
+ggggcggggcggagccgcgcgggggccgcagtccgggccggggccgccgtcgggtctcgg
+cccgctcccgtcggggcggagcgtccgacgatcggcctccacgaaacgcggtgccgtgat
+gtgtttgtagtggttcctcgtaggctccagacgttttctcctcgtatcgccaaattaacg
+cgttttgcatattacagttgagtgcctcgacttagattgcaatataagcggccagcaaac
+aagtctcaaaaaaaagttacgtgcgtttctgcgagtgttattttgttaagaacggctcac
+agtgtcctcttcctgtgttacagaagccaacctgaaatgaaactagtctggaaaaattca
+ttgttctctgtagttgcagctgtacctgaaataaaaatgttattgatgactgaaaaaaaa
+aaaaaaaaaa
+&gt;AF123457 AF123457.1 Toxoplasma gondii enolase (ENO2) mRNA, complete cds.
+tctaccgttactcaacttccaacaaaatggtggccatcaaggacatcactgctcgtcaga
+tcctcgactcccgaggaaacccgaccgtcgaggttgacttgttgaccgatggcggctgct
+tccgtgccgctgtccccagcggcgcatccactggcatctacgaggcgcttgagctccgtg
+acaaggaccaaactaagttcatgggcaagggtgtgatgaaggccgtggagaacatccaca
+agattatcaagccggcgcttattggcaaggacccgtgcgaccagaagggtattgacaagc
+tgatggtcgaggagctcgatggaactaagaacgagtggggctggtgcaagtcgaagctcg
+gcgcgaacgcgatcctggccgtctcgatggcttgctgccgcgccggcgctgctgccaagg
+gcatgcccctgtacaagtacattgccactttggctggaaacccgacagacaagatggtaa
+tgcccgtcccgttcttcaacgtcatcaacggcggctcccacgcaggcaacaaggtcgcga
+tgcaggagttcatgatcgcccccgtcggcgcctccacaatccaagaggcgatccagatcg
+gcgcggaagtgtaccagcacctgaaggtcgtcattaagaagaagtatggcctcgacgcca
+cgaacgtcggcgacgagggtggcttcgcccccaacatcagcggcgccacggaggccctcg
+acttgctgatggaggccatcaaggtgtctggtcacgaaggcaaggtcaagattgccgccg
+acgtcgccgcttccgagttcttcctccaggacgacaaagtctatgacctagacttcaaga
+ctccgaacaacgacaagtcgcaacgcaagactggcgaagagcttcgcaacctgtacaagg
+acctgtgccagaagtatcccttcgtgtccatcgaggacccgttcgaccaggacgacttcc
+acagctacgctcagctcaccaacgaggttggcgagaaggtccaaatcgtcggcgacgacc
+tcctggtcaccaacccgacgcgcattgagaaggccgttcaggagaaagcgtgcaacggcc
+tgcttctcaaggtgaaccagattggcacagtcagcgagtctatcgaggcctgccagcttg
+cccagaagaacaagtggggcgttatggtttctcaccgctccggtgagactgaggactcct
+tcatcgctgacctcgtcgtcggtctccgcaccgggcaaatcaagactggcgccccgtgca
+gatccgagcgtctctgcaagtacaaccagctgatgcgtatcgaagagtcgctcggctccg
+actgtcagtacgccggcgctggcttccgccatcccaactaagtggaaacggagtttcgac
+tacccaactgctcaattggggctgggtggtttgtccactctgcaacaagggcgtgacgag
+atcgttgcacatgcaactgccttttttgtgcttggtgggaaggagcactttcgcaggtgc
+agcaccgagttgcggttgatgggaatttcggaactgatttgtttcttgcatgccatcacc
+gaaggaacgagcagtttcgttgataatattggaaagtcttttgaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaa
+</pre>
+</td></tr></table><p>
+
+<H2>
+    Data files
+</H2>
+
+None
+
+<H2>
+    Notes
+</H2>
+
+None
+
+
+<H2>
+    References
+</H2>
+
+None
+
+
+<H2>
+    Warnings
+</H2>
+
+None
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None
+
+
+<H2>
+    Exit status
+</H2>
+
+Always exits with status 0
+
+<H2>
+    Known bugs
+</H2>
+
+None
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="banana.html">banana</a></td>
+<td>Bending and curvature plot in B-DNA</td>
+</tr>
+
+<tr>
+<td><a href="btwisted.html">btwisted</a></td>
+<td>Calculates the twisting in a B-DNA sequence</td>
+</tr>
+
+<tr>
+<td><a href="chaos.html">chaos</a></td>
+<td>Create a chaos game representation plot for a sequence</td>
+</tr>
+
+<tr>
+<td><a href="compseq.html">compseq</a></td>
+<td>Count composition of dimer/trimer/etc words in a sequence</td>
+</tr>
+
+<tr>
+<td><a href="dan.html">dan</a></td>
+<td>Calculates DNA RNA/DNA melting temperature</td>
+</tr>
+
+<tr>
+<td><a href="freak.html">freak</a></td>
+<td>Residue/base frequency table or plot</td>
+</tr>
+
+<tr>
+<td><a href="isochore.html">isochore</a></td>
+<td>Plots isochores in large DNA sequences</td>
+</tr>
+
+<tr>
+<td><a href="sirna.html">sirna</a></td>
+<td>Finds siRNA duplexes in mRNA</td>
+</tr>
+
+<tr>
+<td><a href="wordcount.html">wordcount</a></td>
+<td>Counts words of a specified size in a DNA sequence</td>
+</tr>
+
+</table>
+
+<H2>
+    Author(s)
+</H2>
+
+
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+None
+
+</BODY>
+</HTML>
+

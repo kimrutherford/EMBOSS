@@ -1,0 +1,193 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: oddcomp
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+oddcomp
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/oddcomp.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+<p><b>oddcomp</b> reads one or more protein sequences, identifies proteins containing regions with a specific sequence word composition, then writes a list of sequence identifiers of those proteins to an output file. The word composition is read from an input file which gives the minimum word occurence for any number of sequence words. For an input sequence to be listed in the output file, each word must be found at least the stated number of times in any window over the input sequence. The window size may be set to any value or the length of the current protein (<tt>-fullwindow</tt> option).</p>
+
+
+<H2>
+Algorithm
+</H2>
+
+<p>The input file of sequence word composition data is in the same format as the output from <b>compseq</b>. Only one word size (of any length) can be used and is specified at the top of the file. The search for words is a boolean AND meaning all words given in the file must be found in a sequence for it to be reported. </p>
+
+<p>Each word must occur at least the stated number of times in a window over an input sequence for the sequence to be reported. The word size given in the input data file must be less than the specified window size; you will not get any hits otherwise.</p>
+
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/oddcomp.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/oddcomp.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/oddcomp.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+<!--#include file="inc/oddcomp.input" -->
+
+<p>
+
+The columns "Obs Frequency", "Exp Frequency" and "Obs/Exp Frequency" are
+not required - they were simply included in this example to show the
+similarity between this input file format and the output of the program
+<A HREF="compseq.html">compseq</A>.  A compseq output file can be used as the
+input to <b>oddcomp</b> - the extra columns are ignored by
+<b>oddcomp</b>. 
+
+<p>
+
+A minimal composition input data file would look like this:
+
+<hr>
+<pre>
+Word size       2
+Total count     0
+RS      2
+SR      1
+</pre>
+<hr>
+
+<p>
+
+Blank lines and lines starting with '#' are ignored.
+
+<p>
+
+The first non-comment line should start with 'Word size' and will
+specify the word size to use.
+
+<p>
+
+A line starting with the word 'Total' is required.
+
+<p>
+
+Anything after the line starting with the word 'Total' will be read as
+word count data. 
+
+<p>
+
+Word count data consists of a word to search for and the count of that
+word to search for within the sliding window.  The columns are separated
+by one or more spaces or TAB characters. Anything after these two columns
+will be ignored. 
+
+<H2>
+    Output file format
+</H2>
+
+
+<b>oddcomp</b> writes a list of sequence name identifiers.
+
+<p>
+
+<!--#include file="inc/oddcomp.output" -->
+
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+<p><b>oddcomp</b> was originally written to identify proteins with <tt>SR</tt>/<tt>RS</tt> dimers, for example, windows of forty amino acids containing at least 3 <tt>SR</tt> and 4 <tt>RS</tt> words. More generally, it will help answer questions of the type 'which proteins contain at least x occurrences of word X and y occurences of word Y in regions of n residues'.  For example, one could search for serine rich or polyglutamine rich, collagen helix, or similar proteins using this program.</p>
+
+<p><b>oddcomp</b> does not report the location of the word matches in the sequence, merely the sequence ID. To search for a specific set of words in a sequence, you should edit the input file of sequence word composition data.</p>
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/oddcomp.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+
+<!--#include file="inc/dmartin.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/oddcomp.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/oddcomp.comment" -->
+
+</BODY>
+</HTML>
+

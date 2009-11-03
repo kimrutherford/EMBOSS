@@ -1,0 +1,446 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: mwfilter
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+mwfilter
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
+    Function
+</H2>
+Filter noisy data from molecular weights file
+<H2>
+    Description
+</H2>
+
+<p><b>mwfilter</b> removes unwanted (noisy) data from mass spectrometry output in proteomics. It reads an input file with a list of experimental molecular weights and writes the same data to an output file but with unwanted (noisy) data removed, at a specified ppm tolerance. Optionally the deleted molecular weights are shown.  It removes those molecular weights which are:</p>
+
+
+<ul>
+  <li>Contaminating trypsin or keratin
+  <li>Modified oxy-methionine or oxy-threonine
+  <li>Peaks associated with sodium ions.
+</ul>
+
+<p>
+The last two operations can be done as most peaks are reported in
+both modified and unmodified forms. Removal of modified peaks
+aids in database searching for protein identification.</p>
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with mwfilter</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>mwfilter </b>
+Filter noisy data from molecular weights file
+Molecular weights file: <b>molwts.dat</b>
+Ppm tolerance [50.0]: <b></b>
+Molecular weights output file [molwts.mwfilter]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-infile]            infile     Molecular weights file
+   -tolerance          float      [50.0] Ppm tolerance (Any numeric value)
+  [-outfile]           outfile    [*.mwfilter] Molecular weights output file
+
+   Additional (Optional) qualifiers:
+   -showdel            boolean    [N] Output deleted mwts
+
+   Advanced (Unprompted) qualifiers:
+   -datafile           datafile   [Emwfilter.dat] Molecular weight standards
+                                  data file
+
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-infile]<br>(Parameter 1)</td>
+<td>Molecular weights file</td>
+<td>Input file</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-tolerance</td>
+<td>Ppm tolerance</td>
+<td>Any numeric value</td>
+<td>50.0</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Molecular weights output file</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.mwfilter</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-showdel</td>
+<td>Output deleted mwts</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-datafile</td>
+<td>Molecular weight standards data file</td>
+<td>Data file</td>
+<td>Emwfilter.dat</td>
+</tr>
+
+</table>
+
+<H2>
+    Input file format
+</H2>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: molwts.dat</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+874.364756
+927.450380
+1045.572
+1068.397129
+1121.431124
+1163.584593
+1305.660840
+1428.596448
+1479.748341
+1502.549157
+1554.591658
+1567.686209
+1576.708354
+1639.868056
+1748.611920
+1753.745298
+1880.841178
+2383.99
+</pre>
+</td></tr></table><p>
+
+<p>
+
+The input file is a simple list of the experimental molecular weights.
+<br>
+There should be one weight per line.
+
+<p>
+
+Comments in the data file start with a '#' character in the first column.
+<br>
+Blank lines are ignored.
+
+
+<H2>
+    Output file format
+</H2>
+
+The output is a list of the molecular weights with the unwanted (noisy)
+data removed. 
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: molwts.mwfilter</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+874.364756
+927.450380
+1068.397129
+1121.431124
+1163.584593
+1305.660840
+1428.596448
+1479.748341
+1502.549157
+1554.591658
+1567.686209
+1576.708354
+1639.868056
+1748.611920
+1753.745298
+1880.841178
+</pre>
+</td></tr></table><p>
+
+<H2>
+    Data files
+</H2>
+
+The program reads the data file <b>Emwfilter.dat</b> for the molecular
+weights of items to be deleted from the experimental data. 
+
+<p>
+
+<p>
+EMBOSS data files are distributed with the application and stored
+in the standard EMBOSS data directory, which is defined
+by the EMBOSS environment variable EMBOSS_DATA.
+
+<p>
+
+To see the available EMBOSS data files, run:
+<p>
+<pre>
+% embossdata -showall
+</pre>
+<p>
+To fetch one of the data files (for example 'Exxx.dat') into your
+current directory for you to inspect or modify, run:
+
+<pre>
+
+% embossdata -fetch -file Exxx.dat
+
+</pre>
+<p>
+
+Users can provide their own data files in their own directories.
+Project specific files can be put in the current directory, or for
+tidier directory listings in a subdirectory called
+".embossdata". Files for all EMBOSS runs can be put in the user's home
+directory, or again in a subdirectory called ".embossdata".
+
+<p>
+The directories are searched in the following order:
+
+<ul>
+   <li> . (your current directory)
+   <li> .embossdata (under your current directory)
+   <li> ~/ (your home directory)
+   <li> ~/.embossdata
+</ul>
+<p>
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="backtranambig.html">backtranambig</a></td>
+<td>Back-translate a protein sequence to ambiguous nucleotide sequence</td>
+</tr>
+
+<tr>
+<td><a href="backtranseq.html">backtranseq</a></td>
+<td>Back-translate a protein sequence to a nucleotide sequence</td>
+</tr>
+
+<tr>
+<td><a href="charge.html">charge</a></td>
+<td>Draw a protein charge plot</td>
+</tr>
+
+<tr>
+<td><a href="checktrans.html">checktrans</a></td>
+<td>Reports STOP codons and ORF statistics of a protein</td>
+</tr>
+
+<tr>
+<td><a href="compseq.html">compseq</a></td>
+<td>Calculate the composition of unique words in sequences</td>
+</tr>
+
+<tr>
+<td><a href="emowse.html">emowse</a></td>
+<td>Search protein sequences by digest fragment molecular weight</td>
+</tr>
+
+<tr>
+<td><a href="freak.html">freak</a></td>
+<td>Generate residue/base frequency table or plot</td>
+</tr>
+
+<tr>
+<td><a href="iep.html">iep</a></td>
+<td>Calculate the isoelectric point of proteins</td>
+</tr>
+
+<tr>
+<td><a href="mwcontam.html">mwcontam</a></td>
+<td>Find weights common to multiple molecular weights files</td>
+</tr>
+
+<tr>
+<td><a href="octanol.html">octanol</a></td>
+<td>Draw a White-Wimley protein hydropathy plot</td>
+</tr>
+
+<tr>
+<td><a href="pepinfo.html">pepinfo</a></td>
+<td>Plot amino acid properties of a protein sequence in parallel</td>
+</tr>
+
+<tr>
+<td><a href="pepstats.html">pepstats</a></td>
+<td>Calculates statistics of protein properties</td>
+</tr>
+
+<tr>
+<td><a href="pepwindow.html">pepwindow</a></td>
+<td>Draw a hydropathy plot for a protein sequence</td>
+</tr>
+
+<tr>
+<td><a href="pepwindowall.html">pepwindowall</a></td>
+<td>Draw Kyte-Doolittle hydropathy plot for a protein alignment</td>
+</tr>
+
+<tr>
+<td><a href="wordcount.html">wordcount</a></td>
+<td>Count and extract unique words in DNA sequence(s)</td>
+</tr>
+
+</table>
+
+<H2>
+    Author(s)
+</H2>
+
+Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+
+<H2>
+    History
+</H2>
+
+Written (Jan 2002) - Alan Bleasby.
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+None
+
+
+</BODY>
+</HTML>
+

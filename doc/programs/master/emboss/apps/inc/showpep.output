@@ -1,0 +1,190 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: laci_ecoli.showpep </h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+LACI_ECOLI
+Lactose operon repressor
+
+                   10        20        30        40        50        60        
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPNRVAQQLAGKQ
+          |===========================================================
+          mature_protein_region note="Lactose operon repressor" ftid="PRO_00001
+          |========================================================|
+          polypeptide_domain note="HTH lacI-type"
+               |==================|                         |====|
+               DNA_contact note="H-T-H motif"               alpha_helix
+                          |
+          mutated_variant_site note="Y-&gt;H: Broadening of specificity"
+                               |
+          mutated_variant_site note="R-&gt;N: Recognizes an operator variant"
+               |====|                     |===========|
+               alpha_helix                alpha_helix
+                     |=|
+                     turn
+                          |======|
+                          alpha_helix
+
+                   70        80        90        100       
+          ----:----|----:----|----:----|----:----|
+          SLLIGVATSSLALHAPSQIVAAIKSRADQLGASVVVSMVE
+          ========================================
+          mature_protein_region note="Lactose operon repressor" ftid="PRO_00001
+            |=====|                       |====|
+            beta_strand                   beta_strand
+                       |==============|
+                       alpha_helix
+
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: laci_ecoli.showpep </h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+LACI_ECOLI
+Lactose operon repressor
+
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPNRVAQQLAGKQ
+
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          SLLIGVATSSLALHAPSQIVAAIKSRADQLGASVVVSMVERSGVEACKAAVHNLLAQRVS
+
+</pre>
+</td></tr></table><p>
+
+<a name="output.3"></a>
+<h3>Output files for usage example 3</h3>
+<p><h3>File: laci_ecoli.showpep</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+          MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPNRVAQQLAGKQ
+          SLLIGVATSSLALHAPSQIVAAIKSRADQLGASVVVSMVE
+
+</pre>
+</td></tr></table><p>
+
+<a name="output.4"></a>
+<h3>Output files for usage example 4</h3>
+<p><h3>File: rs24_fugru.showpep</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+RS24_FUGRU
+40S ribosomal protein S24
+
+                   10        20        30        40        50        60        
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          MAATVTVATALPMTAALLGALGMVVAVLHPGLATVPLTGIAGLLALMTLTTPAVVPVPGP
+          esshaharhryhehsreelryleaasaeirlylharyhllrlyelyeyyhhrsaahahlh
+          tnprlrlgrgsetrnguungsntllplusoysarlosruegusuastrsrroplleleye
+          |===========================================================
+          mature_protein_region note="40S ribosomal protein S24" ftid="PRO_0000
+
+                   70        80        90        100       110       120       
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          ATGPGGGLTTGPAMVTASLATALLAGPLHALAAHGLPGLLLTSALGALGALAAMLLVAGT
+          rhlhlllyhhlhleayseesylyyslryirelrilehlyyyherylrylrysreyyarlh
+          grneyyysrryeatlrpruprassnuossguagsyueusssrrgsngsugsngtsslgyr
+          ============================================================
+          mature_protein_region note="40S ribosomal protein S24" ftid="PRO_0000
+
+                   130       
+          ----:----|--
+          LLASVGASLLLA
+          yylealleyyys
+          ssarlyarsssp
+          ===========|
+          mature_protein_region note="40S ribosomal protein S24" ftid="PRO_0000
+
+</pre>
+</td></tr></table><p>
+
+<a name="output.5"></a>
+<h3>Output files for usage example 5</h3>
+<p><h3>File: laci_ecoli.showpep</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+LACI_ECOLI
+Lactose operon repressor
+        1 MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPNRVAQQLAGKQ 60
+       61 SLLIGVATSSLALHAPSQIVAAIKSRADQLGASVVVSMVE 100
+
+</pre>
+</td></tr></table><p>
+
+<a name="output.6"></a>
+<h3>Output files for usage example 6</h3>
+<p><h3>File: laci_ecoli.showpep </h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+LACI_ECOLI
+Lactose operon repressor
+      123 MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPNRVAQQLAGKQ 182
+      183 SLLIGVATSSLALHAPSQIVAAIKSRADQLGASVVVSMVE 222
+
+</pre>
+</td></tr></table><p>
+
+<a name="output.7"></a>
+<h3>Output files for usage example 7</h3>
+<p><h3>File: laci_ecoli.showpep</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+LACI_ECOLI
+Lactose operon repressor
+          mkpvtlydvaeyagvsYqtvsRvvnqashvsaktrekveaamaelnyipnrvaqqlagkq
+          slligvatsslalhapsqivaaiksradqlgasvvvsmve
+
+</pre>
+</td></tr></table><p>
+
+<a name="output.8"></a>
+<h3>Output files for usage example 8</h3>
+<p><h3>File: laci_ecoli.showpep</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+LACI_ECOLI
+Lactose operon repressor
+
+                   10        20        30        40        50        60        
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPNRVAQQLAGKQ
+               |------------------|
+               binding site
+                          |    |
+                          SNP  SNP
+          |===========================================================
+          mature_protein_region note="Lactose operon repressor" ftid="PRO_00001
+          |========================================================|
+          polypeptide_domain note="HTH lacI-type"
+               |==================|                         |====|
+               DNA_contact note="H-T-H motif"               alpha_helix
+                          |
+          mutated_variant_site note="Y-&gt;H: Broadening of specificity"
+                               |
+          mutated_variant_site note="R-&gt;N: Recognizes an operator variant"
+               |====|                     |===========|
+               alpha_helix                alpha_helix
+                     |=|
+                     turn
+                          |======|
+                          alpha_helix
+
+                   70        80        90        100       110       120       
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          SLLIGVATSSLALHAPSQIVAAIKSRADQLGASVVVSMVERSGVEACKAAVHNLLAQRVS
+          ============================================================
+          mature_protein_region note="Lactose operon repressor" ftid="PRO_00001
+            |=====|                       |====|                 |=|
+            beta_strand                   beta_strand            turn
+                       |==============|           |=|
+                       alpha_helix                beta_strand
+                                                     |==========|
+                                                     alpha_helix
+
+</pre>
+</td></tr></table><p>

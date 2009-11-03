@@ -1,0 +1,268 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: compseq
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+compseq
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/compseq.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<p><b>compseq</b> calculates the composition of words of a specified
+length (dimer, trimer etc) in the input sequence(s).  The word length
+is user-specified.  The unique sequences (words), their observed
+count, observed frequency, expected frequency and (observed /
+expected) frequency are written to the output file.  The (observed /
+expected) frequency highlights any words with unusually high (or low)
+occurence in the input sequences.</p>
+
+
+<H2>
+    Algorithm
+</H2>
+<p>By default, <b>compseq</b> makes the (false) assumption that each
+word is equally likely. The expected frequency therefore of any dimer
+is 1/16 - this is simply the inverse of the number of possible dimers
+(<tt>AA</tt>, <tt>AC</tt>, <tt>AG</tt>, <tt>AT</tt>, <tt>CA</tt>,
+<tt>CC</tt>, <tt>CG</tt>, <tt>CT</tt>, <tt>GA</tt>, <tt>GC</tt>,
+<tt>GG</tt>, <tt>GT</tt>, <tt>TA</tt>, <tt>TC</tt>, <tt>TG</tt>, <tt>TT</tt>).
+Similarly, the expected frequency of any trimer is 1/64, etc. Clearly
+this is not the case in real sequences where there will be bias in
+favour of some monomers and words.  There are ways around this (see
+"Notes").</p>
+
+<p>The normal behaviour of <b>compseq</b> is to count the frequencies
+of all words that occur by moving a window of length 'word' up by one
+each time.  The '-frame' option allows you to move the window up by
+the length of the word each time, skipping over the intervening words.
+You can count only those words that occur in a single frame of the
+word by setting this value to a number other than zero.  If you set it
+to 1 it will only count the words in frame 1, 2 will only count the
+words in frame 2 and so on.</p>
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/compseq.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/compseq.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/compseq.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+<b>compseq</b> reads a normal sequence(s) USA.
+
+<p>
+An optional second input file is the output from a previous compseq
+run used to set the expected word frequencies.
+
+<p>
+The optional second input data file format is exactly the same as the output
+file format. 
+<p>
+It expects to read in a previous output file of this program.
+An error is produced if the word size of the current compseq job
+and that of the output file being read in are different.
+
+
+<!--#include file="inc/compseq.input" -->
+
+
+<H2>
+    Output file format
+</H2>
+
+The output format consists of:
+<p>
+Header information and comments are preceeded by a '#' character
+at the start of the line.
+<p>
+The Word size and the Total count are then given on separate lines,
+<p>
+The headers of the columns of results are preceeded by a '#'
+<p>
+The results columns are: the sub-sequence word, the observed
+frequency, the expected frequency (which will be read from the input
+file if one is given, else it is a simple inverse of the number of words
+of the size specified that can be constructed), the ratio of the
+observed to expected frequency.
+<p>
+After a blank line at the end, the results of 'Other' words is
+given - this is the number of words with a sequence which has
+IUPAC ambiguity codes or other unusual characters in. 
+
+<p>
+<!--#include file="inc/compseq.output" -->
+
+
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+<p>
+The maximum word size is limited to 4 for proteins, and 6 for
+nucleotide sequences.</p>
+
+<p>
+Large word sizes are not appropriate for the <b>compseq</b>
+algorithm. All possible words will be stored and reported. The
+algorithm is designed to generate useful information for word sizes
+expected to occur at least once in the input sequence.</p>
+
+<p>The results are held in an array in memory before being written to
+a file. For large values of wordsize (over about 7 for nucleic, 5 for
+protein), you may run out of memory or generate a very large output
+file.</p>
+
+<p>There is no way for <b>compseq</b> to guess what the true expected
+frequency should be for each word. It can however read in the result
+of a previous <b>compseq</b> analysis and use this to set the expected
+frequencies of the subsequences.  In this case, the input sequences
+under investigation should be representative of those used for the
+previous <b>compseq</b> analysis.  It is down to your biological
+expertise to ensure the sequences are genuinely "representative", for
+instance, you might select a group of sequences belonging to the same
+taxonomic rank such as genus or species.</p>
+
+<p>The file of expected frequencies is specified by name with
+the <tt>-infile</tt> qualifier. The word size in the current run must
+be the same as the one in this results file.  Obviously, you should
+use a file produced from protein sequences if you are counting protein
+sequence word frequencies, and you must use one made from nucleotide
+frequencies if you are analysing a nucleotide sequence.</p>
+
+<p>As an alternative to using <tt>-infile</tt>, the expected
+frequencies of words may be calculated from the observed frequency of
+single bases or residues in the sequences.  To do this, specify
+the <tt>-calcfreq</tt> qualifier.  If you are reporting a word size of
+1 (single bases or residues) then there is no point in using this
+option because the calculated expected frequency will be equal to the
+observed frequency.</p>
+
+<p>Calculating the expected frequencies like this will give an
+approximation of the expected frequencies that you might get by using
+an input file of frequencies produced by a previous run of this
+program. If an input file of expected word frequencies has been
+specified then the values from that file will be used instead of this
+calculation of expected frequency from the sequence, even if
+'calcfreq' is set to be true.</p>
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<dl>
+<dt>"The word size is too large for the data structure available."
+</dt><dd>You chose a word size that cannot be stored by the program.
+
+<dt>"Insufficient memory - aborting."
+</dt><dd>You do not have enough memory - use a machine with more memory.
+
+<dt>"The word size you are counting (n) is different to the word
+size in the file of expected frequencies (n)."	
+</dt><dd>You chose different word sizes in the run of compseq that produced
+your results file used to display the expected word frequencies
+to the word size used in this run of compseq.
+
+<dt>"The 'Word size' line was not found, instead found:"
+</dt><dd>You appear to be trying to read a corrupted compseq results file
+</dl>
+
+<H2>
+    Exit status
+</H2>
+
+
+It always exits with status 0 unless one of the above error conditions
+is found
+
+<H2>
+    Known bugs
+</H2>
+
+
+This program can use a large amount of memory is you were allowed to
+specify a large word size (7 or above).  This may impact the behaviour
+of other programs on your machine.
+
+<p>
+If you run out of memory, you may see the program crash with a generic
+error message that will be specific to your machine's operating system,
+but will probably be a warning about writing to memory that the program
+does not own (eg "Segmentation fault" on a Solaris machine)
+
+<p>
+This is not a bug, it is a feature of the way this program grabs large
+amounts of memory. The maximum word size is restricted to avoid this problem.
+
+<!--#include file="inc/compseq.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/gwilliam.address" -->
+
+
+<H2>
+    History
+</H2>
+
+<!--#include file="inc/compseq.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/compseq.comment" -->
+
+
+</BODY>
+</HTML>
+

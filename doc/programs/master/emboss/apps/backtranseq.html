@@ -1,0 +1,155 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: backtranseq
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+backtranseq
+<!--#include file="header2.inc" -->
+
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/backtranseq.ione" -->
+
+<H2>
+    Description
+</H2>
+
+
+<p><b>backtranseq</b> reads a protein sequence and writes the nucleic acid sequence it is most likely to have come from.</p>
+
+<H2>
+    Algorithm
+</H2>
+<p><b>backtranseq</b> uses a codon usage table which gives the frequency of usage of each codon for each amino acid. For each amino acid in the input sequence, the corresponding most frequently occuring codon is used in the nucleic acid sequence that is output.</p>
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/backtranseq.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/backtranseq.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/backtranseq.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+
+Any DNA sequence USA.
+
+<p>
+<!--#include file="inc/backtranseq.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+
+The output is a nucleotide sequence containing the most favoured back
+translation of the specified protein, and using the specified
+translation table (which defaults to human).
+
+<p>
+<!--#include file="inc/backtranseq.output" -->
+
+
+<H2>
+    Data files
+</H2>
+
+
+The codon usage table is read by default from "Ehum.cut" in the 'data/CODONS'
+directory of the EMBOSS distribution.  If the name of a codon usage file
+is specified on the command line, then this file will first be searched
+for in the current directory and then in the 'data/CODONS' directory of
+the EMBOSS distribution. 
+
+<p>
+<!--#include file="inc/localfiles.ihtml" -->
+
+<H2>
+    Notes
+</H2>
+<p><b>backtranseq</b> reads a data file containing the codon usage table. The default file is <tt>Ehum.cut</tt> - the human codon usage table. Many others are available and can be set by name with the <tt>-cfile</tt> qualifier.  It is important to use one that is appropriate for the species that your protein comes from. The specified data file must exist in the EMBOSS data directory (see below for more information).</p>
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+"Corrupt codon index file" - the codon usage file is incomplete or empty.
+
+<p>
+"The file 'drosoph.cut' does not exist" - the codon usage file cannot be opened.
+
+<H2>
+    Exit status
+</H2>
+
+
+This program always exits with a status of 0, unless the codon usage
+table cannot be opened.
+
+<H2>
+    Known bugs
+</H2>
+
+
+None.
+
+<!--#include file="inc/backtranseq.isee" -->
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/ableasby.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/backtranseq.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/backtranseq.comment" -->
+
+
+</BODY>
+</HTML>
+

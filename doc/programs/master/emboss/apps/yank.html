@@ -1,0 +1,179 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: yank
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+<!--#include file="header1.inc" -->
+yank
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/yank.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<p><b>yank</b> adds the full Uniform Sequence Address (USA) of a specified sequence, or a region (subsequence) of a sequence, to a list file. The file is appended to by default but (optionally) is overwritten.A list file contains one or more sequence references (USAs).  For example, a database entry, the name of a file containing sequences, or even the names of another list file. In addition to the name of the sequence, it can write the start and end position of a region within that sequence and, if the sequence is nucleic, if can specify whether the sequence is the reverse complement.</p>
+
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/yank.usage" -->
+
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/yank.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/yank.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+<b>yank</b> reads any valid sequence USA.
+
+<p>
+
+You will be prompted for the start and end positions you wish to use.
+
+<p>
+
+If the sequence is nucleic, you will be prompted whether you wish to use
+the reverse complement of the sequence. 
+
+<p>
+
+<!--#include file="inc/yank.input" -->
+
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/yank.output" -->
+
+
+<p>
+
+The output list file can now be read in by a program such as
+<b>union</b> by specifying the list file as '@cds.list' when
+<b>union</b> prompts for input. 
+
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+
+<H2>
+    Notes
+</H2>
+
+<p>There are many ways of specifying input and output sequences for EMBOSS programs, including wildcarded sequence file names, wildcarded database entry names and list files. List files (files of file names) are the most flexible. Instead of containing the sequences themselves, a list file contains one or more sequence references (USAs).  For example, a database entry, the name of a file containing sequences, or even the names of another list file. For example, here's a valid list file:</p>
+<pre>
+opsd_abyko.fasta
+sw:opsd_xenla
+sw:opsd_c*
+@another_list
+</pre>
+
+<p>The file contains:</p>
+
+<pre>
+    * opsd_abyko.fasta - this is the name of a sequence file. The file is read in from the current directory.
+    * sw:opsd_xenla - this is a reference to a specific sequence in the SwissProt database
+    * sw:opsd_c* - this represents all the sequences in SwissProt whose identifiers start with ``opsd_c''
+    * another_list - this is the name of a second list file </pre>
+
+
+<p>Notice the <tt>@</tt> in front of the last entry. This is the way you tell EMBOSS that this file is a list file, not a regular sequence file.</p>
+
+<p>Without the program <b>yank</b> you would need to use a text editor such as pico to create the appropriate list files. <b>yank</b> makes this process easy.</p>
+
+
+<H2>
+    References
+</H2>
+
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+None.
+
+<!--#include file="inc/yank.isee" -->
+<p>
+
+The program <b>extract</b> does not make list files, but creates a
+sequence from sub-regions of a single other sequence. 
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/price.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/yank.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/yank.comment" -->
+
+
+</BODY>
+</HTML>
+

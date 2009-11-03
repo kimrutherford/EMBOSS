@@ -1,0 +1,170 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: hba_human.matcher</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: matcher
+# Rundate: Tue 15 Jul 2008 12:00:00
+# Commandline: matcher
+#    [-asequence] tsw:hba_human
+#    [-bsequence] tsw:hbb_human
+# Align_format: markx0
+# Report_file: hba_human.matcher
+########################################
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: HBA_HUMAN
+# 2: HBB_HUMAN
+# Matrix: EBLOSUM62
+# Gap_penalty: 14
+# Extend_penalty: 4
+#
+# Length: 145
+# Identity:      63/145 (43.4%)
+# Similarity:    88/145 (60.7%)
+# Gaps:           8/145 ( 5.5%)
+# Score: 264
+# 
+#
+#=======================================
+
+             10        20        30        40         50 
+HBA_HU LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-DLSH
+       :.: .:. : : ::::  .  : : ::: :. . .: :. .:  : ::: 
+HBB_HU LTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRFFESFGDLST
+            10          20        30        40        50 
+
+                   60        70        80        90      
+HBA_HU -----GSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDP
+            :. .:: :::::  : .. .::.:..    . ::.::  :: :::
+HBB_HU PDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDP
+              60        70        80        90       100 
+
+        100       110       120       130       140 
+HBA_HU VNFKLLSHCLLVTLAAHLPAEFTPAVHASLDKFLASVSTVLTSKY
+        ::.:: . :.  :: :   :::: : :.  : .: :.  :  ::
+HBB_HU ENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKY
+             110       120       130       140      
+
+
+#---------------------------------------
+#---------------------------------------
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: hba_human.matcher</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: matcher
+# Rundate: Tue 15 Jul 2008 12:00:00
+# Commandline: matcher
+#    [-asequence] tsw:hba_human
+#    [-bsequence] tsw:hbb_human
+#    -alternatives 10
+# Align_format: markx0
+# Report_file: hba_human.matcher
+########################################
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: HBA_HUMAN
+# 2: HBB_HUMAN
+# Matrix: EBLOSUM62
+# Gap_penalty: 14
+# Extend_penalty: 4
+#
+# Length: 145
+# Identity:      63/145 (43.4%)
+# Similarity:    88/145 (60.7%)
+# Gaps:           8/145 ( 5.5%)
+# Score: 264
+# 
+#
+#=======================================
+
+             10        20        30        40         50 
+HBA_HU LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-DLSH
+       :.: .:. : : ::::  .  : : ::: :. . .: :. .:  : ::: 
+HBB_HU LTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRFFESFGDLST
+            10          20        30        40        50 
+
+                   60        70        80        90      
+HBA_HU -----GSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDP
+            :. .:: :::::  : .. .::.:..    . ::.::  :: :::
+HBB_HU PDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDP
+              60        70        80        90       100 
+
+        100       110       120       130       140 
+HBA_HU VNFKLLSHCLLVTLAAHLPAEFTPAVHASLDKFLASVSTVLTSKY
+        ::.:: . :.  :: :   :::: : :.  : .: :.  :  ::
+HBB_HU ENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKY
+             110       120       130       140      
+
+
+#=======================================
+#
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+#
+# Aligned_sequences: 2
+# 1: HBA_HUMAN
+# 2: HBB_HUMAN
+# Matrix: EBLOSUM62
+# Gap_penalty: 14
+# Extend_penalty: 4
+#
+# Length: 12
+# Identity:       6/12 (50.0%)
+# Similarity:     6/12 (50.0%)
+# Gaps:           0/12 ( 0.0%)
+# Score: 20
+# 
+#
+#=======================================
+
+            120    
+HBA_HU HLPAEFTPAVHA
+       ::  :   :: :
+HBB_HU HLTPEEKSAVTA
+             10    
+
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: HBA_HUMAN
+# 2: HBB_HUMAN
+# Matrix: EBLOSUM62
+# Gap_penalty: 14
+# Extend_penalty: 4
+#
+# Length: 21
+# Identity:       6/21 (28.6%)
+# Similarity:     7/21 (33.3%)
+# Gaps:           0/21 ( 0.0%)
+# Score: 19
+# 
+#
+#=======================================
+
+           10        20     
+HBA_HU PADKTNVKAAWGKVGAHAGEY
+       :      :   :   : : .:
+HBB_HU PVQAAYQKVVAGVANALAHKY
+         130       140      
+
+
+#---------------------------------------
+#---------------------------------------
+</pre>
+</td></tr></table><p>

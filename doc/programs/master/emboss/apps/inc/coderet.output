@@ -1,0 +1,71 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: x03487.cds</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;x03487_cds_1
+atgacgaccgcgtccacctcgcaggtgcgccagaactaccaccaggactcagaggccgcc
+atcaaccgccagatcaacctggagctctacgcctcctacgtttacctgtccatgtcttac
+tactttgaccgcgatgatgtggctttgaagaactttgccaaatactttcttcaccaatct
+catgaggagagggaacatgctgagaaactgatgaagctgcagaaccaacgaggtggccga
+atcttccttcaggatatcaagaaaccagactgtgatgactgggagagcgggctgaatgca
+atggagtgtgcattacatttggaaaaaaatgtgaatcagtcactactggaactgcacaaa
+ctggccactgacaaaaatgacccccatttgtgtgacttcattgagacacattacctgaat
+gagcaggtgaaagccatcaaagaattgggtgaccacgtgaccaacttgcgcaagatggga
+gcgcccgaatctggcttggcggaatatctctttgacaagcacaccctgggagacagtgat
+aatgaaagctaa
+</pre>
+</td></tr></table><p>
+<p><h3>File: x03487.mrna</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;x03487_mrna_1
+cagacgttcttcgccgagagtcgtcggggtttcctgcttcaacagtgcttggacggaacc
+cggcgctcgttccccaccccggccggccgcccatagccagccctccgtcgacctcttcac
+cgcaccctcggactgccccaaggcccccgccgccgctccagcgccgcgcagccaccgccg
+ccgccgccgcctctccttagtcgccgccatgacgaccgcgtccacctcgcaggtgcgcca
+gaactaccaccaggactcagaggccgccatcaaccgccagatcaacctggagctctacgc
+ctcctacgtttacctgtccatg
+</pre>
+</td></tr></table><p>
+<p><h3>File: x03487.prot</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;x03487_pro_1
+MTTASTSQVRQNYHQDSEAAINRQINLELYASYVYLSMSYYFDRDDVALKNFAKYFLHQS
+HEEREHAEKLMKLQNQRGGRIFLQDIKKPDCDDWESGLNAMECALHLEKNVNQSLLELHK
+LATDKNDPHLCDFIETHYLNEQVKAIKELGDHVTNLRKMGAPESGLAEYLFDKHTLGDSD
+NES
+</pre>
+</td></tr></table><p>
+<p><h3>File: x03487.noncoding</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;x03487_noncoding_1
+agnncaaacctnagctccgccagagcgcgcgaggcctccagcggccgcccctcccccaca
+gcaggggcggggntcccgcgcccaccggaaggagcgggctcggggcgggcggcgctgatt
+ggccggggcgggcctgacgccgacgcggctataagagaccacaagcgacccgcagggc
+&gt;x03487_noncoding_501
+gtgagcgcgggc
+</pre>
+</td></tr></table><p>
+<p><h3>File: x03487.coderet</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+   CDS  mRNA non-c Trans Total Sequence
+ ===== ===== ===== ===== ===== ========
+     1     1     2     1     5 X03487
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: x03487.coderet</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+  mRNA Total Sequence
+ ===== ===== ========
+     1     1 X03487
+</pre>
+</td></tr></table><p>

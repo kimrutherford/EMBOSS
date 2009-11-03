@@ -1,0 +1,475 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: printsextract
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+printsextract
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
+    Function
+</H2>
+Extract data from PRINTS database for use by pscan
+
+<H2>
+    Description
+</H2>
+
+<p><b>printsextract</b> preprocesses the PRINTS database for use with the program pscan. It derives matrix information from the final motif sets of the PRINTS data file (<tt>prints.dat</tt>). It creates files in the EMBOSS data subdirectory PRINTS these being a matrix file and files containing text information for each fingerprint. Running this program may be the job of your system manager.</p>
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with printsextract</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>printsextract </b>
+Extract data from PRINTS database for use by pscan
+PRINTS database file: <b>prints.test</b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-infile]            infile     PRINTS database file
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers: (none)
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-infile]<br>(Parameter 1)</td>
+<td>PRINTS database file</td>
+<td>Input file</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Input file format
+</H2>
+
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: prints.test</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+gc; ACHEFISH
+gx; PR00879
+gn; COMPOUND(4)
+ga; 06-JUL-1998; UPDATE 06-JUN-1999
+gt; Fish acetylcholinesterase signature
+gp; PRINTS; PR00878 CHOLNESTRASE; PR00880 ACHEINSECT
+gp; INTERPRO; IPR000908
+gp; PDB; 2ACE
+gp; SCOP; 2ACE
+gp; CATH; 2ACE
+bb;
+gr; 1. VOET, D. AND VOET, J.G.
+gr; Biochemical communications: Hormones and neurotransmission.
+gr; BIOCHEMISTRY 34(4) 1298-1299 (1995).
+gr; 
+gr; 2. COUSIN, X., HOTELIER, T., GILES, K., TOUTANT, J.P. AND CHATONNET, A.
+gr; aCHEdb: the database system for ESTHER, the a/b fold family of proteins and
+gr; the cholinesterase gene server.
+gr; NUCLEIC ACIDS RES. 26 226-228 (1998).
+gr; 
+gr; 3. THE ESTHER DATABASE
+gr; http://meleze.ensam.inra.fr/cholinesterase/definitions.html
+gr; 
+gr; 4. CHOLINESTERASES
+gr; http://bnlstb.bio.bnl.gov:8000/disk$3/giles/che.html
+bb;
+bb;
+gd; Acetylcholine is involved in the transfer of messages across a variety of
+gd; synapses in vertebrates and invertebrates. The diverse physiological effects
+gd; attributable to this molecule arise from the presence of specific receptors
+gd; in the postsynaptic cell membranes. Several classes of receptor are known, 
+gd; most of which translate the binding of acetylcholine into the opening of 
+gd; channels for the passage of ions, such as sodium and potassium.
+gd;
+gd; Acetylcholinesterase is an enzyme that catalyses the hydrolysis of 
+gd; acetylcholine to choline and acetate:
+gd; 
+gd;	     Acetylcholine + H(2)O -&gt; Choline + Acetate 	     
+gd; 
+gd; The enzyme also acts on a variety of acetic esters and catalyses trans-
+gd; acetylations. It is found in, or attached to, cellular or basement membranes
+gd; of presynaptic cholinergic neurons and postsynaptic cholinoceptive cells.
+gd; To prevent continuous firing of nerve impulses, acetylcholinesterase has a
+gd; high K(cat) (~14000/s), to ensure that acetylcholine is broken down quickly.
+gd;
+gd; Cholinesterases constitute a family of enzymes that fall into two main
+gd; types, depending on their substrate preference: enzymes that preferentially
+gd; hydrolyse acetyl esters are termed acetylcholinesterase (AChE) (EC 3.1.1.7); 
+gd; and those that prefer other types of ester, such as butyrylcholine are 
+gd; termed butyrylcholinesterase (BChE) (EC 3.1.1.8). 
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+fd; YFISGFLFYLATIINPIAYNLASSRFR          Q18701    323    17
+fd; FIISMLLASLNSCCNPWIYMFFAGHLF          Q90334    311    13
+fd; YKITRPLASANSCLDPVLYFLAGQRLV        P2UR_RAT    287    20
+fd; AAMPAYFAKSATIYNPIIYVFMNRQFR      OPSR_CARAU    301    13
+fd; AQWFIVLAVLNSAMNPVIYTLASKEMR      EDG3_HUMAN    280    14
+fd; YKVTRPLASANSCLDPVLYFLAGQRLV      P2UR_HUMAN    288    20
+fd; YKITRPLASANSCLDPVLYFLAGQRLV      P2UR_MOUSE    288    20
+fd; AAMPAYFAKSATIYNPVIYVFMNRQFR      OPSR_ORYLA    301    13
+fd; MAIPSFFSKSSALFNPIIYILLNKQFR      OPSG_ORYLA    289    13
+fd; THFAFALQYINSAANPFLYVFLSDSFQ          Q23033    401    16
+fd; FTAITWISFSSSASKPTLYSIYNANFR      GPRJ_HUMAN    312    13
+fd; AALPAYFAKSATIYNPIIYVFMNRQFR      OPSR_CAPHI    304    13
+fd; YINIYWLGMSSTVFNPVIYYFMNKRFR          O44148    323    16
+fd; LHFTVCLMNFNCCMDPFIYFFACKGYK      EBI2_HUMAN    290    23
+fd; FTAVTWVSFSSSASKPTLYSIYNANFR      GPRJ_MOUSE    306    13
+fd; NYTGINMASLNSCIGPVALYFVSRKFK      ET3R_XENLA    365    36
+fd; TIWGSVFAKANSCYNPIVYGISHPRYK      OPS2_LIMPO    310    13
+fd; YLVALCLSTLNSCIDPFVYYFVSKDFR      PAR2_MOUSE    328    16
+fd; YIVALCLSTLNSCIDPFVYYFVSHDFR      PAR2_HUMAN    326    16
+fd; YLVALCLSTLNSCIDPFVYYFVSKDFR        PAR2_RAT    326    16
+fd; YILSACVGSVSCCLDPLIYYYASSQCQ      THRR_XENLA    348    13
+fd; TIWGSVFAKANAVYNPIVYGISHPKYR          O76125    317    12
+fd; TIWGSVFAKANSCYNPIVYGISHPRYK      OPS1_LIMPO    310    13
+fd; YLIALCLGSLNSCLDPFLYFVMSKVVD      PAR3_MOUSE    339    16
+fd; TIWGSVFAKANAVYNPIVYGISHPKYR          O76123    317    12
+fd; YLLCVCVTSVASCIDPLIYYYASSECQ        THRR_RAT    360    17
+fd; VHVAEIVSLCHCFINPLIYAFCSREFT      VQ3L_CAPVK    337    21
+fd; TIWGSLFAKANAVFNPIVYGISHPKYR      OPS1_SCHGR    315    12
+fd; AAAPAFFSKTAAVYNPVIYVFMNKQVS      OPSO_SALSA    286    13
+fd; YHFSLLLTSFNCVADPVLYCFVSETTH          O46685    268    17
+fd; KILLVLFYPINSCANPFLYAIFTKNFR      FSHR_HORSE    607    13
+fd; YIFCHLVGISSTCVNPIVYALVNESFR          O44690    308    12
+fd; YLLCVCVSSISSCIDPLIYYYASSECQ      THRR_HUMAN    353    17
+fd; AALPAYFAKSATIYNPIIYVFMNRQFR      OPSR_XENLA    303    13
+fd; ITFSETISLARCCINPIIYTLIGEHVR      VK02_SPVKA    312    24
+fd; YHSSLAFTSLNCVADPILYCLVNEGAR      GPR4_HUMAN    268    21
+fd; YHFSLLLTSFNCVADPVLYCFVSETTH      OGR1_HUMAN    268    17
+fd; YHSSLAFTSLNCVADPILYCLVNEGAR        GPR4_PIG    268    21
+fd; TIWGSLFAKANAVYNPIVYGISHPKYR      OPSD_CAMAB    315    12
+fd; TIWGSLFAKANAVYNPIVYGISHPKYR      OPSD_CATBO    315    12
+fd; KILLVFFYPLNSCADPYLYAILTSQYR          Q94979    738    13
+fd; TIWGACFAKSAACYNPIVYGISHPKYG      OPS1_CALVI    309    12
+fd; KILLVLFYPINSCANPFLYAIFTKTFR      FSHR_CHICK    608    13
+fd; KILLVLFYPINSCANPFLYAIFTKNFR      FSHR_EQUAS    600    13
+fd; TMLPAVFAKTVSCIDPWIYAINHPRYR      OPSB_APIME    318    13
+fd; TMIPAVTAKIVSCIDPWVYAINHPRFR      OPS2_SCHGR    315    13
+fd; TIWGACFAKSAACYNPIVYGISHPKYR      OPS1_DROME    311    12
+fd; TIWGSLFAKANAVYNPIVYGISHPKYR      OPSD_APIME    313    12
+fd; SMLPCLACKSVSCLDPWVYATSHPKYR      OPS5_DROME    314    13
+fd; TICGSVFAKANAVCNPIVYGLSHPKYK      OPS6_DROME    309    12
+bb;
+</pre>
+</td></tr></table><p>
+
+<p>
+
+The input file must be the "prints.dat" file of a PRINTS distribution. 
+
+<p>
+The PRINTS database is currently available via the anonymous ftp servers at: 
+
+<ul>
+
+<li>  Manchester   <a href="ftp://bioinf.man.ac.uk/pub/prints/">ftp://bioinf.man.ac.uk/pub/prints/</a>
+<li>  EBI          <a href="ftp://ftp.ebi.ac.uk/pub/databases/">ftp://ftp.ebi.ac.uk/pub/databases/</a>
+<li>  EMBL         <a href="ftp://ftp.embl-heidelberg.de/">ftp://ftp.embl-heidelberg.de/</a>
+<li>  NCBI         <a href="ftp://ncbi.nlm.nih.gov/">ftp://ncbi.nlm.nih.gov/</a>
+
+</ul>
+
+<p>
+It is also distributed on the EMBL CD-ROMs. 
+<p>
+
+The home page for PRINTS is: <a
+href="http://www.bioinf.man.ac.uk/dbbrowser/PRINTS/">http://www.bioinf.man.ac.uk/dbbrowser/PRINTS/</a>
+
+<H2>
+    Output file format
+</H2>
+
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>Directory: PRINTS</h3>
+<p>This directory contains output files.
+<p>
+
+<p>
+
+The output files are held in the PRINTS subdirectory of the EMBOSS data
+directory.
+
+<ul>
+	<li> prints.mat		matrices calculated from PRINTS
+	<li> Pxxxxx		text information for each fingerprint
+</ul>
+
+<H2>
+    Data files
+</H2>
+
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+You may have to ask your system manager to run this program.
+
+
+<H2>
+    References
+</H2>
+
+
+<ol>
+
+<li>
+ Attwood, T.K., Flower, D.R., Lewis, A.P., Mabey, J.E., Morgan, S.R., 
+   Scordis, P., Selley, J. and Wright, W. (1999) PRINTS prepares for the new
+   millennium. Nucleic Acids Research, 27(1), 220-225. 
+
+<li>
+ Attwood, T.K., Beck, M.E., Flower, D.R., Scordis, P. and Selley, J. (1998)
+   The PRINTS protein fingerprint database in its fifth year. Nucleic Acids 
+   Research, 26(1), 304-308. 
+
+<li>
+ Attwood, T.K., Beck, M.E., Bleasby, A.J., Degtyarenko, K., Michie, A.D. and 
+   Parry-Smith, D.J. (1997) Novel developments with the PRINTS protein motif
+   fingerprint database. Nucleic Acids Research, 25 (1), 212-216.
+
+<li>
+ Attwood, T.K. and Beck, M.E. (1994) PRINTS - A protein motif fingerprint
+   database. Protein Engineering, 7(7), 841-848.
+
+<li>
+ Bleasby, A.J., Akrigg, D.A. and Attwood, T.K. (1994) OWL - A non-redundant
+   composite protein sequence database. Nucleic Acids Research, 22(17), 3574-77.
+
+<li>
+Bleasby, A.J. and Wootton, J.C. (1990) Constructing validated, non-
+   redundant composite protein sequence databases. Protein Engineering, 3(3), 
+   153-159. 
+
+<li>
+Parry-Smith, D.J. and Attwood, T.K. (1992) ADSP - A new package for
+   computational sequence analysis. CABIOS, 8(5), 451-459.
+
+<li>
+Attwood, T.K. and Findlay, J.B.C. (1994) Fingerprinting G-protein-coupled
+   receptors. Prot.Engng. 7(2), 195-203.
+
+<li>
+Attwood, T.K. and Findlay, J.B.C. (1993) Design of a discriminating finger-
+   print for G-protein-coupled receptors. Prot.Engng. 6(2) 167-176.
+
+<li>
+ Akrigg, D., Attwood, T.K., Bleasby, A.J., Findlay, J.B.C, North, A.C.T.,
+   Maughan, N.A., Parry-Smith, D.J., Perkins, D.N. and Wootton, J.C. (1992)
+   SERPENT - An information storage and analysis resource for protein
+   sequences. CABIOS 8(3) 295-296.
+
+<li>
+Parry-Smith, D.J. and Attwood, T.K. (1991) SOMAP - A novel interactive
+    approach to multiple protein sequence aligment. CABIOS, 7(2), 233-235.
+
+<li>
+Perkins, D.N. and Attwood, T.K. (1995) VISTAS - A package for VIsualising
+    STructures And Sequences of proteins. J.Mol.Graph., 13, 73-75. 
+
+<li>
+Parry-Smith, D.J., Payne, A.W.R, Michie, A.D. and Attwood, T.K. (1998) 
+    CINEMA - A novel Colour INteractive Editor for Multiple Alignments.
+    Gene, 211(2), GC45-56. 
+
+</ol>
+
+<H2>
+    Warnings
+</H2>
+<p>The program will warn you if the input file is incorrectly formatted.</p>
+<p>If you do not have write-access to the EMBOSS data directory, you should ask your system manager to run this program.</p>
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+
+It exits with status 0 unless an error is reported.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="aaindexextract.html">aaindexextract</a></td>
+<td>Extract amino acid property data from AAINDEX</td>
+</tr>
+
+<tr>
+<td><a href="cutgextract.html">cutgextract</a></td>
+<td>Extract codon usage tables from from CUTG database</td>
+</tr>
+
+<tr>
+<td><a href="jaspextract.html">jaspextract</a></td>
+<td>Extract data from JASPAR</td>
+</tr>
+
+<tr>
+<td><a href="prosextract.html">prosextract</a></td>
+<td>Processes the PROSITE motif database for use by patmatmotifs</td>
+</tr>
+
+<tr>
+<td><a href="rebaseextract.html">rebaseextract</a></td>
+<td>Process the REBASE database for use by restriction enzyme applications</td>
+</tr>
+
+<tr>
+<td><a href="tfextract.html">tfextract</a></td>
+<td>Process TRANSFAC transcription factor database for use by tfscan</td>
+</tr>
+
+</table>
+
+<H2>
+    Author(s)
+</H2>
+
+
+Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+
+
+<H2>
+    History
+</H2>
+
+Completed 8th April 1999
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by administrators responsible
+for software and database installation and maintenance. 
+
+<H2>
+    Comments
+</H2>
+None
+
+
+</BODY>
+</HTML>
+

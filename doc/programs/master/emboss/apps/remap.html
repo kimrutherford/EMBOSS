@@ -1,0 +1,303 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: remap
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+remap
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+
+<!--#include file="inc/remap.ione" -->
+
+
+<H2>
+    Description
+</H2>
+<p><b>remap</b> scans one or more nucleotide sequences for recognition sites and/or cut sites for a supplied set of restriction enzymes.  One or more restriction enzymes can be specified or alternatively all the enzymes in the REBASE database can be investigated. The minimum length of a recognition site to be reported must be specified. It writes an output file showing the location of the cut sites and (optionally) the recognition sites. Sites on both strands are shown by default but there are many options to control exactly what sites are reported and the format of the output file. Optionally, the translated sequence is reported. Additionally, the output file lists enzymess that cut / do not cut the sequence and which match / do not matching certain specified criteria.</p>
+
+
+   
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/remap.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/remap.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/remap.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+
+<!--#include file="inc/remap.input" -->
+
+<p>
+
+You can specifiy a file of ranges to display in uppercase by giving the
+'-uppercase' qualifier the value '@' followed by the name of the file
+containing the ranges.  (eg: '-upper @myfile'). 
+
+<p>
+
+The format of the range file is: 
+
+<p>
+
+<ul>
+<li>      Comment lines start with '#' in the first column. 
+<li>      Comment lines and blank lines are ignored. 
+<li>      The line may start with white-space. 
+<li>      There are two positive (integer) numbers per line separated by one or more
+      space or TAB characters. 
+<li>      The second number must be greater or equal to the first number. 
+<li>      There can be optional text after the two numbers to annotate the line. 
+<li>      White-space before or after the text is removed. 
+</ul>
+
+<p>
+
+An example range file is: 
+
+<pre>
+
+# this is my set of ranges
+12   23
+ 4   5       this is like 12-23, but smaller
+67   10348   interesting region
+
+</pre>
+
+<p>
+
+You can specifiy a file of ranges to highlight in a different colour
+when outputting in HTML format (using the '-html' qualifier) by giving
+the '-highlight' qualifier the value '@' followed by the name of the
+file containing the ranges.  (eg: '-highlight @myfile'). 
+
+<p>
+
+The format of this file is very similar to the format of the above
+uppercase range file, except that the text after the start and end
+positions is used as the HTML colour name.  This colour name is used 'as
+is' when specifying the colour in HTML in a '&lt;FONT COLOR=xxx&gt;'
+construct, (where 'xxx' is the name of the colour). 
+
+<p>
+
+The standard names of HTML font colours are given in:
+
+<br>
+
+<A HREF="http://http://www.w3.org/TR/REC-html40/types.html">
+http://http://www.w3.org/TR/REC-html40/types.html</A>
+and
+<A HREF="http://www.ausmall.com.au/freegraf/ncolour2.htm">
+http://www.ausmall.com.au/freegraf/ncolour2.htm</A>
+and
+<A HREF="http://mindprod.com/htmlcolours.html">
+http://mindprod.com/htmlcolours.html</A>
+(amongst other places).
+
+<p>
+
+An example highlight range file is:
+
+<p>
+
+<hr>
+<pre>
+# this is my set of ranges
+12   23		red
+ 4   5		darkturquoise
+67   10348	#FFE4E1
+</pre>
+<hr>
+
+<H2>
+    Output file format
+</H2>
+
+
+<!--#include file="inc/remap.output" -->
+
+<p>
+
+The name of the sequence is displayed, followed by the description of
+the sequence.
+
+<p>
+
+The formatted display of cut sites on the sequence follows, with the
+six-frame translation below it.  The cut sites are indicated by a slash
+character '\' that points to the poition between the nucleotides where
+the cuts occur.  Cuts by many enzymes at the same position are indicated
+by stacking the enzyme names on top of each other. 
+
+<p>
+
+At the end the section header 'Enzymes that cut' is displayed followed
+by a list of the enzymes that cut the specified sequence and the number
+of times that they cut.  For each enzyme that cuts, a list of
+isoschizomers of that enzyme (sharing the same recognition site pattern
+and cut sites) is given.  
+
+<p>
+
+This is followed by lists of the enzymes that do cut, but which cut less
+often than the '-mincut' qualifier or more often than the '-maxcut'
+qualifier. 
+
+<p>
+
+Any of the isoschizomers that are excluded from cutting, (either through
+restrictions such as the permitted number of cuts, blunt cutters only,
+single cutters only etc.  or because their name has not been given in
+the input list of enzymes), will not be listed. 
+
+<p>
+
+Then a list is displayed of the enzymes whose names were input and which
+match the other criteria ('-sitelen', '-blunt', '-sticky', '-ambiguity' or
+'-commercial') but which do not cut. 
+
+<p>
+
+Finally the number of enzymes that were rejected from consideration
+because they do not match the '-sitelen', '-blunt', '-sticky', '-ambiguity' or
+'-commercial' criteria is displayed.
+
+<p>
+
+The '-flatreformat' qualifier changes the display to emphasise the
+recognition site of the restriction enzyme, which is indicated by a row
+of '=' characters.  The cut site if pointed to by a '&gt;' or '&lt;' character
+and if the cut site is not within or imemdiately adjacent to the
+recognition site, they are linked by a row of '.' characters.  
+
+<p>
+
+The name of the enzyme is displayed above (or below when the reverse
+sense site if displayed) the recognition site.  The name of the enzyme
+is also displayed above the cut site if this occurs on a different
+display line to the recognition site (i.e.  if it wraps onto the next
+line of sequence). 
+
+
+
+<H2>
+    Data files
+</H2>
+
+<!--#include file="inc/localfiles.ihtml" -->
+
+<p>
+
+<!--#include file="inc/refiles.ihtml" -->
+
+<H2>
+    Notes
+</H2>
+
+
+<p>The Restriction Enzyme database (REBASE) is a collection of information about restriction enzymes and related proteins. It contains published and unpublished references, recognition and cleavage sites, isoschizomers, commercial availability, methylation sensitivity, crystal and sequence data. DNA methyltransferases, homing endonucleases, nicking enzymes, specificity subunits and control proteins are also included. Most recently, putative DNA methyltransferases and restriction enzymes, as predicted from analysis of genomic sequences, are also listed.</p>
+
+<p>The home page of REBASE is: <a href="http://rebase.neb.com/">http://rebase.neb.com/</a></p>
+
+<p>Where the translation is given in the output file, the genetic code and one or more frames for translation may be specified. The <tt>-no[reverse]</tt> option specifies whether the translation (and cut and recognition sites) are shown for the reverse sense strand.</p>
+
+<p>By default, only one enzyme of any group of isoschizomers (enzymes that have the same recognition site and cut positions) is reported. This behaviour can be changed by specifying <tt>-nolimit</tt>, in which case all isoschizomers are reported.  The default behaviour uses the representative enzyme of an isoschizomer group (the prototype) which is specified in the EMBOSS data file <tt>embossre.equ</tt>.  This file is generated from the REBASE database by running <b>rebaseextract</b>. You may edit this file to set your own preferred prototype, if you wish.</p> 
+
+<p>As well as the display of where enzymes cut in the sequence, <b>remap</b> displays:</p>
+
+<ul>
+<li>The list of enzymes that cut the sequence and match the required criteria.
+<li>The list of enzymes that cut the sequence and fail the MINCUTS criteria.
+<li>The list of enzymes that cut the sequence and fail the MAXCUTS criteria.
+<li>The list of enzymes that do not cut the sequence but which match all the required criteria.
+<li>The number of enzymes that cut the sequence and fail the SITELEN, BLUNT, STICKY, COMMERCIAL, AMBIGUOUS criteria.
+</ul>
+
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+<p><b>remap</b> uses the EMBOSS REBASE restriction enzyme data files stored in directory <tt>data/REBASE/*</tt> under the EMBOSS installation directory. These files must first be set up using the program <b>rebaseextract</b>. Running <b>rebaseextract</b> may be the job of your system manager.</p>
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+
+<!--#include file="inc/remap.isee" -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+<!--#include file="inc/gwilliam.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/remap.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/remap.comment" -->
+
+</BODY>
+</HTML>
+

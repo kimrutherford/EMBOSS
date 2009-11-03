@@ -1,0 +1,15 @@
+<b>Here is a sample session with sizeseq</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>sizeseq -osformat swiss </b>
+Sort sequences by size
+Input sequence set: <b>globins.fasta</b>
+Return longest sequence first [N]: <b></b>
+output sequence(s) [globins.swiss]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

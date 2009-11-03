@@ -1,0 +1,61 @@
+application: pepwindow [
+  documentation: "Draw a hydropathy plot for a protein sequence"
+  groups: "Protein:Composition"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  sequence: sequence [
+    parameter: "Y"
+    type: "protein"
+  ]
+
+  datafile: datafile [
+    additional: "Y"
+    information: "AAINDEX entry data file"
+    directory: "AAINDEX"
+    default: "Enakai.dat"
+    knowntype: "aaindex data"
+  ]
+
+endsection: input
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  integer: length [
+    additional: "Y"
+    information: "Window size"
+    default: "19"
+    minimum: "1"
+    maximum: "200"
+  ]
+
+  boolean: normalize [
+    additional: "Y"
+    information: "Normalize data values"
+    default: "N"
+  ]
+  
+
+endsection: additional
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  xygraph: graph [
+    standard: "Y"
+    multiple: "1"
+    gxtitle: "$(sequence.name)"
+    gytitle: "Hydropathy"
+    gtitle: "Hydropathy Plot"
+  ]
+
+endsection: output

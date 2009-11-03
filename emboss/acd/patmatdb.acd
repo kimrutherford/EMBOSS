@@ -1,0 +1,50 @@
+application: patmatdb [
+  documentation: "Searches protein sequences with a sequence motif"
+  groups: "Protein:Motifs"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "Protein"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  string: motif [
+    parameter: "Y"
+    minlength: "2"
+    information: "Protein motif to search for"
+    help: "Patterns for patmatdb are based on the format of pattern
+           used in the PROSITE database. For example:
+           '[DE](2)HS{P}X(2)PX(2,4)C' means two Asps or Glus in any order
+           followed by His, Ser, any residue other then Pro, then two of any
+           residue followed by Pro followed by two to four of any residue
+           followed by Cys. The search is case-independent, so 'AAA' matches
+           'aaa'."
+    knowntype: "prosite pattern"
+  ]
+
+endsection: required
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  report: outfile [
+    parameter: "Y"
+    rformat: "dbmotif"
+    precision: "0"
+  ]
+
+endsection: output

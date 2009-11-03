@@ -1,0 +1,35 @@
+<b>Here is a sample session with notseq</b>
+<p>
+In this case the excluded sequences (myg_phyca and lgb2_luplu) are not saved to any file: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>notseq </b>
+Write to file a subset of an input stream of sequences
+Input (gapped) sequence(s): <b>globins.fasta</b>
+Sequence names to exclude: <b>myg_phyca,lgb2_luplu</b>
+output sequence(s) [hbb_human.fasta]: <b>mydata.seq</b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+Here is an example where the sequences to be excluded are saved to another file: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>notseq -junkout hb.seq </b>
+Write to file a subset of an input stream of sequences
+Input (gapped) sequence(s): <b>globins.fasta</b>
+Sequence names to exclude: <b>hb*</b>
+output sequence(s) [hbb_human.fasta]: <b>mydata.seq</b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>

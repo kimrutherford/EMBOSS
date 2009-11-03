@@ -1,0 +1,14 @@
+<b>Here is a sample session with cutgextract</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>cutgextract </b>
+Extract codon usage tables from from CUTG database
+Codon usage directories [.]: <b>data</b>
+General log output file [outfile.cutgextract]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>

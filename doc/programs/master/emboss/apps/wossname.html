@@ -1,0 +1,166 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: wossname
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+wossname
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+
+<!--#include file="inc/wossname.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+
+<p><b>wossname</b> search for the specified keywords (or parts thereof) in the application short description (as displayed by a program when it starts), functional group name and keywords. The group name, application name and short description of any matching applications is output (screen by default). If no search words are specified, then details of all the EMBOSS programs are output.  There are various options for controlling how the search is performed and what is given in the output file.  Optionally, the output will be wrapped in HTML tags ready for inclusion in a Web page.</p>
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/wossname.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/wossname.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/wossname.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+
+<!--#include file="inc/wossname.input" -->
+
+<p>
+
+<b>wossname</b> reads the brief descriptions and the program groups from
+the ACD files.  (ACD files control the parameters that the programs
+expect - don't worry about them unless you are writing EMBOSS
+programs).
+
+<p>
+
+The format of ACD files is documented elsewhere.
+
+<H2>
+    Output file format
+</H2>
+
+
+The results are written out as a simple list preceded by the group
+that the programs belong to or the word that is being searched for. 
+
+<p>
+
+<!--#include file="inc/wossname.output" -->
+
+
+<p>
+
+If the -html, -prelink and -postlink qualifiers are specified, then
+the output will be wrapped in HTML tags, ready for inclusion in a Web
+page.  Note that tags such as &lt;HTML&gt;, &lt;BODY&gt;,
+&lt;/BODY&gt; and &lt;/HTML&gt; are not output by this program as the
+list of programs is expected to form only part of the contents of a
+web page - the rest of the web page must be supplied by the user.
+
+<H2>
+    Data files
+</H2>
+
+
+As noted above, the program ACD files are searched.
+The average user will not need to worry about this.
+
+
+<H2>
+    Notes
+</H2>
+
+
+<p><b>wossname</b> reads the short descriptions and the program groups from the program ACD files. These file describe the command-line interface of the applications.  You don't need to know about them unless you are writing EMBOSS programs. They are described in the EMBOSS Developers Manual.</p>
+
+<p>If a program's ACD file does not specify a program group, then it will be automatically assigned to the group <tt>ASSORTED</tt> in the output file. A program can belong to more than one group.</p>
+
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+
+It always exits with status 0
+
+<H2>
+    Known bugs
+</H2>
+
+
+None.
+
+<!--#include file="inc/wossname.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/gwilliam.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/wossname.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/wossname.comment" -->
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,156 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: checktrans
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+checktrans
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/checktrans.ione" -->
+
+<H2>
+    Description
+</H2>
+
+
+<p><b>checktrans</b> reads a protein sequence containing stop characters and writes a statistical report of any open reading frames (ORFs) that are greater than a minimum size. An open reading frame is defined as a continuous region of protein sequence with no stop characters.   The default minimum ORF size is 100 residues. In addition to the report output, any ORF sequences are written to file and features of those sequences written to a separate file.</p>
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/checktrans.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/checktrans.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/checktrans.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+This program reads the USA of a protein sequence with STOP codons in it.
+
+<p>
+<!--#include file="inc/checktrans.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+
+This program writes three files: the ORF report file
+(x13776_1.checktrans), the output sequence file (x13776_1.fasta) and the
+feature file (x13776_1.out3) which is in GFF format by default. 
+
+<p>
+
+The ORF report file gives the numeric count of the ORF, the position of
+the terminating STOP codon, the length of the ORF, its start and end
+positions and the name of the sequence it has been written out as. 
+
+<p>
+
+The name of the output sequences is constructed from the name of the
+input sequence followed by an underscore and then the numeric count of
+the ORF (e.g. 'X13776_1_7').
+
+<!--#include file="inc/checktrans.output" -->
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+
+<H2>
+    Notes
+</H2>
+
+<p>A reading frame is a relative position in DNA or RNA from which contiguous, non-overlapping codons are read during transcription. There are 3 possible reading frames in mRNA strand and six in a double stranded DNA where transcription is possible from either strand. An open reading frame (ORF) is a reading frame that begins with a start codon and includes the subsequent transcribed region, stopping immediately before the first stop codon.</p>
+
+<p>Where you have a nucleotide sequence for analysis, it should first be translated by using <b>transeq</b>.  The <b>transeq</b> output file will then serve as the input to <b>checktrans</b>. Note that if you have only translated a nucleic sequence in one frame, <b>checktrans</b> will miss possible ORFs in the other frames. You must provide <b>checktrans</b> with translations in all three (six?) frames in order for it to be effective at finding all possible ORFs.</p>
+
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+
+This program always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/checktrans.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/rlopez.address" -->
+
+
+and modified by
+<!--#include file="inc/gwilliam.address" -->
+
+to output the sequence data to a single file in the conventional
+EMBOSS style.
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/checktrans.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/checktrans.comment" -->
+
+
+</BODY>
+</HTML>
+

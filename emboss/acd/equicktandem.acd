@@ -1,0 +1,58 @@
+application: equicktandem [
+  documentation: "Finds tandem repeats in nucleotide sequences"
+  groups: "Nucleic:Repeats"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  sequence: sequence [
+    parameter: "Y"
+    type: "dna"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  integer: maxrepeat [
+    standard: "Y"
+    default: "600"
+    information: "Maximum repeat size"
+  ]
+
+  integer: threshold [
+    standard: "Y"
+    default: "20"
+    information: "Threshold score"
+  ]
+
+endsection: required
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  report: outfile [
+    parameter: "Y"
+    rformat: "table"
+    taglist: "int:rpt_size=Size int:rpt_count=Count"
+    rextension: "qtan"
+    precision: "0"
+  ]
+
+  outfile: origfile [
+    extension: "oldqtan"
+    nullok: "Y"
+    knowntype: "quicktandem output"
+    information: "Sanger Centre program quicktandem output file
+                  (optional)"
+  ]
+
+endsection: output

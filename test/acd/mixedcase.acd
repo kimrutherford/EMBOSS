@@ -1,0 +1,20 @@
+# ACD file for QA testing - missing the application definition
+#
+
+appl: mixedcase [ doc: "testing" group: "testing" ]
+
+section: input [ info: "Input section" type: "page" ]
+
+sequence: asequence [ param: Y ]
+
+sequence: bsequence [ param: Y ]
+
+endsection: input
+
+section: output [ info: "Output section" type: "page" ]
+
+string: testA [ standard: Y info: "Asequence end $(asequence.send)" ]
+
+string: testb [ standard: Y info: "Bsequence end $(bsequence.send)" ]
+
+endsection: output

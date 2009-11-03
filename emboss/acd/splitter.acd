@@ -1,0 +1,68 @@
+application: splitter [
+  documentation: "Split sequence(s) into smaller sequences"
+  groups: "Edit"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  boolean: feature [
+    default: "N"
+    information: "Use feature information"
+  ]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "any"
+    features: "$(feature)"
+  ]
+
+endsection: input
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  integer: size [
+    additional: "Y"
+    minimum: "1"
+    default: "10000"
+    information: "Size to split at"
+  ]
+
+  integer: overlap [
+    additional: "Y"
+    minimum: "0"
+    maximum: "@($(size)-1)"
+    default: "0"
+    information: "Overlap between split sequences"
+  ]
+
+endsection: additional
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  boolean: addoverlap [
+    default: "N"
+    information: "Include overlap in output sequence size"
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  seqoutall: outseq [
+    parameter: "Y"
+    features: "$(feature)"
+  ]
+
+endsection: output

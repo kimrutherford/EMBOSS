@@ -1,0 +1,64 @@
+application: descseq [
+  documentation: "Alter the name or description of a
+                  sequence."
+  groups: "Edit"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  sequence: sequence [
+    parameter: "Y"
+    type: "gapany"
+  ]
+
+endsection: input
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  string: name [
+    additional: "Y"
+    default: ""
+    information: "Name of the sequence"
+    knowntype: "sequence id output"
+  ]
+
+  string: description [
+    additional: "Y"
+    default: ""
+    information: "Description of the sequence"
+    knowntype: "string"
+  ]
+
+endsection: additional
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  boolean: append [
+    default: "N"
+    information: "Append to the existing description"
+    help: "This allows you to append the name or description you have
+           given on to the end of the existing name or description of the
+           sequence."
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  seqout: outseq [
+    parameter: "Y"
+  ]
+
+endsection: output

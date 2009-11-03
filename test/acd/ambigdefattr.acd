@@ -1,0 +1,5 @@
+# ACD file for QA testing - default/documentation ambiguity
+#
+appl: ambigdefattr [ std: N d: "testing" group: "testing" ]
+
+sequence: sequence [ param: Y ]

@@ -1,0 +1,38 @@
+application: tmap [
+  documentation: "Predict and plot transmembrane segments in protein sequences"
+  groups: "Protein:2D Structure"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqset: sequences [
+    parameter: "Y"
+    type: "gapprotein"
+    aligned: "Y"
+    help: "File containing a sequence alignment"
+  ]
+
+endsection: input
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  xygraph: graph [
+    standard: "y"
+    multiple: "2"
+    gxtitle: "Residue number"
+    goutfile: "tmap"
+  ]
+
+  report: outfile [
+    parameter: "Y"
+    rformat: "seqtable"
+    taglist: "int:TM=TransMem"
+  ]
+
+endsection: output

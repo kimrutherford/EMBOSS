@@ -1,0 +1,68 @@
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Protein sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-infile]<br>(Parameter 2)</td>
+<td>This is a file in the format of the output produced by 'compseq' that is used to set the minimum frequencies of words in this analysis.</td>
+<td>Input file</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-window</td>
+<td>This is the size of window in which to count.
+Thus if you want to count frequencies in a 40 aa stretch you should enter 40 here.</td>
+<td>Integer 10 or more</td>
+<td>30</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 3)</td>
+<td>This is the results file.</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.oddcomp</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-fullwindow</td>
+<td>Set this option on (Y) if you want the window size to be set to the length of the current protein. Otherwise, leave this option unset, in which case you'll be prompted for a window size to use.</td>
+<td>Toggle value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]ignorebz</td>
+<td>The amino acid code B represents Asparagine or Aspartic acid and the code Z represents Glutamine or Glutamic acid.
+These are not commonly used codes and you may wish not to count words containing them, just noting them in the count of 'Other' words.</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+</table>

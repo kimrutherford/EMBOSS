@@ -1,0 +1,18 @@
+<b>Here is a sample session with vectorstrip</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>vectorstrip @vecseqs.list </b>
+Removes vectors from the ends of nucleotide sequence(s)
+Are your vector sequences in a file? [Y]: <b></b>
+Cloning vector definition file (optional): <b>vectors</b>
+Max allowed % mismatch [10]: <b></b>
+Show only the best hits (minimise mismatches)? [Y]: <b></b>
+Output file [pbluescript.vectorstrip]: <b>vector.strip</b>
+output sequence(s) [pbluescript.fasta]: <b>vector.fasta</b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

@@ -1,0 +1,34 @@
+<b>Here is a sample session with tcode</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>tcode </b>
+Identify protein-coding regions using Fickett TESTCODE statistic
+Input nucleotide sequence(s): <b>tembl:x65921</b>
+Length of sliding window [200]: <b></b>
+Output report [x65921.tcode]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+Produce a graphical plot 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>tcode -plot -graph cps </b>
+Identify protein-coding regions using Fickett TESTCODE statistic
+Input nucleotide sequence(s): <b>tembl:x65921</b>
+Length of sliding window [200]: <b></b>
+
+Created tcode.ps
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>

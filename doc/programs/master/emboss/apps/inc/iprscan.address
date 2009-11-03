@@ -1,0 +1,17 @@
+This program is an EMBOSS wrapper for the InterProSCAN application
+"iprscan"
+
+<p>
+The original iprscan application must be installed and configured to
+use this wrapper.
+
+
+<p>
+Although we take every care to ensure that the results of the EMBOSS
+version are identical to those from the original package, we recommend
+that you check your inputs give the same results in both versions
+before publication.
+
+<p>
+Please report all bugs in the EMBOSS version to the EMBOSS bug team,
+not to the original author.

@@ -1,0 +1,15 @@
+<b>Here is a sample session with supermatcher</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>supermatcher @eclac.list tembl:j01636 -word 50  </b>
+Calculate approximate local pair-wise alignments of larger sequences
+Gap opening penalty [10.0]: <b></b>
+Gap extension penalty [0.5]: <b>3.0</b>
+Output alignment [j01636.supermatcher]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

@@ -1,0 +1,79 @@
+#Multiple attributes of the same type are indicated by separating the
+#values with the comma "," character, as in:
+#
+#       Parent=AF2312,AB2812,abc-3
+#
+#Note that attribute names are case sensitive.  "Parent" is not the
+#same as "parent".
+#
+#All attributes that begin with an uppercase letter are reserved for
+#later use.  Attributes that begin with a lowercase letter can be used
+#freely by applications.
+
+# Reserved attribute names
+# ========================
+
+# Indicates the name of the feature.  IDs must be unique within the
+# scope of the GFF file.
+
+ID
+
+# Display name for the feature.  This is the name to be displayed to
+# the user.  Unlike IDs, there is no requirement that the Name be
+# unique within the file.
+
+Name
+
+# A secondary name for the feature.  It is suggested that this tag be
+# used whenever a secondary identifier for the feature is needed, such
+# as locus names and accession numbers.  Unlike ID, there is no
+# requirement that Alias be unique within the file.
+
+Alias
+
+# Indicates the parent of the feature.  A parent ID can be used to
+# group exons into transcripts, transcripts into genes, an so forth.
+# A feature may have multiple parents.  Parent can *only* be used to
+# indicate a partof relationship.
+
+Parent
+
+# Indicates the target of a nucleotide-to-nucleotide or
+# protein-to-nucleotide alignment.  The format of the value is
+# "target_id start end [strand]", where strand is optional and may be
+# "+" or "-".  If the target_id contains spaces, they must be escaped
+# as hex escape %20.
+
+Target
+
+# The alignment of the feature to the target if the two are not
+# collinear (e.g. contain gaps).  The alignment format is taken from
+# the CIGAR format described in the Exonerate documentation.
+# (http://cvsweb.sanger.ac.uk/cgi-bin/cvsweb.cgi/exonerate
+# ?cvsroot=Ensembl).  See "THE GAP ATTRIBUTE" for a description of
+# this format.
+
+Gap
+
+# Used to disambiguate the relationship between one feature and
+# another when the relationship is a temporal one rather than a purely
+# structural "part of" one.  This is needed for polycistronic genes.
+# See "PATHOLOGICAL CASES" for further discussion.
+
+Derives_from
+  
+# A free text note.
+
+Note
+
+# A database cross reference.  See the section "Ontology Associations
+# and Db Cross References" for details on the format.
+
+Dbxref
+
+# A cross reference to an ontology term.  See the section "Ontology
+# Associations and Db Cross References" for details.
+
+Ontology_term
+
+#include Etags.gff

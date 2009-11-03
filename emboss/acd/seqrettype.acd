@@ -1,0 +1,62 @@
+application: seqrettype [
+  documentation: "Reads and writes (returns) sequences"
+  groups: "Edit"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  boolean: feature [
+    information: "Use feature information"
+  ]
+
+  list: type [
+    default: "any"
+    delimiter: ";"
+    values: "any:any valid sequence; dna:DNA sequence; rna:RNA
+             sequence; puredna:DNA, bases ACGT only; purerna:RNA, bases ACGU
+             only; nucleotide:nucleotide sequence; purenucleotide:nucleotide,
+             bases ACGTU only; gapnucleotide:nucleotide, bases ACGTU with
+             gaps; gapdna:DNA sequence with gaps; gaprna:RNA sequence with
+             gaps; protein:protein sequence; proteinstandard:protein sequence
+             with no selenocysteine; gapprotein:protein sequence with gaps;
+             gapprotein:protein sequence with gaps but no selenocysteine;
+             pureprotein:protein sequence without BZ U or X;
+             stopprotein:protein sequence with a possible stop;
+             stopproteinstandard:protein sequence with a possible stop but no
+             selenocysteine; gapany:any valid sequence with gaps"
+    information: "Sequence type"
+  ]
+
+  seqall: sequence [
+    parameter: "Y"
+    features: "$(feature)"
+    type: "$(type)"
+  ]
+
+endsection: input
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  boolean: firstonly [
+    information: "Read one sequence and stop"
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  seqoutall: outseq [
+    parameter: "Y"
+    features: "$(feature)"
+  ]
+
+endsection: output

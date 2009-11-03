@@ -1,0 +1,18 @@
+# ACD file for QA testing - missing the application definition
+#
+
+appl: noendsec [ doc: "testing" group: "testing" ]
+
+section: input [ info: "Input section" type: "page" ]
+
+sequence: asequence [ param: Y features: Y ]
+
+endsection: input
+
+section: output [ info: "Output section" type: "page" ]
+
+outfile: outtest [ param: Y odirectory: "$(outdir)" ]
+
+intager: fred [ def: 123 ]
+
+endsection: output

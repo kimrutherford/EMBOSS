@@ -1,0 +1,274 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: pscan
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+pscan
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/pscan.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+<p>pscan reads one or more protein sequences and searches them against the PRINTS database of diagnostic protein signatures (fingerprints).  A fingerprint is a group of conserved motifs or elements that together form a diagnostic signature for a particular protein family.  The minimum and maximum number of elements per fingerprint may be specified.  pscan writes an output file with details of any matches between each input sequence and the fingerprints. It reports various classes of matches:</p>
+
+<ul>
+<li>Matches where all elements of a motif exist in the correct order
+<li>Matches where all elements exist but some are in the incorrect order
+<li>Matches where some elements match and are in the correct order
+<li>Miscellaneous matches. 
+</ul>
+
+<H2>
+Algorithm
+</H2>
+<p>The matrix information used to scan a sequence is derived from the final motif sets in the PRINTS database. The matrices are of the simple frequency type and contain the number of times a residue occurs in each position of a PRINTS alignment. Each matrix therefore has a highest possible score, being the sum of the maximum score of each column. A match to a window over the input sequence is obtained if it has a score equal to or greater than the percentage of the maximum score of the lowest scoring sequence in the final motif set.</p>
+
+
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/pscan.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/pscan.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/pscan.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+
+<b>pscan</b> reads one or more protein sequence USAs.
+
+<p>
+
+<!--#include file="inc/pscan.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+
+<!--#include file="inc/pscan.output" -->
+
+<p>
+
+The program reports hits in four classes.
+
+<dl>
+
+
+	<dt> Class1:</dt><dd>Matches where all elements of a motif
+	exist in the correct order
+
+        <dt> Class2:</dt><dd>Matches where all elements exist but some
+        are in the incorrect order
+
+        <dt> Class3:</dt><dd>Matches where some elements match and are
+        in the correct order
+
+        <dt> Class4:</dt><dd>Miscellaneous matches
+
+</dl>
+
+
+<H2>
+    Data files
+</H2>
+
+
+The data file is stored in the PRINTS directory of the standard EMBOSS
+data directory.
+
+<ul>
+   <li> prints.mat       Matrices derived from PRINTS
+   <li> Pxxxxx           Information for each fingerprint
+</ul>
+
+The column information is described at the top of the matrix data file
+
+<H2>
+    Notes
+</H2>
+<p>Fingerprints are groups of conserved motifs or elements that together form a diagnostic signature for particular protein families. An uncharacterised sequence matching all motifs or elements can then be readily diagnosed as a true match to a particular family fingerprint. They can be used to diagnose family relationships in newly-determined sequences (especially from genome projects).</p>
+
+<p>Usually the motifs or elements do not overlap, but are separated along a sequence, though they may be contiguous in 3D-space. Fingerprints can encode protein folds and functionalities more flexibly and powerfully than can single motifs, full diagnostic potency deriving from the mutual context provided by motif neighbours. Diagnostically, this is more powerful than using single motifs by virtue of the biological context afforded by matching motif neighbours.</p>
+
+<p>The home web page of the PRINTS database is: <a href="http://www.bioinf.man.ac.uk/dbbrowser/PRINTS/">http://www.bioinf.man.ac.uk/dbbrowser/PRINTS/</a> </p>
+
+
+
+<H2>
+    References
+</H2>
+
+
+<ol>
+
+<li>
+Attwood, T.K., Flower, D.R., Lewis, A.P., Mabey, J.E., Morgan, S.R., 
+   Scordis, P., Selley, J. and Wright, W. (1999) PRINTS prepares for the new
+   millennium. Nucleic Acids Research, 27(1), 220-225. 
+
+<li>
+Attwood, T.K., Beck, M.E., Flower, D.R., Scordis, P. and Selley, J. (1998)
+   The PRINTS protein fingerprint database in its fifth year. Nucleic Acids 
+   Research, 26(1), 304-308. 
+
+<li>
+Attwood, T.K., Beck, M.E., Bleasby, A.J., Degtyarenko, K., Michie, A.D. and 
+   Parry-Smith, D.J. (1997) Novel developments with the PRINTS protein motif
+   fingerprint database. Nucleic Acids Research, 25 (1), 212-216.
+
+<li>
+Attwood, T.K. and Beck, M.E. (1994) PRINTS - A protein motif fingerprint
+   database. Protein Engineering, 7(7), 841-848.
+
+<li>
+Bleasby, A.J., Akrigg, D.A. and Attwood, T.K. (1994) OWL - A non-redundant
+   composite protein sequence database. Nucleic Acids Research, 22(17), 3574-77.
+
+<li>
+Bleasby, A.J. and Wootton, J.C. (1990) Constructing validated, non-
+   redundant composite protein sequence databases. Protein Engineering, 3(3), 
+   153-159. 
+
+<li>
+Parry-Smith, D.J. and Attwood, T.K. (1992) ADSP - A new package for
+   computational sequence analysis. CABIOS, 8(5), 451-459.
+
+<li>
+Attwood, T.K. and Findlay, J.B.C. (1994) Fingerprinting G-protein-coupled
+   receptors. Prot.Engng. 7(2), 195-203.
+
+<li>
+Attwood, T.K. and Findlay, J.B.C. (1993) Design of a discriminating finger-
+   print for G-protein-coupled receptors. Prot.Engng. 6(2) 167-176.
+
+<li>
+ Akrigg, D., Attwood, T.K., Bleasby, A.J., Findlay, J.B.C, North, A.C.T.,
+   Maughan, N.A., Parry-Smith, D.J., Perkins, D.N. and Wootton, J.C. (1992)
+   SERPENT - An information storage and analysis resource for protein
+   sequences. CABIOS 8(3) 295-296.
+
+<li>
+ Parry-Smith, D.J. and Attwood, T.K. (1991) SOMAP - A novel interactive
+    approach to multiple protein sequence aligment. CABIOS, 7(2), 233-235.
+
+<li>
+ Perkins, D.N. and Attwood, T.K. (1995) VISTAS - A package for VIsualising
+    STructures And Sequences of proteins. J.Mol.Graph., 13, 73-75. 
+
+<li>
+ Parry-Smith, D.J., Payne, A.W.R, Michie, A.D. and Attwood, T.K. (1998) 
+    CINEMA - A novel Colour INteractive Editor for Multiple Alignments.
+    Gene, 211(2), GC45-56. 
+
+</ol>
+
+
+
+<H2>
+    Warnings
+</H2>
+
+
+<p>The data files must have been created before running this program. This is done by running the <b>printsextract</b> program with the <tt>prints.dat</tt> file from a PRINTS release. You may have to ask your system manager to do this.</p>
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+If you get the following EMBOSS FATAL ERROR message: 
+
+<pre>
+
+"prints.mat file not found. Create it with printsextract."
+
+</pre>
+
+<p>
+then your local PRINTS data has not been set up correctly in your
+EMBOSS DATA directory.  Use <a
+href="printsextract.html">'printsextract'</a> to do this.
+
+<H2>
+    Exit status
+</H2>
+
+
+It exits with status 0 unless an error is reported.
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!--#include file="inc/pscan.isee" -->
+
+<p>
+
+<ul>
+
+<li>
+<a href="printsextract.html">printsextract</a> - Extract data from
+PRINTS.  pscan uses the PRINTS data.  Until printsextract has been run
+to set up the PRINTS data, pscan will not run correctly.
+
+</ul>
+
+<H2>
+    Author(s)
+</H2>
+
+
+<!--#include file="inc/ableasby.address" -->
+
+
+<H2>
+    History
+</H2>
+
+<!--#include file="inc/pscan.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/pscan.comment" -->
+
+</BODY>
+</HTML>
+

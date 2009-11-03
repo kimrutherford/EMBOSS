@@ -1,0 +1,204 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: l46634.fuzznuc</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: fuzznuc
+# Rundate: Tue 15 Jul 2008 12:00:00
+# Commandline: fuzznuc
+#    -sequence tembl:L46634
+#    -pattern AAGCTT
+# Report_format: seqtable
+# Report_file: l46634.fuzznuc
+########################################
+
+#=======================================
+#
+# Sequence: L46634     from: 1   to: 1272
+# HitCount: 2
+#
+# Pattern_name Mismatch Pattern
+# pattern             0 AAGCTT
+# 
+# Complement: No
+#
+#=======================================
+
+  Start     End  Strand Pattern_name Mismatch Sequence
+      1       6       + pattern             . aagctt
+   1267    1272       + pattern             . aagctt
+
+#---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_length: 1272
+# Reported_sequences: 1
+# Reported_hitcount: 2
+#---------------------------------------
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: l46634.fuzznuc</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: fuzznuc
+# Rundate: Tue 15 Jul 2008 12:00:00
+# Commandline: fuzznuc
+#    -sequence tembl:L46634
+#    -pattern @../../data/nucseq.pat
+# Report_format: seqtable
+# Report_file: l46634.fuzznuc
+########################################
+
+#=======================================
+#
+# Sequence: L46634     from: 1   to: 1272
+# HitCount: 2
+#
+# Pattern_name Mismatch Pattern
+# targetseq           0 cg(2)c(3)taaccctagc(3)ta
+# 
+# Complement: No
+#
+#=======================================
+
+  Start     End  Strand Pattern_name Mismatch Sequence
+    429     448       + targetseq           . cggccctaaccctagcccta
+    491     510       + targetseq           . cggccctaaccctagcccta
+
+#---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_length: 1272
+# Reported_sequences: 1
+# Reported_hitcount: 2
+#---------------------------------------
+</pre>
+</td></tr></table><p>
+
+<a name="output.3"></a>
+<h3>Output files for usage example 3</h3>
+<p><h3>File: l46634.fuzznuc</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: fuzznuc
+# Rundate: Tue 15 Jul 2008 12:00:00
+# Commandline: fuzznuc
+#    -pname test
+#    -sequence tembl:L46634
+#    -pattern @../../data/nucsimple.pat
+# Report_format: seqtable
+# Report_file: l46634.fuzznuc
+########################################
+
+#=======================================
+#
+# Sequence: L46634     from: 1   to: 1272
+# HitCount: 13
+#
+# Pattern_name Mismatch Pattern
+# test1               0 cg(2)c(3)taac
+# test2               0 cctagc(3)ta
+# 
+# Complement: No
+#
+#=======================================
+
+  Start     End  Strand Pattern_name Mismatch Sequence
+    429     438       + test1               . cggccctaac
+    491     500       + test1               . cggccctaac
+    535     544       + test1               . cggccctaac
+    605     614       + test1               . cggccctaac
+    631     640       + test1               . cggccctaac
+    695     704       + test1               . cggccctaac
+    721     730       + test1               . cggccctaac
+    753     762       + test1               . cggccctaac
+    293     302       + test2               . cctagcccta
+    439     448       + test2               . cctagcccta
+    469     478       + test2               . cctagcccta
+    501     510       + test2               . cctagcccta
+    801     810       + test2               . cctagcccta
+
+#---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_length: 1272
+# Reported_sequences: 1
+# Reported_hitcount: 13
+#---------------------------------------
+</pre>
+</td></tr></table><p>
+
+<a name="output.4"></a>
+<h3>Output files for usage example 4</h3>
+<p><h3>File: l46634.fuzznuc</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: fuzznuc
+# Rundate: Tue 15 Jul 2008 12:00:00
+# Commandline: fuzznuc
+#    -sequence tembl:L46634
+#    -pattern @../../data/nuc.pat
+# Report_format: seqtable
+# Report_file: l46634.fuzznuc
+########################################
+
+#=======================================
+#
+# Sequence: L46634     from: 1   to: 1272
+# HitCount: 19
+#
+# Pattern_name Mismatch Pattern
+# pat1                0 cggccctaaccctagcccta
+# pat2                1 cg(2)c(3)taaccctagc(3)ta
+# pat3                0 cggc(2,4)taac(2,5)
+# 
+# Complement: No
+#
+#=======================================
+
+  Start     End  Strand Pattern_name Mismatch Sequence
+    429     448       + pat1                . cggccctaaccctagcccta
+    491     510       + pat1                . cggccctaaccctagcccta
+    429     448       + pat2                . cggccctaaccctagcccta
+    491     510       + pat2                . cggccctaaccctagcccta
+    535     554       + pat2                1 cggccctaaccctaacccta
+    605     624       + pat2                1 cggccctaaccctaacccta
+    631     650       + pat2                1 cggccctaaccctaacccta
+    695     714       + pat2                1 cggccctaaccctaacccta
+    721     740       + pat2                1 cggccctaaccctaacccta
+    753     772       + pat2                1 cggccctaaccctaacccta
+    791     810       + pat2                1 cggcccgaaccctagcccta
+    753     764       + pat3                . cggccctaaccc
+    721     732       + pat3                . cggccctaaccc
+    695     706       + pat3                . cggccctaaccc
+    631     642       + pat3                . cggccctaaccc
+    605     616       + pat3                . cggccctaaccc
+    535     546       + pat3                . cggccctaaccc
+    491     502       + pat3                . cggccctaaccc
+    429     440       + pat3                . cggccctaaccc
+
+#---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_length: 1272
+# Reported_sequences: 1
+# Reported_hitcount: 19
+#---------------------------------------
+</pre>
+</td></tr></table><p>

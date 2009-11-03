@@ -1,0 +1,74 @@
+application: palindrome [
+  documentation: "Finds inverted repeats in nucleotide sequence(s)"
+  groups: "Nucleic:Repeats"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "nucleotide"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  integer: minpallen [
+    standard: "Y"
+    default: "10"
+    minimum: "1"
+    maximum: "@($(sequence.length)/2)"
+    information: "Enter minimum length of palindrome"
+  ]
+
+  integer: maxpallen [
+    standard: "Y"
+    default: "100"
+    minimum: "$(minpalLen)"
+    maximum: "@($(sequence.length)/2)"
+    information: "Enter maximum length of palindrome"
+  ]
+
+  integer: gaplimit [
+    standard: "Y"
+    default: "100"
+    minimum: "0"
+    maximum: "$(sequence.length)"
+    information: "Enter maximum gap between repeated regions"
+  ]
+
+  integer: nummismatches [
+    standard: "Y"
+    default: "0"
+    minimum: "0"
+    information: "Number of mismatches allowed"
+    valid: "Positive integer"
+  ]
+
+endsection: required
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    parameter: "Y"
+    extension: "pal"
+    knowntype: "palindrome output"
+  ]
+
+  boolean: overlap [
+    standard: "Y"
+    information: "Report overlapping matches"
+    default: "Y"
+  ]
+
+endsection: output

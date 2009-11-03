@@ -1,0 +1,12 @@
+# ACD file for QA testing - for calculated attributes
+#
+
+appl: qatestcalcstring [ groups: "test" doc: "ACD file for QA testing" ]
+
+string: test [ param: Y info: "String" ]
+
+string: testlength [
+	 standard: "Y"
+	 info: "Length"
+	 default: "$(test.length)"
+]

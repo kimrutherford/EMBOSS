@@ -1,0 +1,36 @@
+>simple Fasta format simple id name
+SIMPLE
+>database:entry Dbname prefix
+DATABASEENTRY
+>database:idacc A12345 Dbname prefix with accession
+DATABASEIDACC
+>database:idver A12345.1 Dbname prefix with seqversion
+DATABASEIDVER
+>database:idaccnew AB123456 Dbname prefix with new accession
+DATABASEIDACC
+>database:idvernew AB123456.1 Dbname prefix with new seqversion
+DATABASEIDVER
+>database:idaccbad AB123456 Dbname prefix with new accession
+DATABASEIDACC
+>database:idverbad AB123456.1 Dbname prefix with new seqversion
+DATABASEIDVER
+>database:idaccnewbad AB12G456 Dbname prefix with bad new accession
+DATABASEIDACC
+>database:idvernewbad A0123X.1 Dbname prefix with bad new seqversion
+DATABASEIDVER
+>swiss_id A12345 Swissprot id with old format accession
+SWISS-ID
+>swiss_ver A12345.1 Swissprot id with seq version
+SWISS-VER
+>swiss-idnew A1BCD2 Swissprot id with new accession
+SWISS-IDNEW
+>swiss-vernew A1BCD2.1 Swissprot id with new format seq version
+SWISS-VERNEW
+>sanger S67890 Sanger Centre style (from ACEDB) with simple id and accession
+SANGER
+>fragment.12 Sanger contig with clone name and contig number
+FRAGMENT
+> Nameless
+NAMELESS
+>
+BLANK

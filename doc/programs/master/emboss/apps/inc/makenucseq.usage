@@ -1,0 +1,35 @@
+<b>Here is a sample session with makenucseq</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>makenucseq </b>
+Create random nucleotide sequences
+Codon usage file (optional): <b></b>
+Number of sequences created [100]: <b></b>
+Length of each sequence [100]: <b></b>
+nucleotide output sequence(s) [makeseq.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+Providing a codon usage file specifies the sequence composition. This Pseudomonas aeruginosa file specifies a high GC content. 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>makenucseq </b>
+Create random nucleotide sequences
+Codon usage file (optional): <b>Epseae.cut</b>
+Number of sequences created [100]: <b></b>
+Length of each sequence [100]: <b></b>
+nucleotide output sequence(s) [makeseq.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>

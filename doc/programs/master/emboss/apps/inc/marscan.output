@@ -1,0 +1,20 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: u01317.marscan </h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+##gff-version 3
+##sequence-region U01317 1 65963
+#!Date 2008-07-15
+#!Type DNA
+#!Source-version EMBOSS 6.1.0
+U01317	marscan	regulatory_region	2242	2458	0.000	+	.	ID="U01317.1";note="*type MAR/SAR recognition site (MRS)";note="*start8bp 2451";note="*end8bp 2458";note="*start16bp 2242";note="*end16bp 2257"
+U01317	marscan	regulatory_region	17654	17730	0.000	+	.	ID="U01317.2";note="*type MAR/SAR recognition site (MRS)";note="*start8bp 17723";note="*end8bp 17730";note="*start16bp 17654";note="*end16bp 17669"
+U01317	marscan	regulatory_region	40956	41123	0.000	+	.	ID="U01317.3";note="*type MAR/SAR recognition site (MRS)";note="*start8bp 40956";note="*end8bp 40963";note="*start16bp 41108";note="*end16bp 41123"
+U01317	marscan	regulatory_region	42232	42248	0.000	+	.	ID="U01317.4";note="*type MAR/SAR recognition site (MRS)";note="*start8bp 42232";note="*end8bp 42239";note="*start16bp 42233";note="*end16bp 42248"
+U01317	marscan	regulatory_region	47834	47966	0.000	+	.	ID="U01317.5";note="*type MAR/SAR recognition site (MRS)";note="*start8bp 47959";note="*end8bp 47966";note="*start16bp 47834";note="*end16bp 47849"
+U01317	marscan	regulatory_region	65112	65146	0.000	+	.	ID="U01317.6";note="*type MAR/SAR recognition site (MRS)";note="*start8bp 65139";note="*end8bp 65146";note="*start16bp 65112";note="*end16bp 65127"
+U01317	marscan	regulatory_region	65947	65963	0.000	+	.	ID="U01317.7";note="*type MAR/SAR recognition site (MRS)";note="*start8bp 65947";note="*end8bp 65954";note="*start16bp 65948";note="*end16bp 65963"
+</pre>
+</td></tr></table><p>

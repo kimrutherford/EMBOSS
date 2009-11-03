@@ -1,0 +1,116 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:u01317' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:u01317</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   U01317; SV 1; linear; genomic DNA; STD; HUM; 73308 BP.
+XX
+AC   U01317; J00093-J00094; J00096; J00158-J00175; J00177-J00179; K01239;
+AC   K01890; K02544; M18047; M19067; M24868; M24886;
+XX
+DT   19-MAR-1994 (Rel. 39, Created)
+DT   08-NOV-2008 (Rel. 97, Last updated, Version 36)
+XX
+DE   Human beta globin region on chromosome 11.
+XX
+KW   allelic variation; alternate cap site; Alu repeat; beta-1 pseudogene;
+KW   beta-globin; delta-globin; epsilon-globin; gamma-globin; gene duplication;
+KW   globin; HPFH; KpnI repetitive sequence; polymorphism; promoter mutation;
+KW   pseudogene; repetitive sequence; RNA polymerase III; thalassemia.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   62409-62631, 63482-63610
+RX   DOI; 10.1073/pnas.71.6.2300.
+RX   PUBMED; 4135409.
+RA   Marotta C.A., Forget B.G., Weissman S.M., Verma I.M., McCaffrey R.P.,
+RA   Baltimore D.;
+RT   "Nucleotide sequences of human globin messenger RNA";
+RL   Proc. Natl. Acad. Sci. U.S.A. 71(6):2300-2304(1974).
+XX
+RN   [2]
+RP   63602-63646
+RX   DOI; 10.1073/pnas.72.9.3614.
+RX   PUBMED; 1059150.
+RA   Forget B.G., Marotta C.A., Weissman S.M., Cohen-Solal M.;
+RT   "Nucleotide sequences of the 3'-terminal untranslated region of messenger
+RT   RNA for human beta globin chain";
+RL   Proc. Natl. Acad. Sci. U.S.A. 72(9):3614-3618(1975).
+XX
+RN   [3]
+RP   63593-63626
+RX   PUBMED; 788834.
+RA   Proudfoot N.J., Brownlee G.G.;
+RT   "Nucleotide sequences of globin messenger RNA";
+RL   Br. Med. Bull. 32(3):251-256(1976).
+XX
+RN   [4]
+RP   63673-63743
+RX   DOI; 10.1016/0092-8674(76)90137-9.
+RX   PUBMED; 1035137.
+RA   Proudfoot N.J., Longley J.I.;
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+     aaaggggaga agaatcaaat agacgcaata aaaaatgaca cggggtatca ccactgatcc     70380
+     cacagaaata caaactaccg tcagagaata ctataaacac ctctacgcaa ataaactaga     70440
+     aaatctagaa gaaatggata aattcctcga cacatacact ctgccaagac taaaccagga     70500
+     agaagttgta tctctgaata gaccaataac aggctctgaa attgaggcaa taattaatag     70560
+     cttatcaacc aaaaaaagtc cgggaccagt aggattcata gccgaattct accagaggta     70620
+     caaggaggag ctggtaccat tccttctgaa actattccaa tcaatagaaa aagagggaat     70680
+     cctccctaac tcattttatg aggccagcat catcctgata ccaaagcctg acagagacac     70740
+     aacaaaaaaa gagaatgtta caccaatatc cttgatgaac atcgatgcaa aaatcctcaa     70800
+     taaaatactg gcaaactgaa tccagcagca catcaaaaag cttatcctcc atgatcaagt     70860
+     gggcttcatc cctgccatgc aaggctggtt caacatacga aatcaataaa cataatccag     70920
+     catataaaca gaaccaaaga cacaaaccat atgattatct caatagatgc agaaaaggcc     70980
+     tttgacaaaa ttcaacaatg cttcatgcta aaaactctca ataaattagg tattgatggg     71040
+     acatatctca aaataataag agctatctat gacaaaccca cagccaatat catactgagt     71100
+     ggacaaaaac tggaagcatt ccctttgaaa actggcacaa ggcagggatg ccctctctca     71160
+     ccactcctat tcaacatagt gttggaagtt ctggccaggg caatcaggca ggagaaggaa     71220
+     ataaagggca ttcaattagg aaaagaggaa ggtgaaattg tccctgtttg cagatgacat     71280
+     gattgtatat ctagaaaacc ccattgtctc agcccaaaat ctccttaagc tgataagcaa     71340
+     cttcagcaaa gtctcaggat ataaaatcag tgtgcaaaaa tcacaagtat tcctatgcac     71400
+     caataacaga caaacagaga gccaaatcat gagtgaactc ccattcacaa ttgcttcaaa     71460
+     gagaataaaa tacctaggaa tccaacttac aagggatgtg aaggacctct tcaaggagaa     71520
+     ctacaaacca ctgctcaatg aaataaaaga ggatacaaac aaatggaaga acattccatg     71580
+     cttatgggta ggaagaatca tatcgtgaaa atggtcatac tgcccaaggt aatttataga     71640
+     ttcaatgcca tccccatcaa gctaccaatg actttcttca cagaactgga aaaaactact     71700
+     ttaaagttca tatggaatca aaaaagagcc cacatcacca aggcaatcct aagccaaaag     71760
+     aacaaagctg gaggcatcac gctacctgac ttcaaactat actacaatgc tacggtaacc     71820
+     aaaacagcat ggtactggta ccaaaacaga gatctagacc aatggaacag aacagagccc     71880
+     tcagaaataa tgccgcatat ctacaactat ccgatctttg acaaacctga gagaaacaag     71940
+     caatggggaa aggattccct atttaataaa tggtgctggg aaaactggct agccatatgt     72000
+     agaaagctga aactggatcc ttccttacac cttatacaaa aattaattca agatggatta     72060
+     aagacttaaa cattagacct aaaaccataa aaaccctaga aaaaaaccta ggcaatacca     72120
+     ttcaggacat aggcatgggc aaggacttca tgtctaaaac accaaaacga atggcaacaa     72180
+     aagacaaaat ggacaaacgg gatctaatta aactaaagag cttctgcaca gctaaagaaa     72240
+     ctaccatcag agtgaacagg caacctacaa aatgggagaa aatttttgca atctactcat     72300
+     ctgacaaagg gctaatatcc agaatctaca atgaactcaa acaaatttac aagaaaaaac     72360
+     aaacaacccc atcaaaaagt gggcaaagga tatgaacaga cacttctcaa aagaagacat     72420
+     ttatgtaatc aaaaaacaca tgaaaaaatg ctcatcatca ctagccatca gagaaatgca     72480
+     aatcaaaacc acaatgagat accatctcac accagttaga atggcgatca ttaaaaagtc     72540
+     aggaaacaac aggtgctgga gaggatgtgg agaaacagga acaactttta cactgttggt     72600
+     gggactgtaa actagttcaa ccattgcgga agtcagtgtg gcaattcctc aggaatctag     72660
+     aactagaaat accatttgac ccagccatcc cattactggg tagataccca aaggattata     72720
+     aatcatgctg ctataaagac acatgcacac gtatgtttat tgcagcacta ttcacaatag     72780
+     caaagacttg gaaccaaccc aaatgtccaa caacgataga ttggattaag aaaatgtggc     72840
+     acatatacac catggaatac tatgcagcca taaaaaatga tgagttcatg tcctttgtag     72900
+     ggacatggat gaagctggaa actatcattc tcagcaaact atcacaagga caataaacca     72960
+     aacaccgcat gttctcactc ataggtggga attgaacaat gagaacacat ggacacatga     73020
+     agaggaacat cacactctgg ggactgttat ggggtggggg gcaggggcag ggatagcact     73080
+     aggagatata cctaatgcta aatgacgagt taatgggtgc agcacaccaa catggcacat     73140
+     gtatacatat ataacaaacc tgccgttgtg cacatgtacc ctaaaacttg aagtataata     73200
+     ataaaaaaaa gttatcctat taaaactgat ctcacacatc cgtagagcca ttatcaagtc     73260
+     tttctctttg aaacagacag aaatttagtg ttttctcagt cagttaac                  73308
+//
+</pre>
+</td></tr></table><p>

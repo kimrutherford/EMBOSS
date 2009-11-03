@@ -1,0 +1,113 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: prints.test</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+gc; ACHEFISH
+gx; PR00879
+gn; COMPOUND(4)
+ga; 06-JUL-1998; UPDATE 06-JUN-1999
+gt; Fish acetylcholinesterase signature
+gp; PRINTS; PR00878 CHOLNESTRASE; PR00880 ACHEINSECT
+gp; INTERPRO; IPR000908
+gp; PDB; 2ACE
+gp; SCOP; 2ACE
+gp; CATH; 2ACE
+bb;
+gr; 1. VOET, D. AND VOET, J.G.
+gr; Biochemical communications: Hormones and neurotransmission.
+gr; BIOCHEMISTRY 34(4) 1298-1299 (1995).
+gr; 
+gr; 2. COUSIN, X., HOTELIER, T., GILES, K., TOUTANT, J.P. AND CHATONNET, A.
+gr; aCHEdb: the database system for ESTHER, the a/b fold family of proteins and
+gr; the cholinesterase gene server.
+gr; NUCLEIC ACIDS RES. 26 226-228 (1998).
+gr; 
+gr; 3. THE ESTHER DATABASE
+gr; http://meleze.ensam.inra.fr/cholinesterase/definitions.html
+gr; 
+gr; 4. CHOLINESTERASES
+gr; http://bnlstb.bio.bnl.gov:8000/disk$3/giles/che.html
+bb;
+bb;
+gd; Acetylcholine is involved in the transfer of messages across a variety of
+gd; synapses in vertebrates and invertebrates. The diverse physiological effects
+gd; attributable to this molecule arise from the presence of specific receptors
+gd; in the postsynaptic cell membranes. Several classes of receptor are known, 
+gd; most of which translate the binding of acetylcholine into the opening of 
+gd; channels for the passage of ions, such as sodium and potassium.
+gd;
+gd; Acetylcholinesterase is an enzyme that catalyses the hydrolysis of 
+gd; acetylcholine to choline and acetate:
+gd; 
+gd;	     Acetylcholine + H(2)O -&gt; Choline + Acetate 	     
+gd; 
+gd; The enzyme also acts on a variety of acetic esters and catalyses trans-
+gd; acetylations. It is found in, or attached to, cellular or basement membranes
+gd; of presynaptic cholinergic neurons and postsynaptic cholinoceptive cells.
+gd; To prevent continuous firing of nerve impulses, acetylcholinesterase has a
+gd; high K(cat) (~14000/s), to ensure that acetylcholine is broken down quickly.
+gd;
+gd; Cholinesterases constitute a family of enzymes that fall into two main
+gd; types, depending on their substrate preference: enzymes that preferentially
+gd; hydrolyse acetyl esters are termed acetylcholinesterase (AChE) (EC 3.1.1.7); 
+gd; and those that prefer other types of ester, such as butyrylcholine are 
+gd; termed butyrylcholinesterase (BChE) (EC 3.1.1.8). 
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+fd; YFISGFLFYLATIINPIAYNLASSRFR          Q18701    323    17
+fd; FIISMLLASLNSCCNPWIYMFFAGHLF          Q90334    311    13
+fd; YKITRPLASANSCLDPVLYFLAGQRLV        P2UR_RAT    287    20
+fd; AAMPAYFAKSATIYNPIIYVFMNRQFR      OPSR_CARAU    301    13
+fd; AQWFIVLAVLNSAMNPVIYTLASKEMR      EDG3_HUMAN    280    14
+fd; YKVTRPLASANSCLDPVLYFLAGQRLV      P2UR_HUMAN    288    20
+fd; YKITRPLASANSCLDPVLYFLAGQRLV      P2UR_MOUSE    288    20
+fd; AAMPAYFAKSATIYNPVIYVFMNRQFR      OPSR_ORYLA    301    13
+fd; MAIPSFFSKSSALFNPIIYILLNKQFR      OPSG_ORYLA    289    13
+fd; THFAFALQYINSAANPFLYVFLSDSFQ          Q23033    401    16
+fd; FTAITWISFSSSASKPTLYSIYNANFR      GPRJ_HUMAN    312    13
+fd; AALPAYFAKSATIYNPIIYVFMNRQFR      OPSR_CAPHI    304    13
+fd; YINIYWLGMSSTVFNPVIYYFMNKRFR          O44148    323    16
+fd; LHFTVCLMNFNCCMDPFIYFFACKGYK      EBI2_HUMAN    290    23
+fd; FTAVTWVSFSSSASKPTLYSIYNANFR      GPRJ_MOUSE    306    13
+fd; NYTGINMASLNSCIGPVALYFVSRKFK      ET3R_XENLA    365    36
+fd; TIWGSVFAKANSCYNPIVYGISHPRYK      OPS2_LIMPO    310    13
+fd; YLVALCLSTLNSCIDPFVYYFVSKDFR      PAR2_MOUSE    328    16
+fd; YIVALCLSTLNSCIDPFVYYFVSHDFR      PAR2_HUMAN    326    16
+fd; YLVALCLSTLNSCIDPFVYYFVSKDFR        PAR2_RAT    326    16
+fd; YILSACVGSVSCCLDPLIYYYASSQCQ      THRR_XENLA    348    13
+fd; TIWGSVFAKANAVYNPIVYGISHPKYR          O76125    317    12
+fd; TIWGSVFAKANSCYNPIVYGISHPRYK      OPS1_LIMPO    310    13
+fd; YLIALCLGSLNSCLDPFLYFVMSKVVD      PAR3_MOUSE    339    16
+fd; TIWGSVFAKANAVYNPIVYGISHPKYR          O76123    317    12
+fd; YLLCVCVTSVASCIDPLIYYYASSECQ        THRR_RAT    360    17
+fd; VHVAEIVSLCHCFINPLIYAFCSREFT      VQ3L_CAPVK    337    21
+fd; TIWGSLFAKANAVFNPIVYGISHPKYR      OPS1_SCHGR    315    12
+fd; AAAPAFFSKTAAVYNPVIYVFMNKQVS      OPSO_SALSA    286    13
+fd; YHFSLLLTSFNCVADPVLYCFVSETTH          O46685    268    17
+fd; KILLVLFYPINSCANPFLYAIFTKNFR      FSHR_HORSE    607    13
+fd; YIFCHLVGISSTCVNPIVYALVNESFR          O44690    308    12
+fd; YLLCVCVSSISSCIDPLIYYYASSECQ      THRR_HUMAN    353    17
+fd; AALPAYFAKSATIYNPIIYVFMNRQFR      OPSR_XENLA    303    13
+fd; ITFSETISLARCCINPIIYTLIGEHVR      VK02_SPVKA    312    24
+fd; YHSSLAFTSLNCVADPILYCLVNEGAR      GPR4_HUMAN    268    21
+fd; YHFSLLLTSFNCVADPVLYCFVSETTH      OGR1_HUMAN    268    17
+fd; YHSSLAFTSLNCVADPILYCLVNEGAR        GPR4_PIG    268    21
+fd; TIWGSLFAKANAVYNPIVYGISHPKYR      OPSD_CAMAB    315    12
+fd; TIWGSLFAKANAVYNPIVYGISHPKYR      OPSD_CATBO    315    12
+fd; KILLVFFYPLNSCADPYLYAILTSQYR          Q94979    738    13
+fd; TIWGACFAKSAACYNPIVYGISHPKYG      OPS1_CALVI    309    12
+fd; KILLVLFYPINSCANPFLYAIFTKTFR      FSHR_CHICK    608    13
+fd; KILLVLFYPINSCANPFLYAIFTKNFR      FSHR_EQUAS    600    13
+fd; TMLPAVFAKTVSCIDPWIYAINHPRYR      OPSB_APIME    318    13
+fd; TMIPAVTAKIVSCIDPWVYAINHPRFR      OPS2_SCHGR    315    13
+fd; TIWGACFAKSAACYNPIVYGISHPKYR      OPS1_DROME    311    12
+fd; TIWGSLFAKANAVYNPIVYGISHPKYR      OPSD_APIME    313    12
+fd; SMLPCLACKSVSCLDPWVYATSHPKYR      OPS5_DROME    314    13
+fd; TICGSVFAKANAVCNPIVYGLSHPKYK      OPS6_DROME    309    12
+bb;
+</pre>
+</td></tr></table><p>

@@ -1,0 +1,155 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: union
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+union
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/union.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<p>
+
+<b>union</b> reads in several sequences, concatenates them and writes
+them out as a single sequence.  The input is typically a list file
+containing references to multiple sequences or subsequences (regions
+of a sequence). Optionally, feature information will be used.</p>
+
+<p>
+The output can have source features generated which document composite
+sequences in the EMBL/GenBank feature table. The -findoverlap optin
+checks for overlaps between adjacent joined regions and reports them
+in the overlap file.
+</p>
+
+<H2>
+    Usage
+</H2>
+
+<!--#include file="inc/union.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/union.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/union.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+The input can be any set of sequences in a file of multiple sequence
+entries or in a <i>List</i> file.  The sequences are concatenated in the
+order in which they appear in the file. 
+
+<p>
+
+<!--#include file="inc/union.input" -->
+
+<p>
+
+You may find the program <b>yank</b> useful for creating List files.
+
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/union.output" -->
+
+<p>
+
+The result is a normal sequence file containing a single sequence
+resulting from the concatenation of the input sequences. 
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+<p><b>union</b> is most useful when the input sequences are specified in a "list file". A list file contain references to any number of sequences which are retrieved from some other file or database.  Each sequence reference is a Uniform Sequence Address (USA) which can include the specification of sub-regions of the sequence, eg. <tt>em:x65923[20:55]</tt>). Specifying several such subregions in a sequence or sequences allows you to enter disjoint sequences to be joined.</p>
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/union.isee" -->
+<p>
+
+You may find the program <b>yank</b> useful for creating List files.
+
+
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/price.address" -->
+
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/union.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/union.comment" -->
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,79 @@
+<b>Here is a sample session with extractfeat</b>
+<p>
+To write out the exons of a sequence:  
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>extractfeat tembl:x65921 -type exon </b>
+Extract features from sequence(s)
+output sequence [x65921.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+To write out the exons with 10 extra bases at the start and end so that you can inspect the splice sites: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>extractfeat tembl:x65921 -type exon -before 10 -after 10 </b>
+Extract features from sequence(s)
+output sequence [x65921.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 3</b>
+<p>
+To write out the 10 bases around the start of all 'exon' features in the tembl database:  
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>extractfeat 'tembl:*'  -type exon -before 5 -after -5 </b>
+Extract features from sequence(s)
+output sequence [h45989.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.3">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 4</b>
+<p>
+To extract the CDS region with the exons joined into one sequence: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>extractfeat tembl:x65921 -type CDS -join </b>
+Extract features from sequence(s)
+output sequence [x65921.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.4">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 5</b>
+<p>
+To write out the 7 residues around all phosphorylated serine residues 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>extractfeat 'tsw:*' -type MOD_RES -value 'phosphoserine*' -before 3 -after -4 </b>
+Extract features from sequence(s)
+output sequence [12s1_arath.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.5">Go to the output files for this example</a><p><p>

@@ -1,0 +1,1912 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: seqret
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+seqret
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+
+<H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
+    Function
+</H2>
+Reads and writes (returns) sequences
+
+<H2>
+    Description
+</H2>
+
+
+<p><b>seqret</b> reads in one or more sequences and writes them out again. The sequence input may be a literal sequence or read from a database, file, file of sequence names, or even the command-line or the output of another programs. The sequence output can be written to screen, to file, or passed to another program. A wide range of standard sequence formats may be specified for input and output.  If you don't specify the input format, <b>seqret</b> will try a set of possible formats until it reads it in successfully. The sequence input and output, as for all EMBOSS programs, is described by a Uniform Sequence Address.  This is is a very flexible way of specifying one or more sequences from a variety of sources and includes sequence files, database queries and external applications.</p>
+
+<p>There are many options built-in into EMBOSS for detailed specification of the input and output sequences, for example the sequence type, file format. specification of sequence regions by begin and end positions, or generation of the reverse complement of a nucleic acid sequence.  On output <b>seqret</b> can change the case of the sequence to upper or to lower case. </p>
+
+<p><b>seqret</b> is useful for a variety of tasks, including extracting sequences from databases, displaying sequences, reformatting sequences, producing the reverse complement of a sequence, extracting fragments of a sequence, sequence case conversion or any combination of the above functions.</p>
+
+
+
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with seqret</b>
+<p>
+Extract an entry from a database and write it to a file:  
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>seqret </b>
+Reads and writes (returns) sequences
+Input (gapped) sequence(s): <b>tembl:x65923</b>
+output sequence(s) [x65923.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+Read all entries in the database 'tembl' that start with 'ab' and write them to a file. In this example the specification is all done in the command line and to stop Unix getting confused by the '*' character, it has to have a backslash ('\') before it: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>seqret 'tembl:ab*'  aball.seq </b>
+Reads and writes (returns) sequences
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 3</b>
+<p>
+seqret does not read in features by default because this results in slightly faster performance.  If however you wish to read in features with your sequence and write them out on output, using '-feature' will change the default behaviour to use any features present in the sequence.  N.B. use embl format for the output file as the default format 'fasta' reports the features in gff (file "&lt;seqname&gt;.gff") 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>seqret -feature </b>
+Reads and writes (returns) sequences
+Input (gapped) sequence(s): <b>tembl:x65923</b>
+output sequence(s) [x65923.fasta]: <b>embl::x65923.embl</b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.3">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 4</b>
+<p>
+Display the contents of the sequence on the screen: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>seqret </b>
+Reads and writes (returns) sequences
+Input (gapped) sequence(s): <b>tembl:x65923</b>
+output sequence(s) [x65923.fasta]: <b>stdout</b>
+
+>X65923 X65923.1 H.sapiens fau mRNA
+ttcctctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgc
+agctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcg
+cccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgc
+tcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccc
+tgactaccctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctggccc
+gtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaaga
+agacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgccca
+cctttggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttc
+tctaataaaaaagccacttagttcagtcaaaaaaaaaa
+
+</pre></td></tr></table><p>
+<p>
+<p>
+<p>
+<b>Example 5</b>
+<p>
+Write the result in GCG format by using the qualifier '-osformat'. 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>seqret -osf gcg </b>
+Reads and writes (returns) sequences
+Input (gapped) sequence(s): <b>tembl:x65923</b>
+output sequence(s) [x65923.gcg]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.5">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 6</b>
+<p>
+Write the result in GCG format by specifying the format in the output USA on the command line. 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>seqret -outseq gcg::x65923.gcg </b>
+Reads and writes (returns) sequences
+Input (gapped) sequence(s): <b>tembl:x65923</b>
+
+</pre></td></tr></table><p>
+<p>
+<p>
+<p>
+<b>Example 7</b>
+<p>
+Write the result in GCG format by specifying the format in the output USA at the prompt. 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>seqret </b>
+Reads and writes (returns) sequences
+Input (gapped) sequence(s): <b>tembl:x65923</b>
+output sequence(s) [x65923.fasta]: <b>gcg::x65923.gcg</b>
+
+</pre></td></tr></table><p>
+<p>
+<p>
+<p>
+<b>Example 8</b>
+<p>
+Write the reverse-complement of a sequence: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>seqret -srev </b>
+Reads and writes (returns) sequences
+Input (gapped) sequence(s): <b>tembl:x65923</b>
+output sequence(s) [x65923.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.8">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 9</b>
+<p>
+Extract the bases between the positions starting at 5 and ending at 25: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>seqret -sbegin 5 -send 25 </b>
+Reads and writes (returns) sequences
+Input (gapped) sequence(s): <b>tembl:x65923</b>
+output sequence(s) [x65923.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.9">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 10</b>
+<p>
+Extract the bases between the positions starting at 5 and ending at 5 bases before the end of the sequence: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>seqret -sbegin 5 -send -5 </b>
+Reads and writes (returns) sequences
+Input (gapped) sequence(s): <b>tembl:x65923</b>
+output sequence(s) [x65923.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.10">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 11</b>
+<p>
+Read all entries in the database 'tembl' that start with 'h' and write them to a file: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>seqret </b>
+Reads and writes (returns) sequences
+Input (gapped) sequence(s): <b>tembl:h*</b>
+output sequence(s) [h45989.fasta]: <b>hall.seq</b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.11">Go to the output files for this example</a><p><p>
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     (Gapped) sequence(s) filename and optional
+                                  format, or reference (input USA)
+  [-outseq]            seqoutall  [<sequence>.<format>] Sequence set(s)
+                                  filename and optional format (output USA)
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -feature            boolean    Use feature information
+   -firstonly          boolean    [N] Read one sequence and stop
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outseq" associated qualifiers
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>(Gapped) sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 2)</td>
+<td>Sequence set(s) filename and optional format (output USA)</td>
+<td>Writeable sequence(s)</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-feature</td>
+<td>Use feature information</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-firstonly</td>
+<td>Read one sequence and stop</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Input file format
+</H2>
+
+
+<b>seqret</b> reads one or more sequence USAs.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:x65923' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:x65923</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   X65923; SV 1; linear; mRNA; STD; HUM; 518 BP.
+XX
+AC   X65923;
+XX
+DT   13-MAY-1992 (Rel. 31, Created)
+DT   18-APR-2005 (Rel. 83, Last updated, Version 11)
+XX
+DE   H.sapiens fau mRNA
+XX
+KW   fau gene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-518
+RA   Michiels L.M.R.;
+RT   ;
+RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   L.M.R. Michiels, University of Antwerp, Dept of Biochemistry,
+RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
+XX
+RN   [2]
+RP   1-518
+RX   PUBMED; 8395683.
+RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
+RT   "fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
+RT   an antisense sequence in the Finkel-Biskis-Reilly murine sarcoma virus";
+RL   Oncogene 8(9):2537-2546(1993).
+XX
+DR   H-InvDB; HIT000322806.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..518
+FT                   /organism="Homo sapiens"
+FT                   /chromosome="11q"
+FT                   /map="13"
+FT                   /mol_type="mRNA"
+FT                   /clone_lib="cDNA"
+FT                   /clone="pUIA 631"
+FT                   /tissue_type="placenta"
+FT                   /db_xref="taxon:9606"
+FT   misc_feature    57..278
+FT                   /note="ubiquitin like part"
+FT   CDS             57..458
+FT                   /gene="fau"
+FT                   /db_xref="GDB:135476"
+FT                   /db_xref="GOA:P62861"
+FT                   /db_xref="HGNC:3597"
+FT                   /db_xref="HSSP:1GJZ"
+FT                   /db_xref="InterPro:IPR006846"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
+FT                   /protein_id="CAA46716.1"
+FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLAG
+FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKTG
+FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
+FT   misc_feature    98..102
+FT                   /note="nucleolar localization signal"
+FT   misc_feature    279..458
+FT                   /note="S30 part"
+FT   polyA_signal    484..489
+FT   polyA_site      509
+XX
+SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
+     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        60
+     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       120
+     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       180
+     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       240
+     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       300
+     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       360
+     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       420
+     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       480
+     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               518
+//
+</pre>
+</td></tr></table><p>
+
+<H2>
+    Output file format
+</H2>
+
+
+The output from <b>seqret</b> is one or more sequences, and by default will be
+written in FASTA format. 
+
+<p>
+
+If the '-firstonly' qualifier is used then only the first sequence of the
+input USA specification will be written out. 
+
+<p>
+
+In some cases the output filename will be the same as the input
+filename, but as <b>seqret</b> reads only the first sequence before opening
+the output file it may try to overwrite the input.  Note that this is
+not true of <b>seqretset</b> which reads all sequences into memory at
+startup, but which can need a large amount of memory for many sequences.
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: x65923.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;X65923 X65923.1 H.sapiens fau mRNA
+ttcctctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgc
+agctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcg
+cccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgc
+tcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccc
+tgactaccctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctggccc
+gtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaaga
+agacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgccca
+cctttggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttc
+tctaataaaaaagccacttagttcagtcaaaaaaaaaa
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: aball.seq</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;AB009602 AB009602.1 Schizosaccharomyces pombe mRNA for MET1 homolog, partial cds.
+gttcgatgcctaaaataccttcttttgtccctacacagaccacagttttcctaatggctt
+tacaccgactagaaattcttgtgcaagcactaattgaaagcggttggcctagagtgttac
+cggtttgtatagctgagcgcgtctcttgccctgatcaaaggttcattttctctactttgg
+aagacgttgtggaagaatacaacaagtacgagtctctcccccctggtttgctgattactg
+gatacagttgtaatacccttcgcaacaccgcgtaactatctatatgaattattttccctt
+tattatatgtagtaggttcgtctttaatcttcctttagcaagtcttttactgttttcgac
+ctcaatgttcatgttcttaggttgttttggataatatgcggtcagtttaatcttcgttgt
+ttcttcttaaaatatttattcatggtttaatttttggtttgtacttgttcaggggccagt
+tcattatttactctgtttgtatacagcagttcttttatttttagtatgattttaatttaa
+aacaattctaatggtcaaaaa
+&gt;AB000095 AB000095.1 Homo sapiens mRNA for hepatocyte growth factor activator inhibitor, complete cds.
+cggccgagcccagctctccgagcaccgggtcggaagccgcgacccgagccgcgcaggaag
+ctgggaccggaacctcggcggacccggccccacccaactcacctgcgcaggtcaccagca
+ccctcggaacccagaggcccgcgctctgaaggtgacccccctggggaggaaggcgatggc
+ccctgcgaggacgatggcccgcgcccgcctcgccccggccggcatccctgccgtcgcctt
+gtggcttctgtgcacgctcggcctccagggcacccaggccgggccaccgcccgcgccccc
+tgggctgcccgcgggagccgactgcctgaacagctttaccgccggggtgcctggcttcgt
+gctggacaccaacgcctcggtcagcaacggagctaccttcctggagtcccccaccgtgcg
+ccggggctgggactgcgtgcgcgcctgctgcaccacccagaactgcaacttggcgctagt
+ggagctgcagcccgaccgcggggaggacgccatcgccgcctgcttcctcatcaactgcct
+ctacgagcagaacttcgtgtgcaagttcgcgcccagggagggcttcatcaactacctcac
+gagggaagtgtaccgctcctaccgccagctgcggacccagggctttggagggtctgggat
+ccccaaggcctgggcaggcatagacttgaaggtacaaccccaggaacccctggtgctgaa
+ggatgtggaaaacacagattggcgcctactgcggggtgacacggatgtcagggtagagag
+gaaagacccaaaccaggtggaactgtggggactcaaggaaggcacctacctgttccagct
+gacagtgactagctcagaccacccagaggacacggccaacgtcacagtcactgtgctgtc
+caccaagcagacagaagactactgcctcgcatccaacaaggtgggtcgctgccggggctc
+tttcccacgctggtactatgaccccacggagcagatctgcaagagtttcgtttatggagg
+ctgcttgggcaacaagaacaactaccttcgggaagaagagtgcattctagcctgtcgggg
+tgtgcaaggcccctccatggaaaggcgccatccagtgtgctctggcacctgtcagcccac
+ccagttccgctgcagcaatggctgctgcatcgacagtttcctggagtgtgacgacacccc
+caactgccccgacgcctccgacgaggctgcctgtgaaaaatacacgagtggctttgacga
+gctccagcgcatccatttccccagtgacaaagggcactgcgtggacctgccagacacagg
+actctgcaaggagagcatcccgcgctggtactacaaccccttcagcgaacactgcgcccg
+ctttacctatggtggttgttatggcaacaagaacaactttgaggaagagcagcagtgcct
+cgagtcttgtcgcggcatctccaagaaggatgtgtttggcctgaggcgggaaatccccat
+tcccagcacaggctctgtggagatggctgtcgcagtgttcctggtcatctgcattgtggt
+ggtggtagccatcttgggttactgcttcttcaagaaccagagaaaggacttccacggaca
+ccaccaccacccaccacccacccctgccagctccactgtctccactaccgaggacacgga
+gcacctggtctataaccacaccacccggcccctctgagcctgggtctcaccggctctcac
+ctggccctgcttcctgcttgccaaggcagaggcctgggctgggaaaaactttggaaccag
+actcttgcctgtttcccaggcccactgtgcctcagagaccagggctccagcccctcttgg
+agaagtctcagctaagctcacgtcctgagaaagctcaaaggtttggaaggagcagaaaac
+ccttgggccagaagtaccagactagatggacctgcctgcataggagtttggaggaagttg
+gagttttgtttcctctgttcaaagctgcctgtccctaccccatggtgctaggaagaggag
+tggggtggtgtcagaccctggaggccccaaccctgtcctcccgagctcctcttccatgct
+gtgcgcccagggctgggaggaaggacttccctgtgtagtttgtgctgtaaagagttgctt
+tttgtttatttaatgctgtggcatgggtgaagaggaggggaagaggcctgtttggcctct
+ctgtcctctcttcctcttcccccaagattgagctctctgcccttgatcagccccaccctg
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
+nnnnnnnnntcctgtcctcccgtccatcctctgttcccgggttctcctgcccctttccct
+ccccttcctcctcctccatggcctcttcgcctgcccatgctctgtgtgtattgcaggttt
+cccagttcatggcgtgtgaggagctgcccccgggggccccagagcttccccaagaaggcc
+ccacacgacgcctctccctaccgggccagctgggggccctcacctcccagcccctgcaca
+gacacggctcggacccgggcagttagtggggctgcccagtgtggacacgt
+&gt;AB000360 AB000360.1 Homo sapiens PIGC gene, complete cds.
+ggatccctgctgcagagggggtaacggtgtctggcttgccaagcaatatttgttgtggtc
+tatcatggaagaaataaagtcgggcaatatgaattttttttttctcaaatttgccggatg
+gctgtggtgtttctgactcttagttttctcattgtgaaaaaggaatgattatcttcttcg
+atcctctcaagagtttccttgttttgagtagattgatagctctttaaaggatgctaagct
+cagctaatggaagaagagtctagtttctttgaggctttgattttggttaaactatagagc
+tcatacctttctgtatggtgcagcttactattgtctttggattggtaacttaaaaaatac
+aaataacatgcctttgagaaccaataaaaactatggatattatccctataaatttacaca
+aatccagatataagcatgcaatgtgatatacctaagggatatgtgaaccactgagttaag
+aactgctttagagggagatacaatgtgagacacaggctttgggataagactttggtttga
+atcctggctctgctctgttaccttagggcaaagttacttaagcatcttgaatctcagctt
+ttttaccaaagcaggactaatactaacttacaaggtggtgaggattaagtgaaagaagat
+acataaggcacttagcacatagtaggtactcaataagcgatagctaacagatgtctatta
+ttattcaaggaattataattttcaaatctgaaatgcagttttaatgtcccataaggtgac
+taccacatacatttttctcagacttttagtaaactgagttgatttgactttatctcagta
+ctactcttgacctttcacaactttcgtaggttcacagtctctctttttctaggaacttgg
+ctgtgttgtcctgcctcagagacaaattcatctattgtaggcctagcccctgcctttgaa
+aacaaggaaaggttggtagaacatcaacacagcatggaatttccagggaggtctcatttc
+aaaacttcataaagaacaagaaccacctggacttctgtgagggcgatgattaaactggcc
+tgagtttgaatgaaaggataatgtatgctcaacctgtgactaacaccaaggaggtcaagt
+ggcagaaggtcttgtatgagcgacagccctttcctgataactatgtggaccggcgattcc
+tggaagagctccggaaaaacatccatgctcggaaataccaatattgggctgtggtatttg
+agtccagtgtggtgatccagcagctgtgcagtgtttgtgtttttgtggttatctggtggt
+atatggatgagggtcttctggccccccattggcttttagggactggcctggcttcttcac
+tgattgggtatgttttgtttgatctcattgatggaggtgaagggcggaagaagagtgggc
+agacccggtgggctgacctgaagagtgccctagtcttcattactttcacttatgggtttt
+caccagtgctgaagacccttacagagtctgtcagcactgacaccatctatgccatgtcag
+tcttcatgctgttaggccatctcatcttttttgactatggtgccaatgctgccattgtat
+ccagcacactatccttgaacatggccatctttgcttctgtatgcttggcatcacgtcttc
+cccggtccctgcatgccttcatcatggtgacatttgccattcagatttttgccctgtggc
+ccatgttgcagaagaaactaaaggcatgtactccccggagctatgtgggggtcacactgc
+tttttgcattttcagccgtgggaggcctactgtccattagtgctgtgggagccgtactct
+ttgcccttctgctgatgtctatctcatgtctgtgttcattctacctcattcgcttgcagc
+tttttaaagaaaacattcatgggccttgggatgaagctgaaatcaaggaagacttgtcca
+ggttcctcagttaaattaggacatccattacattattaaagcaagctgatagattagcct
+cctaactagtatagaacttaaagacagagttccattctggaagcagcatgtcattgtggt
+aagagaatagagatcaaaaccaaaaaaaatgaaccaaaggcttgggtggtgagggtgctt
+atcctttctgttattttgtagatgaaaaaactttctggggacctcttgaattacatgctg
+taacatatgaagtgatgtggtttctattaaaaaaataacacatccatcaagttgtctcat
+gatttttccataaacaggaggcagacagaggggcatgaagagtgaagtaagtgtgtgtgt
+gtgtgtgtgtgtgtgtaaagtcacttctttctacccttttcaatgtgctaatgctctttt
+atttatctagggctcaaatcttagaacacagggtgctatgctcagttttgttgcccaaga
+tcacagaattggttacttaaccttgactcagagtttctaccttgttcttagggaagcata
+tcacaactaattgcaaagcagagtgtgatgtgtcacaataagcagaatgctagggggaat
+tc
+</pre>
+</td></tr></table><p>
+
+<a name="output.3"></a>
+<h3>Output files for usage example 3</h3>
+<p><h3>File: x65923.embl</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+ID   X65923; SV 1; linear; mRNA; STD; HUM; 518 BP.
+XX
+AC   X65923;
+XX
+DT   13-MAY-1992 (Rel. 31, Created)
+DT   18-APR-2005 (Rel. 83, Last updated, Version 11)
+XX
+DE   H.sapiens fau mRNA
+XX
+KW   fau gene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-518
+RA   Michiels L.M.R.;
+RT   ;
+RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   L.M.R. Michiels, University of Antwerp, Dept of Biochemistry,
+RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM.
+XX
+RN   [2]
+RP   1-518
+RX   PUBMED; 8395683.
+RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
+RT   "fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
+RT   an antisense sequence in the Finkel-Biskis-Reilly murine sarcoma virus";
+RL   Oncogene 8(9):2537-2546(1993).
+XX
+DR   H-InvDB; HIT000322806.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..518
+FT                   /organism="Homo sapiens"
+FT                   /chromosome="11q"
+FT                   /map="13"
+FT                   /mol_type="mRNA"
+FT                   /clone_lib="cDNA"
+FT                   /clone="pUIA 631"
+FT                   /tissue_type="placenta"
+FT                   /db_xref="taxon:9606"
+FT   misc_feature    57..278
+FT                   /note="ubiquitin like part"
+FT   CDS             57..458
+FT                   /gene="fau"
+FT                   /db_xref="GDB:135476"
+FT                   /db_xref="GOA:P62861"
+FT                   /db_xref="HGNC:3597"
+FT                   /db_xref="HSSP:1GJZ"
+FT                   /db_xref="InterPro:IPR006846"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
+FT                   /protein_id="CAA46716.1"
+FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLAG
+FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKTG
+FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
+FT   misc_feature    98..102
+FT                   /note="nucleolar localization signal"
+FT   misc_feature    279..458
+FT                   /note="S30 part"
+FT   polyA_signal    484..489
+FT   polyA_site      509
+XX
+SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
+     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        60
+     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       120
+     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       180
+     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       240
+     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       300
+     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       360
+     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       420
+     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       480
+     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               518
+//
+</pre>
+</td></tr></table><p>
+
+<a name="output.5"></a>
+<h3>Output files for usage example 5</h3>
+<p><h3>File: x65923.gcg</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+!!NA_SEQUENCE 1.0
+
+H.sapiens fau mRNA
+
+X65923  Length: 518  Type: N  Check: 2981 ..
+
+   1 ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc
+
+  51 gccaatatgc agctctttgt ccgcgcccag gagctacaca ccttcgaggt
+
+ 101 gaccggccag gaaacggtcg cccagatcaa ggctcatgta gcctcactgg
+
+ 151 agggcattgc cccggaagat caagtcgtgc tcctggcagg cgcgcccctg
+
+ 201 gaggatgagg ccactctggg ccagtgcggg gtggaggccc tgactaccct
+
+ 251 ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc
+
+ 301 gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag
+
+ 351 aagaagaaga agacaggtcg ggctaagcgg cggatgcagt acaaccggcg
+
+ 401 ctttgtcaac gttgtgccca cctttggcaa gaagaagggc cccaatgcca
+
+ 451 actcttaagt cttttgtaat tctggctttc tctaataaaa aagccactta
+
+ 501 gttcagtcaa aaaaaaaa
+
+</pre>
+</td></tr></table><p>
+
+<a name="output.8"></a>
+<h3>Output files for usage example 8</h3>
+<p><h3>File: x65923.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;X65923 X65923.1 H.sapiens fau mRNA
+ttttttttttgactgaactaagtggcttttttattagagaaagccagaattacaaaagac
+ttaagagttggcattggggcccttcttcttgccaaaggtgggcacaacgttgacaaagcg
+ccggttgtactgcatccgccgcttagcccgacctgtcttcttcttcttcttctcctgttt
+ggccaccttaggagtctgacctctcacttttccagcacgggccagggaaccatgaacttt
+acctccaagcatgcggcctgctacttccagggtagtcagggcctccaccccgcactggcc
+cagagtggcctcatcctccaggggcgcgcctgccaggagcacgacttgatcttccggggc
+aatgccctccagtgaggctacatgagccttgatctgggcgaccgtttcctggccggtcac
+ctcgaaggtgtgtagctcctgggcgcggacaaagagctgcatattggcgactgaacggcg
+gtcccagctaccgcgaagatggagtcgagaaagaggaa
+</pre>
+</td></tr></table><p>
+
+<a name="output.9"></a>
+<h3>Output files for usage example 9</h3>
+<p><h3>File: x65923.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;X65923 X65923.1 H.sapiens fau mRNA
+tctttctcgactccatcttcg
+</pre>
+</td></tr></table><p>
+
+<a name="output.10"></a>
+<h3>Output files for usage example 10</h3>
+<p><h3>File: x65923.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;X65923 X65923.1 H.sapiens fau mRNA
+tctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgcagct
+ctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcgccca
+gatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgctcct
+ggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccctgac
+taccctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctggcccgtgc
+tggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaagaagac
+aggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgcccacctt
+tggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttctcta
+ataaaaaagccacttagttcagtcaaaaaa
+</pre>
+</td></tr></table><p>
+
+<a name="output.11"></a>
+<h3>Output files for usage example 11</h3>
+<p><h3>File: hall.seq</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;H45989 H45989.1 yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+ccggnaagctcancttggaccaccgactctcgantgnntcgccgcgggagccggntggan
+aacctgagcgggactggnagaaggagcagagggaggcagcacccggcgtgacggnagtgt
+gtggggcactcaggccttccgcagtgtcatctgccacacggaaggcacggccacgggcag
+gggggtctatgatcttctgcatgcccagctggcatggccccacgtagagtggnntggcgt
+ctcggtgctggtcagcgacacgttgtcctggctgggcaggtccagctcccggaggacctg
+gggcttcagcttcccgtagcgctggctgcagtgacggatgctcttgcgctgccatttctg
+ggtgctgtcactgtccttgctcactccaaaccagttcggcggtccccctgcggatggtct
+gtgttgatggacgtttgggctttgcagcaccggccgccgagttcatggtngggtnaagag
+atttgggttttttcn
+</pre>
+</td></tr></table><p>
+
+<H2>
+    Data files
+</H2>
+
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+This description of what you can do when reading or writing files is not
+specific to the program <b>seqret</b>.  All EMBOSS programs that read or write
+sequences can do the same. 
+
+<p>
+
+<b>seqret</b> is often one of the first programs taught in EMBOSS training
+courses.  This is because it is versatile, it is extremely powerful for
+its size (17 lines of code) it illustrates many aspects of EMBOSS
+programs and it was one of the first EMBOSS programs to be written, so
+it has a special place in the hearts of EMBOSS developers. 
+
+<p>
+
+The name '<b>seqret</b>' derives both from its function ("sequence return") and
+from the fact that immense amounts of functionality can come from so few
+lines of source code - most of the work is done by the EMBOSS libraries
+which the program calls and whose complexity is hidden, or "secret". 
+
+<p>
+The simplicity of the above description of this program greatly
+understates the rich functionality of this program. 
+
+<p>
+
+Because EMBOSS programs can take a wide range of qualifiers that
+slightly change the behaviour of the program when reading or writing a
+sequence, this program can do many more things than simply "read and
+write a sequence". 
+
+<p>
+
+<b>seqret</b> can read a sequence or many sequences from databases, files,
+files of sequence names, the command-line or the output of other
+programs and then can write them to files, the screen or pass them to
+other programs.  Because it can read in a sequence from a database and
+write it to a file, <b>seqret</b> is a program for extracting sequences from
+databases.  Because it can write the sequence to the screen, <b>seqret</b> is a
+program for displaying sequences. 
+
+<p>
+
+<b>seqret</b> can read sequences in any of a wide range of standard sequence
+formats.  You can specify the input and output formats being used.  If
+you don't specify the input format, <b>seqret</b> will try a set of possible
+formats until it reads it in successfully.  Because you can specify the
+output sequence format, <b>seqret</b> is a program to reformat a sequence. 
+
+<p>
+
+<b>seqret</b> can read in the reverse complement of a nucleic acid sequence. 
+It therefore is a program for producing the reverse complement of a
+sequence. 
+
+<p>
+
+<b>seqret</b> can read in a sequence whose begin and end positions you have
+specified and write out that fragment.  It is therefore a utility for
+doing simple extraction of a region of a sequence. 
+
+<p>
+
+<b>seqret</b> can change the case of the sequence being read in to upper or to
+lower case.  It is therefore a simple sequence beautification utility. 
+
+<p>
+
+<b>seqret</b> can do any combination of the above functions.
+
+<p>
+
+The sequence input and output specification of this (and many other
+EMBOSS programs) is described as being a Uniform Sequence Address. 
+
+<p>
+
+The Uniform Sequence Address, or USA, is a somewhat tongue-in-cheek
+reference to a URL-style sequence naming used by all EMBOSS
+applications. 
+
+<p>
+
+The USA is a very flexible way of specifying one or more sequences from
+a variety of sources and includes sequence files, database queries and
+external applications. 
+
+<p>
+
+See the full specification of USA syntax at:
+<br>
+<a href="http://emboss.sourceforge.net/docs/themes/UniformSequenceAddress.html">
+http://emboss.sourceforge.net/docs/themes/UniformSequenceAddress.html
+</a>
+
+<p>
+
+The basic USA syntax is one of: 
+
+<ul>
+<li>"file" 
+<li>"file:entry" 
+<li>"format::file" 
+<li>"format::file:entry" 
+<li>"database:entry" 
+<li>"database"
+<li>"@file" 
+</ul>
+
+<p>
+
+Note that ':' separates the name of a file containing many possible
+entries from the specific name of a sequence entry in that file.  It
+also separates the name of a database from an entry in that database
+
+<p>
+
+Note also that '::' separates the specified format of a file from the
+name of the file.  Normally the format can be omitted, in which case the
+program will attempt to identify the correct format when reading the
+sequence in and will default to using FASTA format when writing the
+sequence out. 
+
+<p>
+
+Valid names of the databases set up in your local implementation of
+EMBOSS can be seen by using the program '<a href="showdb.html">showdb</a>'.
+
+<p>
+
+Database queries, and individual entries in files that have more than
+one sequence entry, use wildcards of "?" for any character and "*" for
+any string of characters.  There are some problems with the Unix shell
+catching these characters so they do need to be hidden in quotes or
+preceded by a backslash on the Unix command line, (for example
+"embl:hs\*")
+
+<p>
+
+The output USA name 'stdout' is special.  It makes the output go to the
+device 'standard output'.  This is the screen, by default. 
+
+<p>
+
+<h3>Example USAs</h3>
+
+The following are valid USAs for sequences:
+
+<p>
+
+<TABLE border=3>
+<TR>
+<TH>USA</TH>
+<TH>Description</TH>
+</TR>
+
+<TR>
+<TD>xxx.seq</TD>
+<TD>A sequence file "xxx.seq" in any format</TD>
+</TR>
+
+<TR>
+<TD>fasta::xxx.seq</TD>
+<TD>A sequence file "xxx.seq" in fasta format</TD>
+</TR>
+
+<TR>
+<TD>gcg::egmsmg.gcg</TD>
+<TD>A sequence file "egmsmg.gcg" in GCG 9 format</TD>
+</TR>
+
+<TR>
+<TD>egmsmg.gcg -sformat=gcg</TD>
+<TD>A sequence file "egmsmg.gcg" in GCG 9 format</TD>
+</TR>
+
+<TR>
+<TD>embl::x13776.em</TD>
+<TD>A sequence file "x13776.em" in EMBL format</TD>
+</TR>
+
+<TR>
+<TD>embl:x13776</TD>
+<TD>EMBL entry X13776, using whatever access method is defined locally
+for the EMBL database</TD>
+</TR>
+
+<TR>
+<TD>embl:K01793</TD>
+<TD>EMBL entry K01793, using whatever access method is defined locally
+for the EMBL database and searching by accession number and entry name
+(K01793 is a secondary accession number in this case for entry J01636)</TD>
+</TR>
+
+<TR>
+<TD>embl-acc:K01793</TD>
+<TD>EMBL entry X13776, using whatever access method is defined locally
+for the EMBL database and searching by accession number only
+</TD>
+</TR>
+
+<TR>
+<TD>embl-id:x13776</TD>
+<TD>EMBL entry x13776, using whatever access method is defined locally
+for the EMBL database, and searching by ID only</TD>
+</TR>
+
+<TR>
+<TD>embl:v0029*</TD>
+<TD>EMBL entries V00290, V00291, and so on, usually in alphabetical order,
+using whatever access method is defined locally for the EMBL database</TD>
+</TR>
+
+<TR>
+<TD>embl or EMBL:*</TD>
+<TD>All sequences in the EMBL database</TD>
+</TR>
+
+<TR>
+<TD>@mylist</TD>
+<TD>Reads file <i>mylist</i> and uses each line as a separate USA.  This
+is standard VMS list file syntax, also used in SRS 4.0 but missing in
+SRS 5.0 onwards.  The list file is a list of USAs (one per line).  List files
+can contain references to other lists files or any other standard
+USA.</TD>
+</TR>
+
+<TR>
+<TD>list::mylist</TD>
+<TD>Same as "@mylist" above</TD>
+</TR>
+
+<TR>
+<TD>'getz -e [embl-id:x13776] |'</TD>
+<TD>The pipe character "|" causes EMBOSS to fire up getz (SRS)
+to extract entry x13776 from EMBL in EMBL format. Any application or
+script which writes one or more sequences to stdout can be used in
+this way.
+</TR>
+
+<TR>
+<TD>asis::atacgcagttatctgaccat</TD>
+<TD>So far the shortest USA we
+could invent. In 'asis' format the name is the sequence so no file
+needs to be opened. This is a special case.  It was intended as a
+joke, but has proved quite useful for generating command lines when testing.</TD>
+</TR>
+
+</TABLE>
+
+<h3>Input sequence formats</h3>
+
+To date, the following sequence formats are accepted as
+input.
+<P>
+
+By default, (i.e.  if no format is explicitly specified) EMBOSS tries
+each format in turn until one succeeds.
+
+<!--
+INPUT FORMAT TABLE
+LAST UPDATED: 23 OCT 2000 - GWW
+-->
+
+<p>
+
+<table border=3>
+<tr><th>Input Format</th><th>Comments</th></tr>
+
+
+
+<tr><td>gcg</td><td>
+GCG 9.x and 10.x format with the format and sequence type identified on the
+first line of the file
+</td></tr>
+
+<tr><td>gcg8</td><td>
+GCG 8.x format where anything up to the first line containing ".." is
+considered as heading, and the remainder is sequence data.  This
+format is complicated by the header appearing to be in other formats
+such as EMBL, and by the possibility of reading a large amount of data
+in the wrong format before discovering that there is no ".." line
+because it is not GCG format after all.
+</td></tr>
+
+<tr><td>embl<br>em</td><td>
+EMBL entry format, or at least a minimal subset of the fields. The <a
+href="http://www.mrc-lmb.cam.ac.uk/pubseq/"> Staden package</a> and
+others use EMBL or similar formats for sequence data.
+</td></tr>
+
+<tr><td>swiss<br>sw</td><td>   
+SWISSPROT entry format, or at least a minimal subset of the fields.
+</td></tr>
+
+<tr><td>fasta<br>pearson</td><td>
+FASTA format with an optional accession number after the sequence
+identifier, eg:
+<br>
+<b>&gt;name description</b>
+<br>
+or   
+<br>
+<b>&gt;name accession description</b>
+<br>
+and with an optional database name in GCG style
+fasta format included as part of the sequence identifier, eg:
+<br>
+<b>&gt;database:name accession description</b>
+<br>
+</td></tr>
+   
+<tr><td>ncbi</td><td>
+FASTA format with optional accession number and database name in NCBI
+style included as part of the sequence identifier.
+eg
+<br>
+<b>&gt;database|accession|id description</b>
+<br>
+(and other variants on this theme!)
+</td></tr>
+
+<tr><td>genbank<br>gb</td><td>
+GENBANK entry format, or at least a minimal subset of the fields.
+</td></tr>
+
+<tr><td>nbrf<br>pir</td><td>
+NBRF (PIR) format, as used in the PIR database sequence files.
+</td></tr>
+
+<tr><td>codata</td><td>
+CODATA format.
+</td></tr>
+
+<tr><td>strider</td><td>
+DNA strider format
+</td></tr>
+   
+<tr><td>clustal<br>aln</td><td>
+ClustalW ALN (multiple alignment) format.
+</td></tr>
+
+<tr><td>phylip</td><td>
+PHYLIP interleaved multiple alignment format.
+</td></tr>
+
+<tr><td>acedb</td><td>
+ACeDB format
+</td></tr>
+
+<tr><td>msf</td><td>
+<a href="http://www.gcg.com/">Wisconsin Package</a>
+GCG's MSF multiple sequence format.
+</td></tr>
+
+<tr><td>hennig86</td><td>
+Hennig86 format
+</td></tr>
+
+<tr><td>jackknifer</td><td>
+Jackknifer format
+</td></tr>
+
+<tr><td>jackknifernon</td><td> 
+Jackknifernon format
+</td></tr>
+
+<tr><td>nexus<br>paup</td><td>   
+Nexus/PAUP format
+</td></tr>
+
+<tr><td>nexusnon<br>paupnon</td><td>
+Nexusnon/PAUPnon format
+</td></tr>
+
+<tr><td>treecon</td><td>
+Treecon format
+</td></tr>
+
+<tr><td>mega</td><td>
+Mega format
+</td></tr>
+
+<tr><td>meganon</td><td>
+Meganon format
+</td></tr>
+
+<tr><td>ig</td><td>
+IntelliGenetics format.
+</td></tr>
+
+<tr><td>staden<br>experiment</td><td>
+The experiment file format used by the "gap" program in the Staden
+package, where the sequence identifier is optional and the remainer is
+plain text.  Some alternative nucleotide ambiguity codes are used and
+must be converted.
+</td></tr>
+
+
+<tr><td>unknown<br>text<br>plain</td><td>
+Plain text.
+This is the format with no format. The whole of the file is
+read in as a sequence. 
+No attempt is made to parse the file contents in any way.
+Anything is acceptable in this format.
+</td></tr>
+
+
+<tr><td>raw</td><td>
+Like unknown/text/plain format except that
+it accepts only alphanumeric and whitespace
+characters and rejects anything else.
+</td></tr>
+
+
+<tr><td>asis</td><td>
+This is not so much a sequence format as a quick way of entering a
+sequence on the command line, but it is included here for completeness.
+Where a filename would normally be given, in <b>asis</b> format there is
+the sequence itself.
+An example would be:
+<br>
+asis::atacgcagttatctgaccat
+<br>
+In 'asis' format the name is the sequence so no file needs to be opened.
+This is a special case.  It was intended as a joke, but could be quite
+useful for generating command lines.
+</td></tr>
+
+
+</table>
+
+
+
+
+
+<h3>Output sequence formats</h3>
+
+To date, the following sequence formats are available as output.
+<p>
+
+Some sequence formats can hold multiple sequences in one file, these are
+marked as <b>multiple</b> in the following table.  The details of how many
+sequences are held in one file differs between formats, but they either
+allow many sequences to be concatenated one after the other, or they
+hold the sequences together in some sort of aligned set of sequences.
+<P>
+
+Other formats, such as GCG, plain and staden formats can only hold one
+sequence per file, these are marked as <b>single</b>.  An attempt to
+concatenate several sequences in one file leaves the results as a mess
+that makes it impossible to decide where the sequences start and end or
+what is annotation and what is sequence. 
+<p>
+   
+These <b>single</b> formats therefore cause problems when there are
+multiple sequences to write out because a single file containing
+multiple sequences in that format is invalid.  When these formats are
+specified for output, an EMBOSS program will allow you to write many
+sequences to one file, but EMBOSS programs will not be able to reliably
+read in the resulting mess. 
+<p>
+
+<B>N.B</B> This behaviour changed in EMBOSS version 1.7.0.  (31 Oct
+2000) Previously, EMBOSS programs that were asked to write multiple
+sequences in a <b>single</b> format would ignore the requested output
+file name and would write each sequence into a separate file whose name
+was constructed from the sequence name and the name of the format.  This
+resulted in ouput to files whose names could not be reliably controlled. 
+A decision was taken that EMBOSS users were intelligent people who could
+live with the consequences of their actions and who could learn not to
+write out multiple sequences to a file in formats that could not cope
+with multiple sequences. 
+<P>
+
+It you really wish to write multiple sequences out in formats that can
+not cope with multiple sequences, you are advised to add the global
+qualifier <b>-ossingle</b> on the command line.  This will force the
+EMBOSS program to ignore the given output file name and will generate its
+own file names.  One sequence will be written to each such file.  These file
+names are made from the sequence ID name, with the name of the format as
+the extension (e.g.  <b>x65923.gcg</b>). 
+<P>
+
+This is not ideal.  Preferably, you should stay away from formats that
+can't cope with multiple sequences in a file. 
+<P>
+
+
+<!--
+OUTPUT FORMAT TABLE
+LAST UPDATED: 30 OCT 2000 - GWW
+-->
+
+<p>
+
+<table border=3>
+<tr><th>Output Format</th><th>Single/<br>Multiple</th><th>Comments</th></tr>
+
+<tr><td>gcg</td><td>single</td><td>
+<a href="http://www.gcg.com/">Wisconsin Package</a> GCG 9.x and 10.x format
+with the sequence type on the first line of the file.
+</td></tr>
+
+<tr><td>gcg8</td><td>single</td><td>
+GCG 8.x format where anything up to the first line containing ".." is
+considered as heading, and the remainder is sequence data.
+</td></tr>
+
+<tr><td>embl<br>em</td><td>multiple</td><td>
+EMBL entry format with available fields filled in and others with no
+infomation omitted. The EMBOSS command line allows missing data such
+as accession numbers to be provided if they are not obtainable from
+the input sequence.
+</td></tr>
+
+<tr><td>swiss<br>sw</td><td>multiple</td><td>
+SwisProt entry format with available fields filled in and others with no
+infomation omitted.  The EMBOSS command line allows missing data such as
+accession numbers to be provided if they are not obtainable from the
+input sequence. 
+</td></tr>
+
+<tr><td>fasta</td><td>multiple</td><td>
+Standard Pearson FASTA format, but with the accession number included
+after the identifier if available.
+</td></tr>
+
+<tr><td>pearson</td><td>multiple</td><td>
+Simple Pearson FASTA format, an alias for "fasta" format.
+</td></tr>
+
+<tr><td>ncbi</td><td>multiple</td><td>
+NCBI style FASTA format with the database name, entry name and
+accession number separated by pipe ("|") characters.
+</td></tr>
+
+<tr><td>nbrf<br>pir</td><td>multiple</td><td>
+NBRF (PIR) format, as used in the PIR database sequence files.
+</td></tr>
+
+
+<tr><td>genbank<br>gb</td><td>multiple</td><td>
+GENBANK entry format with available fields filled in and others with no
+infomation omitted. The EMBOSS command line allows missing data such
+as accession numbers to be provided if they are not obtainable from
+the input sequence.
+</td></tr>
+
+
+<tr><td>ig</td><td>multiple</td><td>
+Intelligenetics format, as used by the
+Intelligenetics package
+</td></tr>
+
+<tr><td>codata</td><td>multiple</td><td>
+CODATA format.
+</td></tr>
+
+<tr><td>strider</td><td>multiple</td><td>
+DNA strider format
+</td></tr>
+
+<tr><td>acedb</td><td>multiple</td><td>
+ACeDB format
+</td></tr>
+
+<tr><td>staden<br>experiment</td><td>single</td><td>
+The experiment file format used by the "gap" program in the 
+<a href="http://www.mrc-lmb.cam.ac.uk/pubseq/">
+Staden package</a>.
+Some alternative nucleotide ambiguity codes are used and are converted.
+</td></tr>
+
+<tr><td>text<br>plain<br>raw</td><td>single</td><td>
+Plain sequence, no annotation or heading.
+</td></tr>
+
+<tr><td>fitch</td><td>multiple</td><td>
+Fitch format
+</td></tr>
+
+<tr><td>msf</td><td>multiple</td><td>
+<a href="http://www.gcg.com/">Wisconsin Package</a>
+GCG's MSF multiple sequence format.
+</td></tr>
+
+<tr><td>clustal<br>aln</td><td>multiple</td><td>
+Clustal multiple sequence format.
+</td></tr>
+
+<tr><td>phylip</td><td>multiple</td><td>
+PHYLIP non-interleaved format.
+</td></tr>
+
+<tr><td>phylip3</td><td>multiple</td><td>
+PHYLIP interleaved format.
+</td></tr>
+
+<tr><td>asn1</td><td>multiple</td><td>
+A subset of ASN.1 containing entry name, accession number, description
+and sequence, similar to the current ASN.1 output of
+<a href="http://iubio.bio.indiana.edu/soft/molbio/readseq/">
+readseq</a> 
+</td></tr>
+
+<tr><td>hennig86</td><td>multiple</td><td>
+Hennig86 format
+</td></tr>
+
+<tr><td>mega</td><td>multiple</td><td>
+Mega format
+</td></tr>
+
+<tr><td>meganon</td><td>multiple</td><td>
+Meganon format
+</td></tr>
+
+<tr><td>nexus<br>paup</td><td>multiple</td><td>
+Nexus/PAUP format
+</td></tr>
+
+<tr><td>nexusnon<br>paupnon</td><td>multiple</td><td>
+Nexusnon/PAUPnon format
+</td></tr>
+
+<tr><td>jackknifer</td><td>multiple</td><td>
+Jackknifer format
+</td></tr>
+
+<tr><td>jackknifernon</td><td>multiple</td><td>
+Jackknifernon format
+</td></tr>
+
+<tr><td>treecon</td><td>multiple</td><td>
+Treecon format
+</td></tr>
+
+
+<tr><td>debug</td><td>multiple</td><td>
+EMBOSS sequence object report for debugging showing all available fields.
+Not all fields will contain data - this depends very much on the input
+format used.
+</td></tr>
+
+
+</table>
+
+
+<h3>Future directions</h3>
+
+More formats, both for input and for output, can be easily added, so
+suggestions are always welcome. 
+
+
+
+<h3>Associated qualifiers</h3>
+
+<p>
+
+As noted previously there are many 'associated' qualifiers that alter
+the behaviour of <b>seqret</b> when it reads in or writes out a sequence.  As
+these are used in all EMBOSS programs that read in or write out
+sequences, they are not reported by the '-help' qualifier.  They are
+however reported by the pair of qualifiers: '-help -verbose':
+
+
+<p>
+
+Some of the more useful associated qualifiers are:
+
+<table border=3>
+<tr><th>Qualifier</th>		<th>Description</th></tr>
+
+<tr><td>-sbegin</td><td>The first position to be used in the sequence</td></tr>
+<tr><td>-send</td><td>The last position to be used in the sequence</td></tr>
+<tr><td>-sreverse</td><td>Use the reverse complement of a nucleic acid sequence</td></tr>
+<tr><td>-sask</td><td>Ask the user for begin/end/reverse information</td></tr>
+<tr><td>-slower</td><td>Convert the sequence to lower case</td></tr>
+<tr><td>-supper</td><td>Convert the sequence to upper case</td></tr>
+<tr><td>-sformat</td><td>Specify the input sequence format</td></tr>
+<tr><td>-osformat</td><td>Specify the output sequence format</td></tr>
+<tr><td>-ossingle</td><td>Write each entry into a separate file</td></tr>
+<tr><td>-auto</td><td>Turn off prompts and don't report the one-line description</td></tr>
+<tr><td>-stdout</td><td>Write the results to 'standard output' (the screen)</td></tr>
+<tr><td>-filter</td><td>Read input from another program, write to the screen</td></tr>
+<tr><td>-options</td><td>Prompt for optional qualifiers</td></tr>
+<tr><td>-help</td><td>Display a table of the command-line options</td></tr>
+</table>
+
+<p>
+
+The set of associated qualifiers for sequences behave in different ways
+depending on where they appear. 
+
+<p>
+
+If these qualifiers immediately follow a parameter they apply only to
+that parameter and not to all cases.  If they occur before any
+parameters, they apply to all following sequence parameters. 
+
+<p>
+
+If there are no two parameters of equal type, the order of parameters
+and their qualifiers is irrelevant. 
+
+<p>
+
+Where a qualifier is defined more than once, for example "-sformat" for
+2 input sequences to be aligned, the qualifier name can have a number to
+indicate which sequence is meant.  "-sbegin2=25" will apply only to the
+second sequence, no matter where it appears on the command line. 
+
+<p>
+
+The -sbegin and -send qualifiers take an integer number specifying the
+position to begin or end reading a sequence.  If the number is positive,
+the number is the position counting from the first base or residue of
+the sequence.  If the number is negative the position is counted from
+the end of the sequence, so position -1 is the last base or residue of
+the sequence.  (If -sbegin 0 is used, it is assumed to be the same as
+-sbegin 1 and -send 0 is the same as -send -1.)
+
+<p>
+
+The filter qualifier makes the program behave like a filter, reading its
+(first) input 'file' from the standard input, and writing its (first)
+output 'file' to the standard output.  The -filter qualifier will also
+invoke the -auto qualifier, so the user is never prompted for any
+missing values. 
+
+<p>
+
+Example:
+
+<pre>
+
+% cat sequence.seq | seqret -filter | lpr
+
+</pre>
+
+<p>
+
+The example shows the application <b>seqret</b> being run with the -filter
+qualifier.  The input file is 'piped' into the program using the unix
+command cat and the output is 'piped' directly to the unix program lpr,
+which will print it on the printer. 
+
+<p>
+
+When the -options qualifier is used and not all the parameters are given
+on the command line, it will query the user for those parameters.  It
+will not only query the user for the required parameters as it would do
+without the -options qualifier, but it will also query the user for the
+optional parameters.
+
+<p>
+
+When the -stdout qualifier is used, the user will still be prompted for
+all the info that is required, but will write to standard output by
+default.  The user will also still be prompted for an output filename,
+in case the user wants to save the output to a file. 
+
+
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="aligncopy.html">aligncopy</a></td>
+<td>Reads and writes alignments</td>
+</tr>
+
+<tr>
+<td><a href="aligncopypair.html">aligncopypair</a></td>
+<td>Reads and writes pairs from alignments</td>
+</tr>
+
+<tr>
+<td><a href="biosed.html">biosed</a></td>
+<td>Replace or delete sequence sections</td>
+</tr>
+
+<tr>
+<td><a href="codcopy.html">codcopy</a></td>
+<td>Copy and reformat a codon usage table</td>
+</tr>
+
+<tr>
+<td><a href="cutseq.html">cutseq</a></td>
+<td>Removes a section from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="degapseq.html">degapseq</a></td>
+<td>Removes non-alphabetic (e.g. gap) characters from sequences</td>
+</tr>
+
+<tr>
+<td><a href="descseq.html">descseq</a></td>
+<td>Alter the name or description of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="entret.html">entret</a></td>
+<td>Retrieves sequence entries from flatfile databases and files</td>
+</tr>
+
+<tr>
+<td><a href="extractalign.html">extractalign</a></td>
+<td>Extract regions from a sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="extractfeat.html">extractfeat</a></td>
+<td>Extract features from sequence(s)</td>
+</tr>
+
+<tr>
+<td><a href="extractseq.html">extractseq</a></td>
+<td>Extract regions from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="featcopy.html">featcopy</a></td>
+<td>Reads and writes a feature table</td>
+</tr>
+
+<tr>
+<td><a href="featreport.html">featreport</a></td>
+<td>Reads and writes a feature table</td>
+</tr>
+
+<tr>
+<td><a href="listor.html">listor</a></td>
+<td>Write a list file of the logical OR of two sets of sequences</td>
+</tr>
+
+<tr>
+<td><a href="makenucseq.html">makenucseq</a></td>
+<td>Create random nucleotide sequences</td>
+</tr>
+
+<tr>
+<td><a href="makeprotseq.html">makeprotseq</a></td>
+<td>Create random protein sequences</td>
+</tr>
+
+<tr>
+<td><a href="maskambignuc.html">maskambignuc</a></td>
+<td>Masks all ambiguity characters in nucleotide sequences with N</td>
+</tr>
+
+<tr>
+<td><a href="maskambigprot.html">maskambigprot</a></td>
+<td>Masks all ambiguity characters in protein sequences with X</td>
+</tr>
+
+<tr>
+<td><a href="maskfeat.html">maskfeat</a></td>
+<td>Write a sequence with masked features</td>
+</tr>
+
+<tr>
+<td><a href="maskseq.html">maskseq</a></td>
+<td>Write a sequence with masked regions</td>
+</tr>
+
+<tr>
+<td><a href="newseq.html">newseq</a></td>
+<td>Create a sequence file from a typed-in sequence</td>
+</tr>
+
+<tr>
+<td><a href="nohtml.html">nohtml</a></td>
+<td>Remove mark-up (e.g. HTML tags) from an ASCII text file</td>
+</tr>
+
+<tr>
+<td><a href="noreturn.html">noreturn</a></td>
+<td>Remove carriage return from ASCII files</td>
+</tr>
+
+<tr>
+<td><a href="nospace.html">nospace</a></td>
+<td>Remove all whitespace from an ASCII text file</td>
+</tr>
+
+<tr>
+<td><a href="notab.html">notab</a></td>
+<td>Replace tabs with spaces in an ASCII text file</td>
+</tr>
+
+<tr>
+<td><a href="notseq.html">notseq</a></td>
+<td>Write to file a subset of an input stream of sequences</td>
+</tr>
+
+<tr>
+<td><a href="nthseq.html">nthseq</a></td>
+<td>Write to file a single sequence from an input stream of sequences</td>
+</tr>
+
+<tr>
+<td><a href="nthseqset.html">nthseqset</a></td>
+<td>Reads and writes (returns) one set of sequences from many</td>
+</tr>
+
+<tr>
+<td><a href="pasteseq.html">pasteseq</a></td>
+<td>Insert one sequence into another</td>
+</tr>
+
+<tr>
+<td><a href="revseq.html">revseq</a></td>
+<td>Reverse and complement a nucleotide sequence</td>
+</tr>
+
+<tr>
+<td><a href="seqretsetall.html">seqretsetall</a></td>
+<td>Reads and writes (returns) many sets of sequences</td>
+</tr>
+
+<tr>
+<td><a href="seqretsplit.html">seqretsplit</a></td>
+<td>Reads sequences and writes them to individual files</td>
+</tr>
+
+<tr>
+<td><a href="sizeseq.html">sizeseq</a></td>
+<td>Sort sequences by size</td>
+</tr>
+
+<tr>
+<td><a href="skipredundant.html">skipredundant</a></td>
+<td>Remove redundant sequences from an input set</td>
+</tr>
+
+<tr>
+<td><a href="skipseq.html">skipseq</a></td>
+<td>Reads and writes (returns) sequences, skipping first few</td>
+</tr>
+
+<tr>
+<td><a href="splitsource.html">splitsource</a></td>
+<td>Split sequence(s) into original source sequences</td>
+</tr>
+
+<tr>
+<td><a href="splitter.html">splitter</a></td>
+<td>Split sequence(s) into smaller sequences</td>
+</tr>
+
+<tr>
+<td><a href="trimest.html">trimest</a></td>
+<td>Remove poly-A tails from nucleotide sequences</td>
+</tr>
+
+<tr>
+<td><a href="trimseq.html">trimseq</a></td>
+<td>Remove unwanted characters from start and end of sequence(s)</td>
+</tr>
+
+<tr>
+<td><a href="trimspace.html">trimspace</a></td>
+<td>Remove extra whitespace from an ASCII text file</td>
+</tr>
+
+<tr>
+<td><a href="union.html">union</a></td>
+<td>Concatenate multiple sequences into a single sequence</td>
+</tr>
+
+<tr>
+<td><a href="vectorstrip.html">vectorstrip</a></td>
+<td>Removes vectors from the ends of nucleotide sequence(s)</td>
+</tr>
+
+<tr>
+<td><a href="yank.html">yank</a></td>
+<td>Add a sequence reference (a full USA) to a list file</td>
+</tr>
+
+</table>
+<p>
+
+Valid names of the databases set up in your local implementation of
+EMBOSS can be seen by using the program 'showdb'. 
+
+
+<H2>
+    Author(s)
+</H2>
+Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+
+<H2>
+    History
+</H2>
+
+1999 - Written by Peter Rice
+<br>
+Feb 2002 - '-feature' qualifier added by Peter Rice
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+<H2>
+    Comments
+</H2>
+
+<h3>Fasta output format</h3>
+
+<h4>Question</h4>
+When i tried to convert the EMBL format file into fasta format using the
+program "<b>seqret</b>", I found that the Access.no appears twice... 
+
+<p>
+
+<pre>
+&gt;AF102796 AF102796 Homo sapiens alphaE-catenin (CTNNA1) gene, exon 11.
+</pre>
+<p>
+
+<h4>Answer</h4>
+
+"It is not a bug ... it is a feature"
+<p>
+
+
+There are many "FASTA formats". EMBOSS uses the format that ACEDB and the
+EBI genome projects use. The first field after the ID is the
+accession number, so that accession numbers can be kept when sequences are
+converted to FASTA format, without using the NCBI format (with '|'
+characters in the IDs).
+<p>
+
+Your EMBL format file has IDs that look like accession numbers, so
+EMBOSS fills in the accession number for each sequence, and reports it
+in the FASTA format. 
+
+
+
+
+</BODY>
+</HTML>
+

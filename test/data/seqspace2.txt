@@ -1,0 +1,46 @@
+>X13776   Pseudomonas aeruginosa    amiC and amiR gene
+ ggtaccgctg gccgagcatc tgctcgatca ccaccagccg ggcgacggga
+ actgcacgat ctacctggcg agcctggagc acgagcgggt tcgcttcgta
+ cggcgctgag cgacagtcac aggagaggaa acggatggga tcgcaccagg
+ agcggccgct gatcggcctg ctgttctccg aaaccggcgt caccgccgat
+ atcgagcgct cgcacgcgta tggcgcattg ctcgcggtcg agcaactgaa
+ ccgcgagggc ggcgtcggcg gtcgcccgat cgaaacgctg tcccaggacc
+ ccggcggcga cccggaccgc tatcggctgt gcgccgagga cttcattcgc
+ aaccgggggg tacggttcct cgtgggctgc tacatgtcgc acacgcgcaa
+ ggcggtgatg ccggtggtcg agcgcgccga cgcgctgctc tgctacccga
+ ccccctacga gggcttcgag tattcgccga acatcgtcta cggcggtccg
+ gcgccgaacc agaacagtgc gccgctggcg gcgtacctga ttcgccacta
+ cggcgagcgg gtggtgttca tcggctcgga ctacatctat ccgcgggaaa
+ gcaaccatgt gatgcgccac ctgtatcgcc agcacggcgg cacggtgctc
+ gaggaaatct acattccgct gtatccctcc gacgacgact tgcagcgcgc
+ cgtcgagcgc atctaccagg cgcgcgccga cgtggtcttc tccaccgtgg
+ tgggcaccgg caccgccgag ctgtatcgcg ccatcgcccg tcgctacggc
+ gacggcaggc ggccgccgat cgccagcctg accaccagcg aggcggaggt
+ ggcgaagatg gagagtgacg tggcagaggg gcaggtggtg gtcgcgcctt
+ acttctccag catcgatacg cccgccagcc gggccttcgt ccaggcctgc
+ catggtttct tcccggagaa cgcgaccatc accgcctggg ccgaggcggc
+ ctactggcag accttgttgc tcggccgcgc cgcgcaggcc gcaggcaact
+ ggcgggtgga agacgtgcag cggcacctgt acgacatcga catcgacgcg
+ ccacaggggc cggtccgggt ggagcgccag aacaaccaca gccgcctgtc
+ ttcgcgcatc gcggaaatcg atgcgcgcgg cgtgttccag gtccgctggc
+ agtcgcccga accgattcgc cccgaccctt atgtcgtcgt gcataacctc
+ gacgactggt ccgccagcat gggcggggga ccgctcccat gagcgccaac
+ tcgctgctcg gcagcctgcg cgagttgcag gtgctggtcc tcaacccgcc
+ gggggaggtc agcgacgccc tggtcttgca gctgatccgc atcggttgtt
+ cggtgcgcca gtgctggccg ccgccggaag ccttcgacgt gccggtggac
+ gtggtcttca ccagcatttt ccagaatggc caccacgacg agatcgctgc
+ gctgctcgcc gccgggactc cgcgcactac cctggtggcg ctggtggagt
+ acgaaagccc cgcggtgctc tcgcagatca tcgagctgga gtgccacggc
+ gtgatcaccc agccgctcga tgcccaccgg gtgctgcctg tgctggtatc
+ ggcgcggcgc atcagcgagg aaatggcgaa gctgaagcag aagaccgagc
+ agctccagga ccgcatcgcc ggccaggccc ggatcaacca ggccaaggtg
+ ttgctgatgc agcgccatgg ctgggacgag cgcgaggcgc accagcacct
+ gtcgcgggaa gcgatgaagc ggcgcgagcc gatcctgaag atcgctcagg
+ agttgctggg aaacgagccg tccgcctgag cgatccgggc cgaccagaac
+ aataacaaga ggggtatcgt catcatgctg ggactggttc tgctgtacgt
+ tggcgcggtg ctgtttctca atgccgtctg gttgctgggc aagatcagcg
+ gtcgggaggt ggcggtgatc aacttcctgg tcggcgtgct gagcgcctgc
+ gtcgcgttct acctgatctt ttccgcagca gccgggcagg gctcgctgaa
+ ggccggagcg ctgaccctgc tattcgcttt tacctatctg tgggtggccg
+ ccaaccagtt cctcgag
+

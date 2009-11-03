@@ -1,0 +1,16 @@
+<b>Here is a sample session with cusp</b>
+<p>
+This example uses only one input sequence. The normal use would be to use a set of coding sequences as the input. 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>cusp -sbeg 135 -send 1292 </b>
+Create a codon usage table from nucleotide sequence(s)
+Input nucleotide sequence(s): <b>tembl:x13776</b>
+Output file [x13776.cusp]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

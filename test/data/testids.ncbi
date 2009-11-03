@@ -1,0 +1,36 @@
+>gb|G12345|GENBANK genbank identifier with accession
+GENBANK
+>emb|E12345|EMBL embl identifier with accession
+EMBL
+>dbj|D12345|DDBJ DDBJ identifier with accession
+DDB-
+>pir||PIR PIR entry with empty accession
+PIR
+>prf||PRF Protein Research Foundation with empty accession
+PRF
+>sp|P01234|SWISS_PRT swissprot identifier with accession
+SWISSPR-T
+>pdb|2PDB|A PDB entry with chain
+-PDB-A
+>pat|uk|12345 Patent entry with country
+PAT-K
+>bbs|geninfo Geninfo Backbone Id
+GENINF-
+>gnl|PID|e1234 General identifier with db (this is a PID protein id)
+GNLPID
+>ref|NP_007225.1|REF_12345 NCBI Reference Sequence
+REFSEQ
+>ref|NM_012488.1| NCBI Reference Sequence with no locus
+REFSEQ
+>lcl|localid Local identifier (no database name)
+L-CALID
+>gi|123456 gi prefix
+GIPREFIX
+>gi|123456|gb|G67890|GIGENBANK gi and genbank together
+GIGENBANK
+>gi|234567|sp|P01234|GISWISS_PRT gi and swissprot together
+GISWISSPR-T
+>gnl|BL_ORD_ID|0 Blast formatdb prefix for simple names
+BLAST
+>gi|1234567|tpg|DAA00001.1| TPA: with no locus
+TPG

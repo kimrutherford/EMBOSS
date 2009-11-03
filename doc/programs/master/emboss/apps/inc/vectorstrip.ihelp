@@ -1,0 +1,68 @@
+   Standard (Mandatory) qualifiers (* if not always prompted):
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+  [-[no]readfile]      toggle     [Y] Are your vector sequences in a file?
+*  -vectorsfile        infile     Cloning vector definition file (optional)
+   -mismatch           integer    [10] Max allowed % mismatch (Any integer
+                                  value)
+   -[no]besthits       boolean    [Y] Show only the best hits (minimise
+                                  mismatches)?
+*  -alinker            string     The 5' sequence (Any string is accepted)
+*  -blinker            string     The 3' sequence (Any string is accepted)
+  [-outfile]           outfile    [*.vectorstrip] Output file name
+  [-outseq]            seqoutall  [<sequence>.<format>] Sequence set(s)
+                                  filename and optional format (output USA)
+
+   Additional (Optional) qualifiers:
+   -allsequences       boolean    [N] Show all sequences in output
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory3        string     Output directory
+
+   "-outseq" associated qualifiers
+   -osformat4          string     Output seq format
+   -osextension4       string     File name extension
+   -osname4            string     Base file name
+   -osdirectory4       string     Output directory
+   -osdbname4          string     Database name to add
+   -ossingle4          boolean    Separate file for each entry
+   -oufo4              string     UFO features
+   -offormat4          string     Features format
+   -ofname4            string     Features file name
+   -ofdirectory4       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+

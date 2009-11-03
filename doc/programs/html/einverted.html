@@ -1,0 +1,622 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: einverted
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+einverted
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
+    Function
+</H2>
+Finds inverted repeats in nucleotide sequences
+<H2>
+    Description
+</H2>
+
+
+<p><b>einverted</b> finds inverted repeats (stem loops) in nucleotide sequences.  It identifies regions of local alignment of the input sequence and its reverse complement that exceed a threshold score. The alignments may include a proportion of mismatches and gaps, which correspond to bulges in the stem loop.  One or more sequences are read and a file with the sequence(s) (without gap characters) of the inverted repeat regions is written. It can find multiple inverted repeats in a sequence. Only non-overlapping matches are reported.</p>
+
+
+
+<H2>Algorithm</H2>
+<p><b>einverted</b> uses dynamic programming and thus is guaranteed to find optimal, local alignments between the sequence and its reverse complement.  Matched bases contribute positively to the score whereas gaps and mismatches are penalised. The score for a local alignment is the sum of the values of each match, minus penalties for mismatches and gap insertion. Any region whose score exceeds the threshold is reported.  The gap penalty, match score and mismatch score, and the threshold score for reporting regions, are all user-specified.</p>
+
+
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with einverted</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>einverted tembl:d00596 </b>
+Finds inverted repeats in nucleotide sequences
+Gap penalty [12]: <b></b>
+Minimum score threshold [50]: <b></b>
+Match score [3]: <b></b>
+Mismatch score [-4]: <b></b>
+Sanger Centre program inverted output file [d00596.inv]: <b></b>
+File for sequence of regions of inverted repeats. [d00596.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -gap                integer    [12] Gap penalty (Any integer value)
+   -threshold          integer    [50] Minimum score threshold (Any integer
+                                  value)
+   -match              integer    [3] Match score (Any integer value)
+   -mismatch           integer    [-4] Mismatch score (Any integer value)
+  [-outfile]           outfile    [*.einverted] Sanger Centre program inverted
+                                  output file
+  [-outseq]            seqout     [<sequence>.<format>] The sequence of the
+                                  inverted repeat regions without gap
+                                  characters.
+
+   Additional (Optional) qualifiers:
+   -maxrepeat          integer    [2000] Maximum separation between the start
+                                  of repeat and the end of the inverted repeat
+                                  (the default is 2000 bases). (Any integer
+                                  value)
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   "-outseq" associated qualifiers
+   -osformat3          string     Output seq format
+   -osextension3       string     File name extension
+   -osname3            string     Base file name
+   -osdirectory3       string     Output directory
+   -osdbname3          string     Database name to add
+   -ossingle3          boolean    Separate file for each entry
+   -oufo3              string     UFO features
+   -offormat3          string     Features format
+   -ofname3            string     Features file name
+   -ofdirectory3       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Nucleotide sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-gap</td>
+<td>Gap penalty</td>
+<td>Any integer value</td>
+<td>12</td>
+</tr>
+
+<tr>
+<td>-threshold</td>
+<td>Minimum score threshold</td>
+<td>Any integer value</td>
+<td>50</td>
+</tr>
+
+<tr>
+<td>-match</td>
+<td>Match score</td>
+<td>Any integer value</td>
+<td>3</td>
+</tr>
+
+<tr>
+<td>-mismatch</td>
+<td>Mismatch score</td>
+<td>Any integer value</td>
+<td>-4</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Sanger Centre program inverted output file</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.einverted</td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 3)</td>
+<td>The sequence of the inverted repeat regions without gap characters.</td>
+<td>Writeable sequence</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-maxrepeat</td>
+<td>Maximum separation between the start of repeat and the end of the inverted repeat (the default is 2000 bases).</td>
+<td>Any integer value</td>
+<td>2000</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+<H2>
+    Input file format
+</H2>
+
+
+The input for <b>einverted</b> is a nucleotide sequence
+
+<p>
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:d00596' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:d00596</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   D00596; SV 1; linear; genomic DNA; STD; HUM; 18596 BP.
+XX
+AC   D00596;
+XX
+DT   17-JUL-1991 (Rel. 28, Created)
+DT   07-DEC-2007 (Rel. 94, Last updated, Version 6)
+XX
+DE   Homo sapiens gene for thymidylate synthase, complete cds.
+XX
+KW   .
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-18596
+RX   PUBMED; 2243092.
+RA   Kaneda S., Nalbantoglu J., Takeishi K., Shimizu K., Gotoh O., Seno T.,
+RA   Ayusawa D.;
+RT   "Structural and functional analysis of the human thymidylate synthase
+RT   gene";
+RL   J. Biol. Chem. 265(33):20277-20284(1990).
+XX
+DR   GDB; 163670.
+DR   GDB; 182340.
+XX
+CC   These data kindly submitted in computer readable form by:
+CC   Sumiko Kaneda
+CC   National Institute of Genetics
+CC   1111 Yata
+CC   Mishima 411
+CC   Japan
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..18596
+FT                   /organism="Homo sapiens"
+FT                   /chromosome="18"
+FT                   /map="18p11.32"
+FT                   /mol_type="genomic DNA"
+FT                   /clone="lambdaHTS-1 and lambdaHTS-3"
+FT                   /db_xref="taxon:9606"
+FT   repeat_region   1..148
+FT                   /rpt_family="Alu"
+FT   repeat_region   202..477
+FT                   /rpt_family="Alu"
+FT   prim_transcript 822..16246
+FT                   /note="thymidylate synthase mRNA and introns"
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+     ttttgttttt agcttcagcg agaacccaga cctttcccaa agctcaggat tcttcgaaaa     15660
+     gttgagaaaa ttgatgactt caaagctgaa gactttcaga ttgaagggta caatccgcat     15720
+     ccaactatta aaatggaaat ggctgtttag ggtgctttca aaggagctcg aaggatattg     15780
+     tcagtcttta ggggttgggc tggatgccga ggtaaaagtt ctttttgctc taaaagaaaa     15840
+     aggaactagg tcaaaaatct gtccgtgacc tatcagttat taatttttaa ggatgttgcc     15900
+     actggcaaat gtaactgtgc cagttctttc cataataaaa ggctttgagt taactcactg     15960
+     agggtatctg acaatgctga ggttatgaac aaagtgagga gaatgaaatg tatgtgctct     16020
+     tagcaaaaac atgtatgtgc atttcaatcc cacgtactta taaagaaggt tggtgaattt     16080
+     cacaagctat ttttggaata tttttagaat attttaagaa tttcacaagc tattccctca     16140
+     aatctgaggg agctgagtaa caccatcgat catgatgtag agtgtggtta tgaactttaa     16200
+     agttatagtt gttttatatg ttgctataat aaagaagtgt tctgcattcg tccacgcttt     16260
+     gttcattctg tactgccact tatctgctca gttccttcct aaaatagatt aaagaactct     16320
+     ccttaagtaa acatgtgctg tattctggtt tggatgctac ttaaaagagt atattttaga     16380
+     aataatagtg aatatatttt gccctatttt tctcatttta actgcatctt atcctcaaaa     16440
+     tataatgacc atttaggata gagttttttt tttttttttt taaactttta taaccttaaa     16500
+     gggttatttt aaaataatct atggactacc attttgccct cattagcttc agcatggtgt     16560
+     gacttctcta ataatatgct tagattaagc aaggaaaaga tgcaaaacca cttcggggtt     16620
+     aatcagtgaa atatttttcc cttcgttgca taccagatac ccccggtgtt gcacgactat     16680
+     ttttattctg ctaatttatg acaagtgtta aacagaacaa ggaattattc caacaagtta     16740
+     tgcaacatgt tgcttatttt caaattacag tttaatgtct aggtgccagc ccttgatata     16800
+     gctatttttg taagaacatc ctcctggact ttgggttagt taaatctaaa cttatttaag     16860
+     gattaagtag gataacgtgc attgatttgc taaaagaatc aagtaataat tacttagctg     16920
+     attcctgagg gtggtatgac ttctagctga actcatcttg atcggtagga ttttttaaat     16980
+     ccatttttgt aaaactattt ccaagaaatt ttaagccctt tcacttcaga aagaaaaaag     17040
+     ttgttggggc tgagcactta attttcttga gcaggaagga gtttcttcca aacttcacca     17100
+     tctggagact ggtgtttctt tacagattcc tccttcattt ctgttgagta gccgggatcc     17160
+     tatcaaagac caaaaaaatg agtcctgtta acaaccacct ggaacaaaaa cagattttat     17220
+     gcatttatgc tgctccaaga aatgctttta cgtctaagcc agaggcaatt aattaatttt     17280
+     tttttttttg acatggagtc actgtccgtt gcccaggctg cagtgcagtg gcgcaatctt     17340
+     ggctcactgc aacctccacc tcccaggttc aagtgattct cctgcctcag cctcccatgt     17400
+     agctgggatc acaggcacct gccaccatgc ccggctaatt ttttgtattt tttgtagaga     17460
+     cagggtttca ccatgttggc caggctggtc tcaaacacct gacctcaaat gatccacctg     17520
+     cctcagcctc ccaaagtgtt gggattacag gcgtaagcca ccatgcccag ccctgaatta     17580
+     atatttttaa aataagtttg gagactgttg gaaataatag ggcagaggaa catattttac     17640
+     tggctacttg ccagagttag ttaactcatc aaactctttg ataatagttt gacctctgtt     17700
+     ggtgaaaatg agccatgatc tcttgaacat gatcagaata aatgccccag ccacacaatt     17760
+     gtagtccaaa ctttttaggt cactaacttg ctagatggtg ccaggttttt ttgcacaagg     17820
+     agtgcaaatg ttaagatctc cactagtgag gaaaggctag tattacagaa gccttgtcag     17880
+     aggcaattga acctccaagc cctggccctc aggcctgagg attttgatac agacaaactg     17940
+     aagaaccgtt tgttagtgga tattgcaaac aaacaggagt caaagcttgg tgctccacag     18000
+     tctagttcac gagacaggcg tggcagtggc tggcagcatc tcttctcaca ggggccctca     18060
+     ggcacagctt accttgggag gcatgtagga agcccgctgg atcatcacgg gatacttgaa     18120
+     atgctcatgc aggtggtcaa catactcaca caccctagga ggagggaatc agatcggggc     18180
+     aatgatgcct gaagtcagat tattcacgtg gtgctaactt aaagcagaag gagcgagtac     18240
+     cactcaattg acagtgttgg ccaaggctta gctgtgttac catgcgtttc taggcaagtc     18300
+     cctaaacctc tgtgcctcag gtccttttct tctaaaatat agcaatgtga ggtggggact     18360
+     ttgatgacat gaacacacga agtccctctg agaggttttg tggtgccctt taaaagggat     18420
+     caattcagac tctgtaaata tccagaatta tttgggttcc tctggtcaaa agtcagatga     18480
+     atagattaaa atcaccacat tttgtgatct atttttcaag aagcgtttgt attttttcat     18540
+     atggctgcag cagctgccag gggcttgggg tttttttggc aggtagggtt gggagg         18596
+//
+</pre>
+</td></tr></table><p>
+
+<H2>
+    Output file format
+</H2>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: d00596.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;D00596_13_142
+gctacgcgagaggctgaggcagcagaattacttgaacccaggaggcggaggttgcagtga
+gccgagatcgcgccactgcactccagcctgggtgagagagcgagactctgtctcaaaaaa
+aaaaaaaaaa
+&gt;D00596_199_328
+ttttttttttttttttttgggacagtcttgctctgtcgcccaggctggagtacaatggtc
+ggatcttggctcactgcaacctctgcctcccaggttcaagcaattcttctgcctcagcct
+cccaagtagc
+&gt;D00596_12128_12301
+agaggatttttttttttttttttttttttgagacagagttttgctctgttgcccaggctg
+gaatgcaacggcgtgatcttggctcactgtaacctctgcctcctgggttcgagtgattct
+cctgcctcagcctccaagtagctgggattacagcatgtgccaccatgcctggct
+&gt;D00596_12573_12749
+agccaggtgtggtggctcacacctgtaattccaacaactccagaggccaaggcgagagga
+tcatttgaacccacggaatttgaggctgtagtgagtcatgatcacgccattgcactccat
+cctgggcaacagagtgagaccctgaatatttaaaaacaacaacaacaacaaaactct
+&gt;D00596_12246_12296
+ctcctgcctcagcctccaagtagctgggattacagcatgtgccaccatgcc
+&gt;D00596_13886_13938
+ggtatggtggctcatgcctgtaatcccagcactttggaagactgagacaggag
+&gt;D00596_13884_13949
+tgggtatggtggctcatgcctgtaatcccagcactttggaagactgagacaggagcaatt
+gcttga
+&gt;D00596_14628_14692
+tcaagcaattcttctgcctcagcctcccaggtagctgggattacaggcacatgccaccac
+accca
+</pre>
+</td></tr></table><p>
+<p><h3>File: d00596.inv</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+
+D00596: Score 236: 108/130 ( 83%) matches, 0 gaps
+      13 gctacgcgagaggctgaggcagcagaattacttgaacccaggaggcggaggttgcagtgagccgagatcgcgccactgcactccagcctgggtgagagagcgagactctgtctcaaaaaaaaaaaaaaaa 142     
+         |||||  | ||||||||||||| |||||| ||||||||  |||||| |||||||||||||||| |||||   ||| || ||||||||||||| || ||||| ||||| |  |  ||||||||||||||||
+     328 cgatgaaccctccgactccgtcttcttaacgaacttggaccctccgtctccaacgtcactcggttctaggctggtaacatgaggtcggacccgctgtctcgttctgacagggtttttttttttttttttt 199     
+
+D00596: Score 164: 128/174 ( 73%) matches, 3 gaps
+   12128 agaggatttttttttttttttttttttttgagacagagttttgctctgttgcccaggctggaatgcaacggcgtgatcttggctcactgtaacctctgcctcc-tgggttcgagtgattctcctgcctcagcctc-caagtagctgggattaca-gcatgtgccaccatgcctggct 12301   
+         ||||  || || || || || |||||    |  ||| || |  |||||||||||||| |||| ||||| ||||||||| || ||||||  | ||||    ||| ||||||| | |||| |||  ||||  |||||   ||| | ||| |||||| |  || |||||||  |||||||
+   12749 tctcaaaacaacaacaacaacaaaaatttataagtcccagagtgagacaacgggtcctacctcacgttaccgcactagtactgagtgatgtcggagtttaaggcacccaagtttactaggagagcggaaccggagacctcaacaaccttaatgtccacactcggtggtgtggaccga 12573   
+
+D00596: Score 80: 44/51 ( 86%) matches, 2 gaps
+   12246 ctcctgcctcag-cctccaagtagctgggattaca-gcatgtgccaccatgcc 12296   
+         |||||| ||||| | |||||   |||||||||||| ||||| |||||||| ||
+   13938 gaggacagagtcagaaggtttcacgaccctaatgtccgtactcggtggtatgg 13886   
+
+D00596: Score 99: 53/65 ( 81%) matches, 1 gaps
+   13884 tgggtatggtggctcatgcctgtaatcccagcactttggaagactgagacaggagcaattgcttga 13949   
+         ||||| |||||||   ||||||||||||||||    ||| || ||||| ||| || ||||||||||
+   14692 acccacaccaccgtacacggacattagggtcgatggaccctccgactccgtcttc-ttaacgaact 14628   
+</pre>
+</td></tr></table><p>
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+<p>The original "inverted" program (from which <b>einverted</b> was derived) was used to annotate the nematode genome. Excluding overlapping repeats saved problems with simple repeat sequences in this genome. </p>
+<p><b>einverted</b> will find optimal alignments but is slower than heuristic methods such as BLAST.</p>
+
+Sometimes you can find repeats using the program <b>palindrome</b> that
+you can't find with <b>einverted</b> using the default parameters. 
+
+<p>
+
+This is not due to a problem with either program.  It is simply because
+some of the shortest repeats that you find with <b>palindrome</b>'s
+default parameter values are below <b>einverted</b>'s default cutoff
+score - you should decrease the 'Minimum score threshold' to see them. 
+
+<p>
+
+For example, when <b>palindrome</b> is run with 'em:x65921', 
+it finds the repeat:
+
+<p>
+<pre>
+64    aaaactaaggc    74
+      |||||||||||
+98    ttttgattccg    88
+</pre>
+<p>
+
+<b>einverted</b> will not report this as its score is 33 (11 bases
+scoring 3 each, no mismatches or gaps) with is below the default score
+cutoff of 50. 
+
+<p>
+
+If  <b>einverted</b> is run as:
+<p>
+
+% einverted em:x65921  -threshold 30 
+<p>
+
+then it will find it:
+<p>
+
+<pre>
+Score 33: 11/11 (100%) matches, 0 gaps
+      64 aaaactaaggc 74      
+         |||||||||||
+      98 ttttgattccg 88      
+</pre>
+
+<p>
+
+
+Anything can be considered to be a repeat if you set the score
+threshold low enough!
+
+<p>
+
+<b>einverted</b> does not report overlapping matches.
+
+<p>
+
+The original "inverted" program was written to annotate the nematode
+genome.  Excluding overlapping repeats saved problems with simple repeat
+sequences in this genome.
+
+
+<H2>
+    References
+</H2>
+
+Some useful references on inverted repeats:
+
+<p>
+
+<ol>
+
+<li>
+Pearson CE, Zorbas H, Price GB, Zannis-Hadjopoulos M Inverted repeats,
+stem-loops, and cruciforms: significance for initiation of DNA
+replication.  J Cell Biochem 1996 Oct;63(1):1-22
+
+<li>
+Waldman AS, Tran H, Goldsmith EC, Resnick MA. q Long inverted repeats
+are an at-risk motif for recombination in mammalian cells.
+Genetics. 1999 Dec;153(4):1873-83.  PMID: 10581292; UI: 20050682
+
+<li>
+Jacobsen SE 
+Gene silencing: Maintaining methylation patterns. 
+Curr Biol 1999 Aug 26;9(16):R617-9
+
+<li>
+Lewis S, Akgun E, Jasin M. 
+Palindromic DNA and genome stability. Further studies.
+Ann N Y Acad Sci. 1999 May 18;870:45-57.
+PMID: 10415472; UI: 99343961
+
+<li>
+Dai X, Greizerstein MB, Nadas-Chinni K, Rothman-Denes LB
+Supercoil-induced extrusion of a regulatory DNA hairpin.  Proc Natl
+Acad Sci U S A 1997 Mar 18;94(6):2174-9
+
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="equicktandem.html">equicktandem</a></td>
+<td>Finds tandem repeats in nucleotide sequences</td>
+</tr>
+
+<tr>
+<td><a href="etandem.html">etandem</a></td>
+<td>Finds tandem repeats in a nucleotide sequence</td>
+</tr>
+
+<tr>
+<td><a href="palindrome.html">palindrome</a></td>
+<td>Finds inverted repeats in nucleotide sequence(s)</td>
+</tr>
+
+</table>
+
+<b>palindrome</b> also looks for inverted repeats but is much faster
+and less sensitive, as it looks for near-perfect repeats.
+
+<H2>
+    Author(s)
+</H2>
+
+
+This program was originally written by 
+Richard Durbin (rd&nbsp;&copy;&nbsp;sanger.ac.uk)
+<br>
+Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
+Cambridge, CB10 1SA, UK.                      
+
+<p>
+
+This application was modified for inclusion in EMBOSS by 
+Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+<H2>
+    History
+</H2>
+
+Written (1999) - Peter Rice
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+None
+
+</BODY>
+</HTML>
+

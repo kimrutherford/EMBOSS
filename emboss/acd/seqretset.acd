@@ -1,0 +1,35 @@
+application: seqretset [
+  documentation: "Reads and writes (returns) a set of
+                  sequences all at once"
+  groups: "Edit"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  boolean: feature [
+    information: "Use feature information"
+  ]
+
+  seqset: sequence [
+    parameter: "Y"
+    features: "$(feature)"
+    type: "gapany"
+    aligned: "N"
+  ]
+
+endsection: input
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  seqoutset: outseq [
+    parameter: "Y"
+    features: "$(feature)"
+  ]
+
+endsection: output

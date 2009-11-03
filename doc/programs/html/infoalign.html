@@ -1,0 +1,1243 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: infoalign
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+infoalign
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
+    Function
+</H2>
+Display basic information about a multiple sequence alignment
+
+
+<H2>
+    Description
+</H2>
+
+<p><b>infoalign</b> displays on screen basic information about sequences in an input multiple sequence alignment.  This includes the sequences' USA, name, two measures of length, counts of gaps, and numbers of identical, similar and different residues or bases in this sequence when compared to a reference sequence, together with a simple statistic of the % change between the reference sequence and this sequence. Any combination of these records is easily selected or unselected for display. The same information may be written to an output file which (optionally) may be formatted in an HTML table.</p>
+<p>The reference sequence is the one against which all the other sequences are compared using a specified substitution matrix.  It is either the calculated consensus sequence of the alignment (the default) or it can be one of the set of aligned sequences, specified by either the ordinal number of that sequence in the input file, or by name.  There are various options to control how the consensus is calculated.</p>
+
+
+<H2>
+    Algorithm
+</H2>
+
+The set of aligned sequences is read in.
+
+<p>
+
+If the reference sequence is the consensus sequence (this is the
+default) then this is calculated.  If the reference sequence is
+specified as an ordinal number, then the sequences are counted (from 1)
+until the reference sequence is identified.  If the reference sequence
+is specified by its name then the names of the sequences are compared to
+the specified name until the reference sequence is identified. 
+
+<p>
+
+<pre>
+Foreach sequence:
+<p>
+  Find the position of the first residue or base which is not a gap character.
+<br>
+  Find the position of the last residue or base which is not a gap character.
+<p>
+  Foreach position from the first non-gap character to the last non-gap
+character:
+<p>
+    if the position is a gap character, then 
+<br>
+      increment the 'GapLen' count
+<br>
+      if this character is the start of a new gap, increment the 'Gaps' count
+<br>
+    else
+<br>
+      the character at this position of the sequence and in the
+      reference sequence are now compared. 
+<br>
+      if the sequence character and the reference character are identical 
+      (apart from case) then
+<br>
+        increment the 'Ident' count
+<br>
+      else if the similarity matrix score for the two characters is > 0
+      (i.e.  if they are similar) then
+<br>
+        increment the 'Similar' count
+<br>
+      else
+<br>
+        increment the 'Different' count
+<p>
+  The 'SeqLen' length of the sequence is the number of non-gap characters
+  in the sequence (i.e. 'Ident' + 'Similar' + 'Different')
+<p>
+  The 'AlignLen' length of the sequence is the length from the first
+  non-gap character to the last non-gap character.  (i.e.  the number of
+  bases or residues of the sequence plus the number of gap characters
+  internal to the sequence.)
+<p>
+  The '%Change' value for the sequence is calculated as: 
+<br>
+  ('AlignLen' - 'Ident') * 100 / 'AlignLen'
+</pre>
+
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with infoalign</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>infoalign globins.msf </b>
+Display basic information about a multiple sequence alignment
+Output file [globins.infoalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+This example doesn't display the USA of the sequence: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>infoalign globins.msf -nousa </b>
+Display basic information about a multiple sequence alignment
+Output file [globins.infoalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 3</b>
+<p>
+Display only the name and sequence length of a sequence: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>infoalign globins.msf -only -name -seqlength </b>
+Display basic information about a multiple sequence alignment
+Output file [globins.infoalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.3">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 4</b>
+<p>
+Display only the name, number of gap characters and differences to the consensus sequence: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>infoalign globins.msf -only -name -gapcount -diffcount </b>
+Display basic information about a multiple sequence alignment
+Output file [globins.infoalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.4">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 5</b>
+<p>
+Display the name and number of gaps within a sequence: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>infoalign globins.msf -only -name -gaps </b>
+Display basic information about a multiple sequence alignment
+Output file [globins.infoalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.5">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 6</b>
+<p>
+Display information formatted with HTML: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>infoalign globins.msf -html </b>
+Display basic information about a multiple sequence alignment
+Output file [globins.infoalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.6">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 7</b>
+<p>
+Use the first sequence as the reference sequence to compare to: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>infoalign globins.msf -refseq 1 </b>
+Display basic information about a multiple sequence alignment
+Output file [globins.infoalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.7">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 8</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>infoalign -auto @eclac.list -out test.out </b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.8">Go to the input files for this example</a><br><a href="#output.8">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 9</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>infoalign -auto tembl:v00296 -out test.out </b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.9">Go to the input files for this example</a><br><a href="#output.9">Go to the output files for this example</a><p><p>
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqset     The sequence alignment to be displayed.
+  [-outfile]           outfile    [*.infoalign] If you enter the name of a
+                                  file here then this program will write the
+                                  sequence details into that file.
+
+   Additional (Optional) qualifiers:
+   -matrix             matrix     [EBLOSUM62 for protein, EDNAFULL for DNA]
+                                  This is the scoring matrix file used when
+                                  comparing sequences. By default it is the
+                                  file 'EBLOSUM62' (for proteins) or the file
+                                  'EDNAFULL' (for nucleic sequences). These
+                                  files are found in the 'data' directory of
+                                  the EMBOSS installation.
+   -refseq             string     [0] If you give the number in the alignment
+                                  or the name of a sequence, it will be taken
+                                  to be the reference sequence. The reference
+                                  sequence is the one against which all the
+                                  other sequences are compared. If this is set
+                                  to 0 then the consensus sequence will be
+                                  used as the reference sequence. By default
+                                  the consensus sequence is used as the
+                                  reference sequence. (Any string is accepted)
+   -html               boolean    [N] Format output as an HTML table
+
+   Advanced (Unprompted) qualifiers:
+   -plurality          float      [50.0] Set a cut-off for the % of positive
+                                  scoring matches below which there is no
+                                  consensus. The default plurality is taken as
+                                  50% of the total weight of all the
+                                  sequences in the alignment. (Number from
+                                  0.000 to 100.000)
+   -identity           float      [0.0] Provides the facility of setting the
+                                  required number of identities at a position
+                                  for it to give a consensus. Therefore, if
+                                  this is set to 100% only columns of
+                                  identities contribute to the consensus.
+                                  (Number from 0.000 to 100.000)
+   -only               boolean    [N] This is a way of shortening the command
+                                  line if you only want a few things to be
+                                  displayed. Instead of specifying:
+                                  '-nohead -nousa -noname -noalign -nogaps
+                                  -nogapcount -nosimcount -noidcount
+                                  -nodiffcount -noweight'
+                                  to get only the sequence length output, you
+                                  can specify
+                                  '-only -seqlength'
+   -heading            boolean    [@(!$(only))] Display column headings
+   -usa                boolean    [@(!$(only))] Display the USA of the
+                                  sequence
+   -name               boolean    [@(!$(only))] Display 'name' column
+   -seqlength          boolean    [@(!$(only))] Display 'seqlength' column
+   -alignlength        boolean    [@(!$(only))] Display 'alignlength' column
+   -gaps               boolean    [@(!$(only))] Display number of gaps
+   -gapcount           boolean    [@(!$(only))] Display number of gap
+                                  positions
+   -idcount            boolean    [@(!$(only))] Display number of identical
+                                  positions
+   -simcount           boolean    [@(!$(only))] Display number of similar
+                                  positions
+   -diffcount          boolean    [@(!$(only))] Display number of different
+                                  positions
+   -change             boolean    [@(!$(only))] Display % number of changed
+                                  positions
+   -weight             boolean    [@(!$(only))] Display 'weight' column
+   -description        boolean    [@(!$(only))] Display 'description' column
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>The sequence alignment to be displayed.</td>
+<td>Readable set of sequences</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>If you enter the name of a file here then this program will write the sequence details into that file.</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.infoalign</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-matrix</td>
+<td>This is the scoring matrix file used when comparing sequences. By default it is the file 'EBLOSUM62' (for proteins) or the file 'EDNAFULL' (for nucleic sequences). These files are found in the 'data' directory of the EMBOSS installation.</td>
+<td>Comparison matrix file in EMBOSS data path</td>
+<td>EBLOSUM62 for protein<br>EDNAFULL for DNA</td>
+</tr>
+
+<tr>
+<td>-refseq</td>
+<td>If you give the number in the alignment or the name of a sequence, it will be taken to be the reference sequence. The reference sequence is the one against which all the other sequences are compared. If this is set to 0 then the consensus sequence will be used as the reference sequence. By default the consensus sequence is used as the reference sequence.</td>
+<td>Any string is accepted</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-html</td>
+<td>Format output as an HTML table</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-plurality</td>
+<td>Set a cut-off for the % of positive scoring matches below which there is no consensus. The default plurality is taken as 50% of the total weight of all the sequences in the alignment.</td>
+<td>Number from 0.000 to 100.000</td>
+<td>50.0</td>
+</tr>
+
+<tr>
+<td>-identity</td>
+<td>Provides the facility of setting the required number of identities at a position for it to give a consensus. Therefore, if this is set to 100% only columns of identities contribute to the consensus.</td>
+<td>Number from 0.000 to 100.000</td>
+<td>0.0</td>
+</tr>
+
+<tr>
+<td>-only</td>
+<td>This is a way of shortening the command line if you only want a few things to be displayed. Instead of specifying:
+'-nohead -nousa -noname -noalign -nogaps -nogapcount -nosimcount -noidcount -nodiffcount -noweight'
+to get only the sequence length output, you can specify
+'-only -seqlength'</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-heading</td>
+<td>Display column headings</td>
+<td>Boolean value Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+<tr>
+<td>-usa</td>
+<td>Display the USA of the sequence</td>
+<td>Boolean value Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+<tr>
+<td>-name</td>
+<td>Display 'name' column</td>
+<td>Boolean value Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+<tr>
+<td>-seqlength</td>
+<td>Display 'seqlength' column</td>
+<td>Boolean value Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+<tr>
+<td>-alignlength</td>
+<td>Display 'alignlength' column</td>
+<td>Boolean value Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+<tr>
+<td>-gaps</td>
+<td>Display number of gaps</td>
+<td>Boolean value Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+<tr>
+<td>-gapcount</td>
+<td>Display number of gap positions</td>
+<td>Boolean value Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+<tr>
+<td>-idcount</td>
+<td>Display number of identical positions</td>
+<td>Boolean value Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+<tr>
+<td>-simcount</td>
+<td>Display number of similar positions</td>
+<td>Boolean value Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+<tr>
+<td>-diffcount</td>
+<td>Display number of different positions</td>
+<td>Boolean value Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+<tr>
+<td>-change</td>
+<td>Display % number of changed positions</td>
+<td>Boolean value Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+<tr>
+<td>-weight</td>
+<td>Display 'weight' column</td>
+<td>Boolean value Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+<tr>
+<td>-description</td>
+<td>Display 'description' column</td>
+<td>Boolean value Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>infoalign</b> reads a normal multiple sequence alignment file, as
+produced by a alignment program. 
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: globins.msf</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+!!AA_MULTIPLE_ALIGNMENT 1.0
+
+  ../data/globins.msf MSF:  164 Type: P 25/06/01 CompCheck: 4278 ..
+
+  Name: HBB_HUMAN Len: 164  Check: 6914 Weight: 0.61
+  Name: HBB_HORSE Len: 164  Check: 6007 Weight: 0.65
+  Name: HBA_HUMAN Len: 164  Check: 3921 Weight: 0.65
+  Name: HBA_HORSE Len: 164  Check: 4770 Weight: 0.83
+  Name: MYG_PHYCA Len: 164  Check: 7930 Weight: 1.00
+  Name: GLB5_PETMA Len: 164  Check: 1857 Weight: 0.91
+  Name: LGB2_LUPLU Len: 164  Check: 2879 Weight: 0.43
+
+//
+
+           1                                               50
+HBB_HUMAN  ~~~~~~~~VHLTPEEKSAVTALWGKVN.VDEVGGEALGR.LLVVYPWTQR
+HBB_HORSE  ~~~~~~~~VQLSGEEKAAVLALWDKVN.EEEVGGEALGR.LLVVYPWTQR
+HBA_HUMAN  ~~~~~~~~~~~~~~VLSPADKTNVKAA.WGKVGAHAGEYGAEALERMFLS
+HBA_HORSE  ~~~~~~~~~~~~~~VLSAADKTNVKAA.WSKVGGHAGEYGAEALERMFLG
+MYG_PHYCA  ~~~~~~~VLSEGEWQLVLHVWAKVEAD.VAGHGQDILIR.LFKSHPETLE
+GLB5_PETMA PIVDTGSVAPLSAAEKTKIRSAWAPVYSTYETSGVDILVKFFTSTPAAQE
+LGB2_LUPLU ~~~~~~~~GALTESQAALVKSSWEEFNANIPKHTHRFFILVLEIAPAAKD
+
+           51                                             100
+HBB_HUMAN  FFESFGDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSE
+HBB_HORSE  FFDSFGDLSNPGAVMGNPKVKAHGKKVLHSFGEGVHHLDNLKGTFAALSE
+HBA_HUMAN  FPTTKTYFPHFDLSHGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSD
+HBA_HORSE  FPTTKTYFPHFDLSHGSAQVKAHGKKVGDALTLAVGHLDDLPGALSNLSD
+MYG_PHYCA  KFDRFKHLKTEAEMKASEDLKKHGVTVLTALGAILKKKGHHEAELKPLAQ
+GLB5_PETMA FFPKFKGLTTADQLKKSADVRWHAERIINAVNDAVASMDDTEKMSMKLRD
+LGB2_LUPLU LFSFLKGTSEVPQNNPELQAHAGKVFKLVYEAAIQLQVTGVVVTDATLKN
+
+           101                                            150
+HBB_HUMAN  LHCDKLH..VDPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVA
+HBB_HORSE  LHCDKLH..VDPENFRLLGNVLVVVLARHFGKDFTPELQASYQKVVAGVA
+HBA_HUMAN  LHAHKLR..VDPVNFKLLSHCLLVTLAAHLPAEFTPAVHASLDKFLASVS
+HBA_HORSE  LHAHKLR..VDPVNFKLLSHCLLSTLAVHLPNDFTPAVHASLDKFLSSVS
+MYG_PHYCA  SHATKHK..IPIKYLEFISEAIIHVLHSRHPGDFGADAQGAMNKALELFR
+GLB5_PETMA LSGKHAK..SFQVDPQYFKVLAAVIADTVAAGDAGFEKLMSMICILLRSA
+LGB2_LUPLU LGSVHVSKGVADAHFPVVKEAILKTIKEVVGAKWSEELNSAWTIAYDELA
+
+           151        164
+HBB_HUMAN  NALAHKYH~~~~~~
+HBB_HORSE  NALAHKYH~~~~~~
+HBA_HUMAN  TVLTSKYR~~~~~~
+HBA_HORSE  TVLTSKYR~~~~~~
+MYG_PHYCA  KDIAAKYKELGYQG
+GLB5_PETMA Y~~~~~~~~~~~~~
+LGB2_LUPLU IVIKKEMNDAA~~~
+
+</pre>
+</td></tr></table><p>
+
+<a name="input.8"></a>
+<h3>Input files for usage example 8</h3>
+<p><h3>File: eclac.list</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+#Formerly ECLAC
+tembl:J01636
+
+#Formerly ECLACA
+tembl:X51872
+
+#Formerly ECLACI
+tembl:V00294
+
+#Formerly ECLACY
+tembl:V00295
+
+#Formerly ECLACZ
+tembl:V00296
+</pre>
+</td></tr></table><p>
+
+<a name="input.9"></a>
+<h3>Input files for usage example 9</h3>
+
+'tembl:v00296' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:v00296</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   V00296; SV 1; linear; genomic DNA; STD; PRO; 3078 BP.
+XX
+AC   V00296;
+XX
+DT   13-JUL-1983 (Rel. 03, Created)
+DT   18-APR-2005 (Rel. 83, Last updated, Version 5)
+XX
+DE   E. coli gene lacZ coding for beta-galactosidase (EC 3.2.1.23).
+XX
+KW   galactosidase.
+XX
+OS   Escherichia coli
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
+OC   Enterobacteriaceae; Escherichia.
+XX
+RN   [1]
+RP   1-3078
+RX   PUBMED; 6313347.
+RA   Kalnins A., Otto K., Ruether U., Mueller-Hill B.;
+RT   "Sequence of the lacZ gene of Escherichia coli";
+RL   EMBO J. 2(4):593-597(1983).
+XX
+RN   [2]
+RX   PUBMED; 3038536.
+RA   Zell R., Fritz H.J.;
+RT   "DNA mismatch-repair in Escherichia coli counteracting the hydrolytic
+RT   deamination of 5-methyl-cytosine residues";
+RL   EMBO J. 6(6):1809-1815(1987).
+XX
+CC   Data kindly reviewed (18-MAY-1983) by U. Ruether
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..3078
+FT                   /organism="Escherichia coli"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:562"
+FT   CDS             &lt;1..3072
+FT                   /transl_table=11
+FT                   /note="galactosidase"
+FT                   /db_xref="GOA:P00722"
+FT                   /db_xref="InterPro:IPR014718"
+FT                   /db_xref="PDB:3DYP"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P00722"
+FT                   /protein_id="CAA23573.1"
+FT                   /translation="TMITDSLAVVLQRRDWENPGVTQLNRLAAHPPFASWRNSEEARTD
+FT                   RPSQQLRSLNGEWRFAWFPAPEAVPESWLECDLPEADTVVVPSNWQMHGYDAPIYTNVT
+FT                   YPITVNPPFVPTENPTGCYSLTFNVDESWLQEGQTRIIFDGVNSAFHLWCNGRWVGYGQ
+FT                   DSRLPSEFDLSAFLRAGENRLAVMVLRWSDGSYLEDQDMWRMSGIFRDVSLLHKPTTQI
+FT                   SDFHVATRFNDDFSRAVLEAEVQMCGELRDYLRVTVSLWQGETQVASGTAPFGGEIIDE
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+     gaggcccgca ccgatcgccc ttcccaacag ttgcgcagcc tgaatggcga atggcgcttt       180
+     gcctggtttc cggcaccaga agcggtgccg gaaagctggc tggagtgcga tcttcctgag       240
+     gccgatactg tcgtcgtccc ctcaaactgg cagatgcacg gttacgatgc gcccatctac       300
+     accaacgtaa cctatcccat tacggtcaat ccgccgtttg ttcccacgga gaatccgacg       360
+     ggttgttact cgctcacatt taatgttgat gaaagctggc tacaggaagg ccagacgcga       420
+     attatttttg atggcgttaa ctcggcgttt catctgtggt gcaacgggcg ctgggtcggt       480
+     tacggccagg acagtcgttt gccgtctgaa tttgacctga gcgcattttt acgcgccgga       540
+     gaaaaccgcc tcgcggtgat ggtgctgcgt tggagtgacg gcagttatct ggaagatcag       600
+     gatatgtggc ggatgagcgg cattttccgt gacgtctcgt tgctgcataa accgactaca       660
+     caaatcagcg atttccatgt tgccactcgc tttaatgatg atttcagccg cgctgtactg       720
+     gaggctgaag ttcagatgtg cggcgagttg cgtgactacc tacgggtaac agtttcttta       780
+     tggcagggtg aaacgcaggt cgccagcggc accgcgcctt tcggcggtga aattatcgat       840
+     gagcgtggtg gttatgccga tcgcgtcaca ctacgtctga acgtcgaaaa cccgaaactg       900
+     tggagcgccg aaatcccgaa tctctatcgt gcggtggttg aactgcacac cgccgacggc       960
+     acgctgattg aagcagaagc ctgcgatgtc ggtttccgcg aggtgcggat tgaaaatggt      1020
+     ctgctgctgc tgaacggcaa gccgttgctg attcgaggcg ttaaccgtca cgagcatcat      1080
+     cctctgcatg gtcaggtcat ggatgagcag acgatggtgc aggatatcct gctgatgaag      1140
+     cagaacaact ttaacgccgt gcgctgttcg cattatccga accatccgct gtggtacacg      1200
+     ctgtgcgacc gctacggcct gtatgtggtg gatgaagcca atattgaaac ccacggcatg      1260
+     gtgccaatga atcgtctgac cgatgatccg cgctggctac cggcgatgag cgaacgcgta      1320
+     acgcgaatgg tgcagcgcga tcgtaatcac ccgagtgtga tcatctggtc gctggggaat      1380
+     gaatcaggcc acggcgctaa tcacgacgcg ctgtatcgct ggatcaaatc tgtcgatcct      1440
+     tcccgcccgg tgcagtatga aggcggcgga gccgacacca cggccaccga tattatttgc      1500
+     ccgatgtacg cgcgcgtgga tgaagaccag cccttcccgg ctgtgccgaa atggtccatc      1560
+     aaaaaatggc tttcgctacc tggagagacg cgcccgctga tcctttgcga atacgcccac      1620
+     gcgatgggta acagtcttgg cggtttcgct aaatactggc aggcgtttcg tcagtatccc      1680
+     cgtttacagg gcggcttcgt ctgggactgg gtggatcagt cgctgattaa atatgatgaa      1740
+     aacggcaacc cgtggtcggc ttacggcggt gattttggcg atacgccgaa cgatcgccag      1800
+     ttctgtatga acggtctggt ctttgccgac cgcacgccgc atccagcgct gacggaagca      1860
+     aaacaccagc agcagttttt ccagttccgt ttatccgggc aaaccatcga agtgaccagc      1920
+     gaatacctgt tccgtcatag cgataacgag ctcctgcact ggatggtggc gctggatggt      1980
+     aagccgctgg caagcggtga agtgcctctg gatgtcgctc cacaaggtaa acagttgatt      2040
+     gaactgcctg aactaccgca gccggagagc gccgggcaac tctggctcac agtacgcgta      2100
+     gtgcaaccga acgcgaccgc atggtcagaa gccgggcaca tcagcgcctg gcagcagtgg      2160
+     cgtctggcgg aaaacctcag tgtgacgctc cccgccgcgt cccacgccat cccgcatctg      2220
+     accaccagcg aaatggattt ttgcatcgag ctgggtaata agcgttggca atttaaccgc      2280
+     cagtcaggct ttctttcaca gatgtggatt ggcgataaaa aacaactgct gacgccgctg      2340
+     cgcgatcagt tcacccgtgc accgctggat aacgacattg gcgtaagtga agcgacccgc      2400
+     attgacccta acgcctgggt cgaacgctgg aaggcggcgg gccattacca ggccgaagca      2460
+     gcgttgttgc agtgcacggc agatacactt gctgatgcgg tgctgattac gaccgctcac      2520
+     gcgtggcagc atcaggggaa aaccttattt atcagccgga aaacctaccg gattgatggt      2580
+     agtggtcaaa tggcgattac cgttgatgtt gaagtggcga gcgatacacc gcatccggcg      2640
+     cggattggcc tgaactgcca gctggcgcag gtagcagagc gggtaaactg gctcggatta      2700
+     gggccgcaag aaaactatcc cgaccgcctt actgccgcct gttttgaccg ctgggatctg      2760
+     ccattgtcag acatgtatac cccgtacgtc ttcccgagcg aaaacggtct gcgctgcggg      2820
+     acgcgcgaat tgaattatgg cccacaccag tggcgcggcg acttccagtt caacatcagc      2880
+     cgctacagtc aacagcaact gatggaaacc agccatcgcc atctgctgca cgcggaagaa      2940
+     ggcacatggc tgaatatcga cggtttccat atggggattg gtggcgacga ctcctggagc      3000
+     ccgtcagtat cggcggaatt ccagctgagc gccggtcgct accattacca gttggtctgg      3060
+     tgtcaaaaat aataataa                                                    3078
+//
+</pre>
+</td></tr></table><p>
+
+
+
+<H2>
+    Output file format
+</H2>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: globins.infoalign</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+# USA             Name        SeqLen	AlignLen	Gaps	GapLen	Ident	Similar	Differ	% Change	Weight	Description
+msf::../../data/globins.msf:HBB_HUMAN	HBB_HUMAN     146	150	3	4	68	17	61	54.666668	0.610000	
+msf::../../data/globins.msf:HBB_HORSE	HBB_HORSE     146	150	3	4	68	17	61	54.666668	0.650000	
+msf::../../data/globins.msf:HBA_HUMAN	HBA_HUMAN     141	144	2	3	60	9	72	58.333332	0.650000	
+msf::../../data/globins.msf:HBA_HORSE	HBA_HORSE     141	144	2	3	63	6	72	56.250000	0.830000	
+msf::../../data/globins.msf:MYG_PHYCA	MYG_PHYCA     153	157	3	4	30	15	108	80.891716	1.000000	
+msf::../../data/globins.msf:GLB5_PETMA	GLB5_PETMA    149	151	1	2	32	16	101	78.807945	0.910000	
+msf::../../data/globins.msf:LGB2_LUPLU	LGB2_LUPLU    153	153	0	0	19	24	110	87.581696	0.430000	
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: globins.infoalign</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+# Name        SeqLen	AlignLen	Gaps	GapLen	Ident	Similar	Differ	% Change	Weight	Description
+HBB_HUMAN     146	150	3	4	68	17	61	54.666668	0.610000	
+HBB_HORSE     146	150	3	4	68	17	61	54.666668	0.650000	
+HBA_HUMAN     141	144	2	3	60	9	72	58.333332	0.650000	
+HBA_HORSE     141	144	2	3	63	6	72	56.250000	0.830000	
+MYG_PHYCA     153	157	3	4	30	15	108	80.891716	1.000000	
+GLB5_PETMA    149	151	1	2	32	16	101	78.807945	0.910000	
+LGB2_LUPLU    153	153	0	0	19	24	110	87.581696	0.430000	
+</pre>
+</td></tr></table><p>
+
+<a name="output.3"></a>
+<h3>Output files for usage example 3</h3>
+<p><h3>File: globins.infoalign</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+HBB_HUMAN     146
+HBB_HORSE     146
+HBA_HUMAN     141
+HBA_HORSE     141
+MYG_PHYCA     153
+GLB5_PETMA    149
+LGB2_LUPLU    153
+</pre>
+</td></tr></table><p>
+
+<a name="output.4"></a>
+<h3>Output files for usage example 4</h3>
+<p><h3>File: globins.infoalign</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+HBB_HUMAN     4	61
+HBB_HORSE     4	61
+HBA_HUMAN     3	72
+HBA_HORSE     3	72
+MYG_PHYCA     4	108
+GLB5_PETMA    2	101
+LGB2_LUPLU    0	110
+</pre>
+</td></tr></table><p>
+
+<a name="output.5"></a>
+<h3>Output files for usage example 5</h3>
+<p><h3>File: globins.infoalign</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+HBB_HUMAN     3
+HBB_HORSE     3
+HBA_HUMAN     2
+HBA_HORSE     2
+MYG_PHYCA     3
+GLB5_PETMA    1
+LGB2_LUPLU    0
+</pre>
+</td></tr></table><p>
+
+<a name="output.6"></a>
+<h3>Output files for usage example 6</h3>
+<p><h3>File: globins.infoalign</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&lt;table border cellpadding=4 bgcolor="#FFFFF0"&gt;
+&lt;tr&gt;&lt;th&gt;USA&lt;/th&gt;&lt;th&gt;Name&lt;/th&gt;&lt;th&gt;Sequence Length&lt;/th&gt;&lt;th&gt;Aligned Length&lt;/th&gt;&lt;th&gt;Gaps&lt;/th&gt;&lt;th&gt;Gap Length&lt;/th&gt;&lt;th&gt;Identity&lt;/th&gt;&lt;th&gt;Similarity&lt;/th&gt;&lt;th&gt;Difference&lt;/th&gt;&lt;th&gt;% Change&lt;/th&gt;&lt;th&gt;Weight&lt;/th&gt;&lt;th&gt;Description&lt;/th&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;msf::../../data/globins.msf:HBB_HUMAN&lt;/td&gt;
+&lt;td&gt;HBB_HUMAN&lt;/td&gt;
+&lt;td&gt;146&lt;/td&gt;
+&lt;td&gt;150&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;4&lt;/td&gt;
+&lt;td&gt;68&lt;/td&gt;
+&lt;td&gt;17&lt;/td&gt;
+&lt;td&gt;61&lt;/td&gt;
+&lt;td&gt;54.666668&lt;/td&gt;
+&lt;td&gt;0.610000&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;msf::../../data/globins.msf:HBB_HORSE&lt;/td&gt;
+&lt;td&gt;HBB_HORSE&lt;/td&gt;
+&lt;td&gt;146&lt;/td&gt;
+&lt;td&gt;150&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;4&lt;/td&gt;
+&lt;td&gt;68&lt;/td&gt;
+&lt;td&gt;17&lt;/td&gt;
+&lt;td&gt;61&lt;/td&gt;
+&lt;td&gt;54.666668&lt;/td&gt;
+&lt;td&gt;0.650000&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;msf::../../data/globins.msf:HBA_HUMAN&lt;/td&gt;
+&lt;td&gt;HBA_HUMAN&lt;/td&gt;
+&lt;td&gt;141&lt;/td&gt;
+&lt;td&gt;144&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;60&lt;/td&gt;
+&lt;td&gt;9&lt;/td&gt;
+&lt;td&gt;72&lt;/td&gt;
+&lt;td&gt;58.333332&lt;/td&gt;
+&lt;td&gt;0.650000&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;msf::../../data/globins.msf:HBA_HORSE&lt;/td&gt;
+&lt;td&gt;HBA_HORSE&lt;/td&gt;
+&lt;td&gt;141&lt;/td&gt;
+&lt;td&gt;144&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;63&lt;/td&gt;
+&lt;td&gt;6&lt;/td&gt;
+&lt;td&gt;72&lt;/td&gt;
+&lt;td&gt;56.250000&lt;/td&gt;
+&lt;td&gt;0.830000&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;msf::../../data/globins.msf:MYG_PHYCA&lt;/td&gt;
+&lt;td&gt;MYG_PHYCA&lt;/td&gt;
+&lt;td&gt;153&lt;/td&gt;
+&lt;td&gt;157&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;4&lt;/td&gt;
+&lt;td&gt;30&lt;/td&gt;
+&lt;td&gt;15&lt;/td&gt;
+&lt;td&gt;108&lt;/td&gt;
+&lt;td&gt;80.891716&lt;/td&gt;
+&lt;td&gt;1.000000&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;msf::../../data/globins.msf:GLB5_PETMA&lt;/td&gt;
+&lt;td&gt;GLB5_PETMA&lt;/td&gt;
+&lt;td&gt;149&lt;/td&gt;
+&lt;td&gt;151&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;32&lt;/td&gt;
+&lt;td&gt;16&lt;/td&gt;
+&lt;td&gt;101&lt;/td&gt;
+&lt;td&gt;78.807945&lt;/td&gt;
+&lt;td&gt;0.910000&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;msf::../../data/globins.msf:LGB2_LUPLU&lt;/td&gt;
+&lt;td&gt;LGB2_LUPLU&lt;/td&gt;
+&lt;td&gt;153&lt;/td&gt;
+&lt;td&gt;153&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;19&lt;/td&gt;
+&lt;td&gt;24&lt;/td&gt;
+&lt;td&gt;110&lt;/td&gt;
+&lt;td&gt;87.581696&lt;/td&gt;
+&lt;td&gt;0.430000&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+</pre>
+</td></tr></table><p>
+
+<a name="output.7"></a>
+<h3>Output files for usage example 7</h3>
+<p><h3>File: globins.infoalign</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+# USA             Name        SeqLen	AlignLen	Gaps	GapLen	Ident	Similar	Differ	% Change	Weight	Description
+msf::../../data/globins.msf:HBB_HUMAN	HBB_HUMAN     146	150	3	4	146	0	0	2.666667	0.610000	
+msf::../../data/globins.msf:HBB_HORSE	HBB_HORSE     146	150	3	4	122	10	14	18.666666	0.650000	
+msf::../../data/globins.msf:HBA_HUMAN	HBA_HUMAN     141	144	2	3	48	19	74	66.666664	0.650000	
+msf::../../data/globins.msf:HBA_HORSE	HBA_HORSE     141	144	2	3	51	18	72	64.583336	0.830000	
+msf::../../data/globins.msf:MYG_PHYCA	MYG_PHYCA     153	157	3	4	30	22	101	80.891716	1.000000	
+msf::../../data/globins.msf:GLB5_PETMA	GLB5_PETMA    149	151	1	2	24	27	98	84.105957	0.910000	
+msf::../../data/globins.msf:LGB2_LUPLU	LGB2_LUPLU    153	153	0	0	21	28	104	86.274513	0.430000	
+</pre>
+</td></tr></table><p>
+
+<a name="output.8"></a>
+<h3>Output files for usage example 8</h3>
+<p><h3>File: test.out</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+# USA             Name        SeqLen	AlignLen	Gaps	GapLen	Ident	Similar	Differ	% Change	Weight	Description
+tembl-id:J01636   J01636        7477	7477	0	0	374	0	7103	94.997993	1.000000	E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
+tembl-id:X51872   X51872        1832	1832	0	0	374	0	1458	79.585152	1.000000	Escherichia coli lacA gene for thiogalactoside transacetylase
+tembl-id:V00294   V00294        1113	1113	0	0	302	0	811	72.866127	1.000000	E. coli laci gene (codes for the lac repressor).
+tembl-id:V00295   V00295        1500	1500	0	0	336	0	1164	77.599998	1.000000	E. coli lacY gene (codes for lactose permease).
+tembl-id:V00296   V00296        3078	3078	0	0	373	0	2705	87.881744	1.000000	E. coli gene lacZ coding for beta-galactosidase (EC 3.2.1.23).
+</pre>
+</td></tr></table><p>
+
+<a name="output.9"></a>
+<h3>Output files for usage example 9</h3>
+<p><h3>File: test.out</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+# USA             Name        SeqLen	AlignLen	Gaps	GapLen	Ident	Similar	Differ	% Change	Weight	Description
+tembl-id:V00296   V00296        3078	3078	0	0	3078	0	0	0.000000	1.000000	E. coli gene lacZ coding for beta-galactosidase (EC 3.2.1.23).
+</pre>
+</td></tr></table><p>
+
+<p>
+The first non-blank line is the heading.  This is followed by one line
+per sequence containing the following columns of data separated by one
+of more space or TAB characters:
+
+<p>
+
+<UL>
+<LI> The USA (Uniform Sequence Address) that EMBOSS can use to read in
+the sequence.
+
+<LI> Name - name of the sequence.
+
+<LI> SeqLen - length of the sequence when all gap characters are removed.
+
+<LI> AlignLen - length of the sequence including internal gap
+characters i.e. gaps at the start or the end are not included.
+
+<LI> Gaps - number of gaps e.g. 'AAA---AAA' is 1 gap (and 3 gap
+characters long (see GapLen)).
+
+<LI> GapLen - total number of internal gap characters, see the 3 gap
+characters above. This is the sum total of all of the internal gap
+characters in this sequence.
+
+<LI> Ident - number of characters that are identical to the specified
+reference sequence (uppercase 'A' is identical to lowercase 'a').
+
+<LI> Similar - number of characters which are non-identical - which
+score > 0 in the comparison matrix when compared to the reference
+sequence, but which are not identical.
+
+<LI> Different - number of characters which score <= 0 in the
+comparison matrix when compared to the reference sequence.
+
+<LI> %Change - a simple measure of the percentage change as compared
+to the reference sequence: (AlignLen - Ident) * 100 / AlignLen
+
+<LI> Description - the description annotation of the sequence (if
+any).
+
+</UL>
+
+<p>
+
+If qualifiers to inhibit various columns of information are used, then
+the remaining columns of information are output in the same order as
+shown above, so if '-noseqlength' is used, the order of output is: usa,
+name, alignlength, gaps, gapcount, idcount, simcount, diffcount, change,
+description. 
+
+<p>
+
+When the -html qualifier is specified, then the output will be wrapped
+in HTML tags, ready for inclusion in a Web page.  Note that tags such as
+<HTML> and <BODY> are not output by this program as the table of
+databases is expected to form only part of the contents of a web page -
+the rest of the web page must be supplier by the user. 
+
+<p>
+
+The lines of output information are guaranteed not to have trailing
+white-space at the end. 
+
+
+<H2>
+    Data files
+</H2>
+
+<b>infoalign</b> reads in scoring matrices to determine the consensus
+sequence and to determine which matches are similar or not. 
+
+<p>
+
+<p>
+EMBOSS data files are distributed with the application and stored
+in the standard EMBOSS data directory, which is defined
+by the EMBOSS environment variable EMBOSS_DATA.
+
+<p>
+
+To see the available EMBOSS data files, run:
+<p>
+<pre>
+% embossdata -showall
+</pre>
+<p>
+To fetch one of the data files (for example 'Exxx.dat') into your
+current directory for you to inspect or modify, run:
+
+<pre>
+
+% embossdata -fetch -file Exxx.dat
+
+</pre>
+<p>
+
+Users can provide their own data files in their own directories.
+Project specific files can be put in the current directory, or for
+tidier directory listings in a subdirectory called
+".embossdata". Files for all EMBOSS runs can be put in the user's home
+directory, or again in a subdirectory called ".embossdata".
+
+<p>
+The directories are searched in the following order:
+
+<ul>
+   <li> . (your current directory)
+   <li> .embossdata (under your current directory)
+   <li> ~/ (your home directory)
+   <li> ~/.embossdata
+</ul>
+<p>
+
+
+
+
+
+<H2>
+    Notes
+</H2>
+
+<p>There are many qualifiers to control exactly what information on the sequence is output and how it is formatted.  If you only want a few fields in the output file, the command line may be shortended by preceding the appropriate qualifier with <tt>-only</tt>.  For example, instead of specifying <tt>-nohead -nousa -noname -noalign -nogaps -nogapcount -nosimcount -noidcount -nodiffcount -noweight</tt> to get only the sequence length output, you can specify <tt>-only -seqlength</tt>.</p>
+
+<p>By default, the output file starts each line with the USA of the sequence being described, so the output file is a list file that can be manually edited and read in by any other EMBOSS program that can read in one or more sequence to be analysed.</p>
+
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="edialign.html">edialign</a></td>
+<td>Local multiple alignment of sequences</td>
+</tr>
+
+<tr>
+<td><a href="emma.html">emma</a></td>
+<td>Multiple sequence alignment (ClustalW wrapper)</td>
+</tr>
+
+<tr>
+<td><a href="infobase.html">infobase</a></td>
+<td>Return information on a given nucleotide base</td>
+</tr>
+
+<tr>
+<td><a href="inforesidue.html">inforesidue</a></td>
+<td>Return information on a given amino acid residue</td>
+</tr>
+
+<tr>
+<td><a href="infoseq.html">infoseq</a></td>
+<td>Display basic information about sequences</td>
+</tr>
+
+<tr>
+<td><a href="plotcon.html">plotcon</a></td>
+<td>Plot conservation of a sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="prettyplot.html">prettyplot</a></td>
+<td>Draw a sequence alignment with pretty formatting</td>
+</tr>
+
+<tr>
+<td><a href="seealso.html">seealso</a></td>
+<td>Finds programs with similar function to a specified program</td>
+</tr>
+
+<tr>
+<td><a href="showalign.html">showalign</a></td>
+<td>Display a multiple sequence alignment in pretty format</td>
+</tr>
+
+<tr>
+<td><a href="showdb.html">showdb</a></td>
+<td>Displays information on configured databases</td>
+</tr>
+
+<tr>
+<td><a href="textsearch.html">textsearch</a></td>
+<td>Search the textual description of sequence(s)</td>
+</tr>
+
+<tr>
+<td><a href="tfm.html">tfm</a></td>
+<td>Displays full documentation for an application</td>
+</tr>
+
+<tr>
+<td><a href="tranalign.html">tranalign</a></td>
+<td>Generate an alignment of nucleic coding regions from aligned proteins</td>
+</tr>
+
+<tr>
+<td><a href="whichdb.html">whichdb</a></td>
+<td>Search all sequence databases for an entry and retrieve it</td>
+</tr>
+
+<tr>
+<td><a href="wossname.html">wossname</a></td>
+<td>Finds programs by keywords in their short description</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Author(s)
+</H2>
+
+Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+<br>
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+
+<H2>
+    History
+</H2>
+
+Written (June 2001) - Gary Williams
+
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+<H2>
+    Comments
+</H2>
+
+None
+
+</BODY>
+</HTML>
+

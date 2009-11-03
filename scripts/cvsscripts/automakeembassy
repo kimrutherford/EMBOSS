@@ -1,0 +1,59 @@
+#!/bin/csh -x
+
+#######################################
+set maillist = "emboss-bug@sanger.ac.uk"
+
+# touch file before deleteing in case it does not exist
+rm -f ~emboss/ALPHA.embassy.out ~emboss/SGI.embassy.out ~emboss/SOLARIS.embassy.out
+rm -f ~emboss/LINUX.embassy.out ~emboss/SGI-PURE.embassy.out
+	
+~emboss/cvsscripts/makeembassy OSF >&! ~emboss/ALPHA.embassy.out 
+rsh unst  ~emboss/cvsscripts/makeembassy2 SGI >&! ~emboss/SGI.embassy.out &
+rsh ics-sparc1 ~emboss/cvsscripts/makeembassy2 SOLARIS  >&! ~emboss/SOLARIS.embassy.out & 
+rsh ics-linux2 ~emboss/cvsscripts/makeembassy2 LINUX >&! ~emboss/LINUX.embassy.out  &
+
+wait
+rsh unst  ~emboss/cvsscripts/makeembassy2 SGI-PURE >&! ~emboss/SGI-PURE.embassy.out &
+wait
+
+
+set ok = "Y"
+
+# Check for the executable mse (different place than the others)
+if(! -e ~emboss/CURRENT/OSF/emboss/embassy/mse/source/mse) then
+    more ~emboss/ALPHA.embassy.out | Mail -s "MSE make failed on OSF" $maillist
+    set ok = "N"    
+endif
+
+# Check for the executable eseqboot (different place than the others)
+if(! -e ~emboss/CURRENT/OSF/emboss/embassy/phylip/src/eseqboot) then
+    more ~emboss/ALPHA.embassy.out | Mail -s "MSE make failed on OSF" $maillist
+    set ok = "N"    
+endif
+
+# Check for the executables.
+
+if ($ok == "Y") then
+  foreach t (SOLARIS SGI LINUX SGI-PURE)
+    if(! -e ~emboss/CURRENT/$t/EMBOSS-0.0.4/embassy/MSE-0.0.4/source/mse) then
+      more ~emboss/$t.embassy.out |  Mail -s "MSE make failed on $t" $maillist
+      set ok = "N"
+    endif
+    if(! -e ~emboss/CURRENT/$t/EMBOSS-0.0.4/embassy/PHYLIP-3.573c/src/eseqboot) then
+      more ~emboss/$t.embassy.out |  Mail -s "PHYLIP make failed on $t" $maillist
+      set ok = "N"
+    endif
+    if(! -e ~emboss/CURRENT/$t/EMBOSS-0.0.4/embassy/TOPO-0.1/source/topo) then
+      more ~emboss/$t.embassy.out |  Mail -s "TOPO make failed on $t" $maillist
+      set ok = "N"
+    endif
+  end
+endif
+
+if ($ok == "Y") then
+    \cp ~emboss/CURRENT/OSF/emboss/embassy/mse/MSE*.tar.gz ~ftp/pub/EMBOSS/
+    \cp ~emboss/CURRENT/OSF/emboss/embassy/phylip/PHYLIP*.tar.gz ~ftp/pub/EMBOSS/
+    \cp ~emboss/CURRENT/OSF/emboss/embassy/topo/TOPO*.tar.gz ~ftp/pub/EMBOSS/
+
+    echo "~ftp/pub/EMBOSS/*.tar.gz   distribution updated"
+endif

@@ -1,0 +1,13 @@
+<b>Here is a sample session with charge</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>charge tsw:hbb_human </b>
+Draw a protein charge plot
+Output file [hbb_human.charge]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

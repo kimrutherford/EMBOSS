@@ -1,0 +1,48 @@
+ 
+REBASE version 305                                              proto.305
+ 
+    =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    REBASE, The Restriction Enzyme Database   http://rebase.neb.com
+    Copyright (c)  Dr. Richard J. Roberts, 2003.   All rights reserved.
+    =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+ 
+Rich Roberts                                                    Apr 30 2003
+ 
+
+
+
+	    TYPE II ENZYMES
+	    ---------------
+
+BseYI                          CCCAGC (-5/-1)
+BsiYI                          CCNNNNN^NNGG
+BsrI                           ACTGG (1/-1)
+HaeIII                         GG^CC
+HpaII                          C^CGG
+Ksp632I                        CTCTTC (1/4)
+MaeII                          A^CGT
+
+
+
+	    TYPE I ENZYMES
+	    ---------------
+
+EcoAI                          GAGNNNNNNNGTCA
+EcoBI                          TGANNNNNNNNTGCT
+EcoDI                          TTANNNNNNNGTCY
+EcoDR2                         TCANNNNNNGTCG
+EcoDR3                         TCANNNNNNNATCG
+EcoDXXI                        TCANNNNNNNRTTC
+EcoEI                          GAGNNNNNNNATGC
+EcoKI                          AACNNNNNNGTGC
+
+
+
+	    TYPE III ENZYMES
+	    ---------------
+
+EcoPI                          AGACC
+EcoP15I                        CAGCAG (25/27)
+HinfIII                        CGAAT
+StyLTI                         CAGAG
+

@@ -1,0 +1,20 @@
+#=ID r17
+#=AC RNA00001
+#=DE RNA ligands evolved to bind phage R17 coat protein 
+#=GA 0.0 0.0
+#=TC 0.0 5.0
+#=NC 0.0 0.0
+#=AU COVE 2.2.3 Wed Dec  2 08:39:58 1998
+
+#=SQ lig28 1.0 - - 1..29:29 R17 coat protein ligand 28
+#=SQ lig1  1.0 - - 1..17:17 R17 coat protein ligand 1
+#=SQ lig2  1.0 - - 1..29:29 R17 coat protein ligand 2
+
+#=RF         ***A** loop *****
+#=CS  .......>>>+>> ++++ <<<<<.......
+lig28 GGAGUAAGAUAGC AUCA GCAUCUUGUUCC
+#=SS   >>>>>>>>>+>> ++++ <<<<<<<<<<<<
+lig1        GUUCACC AUCA GGGGAC
+#=SS        >>>>+>> ++++ <<<<<<
+lig2  AUGGAUGCGCACC AUCA GGGCGUAUCUAU
+#=SS  >>>>>>>>>>+>> ++++ <<<<<<<<<<<<

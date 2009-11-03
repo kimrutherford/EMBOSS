@@ -1,0 +1,242 @@
+
+                                shuffleseq 
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Shuffles a set of sequences maintaining composition
+
+Description
+
+   shuffleseq reads one or more sequences and writes them out again in a
+   random (shuffled) order. The number of shuffles may be specified. Only
+   the order of sequences is changed, no bases or residues are changed.
+
+Usage
+
+   Here is a sample session with shuffleseq
+
+   This makes two randomised copies of the input sequence:
+
+
+% shuffleseq -shuffle 2 
+Shuffles a set of sequences maintaining composition
+Input sequence(s): tembl:L48662
+output sequence(s) [l48662.fasta]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Sequence(s) filename and optional format, or
+                                  reference (input USA)
+  [-outseq]            seqoutall  [.] Sequence set(s)
+                                  filename and optional format (output USA)
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -shuffle            integer    [1] Number of shuffles (Any integer value)
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outseq" associated qualifiers
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   shuffleseq reads one or more sequence USAs.
+
+  Input files for usage example
+
+   'tembl:L48662' is a sequence entry in the example nucleic acid
+   database 'tembl'
+
+  Database entry: tembl:L48662
+
+ID   L48662; SV 1; linear; mRNA; STD; MUS; 366 BP.
+XX
+AC   L48662;
+XX
+DT   04-NOV-1995 (Rel. 45, Created)
+DT   04-MAR-2000 (Rel. 63, Last updated, Version 4)
+XX
+DE   Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antibody heavy
+DE   chain mRNA.
+XX
+KW   .
+XX
+OS   Mus musculus (house mouse)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
+;
+OC   Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea;
+OC   Muridae; Murinae; Mus.
+XX
+RN   [1]
+RP   1-366
+RX   DOI; 10.1002/eji.1830260939.
+RX   PUBMED; 8814271.
+RA   Wloch M.K., Alexander A.L., Pippen A.M., Pisetsky D.S., Gilkeson G.S.;
+RT   "Differences in V kappa gene utilization and VH CDR3 sequence among
+RT   anti-DNA from C3H-lpr mice and lupus mice with nephritis";
+RL   Eur. J. Immunol. 26(9):2225-2233(1996).
+XX
+DR   IMGT/LIGM; L48662.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..366
+FT                   /organism="Mus musculus"
+FT                   /strain="C3H/HeJ-lpr/lpr"
+FT                   /mol_type="mRNA"
+FT                   /cell_line="C3H/F2-11"
+FT                   /cell_type="hybridoma"
+FT                   /tissue_type="spleen"
+FT                   /db_xref="taxon:10090"
+XX
+SQ   Sequence 366 BP; 100 A; 90 C; 85 G; 89 T; 2 other;
+     gagnnccagc tgcagcagtc tggacctgag ctggtaaagc ctggggcttc agtgaagatg        6
+0
+     tcctgcaagg cttctggata cacattcact agctatgtta tgcactgggt gaatcagaag       12
+0
+     cctgggcagg gccttgagtg gattggatat attaatcctt acaatgatgg tactaactac       18
+0
+     aatgagaagt tcaaaggcaa ggccacactg acttcagaca aatcctccag cacagcctac       24
+0
+     atggagttca gcagcctgac ctctgaggac tctgcggtct attactgtgc aagaaaaact       30
+0
+     tcctactata gtaacctata ttactttgac tactggggcc aaggcaccac tctcacagtc       36
+0
+     tcctca                                                                  36
+6
+//
+
+Output file format
+
+  Output files for usage example
+
+  File: l48662.fasta
+
+>L48662 L48662.1 Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA anti
+body heavy chain mRNA.
+aggtttttatattacaagcatactaagagactcgcgatgatcgcacaattccaaatgtgc
+tcatgggtgtagcaagaacctcaaataaaagggcaaccatgagggtaaagtctccgcatg
+agcccctgggacgcgagagactttctcccgctagtgggtcgaacctgcagtgtcgataat
+tggagttaaaatcgcagcatttacggccatgaattgtgtcgatanacgattcacgcaatc
+gttaagatcaggttcattgggntcacaaaccgtaggccccccgttgcctgacgcgtaacg
+ttcggatttccgtgacttcatctgactactctgtcacattcttacacgacaagctcaaca
+agccgg
+>L48662 L48662.1 Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA anti
+body heavy chain mRNA.
+gtggatggtatccctaacccatgacttgcgattccattgactaataccgatttcgctatg
+cgaataatactgcacaataagcgctgggggttggtttaaanttgcgatgtattatcaggt
+gcatcatacgcgtgtcttcaatcgcaggagaatacaaactcagtcccaagcctaaggcgc
+gtgagacttcattagggcaacggatactgctaactagttaaactcgcatgtaacaactca
+cctgagcggtcgtacatgggcctctcttcccgaagggttgttcgaaaaaagcattgatac
+aggccaggcaagcaccacgtgtcagcactacgatggccgttntcaaagtagctcatacag
+cctcgc
+
+   Each run will produce a different sequence.
+
+   Note that these two sequences have the same name.
+
+Data files
+
+   None.
+
+Notes
+
+   shuffleseq is useful for producing sets of sequences with randomised
+   order which can be used for checking the statistics of sequence
+   similarity searches.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+                    Program name    Description
+                    msbar        Mutate a sequence
+
+Author(s)
+
+   Michael          Schmitz (mschmitz © lbl.gov)
+   Lawrence         Berkeley Labs, USA
+
+History
+
+Target users
+
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
+
+Comments
+
+                    None

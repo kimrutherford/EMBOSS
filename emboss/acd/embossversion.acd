@@ -1,0 +1,29 @@
+application: embossversion [
+  documentation: "Reports the current EMBOSS version number"
+  groups: "Utils:Misc"
+]
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  boolean: full [
+    additional: "Y"
+    information: "Show all EMBOSS version information fields"
+  ]
+
+endsection: additional
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    additional: "Y"
+    default: "stdout"
+    knowntype: "embossversion output"
+  ]
+
+endsection: output

@@ -1,0 +1,18 @@
+application: demotable [
+  documentation: "Demonstration of the table functions"
+  groups: "Test"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  infile: infile [
+    parameter: "Y"
+    information: "GFF format features file"
+    help: "File containing normal tab delimited gff's"
+    knowntype: "gff"
+  ]
+
+endsection: input

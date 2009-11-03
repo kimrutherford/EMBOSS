@@ -1,0 +1,194 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: tranalign
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+tranalign
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/tranalign.ione" -->
+
+<H2>
+    Description
+</H2>
+
+
+
+<p><b>tranalign</b> is a re-implementation in EMBOSS of the program mrtrans by Bill Pearson. It reads a set of (unaligned) nucleotide sequences and a corresponding set of aligned protein sequences which are the translations, and writes the coding regions to file as a nucleotide sequence alignment. The sequences must be in the same order in the input sets.  Each nucleotide sequence is translated in all three forward frames using the specified genetic code and the translations compared to the corresponding protein sequence from input the alignment.  The contiguous nucleotide sequence that coded the protein is written to file (it will not splice together different exons to produce a coding sequence).</p>
+
+
+<H2>
+Algorithm
+</H2>
+<p>The protein sequences will typically include gap (<tt>-</tt>) characters. These are ignored during sequence comparison but replaced by <tt>---</tt> in the nucleotide sequence alignment output.</p>
+
+
+
+
+<H2>
+    Usage
+</H2>
+
+<!--#include file="inc/tranalign.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/tranalign.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/tranalign.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+The input is a set of unaligned nucleic sequences and the set of aligned
+protein sequences to be used as a guide in the alignment of the output
+nucleic sequences. 
+
+<p>
+
+The ID names of the nucleic acid and protein sequences are NOT checked
+to see if they correspond to each other.  They can have any names. 
+
+<p>
+
+There must be at least as many protein sequences as nucleic acid
+sequence - extra protein sequences are ignored. 
+
+<p>
+
+Each of the nucleic acid sequences must have a corresponding protein
+sequence which is derived from the coding region of that nucleic acid
+sequence. The two sets of sequences must be in the same order.
+
+<p>
+
+<!--#include file="inc/tranalign.input" -->
+
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/tranalign.output" -->
+
+<p>
+
+The output is the regions of the nucleic acid sequences which code for
+the corresponding protein sequence, with gap characters ('-') introduced
+so that they have the same alignment as the corresponding protein
+sequences. 
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+
+<H2>
+    Notes
+</H2>
+
+<p>In general, it is better to use protein sequences for multiple alignment, but to use DNA sequences for phylogeny, for example, when using the programs <b>dnadist</b>, <b>dnapars</b>, <b>dnaml</b>, etc in the PHYLIP package. Where one has a protein sequence alignment, it would be time consuming to remove gap characters before back-translating the proteins. <b>tranalign</b> helps by generating aligned cDNA sequences from a protein sequence alignment.</p>
+
+<p><b>tranalign</b> finds the coding regions for contiguous sequences only. It will not splice together different exons to produce a coding sequence. You should therefore use either mRNA sequences, or nucleic sequences which you have constructed to hold a contiguous coding region (maybe using <b>extractseq</b> or <b>yank</b> and <b>union</b>?).</p>
+
+
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+<p>The sequences must be in the same order in both input sets of sequences. Some alignment program (including clustalw/emma) will re-order their input sequences so as to group similar sequences together.</p>
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+"No guide protein sequence available for nucleic sequence xxx" - the
+corresponding protein sequence for this nucleic sequence has not been
+input. You have input more nucleic acid sequences than protein sequences.
+
+<p>
+
+
+"Guide protein sequence xxx not found in nucleic sequence xxx" - the
+region of the nucleic sequence which codes for the protein was not
+found.  The coding region in the nucleic acid sequence must be a single
+contiguous sequence.  The protein sequence might not be the
+corresponding one for this nucleic acid sequence if they are out of
+order. 
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/tranalign.isee" -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+The original program <b>mrtrans</b> was written by Bill Pearson
+<a href="mailto:wrp@virginia.edu">(wrp@virginia.edu)</a>
+
+<p>
+
+<b>tranalign</b> was written in EMBOSS code using the
+description of <b>mrtrans</b> as a guide by 
+
+<!--#include file="inc/gwilliam.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/tranalign.history" -->
+
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/tranalign.comment" -->
+
+</BODY>
+</HTML>
+

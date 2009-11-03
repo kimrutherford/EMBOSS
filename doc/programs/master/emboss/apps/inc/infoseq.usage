@@ -1,0 +1,109 @@
+<b>Here is a sample session with infoseq</b>
+<p>
+Display information on a sequence: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>infoseq tembl:x13776 </b>
+Display basic information about sequences
+
+USA                      Database  Name           Accession      Type Length %GC    Description 
+tembl-id:X13776          tembl          X13776         X13776         N    2167   66.54  Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><p>
+<p>
+<b>Example 2</b>
+<p>
+Don't display the USA of a sequence: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>infoseq tembl:x13776 -nousa </b>
+Display basic information about sequences
+
+Database  Name           Accession      Type Length %GC    Description 
+tembl          X13776         X13776         N    2167   66.54  Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+
+</pre></td></tr></table><p>
+<p>
+<p>
+<p>
+<b>Example 3</b>
+<p>
+Display only the name and length of a sequence: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>infoseq tembl:x13776 -only -name -length </b>
+Display basic information about sequences
+
+Name           Length 
+X13776         2167   
+
+</pre></td></tr></table><p>
+<p>
+<p>
+<p>
+<b>Example 4</b>
+<p>
+Display only the description of a sequence: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>infoseq tembl:x13776 -only -desc </b>
+Display basic information about sequences
+
+Description 
+Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+
+</pre></td></tr></table><p>
+<p>
+<p>
+<p>
+<b>Example 5</b>
+<p>
+Display the type of a sequence: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>infoseq tembl:x13776 -only -type </b>
+Display basic information about sequences
+
+Type 
+N    
+
+</pre></td></tr></table><p>
+<p>
+<p>
+<p>
+<b>Example 6</b>
+<p>
+Display information formatted with HTML: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>infoseq tembl:x13776 -html </b>
+Display basic information about sequences
+
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>USA</th><th>Database</th><th>Name</th><th>Accession</th><th>Type</th><th>Length</th><th>%GC</th><th>Description</th></tr>
+<tr><td>tembl-id:X13776</td><td>tembl</td><td>X13776</td><td>X13776</td><td>N</td><td>2167</td><td>66.54</td><td>Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation</td></tr>
+</table>
+
+</pre></td></tr></table><p>
+<p>
+<p>

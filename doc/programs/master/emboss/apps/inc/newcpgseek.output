@@ -1,0 +1,18 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: u68037.newcpgseek</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+
+
+NEWCPGSEEK of U68037 from 1 to 1218
+with score &gt; 17 
+
+ Begin    End  Score        CpG  %CG  CG/GC
+*    96   1032   630         87  66.1   0.65
+  1072   1100    26          3  62.1   0.00
+  1183   1193    26          2  72.7   2.00
+-------------------------------------------
+</pre>
+</td></tr></table><p>

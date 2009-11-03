@@ -1,0 +1,200 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: matcher
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+matcher
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/matcher.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+
+<p><b>matcher</b> identifies local similarities in two input sequences using a rigorous algorithm based on Bill Pearson's <b>lalign</b> application, version 2.0u4 (Feb. 1996). The substitution matrix, gap insertion and extension penalty are specified. The specified number of top-scoring pair-wise local sequence alignments are written to file.</p>
+
+
+<H2>
+Algorithm
+</H2>
+
+
+<p><b>matcher</b> is based on Bill Pearson's <b>lalign</b> application, version 2.0u4 (Feb. 1996). lalign uses code developed by X. Huang and W. Miller (Adv. Appl. Math. (1991) 12:337-357) for the "sim" program, which is a linear-space version of an algorithm described by M. S. Waterman and M. Eggert (J. Mol. Biol. 197:723-728).</p>
+
+<H2>
+    Usage
+</H2>
+
+<!--#include file="inc/matcher.usage" -->
+
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/matcher.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/matcher.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+
+<b>matcher</b> reads in any 2 sequence USAs of the same type (DNA or protein).
+
+<p>
+
+<!--#include file="inc/matcher.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+
+<!--#include file="inc/alignformats.ihtml" -->
+ 
+
+<p>
+
+<!--#include file="inc/matcher.output" -->
+
+
+<H2>
+    Data files
+</H2>
+
+
+For protein sequences EBLOSUM62 is used for the substitution matrix.
+For nucleotide sequence, EDNAFULL is used.
+
+<p>
+
+EMBOSS data files are distributed with the application and stored
+in the standard EMBOSS data directory, which is defined
+by EMBOSS environment variable EMBOSS_DATA.
+
+<p>
+
+Users can provide their own data files in their own directories.
+Project specific files can be put in the current directory, or for
+tidier directory listings in a subdirectory called
+".embossdata". Files for all EMBOSS runs can be put in the user's home
+directory, or again in a subdirectory called ".embossdata".
+
+<p>
+The directories are searched in the following order:
+
+<ul>
+   <li> . (your current directory)
+   <li> .embossdata (under your current directory)
+   <li> ~/ (your home directory)
+   <li> ~/.embossdata
+</ul>
+
+<H2>
+    Notes
+</H2>
+
+<p><b>matcher</b> is rigorous but also very slow. The advantage of <b>matcher</b> over <b>water</b> (which is also rigorous) is that it uses far less memory, so you are much less likely to run out of memory when aligning large sequences.</p>
+<p><b>matcher</b> reports a specified number of alignments between the two sequences. <b>water</b> in contrast will only report only the single (optimal) match. The default number of alignments output is 1, but can be increased to (for example) the 10 best alignments by using the <tt>-alternatives 10</tt> command-line qualifier. In some cases, for example multidomain proteins or cDNA and genomic DNA comparisons, there may be many interesting and significant alignments.</p>
+
+<p><b>matcher</b> will not produce an alignment that is guaranteed to be optimal in the same way that <b>water</b> does, which implements the Needleman & Wunsch algorith.  <b>water</b> will generate the single, optimal local alignment and uses memory in the order of the product of the lengths of the sequences to be aligned. If you require an optimal alignment you should use <b>water</b>. If you run out of memory or want several possible good alignments, use <b>matcher</b>.</p>
+
+
+
+<H2>
+    References
+</H2>
+
+
+<ol>
+<li>
+X. Huang and W. Miller (1991) Adv. Appl. Math. 12:373-381
+<li>
+M.  S.  Waterman and M.  Eggert (J. Mol.  Biol.  197:723-728).  
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+   0 upon successful completion. 
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/matcher.isee" -->
+
+<p>
+
+<b>water</b> will give a single best rigorous local alignment.  It will
+use memory of the order of the product of the lengths of the sequences
+to be aligned.  If you wish the 'best' local alignment you should use
+<b>water</b>.  If you run out of memory or want several possible good
+alignments, use <b>matcher</b>. 
+
+<H2>
+    Author(s)
+</H2>
+
+
+This program was originally written by Bill Pearson as part of the
+FASTA package under the name 'lalign'.
+<p>
+
+This application was modified for inclusion in EMBOSS by 
+<!--#include file="inc/ilongden.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/matcher.history" -->
+
+<H2>
+    Target users
+</H2>
+
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/matcher.comment" -->
+
+</BODY>
+</HTML>
+

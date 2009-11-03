@@ -1,0 +1,54 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: x65923.twofeat</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: twofeat
+# Rundate: Tue 15 Jul 2008 12:00:00
+# Commandline: twofeat
+#    [-sequence] tembl:x65923
+#    -atype polyA_signal
+#    -btype polyA_site
+#    -minrange 10
+#    -maxrange 50
+# Report_format: table
+# Report_file: x65923.twofeat
+########################################
+
+#=======================================
+#
+# Sequence: X65923     from: 1   to: 518
+# HitCount: 1
+#=======================================
+
+  Start     End  Strand   Score starta   enda startb   endb
+    484     509       +   0.000    484    489    509    509
+
+#---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_length: 518
+# Reported_sequences: 1
+# Reported_hitcount: 1
+#---------------------------------------
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: x65923.twofeat</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+##gff-version 3
+##sequence-region X65923 1 518
+#!Date 2008-07-15
+#!Type DNA
+#!Source-version EMBOSS 6.1.0
+X65923	EMBL	polyA_signal_sequence	484	489	0.000	+	.	ID="X65923.6"
+X65923	EMBL	polyA_site	509	509	0.000	+	.	ID="X65923.7";featflags="0x40"
+</pre>
+</td></tr></table><p>

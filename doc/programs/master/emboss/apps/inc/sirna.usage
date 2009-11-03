@@ -1,0 +1,33 @@
+<b>Here is a sample session with sirna</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>sirna </b>
+Finds siRNA duplexes in mRNA
+Input nucleotide sequence(s): <b>tembl:x65923</b>
+Output report [x65923.sirna]: <b></b>
+output sequence(s) [x65923.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+Show the first two bases of the 23 base target region in brackets. These do not form part of the sequence to be ordered, but it is useful to see if the 23 base region starts with an 'AA'. 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>sirna -context </b>
+Finds siRNA duplexes in mRNA
+Input nucleotide sequence(s): <b>tembl:x65923</b>
+Output report [x65923.sirna]: <b></b>
+output sequence(s) [x65923.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>

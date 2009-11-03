@@ -1,0 +1,1741 @@
+
+                                embossdata 
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Find and retrieve EMBOSS data files
+
+Description
+
+   embossdata searches for a specified data file in all the directories
+   which can hold them and writes the results of the search to screen or
+   (optionally) to file. Optionally, all the files in the searched
+   directories can be displayed. Optionally, it will also copy the file
+   from the EMBOSS standard data directory to the current directory so
+   that you can safely edit and use it.
+
+Usage
+
+   Here is a sample session with embossdata
+
+   Display the directories searched for EMBOSS data files:
+
+
+% embossdata 
+Find and retrieve EMBOSS data files
+Data file name: 
+
+# The following directories can contain EMBOSS data files.
+# They are searched in the following order until the file is found.
+# If the directory does not exist, then this is noted below.
+# '.' is the UNIX name for your current working directory.
+
+.                                                            Exists
+.embossdata                                                  Does not exist
+/homes/pmr                                                   Exists
+/homes/pmr/.embossdata                                       Does not exist
+/homes/pmr/local/share/EMBOSS/data/                          Exists
+
+   Example 2
+
+   Display the names of data files in all of the possible data
+   directories: This is run on a small test system and so the results
+   will probably be different when you run this.
+
+
+% embossdata -showall 
+Find and retrieve EMBOSS data files
+Data file name: 
+
+
+
+DIRECTORY: /homes/pmr/local/share/EMBOSS/data/
+
+  EBLOSUM30
+  EBLOSUM35
+  EBLOSUM40
+  EBLOSUM45
+  EBLOSUM50
+  EBLOSUM55
+  EBLOSUM60
+  EBLOSUM62
+  EBLOSUM62-12
+  EBLOSUM65
+  EBLOSUM70
+  EBLOSUM75
+  EBLOSUM80
+  EBLOSUM85
+  EBLOSUM90
+  EBLOSUMN
+  EDNAFULL
+  EDNAMAT
+  EGC.0
+  EGC.1
+  EGC.10
+  EGC.11
+  EGC.12
+  EGC.13
+  EGC.14
+  EGC.15
+  EGC.16
+  EGC.2
+  EGC.21
+  EGC.22
+  EGC.23
+  EGC.3
+  EGC.4
+  EGC.5
+  EGC.6
+  EGC.9
+  EGC.index
+  EGC.txt
+  ENUC.4.2
+  ENUC.4.4
+  EPAM10
+  EPAM100
+  EPAM110
+  EPAM120
+  EPAM130
+  EPAM140
+  EPAM150
+  EPAM160
+  EPAM170
+  EPAM180
+  EPAM190
+  EPAM20
+  EPAM200
+  EPAM210
+  EPAM220
+  EPAM230
+  EPAM240
+  EPAM250
+  EPAM260
+  EPAM270
+  EPAM280
+  EPAM290
+  EPAM30
+  EPAM300
+  EPAM310
+  EPAM320
+  EPAM330
+  EPAM340
+  EPAM350
+  EPAM360
+  EPAM370
+  EPAM380
+  EPAM390
+  EPAM40
+  EPAM400
+  EPAM410
+  EPAM420
+  EPAM430
+  EPAM440
+  EPAM450
+  EPAM460
+  EPAM470
+  EPAM480
+  EPAM490
+  EPAM50
+  EPAM500
+  EPAM60
+  EPAM70
+  EPAM80
+  EPAM90
+  Eaa_acc_surface.dat
+  Eaa_hydropathy.dat
+  Eaa_properties.dat
+  Eamino.dat
+  Eangles.dat
+  Eangles_tri.dat
+  Eantigenic.dat
+  Ebases.iub
+  Edayhoff.freq
+  Edna.melt
+  Eembl.ior
+  Eenergy.dat
+  Efeatures.embl
+  Efeatures.emboss
+  Efeatures.gff
+  Efeatures.gff2
+  Efeatures.gff2protein
+  Efeatures.gff3
+  Efeatures.gff3protein
+  Efeatures.gffprotein
+  Efeatures.pir
+  Efeatures.protein
+  Efeatures.swiss
+  Efreqs.dat
+  Ehet.dat
+  Ehth.dat
+  Ehth87.dat
+  Emass.dat
+  Emassmod.dat
+  Ememe.dat
+  Emethylsites.dat
+  Emolwt.dat
+  Emwfilter.dat
+  Enakai.dat
+  Epepcoil.dat
+  Epk.dat
+  Epprofile
+  Eprior1.plib
+  Eprior30.plib
+  Eresidues.iub
+  Erna.melt
+  Esig.euk
+  Esig.pro
+  Etags.embl
+  Etags.emboss
+  Etags.gff
+  Etags.gff3
+  Etags.gff3protein
+  Etags.gffprotein
+  Etags.pir
+  Etags.protein
+  Etags.swiss
+  Etcode.dat
+  Evdw.dat
+  Ewhite-wimley.dat
+  Matrices.nucleotide
+  Matrices.protein
+  Matrices.proteinstructure
+  SSSUB
+  edialignmat
+  embossre.equ
+  tffungi
+  tfinsect
+  tfother
+  tfplant
+  tfvertebrate
+  tp400_dna
+  tp400_prot
+  tp400_trans
+
+
+DIRECTORY: /homes/pmr/local/share/EMBOSS/data/JASPAR_PHYLOFACTS
+
+  PF0001.pfm
+  PF0002.pfm
+  PF0003.pfm
+  PF0004.pfm
+  PF0005.pfm
+  PF0006.pfm
+  PF0007.pfm
+  PF0008.pfm
+  PF0009.pfm
+  PF0010.pfm
+  PF0011.pfm
+  PF0012.pfm
+  PF0013.pfm
+  PF0014.pfm
+  PF0015.pfm
+  PF0016.pfm
+  PF0017.pfm
+  PF0018.pfm
+  PF0019.pfm
+  PF0020.pfm
+  PF0021.pfm
+  PF0022.pfm
+  PF0023.pfm
+  PF0024.pfm
+  PF0025.pfm
+  PF0026.pfm
+  PF0027.pfm
+  PF0028.pfm
+  PF0029.pfm
+  PF0030.pfm
+  PF0031.pfm
+  PF0032.pfm
+  PF0033.pfm
+  PF0034.pfm
+  PF0035.pfm
+  PF0036.pfm
+  PF0037.pfm
+  PF0038.pfm
+  PF0039.pfm
+  PF0040.pfm
+  PF0041.pfm
+  PF0042.pfm
+  PF0043.pfm
+  PF0044.pfm
+  PF0045.pfm
+  PF0046.pfm
+  PF0047.pfm
+  PF0048.pfm
+  PF0049.pfm
+  PF0050.pfm
+  PF0051.pfm
+  PF0052.pfm
+  PF0053.pfm
+  PF0054.pfm
+  PF0055.pfm
+  PF0056.pfm
+  PF0057.pfm
+  PF0058.pfm
+  PF0059.pfm
+  PF0060.pfm
+  PF0061.pfm
+  PF0062.pfm
+  PF0063.pfm
+  PF0064.pfm
+  PF0065.pfm
+  PF0066.pfm
+  PF0067.pfm
+  PF0068.pfm
+  PF0069.pfm
+  PF0070.pfm
+  PF0071.pfm
+  PF0072.pfm
+  PF0073.pfm
+  PF0074.pfm
+  PF0075.pfm
+  PF0076.pfm
+  PF0077.pfm
+  PF0078.pfm
+  PF0079.pfm
+  PF0080.pfm
+  PF0081.pfm
+  PF0082.pfm
+  PF0083.pfm
+  PF0084.pfm
+  PF0085.pfm
+  PF0086.pfm
+  PF0087.pfm
+  PF0088.pfm
+  PF0089.pfm
+  PF0090.pfm
+  PF0091.pfm
+  PF0092.pfm
+  PF0093.pfm
+  PF0094.pfm
+  PF0095.pfm
+  PF0096.pfm
+  PF0097.pfm
+  PF0098.pfm
+  PF0099.pfm
+  PF0100.pfm
+  PF0101.pfm
+  PF0102.pfm
+  PF0103.pfm
+  PF0104.pfm
+  PF0105.pfm
+  PF0106.pfm
+  PF0107.pfm
+  PF0108.pfm
+  PF0109.pfm
+  PF0110.pfm
+  PF0111.pfm
+  PF0112.pfm
+  PF0113.pfm
+  PF0114.pfm
+  PF0115.pfm
+  PF0116.pfm
+  PF0117.pfm
+  PF0118.pfm
+  PF0119.pfm
+  PF0120.pfm
+  PF0121.pfm
+  PF0122.pfm
+  PF0123.pfm
+  PF0124.pfm
+  PF0125.pfm
+  PF0126.pfm
+  PF0127.pfm
+  PF0128.pfm
+  PF0129.pfm
+  PF0130.pfm
+  PF0131.pfm
+  PF0132.pfm
+  PF0133.pfm
+  PF0134.pfm
+  PF0135.pfm
+  PF0136.pfm
+  PF0137.pfm
+  PF0138.pfm
+  PF0139.pfm
+  PF0140.pfm
+  PF0141.pfm
+  PF0142.pfm
+  PF0143.pfm
+  PF0144.pfm
+  PF0145.pfm
+  PF0146.pfm
+  PF0147.pfm
+  PF0148.pfm
+  PF0149.pfm
+  PF0150.pfm
+  PF0151.pfm
+  PF0152.pfm
+  PF0153.pfm
+  PF0154.pfm
+  PF0155.pfm
+  PF0156.pfm
+  PF0157.pfm
+  PF0158.pfm
+  PF0159.pfm
+  PF0160.pfm
+  PF0161.pfm
+  PF0162.pfm
+  PF0163.pfm
+  PF0164.pfm
+  PF0165.pfm
+  PF0166.pfm
+  PF0167.pfm
+  PF0168.pfm
+  PF0169.pfm
+  PF0170.pfm
+  PF0171.pfm
+  PF0172.pfm
+  PF0173.pfm
+  PF0174.pfm
+  dummyfile
+  matrix_list.txt
+
+
+DIRECTORY: /homes/pmr/local/share/EMBOSS/data/JASPAR_POLII
+
+  dummyfile
+
+
+DIRECTORY: /homes/pmr/local/share/EMBOSS/data/AAINDEX
+
+  alts910101
+  andn920101
+  argp820101
+  argp820102
+  argp820103
+  aurr980101
+  aurr980102
+  aurr980103
+  aurr980104
+  aurr980105
+  aurr980106
+  aurr980107
+  aurr980108
+  aurr980109
+  aurr980110
+  aurr980111
+  aurr980112
+  aurr980113
+  aurr980114
+  aurr980115
+  aurr980116
+  aurr980117
+  aurr980118
+  aurr980119
+  aurr980120
+  avbf000101
+  avbf000102
+  avbf000103
+  avbf000104
+  avbf000105
+  avbf000106
+  avbf000107
+  avbf000108
+  avbf000109
+  azae970101
+  azae970102
+  baek050101
+  basu010101
+  basu050101
+  basu050102
+  basu050103
+  begf750101
+  begf750102
+  begf750103
+  bens940101
+  bens940102
+  bens940103
+  bens940104
+  betm990101
+  bhar880101
+  bigc670101
+  biov880101
+  biov880102
+  blaj010101
+  blam930101
+  blas910101
+  bonm030101
+  bonm030102
+  bonm030103
+  bonm030104
+  bonm030105
+  bonm030106
+  broc820101
+  broc820102
+  brys930101
+  bulh740101
+  bulh740102
+  buna790101
+  buna790102
+  buna790103
+  bura740101
+  bura740102
+  casg920101
+  cedj970101
+  cedj970102
+  cedj970103
+  cedj970104
+  cedj970105
+  cham810101
+  cham820101
+  cham820102
+  cham830101
+  cham830102
+  cham830103
+  cham830104
+  cham830105
+  cham830106
+  cham830107
+  cham830108
+  choc750101
+  choc760101
+  choc760102
+  choc760103
+  choc760104
+  chop780101
+  chop780201
+  chop780202
+  chop780203
+  chop780204
+  chop780205
+  chop780206
+  chop780207
+  chop780208
+  chop780209
+  chop780210
+  chop780211
+  chop780212
+  chop780213
+  chop780214
+  chop780215
+  chop780216
+  cidh920101
+  cidh920102
+  cidh920103
+  cidh920104
+  cidh920105
+  cohe430101
+  corj870101
+  corj870102
+  corj870103
+  corj870104
+  corj870105
+  corj870106
+  corj870107
+  corj870108
+  cosi940101
+  cowr900101
+  craj730101
+  craj730102
+  craj730103
+  crog050101
+  csem940101
+  dawd720101
+  daym780101
+  daym780201
+  daym780301
+  daym780302
+  desm900101
+  desm900102
+  digm050101
+  dosz010101
+  dosz010102
+  dosz010103
+  dosz010104
+  dummyfile
+  eisd840101
+  eisd860101
+  eisd860102
+  eisd860103
+  engd860101
+  fasg760101
+  fasg760102
+  fasg760103
+  fasg760104
+  fasg760105
+  fasg890101
+  fauj830101
+  fauj880101
+  fauj880102
+  fauj880103
+  fauj880104
+  fauj880105
+  fauj880106
+  fauj880107
+  fauj880108
+  fauj880109
+  fauj880110
+  fauj880111
+  fauj880112
+  fauj880113
+  fend850101
+  fina770101
+  fina910101
+  fina910102
+  fina910103
+  fina910104
+  fitw660101
+  fodm020101
+  fuks010101
+  fuks010102
+  fuks010103
+  fuks010104
+  fuks010105
+  fuks010106
+  fuks010107
+  fuks010108
+  fuks010109
+  fuks010110
+  fuks010111
+  fuks010112
+  garj730101
+  geim800101
+  geim800102
+  geim800103
+  geim800104
+  geim800105
+  geim800106
+  geim800107
+  geim800108
+  geim800109
+  geim800110
+  geim800111
+  geod900101
+  geor030101
+  geor030102
+  geor030103
+  geor030104
+  geor030105
+  geor030106
+  geor030107
+  geor030108
+  geor030109
+  giag010101
+  goda950101
+  gold730101
+  gold730102
+  gong920101
+  grar740101
+  grar740102
+  grar740103
+  grar740104
+  guod860101
+  guyh850101
+  guyh850102
+  guyh850103
+  guyh850104
+  guyh850105
+  hary940101
+  hens920101
+  hens920102
+  hens920103
+  hens920104
+  hopa770101
+  hopt810101
+  hutj700101
+  hutj700102
+  hutj700103
+  isoy800101
+  isoy800102
+  isoy800103
+  isoy800104
+  isoy800105
+  isoy800106
+  isoy800107
+  isoy800108
+  jacr890101
+  janj780101
+  janj780102
+  janj780103
+  janj790101
+  janj790102
+  johm930101
+  jond750101
+  jond750102
+  jond920101
+  jond920102
+  jond920103
+  jond940101
+  jukt750101
+  junj780101
+  jurd980101
+  kanm000101
+  kanm800101
+  kanm800102
+  kanm800103
+  kanm800104
+  kapo950101
+  karp850101
+  karp850102
+  karp850103
+  keso980101
+  keso980102
+  khag800101
+  kida850101
+  kimc930101
+  klep840101
+  koep990101
+  koep990102
+  kola920101
+  kola930101
+  kosj950101
+  kosj950102
+  kosj950103
+  kosj950104
+  kosj950105
+  kosj950106
+  kosj950107
+  kosj950108
+  kosj950109
+  kosj950110
+  kosj950111
+  kosj950112
+  kosj950113
+  kosj950114
+  kosj950115
+  kriw710101
+  kriw790101
+  kriw790102
+  kriw790103
+  kuhl950101
+  kums000101
+  kums000102
+  kums000103
+  kums000104
+  kytj820101
+  lawe840101
+  levj860101
+  levm760101
+  levm760102
+  levm760103
+  levm760104
+  levm760105
+  levm760106
+  levm760107
+  levm780101
+  levm780102
+  levm780103
+  levm780104
+  levm780105
+  levm780106
+  lewp710101
+  lifs790101
+  lifs790102
+  lifs790103
+  link010101
+  liwa970101
+  lutr910101
+  lutr910102
+  lutr910103
+  lutr910104
+  lutr910105
+  lutr910106
+  lutr910107
+  lutr910108
+  lutr910109
+  manp780101
+  maxf760101
+  maxf760102
+  maxf760103
+  maxf760104
+  maxf760105
+  maxf760106
+  mcla710101
+  mcla720101
+  mcmt640101
+  meej800101
+  meej800102
+  meej810101
+  meej810102
+  mehp950101
+  mehp950102
+  mehp950103
+  meih800101
+  meih800102
+  meih800103
+  micc010101
+  mirl960101
+  mits020101
+  miys850101
+  miys850102
+  miys850103
+  miys930101
+  miys960101
+  miys960102
+  miys960103
+  miys990101
+  miys990102
+  miys990103
+  miys990104
+  miys990105
+  miys990106
+  miys990107
+  miyt790101
+  mohr870101
+  monm990101
+  monm990201
+  moog990101
+  muet010101
+  muet020101
+  muet020102
+  munv940101
+  munv940102
+  munv940103
+  munv940104
+  munv940105
+  nadh010101
+  nadh010102
+  nadh010103
+  nadh010104
+  nadh010105
+  nadh010106
+  nadh010107
+  nagk730101
+  nagk730102
+  nagk730103
+  nakh900101
+  nakh900102
+  nakh900103
+  nakh900104
+  nakh900105
+  nakh900106
+  nakh900107
+  nakh900108
+  nakh900109
+  nakh900110
+  nakh900111
+  nakh900112
+  nakh900113
+  nakh920101
+  nakh920102
+  nakh920103
+  nakh920104
+  nakh920105
+  nakh920106
+  nakh920107
+  nakh920108
+  naod960101
+  ngpc000101
+  niek910101
+  niek910102
+  nisk800101
+  nisk860101
+  nozy710101
+  ogak980101
+  olsk800101
+  onek900101
+  onek900102
+  oobm770101
+  oobm770102
+  oobm770103
+  oobm770104
+  oobm770105
+  oobm850101
+  oobm850102
+  oobm850103
+  oobm850104
+  oobm850105
+  ovej920101
+  ovej920102
+  ovej920103
+  ovej920104
+  ovej920105
+  palj810101
+  palj810102
+  palj810103
+  palj810104
+  palj810105
+  palj810106
+  palj810107
+  palj810108
+  palj810109
+  palj810110
+  palj810111
+  palj810112
+  palj810113
+  palj810114
+  palj810115
+  palj810116
+  parb960101
+  parb960102
+  parj860101
+  pars000101
+  pars000102
+  pliv810101
+  ponj960101
+  ponp800101
+  ponp800102
+  ponp800103
+  ponp800104
+  ponp800105
+  ponp800106
+  ponp800107
+  ponp800108
+  ponp930101
+  pram820101
+  pram820102
+  pram820103
+  pram900101
+  pram900102
+  pram900103
+  pram900104
+  prla000101
+  prla000102
+  ptio830101
+  ptio830102
+  punt030101
+  punt030102
+  qian880101
+  qian880102
+  qian880103
+  qian880104
+  qian880105
+  qian880106
+  qian880107
+  qian880108
+  qian880109
+  qian880110
+  qian880111
+  qian880112
+  qian880113
+  qian880114
+  qian880115
+  qian880116
+  qian880117
+  qian880118
+  qian880119
+  qian880120
+  qian880121
+  qian880122
+  qian880123
+  qian880124
+  qian880125
+  qian880126
+  qian880127
+  qian880128
+  qian880129
+  qian880130
+  qian880131
+  qian880132
+  qian880133
+  qian880134
+  qian880135
+  qian880136
+  qian880137
+  qian880138
+  qian880139
+  qu_c930101
+  qu_c930102
+  qu_c930103
+  quib020101
+  racs770101
+  racs770102
+  racs770103
+  racs820101
+  racs820102
+  racs820103
+  racs820104
+  racs820105
+  racs820106
+  racs820107
+  racs820108
+  racs820109
+  racs820110
+  racs820111
+  racs820112
+  racs820113
+  racs820114
+  rada880101
+  rada880102
+  rada880103
+  rada880104
+  rada880105
+  rada880106
+  rada880107
+  rada880108
+  ricj880101
+  ricj880102
+  ricj880103
+  ricj880104
+  ricj880105
+  ricj880106
+  ricj880107
+  ricj880108
+  ricj880109
+  ricj880110
+  ricj880111
+  ricj880112
+  ricj880113
+  ricj880114
+  ricj880115
+  ricj880116
+  ricj880117
+  rier950101
+  risj880101
+  robb760101
+  robb760102
+  robb760103
+  robb760104
+  robb760105
+  robb760106
+  robb760107
+  robb760108
+  robb760109
+  robb760110
+  robb760111
+  robb760112
+  robb760113
+  robb790101
+  robb790102
+  rosg850101
+  rosg850102
+  rosm880101
+  rosm880102
+  rosm880103
+  rosm880104
+  rosm880105
+  rusr970101
+  rusr970102
+  rusr970103
+  simk990101
+  simk990102
+  simk990103
+  simk990104
+  simk990105
+  simz760101
+  skoj000101
+  skoj000102
+  skoj970101
+  snep660101
+  snep660102
+  snep660103
+  snep660104
+  suem840101
+  suem840102
+  suym030101
+  swer830101
+  takk010101
+  tans760101
+  tans760102
+  tans770101
+  tans770102
+  tans770103
+  tans770104
+  tans770105
+  tans770106
+  tans770107
+  tans770108
+  tans770109
+  tans770110
+  thop960101
+  tobd000101
+  tobd000102
+  tsaj990101
+  tsaj990102
+  tude900101
+  vasm830101
+  vasm830102
+  vasm830103
+  velv850101
+  venm980101
+  vent840101
+  vheg790101
+  vinm940101
+  vinm940102
+  vinm940103
+  vinm940104
+  vogg950101
+  warp780101
+  weba780101
+  weil970101
+  weil970102
+  werd780101
+  werd780102
+  werd780103
+  werd780104
+  wilm950101
+  wilm950102
+  wilm950103
+  wilm950104
+  wimw960101
+  woec730101
+  wolr790101
+  wolr810101
+  wols870101
+  wols870102
+  wols870103
+  yanj020101
+  yutk870101
+  yutk870102
+  yutk870103
+  yutk870104
+  zasb820101
+  zhac000101
+  zhac000102
+  zhac000103
+  zhac000104
+  zhac000105
+  zhac000106
+  zhoh040101
+  zhoh040102
+  zhoh040103
+  zimj680101
+  zimj680102
+  zimj680103
+  zimj680104
+  zimj680105
+
+
+DIRECTORY: /homes/pmr/local/share/EMBOSS/data/CODONS
+
+  Cut.index
+  EAcanthocheilonema_viteae.cut
+  EAedes.cut
+  EAedes_aegypti.cut
+  EAedes_albopictus.cut
+  EAedes_atropalpus.cut
+  EAmblyomma_americanum.cut
+  EAnadara_trapezia.cut
+  EAphrodite_aculeata.cut
+  EAstacus_astacus.cut
+  EDictyostelium_discoideum.cut
+  Eacc.cut
+  Eacica.cut
+  Eadenovirus5.cut
+  Eadenovirus7.cut
+  Eagrtu.cut
+  Eaidlav.cut
+  Eanasp.cut
+  Eani.cut
+  Eani_h.cut
+  Eanidmit.cut
+  Earath.cut
+  Easn.cut
+  Eath.cut
+  Eatu.cut
+  Eavi.cut
+  Eazovi.cut
+  Ebacme.cut
+  Ebacst.cut
+  Ebacsu.cut
+  Ebacsu_high.cut
+  Ebja.cut
+  Ebly.cut
+  Ebme.cut
+  Ebmo.cut
+  Ebna.cut
+  Ebommo.cut
+  Ebov.cut
+  Ebovin.cut
+  Ebovsp.cut
+  Ebpphx.cut
+  Ebraja.cut
+  Ebrana.cut
+  Ebrare.cut
+  Ebst.cut
+  Ebsu.cut
+  Ebsu_h.cut
+  Ecac.cut
+  Ecaeel.cut
+  Ecal.cut
+  Ecanal.cut
+  Ecanfa.cut
+  Ecaucr.cut
+  Eccr.cut
+  Ecel.cut
+  Echi.cut
+  Echick.cut
+  Echicken.cut
+  Echisp.cut
+  Echk.cut
+  Echlre.cut
+  Echltr.cut
+  Echmp.cut
+  Echnt.cut
+  Echos.cut
+  Echzm.cut
+  Echzmrubp.cut
+  Ecloab.cut
+  Ecpx.cut
+  Ecre.cut
+  Ecrigr.cut
+  Ecrisp.cut
+  Ectr.cut
+  Ecyapa.cut
+  Edayhoff.cut
+  Eddi.cut
+  Eddi_h.cut
+  Edicdi.cut
+  Edicdi_high.cut
+  Edog.cut
+  Edro.cut
+  Edro_h.cut
+  Edrome.cut
+  Edrome_high.cut
+  Edrosophila.cut
+  Eeca.cut
+  Eeco.cut
+  Eeco_h.cut
+  Eecoli.cut
+  Eecoli_high.cut
+  Eemeni.cut
+  Eemeni_high.cut
+  Eemeni_mit.cut
+  Eerwct.cut
+  Ef1.cut
+  Efish.cut
+  Efmdvpolyp.cut
+  Ehaein.cut
+  Ehalma.cut
+  Ehalsa.cut
+  Eham.cut
+  Ehha.cut
+  Ehin.cut
+  Ehma.cut
+  Ehorvu.cut
+  Ehum.cut
+  Ehuman.cut
+  Ekla.cut
+  Eklepn.cut
+  Eklula.cut
+  Ekpn.cut
+  Elacdl.cut
+  Ella.cut
+  Elyces.cut
+  Emac.cut
+  Emacfa.cut
+  Emaize.cut
+  Emaize_chl.cut
+  Emam_h.cut
+  Emammal_high.cut
+  Emanse.cut
+  Emarpo_chl.cut
+  Emedsa.cut
+  Emetth.cut
+  Emixlg.cut
+  Emouse.cut
+  Emsa.cut
+  Emse.cut
+  Emta.cut
+  Emtu.cut
+  Emus.cut
+  Emussp.cut
+  Emva.cut
+  Emyctu.cut
+  Emze.cut
+  Emzecp.cut
+  Encr.cut
+  Eneigo.cut
+  Eneu.cut
+  Eneucr.cut
+  Engo.cut
+  Eoncmy.cut
+  Eoncsp.cut
+  Eorysa.cut
+  Eorysa_chl.cut
+  Epae.cut
+  Epea.cut
+  Epet.cut
+  Epethy.cut
+  Epfa.cut
+  Ephavu.cut
+  Ephix174.cut
+  Ephv.cut
+  Ephy.cut
+  Epig.cut
+  Eplafa.cut
+  Epolyomaa2.cut
+  Epombe.cut
+  Epombecai.cut
+  Epot.cut
+  Eppu.cut
+  Eprovu.cut
+  Epse.cut
+  Epseae.cut
+  Epsepu.cut
+  Epsesm.cut
+  Epsy.cut
+  Epvu.cut
+  Erab.cut
+  Erabbit.cut
+  Erabit.cut
+  Erabsp.cut
+  Erat.cut
+  Eratsp.cut
+  Erca.cut
+  Erhile.cut
+  Erhime.cut
+  Erhm.cut
+  Erhoca.cut
+  Erhosh.cut
+  Eric.cut
+  Erle.cut
+  Erme.cut
+  Ersp.cut
+  Esalsa.cut
+  Esalsp.cut
+  Esalty.cut
+  Esau.cut
+  Eschma.cut
+  Eschpo.cut
+  Eschpo_cai.cut
+  Eschpo_high.cut
+  Esco.cut
+  Eserma.cut
+  Esgi.cut
+  Esheep.cut
+  Eshp.cut
+  Eshpsp.cut
+  Esli.cut
+  Eslm.cut
+  Esma.cut
+  Esmi.cut
+  Esmu.cut
+  Esoltu.cut
+  Esoy.cut
+  Esoybn.cut
+  Espi.cut
+  Espiol.cut
+  Espn.cut
+  Espo.cut
+  Espo_h.cut
+  Espu.cut
+  Esta.cut
+  Estaau.cut
+  Estrco.cut
+  Estrmu.cut
+  Estrpn.cut
+  Estrpu.cut
+  Esty.cut
+  Esus.cut
+  Esv40.cut
+  Esyhsp.cut
+  Esynco.cut
+  Esyncy.cut
+  Esynsp.cut
+  Etbr.cut
+  Etcr.cut
+  Eter.cut
+  Etetsp.cut
+  Etetth.cut
+  Etheth.cut
+  Etob.cut
+  Etobac.cut
+  Etobac_chl.cut
+  Etobcp.cut
+  Etom.cut
+  Etrb.cut
+  Etrybr.cut
+  Etrycr.cut
+  Evco.cut
+  Evibch.cut
+  Ewheat.cut
+  Ewht.cut
+  Exel.cut
+  Exenla.cut
+  Exenopus.cut
+  Eyeast.cut
+  Eyeast_cai.cut
+  Eyeast_high.cut
+  Eyeast_mit.cut
+  Eyeastcai.cut
+  Eyen.cut
+  Eyeren.cut
+  Eyerpe.cut
+  Eysc.cut
+  Eysc_h.cut
+  Eyscmt.cut
+  Eysp.cut
+  Ezebrafish.cut
+  Ezma.cut
+
+
+DIRECTORY: /homes/pmr/local/share/EMBOSS/data/JASPAR_SPLICE
+
+  dummyfile
+
+
+DIRECTORY: /homes/pmr/local/share/EMBOSS/data/JASPAR_FAM
+
+  MF0001.pfm
+  MF0002.pfm
+  MF0003.pfm
+  MF0004.pfm
+  MF0005.pfm
+  MF0006.pfm
+  MF0007.pfm
+  MF0008.pfm
+  MF0009.pfm
+  MF0010.pfm
+  MF0011.pfm
+  dummyfile
+  matrix_list.txt
+
+
+DIRECTORY: /homes/pmr/local/share/EMBOSS/data/JASPAR_CORE
+
+  MA0001.pfm
+  MA0002.pfm
+  MA0003.pfm
+  MA0004.pfm
+  MA0005.pfm
+  MA0006.pfm
+  MA0007.pfm
+  MA0008.pfm
+  MA0009.pfm
+  MA0010.pfm
+  MA0011.pfm
+  MA0012.pfm
+  MA0013.pfm
+  MA0014.pfm
+  MA0015.pfm
+  MA0016.pfm
+  MA0017.pfm
+  MA0018.pfm
+  MA0019.pfm
+  MA0020.pfm
+  MA0021.pfm
+  MA0022.pfm
+  MA0023.pfm
+  MA0024.pfm
+  MA0025.pfm
+  MA0026.pfm
+  MA0027.pfm
+  MA0028.pfm
+  MA0029.pfm
+  MA0030.pfm
+  MA0031.pfm
+  MA0032.pfm
+  MA0033.pfm
+  MA0034.pfm
+  MA0035.pfm
+  MA0036.pfm
+  MA0037.pfm
+  MA0038.pfm
+  MA0039.pfm
+  MA0040.pfm
+  MA0041.pfm
+  MA0042.pfm
+  MA0043.pfm
+  MA0044.pfm
+  MA0045.pfm
+  MA0046.pfm
+  MA0047.pfm
+  MA0048.pfm
+  MA0049.pfm
+  MA0050.pfm
+  MA0051.pfm
+  MA0052.pfm
+  MA0053.pfm
+  MA0054.pfm
+  MA0055.pfm
+  MA0056.pfm
+  MA0057.pfm
+  MA0058.pfm
+  MA0059.pfm
+  MA0060.pfm
+  MA0061.pfm
+  MA0062.pfm
+  MA0063.pfm
+  MA0064.pfm
+  MA0065.pfm
+  MA0066.pfm
+  MA0067.pfm
+  MA0068.pfm
+  MA0069.pfm
+  MA0070.pfm
+  MA0071.pfm
+  MA0072.pfm
+  MA0073.pfm
+  MA0074.pfm
+  MA0075.pfm
+  MA0076.pfm
+  MA0077.pfm
+  MA0078.pfm
+  MA0079.pfm
+  MA0080.pfm
+  MA0081.pfm
+  MA0082.pfm
+  MA0083.pfm
+  MA0084.pfm
+  MA0085.pfm
+  MA0086.pfm
+  MA0087.pfm
+  MA0088.pfm
+  MA0089.pfm
+  MA0090.pfm
+  MA0091.pfm
+  MA0092.pfm
+  MA0093.pfm
+  MA0094.pfm
+  MA0095.pfm
+  MA0096.pfm
+  MA0097.pfm
+  MA0098.pfm
+  MA0099.pfm
+  MA0100.pfm
+  MA0101.pfm
+  MA0102.pfm
+  MA0103.pfm
+  MA0104.pfm
+  MA0105.pfm
+  MA0106.pfm
+  MA0107.pfm
+  MA0108.pfm
+  MA0109.pfm
+  MA0110.pfm
+  MA0111.pfm
+  MA0112.pfm
+  MA0113.pfm
+  MA0114.pfm
+  MA0115.pfm
+  MA0116.pfm
+  MA0117.pfm
+  MA0118.pfm
+  MA0119.pfm
+  MA0120.pfm
+  MA0121.pfm
+  MA0122.pfm
+  MA0123.pfm
+  dummyfile
+  matrix_list.txt
+
+
+DIRECTORY: /homes/pmr/local/share/EMBOSS/data/REBASE
+
+  dummyfile
+  embossre.enz
+  embossre.equ
+  embossre.ref
+  embossre.sup
+
+
+DIRECTORY: /homes/pmr/local/share/EMBOSS/data/JASPAR_CNE
+
+  dummyfile
+
+   Example 3
+
+   Make a copy of an EMBOSS data file in the current directory:
+
+
+% embossdata -fetch Epepcoil.dat 
+Find and retrieve EMBOSS data files
+
+File '/homes/pmr/local/share/EMBOSS/data/Epepcoil.dat' has been copied successf
+ully.
+
+   Go to the output files for this example
+
+   Example 4
+
+   Display the directories which contain a particular EMBOSS data file:
+
+
+% embossdata EPAM60 
+Find and retrieve EMBOSS data files
+
+# The following directories can contain EMBOSS data files.
+# They are searched in the following order until the file is found.
+# If the directory does not exist, then this is noted below.
+# '.' is the UNIX name for your current working directory.
+
+File ./EPAM60                                                     Does not exis
+t
+File .embossdata/EPAM60                                           Does not exis
+t
+File /homes/pmr/EPAM60                                            Does not exis
+t
+File /homes/pmr/.embossdata/EPAM60                                Does not exis
+t
+File /homes/pmr/local/share/EMBOSS/data/EPAM60                    Exists
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-filename]          string     This specifies the name of the file that
+                                  should be fetched into the current directory
+                                  or searched for in all of the directories
+                                  that EMBOSS programs search when looking for
+                                  a data file. The name of the file is not
+                                  altered when it is fetched. (Any string is
+                                  accepted)
+
+   Additional (Optional) qualifiers (* if not always prompted):
+   -showall            toggle     Show all potential EMBOSS data files
+*  -fetch              boolean    Fetch a data file
+   -outfile            outfile    [stdout] This specifies the name of the file
+                                  that the results of a search for a file in
+                                  the various data directories is written to.
+                                  By default these results are written to the
+                                  screen (stdout).
+
+   Advanced (Unprompted) qualifiers:
+   -reject             selection  [3, 5, 6] This specifies the names of the
+                                  sub-directories of the EMBOSS data directory
+                                  that should be ignored when displaying data
+                                  directories.
+
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   None.
+
+Output file format
+
+   All output is to stdout by default.
+
+  Output files for usage example 3
+
+  File: Epepcoil.dat
+
+# Input data for PEPCOIL
+# from Lupas A, van Dyke M & Stock J; Science 252:1162-4 (1991)
+#
+#   Freq in       Relative occurrence at heptad position
+# R GenBank     a      b      c      d      e      f      g
+  L  9.33     3.167  0.297  0.398  3.902  0.585  0.501  0.483
+  I  5.35     2.597  0.098  0.345  0.894  0.514  0.471  0.431
+  V  6.42     1.665  0.403  0.386  0.949  0.211  0.342  0.360
+  M  2.34     2.240  0.370  0.480  1.409  0.541  0.772  0.663
+  F  3.88     0.531  0.076  0.403  0.662  0.189  0.106  0.013
+  Y  3.16     1.417  0.090  0.122  1.659  0.190  0.130  0.155
+  G  7.10     0.045  0.275  0.578  0.216  0.211  0.426  0.156
+  A  7.59     1.297  1.551  1.084  2.612  0.377  1.248  0.877
+  K  5.72     1.375  2.639  1.763  0.191  1.815  1.961  2.795
+  R  5.39     0.659  1.163  1.210  0.031  1.358  1.937  1.798
+  H  2.25     0.347  0.275  0.679  0.395  0.294  0.579  0.213
+  E  6.10     0.262  3.496  3.108  0.998  5.685  2.494  3.048
+  D  5.03     0.030  2.352  2.268  0.237  0.663  1.620  1.448
+  Q  4.27     0.179  2.114  1.778  0.631  2.550  1.578  2.526
+  N  4.25     0.835  1.475  1.534  0.039  1.722  2.456  2.280
+  S  7.28     0.382  0.583  1.052  0.419  0.525  0.916  0.628
+  T  5.97     0.169  0.702  0.955  0.654  0.791  0.843  0.647
+  C  1.86     0.824  0.022  0.308  0.152  0.180  0.156  0.044
+  W  1.41     0.240  0.0    0.0    0.456  0.019  0.0    0.0
+  P  5.28     0.0    0.008  0.0    0.013  0.0    0.0    0.0
+
+Data files
+
+   No data files are read by this program.
+
+Notes
+
+   Many EMBOSS programs use a data file. The data files are typically
+   kept in a standard directory in the EMBOSS installation
+   (.../emboss/emboss/data/). When an EMBOSS programs require a data
+   file, it search for it in the following order of directories:
+     * The current directory
+     * .embossdata subdirectory in the current directory
+     * Your home directory
+     * .embossdata subdirectory in your home directory
+     * The EMBOSS standard data directory
+
+   EMBOSS will use the data file it finds first from the above
+   directories. For example, a data file in the current directory is used
+   in preference to a file of the same name in the EMBOSS standard data
+   directory.
+
+   It is sometimes necessary to modify a data file to change the
+   behaviour of an EMBOSS program. To do this safely, you should copy the
+   data file from the EMBOSS standard data directory to one of the other
+   directories, such as the current directory or your home directory,
+   before editing it. embossdata helps here by displaying the names of
+   data files in all the directories which could hold them, and copying a
+   data file from the EMBOSS standard data directory to the current
+   directory.
+
+   By convention, all EMBOSS data file names start with the character
+   'E', to distinguish them from other files on your system. For example
+   genetic codes to translate codons to amino acids are held in data
+   files called "EGC.0", "EGC.1", "EGC.2", etc.
+
+  -filename option
+
+   Name of data file to search for or copy into the current directory
+   from the EMBOSS standard data directory. The name of the file is not
+   altered when it is fetched. (Any string is accepted).
+
+  -outfile option
+
+   Name of file containing the results of searching the data directories.
+   By default this is written to the screen (stdout).
+
+  -reject option
+
+   The names of sub-directories of the EMBOSS data directory that should
+   be ignored when displaying data directories.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   When copying a file, this program will report if the file has been
+   copied successfully, e.g.:
+"'Epepcoil.dat' has been copied successfully."
+
+Exit status
+
+   It always exits with status 0
+
+Known bugs
+
+   None noted.
+
+See also
+
+                    Program name                 Description
+   embossversion    Reports the current EMBOSS version number
+
+Author(s)
+
+   Gary             Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC              Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome           Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+History
+
+Target users
+
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
+
+Comments
+
+                    It should be possible to format the output for html.

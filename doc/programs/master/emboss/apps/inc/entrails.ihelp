@@ -1,0 +1,8 @@
+   Mandatory qualifiers:
+  [-outfile]           outfile    Output file name
+
+   Optional qualifiers:
+   -fullreport         bool       By default, only the essential details are
+                                  reported
+
+   Advanced qualifiers: (none)

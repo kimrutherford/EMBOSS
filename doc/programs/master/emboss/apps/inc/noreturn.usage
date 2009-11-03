@@ -1,0 +1,13 @@
+<b>Here is a sample session with noreturn</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>noreturn abc.dat </b>
+Remove carriage return from ASCII files
+ASCII text output file [abc.noreturn]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

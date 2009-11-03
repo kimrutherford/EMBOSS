@@ -1,0 +1,15 @@
+<b>Here is a sample session with pepwindowall</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>pepwindowall globins.msf -gxtitle='Base Number' -gytitle='hydropathy' </b>
+Draw Kyte-Doolittle hydropathy plot for a protein alignment
+Graph type [x11]: <b>cps</b>
+
+Created pepwindowall.ps
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

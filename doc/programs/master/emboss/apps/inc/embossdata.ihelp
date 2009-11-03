@@ -1,0 +1,45 @@
+   Standard (Mandatory) qualifiers:
+  [-filename]          string     This specifies the name of the file that
+                                  should be fetched into the current directory
+                                  or searched for in all of the directories
+                                  that EMBOSS programs search when looking for
+                                  a data file. The name of the file is not
+                                  altered when it is fetched. (Any string is
+                                  accepted)
+
+   Additional (Optional) qualifiers (* if not always prompted):
+   -showall            toggle     Show all potential EMBOSS data files
+*  -fetch              boolean    Fetch a data file
+   -outfile            outfile    [stdout] This specifies the name of the file
+                                  that the results of a search for a file in
+                                  the various data directories is written to.
+                                  By default these results are written to the
+                                  screen (stdout).
+
+   Advanced (Unprompted) qualifiers:
+   -reject             selection  [3, 5, 6] This specifies the names of the
+                                  sub-directories of the EMBOSS data directory
+                                  that should be ignored when displaying data
+                                  directories.
+
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+

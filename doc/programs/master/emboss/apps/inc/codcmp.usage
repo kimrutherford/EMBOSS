@@ -1,0 +1,17 @@
+<b>Here is a sample session with codcmp</b>
+<p>
+This compares the codon usage tables for Escherichia coli and Haemophilus influenzae. 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>codcmp </b>
+Codon usage table comparison
+Codon usage file: <b>Eecoli.cut</b>
+Second Codon usage file: <b>Ehaein.cut</b>
+Output file [eecoli.codcmp]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>

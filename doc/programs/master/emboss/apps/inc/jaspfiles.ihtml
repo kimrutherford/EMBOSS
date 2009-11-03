@@ -1,0 +1,23 @@
+The EMBOSS JASPAR transcription site files are stored in
+directory 'data/JASPAR/*' under the EMBOSS installation directory.
+
+<p>
+
+These files must first be set up using the program <a
+href="jaspextract.html">'<b>jaspextract</b>'</a>.  Running
+'jaspextract' may be the job of your system manager.
+
+<p>
+      
+The data files are stored in the JASPAR directory of the standard EMBOSS
+data directory. The subdirectory names are:
+
+<ul>
+<li> JASPAR_CORE      Core files
+<li> JASPAR_FAM       Family files
+<li> JASPAR_PHYLOFACT Phylogeny files
+</ul>
+	 
+The column information is described on the JASPAR home page <a
+href="http://jaspar.genereg.net/">http://jaspar.genereg.net/</a>
+	 

@@ -1,0 +1,15 @@
+<b>Here is a sample session with pepcoil</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>pepcoil </b>
+Predicts coiled coil regions in protein sequences
+Input protein sequence(s): <b>tsw:gcn4_yeast</b>
+Window size [28]: <b></b>
+Output report [gcn4_yeast.pepcoil]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

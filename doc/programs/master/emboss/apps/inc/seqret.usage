@@ -1,0 +1,194 @@
+<b>Here is a sample session with seqret</b>
+<p>
+Extract an entry from a database and write it to a file:  
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>seqret </b>
+Reads and writes (returns) sequences
+Input (gapped) sequence(s): <b>tembl:x65923</b>
+output sequence(s) [x65923.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+Read all entries in the database 'tembl' that start with 'ab' and write them to a file. In this example the specification is all done in the command line and to stop Unix getting confused by the '*' character, it has to have a backslash ('\') before it: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>seqret 'tembl:ab*'  aball.seq </b>
+Reads and writes (returns) sequences
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 3</b>
+<p>
+seqret does not read in features by default because this results in slightly faster performance.  If however you wish to read in features with your sequence and write them out on output, using '-feature' will change the default behaviour to use any features present in the sequence.  N.B. use embl format for the output file as the default format 'fasta' reports the features in gff (file "&lt;seqname&gt;.gff") 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>seqret -feature </b>
+Reads and writes (returns) sequences
+Input (gapped) sequence(s): <b>tembl:x65923</b>
+output sequence(s) [x65923.fasta]: <b>embl::x65923.embl</b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.3">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 4</b>
+<p>
+Display the contents of the sequence on the screen: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>seqret </b>
+Reads and writes (returns) sequences
+Input (gapped) sequence(s): <b>tembl:x65923</b>
+output sequence(s) [x65923.fasta]: <b>stdout</b>
+
+>X65923 X65923.1 H.sapiens fau mRNA
+ttcctctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgc
+agctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcg
+cccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgc
+tcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccc
+tgactaccctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctggccc
+gtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaaga
+agacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgccca
+cctttggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttc
+tctaataaaaaagccacttagttcagtcaaaaaaaaaa
+
+</pre></td></tr></table><p>
+<p>
+<p>
+<p>
+<b>Example 5</b>
+<p>
+Write the result in GCG format by using the qualifier '-osformat'. 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>seqret -osf gcg </b>
+Reads and writes (returns) sequences
+Input (gapped) sequence(s): <b>tembl:x65923</b>
+output sequence(s) [x65923.gcg]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.5">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 6</b>
+<p>
+Write the result in GCG format by specifying the format in the output USA on the command line. 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>seqret -outseq gcg::x65923.gcg </b>
+Reads and writes (returns) sequences
+Input (gapped) sequence(s): <b>tembl:x65923</b>
+
+</pre></td></tr></table><p>
+<p>
+<p>
+<p>
+<b>Example 7</b>
+<p>
+Write the result in GCG format by specifying the format in the output USA at the prompt. 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>seqret </b>
+Reads and writes (returns) sequences
+Input (gapped) sequence(s): <b>tembl:x65923</b>
+output sequence(s) [x65923.fasta]: <b>gcg::x65923.gcg</b>
+
+</pre></td></tr></table><p>
+<p>
+<p>
+<p>
+<b>Example 8</b>
+<p>
+Write the reverse-complement of a sequence: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>seqret -srev </b>
+Reads and writes (returns) sequences
+Input (gapped) sequence(s): <b>tembl:x65923</b>
+output sequence(s) [x65923.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.8">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 9</b>
+<p>
+Extract the bases between the positions starting at 5 and ending at 25: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>seqret -sbegin 5 -send 25 </b>
+Reads and writes (returns) sequences
+Input (gapped) sequence(s): <b>tembl:x65923</b>
+output sequence(s) [x65923.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.9">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 10</b>
+<p>
+Extract the bases between the positions starting at 5 and ending at 5 bases before the end of the sequence: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>seqret -sbegin 5 -send -5 </b>
+Reads and writes (returns) sequences
+Input (gapped) sequence(s): <b>tembl:x65923</b>
+output sequence(s) [x65923.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.10">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 11</b>
+<p>
+Read all entries in the database 'tembl' that start with 'h' and write them to a file: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>seqret </b>
+Reads and writes (returns) sequences
+Input (gapped) sequence(s): <b>tembl:h*</b>
+output sequence(s) [h45989.fasta]: <b>hall.seq</b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.11">Go to the output files for this example</a><p><p>

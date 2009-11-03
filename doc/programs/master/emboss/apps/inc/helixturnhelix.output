@@ -1,0 +1,46 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: laci_ecoli.hth</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: helixturnhelix
+# Rundate: Tue 15 Jul 2008 12:00:00
+# Commandline: helixturnhelix
+#    -sequence tsw:laci_ecoli
+# Report_format: motif
+# Report_file: laci_ecoli.hth
+########################################
+
+#=======================================
+#
+# Sequence: LACI_ECOLI     from: 1   to: 360
+# HitCount: 1
+#
+# Hits above +2.50 SD (972.73)
+#
+#=======================================
+
+Maximum_score_at at "*"
+
+(1) Score 2160.000 length 22 at residues 4-&gt;25
+           *
+ Sequence: VTLYDVAEYAGVSYQTVSRVVN
+           |                    |
+           4                    25
+ Maximum_score_at: 4
+ Standard_deviations: 6.54
+
+
+#---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_length: 360
+# Reported_sequences: 1
+# Reported_hitcount: 1
+#---------------------------------------
+</pre>
+</td></tr></table><p>

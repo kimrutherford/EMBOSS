@@ -1,0 +1,105 @@
+application: emowse [
+  documentation: "Search protein sequences by digest fragment molecular weight"
+  groups: "Protein:Composition"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "protein"
+  ]
+
+  infile: infile [
+    parameter: "Y"
+    information: "Peptide molecular weight values file"
+    knowntype: "peptide molweights"
+  ]
+
+  datafile: mwdata [
+    information: "Molecular weights data file"
+    default: "Emolwt.dat"
+    knowntype: "molecular weights"
+  ]
+
+  datafile: frequencies [
+    default: "Efreqs.dat"
+    information: "Amino acid frequencies data file"
+    knowntype: "amino acid frequencies"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  integer: weight [
+    standard: "Y"
+    default: "0"
+    information: "Whole sequence molwt"
+  ]
+
+  boolean: mono [
+    standard: "Y"
+    default: "N"
+    information: "Use monoisotopic weights"
+  ]
+
+endsection: required
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  list: enzyme [
+    default: "1"
+    minimum: "1"
+    maximum: "1"
+    header: "Enzymes and reagents"
+    values: "1:Trypsin, 2:Lys-C, 3:Arg-C, 4:Asp-N, 5:V8-bicarb,
+             6:V8-phosph, 7:Chymotrypsin, 8:CNBr"
+    delimiter: ","
+    codedelimiter: ":"
+    information: "Enzyme or reagent"
+  ]
+
+  integer: pcrange [
+    default: "25"
+    minimum: "0"
+    maximum: "75"
+    information: "Allowed whole sequence weight variability"
+  ]
+
+  float: tolerance [
+    default: "0.1"
+    minimum: "0.1"
+    maximum: "1.0"
+    information: "Tolerance"
+  ]
+
+  float: partials [
+    default: "0.4"
+    minimum: "0.1"
+    maximum: "1.0"
+    information: "Partials factor"
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    parameter: "Y"
+    knowntype: "emowse output"
+  ]
+
+endsection: output

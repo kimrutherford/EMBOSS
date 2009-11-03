@@ -1,0 +1,165 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: seealso
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+seealso
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/seealso.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+
+
+<p><b>seealso</b> takes the name of an EMBOSS or EMBASSY program and returns a list of applications in the same functional group.  Application names and short descriptions are listed. Optionally, the output is written to an HTML table.</p>
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/seealso.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/seealso.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/seealso.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+<!--#include file="inc/seealso.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+
+<!--#include file="inc/seealso.output" -->
+
+<p>
+
+The result is header line 'SEE ALSO' then a simple list of program names
+followed by the one-line description of the program. 
+
+<p>
+
+If the '-html' qualifier is used, then the result is an HTML-formatted
+table, lacking the HTML document structures such as &lt;HTML&gt;,
+&lt;BODY&gt;, &lt;/BODY&gt;, &lt;/HTML&gt; which the user is expected
+to provide as the table will usually be included in the middle of a
+larger HTML document.
+
+<H2>
+    Data files
+</H2>
+
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+
+<p>The functional group of a program is set in its ACD file; this is an EMBOSS system file which specifies the application command-line interface such as required parameters, help on the parameters, one-line description of the program and so on.  Normally the names of the groups are fairly specific.  For example "NUCLEIC COMPOSITION" is a small group of applications for nucleotide sequence composition analysis.</p>
+
+<p>The <tt>-explode</tt> qualifier will increase the number of groups that the program retrieves by splitting the group name at selected points to produce such groups as: "NUCLEIC", "NUCLEIC COMPOSITION" and "COMPOSITION". All programs with the exploded group names which also include "NUCLEIC" and "COMPOSITION" will now be reported. The result of this qualifier is thus a report of a larger number of programs with a more tenuous link to the specified program. </p>
+
+<p>The groups that the program belongs to can be output by using the <tt>-groups</tt> qualifier. </p>
+
+<H2>
+    References
+</H2>
+
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+<p>The (optional) HTML-formatted table output lacks the HTML document structures such as <HTML>, <BODY>, </BODY>, </HTML>. It is expected the table will be included in the middle of a larger HTML document.</p>
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+The error message:
+
+<pre>
+
+FATAL ERROR: No application specified.
+
+</pre>
+
+is output if a non-existent program name is specified.
+
+<H2>
+    Exit status
+</H2>
+
+
+The program exits with exist status '0' unless a non-existent program name
+is specified, when the exit status is '1'.
+
+<H2>
+    Known bugs
+</H2>
+
+
+None.
+
+<!--#include file="inc/seealso.isee" -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+<!--#include file="inc/gwilliam.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/seealso.history" -->
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/seealso.comment" -->
+
+
+
+</BODY>
+</HTML>
+

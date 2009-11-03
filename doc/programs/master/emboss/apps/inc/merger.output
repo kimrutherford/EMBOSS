@@ -1,0 +1,172 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: v00295.merger</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: merger
+# Rundate: Tue 15 Jul 2008 12:00:00
+# Commandline: merger
+#    -asequence tembl:v00295
+#    -bsequence tembl:x51872
+# Align_format: simple
+# Report_file: v00295.merger
+########################################
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: V00295
+# 2: X51872
+# Matrix: EDNAFULL
+# Gap_penalty: 50.0
+# Extend_penalty: 5.0
+#
+# Length: 3173
+# Identity:     159/3173 ( 5.0%)
+# Similarity:   159/3173 ( 5.0%)
+# Gaps:        3014/3173 (95.0%)
+# Score: 795.0
+# 
+#
+#=======================================
+
+V00295             1 ttccagctgagcgccggtcgctaccattaccagttggtctggtgtcaaaa     50
+                                                                       
+X51872             1 --------------------------------------------------      0
+
+V00295            51 ataataataaccgggcaggccatgtctgcccgtatttcgcgtaaggaaat    100
+                                                                       
+X51872             1 --------------------------------------------------      0
+
+V00295           101 ccattatgtactatttaaaaaacacaaacttttggatgttcggtttattc    150
+                                                                       
+X51872             1 --------------------------------------------------      0
+
+V00295           151 tttttcttttacttttttatcatgggagcctacttcccgtttttcccgat    200
+                                                                       
+X51872             1 --------------------------------------------------      0
+
+V00295           201 ttggctacatgacatcaaccatatcagcaaaagtgatacgggtattattt    250
+                                                                       
+X51872             1 --------------------------------------------------      0
+
+V00295           251 ttgccgctatttctctgttctcgctattattccaaccgctgtttggtctg    300
+                                                                       
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+                                                                       
+X51872          1310 ctggcgtaaccgccgttaatcagaccgaagtaaacacccagcgtccacgc   1359
+
+V00295          1501 --------------------------------------------------   1500
+                                                                       
+X51872          1360 gcggggagtgaataccacgcgaaccggagtggttgttgtcttgtgggaag   1409
+
+V00295          1501 --------------------------------------------------   1500
+                                                                       
+X51872          1410 aggcgacctcgcgggcgctttgccaccaccaggcaaagagcgcaacaacg   1459
+
+V00295          1501 --------------------------------------------------   1500
+                                                                       
+X51872          1460 gcaggcagcgccaccaggcgagtgtttgataccaggtttcgctatgttga   1509
+
+V00295          1501 --------------------------------------------------   1500
+                                                                       
+X51872          1510 actaaccagggcgttatggcggcaccaagcccaccgccgcccatcagagc   1559
+
+V00295          1501 --------------------------------------------------   1500
+                                                                       
+X51872          1560 cgcggaccacagccccatcaccagtggcgtgcgctgctgaaaccgccgtt   1609
+
+V00295          1501 --------------------------------------------------   1500
+                                                                       
+X51872          1610 taatcaccgaagcatcaccgcctgaatgatgccgatccccaccccaccaa   1659
+
+V00295          1501 --------------------------------------------------   1500
+                                                                       
+X51872          1660 gcagtgcgctgctaagcagcagcgcactttgcgggtaaagctcacgcatc   1709
+
+V00295          1501 --------------------------------------------------   1500
+                                                                       
+X51872          1710 aatgcaccgacggcaatcagcaacagactgatggcgacactgcgacgttc   1759
+
+V00295          1501 --------------------------------------------------   1500
+                                                                       
+X51872          1760 gctgacatgctgatgaagccagcttccggccagcgccagcccgcccatgg   1809
+
+V00295          1501 -----------------------   1500
+                                            
+X51872          1810 taaccaccggcagagcggtcgac   1832
+
+
+#---------------------------------------
+#
+# Conflicts:          V00295          X51872
+#              position base   position base Using
+# 
+#
+#---------------------------------------
+</pre>
+</td></tr></table><p>
+<p><h3>File: v00295.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;V00295 V00295.1 E. coli lacY gene (codes for lactose permease).
+ttccagctgagcgccggtcgctaccattaccagttggtctggtgtcaaaaataataataa
+ccgggcaggccatgtctgcccgtatttcgcgtaaggaaatccattatgtactatttaaaa
+aacacaaacttttggatgttcggtttattctttttcttttacttttttatcatgggagcc
+tacttcccgtttttcccgatttggctacatgacatcaaccatatcagcaaaagtgatacg
+ggtattatttttgccgctatttctctgttctcgctattattccaaccgctgtttggtctg
+ctttctgacaaactcgggctgcgcaaatacctgctgtggattattaccggcatgttagtg
+atgtttgcgccgttctttatttttatcttcgggccactgttacaatacaacattttagta
+ggatcgattgttggtggtatttatctaggcttttgttttaacgccggtgcgccagcagta
+gaggcatttattgagaaagtcagccgtcgcagtaatttcgaatttggtcgcgcgcggatg
+tttggctgtgttggctgggcgctgtgtgcctcgattgtcggcatcatgttcaccatcaat
+aatcagtttgttttctggctgggctctggctgtgcactcatcctcgccgttttactcttt
+ttcgccaaaacggatgcgccctcttctgccacggttgccaatgcggtaggtgccaaccat
+tcggcatttagccttaagctggcactggaactgttcagacagccaaaactgtggtttttg
+tcactgtatgttattggcgtttcctgcacctacgatgtttttgaccaacagtttgctaat
+ttctttacttcgttctttgctaccggtgaacagggtacgcgggtatttggctacgtaacg
+acaatgggcgaattacttaacgcctcgattatgttctttgcgccactgatcattaatcgc
+atcggtgggaaaaacgccctgctgctggctggcactattatgtctgtacgtattattggc
+tcatcgttcgccacctcagcgctggaagtggttattctgaaaacgctgcatatgtttgaa
+gtaccgttcctgctggtgggctgctttaaatatattaccagccagtttgaagtgcgtttt
+tcagcgacgatttatctggtctgtttctgcttctttaagcaactggcgatgatttttatg
+tctgtactggcgggcaatatgtatgaaagcatcggtttccagggcgcttatctggtgctg
+ggtctggtggcgctgggcttcaccttaatttccgtgttcacgcttagcggccccggcccg
+ctttccctgctgcgtcgtcaggtgaatgaagtcgcttaagcaatcaatgtcggatgcggc
+gcgacgcttatccgaccaacatatcataacggagtgatcgcattgaacatgccaatgacc
+gaaagaataagagcaggcaagctatttaccgatatgtgcgaaggcttaccggaaaaaaga
+cttcgtgggaaaacgttaatgtatgagtttaatcactcgcatccatcagaagttgaaaaa
+agagaaagcctgattaaagaaatgtttgccacggtaggggaaaacgcctgggtagaaccg
+cctgtctatttctcttacggttccaacatccatataggccgcaatttttatgcaaatttc
+aatttaaccattgtcgatgactacacggtaacaatcggtgataacgtactgattgcaccc
+aacgttactctttccgttacgggacaccctgtacaccatgaattgagaaaaaacggcgag
+atgtactcttttccgataacgattggcaataacgtctggatcggaagtcatgtggttatt
+aatccaggcgtcaccatcggggataattctgttattggcgcgggtagtatcgtcacaaaa
+gacattccaccaaacgtcgtggcggctggcgttccttgtcgggttattcgcgaaataaac
+gaccgggataagcactattatttcaaagattataaagttgaatcgtcagtttaaattata
+aaaattgcctgatacgctgcgcttatcaggcctacaagttcagcgatctacattagccgc
+atccggcatgaacaaagcgcaggaacaagcgtcgcatcatgcctctttgacccacagctg
+cggaaaacgtactggtgcaaaacgcagggttatgatcatcagcccaacgacgcacagcgc
+atgaaatgcccagtccatcaggtaattgccgctgatactacgcagcacgccagaaaacca
+cggggcaagcccggcgatgataaaaccgattccctgcataaacgccaccagcttgccagc
+aatagccggttgcacagagtgatcgagcgccagcagcaaacagagcggaaacgcgccgcc
+cagacctaacccacacaccatcgcccacaataccggcaattgcatcggcagccagataaa
+gccgcagaaccccaccagttgtaacaccagcgccagcattaacagtttgcgccgatcctg
+atggcgagccatagcaggcatcagcaaagctcctgcggcttgcccaagcgtcatcaatgc
+cagtaaggaaccgctgtactgcgcgctggcaccaatctcaatatagaaagcgggtaacca
+ggcaatcaggctggcgtaaccgccgttaatcagaccgaagtaaacacccagcgtccacgc
+gcggggagtgaataccacgcgaaccggagtggttgttgtcttgtgggaagaggcgacctc
+gcgggcgctttgccaccaccaggcaaagagcgcaacaacggcaggcagcgccaccaggcg
+agtgtttgataccaggtttcgctatgttgaactaaccagggcgttatggcggcaccaagc
+ccaccgccgcccatcagagccgcggaccacagccccatcaccagtggcgtgcgctgctga
+aaccgccgtttaatcaccgaagcatcaccgcctgaatgatgccgatccccaccccaccaa
+gcagtgcgctgctaagcagcagcgcactttgcgggtaaagctcacgcatcaatgcaccga
+cggcaatcagcaacagactgatggcgacactgcgacgttcgctgacatgctgatgaagcc
+agcttccggccagcgccagcccgcccatggtaaccaccggcagagcggtcgac
+</pre>
+</td></tr></table><p>

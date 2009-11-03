@@ -1,0 +1,227 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: pepwindow
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+pepwindow
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+-->
+<!--#include file="inc/pepwindow.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+<p><b>pepwindow</b> draws a classic Kyte & Doolittle hydropathy plot for a protein sequence.</p>
+
+
+
+<H2>
+Algorithm
+</H2>
+
+<p><b>pepwindow</b> calculates hydropathy in windows of a specified size over the input sequence.</p>
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/pepwindow.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/pepwindow.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/pepwindow.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+
+<b>pepwindow</b> reads any protein sequence USA.
+
+<p>
+
+<!--#include file="inc/pepwindow.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+An image is displayed on the specified graphics device.
+
+<p>
+
+<!--#include file="inc/pepwindow.output" -->
+
+<H2>
+    Data files
+</H2>
+
+<!--#include file="inc/localfiles.ihtml" -->
+
+<p>
+
+<b>pepwindow</b> reads the Kyte-Doolittle hydropathy data from the file
+'Enakai.dat'
+
+<p>
+
+The EMBOSS data file 'Enakai.dat' contains :-
+<p>
+<pre>
+D Hydropathy index (Kyte-Doolittle, 1982)
+R 0807099
+A Kyte, J. and Doolittle, R.F.
+T A simple method for displaying the hydropathic character of a protein
+J J. Mol. Biol. 157, 105-132 (1982)
+C CHOC760103    0.964  JANJ780102    0.922  DESM900102    0.898
+  EISD860103    0.897  CHOC760104    0.889  WOLR810101    0.885
+  RADA880101    0.884  MANP780101    0.881  EISD840101    0.878
+  PONP800103    0.870  NAKH920108    0.868  JANJ790101    0.867
+  JANJ790102    0.866  PONP800102    0.861  MEIH800103    0.856
+  PONP800101    0.851  PONP800108    0.850  WARP780101    0.845
+  RADA880108    0.842  ROSG850102    0.841  DESM900101    0.837
+  BIOV880101    0.829  RADA880107    0.828  LIFS790102    0.824
+  KANM800104    0.824  CIDH920104    0.824  MIYS850101    0.821
+  RADA880104    0.819  NAKH900111    0.817  NISK800101    0.812
+  FAUJ830101    0.811  ARGP820103    0.806  NAKH920105    0.803
+  ARGP820102    0.803  KRIW790101   -0.805  CHOC760102   -0.838
+  GUYH850101   -0.843  RACS770102   -0.844  JANJ780103   -0.845
+  ROSM880101   -0.845  PRAM900101   -0.850  JANJ780101   -0.852
+  GRAR740102   -0.859  MEIH800102   -0.871  ROSM880102   -0.878
+  OOBM770101   -0.899
+I   A/L    R/K    N/M    D/F    C/P    Q/S    E/T    G/W    H/Y    I/V
+    1.8   -4.5   -3.5   -3.5    2.5   -3.5   -3.5   -0.4   -3.2    4.5
+    3.8   -3.9    1.9    2.8   -1.6   -0.8   -0.7   -0.9   -1.3    4.2
+//
+</pre>
+
+<p>
+
+<b>pepwindow</b> can use any of the "Nakai et al." database of amino 
+acid parameters - these used to be in a database called "NAKAI" but are 
+now in one called "AAINDEX". EMBOSS has a program <b>aaindexextract</b> that 
+takes data from this database and makes it available for <b>pepwindow</b>.
+
+<p>
+
+1. FTP the AAINDEX database from Japan:
+
+<br>
+
+<A HREF="ftp://ftp.genome.ad.jp/pub/db/genomenet/aaindex/aaindex1">ftp://ftp.genome.ad.jp/pub/db/genomenet/aaindex/aaindex1</A>
+
+<p>
+
+2. Run <b>aaindexextract</b> with the aaindex1 file as input (or ask whoever 
+installs EMBOSS to run it)
+
+<p>
+
+3.  Run <b>pepwindow</b> with -datafile specifying the name of whatever
+"AAINDEX" datafile you wish to use.  (Use <b>embossdata -showall</b> to
+see your available "AAINDEX" data file names.)
+
+<p>
+
+
+
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+<pre>
+Kyte, J. and Doolittle, R.F.
+A simple method for displaying the hydropathic character of a protein
+J. Mol. Biol. 157, 105-132 (1982)
+
+</pre> 
+<H2>
+    Warnings
+</H2>
+
+<p>In calculating hydropathy, <b>pepwindow</b> can use any of the amino acid parameters from the database of "Nakai et al." which are now included in the database AAINDEX. Before running <b>pepwindow</b>, you must first extract the required data files from AAINDEX (see "Data Files" section).</p>
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+0 upon successful completion.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/pepwindow.isee" -->
+
+<b>pepwindow</b> can use any of the "Nakai et al." database of amino
+acid parameters - these are in a database called "AAINDEX".  The program
+<b>aaindexextract</b> takes data from this database and makes it
+available for <b>pepwindow</b>. 
+ 
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/ilongden.address" -->
+<p>
+
+
+Based on the original program by Jack Kyte and Russell F. Doolittle.
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/pepwindow.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/pepwindow.comment" -->
+
+
+</BODY>
+</HTML>
+

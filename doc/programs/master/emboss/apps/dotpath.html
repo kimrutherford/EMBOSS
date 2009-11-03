@@ -1,0 +1,147 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+dotpath
+<!--#include file="header2.inc" -->
+
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/dotpath.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<p><b>dotpath</b> generates a dotplot from two input sequences.  The dotplot is an intuitive graphical representation of the regions of similarity between two sequences. Sequence "words" of a user-specified length are compared and all exact word matches between the two sequences are recorded.  The set of the longest possible but non-overlapping matches is identified. The two sequences are the axes of the rectangular dotplot.  Wherever there is an exact matching word in the two sequences a line is plotted.</p>
+
+
+<H2>
+Algorithm
+</H2>
+<p><b>dotpath</b> uses the same algorithm as <b>diffseq</b> and <b>dottup</b> for finding a minimal set of exact matches between two sequences. It finds all identical words of size <tt>-wordsize</tt> or greater in the two sequences. It then reduces the matches found to the minimal set of matches that do not overlap.  This set is rendered as lines in the dotplot.</p>
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/dotpath.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/dotpath.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/dotpath.itable" -->
+
+<H2>
+    Input file format
+</H2>
+<!--#include file="inc/dotpath.input" -->
+
+
+<H2>
+    Output file format
+</H2>
+
+In normal operation, a dotplot image is displayed.
+<p>
+
+With the <b>-data</b> qualifier a file of the positions of the
+matches in the minimal non-overlapping set of matches is output.
+
+<p>
+<!--#include file="inc/dotpath.output" -->
+
+
+<H2>
+    Notes
+</H2>
+
+<p>For similar sequences, <b>dotpath</b> provides a convenient way to find a path that aligns the two sequences well. It is not a true optimal path as produced by the dynamic programming algorithms used in <b>water</b> or <b>needle</b>, but for very closely related sequences it will produce the same result.  In contast to full alignment, it works very quickly with very long sequences.</p>
+
+<p>The entire set of matches found can be displayed with the -overlaps qualifier.  This shows all matches in red, except for those in the minimal path (non-overlapping set) which are shown in black, as normal.</p>
+
+<p>Using a longer word size will create a dottplot with relatively less noise; the matches are longer and therefore more likely to have biological meaning. Such runs will be much faster, but of course are less sensitive.</p>
+
+<H2>
+    References
+</H2>
+
+None
+
+<H2>
+    Warnings
+</H2>
+
+If you give a small word size with a very large sequence you will run
+out of memory.  If this happens, try again with a larger word size. 
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None
+
+<!--#include file="inc/dotpath.isee" -->
+
+<P>
+This program is closely based on <b>dottup</b> with the addition of
+by default displaying only the minimal set of non-overlapping matches. 
+<P>
+
+This program uses the same algorithm as <b>diffseq</b> for finding a
+minimal set of very good matches between two sequences.  <b>diffseq</b>
+may be more convenient if you are looking at the differences between two
+nearly identical sequences. 
+
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/gwilliam.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/dotpath.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/dotpath.comment" -->
+
+
+</BODY>
+</HTML>
+

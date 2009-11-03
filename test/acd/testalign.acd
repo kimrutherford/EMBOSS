@@ -1,0 +1,15 @@
+# ACD file for QA testing - missing the application definition
+#
+
+appl: testalign [ doc: "testing" group: "testing" ]
+
+section: input [ info: "Input section" type: "page" ]
+
+align: atest [
+      standard: Y
+      aformat: pair
+]
+
+integer: numtest [ min: 1 info: "Pick a number" ]
+
+endsection: input

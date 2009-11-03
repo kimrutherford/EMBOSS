@@ -1,0 +1,166 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: withrefm</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ 
+REBASE version 106                                              withrefm.106
+ 
+    =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    REBASE, The Restriction Enzyme Database   http://rebase.neb.com
+    Copyright (c)  Dr. Richard J. Roberts, 2001.   All rights reserved.
+    =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+ 
+Rich Roberts                                                    May 31 2001
+ 
+
+&lt;ENZYME NAME&gt;   Restriction enzyme name.
+&lt;ISOSCHIZOMERS&gt; Other enzymes with this specificity.
+&lt;RECOGNITION SEQUENCE&gt; 
+                These are written from 5' to 3', only one strand being given.
+                If the point of cleavage has been determined, the precise site
+                is marked with ^.  For enzymes such as HgaI, MboII etc., which
+                cleave away from their recognition sequence the cleavage sites
+                are indicated in parentheses.  
+
+                For example HgaI GACGC (5/10) indicates cleavage as follows:
+                                5' GACGCNNNNN^      3'
+                                3' CTGCGNNNNNNNNNN^ 5'
+
+                In all cases the recognition sequences are oriented so that
+                the cleavage sites lie on their 3' side.
+
+                REBASE Recognition sequences representations use the standard 
+                abbreviations (Eur. J. Biochem. 150: 1-5, 1985) to represent 
+                ambiguity.
+                                R = G or A
+                                Y = C or T
+                                M = A or C
+                                K = G or T
+                                S = G or C
+                                W = A or T
+                                B = not A (C or G or T)
+                                D = not C (A or G or T)
+                                H = not G (A or C or T)
+                                V = not T (A or C or G)
+                                N = A or C or G or T
+
+
+
+                ENZYMES WITH UNUSUAL CLEAVAGE PROPERTIES:  
+
+                Enzymes that cut on both sides of their recognition sequences,
+                such as BcgI, Bsp24I, CjeI and CjePI, have 4 cleavage sites
+                each instead of 2.
+
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+&lt;5&gt;Klebsiella pneumoniae OK8
+&lt;6&gt;ATCC 49790
+&lt;7&gt;ABCDEFGHIJKLMNOQRSTU
+&lt;8&gt;Kiss, A., Finta, C., Venetianer, P., (1991) Nucleic Acids Res., vol. 19, pp. 3460.
+Smith, D.I., Blattner, F.R., Davies, J., (1976) Nucleic Acids Res., vol. 3, pp. 343-353.
+Tomassini, J., Roychoudhury, R., Wu, R., Roberts, R.J., (1978) Nucleic Acids Res., vol. 5, pp. 4055-4064.
+
+&lt;1&gt;Ksp632I
+&lt;2&gt;Bco5I,Bco116I,BcoKI,BcoSI,BcrAI,BseZI,BsrEI,Bst6I,Bst158I,Bsu6I,Eam1104I,EarI,TdeII,Uba1192I,Uba1276I,VpaKutEI,VpaKutFI,VpaO5I
+&lt;3&gt;CTCTTC(1/4)
+&lt;4&gt;
+&lt;5&gt;Kluyvera species 632
+&lt;6&gt;DSM 4196
+&lt;7&gt;M
+&lt;8&gt;Bolton, B.J., Schmitz, G.G., Jarsch, M., Comer, M.J., Kessler, C., (1988) Gene, vol. 66, pp. 31-43.
+Tsukahara, S., Yamakawa, H., Takai, K., Takaku, H., (1994) Nucleosides &amp; Nucleotides, vol. 13, pp. 1617-1626.
+
+&lt;1&gt;MaeII
+&lt;2&gt;HpyCH4IV,HpyF13III,HpyF35II,HpyF74II,TaiI,TscI,Tsp49I,TspIDSI,TspWAM8AI,TtmI
+&lt;3&gt;A^CGT
+&lt;4&gt;
+&lt;5&gt;Methanococcus aeolicus PL-15/H
+&lt;6&gt;K.O. Stetter
+&lt;7&gt;M
+&lt;8&gt;Schmid, K., Thomm, M., Laminet, A., Laue, F.G., Kessler, C., Stetter, K.O., Schmitt, R., (1984) Nucleic Acids Res., vol. 12, pp. 2619-2628.
+
+&lt;1&gt;NotI
+&lt;2&gt;CciNI,CspBI,MchAI
+&lt;3&gt;GC^GGCCGC
+&lt;4&gt;?(4)
+&lt;5&gt;Nocardia otitidis-caviarum
+&lt;6&gt;ATCC 14630
+&lt;7&gt;ABCDEFGHJKLMNOQRSTU
+&lt;8&gt;Borsetti, R., Wise, D., Qiang, B.-Q., Schildkraut, I., Unpublished observations.
+Morgan, R.D., Unpublished observations.
+Morgan, R.D., Benner, J.S., Claus, T.E., US Patent Office, 1994.
+Qiang, B.-Q., Schildkraut, I., (1987) Methods Enzymol., vol. 155, pp. 15-21.
+
+&lt;1&gt;TaqI
+&lt;2&gt;CviSIII,EsaBC3I,HpyV,Hpy26II,HpyF14III,HpyF16I,HpyF23I,HpyF24I,HpyF26III,HpyF30I,HpyF35I,HpyF40II,HpyF42IV,HpyF45I,HpyF49I,HpyF52I,HpyF59III,HpyF62II,HpyF64I,HpyF65II,HpyF66IV,HpyF71I,HpyF73II,HpyJP26II,PpaAII,Taq20I,Tbr51I,TfiA3I,TfiTok4A2I,TfiTok6A1I,TflI,Tsc4aI,Tsp32I,Tsp32II,Tsp358I,Tsp505I,Tsp510I,TspAK13D21I,TspAK16D24I,TspNI,TspVi4AI,TspVil3I,Tth24I,TthHB8I,TthRQI
+&lt;3&gt;T^CGA
+&lt;4&gt;4(6)
+&lt;5&gt;Thermus aquaticus YTI
+&lt;6&gt;J.I. Harris
+&lt;7&gt;ABCDEFGIJLMNOQRSTU
+&lt;8&gt;Anton, B.P., Brooks, J.E., Unpublished observations.
+Fomenkov, A., Xiao, J.-P., Dila, D., Raleigh, E., Xu, S.-Y., (1994) Nucleic Acids Res., vol. 22, pp. 2399-2403.
+McClelland, M., (1981) Nucleic Acids Res., vol. 9, pp. 6795-6804.
+Sato, S., Hutchison, C.A. III, Harris, J.I., (1977) Proc. Natl. Acad. Sci. U. S. A., vol. 74, pp. 542-546.
+Zebala, J.A., (1993) Diss. Abstr., vol. 54, pp. 1394-1398.
+
+</pre>
+</td></tr></table><p>
+<p><h3>File: proto</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ 
+REBASE version 305                                              proto.305
+ 
+    =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    REBASE, The Restriction Enzyme Database   http://rebase.neb.com
+    Copyright (c)  Dr. Richard J. Roberts, 2003.   All rights reserved.
+    =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+ 
+Rich Roberts                                                    Apr 30 2003
+ 
+
+
+
+	    TYPE II ENZYMES
+	    ---------------
+
+BseYI                          CCCAGC (-5/-1)
+BsiYI                          CCNNNNN^NNGG
+BsrI                           ACTGG (1/-1)
+HaeIII                         GG^CC
+HpaII                          C^CGG
+Ksp632I                        CTCTTC (1/4)
+MaeII                          A^CGT
+
+
+
+	    TYPE I ENZYMES
+	    ---------------
+
+EcoAI                          GAGNNNNNNNGTCA
+EcoBI                          TGANNNNNNNNTGCT
+EcoDI                          TTANNNNNNNGTCY
+EcoDR2                         TCANNNNNNGTCG
+EcoDR3                         TCANNNNNNNATCG
+EcoDXXI                        TCANNNNNNNRTTC
+EcoEI                          GAGNNNNNNNATGC
+EcoKI                          AACNNNNNNGTGC
+
+
+
+	    TYPE III ENZYMES
+	    ---------------
+
+EcoPI                          AGACC
+EcoP15I                        CAGCAG (25/27)
+HinfIII                        CGAAT
+StyLTI                         CAGAG
+
+</pre>
+</td></tr></table><p>

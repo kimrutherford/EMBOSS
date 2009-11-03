@@ -1,0 +1,500 @@
+ID   O42495_FUGRU            Unreviewed;       433 AA.
+AC   O42495;
+DT   01-JAN-1998, integrated into UniProtKB/TrEMBL.
+DT   01-OCT-2002, sequence version 2.
+DT   05-MAY-2009, entry version 44.
+DE   SubName: Full=SkmBOP;
+GN   Name=skmBOP;
+OS   Fugu rubripes (Japanese pufferfish) (Takifugu rubripes).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Actinopterygii; Neopterygii; Teleostei; Euteleostei; Neoteleostei;
+OC   Acanthomorpha; Acanthopterygii; Percomorpha; Tetraodontiformes;
+OC   Tetradontoidea; Tetraodontidae; Takifugu.
+OX   NCBI_TaxID=31033;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE.
+RX   MEDLINE=98024154; PubMed=9356472; DOI=10.1073/pnas.94.23.12462;
+RA   Venkatesh B., Si-Hoe S.L., Murphy D., Brenner S.;
+RT   "Transgenic rats reveal functional conservation of regulatory controls
+RT   between the Fugu isotocin and rat oxytocin genes.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 94:12462-12466(1997).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE.
+RX   MEDLINE=22220114; PubMed=12234665; DOI=10.1016/S0378-1119(02)00793-X;
+RA   Gilligan P., Brenner S., Venkatesh B.;
+RT   "Fugu and human sequence comparison identifies novel human genes and
+RT   conserved non-coding sequences.";
+RL   Gene 294:35-44(2002).
+CC   -----------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution-NoDerivs License
+CC   -----------------------------------------------------------------------
+DR   EMBL; U90880; AAC60295.2; -; Genomic_DNA.
+DR   HOVERGEN; O42495; -.
+DR   GO; GO:0008270; F:zinc ion binding; IEA:InterPro.
+DR   InterPro; IPR001214; SET.
+DR   InterPro; IPR002893; Znf_MYND.
+DR   Pfam; PF01753; zf-MYND; 1.
+DR   SMART; SM00317; SET; 1.
+DR   PROSITE; PS50280; SET; 1.
+DR   PROSITE; PS01360; ZF_MYND_1; 1.
+DR   PROSITE; PS50865; ZF_MYND_2; 1.
+PE   4: Predicted;
+SQ   SEQUENCE   433 AA;  49500 MW;  7CA7DE79E73EEE26 CRC64;
+     MENVAIFDSP GKGRGLKTTK EFWAGDVIFS EPSLAAVVFD SLAERICHSC FRRQEKLQKC
+     SQCKFAHYCD RTCQRAGWAE HKQECGAIKA YGKAPNENIR VVSHMQLITV EELEDHVADM
+     QEDEIKELKV DIHNFLDYWP RNSKQHTIDD ISHIFGVINC NGFTVSDQRG LQAVGVGLFP
+     NLCMVNHNCW PNCTVILNHG KIELRSLGKI AEGEELTVAY VDFLNLSEER RRLLKTQYFF
+     DCQCDYCKNG TKDDLKLAGR EVDGVKVVKI CRDVIDRTEP VLADNHIYLL RMWSTLSEVQ
+     AYLQYFNDAA EKLYHPNNAA LGMAAMRAGV NHWQAGLIEV GHGMVCKAYA ILLRFCHHIW
+     CKTRKCLMSS VVVIVSAFTG DADQTEMELR MFKQNEYVYH SMRDAALQNK PITMLHEPKG
+     VEEGIKNLFH RRK
+//
+ID   Q1KKT3_FUGRU            Unreviewed;       412 AA.
+AC   Q1KKT3;
+DT   30-MAY-2006, integrated into UniProtKB/TrEMBL.
+DT   30-MAY-2006, sequence version 1.
+DT   10-FEB-2009, entry version 17.
+DE   SubName: Full=Even-skipped homeobox 2;
+GN   Name=Evx2;
+OS   Fugu rubripes (Japanese pufferfish) (Takifugu rubripes).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Actinopterygii; Neopterygii; Teleostei; Euteleostei; Neoteleostei;
+OC   Acanthomorpha; Acanthopterygii; Percomorpha; Tetraodontiformes;
+OC   Tetradontoidea; Tetraodontidae; Takifugu.
+OX   NCBI_TaxID=31033;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE.
+RX   PubMed=16636282; DOI=10.1073/pnas.0601492103;
+RA   Lee A.P., Koh E.G.L., Tay A., Brenner S., Venkatesh B.;
+RT   "Highly conserved syntenic blocks at the vertebrate Hox loci and
+RT   conserved regulatory elements within and outside Hox gene clusters.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 103:6994-6999(2006).
+CC   -!- SUBCELLULAR LOCATION: Nucleus (By similarity).
+CC   -----------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution-NoDerivs License
+CC   -----------------------------------------------------------------------
+DR   EMBL; DQ481668; ABF22461.1; -; Genomic_DNA.
+DR   SMR; Q1KKT3; 165-221.
+DR   HOVERGEN; Q1KKT3; -.
+DR   GO; GO:0005634; C:nucleus; IEA:InterPro.
+DR   GO; GO:0043565; F:sequence-specific DNA binding; IEA:InterPro.
+DR   GO; GO:0003700; F:transcription factor activity; IEA:InterPro.
+DR   GO; GO:0006355; P:regulation of transcription, DNA-dependent; IEA:InterPro.
+DR   InterPro; IPR001356; Homeobox.
+DR   InterPro; IPR017970; Homeobox_CS.
+DR   InterPro; IPR012287; Homeodomain-rel.
+DR   Gene3D; G3DSA:1.10.10.60; Homeodomain-rel; 1.
+DR   Pfam; PF00046; Homeobox; 1.
+DR   ProDom; PD000010; Homeobox; 1.
+DR   SMART; SM00389; HOX; 1.
+DR   PROSITE; PS00027; HOMEOBOX_1; 1.
+DR   PROSITE; PS50071; HOMEOBOX_2; 1.
+PE   3: Inferred from homology;
+KW   DNA-binding; Homeobox; Nucleus.
+SQ   SEQUENCE   412 AA;  44015 MW;  7E7FEA72B2BC421E CRC64;
+     MMERIRKEMI LMERGLHSPV AGKRLTDAPG NSVLEALENS QHSGRLSPRI TSASLHGNLG
+     DIPSKGKFEI DSLFGTHHSS DNASSVDINS SENRKKMSIY SEVSPDSDIN SDVEVGCPAH
+     RSPSQHKENN KGFSDSNNGS SSSNSGANIN GNSSAGSNNS DQVRRYRTAF TREQIARLEK
+     EFYRENYVSR PRRCELAAAL NLPETTIKVW FQNRRMKDKR QRLAMSWPHP ADPSFYTYMM
+     THAAATGSLP YPFHSHMPLH YYPHVGVTAA AAAAAATGAA SSPFATSIRP LDTFRALSHP
+     YSRPELLCSF RHPGLYQSTA GLNSSAAASA AAAAAAAAAA VSAPSASGPC SCLSCHSSQA
+     ASALGSRSAG ADFTCTASGQ RSESGFLPYS AAVLSKTSVP SPDPREETSL TR
+//
+ID   Q1KL02_FUGRU            Unreviewed;       676 AA.
+AC   Q1KL02;
+DT   30-MAY-2006, integrated into UniProtKB/TrEMBL.
+DT   30-MAY-2006, sequence version 1.
+DT   20-JAN-2009, entry version 20.
+DE   SubName: Full=Chimerin 2;
+GN   Name=Chn2;
+OS   Fugu rubripes (Japanese pufferfish) (Takifugu rubripes).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Actinopterygii; Neopterygii; Teleostei; Euteleostei; Neoteleostei;
+OC   Acanthomorpha; Acanthopterygii; Percomorpha; Tetraodontiformes;
+OC   Tetradontoidea; Tetraodontidae; Takifugu.
+OX   NCBI_TaxID=31033;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE.
+RX   PubMed=16636282; DOI=10.1073/pnas.0601492103;
+RA   Lee A.P., Koh E.G.L., Tay A., Brenner S., Venkatesh B.;
+RT   "Highly conserved syntenic blocks at the vertebrate Hox loci and
+RT   conserved regulatory elements within and outside Hox gene clusters.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 103:6994-6999(2006).
+CC   -!- SIMILARITY: Contains 1 Rho-GAP domain.
+CC   -----------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution-NoDerivs License
+CC   -----------------------------------------------------------------------
+DR   EMBL; DQ481664; ABF22392.1; -; Genomic_DNA.
+DR   SMR; Q1KL02; 3-115, 419-676.
+DR   HOVERGEN; Q1KL02; -.
+DR   GO; GO:0005622; C:intracellular; IEA:InterPro.
+DR   GO; GO:0005515; F:protein binding; IEA:InterPro.
+DR   GO; GO:0008270; F:zinc ion binding; IEA:UniProtKB-KW.
+DR   GO; GO:0007242; P:intracellular signaling cascade; IEA:InterPro.
+DR   InterPro; IPR002219; DAG_PE_bd.
+DR   InterPro; IPR000198; RhoGAP.
+DR   InterPro; IPR000980; SH2.
+DR   Gene3D; G3DSA:1.10.555.10; RhoGAP; 1.
+DR   Gene3D; G3DSA:3.30.505.10; SH2; 1.
+DR   Pfam; PF00130; C1_1; 1.
+DR   Pfam; PF00620; RhoGAP; 1.
+DR   Pfam; PF00017; SH2; 1.
+DR   ProDom; PD000093; SH2; 1.
+DR   SMART; SM00109; C1; 1.
+DR   SMART; SM00324; RhoGAP; 1.
+DR   SMART; SM00252; SH2; 1.
+DR   PROSITE; PS50238; RHOGAP; 1.
+DR   PROSITE; PS50001; SH2; 1.
+DR   PROSITE; PS00479; ZF_DAG_PE_1; 1.
+DR   PROSITE; PS50081; ZF_DAG_PE_2; 1.
+PE   4: Predicted;
+KW   Metal-binding; Zinc.
+SQ   SEQUENCE   676 AA;  77365 MW;  417B610C5ACC1B97 CRC64;
+     MLFQKLFHGR ISREYADELL ATAEGAYLIR ESQRQPGSHT LALRFGHQTL NYRLFYDGKH
+     FVGEKRFESV HDLVTDALIT LYIETKAAEY IAKMTTNPIY EHLGYTSLLK DKTVHRLNRG
+     RTEPRRVTFQ RDERVSLLVI EAVEPSVRGC FVESVCRSVL LSYRVSPHCA VWSVSSRPTE
+     SHLPSHKRAQ PLVLPPQQPH QAEISIYKSS LPRLSPQTTH VCIFSRNVSH NGKYLHLPCH
+     SGKRQDFPDG REKPLLRGLA VVFYFASKRP ALSFYLGFAV ALKVFSFLLR HCDTLSSLIH
+     FAPESDLVRV LQLLPRWAVL SPLCNFPQRR WSVCGNPTGP LWRLKKTEEV WEAELITHKA
+     RRHERKRQEL LALALGVKLG SKGTILWKPI KLLASCPQIA SPLVRRTVLK DAPEKQCSYE
+     KMHNFKVHTF RGPHWCEYCA NFMWGLIAQG VRCSDCGLNV HKQCSKLVPS DCQPDLRRIK
+     KVFSCDLTTL VKAHNSTRPM VVDMCIQEIE LRGMKSEGLY RVSGFSEHIE DVRLAFDRDG
+     DKADISASAY ADINIIAGAL KLYLRDLPIP VITFELYSKF IQAARIPNAD TRLEAIHDSL
+     LQLPPAHYET LRYLMAHLKR VTLFEKYNLM NAENLGIVFG PTLMQPPEMN ALTTLNDMRL
+     QKLVVQLMIE HEDVLF
+//
+ID   Q2HPN2_FUGRU            Unreviewed;       317 AA.
+AC   Q2HPN2;
+DT   21-MAR-2006, integrated into UniProtKB/TrEMBL.
+DT   21-MAR-2006, sequence version 1.
+DT   14-APR-2009, entry version 12.
+DE   SubName: Full=Beta1,4-galactosyltransferase 7;
+DE            EC=2.4.1.133;
+GN   Name=b4Gal-T7;
+OS   Fugu rubripes (Japanese pufferfish) (Takifugu rubripes).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Actinopterygii; Neopterygii; Teleostei; Euteleostei; Neoteleostei;
+OC   Acanthomorpha; Acanthopterygii; Percomorpha; Tetraodontiformes;
+OC   Tetradontoidea; Tetraodontidae; Takifugu.
+OX   NCBI_TaxID=31033;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE.
+RA   Ouzzine M., Bui C., Fournel-Gigleux S., Mollicone R., Oriol R.;
+RT   "Phylogeny of beta1,4-galactosyltransferases.";
+RL   Submitted (FEB-2006) to the EMBL/GenBank/DDBJ databases.
+CC   -----------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution-NoDerivs License
+CC   -----------------------------------------------------------------------
+DR   EMBL; AM231267; CAJ77200.1; -; mRNA.
+DR   RefSeq; NP_001072098.1; -.
+DR   UniGene; Tru.3653; -.
+DR   CAZy; GT7; Glycosyltransferase Family 7.
+DR   GeneID; 778009; -.
+DR   HOVERGEN; Q2HPN2; -.
+DR   GO; GO:0046525; F:xylosylprotein 4-beta-galactosyltransferase...; IEA:EC.
+DR   GO; GO:0005975; P:carbohydrate metabolic process; IEA:InterPro.
+DR   InterPro; IPR003859; Galactosyl_T_2.
+DR   PANTHER; PTHR19300; Galactosyl_T_2; 1.
+DR   Pfam; PF02709; Galactosyl_T_2; 1.
+PE   2: Evidence at transcript level;
+KW   Glycosyltransferase; Transferase.
+SQ   SEQUENCE   317 AA;  36672 MW;  DA3B946E1934C1F0 CRC64;
+     MMYPSRRKPV LYFKEERRCT IYKLFIVCTV LLLVSLLWLQ LSCSGDMTSS AEDRPQLLPQ
+     QRPPPCQAEA QASAADDPSW GPHKLAVIVP FRERFEELLV FVPFMHGFLS KKKIRHKILV
+     INQVDRYRFN RASLINVGHL ESGNDTDYLA MHDVDLLPLN DALDYGFPEE GPFHVASPEL
+     HPLYHYKTYV GGILLLTKKH YDMCNGMSNR FWGWGREDDE FYRRLKKAQL QLFRPSGITT
+     GYKTFLHIHD PAWRKRDQKR VAAQKQEQFK VDPEGGLSNL RYEVESRQEV VIGGAPCTVI
+     NTRLGCDQNQ TPWCMLG
+//
+ID   Q2HWR4_FUGRU            Unreviewed;       217 AA.
+AC   Q2HWR4;
+DT   21-MAR-2006, integrated into UniProtKB/TrEMBL.
+DT   21-MAR-2006, sequence version 1.
+DT   25-NOV-2008, entry version 16.
+DE   SubName: Full=T-cell surface glycoprotein CD8alpha;
+GN   Name=CD8alpha;
+OS   Fugu rubripes (Japanese pufferfish) (Takifugu rubripes).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Actinopterygii; Neopterygii; Teleostei; Euteleostei; Neoteleostei;
+OC   Acanthomorpha; Acanthopterygii; Percomorpha; Tetraodontiformes;
+OC   Tetradontoidea; Tetraodontidae; Takifugu.
+OX   NCBI_TaxID=31033;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE.
+RA   Suetake H., Saha N.R., Araki K., Akatsu K., Kikuchi K., Suzuki Y.;
+RT   "Lymphocyte surface marker genes in fugu.";
+RL   Comp. Biochem. Physiol. Part D Genomics Proteomics 1:102-108(2006).
+CC   -----------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution-NoDerivs License
+CC   -----------------------------------------------------------------------
+DR   EMBL; AB232548; BAE79813.1; -; mRNA.
+DR   RefSeq; NP_001072086.1; -.
+DR   UniGene; Tru.3654; -.
+DR   GeneID; 777995; -.
+DR   HOVERGEN; Q2HWR4; -.
+DR   InterPro; IPR015468; CD8_asu.
+DR   InterPro; IPR007110; Ig-like.
+DR   InterPro; IPR013783; Ig-like_fold.
+DR   InterPro; IPR003599; Ig_sub.
+DR   InterPro; IPR013106; Ig_V-set.
+DR   Gene3D; G3DSA:2.60.40.10; Ig-like_fold; 1.
+DR   PANTHER; PTHR10441; CD8_alpha; 1.
+DR   Pfam; PF07686; V-set; 1.
+DR   SMART; SM00409; IG; 1.
+DR   PROSITE; PS50835; IG_LIKE; 1.
+PE   2: Evidence at transcript level;
+SQ   SEQUENCE   217 AA;  24169 MW;  11B791A87D22A954 CRC64;
+     MEQKWRKVLV FLVFCQQTTP GDNQKEDVVK EGAQVDIHCQ PSQAASMTVW FRVRDNSWME
+     FIGSFSNGLK KTENNVSSEF THGKINRDIL TLKSFQRQKD SGLYCCASLY KGKELRFGPV
+     TQLRGETVEQ KPTVAQTTPR QQPVTTAPAC TCDSSKARGG IGTQLSCAPL ILGPLAGGCG
+     LLLLLLIVTA LYCNRVRTRR CPHHYKRKPR GKPPGNK
+//
+ID   Q2KT90_FUGRU            Unreviewed;       230 AA.
+AC   Q2KT90;
+DT   07-MAR-2006, integrated into UniProtKB/TrEMBL.
+DT   07-MAR-2006, sequence version 1.
+DT   05-MAY-2009, entry version 22.
+DE   RecName: Full=Cytochrome c oxidase subunit 2;
+GN   Name=COII;
+OS   Fugu rubripes (Japanese pufferfish) (Takifugu rubripes).
+OG   Mitochondrion.
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Actinopterygii; Neopterygii; Teleostei; Euteleostei; Neoteleostei;
+OC   Acanthomorpha; Acanthopterygii; Percomorpha; Tetraodontiformes;
+OC   Tetradontoidea; Tetraodontidae; Takifugu.
+OX   NCBI_TaxID=31033;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE.
+RX   PubMed=16607039; DOI=10.1266/ggs.81.29;
+RA   Yamanoue Y., Miya M., Inoue J.G., Matsuura K., Nishida M.;
+RT   "The mitochondrial genome of spotted green pufferfish Tetraodon
+RT   nigroviridis (Teleostei: Tetraodontiformes) and divergence time
+RT   estimation among model organisms in fishes.";
+RL   Genes Genet. Syst. 81:29-39(2006).
+CC   -!- FUNCTION: Cytochrome c oxidase is the component of the respiratory
+CC       chain that catalyzes the reduction of oxygen to water. Subunits 1-
+CC       3 form the functional core of the enzyme complex. Subunit 2
+CC       transfers the electrons from cytochrome c via its binuclear copper
+CC       A center to the bimetallic center of the catalytic subunit 1 (By
+CC       similarity).
+CC   -!- COFACTOR: Copper A (By similarity).
+CC   -!- SUBCELLULAR LOCATION: Mitochondrion inner membrane; Multi-pass
+CC       membrane protein (By similarity).
+CC   -!- SIMILARITY: Belongs to the cytochrome c oxidase subunit 2 family.
+CC   -----------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution-NoDerivs License
+CC   -----------------------------------------------------------------------
+DR   EMBL; AP006045; BAE79207.1; -; Genomic_DNA.
+DR   SMR; Q2KT90; 2-227.
+DR   HOVERGEN; Q2KT90; -.
+DR   GO; GO:0016021; C:integral to membrane; IEA:InterPro.
+DR   GO; GO:0005746; C:mitochondrial respiratory chain; IEA:UniProtKB-KW.
+DR   GO; GO:0005507; F:copper ion binding; IEA:InterPro.
+DR   GO; GO:0004129; F:cytochrome-c oxidase activity; IEA:InterPro.
+DR   GO; GO:0009055; F:electron carrier activity; IEA:InterPro.
+DR   GO; GO:0020037; F:heme binding; IEA:InterPro.
+DR   GO; GO:0022904; P:respiratory electron transport chain; IEA:InterPro.
+DR   GO; GO:0006810; P:transport; IEA:UniProtKB-KW.
+DR   InterPro; IPR001505; Copper_CuA.
+DR   InterPro; IPR008972; Cupredoxin.
+DR   InterPro; IPR011759; Cyt_c_oxidase_II_TM.
+DR   InterPro; IPR014222; Cyt_c_oxidase_su2.
+DR   InterPro; IPR002429; Cyt_c_oxidase_su2_C.
+DR   Gene3D; G3DSA:1.10.287.90; COX2_TM; 1.
+DR   Gene3D; G3DSA:2.60.40.420; Cupredoxin; 1.
+DR   PANTHER; PTHR22888; COX2_C; 1.
+DR   Pfam; PF00116; COX2; 1.
+DR   Pfam; PF02790; COX2_TM; 1.
+DR   PRINTS; PR01166; CYCOXIDASEII.
+DR   ProDom; PD000131; Copper_CuA; 1.
+DR   TIGRFAMs; TIGR02866; CoxB; 1.
+DR   PROSITE; PS00078; COX2; 1.
+DR   PROSITE; PS50857; COX2_CUA; 1.
+DR   PROSITE; PS50999; COX2_TM; 1.
+PE   3: Inferred from homology;
+KW   Copper; Electron transport; Membrane; Metal-binding; Mitochondrion;
+KW   Mitochondrion inner membrane; Respiratory chain; Transmembrane;
+KW   Transport.
+SQ   SEQUENCE   230 AA;  26042 MW;  19C6D6E9BDB9D12C CRC64;
+     MAHPSQLGFQ DAASPVMEEL LHFHDHALMI VFLISTLVLY IIVAMVSTKL TNKYILDSQE
+     IEIIWTILPA IILILIALPS LRILYLMDEI NDPHLTIKAM GHQWYWSYEY TDYSDLAFDS
+     YMVPTQDLAP GQFRLLETDH RMVVPVDSPI RILVSAEDVL HSWAVPSLGV KMDAVPGRLN
+     QTAFILSRPG VFYGQCSEIC GANHSFMPIV VEAVPLEHFE NWSSLMLEDA
+//
+ID   Q4JHL5_FUGRU            Unreviewed;       854 AA.
+AC   Q4JHL5;
+DT   02-AUG-2005, integrated into UniProtKB/TrEMBL.
+DT   02-AUG-2005, sequence version 1.
+DT   25-NOV-2008, entry version 23.
+DE   SubName: Full=Aryl hydrocarbon receptor 1B;
+OS   Fugu rubripes (Japanese pufferfish) (Takifugu rubripes).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Actinopterygii; Neopterygii; Teleostei; Euteleostei; Neoteleostei;
+OC   Acanthomorpha; Acanthopterygii; Percomorpha; Tetraodontiformes;
+OC   Tetradontoidea; Tetraodontidae; Takifugu.
+OX   NCBI_TaxID=31033;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE.
+RA   Karchner S.I., Franks D.G., Hahn M.E.;
+RT   "Aryl Hydrocarbon Receptor Diversity in the Pufferfish (Takifugu
+RT   rubripes).";
+RL   Submitted (JUN-2005) to the EMBL/GenBank/DDBJ databases.
+CC   -!- SIMILARITY: Contains 1 basic helix-loop-helix (bHLH) domain.
+CC   -!- SIMILARITY: Contains 2 PAS (PER-ARNT-SIM) domains.
+CC   -----------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution-NoDerivs License
+CC   -----------------------------------------------------------------------
+DR   EMBL; DQ088138; AAY96630.1; -; mRNA.
+DR   RefSeq; NP_001033048.1; -.
+DR   UniGene; Tru.3516; -.
+DR   GeneID; 654292; -.
+DR   HOVERGEN; Q4JHL5; -.
+DR   GO; GO:0005634; C:nucleus; IEA:InterPro.
+DR   GO; GO:0003677; F:DNA binding; IEA:UniProtKB-KW.
+DR   GO; GO:0004872; F:receptor activity; IEA:UniProtKB-KW.
+DR   GO; GO:0030528; F:transcription regulator activity; IEA:InterPro.
+DR   GO; GO:0006355; P:regulation of transcription, DNA-dependent; IEA:InterPro.
+DR   GO; GO:0007165; P:signal transduction; IEA:InterPro.
+DR   InterPro; IPR001092; HLH_basic.
+DR   InterPro; IPR001610; PAC.
+DR   InterPro; IPR000014; PAS.
+DR   InterPro; IPR013767; PAS_fold.
+DR   InterPro; IPR013655; PAS_fold_3.
+DR   Pfam; PF00010; HLH; 1.
+DR   Pfam; PF00989; PAS; 1.
+DR   Pfam; PF08447; PAS_3; 1.
+DR   SMART; SM00353; HLH; 1.
+DR   SMART; SM00086; PAC; 1.
+DR   SMART; SM00091; PAS; 2.
+DR   PROSITE; PS50888; HLH; 1.
+DR   PROSITE; PS50112; PAS; 1.
+PE   2: Evidence at transcript level;
+KW   DNA-binding; Nucleus; Receptor; Repeat; Transcription;
+KW   Transcription regulation.
+SQ   SEQUENCE   854 AA;  93640 MW;  C6B5B41CFE5BCB96 CRC64;
+     MYAGRKRRKP LQKGVKPAPT EGAKSNPSKR HRDRLNSELD RLASLLPFSE DVIASLDKLS
+     ILRLSVSFLR TKGFFSGVLN NLPSDGINKS SDHGGGGGAA SGAEERRLPE GELLLQALNG
+     FVLVVTTEGN IFFCSHTIRD YLGFHQTDVM HQSVFEMIHT EDQQEFRRNL HWGPDTTPTA
+     EPETDGESVS TSSLLSCDPD QPPRDNSSFL DRSFICRFRC LLDNTSGFLA LNIQGRLKFL
+     HGQHHPQRSS KVSSPPQLAL FAIATPLQPP TILEIRTRNM IFRTKHKLDF TPMACDAKGK
+     IVLGYTEAEL RVRGSGYQFI HAADMLYCAE NHVRMIKTGE SGLTVFRLLT KDNRWKWVQA
+     NARLVYKNGK PDYIVATQRP LVDEEGGEHL RKRSMHLPFT FATGEAMLYQ TGHPLHSFSE
+     SVQGKAKGSK TKKGKQSSSD NLDPKSLLGA LMSQDESVYV CQPDSEPAVS GPSSLLSQQQ
+     TDSECSSFLG HNSLHVFSNE TSSYDPLLAT LDSLTLDGED PCSNTEIFNA LENLGLNAED
+     LELLLLDERM IQVELGPNHI PTLSDLLTNN EILSYIHNKL ENSPEPADGD AGRYGVNADQ
+     AAVPEPPAFV QQSQQMQQHV GSGVPAKAAP PTAEAKGQTR LPNGHWVTNT ANAHQPDNQV
+     QPHPVLTPSR LNSELKHLLE SSQQWSQDQL VHYPSHPQVS QDPSLLGFHN QRTINASYIP
+     NGHTSFLPSV EVGHTYSITA APCAPAALLN GLTAPDVCHY QSYQQQVSVA QSSTLELEQL
+     LGLSQSQHSL PAYAMFNTSA QGSAHSKLEN GCLLNATNAA YIRTCLMPNG NAVVAANVDG
+     LSTLQDHQKP GFLL
+//
+ID   Q50J40_FUGRU            Unreviewed;       372 AA.
+AC   Q50J40;
+DT   07-JUN-2005, integrated into UniProtKB/TrEMBL.
+DT   07-JUN-2005, sequence version 1.
+DT   14-OCT-2008, entry version 14.
+DE   SubName: Full=Alpha-2,8-sialyltransferase;
+DE   Flags: Fragment;
+GN   Name=st8Sia V;
+OS   Fugu rubripes (Japanese pufferfish) (Takifugu rubripes).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Actinopterygii; Neopterygii; Teleostei; Euteleostei; Neoteleostei;
+OC   Acanthomorpha; Acanthopterygii; Percomorpha; Tetraodontiformes;
+OC   Tetradontoidea; Tetraodontidae; Takifugu.
+OX   NCBI_TaxID=31033;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE.
+RA   Lehmann F.;
+RT   "Phylogeny of sialyltransferases.";
+RL   Submitted (MAY-2004) to the EMBL/GenBank/DDBJ databases.
+CC   -----------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution-NoDerivs License
+CC   -----------------------------------------------------------------------
+DR   EMBL; AJ705092; CAG29214.1; -; mRNA.
+DR   HOVERGEN; Q50J40; -.
+DR   GO; GO:0030173; C:integral to Golgi membrane; IEA:InterPro.
+DR   GO; GO:0008373; F:sialyltransferase activity; IEA:InterPro.
+DR   GO; GO:0006486; P:protein amino acid glycosylation; IEA:InterPro.
+DR   InterPro; IPR001675; Glyco_trans_29.
+DR   InterPro; IPR012163; Sialyl_trans.
+DR   Pfam; PF00777; Glyco_transf_29; 1.
+DR   PIRSF; PIRSF005557; Sialyl_trans; 1.
+PE   2: Evidence at transcript level;
+KW   Glycosyltransferase; Golgi apparatus; Membrane; Transferase;
+KW   Transmembrane.
+FT   NON_TER       1      1
+FT   NON_TER     372    372
+SQ   SEQUENCE   372 AA;  42962 MW;  74842EC22385F239 CRC64;
+     YADTSSGKDI LGNRSLCFIF ICAFGLVTLI QQILSGKNYI KRYLGNYDGP FEYNSTTCRE
+     LRQEIMDVKV LTMVKTSDLF ERWRNLQICR WEQNKEETSN FKMSLSRCCN APSFLFTTKR
+     NTPAGTKLRY EVDTSGILPI TAEVFKMFPD DMPYSKSQFK KCAVVGNGGI IKNSKCGKEI
+     DSADFVFRCN IPPISEKYSA DVGTKTDLVS INPSIITERF QKLEKWRRPF YEVLQNYENS
+     SAVLPAFYNT RNTDVSFRVK YMLDDFDSQR GVFFFHPQYL LNVQRFWAVQ GVRAKRLSSG
+     LMLVTAALEM CEEVHLYGFW AFPMNPSGIF ITHHYYDNVK PRPGFHAMPH EIFNFIHMHT
+     RGIVNVHTGQ CT
+//
+ID   Q68HA9_FUGRU            Unreviewed;       606 AA.
+AC   Q68HA9;
+DT   11-OCT-2004, integrated into UniProtKB/TrEMBL.
+DT   11-OCT-2004, sequence version 1.
+DT   14-OCT-2008, entry version 19.
+DE   SubName: Full=E1A-associated protein p300;
+DE   Flags: Fragment;
+GN   Name=EP300;
+OS   Fugu rubripes (Japanese pufferfish) (Takifugu rubripes).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Actinopterygii; Neopterygii; Teleostei; Euteleostei; Neoteleostei;
+OC   Acanthomorpha; Acanthopterygii; Percomorpha; Tetraodontiformes;
+OC   Tetradontoidea; Tetraodontidae; Takifugu.
+OX   NCBI_TaxID=31033;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE.
+RA   Fernandes J.M., Mackenzie M.G., Kinghorn J.R., Johnston I.A.;
+RT   "Cloning and characterization of the E1A-associated protein p300 gene
+RT   in Takifugu rubripes.";
+RL   Submitted (JUL-2004) to the EMBL/GenBank/DDBJ databases.
+CC   -----------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution-NoDerivs License
+CC   -----------------------------------------------------------------------
+DR   EMBL; AY690625; AAT99578.1; -; mRNA.
+DR   UniGene; Tru.1841; -.
+DR   SMR; Q68HA9; 311-409, 551-606.
+DR   HOVERGEN; Q68HA9; -.
+DR   GO; GO:0005634; C:nucleus; IEA:InterPro.
+DR   GO; GO:0004402; F:histone acetyltransferase activity; IEA:InterPro.
+DR   GO; GO:0003712; F:transcription cofactor activity; IEA:InterPro.
+DR   GO; GO:0008270; F:zinc ion binding; IEA:InterPro.
+DR   GO; GO:0006355; P:regulation of transcription, DNA-dependent; IEA:InterPro.
+DR   InterPro; IPR003101; KIX.
+DR   InterPro; IPR000197; Znf_TAZ.
+DR   Gene3D; G3DSA:1.10.246.20; KIX; 1.
+DR   Gene3D; G3DSA:1.20.1020.10; Znf_TAZ; 1.
+DR   Pfam; PF02172; KIX; 1.
+DR   Pfam; PF02135; zf-TAZ; 1.
+DR   SMART; SM00551; ZnF_TAZ; 1.
+DR   PROSITE; PS50952; KIX; 1.
+DR   PROSITE; PS50134; ZF_TAZ; 1.
+PE   2: Evidence at transcript level;
+FT   NON_TER     606    606
+SQ   SEQUENCE   606 AA;  62682 MW;  B60774021C25DA7A CRC64;
+     MADNVLDSGA PSAKRPKLSS PALSVSASDG NDFGSPFELE QDLPDELISS ADLGLSNGGD
+     LSQLHTSPSG PLGGLGLGGQ DAASKHKQLS ELLRAGAPPQ QGVPASNSTA PGAPMGMMGG
+     VGVSPGGPQG MHPHGQPQQP GLMPQVGMVG GVAALSRVAA MMGTQKGNPG QQPHGMMGGQ
+     VMNGSPRMGY PGNTGMGNNS NLLADTLQQQ QQQGGQQMVP GAQATMRPQQ PGALNKMNMM
+     ANTGPYAGPY SQSAGQALPG AGLGSPLQNK ASMPNMLNQF NVDKKTLPGM LTAATGVGPV
+     GLGPVGVGPS AGPPTADPEK RKLIQQQLVL LLHAHKCQRR EQANGEVRQC NLPHCRTMKN
+     VLNHMTHCQA GKSCQVAHCA SSRQIISHWK NCTRHDCPVC LPLKNAGDKR NQQSLLNSAG
+     VGLVNSLGAG LPGGQSNNPN LNPPNQIDPS SIERAYAALG LTYQGNQMPQ QPSQPNMPTQ
+     GLQGQPGMGA LNSMGGNSMG VNGGVGVQPP NQQSAVLSNA MLHSNMNAQS LLNDGVANVG
+     SMPTAAPSAA GIRKSWHEDI TQDLRNHLVH KLVQAIFPTP DPAALKDRRM ENLVAYARKV
+     EGDMYE
+//

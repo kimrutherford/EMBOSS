@@ -1,0 +1,30 @@
+application: corbatest [
+  documentation: "Test of EMBL corba retrieval"
+  groups: "Test"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  string: entry [
+    parameter: "Y"
+    information: "Enter an EMBL ID or ACCNO"
+    default: "hsfau"
+    knowntype: "sequence id input"
+  ]
+
+endsection: input
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    parameter: "Y"
+    knowntype: "corbatest output"
+  ]
+
+endsection: output

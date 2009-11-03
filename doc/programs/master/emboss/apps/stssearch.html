@@ -1,0 +1,168 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: stssearch
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+stssearch
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/stssearch.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+<p><b>stssearch</b> searches one or more DNA sequences with a set of STS primers and reports expected matches.  The database to search, the input primer pairs file and an output file for matches are specified.  For each pair of primers, it looks for matches between the primers and the query sequence in either orientation.  Details of any matches are written to the output file. Only one primer need match for it to be reported.</p>
+
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/stssearch.usage" -->
+
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/stssearch.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/stssearch.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+
+<!--#include file="inc/stssearch.input" -->
+
+<p>
+
+The primers file consists of three columns separated by tabs or spaces.
+
+<p>
+
+The first column is the name of the primer pair.
+<br>
+The second column is the sequence of the first primer.
+<br>
+The third column is the sequence of the second primer.
+
+
+<H2>
+    Output file format
+</H2>
+
+
+<!--#include file="inc/stssearch.output" -->
+
+<p>
+
+The output file consists of one line per match. This consists of:
+
+<p>
+
+<ul>
+<li>The name of the sequence that the match is found in, followed by a ':'.
+<li>If the match is in the reverse sense, it has a '(rev)'.
+<li>The name of the primer pair.
+<li>'PrimerA' or 'PrimerB'.
+<li>'matched at' the start of the match position.
+</ul>
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+None.
+
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+
+<!--#include file="inc/stssearch.isee" -->
+<p>
+
+If you want something that only reports matches of both primer pairs and
+can find mismatches, use <A href="primersearch.html">primersearch</a>. 
+
+<H2>
+    Author(s)
+</H2>
+
+
+<!--#include file="inc/price.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/stssearch.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/stssearch.comment" -->
+
+</BODY>
+</HTML>
+

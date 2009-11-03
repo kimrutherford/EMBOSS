@@ -1,0 +1,61 @@
+ID   Z52466; SV 1; linear; genomic DNA; STS; HUM; 389 BP.
+XX
+AC   Z52466;
+XX
+DT   18-MAR-1996 (Rel. 47, Created)
+DT   09-SEP-2004 (Rel. 81, Last updated, Version 4)
+XX
+DE   H.sapiens (D1S2660) DNA segment containing (CA) repeat; clone AFMa203yc1;
+DE   single read.
+XX
+KW   CA repeat; dinucleotide repeat; GT repeat; microsatellite DNA;
+KW   microsatellite marker; repeat polymorphism; STS.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-389
+RA   Weissenbach J.;
+RT   ;
+RL   Submitted (01-SEP-1995) to the EMBL/GenBank/DDBJ databases.
+RL   Genethon, B.P. 60, 91002 Evry Cedex France. E-mail:
+RL   Jean.Weissenbach@genethon.fr
+XX
+RN   [2]
+RP   1-389
+RX   DOI; 10.1038/380152a0.
+RX   PUBMED; 8600387.
+RA   Dib C., Faure S., Fizames C., Samson D., Drouot N., Vignal A.,
+RA   Millasseau P., Marc S., Hazan J., Seboun E., Lathrop M., Gyapay G.,
+RA   Morissette J., Weissenbach J.;
+RT   "A comprehensive genetic map of the human genome based on 5,264
+RT   microsatellites";
+RL   Nature 380(6570):152-154(1996).
+XX
+DR   GDB; 606855.
+XX
+CC   full automatic;
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..389
+FT                   /organism="Homo sapiens"
+FT                   /chromosome="1"
+FT                   /mol_type="genomic DNA"
+FT                   /clone_lib="genomic DNA"
+FT                   /cell_line="CEPH 134702"
+FT                   /note="cloning vector is M13mp18"
+FT                   /db_xref="taxon:9606"
+XX
+SQ   Sequence 389 BP; 118 A; 124 C; 86 G; 57 T; 4 other;
+     agctgtgtgc acacaacatg anggggcaca catgcacatg cacacatgcc cacatgcata        60
+     tgcacacaca cacacacaca cacacacaca ttcatgccca agcacgccca ccctcatgtc       120
+     tcaccatgtg cacataacac acagtcacat ataccctggc acacatgccc acatgcagac       180
+     acgaaacaca ggcccacgnt tncatgcaca caggtatggg cacacatacc atgcacacat       240
+     aangacaaat accaggccag acatgatttg cccctgctgg tgtcactgtt aagtgtgaca       300
+     gacaagcaga ggacacacac ccacctggga cgcggggctt caggagagag gcagacctaa       360
+     tagggcccgg attcggggct ggggaggct                                         389
+//

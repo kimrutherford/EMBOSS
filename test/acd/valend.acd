@@ -1,0 +1,6 @@
+# ACD file for QA testing - missing the application definition
+#
+appl: valend [ doc: "testing" group: "testing" ]
+
+outfile: outtest [ standard: Y prompt: "Some text"
+

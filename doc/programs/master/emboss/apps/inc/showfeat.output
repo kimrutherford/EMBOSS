@@ -1,0 +1,70 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: x65921.showfeat </h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+X65921
+H.sapiens fau 1 gene
+|==========================================================| 2016
+|----------------------------------------------------------&gt; source
+           |--&gt;                                              exon
+           |--&gt;                                              mRNA
+              |-------&gt;                                      intron
+                      |-&gt;                                    exon
+                      |-&gt;                                    mRNA
+                      |-&gt;                                    CDS
+                        |--&gt;                                 intron
+                           |---&gt;                             CDS
+                           |---&gt;                             exon
+                           |---&gt;                             mRNA
+                               |-------------&gt;               intron
+                                             |&gt;              CDS
+                                             |&gt;              exon
+                                             |&gt;              mRNA
+                                               |----&gt;        intron
+                                                    |--&gt;     CDS
+                                                    |--&gt;     exon
+                                                    |--&gt;     mRNA
+                                                        &gt;    polyA_signal
+
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: x65921.showfeat </h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+X65921
+H.sapiens fau 1 gene
+|==========================================================| 2016
+|----------------------------------------------------------&gt; 1-2016 source
+           |--&gt;                                              408-504 exon
+           |--&gt;                                              408-504 mRNA
+              |-------&gt;                                      505-773 intron
+                      |-&gt;                                    774-856,774-856 exon
+                      |-&gt;                                    782-856 CDS
+                        |--|---&gt;                             857-950,951-1095 intron
+                           |---&gt;                             951-1095,951-1095 exon
+                               |-------------|&gt;              1096-1556,1557-1612 intron
+                                             |&gt;              1557-1612,1557-1612 exon
+                                               |----|--&gt;     1613-1786,1787-1912 intron
+                                                    |--&gt;     1787-1912,1787-1912 exon
+                                                        &gt;    1938-1943 polyA_signal
+
+</pre>
+</td></tr></table><p>
+
+<a name="output.3"></a>
+<h3>Output files for usage example 3</h3>
+<p><h3>File: x65921.showfeat </h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+782-856 CDS
+951-1095 CDS
+1557-1612 CDS
+1787-1912 CDS
+
+</pre>
+</td></tr></table><p>

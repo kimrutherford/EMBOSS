@@ -1,0 +1,45 @@
+########################################
+# Program: dbiflat
+# Rundate: Wed 15 Jul 2009 12:00:00
+# Dbname: SWISSNEW
+# Release: 0.0
+# Date: 15/07/09
+# CurrentDirectory: /data2/users/pmr/cvsemboss/test/swnew/
+# IndexDirectory: ./
+# IndexDirectoryPath: /data2/users/pmr/cvsemboss/test/swnew/
+# Maxindex: 0
+# Fields: 6
+#   Field 1: id
+#   Field 2: acc
+#   Field 3: sv
+#   Field 4: des
+#   Field 5: key
+#   Field 6: org
+# Directory: ./
+# DirectoryPath: /data2/users/pmr/cvsemboss/test/swnew/
+# Filenames: *.dat
+# Exclude: 
+# Files: 1
+#   File 1: ./trembl.dat
+########################################
+# Commandline: dbiflat
+#    -fields acnum,seqvn,des,keyword,taxon
+#    -dbname SWISSNEW
+#    -auto
+########################################
+
+filename: 'trembl.dat'
+    id: 9
+   acc: 9
+    sv: 9
+   des: 60
+   key: 27
+   org: 189
+
+Index acc: maxlen 6 items 9
+Index sv: maxlen 8 items 9
+Index des: maxlen 21 items 38
+Index key: maxlen 28 items 20
+Index org: maxlen 19 items 21
+
+Total 1 files 9 entries (0 duplicates)

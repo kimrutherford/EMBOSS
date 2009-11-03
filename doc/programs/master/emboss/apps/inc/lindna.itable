@@ -1,0 +1,157 @@
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-infile]<br>(Parameter 1)</td>
+<td>Commands to the lindna drawing program file</td>
+<td>Input file</td>
+<td>inputfile</td>
+</tr>
+
+<tr>
+<td>-[no]ruler</td>
+<td>Draw a ruler</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-blocktype</td>
+<td>Type of blocks</td>
+<td><table><tr><td>Open</td> <td><i>(Open blocks)</i></td></tr><tr><td>Filled</td> <td><i>(Filled blocks)</i></td></tr><tr><td>Outline</td> <td><i>(Black border)</i></td></tr></table></td>
+<td>Filled</td>
+</tr>
+
+<tr>
+<td>-graphout</td>
+<td>Graph type</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, das, xterm, png, gif</td>
+<td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-maxgroups</td>
+<td>Maximum number of groups</td>
+<td>Integer 1 or more</td>
+<td>20</td>
+</tr>
+
+<tr>
+<td>-maxlabels</td>
+<td>Maximum number of labels</td>
+<td>Integer 1 or more</td>
+<td>10000</td>
+</tr>
+
+<tr>
+<td>-intersymbol</td>
+<td>Type of junctions between blocks</td>
+<td>Choose from selection list of values</td>
+<td>Straight</td>
+</tr>
+
+<tr>
+<td>-intercolour</td>
+<td>Colour of junctions between blocks (enter a colour number)</td>
+<td>Integer from 0 to 15</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-interticks</td>
+<td>Horizontal junctions between ticks</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-gapsize</td>
+<td>Interval between ticks in the ruler</td>
+<td>Integer 0 or more</td>
+<td>500</td>
+</tr>
+
+<tr>
+<td>-ticklines</td>
+<td>Vertical lines at the ruler's ticks</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-textheight</td>
+<td>Height of text. Enter a number &lt;1.0 or &gt;1.0 to decrease or increase the size, respectively</td>
+<td>Number 0.000 or more</td>
+<td>1.0</td>
+</tr>
+
+<tr>
+<td>-textlength</td>
+<td>Length of text. Enter a number &lt;1.0 or &gt;1.0 to decrease or increase the size, respectively</td>
+<td>Number 0.000 or more</td>
+<td>1.0</td>
+</tr>
+
+<tr>
+<td>-margin</td>
+<td>Width of left margin. This is the region left to the groups where the names of the groups are displayed. Enter a number &lt;1.0 or &gt;1.0 to decrease or increase the size, respectively</td>
+<td>Number 0.000 or more</td>
+<td>1.0</td>
+</tr>
+
+<tr>
+<td>-tickheight</td>
+<td>Height of ticks. Enter a number &lt;1.0 or &gt;1.0 to decrease or increase the size, respectively</td>
+<td>Number 0.000 or more</td>
+<td>1.0</td>
+</tr>
+
+<tr>
+<td>-blockheight</td>
+<td>Height of blocks. Enter a number &lt;1.0 or &gt;1.0 to decrease or increase the size, respectively</td>
+<td>Number 0.000 or more</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-rangeheight</td>
+<td>Height of range ends. Enter a number &lt;1.0 or &gt;1.0 to decrease or increase the size, respectively</td>
+<td>Number 0.000 or more</td>
+<td>1.0</td>
+</tr>
+
+<tr>
+<td>-gapgroup</td>
+<td>Space between groups. Enter a number &lt;1.0 or &gt;1.0 to decrease or increase the size, respectively</td>
+<td>Number 0.000 or more</td>
+<td>1.0</td>
+</tr>
+
+<tr>
+<td>-postext</td>
+<td>Space between text and ticks, blocks, and ranges. Enter a number &lt;1.0 or &gt;1.0 to decrease or increase the size, respectively</td>
+<td>Number 0.000 or more</td>
+<td>1.0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>

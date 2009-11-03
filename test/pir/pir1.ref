@@ -1,0 +1,1001 @@
+>P1;CCHU
+cytochrome c [validated] - human
+C;Species: Homo sapiens (man)
+C;Date: 24-Apr-1984 #sequence_revision 30-Sep-1991 #text_change 31-Dec-2004
+C;Accession: A31764; A05676; I55192; A00001
+R;Evans, M.J.; Scarpulla, R.C.
+Proc. Natl. Acad. Sci. U.S.A. 85, 9625-9629, 1988
+A;Title: The human somatic cytochrome c gene: two classes of processed pseudogenes demarcate a period of rapid molecular evolution.
+A;Reference number: A31764; MUID:89071748; PMID:2849112
+A;Accession: A31764
+A;Molecule type: DNA
+A;Residues: 1-105 A;Cross-references: UNIPROT:P99999; UNIPARC:UPI000013EAA0; GB:M22877; NID:g181241; PIDN:AAA35732.1; PID:g181242
+R;Matsubara, H.; Smith, E.L.
+J. Biol. Chem. 238, 2732-2753, 1963
+A;Title: Human heart cytochrome c. Chymotryptic peptides, tryptic peptides, and the complete amino acid sequence.
+A;Reference number: A05676
+A;Accession: A05676
+A;Molecule type: protein
+A;Residues: 2-28;29-46;47-100;101-105 A;Cross-references: UNIPARC:UPI0000171C77; UNIPARC:UPI0000171C78; UNIPARC:UPI0000171C79; UNIPARC:UPI0000171C7A
+R;Matsubara, H.; Smith, E.L.
+J. Biol. Chem. 237, 3575-3576, 1962
+A;Title: The amino acid sequence of human heart cytochrome c.
+A;Reference number: A00001
+A;Contents: annotation
+A;Note: 66-Leu is found in 10% of the molecules in pooled protein
+R;Tanaka, Y.; Ashikari, T.; Shibano, Y.; Amachi, T.; Yoshizumi, H.; Matsubara, H.
+J. Biochem. 103, 954-961, 1988
+A;Title: Construction of a human cytochrome c gene and its functional expression in Saccharomyces cerevisiae.
+A;Reference number: I55192; MUID:89008207; PMID:2844747
+A;Accession: I55192
+A;Status: translated from GB/EMBL/DDBJ
+A;Molecule type: mRNA
+A;Residues: 78-105 A;Cross-references: UNIPARC:UPI0000000359; GB:D00265; NID:g2897691; PIDN:BAA00187.1; PID:g219557
+C;Genetics:
+A;Introns: 57/1
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: acetylated amino end; chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; polymorphism; respiratory chain
+F;2-105/Product: cytochrome c #status experimental F;5-99/Domain: cytochrome c homology F;2/Modified site: acetylated amino end (Gly) (in mature form) #status experimental
+F;15,18/Binding site: heme (Cys) (covalent) #status experimental
+F;19,81/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCCZ
+cytochrome c - chimpanzee (tentative sequence)
+C;Species: Pan troglodytes (chimpanzee)
+C;Date: 17-Mar-1987 #sequence_revision 17-Mar-1987 #text_change 31-Dec-2004
+C;Accession: A00002
+R;Needleman, S.B.
+submitted to the Atlas, October 1968
+A;Reference number: A94601
+A;Accession: A00002
+A;Molecule type: protein
+A;Residues: 1-104 A;Cross-references: UNIPROT:P99998; UNIPARC:UPI0000128BBF
+R;Needleman, S.B.; Margoliash, E.
+unpublished results, 1966, cited by Margoliash, E., and Fitch, W.M., Ann. N.Y. Acad. Sci. 151, 359-381, 1968
+A;Reference number: A94455
+A;Contents: annotation; compositions of chymotryptic peptides
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: acetylated amino end; chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;4-98/Domain: cytochrome c homology F;1/Modified site: acetylated amino end (Gly) #status predicted
+F;14,17/Binding site: heme (Cys) (covalent) #status predicted
+F;18,80/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCMQR
+cytochrome c - rhesus macaque (tentative sequence)
+C;Species: Macaca mulatta (rhesus macaque)
+C;Date: 17-Mar-1987 #sequence_revision 17-Mar-1987 #text_change 31-Dec-2004
+C;Accession: A00003
+R;Rothfus, J.A.; Smith, E.L.
+J. Biol. Chem. 240, 4277-4283, 1965
+A;Title: Amino acid sequence of rhesus monkey heart cytochrome c.
+A;Reference number: A00003; MUID:66045191; PMID:4954366
+A;Contents: compositions of chymotryptic peptides; sequences of residues 55-61 and 68-70
+A;Accession: A00003
+A;Molecule type: protein
+A;Residues: 1-104 A;Cross-references: UNIPROT:P00002; UNIPARC:UPI0000128BC7
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: acetylated amino end; chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;4-98/Domain: cytochrome c homology F;1/Modified site: acetylated amino end (Gly) #status experimental
+F;14,17/Binding site: heme (Cys) (covalent) #status predicted
+F;18,80/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCMKP
+cytochrome c - spider monkey
+C;Species: Ateles sp. (spider monkey)
+C;Date: 17-Dec-1982 #sequence_revision 17-Dec-1982 #text_change 31-Dec-2004
+C;Accession: A00004
+R;Margoliash, E.
+unpublished results, cited by Shelnutt, J.A., Rousseau, D.L., Dethmers, J.K., and Margoliash, E., Biochemistry 20, 6485-6497, 1981
+A;Reference number: A00004
+A;Accession: A00004
+A;Molecule type: protein
+A;Residues: 1-104 A;Cross-references: UNIPROT:P00003; UNIPARC:UPI0000128B99
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: acetylated amino end; chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;4-98/Domain: cytochrome c homology F;1/Modified site: acetylated amino end (Gly) #status predicted
+F;14,17/Binding site: heme (Cys) (covalent) #status predicted
+F;18,80/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCMS
+cytochrome c [validated] - mouse
+C;Species: Mus musculus (house mouse)
+C;Date: 31-Dec-1990 #sequence_revision 30-Sep-1991 #text_change 31-Dec-2004
+C;Accession: A23057; A04604; A00009
+R;Limbach, K.J.; Wu, R.
+Nucleic Acids Res. 13, 617-630, 1985
+A;Title: Characterization of a mouse somatic cytochrome c gene and three cytochrome c pseudogenes.
+A;Reference number: A23057; MUID:85215501; PMID:2987801
+A;Accession: A23057
+A;Molecule type: DNA
+A;Residues: 1-105 A;Cross-references: UNIPROT:P00009; UNIPARC:UPI0000003E57; EMBL:X01756; NID:g50618; PIDN:CAA25899.1; PID:g50619
+A;Experimental source: strain BALB/c
+R;Carlson, S.S.; Mross, G.A.; Wilson, A.C.; Mead, R.T.; Wolin, L.D.; Bowers, S.F.; Foley, N.T.; Muijsers, A.O.; Margoliash, E.
+Biochemistry 16, 1437-1442, 1977
+A;Title: Primary structure of mouse, rat, and guinea pig cytochrome c.
+A;Reference number: A04604; MUID:77134768; PMID:191069
+A;Accession: A04604
+A;Molecule type: protein
+A;Residues: 2-105 A;Cross-references: UNIPARC:UPI00000291A5
+A;Experimental source: strain BALB/c
+C;Genetics:
+A;Introns: 57/1
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: acetylated amino end; chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;2-105/Product: cytochrome c #status experimental F;5-99/Domain: cytochrome c homology F;2/Modified site: acetylated amino end (Gly) (in mature form) #status experimental
+F;15,18/Binding site: heme (Cys) (covalent) #status experimental
+F;19,81/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCRT
+cytochrome c [validated] - rat
+C;Species: Rattus norvegicus (Norway rat)
+C;Date: 31-Dec-1990 #sequence_revision 30-Sep-1991 #text_change 31-Dec-2004
+C;Accession: A04605; C28160; A00009
+R;Scarpulla, R.C.; Agne, K.M.; Wu, R.
+J. Biol. Chem. 256, 6480-6486, 1981
+A;Title: Isolation and structure of a rat cytochrome c gene.
+A;Reference number: A04605; MUID:81215609; PMID:6263917
+A;Accession: A04605
+A;Molecule type: DNA
+A;Residues: 1-105 A;Cross-references: UNIPROT:P00009; UNIPARC:UPI0000003E57; GB:K00750; GB:M28216; NID:g550511; PIDN:AAA21711.1; PID:g203699
+R;Virbasius, J.V.; Scarpulla, R.C.
+J. Biol. Chem. 263, 6791-6796, 1988
+A;Title: Structure and expression of rodent genes encoding the testis-specific cytochrome c. Differences in gene structure and evolution between somatic and testicular variants.
+A;Reference number: A28160; MUID:88198250; PMID:2834389
+A;Accession: C28160
+A;Molecule type: mRNA
+A;Residues: 1-105 A;Cross-references: UNIPARC:UPI0000003E57; GB:M20622; NID:g203722; PIDN:AAA41014.1; PID:g203723
+R;Carlson, S.S.; Mross, G.A.; Wilson, A.C.; Mead, R.T.; Wolin, L.D.; Bowers, S.F.; Foley, N.T.; Muijsers, A.O.; Margoliash, E.
+Biochemistry 16, 1437-1442, 1977
+A;Title: Primary structure of mouse, rat, and guinea pig cytochrome c.
+A;Reference number: A04604; MUID:77134768; PMID:191069
+A;Contents: annotation
+A;Note: peptide mapping, compositional analysis, and partial sequencing indicate that rat cytochrome c is identical with that of mouse
+C;Genetics:
+A;Introns: 57/1
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: blocked amino end; chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;2-105/Product: cytochrome c #status experimental F;5-99/Domain: cytochrome c homology F;2/Modified site: blocked amino end (Gly) (in mature form) (probably acetylated) #status experimental
+F;15,18/Binding site: heme (Cys) (covalent) #status experimental
+F;19,81/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCRB
+cytochrome c [validated] - rabbit
+C;Species: Oryctolagus cuniculus (domestic rabbit)
+C;Date: 13-Jul-1981 #sequence_revision 13-Jul-1981 #text_change 31-Dec-2004
+C;Accession: A00009
+R;Needleman, S.B.; Margoliash, E.
+J. Biol. Chem. 241, 853-863, 1966
+A;Title: Rabbit heart cytochrome c.
+A;Reference number: A00009; MUID:66093127; PMID:5905125
+A;Accession: A00009
+A;Molecule type: protein
+A;Residues: 1-104 A;Cross-references: UNIPROT:P00008; UNIPARC:UPI0000128BD2
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: acetylated amino end; chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;4-98/Domain: cytochrome c homology F;1/Modified site: acetylated amino end (Gly) #status experimental
+F;14,17/Binding site: heme (Cys) (covalent) #status experimental
+F;18,80/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCGW
+cytochrome c [validated] - guanaco
+C;Species: Lama guanicoe (guanaco)
+C;Date: 31-Dec-1990 #sequence_revision 31-Dec-1990 #text_change 31-Dec-2004
+C;Accession: A04608; A00009
+R;Niece, R.L.; Margoliash, E.; Fitch, W.M.
+Biochemistry 16, 68-72, 1977
+A;Title: Complete amino acid sequence of guanaco (Lama guanicoe) cytochrome c.
+A;Reference number: A04608; MUID:77087753; PMID:188448
+A;Accession: A04608
+A;Molecule type: protein
+A;Residues: 1-104 A;Cross-references: UNIPROT:P00010; UNIPARC:UPI0000128BB2
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: acetylated amino end; chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;4-98/Domain: cytochrome c homology F;1/Modified site: acetylated amino end (Gly) #status experimental
+F;14,17/Binding site: heme (Cys) (covalent) #status experimental
+F;18,80/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCCM
+cytochrome c - Arabian camel
+C;Species: Camelus dromedarius (Arabian camel)
+C;Date: 31-Dec-1990 #sequence_revision 31-Dec-1990 #text_change 31-Dec-2004
+C;Accession: A04607; A00009
+R;Sokolovsky, M.; Moldovan, M.
+Biochemistry 11, 145-149, 1972
+A;Title: Primary structure of cytochrome c from the camel, Camelus dromedarius.
+A;Reference number: A04607; MUID:72096652; PMID:5061872
+A;Accession: A04607
+A;Molecule type: protein
+A;Residues: 1-104 A;Cross-references: UNIPROT:P00010; UNIPARC:UPI0000128BB2
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: acetylated amino end; chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;4-98/Domain: cytochrome c homology F;1/Modified site: acetylated amino end (Gly) #status experimental
+F;14,17/Binding site: heme (Cys) (covalent) #status predicted
+F;18,80/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCWHC
+cytochrome c - California gray whale
+C;Species: Eschrichtius robustus, Eschrichtius gibbosus (California gray whale)
+C;Date: 31-Dec-1990 #sequence_revision 31-Dec-1990 #text_change 31-Dec-2004
+C;Accession: A04606; A00009
+R;Goldstone, A.; Smith, E.L.
+J. Biol. Chem. 241, 4480-4486, 1966
+A;Title: Amino acid sequence of whale heart cytochrome c.
+A;Reference number: A04606; MUID:67041932; PMID:5922971
+A;Accession: A04606
+A;Molecule type: protein
+A;Residues: 1-104 A;Cross-references: UNIPROT:P00010; UNIPARC:UPI0000128BB2
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: blocked amino end; chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;4-98/Domain: cytochrome c homology F;1/Modified site: blocked amino end (Gly) (probably acetylated) #status experimental
+F;14,17/Binding site: heme (Cys) (covalent) #status predicted
+F;18,80/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCPG
+cytochrome c [validated] - pig
+C;Species: Sus scrofa domestica (domestic pig)
+C;Date: 17-Mar-1987 #sequence_revision 17-Mar-1987 #text_change 31-Dec-2004
+C;Accession: A00007
+R;Stewart, J.W.; Margoliash, E.
+Can. J. Biochem. 43, 1187-1206, 1965
+A;Title: The primary structure of the cytochrome c from various organs of the hog.
+A;Reference number: A90743; MUID:66072936; PMID:5855656
+A;Accession: A00007
+A;Molecule type: protein
+A;Residues: 1-104 A;Cross-references: UNIPROT:P00006; UNIPARC:UPI0000128B9A
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: acetylated amino end; chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;4-98/Domain: cytochrome c homology F;1/Modified site: acetylated amino end (Gly) #status experimental
+F;14,17/Binding site: heme (Cys) (covalent) #status experimental
+F;18,80/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCBO
+cytochrome c - bovine
+C;Species: Bos primigenius taurus (cattle)
+C;Date: 31-Mar-1992 #sequence_revision 31-Mar-1992 #text_change 31-Dec-2004
+C;Accession: A92022; A00007
+R;Nakashima, T.; Higa, H.; Matsubara, H.; Benson, A.; Yasunobu, K.T.
+J. Biol. Chem. 241, 1166-1177, 1966
+A;Title: The amino acid sequence of bovine heart cytochrome c.
+A;Reference number: A92022; MUID:66132521; PMID:5933874
+A;Accession: A92022
+A;Molecule type: protein
+A;Residues: 1-104 A;Cross-references: UNIPROT:P00006; UNIPARC:UPI0000128B9A
+R;Tsunasawa, S.; Narita, K.
+J. Biochem. 92, 607-613, 1982
+A;Title: Micro-identification of amino-terminal acetylamino acids in proteins.
+A;Reference number: A61297; MUID:83056735; PMID:6754709
+A;Contents: annotation; acetylation
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: acetylated amino end; chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;4-98/Domain: cytochrome c homology F;1/Modified site: acetylated amino end (Gly) #status experimental
+F;14,17/Binding site: heme (Cys) (covalent) #status predicted
+F;18,80/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCSH
+cytochrome c - sheep (tentative sequence)
+C;Species: Ovis orientalis aries, Ovis ammon aries (domestic sheep)
+C;Date: 31-Mar-1992 #sequence_revision 31-Mar-1992 #text_change 31-Dec-2004
+C;Accession: A91454; A00007
+R;Smith, E.L.; Margoliash, E.
+Fed. Proc. 23, 1243-1247, 1964
+A;Title: Evolution of cytochrome c.
+A;Reference number: A91454
+A;Accession: A91454
+A;Molecule type: protein
+A;Residues: 1-104 A;Cross-references: UNIPROT:P00006; UNIPARC:UPI0000128B9A
+A;Note: amino acid compositions and mobilities of tryptic and chymotryptic peptides were determined
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: acetylated amino end; chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;4-98/Domain: cytochrome c homology F;1/Modified site: acetylated amino end (Gly) #status predicted
+F;14,17/Binding site: heme (Cys) (covalent) #status predicted
+F;18,80/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCHOD
+cytochrome c - donkey (tentative sequence)
+C;Species: Equus asinus (donkey)
+C;Date: 17-Mar-1987 #sequence_revision 17-Mar-1987 #text_change 31-Dec-2004
+C;Accession: A00006
+R;Walasek, O.F.; Margoliash, E.
+J. Biol. Chem. 252, 830-834, 1977
+A;Title: Transmission of the cytochrome c structural gene in horse-donkey crosses.
+A;Reference number: A92217; MUID:77118552; PMID:190219
+A;Accession: A00006
+A;Molecule type: protein
+A;Residues: 1-104 A;Cross-references: UNIPROT:P00005; UNIPARC:UPI0000128BB1
+A;Note: compositions of chymotryptic peptides and the sequence of residues 47-48 were determined
+A;Note: mules and hinnies are heterozygous, having equal amounts of horse and donkey cytochromes c
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: acetylated amino end; chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;4-98/Domain: cytochrome c homology F;1/Modified site: acetylated amino end (Gly) #status predicted
+F;14,17/Binding site: heme (Cys) (covalent) #status predicted
+F;18,80/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCHOZ
+cytochrome c - common zebra (tentative sequence)
+C;Species: Equus burchelli, Equus quagga (common zebra, plains zebra)
+C;Date: 31-Mar-1992 #sequence_revision 31-Mar-1992 #text_change 31-Dec-2004
+C;Accession: A91330; A00006
+R;Guertler, L.; Horstmann, H.J.
+FEBS Lett. 18, 106-108, 1971
+A;Title: Zur Primaerstruktur des Cytochromes c des Steppenzebras (Equus quagga boehmi).
+A;Reference number: A91330
+A;Accession: A91330
+A;Molecule type: protein
+A;Residues: 1-104 A;Cross-references: UNIPROT:P00005; UNIPARC:UPI0000128BB1
+A;Note: the amino acid composition and the sequence of residues 40-48 were determined
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: acetylated amino end; chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;4-98/Domain: cytochrome c homology F;1/Modified site: acetylated amino end (Gly) #status predicted
+F;14,17/Binding site: heme (Cys) (covalent) #status predicted
+F;18,80/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCHO
+cytochrome c [validated] - horse
+C;Species: Equus caballus (domestic horse)
+C;Date: 13-Jul-1981 #sequence_revision 13-Jul-1981 #text_change 31-Dec-2004
+C;Accession: A00005; S59487
+R;Margoliash, E.; Smith, E.L.; Kreil, G.; Tuppy, H.
+Nature 192, 1125-1127, 1961
+A;Title: The complete amino-acid sequence.
+A;Reference number: A93145
+A;Accession: A00005
+A;Molecule type: protein
+A;Residues: 1-104 A;Cross-references: UNIPROT:P00004; UNIPARC:UPI000011054E
+R;Theodorakis, J.L.; Armes, L.G.; Margoliash, E.
+Biochim. Biophys. Acta 1252, 114-125, 1995
+A;Title: beta-Thiopropionyl cytochromes c modified at lysyl residues: preparation and characterization of the monosubstituted horse cytochromes c.
+A;Reference number: S59487; MUID:96001358; PMID:7548153
+A;Accession: S59487
+A;Status: preliminary
+A;Molecule type: protein
+A;Residues: 1-10;11-18;19-26;27-34;38-47;50-54;55-58;60-67;68-74;75-82;83-97;98-104 A;Cross-references: UNIPARC:UPI0000171C7B; UNIPARC:UPI0000171C7C; UNIPARC:UPI0000171C7D; UNIPARC:UPI0000171C7E; UNIPARC:UPI0000171C7F; UNIPARC:UPI0000171C80; UNIPARC:UPI0000171C81; UNIPARC:UPI0000171C82; UNIPARC:UPI0000171C83; UNIPARC:UPI0000171C84; UNIPARC:UPI0000171C85; UNIPARC:UPI0000171C86
+R;Luo, Y.; Brayer, G.D.
+submitted to the Brookhaven Protein Data Bank, August 1994
+A;Reference number: A52805; PDB:1HRC
+A;Contents: annotation; X-ray crystallography, 1.9 angstroms, residues 1-104
+R;Dickerson, R.E.; Takano, T.; Eisenberg, D.; Kallai, O.B.; Samson, L.; Cooper, A.; Margoliash, E.
+J. Biol. Chem. 246, 1511-1533, 1971
+A;Title: Ferricytochrome c. I. General features of the horse and bonito proteins at 2.8 A resolution.
+A;Reference number: A92076; MUID:71116428; PMID:5545094
+A;Contents: annotation; X-ray crystallography, 2.8 angstroms
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: acetylated amino end; chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;4-98/Domain: cytochrome c homology F;1/Modified site: acetylated amino end (Gly) #status experimental
+F;14,17/Binding site: heme (Cys) (covalent) #status experimental
+F;18,80/Binding site: heme iron (His, Met) (axial ligands) #status experimental
+>P1;CCHP
+cytochrome c - hippopotamus
+C;Species: Hippopotamus amphibius (hippopotamus)
+C;Date: 19-Feb-1984 #sequence_revision 19-Feb-1984 #text_change 31-Dec-2004
+C;Accession: A00008
+R;Thompson, R.B.; Borden, D.; Tarr, G.E.; Margoliash, E.
+J. Biol. Chem. 253, 8957-8961, 1978
+A;Title: Heterogeneity of amino acid sequence in hippopotamus cytochrome c.
+A;Reference number: A00008; MUID:79067782; PMID:214435
+A;Accession: A00008
+A;Molecule type: protein
+A;Residues: 1-104 A;Cross-references: UNIPROT:P00007; UNIPARC:UPI0000128BBE
+A;Note: 3-Ile was also found
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: acetylated amino end; chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;4-98/Domain: cytochrome c homology F;1/Modified site: acetylated amino end (Gly) #status predicted
+F;14,17/Binding site: heme (Cys) (covalent) #status predicted
+F;18,80/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCDG
+cytochrome c - dog (tentative sequence)
+C;Species: Canis lupus familiaris (dog)
+C;Date: 13-Jul-1981 #sequence_revision 13-Jul-1981 #text_change 31-Dec-2004
+C;Accession: A00010
+R;McDowall, M.A.; Smith, E.L.
+J. Biol. Chem. 240, 4635-4647, 1965
+A;Title: Amino acid sequence of dog heart cytochrome c.
+A;Reference number: A00010; MUID:66047448; PMID:5846985
+A;Accession: A00010
+A;Molecule type: protein
+A;Residues: 1-104 A;Cross-references: UNIPROT:P00011; UNIPARC:UPI0000128B9E
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: blocked amino end; chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;4-98/Domain: cytochrome c homology F;1/Modified site: blocked amino end (Gly) (probably acetylated) #status experimental
+F;14,17/Binding site: heme (Cys) (covalent) #status predicted
+F;18,80/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCSLE
+cytochrome c - southern elephant seal (tentative sequence)
+C;Species: Mirounga leonina (southern elephant seal)
+C;Date: 31-Dec-1990 #sequence_revision 31-Dec-1990 #text_change 31-Dec-2004
+C;Accession: A04615; A00010
+R;Augusteyn, R.C.; McDowall, M.A.; Webb, E.C.; Zerner, B.
+Biochim. Biophys. Acta 257, 264-272, 1972
+A;Title: Primary structure of cytochrome c from the elephant seal, Mirounga leonina.
+A;Reference number: A04615; MUID:72170090; PMID:4553890
+A;Accession: A04615
+A;Molecule type: protein
+A;Residues: 1-104 A;Cross-references: UNIPROT:P00012; UNIPARC:UPI0000128BCB
+A;Note: peptides were positioned by homology
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: acetylated amino end; chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;4-98/Domain: cytochrome c homology F;1/Modified site: acetylated amino end (Gly) #status experimental
+F;14,17/Binding site: heme (Cys) (covalent) #status experimental
+F;18,80/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCBTS
+cytochrome c - Schreibers's long-fingered bat (tentative sequence)
+C;Species: Miniopterus schreibersi (Schreibers's long-fingered bat)
+C;Date: 31-Dec-1990 #sequence_revision 31-Dec-1990 #text_change 31-Dec-2004
+C;Accession: A04614; A00010
+R;Strydom, D.J.; van der Walt, S.J.; Botes, D.P.
+Comp. Biochem. Physiol. B 43, 21-24, 1972
+A;Title: The amino acid sequence of bat (Miniopteris schreibersi) cytochrome c.
+A;Reference number: A04614; MUID:73123526; PMID:4347193
+A;Accession: A04614
+A;Molecule type: protein
+A;Residues: 1-104 A;Cross-references: UNIPROT:P00013; UNIPARC:UPI0000128BCA
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: acetylated amino end; chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;4-98/Domain: cytochrome c homology F;1/Modified site: acetylated amino end (Gly) #status predicted
+F;14,17/Binding site: heme (Cys) (covalent) #status predicted
+F;18,80/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCKGG
+cytochrome c [validated] - eastern gray kangaroo
+C;Species: Macropus giganteus (eastern gray kangaroo)
+C;Date: 24-Apr-1984 #sequence_revision 24-Apr-1984 #text_change 31-Dec-2004
+C;Accession: A00011
+R;Nolan, C.; Margoliash, E.
+J. Biol. Chem. 241, 1049-1059, 1966
+A;Title: Primary structure of the cytochrome c from the great grey kangaroo, Macropus canguru.
+A;Reference number: A00011; MUID:66132505; PMID:5933863
+A;Accession: A00011
+A;Molecule type: protein
+A;Residues: 1-104 A;Cross-references: UNIPROT:P00014; UNIPARC:UPI0000128BC5
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: acetylated amino end; chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;4-98/Domain: cytochrome c homology F;1/Modified site: acetylated amino end (Gly) #status experimental
+F;14,17/Binding site: heme (Cys) (covalent) #status experimental
+F;18,80/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCMST
+cytochrome c, testis-specific [validated] - mouse
+N;Alternate names: cytochrome c T
+C;Species: Mus musculus (house mouse)
+C;Date: 24-Apr-1984 #sequence_revision 30-Sep-1991 #text_change 31-Dec-2004
+C;Accession: B28160; A00012; I48313
+R;Virbasius, J.V.; Scarpulla, R.C.
+J. Biol. Chem. 263, 6791-6796, 1988
+A;Title: Structure and expression of rodent genes encoding the testis-specific cytochrome c. Differences in gene structure and evolution between somatic and testicular variants.
+A;Reference number: A28160; MUID:88198250; PMID:2834389
+A;Accession: B28160
+A;Molecule type: mRNA
+A;Residues: 1-105 A;Cross-references: UNIPROT:P00015; UNIPARC:UPI0000022AAF; GB:M20625; NID:g192875; PIDN:AAA37501.1; PID:g309203
+R;Hennig, B.
+Eur. J. Biochem. 55, 167-183, 1975
+A;Title: Change of cytochrome c structure during development of the mouse.
+A;Reference number: A00012; MUID:76022386; PMID:240690
+A;Accession: A00012
+A;Molecule type: protein
+A;Residues: 2-57,'IV',60-61,'ZZ',64-66,'Z',68-69,'ZB',72-105 A;Cross-references: UNIPARC:UPI0000171C87
+A;Experimental source: strain BALB/c
+R;Hake, L.E.; Alcivar, A.A.; Hecht, N.B.
+Development 110, 249-257, 1990
+A;Title: Changes in mRNA length accompany translational regulation of the somatic and testis-specific cytochrome c genes during spermatogenesis in the mouse.
+A;Reference number: I48313; MUID:91184013; PMID:1964409
+A;Accession: I48313
+A;Status: translated from GB/EMBL/DDBJ
+A;Molecule type: mRNA
+A;Residues: 1-105 A;Cross-references: UNIPARC:UPI0000022AAF; EMBL:X55771; NID:g288155; PIDN:CAA39293.1; PID:g288156
+C;Comment: Mammalian testis contains two forms of cytochrome c, one identical with the form found in somatic tissues and another that is expressed in a stage-specific manner during spermatogenic differentiation.
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: blocked amino end; chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain; sperm; testis
+F;2-105/Product: cytochrome c, testis-specific #status experimental F;5-99/Domain: cytochrome c homology F;2/Modified site: blocked amino end (Gly) (in mature form) (probably acetylated) #status experimental
+F;15,18/Binding site: heme (Cys) (covalent) #status experimental
+F;19,81/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCRTT
+cytochrome c, testis-specific - rat
+C;Species: Rattus norvegicus (Norway rat)
+C;Date: 30-Sep-1991 #sequence_revision 30-Sep-1991 #text_change 31-Dec-2004
+C;Accession: A28160
+R;Virbasius, J.V.; Scarpulla, R.C.
+J. Biol. Chem. 263, 6791-6796, 1988
+A;Title: Structure and expression of rodent genes encoding the testis-specific cytochrome c. Differences in gene structure and evolution between somatic and testicular variants.
+A;Reference number: A28160; MUID:88198250; PMID:2834389
+A;Accession: A28160
+A;Molecule type: DNA; mRNA
+A;Residues: 1-105 A;Cross-references: UNIPROT:P10715; UNIPARC:UPI0000167AA4; GB:M20627; GB:M20628; NID:g203727; PIDN:AAA41015.1; PID:g203729; GB:M20623; NID:g203730; PID:g203731
+C;Comment: Mammalian testis contains two forms of cytochrome c, one identical to the form found in somatic tissues and another that is expressed in a stage-specific manner during spermatogenic differentiation.
+C;Genetics:
+A;Introns: 57/1
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: acetylated amino end; chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain; sperm; testis
+F;2-105/Product: cytochrome c, testis-specific #status predicted F;5-99/Domain: cytochrome c homology F;2/Modified site: acetylated amino end (Gly) (in mature form) #status predicted
+F;15,18/Binding site: heme (Cys) (covalent) #status predicted
+F;19,81/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCPY
+cytochrome c - pigeon (tentative sequence)
+C;Species: Columba livia (domestic pigeon)
+C;Date: 04-Dec-1986 #sequence_revision 04-Dec-1986 #text_change 31-Dec-2004
+C;Accession: A00013
+R;Chan, S.K.; Tulloss, I.; Margoliash, E.
+unpublished results, cited by Wojciech, R., and Margoliash, E., in Handbook of Biochemistry, Sober, H.A., ed., pp.C158-C161, Chemical Rubber Co., Cleveland, 1968
+A;Reference number: A94490
+A;Accession: A00013
+A;Molecule type: protein
+A;Residues: 1-104 A;Cross-references: UNIPROT:P00021; UNIPARC:UPI0000128BA4
+A;Note: compositions of tryptic peptides and sequences of residues 89-91, 92-99, and 100-104 were determined
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: acetylated amino end; chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;4-98/Domain: cytochrome c homology F;1/Modified site: acetylated amino end (Gly) #status predicted
+F;14,17/Binding site: heme (Cys) (covalent) #status predicted
+F;18,80/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCCH
+cytochrome c [validated] - chicken
+C;Species: Gallus gallus (chicken)
+C;Date: 24-Apr-1984 #sequence_revision 20-Aug-1994 #text_change 31-Dec-2004
+C;Accession: A00014; A04611
+R;Limbach, K.J.; Wu, R.
+Nucleic Acids Res. 11, 8931-8950, 1983
+A;Title: Isolation and characterization of two alleles of the chicken cytochrome c gene.
+A;Reference number: A00014; MUID:84169527; PMID:6324108
+A;Accession: A00014
+A;Molecule type: DNA
+A;Residues: 1-105 A;Cross-references: UNIPROT:P00016; UNIPARC:UPI0000171302; GB:K02303; NID:g211708; PIDN:AAA48741.1; PID:g211709
+R;Chan, S.K.; Margoliash, E.
+J. Biol. Chem. 241, 507-515, 1966
+A;Title: Amino acid sequence of chicken heart cytochrome.
+A;Reference number: A04611; MUID:66080352; PMID:5903744
+A;Accession: A04611
+A;Molecule type: protein
+A;Residues: 2-105 A;Cross-references: UNIPARC:UPI0000128BA2
+C;Genetics:
+A;Introns: 57/1
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: acetylated amino end; chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;2-105/Product: cytochrome c #status experimental F;5-99/Domain: cytochrome c homology F;2/Modified site: acetylated amino end (Gly) (in mature form) #status experimental
+F;15,18/Binding site: heme (Cys) (covalent) #status experimental
+F;19,81/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCTK
+cytochrome c - turkey (tentative sequence)
+C;Species: Meleagris gallopavo (common turkey)
+C;Date: 31-Dec-1990 #sequence_revision 31-Dec-1990 #text_change 31-Dec-2004
+C;Accession: A04612; A00014
+R;Chan, S.K.; Tulloss, I.; Margoliash, E.
+submitted to the Atlas, June 1966
+A;Reference number: A04612
+A;Accession: A04612
+A;Molecule type: protein
+A;Residues: 1-104 A;Cross-references: UNIPROT:P00016; UNIPARC:UPI0000128BA2
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: acetylated amino end; chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;4-98/Domain: cytochrome c homology F;1/Modified site: acetylated amino end (Gly) #status predicted
+F;14,17/Binding site: heme (Cys) (covalent) #status predicted
+F;18,80/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCDK
+cytochrome c - duck (tentative sequence)
+C;Species: Anas platyrhynchos (domestic duck)
+C;Date: 04-Dec-1986 #sequence_revision 04-Dec-1986 #text_change 31-Dec-2004
+C;Accession: A00015
+R;Chan, S.K.; Tulloss, I.; Margoliash, E.
+submitted to the Atlas, June 1966
+A;Reference number: A04612
+A;Contents: compositions of tryptic peptides; sequences of residues 1-5, 92-99, and 100-104
+A;Accession: A00015
+A;Molecule type: protein
+A;Residues: 1-104 A;Cross-references: UNIPROT:P00020; UNIPARC:UPI0000128B93
+A;Experimental source: Pekin breed
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: acetylated amino end; chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;4-98/Domain: cytochrome c homology F;1/Modified site: acetylated amino end (Gly) #status predicted
+F;14,17/Binding site: heme (Cys) (covalent) #status predicted
+F;18,80/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCOS
+cytochrome c [validated] - ostrich
+C;Species: Struthio camelus (ostrich)
+C;Date: 04-Dec-1986 #sequence_revision 04-Dec-1986 #text_change 31-Dec-2004
+C;Accession: A00016
+R;Howard, N.L.; Joubert, F.J.; Strydom, D.J.
+Comp. Biochem. Physiol. B 48, 75-85, 1974
+A;Title: The amino acid sequence of ostrich (Struthio camelus) cytochrome C.
+A;Reference number: A00016; MUID:74175476; PMID:4364857
+A;Accession: A00016
+A;Molecule type: protein
+A;Residues: 1-104 A;Cross-references: UNIPROT:P00019; UNIPARC:UPI0000128BE0
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: acetylated amino end; chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;4-98/Domain: cytochrome c homology F;1/Modified site: acetylated amino end (Gly) #status experimental
+F;14,17/Binding site: heme (Cys) (covalent) #status experimental
+F;18,80/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCEU
+cytochrome c [validated] - emu
+C;Species: Dromaius novaehollandiae (emu)
+C;Date: 04-Dec-1986 #sequence_revision 04-Dec-1986 #text_change 31-Dec-2004
+C;Accession: A00017
+R;Augusteyn, R.C.
+Biochim. Biophys. Acta 303, 1-7, 1973
+A;Title: Primary structure of cytochrome c from the emu, Dromaeus novaehollandiae.
+A;Reference number: A00017; MUID:73171069; PMID:4349739
+A;Accession: A00017
+A;Molecule type: protein
+A;Residues: 1-104 A;Cross-references: UNIPROT:P00018; UNIPARC:UPI0000128BAD
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: blocked amino end; chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;4-98/Domain: cytochrome c homology F;1/Modified site: blocked amino end (Gly) (probably acetylated) #status experimental
+F;14,17/Binding site: heme (Cys) (covalent) #status experimental
+F;18,80/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCPN
+cytochrome c - king penguin
+C;Species: Aptenodytes patagonicus (king penguin)
+C;Date: 04-Dec-1986 #sequence_revision 04-Dec-1986 #text_change 31-Dec-2004
+C;Accession: A00018
+R;Chan, S.K.; Tulloss, I.; Margoliash, E.
+submitted to the Atlas, July 1967
+A;Reference number: A38040
+A;Accession: A00018
+A;Molecule type: protein
+A;Residues: 1-104 A;Cross-references: UNIPROT:P00017; UNIPARC:UPI0000128B95
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: acetylated amino end; chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;4-98/Domain: cytochrome c homology F;1/Modified site: acetylated amino end (Gly) #status predicted
+F;14,17/Binding site: heme (Cys) (covalent) #status predicted
+F;18,80/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCST
+cytochrome c - snapping turtle (tentative sequence)
+C;Species: Chelydra serpentina (snapping turtle)
+C;Date: 24-Apr-1984 #sequence_revision 30-Sep-1988 #text_change 31-Dec-2004
+C;Accession: A00019
+R;Chan, S.K.; Tulloss, I.; Margoliash, E.
+Biochemistry 5, 2586-2597, 1966
+A;Title: Primary structure of the cytochrome c from the snapping turtle, Chelydra serpentina.
+A;Reference number: A00019; MUID:67172948; PMID:5968568
+A;Accession: A00019
+A;Molecule type: protein
+A;Residues: 1-104 A;Cross-references: UNIPROT:P00022; UNIPARC:UPI0000128BA1
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: acetylated amino end; chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;4-98/Domain: cytochrome c homology F;1/Modified site: acetylated amino end (Gly) #status predicted
+F;14,17/Binding site: heme (Cys) (covalent) #status predicted
+F;18,80/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCFG
+cytochrome c - bullfrog (tentative sequence)
+C;Species: Rana catesbeiana (bullfrog)
+C;Date: 24-Apr-1984 #sequence_revision 24-Apr-1984 #text_change 31-Dec-2004
+C;Accession: A00021
+R;Chan, S.K.; Walasek, O.F.; Barlow, G.H.; Margoliash, E.
+submitted to the Atlas, July 1967
+A;Reference number: A00021
+A;Accession: A00021
+A;Molecule type: protein
+A;Residues: 1-104 A;Cross-references: UNIPROT:P00024; UNIPARC:UPI0000128BD3
+C;Comment: The presence of Lys-104 is not certain.
+C;Comment: We have arranged the amino acids in positions 88-92 by homology with the other cytochrome c sequences. This arrangement is contrary to the authors'.
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: acetylated amino end; chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;4-98/Domain: cytochrome c homology F;1/Modified site: acetylated amino end (Gly) #status predicted
+F;14,17/Binding site: heme (Cys) (covalent) #status predicted
+F;18,80/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+F;20-102/Disulfide bonds: #status experimental
+>P1;CCBN
+cytochrome c [validated] - skipjack tuna
+C;Species: Euthynnus pelamis, Katsuwonus pelamis (skipjack tuna)
+C;Date: 13-Jul-1981 #sequence_revision 10-Oct-1997 #text_change 31-Dec-2004
+C;Accession: A00022
+R;Nakayama, T.; Titani, K.; Narita, K.
+J. Biochem. 70, 311-326, 1971
+A;Title: The amino acid sequence of cytochrome c from bonito (Katsuwonus pelamis, Linnaeus).
+A;Reference number: A00022; MUID:72003272; PMID:5106585
+A;Accession: A00022
+A;Molecule type: protein
+A;Residues: 1-103 A;Cross-references: UNIPROT:P00025; UNIPARC:UPI0000110E3B
+R;Tanaka, N.; Yamane, T.; Tsukihara, T.; Ashida, T.; Kakudo, M.
+submitted to the Brookhaven Protein Data Bank, August 1976
+A;Reference number: A50107; PDB:1CYC
+A;Contents: annotation; X-ray crystallography, 2.3 angstroms, residues 1-103
+R;Tanaka, N.; Yamane, T.; Tsukihara, T.; Ashida, T.; Kakudo, M.
+J. Biochem. 77, 147-162, 1975
+A;Title: The crystal structure of bonito (katsuo) ferrocytochrome c at 2.3 A resolution. II. Structure and function.
+A;Reference number: A38036; MUID:75170243; PMID:166072
+A;Contents: annotation; X-ray crystallography, reduced form, 2.3 angstroms
+R;Matsuura, Y.; Hata, Y.; Yamaguchi, T.; Tanaka, N.; Kakudo, M.
+J. Biochem. 85, 729-737, 1979
+A;Title: Structure of bonito heart ferricytochrome c and some remarks on molecular interaction in its crystalline state.
+A;Reference number: A38037; MUID:79150869; PMID:218921
+A;Contents: annotation; X-ray crystallography, oxidized form, 2.8 angstroms
+R;Mandel, N.; Mandel, G.; Trus, B.L.; Rosenburg, J.; Carlson, G.; Dickerson, R.E.
+J. Biol. Chem. 252, 4619-4636, 1977
+A;Title: Tuna cytochrome c at 2.0 A resolution. III. Coordinate optimization and comparison of structures.
+A;Reference number: A38038; MUID:77207068; PMID:194885
+A;Contents: annotation; commercial Scombridae, X-ray crystallography, oxidized and reduced forms, 2.0 angstroms
+A;Note: this is the final paper in a series
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: acetylated amino end; chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;4-98/Domain: cytochrome c homology F;1/Modified site: acetylated amino end (Gly) #status experimental
+F;14,17/Binding site: heme (Cys) (covalent) #status experimental
+F;18,80/Binding site: heme iron (His, Met) (axial ligands) #status experimental
+>P1;CCCA
+cytochrome c - common carp (tentative sequence)
+C;Species: Cyprinus carpio (common carp)
+C;Date: 24-Apr-1984 #sequence_revision 24-Apr-1984 #text_change 31-Dec-2004
+C;Accession: A00023
+R;Guertler, L.; Horstmann, H.J.
+Eur. J. Biochem. 12, 48-57, 1970
+A;Title: Die Aminosaeure-sequenz vom Cytochrom c des Karpfens, Cyprinus carpio.
+A;Reference number: A00023; MUID:70137310; PMID:5434283
+A;Accession: A00023
+A;Molecule type: protein
+A;Residues: 1-103 A;Cross-references: UNIPROT:P00026; UNIPARC:UPI0000128BAA
+A;Note: the sequence of iso-2-cytochrome c differs from that shown in having 4-Asp
+A;Note: the protein was obtained from food carp that consisted of two cross-bred strains, the European carp and the Amur carp; the isocytochromes may be the result of strain differences
+C;Comment: The sequence shown is iso-1-cytochrome c.
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: blocked amino end; chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;4-98/Domain: cytochrome c homology F;1/Modified site: blocked amino end (Gly) (probably acetylated) #status experimental
+F;14,17/Binding site: heme (Cys) (covalent) #status experimental
+F;18,80/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCDF
+cytochrome c [validated] - Puget Sound dogfish
+C;Species: Squalus sucklii (Puget Sound dogfish)
+C;Date: 23-Oct-1981 #sequence_revision 23-Oct-1981 #text_change 31-Dec-2004
+C;Accession: A00024
+R;Goldstone, A.; Smith, E.L.
+J. Biol. Chem. 242, 4702-4710, 1967
+A;Title: Amino acid sequence of the cytochrome c from the dogfish, Squalus sucklii.
+A;Reference number: A00024; MUID:68054790; PMID:6061416
+A;Accession: A00024
+A;Molecule type: protein
+A;Residues: 1-104 A;Cross-references: UNIPROT:P00027; UNIPARC:UPI0000128BDE
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: acetylated amino end; chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;4-98/Domain: cytochrome c homology F;1/Modified site: acetylated amino end (Gly) #status experimental
+F;14,17/Binding site: heme (Cys) (covalent) #status experimental
+F;18,80/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCLM
+cytochrome c [validated] - Pacific lamprey
+C;Species: Lampetra tridentata, Entosphenus tridentatus (Pacific lamprey)
+C;Date: 13-Jul-1981 #sequence_revision 13-Jul-1981 #text_change 31-Dec-2004
+C;Accession: A00025
+R;Nolan, C.; Fitch, W.M.; Uzzell, T.; Weiss, L.J.; Margoliash, E.
+Biochemistry 12, 4052-4060, 1973
+A;Title: Amino acid sequence of a cytochrome c from the common Pacific lamprey, Entosphenus tridentatus.
+A;Reference number: A00025; MUID:74011773; PMID:4355549
+A;Accession: A00025
+A;Molecule type: protein
+A;Residues: 1-104 A;Cross-references: UNIPROT:P00028; UNIPARC:UPI0000128BC2
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: acetylated amino end; chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;4-98/Domain: cytochrome c homology F;1/Modified site: acetylated amino end (Gly) #status experimental
+F;14,17/Binding site: heme (Cys) (covalent) #status experimental
+F;18,80/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCRS
+cytochrome c - eastern diamondback rattlesnake
+C;Species: Crotalus adamanteus (eastern diamondback rattlesnake)
+C;Date: 19-Feb-1984 #sequence_revision 19-Feb-1984 #text_change 31-Dec-2004
+C;Accession: A94624; A92021; A00020
+R;Ambler, R.
+submitted to the Protein Sequence Database, January 1984
+A;Reference number: A94624
+A;Accession: A94624
+A;Molecule type: protein
+A;Residues: 1-104 A;Cross-references: UNIPROT:P00023; UNIPARC:UPI0000128BA7
+R;Bahl, O.P.; Smith, E.L.
+J. Biol. Chem. 240, 3585-3593, 1965
+A;Title: Amino acid sequence of rattlesnake heart cytochrome c.
+A;Reference number: A92021; MUID:66019642; PMID:5835940
+A;Accession: A92021
+A;Molecule type: protein
+A;Residues: 1-85,'SK',88-92,'N',94-100,'K',102-103,'A' A;Cross-references: UNIPARC:UPI0000171C88
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: blocked amino end; chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;4-98/Domain: cytochrome c homology F;1/Modified site: blocked amino end (Gly) (probably acetylated) #status experimental
+F;14,17/Binding site: heme (Cys) (covalent) #status predicted
+F;18,80/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCRSW
+cytochrome c - western rattlesnake
+C;Species: Crotalus viridis (western rattlesnake)
+C;Date: 31-Mar-1992 #sequence_revision 31-Mar-1992 #text_change 31-Dec-2004
+C;Accession: S14358
+R;Ambler, R.P.; Daniel, M.
+Biochem. J. 274, 825-831, 1991
+A;Title: Rattlesnake cytochrome c. A re-appraisal of the reported amino acid sequence.
+A;Reference number: S14358; MUID:91190099; PMID:1849408
+A;Accession: S14358
+A;Molecule type: protein
+A;Residues: 1-104 A;Cross-references: UNIPROT:P00023; UNIPARC:UPI0000128BA7
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: acetylated amino end; chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;4-98/Domain: cytochrome c homology F;1/Modified site: acetylated amino end (Gly) #status predicted
+F;14,17/Binding site: heme (Cys) (covalent) #status predicted
+F;18,80/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCSF
+cytochrome c - starfish (Asterias rubens) (tentative sequence)
+C;Species: Asterias rubens (common European starfish)
+C;Date: 24-Apr-1984 #sequence_revision 24-Apr-1984 #text_change 31-Dec-2004
+C;Accession: A00026
+R;Lyddiatt, A.; Boulter, D.
+FEBS Lett. 67, 331-334, 1976
+A;Title: The amino acid sequence of cytochrome c from Asterias rubens L. (common starfish).
+A;Reference number: A00026; MUID:77003681; PMID:183984
+A;Accession: A00026
+A;Molecule type: protein
+A;Residues: 1-103 A;Cross-references: UNIPROT:P00029; UNIPARC:UPI0000128B98
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;4-98/Domain: cytochrome c homology F;14,17/Binding site: heme (Cys) (covalent) #status predicted
+F;18,80/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCWB
+cytochrome c - earthworm (Eisenia foetida)
+C;Species: Eisenia foetida (common brandling worm, common dung-worm)
+C;Date: 24-Apr-1984 #sequence_revision 01-Feb-1985 #text_change 31-Dec-2004
+C;Accession: A00027
+R;Lyddiatt, A.; Boulter, D.
+FEBS Lett. 62, 85-88, 1976
+A;Title: The amino acid sequence of cytochrome c from Eisenia foetida (Savigny) (common brandling worm).
+A;Reference number: A00027; MUID:76118291; PMID:174956
+A;Accession: A00027
+A;Molecule type: protein
+A;Residues: 1-108 A;Cross-references: UNIPROT:P00030; UNIPARC:UPI0000128BAE
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;9-103/Domain: cytochrome c homology F;19,22/Binding site: heme (Cys) (covalent) #status predicted
+F;23,85/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCMM
+cytochrome c - monsoon river-prawn
+C;Species: Macrobrachium malcolmsonii (monsoon river-prawn)
+C;Date: 24-Apr-1984 #sequence_revision 24-Apr-1984 #text_change 31-Dec-2004
+C;Accession: A00028
+R;Lyddiatt, A.; Boulter, D.
+Comp. Biochem. Physiol. B 55, 337-342, 1976
+A;Title: A comparison of cytochrome C from Macrobrachium malcomsonii with other invertebrate cytochromes C.
+A;Reference number: A00028; MUID:77024998; PMID:185001
+A;Accession: A00028
+A;Molecule type: protein
+A;Residues: 1-104 A;Cross-references: UNIPROT:P00031; UNIPARC:UPI0000128BC6
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: blocked amino end; chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;4-98/Domain: cytochrome c homology F;1/Modified site: blocked amino end (Gly) (probably acetylated) #status experimental
+F;14,17/Binding site: heme (Cys) (covalent) #status predicted
+F;18,80/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCHA
+cytochrome c [validated] - brown garden snail
+C;Species: Helix aspersa (brown garden snail)
+C;Date: 24-Apr-1984 #sequence_revision 24-Apr-1984 #text_change 31-Dec-2004
+C;Accession: A00029
+R;Brown, R.H.; Richardson, M.; Boulter, D.; Ramshaw, J.A.M.; Jefferies, R.P.S.
+Biochem. J. 128, 971-974, 1972
+A;Title: The amino acid sequence of cytochrome c from Helix aspersa Mueller (garden snail).
+A;Reference number: A00029; MUID:73054484; PMID:4344699
+A;Accession: A00029
+A;Molecule type: protein
+A;Residues: 1-104 A;Cross-references: UNIPROT:P00032; UNIPARC:UPI0000128BBD
+A;Note: the amidation states of residues 16, 21, 52, 70, and 90 were assigned by homology with other cytochromes c
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;4-98/Domain: cytochrome c homology F;14,17/Binding site: heme (Cys) (covalent) #status experimental
+F;18,80/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCFFCM
+cytochrome c - Mediterranean fruit fly
+C;Species: Ceratitis capitata (Mediterranean fruit fly)
+C;Date: 13-Jul-1981 #sequence_revision 30-Jun-1991 #text_change 31-Dec-2004
+C;Accession: A00030
+R;Fernandez-Sousa, J.M.; Gavilanes, J.G.; Municio, A.M.; Paredes, J.A.; Perez-Aranda, A.; Rodriguez, R.
+Biochim. Biophys. Acta 393, 358-367, 1975
+A;Title: Primary structure of cytochrome c from the insect Ceratitis capitata.
+A;Reference number: A00030; MUID:75205681; PMID:167835
+A;Accession: A00030
+A;Molecule type: protein
+A;Residues: 1-107 A;Cross-references: UNIPROT:P00034; UNIPARC:UPI0000128B46
+A;Note: some peptides were positioned by homology
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;8-102/Domain: cytochrome c homology F;18,21/Binding site: heme (Cys) (covalent) #status predicted
+F;22,84/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCFFDM
+cytochrome c DC4 - fruit fly (Drosophila melanogaster)
+C;Species: Drosophila melanogaster
+C;Date: 30-Jun-1991 #sequence_revision 20-Aug-1994 #text_change 31-Dec-2004
+C;Accession: A22945; A23058; A25506; A38039; A00030
+R;Swanson, M.S.; Zieminn, S.M.; Miller, D.D.; Garber, E.A.E.; Margoliash, E.
+Proc. Natl. Acad. Sci. U.S.A. 82, 1964-1968, 1985
+A;Title: Developmental expression of nuclear genes that encode mitochondrial proteins: insect cytochromes c.
+A;Reference number: A94704; MUID:85166253; PMID:2984675
+A;Accession: A22945
+A;Molecule type: DNA
+A;Residues: 1-108 A;Cross-references: UNIPROT:P00034; UNIPARC:UPI0000000FDA; GB:M11381; NID:g157160; PIDN:AAA28437.1; PID:g157161
+R;Limbach, K.J.; Wu, R.
+Nucleic Acids Res. 13, 631-644, 1985
+A;Title: Characterization of two Drosophila melanogaster cytochrome c genes and their transcripts.
+A;Reference number: A93584; MUID:85215502; PMID:2987802
+A;Accession: A23058
+A;Molecule type: DNA
+A;Residues: 1-108 A;Cross-references: UNIPARC:UPI0000000FDA; GB:X01760; NID:g7782; PIDN:CAA25900.1; PID:g7783
+R;Inoue, S.; Inoue, H.; Hiroyoshi, T.; Matsubara, H.; Yamanaka, T.
+J. Biochem. 100, 955-965, 1986
+A;Title: Developmental variation and amino acid sequences of cytochromes c of the fruit fly Drosophila melanogaster and the flesh fly Boettcherisca peregrina.
+A;Reference number: A91907; MUID:87137362; PMID:3029051
+A;Accession: A25506
+A;Molecule type: protein
+A;Residues: 2-108 A;Cross-references: UNIPARC:UPI0000128B46
+R;Nolan, C.; Weiss, L.J.; Adams, J.J.; Margoliash, E.
+unpublished results, cited by Wojciech, R., and Margoliash, E., in Handbook of Biochemistry, Sober, H.A., ed., pp.C160-C161, Chemical Rubber Co., Cleveland, 1968
+A;Reference number: A38039
+A;Accession: A38039
+A;Molecule type: protein
+A;Residues: 2-54,'N',56-64,'QD',67-108 A;Cross-references: UNIPARC:UPI0000171C89
+A;Note: some peptides were positioned by homology
+C;Comment: This protein is expressed at varying, but relatively high levels throughout development.
+C;Genetics:
+A;Gene: DC4
+A;Cross-references: FlyBase:FBgn0000409
+A;Map position: 2 36A 10-11
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;2-108/Product: cytochrome c DC4 #status experimental F;9-103/Domain: cytochrome c homology F;19,22/Binding site: heme (Cys) (covalent) #status predicted
+F;23,85/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCFHHF
+cytochrome c - horn fly
+C;Species: Haematobia irritans (horn fly)
+C;Date: 30-Jun-1991 #sequence_revision 30-Jun-1991 #text_change 31-Dec-2004
+C;Accession: A38040; A00030
+R;Chan, S.K.; Tulloss, I.; Margoliash, E.
+submitted to the Atlas, July 1967
+A;Reference number: A38040
+A;Accession: A38040
+A;Molecule type: protein
+A;Residues: 1-107 A;Cross-references: UNIPROT:P00035; UNIPARC:UPI0000128BBA
+A;Note: some peptides were positioned by homology
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;8-102/Domain: cytochrome c homology F;18,21/Binding site: heme (Cys) (covalent) #status predicted
+F;22,84/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCHFGB
+cytochrome c - greenbottle fly (Lucilia cuprina) (tentative sequence)
+C;Species: Lucilia cuprina
+C;Date: 30-Jun-1991 #sequence_revision 30-Jun-1991 #text_change 31-Dec-2004
+C;Accession: A38041; A00030
+R;Shaw, D.C.; Williams, K.L.; Smith, E.; Birt, L.M.
+Biochim. Biophys. Acta 532, 179-184, 1978
+A;Title: The amino acid sequence of cytochrome c from the blowfly Lucilia cuprina.
+A;Reference number: A38041; MUID:78080930; PMID:202328
+A;Accession: A38041
+A;Molecule type: protein
+A;Residues: 1-107 A;Cross-references: UNIPROT:P00036; UNIPARC:UPI0000128BC3
+A;Note: the compositions of the tryptic peptides and the sequence of residues 44-49 were determined
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;8-102/Domain: cytochrome c homology F;18,21/Binding site: heme (Cys) (covalent) #status predicted
+F;22,84/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCLQ
+cytochrome c - desert locust
+C;Species: Schistocerca gregaria (desert locust)
+C;Date: 24-Apr-1984 #sequence_revision 24-Apr-1984 #text_change 31-Dec-2004
+C;Accession: A00033
+R;Lyddiatt, A.; Boulter, D.
+Biochem. J. 163, 333-338, 1977
+A;Title: The amino acid sequence of cytochrome c from the locust, Schistocerca gregaria Forskal.
+A;Reference number: A00033; MUID:77201499; PMID:194585
+A;Accession: A00033
+A;Molecule type: protein
+A;Residues: 1-107 A;Cross-references: UNIPROT:P00040; UNIPARC:UPI0000128BD9
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;8-102/Domain: cytochrome c homology F;18,21/Binding site: heme (Cys) (covalent) #status predicted
+F;22,84/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCMT
+cytochrome c [validated] - ailanthus silkmoth
+C;Species: Samia cynthia (ailanthus silkmoth)
+C;Date: 13-Jul-1981 #sequence_revision 23-Oct-1981 #text_change 31-Dec-2004
+C;Accession: A00032
+R;Chan, S.K.; Margoliash, E.
+J. Biol. Chem. 241, 335-348, 1966
+A;Title: Properties and primary structure of the cytochrome c from the flight muscles of the moth, Samia cynthia.
+A;Reference number: A92025; MUID:66080329; PMID:5903726
+A;Accession: A00032
+A;Molecule type: protein
+A;Residues: 1-107 A;Cross-references: UNIPROT:P00037; UNIPARC:UPI0000128BD6
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;8-102/Domain: cytochrome c homology F;18,21/Binding site: heme (Cys) (covalent) #status experimental
+F;22,84/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;CCWOT
+cytochrome c - tobacco hornworm (tentative sequence)
+C;Species: Manduca sexta (tobacco hornworm)
+C;Date: 30-Sep-1991 #sequence_revision 30-Sep-1991 #text_change 31-Dec-2004
+C;Accession: A90578; B22945; A00032
+R;Chan, S.K.
+Biochim. Biophys. Acta 221, 497-501, 1970
+A;Title: Biochemical studies in the developing thoracic muscles of the tobacco horn worm.
+A;Reference number: A90578; MUID:71108407; PMID:5499433
+A;Accession: A90578
+A;Molecule type: protein
+A;Residues: 1-107 A;Cross-references: UNIPROT:P00039; UNIPARC:UPI0000171C8A
+A;Note: the compositions of chymotryptic peptides were determined and residues were ordered by homology with silkmoth cytochrome c
+R;Swanson, M.S.; Zieminn, S.M.; Miller, D.D.; Garber, E.A.E.; Margoliash, E.
+Proc. Natl. Acad. Sci. U.S.A. 82, 1964-1968, 1985
+A;Title: Developmental expression of nuclear genes that encode mitochondrial proteins: insect cytochromes c.
+A;Reference number: A94704; MUID:85166253; PMID:2984675
+A;Accession: B22945
+A;Molecule type: mRNA
+A;Residues: 26-31,'I',33-53,'D',55-63,'NE',66-107 A;Cross-references: UNIPARC:UPI000016BF44; GB:M11382; NID:g159496; PIDN:AAA29308.1; PID:g159497
+A;Note: the authors translated the codon GAT for residue 29 as Asn, AAT for residue 39 as Gln, and GAG for residue 40 as Asp
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;8-102/Domain: cytochrome c homology F;18,21/Binding site: heme (Cys) (covalent) #status predicted
+F;22,84/Binding site: heme iron (His, Met) (axial ligands) #status predicted

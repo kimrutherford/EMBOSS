@@ -1,0 +1,75 @@
+application: makenucseq [
+  documentation: "Create random nucleotide sequences"
+  groups: "Edit"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  codon: codonfile [
+    standard: "Y"
+    information: "Codon usage file (optional)"
+    help: "Optional codon usage file. Nucleotide sequences will be
+           created as triplets matching the frequencies in the file, with the
+           end trimmed to be in the correct reading frame."
+    nullok: "Y"
+    knowntype: "codon usage"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  integer: amount [
+    standard: "Y"
+    default: "100"
+    minimum: "1"
+    information: "Number of sequences created"
+  ]
+
+  integer: length [
+    standard: "Y"
+    default: "100"
+    minimum: "1"
+    information: "Length of each sequence"
+  ]
+
+  toggle: useinsert [
+    additional: "Y"
+    information: "Do you want to make an insert"
+    default: "N"
+  ]
+
+  string: insert [
+    standard: "$(useinsert)"
+    information: "Inserted string"
+    help: "String that is inserted into sequence"
+    knowntype: "sequence"
+  ]
+
+  integer: start [
+    standard: "$(useinsert)"
+    information: "Start point of inserted sequence"
+    minimum: "1"
+    default: "1"
+  ]
+
+endsection: required
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  seqoutall: outseq [
+    parameter: "Y"
+    type: "nucleotide"
+    name: "makeseq"
+  ]
+
+endsection: output

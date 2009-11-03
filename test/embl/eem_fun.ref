@@ -1,0 +1,53 @@
+>>>>AB009602
+ 
+ID   AB009602   standard; RNA; FUN; 561 BP.
+XX
+AC   AB009602;
+XX
+SV   AB009602.1
+XX
+DT   15-DEC-1997 (Rel. 53, Created)
+DT   15-DEC-1997 (Rel. 53, Last updated, Version 1)
+XX
+DE   Schizosaccharomyces pombe mRNA for MET1 homolog, partial cds.
+XX
+KW   MET1 homolog.
+XX
+OS   Schizosaccharomyces pombe (fission yeast)
+OC   Eukaryota; Fungi; Ascomycota; Schizosaccharomycetes;
+OC   Schizosaccharomycetales; Schizosaccharomycetaceae; Schizosaccharomyces.
+XX
+RN   [1]
+RP   1-561
+RA   Kawamukai M.;
+RT   ;
+RL   Submitted (07-DEC-1997) to the EMBL/GenBank/DDBJ databases.
+RL   Makoto Kawamukai, Shimane University, Life and Environmental Science; 1060
+RL   Nishikawatsu, Matsue, Shimane 690, Japan
+RL   (E-mail:kawamuka@life.shimane-u.ac.jp, Tel:0852-32-6587, Fax:0852-32-6499)
+XX
+RN   [2]
+RP   1-561
+RA   Kawamukai M.;
+RT   "S.pmbe MET1 homolog";
+RL   Unpublished.
+XX
+DR   SPTREMBL; Q9URL1; Q9URL1.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1. .561
+FT                   /db_xref="taxon:4896"
+FT                   /sequenced_mol="cDNA to mRNA"
+FT                   /organism="Schizosaccharomyces pombe"
+FT                   /clone_lib="pGAD GH"
+FT   CDS             <1. .275
+FT                   /codon_start=3
+FT                   /db_xref="SPTREMBL:Q9URL1"
+FT                   /transl_table=1
+FT                   /product="MET1 homolog"
+FT                   /protein_id="BAA23999.1"
+FT                   /translation="SMPKIPSFVPTQTTVFLMALHRLEILVQALIESGWPRVLPVCIAE
+FT                   RVSCPDQRFIFSTLEDVVEEYNKYESLPPGLLITGYSCNTLRNTA"
+XX
+SQ   Sequence 561 BP; 135 A; 106 C; 98 G; 222 T; 0 other;

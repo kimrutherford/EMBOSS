@@ -1,0 +1,486 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: checktrans
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+checktrans
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
+    Function
+</H2>
+Reports STOP codons and ORF statistics of a protein
+<H2>
+    Description
+</H2>
+
+
+<p><b>checktrans</b> reads a protein sequence containing stop characters and writes a statistical report of any open reading frames (ORFs) that are greater than a minimum size. An open reading frame is defined as a continuous region of protein sequence with no stop characters.   The default minimum ORF size is 100 residues. In addition to the report output, any ORF sequences are written to file and features of those sequences written to a separate file.</p>
+
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with checktrans</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>checktrans </b>
+Reports STOP codons and ORF statistics of a protein
+Input protein sequence(s): <b>paamir.pep</b>
+Minimum ORF Length to report [100]: <b></b>
+Output file [paamir_1.checktrans]: <b></b>
+output sequence(s) [paamir_1.fasta]: <b></b>
+Features output [paamir_1.gff]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Protein sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -orfml              integer    [100] Minimum ORF Length to report (Integer
+                                  1 or more)
+  [-outfile]           outfile    [*.checktrans] Output file name
+  [-outseq]            seqoutall  [<sequence>.<format>] Sequence file to hold
+                                  output ORF sequences
+  [-outfeat]           featout    [unknown.gff] File for output features
+
+   Additional (Optional) qualifiers:
+   -[no]addlast        boolean    [Y] An asterisk in the protein sequence
+                                  indicates the position of a STOP codon.
+                                  Checktrans assumes that all ORFs end in a
+                                  STOP codon. Forcing the sequence to end with
+                                  an asterisk, if there is not one there
+                                  already, makes checktrans treat the end as a
+                                  potential ORF. If an asterisk is added, it
+                                  is not included in the reported count of
+                                  STOPs.
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   "-outseq" associated qualifiers
+   -osformat3          string     Output seq format
+   -osextension3       string     File name extension
+   -osname3            string     Base file name
+   -osdirectory3       string     Output directory
+   -osdbname3          string     Database name to add
+   -ossingle3          boolean    Separate file for each entry
+   -oufo3              string     UFO features
+   -offormat3          string     Features format
+   -ofname3            string     Features file name
+   -ofdirectory3       string     Output directory
+
+   "-outfeat" associated qualifiers
+   -offormat4          string     Output feature format
+   -ofopenfile4        string     Features file name
+   -ofextension4       string     File name extension
+   -ofdirectory4       string     Output directory
+   -ofname4            string     Base file name
+   -ofsingle4          boolean    Separate file for each entry
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Protein sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-orfml</td>
+<td>Minimum ORF Length to report</td>
+<td>Integer 1 or more</td>
+<td>100</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.checktrans</td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 3)</td>
+<td>Sequence file to hold output ORF sequences</td>
+<td>Writeable sequence(s)</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr>
+<td>[-outfeat]<br>(Parameter 4)</td>
+<td>File for output features</td>
+<td>Writeable feature table</td>
+<td><i>unknown.gff</i></td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-[no]addlast</td>
+<td>An asterisk in the protein sequence indicates the position of a STOP codon. Checktrans assumes that all ORFs end in a STOP codon. Forcing the sequence to end with an asterisk, if there is not one there already, makes checktrans treat the end as a potential ORF. If an asterisk is added, it is not included in the reported count of STOPs.</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+<H2>
+    Input file format
+</H2>
+
+This program reads the USA of a protein sequence with STOP codons in it.
+
+<p>
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: paamir.pep</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+&gt;PAAMIR_1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+GTAGRASARSPPAGRRELHDLPGEPGARAGSLRTALSDSHRRGNGWDRTRSGR*SACCSP
+KPASPPISSARTRMAHCSRSSN*TARAASAVARSKRCPRTPAATRTAIGCAPRTSFATGG
+YGSSWAATCRTRARR*CRWSSAPTRCSATRPPTRASSIRRTSSTAVRRRTRTVRRWRRT*
+FATTASGWCSSARTTSIRGKATM*CATCIASTAARCSRKSTFRCIPPTTTCSAPSSASTR
+RAPTWSSPPWWAPAPPSCIAPSPVATATAGGRRSPA*PPARRRWRRWRVTWQRGRWWSRL
+TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTC
+TTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTG
+PPAWAGDRSHERQLAARQPARVAGAGPQPAGGGQRRPGLAADPHRLFGAPVLAAAGSLRR
+AGGRGLHQHFPEWPPRRDRCAARRRDSAHYPGGAGGVRKPRGALADHRAGVPRRDHPAAR
+CPPGAACAGIGAAHQRGNGEAEAEDRAAPGPHRRPGPDQPGQGVADAAPWLGRARGAPAP
+VAGSDEAARADPEDRSGVAGKRAVRLSDPGRPEQ*QEGYRHHAGTGSAVRWRGAVSQCRL
+VAGQDQRSGGGGDQLPGRRAERLRRVLPDLFRSSRAGLAEGRSADPAIRFYLSVGGRQPV
+PRX
+</pre>
+</td></tr></table><p>
+
+<H2>
+    Output file format
+</H2>
+
+
+This program writes three files: the ORF report file
+(x13776_1.checktrans), the output sequence file (x13776_1.fasta) and the
+feature file (x13776_1.out3) which is in GFF format by default. 
+
+<p>
+
+The ORF report file gives the numeric count of the ORF, the position of
+the terminating STOP codon, the length of the ORF, its start and end
+positions and the name of the sequence it has been written out as. 
+
+<p>
+
+The name of the output sequences is constructed from the name of the
+input sequence followed by an underscore and then the numeric count of
+the ORF (e.g. 'X13776_1_7').
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: paamir_1.checktrans</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+
+
+CHECKTRANS of PAAMIR_1 from 1 to 724
+
+	ORF#	Pos	Len	ORF Range	Sequence name
+
+	7	635	357	278-634	PAAMIR_1_7
+
+	Total STOPS:     7
+
+ </pre>
+</td></tr></table><p>
+<p><h3>File: paamir_1.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;PAAMIR_1_7
+PPARRRWRRWRVTWQRGRWWSRLTSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGR
+PCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSR
+SAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHERQLAARQPARVAGAGPQPAGGGQRRP
+GLAADPHRLFGAPVLAAAGSLRRAGGRGLHQHFPEWPPRRDRCAARRRDSAHYPGGAGGV
+RKPRGALADHRAGVPRRDHPAARCPPGAACAGIGAAHQRGNGEAEAEDRAAPGPHRRPGP
+DQPGQGVADAAPWLGRARGAPAPVAGSDEAARADPEDRSGVAGKRAVRLSDPGRPEQ
+</pre>
+</td></tr></table><p>
+<p><h3>File: paamir_1.gff</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+##gff-version 3
+##sequence-region PAAMIR_1 1 634
+#!Date 2008-07-15
+#!Type Protein
+#!Source-version EMBOSS 6.1.0
+PAAMIR_1	checktrans	polypeptide_region	278	634	0.000	+	.	ID="PAAMIR_1.1"
+</pre>
+</td></tr></table><p>
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+
+<H2>
+    Notes
+</H2>
+
+<p>A reading frame is a relative position in DNA or RNA from which contiguous, non-overlapping codons are read during transcription. There are 3 possible reading frames in mRNA strand and six in a double stranded DNA where transcription is possible from either strand. An open reading frame (ORF) is a reading frame that begins with a start codon and includes the subsequent transcribed region, stopping immediately before the first stop codon.</p>
+
+<p>Where you have a nucleotide sequence for analysis, it should first be translated by using <b>transeq</b>.  The <b>transeq</b> output file will then serve as the input to <b>checktrans</b>. Note that if you have only translated a nucleic sequence in one frame, <b>checktrans</b> will miss possible ORFs in the other frames. You must provide <b>checktrans</b> with translations in all three (six?) frames in order for it to be effective at finding all possible ORFs.</p>
+
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+
+This program always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="backtranambig.html">backtranambig</a></td>
+<td>Back-translate a protein sequence to ambiguous nucleotide sequence</td>
+</tr>
+
+<tr>
+<td><a href="backtranseq.html">backtranseq</a></td>
+<td>Back-translate a protein sequence to a nucleotide sequence</td>
+</tr>
+
+<tr>
+<td><a href="charge.html">charge</a></td>
+<td>Draw a protein charge plot</td>
+</tr>
+
+<tr>
+<td><a href="compseq.html">compseq</a></td>
+<td>Calculate the composition of unique words in sequences</td>
+</tr>
+
+<tr>
+<td><a href="emowse.html">emowse</a></td>
+<td>Search protein sequences by digest fragment molecular weight</td>
+</tr>
+
+<tr>
+<td><a href="freak.html">freak</a></td>
+<td>Generate residue/base frequency table or plot</td>
+</tr>
+
+<tr>
+<td><a href="iep.html">iep</a></td>
+<td>Calculate the isoelectric point of proteins</td>
+</tr>
+
+<tr>
+<td><a href="mwcontam.html">mwcontam</a></td>
+<td>Find weights common to multiple molecular weights files</td>
+</tr>
+
+<tr>
+<td><a href="mwfilter.html">mwfilter</a></td>
+<td>Filter noisy data from molecular weights file</td>
+</tr>
+
+<tr>
+<td><a href="octanol.html">octanol</a></td>
+<td>Draw a White-Wimley protein hydropathy plot</td>
+</tr>
+
+<tr>
+<td><a href="pepinfo.html">pepinfo</a></td>
+<td>Plot amino acid properties of a protein sequence in parallel</td>
+</tr>
+
+<tr>
+<td><a href="pepstats.html">pepstats</a></td>
+<td>Calculates statistics of protein properties</td>
+</tr>
+
+<tr>
+<td><a href="pepwindow.html">pepwindow</a></td>
+<td>Draw a hydropathy plot for a protein sequence</td>
+</tr>
+
+<tr>
+<td><a href="pepwindowall.html">pepwindowall</a></td>
+<td>Draw Kyte-Doolittle hydropathy plot for a protein alignment</td>
+</tr>
+
+<tr>
+<td><a href="wordcount.html">wordcount</a></td>
+<td>Count and extract unique words in DNA sequence(s)</td>
+</tr>
+
+</table>
+
+<H2>
+    Author(s)
+</H2>
+
+Rodrigo Lopez (rls&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+
+and modified by
+Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+<br>
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+
+to output the sequence data to a single file in the conventional
+EMBOSS style.
+
+<H2>
+    History
+</H2>
+
+Completed 24 Feb 2000 - Rodrigo Lopez
+
+<p>
+Modified 2 March 2000 - Gary Williams
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+None
+
+
+</BODY>
+</HTML>
+

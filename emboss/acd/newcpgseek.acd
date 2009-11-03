@@ -1,0 +1,44 @@
+application: newcpgseek [
+  documentation: "Identify and report CpG-rich regions in
+                  nucleotide sequence(s)"
+  groups: "Nucleic:CpG Islands"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "DNA"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  integer: score [
+    standard: "Y"
+    minimum: "1"
+    maximum: "200"
+    default: "17"
+    information: "CpG score"
+  ]
+
+endsection: required
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    parameter: "Y"
+    knowntype: "newcpgseek output"
+  ]
+
+endsection: output

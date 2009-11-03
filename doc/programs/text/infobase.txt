@@ -1,0 +1,179 @@
+
+                                 infobase 
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Return information on a given nucleotide base
+
+Description
+
+   infobase reports the defined properties for all known bases, or for
+   any bases specified by the user.
+
+Usage
+
+   Here is a sample session with infobase
+
+
+% infobase 
+Return information on a given nucleotide base
+Nucleotide base code [ABCDGHKMNRSTUVWXY]: 
+Output file [outfile.infobase]: 
+
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-code]              string     [ABCDGHKMNRSTUVWXY] Enter IUPAC nucleotide
+                                  base codes, e.g. A, C, G, T, R, Y etc. (Any
+                                  string is accepted)
+  [-outfile]           outfile    [*.infobase] Output file name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   infobase uses a string of base codes.
+
+Output file format
+
+   infobase outputs a text table of base properties.
+
+  Output files for usage example
+
+  File: outfile.infobase
+
+Code Ambiguity  Complement Mnemonic
+A    A          T          adenine
+B    CGT        V          not_adenine
+C    C          G          cytosine
+D    AGT        H          not_cytosine
+G    G          C          guanine
+H    ACT        D          not_guanine
+K    GT         M          keto_base
+M    AC         K          amino_base
+N    ACGT       N          any_base
+R    AG         Y          purine_base
+S    CG         S          strong_bond
+T    T          A          thymine
+U    T          A          uracil
+V    ACG        B          not_thymine/uracil
+W    AT         W          weak_bond
+X    ACGT       X          unknown
+Y    CT         R          pyrimidine
+
+Data files
+
+   infobase reads the Ebases.iub file to define IUB standard codes for
+   nucleotides and ambiguity codes.
+
+   EMBOSS data files are distributed with the application and stored in
+   the standard EMBOSS data directory, which is defined by the EMBOSS
+   environment variable EMBOSS_DATA.
+
+   To see the available EMBOSS data files, run:
+
+% embossdata -showall
+
+   To fetch one of the data files (for example 'Exxx.dat') into your
+   current directory for you to inspect or modify, run:
+
+% embossdata -fetch -file Exxx.dat
+
+   Users can provide their own data files in their own directories.
+   Project specific files can be put in the current directory, or for
+   tidier directory listings in a subdirectory called ".embossdata".
+   Files for all EMBOSS runs can be put in the user's home directory, or
+   again in a subdirectory called ".embossdata".
+
+   The directories are searched in the following order:
+     * . (your current directory)
+     * .embossdata (under your current directory)
+     * ~/ (your home directory)
+     * ~/.embossdata
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name     Description
+   infoalign        Display basic information about a multiple sequence
+                    alignment
+   inforesidue      Return information on a given amino acid residue
+   infoseq          Display basic information about sequences
+   seealso          Finds programs with similar function to a specified program
+   showdb           Displays information on configured databases
+   textsearch       Search the textual description of sequence(s)
+   tfm              Displays full documentation for an application
+   whichdb          Search all sequence databases for an entry and retrieve it
+   wossname         Finds programs by keywords in their short description
+
+Author(s)
+
+   Jon Ison (jison © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
+
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

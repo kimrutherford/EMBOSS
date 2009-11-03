@@ -1,0 +1,47 @@
+application: findkm [
+  documentation: "Calculate and plot enzyme reaction data"
+  groups: "Enzyme Kinetics"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  infile: infile [
+    parameter: "Y"
+    information: "Enzyme kinetics data (application-specific)
+                  file"
+    knowntype: "enzyme data"
+  ]
+
+endsection: input
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  boolean: plot [
+    default: "Y"
+    information: "S/V vs S"
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    parameter: "Y"
+    knowntype: "findkm output"
+  ]
+
+  xygraph: graphlb [
+    standard: "Y"
+    multiple: "2"
+  ]
+
+endsection: output

@@ -1,0 +1,80 @@
+application: cutgextract [
+  documentation: "Extract codon usage tables from from CUTG database"
+  groups: "Utils:Database creation"
+  gui: "no"
+  batch: "no"
+  cpu: "medium"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  dirlist: directory [
+    parameter: "Y"
+    information: "Codon usage directories"
+    knowntype: "codon usage"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+endsection: required
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  string: release [
+    default: ""
+    information: "CUTG release"
+    knowntype: "database release"
+  ]
+
+  string: wildspec [
+    default: "*.codon"
+    information: "Type of codon file"
+    knowntype: "filename wildcard"
+  ]
+
+  string: species [
+    default: "*"
+    information: "Species wildcard"
+    knowntype: "wildcard string"
+  ]
+
+  boolean: allrecords [
+    default: "N"
+    information: "Include all records, including those with
+                  warnings"
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    parameter: "Y"
+    knowntype: "log"
+    information: "General log output file"
+  ]
+
+  string: filename [
+    default: ""
+    information: "Single output filename"
+    help: "Single output filename to override automatic one file for
+           each species. Leave blank to generate the filenames. Specify a
+           filename to combine several species into one file."
+    knowntype: "output filename"
+  ]
+
+endsection: output

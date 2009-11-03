@@ -1,0 +1,92 @@
+application: vectorstrip [
+  documentation: "Removes vectors from the ends of nucleotide sequence(s)"
+  groups: "Edit"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "dna"
+  ]
+
+  section: vectorfilesection [
+    information: "Vector input options"
+    type: "frame"
+  ]
+
+    toggle: readfile [
+      parameter: "Y"
+      default: "Y"
+      information: "Are your vector sequences in a file?"
+    ]
+
+    infile: vectorsfile [
+      standard: "$(readfile)"
+      nullok: "Y"
+      default: ""
+      information: "Cloning vector definition file (optional)"
+      knowntype: "vector"
+    ]
+
+  endsection: vectorfilesection
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  integer: mismatch [
+    standard: "Y"
+    default: "10"
+    information: "Max allowed % mismatch"
+  ]
+
+  boolean: besthits [
+    standard: "Y"
+    default: "Y"
+    information: "Show only the best hits (minimise
+                  mismatches)?"
+  ]
+
+  string: alinker [
+    standard: "@(!$(readfile))"
+    information: "The 5' sequence"
+    knowntype: "nucleotide sequence"
+  ]
+
+  string: blinker [
+    standard: "@(!$(readfile))"
+    information: "The 3' sequence"
+    knowntype: "nucleotide sequence"
+  ]
+
+endsection: required
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  boolean: allsequences [
+    additional: "Y"
+    information: "Show all sequences in output"
+    default: "N"
+    outputmodifier: "Y"
+  ]
+
+  outfile: outfile [
+    parameter: "Y"
+    knowntype: "vectorstrip output"
+  ]
+
+  seqoutall: outseq [
+    parameter: "Y"
+  ]
+
+endsection: output

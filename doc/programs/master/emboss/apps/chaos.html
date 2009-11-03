@@ -1,0 +1,142 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: chaos
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+chaos
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/chaos.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<p><b>chaos</b> creates a <b>chaos</b> game representation (CGR) plot for a nucleotide sequence.  A CGR plot represents a nucleotide sequence as a square box with an <tt>A</tt>, <tt>G</tt>, <tt>C</tt>, or <tt>T</tt> nucleotide at each corner. The box contains dots, each one representing a dinucleotide.  All overlapping dinucleotides from the start to the end of the sequence are plotted.  Regions which are devoid of dots (or heavily covered with dots) indicate short sequence motifs that are unusually infrequent (or frequent). CGR plots depict base composition and sequentiality and is a unique visual representation of a sequence that complements more traditional linear representations.</p>
+
+
+<H2>
+    Algorithm
+</H2>
+<p>The plot is generated as follows.  A box is drawn and an <tt>A</tt>, <tt>G</tt>, <tt>C</tt>, or <tt>T</tt> is drawn at each corner. Starting from the middle, move half way to the corner of the box representing the first base in the sequence and draw a dot. Then for each subsequent base move half way to the corresponding box corner and draw a dot. Finally display the number and percentage values of <tt>AGCT</tt> bases.  The result is an image of a square sprinkled with dots.</p>
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/chaos.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/chaos.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/chaos.itable" -->
+<H2>
+    Input file format
+</H2>
+
+Any DNA sequence USA.
+
+<p>
+<!--#include file="inc/chaos.input" -->
+
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/chaos.output" -->
+A graphics image is produced.
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+<p>Regions which are devoid of dots (or heavily covered with dots) indicate short sequence motifs that are unusually infrequent (or frequent). The sequence of such motifs can be deduced by looking to see which quarter of the square the region is in - the letter that this quarter belongs to is the first base of the motif. The quarter is then quartered again and the appropriate base letters are assigned to the corners of the quarter - the part that the region is in gives the second base of the motif.</p>
+
+<p>The process continues until you have identified the 1/16th or 1/32nd, etc. of the original square containing the unusual region and you now have the sequence of the motif.</p>
+
+
+<H2>
+    References
+</H2>
+
+<OL>
+
+<LI>Jeffrey (1990) Nucleic Acids Research 18: 2163-2170
+"Chaos game representation of gene structure"
+
+</OL>
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+0 upon successful completion.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+
+<!--#include file="inc/chaos.isee" -->
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/ilongden.address" -->
+
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/chaos.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/chaos.comment" -->
+
+</BODY>
+</HTML>
+

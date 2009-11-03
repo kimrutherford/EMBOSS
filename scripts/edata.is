@@ -1,0 +1,605 @@
+#!/bin/env icarus
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#    $RCSfile: edata.is,v $
+#    $Revision: 1.4 $
+#    $Date: 2004/08/05 13:12:52 $
+#    $Author: rice $
+#
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+$col1 = '"#58081a"'
+
+$fn={
+  ID:id       DE:des
+  TY:typ      MO:module    LB:lib
+  NN:new      ND:new       NX:new
+  DN:del   DD:del    DX:del
+  AN:attr     AT:attr      AD:attr     AX:attr
+  EN:assign   ED:assign    EX:assign
+  MN:modify   MD:modify    MX:modify
+  ON:use      OD:use       OX:use
+  CN:cast     CD:cast      CX:cast
+  JN:input    JD:input     JX:input
+  KN:iterator KD:iterator  KX:iterator
+  LN:iterate  LD:iterate   LX:iterate
+  PN:output   PD:output    PX:output
+  RN:other    RD:other     RX:other
+  TN:alias    TD:alias     TX:alias
+  XX:rest   '//':rest 'other':rest
+}
+
+
+$rules={
+
+# entry is from 'ID name' to '}' at start of line
+
+  entry:   ~ {$In:[file:text] $Out pre $Skip:0}
+             (/ID +/ {$Not} ln)* 
+             (/ID +([A-Za-z0-9_]+)/
+                {$Wrt $entryFip=$Fip $entryName=$1} 
+                ln {$App}
+              ( /ID +/ {$Not} ln{$App})+
+             )? ~
+
+  # fields
+  fields:    ~ {$In:entry $Out $Skip:1} 
+               (/^[A-Z\/][A-Z\/]/
+                 { $t=$Ct
+                   if:$fn.$t.=="" {
+                      $dp:"+++ unknown: $t in $entryName +++"
+                      $t="other"
+                   }
+                   if:$fn.$t.==$prev $App else $Wrt:$fn.$t
+                   $prev=$fn.$t
+                 } ln {$App})+  body ~
+  clFields:  ~ {$In:fields $Out $Skip:1}
+               /.. */ ln {$Wrt:$Itc} (/.. */ ln {$App})* ~
+
+  body:    ~ ln {$Wrt:body} (ln {$App})* ~
+
+  id:      ~ {$In:[fields c:id] $Out}
+             /../ word {$Wrt $id=$Ct} ~
+  des:     ~ {$In:[clFields c:des] $Out}
+             (word {$Uniq} | noword)* ~
+
+#  hdes:    ~ {$In:[fields c:des] $Out}
+#             (/../ (/\n/ {$Wrt:[s:"<p>\n"]} | ln {$Wrt}) )* ~
+
+  attrs:  ~ x{$args={}}
+             ('AN' rest {$tmp={} $tmp.name=$Ct} ln
+             'AT' rest {$tmp.type=$Ct} /\n/ {$tmp.comment=""}
+            ('AD' ln {if:$Ct.=="" $StrApp:[$tmp.comment s:"<p>\n"]
+                      else $StrApp:[$tmp.comment s:$Ct]})*
+             'AX' ln {$args.app:$tmp})* ~
+
+  alias:     ~ {$In:[fields c:{id alias}] $Out} 
+	       (/ID/ word {$Wrt} ln)*
+	       ( /.N/  word {$Wrt} ln
+		 (/.D/ ln)*
+		 /.X/ ln)*
+               ~
+  attr:     ~ {$In:[fields c:attr] $Out} 
+             ( /.N/  word {$Wrt} ln
+              (/.T/ ln)*
+              (/.D/ ln)*
+               /.X/ ln)* ~
+  new:     ~ {$In:[fields c:new] $Out} 
+             ( /.N/  word {$Wrt} ln
+              (/.D/ ln)*
+               /.X/ ln)* ~
+  del:  ~ {$In:[fields c:del] $Out} 
+             ( /.N/  word {$Wrt} ln
+              (/.D/ ln)*
+               /.X/ ln)* ~
+  assign:  ~ {$In:[fields c:assign] $Out} 
+             ( /.N/  word {$Wrt} ln
+              (/.D/ ln)*
+               /.X/ ln)* ~
+  modify:  ~ {$In:[fields c:modify] $Out} 
+             ( /.N/  word {$Wrt} ln
+              (/.D/ ln)*
+               /.X/ ln)* ~
+  use:     ~ {$In:[fields c:use] $Out} 
+             ( /.N/  word {$Wrt} ln
+              (/.D/ ln)*
+               /.X/ ln)* ~
+  cast:    ~ {$In:[fields c:cast] $Out} 
+             ( /.N/  word {$Wrt} ln
+              (/.D/ ln)*
+               /.X/ ln)* ~
+  input:   ~ {$In:[fields c:input] $Out} 
+             ( /.N/  word {$Wrt} ln
+              (/.D/ ln)*
+               /.X/ ln)* ~
+  output:  ~ {$In:[fields c:output] $Out} 
+             ( /.N/  word {$Wrt} ln
+              (/.D/ ln)*
+               /.X/ ln)* ~
+  iterate:  ~ {$In:[fields c:iterate] $Out} 
+             ( /.N/  word {$Wrt} ln
+              (/.D/ ln)*
+               /.X/ ln)* ~
+  iterator:  ~ {$In:[fields c:iterator] $Out} 
+             ( /.N/  word {$Wrt} ln
+              (/.D/ ln)*
+               /.X/ ln)* ~
+  other:  ~ {$In:[fields c:other] $Out} 
+             ( /.N/  word {$Wrt} ln
+              (/.D/ ln)*
+               /.X/ ln)* ~
+  rest:    ~ (/[^\n]*/)? ~
+
+  # indexing
+  btext:      ~ {$In:[fields c:body] $Out pre {$Request:id} }
+             (/[a-zA-Z0-9_]+/ {$Uniq} | /./)+ ~
+
+  ref_data:    ~ {$In:[fields c:body] $Out}
+		 (/[A-Z]+[a-zA-Z0-9_]+/  {if:$Ct != $id {$Uniq}} |
+		   /[a-zA-Z0-9_]+/ | /./)+
+	       ~
+  lines: ~ x{$txt={}} (/../ ln {if:$Ct.trim:' \n\t' .=="" $txt.app:"<p>\n"
+                              else $txt.app:$Ct} )* ~
+
+  # html display
+  
+  h_pnum: ~ {$In:[fields c:pnum t:html]}
+             /.*/ {$Rep:""} ~
+  h_lib: ~ {$In:[fields c:lib t:html]}
+             /.. +([^\n]*).*/ {$showlib = $1 $Rep:""}  ~
+  h_module: ~ {$In:[fields c:module t:html]}
+             /.. +([^\n]*).*/ {$showmod = $1 $Rep:""}  ~
+  h_typ: ~ {$In:[fields c:typ t:html]}
+             /.. +([^\n]*).*/ {$showtyp = $1 $Rep:""}  ~
+  h_rest: ~ {$In:[fields c:rest t:html]}
+             /.*/ {$Rep:""}  ~
+  h_id: ~ {$In:[fields c:id t:html]}
+             /.*/ {$Rep:
+                    |<TR>
+                    |<TD VALIGN=TOP bgcolor=$col1><FONT color="#FFFFFF">
+                    |<B>Name</B></TD><TD>
+                    |<B>($entry.name)</B>
+                    |</TD></TR>
+                  }
+           ~
+  h_attr: ~ {$In:[fields c:attr t:html]}
+             attrs {$Rep:
+                        |<TR>
+                        |<TD VALIGN=TOP bgcolor=$col1><FONT color="#FFFFFF">
+                        |<B>Attributes</B></TD><TD>
+                        |<TABLE BORDER CELLPADDING=4 BGCOLOR="#FFFFF0">
+                        | <TR BGCOLOR="#d3b5b5">
+                        |  <TH><FONT SIZE=-1>Type</TH>
+                        |  <TH><FONT SIZE=-1>Name</TH>
+                        |  <TH><FONT SIZE=-1>Comment</TH>
+              		|($Foreach:[$tmp in:$args s:@
+			     |<TR>
+			     | <TD VALIGN=TOP>($tmp.type)</TD>
+			     | <TD VALIGN=TOP>($tmp.name)</TD>
+		             | <TD VALIGN=TOP>($Alt:[$tmp.comment.trim.==""
+                                               t:'&nbsp;' f:$tmp.comment])</TD>
+			     |</TR>
+			   ])
+                        |</TR>
+                        |</TABLE>
+                        |</TD></TR>
+                  }
+           ~
+  h_des: ~ {$In:[fields c:des t:html]}
+               lines   {$Rep:
+                    |<TR>
+                    |<TD VALIGN=TOP bgcolor=$col1><FONT color="#FFFFFF">
+                    |<B>Description</B></TD><TD width=500>
+                    |($Foreach:[$s in:$txt s:@"$s"])
+                    |</TD></TR>
+                  }
+           ~
+  h_alias: ~ {$In:[fields c:alias t:html] }
+	   x{$fun={}} fundoc {$efun=$fun
+	            $Rep:
+                        |<TR>
+                        |<TD VALIGN=TOP bgcolor=$col1><FONT color="#FFFFFF">
+                        |<B>Alias(es)</B></TD><TD>
+                        |Aliases are alternate names for an
+                        |<b>($entry.name)</b> object.<p>
+                        |<TABLE BORDER CELLPADDING=4 BGCOLOR="#FFFFF0">
+                        | <TR BGCOLOR="#d3b5b5">
+                        |  <TH><FONT SIZE=-1>Name</TH>
+                        |  <TH><FONT SIZE=-1>Comment</TH>
+              		|($Foreach:[$tmp in:$efun s:@
+			     |<TR>
+			     | <TD VALIGN=TOP>($tmp.name)</TD>
+			     | <TD VALIGN=TOP>($Alt:[$tmp.comment.trim.==""
+                                               t:'&nbsp' f:$tmp.comment])</TD>
+			     |</TR>
+			   ])
+                        |</TR>
+                        |</TABLE>
+                        |</TD></TR>
+                  }
+           ~
+  h_iterator: ~ {$In:[fields c:iterator t:html] }
+	   x{$fun={}} fundoc {$efun=$fun
+	            $Rep:
+                        |<TR>
+                        |<TD VALIGN=TOP bgcolor=$col1><FONT color="#FFFFFF">
+                        |<B>Iterator(s)</B></TD><TD>
+                        |Iterators are objects that allow functions to
+                        |step through the contents of an
+                        |<b>($entry.name)</b> object.<p>
+                        |<TABLE BORDER CELLPADDING=4 BGCOLOR="#FFFFF0">
+                        | <TR BGCOLOR="#d3b5b5">
+                        |  <TH><FONT SIZE=-1>Name</TH>
+                        |  <TH><FONT SIZE=-1>Comment</TH>
+              		|($Foreach:[$tmp in:$efun s:@
+	       		     |<TR>
+			     | <TD VALIGN=TOP>
+		             | ($tmp.name)</TD>
+			     | <TD VALIGN=TOP>($Alt:[$tmp.comment.trim.==""
+                                              t:'&nbsp' f:$tmp.comment])</TD>
+			     |</TR>
+			   ])
+                        |</TR>
+                        |</TABLE>
+                        |</TD></TR>
+                  }
+           ~
+  h_new: ~ {$In:[fields c:new t:html] }
+	   x{$fun={}} fundoc {$nfun=$fun
+	            $Rep:
+                        |<TR>
+                        |<TD VALIGN=TOP bgcolor=$col1><FONT color="#FFFFFF">
+                        |<B>Constructor(s)</B></TD><TD>
+                        |Constructors allocate memory and
+                        |create new instances of an <b>($entry.name)</b> object.<p>
+                        |<TABLE BORDER CELLPADDING=4 BGCOLOR="#FFFFF0">
+                        | <TR BGCOLOR="#d3b5b5">
+                        |  <TH><FONT SIZE=-1>Name</TH>
+                        |  <TH><FONT SIZE=-1>Comment</TH>
+              		|($Foreach:[$tmp in:$nfun s:@
+			     |<TR>
+			     | <TD VALIGN=TOP>($tmp.name)</TD>
+			     | <TD VALIGN=TOP>($Alt:[$tmp.comment.trim.==""
+                                               t:'&nbsp;' f:$tmp.comment])</TD>
+			     |</TR>
+			   ])
+                        |</TR>
+                        |</TABLE>
+                        |</TD></TR>
+                  }
+           ~
+  h_del: ~ {$In:[fields c:del t:html]}
+             x{$fun={}} fundoc {$dfun=$fun
+	            $Rep:
+                        |<TR>
+                        |<TD VALIGN=TOP bgcolor=$col1><FONT color="#FFFFFF">
+                        |<B>Destructor(s)</B></TD><TD>
+                        |Destructors destroy instances of an <b>($entry.name)</b> object
+                        |and clean up memory.</p>
+                        |<TABLE BORDER CELLPADDING=4 BGCOLOR="#FFFFF0">
+                        | <TR BGCOLOR="#d3b5b5">
+                        |  <TH><FONT SIZE=-1>Name</TH>
+                        |  <TH><FONT SIZE=-1>Comment</TH>
+              		|($Foreach:[$tmp in:$dfun s:@
+			     |<TR>
+			     | <TD VALIGN=TOP>($tmp.name)</TD>
+			     | <TD VALIGN=TOP>($Alt:[$tmp.comment.trim.==""
+                                               t:'&nbsp;' f:$tmp.comment])</TD>
+			     |</TR>
+			   ])
+                        |</TR>
+                        |</TABLE>
+                        |</TD></TR>
+                  }
+           ~
+  h_assign: ~ {$In:[fields c:assign t:html]}
+             x{$fun={}} fundoc {$afun=$fun
+                   $Rep:
+                        |<TR>
+                        |<TD VALIGN=TOP bgcolor=$col1><FONT color="#FFFFFF">
+                        |<B>Assignment(s)</B></TD><TD>
+                        |Assignments overwrite and replace the
+                        |contents of an <b>($entry.name)</b> object.<p>
+                        |<TABLE BORDER CELLPADDING=4 BGCOLOR="#FFFFF0">
+                        | <TR BGCOLOR="#d3b5b5">
+                        |  <TH><FONT SIZE=-1>Name</TH>
+                        |  <TH><FONT SIZE=-1>Comment</TH>
+              		|($Foreach:[$tmp in:$afun s:@
+			     |<TR>
+			     | <TD VALIGN=TOP>($tmp.name)</TD>
+			     | <TD VALIGN=TOP>($Alt:[$tmp.comment.trim.==""
+                                               t:'&nbsp;' f:$tmp.comment])</TD>
+			     |</TR>
+			   ])
+                        |</TR>
+                        |</TABLE>
+                        |</TD></TR>
+                  }
+           ~
+  h_modify: ~ {$In:[fields c:modify t:html]}
+             x{$fun={}} fundoc {$mfun=$fun
+                   $Rep:
+                        |<TR>
+                        |<TD VALIGN=TOP bgcolor=$col1><FONT color="#FFFFFF">
+                        |<B>Modifier(s)</B></TD><TD>
+                        |Modifiers change or replace the
+                        |contents of an <b>($entry.name)</b> object.<p>
+                        |<TABLE BORDER CELLPADDING=4 BGCOLOR="#FFFFF0">
+                        | <TR BGCOLOR="#d3b5b5">
+                        |  <TH><FONT SIZE=-1>Name</TH>
+                        |  <TH><FONT SIZE=-1>Comment</TH>
+              		|($Foreach:[$tmp in:$mfun s:@
+			     |<TR>
+			     | <TD VALIGN=TOP>($tmp.name)</TD>
+			     | <TD VALIGN=TOP>($Alt:[$tmp.comment.trim.==""
+                                               t:'&nbsp;' f:$tmp.comment])</TD>
+			     |</TR>
+			   ])
+                        |</TR>
+                        |</TABLE>
+                        |</TD></TR>
+                  }
+           ~
+  h_use: ~ {$In:[fields c:use t:html]}
+             x{$fun={}} fundoc {$ufun=$fun
+                   $Rep:
+                        |<TR>
+                        |<TD VALIGN=TOP bgcolor=$col1><FONT color="#FFFFFF">
+                        |<B>Operator(s)</B></TD><TD>
+                        |Operators use, but do not change, the
+                        |contents of an <b>($entry.name)</b> object.<p>
+                        |<TABLE BORDER CELLPADDING=4 BGCOLOR="#FFFFF0">
+                        | <TR BGCOLOR="#d3b5b5">
+                        |  <TH><FONT SIZE=-1>Name</TH>
+                        |  <TH><FONT SIZE=-1>Comment</TH>
+              		|($Foreach:[$tmp in:$ufun s:@
+			     |<TR>
+			     | <TD VALIGN=TOP>($tmp.name)</TD>
+			     | <TD VALIGN=TOP>($Alt:[$tmp.comment.trim.==""
+                                               t:'&nbsp;' f:$tmp.comment])</TD>
+			     |</TR>
+			   ])
+                        |</TR>
+                        |</TABLE>
+                        |</TD></TR>
+                  }
+           ~
+  h_cast: ~ {$In:[fields c:cast t:html]}
+             x{$fun={}} fundoc {$cfun=$fun
+                   $Rep:
+                        |<TR>
+                        |<TD VALIGN=TOP bgcolor=$col1><FONT color="#FFFFFF">
+                        |<B>Cast(s)</B></TD><TD>
+                        |Casts convert an <b>($entry.name)</b> object
+                        |into an object or data of another type.<p>
+                        |<TABLE BORDER CELLPADDING=4 BGCOLOR="#FFFFF0">
+                        | <TR BGCOLOR="#d3b5b5">
+                        |  <TH><FONT SIZE=-1>Name</TH>
+                        |  <TH><FONT SIZE=-1>Comment</TH>
+              		|($Foreach:[$tmp in:$cfun s:@
+			     |<TR>
+			     | <TD VALIGN=TOP>($tmp.name)</TD>
+			     | <TD VALIGN=TOP>($Alt:[$tmp.comment.trim.==""
+                                               t:'&nbsp;' f:$tmp.comment])</TD>
+			     |</TR>
+			   ])
+                        |</TR>
+                        |</TABLE>
+                        |</TD></TR>
+                  }
+           ~
+  h_input: ~ {$In:[fields c:input t:html]}
+             x{$fun={}} fundoc {$ufun=$fun
+                   $Rep:
+                        |<TR>
+                        |<TD VALIGN=TOP bgcolor=$col1><FONT color="#FFFFFF">
+                        |<B>Input(s)</B></TD><TD>
+                        |Inputs read an external source and populate
+                        |the contents of an <b>($entry.name)</b> object.<p>
+                        |<TABLE BORDER CELLPADDING=4 BGCOLOR="#FFFFF0">
+                        | <TR BGCOLOR="#d3b5b5">
+                        |  <TH><FONT SIZE=-1>Name</TH>
+                        |  <TH><FONT SIZE=-1>Comment</TH>
+              		|($Foreach:[$tmp in:$ufun s:@
+			     |<TR>
+			     | <TD VALIGN=TOP>($tmp.name)</TD>
+			     | <TD VALIGN=TOP>($Alt:[$tmp.comment.trim.==""
+                                               t:'&nbsp;' f:$tmp.comment])</TD>
+			     |</TR>
+			   ])
+                        |</TR>
+                        |</TABLE>
+                        |</TD></TR>
+                  }
+           ~
+ h_output: ~ {$In:[fields c:output t:html]}
+             x{$fun={}} fundoc {$ufun=$fun
+                   $Rep:
+                        |<TR>
+                        |<TD VALIGN=TOP bgcolor=$col1><FONT color="#FFFFFF">
+                        |<B>Output(s)</B></TD><TD>
+                        |Outputs write the contents of an
+                        |<b>($entry.name)</b> object to an external file.<p>
+                        |<TABLE BORDER CELLPADDING=4 BGCOLOR="#FFFFF0">
+                        | <TR BGCOLOR="#d3b5b5">
+                        |  <TH><FONT SIZE=-1>Name</TH>
+                        |  <TH><FONT SIZE=-1>Comment</TH>
+              		|($Foreach:[$tmp in:$ufun s:@
+			     |<TR>
+			     | <TD VALIGN=TOP>($tmp.name)</TD>
+			     | <TD VALIGN=TOP>($Alt:[$tmp.comment.trim.==""
+                                               t:'&nbsp;' f:$tmp.comment])</TD>
+			     |</TR>
+			   ])
+                        |</TR>
+                        |</TABLE>
+                        |</TD></TR>
+                  }
+           ~
+  h_iterate: ~ {$In:[fields c:iterate t:html]}
+             x{$fun={}} fundoc {$ufun=$fun
+                   $Rep:
+                        |<TR>
+                        |<TD VALIGN=TOP bgcolor=$col1><FONT color="#FFFFFF">
+                        |<B>Iterate function(s)</B></TD><TD>
+                        |Iterate functions use the iterator type associated
+                        |with an <b>($entry.name)</b> object to
+                        |step through the contents.<p>
+                        |<TABLE BORDER CELLPADDING=4 BGCOLOR="#FFFFF0">
+                        | <TR BGCOLOR="#d3b5b5">
+                        |  <TH><FONT SIZE=-1>Name</TH>
+                        |  <TH><FONT SIZE=-1>Comment</TH>
+              		|($Foreach:[$tmp in:$ufun s:@
+			     |<TR>
+			     | <TD VALIGN=TOP>($tmp.name)</TD>
+			     | <TD VALIGN=TOP>($Alt:[$tmp.comment.trim.==""
+                                               t:'&nbsp;' f:$tmp.comment])</TD>
+			     |</TR>
+			   ])
+                        |</TR>
+                        |</TABLE>
+                        |</TD></TR>
+                  }
+           ~
+  h_other: ~ {$In:[fields c:other t:html]}
+             x{$ofun={}} fundoc {$ofun.app:$tmp
+                   $Rep:
+                        |<TR>
+                        |<TD VALIGN=TOP bgcolor=$col1><FONT color="#FFFFFF">
+                        |<B>Related Data</B></TD><TD>
+                        |These objects are similar to or make use of
+                        |<b>($entry.name)</b> objects.</p>
+                        |<TABLE BORDER CELLPADDING=4 BGCOLOR="#FFFFF0">
+                        | <TR BGCOLOR="#d3b5b5">
+                        |  <TH><FONT SIZE=-1>Name</TH>
+                        |  <TH><FONT SIZE=-1>Comment</TH>
+              		|($Foreach:[$tmp in:$ofun s:@
+			     |<TR>
+			     | <TD VALIGN=TOP>($tmp.name)</TD>
+			     | <TD VALIGN=TOP>($Alt:[$tmp.comment.trim.==""
+                                               t:'&nbsp;' f:$tmp.comment])</TD>
+			     |</TR>
+			   ])
+                        |</TR>
+                        |</TABLE>
+                        |</TD></TR>
+                  }
+           ~
+  h_body:  ~ { $In:[fields c:body t:html] 
+               $Rep:
+                    |<TR>
+                    |<TD VALIGN=TOP bgcolor="#58081a"><FONT color="#FFFFFF">
+                    |<B>Body</B></TD><TD>
+                    |<TABLE BORDER=5 BGCOLOR="#FFFFF0"><TR><TD WIDTH=500><PRE>
+                    |($Ct.trim:'\n')
+                    |</TD></TR></TABLE>
+                    |</TD></TR>
+             }
+             (/[^<>]+/ | '>' {$Rep:'&gt;'} | '<' {$Rep:'&lt;'})*
+	     #(/.*/)*
+           ~
+  fundoc:  ~
+            ( 
+             /.N */ {$tmp={}} funname {$tmp.name=$Ct} ln {$tmp.comment=""}
+            (/.D */ ln {if:$Ct.trim:' \n\t'.==""
+                           $StrApp:[$tmp.comment s:"<p>\n"]
+                      else $StrApp:[$tmp.comment s:$Ct]})*
+             /.X/ ln
+	    {$fun.app:$tmp} )*
+           ~
+
+  funname: ~ rest { $q=$Query:"[efunc-id:$Ct]"
+                if:$q.size>0 {$Rep:$Hlink:[efuncR p:$Ct]}
+                else {$q=$Query:"[edata-alias:$Ct]"
+		 if:$q.size>0 {$Rep:$Hlink:[edataR p:$Ct]}}
+                } ~
+
+  writecode: ~ (/[wu][A-Za-z]*/ {$write=$Ct} | word {$write=""} ) ~
+  sp:  ~ /[ \t]*/ ~
+
+  tag:     ~ /<[a-zA-Z][^>]+>/ ~
+  code:    ~ /&[a-z]+;/ ~
+  comment: ~ '/*' /([^*]+|\\*[^\/])*/ '*/' ~
+
+  h_desLink:   ~ { $In:[fields c:{des} t:html]}
+             (comment | /[a-zA-Z0-9]*[a-zA-Z_][a-zA-Z0-9_]+/ {
+                $q=$Query:"[efunc-id:$Ct]"
+                if:$q.size>0 {$Rep:$Hlink:[efuncR p:$Ct]}
+                else {$q=$Query:"[edata-alias:$Ct]"
+                if:$q.size>0 {$Rep:$Hlink:[edataR p:$Ct]}}
+                } | /./)+
+		   ~
+  h_attrLink:   ~ { $In:[fields c:{attr} t:html]}
+             (/[a-zA-Z0-9]*[a-zA-Z_][a-zA-Z0-9_]+/ {
+                $q=$Query:"[efunc-id:$Ct]"
+                if:$q.size>0 {$Rep:$Hlink:[efuncR p:$Ct]}
+                else {$q=$Query:"[edata-alias:$Ct]"
+                if:$q.size>0 {$Rep:$Hlink:[edataR p:$Ct]}}
+                } | /./)+
+		~
+  h_bodyLink:   ~ { $In:[fields c:{body} t:html]}
+             (/[a-zA-Z0-9]*[a-zA-Z_][a-zA-Z0-9_]+/ {
+                 if:$Ct==$id {	$sup=$Ct   # we have the datatype
+		   $qup = $Query:"[edata-id:$Ct]>efunc"
+		   if:$qup.size>0 {$sup=
+		    |<A HREF="wgetz?($ParStr:userIdOpt)\
+		    |[edata-id:$Ct]%3eefunc+-page+qResult">\
+		    |<IMG BORDER=0 SRC=($ParStr:imgdir)/up.gif \
+		    |ALIGN=middle  ALT = "Up" WIDTH="16" HEIGHT="14"></A>$Ct
+		   }
+		   $Rep:"$sup.rep:['\n' to:'']" #$Hlink:[efuncR p:$Ct]"
+		 }
+		else {
+                   $q=$Query:"[efunc-id:$Ct]"
+                   if:$q.size>0 {$Rep:$Hlink:[efuncR p:$Ct]}
+                   else {$q=$Query:"[edata-alias:$Ct]"
+                   if:$q.size>0 {$Rep:$Hlink:[edataR p:$Ct]}
+                     }
+                }
+		    } | /./)+
+		~
+
+#  h_used:  ~ { $In:[fields c:body t:html] }
+#             (/[a-zA-Z0-9]*[A-Z_][a-zA-Z0-9_]+/  {
+#                if:$Ct==$id {	$sup=""   # we have the datatype
+#		   $qup = $Query:"[edata-id:$Ct]>efunc"
+#		   if:$qup.size>0 {$sup=
+#		    |<A HREF="wgetz?($ParStr:userIdOpt)\
+#		    |[edata-id:$Ct]%3eefunc+-page+qResult">
+#		    |<IMG BORDER=0 SRC=($ParStr:imgdir)/up.gif 
+#		    |ALIGN=middle  ALT = "Up" WIDTH="16" HEIGHT="14"></A>  
+#		   }
+#		   $Rep:"$sup$Hlink:[efuncR p:$Ct]"
+#		 }
+#                else {$qq=$Query:"[edata-alias:$Ct]"
+#                if:$qq.size>0 {$Rep:$Hlink:[edataR p:$Ct]}}
+#              } | /./)+
+#           ~
+
+  # other stuff
+  ln:      ~ /[^\n]*\n/ ~
+  word:      ~ /[^" ,;:()\/=\n.-]+/ ~
+  noword:      ~ /[" ,;:()\/=.-]+/ ~
+}
+
+if:$TestMode {
+  $job = $Job:[prod:$rules skip:" "
+              fileName:'edata.dat']
+  while:$job.hasInput {
+#    $job.tokens:[entry print:y]
+#    $job.tokens:[typ print:y]
+    $job.tokens:[id print:y]
+    $job.tokens:[fields print:y]
+#    $job.tokens:[clFields print:y]
+#    $job.tokens:[fields code:des print:y]
+#    $job.tokens:[des print:y]
+#    $job.tokens:[clFields code:par print:y]
+#    $job.tokens:[ret print:y]
+#    $job.tokens:[fields code:proto print:y]
+#    $job.tokens:[fields code:body print:y]
+#    $job.tokens:[input print:y]
+#    $job.tokens:[ret print:y]
+#    $job.tokens:[fields code:endcc print:y]
+#    $job.tokens:[body print:y]
+    $job.reset
+  }
+}

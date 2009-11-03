@@ -1,0 +1,15 @@
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="needle.html">needle</a></td>
+<td>Needleman-Wunsch global alignment of two sequences</td>
+</tr>
+
+<tr>
+<td><a href="stretcher.html">stretcher</a></td>
+<td>Needleman-Wunsch rapid global alignment of two sequences</td>
+</tr>
+
+</table>

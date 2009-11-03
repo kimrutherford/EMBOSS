@@ -1,0 +1,57 @@
+#!/bin/csh -x
+
+#######################################
+set maillist = "emboss-bug@sanger.ac.uk"
+
+# touch file before deleteing in case it does not exist
+
+touch ~emboss/COMPILEOKAY
+rm -f ~emboss/COMPILEOKAY
+
+rm -Rf ~emboss/CURRENT
+mkdir  ~emboss/CURRENT
+rm -f  ~emboss/*.out
+	
+~emboss/cvsscripts/makeemboss OSF >&! ~emboss/ALPHA.out 
+rsh unst  ~emboss/cvsscripts/makeemboss2 SGI >&! ~emboss/SGI.out &
+rsh ics-sparc1 ~emboss/cvsscripts/makeemboss2 SOLARIS  >&! ~emboss/SOLARIS.out & 
+rsh ics-linux2 ~emboss/cvsscripts/makeemboss2 LINUX >&! ~emboss/LINUX.out  &
+	
+wait
+rsh unst  ~emboss/cvsscripts/makeembosspure SGI-PURE >&! ~emboss/SGI-PURE.out &
+#rsh ics-sparc1 ~emboss/cvsscripts/makeemboss3 SOLARIS_CC  >&! ~emboss/SOLARIS_CC.out & 
+rsh ics-linux2 ~emboss/cvsscripts/makeemboss3 LINUX_CC >&! ~emboss/LINUX_CC.out  &
+~emboss/cvsscripts/makeemboss3 OSF_CC >&! ~emboss/ALPHA_CC.out &
+#wait # no point as the output is not checked.
+
+set ok = "Y"
+
+# Check for the executable seqret (different place than the others)
+if(! -e ~emboss/CURRENT/OSF/emboss/emboss/wossname) then
+    more ~emboss/$t.out | Mail -s "emboss make failed on OSF" $maillist
+    set ok = "N"    
+endif
+
+# Check for the executable seqret.
+foreach t (SOLARIS SGI LINUX)
+  if(! -e ~emboss/CURRENT/$t/EMBOSS-0.0.4/emboss/wossname) then
+      more ~emboss/$t.out |  Mail -s "emboss make failed on $t" $maillist
+      set ok = "N"
+   endif
+end
+
+if ($ok == "Y") then
+    \cp ~emboss/EMBOSS-[0-9]*.tar.gz ~ftp/pub/EMBOSS/
+
+    echo "~ftp/pub/EMBOSS/*.tar.gz   distribution updated"
+    touch ~emboss/COMPILEOKAY
+    ~emboss/cvsscripts/automakeembassy
+endif
+wait
+# Check for the executable seqret.
+foreach t (SGI-PURE LINUX_CC OSF_CC)
+  if(! -e ~emboss/CURRENT/$t/EMBOSS-0.0.4/emboss/wossname) then
+      more ~emboss/$t.out |  Mail -s "emboss make failed on $t" $maillist
+      set ok = "N"
+   endif
+end

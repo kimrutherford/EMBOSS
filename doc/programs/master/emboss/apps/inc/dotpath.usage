@@ -1,0 +1,14 @@
+<b>Here is a sample session with dotpath</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>dotpath tembl:AF129756 tembl:BA000025 -word 20 -graph cps -overlaps </b>
+Draw a non-overlapping wordmatch dotplot of two sequences
+
+Created dotpath.ps
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

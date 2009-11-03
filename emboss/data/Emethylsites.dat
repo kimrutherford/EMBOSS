@@ -1,0 +1,11 @@
+# Methylation data for the restrict application
+# The first column gives the name of the methylase: this is
+# currently unused by the program but must be supplied.
+# The second column gives the recognition site for the methylase.
+# Following standard nomenclature any methylated base is preceded by 'm'
+#
+dam          GmATC
+dcm          mCmCAGG
+dcm          mCmCTGG
+MEcoKI       mAmACNNNNNNGTGC
+MEcoKI       GCmACNNNNNNGTT

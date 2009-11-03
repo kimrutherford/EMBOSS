@@ -1,0 +1,548 @@
+
+                                  coderet 
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Extract CDS, mRNA and translations from feature tables
+
+Description
+
+   coderet extracts the coding nucleotide sequence (CDS), messenger RNA
+   nucleotide sequence (mRNA) and translations specified by the feature
+   tables of the input sequence(s). If the sequences to be extracted are
+   in other entries of that database, they are automatically fetched and
+   incorporated correctly into the output.
+
+   For each input sequence, an output sequence file is written containing
+   any CDS, mRNA and protein translation sequences from the input feature
+   table. Optionally, the CDS, mRNA, translated protein sequence and
+   non-coding nucleotide sequence regions may be written to separate
+   files.
+
+Usage
+
+   Here is a sample session with coderet
+
+   To extract all of the CDS, mRNA, non-coding and the protein
+   translations:
+
+
+% coderet 
+Extract CDS, mRNA and translations from feature tables
+Input nucleotide sequence(s): tembl:x03487
+Output file [x03487.coderet]: 
+Coding nucleotide output sequence(s) (optional) [x03487.cds]: 
+Messenger RNA nucleotide output sequence(s) (optional) [x03487.mrna]: 
+Translated coding protein output sequence(s) (optional) [x03487.prot]: 
+Non-coding nucleotide output sequence(s) (optional) [x03487.noncoding]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+   Example 2
+
+   To only extract the mRNA sequence:
+
+
+% coderet -nocds -notranslation -norest 
+Extract CDS, mRNA and translations from feature tables
+Input nucleotide sequence(s): tembl:X03487
+Output file [x03487.coderet]: 
+Messenger RNA nucleotide output sequence(s) (optional) [x03487.mrna]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-seqall]            seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+  [-outfile]           outfile    [*.coderet] Output file name
+  [-cdsoutseq]         seqoutall  [.] Coding nucleotide
+                                  output sequence(s) (optional)
+  [-mrnaoutseq]        seqoutall  [.] Messenger RNA
+                                  nucleotide output sequence(s) (optional)
+  [-translationoutseq] seqoutall  [.] Translated coding
+                                  protein output sequence(s) (optional)
+  [-restoutseq]        seqoutall  [.] Non-coding nucleotide
+                                  output sequence(s) (optional)
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-seqall" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   "-cdsoutseq" associated qualifiers
+   -osformat3          string     Output seq format
+   -osextension3       string     File name extension
+   -osname3            string     Base file name
+   -osdirectory3       string     Output directory
+   -osdbname3          string     Database name to add
+   -ossingle3          boolean    Separate file for each entry
+   -oufo3              string     UFO features
+   -offormat3          string     Features format
+   -ofname3            string     Features file name
+   -ofdirectory3       string     Output directory
+
+   "-mrnaoutseq" associated qualifiers
+   -osformat4          string     Output seq format
+   -osextension4       string     File name extension
+   -osname4            string     Base file name
+   -osdirectory4       string     Output directory
+   -osdbname4          string     Database name to add
+   -ossingle4          boolean    Separate file for each entry
+   -oufo4              string     UFO features
+   -offormat4          string     Features format
+   -ofname4            string     Features file name
+   -ofdirectory4       string     Output directory
+
+   "-translationoutseq" associated qualifiers
+   -osformat5          string     Output seq format
+   -osextension5       string     File name extension
+   -osname5            string     Base file name
+   -osdirectory5       string     Output directory
+   -osdbname5          string     Database name to add
+   -ossingle5          boolean    Separate file for each entry
+   -oufo5              string     UFO features
+   -offormat5          string     Features format
+   -ofname5            string     Features file name
+   -ofdirectory5       string     Output directory
+
+   "-restoutseq" associated qualifiers
+   -osformat6          string     Output seq format
+   -osextension6       string     File name extension
+   -osname6            string     Base file name
+   -osdirectory6       string     Output directory
+   -osdbname6          string     Database name to add
+   -ossingle6          boolean    Separate file for each entry
+   -oufo6              string     UFO features
+   -offormat6          string     Features format
+   -ofname6            string     Features file name
+   -ofdirectory6       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   coderet reads one or more nucleic sequence USAs having CDS, mRNA or
+   translation headings in their feature tables.
+
+  Input files for usage example
+
+   'tembl:x03487' is a sequence entry in the example nucleic acid
+   database 'tembl'
+
+  Database entry: tembl:x03487
+
+ID   X03487; SV 1; linear; genomic DNA; STD; HUM; 512 BP.
+XX
+AC   X03487;
+XX
+DT   02-JUL-1986 (Rel. 09, Created)
+DT   24-AUG-2005 (Rel. 84, Last updated, Version 3)
+XX
+DE   Human apoferritin H gene exon 1
+XX
+KW   ferritin.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
+;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-512
+RX   DOI; 10.1093/nar/14.2.721.
+RX   PUBMED; 3003694.
+RA   Costanzo F., Colombo M., Staempfli S., Santoro C., Marone M., Frank R.,
+RA   Delius H., Cortese R.;
+RT   "Structure of gene and pseudogenes of human apoferritin H";
+RL   Nucleic Acids Res. 14(2):721-736(1986).
+XX
+DR   EPD; EP11112; HS_FTH1.
+DR   RFAM; RF00037; IRE.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..512
+FT                   /organism="Homo sapiens"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:9606"
+FT   misc_feature    65..70
+FT                   /note="GGGCGG box"
+FT   misc_feature    103..108
+FT                   /note="GGGCGG box"
+FT   misc_feature    126..131
+FT                   /note="GGGCGG box"
+FT   promoter        150..154
+FT                   /note="put. TATA box"
+FT   mRNA            179..500
+FT                   /note="exon 1"
+FT   CDS             join(387..500,X03488.1:50..196,X03488.1:453..578,
+FT                   X03488.1:674..838)
+FT                   /product="apoferritin H subunit"
+FT                   /db_xref="GDB:120617"
+FT                   /db_xref="GOA:P02794"
+FT                   /db_xref="HGNC:3976"
+FT                   /db_xref="InterPro:IPR014034"
+FT                   /db_xref="PDB:3ES3"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P02794"
+FT                   /protein_id="CAA27205.1"
+FT                   /translation="MTTASTSQVRQNYHQDSEAAINRQINLELYASYVYLSMSYYFDR
+D
+FT                   DVALKNFAKYFLHQSHEEREHAEKLMKLQNQRGGRIFLQDIKKPDCDDWESGLNAMEC
+A
+FT                   LHLEKNVNQSLLELHKLATDKNDPHLCDFIETHYLNEQVKAIKELGDHVTNLRKMGAP
+E
+FT                   SGLAEYLFDKHTLGDSDNES"
+FT   intron          501..>512
+FT                   /note="intron I"
+XX
+SQ   Sequence 512 BP; 80 A; 212 C; 152 G; 64 T; 4 other;
+     agnncaaacc tnagctccgc cagagcgcgc gaggcctcca gcggccgccc ctcccccaca        6
+0
+     gcaggggcgg ggntcccgcg cccaccggaa ggagcgggct cggggcgggc ggcgctgatt       12
+0
+     ggccggggcg ggcctgacgc cgacgcggct ataagagacc acaagcgacc cgcagggcca       18
+0
+     gacgttcttc gccgagagtc gtcggggttt cctgcttcaa cagtgcttgg acggaacccg       24
+0
+     gcgctcgttc cccaccccgg ccggccgccc atagccagcc ctccgtcgac ctcttcaccg       30
+0
+     caccctcgga ctgccccaag gcccccgccg ccgctccagc gccgcgcagc caccgccgcc       36
+0
+     gccgccgcct ctccttagtc gccgccatga cgaccgcgtc cacctcgcag gtgcgccaga       42
+0
+     actaccacca ggactcagag gccgccatca accgccagat caacctggag ctctacgcct       48
+0
+     cctacgttta cctgtccatg gtgagcgcgg gc                                     51
+2
+//
+
+  Input files for usage example 2
+
+  Database entry: tembl:X03487
+
+ID   X03487; SV 1; linear; genomic DNA; STD; HUM; 512 BP.
+XX
+AC   X03487;
+XX
+DT   02-JUL-1986 (Rel. 09, Created)
+DT   24-AUG-2005 (Rel. 84, Last updated, Version 3)
+XX
+DE   Human apoferritin H gene exon 1
+XX
+KW   ferritin.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
+;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-512
+RX   DOI; 10.1093/nar/14.2.721.
+RX   PUBMED; 3003694.
+RA   Costanzo F., Colombo M., Staempfli S., Santoro C., Marone M., Frank R.,
+RA   Delius H., Cortese R.;
+RT   "Structure of gene and pseudogenes of human apoferritin H";
+RL   Nucleic Acids Res. 14(2):721-736(1986).
+XX
+DR   EPD; EP11112; HS_FTH1.
+DR   RFAM; RF00037; IRE.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..512
+FT                   /organism="Homo sapiens"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:9606"
+FT   misc_feature    65..70
+FT                   /note="GGGCGG box"
+FT   misc_feature    103..108
+FT                   /note="GGGCGG box"
+FT   misc_feature    126..131
+FT                   /note="GGGCGG box"
+FT   promoter        150..154
+FT                   /note="put. TATA box"
+FT   mRNA            179..500
+FT                   /note="exon 1"
+FT   CDS             join(387..500,X03488.1:50..196,X03488.1:453..578,
+FT                   X03488.1:674..838)
+FT                   /product="apoferritin H subunit"
+FT                   /db_xref="GDB:120617"
+FT                   /db_xref="GOA:P02794"
+FT                   /db_xref="HGNC:3976"
+FT                   /db_xref="InterPro:IPR014034"
+FT                   /db_xref="PDB:3ES3"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P02794"
+FT                   /protein_id="CAA27205.1"
+FT                   /translation="MTTASTSQVRQNYHQDSEAAINRQINLELYASYVYLSMSYYFDR
+D
+FT                   DVALKNFAKYFLHQSHEEREHAEKLMKLQNQRGGRIFLQDIKKPDCDDWESGLNAMEC
+A
+FT                   LHLEKNVNQSLLELHKLATDKNDPHLCDFIETHYLNEQVKAIKELGDHVTNLRKMGAP
+E
+FT                   SGLAEYLFDKHTLGDSDNES"
+FT   intron          501..>512
+FT                   /note="intron I"
+XX
+SQ   Sequence 512 BP; 80 A; 212 C; 152 G; 64 T; 4 other;
+     agnncaaacc tnagctccgc cagagcgcgc gaggcctcca gcggccgccc ctcccccaca        6
+0
+     gcaggggcgg ggntcccgcg cccaccggaa ggagcgggct cggggcgggc ggcgctgatt       12
+0
+     ggccggggcg ggcctgacgc cgacgcggct ataagagacc acaagcgacc cgcagggcca       18
+0
+     gacgttcttc gccgagagtc gtcggggttt cctgcttcaa cagtgcttgg acggaacccg       24
+0
+     gcgctcgttc cccaccccgg ccggccgccc atagccagcc ctccgtcgac ctcttcaccg       30
+0
+     caccctcgga ctgccccaag gcccccgccg ccgctccagc gccgcgcagc caccgccgcc       36
+0
+     gccgccgcct ctccttagtc gccgccatga cgaccgcgtc cacctcgcag gtgcgccaga       42
+0
+     actaccacca ggactcagag gccgccatca accgccagat caacctggag ctctacgcct       48
+0
+     cctacgttta cctgtccatg gtgagcgcgg gc                                     51
+2
+//
+
+Output file format
+
+   The output is a sequence file containing any CDS, mRNA and protein
+   translation sequences as specified by the feature table of the
+   sequence(s).
+
+   One or more of CDS, mRNA, translation can be excluded from the output
+   by using the appropriate qualifiers to the program (i.e. -nocds, etc.)
+
+   The ID names of the output sequences are constructed from the name of
+   the input sequence, the type of feature being output (i.e. cds, mrna,
+   pro) and a unique ordinal number for this type to distinguish it from
+   others in this sequence. The name, type and number of separated by
+   underscore characters. Thus the second CDS feature in the sequence
+   'A12345' would be named 'A12345_cds_2'.
+
+   The translations are not made from the coding sequence, they are
+   extracted directly from the translation sequence held in the feature
+   table.
+
+  Output files for usage example
+
+  File: x03487.cds
+
+>x03487_cds_1
+atgacgaccgcgtccacctcgcaggtgcgccagaactaccaccaggactcagaggccgcc
+atcaaccgccagatcaacctggagctctacgcctcctacgtttacctgtccatgtcttac
+tactttgaccgcgatgatgtggctttgaagaactttgccaaatactttcttcaccaatct
+catgaggagagggaacatgctgagaaactgatgaagctgcagaaccaacgaggtggccga
+atcttccttcaggatatcaagaaaccagactgtgatgactgggagagcgggctgaatgca
+atggagtgtgcattacatttggaaaaaaatgtgaatcagtcactactggaactgcacaaa
+ctggccactgacaaaaatgacccccatttgtgtgacttcattgagacacattacctgaat
+gagcaggtgaaagccatcaaagaattgggtgaccacgtgaccaacttgcgcaagatggga
+gcgcccgaatctggcttggcggaatatctctttgacaagcacaccctgggagacagtgat
+aatgaaagctaa
+
+  File: x03487.mrna
+
+>x03487_mrna_1
+cagacgttcttcgccgagagtcgtcggggtttcctgcttcaacagtgcttggacggaacc
+cggcgctcgttccccaccccggccggccgcccatagccagccctccgtcgacctcttcac
+cgcaccctcggactgccccaaggcccccgccgccgctccagcgccgcgcagccaccgccg
+ccgccgccgcctctccttagtcgccgccatgacgaccgcgtccacctcgcaggtgcgcca
+gaactaccaccaggactcagaggccgccatcaaccgccagatcaacctggagctctacgc
+ctcctacgtttacctgtccatg
+
+  File: x03487.prot
+
+>x03487_pro_1
+MTTASTSQVRQNYHQDSEAAINRQINLELYASYVYLSMSYYFDRDDVALKNFAKYFLHQS
+HEEREHAEKLMKLQNQRGGRIFLQDIKKPDCDDWESGLNAMECALHLEKNVNQSLLELHK
+LATDKNDPHLCDFIETHYLNEQVKAIKELGDHVTNLRKMGAPESGLAEYLFDKHTLGDSD
+NES
+
+  File: x03487.noncoding
+
+>x03487_noncoding_1
+agnncaaacctnagctccgccagagcgcgcgaggcctccagcggccgcccctcccccaca
+gcaggggcggggntcccgcgcccaccggaaggagcgggctcggggcgggcggcgctgatt
+ggccggggcgggcctgacgccgacgcggctataagagaccacaagcgacccgcagggc
+>x03487_noncoding_501
+gtgagcgcgggc
+
+  File: x03487.coderet
+
+   CDS  mRNA non-c Trans Total Sequence
+ ===== ===== ===== ===== ===== ========
+     1     1     2     1     5 X03487
+
+  Output files for usage example 2
+
+  File: x03487.coderet
+
+  mRNA Total Sequence
+ ===== ===== ========
+     1     1 X03487
+
+Data files
+
+   None.
+
+Notes
+
+   One or more of CDS, mRNA, translation or non-coding regions can be
+   excluded from output with the appropriate qualifiers; "no" is
+   prepended to the qualifier name, for example -nocds would exclude the
+   coding sequence.
+
+   The translations are not made from the coding sequence, they are
+   extracted directly from the translation sequence held in the feature
+   table.
+
+   The regions of the feature table that concern us are shown below.
+
+   This specifies that the coding sequence for the gene is constructed by
+   joining several sections of code, many of which are in other entries
+   in this database:
+FT   CDS             join(U21925.1:818..987,U21926.1:258..420,
+FT                   U21927.1:428..520,U21928.1:196..336,U21929.1:279..415,
+FT                   U21930.1:895..1014,516..708)
+
+   This specifies that the messenger RNA sequence for the gene is
+   constructed by joining several sections of code, many of which are in
+   other entries in this database.
+FT   mRNA            join(M88628.1:1006..1318,M88629.1:221..342,
+FT                   M88630.1:101..223,M88631.1:46..258,M88632.1:104..172,
+FT                   M88633.1:387..503,M88634.1:51..272,M88635.1:303..564,
+FT                   M88635.1:849..1020,M88636.1:282..375,M88637.1:39..253,
+FT                   M88638.1:91..241,M88639.1:168..377,M88640.1:627..3732,
+FT                   M88641.1:158..311,M88642.1:1051..1263,M88642.1:1550..1778,
+FT                   M88642.1:1986..2168,M88642.1:3904..4020,
+FT                   M88642.1:4627..4698,M88643.1:39..124,M88644.1:42..197,
+FT                   M88645.1:542..686,M88646.1:75..223,M88647.1:109..285,
+FT                   253..2211)
+
+   This specifies that the translation of the coding region is as
+   follows:
+FT                   /translation="MAQDSVDLSCDYQFWMQKLSVWDQASTLETQQDTCLHVAQFQEF
+L
+FT                   RKMYEALKEMDSNTVIERFPTIGQLLAKACWNPFILAYDESQKILIWCLCCLINKEPQ
+N
+FT                   SGQSKLNSWIQGVLSHILSALRFDKEVALFTQGLGYAPIDYYPGLLKNMVLSLASELR
+E
+FT                   NHLNGFNTQRRMAPERVASLSRVCVPLITLTDVDPLVEALLICHGREPQEILQPEFFE
+A
+FT                   VNEAILLKKISLPMSAVVCLWLRHLPSLEKAMLHLFEKLISSERNCLRRIECFIKDSS
+L
+FT                   PQAACHPAIFRVDEMFRCALLETDGALEIIATIQVFTQCFVEALEKASKQLRFALKTY
+F
+FT                   PYTSPSLAMVLLQDPQDIPRGHWLQTLKHISELLREAVEDQTHGSCGGPFESWFLFIH
+F
+FT                   GGWAEMVAEQLLMSAAEPPTALLWLLAFYYGPRDGRQQRAQTMVQVKAVLGHLLAMSR
+S
+FT                   SSLSAQDLQTVAGQGTDTDLRAPAQQLIRHLLLNFLLWAPGGHTIAWDVITLMAHTAE
+I
+FT                   THEIIGFLDQTLYRWNRLGIESPRSEKLARELLKELRTQV"
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name     Description
+   backtranambig    Back-translate a protein sequence to ambiguous
+                    nucleotide sequence
+   backtranseq      Back-translate a protein sequence to a nucleotide sequence
+   extractfeat      Extract features from sequence(s)
+   maskfeat         Write a sequence with masked features
+   plotorf          Plot potential open reading frames in a nucleotide sequence
+   prettyseq        Write a nucleotide sequence and its translation to file
+   remap            Display restriction enzyme binding sites in a nucleotide
+                    sequence
+   showfeat         Display features of a sequence in pretty format
+   showorf          Display a nucleotide sequence and translation in pretty format
+   showseq          Displays sequences with features in pretty format
+   sixpack          Display a DNA sequence with 6-frame translation and ORFs
+   transeq          Translate nucleic acid sequences
+   twofeat          Finds neighbouring pairs of features in sequence(s)
+
+Author(s)
+
+   Alan Bleasby (ajb © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
+
+History
+
+   Written (Nov 2000) - Alan Bleasby.
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

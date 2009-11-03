@@ -1,0 +1,30 @@
+PileUp of: fasta*.gcg
+
+ Symbol comparison table: GenRunData:pileupdna.cmp  CompCheck: 6876
+
+                   GapWeight: 5.000
+             GapLengthWeight: 0.300 
+
+ dna.msf8  MSF: 121  Type: N  December 15, 1998 15:24  Check: 3494 ..
+
+ Name: fastam1          Len:   121  Check: 8742  Weight:  1.00
+ Name: fastam2          Len:   121  Check: 6333  Weight:  1.00
+ Name: fastam3          Len:   121  Check: 8419  Weight:  1.00
+
+//
+
+         1                                                   50
+fastam1  ACGTACGTAC GTACGTACGT ACGTACGTAC GTACGTACGT ACGTACGTAC 
+fastam2  ACGTACGTAC GTACGTACGT ....ACGTAC GTACGTACGT ACGTACGTAC 
+fastam3  ACGTACGTAC GTACGTACGT ACGTACGTAC GTACGTACGT .CGTACGTAC 
+
+         51                                                 100
+fastam1  GTACGTACGT ACGTACGTAC GTACGTACGT .ACGTACGTA CGTACGTACG 
+fastam2  GTACGTACGT ACGTACGTAC GTACGTACGT .ACGTACGTA CGTACGTACG 
+fastam3  GTACGTACGT ACGTACGTAC GTACGTACGT AACGTACGTA CGTACGTACG 
+
+         101                 121
+fastam1  TACGTACGTA CGTACGTACG T
+fastam2  TACGTACGTT GCAACGTACG T
+fastam3  TACGTACGTA CGTACGTACG T
+

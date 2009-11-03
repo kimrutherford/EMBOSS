@@ -1,0 +1,113 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: x13776.showorf</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+SHOWORF of X13776 from 1 to 2167
+
+           ---------|---------|---------|---------|---------|
+         1 ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacggga 50
+F1       1 G  T  A  G  R  A  S  A  R  S  P  P  A  G  R  R  E  17
+F2       1  V  P  L  A  E  H  L  L  D  H  H  Q  P  G  D  G  N 17
+F3       1   Y  R  W  P  S  I  C  S  I  T  T  S  R  A  T  G   16
+R1       9   T  G  S  A  S  C  R  S  S  *  W  W  G  P  S  P   5
+R2     106    Y  R  Q  G  L  M  Q  E  I  V  V  L  R  A  V  P  91
+R3      38     V  A  P  R  A  D  A  R  D  G  G  A  P  R  R  S 23
+
+           ---------|---------|---------|---------|---------|
+        51 actgcacgatctacctggcgagcctggagcacgagcgggttcgcttcgta 100
+F1      18  L  H  D  L  P  G  E  P  G  A  R  A  G  S  L  R  T 34
+F2      18   C  T  I  Y  L  A  S  L  E  H  E  R  V  R  F  V   33
+F3      17 T  A  R  S  T  W  R  A  W  S  T  S  G  F  A  S  Y  33
+R1       4 F  Q  V  I  *  R  A  L  R  S  C  S  R  T  R  K  T  31
+R2      90  V  A  R  D  V  Q  R  A  Q  L  V  L  P  N  A  E  Y 74
+R3      22   S  C  S  R  G  P  S  G  P  A  R  A  P  E  S  R   7
+
+           ---------|---------|---------|---------|---------|
+       101 cggcgctgagcgacagtcacaggagaggaaacggatgggatcgcaccagg 150
+F1      35   A  L  S  D  S  H  R  R  G  N  G  W  D  R  T  R   50
+F2      34 R  R  *  A  T  V  T  G  E  E  T  D  G  I  A  P  G  14
+F3      34  G  A  E  R  Q  S  Q  E  R  K  R  M  G  S  H  Q  E 50
+R1      30  R  R  Q  A  V  T  V  P  S  S  V  S  P  I  A  G  P 14
+R2      73   P  A  S  R  C  D  C  S  L  F  R  I  P  D  C  W   58
+R3       6 V  A  S  L  S  L  *  L  L  P  F  P  H  S  R  V  L  398
+
+           ---------|---------|---------|---------|---------|
+       151 agcggccgctgatcggcctgctgttctccgaaaccggcgtcaccgccgat 200
+F1      51 S  G  R  *  S  A  C  C  S  P  K  P  A  S  P  P  I  13
+F2      15  A  A  A  D  R  P  A  V  L  R  N  R  R  H  R  R  Y 31
+F3      51   R  P  L  I  G  L  L  F  S  E  T  G  V  T  A  D   66
+R1      13   A  A  A  S  R  G  A  T  R  R  F  R  R  *  R  R   49
+R2      57 S  R  G  S  I  P  R  S  N  E  S  V  P  T  V  A  S  41
+R3     397  L  P  R  Q  D  A  Q  Q  E  G  F  G  A  D  G  G  I 381
+
+           ---------|---------|---------|---------|---------|
+       201 atcgagcgctcgcacgcgtatggcgcattgctcgcggtcgagcaactgaa 250
+F1      14  S  S  A  R  T  R  M  A  H  C  S  R  S  S  N  *  T 1
+F2      32   R  A  L  A  R  V  W  R  I  A  R  G  R  A  T  E   47
+F3      67 I  E  R  S  H  A  Y  G  A  L  L  A  V  E  Q  L  N  83
+R1      48 Y  R  A  S  A  R  T  H  R  M  A  R  P  R  A  V  S  32
+R2      40  I  S  R  E  C  A  Y  P  A  N  S  A  T  S  C  S  F 24
+R3     380   D  L  A  R  V  R  I  A  C  Q  E  R  D  L  L  Q   365
+
+           ---------|---------|---------|---------|---------|
+       251 ccgcgagggcggcgtcggcggtcgcccgatcgaaacgctgtcccaggacc 300
+F1       2   A  R  A  A  S  A  V  A  R  S  K  R  C  P  R  T   17
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+F2       8 N  N  K  R  G  I  V  I  M  L  G  L  V  L  L  Y  V  24
+F3      22  I  T  R  G  V  S  S  S  C  W  D  W  F  C  C  T  L 38
+R1      53  L  L  L  L  P  I  T  M  M  S  P  S  T  R  S  Y  T 37
+R2      73   I  V  L  P  T  D  D  D  H  Q  S  Q  N  Q  Q  V   58
+R3       7 C  Y  C  S  P  Y  R  *  *  A  P  V  P  E  A  T  R  7
+
+           ---------|---------|---------|---------|---------|
+      1951 tggcgcggtgctgtttctcaatgccgtctggttgctgggcaagatcagcg 2000
+F1      16 W  R  G  A  V  S  Q  C  R  L  V  A  G  Q  D  Q  R  32
+F2      25  G  A  V  L  F  L  N  A  V  W  L  L  G  K  I  S  G 41
+F3      39   A  R  C  C  F  S  M  P  S  G  C  W  A  R  S  A   54
+R1      36   P  A  T  S  N  R  L  A  T  Q  N  S  P  L  I  L   21
+R2      57 N  A  R  H  Q  K  E  I  G  D  P  Q  Q  A  L  D  A  41
+R3       6  Q  R  P  A  T  E  *  H  R  R  T  A  P  C  S  *  R 7
+
+           ---------|---------|---------|---------|---------|
+      2001 gtcgggaggtggcggtgatcaacttcctggtcggcgtgctgagcgcctgc 2050
+F1      33  S  G  G  G  G  D  Q  L  P  G  R  R  A  E  R  L  R 49
+F2      42   R  E  V  A  V  I  N  F  L  V  G  V  L  S  A  C   57
+F3      55 V  G  R  W  R  *  S  T  S  W  S  A  C  *  A  P  A  3
+R1      20 P  R  S  T  A  T  I  L  K  R  T  P  T  S  L  A  Q  4
+R2      40  T  P  L  H  R  H  D  V  E  Q  D  A  H  Q  A  G  A 24
+R3       6   D  P  P  P  P  S  *  S  G  P  R  R  A  S  R  R   28
+
+           ---------|---------|---------|---------|---------|
+      2051 gtcgcgttctacctgatcttttccgcagcagccgggcagggctcgctgaa 2100
+F1      50   R  V  L  P  D  L  F  R  S  S  R  A  G  L  A  E   65
+F2      58 V  A  F  Y  L  I  F  S  A  A  A  G  Q  G  S  L  K  74
+F3       4  S  R  S  T  *  S  F  P  Q  Q  P  G  R  A  R  *  R 1
+R1       3  T  A  N  *  R  I  K  E  A  A  A  P  C  P  E  S  F 12
+R2      23   D  R  E  V  Q  D  K  G  C  C  G  P  L  A  R  Q   8
+R3      27 R  R  T  R  G  S  R  K  R  L  L  R  A  P  S  A  S  11
+
+           ---------|---------|---------|---------|---------|
+      2101 ggccggagcgctgaccctgctattcgcttttacctatctgtgggtggccg 2150
+F1      66 G  R  S  A  D  P  A  I  R  F  Y  L  S  V  G  G  R  82
+F2      75  A  G  A  L  T  L  L  F  A  F  T  Y  L  W  V  A  A 91
+F3       2   P  E  R  *  P  C  Y  S  L  L  P  I  C  G  W  P   12
+R1      11   A  P  A  S  V  R  S  N  A  K  V  *  R  H  T  A   7
+R2       7 L  G  S  R  Q  G  Q  *  E  S  K  G  I  Q  P  H  G  7
+R3      10  P  R  L  A  S  G  A  I  R  K  *  R  D  T  P  P  R 6
+
+           ---------|-------
+      2151 ccaaccagttcctcgag 2167
+F1      83  Q  P  V  P  R    87
+F2      92   N  Q  F  L  E   96
+F3      13 P  T  S  S  S     17
+R1       6 A  L  W  N  R  S  1
+R2       6  G  V  L  E  E  L 1
+R3       5   W  G  T  G  R   1
+
+</pre>
+</td></tr></table><p>

@@ -1,0 +1,173 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: palindrome
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+palindrome
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/palindrome.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+
+<p><b>palindrome</b> finds inverted repeats (stem loops) in nucleotide sequences. It will find inverted repeats that include a proportion of mismatches and gaps, that correspond to bulges in the stem loop.  It finds all possible inverted matches satisfying the specified conditions of minimum and maximum length of palindrome, maximum gap between repeated regions and number of mismatches allowed.</p>
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/palindrome.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/palindrome.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/palindrome.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+
+<b>palindrome</b> reads normal nucleotide sequence USAs.
+
+<p>
+
+<!--#include file="inc/palindrome.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+
+<!--#include file="inc/palindrome.output" -->
+
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+<p>Secondary structures-like inverted repeats in genomic sequences may be implicated in initiation of DNA replication.</p>
+
+<p>Some genomic sequence entries in the databases are composed of unfinished, draft sequence with gaps of unknown size between contigs. The positions of these gaps are often indicated by runs of 200 'N' characters. To prevent <b>palindrome</b> producing large, uninformative outputs, any palindromes found that are composed only of <tt>N</tt> will not be reported. </p>
+
+<p>Unless the qualifier <tt>-nooverlap</tt> is specified, <b>palindrome</b> makes no attempt to exclude subsets of previously found palindromes.</p>
+
+
+
+<H2>
+    References
+</H2>
+
+
+Some references on inverted repeats: 
+
+<ol>
+
+<li>Pearson CE, Zorbas H, Price GB, Zannis-Hadjopoulos M Inverted
+      repeats, stem-loops, and cruciforms: significance for initiation
+      of DNA replication. J Cell Biochem 1996 Oct;63(1):1-22
+
+<li>Waldman AS, Tran H, Goldsmith EC, Resnick MA. q Long inverted
+      repeats are an at-risk motif for recombination in mammalian
+      cells. Genetics. 1999 Dec;153(4):1873-83. PMID: 10581292; UI:
+      20050682
+
+<li>Jacobsen SE Gene silencing: Maintaining methylation patterns. Curr
+      Biol 1999 Aug 26;9(16):R617-9
+
+<li>Lewis S, Akgun E, Jasin M. Palindromic DNA and genome
+      stability. Further studies. Ann N Y Acad Sci. 1999 May
+      18;870:45-57. PMID: 10415472; UI: 99343961
+
+<li>Dai X, Greizerstein MB, Nadas-Chinni K, Rothman-Denes LB
+      Supercoil-induced extrusion of a regulatory DNA hairpin. Proc
+      Natl Acad Sci U S A 1997 Mar 18;94(6):2174-9
+
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+
+<!--#include file="inc/palindrome.isee" -->
+<p>
+
+<b>einverted</b> also looks for inverted repeats but is much slower and
+more sensitive, as it finds low-quality (very mismatched) repeats and
+repeats with gaps. 
+
+<H2>
+    Author(s)
+</H2>
+
+
+<!--#include file="inc/mfaller.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/palindrome.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/palindrome.comment" -->
+
+</BODY>
+</HTML>
+

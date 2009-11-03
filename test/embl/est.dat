@@ -1,0 +1,99 @@
+ID   H45989; SV 1; linear; mRNA; EST; HUM; 495 BP.
+XX
+AC   H45989;
+XX
+DT   18-NOV-1995 (Rel. 45, Created)
+DT   04-MAR-2000 (Rel. 63, Last updated, Version 2)
+XX
+DE   yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone
+DE   IMAGE:177794 3', mRNA sequence.
+XX
+KW   EST.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-495
+RA   Hillier L., Clark N., Dubuque T., Elliston K., Hawkins M., Holman M.,
+RA   Hultman M., Kucaba T., Le M., Lennon G., Marra M., Parsons J., Rifkin L.,
+RA   Rohlfing T., Soares M., Tan F., Trevaskis E., Waterston R., Williamson A.,
+RA   Wohldmann P., Wilson R.;
+RT   "The WashU-Merck EST Project";
+RL   Unpublished.
+XX
+DR   GDB; 3839990.
+DR   GDB; 4193257.
+DR   ImaGenes; ENSEp780A0214D.
+DR   ImaGenes; ENSEp780A044Q.
+DR   ImaGenes; HU3_p972A0639D.
+DR   ImaGenes; HU3_p972B1110Q.
+DR   ImaGenes; HU3_p983A0639D.
+DR   ImaGenes; HU4_p940A0622D.
+DR   ImaGenes; IMAGp956A0431Q.
+DR   ImaGenes; IMAGp998F03326Q.
+DR   ImaGenes; RZPDp1096A101D.
+DR   ImaGenes; RZPDp1096A191Q.
+DR   ImaGenes; RZPDp200A0214D.
+DR   UNILIB; 555; 300.
+XX
+CC   On May 8, 1995 this sequence version replaced gi:800819.
+CC   Contact: Wilson RK
+CC   Washington University School of Medicine
+CC   4444 Forest Park Parkway, Box 8501, St. Louis, MO 63108
+CC   Tel: 314 286 1800
+CC   Fax: 314 286 1810
+CC   Email: est@watson.wustl.edu
+CC   Insert Size: 544
+CC   High quality sequence stops: 265
+CC   Source: IMAGE Consortium, LLNL
+CC   This clone is available royalty-free through LLNL ; contact the
+CC   IMAGE Consortium (info@image.llnl.gov) for further information.
+CC   Possible reversed clone: polyT not found
+CC   Insert Length: 544   Std Error: 0.00
+CC   Seq primer: SP6
+CC   High quality sequence stop: 265.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..495
+FT                   /organism="Homo sapiens"
+FT                   /lab_host="DH10B (ampicillin resistant)"
+FT                   /mol_type="mRNA"
+FT                   /sex="Male"
+FT                   /dev_stage="55-year old"
+FT                   /clone_lib="Soares adult brain N2b5HB55Y"
+FT                   /clone="IMAGE:177794"
+FT                   /note="Organ: brain; Vector: pT7T3D (Pharmacia) with a
+FT                   modified polylinker; Site_1: Not I; Site_2: Eco RI; 1st
+FT                   strand cDNA was primed with a Not I - oligo(dT) primer [5'
+FT                   TGTTACCAATCTGAAGTGGGAGCGGCCGCGCTTTTTTTTTTTTTTTTTTT 3'],
+FT                   double-stranded cDNA was size selected, ligated to Eco RI
+FT                   adapters (Pharmacia), digested with Not I and cloned into
+FT                   the Not I and Eco RI sites of a modified pT7T3 vector
+FT                   (Pharmacia). Library went through one round of
+FT                   normalization to a Cot = 53. Library constructed by Bento
+FT                   Soares and M.Fatima Bonaldo. The adult brain RNA was
+FT                   provided by Dr. Donald H. Gilden. Tissue was acquired 17-18
+FT                   hours after death which occurred in consequence of a
+FT                   ruptured aortic aneurysm. RNA was prepared from a pool of
+FT                   tissues representing the following areas of the brain:
+FT                   frontal, parietal, temporal and occipital cortex from the
+FT                   left and right hemispheres, subcortical white matter, basal
+FT                   ganglia, thalamus, cerebellum, midbrain, pons and medulla."
+FT                   /db_xref="taxon:9606"
+FT                   /db_xref="UNILIB:555"
+XX
+SQ   Sequence 495 BP; 73 A; 135 C; 169 G; 104 T; 14 other;
+     ccggnaagct cancttggac caccgactct cgantgnntc gccgcgggag ccggntggan        60
+     aacctgagcg ggactggnag aaggagcaga gggaggcagc acccggcgtg acggnagtgt       120
+     gtggggcact caggccttcc gcagtgtcat ctgccacacg gaaggcacgg ccacgggcag       180
+     gggggtctat gatcttctgc atgcccagct ggcatggccc cacgtagagt ggnntggcgt       240
+     ctcggtgctg gtcagcgaca cgttgtcctg gctgggcagg tccagctccc ggaggacctg       300
+     gggcttcagc ttcccgtagc gctggctgca gtgacggatg ctcttgcgct gccatttctg       360
+     ggtgctgtca ctgtccttgc tcactccaaa ccagttcggc ggtccccctg cggatggtct       420
+     gtgttgatgg acgtttgggc tttgcagcac cggccgccga gttcatggtn gggtnaagag       480
+     atttgggttt tttcn                                                        495
+//

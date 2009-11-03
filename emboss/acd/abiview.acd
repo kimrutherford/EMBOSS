@@ -1,0 +1,83 @@
+application: abiview [
+  documentation: "Display the trace in an ABI sequencer file"
+  groups: "Display"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  infile: infile [
+    parameter: "Y"
+    default: ""
+    binary: "Y"
+    knowntype: "abi trace"
+    information: "ABI sequencing trace file"
+  ]
+
+endsection: input
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  seqout: outseq [
+    parameter: "Y"
+    type: "dna"
+  ]
+
+  xygraph: graph [
+    standard: "Y"
+    gxtitle: "Residue Position"
+  ]
+
+  integer: startbase [
+    additional: "Y"
+    default: "0"
+    minimum: "0"
+    information: "First base to report or display"
+  ]
+
+  integer: endbase [
+    additional: "Y"
+    default: "0"
+    information: "Last base to report or display"
+    help: "Last sequence base to report or display. If the default is
+           set to zero then the value of this is taken as the maximum number
+           of bases."
+  ]
+
+  boolean: separate [
+    default: "N"
+    information: "Separate the trace graphs for the 4 bases"
+  ]
+
+  boolean: yticks [
+    additional: "Y"
+    default: "N"
+    information: "Display y-axis ticks"
+  ]
+
+  boolean: sequence [
+    additional: "Y"
+    default: "Y"
+    information: "Display the sequence on the graph"
+  ]
+
+  integer: window [
+    additional: "Y"
+    default: "40"
+    information: "Sequence display window size"
+  ]
+
+  string: bases [
+    additional: "Y"
+    default: "GATC"
+    information: "Base graphs to be displayed"
+    pattern: "[GATC]+"
+    knowntype: "nucleotide codes"
+  ]
+
+endsection: output

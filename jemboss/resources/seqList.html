@@ -1,0 +1,51 @@
+<html>
+<head>
+   <meta name="keywords" content="java, biology, bioinformatics, EMBOSS, GUI, Jemboss, computational biology, sequence analysis, interface">
+   <title>Jemboss Sequence List</title>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#0000EE" vlink="#551A8B" alink="#FF0000">
+
+<center><img SRC="../images/Jemboss_logo_large.gif" height=110 width=240><br>&nbsp;
+<h1>Sequence List</h1></center>
+
+<p>This window allows users to store their commonly
+used sequences. A sequence file can be dragged from the
+file managers into this window or a database entry 
+(e.g. sw:pax6_human) can simply be typed into the table.
+The files then can be dragged and dropped back into
+the program sequence fields in the main Jemboss window
+when required.
+<p>An EMBOSS list file contains "references" to sequences,
+for example the file could look like:
+<br><tt>opsd_abyko.fasta
+<br>sw:opsd_xenla
+<br>sw:opsd_c*
+<br>@another_list</tt>
+<p>Selecting <b>'List'</b> in the Sequence List table will  
+automatically prepend the filename with '@' (indicating
+to EMBOSS that this is a list file) when it is
+dragged into a application sequence field.
+<p>If the <b>'Default'</b> column is selected then this 
+sequence will automatically be the input sequence used
+when an EMBOSS application is chosen.
+<p>The sequence length can be calculated by selecting
+the sequence and clicking on 'Calculate sequence attributes'
+under the 'Tools' menu. The sequence start and end positions
+will then be displayed.
+<p><b>Saving the sequence list</b>, between Jemboss sessions,
+is not done automatically.
+Go to the tools menu and select 'Save Sequence List' if
+this table is to be used in the next Jemboss session. This
+simply creates  '.jembossSeqList' file in the user's home
+directory. This will then be loaded in (unless deleted
+from the file system) on the next Jemboss launch.
+<p>A sequence file can be <b>opened</b> by selecting the
+sequence in the table and opening it from the <b>'File'</b> menu.
+Extra rows can be added to the table and sequences can
+be deleted from the <b>'Tools'</b> menu.
+
+<br>&nbsp;
+<p>
+<hr>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-directory]<br>(Parameter 1)</td>
+<td>Codon usage directories</td>
+<td>Directory with files</td>
+<td>.</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>General log output file</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.cutgextract</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-release</td>
+<td>CUTG release</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr>
+<td>-wildspec</td>
+<td>Type of codon file</td>
+<td>Any string is accepted</td>
+<td>*.codon</td>
+</tr>
+
+<tr>
+<td>-species</td>
+<td>Species wildcard</td>
+<td>Any string is accepted</td>
+<td>*</td>
+</tr>
+
+<tr>
+<td>-allrecords</td>
+<td>Include all records, including those with warnings</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-filename</td>
+<td>Single output filename to override automatic one file for each species. Leave blank to generate the filenames. Specify a filename to combine several species into one file.</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+</table>

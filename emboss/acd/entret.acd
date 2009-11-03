@@ -1,0 +1,42 @@
+application: entret [
+  documentation: "Retrieves sequence entries from flatfile databases and files"
+  groups: "Edit"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    entry: "Y"
+    type: "any"
+  ]
+
+endsection: input
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  boolean: firstonly [
+    information: "Read one sequence and stop"
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    parameter: "Y"
+    knowntype: "entry full text"
+    information: "Full text of a sequence database entry output
+                  file"
+  ]
+
+endsection: output

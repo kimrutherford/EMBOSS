@@ -1,0 +1,80 @@
+application: dbxstat [
+  groups: "Utils:Database indexing"
+  documentation: "Dump statistics for dbx databases"
+  gui: "yes"
+  batch: "no"
+  cpu: "medium"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  string: dbname [
+    parameter: "Y"
+    maxlength: "19"
+    minlength: "2"
+    information: "Basename for index files"
+    knowntype: "emboss database name"
+    pattern: "[A-z][A-z0-9_]+"
+  ]
+
+  directory: indexdir [
+    standard: "y"
+    default: "."
+    information: "Index directory"
+    knowntype: "emboss database index"
+  ]
+
+  list: idtype [
+    standard: "y"
+    information: "Index type"
+    values: "id:ID index; ac:Accession index; sv:Version/GI Index;
+             kw:Keyword index; de:Description index; tx:Taxonomy Index"
+#    values: "id:ID index; ac:Accession index; sv:Version/GI Index;
+#             kw:Keyword index; de:Description index; tx:Taxonomy Index"
+    maximum: "1"
+    minimum: "1"
+    default: "id"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+endsection: required
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  integer: minimum [
+    information: "Minimum occurrences"
+    minimum: "1"
+    default: "1"
+  ]
+
+  integer: maximum [
+    information: "Maximum occurrences (0=no maximum)"
+    minimum: "0"
+    default: "0"
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    standard: "y"
+    knowntype: "dbxstat output"
+  ]
+
+endsection: output

@@ -1,0 +1,383 @@
+
+                                prettyplot 
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Draw a sequence alignment with pretty formatting
+
+Description
+
+   prettyplot draws a plot of the input sequence alignment. The sequences
+   are rendered in pretty formatting on the specified graphics device.
+   Drawing options control the appearance of the image, such as boxes,
+   colour and shading for highlighting conserved regions.
+
+Usage
+
+   Here is a sample session with prettyplot
+
+
+% prettyplot -resbreak=10 -boxcol -consensus -plurality=3 
+Draw a sequence alignment with pretty formatting
+Input (aligned) sequence set: globins.msf
+Graph type [x11]: cps
+
+Created prettyplot.ps
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+   Example 2
+
+
+% prettyplot globins.msf -plurality=3 -docolour 
+Draw a sequence alignment with pretty formatting
+Graph type [x11]: cps
+
+Created prettyplot.ps
+
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-sequences]         seqset     (Aligned) sequence set filename and optional
+                                  format, or reference (input USA)
+   -graph              graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, das, xterm, png, gif)
+
+   Additional (Optional) qualifiers:
+   -matrixfile         matrix     [EBLOSUM62 for protein, EDNAFULL for DNA]
+                                  This is the scoring matrix file used when
+                                  comparing sequences. By default it is the
+                                  file 'EBLOSUM62' (for proteins) or the file
+                                  'EDNAFULL' (for nucleic sequences). These
+                                  files are found in the 'data' directory of
+                                  the EMBOSS installation.
+   -residuesperline    integer    [50] The number of residues to be displayed
+                                  on each line (Any integer value)
+   -resbreak           integer    [Same as -residuesperline to give no breaks]
+                                  Residues before a space (Integer 1 or more)
+   -[no]ccolours       boolean    [Y] Colour residues by their consensus
+                                  value.
+   -cidentity          string     [RED] Colour to display identical residues
+                                  (RED) (Any string is accepted)
+   -csimilarity        string     [GREEN] Colour to display similar residues
+                                  (GREEN) (Any string is accepted)
+   -cother             string     [BLACK] Colour to display other residues
+                                  (BLACK) (Any string is accepted)
+   -docolour           boolean    [N] Colour residues by table oily, amide
+                                  etc.
+   -shade              string     Set to BPLW for normal shading
+                                  (black, pale, light, white)
+                                  so for pair = 1.5,1.0,0.5 and shade = BPLW
+                                  Residues score Colour
+                                  1.5 or over... BLACK (B)
+                                  1.0 to 1.5 ... BROWN (P)
+                                  0.5 to 1.0 ... WHEAT (L)
+                                  under 0.5 .... WHITE (W)
+                                  The only four letters allowed are BPLW, in
+                                  any order. (Any string up to 4 characters,
+                                  matching regular expression
+                                  /^([BPLW]{4})?$/)
+   -pair               array      [1.5,1.0,0.5] Values to represent identical
+                                  similar related
+   -identity           integer    [0] Only match those which are identical in
+                                  all sequences. (Integer 0 or more)
+   -[no]box            boolean    [Y] Display prettyboxes
+   -boxcol             boolean    [N] Colour the background in the boxes
+   -boxuse             string     [GREY] Colour to be used for background.
+                                  (GREY) (Any string is accepted)
+   -[no]name           boolean    [Y] Display the sequence names
+   -maxnamelen         integer    [10] Margin size for the sequence name. (Any
+                                  integer value)
+   -[no]number         boolean    [Y] Display the residue number
+   -[no]listoptions    boolean    [Y] Display the date and options used
+   -plurality          float      [Half the total sequence weighting]
+                                  Plurality check value (totweight/2) (Any
+                                  numeric value)
+   -consensus          boolean    [N] Display the consensus
+   -[no]collision      boolean    [Y] Allow collisions in calculating
+                                  consensus
+   -alternative        menu       [0] Values are 0:Normal collision check.
+                                  (default)
+                                  1:Compares identical scores with the max
+                                  score found. So if any other residue matches
+                                  the identical score then a collision has
+                                  occurred.
+                                  2:If another residue has a greater than or
+                                  equal to matching score and these do not
+                                  match then a collision has occurred.
+                                  3:Checks all those not in the current
+                                  consensus.If any of these give a top score
+                                  for matching or identical scores then a
+                                  collision has occured. (Values: 0 (Normal
+                                  collision check. (default)); 1 (Compares
+                                  identical scores with the max score found.
+                                  So if any other residue matches the
+                                  identical score then a collision has
+                                  occurred.); 2 (If another residue has a
+                                  greater than or equal to matching score and
+                                  these do not match then a collision has
+                                  occurred.); 3 (Checks all those not in the
+                                  current consensus.If any of these give a top
+                                  score for matching or identical scores then
+                                  a collision has occured.))
+   -showscore          integer    [-1] Print residue scores (Any integer
+                                  value)
+   -portrait           boolean    [N] Set page to Portrait
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequences" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-graph" associated qualifiers
+   -gprompt            boolean    Graph prompting
+   -gdesc              string     Graph description
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   prettyplot reads any sequence USA.
+
+  Input files for usage example
+
+  File: globins.msf
+
+!!AA_MULTIPLE_ALIGNMENT 1.0
+
+  ../data/globins.msf MSF:  164 Type: P 25/06/01 CompCheck: 4278 ..
+
+  Name: HBB_HUMAN Len: 164  Check: 6914 Weight: 0.61
+  Name: HBB_HORSE Len: 164  Check: 6007 Weight: 0.65
+  Name: HBA_HUMAN Len: 164  Check: 3921 Weight: 0.65
+  Name: HBA_HORSE Len: 164  Check: 4770 Weight: 0.83
+  Name: MYG_PHYCA Len: 164  Check: 7930 Weight: 1.00
+  Name: GLB5_PETMA Len: 164  Check: 1857 Weight: 0.91
+  Name: LGB2_LUPLU Len: 164  Check: 2879 Weight: 0.43
+
+//
+
+           1                                               50
+HBB_HUMAN  ~~~~~~~~VHLTPEEKSAVTALWGKVN.VDEVGGEALGR.LLVVYPWTQR
+HBB_HORSE  ~~~~~~~~VQLSGEEKAAVLALWDKVN.EEEVGGEALGR.LLVVYPWTQR
+HBA_HUMAN  ~~~~~~~~~~~~~~VLSPADKTNVKAA.WGKVGAHAGEYGAEALERMFLS
+HBA_HORSE  ~~~~~~~~~~~~~~VLSAADKTNVKAA.WSKVGGHAGEYGAEALERMFLG
+MYG_PHYCA  ~~~~~~~VLSEGEWQLVLHVWAKVEAD.VAGHGQDILIR.LFKSHPETLE
+GLB5_PETMA PIVDTGSVAPLSAAEKTKIRSAWAPVYSTYETSGVDILVKFFTSTPAAQE
+LGB2_LUPLU ~~~~~~~~GALTESQAALVKSSWEEFNANIPKHTHRFFILVLEIAPAAKD
+
+           51                                             100
+HBB_HUMAN  FFESFGDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSE
+HBB_HORSE  FFDSFGDLSNPGAVMGNPKVKAHGKKVLHSFGEGVHHLDNLKGTFAALSE
+HBA_HUMAN  FPTTKTYFPHFDLSHGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSD
+HBA_HORSE  FPTTKTYFPHFDLSHGSAQVKAHGKKVGDALTLAVGHLDDLPGALSNLSD
+MYG_PHYCA  KFDRFKHLKTEAEMKASEDLKKHGVTVLTALGAILKKKGHHEAELKPLAQ
+GLB5_PETMA FFPKFKGLTTADQLKKSADVRWHAERIINAVNDAVASMDDTEKMSMKLRD
+LGB2_LUPLU LFSFLKGTSEVPQNNPELQAHAGKVFKLVYEAAIQLQVTGVVVTDATLKN
+
+           101                                            150
+HBB_HUMAN  LHCDKLH..VDPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVA
+HBB_HORSE  LHCDKLH..VDPENFRLLGNVLVVVLARHFGKDFTPELQASYQKVVAGVA
+HBA_HUMAN  LHAHKLR..VDPVNFKLLSHCLLVTLAAHLPAEFTPAVHASLDKFLASVS
+HBA_HORSE  LHAHKLR..VDPVNFKLLSHCLLSTLAVHLPNDFTPAVHASLDKFLSSVS
+MYG_PHYCA  SHATKHK..IPIKYLEFISEAIIHVLHSRHPGDFGADAQGAMNKALELFR
+GLB5_PETMA LSGKHAK..SFQVDPQYFKVLAAVIADTVAAGDAGFEKLMSMICILLRSA
+LGB2_LUPLU LGSVHVSKGVADAHFPVVKEAILKTIKEVVGAKWSEELNSAWTIAYDELA
+
+           151        164
+HBB_HUMAN  NALAHKYH~~~~~~
+HBB_HORSE  NALAHKYH~~~~~~
+HBA_HUMAN  TVLTSKYR~~~~~~
+HBA_HORSE  TVLTSKYR~~~~~~
+MYG_PHYCA  KDIAAKYKELGYQG
+GLB5_PETMA Y~~~~~~~~~~~~~
+LGB2_LUPLU IVIKKEMNDAA~~~
+
+Output file format
+
+   An image of the alignment is displayed on the specified graphics
+   device.
+
+  Output files for usage example
+
+  Graphics File: prettyplot.ps
+
+   [prettyplot results]
+
+  Output files for usage example 2
+
+  Graphics File: prettyplot.ps
+
+   [prettyplot results]
+
+Data files
+
+   Prettyplot uses a comparison matrix file to calculate similarity to
+   the consensus.
+
+   For protein sequences EBLOSUM62 is used for the substitution matrix.
+   For nucleotide sequence, EDNAFULL is used.
+
+   EMBOSS data files are distributed with the application and stored in
+   the standard EMBOSS data directory, which is defined by the EMBOSS
+   environment variable EMBOSS_DATA.
+
+   To see the available EMBOSS data files, run:
+
+% embossdata -showall
+
+   To fetch one of the data files (for example 'Exxx.dat') into your
+   current directory for you to inspect or modify, run:
+
+% embossdata -fetch -file Exxx.dat
+
+   Users can provide their own data files in their own directories.
+   Project specific files can be put in the current directory, or for
+   tidier directory listings in a subdirectory called ".embossdata".
+   Files for all EMBOSS runs can be put in the user's home directory, or
+   again in a subdirectory called ".embossdata".
+
+   The directories are searched in the following order:
+     * . (your current directory)
+     * .embossdata (under your current directory)
+     * ~/ (your home directory)
+     * ~/.embossdata
+
+Notes
+
+   A consesnsus sequence is calculated for the alignment and individual
+   sequences compared to the consensus using the specified comparison
+   matrix file. The default matrix for protein sequences is EBLOSUM62 and
+   for nucleotide sequences is EDNAFULL. The drawing options render
+   conserved sites and regions identified from the comparisons. For
+   example, residues in a sequence are classed as "identical", "similar"
+   or "other" to the consensus depending on user-specified thresholds of
+   sequence similarity (-pair option). Residues in each class are
+   rendered red, green and black by default (this can be changed).
+
+   There are other more general drawing options, for example, controlling
+   the number of residues displayed per line, background shading and
+   whether to display sequence names or not.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It exits with status 0 unless an error is reported.
+
+Known bugs
+
+   Portrait mode does not cover the whole page! This is a "feature" in
+   plplot.
+
+See also
+
+   Program name     Description
+   abiview          Display the trace in an ABI sequencer file
+   cirdna           Draws circular maps of DNA constructs
+   edialign         Local multiple alignment of sequences
+   emma             Multiple sequence alignment (ClustalW wrapper)
+   infoalign        Display basic information about a multiple sequence
+                    alignment
+   lindna           Draws linear maps of DNA constructs
+   pepnet           Draw a helical net for a protein sequence
+   pepwheel         Draw a helical wheel diagram for a protein sequence
+   plotcon          Plot conservation of a sequence alignment
+   prettyseq        Write a nucleotide sequence and its translation to file
+   remap            Display restriction enzyme binding sites in a nucleotide
+                    sequence
+   seealso          Finds programs with similar function to a specified program
+   showalign        Display a multiple sequence alignment in pretty format
+   showdb           Displays information on configured databases
+   showfeat         Display features of a sequence in pretty format
+   showpep          Displays protein sequences with features in pretty format
+   showseq          Displays sequences with features in pretty format
+   sixpack          Display a DNA sequence with 6-frame translation and ORFs
+   textsearch       Search the textual description of sequence(s)
+   tranalign        Generate an alignment of nucleic coding regions from aligned
+                    proteins
+
+Author(s)
+
+   Ian Longden (il © sanger.ac.uk)
+   Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
+   CB10 1SA, UK.
+
+   Many features were first implemented in the EGCG program "prettyplot"
+   by Peter Rice (pmr © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
+
+   The original suggestions for the PrettyPlot program were from Denis
+   Duboule and Sigfried Labeit at EMBL. Gert Vriend added the star
+   marking. Rita Grandori suggested the -NOCOLLISION option.
+
+History
+
+   Completed 5th May 1999.
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

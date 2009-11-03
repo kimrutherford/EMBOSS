@@ -1,0 +1,61 @@
+application: prophet [
+  documentation: "Scan one or more sequences with a Gribskov
+                  or Henikoff profile"
+  groups: "Nucleic:Profiles, Protein:Profiles"
+  gui: "yes"
+  batch: "yes"
+  cpu: "medium"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "any"
+  ]
+
+  infile: infile [
+    parameter: "Y"
+    information: "Profile or weight matrix file"
+    knowntype: "profile or matrix"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  float: gapopen [
+    standard: "Y"
+    default: "1.0"
+    minimum: "0.0"
+    maximum: "100.0"
+    information: "Gap opening coefficient"
+  ]
+
+  float: gapextend [
+    standard: "Y"
+    default: "1.0"
+    minimum: "0.0"
+    maximum: "100.0"
+    information: "Gap extension coefficient"
+  ]
+
+endsection: required
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  align: outfile [
+    parameter: "Y"
+    aformat: "simple"
+  ]
+
+endsection: output

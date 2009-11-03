@@ -1,0 +1,71 @@
+application: stretcher [
+  documentation: "Needleman-Wunsch rapid global alignment of two sequences"
+  groups: "Alignment:Global"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  sequence: asequence [
+    parameter: "Y"
+    type: "any"
+  ]
+
+  sequence: bsequence [
+    parameter: "Y"
+    type: "@($(acdprotein) ? stopprotein : nucleotide)"
+  ]
+
+  matrix: datafile [
+    additional: "Y"
+    information: "Matrix file"
+    protein: "$(acdprotein)"
+    help: "This is the scoring matrix file used when comparing
+           sequences. By default it is the file 'EBLOSUM62' (for proteins) or
+           the file 'EDNAFULL' (for nucleic sequences). These files are
+           found in the 'data' directory of the EMBOSS installation."
+  ]
+
+endsection: input
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  integer: gapopen [
+    additional: "Y"
+    information: "Gap penalty"
+    default: "@($(acdprotein)? 12 : 16)"
+    minimum: "0"
+    valid: "Positive integer"
+    expected: "12 for protein, 16 for nucleic"
+  ]
+
+  integer: gapextend [
+    additional: "Y"
+    information: "Gap length penalty"
+    default: "@($(acdprotein)? 2 : 4)"
+    minimum: "0"
+    valid: "Positive integer"
+    expected: "2 for protein, 4 for nucleic"
+  ]
+
+endsection: additional
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  align: outfile [
+    parameter: "Y"
+    aformat: "markx0"
+    minseqs: "2"
+    maxseqs: "2"
+    aglobal: "Y"
+  ]
+
+endsection: output

@@ -1,0 +1,598 @@
+
+                                 showfeat 
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Display features of a sequence in pretty format
+
+Description
+
+   showfeat reads one or more protein or nucleic sequences with
+   associated feature tables, and writes the features to file (or screen)
+   in a style suitable for publication. There are many options for
+   controlling the format of the output.
+
+Usage
+
+   Here is a sample session with showfeat
+
+
+% showfeat 
+Display features of a sequence in pretty format
+Input sequence(s): tembl:x65921
+Output file [x65921.showfeat]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+   Example 2
+
+   Display 'joined' features on one line with positions:
+
+
+% showfeat -joinfeat -pos 
+Display features of a sequence in pretty format
+Input sequence(s): tembl:x65921
+Output file [x65921.showfeat]: 
+
+   Go to the output files for this example
+
+   Example 3
+
+   Display just positions and names of CDS features - this can be used as
+   a regions file in showseq:
+
+
+% showfeat -typematch CDS -width 0 -noid -nodesc -noscale -pos  
+Display features of a sequence in pretty format
+Input sequence(s): tembl:x65921
+Output file [x65921.showfeat]: 
+
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Sequence(s) filename and optional format, or
+                                  reference (input USA)
+  [-outfile]           outfile    [*.showfeat] Output file name
+
+   Additional (Optional) qualifiers:
+   -sourcematch        string     [*] By default any feature source in the
+                                  feature table is shown. You can set this to
+                                  match any feature source you wish to show.
+                                  The source name is usually either the name
+                                  of the program that detected the feature or
+                                  it is the feature table (eg: EMBL) that the
+                                  feature came from.
+                                  The source may be wildcarded by using '*'.
+                                  If you wish to show more than one source,
+                                  separate their names with the character '|',
+                                  eg:
+                                  gene* | embl (Any string is accepted)
+   -typematch          string     [*] By default any feature type in the
+                                  feature table is shown. You can set this to
+                                  match any feature type you wish to show.
+                                  See http://www3.ebi.ac.uk/Services/WebFeat/
+                                  for a list of the EMBL feature types and see
+                                  Appendix A of the Swissprot user manual in
+                                  http://www.expasy.ch/txt/userman.txt for a
+                                  list of the Swissprot feature types.
+                                  The type may be wildcarded by using '*'.
+                                  If you wish to show more than one type,
+                                  separate their names with the character '|',
+                                  eg:
+                                  *UTR | intron (Any string is accepted)
+   -tagmatch           string     [*] Tags are the types of extra values that
+                                  a feature may have. For example in the EMBL
+                                  feature table, a 'CDS' type of feature may
+                                  have the tags '/codon', '/codon_start',
+                                  '/db_xref', '/EC_number', '/evidence',
+                                  '/exception', '/function', '/gene',
+                                  '/label', '/map', '/note', '/number',
+                                  '/partial', '/product', '/protein_id',
+                                  '/pseudo', '/standard_name', '/translation',
+                                  '/transl_except', '/transl_table', or
+                                  '/usedin'. Some of these tags also have
+                                  values, for example '/gene' can have the
+                                  value of the gene name.
+                                  By default any feature tag in the feature
+                                  table is shown. You can set this to match
+                                  any feature tag you wish to show.
+                                  The tag may be wildcarded by using '*'.
+                                  If you wish to show more than one tag,
+                                  separate their names with the character '|',
+                                  eg:
+                                  gene | label (Any string is accepted)
+   -valuematch         string     [*] Tag values are the values associated
+                                  with a feature tag. Tags are the types of
+                                  extra values that a feature may have. For
+                                  example in the EMBL feature table, a 'CDS'
+                                  type of feature may have the tags '/codon',
+                                  '/codon_start', '/db_xref', '/EC_number',
+                                  '/evidence', '/exception', '/function',
+                                  '/gene', '/label', '/map', '/note',
+                                  '/number', '/partial', '/product',
+                                  '/protein_id', '/pseudo', '/standard_name',
+                                  '/translation', '/transl_except',
+                                  '/transl_table', or '/usedin'. Only some of
+                                  these tags can have values, for example
+                                  '/gene' can have the value of the gene name.
+                                  By default any feature tag value in the
+                                  feature table is shown. You can set this to
+                                  match any feature tag valueyou wish to show.
+                                  The tag value may be wildcarded by using
+                                  '*'.
+                                  If you wish to show more than one tag value,
+                                  separate their names with the character
+                                  '|', eg:
+                                  pax* | 10 (Any string is accepted)
+   -sort               menu       [start] Sort features by Type, Start or
+                                  Source, Nosort (don't sort - use input
+                                  order) or join coding regions together and
+                                  leave other features in the input order
+                                  (Values: source (Sort by Source); start
+                                  (Sort by Start position); type (Sort by
+                                  Type); nosort (No sorting done))
+   -joinfeatures       boolean    [N] Join coding regions together
+   -annotation         range      [If this is left blank, then no annotation
+                                  is added.] Regions to annotate by marking.
+                                  If this is left blank, then no annotation is
+                                  added.
+                                  A set of regions is specified by a set of
+                                  pairs of positions followed by optional
+                                  text.
+                                  The positions are integers.
+                                  They are followed by any text (but not
+                                  digits when on the command-line).
+                                  Examples of region specifications are:
+                                  24-45 new domain 56-78 match to Mouse
+                                  1-100 First part 120-156 oligo
+                                  A file of ranges to annotate (one range per
+                                  line) can be specified as '@filename'.
+
+   Advanced (Unprompted) qualifiers:
+   -html               boolean    [N] Use HTML formatting
+   -[no]id             boolean    [Y] Set this to be false if you do not wish
+                                  to display the ID name of the sequence.
+   -[no]description    boolean    [Y] Set this to be false if you do not wish
+                                  to display the description of the sequence.
+   -[no]scale          boolean    [Y] Set this to be false if you do not wish
+                                  to display the scale line.
+   -width              integer    [60] You can expand (or contract) the width
+                                  of the ASCII-character graphics display of
+                                  the positions of the features using this
+                                  value.
+                                  For example, a width of 80 characters would
+                                  cover a standard page width and a width a 10
+                                  characters would be nearly unreadable.
+                                  If the width is set to less than 4, the
+                                  graphics lines and the scale line will not
+                                  be displayed. (Integer 0 or more)
+   -collapse           boolean    [N] If this is set, then features from the
+                                  same source and of the same type and sense
+                                  are all printed on the same line. For
+                                  instance if there are several features from
+                                  the EMBL feature table (ie. the same source)
+                                  which are all of type 'exon' in the same
+                                  sense, then they will all be displayed on
+                                  the same line. This makes it hard to
+                                  distinguish overlapping features.
+                                  If this is set to false then each feature is
+                                  displayed on a separate line making it
+                                  easier to distinguish where features start
+                                  and end.
+   -[no]forward        boolean    [Y] Set this to be false if you do not wish
+                                  to display forward sense features.
+   -[no]reverse        boolean    [Y] Set this to be false if you do not wish
+                                  to display reverse sense features.
+   -[no]unknown        boolean    [Y] Set this to be false if you do not wish
+                                  to display unknown sense features. (ie.
+                                  features with no directionality - all
+                                  protein features are of this type and some
+                                  nucleic features (for example, CG-rich
+                                  regions)).
+   -strand             boolean    [N] Set this if you wish to display the
+                                  strand of the features. Protein features are
+                                  always directionless (indicated by '0'),
+                                  forward is indicated by '+' and reverse is
+                                  '-'.
+   -origin             boolean    [N] Set this if you wish to display the
+                                  origin of the features.
+                                  The source name is usually either the name
+                                  of the program that detected the feature or
+                                  it is the name of the feature table (eg:
+                                  EMBL) that the feature came from.
+   -position           boolean    [N] Set this if you wish to display the
+                                  start and end position of the features. If
+                                  several features are being displayed on the
+                                  same line, then the start and end positions
+                                  will be joined by a comma, for example:
+                                  '189-189,225-225'.
+   -[no]type           boolean    [Y] Set this to be false if you do not wish
+                                  to display the type of the features.
+   -tags               boolean    [N] Set this to be false if you do not wish
+                                  to display the tags and values of the
+                                  features.
+   -[no]values         boolean    [Y] Set this to be false if you do not wish
+                                  to display the tag values of the features.
+                                  If this is set to be false, only the tag
+                                  names will be displayed. If the tags are not
+                                  displayed, then the values will not be
+                                  displayed. The value of the 'translation'
+                                  tag is never displayed as it is often
+                                  extremely long.
+   -stricttags         boolean    [N] By default if any tag/value pair in a
+                                  feature matches the specified tag and value,
+                                  then all the tags/value pairs of that
+                                  feature will be displayed. If this is set to
+                                  be true, then only those tag/value pairs in
+                                  a feature that match the specified tag and
+                                  value will be displayed.
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   The feature input is the feature table lines from a normal sequence
+   USA.
+
+  Input files for usage example
+
+   'tembl:x65921' is a sequence entry in the example nucleic acid
+   database 'tembl'
+
+  Database entry: tembl:x65921
+
+ID   X65921; SV 1; linear; genomic DNA; STD; HUM; 2016 BP.
+XX
+AC   X65921; S45242;
+XX
+DT   13-MAY-1992 (Rel. 31, Created)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 7)
+XX
+DE   H.sapiens fau 1 gene
+XX
+KW   fau 1 gene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
+;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-2016
+RA   Kas K.;
+RT   ;
+RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   K. Kas, University of Antwerp, Dept of Biochemistry T3.22,
+RL   Universiteitsplein 1, 2610 Wilrijk, BELGIUM
+XX
+RN   [2]
+RP   1-2016
+RX   DOI; 10.1016/0006-291X(92)91286-Y.
+RX   PUBMED; 1326960.
+RA   Kas K., Michiels L., Merregaert J.;
+RT   "Genomic structure and expression of the human fau gene: encoding the
+RT   ribosomal protein S30 fused to a ubiquitin-like protein";
+RL   Biochem. Biophys. Res. Commun. 187(2):927-933(1992).
+XX
+DR   GDB; 191789.
+DR   GDB; 191790.
+DR   GDB; 354872.
+DR   GDB; 4590236.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..2016
+FT                   /organism="Homo sapiens"
+FT                   /mol_type="genomic DNA"
+FT                   /clone_lib="CML cosmid"
+FT                   /clone="15.1"
+FT                   /db_xref="taxon:9606"
+FT   mRNA            join(408..504,774..856,951..1095,1557..1612,1787..>1912)
+FT                   /gene="fau 1"
+FT   exon            408..504
+FT                   /number=1
+
+
+  [Part of this file has been deleted for brevity]
+
+FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
+FT   intron          857..950
+FT                   /number=2
+FT   exon            951..1095
+FT                   /number=3
+FT   intron          1096..1556
+FT                   /number=3
+FT   exon            1557..1612
+FT                   /number=4
+FT   intron          1613..1786
+FT                   /number=4
+FT   exon            1787..>1912
+FT                   /number=5
+FT   polyA_signal    1938..1943
+XX
+SQ   Sequence 2016 BP; 421 A; 562 C; 538 G; 495 T; 0 other;
+     ctaccatttt ccctctcgat tctatatgta cactcgggac aagttctcct gatcgaaaac        6
+0
+     ggcaaaacta aggccccaag taggaatgcc ttagttttcg gggttaacaa tgattaacac       12
+0
+     tgagcctcac acccacgcga tgccctcagc tcctcgctca gcgctctcac caacagccgt       18
+0
+     agcccgcagc cccgctggac accggttctc catccccgca gcgtagcccg gaacatggta       24
+0
+     gctgccatct ttacctgcta cgccagcctt ctgtgcgcgc aactgtctgg tcccgccccg       30
+0
+     tcctgcgcga gctgctgccc aggcaggttc gccggtgcga gcgtaaaggg gcggagctag       36
+0
+     gactgccttg ggcggtacaa atagcaggga accgcgcggt cgctcagcag tgacgtgaca       42
+0
+     cgcagcccac ggtctgtact gacgcgccct cgcttcttcc tctttctcga ctccatcttc       48
+0
+     gcggtagctg ggaccgccgt tcaggtaaga atggggcctt ggctggatcc gaagggcttg       54
+0
+     tagcaggttg gctgcggggt cagaaggcgc ggggggaacc gaagaacggg gcctgctccg       60
+0
+     tggccctgct ccagtcccta tccgaactcc ttgggaggca ctggccttcc gcacgtgagc       66
+0
+     cgccgcgacc accatcccgt cgcgatcgtt tctggaccgc tttccactcc caaatctcct       72
+0
+     ttatcccaga gcatttcttg gcttctctta caagccgtct tttctttact cagtcgccaa       78
+0
+     tatgcagctc tttgtccgcg cccaggagct acacaccttc gaggtgaccg gccaggaaac       84
+0
+     ggtcgcccag atcaaggtaa ggctgcttgg tgcgccctgg gttccatttt cttgtgctct       90
+0
+     tcactctcgc ggcccgaggg aacgcttacg agccttatct ttccctgtag gctcatgtag       96
+0
+     cctcactgga gggcattgcc ccggaagatc aagtcgtgct cctggcaggc gcgcccctgg      102
+0
+     aggatgaggc cactctgggc cagtgcgggg tggaggccct gactaccctg gaagtagcag      108
+0
+     gccgcatgct tggaggtgag tgagagagga atgttctttg aagtaccggt aagcgtctag      114
+0
+     tgagtgtggg gtgcatagtc ctgacagctg agtgtcacac ctatggtaat agagtacttc      120
+0
+     tcactgtctt cagttcagag tgattcttcc tgtttacatc cctcatgttg aacacagacg      126
+0
+     tccatgggag actgagccag agtgtagttg tatttcagtc acatcacgag atcctagtct      132
+0
+     ggttatcagc ttccacacta aaaattaggt cagaccaggc cccaaagtgc tctataaatt      138
+0
+     agaagctgga agatcctgaa atgaaactta agatttcaag gtcaaatatc tgcaactttg      144
+0
+     ttctcattac ctattgggcg cagcttctct ttaaaggctt gaattgagaa aagaggggtt      150
+0
+     ctgctgggtg gcaccttctt gctcttacct gctggtgcct tcctttccca ctacaggtaa      156
+0
+     agtccatggt tccctggccc gtgctggaaa agtgagaggt cagactccta aggtgagtga      162
+0
+     gagtattagt ggtcatggtg ttaggacttt ttttcctttc acagctaaac caagtccctg      168
+0
+     ggctcttact cggtttgcct tctccctccc tggagatgag cctgagggaa gggatgctag      174
+0
+     gtgtggaaga caggaaccag ggcctgatta accttccctt ctccaggtgg ccaaacagga      180
+0
+     gaagaagaag aagaagacag gtcgggctaa gcggcggatg cagtacaacc ggcgctttgt      186
+0
+     caacgttgtg cccacctttg gcaagaagaa gggccccaat gccaactctt aagtcttttg      192
+0
+     taattctggc tttctctaat aaaaaagcca cttagttcag tcatcgcatt gtttcatctt      198
+0
+     tacttgcaag gcctcaggga gaggtgtgct tctcgg                                201
+6
+//
+
+Output file format
+
+   The output is a text representation of the feature table.
+
+  Output files for usage example
+
+  File: x65921.showfeat
+
+X65921
+H.sapiens fau 1 gene
+|==========================================================| 2016
+|----------------------------------------------------------> source
+           |-->                                              exon
+           |-->                                              mRNA
+              |------->                                      intron
+                      |->                                    exon
+                      |->                                    mRNA
+                      |->                                    CDS
+                        |-->                                 intron
+                           |--->                             CDS
+                           |--->                             exon
+                           |--->                             mRNA
+                               |------------->               intron
+                                             |>              CDS
+                                             |>              exon
+                                             |>              mRNA
+                                               |---->        intron
+                                                    |-->     CDS
+                                                    |-->     exon
+                                                    |-->     mRNA
+                                                        >    polyA_signal
+
+  Output files for usage example 2
+
+  File: x65921.showfeat
+
+X65921
+H.sapiens fau 1 gene
+|==========================================================| 2016
+|----------------------------------------------------------> 1-2016 source
+           |-->                                              408-504 exon
+           |-->                                              408-504 mRNA
+              |------->                                      505-773 intron
+                      |->                                    774-856,774-856 ex
+on
+                      |->                                    782-856 CDS
+                        |--|--->                             857-950,951-1095 i
+ntron
+                           |--->                             951-1095,951-1095
+exon
+                               |-------------|>              1096-1556,1557-161
+2 intron
+                                             |>              1557-1612,1557-161
+2 exon
+                                               |----|-->     1613-1786,1787-191
+2 intron
+                                                    |-->     1787-1912,1787-191
+2 exon
+                                                        >    1938-1943 polyA_si
+gnal
+
+  Output files for usage example 3
+
+  File: x65921.showfeat
+
+782-856 CDS
+951-1095 CDS
+1557-1612 CDS
+1787-1912 CDS
+
+Data files
+
+   None.
+
+Notes
+
+   Sequence regions to annotate may be specified as a set or ranges.
+   Optionally, forward and reverse sense features, and features of
+   unspecified sense (for example, CG-rich regions), are displayed.
+   Optionally, features from the same source and of the same type and
+   sense may all be printed on the same line, although this may make it
+   hard to distinguish overlapping features.
+
+   By default, any features in the feature table are displayed however
+   there are options to restrict this by feature source, type, feature
+   tag and feature tag value.
+
+   Features may be sorted by Type, Start or Source, left unsorted (in
+   which case the same order as the input is used), or features for the
+   coding regions presented all together.
+
+   Various options control what else is displayed, including the sequence
+   ID, description, scale line, width of display, strand of the features,
+   feature source, start and end positions, feature type, and feature
+   tags and tag values. By default if any tag/value pair in a feature
+   matches the specified tag and value, then all the tags/value pairs of
+   that feature will be displayed. If this is set to be true, then only
+   those tag/value pairs in a feature that match the specified tag and
+   value will be displayed.
+
+   Optionally, output can be in HTML.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with a status of 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name     Description
+   abiview          Display the trace in an ABI sequencer file
+   cirdna           Draws circular maps of DNA constructs
+   coderet          Extract CDS, mRNA and translations from feature tables
+   extractfeat      Extract features from sequence(s)
+   lindna           Draws linear maps of DNA constructs
+   maskfeat         Write a sequence with masked features
+   pepnet           Draw a helical net for a protein sequence
+   pepwheel         Draw a helical wheel diagram for a protein sequence
+   prettyplot       Draw a sequence alignment with pretty formatting
+   prettyseq        Write a nucleotide sequence and its translation to file
+   remap            Display restriction enzyme binding sites in a nucleotide
+                    sequence
+   seealso          Finds programs with similar function to a specified program
+   showalign        Display a multiple sequence alignment in pretty format
+   showdb           Displays information on configured databases
+   showpep          Displays protein sequences with features in pretty format
+   showseq          Displays sequences with features in pretty format
+   sixpack          Display a DNA sequence with 6-frame translation and ORFs
+   textsearch       Search the textual description of sequence(s)
+   twofeat          Finds neighbouring pairs of features in sequence(s)
+
+Author(s)
+
+   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+History
+
+   Written 1999 - Gary Williams
+
+   Dec 2001 - added -sort nosort option to get the features in the input
+   order
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

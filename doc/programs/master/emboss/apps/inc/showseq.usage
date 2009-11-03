@@ -1,0 +1,164 @@
+<b>Here is a sample session with showseq</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showseq tembl:x13776 -sbeg 1 -send 100 </b>
+Displays sequences with features in pretty format
+Things to display
+         0 : Enter your own list of things to display
+         1 : Sequence only
+         2 : Default sequence with features
+         3 : Pretty sequence
+         4 : One frame translation
+         5 : Three frame translations
+         6 : Six frame translations
+         7 : Restriction enzyme map
+         8 : Baroque
+Display format [2]: <b></b>
+Output file [x13776.showseq]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+The standard list of output formats are only a small selection of the possible ways in which a sequence might be displayed.  Precise control over the output format is acheived by selecting the qualifier '-format 0'  (Option 0 in the list of things to display).  For example, by choosing format '0' and then specifying that we want to display the things: 'b,s,t,c', we will output the sequence in the following way: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showseq tembl:x13776 -sbeg 1 -send 120 </b>
+Displays sequences with features in pretty format
+Things to display
+         0 : Enter your own list of things to display
+         1 : Sequence only
+         2 : Default sequence with features
+         3 : Pretty sequence
+         4 : One frame translation
+         5 : Three frame translations
+         6 : Six frame translations
+         7 : Restriction enzyme map
+         8 : Baroque
+Display format [2]: <b>0</b>
+Specify your own things to display
+         S : Sequence
+         B : Blank line
+         1 : Frame1 translation
+         2 : Frame2 translation
+         3 : Frame3 translation
+        -1 : CompFrame1 translation
+        -2 : CompFrame2 translation
+        -3 : CompFrame3 translation
+         T : Ticks line
+         N : Number ticks line
+         C : Complement sequence
+         F : Features
+         R : Restriction enzyme cut sites in forward sense
+        -R : Restriction enzyme cut sites in reverse sense
+         A : Annotation
+Enter a list of things to display [B,N,T,S,A,F]: <b>b,s,t,c</b>
+Output file [x13776.showseq]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 3</b>
+<p>
+Display only the sequence: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showseq tembl:x13776 -sbeg 1 -send 100 -noname -nodesc -format 0 -thing S </b>
+Displays sequences with features in pretty format
+Output file [x13776.showseq]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.3">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 4</b>
+<p>
+Number the sequence lines in the margin:  
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showseq tembl:x13776 -sbeg 1 -send 100 -format 1 -number </b>
+Displays sequences with features in pretty format
+Output file [x13776.showseq]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.4">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 5</b>
+<p>
+Start the numbering at a specified value ('123' in this case): 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showseq tembl:x13776 -sbeg 1 -send 100 -format 1 -number -offset 123 </b>
+Displays sequences with features in pretty format
+Output file [x13776.showseq]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.5">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 6</b>
+<p>
+Make selected regions uppercase. (Use '-slower' to force the rest of the sequence to be lowercase).  
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showseq tembl:x13776 -sbeg 1 -send 100 -format 1 -slower -upper '8-24,65-81' </b>
+Displays sequences with features in pretty format
+Output file [x13776.showseq]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.6">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 7</b>
+<p>
+Translate selected regions:  
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showseq tembl:x13776 -sbeg 1 -send 120 -format 5 -trans 25-49,66-76 </b>
+Displays sequences with features in pretty format
+Output file [x13776.showseq]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.7">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 8</b>
+<p>
+Add your own annotation to the display: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showseq tembl:x13776 -sbeg 1 -send 100 -format 2 -send 120 -annotation '13-26 binding site 15-15 SNP' </b>
+Displays sequences with features in pretty format
+Output file [x13776.showseq]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.8">Go to the output files for this example</a><p><p>

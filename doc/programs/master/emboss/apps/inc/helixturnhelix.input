@@ -1,0 +1,116 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tsw:laci_ecoli' is a sequence entry in the example protein database 'tsw'
+<p>
+<p><h3>Database entry: tsw:laci_ecoli</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   LACI_ECOLI              Reviewed;         360 AA.
+AC   P03023; O09196; P71309; Q2MC79; Q47338;
+DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
+DT   19-JUL-2003, sequence version 3.
+DT   16-JUN-2009, entry version 105.
+DE   RecName: Full=Lactose operon repressor;
+GN   Name=lacI; OrderedLocusNames=b0345, JW0336;
+OS   Escherichia coli (strain K12).
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
+OC   Enterobacteriaceae; Escherichia.
+OX   NCBI_TaxID=83333;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RX   MEDLINE=78246991; PubMed=355891; DOI=10.1038/274765a0;
+RA   Farabaugh P.J.;
+RT   "Sequence of the lacI gene.";
+RL   Nature 274:765-769(1978).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RA   Chen J., Matthews K.K.S.M.;
+RL   Submitted (MAY-1991) to the EMBL/GenBank/DDBJ databases.
+RN   [3]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RA   Marsh S.;
+RL   Submitted (JAN-1997) to the EMBL/GenBank/DDBJ databases.
+RN   [4]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+RC   STRAIN=K12 / MG1655 / ATCC 47076;
+RA   Chung E., Allen E., Araujo R., Aparicio A.M., Davis K., Duncan M.,
+RA   Federspiel N., Hyman R., Kalman S., Komp C., Kurdi O., Lew H., Lin D.,
+RA   Namath A., Oefner P., Roberts D., Schramm S., Davis R.W.;
+RT   "Sequence of minutes 4-25 of Escherichia coli.";
+RL   Submitted (JAN-1997) to the EMBL/GenBank/DDBJ databases.
+RN   [5]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+RC   STRAIN=K12 / MG1655 / ATCC 47076;
+RX   MEDLINE=97426617; PubMed=9278503; DOI=10.1126/science.277.5331.1453;
+RA   Blattner F.R., Plunkett G. III, Bloch C.A., Perna N.T., Burland V.,
+RA   Riley M., Collado-Vides J., Glasner J.D., Rode C.K., Mayhew G.F.,
+RA   Gregor J., Davis N.W., Kirkpatrick H.A., Goeden M.A., Rose D.J.,
+RA   Mau B., Shao Y.;
+RT   "The complete genome sequence of Escherichia coli K-12.";
+RL   Science 277:1453-1474(1997).
+RN   [6]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+RC   STRAIN=K12 / W3110 / ATCC 27325 / DSM 5911;
+RX   PubMed=16738553; DOI=10.1038/msb4100049;
+RA   Hayashi K., Morooka N., Yamamoto Y., Fujita K., Isono K., Choi S.,
+RA   Ohtsubo E., Baba T., Wanner B.L., Mori H., Horiuchi T.;
+RT   "Highly accurate genome sequences of Escherichia coli K-12 strains
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+FT   CHAIN         1    360       Lactose operon repressor.
+FT                                /FTId=PRO_0000107963.
+FT   DOMAIN        1     58       HTH lacI-type.
+FT   DNA_BIND      6     25       H-T-H motif.
+FT   VARIANT     282    282       Y -&gt; D (in T41 mutant).
+FT   MUTAGEN      17     17       Y-&gt;H: Broadening of specificity.
+FT   MUTAGEN      22     22       R-&gt;N: Recognizes an operator variant.
+FT   CONFLICT    286    286       L -&gt; S (in Ref. 1, 4 and 7).
+FT   HELIX         6     11
+FT   TURN         12     14
+FT   HELIX        17     24
+FT   HELIX        33     45
+FT   HELIX        51     56
+FT   STRAND       63     69
+FT   HELIX        74     89
+FT   STRAND       93     98
+FT   STRAND      101    103
+FT   HELIX       104    115
+FT   TURN        116    118
+FT   STRAND      122    126
+FT   HELIX       130    139
+FT   TURN        140    142
+FT   STRAND      145    150
+FT   STRAND      154    156
+FT   STRAND      158    161
+FT   HELIX       163    177
+FT   STRAND      181    186
+FT   HELIX       192    207
+FT   STRAND      213    217
+FT   HELIX       222    234
+FT   STRAND      240    246
+FT   HELIX       247    259
+FT   TURN        265    267
+FT   STRAND      268    271
+FT   HELIX       277    281
+FT   STRAND      282    284
+FT   STRAND      287    290
+FT   HELIX       293    308
+FT   STRAND      314    319
+FT   STRAND      322    324
+FT   STRAND      334    338
+FT   HELIX       343    353
+FT   HELIX       354    356
+SQ   SEQUENCE   360 AA;  38590 MW;  347A8DEE92D736CB CRC64;
+     MKPVTLYDVA EYAGVSYQTV SRVVNQASHV SAKTREKVEA AMAELNYIPN RVAQQLAGKQ
+     SLLIGVATSS LALHAPSQIV AAIKSRADQL GASVVVSMVE RSGVEACKAA VHNLLAQRVS
+     GLIINYPLDD QDAIAVEAAC TNVPALFLDV SDQTPINSII FSHEDGTRLG VEHLVALGHQ
+     QIALLAGPLS SVSARLRLAG WHKYLTRNQI QPIAEREGDW SAMSGFQQTM QMLNEGIVPT
+     AMLVANDQMA LGAMRAITES GLRVGADISV VGYDDTEDSS CYIPPLTTIK QDFRLLGQTS
+     VDRLLQLSQG QAVKGNQLLP VSLVKRKTTL APNTQTASPR ALADSLMQLA RQVSRLESGQ
+//
+</pre>
+</td></tr></table><p>

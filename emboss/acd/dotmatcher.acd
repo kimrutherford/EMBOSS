@@ -1,0 +1,79 @@
+application: dotmatcher [
+  documentation: "Draw a threshold dotplot of two sequences"
+  groups: "Alignment:Dot plots"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  sequence: asequence [
+    parameter: "y"
+    type: "any"
+  ]
+
+  sequence: bsequence [
+    parameter: "y"
+    type: "@($(acdprotein) ? stopprotein : nucleotide)"
+  ]
+
+  matrix: matrixfile [
+    additional: "Y"
+    information: "Matrix file"
+    protein: "$(acdprotein)"
+    help: "This is the scoring matrix file used when comparing
+           sequences. By default it is the file 'EBLOSUM62' (for proteins) or
+           the file 'EDNAFULL' (for nucleic sequences). These files are
+           found in the 'data' directory of the EMBOSS installation."
+  ]
+
+endsection: input
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  integer: windowsize [
+    additional: "Y"
+    information: "Window size over which to test threshhold"
+    default: "10"
+    minimum: "3"
+  ]
+
+  integer: threshold [
+    additional: "Y"
+    information: "Threshold"
+    default: "23"
+    minimum: "0"
+  ]
+
+endsection: additional
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  toggle: stretch [
+    default: "N"
+    information: "Stretch plot"
+    help: "Display a non-proportional graph"
+  ]
+
+  graph: graph [
+    standard: "@(!$(stretch))"
+    gtitle: "Dotmatcher: $(asequence.usa) vs $(bsequence.usa)"
+    gxtitle: "$(asequence.name)"
+    gytitle: "$(bsequence.name)"
+  ]
+
+  xygraph: xygraph [
+    standard: "$(stretch)"
+    gtitle: "Dotmatcher: $(asequence.usa) vs $(bsequence.usa)"
+    gxtitle: "$(asequence.name)"
+    gytitle: "$(bsequence.name)"
+  ]
+
+endsection: output

@@ -1,0 +1,89 @@
+The Genetic Code data files are based on the NCBI genetic code tables.
+Their names and descriptions are:
+
+<dl>
+<dt>EGC.0 </dt><dd>
+      Standard (Differs from GC.1 in that it only has initiation site 'AUG')
+<dt>EGC.1 </dt><dd>
+      Standard
+<dt>EGC.2 </dt><dd>
+      Vertebrate Mitochodrial
+<dt>EGC.3 </dt><dd>
+      Yeast Mitochondrial
+<dt>EGC.4 </dt><dd>
+      Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma
+<dt>EGC.5 </dt><dd>
+      Invertebrate Mitochondrial
+<dt>EGC.6 </dt><dd>
+      Ciliate Macronuclear and Dasycladacean
+<dt>EGC.9 </dt><dd>
+      Echinoderm Mitochondrial
+<dt>EGC.10 </dt><dd>
+      Euplotid Nuclear
+<dt>EGC.11 </dt><dd>
+      Bacterial
+<dt>EGC.12 </dt><dd>
+      Alternative Yeast Nuclear
+<dt>EGC.13 </dt><dd>
+      Ascidian Mitochondrial
+<dt>EGC.14 </dt><dd>
+      Flatworm Mitochondrial
+<dt>EGC.15</dt><dd>
+      Blepharisma Macronuclear
+<dt>EGC.16</dt><dd>
+      Chlorophycean Mitochondrial
+<dt>EGC.21</dt><dd>
+      Trematode Mitochondrial
+<dt>EGC.22</dt><dd>
+      Scenedesmus obliquus
+<dt>EGC.23</dt><dd>
+      Thraustochytrium Mitochondrial
+</dl>
+
+<p>
+
+The format of these files is very simple.
+
+<p>   
+
+It consists of several lines of optional comments, each starting with
+a '#' character.
+
+<p>
+
+These are followed the line: 'Genetic Code [n]', where 'n' is the
+number of the genetic code file.
+
+<p> 
+
+This is followed by the description of the code and then by four lines
+giving the IUPAC one-letter code of the translated amino acid, the
+start codons (indicdated by an 'M') and the three bases of the codon,
+lined up one on top of the other.
+   
+<p>
+
+For example:
+
+<pre>
+   
+------------------------------------------------------------------------------
+# Genetic Code Table
+#
+# Obtained from: http://www.ncbi.nlm.nih.gov/collab/FT/genetic_codes.html
+# and: http://www3.ncbi.nlm.nih.gov/htbin-post/Taxonomy/wprintgc?mode=c
+#
+# Differs from Genetic Code [1] only in that the initiation sites have been
+# changed to only 'AUG'
+
+Genetic Code [0]
+Standard
+   
+AAs  =   FFLLSSSSYY**CC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG
+Starts = -----------------------------------M----------------------------
+Base1  = TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG
+Base2  = TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG
+Base3  = TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG
+------------------------------------------------------------------------------
+
+</pre>

@@ -1,0 +1,22 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tsw:*' is a sequence entry in the example protein database 'tsw'
+<p>
+<p><h3>File: oddcomp.comp</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+# Example input file for oddcomp
+Word size       2
+Total count     0
+
+#
+# Word  Obs Count       Obs Frequency   Exp Frequency   Obs/Exp Frequency
+#
+RS      2               0               0               0
+SR      1               0               0               0
+
+Other   0               0               0               0
+</pre>
+</td></tr></table><p>

@@ -1,0 +1,25 @@
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="cpgplot.html">cpgplot</a></td>
+<td>Identify and plot CpG islands in nucleotide sequence(s)</td>
+</tr>
+
+<tr>
+<td><a href="cpgreport.html">cpgreport</a></td>
+<td>Identify and report CpG-rich regions in nucleotide sequence(s)</td>
+</tr>
+
+<tr>
+<td><a href="geecee.html">geecee</a></td>
+<td>Calculate fractional GC content of nucleic acid sequences</td>
+</tr>
+
+<tr>
+<td><a href="newcpgseek.html">newcpgseek</a></td>
+<td>Identify and report CpG-rich regions in nucleotide sequence(s)</td>
+</tr>
+
+</table>

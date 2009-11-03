@@ -1,0 +1,130 @@
+For each motif that it discovers in the training set, MEME prints the
+following information: 
+
+    Summary Line
+
+    This line gives the width (`width') and expected number of occurrences in
+    the training set (`sites') of the motif. MEME numbers the motifs
+    consecutively from one as it finds them. MEME usually finds the most
+    statistically significant motifs first. Each motif describes a pattern of 
+    a fixed width--no gaps are allowed in MEME motifs. MEME estimates
+    the number of places the motif occurs in the training set. This need
+    not be an integer value. 
+
+    Simplified Motif Letter-probability Matrix
+
+    MEME motifs are represented by letter-probability matrices that
+    specify the probability of each possible letter appearing at each
+    possible position in an occurrence of the motif. In order to make it
+    easier to see which letters are most likely in each of the columns of
+    the motif, the simplified motif shows the letter probabilities multiplied
+    by 10 rounded to the nearest integer. Zeros are replaced by ":" (the
+    colon) for readability. 
+
+    Information Content Diagram
+
+    The information content diagram provides an idea of which positions
+    in the motif are most highly conserved. Each column (position) in a
+    motif can be characterized by the amount of information it contains
+    (measured in bits). Highly conserved positions in the motif have high
+    information; positions where all letters are equally likely have low
+    information. The diagram is printed so that each column lines up with
+    the same column in the simplified motif letter-probability matrix above
+    it. Summing the information content for each position in the motif
+    gives the total information content of the motif (shown in parentheses
+    to the left of the diagram). This gives a measure of the usefulness of
+    the motif for database searches. For a motif to be useful for database
+    searches, it must as a rule contain at least log_2(N) bits of
+    information where N is the number of sequences in the database
+    being searched. For example, to effectively search a database
+    containing 100,000 sequences for occurrences of a single motif, the
+    motif should have an IC of at least 16.6 bits. Motifs with lower
+    information content are still useful when a family of sequences shares
+    more than one motif since they can be combined in multiple motif
+    searches (using MAST). 
+
+    Multilevel Consensus Sequence
+
+    The multilevel consensus sequence corresponding to the motif is an
+    aid in remembering and understanding the motif. It is calculated from
+    the motif letter-probability matrix as follows. Separately for each
+    column of the motif, the letters in the alphabet are sorted in
+    decreasing order by the probability with which they are expected to
+    occur in that position of motif occurrences. The sorted letters are
+    then printed vertically with the most probable letter on top. Only
+    letters with probabilities of 0.2 or higher at that position in the motif
+    are printed. As an example, the multilevel consensus sequence of
+    motif 2 in the sample output is: 
+
+    Multilevel       LITGAASGIG
+    consensus         V  GS    
+    sequence              G    
+
+    This multilevel consensus sequence says several things about the
+    motif. First, the most likely form of the motif can be read from the top
+    line as LITGAASGIG. Second, that only letter L has probability
+    more than 0.2 in position 1 of the motif, both I and V have probability
+    greater than 0.2 in position 2, etc. Third, a rough approximation of the
+    motif can be made by converting the multilevel consensus sequence
+    into the Prosite signature
+    L-[IV]-T-G-[AG]-[ASG]-S-G-I-G. The multilevel
+    consensus sequence is printed so that each column lines up with
+    the same column in the simplified motif and information content
+    diagrams above it. 
+
+    Motif in BLOCKS or FASTA format
+ 
+    For use with the BLOCKS (http://www.blocks.fhcrc.org/blocks) tools,
+    MEME prints the sites in the sequences which were used to construct the
+    motif in BLOCKS format.
+    The sites reported are, for the different model types:
+        OOPS            position with highest z_i in each sequence,
+        ZOOPS           position with highest z_i > 0.5 in each sequence,
+        TCM             all positions with z_i > 0.5,
+    where z_i is the probability that an occurrence of the motif starts
+    at position i in the sequence given the sequence and the motif model.
+    If you inlcude the  -print_fasta switch on the command line, MEME prints
+    the motif sites in FASTA format instead of BLOCKS format.
+
+    Possible Examples of the Motif
+
+    As a further aid in understanding the motif, MEME displays a list of
+    possible occurrences of the motif in the training set. This list is made
+    by converting the motif letter-probability matrix into a
+    position-dependent scoring matrix (log-odds matrix) and using that
+    to compute a match score between each position in the training set
+    and the motif. All positions which score above a threshold score are
+    listed. (The threshold score is chosen by MEME such that the
+    expected number of non-motif positions listed in error will equal the
+    number of actual motif positions not listed.) The format of the list is
+    sequence name, starting position of the (putative) occurrence, match
+    score of the position, and the actual sequence including the ten
+    positions before and after the motif occurrence (`site'). 
+
+    Position-dependent Scoring Matrix
+
+    The position-dependent scoring matrix corresponding to the motif is
+    printed for use by database search programs such as MAST. This
+    matrix is a log-odds matrix calculated by taking the log (base 2) of
+    the ratio p/f at each position in the motif where p is the probability
+    of a particular letter at that position in the motif, and f is the average
+    frequency of that letter in the non-redundant database as
+    of 9/22/96. The scoring matrix is printed "sideways"--columns correspond 
+    to the letters in the alphabet (in the same order as shown in the 
+    simplified motif) and rows corresponding to the positions of the motif, 
+    position one first.  The scoring matrix is preceded by a line 
+    starting with "log-odds matrix:" and containing the length of the alphabet,
+    width of the motif, number of characters in the training set and the 
+    scoring threshold used in the list of possible motif examples. 
+
+    Motif Letter-probability Matrix
+
+    The motif itself is a position-dependent letter-probability matrix
+    giving, for each position in the pattern, the probabilities of each
+    possible letter occurring there. The letter-probability matrix is printed
+    "sideways"--columns correspond to the letters in the alphabet (in
+    the same order as shown in the simplified motif) and rows
+    corresponding to the positions of the motif, position one first. The
+    motif is preceded by a line starting with "letter-probability matrix:" and
+    containing the length of the alphabet, width of the motif and number of
+    characters in the training set. 

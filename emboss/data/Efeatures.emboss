@@ -1,0 +1,27 @@
+
+# === From release 5.0.0 based on the GFF standard 3.0
+# ====as drafted on the Sequence Ontology website ===
+
+# Note: GFF includes SO numbers with defined relations to most of the
+# EMBL/Genbank/DDBJ feature keys and tags
+
+# === Originally Based on the GFF standard 2.0 ===
+# Note: GFF includes EMBL/Genbank/DDBJ feature keys and tags
+
+# EMBL/GenBank/DDBJ feature tags
+# ==============================
+
+#includeonly Efeatures.embl
+
+
+# GFF 2.0 feature keys
+# ====================
+
+# Cannot include gff2 ... Oligo and Clone clash with GFF3
+####includeonly Efeatures.gff2
+
+# GFF 3.0 feature keys
+# ====================
+
+#includeonly Efeatures.gff3
+

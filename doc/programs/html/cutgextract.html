@@ -1,0 +1,339 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: cutgextract
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+cutgextract
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+
+<H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
+    Function
+</H2>
+Extract codon usage tables from from CUTG database
+<H2>
+    Description
+</H2>
+
+<p>Given the name of a directory containing the CUTG database, <b>cutgextract</b> will calculate codon usage tables for individual species (e.g. EHomo_sapiens.cut) and place them in the CODONS subdirectory of the EMBOSS data directory. This is an all-or-nothing extraction; it will create many files and take several minutes. The usage tables are calculated from the sum of codons over all sequences for each organism.</p>
+
+
+<H2>
+    Algorithm
+</H2>
+
+<p><b>cutgextract</b> looks in the specified directory and opens all the files with the extension '.codon'. These are all expected to be CUTG data files.  It then parses out the codon usage data and writes one file per species into the EMBOSS data/CODONS directory. The names of the files are derived from the species names in the CUTG files. These files names will be long and therefore descriptive.</p>
+
+<H2>
+    Usage
+</H2>
+
+<b>Here is a sample session with cutgextract</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>cutgextract </b>
+Extract codon usage tables from from CUTG database
+Codon usage directories [.]: <b>data</b>
+General log output file [outfile.cutgextract]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-directory]         dirlist    [.] Codon usage directories
+  [-outfile]           outfile    [*.cutgextract] General log output file
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -release            string     CUTG release (Any string is accepted)
+   -wildspec           string     [*.codon] Type of codon file (Any string is
+                                  accepted)
+   -species            string     [*] Species wildcard (Any string is
+                                  accepted)
+   -allrecords         boolean    [N] Include all records, including those
+                                  with warnings
+   -filename           string     Single output filename to override automatic
+                                  one file for each species. Leave blank to
+                                  generate the filenames. Specify a filename
+                                  to combine several species into one file.
+                                  (Any string is accepted)
+
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-directory]<br>(Parameter 1)</td>
+<td>Codon usage directories</td>
+<td>Directory with files</td>
+<td>.</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>General log output file</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.cutgextract</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-release</td>
+<td>CUTG release</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr>
+<td>-wildspec</td>
+<td>Type of codon file</td>
+<td>Any string is accepted</td>
+<td>*.codon</td>
+</tr>
+
+<tr>
+<td>-species</td>
+<td>Species wildcard</td>
+<td>Any string is accepted</td>
+<td>*</td>
+</tr>
+
+<tr>
+<td>-allrecords</td>
+<td>Include all records, including those with warnings</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-filename</td>
+<td>Single output filename to override automatic one file for each species. Leave blank to generate the filenames. Specify a filename to combine several species into one file.</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+</table>
+
+<H2>
+    Input file format
+</H2>
+
+<H2>
+    Output file format
+</H2>
+
+<p><b>cutgextract</b> writes a set of EMBOSS codon usage data files to the EMBOSS data/CODONS data directory.</p>
+
+<p>
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>Directory: CODONS</h3>
+<p>This directory contains output files.
+<p>
+<p><h3>File: outfile.cutgextract</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Writing EDictyostelium_discoideum.cut CDS: 7
+Writing EAphrodite_aculeata.cut CDS: 1
+Writing EAedes_aegypti.cut CDS: 23
+Writing EAnadara_trapezia.cut CDS: 2
+Writing EAedes_albopictus.cut CDS: 2
+Writing EAcanthocheilonema_viteae.cut CDS: 2
+Writing EAmblyomma_americanum.cut CDS: 2
+Writing EAstacus_astacus.cut CDS: 3
+Writing EAedes_atropalpus.cut CDS: 1
+</pre>
+</td></tr></table><p>
+
+
+<H2>
+    Data files
+</H2>
+
+None
+
+<H2>
+    Notes
+</H2>
+
+<p>The EMBOSS distribution includes a set of codon usage tables calculated from the files listed in <a href="ftp://ftp.ebi.ac.uk/pub/databases/codonusage/README">ftp://ftp.ebi.ac.uk/pub/databases/codonusage/README</a>), with a few additions whose exact derivation cannot easily be determined. Many people would prefer to create their own from the public CUTG data.  The CUTG database can be downloaded from <a href="ftp://ftp.ebi.ac.uk/pub/databases/cutg">ftp://ftp.ebi.ac.uk/pub/databases/cutg</a>.</p>
+
+<p>If you run <b>cutgextract</b> on the CUTG database from <a href="ftp://ftp.ebi.ac.uk/pub/databases/cutg">ftp://ftp.ebi.ac.uk/pub/databases/cutg</a> all of the *.codon files included in the database will be processed.  You may need to uncompress these files (<tt>*.codon</tt>) before running <b>cutgextract</b> on them.</p>
+
+<p><b>cutgextract</b> would normally be used once when the EMBOSS package is installled, or when a new version of the CUTG database is released.</p>
+<p>CUTG has a drawback: it has a table for each organism without making the distinction between different gene populations.</p>
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="aaindexextract.html">aaindexextract</a></td>
+<td>Extract amino acid property data from AAINDEX</td>
+</tr>
+
+<tr>
+<td><a href="jaspextract.html">jaspextract</a></td>
+<td>Extract data from JASPAR</td>
+</tr>
+
+<tr>
+<td><a href="printsextract.html">printsextract</a></td>
+<td>Extract data from PRINTS database for use by pscan</td>
+</tr>
+
+<tr>
+<td><a href="prosextract.html">prosextract</a></td>
+<td>Processes the PROSITE motif database for use by patmatmotifs</td>
+</tr>
+
+<tr>
+<td><a href="rebaseextract.html">rebaseextract</a></td>
+<td>Process the REBASE database for use by restriction enzyme applications</td>
+</tr>
+
+<tr>
+<td><a href="tfextract.html">tfextract</a></td>
+<td>Process TRANSFAC transcription factor database for use by tfscan</td>
+</tr>
+
+</table>
+
+<H2>
+    Author(s)
+</H2>
+
+Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+
+<H2>
+    History
+</H2>
+
+Written (June 2001) - Alan Bleasby.
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by administrators responsible
+for software and database installation and maintenance. 
+
+<H2>
+    Comments
+</H2>
+None
+
+
+</BODY>
+</HTML>

@@ -1,0 +1,22 @@
+<b>Here is a sample session with newseq</b>
+<p>
+Type in a short sequence to the file 'mycc.pep' in SWISSPROT format: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>newseq </b>
+Create a sequence file from a typed-in sequence
+Name of the sequence: <b>cytoc</b>
+Description of the sequence: <b>fragment of cytochrome c</b>
+Type of sequence
+         N : Nucleic
+         P : Protein
+Type of sequence [N]: <b>p</b>
+Enter the sequence: <b>KKKEERADLIAY</b>
+output sequence [outfile.fasta]: <b>swiss::mycc.pep</b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>

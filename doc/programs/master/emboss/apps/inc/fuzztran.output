@@ -1,0 +1,52 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: z46957.fuzztran</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: fuzztran
+# Rundate: Tue 15 Jul 2008 12:00:00
+# Commandline: fuzztran
+#    -options
+#    -sequence tembl:Z46957
+#    -pattern RA
+#    -frame f
+# Report_format: table
+# Report_file: z46957.fuzztran
+########################################
+
+#=======================================
+#
+# Sequence: Z46957     from: 1   to: 1493
+# HitCount: 9
+#
+# Pattern_name Mismatch Pattern
+# pattern             0 RA
+# TransTable: 0
+# Frames: F
+#
+#=======================================
+
+  Start     End  Strand   Score Pattern_name Mismatch  Frame PStart   PEnd Translation
+     97     102       +       2 pattern             .      1     33     34 RA         
+    133     138       +       2 pattern             .      1     45     46 RA         
+    421     426       +       2 pattern             .      1    141    142 RA         
+    625     630       +       2 pattern             .      1    209    210 RA         
+    835     840       +       2 pattern             .      1    279    280 RA         
+    919     924       +       2 pattern             .      1    307    308 RA         
+    227     232       +       2 pattern             .      2     76     77 RA         
+    752     757       +       2 pattern             .      2    251    252 RA         
+     72      77       +       2 pattern             .      3     24     25 RA         
+
+#---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_length: 1493
+# Reported_sequences: 1
+# Reported_hitcount: 9
+#---------------------------------------
+</pre>
+</td></tr></table><p>

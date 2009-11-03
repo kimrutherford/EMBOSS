@@ -1,0 +1,31 @@
+# TY   SCOP
+# XX
+# CL   Alpha and beta proteins (a+b)
+# XX
+# FO   Ferredoxin-like
+# XX
+# SF   Adenylyl and guanylyl cyclase catalytic domain
+# XX
+# FA   Adenylyl and guanylyl cyclase catalytic domain
+# XX
+# SI   55074
+# XX
+#         Number               10        20        30        40        50    
+Q9DGG6               0 IIFRPFKMQQIEQVSILFADIVGFTKMSANKSAHALVGLLNDLFGRFDRLCEDTKCE 0
+Q99396               0 IMRNKRDNDNAPKELADPVTLIFTDIESSTAQWATQPELMPDAVATHHSMVRSLIEN 0
+
+# Post_similar         111111111111111111111111111111111111111111-0-111111111111
+
+#         Number        60        70        80        90 
+Q9DGG6               0  KISTLGDCYYCVAGCPEPRADHAYCCIEMGLGMIKAIEQFCQEKKEMVNMRVGVHT 0
+Q99396               0  YDCYEVKTVGDSFMIACKSPFAAVQLAQELQLRFLRLDWGTTVFDEFYREFEERHA 0
+# Post_similar         11111111111111111111111111111111111
+
+#         Number        60        70        80        90 
+Q9DGG6               0  GTVLCGILGMRRFKFDVWSNDVNLANLMEQLGVAGKVHISEATAKYLDDRYEMEDG 0
+Q99396               0  EEGDGKYKPPTARLDPEVYRQLWNGLRVRVGIHTGLCDIRYDEVTKGYDYYGQTAN 0
+
+#         Number        60        70        80        90 
+Q9DGG6               0  KVTERVGQSAVADQLKGLKTYLI                                  0
+Q99396               0  TAARTESVGNGGQVLMTCETYHSLSTAERSQFDVTPLGGVPLRGVSEPVEVYQLN  0
+

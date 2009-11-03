@@ -1,0 +1,164 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: prosextract
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+prosextract
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/prosextract.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+<p>prosextract processes the PROSITE motif database for use by <b>patmatmotifs</b>.  It reads the <tt>prosite.dat</tt> and <tt>prosite.doc</tt> files (from the Prosite distribution) from the specified directory and writes an output file (by default called <tt>prosite.lines</tt>) with the following information (corresponding lines from prosite.dat given in parentheses): i. Identity (<tt>ID</tt>). ii. Accession number (<tt>AC</tt>).  iii. Motif pattern (<tt>PA</tt>). iv. The motif pattern converted a regular expression.  Additionally, one output file per accession number is written containing documentation from <tt>prosite.doc</tt>.</p>
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/prosextract.usage" -->
+
+<p>
+
+The output files named after the prosite accession numbers can now
+also be seen in the prosite directory. This files are automatically
+created after prosextract is run.
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/prosextract.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/prosextract.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+
+These files must be the "prosite.dat" and "prosite.doc" file of a
+Prosite distribution, containing all current prosite data.
+
+<p>
+
+<!--#include file="inc/prosextract.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+
+These files are held in the prosite subdirectory of the emboss data
+directory. The default names are "prosite.lines" and "PS*****"
+(accession number documentation files)
+
+<p>
+
+<!--#include file="inc/prosextract.output" -->
+
+
+<H2>
+    Data files
+</H2>
+
+
+See Input file format above.
+
+<H2>
+    Notes
+</H2>
+
+<p>This program most be run as a prerequisite to using <b>patmatmotifs</b>.</p>
+
+<H2>
+    References
+</H2>
+
+
+<ol>
+<li>Bairoch, A., Bucher P. (1994) PROSITE: recent developments. Nucleic 
+Acids Research, Vol 22, No.17 3583-3589.
+
+<li>Bairoch, A., (1992) PROSITE: a dictionary of sites and patterns in 
+proteins. Nucleic Acids Research, Vol 20, Supplement, 2013-2018.
+
+<li>Peek, J., O'Reilly, T., Loukides, M., (1997) Unix Power Tools, 2nd 
+Edition.
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+
+The program will warn the user if the input file is incorrectly
+formatted.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+As in warnings.
+
+<H2>
+    Exit status
+</H2>
+
+
+Always exits with status 0
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!--#include file="inc/prosextract.isee" -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+<!--#include file="inc/soleary.address" -->
+
+
+<H2>
+    History
+</H2>
+
+<!--#include file="inc/prosextract.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/targetadmin.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/prosextract.comment" -->
+
+
+</BODY>
+</HTML>
+

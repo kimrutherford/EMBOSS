@@ -1,0 +1,103 @@
+
+                             EMBOSS: jembossctl
+     _________________________________________________________________
+   
+                              Program jembossctl
+                                       
+Function
+
+   Jemboss Authentication Control
+   
+Description
+
+   jembossctl should not be run by typical users. It is a slave program
+   for the Jemboss server. If this means nothing to you, then you do not
+   need to know anything more, just ignore this program.
+   
+   If you are setting up a Jemboss server (This is not the Jemboss
+   interface that anyone can download, it is the software that listens to
+   the Jemboss interfaces and runs the EMBOSS programs for you), then
+   this program should be 'chmod 4755' to get root. Details are to be
+   found on the Jemboss web pages.
+   
+Usage
+
+   It is not used by normal users. It is only ever run by other programs.
+   
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sock]              string     Pipe file
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   
+
+   Mandatory qualifiers Allowed values Default
+   [-sock]
+   (Parameter 1) Pipe file Any string is accepted /tmp/emboss
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+   Not applicable.
+   
+Output file format
+
+   Not applicable.
+   
+Data files
+
+   None.
+   
+Notes
+
+   None.
+   
+References
+
+   None.
+   
+Warnings
+
+   None.
+   
+Diagnostic Error Messages
+
+   None.
+   
+Exit status
+
+   It always exits with status 0.
+   
+Known bugs
+
+   None.
+   
+See also
+
+   Program name Description
+   embossdata Finds or fetches the data files read in by the EMBOSS
+   programs
+   embossversion Writes the current EMBOSS version number
+   
+Author(s)
+
+   This application was written by Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+   
+History
+
+   Written (March 2002) - Alan Bleasby.
+   
+Target users
+
+   Administrators of Jemboss servers only.
+   
+Comments

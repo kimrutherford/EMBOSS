@@ -1,0 +1,222 @@
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.showfeat</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-sourcematch</td>
+<td>By default any feature source in the feature table is shown. You can set this to match any feature source you wish to show.
+The source name is usually either the name of the program that detected the feature or it is the feature table (eg: EMBL) that the feature came from.
+The source may be wildcarded by using '*'.
+If you wish to show more than one source, separate their names with the character '|', eg:
+gene* | embl</td>
+<td>Any string is accepted</td>
+<td>*</td>
+</tr>
+
+<tr>
+<td>-typematch</td>
+<td>By default any feature type in the feature table is shown. You can set this to match any feature type you wish to show.
+See http://www3.ebi.ac.uk/Services/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www.expasy.ch/txt/userman.txt for a list of the Swissprot feature types.
+The type may be wildcarded by using '*'.
+If you wish to show more than one type, separate their names with the character '|', eg:
+*UTR | intron</td>
+<td>Any string is accepted</td>
+<td>*</td>
+</tr>
+
+<tr>
+<td>-tagmatch</td>
+<td>Tags are the types of extra values that a feature may have. For example in the EMBL feature table, a 'CDS' type of feature may have the tags '/codon', '/codon_start', '/db_xref', '/EC_number', '/evidence', '/exception', '/function', '/gene', '/label', '/map', '/note', '/number', '/partial', '/product', '/protein_id', '/pseudo', '/standard_name', '/translation', '/transl_except', '/transl_table', or '/usedin'. Some of these tags also have values, for example '/gene' can have the value of the gene name.
+By default any feature tag in the feature table is shown. You can set this to match any feature tag you wish to show.
+The tag may be wildcarded by using '*'.
+If you wish to show more than one tag, separate their names with the character '|', eg:
+gene | label</td>
+<td>Any string is accepted</td>
+<td>*</td>
+</tr>
+
+<tr>
+<td>-valuematch</td>
+<td>Tag values are the values associated with a feature tag. Tags are the types of extra values that a feature may have. For example in the EMBL feature table, a 'CDS' type of feature may have the tags '/codon', '/codon_start', '/db_xref', '/EC_number', '/evidence', '/exception', '/function', '/gene', '/label', '/map', '/note', '/number', '/partial', '/product', '/protein_id', '/pseudo', '/standard_name', '/translation', '/transl_except', '/transl_table', or '/usedin'. Only some of these tags can have values, for example '/gene' can have the value of the gene name. By default any feature tag value in the feature table is shown. You can set this to match any feature tag valueyou wish to show.
+The tag value may be wildcarded by using '*'.
+If you wish to show more than one tag value, separate their names with the character '|', eg:
+pax* | 10</td>
+<td>Any string is accepted</td>
+<td>*</td>
+</tr>
+
+<tr>
+<td>-sort</td>
+<td>Sort features by Type, Start or Source, Nosort (don't sort - use input order) or join coding regions together and leave other features in the input order</td>
+<td><table><tr><td>source</td> <td><i>(Sort by Source)</i></td></tr><tr><td>start</td> <td><i>(Sort by Start position)</i></td></tr><tr><td>type</td> <td><i>(Sort by Type)</i></td></tr><tr><td>nosort</td> <td><i>(No sorting done)</i></td></tr></table></td>
+<td>start</td>
+</tr>
+
+<tr>
+<td>-joinfeatures</td>
+<td>Join coding regions together</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-annotation</td>
+<td>Regions to annotate by marking.
+If this is left blank, then no annotation is added.
+A set of regions is specified by a set of pairs of positions followed by optional text.
+The positions are integers.
+They are followed by any text (but not digits when on the command-line).
+Examples of region specifications are:
+24-45 new domain 56-78 match to Mouse
+1-100 First part 120-156 oligo
+A file of ranges to annotate (one range per line) can be specified as '@filename'.</td>
+<td>Sequence range</td>
+<td>If this is left blank, then no annotation is added.</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-html</td>
+<td>Use HTML formatting</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]id</td>
+<td>Set this to be false if you do not wish to display the ID name of the sequence.</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]description</td>
+<td>Set this to be false if you do not wish to display the description of the sequence.</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]scale</td>
+<td>Set this to be false if you do not wish to display the scale line.</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-width</td>
+<td>You can expand (or contract) the width of the ASCII-character graphics display of the positions of the features using this value.
+For example, a width of 80 characters would cover a standard page width and a width a 10 characters would be nearly unreadable.
+If the width is set to less than 4, the graphics lines and the scale line will not be displayed.</td>
+<td>Integer 0 or more</td>
+<td>60</td>
+</tr>
+
+<tr>
+<td>-collapse</td>
+<td>If this is set, then features from the same source and of the same type and sense are all printed on the same line. For instance if there are several features from the EMBL feature table (ie. the same source) which are all of type 'exon' in the same sense, then they will all be displayed on the same line. This makes it hard to distinguish overlapping features.
+If this is set to false then each feature is displayed on a separate line making it easier to distinguish where features start and end.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]forward</td>
+<td>Set this to be false if you do not wish to display forward sense features.</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]reverse</td>
+<td>Set this to be false if you do not wish to display reverse sense features.</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]unknown</td>
+<td>Set this to be false if you do not wish to display unknown sense features. (ie. features with no directionality - all protein features are of this type and some nucleic features (for example, CG-rich regions)).</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-strand</td>
+<td>Set this if you wish to display the strand of the features. Protein features are always directionless (indicated by '0'), forward is indicated by '+' and reverse is '-'.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-origin</td>
+<td>Set this if you wish to display the origin of the features.
+The source name is usually either the name of the program that detected the feature or it is the name of the feature table (eg: EMBL) that the feature came from.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-position</td>
+<td>Set this if you wish to display the start and end position of the features. If several features are being displayed on the same line, then the start and end positions will be joined by a comma, for example: '189-189,225-225'.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]type</td>
+<td>Set this to be false if you do not wish to display the type of the features.</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-tags</td>
+<td>Set this to be false if you do not wish to display the tags and values of the features.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]values</td>
+<td>Set this to be false if you do not wish to display the tag values of the features. If this is set to be false, only the tag names will be displayed. If the tags are not displayed, then the values will not be displayed. The value of the 'translation' tag is never displayed as it is often extremely long.</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-stricttags</td>
+<td>By default if any tag/value pair in a feature matches the specified tag and value, then all the tags/value pairs of that feature will be displayed. If this is set to be true, then only those tag/value pairs in a feature that match the specified tag and value will be displayed.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+</table>

@@ -1,0 +1,612 @@
+DE   File of van der Waals radii for atoms in proteins
+XX
+NR   24
+XX
+AA   ALA
+XX
+ID   A 
+XX
+NN   12  
+XX
+AT   N    ; 1.7
+AT   CA   ; 1.9
+AT   C    ; 1.7   
+AT   O    ; 1.4   
+AT   CB   ; 1.9   
+AT   OXT  ; 1.4
+AT   H    ; 1.2
+AT   OH   ; 1.4
+AT   HA   ; 1.2
+AT   HB   ; 1.2   
+AT   HG   ; 1.2   
+AT   D    ; 1.2
+//
+AA   ARG
+XX
+ID   R 
+XX
+NN   31
+XX
+AT   N    ; 1.7   
+AT   CA   ; 1.9   
+AT   C    ; 1.7   
+AT   O    ; 1.4   
+AT   CB   ; 1.9   
+AT   CG   ; 1.9   
+AT   CD   ; 1.9   
+AT   NE   ; 1.7   
+AT   CZ   ; 1.7   
+AT   NH1  ; 1.7   
+AT   NH2  ; 1.7   
+AT   OXT  ; 1.4
+AT   H    ; 1.2   
+AT   HE   ; 1.2   
+AT   HH1  ; 1.2   
+AT   HH2  ; 1.2   
+AT   HG   ; 1.2   
+AT   D    ; 1.2
+AT   HA   ; 1.2
+AT   HB   ; 1.2   
+AT   HD   ; 1.2   
+AT   HD1  ; 1.2
+AT   HD2  ; 1.2
+AT   HE1  ; 1.2
+AT   HE2  ; 1.2
+AT   DE   ; 1.7   
+AT   DE1  ; 1.7   
+AT   DE2  ; 1.7   
+AT   DH   ; 1.2   
+AT   DH1  ; 1.2   
+AT   DH2  ; 1.2   
+//
+AA   ASN
+XX
+ID   N  
+XX
+NN   19  
+XX
+AT   N    ; 1.7   
+AT   CA   ; 1.9   
+AT   C    ; 1.7   
+AT   O    ; 1.4   
+AT   CB   ; 1.9   
+AT   CG   ; 1.7   
+AT   OD1  ; 1.4   
+AT   ND2  ; 1.7   
+AT   AD1  ; 1.7   
+AT   AD2  ; 1.7   
+AT   OXT  ; 1.4
+AT   H    ; 1.2
+AT   HD1  ; 1.2   
+AT   HD2  ; 1.2   
+AT   DD2  ; 1.2   
+AT   D    ; 1.2
+AT   HG   ; 1.2   
+AT   HA   ; 1.2   
+AT   HB   ; 1.2   
+//
+AA   ASP  
+XX
+ID   D  
+XX
+NN   16
+XX
+AT   N    ; 1.7   
+AT   CA   ; 1.9   
+AT   C    ; 1.7   
+AT   O    ; 1.4   
+AT   CB   ; 1.9   
+AT   CG   ; 1.7   
+AT   OD1  ; 1.4   
+AT   OD2  ; 1.4   
+AT   OXT  ; 1.4
+AT   D    ; 1.2
+AT   H    ; 1.2  
+AT   HA   ; 1.2   
+AT   HB   ; 1.2   
+AT   HD1  ; 1.2   
+AT   HD2  ; 1.2   
+AT   HG   ; 1.2   
+//
+AA   CYS  
+XX
+ID   C  
+XX
+NN   13
+XX
+AT   N    ; 1.7   
+AT   CA   ; 1.9   
+AT   C    ; 1.7   
+AT   O    ; 1.4   
+AT   CB   ; 1.9   
+AT   SG   ; 1.8   
+AT   OXT  ; 1.4
+AT   H    ; 1.2   
+AT   D    ; 1.2
+AT   HA   ; 1.2   
+AT   HB   ; 1.2   
+AT   HD   ; 1.2   
+AT   HG   ; 1.2   
+//
+AA   GLN  
+XX
+ID   Q  
+XX
+NN   20
+XX
+AT   N    ; 1.7   
+AT   CA   ; 1.9   
+AT   C    ; 1.7   
+AT   O    ; 1.4   
+AT   CB   ; 1.9   
+AT   CG   ; 1.9   
+AT   CD   ; 1.7   
+AT   OE1  ; 1.4   
+AT   NE2  ; 1.7   
+AT   AE1  ; 1.7   
+AT   AE2  ; 1.7   
+AT   OXT  ; 1.4
+AT   H    ; 1.2   
+AT   D    ; 1.2   
+AT   HE2  ; 1.2   
+AT   HG   ; 1.2   
+AT   HA   ; 1.2   
+AT   HB   ; 1.2
+AT   DE1  ; 1.7   
+AT   DE2  ; 1.7   
+//
+AA   GLU  
+XX
+ID   E  
+XX
+NN   19
+XX
+AT   N    ; 1.7   
+AT   CA   ; 1.9   
+AT   C    ; 1.7   
+AT   O    ; 1.4   
+AT   CB   ; 1.9   
+AT   CG   ; 1.9   
+AT   CD   ; 1.7   
+AT   OE1  ; 1.4   
+AT   OE2  ; 1.4   
+AT   OXT  ; 1.4
+AT   H    ; 1.2 
+AT   D    ; 1.2 
+AT   HE1  ; 1.2 
+AT   HE2  ; 1.2 
+AT   HD1  ; 1.2 
+AT   HD2  ; 1.2 
+AT   HA   ; 1.2   
+AT   HB   ; 1.2   
+AT   HG   ; 1.2   
+//
+AA   GLY  
+XX
+ID   G  
+XX
+NN   11
+XX
+AT   N    ; 1.7   
+AT   CA   ; 1.9   
+AT   C    ; 1.7   
+AT   O    ; 1.4   
+AT   OXT  ; 1.4
+AT   H    ; 1.2   
+AT   D    ; 1.2   
+AT   HA   ; 1.2   
+AT   HB   ; 1.2   
+AT   CB   ; 1.9   
+AT   HG   ; 1.2   
+//
+AA   HIS  
+XX
+ID   H        
+XX
+NN   28  
+XX
+AT   N    ; 1.7   
+AT   CA   ; 1.9   
+AT   C    ; 1.7   
+AT   O    ; 1.4   
+AT   CB   ; 1.9   
+AT   CG   ; 1.9   
+AT   ND1  ; 1.7   
+AT   CD2  ; 1.9
+AT   CE1  ; 1.9   
+AT   NE2  ; 1.7   
+AT   AD1  ; 1.8   
+AT   AD2  ; 1.8
+AT   AE1  ; 1.8   
+AT   AE2  ; 1.8   
+AT   OXT  ; 1.4
+AT   H    ; 1.2   
+AT   HD1  ; 1.2   
+AT   HD2  ; 1.2   
+AT   HE1  ; 1.2   
+AT   HE2  ; 1.2   
+AT   HG   ; 1.2  
+AT   D    ; 1.2   
+AT   HA   ; 1.2
+AT   HB   ; 1.2
+AT   DD1  ; 1.2
+AT   DD2  ; 1.2
+AT   DE1  ; 1.7   
+AT   DE2  ; 1.7   
+//
+AA   ILE  
+XX
+ID   I  
+XX
+NN   21
+XX
+AT   N    ; 1.7   
+AT   CA   ; 1.9   
+AT   C    ; 1.7   
+AT   O    ; 1.4   
+AT   CB   ; 1.9   
+AT   CG1  ; 1.9
+AT   CG2  ; 1.9   
+AT   CD1  ; 1.9   
+AT   OXT  ; 1.4
+AT   H    ; 1.2   
+AT   CD   ; 1.9
+AT   D    ; 1.2   
+AT   HA   ; 1.2
+AT   HB   ; 1.2
+AT   HG1  ; 1.2
+AT   HG2  ; 1.2
+AT   HD1  ; 1.2   
+AT   HD2  ; 1.2
+AT   HE2  ; 1.2
+AT   HE1  ; 1.2
+AT   HG   ; 1.2   
+//
+AA   LEU  
+XX
+ID   L  
+XX
+NN   19
+XX
+AT   N    ; 1.7   
+AT   CA   ; 1.9   
+AT   C    ; 1.7   
+AT   O    ; 1.4   
+AT   CB   ; 1.9   
+AT   CG   ; 1.9   
+AT   CD1  ; 1.9   
+AT   CD2  ; 1.9   
+AT   OXT  ; 1.4
+AT   H    ; 1.2   
+AT   D    ; 1.2   
+AT   HA   ; 1.2   
+AT   HB   ; 1.2   
+AT   HG   ; 1.2   
+AT   HD1  ; 1.2   
+AT   HD2  ; 1.2
+AT   HE2  ; 1.2
+AT   HE1  ; 1.2
+AT   HG   ; 1.2   
+//
+AA   LYS  
+XX
+ID   K  
+XX
+NN   24  
+XX
+AT   N    ; 1.7   
+AT   CA   ; 1.9   
+AT   C    ; 1.7   
+AT   O    ; 1.4   
+AT   CB   ; 1.9   
+AT   CG   ; 1.9   
+AT   CD   ; 1.9   
+AT   CE   ; 1.9   
+AT   NZ   ; 1.7   
+AT   OXT  ; 1.4
+AT   H    ; 1.2   
+AT   HZ   ; 1.2   
+AT   HA   ; 1.2   
+AT   HB   ; 1.2   
+AT   OH   ; 1.4
+AT   D    ; 1.2   
+AT   OG   ; 1.4
+AT   HG   ; 1.2   
+AT   HD   ; 1.2   
+AT   HE   ; 1.2   
+AT   DZ   ; 1.2   
+AT   HG   ; 1.2 
+AT   HA   ; 1.2   
+AT   HB   ; 1.2   
+//
+AA   MET  
+XX
+ID   M      
+XX
+NN   17
+XX
+AT   N    ; 1.7   
+AT   CA   ; 1.9   
+AT   C    ; 1.7   
+AT   O    ; 1.4   
+AT   CB   ; 1.9   
+AT   CG   ; 1.9   
+AT   SD   ; 1.8   
+AT   CE   ; 1.9   
+AT   OXT  ; 1.4
+AT   H    ; 1.2   
+AT   HA   ; 1.2   
+AT   HB   ; 1.2 
+AT   D    ; 1.2
+AT   HG   ; 1.2   
+AT   HE   ; 1.2
+AT   HE1  ; 1.2
+AT   HE2  ; 1.2
+//
+AA   PHE  
+XX
+ID   F        
+XX
+NN   21  
+XX
+AT   N    ; 1.7   
+AT   CA   ; 1.9   
+AT   C    ; 1.7   
+AT   O    ; 1.4   
+AT   CB   ; 1.9   
+AT   CG   ; 1.9   
+AT   CD1  ; 1.9   
+AT   CD2  ; 1.9   
+AT   CE1  ; 1.9
+AT   CE2  ; 1.9
+AT   CZ   ; 1.9
+AT   OXT  ; 1.4
+AT   H    ; 1.2   
+AT   D    ; 1.2   
+AT   HA   ; 1.2   
+AT   HB   ; 1.2   
+AT   HD1  ; 1.2
+AT   HD2  ; 1.2
+AT   HE1  ; 1.2
+AT   HE2  ; 1.2
+AT   HZ   ; 1.2
+//
+AA   PRO  
+XX
+ID   P  
+XX
+NN   14
+XX
+AT   N    ; 1.7   
+AT   CA   ; 1.9   
+AT   C    ; 1.7   
+AT   O    ; 1.4   
+AT   CB   ; 1.9   
+AT   CG   ; 1.9   
+AT   CD   ; 1.9   
+AT   OXT  ; 1.4
+AT   H    ; 1.2   
+AT   HA   ; 1.2   
+AT   HB   ; 1.2   
+AT   HG   ; 1.2   
+AT   HD   ; 1.2   
+AT   D    ; 1.2 
+//
+AA   SER  
+XX
+ID   S  
+XX
+NN   14  
+XX
+AT   N    ; 1.7   
+AT   CA   ; 1.9   
+AT   C    ; 1.7   
+AT   O    ; 1.4   
+AT   CB   ; 1.9   
+AT   OG   ; 1.4   
+AT   OXT  ; 1.4
+AT   H    ; 1.2   
+AT   HG   ; 1.2   
+AT   OG1  ; 1.4   
+AT   HA   ; 1.2   
+AT   HB   ; 1.2   
+AT   D    ; 1.2
+AT   DG   ; 1.2
+//
+AA   THR  
+XX
+ID   T  
+XX
+NN   16  
+XX
+AT   N    ; 1.7   
+AT   CA   ; 1.9   
+AT   C    ; 1.7   
+AT   O    ; 1.4   
+AT   CB   ; 1.9   
+AT   OG1  ; 1.9
+AT   CG2  ; 1.9   
+AT   OXT  ; 1.4
+AT   H    ; 1.2   
+AT   HG1  ; 1.2   
+AT   HA   ; 1.2
+AT   HB   ; 1.2
+AT   HG2  ; 1.2
+AT   D    ; 1.2   
+AT   DG1  ; 1.2   
+AT   DG2  ; 1.2   
+//
+AA   TRP  
+XX
+ID   W  
+XX
+NN   33  
+XX
+AT   N    ; 1.7   
+AT   CA   ; 1.9   
+AT   C    ; 1.7   
+AT   O    ; 1.4   
+AT   CB   ; 1.9   
+AT   CG   ; 1.9   
+AT   CD1  ; 1.9   
+AT   CD2  ; 1.9
+AT   NE1  ; 1.7   
+AT   CE2  ; 1.9   
+AT   CE3  ; 1.9
+AT   CZ2  ; 1.9   
+AT   CZ3  ; 1.9
+AT   CH2  ; 1.9   
+AT   OXT  ; 1.4
+AT   H    ; 1.2   
+AT   HE1  ; 1.2
+AT   HA   ; 1.2
+AT   HB   ; 1.2   
+AT   D    ; 1.2   
+AT   HD   ; 1.2
+AT   HD1  ; 1.2
+AT   HD2  ; 1.2
+AT   HE2  ; 1.2
+AT   HE3  ; 1.2
+AT   HZ1  ; 1.2
+AT   HZ2  ; 1.2
+AT   HZ3  ; 1.2
+AT   HH1  ; 1.2   
+AT   HH2  ; 1.2   
+AT   DE   ; 1.7   
+AT   DE1  ; 1.7   
+AT   DE2  ; 1.7   
+//
+AA   TYR  
+XX
+ID   Y  
+XX
+NN   24
+XX
+AT   N    ; 1.7   
+AT   CA   ; 1.9   
+AT   C    ; 1.7   
+AT   O    ; 1.4   
+AT   CB   ; 1.9   
+AT   CG   ; 1.9   
+AT   CD1  ; 1.9   
+AT   CD2  ; 1.9
+AT   CE1  ; 1.9
+AT   CE2  ; 1.9
+AT   CZ   ; 1.9
+AT   OH   ; 1.4   
+AT   OXT  ; 1.4
+AT   H    ; 1.2   
+AT   HH   ; 1.2   
+AT   HG   ; 1.2   
+AT   HA   ; 1.2
+AT   HB   ; 1.2   
+AT   D    ; 1.2   
+AT   HD1  ; 1.2
+AT   HD2  ; 1.2
+AT   HE1  ; 1.2
+AT   HE2  ; 1.2
+AT   DH   ; 1.2
+//
+AA   VAL  
+XX
+ID   V  
+XX
+NN   15
+XX
+AT   N    ; 1.7   
+AT   CA   ; 1.9   
+AT   C    ; 1.7   
+AT   O    ; 1.4   
+AT   CB   ; 1.9   
+AT   CG1  ; 1.9   
+AT   CG2  ; 1.9   
+AT   OXT  ; 1.4
+AT   H    ; 1.2   
+AT   D    ; 1.2   
+AT   HA   ; 1.2   
+AT   HB   ; 1.2   
+AT   HG1  ; 1.2   
+AT   HG2  ; 1.2   
+AT   HG   ; 1.2 
+//
+AA   GLX  
+XX
+ID   Z  
+XX
+NN   23
+XX
+AT   N    ; 1.7   
+AT   CA   ; 1.9   
+AT   C    ; 1.7   
+AT   O    ; 1.4   
+AT   CB   ; 1.9   
+AT   CG   ; 1.9   
+AT   CD   ; 1.7   
+AT   OE1  ; 1.4   
+AT   OE2  ; 1.4   
+AT   OXT  ; 1.4
+AT   H    ; 1.2 
+AT   D    ; 1.2 
+AT   AE1  ; 1.7   
+AT   AE2  ; 1.7   
+AT   HE1  ; 1.2 
+AT   HE2  ; 1.2 
+AT   HD1  ; 1.2 
+AT   HD2  ; 1.2 
+AT   HA   ; 1.2   
+AT   HB   ; 1.2   
+AT   HG   ; 1.2   
+AT   DE1  ; 1.7   
+AT   DE2  ; 1.7   
+//
+AA   ASX  
+XX
+ID   B  
+XX
+NN   20
+XX
+AT   N    ; 1.7   
+AT   CA   ; 1.9   
+AT   C    ; 1.7   
+AT   O    ; 1.4   
+AT   CB   ; 1.9   
+AT   CG   ; 1.7   
+AT   OD1  ; 1.4
+AT   OD2  ; 1.4  
+AT   ND2  ; 1.7   
+AT   AD1  ; 1.7   
+AT   AD2  ; 1.7   
+AT   OXT  ; 1.4
+AT   H    ; 1.2
+AT   HD1  ; 1.2   
+AT   HD2  ; 1.2   
+AT   DD2  ; 1.2   
+AT   D    ; 1.2
+AT   HG   ; 1.2   
+AT   HA   ; 1.2   
+AT   HB   ; 1.2   
+//
+AA   ACE  
+XX
+ID   X  
+XX
+NN   4
+XX
+AT   C    ; 1.9
+AT   O    ; 1.4    
+AT   CH3  ; 1.9
+AT   HH3  ; 1.2
+//
+AA   XAA
+XX
+ID   X  
+XX
+NN   6
+XX
+AT   C    ; 1.9
+AT   N    ; 1.7
+AT   O    ; 1.4
+AT   H    ; 1.2
+AT   S    ; 1.8
+AT   D    ; 1.2	
+//

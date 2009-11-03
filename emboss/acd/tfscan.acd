@@ -1,0 +1,78 @@
+application: tfscan [
+  documentation: "Identify transcription factor binding sites in DNA sequences"
+  groups: "Nucleic:Transcription"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "DNA"
+  ]
+
+  list: menu [
+    standard: "Y"
+    default: "V"
+    minimum: "1"
+    maximum: "1"
+    values: "F:fungi,I:insect,P:plant,V:vertebrate,O:other,C:Custom"
+    delimiter: ","
+    codedelimiter: ":"
+    header: "Transcription Factor Class"
+    information: "Select class"
+    button: "Y"
+  ]
+
+  datafile: custom [
+    standard: "@($(menu)==C)"
+    information: "Transfac database data file (optional)"
+    nullok: "@($(menu)!=C)"
+    knowntype: "transfac data"
+    default: ""
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  integer: mismatch [
+    standard: "Y"
+    default: "0"
+    minimum: "0"
+    information: "Number of mismatches"
+  ]
+
+endsection: required
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  integer: minlength [
+    additional: "Y"
+    default: "1"
+    minimum: "1"
+    information: "Display matches equal to or above this
+                  length"
+  ]
+
+endsection: additional
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    parameter: "Y"
+    knowntype: "tfscan output"
+  ]
+
+endsection: output

@@ -1,0 +1,29 @@
+# with a comment
+application: featcopy [
+  documentation: "Reads and writes a feature table"
+  groups: "Edit"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  features: features [
+    parameter: "Y"
+    type: "any"
+  ]
+
+endsection: input
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  featout: outfeat [
+    parameter: "Y"
+    type: "$(features.type)"
+  ]
+
+endsection: output

@@ -1,0 +1,485 @@
+
+                                 jaspscan 
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Scans DNA sequences for transcription factors
+
+Description
+
+   jaspscan scans one or more DNA sequences for transcription factor
+   binding sites from the JASPAR database. Matches are searched for using
+   fast sequence word-matching, optionally allowing mismatches. Because
+   the binding sites are so small, there will be many spurious (false
+   positive) matches.
+
+   An output file is written with information on the matches, including
+   sequence ID and accession number, the start and end positions of the
+   match in an input sequence and the sequence of the region where a
+   match has been found. Binding factor information, where available, is
+   given at the end of the matches for each matching entry.
+
+Usage
+
+   Here is a sample session with jaspscan
+
+
+% jaspscan -both 
+Scans DNA sequences for transcription factors
+Input nucleotide sequence(s): tembl:m23100
+Jaspar matrix set
+         C : Core
+         F : Fam
+         P : Phylofacts
+         N : CNE
+         O : POLII
+         S : SPLICE
+Matrix set [C]: 
+Comma separated matrix list [all]: ma0079
+Threshold percentage [80.0]: 
+Output report [m23100.jaspscan]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -menu               menu       [C] Matrix set (Values: C (Core); F (Fam); P
+                                  (Phylofacts); N (CNE); O (POLII); S
+                                  (SPLICE))
+   -matrices           string     [all] The name 'all' reads in all matrix
+                                  files from the selected
+                                  JASPAR matrix set. You can specify
+                                  individual matrices by giving
+                                  their names with commas between then, such
+                                  as:
+                                  'ma0001,ma0015'.
+                                  The case of the names is not important. You
+                                  can specify a file of
+                                  matrix names to read in by giving the name
+                                  of the file holding the
+                                  matrix names with a '@' character in front
+                                  of it, for example,
+                                  '@matrix.list'.
+                                  Blank lines and lines starting with a hash
+                                  character or '!' are ignored and all other
+                                  lines are concatenated together with a comma
+                                  character ',' and then treated as the list
+                                  of enzymes to search
+                                  for.
+                                  An example of a file of matrix names is:
+                                  ! my matrices
+                                  ma0001, ma0002
+                                  ! other matrices
+                                  ma0010
+                                  ma0032
+                                  ma0053 (Any string is accepted)
+   -threshold          float      [80.0] If the matrix score is greater than
+                                  or equal to this percentage
+                                  then a hit will be reported (Any numeric
+                                  value)
+  [-outfile]           report     [*.jaspscan] Output report file name
+
+   Additional (Optional) qualifiers:
+   -exclude            string     The names of any matrices to exclude from
+                                  the 'matrices'
+                                  list. Matrices are specified in the same way
+                                  as for the
+                                  selection list. (Any string is accepted)
+   -both               boolean    [N] If set then both the forward and reverse
+                                  strands are searched
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -rformat2           string     Report format
+   -rname2             string     Base file name
+   -rextension2        string     File name extension
+   -rdirectory2        string     Output directory
+   -raccshow2          boolean    Show accession number in the report
+   -rdesshow2          boolean    Show description in the report
+   -rscoreshow2        boolean    Show the score in the report
+   -rstrandshow2       boolean    Show the nucleotide strand in the report
+   -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   jaspscan reads any normal sequence USAs.
+
+  Input files for usage example
+
+   'tembl:m23100' is a sequence entry in the example nucleic acid
+   database 'tembl'
+
+  Database entry: tembl:m23100
+
+ID   M23100; SV 1; linear; genomic DNA; STD; HUM; 2085 BP.
+XX
+AC   M23100; M32822;
+XX
+DT   06-JUL-1989 (Rel. 20, Created)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 10)
+XX
+DE   Human insulin receptor (INSR) gene, exon 1, clones lambda-hINSR-(1-13).
+XX
+KW   Alu repeat; insulin receptor.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
+;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-1933
+RX   DOI; 10.1073/pnas.86.1.114.
+RX   PUBMED; 2911561.
+RA   Seino S., Seino M., Nishi S., Bell G.I.;
+RT   "Structure of the human insulin receptor gene and characterization of its
+RT   promoter";
+RL   Proc. Natl. Acad. Sci. U.S.A. 86(1):114-118(1989).
+XX
+RN   [2]
+RP   1-2085
+RX   PUBMED; 2210055.
+RA   Seino S., Seino M., Bell G.I.;
+RT   "Human insulin-receptor gene. Partial sequence and amplification of exons
+RT   by polymerase chain reaction";
+RL   Diabetes 39(1):123-128(1990).
+XX
+DR   EMBL-JOIN; M32972.
+DR   TRANSFAC; R03068; HS$INSR_01.
+XX
+CC   Draft entry and computer-readable sequence for [1] kindly submitted
+CC   by G.Bell, 14-MAR-1990.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..2085
+FT                   /organism="Homo sapiens"
+FT                   /map="19p13.3-p13.2"
+FT                   /mol_type="genomic DNA"
+FT                   /dev_stage="foetus"
+FT                   /tissue_type="liver"
+FT                   /db_xref="taxon:9606"
+FT   repeat_region   <1..76
+FT                   /rpt_family="Alu"
+
+
+  [Part of this file has been deleted for brevity]
+
+FT                   /number=1
+FT                   /note="alternative exon 1; G00-119-352"
+FT   exon            1548..1923
+FT                   /gene="INSR"
+FT                   /number=1
+FT                   /note="alternative exon 1; G00-119-352"
+FT   sig_peptide     1824..1904
+FT                   /gene="INSR"
+FT                   /note="G00-119-352"
+FT   intron          1924..>2085
+FT                   /gene="INSR"
+FT                   /number=1
+FT                   /note="G00-119-352"
+XX
+SQ   Sequence 2085 BP; 417 A; 631 C; 702 G; 335 T; 0 other;
+     agatctggcc attgcactcc agcctgggca acagagaaaa actccatcta aaaaaaaaaa        6
+0
+     aaaaaaaaaa aaaaaacaga gagagagaga gagagagaga gaaggaaacg gaactggggg       12
+0
+     gaggatttgc aaaaatatgg ttagggatgg cacttcagag atgaagccat cctggagtgt       18
+0
+     tacgggcaag ggaaatgctg gggcaaagcc ccagaggcag gaataggttt ggcctgttgc       24
+0
+     atgaacagtg ggtccagctc ctagcaaact gtttattgaa tgaaagaaga atgaatgcct       30
+0
+     tgggtctagg gttgtgctgg gcgctttctt aagttttctt tcccgggtac ctccccagaa       36
+0
+     ctggcatgca ggtattatta aacccattac acaagtgaaa ctggcccaga gacagaaaag       42
+0
+     tccctggtcc aagaccacac aggagtgagg ggtggaggaa ccctcctccc attgagttct       48
+0
+     ggctttccta tactgaaagc cccttcctct cctgcagtaa ggtaggtgga accgctgtcc       54
+0
+     cgccttgttg gtgaatgtcg ttgctagact tcagacacat acaggctggt ctgctgaaaa       60
+0
+     tcagagatgt ccacctgcgc cctattcgag gtctccggcg tcttctttgg cgtcgtcttt       66
+0
+     gccctttcag aagcgtctgc acatttttcc aggtgtcatt tctccaactt gaacacaggg       72
+0
+     agcgcactgg gcacgcgggc acgtggctgt ccccaggggc ctggcttggg tctcgcccct       78
+0
+     gggccggggc gcacgcgcgg gcgggacatc tgggggcgcc cacgcgctct gggacgagtg       84
+0
+     tcgctggcca ggcccggact gaggaaaggc gagtgagaca ctactcgcct ggggtgcaaa       90
+0
+     atttaaggga gtgaaaaaaa aaaaaaaaga aagaaaccaa aaccacctcg agtcaccaaa       96
+0
+     ataaacattt taatgcagta ttttttaaaa aatcaacagg aatcctccaa agcccactat      102
+0
+     gaacaaaata gcaaaatggt agagaaagga tctgtgccgc tgcgtcgggc ctgtggggcg      108
+0
+     cctccggggg tctgaaactg gaggagactc ggggctgtag ggcgcgcgga tctggggcgc      114
+0
+     gccctcggtc ccggcgcgcc cagggcctcc cgcgcggggc ccggcacagg gaggcgggga      120
+0
+     ggcgggcggg gcggggcggg accgggcggc acctccctcc cctgcaagct ttccctccct      126
+0
+     ctcctgggcc tctcccgggc gcagagtccc ttcctaggcc agatccgcgc cgccttttcc      132
+0
+     cgcggcccgc acggggccca gctgacgggc cgcgttgttt acgggccgga gcagccctct      138
+0
+     ctcccgccgc ccgcccgcca cccgccagcc caggtgcccg cccgccagtc agctagtccg      144
+0
+     tcggtccgcg cgtccctctg tcccggagcc cgcagatcgc gacccagagc gcgcggggcc      150
+0
+     gagagccgag agacagtccc gggcgcagcg cggagctccg ggccccgaga tcctgggacg      156
+0
+     gggcccgggc cgcagcggcc ggggggtcgg ggccaccacc gcaagggcct ccgctcagta      162
+0
+     tttgtagctg gcgaagccgc gcgcgccctt cccggggctg cctctgggcc ctccccggca      168
+0
+     ggggggctgc ggcccgcggg tcgcgggcgt ggaagagaag gacgcgcggc ccccagcgcc      174
+0
+     tcttgggtgg ccgcctcgga gcatgacccc cgcgggccag cgccgcgcgc tctgatccga      180
+0
+     ggagaccccg cgctcccgca gccatgggca ccgggggccg gcggggagcg gcggccgcgc      186
+0
+     cgctgctggt ggcggtggcc gcgctgctac tgggcgccgc gggccacctg taccccggag      192
+0
+     agggtgagtc tgggggcgcg ggcgtgggcg gggagcgccg cgatggggag aggaccccac      198
+0
+     ccaagccaaa atcgatcccc cgcttgtgga ctgagaaccc tccccagggg cggggggcgg      204
+0
+     tggccaggac ggtagctcct gcatcgcgta gggggagcgg gaagc                      208
+5
+//
+
+Output file format
+
+   jaspscan outputs a report format file.
+
+  Output files for usage example
+
+  File: m23100.jaspscan
+
+########################################
+# Program: jaspscan
+# Rundate: Tue 15 Jul 2008 12:00:00
+# Commandline: jaspscan
+#    -both
+#    -sequence tembl:m23100
+#    -matrices ma0079
+# Report_format: seqtable
+# Report_file: m23100.jaspscan
+########################################
+
+#=======================================
+#
+# Sequence: M23100     from: 1   to: 2085
+# HitCount: 18
+#
+# Database scanned: JASPAR_CORE  Threshold: 80.000
+#
+#=======================================
+
+  Start     End  Strand Score_Percent ID     Name   Species      Class
+  Supergroup Protein_Seq Experiment Source_PMID Info_Content Closest_Jaspar Clo
+sest_Transfac MCS_Score Built_From Sequence
+    117     126       +        82.143 MA0079 SP1    Homo sapiens ZN-FINGER, C2H
+2 vertebrate P08047      SELEX      2192357            9.719 .              .
+                      . .          gggggaggat
+   1191    1200       +        89.286 MA0079 SP1    Homo sapiens ZN-FINGER, C2H
+2 vertebrate P08047      SELEX      2192357            9.719 .              .
+                      . .          gaggcgggga
+   1203    1212       +        83.929 MA0079 SP1    Homo sapiens ZN-FINGER, C2H
+2 vertebrate P08047      SELEX      2192357            9.719 .              .
+                      . .          cgggcggggc
+   1208    1217       +        89.286 MA0079 SP1    Homo sapiens ZN-FINGER, C2H
+2 vertebrate P08047      SELEX      2192357            9.719 .              .
+                      . .          ggggcggggc
+   1213    1222       +        80.357 MA0079 SP1    Homo sapiens ZN-FINGER, C2H
+2 vertebrate P08047      SELEX      2192357            9.719 .              .
+                      . .          ggggcgggac
+   1704    1713       +        82.143 MA0079 SP1    Homo sapiens ZN-FINGER, C2H
+2 vertebrate P08047      SELEX      2192357            9.719 .              .
+                      . .          cgggcgtgga
+   1838    1847       +        82.143 MA0079 SP1    Homo sapiens ZN-FINGER, C2H
+2 vertebrate P08047      SELEX      2192357            9.719 .              .
+                      . .          ccggcgggga
+   1933    1942       +        82.143 MA0079 SP1    Homo sapiens ZN-FINGER, C2H
+2 vertebrate P08047      SELEX      2192357            9.719 .              .
+                      . .          ggggcgcggg
+   1945    1954       +        89.286 MA0079 SP1    Homo sapiens ZN-FINGER, C2H
+2 vertebrate P08047      SELEX      2192357            9.719 .              .
+                      . .          tgggcgggga
+   2027    2036       +        89.286 MA0079 SP1    Homo sapiens ZN-FINGER, C2H
+2 vertebrate P08047      SELEX      2192357            9.719 .              .
+                      . .          ggggcggggg
+   2032    2041       +        87.500 MA0079 SP1    Homo sapiens ZN-FINGER, C2H
+2 vertebrate P08047      SELEX      2192357            9.719 .              .
+                      . .          ggggggcggt
+   2034    2043       +        82.143 MA0079 SP1    Homo sapiens ZN-FINGER, C2H
+2 vertebrate P08047      SELEX      2192357            9.719 .              .
+                      . .          ggggcggtgg
+   1252    1261       -        80.357 MA0079 SP1    Homo sapiens ZN-FINGER, C2H
+2 vertebrate P08047      SELEX      2192357            9.719 .              .
+                      . .          gagggaggga
+   1304    1313       -        80.357 MA0079 SP1    Homo sapiens ZN-FINGER, C2H
+2 vertebrate P08047      SELEX      2192357            9.719 .              .
+                      . .          gcggcgcgga
+   1805    1814       -        80.357 MA0079 SP1    Homo sapiens ZN-FINGER, C2H
+2 vertebrate P08047      SELEX      2192357            9.719 .              .
+                      . .          agcgcggggt
+   1974    1983       -        89.286 MA0079 SP1    Homo sapiens ZN-FINGER, C2H
+2 vertebrate P08047      SELEX      2192357            9.719 .              .
+                      . .          tgggtggggt
+   2016    2025       -        80.357 MA0079 SP1    Homo sapiens ZN-FINGER, C2H
+2 vertebrate P08047      SELEX      2192357            9.719 .              .
+                      . .          ggggagggtt
+   2017    2026       -        87.500 MA0079 SP1    Homo sapiens ZN-FINGER, C2H
+2 vertebrate P08047      SELEX      2192357            9.719 .              .
+                      . .          tggggagggt
+
+#---------------------------------------
+#---------------------------------------
+
+Data files
+
+   EMBOSS data files are distributed with the application and stored in
+   the standard EMBOSS data directory, which is defined by the EMBOSS
+   environment variable EMBOSS_DATA.
+
+   To see the available EMBOSS data files, run:
+
+% embossdata -showall
+
+   To fetch one of the data files (for example 'Exxx.dat') into your
+   current directory for you to inspect or modify, run:
+
+% embossdata -fetch -file Exxx.dat
+
+   Users can provide their own data files in their own directories.
+   Project specific files can be put in the current directory, or for
+   tidier directory listings in a subdirectory called ".embossdata".
+   Files for all EMBOSS runs can be put in the user's home directory, or
+   again in a subdirectory called ".embossdata".
+
+   The directories are searched in the following order:
+     * . (your current directory)
+     * .embossdata (under your current directory)
+     * ~/ (your home directory)
+     * ~/.embossdata
+
+   The EMBOSS JASPAR transcription site files are stored in directory
+   'data/JASPAR/*' under the EMBOSS installation directory.
+
+   These files must first be set up using the program 'jaspextract'.
+   Running 'jaspextract' may be the job of your system manager.
+
+   The data files are stored in the JASPAR directory of the standard
+   EMBOSS data directory. The subdirectory names are:
+     * JASPAR_CORE Core files
+     * JASPAR_FAM Family files
+     * JASPAR_PHYLOFACT Phylogeny files
+
+   The column information is described on the JASPAR home page
+   http://jaspar.genereg.net/
+
+Notes
+
+   None.
+
+References
+
+    1. DNA binding sites: representation and discovery Bioinformatics.
+       2000 Jan;16(1):16-23
+    2. Applied bioinformatics for the identification of regulatory
+       elements Nat Rev Genet. 2004 Apr;5(4):276-87
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+                    Program name                         Description
+                    tfscan       Identify transcription factor binding sites in DNA sequences
+
+Author(s)
+
+   Alan             Bleasby (ajb © ebi.ac.uk)
+   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton,         Cambridge CB10 1SD, UK
+
+History
+
+                    Completed 23rd July 2007
+
+Target users
+
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
+
+Comments
+
+                    None

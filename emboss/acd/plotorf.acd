@@ -1,0 +1,47 @@
+application: plotorf [
+  documentation: "Plot potential open reading frames in a nucleotide sequence"
+  groups: "Nucleic:Gene finding, Nucleic:Translation"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  sequence: sequence [
+    parameter: "Y"
+    type: "dna"
+  ]
+
+endsection: input
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  string: start [
+    default: "ATG"
+    information: "Start codons"
+    knowntype: "codon list"
+  ]
+
+  string: stop [
+    default: "TAA,TAG,TGA"
+    information: "Stop codons"
+    knowntype: "codon list"
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  xygraph: graph [
+    standard: "Y"
+    multiple: "6"
+  ]
+
+endsection: output

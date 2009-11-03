@@ -1,0 +1,72 @@
+application: polydot [
+  documentation: "Draw dotplots for all-against-all comparison of a
+                  sequence set"
+  groups: "Alignment:Dot plots"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqset: sequences [
+    parameter: "Y"
+    type: "any"
+    help: "File containing a sequence alignment"
+    aligned: "N"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  integer: wordsize [
+    standard: "Y"
+    default: "6"
+    minimum: "2"
+    information: "Word size"
+  ]
+
+endsection: required
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  integer: gap [
+    default: "10"
+    minimum: "0"
+    information: "Gap (in residues) between dotplots"
+    help: "This specifies the size of the gap that is used to separate
+           the individual dotplots in the display. The size is measured in
+           residues, as displayed in the output."
+  ]
+
+  boolean: boxit [
+    default: "Y"
+    additional: "Y"
+    information: "Draw a box around each dotplot"
+  ]
+
+  toggle: dumpfeat [
+    default: "N"
+    additional: "Y"
+    information: "Dump all matches as feature files"
+  ]
+
+  featout: outfeat [
+    standard: "$(dumpfeat)"
+    nullok: "@(!$(dumpfeat))"
+    nulldefault: "@(!$(dumpfeat))"
+  ]
+
+  graph: graph [
+    standard: "Y"
+    gdesc: "Poly dotplot"
+  ]
+
+endsection: output

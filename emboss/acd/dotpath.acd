@@ -1,0 +1,66 @@
+application: dotpath [
+  documentation: "Draw a non-overlapping wordmatch dotplot of two sequences"
+  groups: "Alignment:Dot plots"
+  gui: "yes"
+  batch: "yes"
+  cpu: "high"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  sequence: asequence [
+    parameter: "y"
+    type: "any"
+  ]
+
+  sequence: bsequence [
+    parameter: "y"
+    type: "@($(acdprotein) ? stopprotein : nucleotide)"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  integer: wordsize [
+    standard: "Y"
+    default: "4"
+    minimum: "2"
+    information: "Word size"
+  ]
+
+endsection: required
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  boolean: overlaps [
+    additional: "Y"
+    default: "N"
+    information: "Display the overlapping matches"
+    help: "Displays the overlapping matches (in red) as well as the
+           minimal set of non-overlapping matches"
+  ]
+
+  boolean: boxit [
+    default: "Y"
+    additional: "Y"
+    information: "Draw a box around dotplot"
+  ]
+
+  graph: graph [
+    standard: "Y"
+    gtitle: "Dotpath: $(asequence.usa) vs $(bsequence.usa)"
+    gxtitle: "$(bsequence.name)"
+    gytitle: "$(asequence.name)"
+  ]
+
+endsection: output

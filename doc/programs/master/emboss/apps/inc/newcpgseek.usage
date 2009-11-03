@@ -1,0 +1,15 @@
+<b>Here is a sample session with newcpgseek</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>newcpgseek </b>
+Identify and report CpG-rich regions in nucleotide sequence(s)
+Input nucleotide sequence(s): <b>tembl:u68037</b>
+CpG score [17]: <b></b>
+Output file [u68037.newcpgseek]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

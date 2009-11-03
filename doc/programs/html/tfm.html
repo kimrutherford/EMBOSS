@@ -1,0 +1,1581 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+tfm
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+
+<H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
+    Function
+</H2>
+Displays full documentation for an application
+
+<H2>
+    Description
+</H2>
+
+<p><b>tfm</b> displays help information for the specified EMBOSS program.</p>
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with tfm</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>tfm wossname </b>
+Displays full documentation for an application
+
+::::::::::::::
+/homes/pmr/local/share/EMBOSS/doc/programs/text/wossname.txt
+::::::::::::::
+
+                                 wossname 
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+Function
+
+   Finds programs by keywords in their short description
+
+Description
+
+   wossname search for the specified keywords (or parts thereof) in the
+   application short description (as displayed by a program when it
+   starts), functional group name and keywords. The group name,
+   application name and short description of any matching applications is
+   output (screen by default). If no search words are specified, then
+   details of all the EMBOSS programs are output. There are various
+   options for controlling how the search is performed and what is given
+   in the output file. Optionally, the output will be wrapped in HTML
+   tags ready for inclusion in a Web page.
+
+Usage
+
+   Here is a sample session with wossname
+
+   Search for programs with 'restrict' in their description:
+
+
+% wossname restrict 
+Finds programs by keywords in their short description
+
+SEARCH FOR 'RESTRICT'
+erestml       Restriction site Maximum Likelihood method
+frestboot     Bootstrapped restriction sites algorithm
+frestdist     Distance matrix from restriction sites or fragments
+frestml       Restriction site maximum Likelihood method
+rebaseextract Process the REBASE database for use by restriction enzyme applica
+tions
+recoder       Find restriction sites to remove (mutate) with no translation cha
+nge
+redata        Retrieve information from REBASE restriction enzyme database
+remap         Display restriction enzyme binding sites in a nucleotide sequence
+restover      Find restriction enzymes producing a specific overhang
+restrict      Report restriction enzyme cleavage sites in a nucleotide sequence
+showseq       Displays sequences with features in pretty format
+silent        Find restriction sites to insert (mutate) with no translation cha
+nge
+
+
+   Example 2
+
+   Display a listing of programs in their groups:
+
+
+% wossname -search '' 
+Finds programs by keywords in their short description
+
+ACD
+acdc      Test an application ACD file
+acdpretty Correctly reformat an application ACD file
+acdtable  Generate an HTML table of parameters from an application ACD file
+acdtrace  Trace processing of an application ACD file (for testing)
+acdvalid  Validate an application ACD file
+
+ALIGNMENT CONSENSUS
+cons       Create a consensus sequence from a multiple alignment
+consambig  Create an ambiguous consensus sequence from a multiple alignment
+megamerger Merge two large overlapping DNA sequences
+merger     Merge two overlapping sequences
+
+ALIGNMENT DIFFERENCES
+diffseq Compare and report features of two similar sequences
+
+ALIGNMENT DOT PLOTS
+dotmatcher Draw a threshold dotplot of two sequences
+dotpath    Draw a non-overlapping wordmatch dotplot of two sequences
+dottup     Displays a wordmatch dotplot of two sequences
+polydot    Draw dotplots for all-against-all comparison of a sequence set
+
+ALIGNMENT GLOBAL
+esim4      Align an mRNA to a genomic DNA sequence
+est2genome Align EST sequences to genomic DNA sequence
+needle     Needleman-Wunsch global alignment of two sequences
+stretcher  Needleman-Wunsch rapid global alignment of two sequences
+
+ALIGNMENT LOCAL
+matcher      Waterman-Eggert local alignment of two sequences
+seqmatchall  All-against-all word comparison of a sequence set
+supermatcher Calculate approximate local pair-wise alignments of larger sequenc
+es
+water        Smith-Waterman local alignment of sequences
+wordfinder   Match large sequences against one or more other sequences
+wordmatch    Finds regions of identity (exact matches) of two sequences
+
+ALIGNMENT MULTIPLE
+edialign   Local multiple alignment of sequences
+emma       Multiple sequence alignment (ClustalW wrapper)
+infoalign  Display basic information about a multiple sequence alignment
+mse        Multiple Sequence Editor
+plotcon    Plot conservation of a sequence alignment
+prettyplot Draw a sequence alignment with pretty formatting
+showalign  Display a multiple sequence alignment in pretty format
+tranalign  Generate an alignment of nucleic coding regions from aligned protein
+s
+
+ASSEMBLY FRAGMENT ASSEMBLY
+emira    MIRA fragment assembly program
+emiraest MIRAest fragment assembly program
+
+DISPLAY
+abiview    Display the trace in an ABI sequencer file
+cirdna     Draws circular maps of DNA constructs
+lindna     Draws linear maps of DNA constructs
+pepnet     Draw a helical net for a protein sequence
+pepwheel   Draw a helical wheel diagram for a protein sequence
+prettyplot Draw a sequence alignment with pretty formatting
+prettyseq  Write a nucleotide sequence and its translation to file
+remap      Display restriction enzyme binding sites in a nucleotide sequence
+seealso    Finds programs with similar function to a specified program
+showalign  Display a multiple sequence alignment in pretty format
+showdb     Displays information on configured databases
+showfeat   Display features of a sequence in pretty format
+showpep    Displays protein sequences with features in pretty format
+showseq    Displays sequences with features in pretty format
+sixpack    Display a DNA sequence with 6-frame translation and ORFs
+textsearch Search the textual description of sequence(s)
+
+EDIT
+aligncopy     Reads and writes alignments
+aligncopypair Reads and writes pairs from alignments
+biosed        Replace or delete sequence sections
+codcopy       Copy and reformat a codon usage table
+cutseq        Removes a section from a sequence
+degapseq      Removes non-alphabetic (e.g. gap) characters from sequences
+descseq       Alter the name or description of a sequence
+entret        Retrieves sequence entries from flatfile databases and files
+extractalign  Extract regions from a sequence alignment
+extractfeat   Extract features from sequence(s)
+extractseq    Extract regions from a sequence
+featcopy      Reads and writes a feature table
+featreport    Reads and writes a feature table
+listor        Write a list file of the logical OR of two sets of sequences
+makenucseq    Create random nucleotide sequences
+makeprotseq   Create random protein sequences
+maskambignuc  Masks all ambiguity characters in nucleotide sequences with N
+maskambigprot Masks all ambiguity characters in protein sequences with X
+maskfeat      Write a sequence with masked features
+maskseq       Write a sequence with masked regions
+newseq        Create a sequence file from a typed-in sequence
+nohtml        Remove mark-up (e.g. HTML tags) from an ASCII text file
+noreturn      Remove carriage return from ASCII files
+nospace       Remove all whitespace from an ASCII text file
+notab         Replace tabs with spaces in an ASCII text file
+notseq        Write to file a subset of an input stream of sequences
+nthseq        Write to file a single sequence from an input stream of sequences
+nthseqset     Reads and writes (returns) one set of sequences from many
+pasteseq      Insert one sequence into another
+revseq        Reverse and complement a nucleotide sequence
+seqret        Reads and writes (returns) sequences
+seqretsetall  Reads and writes (returns) many sets of sequences
+seqretsplit   Reads sequences and writes them to individual files
+sizeseq       Sort sequences by size
+skipredundant Remove redundant sequences from an input set
+skipseq       Reads and writes (returns) sequences, skipping first few
+splitsource   Split sequence(s) into original source sequences
+splitter      Split sequence(s) into smaller sequences
+trimest       Remove poly-A tails from nucleotide sequences
+trimseq       Remove unwanted characters from start and end of sequence(s)
+trimspace     Remove extra whitespace from an ASCII text file
+union         Concatenate multiple sequences into a single sequence
+vectorstrip   Removes vectors from the ends of nucleotide sequence(s)
+yank          Add a sequence reference (a full USA) to a list file
+
+ENZYME KINETICS
+findkm Calculate and plot enzyme reaction data
+
+FEATURE TABLES
+coderet     Extract CDS, mRNA and translations from feature tables
+extractfeat Extract features from sequence(s)
+maskfeat    Write a sequence with masked features
+showfeat    Display features of a sequence in pretty format
+twofeat     Finds neighbouring pairs of features in sequence(s)
+
+HMM
+ehmmalign     Align sequences to an HMM profile
+ehmmbuild     Build a profile HMM from an alignment
+ehmmcalibrate Calibrate HMM search statistics
+ehmmconvert   Convert between profile HMM file formats
+ehmmemit      Generate sequences from a profile HMM
+ehmmfetch     Retrieve an HMM from an HMM database
+ehmmindex     Create a binary SSI index for an HMM database
+ehmmpfam      Search one or more sequences against an HMM database
+ehmmsearch    Search a sequence database with a profile HMM
+oalistat      Statistics for multiple alignment files
+ohmmalign     Align sequences with an HMM
+ohmmbuild     Build HMM
+ohmmcalibrate Calibrate a hidden Markov model
+ohmmconvert   Convert between HMM formats
+ohmmemit      Extract HMM sequences
+ohmmfetch     Extract HMM from a database
+ohmmindex     Index an HMM database
+ohmmpfam      Align single sequence with an HMM
+ohmmsearch    Search sequence database with an HMM
+
+INFORMATION
+infoalign   Display basic information about a multiple sequence alignment
+infobase    Return information on a given nucleotide base
+inforesidue Return information on a given amino acid residue
+infoseq     Display basic information about sequences
+seealso     Finds programs with similar function to a specified program
+showdb      Displays information on configured databases
+textsearch  Search the textual description of sequence(s)
+tfm         Displays full documentation for an application
+whichdb     Search all sequence databases for an entry and retrieve it
+wossname    Finds programs by keywords in their short description
+
+MENUS
+emnu   Simple menu of EMBOSS applications
+
+NUCLEIC 2D STRUCTURE
+einverted      Finds inverted repeats in nucleotide sequences
+vrnaalifold    RNA alignment folding
+vrnaalifoldpf  RNA alignment folding with partition
+vrnacofold     RNA cofolding
+vrnacofoldconc RNA cofolding with concentrations
+vrnacofoldpf   RNA cofolding with partitioning
+vrnadistance   RNA distances
+vrnaduplex     RNA duplex calculation
+vrnaeval       RNA eval
+vrnaevalpair   RNA eval with cofold
+vrnafold       Calculate secondary structures of RNAs
+vrnafoldpf     Secondary structures of RNAs with partition
+vrnaheat       RNA melting
+vrnainverse    RNA sequences matching a structure
+vrnalfold      Calculate locally stable secondary structures of RNAs
+vrnaplot       Plot vrnafold output
+vrnasubopt     Calculate RNA suboptimals
+
+NUCLEIC CODON USAGE
+cai    Calculate codon adaptation index
+chips  Calculates Nc codon usage statistic
+codcmp Codon usage table comparison
+cusp   Create a codon usage table from nucleotide sequence(s)
+syco   Draw synonymous codon usage statictic plot for a nucleotide sequence
+
+NUCLEIC COMPOSITION
+banana    Plot bending and curvature data for B-DNA
+btwisted  Calculate the twisting in a B-DNA sequence
+chaos     Draw a chaos game representation plot for a nucleotide sequence
+compseq   Calculate the composition of unique words in sequences
+dan       Calculates nucleic acid melting temperature
+density   Draw a nucleic acid density plot
+freak     Generate residue/base frequency table or plot
+isochore  Plots isochores in DNA sequences
+sirna     Finds siRNA duplexes in mRNA
+wordcount Count and extract unique words in DNA sequence(s)
+
+NUCLEIC CPG ISLANDS
+cpgplot      Identify and plot CpG islands in nucleotide sequence(s)
+cpgreport    Identify and report CpG-rich regions in nucleotide sequence(s)
+geecee       Calculate fractional GC content of nucleic acid sequences
+newcpgreport Identify CpG islands in nucleotide sequence(s)
+newcpgseek   Identify and report CpG-rich regions in nucleotide sequence(s)
+
+NUCLEIC GENE FINDING
+getorf  Finds and extracts open reading frames (ORFs)
+marscan Finds matrix/scaffold recognition (MRS) signatures in DNA sequences
+plotorf Plot potential open reading frames in a nucleotide sequence
+showorf Display a nucleotide sequence and translation in pretty format
+sixpack Display a DNA sequence with 6-frame translation and ORFs
+syco    Draw synonymous codon usage statictic plot for a nucleotide sequence
+tcode   Identify protein-coding regions using Fickett TESTCODE statistic
+wobble  Plot third base position variability in a nucleotide sequence
+
+NUCLEIC MOTIFS
+dreg     Regular expression search of nucleotide sequence(s)
+fuzznuc  Search for patterns in nucleotide sequences
+fuzztran Search for patterns in protein sequences (translated)
+marscan  Finds matrix/scaffold recognition (MRS) signatures in DNA sequences
+
+NUCLEIC MUTATION
+msbar      Mutate a sequence
+shuffleseq Shuffles a set of sequences maintaining composition
+
+NUCLEIC PRIMERS
+eprimer3     Picks PCR primers and hybridization oligos
+primersearch Search DNA sequences for matches with primer pairs
+stssearch    Search a DNA database for matches with a set of STS primers
+
+NUCLEIC PROFILES
+profit   Scan one or more sequences with a simple frequency matrix
+prophecy Create frequency matrix or profile from a multiple alignment
+prophet  Scan one or more sequences with a Gribskov or Henikoff profile
+
+NUCLEIC REPEATS
+einverted    Finds inverted repeats in nucleotide sequences
+equicktandem Finds tandem repeats in nucleotide sequences
+etandem      Finds tandem repeats in a nucleotide sequence
+palindrome   Finds inverted repeats in nucleotide sequence(s)
+
+NUCLEIC RESTRICTION
+recoder  Find restriction sites to remove (mutate) with no translation change
+redata   Retrieve information from REBASE restriction enzyme database
+remap    Display restriction enzyme binding sites in a nucleotide sequence
+restover Find restriction enzymes producing a specific overhang
+restrict Report restriction enzyme cleavage sites in a nucleotide sequence
+showseq  Displays sequences with features in pretty format
+silent   Find restriction sites to insert (mutate) with no translation change
+
+NUCLEIC RNA FOLDING
+vrnaalifold    RNA alignment folding
+vrnaalifoldpf  RNA alignment folding with partition
+vrnacofold     RNA cofolding
+vrnacofoldconc RNA cofolding with concentrations
+vrnacofoldpf   RNA cofolding with partitioning
+vrnadistance   RNA distances
+vrnaduplex     RNA duplex calculation
+vrnaeval       RNA eval
+vrnaevalpair   RNA eval with cofold
+vrnafold       Calculate secondary structures of RNAs
+vrnafoldpf     Secondary structures of RNAs with partition
+vrnaheat       RNA melting
+vrnainverse    RNA sequences matching a structure
+vrnalfold      Calculate locally stable secondary structures of RNAs
+vrnaplot       Plot vrnafold output
+vrnasubopt     Calculate RNA suboptimals
+
+NUCLEIC TRANSCRIPTION
+jaspscan Scans DNA sequences for transcription factors
+tfscan   Identify transcription factor binding sites in DNA sequences
+
+NUCLEIC TRANSLATION
+backtranambig Back-translate a protein sequence to ambiguous nucleotide sequenc
+e
+backtranseq   Back-translate a protein sequence to a nucleotide sequence
+coderet       Extract CDS, mRNA and translations from feature tables
+plotorf       Plot potential open reading frames in a nucleotide sequence
+prettyseq     Write a nucleotide sequence and its translation to file
+remap         Display restriction enzyme binding sites in a nucleotide sequence
+showorf       Display a nucleotide sequence and translation in pretty format
+showseq       Displays sequences with features in pretty format
+sixpack       Display a DNA sequence with 6-frame translation and ORFs
+transeq       Translate nucleic acid sequences
+
+PHYLOGENY CONSENSUS
+econsense     Majority-rule and strict consensus tree
+fconsense     Majority-rule and strict consensus tree
+ftreedist     Distances between trees
+ftreedistpair Distances between two sets of trees
+
+PHYLOGENY CONTINUOUS CHARACTERS
+econtml   Continuous character Maximum Likelihood method
+econtrast Continuous character Contrasts
+fcontrast Continuous character Contrasts
+
+PHYLOGENY DISCRETE CHARACTERS
+eclique   Largest clique program
+edollop   Dollo and polymorphism parsimony algorithm
+edolpenny Penny algorithm Dollo or polymorphism
+efactor   Multistate to binary recoding program
+emix      Mixed parsimony algorithm
+epenny    Penny algorithm, branch-and-bound
+fclique   Largest clique program
+fdollop   Dollo and polymorphism parsimony algorithm
+fdolpenny Penny algorithm Dollo or polymorphism
+ffactor   Multistate to binary recoding program
+fmix      Mixed parsimony algorithm
+fmove     Interactive mixed method parsimony
+fpars     Discrete character parsimony
+fpenny    Penny algorithm, branch-and-bound
+
+PHYLOGENY DISTANCE MATRIX
+efitch    Fitch-Margoliash and Least-Squares Distance Methods
+ekitsch   Fitch-Margoliash method with contemporary tips
+eneighbor Phylogenies from distance matrix by N-J or UPGMA method
+ffitch    Fitch-Margoliash and Least-Squares Distance Methods
+fkitsch   Fitch-Margoliash method with contemporary tips
+fneighbor Phylogenies from distance matrix by N-J or UPGMA method
+
+PHYLOGENY GENE FREQUENCIES
+egendist Genetic Distance Matrix program
+fcontml  Gene frequency and continuous character Maximum Likelihood
+fgendist Compute genetic distances from gene frequencies
+
+PHYLOGENY MOLECULAR SEQUENCE
+distmat     Create a distance matrix from a multiple sequence alignment
+ednacomp    DNA compatibility algorithm
+ednadist    Nucleic acid sequence Distance Matrix program
+ednainvar   Nucleic acid sequence Invariants method
+ednaml      Phylogenies from nucleic acid Maximum Likelihood
+ednamlk     Phylogenies from nucleic acid Maximum Likelihood with clock
+ednapars    DNA parsimony algorithm
+ednapenny   Penny algorithm for DNA
+eprotdist   Protein distance algorithm
+eprotpars   Protein parsimony algorithm
+erestml     Restriction site Maximum Likelihood method
+eseqboot    Bootstrapped sequences algorithm
+fdiscboot   Bootstrapped discrete sites algorithm
+fdnacomp    DNA compatibility algorithm
+fdnadist    Nucleic acid sequence Distance Matrix program
+fdnainvar   Nucleic acid sequence Invariants method
+fdnaml      Estimates nucleotide phylogeny by maximum likelihood
+fdnamlk     Estimates nucleotide phylogeny by maximum likelihood
+fdnamove    Interactive DNA parsimony
+fdnapars    DNA parsimony algorithm
+fdnapenny   Penny algorithm for DNA
+fdolmove    Interactive Dollo or Polymorphism Parsimony
+ffreqboot   Bootstrapped genetic frequencies algorithm
+fproml      Protein phylogeny by maximum likelihood
+fpromlk     Protein phylogeny by maximum likelihood
+fprotdist   Protein distance algorithm
+fprotpars   Protein parsimony algorithm
+frestboot   Bootstrapped restriction sites algorithm
+frestdist   Distance matrix from restriction sites or fragments
+frestml     Restriction site maximum Likelihood method
+fseqboot    Bootstrapped sequences algorithm
+fseqbootall Bootstrapped sequences algorithm
+
+PHYLOGENY TREE DRAWING
+fdrawgram Plots a cladogram- or phenogram-like rooted tree diagram
+fdrawtree Plots an unrooted tree diagram
+fretree   Interactive tree rearrangement
+
+PROTEIN 2D STRUCTURE
+garnier        Predicts protein secondary structure using GOR method
+helixturnhelix Identify nucleic acid-binding motifs in protein sequences
+hmoment        Calculate and plot hydrophobic moment for protein sequence(s)
+pepcoil        Predicts coiled coil regions in protein sequences
+pepnet         Draw a helical net for a protein sequence
+pepwheel       Draw a helical wheel diagram for a protein sequence
+tmap           Predict and plot transmembrane segments in protein sequences
+topo           Draws an image of a transmembrane protein
+
+PROTEIN 3D STRUCTURE
+contacts    Generate intra-chain CON files from CCF files
+domainalign Generate alignments (DAF file) for nodes in a DCF file
+domainrep   Reorder DCF file to identify representative structures
+domainreso  Remove low resolution domains from a DCF file
+interface   Generate inter-chain CON files from CCF files
+libgen      Generate discriminating elements from alignments
+matgen3d    Generate a 3D-1D scoring matrix from CCF files
+psiphi      Calculates phi and psi torsion angles from protein coordinates
+rocon       Generates a hits file from comparing two DHF files
+rocplot     Performs ROC analysis on hits files
+seqalign    Extend alignments (DAF file) with sequences (DHF file)
+seqfraggle  Removes fragment sequences from DHF files
+seqsearch   Generate PSI-BLAST hits (DHF file) from a DAF file
+seqsort     Remove ambiguous classified sequences from DHF files
+seqwords    Generates DHF files from keyword search of UniProt
+siggen      Generates a sparse protein signature from an alignment
+siggenlig   Generates ligand-binding signatures from a CON file
+sigscan     Generates hits (DHF file) from a signature search
+sigscanlig  Searches ligand-signature library & writes hits (LHF file)
+
+PROTEIN COMPOSITION
+backtranambig Back-translate a protein sequence to ambiguous nucleotide sequenc
+e
+backtranseq   Back-translate a protein sequence to a nucleotide sequence
+charge        Draw a protein charge plot
+checktrans    Reports STOP codons and ORF statistics of a protein
+compseq       Calculate the composition of unique words in sequences
+emowse        Search protein sequences by digest fragment molecular weight
+freak         Generate residue/base frequency table or plot
+iep           Calculate the isoelectric point of proteins
+mwcontam      Find weights common to multiple molecular weights files
+mwfilter      Filter noisy data from molecular weights file
+octanol       Draw a White-Wimley protein hydropathy plot
+pepinfo       Plot amino acid properties of a protein sequence in parallel
+pepstats      Calculates statistics of protein properties
+pepwindow     Draw a hydropathy plot for a protein sequence
+pepwindowall  Draw Kyte-Doolittle hydropathy plot for a protein alignment
+wordcount     Count and extract unique words in DNA sequence(s)
+
+PROTEIN MOTIFS
+antigenic      Finds antigenic sites in proteins
+digest         Reports on protein proteolytic enzyme or reagent cleavage sites
+echlorop       Reports presence of chloroplast transit peptides
+eiprscan       Motif detection
+elipop         Prediction of lipoproteins
+emast          Motif detection
+ememe          Multiple EM for Motif Elicitation
+ememetext      Multiple EM for Motif Elicitation. Text file only
+enetnglyc      Reports N-glycosylation sites in human proteins
+enetoglyc      Reports mucin type GalNAc O-glycosylation sites in mammalian pro
+teins
+enetphos       Reports ser, thr and tyr phosphorylation sites in eukaryotic pro
+teins
+epestfind      Finds PEST motifs as potential proteolytic cleavage sites
+eprop          Reports propeptide cleavage sites in proteins
+esignalp       Reports protein signal cleavage sites
+etmhmm         Reports transmembrane helices
+eyinoyang      Reports O-(beta)-GlcNAc attachment sites
+fuzzpro        Search for patterns in protein sequences
+fuzztran       Search for patterns in protein sequences (translated)
+helixturnhelix Identify nucleic acid-binding motifs in protein sequences
+oddcomp        Identify proteins with specified sequence word composition
+omeme          Motif detection
+patmatdb       Searches protein sequences with a sequence motif
+patmatmotifs   Scan a protein sequence with motifs from the PROSITE database
+pepcoil        Predicts coiled coil regions in protein sequences
+preg           Regular expression search of protein sequence(s)
+pscan          Scans protein sequence(s) with fingerprints from the PRINTS data
+base
+sigcleave      Reports on signal cleavage sites in a protein sequence
+
+PROTEIN MUTATION
+msbar      Mutate a sequence
+shuffleseq Shuffles a set of sequences maintaining composition
+
+PROTEIN PROFILES
+profit   Scan one or more sequences with a simple frequency matrix
+prophecy Create frequency matrix or profile from a multiple alignment
+prophet  Scan one or more sequences with a Gribskov or Henikoff profile
+
+TEST
+crystalball Answers every drug discovery question about a sequence
+
+UTILS DATABASE CREATION
+aaindexextract Extract amino acid property data from AAINDEX
+allversusall   Sequence similarity data from all-versus-all comparison
+cathparse      Generates DCF file from raw CATH files
+cutgextract    Extract codon usage tables from from CUTG database
+domainer       Generates domain CCF files from protein CCF files
+domainnr       Removes redundant domains from a DCF file
+domainseqs     Adds sequence records to a DCF file
+domainsse      Add secondary structure records to a DCF file
+hetparse       Converts heterogen group dictionary to EMBL-like format
+jaspextract    Extract data from JASPAR
+pdbparse       Parses PDB files and writes protein CCF files
+pdbplus        Add accessibility & secondary structure to a CCF file
+pdbtosp        Convert swissprot:PDB codes file to EMBL-like format
+printsextract  Extract data from PRINTS database for use by pscan
+prosextract    Processes the PROSITE motif database for use by patmatmotifs
+rebaseextract  Process the REBASE database for use by restriction enzyme applic
+ations
+scopparse      Generate DCF file from raw SCOP files
+seqnr          Removes redundancy from DHF files
+sites          Generate residue-ligand CON files from CCF files
+ssematch       Search a DCF file for secondary structure matches
+tfextract      Process TRANSFAC transcription factor database for use by tfscan
+
+UTILS DATABASE INDEXING
+dbiblast Index a BLAST database
+dbifasta Index a fasta file database
+dbiflat  Index a flat file database
+dbigcg   Index a GCG formatted database
+dbxfasta Index a fasta file database using b+tree indices
+dbxflat  Index a flat file database using b+tree indices
+dbxgcg   Index a GCG formatted database using b+tree indices
+
+UTILS MISC
+embossdata    Find and retrieve EMBOSS data files
+embossversion Reports the current EMBOSS version number
+
+
+   Example 3
+
+   Display an alphabetic listing of all programs:
+
+
+% wossname -search '' -alphabetic 
+Finds programs by keywords in their short description
+
+ALPHABETIC LIST OF PROGRAMS
+aaindexextract Extract amino acid property data from AAINDEX
+abiview        Display the trace in an ABI sequencer file
+acdc           Test an application ACD file
+acdpretty      Correctly reformat an application ACD file
+acdtable       Generate an HTML table of parameters from an application ACD fil
+e
+acdtrace       Trace processing of an application ACD file (for testing)
+acdvalid       Validate an application ACD file
+aligncopy      Reads and writes alignments
+aligncopypair  Reads and writes pairs from alignments
+allversusall   Sequence similarity data from all-versus-all comparison
+antigenic      Finds antigenic sites in proteins
+backtranambig  Back-translate a protein sequence to ambiguous nucleotide sequen
+ce
+backtranseq    Back-translate a protein sequence to a nucleotide sequence
+banana         Plot bending and curvature data for B-DNA
+biosed         Replace or delete sequence sections
+btwisted       Calculate the twisting in a B-DNA sequence
+cai            Calculate codon adaptation index
+cathparse      Generates DCF file from raw CATH files
+chaos          Draw a chaos game representation plot for a nucleotide sequence
+charge         Draw a protein charge plot
+checktrans     Reports STOP codons and ORF statistics of a protein
+chips          Calculates Nc codon usage statistic
+cirdna         Draws circular maps of DNA constructs
+codcmp         Codon usage table comparison
+codcopy        Copy and reformat a codon usage table
+coderet        Extract CDS, mRNA and translations from feature tables
+compseq        Calculate the composition of unique words in sequences
+cons           Create a consensus sequence from a multiple alignment
+consambig      Create an ambiguous consensus sequence from a multiple alignment
+contacts       Generate intra-chain CON files from CCF files
+cpgplot        Identify and plot CpG islands in nucleotide sequence(s)
+cpgreport      Identify and report CpG-rich regions in nucleotide sequence(s)
+crystalball    Answers every drug discovery question about a sequence
+cusp           Create a codon usage table from nucleotide sequence(s)
+cutgextract    Extract codon usage tables from from CUTG database
+cutseq         Removes a section from a sequence
+dan            Calculates nucleic acid melting temperature
+dbiblast       Index a BLAST database
+dbifasta       Index a fasta file database
+dbiflat        Index a flat file database
+dbigcg         Index a GCG formatted database
+dbxfasta       Index a fasta file database using b+tree indices
+dbxflat        Index a flat file database using b+tree indices
+dbxgcg         Index a GCG formatted database using b+tree indices
+degapseq       Removes non-alphabetic (e.g. gap) characters from sequences
+density        Draw a nucleic acid density plot
+descseq        Alter the name or description of a sequence
+diffseq        Compare and report features of two similar sequences
+digest         Reports on protein proteolytic enzyme or reagent cleavage sites
+distmat        Create a distance matrix from a multiple sequence alignment
+domainalign    Generate alignments (DAF file) for nodes in a DCF file
+domainer       Generates domain CCF files from protein CCF files
+domainnr       Removes redundant domains from a DCF file
+domainrep      Reorder DCF file to identify representative structures
+domainreso     Remove low resolution domains from a DCF file
+domainseqs     Adds sequence records to a DCF file
+domainsse      Add secondary structure records to a DCF file
+dotmatcher     Draw a threshold dotplot of two sequences
+dotpath        Draw a non-overlapping wordmatch dotplot of two sequences
+dottup         Displays a wordmatch dotplot of two sequences
+dreg           Regular expression search of nucleotide sequence(s)
+echlorop       Reports presence of chloroplast transit peptides
+eclique        Largest clique program
+econsense      Majority-rule and strict consensus tree
+econtml        Continuous character Maximum Likelihood method
+econtrast      Continuous character Contrasts
+edialign       Local multiple alignment of sequences
+ednacomp       DNA compatibility algorithm
+ednadist       Nucleic acid sequence Distance Matrix program
+ednainvar      Nucleic acid sequence Invariants method
+ednaml         Phylogenies from nucleic acid Maximum Likelihood
+ednamlk        Phylogenies from nucleic acid Maximum Likelihood with clock
+ednapars       DNA parsimony algorithm
+ednapenny      Penny algorithm for DNA
+edollop        Dollo and polymorphism parsimony algorithm
+edolpenny      Penny algorithm Dollo or polymorphism
+efactor        Multistate to binary recoding program
+efitch         Fitch-Margoliash and Least-Squares Distance Methods
+egendist       Genetic Distance Matrix program
+ehmmalign      Align sequences to an HMM profile
+ehmmbuild      Build a profile HMM from an alignment
+ehmmcalibrate  Calibrate HMM search statistics
+ehmmconvert    Convert between profile HMM file formats
+ehmmemit       Generate sequences from a profile HMM
+ehmmfetch      Retrieve an HMM from an HMM database
+ehmmindex      Create a binary SSI index for an HMM database
+ehmmpfam       Search one or more sequences against an HMM database
+ehmmsearch     Search a sequence database with a profile HMM
+einverted      Finds inverted repeats in nucleotide sequences
+eiprscan       Motif detection
+ekitsch        Fitch-Margoliash method with contemporary tips
+elipop         Prediction of lipoproteins
+emast          Motif detection
+embossdata     Find and retrieve EMBOSS data files
+embossversion  Reports the current EMBOSS version number
+ememe          Multiple EM for Motif Elicitation
+ememetext      Multiple EM for Motif Elicitation. Text file only
+emira          MIRA fragment assembly program
+emiraest       MIRAest fragment assembly program
+emix           Mixed parsimony algorithm
+emma           Multiple sequence alignment (ClustalW wrapper)
+emnu           Simple menu of EMBOSS applications
+emowse         Search protein sequences by digest fragment molecular weight
+eneighbor      Phylogenies from distance matrix by N-J or UPGMA method
+enetnglyc      Reports N-glycosylation sites in human proteins
+enetoglyc      Reports mucin type GalNAc O-glycosylation sites in mammalian pro
+teins
+enetphos       Reports ser, thr and tyr phosphorylation sites in eukaryotic pro
+teins
+entret         Retrieves sequence entries from flatfile databases and files
+epenny         Penny algorithm, branch-and-bound
+epestfind      Finds PEST motifs as potential proteolytic cleavage sites
+eprimer3       Picks PCR primers and hybridization oligos
+eprop          Reports propeptide cleavage sites in proteins
+eprotdist      Protein distance algorithm
+eprotpars      Protein parsimony algorithm
+equicktandem   Finds tandem repeats in nucleotide sequences
+erestml        Restriction site Maximum Likelihood method
+eseqboot       Bootstrapped sequences algorithm
+esignalp       Reports protein signal cleavage sites
+esim4          Align an mRNA to a genomic DNA sequence
+est2genome     Align EST sequences to genomic DNA sequence
+etandem        Finds tandem repeats in a nucleotide sequence
+etmhmm         Reports transmembrane helices
+extractalign   Extract regions from a sequence alignment
+extractfeat    Extract features from sequence(s)
+extractseq     Extract regions from a sequence
+eyinoyang      Reports O-(beta)-GlcNAc attachment sites
+fclique        Largest clique program
+fconsense      Majority-rule and strict consensus tree
+fcontml        Gene frequency and continuous character Maximum Likelihood
+fcontrast      Continuous character Contrasts
+fdiscboot      Bootstrapped discrete sites algorithm
+fdnacomp       DNA compatibility algorithm
+fdnadist       Nucleic acid sequence Distance Matrix program
+fdnainvar      Nucleic acid sequence Invariants method
+fdnaml         Estimates nucleotide phylogeny by maximum likelihood
+fdnamlk        Estimates nucleotide phylogeny by maximum likelihood
+fdnamove       Interactive DNA parsimony
+fdnapars       DNA parsimony algorithm
+fdnapenny      Penny algorithm for DNA
+fdollop        Dollo and polymorphism parsimony algorithm
+fdolmove       Interactive Dollo or Polymorphism Parsimony
+fdolpenny      Penny algorithm Dollo or polymorphism
+fdrawgram      Plots a cladogram- or phenogram-like rooted tree diagram
+fdrawtree      Plots an unrooted tree diagram
+featcopy       Reads and writes a feature table
+featreport     Reads and writes a feature table
+ffactor        Multistate to binary recoding program
+ffitch         Fitch-Margoliash and Least-Squares Distance Methods
+ffreqboot      Bootstrapped genetic frequencies algorithm
+fgendist       Compute genetic distances from gene frequencies
+findkm         Calculate and plot enzyme reaction data
+fkitsch        Fitch-Margoliash method with contemporary tips
+fmix           Mixed parsimony algorithm
+fmove          Interactive mixed method parsimony
+fneighbor      Phylogenies from distance matrix by N-J or UPGMA method
+fpars          Discrete character parsimony
+fpenny         Penny algorithm, branch-and-bound
+fproml         Protein phylogeny by maximum likelihood
+fpromlk        Protein phylogeny by maximum likelihood
+fprotdist      Protein distance algorithm
+fprotpars      Protein parsimony algorithm
+freak          Generate residue/base frequency table or plot
+frestboot      Bootstrapped restriction sites algorithm
+frestdist      Distance matrix from restriction sites or fragments
+frestml        Restriction site maximum Likelihood method
+fretree        Interactive tree rearrangement
+fseqboot       Bootstrapped sequences algorithm
+fseqbootall    Bootstrapped sequences algorithm
+ftreedist      Distances between trees
+ftreedistpair  Distances between two sets of trees
+fuzznuc        Search for patterns in nucleotide sequences
+fuzzpro        Search for patterns in protein sequences
+fuzztran       Search for patterns in protein sequences (translated)
+garnier        Predicts protein secondary structure using GOR method
+geecee         Calculate fractional GC content of nucleic acid sequences
+getorf         Finds and extracts open reading frames (ORFs)
+helixturnhelix Identify nucleic acid-binding motifs in protein sequences
+hetparse       Converts heterogen group dictionary to EMBL-like format
+hmoment        Calculate and plot hydrophobic moment for protein sequence(s)
+iep            Calculate the isoelectric point of proteins
+infoalign      Display basic information about a multiple sequence alignment
+infobase       Return information on a given nucleotide base
+inforesidue    Return information on a given amino acid residue
+infoseq        Display basic information about sequences
+interface      Generate inter-chain CON files from CCF files
+isochore       Plots isochores in DNA sequences
+jaspextract    Extract data from JASPAR
+jaspscan       Scans DNA sequences for transcription factors
+libgen         Generate discriminating elements from alignments
+lindna         Draws linear maps of DNA constructs
+listor         Write a list file of the logical OR of two sets of sequences
+makenucseq     Create random nucleotide sequences
+makeprotseq    Create random protein sequences
+marscan        Finds matrix/scaffold recognition (MRS) signatures in DNA sequen
+ces
+maskambignuc   Masks all ambiguity characters in nucleotide sequences with N
+maskambigprot  Masks all ambiguity characters in protein sequences with X
+maskfeat       Write a sequence with masked features
+maskseq        Write a sequence with masked regions
+matcher        Waterman-Eggert local alignment of two sequences
+matgen3d       Generate a 3D-1D scoring matrix from CCF files
+megamerger     Merge two large overlapping DNA sequences
+merger         Merge two overlapping sequences
+msbar          Mutate a sequence
+mse            Multiple Sequence Editor
+mwcontam       Find weights common to multiple molecular weights files
+mwfilter       Filter noisy data from molecular weights file
+needle         Needleman-Wunsch global alignment of two sequences
+newcpgreport   Identify CpG islands in nucleotide sequence(s)
+newcpgseek     Identify and report CpG-rich regions in nucleotide sequence(s)
+newseq         Create a sequence file from a typed-in sequence
+nohtml         Remove mark-up (e.g. HTML tags) from an ASCII text file
+noreturn       Remove carriage return from ASCII files
+nospace        Remove all whitespace from an ASCII text file
+notab          Replace tabs with spaces in an ASCII text file
+notseq         Write to file a subset of an input stream of sequences
+nthseq         Write to file a single sequence from an input stream of sequence
+s
+nthseqset      Reads and writes (returns) one set of sequences from many
+oalistat       Statistics for multiple alignment files
+octanol        Draw a White-Wimley protein hydropathy plot
+oddcomp        Identify proteins with specified sequence word composition
+ohmmalign      Align sequences with an HMM
+ohmmbuild      Build HMM
+ohmmcalibrate  Calibrate a hidden Markov model
+ohmmconvert    Convert between HMM formats
+ohmmemit       Extract HMM sequences
+ohmmfetch      Extract HMM from a database
+ohmmindex      Index an HMM database
+ohmmpfam       Align single sequence with an HMM
+ohmmsearch     Search sequence database with an HMM
+omeme          Motif detection
+palindrome     Finds inverted repeats in nucleotide sequence(s)
+pasteseq       Insert one sequence into another
+patmatdb       Searches protein sequences with a sequence motif
+patmatmotifs   Scan a protein sequence with motifs from the PROSITE database
+pdbparse       Parses PDB files and writes protein CCF files
+pdbplus        Add accessibility & secondary structure to a CCF file
+pdbtosp        Convert swissprot:PDB codes file to EMBL-like format
+pepcoil        Predicts coiled coil regions in protein sequences
+pepinfo        Plot amino acid properties of a protein sequence in parallel
+pepnet         Draw a helical net for a protein sequence
+pepstats       Calculates statistics of protein properties
+pepwheel       Draw a helical wheel diagram for a protein sequence
+pepwindow      Draw a hydropathy plot for a protein sequence
+pepwindowall   Draw Kyte-Doolittle hydropathy plot for a protein alignment
+plotcon        Plot conservation of a sequence alignment
+plotorf        Plot potential open reading frames in a nucleotide sequence
+polydot        Draw dotplots for all-against-all comparison of a sequence set
+preg           Regular expression search of protein sequence(s)
+prettyplot     Draw a sequence alignment with pretty formatting
+prettyseq      Write a nucleotide sequence and its translation to file
+primersearch   Search DNA sequences for matches with primer pairs
+printsextract  Extract data from PRINTS database for use by pscan
+profit         Scan one or more sequences with a simple frequency matrix
+prophecy       Create frequency matrix or profile from a multiple alignment
+prophet        Scan one or more sequences with a Gribskov or Henikoff profile
+prosextract    Processes the PROSITE motif database for use by patmatmotifs
+pscan          Scans protein sequence(s) with fingerprints from the PRINTS data
+base
+psiphi         Calculates phi and psi torsion angles from protein coordinates
+rebaseextract  Process the REBASE database for use by restriction enzyme applic
+ations
+recoder        Find restriction sites to remove (mutate) with no translation ch
+ange
+redata         Retrieve information from REBASE restriction enzyme database
+remap          Display restriction enzyme binding sites in a nucleotide sequenc
+e
+restover       Find restriction enzymes producing a specific overhang
+restrict       Report restriction enzyme cleavage sites in a nucleotide sequenc
+e
+revseq         Reverse and complement a nucleotide sequence
+rocon          Generates a hits file from comparing two DHF files
+rocplot        Performs ROC analysis on hits files
+scopparse      Generate DCF file from raw SCOP files
+seealso        Finds programs with similar function to a specified program
+seqalign       Extend alignments (DAF file) with sequences (DHF file)
+seqfraggle     Removes fragment sequences from DHF files
+seqmatchall    All-against-all word comparison of a sequence set
+seqnr          Removes redundancy from DHF files
+seqret         Reads and writes (returns) sequences
+seqretsetall   Reads and writes (returns) many sets of sequences
+seqretsplit    Reads sequences and writes them to individual files
+seqsearch      Generate PSI-BLAST hits (DHF file) from a DAF file
+seqsort        Remove ambiguous classified sequences from DHF files
+seqwords       Generates DHF files from keyword search of UniProt
+showalign      Display a multiple sequence alignment in pretty format
+showdb         Displays information on configured databases
+showfeat       Display features of a sequence in pretty format
+showorf        Display a nucleotide sequence and translation in pretty format
+showpep        Displays protein sequences with features in pretty format
+showseq        Displays sequences with features in pretty format
+shuffleseq     Shuffles a set of sequences maintaining composition
+sigcleave      Reports on signal cleavage sites in a protein sequence
+siggen         Generates a sparse protein signature from an alignment
+siggenlig      Generates ligand-binding signatures from a CON file
+sigscan        Generates hits (DHF file) from a signature search
+sigscanlig     Searches ligand-signature library & writes hits (LHF file)
+silent         Find restriction sites to insert (mutate) with no translation ch
+ange
+sirna          Finds siRNA duplexes in mRNA
+sites          Generate residue-ligand CON files from CCF files
+sixpack        Display a DNA sequence with 6-frame translation and ORFs
+sizeseq        Sort sequences by size
+skipredundant  Remove redundant sequences from an input set
+skipseq        Reads and writes (returns) sequences, skipping first few
+splitsource    Split sequence(s) into original source sequences
+splitter       Split sequence(s) into smaller sequences
+ssematch       Search a DCF file for secondary structure matches
+stretcher      Needleman-Wunsch rapid global alignment of two sequences
+stssearch      Search a DNA database for matches with a set of STS primers
+supermatcher   Calculate approximate local pair-wise alignments of larger seque
+nces
+syco           Draw synonymous codon usage statictic plot for a nucleotide sequ
+ence
+tcode          Identify protein-coding regions using Fickett TESTCODE statistic
+textsearch     Search the textual description of sequence(s)
+tfextract      Process TRANSFAC transcription factor database for use by tfscan
+tfm            Displays full documentation for an application
+tfscan         Identify transcription factor binding sites in DNA sequences
+tmap           Predict and plot transmembrane segments in protein sequences
+topo           Draws an image of a transmembrane protein
+tranalign      Generate an alignment of nucleic coding regions from aligned pro
+teins
+transeq        Translate nucleic acid sequences
+trimest        Remove poly-A tails from nucleotide sequences
+trimseq        Remove unwanted characters from start and end of sequence(s)
+trimspace      Remove extra whitespace from an ASCII text file
+twofeat        Finds neighbouring pairs of features in sequence(s)
+union          Concatenate multiple sequences into a single sequence
+vectorstrip    Removes vectors from the ends of nucleotide sequence(s)
+vrnaalifold    RNA alignment folding
+vrnaalifoldpf  RNA alignment folding with partition
+vrnacofold     RNA cofolding
+vrnacofoldconc RNA cofolding with concentrations
+vrnacofoldpf   RNA cofolding with partitioning
+vrnadistance   RNA distances
+vrnaduplex     RNA duplex calculation
+vrnaeval       RNA eval
+vrnaevalpair   RNA eval with cofold
+vrnafold       Calculate secondary structures of RNAs
+vrnafoldpf     Secondary structures of RNAs with partition
+vrnaheat       RNA melting
+vrnainverse    RNA sequences matching a structure
+vrnalfold      Calculate locally stable secondary structures of RNAs
+vrnaplot       Plot vrnafold output
+vrnasubopt     Calculate RNA suboptimals
+water          Smith-Waterman local alignment of sequences
+whichdb        Search all sequence databases for an entry and retrieve it
+wobble         Plot third base position variability in a nucleotide sequence
+wordcount      Count and extract unique words in DNA sequence(s)
+wordfinder     Match large sequences against one or more other sequences
+wordmatch      Finds regions of identity (exact matches) of two sequences
+wossname       Finds programs by keywords in their short description
+yank           Add a sequence reference (a full USA) to a list file
+
+
+   Example 4
+
+   Display only the groups that the programs can belong to:
+
+
+% wossname -search '' -groups 
+Finds programs by keywords in their short description
+
+ACD
+ALIGNMENT CONSENSUS
+ALIGNMENT DIFFERENCES
+ALIGNMENT DOT PLOTS
+ALIGNMENT GLOBAL
+ALIGNMENT LOCAL
+ALIGNMENT MULTIPLE
+ASSEMBLY FRAGMENT ASSEMBLY
+DISPLAY
+EDIT
+ENZYME KINETICS
+FEATURE TABLES
+HMM
+INFORMATION
+MENUS
+NUCLEIC 2D STRUCTURE
+NUCLEIC CODON USAGE
+NUCLEIC COMPOSITION
+NUCLEIC CPG ISLANDS
+NUCLEIC GENE FINDING
+NUCLEIC MOTIFS
+NUCLEIC MUTATION
+NUCLEIC PRIMERS
+NUCLEIC PROFILES
+NUCLEIC REPEATS
+NUCLEIC RESTRICTION
+NUCLEIC RNA FOLDING
+NUCLEIC TRANSCRIPTION
+NUCLEIC TRANSLATION
+PHYLOGENY CONSENSUS
+PHYLOGENY CONTINUOUS CHARACTERS
+PHYLOGENY DISCRETE CHARACTERS
+PHYLOGENY DISTANCE MATRIX
+PHYLOGENY GENE FREQUENCIES
+PHYLOGENY MOLECULAR SEQUENCE
+PHYLOGENY TREE DRAWING
+PROTEIN 2D STRUCTURE
+PROTEIN 3D STRUCTURE
+PROTEIN COMPOSITION
+PROTEIN MOTIFS
+PROTEIN MUTATION
+PROTEIN PROFILES
+TEST
+UTILS DATABASE CREATION
+UTILS DATABASE INDEXING
+UTILS MISC
+
+   Example 5
+
+   Output html tags around the list of programs:
+
+
+% wossname '' -html -out wossname.html 
+Finds programs by keywords in their short description
+
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-search]            string     Enter a word or words here and a
+                                  case-independent search for it will be made
+                                  in the one-line documentation, group names
+                                  and keywords of all of the EMBOSS programs.
+                                  If no keyword is specified, all programs
+                                  will be listed. (Any string is accepted)
+
+   Additional (Optional) qualifiers:
+   -explode            boolean    [N] The groups that EMBOSS applications
+                                  belong to have two forms, exploded and not
+                                  exploded. The exploded group names are more
+                                  numerous and often vaguely phrased than the
+                                  non-exploded ones. The exploded names are
+                                  formed from definitions of the group names
+                                  that start like NAME1:NAME2 and which are
+                                  then expanded into many combinations of the
+                                  names as: 'NAME1', 'NAME2', 'NAME1 NAME2',
+                                  NAME2 NAME1'. The non-expanded names are
+                                  simply like: 'NAME1 NAME2'.
+   -[no]allmatch       boolean    [Y] By default, all words in the search
+                                  string must match. This option searches for
+                                  a match to any word in a list of
+                                  possibilities
+   -showkeywords       boolean    [N] Show keywords with program documentation
+   -outfile            outfile    [stdout] Output file name
+   -html               toggle     [N] If you are sending the output to a file,
+                                  this will format it for displaying as a
+                                  table in a WWW document.
+   -groups             boolean    [N] If you use this option, then only the
+                                  group names will output to the file
+   -alphabetic         boolean    [N] If you use this option, then you will
+                                  get a single list of the program names and
+                                  descriptions instead of the programs being
+                                  listed in their functional groups.
+
+   Advanced (Unprompted) qualifiers:
+   -[no]emboss         boolean    [Y] If you use this option then EMBOSS
+                                  program documentation will be searched. If
+                                  this option is set to be false, then only
+                                  the EMBASSY programs will be searched (if
+                                  the -embassy option is true). EMBASSY
+                                  programs are not strictly part of EMBOSS,
+                                  but use the same code libraries and share
+                                  the same look and feel, but are generally
+                                  developed by people who wish the programs to
+                                  be outside of the GNU Public Licence scheme
+   -[no]embassy        boolean    [Y] If you use this option then EMBASSY
+                                  program documentation will be searched. If
+                                  this option is set to be false, then only
+                                  the EMBOSS programs will be searched (if the
+                                  -emboss option is true). EMBASSY programs
+                                  are not strictly part of EMBOSS, but use the
+                                  same code libraries and share the same look
+                                  and feel, but are generally developed by
+                                  people who wish the programs to be outside
+                                  of the GNU Public Licence scheme
+   -showembassy        string     If you use this option then this EMBASSY
+                                  package program documentation will be
+                                  searched. EMBASSY programs are not strictly
+                                  part of EMBOSS, but use the same code
+                                  libraries and share the same look and feel,
+                                  but are generally developed by people who
+                                  wish the programs to be outside of the GNU
+                                  Public Licence scheme (Any string is
+                                  accepted)
+   -colon              boolean    [N] The groups that EMBOSS applications
+                                  belong to up to two levels, for example the
+                                  primary group 'ALIGNMENT' has several
+                                  sub-groups, or second-level groups, e.g.:
+                                  CONSENSUS, DIFFERENCES, DOT PLOTS, GLOBAL,
+                                  LOCAL, MULTIPLE. To aid programs that parse
+                                  the output of wossname that require the
+                                  names of these subgroups, a colon ':' will
+                                  be placed between the first and second level
+                                  of the group name if this option is true.
+                                  Note: This does not apply if the group names
+                                  have been exploded with the 'explode'
+                                  option.
+   -gui                boolean    [N] This option is intended to help those
+                                  who are designing Graphical User Interfaces
+                                  to the EMBOSS applications. Some EMBOSS
+                                  programs are inappropriate for running in a
+                                  GUI, these include other menu programs and
+                                  interactive editors. This option allows you
+                                  to only report those programs that can be
+                                  run from a GUI
+
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   wossname reads the brief descriptions and the program groups from the
+   ACD files. (ACD files control the parameters that the programs expect
+   - don't worry about them unless you are writing EMBOSS programs).
+
+   The format of ACD files is documented elsewhere.
+
+Output file format
+
+   The results are written out as a simple list preceded by the group
+   that the programs belong to or the word that is being searched for.
+
+  Output files for usage example 5
+
+  File: wossname.html
+
+   <h2><a name="ACD">ACD</a></h2> <table border cellpadding=4
+   bgcolor="#FFFFF0"> <tr><th>Program name</th> <th>Description</th></tr>
+   <tr> <td><a href="acdc.html">acdc</a></td> <td>Test an application ACD
+   file</td> </tr> <tr> <td><a href="acdpretty.html">acdpretty</a></td>
+   <td>Correctly reformat an application ACD file</td> </tr> <tr> <td><a
+   href="acdtable.html">acdtable</a></td> <td>Generate an HTML table of
+   parameters from an application ACD file</td> </tr> <tr> <td><a
+   href="acdtrace.html">acdtrace</a></td> <td>Trace processing of an
+   application ACD file (for testing)</td> </tr> <tr> <td><a
+   href="acdvalid.html">acdvalid</a></td> <td>Validate an application ACD
+   file</td> </tr> </table> <h2><a name="ALIGNMENT CONSENSUS">ALIGNMENT
+   CONSENSUS</a></h2> <table border cellpadding=4 bgcolor="#FFFFF0">
+   <tr><th>Program name</th> <th>Description</th></tr> <tr> <td><a
+   href="cons.html">cons</a></td> <td>Create a consensus sequence from a
+   multiple alignment</td> </tr> <tr> <td><a
+   href="consambig.html">consambig</a></td> <td>Create an ambiguous
+   consensus sequence from a multiple alignment</td> </tr> <tr> <td><a
+   href="megamerger.html">megamerger</a></td> <td>Merge two large
+   overlapping DNA sequences</td> </tr> <tr> [Part of this file has been
+   deleted for brevity] <tr> <td><a
+   href="dbiblast.html">dbiblast</a></td> <td>Index a BLAST database</td>
+   </tr> <tr> <td><a href="dbifasta.html">dbifasta</a></td> <td>Index a
+   fasta file database</td> </tr> <tr> <td><a
+   href="dbiflat.html">dbiflat</a></td> <td>Index a flat file
+   database</td> </tr> <tr> <td><a href="dbigcg.html">dbigcg</a></td>
+   <td>Index a GCG formatted database</td> </tr> <tr> <td><a
+   href="dbxfasta.html">dbxfasta</a></td> <td>Index a fasta file database
+   using b+tree indices</td> </tr> <tr> <td><a
+   href="dbxflat.html">dbxflat</a></td> <td>Index a flat file database
+   using b+tree indices</td> </tr> <tr> <td><a
+   href="dbxgcg.html">dbxgcg</a></td> <td>Index a GCG formatted database
+   using b+tree indices</td> </tr> </table> <h2><a name="UTILS
+   MISC">UTILS MISC</a></h2> <table border cellpadding=4
+   bgcolor="#FFFFF0"> <tr><th>Program name</th> <th>Description</th></tr>
+   <tr> <td><a href="embossdata.html">embossdata</a></td> <td>Find and
+   retrieve EMBOSS data files</td> </tr> <tr> <td><a
+   href="embossversion.html">embossversion</a></td> <td>Reports the
+   current EMBOSS version number</td> </tr> </table>
+
+   If the -html, -prelink and -postlink qualifiers are specified, then
+   the output will be wrapped in HTML tags, ready for inclusion in a Web
+   page. Note that tags such as <HTML>, <BODY>, </BODY> and </HTML> are
+   not output by this program as the list of programs is expected to form
+   only part of the contents of a web page - the rest of the web page
+   must be supplied by the user.
+
+Data files
+
+   As noted above, the program ACD files are searched. The average user
+   will not need to worry about this.
+
+Notes
+
+   wossname reads the short descriptions and the program groups from the
+   program ACD files. These file describe the command-line interface of
+   the applications. You don't need to know about them unless you are
+   writing EMBOSS programs. They are described in the EMBOSS Developers
+   Manual.
+
+   If a program's ACD file does not specify a program group, then it will
+   be automatically assigned to the group ASSORTED in the output file. A
+   program can belong to more than one group.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name     Description
+   infoalign        Display basic information about a multiple sequence
+                    alignment
+   infobase         Return information on a given nucleotide base
+   inforesidue      Return information on a given amino acid residue
+   infoseq          Display basic information about sequences
+   seealso          Finds programs with similar function to a specified program
+   showdb           Displays information on configured databases
+   textsearch       Search the textual description of sequence(s)
+   tfm              Displays full documentation for an application
+   whichdb          Search all sequence databases for an entry and retrieve it
+
+Author(s)
+
+   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None
+
+</pre></td></tr></table><p>
+<p>
+<p>
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-program]           string     Enter the name of an EMBOSS program (Any
+                                  string of at least 1 characters)
+
+   Additional (Optional) qualifiers:
+   -outfile            outfile    [stdout] Program documentation text output
+                                  file
+   -html               boolean    [N] This will format the output for
+                                  displaying as a WWW document.
+   -more               boolean    [@(!$(html))] This uses the standard UNIX
+                                  utility 'more' to display the text
+                                  page-by-page, waiting for you to read one
+                                  screen-full before going on to the next
+                                  page. When you have finished reading a page,
+                                  press the SPACE bar to proceed to the next
+                                  page.
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-program]<br>(Parameter 1)</td>
+<td>Enter the name of an EMBOSS program</td>
+<td>Any string of at least 1 characters</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-outfile</td>
+<td>Program documentation text output file</td>
+<td>Output file</td>
+<td>stdout</td>
+</tr>
+
+<tr>
+<td>-html</td>
+<td>This will format the output for displaying as a WWW document.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-more</td>
+<td>This uses the standard UNIX utility 'more' to display the text page-by-page, waiting for you to read one screen-full before going on to the next page. When you have finished reading a page, press the SPACE bar to proceed to the next page.</td>
+<td>Boolean value Yes/No</td>
+<td>@(!$(html))</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Input file format
+</H2>
+
+None.
+
+<p>
+
+
+<H2>
+    Output file format
+</H2>
+
+Text documentation is output.
+
+<P>
+
+The table of command line arguments can be a bit difficult to read. This is the
+result of changing HTML Web pages to text.
+
+<p>
+
+You will see a page of documentation on the <b>wossname</B> program.
+To see further pages, you should press the <B>SPACE</B> bar on your keyboard.
+To stop seeing the documentation before you get to the end of the text, you
+can press the key <b>q</b> to quit.
+
+<p>
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+The original data for the documentation can be found in:
+<A
+HREF="http://emboss.sourceforge.net/apps/">http://emboss.sourceforge.net/apps/</A>
+but please note that this is the documentation for the current
+development version. The documentation for your release should be
+nistalled somewhere on your system.
+
+
+<H2>
+    Notes
+</H2>
+
+<p>The documentation for your own release is included as HTML pages in the EMBOSS distribution and may be available at your site.  The same documentation is also available however through the program <b>tfm</b> as plain text. The documentation for all current and some past releases is provided by the developers at <a href="http://emboss.sourceforge.net/apps/">http://emboss.sourceforge.net/apps/</a>. All EMBOSS programs should be adequately described.  If you have problems understanding the function or usage of an EMBOSS program, then you should contact the EMBOSS mailing list (emboss@emboss.open-bio.org).</p>
+
+
+<p>The unusual name of this program comes from the common computing science expression: RTFM. This acronym, as you probably already know, stands for Read The Fine* Manual; so this is The Fine* Manual.  (* Insert the expletive of your choice here!)</p>
+
+Paged text output to the screen
+<p><b>tfm</b> is unusual for an EMBOSS program in that it expects to be used interactively and so it displays the documentation text a page at a time, pausing after every page for the user to press the SPACE bar on their keyboard, i.e. it uses the UNIX program <tt>more</tt> to display the information. This behaviour can be turned off by using the qualifier -nomore.</p>
+
+The program <tt>more</tt> is a very standard way for text files to be displayed in UNIX. You might, however, prefer the text to be displayed using other programs, for example <tt>less</tt> (which has more functionality than <tt>more</tt> and is used by many people). The UNIX environment variable <tt>PAGER</tt> can be set to hold the name of your preferred program. If you have PAGER set, then <b>tfm</b> will use this specified program instead of using the default <tt>more</tt> program. (If you want <b>tfm</b> to use a specified program that is different to the normal <tt>PAGER</tt> program, then <tt>PAGER</tt> can be overriden by setting the environment variable <tt>EMBOSS_PAGER</tt> to hold the name of the program that should only be used to display text in <b>tfm</b>).  <tt>PAGER</tt> can be set in UNIX with <tt>setenv PAGER less</tt>.  </p>
+
+<p>To get help on <tt>more</tt> when using it to display text, press the <tt>?</tt> key. To get help on <tt>less</tt> when using it to display text, press the <tt>h</tt> key. </p>
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<b>tfm</b> will warn you if you have supplied the name of a program
+which is not documented yet or which doesn't exist in EMBOSS.
+
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="infoalign.html">infoalign</a></td>
+<td>Display basic information about a multiple sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="infobase.html">infobase</a></td>
+<td>Return information on a given nucleotide base</td>
+</tr>
+
+<tr>
+<td><a href="inforesidue.html">inforesidue</a></td>
+<td>Return information on a given amino acid residue</td>
+</tr>
+
+<tr>
+<td><a href="infoseq.html">infoseq</a></td>
+<td>Display basic information about sequences</td>
+</tr>
+
+<tr>
+<td><a href="seealso.html">seealso</a></td>
+<td>Finds programs with similar function to a specified program</td>
+</tr>
+
+<tr>
+<td><a href="showdb.html">showdb</a></td>
+<td>Displays information on configured databases</td>
+</tr>
+
+<tr>
+<td><a href="textsearch.html">textsearch</a></td>
+<td>Search the textual description of sequence(s)</td>
+</tr>
+
+<tr>
+<td><a href="whichdb.html">whichdb</a></td>
+<td>Search all sequence databases for an entry and retrieve it</td>
+</tr>
+
+<tr>
+<td><a href="wossname.html">wossname</a></td>
+<td>Finds programs by keywords in their short description</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Author(s)
+</H2>
+Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+<br>
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+
+
+<H2>
+    History
+</H2>
+
+Written: 4 Aug 2000.
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+<H2>
+    Comments
+</H2>
+None
+
+</BODY>
+</HTML>
+

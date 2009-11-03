@@ -1,0 +1,12 @@
+This program is an EMBOSS conversion of a Fortran program written by Susan
+Jean Johns, VADMS Center, Biochemistry/Biophysics Department at WSU.
+
+<p>
+This application was modified for inclusion in EMBOSS by Ian Longden <a
+href="mailto:il@sanger.ac.uk">(il@sanger.ac.uk)</a> Informatics
+Division, The Sanger Centre, Wellcome Trust Genome Campus, Hinxton,
+Cambridge, CB10 1SA, UK.
+
+<p>
+Changes to the functionality in version 2 have been ported to the
+EMBOSS version.

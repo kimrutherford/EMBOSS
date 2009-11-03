@@ -1,0 +1,408 @@
+
+                                  recoder 
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Find restriction sites to remove (mutate) with no translation change
+
+Description
+
+   recoder finds restriction enzyme sites in a nucleotide sequence which
+   can be removed without changing the translation. recoder scans a
+   nucleotide sequence for restriction sites for a supplied set of
+   restriction enzymes. It writes a standard EMBOSS report of single base
+   positions which, when mutated, remove the restriction site whilst
+   maintaining the same translation in frame 1 of the input sequence. One
+   or more restriction enzymes can be specified or alternatively all the
+   enzymes in the REBASE database can be investigated. Optionally, the
+   untranslated and translated sequence may be reported.
+
+Usage
+
+   Here is a sample session with recoder
+
+
+% recoder 
+Find restriction sites to remove (mutate) with no translation change
+Input nucleotide sequence: tembl:x65923
+Comma separated enzyme list [all]: EcoRII
+Output report [x65923.recoder]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-sequence]          sequence   Nucleotide sequence filename and optional
+                                  format, or reference (input USA)
+   -enzymes            string     [all] Comma separated enzyme list (Any
+                                  string is accepted)
+  [-outfile]           report     [*.recoder] Output report file name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -sshow              boolean    [N] Display untranslated sequence
+   -tshow              boolean    [N] Display translated sequence
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -rformat2           string     Report format
+   -rname2             string     Base file name
+   -rextension2        string     File name extension
+   -rdirectory2        string     Output directory
+   -raccshow2          boolean    Show accession number in the report
+   -rdesshow2          boolean    Show description in the report
+   -rscoreshow2        boolean    Show the score in the report
+   -rstrandshow2       boolean    Show the nucleotide strand in the report
+   -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   recoder reads a normal nucleic acid sequence USA.
+
+  Input files for usage example
+
+   'tembl:x65923' is a sequence entry in the example nucleic acid
+   database 'tembl'
+
+  Database entry: tembl:x65923
+
+ID   X65923; SV 1; linear; mRNA; STD; HUM; 518 BP.
+XX
+AC   X65923;
+XX
+DT   13-MAY-1992 (Rel. 31, Created)
+DT   18-APR-2005 (Rel. 83, Last updated, Version 11)
+XX
+DE   H.sapiens fau mRNA
+XX
+KW   fau gene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
+;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-518
+RA   Michiels L.M.R.;
+RT   ;
+RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   L.M.R. Michiels, University of Antwerp, Dept of Biochemistry,
+RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
+XX
+RN   [2]
+RP   1-518
+RX   PUBMED; 8395683.
+RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
+RT   "fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
+RT   an antisense sequence in the Finkel-Biskis-Reilly murine sarcoma virus";
+RL   Oncogene 8(9):2537-2546(1993).
+XX
+DR   H-InvDB; HIT000322806.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..518
+FT                   /organism="Homo sapiens"
+FT                   /chromosome="11q"
+FT                   /map="13"
+FT                   /mol_type="mRNA"
+FT                   /clone_lib="cDNA"
+FT                   /clone="pUIA 631"
+FT                   /tissue_type="placenta"
+FT                   /db_xref="taxon:9606"
+FT   misc_feature    57..278
+FT                   /note="ubiquitin like part"
+FT   CDS             57..458
+FT                   /gene="fau"
+FT                   /db_xref="GDB:135476"
+FT                   /db_xref="GOA:P62861"
+FT                   /db_xref="HGNC:3597"
+FT                   /db_xref="HSSP:1GJZ"
+FT                   /db_xref="InterPro:IPR006846"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
+FT                   /protein_id="CAA46716.1"
+FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLA
+G
+FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKT
+G
+FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
+FT   misc_feature    98..102
+FT                   /note="nucleolar localization signal"
+FT   misc_feature    279..458
+FT                   /note="S30 part"
+FT   polyA_signal    484..489
+FT   polyA_site      509
+XX
+SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
+     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        6
+0
+     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       12
+0
+     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       18
+0
+     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       24
+0
+     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       30
+0
+     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       36
+0
+     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       42
+0
+     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       48
+0
+     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               51
+8
+//
+
+Output file format
+
+  Output files for usage example
+
+  File: x65923.recoder
+
+########################################
+# Program: recoder
+# Rundate: Tue 15 Jul 2008 12:00:00
+# Commandline: recoder
+#    -sequence tembl:x65923
+#    -enzymes EcoRII
+# Report_format: table
+# Report_file: x65923.recoder
+########################################
+
+#=======================================
+#
+# Sequence: X65923     from: 1   to: 518
+# HitCount: 34
+#
+# KEY:
+# Dir: Direction (Rev for reverse complement)
+# EnzymeName: Enzyme name
+# RS-Pattern: Restriction enzyme recognition site pattern
+# Base-Posn: Position of base to be mutated
+# AAs: Amino acid. Original sequence(.)After mutation
+# Mutation: The base mutation to perform
+#
+# Creating silent mutations
+#
+#=======================================
+
+  Start     End  Strand Dir    EnzymeName RS-Pattern Base-Posn    AAs Mutation
+     77      81       + .      EcoRII     CCWGG             78    P.P     C->G
+     77      81       + .      EcoRII     CCWGG             78    P.P     C->A
+     77      81       + .      EcoRII     CCWGG             78    P.P     C->T
+     77      81       + .      EcoRII     CCWGG             79    R.R     A->C
+     77      81       + .      EcoRII     CCWGG             81    R.R     G->A
+    107     111       + .      EcoRII     CCWGG            108    A.A     C->G
+    107     111       + .      EcoRII     CCWGG            108    A.A     C->A
+    107     111       + .      EcoRII     CCWGG            108    A.A     C->T
+    107     111       + .      EcoRII     CCWGG            109    R.R     A->C
+    107     111       + .      EcoRII     CCWGG            111    R.R     G->A
+    182     186       + .      EcoRII     CCWGG            183    S.S     C->G
+    182     186       + .      EcoRII     CCWGG            183    S.S     C->A
+    182     186       + .      EcoRII     CCWGG            183    S.S     C->T
+    197     201       + .      EcoRII     CCWGG            198    P.P     C->G
+    197     201       + .      EcoRII     CCWGG            198    P.P     C->A
+    197     201       + .      EcoRII     CCWGG            198    P.P     C->T
+    248     252       + .      EcoRII     CCWGG            249    P.P     C->G
+    248     252       + .      EcoRII     CCWGG            249    P.P     C->A
+    248     252       + .      EcoRII     CCWGG            249    P.P     C->T
+    293     297       + .      EcoRII     CCWGG            294    P.P     C->G
+    293     297       + .      EcoRII     CCWGG            294    P.P     C->A
+    293     297       + .      EcoRII     CCWGG            294    P.P     C->T
+     77      81       - Rev    EcoRII     CCWGG             79    P.P     T->G
+     77      81       - Rev    EcoRII     CCWGG             79    P.P     T->C
+    107     111       - Rev    EcoRII     CCWGG            109    P.P     T->G
+    107     111       - Rev    EcoRII     CCWGG            109    P.P     T->C
+    182     186       - Rev    EcoRII     CCWGG            184    P.P     A->G
+    182     186       - Rev    EcoRII     CCWGG            184    P.P     A->C
+    197     201       - Rev    EcoRII     CCWGG            199    P.P     A->G
+    197     201       - Rev    EcoRII     CCWGG            199    P.P     A->C
+    248     252       - Rev    EcoRII     CCWGG            250    P.P     A->G
+    248     252       - Rev    EcoRII     CCWGG            250    P.P     A->C
+    293     297       - Rev    EcoRII     CCWGG            295    P.P     A->G
+    293     297       - Rev    EcoRII     CCWGG            295    P.P     A->C
+
+#---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_length: 518
+# Reported_sequences: 1
+# Reported_hitcount: 34
+#---------------------------------------
+
+Data files
+
+   EMBOSS data files are distributed with the application and stored in
+   the standard EMBOSS data directory, which is defined by the EMBOSS
+   environment variable EMBOSS_DATA.
+
+   To see the available EMBOSS data files, run:
+
+% embossdata -showall
+
+   To fetch one of the data files (for example 'Exxx.dat') into your
+   current directory for you to inspect or modify, run:
+
+% embossdata -fetch -file Exxx.dat
+
+   Users can provide their own data files in their own directories.
+   Project specific files can be put in the current directory, or for
+   tidier directory listings in a subdirectory called ".embossdata".
+   Files for all EMBOSS runs can be put in the user's home directory, or
+   again in a subdirectory called ".embossdata".
+
+   The directories are searched in the following order:
+     * . (your current directory)
+     * .embossdata (under your current directory)
+     * ~/ (your home directory)
+     * ~/.embossdata
+
+   The EMBOSS REBASE restriction enzyme data files are stored in
+   directory 'data/REBASE/*' under the EMBOSS installation directory.
+
+   These files must first be set up using the program 'rebaseextract'.
+   Running 'rebaseextract' may be the job of your system manager.
+
+   The data files are stored in the REBASE directory of the standard
+   EMBOSS data directory. The names are:
+     * embossre.enz Cleavage information
+     * embossre.ref Reference/methylation information
+     * embossre.sup Supplier information
+
+   The column information is described at the top of the data files
+
+   The reported enzyme from any one group of isoschizomers (the
+   prototype) is specified in the REBASE database and the information is
+   held in the data file 'embossre.equ'. You may edit this file to set
+   your own preferred prototype, if you wish.
+
+   The format of the file "embossre.equ" is
+   Enzyme-name Prototype-name
+
+   i.e. two columns of enzyme names separated by a space. The first name
+   of the pair of enzymes is the name that is not preferred and the
+   second is the preferred (prototype) name.
+
+Notes
+
+   To find out whether the single point mutations found by recoder
+   introduce new restriction sites, silent should be run on the original
+   sequence. silent does the opposite to recoder. silent finds sites
+   where a restriction enzyme site can be introduced without changing the
+   translation in frame 1 of the sequence.
+
+References
+
+   None.
+
+Warnings
+
+   recoder uses the EMBOSS REBASE restriction enzyme data files stored in
+   directory data/REBASE/* under the EMBOSS installation directory. These
+   files must first be set up using the program rebaseextract. Running
+   rebaseextract may be the job of your system manager.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name     Description
+   redata           Retrieve information from REBASE restriction enzyme database
+   remap            Display restriction enzyme binding sites in a nucleotide
+                    sequence
+   restover         Find restriction enzymes producing a specific overhang
+   restrict         Report restriction enzyme cleavage sites in a nucleotide
+                    sequence
+   showseq          Displays sequences with features in pretty format
+   silent           Find restriction sites to insert (mutate) with no translation
+                    change
+
+   silent does the opposite to recoder. silent finds sites where a
+   restriction enzyme site can be introduced without changing the
+   translation in frame 1 of the sequence. recoder finds sites where a
+   restriction enzyme site can be removed without changing the
+   translation in frame 1 of the sequence.
+
+Author(s)
+
+   Tim Carver (tcarver © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+History
+
+   Written (January 2001) - Tim Carver
+
+   Renamed from recode to recoder 16 May 2001 as the old name clashed
+   with a common UNIX print utility:
+   http://www.iro.umontreal.ca/contrib/recode/HTML/
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

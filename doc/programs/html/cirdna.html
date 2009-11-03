@@ -1,0 +1,658 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: cirdna
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+cirdna
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
+    Function
+</H2>
+Draws circular maps of DNA constructs
+<H2>
+    Description
+</H2>
+
+
+<p><b>cirdna</b> draws circular maps of DNA constructs. It uses graphical shapes including ticks, ranges, and blocks to represent genetic markers (e.g, genes and ESTs) and places them according to their position in a DNA fragment. The markers can be organized in different groups. A group may contain up to 10000 markers, so the program is suitable for drawing circular representations of genomic sequences.</p>
+
+<p>The program reads an input file containing the names and positions of the genetic markers. You must write this file yourself (see Input File Format below).  Data for controlling the appearance of the markers may also be added to this file.</p>
+
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with cirdna</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>cirdna -graph cps </b>
+Draws circular maps of DNA constructs
+Commands to the lindna drawing program file [inputfile]: <b>data.cirp</b>
+Draw a ruler [Y]: <b></b>
+      Open : Open blocks
+    Filled : Filled blocks
+   Outline : Black border
+Type of blocks [Filled]: <b></b>
+      1 : In
+      2 : Out
+Ticks inside or outside the circle [Out]: <b></b>
+      1 : In
+      2 : Out
+Text inside or outside the blocks [In]: <b></b>
+
+Created cirdna.ps
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-infile]            infile     [inputfile] Commands to the lindna drawing
+                                  program file
+   -[no]ruler          boolean    [Y] Draw a ruler
+   -blocktype          menu       [Filled] Type of blocks (Values: Open (Open
+                                  blocks); Filled (Filled blocks); Outline
+                                  (Black border))
+   -posticks           selection  [Out] Ticks inside or outside the circle
+   -posblocks          selection  [In] Text inside or outside the blocks
+   -graphout           graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, das, xterm, png, gif)
+
+   Additional (Optional) qualifiers:
+   -maxgroups          integer    [20] Maximum number of groups (Integer 1 or
+                                  more)
+   -maxlabels          integer    [10000] Maximum number of labels (Integer 1
+                                  or more)
+   -originangle        float      [90] Position in degrees of the molecule's
+                                  origin on the circle (Number from 0.000 to
+                                  360.000)
+   -[no]intersymbol    boolean    [Y] Horizontal junctions between blocks
+   -intercolour        integer    [1] Colour of junctions between blocks
+                                  (enter a colour number) (Integer from 0 to
+                                  15)
+   -interticks         boolean    [N] Horizontal junctions between ticks
+   -gapsize            integer    [500] Interval between ticks in the ruler
+                                  (Integer 0 or more)
+   -ticklines          boolean    [N] Vertical lines at the ruler's ticks
+   -textheight         float      [1.0] Height of text. Enter a number <1.0 or
+                                  >1.0 to decrease or increase the size,
+                                  respectively (Number 0.000 or more)
+   -textlength         float      [1.0] Length of text. Enter a number <1.0 or
+                                  >1.0 to decrease or increase the size,
+                                  respectively (Number 0.000 or more)
+   -tickheight         float      [1.0] Height of ticks. Enter a number <1.0
+                                  or >1.0 to decrease or increase the size,
+                                  respectively (Number 0.000 or more)
+   -blockheight        float      [1.0] Height of blocks. Enter a number <1.0
+                                  or >1.0 to decrease or increase the size,
+                                  respectively (Number 0.000 or more)
+   -rangeheight        float      [1.0] Height of range ends. Enter a number
+                                  <1.0 or >1.0 to decrease or increase the
+                                  size, respectively (Number 0.000 or more)
+   -gapgroup           float      [1.0] Space between groups. Enter a number
+                                  <1.0 or >1.0 to decrease or increase the
+                                  size, respectively (Number 0.000 or more)
+   -postext            float      [1.0] Space between text and ticks, blocks,
+                                  and ranges. Enter a number <1.0 or >1.0 to
+                                  decrease or increase the size, respectively
+                                  (Number 0.000 or more)
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-graphout" associated qualifiers
+   -gprompt            boolean    Graph prompting
+   -gdesc              string     Graph description
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-infile]<br>(Parameter 1)</td>
+<td>Commands to the lindna drawing program file</td>
+<td>Input file</td>
+<td>inputfile</td>
+</tr>
+
+<tr>
+<td>-[no]ruler</td>
+<td>Draw a ruler</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-blocktype</td>
+<td>Type of blocks</td>
+<td><table><tr><td>Open</td> <td><i>(Open blocks)</i></td></tr><tr><td>Filled</td> <td><i>(Filled blocks)</i></td></tr><tr><td>Outline</td> <td><i>(Black border)</i></td></tr></table></td>
+<td>Filled</td>
+</tr>
+
+<tr>
+<td>-posticks</td>
+<td>Ticks inside or outside the circle</td>
+<td>Choose from selection list of values</td>
+<td>Out</td>
+</tr>
+
+<tr>
+<td>-posblocks</td>
+<td>Text inside or outside the blocks</td>
+<td>Choose from selection list of values</td>
+<td>In</td>
+</tr>
+
+<tr>
+<td>-graphout</td>
+<td>Graph type</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, das, xterm, png, gif</td>
+<td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-maxgroups</td>
+<td>Maximum number of groups</td>
+<td>Integer 1 or more</td>
+<td>20</td>
+</tr>
+
+<tr>
+<td>-maxlabels</td>
+<td>Maximum number of labels</td>
+<td>Integer 1 or more</td>
+<td>10000</td>
+</tr>
+
+<tr>
+<td>-originangle</td>
+<td>Position in degrees of the molecule's origin on the circle</td>
+<td>Number from 0.000 to 360.000</td>
+<td>90</td>
+</tr>
+
+<tr>
+<td>-[no]intersymbol</td>
+<td>Horizontal junctions between blocks</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-intercolour</td>
+<td>Colour of junctions between blocks (enter a colour number)</td>
+<td>Integer from 0 to 15</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-interticks</td>
+<td>Horizontal junctions between ticks</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-gapsize</td>
+<td>Interval between ticks in the ruler</td>
+<td>Integer 0 or more</td>
+<td>500</td>
+</tr>
+
+<tr>
+<td>-ticklines</td>
+<td>Vertical lines at the ruler's ticks</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-textheight</td>
+<td>Height of text. Enter a number &lt;1.0 or &gt;1.0 to decrease or increase the size, respectively</td>
+<td>Number 0.000 or more</td>
+<td>1.0</td>
+</tr>
+
+<tr>
+<td>-textlength</td>
+<td>Length of text. Enter a number &lt;1.0 or &gt;1.0 to decrease or increase the size, respectively</td>
+<td>Number 0.000 or more</td>
+<td>1.0</td>
+</tr>
+
+<tr>
+<td>-tickheight</td>
+<td>Height of ticks. Enter a number &lt;1.0 or &gt;1.0 to decrease or increase the size, respectively</td>
+<td>Number 0.000 or more</td>
+<td>1.0</td>
+</tr>
+
+<tr>
+<td>-blockheight</td>
+<td>Height of blocks. Enter a number &lt;1.0 or &gt;1.0 to decrease or increase the size, respectively</td>
+<td>Number 0.000 or more</td>
+<td>1.0</td>
+</tr>
+
+<tr>
+<td>-rangeheight</td>
+<td>Height of range ends. Enter a number &lt;1.0 or &gt;1.0 to decrease or increase the size, respectively</td>
+<td>Number 0.000 or more</td>
+<td>1.0</td>
+</tr>
+
+<tr>
+<td>-gapgroup</td>
+<td>Space between groups. Enter a number &lt;1.0 or &gt;1.0 to decrease or increase the size, respectively</td>
+<td>Number 0.000 or more</td>
+<td>1.0</td>
+</tr>
+
+<tr>
+<td>-postext</td>
+<td>Space between text and ticks, blocks, and ranges. Enter a number &lt;1.0 or &gt;1.0 to decrease or increase the size, respectively</td>
+<td>Number 0.000 or more</td>
+<td>1.0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+<H2>
+    Input file format
+</H2>
+
+<p>
+
+Blank lines in the input file are ignored. 
+
+<p>
+
+The file is organized in several fields separated by one or more space
+or TAB characters.
+
+<p>
+
+The first non-blank line gives the start position of the DNA fragment to
+be drawn after the keyword 'Start'.  The end position is on the second
+line following the keyword 'End'. 
+
+<p>
+
+Then, one or more groups (up to a maximum of 20) of genetic markers are
+defined.  Each group begins with a line consisting of the keyword
+'group' and ends with a line consisting of the keyword 'endgroup'. 
+
+<p>
+
+If desired, a group name can be given on the very next line but
+will not be displayed (only for compatibilty with lindna). 
+
+<p>
+
+Next, the individual markers (up to a maximum of 1000) of the group are
+described.  Each marker begins with a line consisting of the keyword
+'label' and ends with a line consisting of the keyword 'endlabel'.
+
+<p>
+
+Do not start a new marker (by using a 'label' line) before you have
+closed the previous marker (by using an 'endlabel' line).  You must end
+a previous marker specification before starting a new one.  i.e.  do not
+overlap marker specifications in the input file. 
+
+<p>
+
+For each marker, the line following the 'label' line describes the
+marker. Three types of markers can be drawn: ticks, blocks, and ranges. 
+
+<p>
+
+For a tick, the descriptive line begins with the keyword 'Tick',
+followed by the position of the tick in the DNA fragment, and a number
+from 0 to 15 specifying the color in which the tick will be drawn (a
+list of available colors is given below).  If desired, a name can be
+written above the tick.  This name must be given on the next line.  If
+more than one name are given (one name per line), only the first one
+will be displayed. 
+
+<p>
+
+For a block, the descriptive line begins with the keyword 'Block',
+followed by the start and end positions of the block in the DNA
+fragment, and the number of the block's color.  If desired, a name can
+be written above or inside the block.  This name must be given on the
+next line.  If more than one name are given (one name per line), only
+the first one will be displayed. 
+
+<p>
+
+For a range, the descriptive line begins with the keyword 'Range',
+followed by the start and end positions of the range in the DNA
+fragment.  Next on the line are the types of boundaries that are to be
+drawn.  The user can choose among '&gt;', '&lt;', '[', ']' and '|' for both
+start and end boundaries.  If none of these types is wanted for a given
+boundary, then a point '.' must be entered.  Next is the color number. 
+If desired, a name can be written above the range.  This name must be
+given on the next line.  If more than one name are given (one name per
+line), only the first one will be displayed. 
+
+<p>
+
+For any type of markers, names will be written in the same color as the
+marker.  Also, try to avoid long names. 
+
+<p>
+
+The colors defined in the PLPLOT graphics library are:
+
+<p>
+
+0 "BLACK", 1 "RED", 2 "YELLOW", 3 "GREEN", 4 "AQUAMARINE",
+5 "PINK", 6 "WHEAT", 7 "GREY", 8 "BROWN", 9 "BLUE", 10 "BLUEVIOLET",
+11 "CYAN", 12 "TURQUOISE", 13 "MAGENTA", 14 "SALMON", and 15 "WHITE".
+
+<p>
+
+This format can also be used for the program <a
+href="lindna.html">"lindna".</a>
+
+<p>
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: data.cirp</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+Start   1001
+End     4270
+
+
+group
+label
+Block    1011   1362    3
+ex1
+endlabel
+label
+Tick     1610   8
+EcoR1
+endlabel
+label
+Block    1647   1815    1
+endlabel
+label
+Tick     2459   8
+BamH1
+endlabel
+label
+Block    4139   4258    3
+ex2
+endlabel
+endgroup
+
+
+group
+label
+Range    2541    2812    [       ]       5
+Alu
+endlabel
+label
+Range    3322    3497    &gt;       &lt;       5
+MER13
+endlabel
+endgroup
+</pre>
+</td></tr></table><p>
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>Graphics File: cirdna.ps</h3>
+<p><img src="cirdna.1.cirdna.gif" alt="[cirdna results]">
+Output is to the specified graphics device.
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+<p>There are many options for controlling the appearance of the plot.  Mostly these are "additional qualifiers" and can be specified on the command-line by using the corresponding flag, but will not normally be prompted for.  To be prompted for values for them, run the program with the <tt>-options</tt> global qualifier.</p>
+
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="abiview.html">abiview</a></td>
+<td>Display the trace in an ABI sequencer file</td>
+</tr>
+
+<tr>
+<td><a href="lindna.html">lindna</a></td>
+<td>Draws linear maps of DNA constructs</td>
+</tr>
+
+<tr>
+<td><a href="pepnet.html">pepnet</a></td>
+<td>Draw a helical net for a protein sequence</td>
+</tr>
+
+<tr>
+<td><a href="pepwheel.html">pepwheel</a></td>
+<td>Draw a helical wheel diagram for a protein sequence</td>
+</tr>
+
+<tr>
+<td><a href="prettyplot.html">prettyplot</a></td>
+<td>Draw a sequence alignment with pretty formatting</td>
+</tr>
+
+<tr>
+<td><a href="prettyseq.html">prettyseq</a></td>
+<td>Write a nucleotide sequence and its translation to file</td>
+</tr>
+
+<tr>
+<td><a href="remap.html">remap</a></td>
+<td>Display restriction enzyme binding sites in a nucleotide sequence</td>
+</tr>
+
+<tr>
+<td><a href="seealso.html">seealso</a></td>
+<td>Finds programs with similar function to a specified program</td>
+</tr>
+
+<tr>
+<td><a href="showalign.html">showalign</a></td>
+<td>Display a multiple sequence alignment in pretty format</td>
+</tr>
+
+<tr>
+<td><a href="showdb.html">showdb</a></td>
+<td>Displays information on configured databases</td>
+</tr>
+
+<tr>
+<td><a href="showfeat.html">showfeat</a></td>
+<td>Display features of a sequence in pretty format</td>
+</tr>
+
+<tr>
+<td><a href="showpep.html">showpep</a></td>
+<td>Displays protein sequences with features in pretty format</td>
+</tr>
+
+<tr>
+<td><a href="showseq.html">showseq</a></td>
+<td>Displays sequences with features in pretty format</td>
+</tr>
+
+<tr>
+<td><a href="sixpack.html">sixpack</a></td>
+<td>Display a DNA sequence with 6-frame translation and ORFs</td>
+</tr>
+
+<tr>
+<td><a href="textsearch.html">textsearch</a></td>
+<td>Search the textual description of sequence(s)</td>
+</tr>
+
+</table>
+
+<H2>
+    Author(s)
+</H2>
+Nicolas Tourasse (nicolas.tourasse&nbsp;&copy;&nbsp;biotek.uio.no)
+<br>
+Biotechnology Center of Oslo
+
+
+<H2>
+    History
+</H2>
+
+Written 1999 - Nicolas Tourasse
+<br>
+Updated (2002) - Nicolas Tourasse
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+None
+
+
+</BODY>
+</HTML>
+

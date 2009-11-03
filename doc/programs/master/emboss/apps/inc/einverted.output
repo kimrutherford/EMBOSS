@@ -1,0 +1,59 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: d00596.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;D00596_13_142
+gctacgcgagaggctgaggcagcagaattacttgaacccaggaggcggaggttgcagtga
+gccgagatcgcgccactgcactccagcctgggtgagagagcgagactctgtctcaaaaaa
+aaaaaaaaaa
+&gt;D00596_199_328
+ttttttttttttttttttgggacagtcttgctctgtcgcccaggctggagtacaatggtc
+ggatcttggctcactgcaacctctgcctcccaggttcaagcaattcttctgcctcagcct
+cccaagtagc
+&gt;D00596_12128_12301
+agaggatttttttttttttttttttttttgagacagagttttgctctgttgcccaggctg
+gaatgcaacggcgtgatcttggctcactgtaacctctgcctcctgggttcgagtgattct
+cctgcctcagcctccaagtagctgggattacagcatgtgccaccatgcctggct
+&gt;D00596_12573_12749
+agccaggtgtggtggctcacacctgtaattccaacaactccagaggccaaggcgagagga
+tcatttgaacccacggaatttgaggctgtagtgagtcatgatcacgccattgcactccat
+cctgggcaacagagtgagaccctgaatatttaaaaacaacaacaacaacaaaactct
+&gt;D00596_12246_12296
+ctcctgcctcagcctccaagtagctgggattacagcatgtgccaccatgcc
+&gt;D00596_13886_13938
+ggtatggtggctcatgcctgtaatcccagcactttggaagactgagacaggag
+&gt;D00596_13884_13949
+tgggtatggtggctcatgcctgtaatcccagcactttggaagactgagacaggagcaatt
+gcttga
+&gt;D00596_14628_14692
+tcaagcaattcttctgcctcagcctcccaggtagctgggattacaggcacatgccaccac
+accca
+</pre>
+</td></tr></table><p>
+<p><h3>File: d00596.inv</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+
+D00596: Score 236: 108/130 ( 83%) matches, 0 gaps
+      13 gctacgcgagaggctgaggcagcagaattacttgaacccaggaggcggaggttgcagtgagccgagatcgcgccactgcactccagcctgggtgagagagcgagactctgtctcaaaaaaaaaaaaaaaa 142     
+         |||||  | ||||||||||||| |||||| ||||||||  |||||| |||||||||||||||| |||||   ||| || ||||||||||||| || ||||| ||||| |  |  ||||||||||||||||
+     328 cgatgaaccctccgactccgtcttcttaacgaacttggaccctccgtctccaacgtcactcggttctaggctggtaacatgaggtcggacccgctgtctcgttctgacagggtttttttttttttttttt 199     
+
+D00596: Score 164: 128/174 ( 73%) matches, 3 gaps
+   12128 agaggatttttttttttttttttttttttgagacagagttttgctctgttgcccaggctggaatgcaacggcgtgatcttggctcactgtaacctctgcctcc-tgggttcgagtgattctcctgcctcagcctc-caagtagctgggattaca-gcatgtgccaccatgcctggct 12301   
+         ||||  || || || || || |||||    |  ||| || |  |||||||||||||| |||| ||||| ||||||||| || ||||||  | ||||    ||| ||||||| | |||| |||  ||||  |||||   ||| | ||| |||||| |  || |||||||  |||||||
+   12749 tctcaaaacaacaacaacaacaaaaatttataagtcccagagtgagacaacgggtcctacctcacgttaccgcactagtactgagtgatgtcggagtttaaggcacccaagtttactaggagagcggaaccggagacctcaacaaccttaatgtccacactcggtggtgtggaccga 12573   
+
+D00596: Score 80: 44/51 ( 86%) matches, 2 gaps
+   12246 ctcctgcctcag-cctccaagtagctgggattaca-gcatgtgccaccatgcc 12296   
+         |||||| ||||| | |||||   |||||||||||| ||||| |||||||| ||
+   13938 gaggacagagtcagaaggtttcacgaccctaatgtccgtactcggtggtatgg 13886   
+
+D00596: Score 99: 53/65 ( 81%) matches, 1 gaps
+   13884 tgggtatggtggctcatgcctgtaatcccagcactttggaagactgagacaggagcaattgcttga 13949   
+         ||||| |||||||   ||||||||||||||||    ||| || ||||| ||| || ||||||||||
+   14692 acccacaccaccgtacacggacattagggtcgatggaccctccgactccgtcttc-ttaacgaact 14628   
+</pre>
+</td></tr></table><p>

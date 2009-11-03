@@ -1,0 +1,101 @@
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-dbname]<br>(Parameter 1)</td>
+<td>Basename for index files</td>
+<td>Any string from 2 to 19 characters, matching regular expression /[A-z][A-z0-9_]+/</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-dbresource]<br>(Parameter 2)</td>
+<td>Resource name</td>
+<td>Any string from 2 to 19 characters, matching regular expression /[A-z][A-z0-9_]+/</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-idformat</td>
+<td>ID line format</td>
+<td><table><tr><td>simple</td> <td><i>(&gt;ID)</i></td></tr><tr><td>idacc</td> <td><i>(&gt;ID ACC or &gt;ID (ACC))</i></td></tr><tr><td>gcgid</td> <td><i>(&gt;db:ID)</i></td></tr><tr><td>gcgidacc</td> <td><i>(&gt;db:ID ACC)</i></td></tr><tr><td>dbid</td> <td><i>(&gt;db ID)</i></td></tr><tr><td>ncbi</td> <td><i>(| formats)</i></td></tr></table></td>
+<td>idacc</td>
+</tr>
+
+<tr>
+<td>-directory</td>
+<td>Database directory</td>
+<td>Directory</td>
+<td>.</td>
+</tr>
+
+<tr>
+<td>-filenames</td>
+<td>Wildcard database filename</td>
+<td>Any string is accepted</td>
+<td>*.fasta</td>
+</tr>
+
+<tr>
+<td>-fields</td>
+<td>Index fields</td>
+<td><table><tr><td>id</td> <td><i>(ID)</i></td></tr><tr><td>acc</td> <td><i>(Accession number)</i></td></tr><tr><td>sv</td> <td><i>(Sequence Version and GI)</i></td></tr><tr><td>des</td> <td><i>(Description)</i></td></tr></table></td>
+<td>id,acc</td>
+</tr>
+
+<tr>
+<td>-outfile</td>
+<td>General log output file</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.dbxfasta</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-release</td>
+<td>Release number</td>
+<td>Any string up to 9 characters</td>
+<td>0.0</td>
+</tr>
+
+<tr>
+<td>-date</td>
+<td>Index date</td>
+<td>Date string dd/mm/yy</td>
+<td>00/00/00</td>
+</tr>
+
+<tr>
+<td>-exclude</td>
+<td>Wildcard filename(s) to exclude</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr>
+<td>-indexoutdir</td>
+<td>Index file output directory</td>
+<td>Output directory</td>
+<td>.</td>
+</tr>
+
+</table>

@@ -1,0 +1,153 @@
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -sitelen            integer    [4] This sets the minimum length of the
+                                  restriction enzyme recognition site. Any
+                                  enzymes with sites shorter than this will be
+                                  ignored. (Integer from 2 to 20)
+   -enzymes            string     [all] The name 'all' reads in all enzyme
+                                  names from the REBASE database. You can
+                                  specify enzymes by giving their names with
+                                  commas between then, such as:
+                                  'HincII,hinfI,ppiI,hindiii'.
+                                  The case of the names is not important. You
+                                  can specify a file of enzyme names to read
+                                  in by giving the name of the file holding
+                                  the enzyme names with a '@' character in
+                                  front of it, for example, '@enz.list'.
+                                  Blank lines and lines starting with a hash
+                                  character or '!' are ignored and all other
+                                  lines are concatenated together with a comma
+                                  character ',' and then treated as the list
+                                  of enzymes to search for.
+                                  An example of a file of enzyme names is:
+                                  ! my enzymes
+                                  HincII, ppiII
+                                  ! other enzymes
+                                  hindiii
+                                  HinfI
+                                  PpiI (Any string is accepted)
+  [-outfile]           report     [*.restrict] Output report file name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -datafile           datafile   Restriction enzyme data file (optional)
+   -mfile              datafile   [Emethylsites.dat] Restriction enzyme data
+                                  file (optional)
+   -min                integer    [1] This sets the minimum number of cuts for
+                                  any restriction enzyme that will be
+                                  considered. Any enzymes that cut fewer times
+                                  than this will be ignored. (Integer from 1
+                                  to 1000)
+   -max                integer    [2000000000] This sets the maximum number of
+                                  cuts for any restriction enzyme that will
+                                  be considered. Any enzymes that cut more
+                                  times than this will be ignored. (Integer up
+                                  to 2000000000)
+   -solofragment       boolean    [N] This gives the fragment lengths of the
+                                  forward sense strand produced by complete
+                                  restriction by each restriction enzyme on
+                                  its own. Results are added to the tail
+                                  section of the report.
+   -single             boolean    [N] If this is set then this forces the
+                                  values of the mincuts and maxcuts qualifiers
+                                  to both be 1. Any other value you may have
+                                  set them to will be ignored.
+   -[no]blunt          boolean    [Y] This allows those enzymes which cut at
+                                  the same position on the forward and reverse
+                                  strands to be considered.
+   -[no]sticky         boolean    [Y] This allows those enzymes which cut at
+                                  different positions on the forward and
+                                  reverse strands, leaving an overhang, to be
+                                  considered.
+   -[no]ambiguity      boolean    [Y] This allows those enzymes which have one
+                                  or more 'N' ambiguity codes in their
+                                  pattern to be considered
+   -plasmid            boolean    [N] If this is set then this allows searches
+                                  for restriction enzyme recognition site and
+                                  cut postions that span the end of the
+                                  sequence to be considered.
+   -methylation        boolean    [N] If this is set then RE recognition sites
+                                  will not match methylated bases.
+   -[no]commercial     boolean    [Y] If this is set, then only those enzymes
+                                  with a commercial supplier will be searched
+                                  for. This qualifier is ignored if you have
+                                  specified an explicit list of enzymes to
+                                  search for, rather than searching through
+                                  'all' the enzymes in the REBASE database. It
+                                  is assumed that, if you are asking for an
+                                  explicit enzyme, then you probably know
+                                  where to get it from and so all enzymes
+                                  names that you have asked to be searched
+                                  for, and which cut, will be reported whether
+                                  or not they have a commercial supplier.
+   -[no]limit          boolean    [Y] This limits the reporting of enzymes to
+                                  just one enzyme from each group of
+                                  isoschizomers. The enzyme chosen to
+                                  represent an isoschizomer group is the
+                                  prototype indicated in the data file
+                                  'embossre.equ', which is created by the
+                                  program 'rebaseextract'. If you prefer
+                                  different prototypes to be used, make a copy
+                                  of embossre.equ in your home directory and
+                                  edit it. If this value is set to be false
+                                  then all of the input enzymes will be
+                                  reported. You might like to set this to
+                                  false if you are supplying an explicit set
+                                  of enzymes rather than searching 'all' of
+                                  them.
+   -alphabetic         boolean    [N] Sort output alphabetically
+   -fragments          boolean    [N] This gives the fragment lengths of the
+                                  forward sense strand produced by complete
+                                  restriction using all of the input enzymes
+                                  together. Results are added to the tail
+                                  section of the report.
+   -name               boolean    [N] Show sequence name
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -rformat2           string     Report format
+   -rname2             string     Base file name
+   -rextension2        string     File name extension
+   -rdirectory2        string     Output directory
+   -raccshow2          boolean    Show accession number in the report
+   -rdesshow2          boolean    Show description in the report
+   -rscoreshow2        boolean    Show the score in the report
+   -rstrandshow2       boolean    Show the nucleotide strand in the report
+   -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+

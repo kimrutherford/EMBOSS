@@ -1,0 +1,694 @@
+
+                                  merger 
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Merge two overlapping sequences
+
+Description
+
+   merger reads two overlapping input sequences of the same type
+   (typically nucleotide) and uses a global alignment algorithm
+   (Needleman & Wunsch) to optimally align the sequences. A merged
+   sequence is generated from the alignment and writen to the output
+   file. The sequence alignment is also written.
+
+Algorithm
+
+   It uses a global alignment algorithm (Needleman & Wunsch) to optimally
+   align the sequences and then creates a merged sequence from the
+   alignment. When there is a mismatch in the alignment between the two
+   sequences, the base included in the merged sequence is the base from
+   the sequence which has the best local sequence quality score.
+
+   The following heuristic is used to find the sequence quality score. If
+   one of the bases is a 'N', then the other sequence's base is used.
+   Otherwise, a window size around the disputed base is used to find the
+   local quality score. This window size is increased from 5, to 10 to 20
+   bases or until there is a clear decision on the best choice. If there
+   is no best choice after using a window of 20, then the base in the
+   first sequence is used.
+
+   To calculate the quality of a window of a sequence around a base:
+    * quality = sequence value/length under window either side of the base
+    * sequence value = sum of points in that window
+    * unambiguous bases (ACGTU) score 2 points
+    * ambiguous bases (MRWSYKVHDB) score 1 point
+    * Ns score 0 points
+    * off end of the sequence scores 0 points
+
+   This heavily discriminates against the iffy bits at the end of
+   sequence reads.
+
+Usage
+
+   Here is a sample session with merger
+
+
+% merger 
+Merge two overlapping sequences
+Input sequence: tembl:v00295
+Second sequence: tembl:x51872
+Output alignment [v00295.merger]: 
+output sequence [v00295.fasta]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+   Typically, one of the sequences will need to be reverse-complemented
+   to put it into the correct orientation to make it join. For example:
+
+% merger file1.seq file2.seq -sreverse2 -outseq merged.seq
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-asequence]         sequence   Sequence filename and optional format, or
+                                  reference (input USA)
+  [-bsequence]         sequence   Sequence filename and optional format, or
+                                  reference (input USA)
+  [-outfile]           align      [*.merger] Output alignment file name
+  [-outseq]            seqout     [.] Sequence filename and
+                                  optional format (output USA)
+
+   Additional (Optional) qualifiers:
+   -datafile           matrixf    [EBLOSUM62 for protein, EDNAFULL for DNA]
+                                  This is the scoring matrix file used when
+                                  comparing sequences. By default it is the
+                                  file 'EBLOSUM62' (for proteins) or the file
+                                  'EDNAFULL' (for nucleic sequences). These
+                                  files are found in the 'data' directory of
+                                  the EMBOSS installation.
+   -gapopen            float      [@($(acdprotein)? 50.0 : 50.0 )] Gap opening
+                                  penalty (Number from 0.000 to 100.000)
+   -gapextend          float      [@($(acdprotein)? 5.0 : 5.0)] Gap extension
+                                  penalty (Number from 0.000 to 10.000)
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-asequence" associated qualifiers
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-bsequence" associated qualifiers
+   -sbegin2            integer    Start of the sequence to be used
+   -send2              integer    End of the sequence to be used
+   -sreverse2          boolean    Reverse (if DNA)
+   -sask2              boolean    Ask for begin/end/reverse
+   -snucleotide2       boolean    Sequence is nucleotide
+   -sprotein2          boolean    Sequence is protein
+   -slower2            boolean    Make lower case
+   -supper2            boolean    Make upper case
+   -sformat2           string     Input sequence format
+   -sdbname2           string     Database name
+   -sid2               string     Entryname
+   -ufo2               string     UFO features
+   -fformat2           string     Features format
+   -fopenfile2         string     Features file name
+
+   "-outfile" associated qualifiers
+   -aformat3           string     Alignment format
+   -aextension3        string     File name extension
+   -adirectory3        string     Output directory
+   -aname3             string     Base file name
+   -awidth3            integer    Alignment width
+   -aaccshow3          boolean    Show accession number in the header
+   -adesshow3          boolean    Show description in the header
+   -ausashow3          boolean    Show the full USA in the alignment
+   -aglobal3           boolean    Show the full sequence in alignment
+
+   "-outseq" associated qualifiers
+   -osformat4          string     Output seq format
+   -osextension4       string     File name extension
+   -osname4            string     Base file name
+   -osdirectory4       string     Output directory
+   -osdbname4          string     Database name to add
+   -ossingle4          boolean    Separate file for each entry
+   -oufo4              string     UFO features
+   -offormat4          string     Features format
+   -ofname4            string     Features file name
+   -ofdirectory4       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   merger reads any two sequence USAs of the same type (protein or
+   nucleic acid.)
+
+  Input files for usage example
+
+   'tembl:v00295' is a sequence entry in the example nucleic acid
+   database 'tembl'
+
+  Database entry: tembl:v00295
+
+ID   V00295; SV 1; linear; genomic DNA; STD; PRO; 1500 BP.
+XX
+AC   V00295;
+XX
+DT   09-JUN-1982 (Rel. 01, Created)
+DT   07-JUL-1995 (Rel. 44, Last updated, Version 4)
+XX
+DE   E. coli lacY gene (codes for lactose permease).
+XX
+KW   membrane protein.
+XX
+OS   Escherichia coli
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
+OC   Enterobacteriaceae; Escherichia.
+XX
+RN   [1]
+RP   1-1500
+RX   DOI; 10.1038/283541a0.
+RX   PUBMED; 6444453.
+RA   Buechel D.E., Gronenborn B., Mueller-Hill B.;
+RT   "Sequence of the lactose permease gene";
+RL   Nature 283(5747):541-545(1980).
+XX
+CC   lacZ is a beta-galactosidase and lacA is transacetylase.
+CC   KST ECO.LACY
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1500
+FT                   /organism="Escherichia coli"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:562"
+FT   CDS             <1..54
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /note="reading frame (lacZ)"
+FT                   /db_xref="GOA:P00722"
+FT                   /db_xref="InterPro:IPR014718"
+FT                   /db_xref="PDB:3DYP"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P00722"
+FT                   /protein_id="CAA23570.1"
+FT                   /translation="FQLSAGRYHYQLVWCQK"
+FT   CDS             106..1359
+FT                   /transl_table=11
+FT                   /note="reading frame (lacY)"
+FT                   /db_xref="GOA:P02920"
+FT                   /db_xref="InterPro:IPR018457"
+FT                   /db_xref="PDB:2V8N"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P02920"
+FT                   /protein_id="CAA23571.1"
+FT                   /translation="MYYLKNTNFWMFGLFFFFYFFIMGAYFPFFPIWLHDINHISKSD
+T
+FT                   GIIFAAISLFSLLFQPLFGLLSDKLGLRKYLLWIITGMLVMFAPFFIFIFGPLLQYNI
+L
+FT                   VGSIVGGIYLGFCFNAGAPAVEAFIEKVSRRSNFEFGRARMFGCVGWALCASIVGIMF
+T
+FT                   INNQFVFWLGSGCALILAVLLFFAKTDAPSSATVANAVGANHSAFSLKLALELFRQPK
+L
+FT                   WFLSLYVIGVSCTYDVFDQQFANFFTSFFATGEQGTRVFGYVTTMGELLNASIMFFAP
+L
+FT                   IINRIGGKNALLLAGTIMSVRIIGSSFATSALEVVILKTLHMFEVPFLLVGCFKYITS
+Q
+FT                   FEVRFSATIYLVCFCFFKQLAMIFMSVLAGNMYESIGFQGAYLVLGLVALGFTLISVF
+T
+FT                   LSGPGPLSLLRRQVNEVA"
+FT   CDS             1423..>1500
+FT                   /transl_table=11
+FT                   /note="reading frame (lacA)"
+FT                   /db_xref="GOA:P07464"
+FT                   /db_xref="InterPro:IPR018357"
+FT                   /db_xref="PDB:1KRV"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P07464"
+FT                   /protein_id="CAA23572.1"
+FT                   /translation="MNMPMTERIRAGKLFTDMCEGLPEKR"
+XX
+SQ   Sequence 1500 BP; 315 A; 342 C; 357 G; 486 T; 0 other;
+     ttccagctga gcgccggtcg ctaccattac cagttggtct ggtgtcaaaa ataataataa        6
+0
+     ccgggcaggc catgtctgcc cgtatttcgc gtaaggaaat ccattatgta ctatttaaaa       12
+0
+     aacacaaact tttggatgtt cggtttattc tttttctttt acttttttat catgggagcc       18
+0
+     tacttcccgt ttttcccgat ttggctacat gacatcaacc atatcagcaa aagtgatacg       24
+0
+     ggtattattt ttgccgctat ttctctgttc tcgctattat tccaaccgct gtttggtctg       30
+0
+     ctttctgaca aactcgggct gcgcaaatac ctgctgtgga ttattaccgg catgttagtg       36
+0
+     atgtttgcgc cgttctttat ttttatcttc gggccactgt tacaatacaa cattttagta       42
+0
+     ggatcgattg ttggtggtat ttatctaggc ttttgtttta acgccggtgc gccagcagta       48
+0
+     gaggcattta ttgagaaagt cagccgtcgc agtaatttcg aatttggtcg cgcgcggatg       54
+0
+     tttggctgtg ttggctgggc gctgtgtgcc tcgattgtcg gcatcatgtt caccatcaat       60
+0
+     aatcagtttg ttttctggct gggctctggc tgtgcactca tcctcgccgt tttactcttt       66
+0
+     ttcgccaaaa cggatgcgcc ctcttctgcc acggttgcca atgcggtagg tgccaaccat       72
+0
+     tcggcattta gccttaagct ggcactggaa ctgttcagac agccaaaact gtggtttttg       78
+0
+     tcactgtatg ttattggcgt ttcctgcacc tacgatgttt ttgaccaaca gtttgctaat       84
+0
+     ttctttactt cgttctttgc taccggtgaa cagggtacgc gggtatttgg ctacgtaacg       90
+0
+     acaatgggcg aattacttaa cgcctcgatt atgttctttg cgccactgat cattaatcgc       96
+0
+     atcggtggga aaaacgccct gctgctggct ggcactatta tgtctgtacg tattattggc      102
+0
+     tcatcgttcg ccacctcagc gctggaagtg gttattctga aaacgctgca tatgtttgaa      108
+0
+     gtaccgttcc tgctggtggg ctgctttaaa tatattacca gccagtttga agtgcgtttt      114
+0
+     tcagcgacga tttatctggt ctgtttctgc ttctttaagc aactggcgat gatttttatg      120
+0
+     tctgtactgg cgggcaatat gtatgaaagc atcggtttcc agggcgctta tctggtgctg      126
+0
+     ggtctggtgg cgctgggctt caccttaatt tccgtgttca cgcttagcgg ccccggcccg      132
+0
+     ctttccctgc tgcgtcgtca ggtgaatgaa gtcgcttaag caatcaatgt cggatgcggc      138
+0
+     gcgacgctta tccgaccaac atatcataac ggagtgatcg cattgaacat gccaatgacc      144
+0
+     gaaagaataa gagcaggcaa gctatttacc gatatgtgcg aaggcttacc ggaaaaaaga      150
+0
+//
+
+  Database entry: tembl:x51872
+
+ID   X51872; SV 1; linear; genomic DNA; STD; PRO; 1832 BP.
+XX
+AC   X51872;
+XX
+DT   17-APR-1990 (Rel. 23, Created)
+DT   05-JUL-1999 (Rel. 60, Last updated, Version 5)
+XX
+DE   Escherichia coli lacA gene for thiogalactoside transacetylase
+XX
+KW   lac operon; lacA gene; lacY gene; thiogalactoside transacetylase.
+XX
+OS   Escherichia coli
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
+OC   Enterobacteriaceae; Escherichia.
+XX
+RN   [1]
+RC   (1-1832)
+RP   1-1832
+RX   DOI; 10.1073/pnas.82.19.6414.
+RX   PUBMED; 3901000.
+RA   Hediger M.A., Johnson D.F., Nierlich D.P., Zabin I.;
+RT   "DNA sequence of the lactose operon: the lacA gene and the transcriptional
+RT   termination region";
+RL   Proc. Natl. Acad. Sci. U.S.A. 82(19):6414-6418(1985).
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1832
+FT                   /organism="Escherichia coli"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:562"
+FT   CDS             <1..18
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /product="lacY gene product"
+FT                   /protein_id="CAA36161.1"
+FT                   /translation="VNEVA"
+FT   CDS             82..693
+FT                   /transl_table=11
+FT                   /gene="lacA"
+FT                   /product="thiogalactoside transacetylase"
+FT                   /db_xref="GOA:P07464"
+FT                   /db_xref="InterPro:IPR018357"
+FT                   /db_xref="PDB:1KRV"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P07464"
+FT                   /protein_id="CAA36162.1"
+FT                   /translation="MNMPMTERIRAGKLFTDMCEGLPEKRLRGKTLMYEFNHSHPSEV
+E
+FT                   KRESLIKEMFATVGENAWVEPPVYFSYGSNIHIGRNFYANFNLTIVDDYTVTIGDNVL
+I
+FT                   APNVTLSVTGHPVHHELRKNGEMYSFPITIGNNVWIGSHVVINPGVTIGDNSVIGAGS
+I
+FT                   VTKDIPPNVVAAGVPCRVIREINDRDKHYYFKDYKVESSV"
+XX
+SQ   Sequence 1832 BP; 519 A; 510 C; 450 G; 353 T; 0 other;
+     gtgaatgaag tcgcttaagc aatcaatgtc ggatgcggcg cgacgcttat ccgaccaaca        6
+0
+     tatcataacg gagtgatcgc attgaacatg ccaatgaccg aaagaataag agcaggcaag       12
+0
+     ctatttaccg atatgtgcga aggcttaccg gaaaaaagac ttcgtgggaa aacgttaatg       18
+0
+     tatgagttta atcactcgca tccatcagaa gttgaaaaaa gagaaagcct gattaaagaa       24
+0
+     atgtttgcca cggtagggga aaacgcctgg gtagaaccgc ctgtctattt ctcttacggt       30
+0
+     tccaacatcc atataggccg caatttttat gcaaatttca atttaaccat tgtcgatgac       36
+0
+     tacacggtaa caatcggtga taacgtactg attgcaccca acgttactct ttccgttacg       42
+0
+     ggacaccctg tacaccatga attgagaaaa aacggcgaga tgtactcttt tccgataacg       48
+0
+     attggcaata acgtctggat cggaagtcat gtggttatta atccaggcgt caccatcggg       54
+0
+     gataattctg ttattggcgc gggtagtatc gtcacaaaag acattccacc aaacgtcgtg       60
+0
+     gcggctggcg ttccttgtcg ggttattcgc gaaataaacg accgggataa gcactattat       66
+0
+     ttcaaagatt ataaagttga atcgtcagtt taaattataa aaattgcctg atacgctgcg       72
+0
+     cttatcaggc ctacaagttc agcgatctac attagccgca tccggcatga acaaagcgca       78
+0
+     ggaacaagcg tcgcatcatg cctctttgac ccacagctgc ggaaaacgta ctggtgcaaa       84
+0
+     acgcagggtt atgatcatca gcccaacgac gcacagcgca tgaaatgccc agtccatcag       90
+0
+     gtaattgccg ctgatactac gcagcacgcc agaaaaccac ggggcaagcc cggcgatgat       96
+0
+     aaaaccgatt ccctgcataa acgccaccag cttgccagca atagccggtt gcacagagtg      102
+0
+     atcgagcgcc agcagcaaac agagcggaaa cgcgccgccc agacctaacc cacacaccat      108
+0
+     cgcccacaat accggcaatt gcatcggcag ccagataaag ccgcagaacc ccaccagttg      114
+0
+     taacaccagc gccagcatta acagtttgcg ccgatcctga tggcgagcca tagcaggcat      120
+0
+     cagcaaagct cctgcggctt gcccaagcgt catcaatgcc agtaaggaac cgctgtactg      126
+0
+     cgcgctggca ccaatctcaa tatagaaagc gggtaaccag gcaatcaggc tggcgtaacc      132
+0
+     gccgttaatc agaccgaagt aaacacccag cgtccacgcg cggggagtga ataccacgcg      138
+0
+     aaccggagtg gttgttgtct tgtgggaaga ggcgacctcg cgggcgcttt gccaccacca      144
+0
+     ggcaaagagc gcaacaacgg caggcagcgc caccaggcga gtgtttgata ccaggtttcg      150
+0
+     ctatgttgaa ctaaccaggg cgttatggcg gcaccaagcc caccgccgcc catcagagcc      156
+0
+     gcggaccaca gccccatcac cagtggcgtg cgctgctgaa accgccgttt aatcaccgaa      162
+0
+     gcatcaccgc ctgaatgatg ccgatcccca ccccaccaag cagtgcgctg ctaagcagca      168
+0
+     gcgcactttg cgggtaaagc tcacgcatca atgcaccgac ggcaatcagc aacagactga      174
+0
+     tggcgacact gcgacgttcg ctgacatgct gatgaagcca gcttccggcc agcgccagcc      180
+0
+     cgcccatggt aaccaccggc agagcggtcg ac                                    183
+2
+//
+
+Output file format
+
+   The output sequence file contains the joined sequence, by default in
+   FASTA format. Where there is a mismatch in the alignment, the chosen
+   base is written to the output sequence in uppercase.
+
+   The output is a standard EMBOSS alignment file.
+
+   The results can be output in one of several styles by using the
+   command-line qualifier -aformat xxx, where 'xxx' is replaced by the
+   name of the required format. Some of the alignment formats can cope
+   with an unlimited number of sequences, while others are only for pairs
+   of sequences.
+
+   The available multiple alignment format names are: unknown, multiple,
+   simple, fasta, msf, trace, srs
+
+   The available pairwise alignment format names are: pair, markx0,
+   markx1, markx2, markx3, markx10, srspair, score
+
+   See: http://emboss.sf.net/docs/themes/AlignFormats.html for further
+   information on alignment formats.
+
+   The output report file contains descriptions of the positions where
+   there is a mismatch in the alignment and shows the alignment. Where
+   there is a mismatch in the alignment, the chosen base is written in
+   uppercase.
+
+  Output files for usage example
+
+  File: v00295.merger
+
+########################################
+# Program: merger
+# Rundate: Tue 15 Jul 2008 12:00:00
+# Commandline: merger
+#    -asequence tembl:v00295
+#    -bsequence tembl:x51872
+# Align_format: simple
+# Report_file: v00295.merger
+########################################
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: V00295
+# 2: X51872
+# Matrix: EDNAFULL
+# Gap_penalty: 50.0
+# Extend_penalty: 5.0
+#
+# Length: 3173
+# Identity:     159/3173 ( 5.0%)
+# Similarity:   159/3173 ( 5.0%)
+# Gaps:        3014/3173 (95.0%)
+# Score: 795.0
+#
+#
+#=======================================
+
+V00295             1 ttccagctgagcgccggtcgctaccattaccagttggtctggtgtcaaaa     50
+
+X51872             1 --------------------------------------------------      0
+
+V00295            51 ataataataaccgggcaggccatgtctgcccgtatttcgcgtaaggaaat    100
+
+X51872             1 --------------------------------------------------      0
+
+V00295           101 ccattatgtactatttaaaaaacacaaacttttggatgttcggtttattc    150
+
+X51872             1 --------------------------------------------------      0
+
+V00295           151 tttttcttttacttttttatcatgggagcctacttcccgtttttcccgat    200
+
+X51872             1 --------------------------------------------------      0
+
+V00295           201 ttggctacatgacatcaaccatatcagcaaaagtgatacgggtattattt    250
+
+X51872             1 --------------------------------------------------      0
+
+V00295           251 ttgccgctatttctctgttctcgctattattccaaccgctgtttggtctg    300
+
+
+
+  [Part of this file has been deleted for brevity]
+
+
+X51872          1310 ctggcgtaaccgccgttaatcagaccgaagtaaacacccagcgtccacgc   1359
+
+V00295          1501 --------------------------------------------------   1500
+
+X51872          1360 gcggggagtgaataccacgcgaaccggagtggttgttgtcttgtgggaag   1409
+
+V00295          1501 --------------------------------------------------   1500
+
+X51872          1410 aggcgacctcgcgggcgctttgccaccaccaggcaaagagcgcaacaacg   1459
+
+V00295          1501 --------------------------------------------------   1500
+
+X51872          1460 gcaggcagcgccaccaggcgagtgtttgataccaggtttcgctatgttga   1509
+
+V00295          1501 --------------------------------------------------   1500
+
+X51872          1510 actaaccagggcgttatggcggcaccaagcccaccgccgcccatcagagc   1559
+
+V00295          1501 --------------------------------------------------   1500
+
+X51872          1560 cgcggaccacagccccatcaccagtggcgtgcgctgctgaaaccgccgtt   1609
+
+V00295          1501 --------------------------------------------------   1500
+
+X51872          1610 taatcaccgaagcatcaccgcctgaatgatgccgatccccaccccaccaa   1659
+
+V00295          1501 --------------------------------------------------   1500
+
+X51872          1660 gcagtgcgctgctaagcagcagcgcactttgcgggtaaagctcacgcatc   1709
+
+V00295          1501 --------------------------------------------------   1500
+
+X51872          1710 aatgcaccgacggcaatcagcaacagactgatggcgacactgcgacgttc   1759
+
+V00295          1501 --------------------------------------------------   1500
+
+X51872          1760 gctgacatgctgatgaagccagcttccggccagcgccagcccgcccatgg   1809
+
+V00295          1501 -----------------------   1500
+
+X51872          1810 taaccaccggcagagcggtcgac   1832
+
+
+#---------------------------------------
+#
+# Conflicts:          V00295          X51872
+#              position base   position base Using
+#
+#
+#---------------------------------------
+
+  File: v00295.fasta
+
+>V00295 V00295.1 E. coli lacY gene (codes for lactose permease).
+ttccagctgagcgccggtcgctaccattaccagttggtctggtgtcaaaaataataataa
+ccgggcaggccatgtctgcccgtatttcgcgtaaggaaatccattatgtactatttaaaa
+aacacaaacttttggatgttcggtttattctttttcttttacttttttatcatgggagcc
+tacttcccgtttttcccgatttggctacatgacatcaaccatatcagcaaaagtgatacg
+ggtattatttttgccgctatttctctgttctcgctattattccaaccgctgtttggtctg
+ctttctgacaaactcgggctgcgcaaatacctgctgtggattattaccggcatgttagtg
+atgtttgcgccgttctttatttttatcttcgggccactgttacaatacaacattttagta
+ggatcgattgttggtggtatttatctaggcttttgttttaacgccggtgcgccagcagta
+gaggcatttattgagaaagtcagccgtcgcagtaatttcgaatttggtcgcgcgcggatg
+tttggctgtgttggctgggcgctgtgtgcctcgattgtcggcatcatgttcaccatcaat
+aatcagtttgttttctggctgggctctggctgtgcactcatcctcgccgttttactcttt
+ttcgccaaaacggatgcgccctcttctgccacggttgccaatgcggtaggtgccaaccat
+tcggcatttagccttaagctggcactggaactgttcagacagccaaaactgtggtttttg
+tcactgtatgttattggcgtttcctgcacctacgatgtttttgaccaacagtttgctaat
+ttctttacttcgttctttgctaccggtgaacagggtacgcgggtatttggctacgtaacg
+acaatgggcgaattacttaacgcctcgattatgttctttgcgccactgatcattaatcgc
+atcggtgggaaaaacgccctgctgctggctggcactattatgtctgtacgtattattggc
+tcatcgttcgccacctcagcgctggaagtggttattctgaaaacgctgcatatgtttgaa
+gtaccgttcctgctggtgggctgctttaaatatattaccagccagtttgaagtgcgtttt
+tcagcgacgatttatctggtctgtttctgcttctttaagcaactggcgatgatttttatg
+tctgtactggcgggcaatatgtatgaaagcatcggtttccagggcgcttatctggtgctg
+ggtctggtggcgctgggcttcaccttaatttccgtgttcacgcttagcggccccggcccg
+ctttccctgctgcgtcgtcaggtgaatgaagtcgcttaagcaatcaatgtcggatgcggc
+gcgacgcttatccgaccaacatatcataacggagtgatcgcattgaacatgccaatgacc
+gaaagaataagagcaggcaagctatttaccgatatgtgcgaaggcttaccggaaaaaaga
+cttcgtgggaaaacgttaatgtatgagtttaatcactcgcatccatcagaagttgaaaaa
+agagaaagcctgattaaagaaatgtttgccacggtaggggaaaacgcctgggtagaaccg
+cctgtctatttctcttacggttccaacatccatataggccgcaatttttatgcaaatttc
+aatttaaccattgtcgatgactacacggtaacaatcggtgataacgtactgattgcaccc
+aacgttactctttccgttacgggacaccctgtacaccatgaattgagaaaaaacggcgag
+atgtactcttttccgataacgattggcaataacgtctggatcggaagtcatgtggttatt
+aatccaggcgtcaccatcggggataattctgttattggcgcgggtagtatcgtcacaaaa
+gacattccaccaaacgtcgtggcggctggcgttccttgtcgggttattcgcgaaataaac
+gaccgggataagcactattatttcaaagattataaagttgaatcgtcagtttaaattata
+aaaattgcctgatacgctgcgcttatcaggcctacaagttcagcgatctacattagccgc
+atccggcatgaacaaagcgcaggaacaagcgtcgcatcatgcctctttgacccacagctg
+cggaaaacgtactggtgcaaaacgcagggttatgatcatcagcccaacgacgcacagcgc
+atgaaatgcccagtccatcaggtaattgccgctgatactacgcagcacgccagaaaacca
+cggggcaagcccggcgatgataaaaccgattccctgcataaacgccaccagcttgccagc
+aatagccggttgcacagagtgatcgagcgccagcagcaaacagagcggaaacgcgccgcc
+cagacctaacccacacaccatcgcccacaataccggcaattgcatcggcagccagataaa
+gccgcagaaccccaccagttgtaacaccagcgccagcattaacagtttgcgccgatcctg
+atggcgagccatagcaggcatcagcaaagctcctgcggcttgcccaagcgtcatcaatgc
+cagtaaggaaccgctgtactgcgcgctggcaccaatctcaatatagaaagcgggtaacca
+ggcaatcaggctggcgtaaccgccgttaatcagaccgaagtaaacacccagcgtccacgc
+gcggggagtgaataccacgcgaaccggagtggttgttgtcttgtgggaagaggcgacctc
+gcgggcgctttgccaccaccaggcaaagagcgcaacaacggcaggcagcgccaccaggcg
+agtgtttgataccaggtttcgctatgttgaactaaccagggcgttatggcggcaccaagc
+ccaccgccgcccatcagagccgcggaccacagccccatcaccagtggcgtgcgctgctga
+aaccgccgtttaatcaccgaagcatcaccgcctgaatgatgccgatccccaccccaccaa
+gcagtgcgctgctaagcagcagcgcactttgcgggtaaagctcacgcatcaatgcaccga
+cggcaatcagcaacagactgatggcgacactgcgacgttcgctgacatgctgatgaagcc
+agcttccggccagcgccagcccgcccatggtaaccaccggcagagcggtcgac
+
+Data files
+
+   It reads the scoring matrix for the alignment from the standard EMBOSS
+   'data' directory. By default it is the file 'EBLOSUM62' (for proteins)
+   or the file 'EDNAFULL' (for nucleic sequences).
+
+Notes
+
+   This program was originally written to aid in the reconstruction of
+   mRNA sequences which had been sequenced from both ends as a 5' and 3'
+   EST (cDNA). eg. joining two reads produced by primer walking
+   sequencing.
+
+   The gap open and gap extension penalties have been set at a higher
+   level than is usual (50 and 5). This was experimentally determined to
+   give the best results with a set of poor quality EST test sequences.
+
+References
+
+   None.
+
+Warnings
+
+   Care should be taken to reverse one of the sequences (e.g. using the
+   qualifier -sreverse2) if this is required to get them both in the
+   correct orientation..
+
+   merger uses the memory-hungry Needleman & Wunsch alignment. The
+   required memory may be greater than the available memory when
+   attempting to merge large (cosmid-sized or greater) sequences.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It exits with a status of 0
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name     Description
+   cons             Create a consensus sequence from a multiple alignment
+   consambig        Create an ambiguous consensus sequence from a multiple
+                    alignment
+   megamerger       Merge two large overlapping DNA sequences
+
+Author(s)
+
+   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+History
+
+   Written (Gary Williams) 1999
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

@@ -1,0 +1,250 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+diffseq
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/diffseq.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<p><b>diffseq</b> reads two sequences which typically are very similar
+or almost identical.  It finds regions of overlap between the two
+sequences and reports on differences between the features of the two
+sequences within these regions.  The output is a standard EMBOSS
+report file.  The start and end positions of the regions of overlap
+are reported.  Any differences between the sequences, and any features
+(except the source feature) that overlap those differences, are
+included in the output report.</p>
+
+<p>The differences are also reported for each input sequence as two
+separate feature table output files.</p>
+
+
+
+<H2>
+Algorithm
+</H2>
+
+<p><b>diffseq</b> searches for identical matches between all sequence
+words from both sequences. Identical sequence regions are found by
+creating a hash table of subsequences of user-defined size (-wordsize
+option), which is 10 by default. It then reduces the matches to a
+minimum set of overlapping matches by sorting them in order of size
+(largest size first).  For each such match it removes any smaller
+matches that overlap. The result is a set of the longest regions of
+identity between the two sequences that do not overlap with each
+other. The mismatched regions between these matches are reported.</p>
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/diffseq.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/diffseq.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/diffseq.itable" -->
+
+<H2>
+    Input file format
+</H2>
+This program reads in two nucleic acid sequence USAs or two protein
+sequence USAs. 
+
+<p>
+<!--#include file="inc/diffseq.input" -->
+
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/reportformats.ihtml" -->
+<p>
+
+By default <b>diffseq</b> writes a 'diffseq' report file.
+
+<p>
+<!--#include file="inc/diffseq.output" -->
+
+<p>
+
+The first line is the title giving the names of the sequences used.
+<p>
+The next two non-blank lines state the positions in each sequence
+where the detected overlap between them starts.
+<p>
+There then follows a set of reports of the mismatches between the sequences.
+<br>
+Each report consists of 4 or more lines.
+<br>
+<ul>
+
+<li>The first line has the name of the first sequence followed by the
+start and end positions of the mismatched region in that sequence,
+followed by the length of the mismatched region. If the mismatched
+region is of zero length in this sequence, then only the position of
+the last matching base before the mismatch is given.</li>
+
+<li>If a feature of the first sequence overlaps with this mismatch
+region, then one or more lines starting with 'Feature:' comes next
+with the type, position and tag field of the feature.</li>
+
+<li>Next is a line starting "Sequence:" giving the sequence of the
+mismatch in the first sequence.</li> </ul>
+
+<p>
+
+This is followed by the equivalent information for the second
+sequence, but in the reverse order, namely 'Sequence:' line,
+'Feature:' lines and line giving the position of the mismatch in the
+second sequence.
+<p>
+
+At the end of the report are two non-blank lines giving the positions in each
+sequence where the detected
+overlap between them ends.
+<p>
+
+The last three lines of the report gives the counts of SNPs (defined
+as a change of one nucleotide to one other nucleotide, no deletions or
+insertions are counted, no multi-base changes are counted).
+<p>
+
+If the input sequences are nucleic acid, The counts of transitions
+(Pyrimide to Pyrimidine or Purine to Purine) and transversions
+(Pyrimidine to Purine) are also given. 
+
+<p>
+
+It should be noted that not all features are reported.
+
+<p>
+
+The 'source' feature found in all EMBL/Genbank feature table entries is
+not reported as this covers all of the sequence and so overlaps with any
+difference found in that sequence and so is uninformative and
+irritating.  It has therefore been removed from the output report. 
+
+<p>
+
+The translation information of CDS features is often extremely long and
+does not add useful information to the report.  It has therefore been
+removed from the output report. 
+
+<H2>
+    Data files
+</H2>
+
+None
+
+<H2>
+    Notes
+</H2>
+
+
+<p><b>diffseq</b> is useful when looking for SNPs, differences between
+strains of an organism and anything else that requires the differences
+between two eseentially identical sequences to be highlighted.</p>
+
+<p>Identical sequence regions are found by creating a hash table of
+subsequences of user-defined size (-wordsize option, which is 10 by
+default). Making this value larger (e.g. 20) may speed-up the program
+slightly, but will mean that any two differences
+within <tt>wordsize</tt> bases bases or residues of each other will be
+grouped as a single region of difference.  This value may be made
+smaller to improve the resolution of nearby differences, but the
+program will go much slower.</p>
+
+<p>The sequences can be very long; it should be possible to find
+differences between sequences that are Mega-bases long. If, however,
+you run out of memory, use a larger word size.  This increases the
+length between mismatches that will be reported as one event. Thus a
+word size of 50 will report two single-base differences that are with
+50 bases of each other as one mismatch.</p>
+   
+<p>By default, <b>diffseq</b> finds regions of identity that are at
+least as long as the specified word-size. This is what is typically
+required when working with long overlapping nucleic acid sequences,
+where the non-overlapping sequence ends are less interesting. If
+however, you have protein sequences or short RNA sequences then
+you may well be interested in differences at the very ends.
+The <tt>-globaldifferences</tt> option when set means the differences
+at the ends will also be reported.</p>
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/diffseq.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/gwilliam.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/diffseq.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/diffseq.comment" -->
+
+
+</BODY>
+</HTML>
+

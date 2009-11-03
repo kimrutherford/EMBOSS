@@ -1,0 +1,72 @@
+# EMBOSS Protein comparison matrix files
+#
+#Name        Description
+#=======     ===========
+
+EBLOSUM30    BLOSUM Matrix in 1/5 Bit Units for Percentage: >= 30
+EBLOSUM35    BLOSUM Matrix in 1/4 Bit Units for Percentage: >= 35
+EBLOSUM40    BLOSUM Matrix in 1/4 Bit Units for Percentage: >= 40
+EBLOSUM45    BLOSUM Matrix in 1/3 Bit Units for Percentage: >= 45
+EBLOSUM50    BLOSUM Matrix in 1/3 Bit Units for Percentage: >= 50
+EBLOSUM55    BLOSUM Matrix in 1/3 Bit Units for Percentage: >= 55
+EBLOSUM60    BLOSUM Matrix in 1/1 Bit Units for Percentage: >= 60
+EBLOSUM62    BLOSUM Matrix in 1/2 Bit Units for Percentage: >= 62
+EBLOSUM62-12 BLOSUM Matrix in 1/2 Bit Units for Percentage: >= 62
+EBLOSUM65    BLOSUM Matrix in 1/2 Bit Units for Percentage: >= 65
+EBLOSUM70    BLOSUM Matrix in 1/2 Bit Units for Percentage: >= 70
+EBLOSUM75    BLOSUM Matrix in 1/2 Bit Units for Percentage: >= 75
+EBLOSUM80    BLOSUM Matrix in 1/2 Bit Units for Percentage: >= 80
+EBLOSUM85    BLOSUM Matrix in 1/2 Bit Units for Percentage: >= 85
+EBLOSUM90    BLOSUM Matrix in 1/2 Bit Units for Percentage: >= 90
+EBLOSUMN     BLOSUM Clustered Scoring Matrix in 1/2 Bit Units for Percentage: >= -2
+
+EPAM10       PAM 10 substitution matrix, scale = ln(2)/2 = 0.346574
+EPAM20       PAM 20 substitution matrix, scale = ln(2)/2 = 0.346574
+EPAM30       PAM 30 substitution matrix, scale = ln(2)/2 = 0.346574
+EPAM40       PAM 40 substitution matrix, scale = ln(2)/2 = 0.346574
+EPAM50       PAM 50 substitution matrix, scale = ln(2)/2 = 0.346574
+EPAM60       PAM 60 substitution matrix, scale = ln(2)/2 = 0.346574
+EPAM70       PAM 70 substitution matrix, scale = ln(2)/2 = 0.346574
+EPAM80       PAM 80 substitution matrix, scale = ln(2)/2 = 0.346574
+EPAM90       PAM 90 substitution matrix, scale = ln(2)/2 = 0.346574
+EPAM100      PAM 100 substitution matrix, scale = ln(2)/2 = 0.346574
+EPAM110      PAM 110 substitution matrix, scale = ln(2)/2 = 0.346574
+EPAM120      PAM 120 substitution matrix, scale = ln(2)/2 = 0.346574
+EPAM130      PAM 130 substitution matrix, scale = ln(2)/2 = 0.346574
+EPAM140      PAM 140 substitution matrix, scale = ln(2)/2 = 0.346574
+EPAM150      PAM 150 substitution matrix, scale = ln(2)/2 = 0.346574
+EPAM160      PAM 160 substitution matrix, scale = ln(2)/2 = 0.346574
+EPAM170      PAM 170 substitution matrix, scale = ln(2)/3 = 0.231049
+EPAM180      PAM 180 substitution matrix, scale = ln(2)/3 = 0.231049
+EPAM190      PAM 190 substitution matrix, scale = ln(2)/3 = 0.231049
+EPAM200      PAM 200 substitution matrix, scale = ln(2)/3 = 0.231049
+EPAM210      PAM 210 substitution matrix, scale = ln(2)/3 = 0.231049
+EPAM220      PAM 220 substitution matrix, scale = ln(2)/3 = 0.231049
+EPAM230      PAM 230 substitution matrix, scale = ln(2)/3 = 0.231049
+EPAM240      PAM 240 substitution matrix, scale = ln(2)/3 = 0.231049
+EPAM250      PAM 250 substitution matrix, scale = ln(2)/3 = 0.231049
+EPAM260      PAM 260 substitution matrix, scale = ln(2)/3 = 0.231049
+EPAM270      PAM 270 substitution matrix, scale = ln(2)/4 = 0.173287
+EPAM280      PAM 280 substitution matrix, scale = ln(2)/4 = 0.173287
+EPAM290      PAM 290 substitution matrix, scale = ln(2)/4 = 0.173287
+EPAM300      PAM 300 substitution matrix, scale = ln(2)/4 = 0.173287
+EPAM310      PAM 310 substitution matrix, scale = ln(2)/4 = 0.173287
+EPAM320      PAM 320 substitution matrix, scale = ln(2)/4 = 0.173287
+EPAM330      PAM 330 substitution matrix, scale = ln(2)/4 = 0.173287
+EPAM340      PAM 340 substitution matrix, scale = ln(2)/4 = 0.173287
+EPAM350      PAM 350 substitution matrix, scale = ln(2)/5 = 0.138629
+EPAM360      PAM 360 substitution matrix, scale = ln(2)/5 = 0.138629
+EPAM370      PAM 370 substitution matrix, scale = ln(2)/5 = 0.138629
+EPAM380      PAM 380 substitution matrix, scale = ln(2)/5 = 0.138629
+EPAM390      PAM 390 substitution matrix, scale = ln(2)/5 = 0.138629
+EPAM400      PAM 400 substitution matrix, scale = ln(2)/5 = 0.138629
+EPAM410      PAM 410 substitution matrix, scale = ln(2)/6 = 0.115525
+EPAM420      PAM 420 substitution matrix, scale = ln(2)/6 = 0.115525
+EPAM430      PAM 430 substitution matrix, scale = ln(2)/6 = 0.115525
+EPAM440      PAM 440 substitution matrix, scale = ln(2)/6 = 0.115525
+EPAM450      PAM 450 substitution matrix, scale = ln(2)/6 = 0.115525
+EPAM460      PAM 460 substitution matrix, scale = ln(2)/6 = 0.115525
+EPAM470      PAM 470 substitution matrix, scale = ln(2)/7 = 0.0990210
+EPAM480      PAM 480 substitution matrix, scale = ln(2)/7 = 0.0990210
+EPAM490      PAM 490 substitution matrix, scale = ln(2)/7 = 0.0990210
+EPAM500      PAM 500 substitution matrix, scale = ln(2)/7 = 0.0990210

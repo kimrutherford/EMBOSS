@@ -1,0 +1,42 @@
+# Example ACD file for QA testing - for calculated attributes
+#
+
+appl: qatestcalcseqall [ groups: "test" doc: "ACD file for QA testing" ]
+
+seqall: test [ param: Y ]
+
+string: testlength [
+	 standard: "Y"
+	 info: "Length"
+	 default: "$(test.length)"
+]
+
+string: testname [
+	 standard: "Y"
+	 info: "Name"
+	 default: "$(test.name)"
+]
+
+string: testbegin [
+	 standard: "Y"
+	 info: "Begin"
+	 default: "$(test.begin)"
+]
+
+string: testend [
+	 standard: "Y"
+	 info: "End"
+	 default: "$(test.end)"
+]
+
+string: testprotein [
+	 standard: "Y"
+	 info: "Protein"
+	 default: "$(test.protein)"
+]
+
+string: testnucleic [
+	 standard: "Y"
+	 info: "Nucleic"
+	 default: "$(test.nucleic)"
+]

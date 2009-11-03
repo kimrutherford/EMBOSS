@@ -1,0 +1,6 @@
+application: acdlog [
+  documentation: "Test application ACD file processing and trace data
+                  structures"
+  gui: "no"
+  groups: "Acd"
+]

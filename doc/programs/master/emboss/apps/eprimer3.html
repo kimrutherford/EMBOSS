@@ -1,0 +1,297 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: eprimer3
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+eprimer3
+<!--#include file="header2.inc" -->
+<H2>
+    Function
+</H2>
+<!--#include file="inc/eprimer3.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<b>eprimer3</b> is an interface to the 'primer3' program from the
+Whitehead Institute. 
+
+<p>
+
+The Whitehead program must be set up and on the path in order for
+<b>eprimer3</b> to find and run it. 
+
+<p>
+
+Primer3 picks primers for PCR reactions, considering as criteria:
+<p>
+
+<UL>
+<LI>oligonucleotide melting temperature, size, GC content,
+  and primer-dimer possibilities,
+
+<LI>PCR product size,
+
+<LI>positional constraints within the source sequence, and
+
+<LI>miscellaneous other constraints.
+</UL>
+
+<p>
+
+All of these criteria are user-specifiable as constraints.
+
+<p>
+
+<b>eprimer3</b> can also pick hybridisation oligos that are internal to
+the product. 
+
+
+<H3>ADVICE FOR PICKING PRIMERS</H3>
+
+We suggest referring to: Wojciech Rychlik, "Selection of Primers
+for Polymerase Chain Reaction" in BA White, Ed., "Methods in
+Molecular Biology, Vol. 15: PCR Protocols: Current Methods and
+Applications", 1993, pp 31-40, Humana Press, Totowa NJ
+
+<H4>Cautions</H4>
+
+Some of the most important issues in primer picking can be
+addressed only before using eprimer3.  These are sequence quality
+(including making sure the sequence is not vector and not
+chimeric) and avoiding repetitive elements.
+
+<p>
+
+Techniques for avoiding problems include a thorough understanding
+of possible vector contaminants and cloning artifacts coupled
+with database searches using blast, fasta, or other similarity
+searching program to screen for vector contaminants and possible
+repeats.  Repbase (J. Jurka, A.F.A. Smit, C. Pethiyagoda, and
+others, 1995-1996, ftp://ncbi.nlm.nih.gov/repository/repbase)
+is an excellent source of repeat sequences and pointers to the
+literature.  eprimer3 now allows you to screen candidate oligos
+against a Mispriming Library (or a Mishyb Library in the case
+of internal oligos).
+
+<p>
+
+Sequence quality can be controlled by manual trace viewing and
+quality clipping or automatic quality clipping programs.  Low-
+quality bases should be changed to N's or can be made part of
+Excluded Regions. The beginning of a sequencing read is often
+problematic because of primer peaks, and the end of the read
+often contains many low-quality or even meaningless called bases.
+Therefore when picking primers from single-pass sequence it is
+often best to use the INCLUDED_REGION parameter to ensure that
+eprimer3 chooses primers in the high quality region of the read.
+
+<p>
+
+In addition, eprimer3 takes as input a Sequence Quality list for
+use with those base calling programs 
+
+<p>
+
+(e.g. Phred, Bass/Grace, Trout) that output this information.
+
+<H4>What to do if eprimer3 cannot find a primers?</H4>
+
+Try relaxing various parameters, including the
+self-complementarity parameters and max and min oligo melting
+temperatures.  For example, for very A-T-rich regions you might
+have to increase maximum primer size or decrease minimum melting
+temperature.  It is usually unwise to reduce the minimum primer
+size if your template is complex (e.g. a mammalian genome), since
+small primers are more likely to be non-specific.  Make sure that
+there are adequate stretches of non-Ns in the regions in which
+you wish to pick primers.  If necessary you can also allow an N
+in your primer and use an oligo mixture containing all four bases
+at that position.
+
+<p>
+
+Try setting the '-explain' option.
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/eprimer3.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/eprimer3.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/eprimer3.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>eprimer3</b> reads a normal nucleic acid sequence USA.
+
+<p>
+<!--#include file="inc/eprimer3.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+
+<!--#include file="inc/eprimer3.output" -->
+<p>
+
+If the '-explain' flag has been used, as in the example, then statistics
+are output describing the number of primers that were considered and
+rejected for various reasons. 
+
+<p>
+
+Headers describing the input file name and the names of the output
+columns are displayed.
+
+<p>
+
+The best 5 primer pairs are displayed with the product size.
+
+<p>
+
+The reverse sequence is displayed as the reverse complement to the input
+forward sense sequence. 
+
+<p>
+
+The 'Start' positions are given counting from the start of the sequence
+for both the forward and reverse primer (and for the internal oligos). 
+
+<p>
+
+Note that if you compare the results to the output from the public
+Primer3 web site you will see a difference in the reverse primer
+positions - this is because the original Primer3 program reports the
+reverse primer positions as counted from the 3' end.  The convention in
+EMBOSS is to report both forward and reverse features as counted from
+the 5' end, so the reverse primer positions are given counted from the
+5' start of the sequence. 
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+The Whitehead Institute's primer3 program is not part of this program,
+but it must be set up on your system and on your path. 
+
+<p>
+The Whitehead Institute program that is run by this program is available from:
+http://primer3.sourceforge.net/
+<br>
+(Then see the link Download and then 'Release 1.1.4')
+<p>
+
+Earlier versions are also supported. We expect later versions to also
+work - please contact the EMBOSS team if you find any problems.
+
+<p>
+
+The Whitehead Institute's primer3 program states:
+<br>
+
+We request but do not require that use of this software be cited in
+publications as:
+<p>
+
+Steve Rozen and Helen J. Skaletsky (2000)
+Primer3 on the WWW for general users and for biologist programmers.
+In: Krawetz S, Misener S (eds)
+Bioinformatics Methods and Protocols: Methods in Molecular Biology.
+Humana Press, Totowa, NJ, pp 365-386
+<p>
+
+Source code available at http://fokker.wi.mit.edu/primer3/.
+The paper above is available at
+http://jura.wi.mit.edu/rozen/papers/rozen-and-skaletsky-2000-primer3.pdf
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+The message: "EMBOSS An error in eprimer3.c at line 346: The program
+'primer3_core' must be on the path.  It is part of the 'primer3'
+package, available from the Whitehead Institute.  See:
+http://primer3.sourceforge.net/" is output if you do not have the
+Whitehead Institute's primer3 program set up and on your path. 
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+None.
+
+<!--#include file="inc/eprimer3.isee" -->
+
+
+<H2>
+    History
+</H2>
+
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/gwilliam.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/eprimer3.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/eprimer3.comment" -->
+
+
+</BODY>
+</HTML>
+

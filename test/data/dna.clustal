@@ -1,0 +1,18 @@
+CLUSTAL W(1.4) multiple sequence alignment
+
+
+MSFM1           ACGTACGTAC GTACGTACGT ACGTACGTAC GTACGTACGT ACGTACGTAC
+MSFM2           ACGTACGTAC GTACGTACGT ----ACGTAC GTACGTACGT ACGTACGTAC
+MSFM3           ACGTACGTAC GTACGTACGT ACGTACGTAC GTACGTACGT CGTACGTACG
+                                                                      
+
+MSFM1           GTACGTACGT ACGTACGTAC GTACGTACGT ACGTACGTAC GTACGTACGT
+MSFM2           GTACGTACGT ACGTACGTAC GTACGTACGT ACGTACGTAC GTACGTACGT
+MSFM3           TACGTACGTA CGTACGTACG TACGTACGTA ACGTACGTAC GTACGTACGT
+                                                                      
+
+MSFM1           ACGTACGTAC GTACGTACGT
+MSFM2           ACGTACGTTG CAACGTACGT
+MSFM3           ACGTACGTAC GTACGTACGT
+                                                                      
+

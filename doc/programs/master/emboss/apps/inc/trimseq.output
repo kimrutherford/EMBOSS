@@ -1,0 +1,90 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: trim1.seq</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;myseq
+ttyyyctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgc
+agctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcg
+cccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgc
+tcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccc
+tgactaccctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctggccc
+gtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaaga
+agacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgccca
+cctttggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttc
+tctaataaaaaagccacttagttca-gnntcy
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: trim2.seq</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;myseq
+ttyyyctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgc
+agctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcg
+cccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgc
+tcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccc
+tgactaccctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctggccc
+gtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaaga
+agacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgccca
+cctttggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttc
+tctaataaaaaagccacttagttca-g
+</pre>
+</td></tr></table><p>
+
+<a name="output.3"></a>
+<h3>Output files for usage example 3</h3>
+<p><h3>File: trim3.seq</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;myseq
+ttyyyctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgc
+agctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcg
+cccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgc
+tcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccc
+tgactaccctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctggccc
+gtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaaga
+agacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgccca
+cctttggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttc
+tctaataaaaaagccacttagttca-gnntcy
+</pre>
+</td></tr></table><p>
+
+<a name="output.4"></a>
+<h3>Output files for usage example 4</h3>
+<p><h3>File: trim4.seq</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;myseq
+ctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgcagctc
+tttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcgcccag
+atcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgctcctg
+gcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccctgact
+accctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctggcccgtgct
+ggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaagaagaca
+ggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgcccaccttt
+ggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttctctaa
+taaaaaagccacttagttca-gnntc
+</pre>
+</td></tr></table><p>
+
+<a name="output.5"></a>
+<h3>Output files for usage example 5</h3>
+<p><h3>File: trim5.seq</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;myseq
+ctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgcagctc
+tttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcgcccag
+atcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgctcctg
+gcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccctgact
+accctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctggcccgtgct
+ggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaagaagaca
+ggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgcccaccttt
+ggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttctctaa
+taaaaaagccacttagttca-gnntcynnnnnn
+</pre>
+</td></tr></table><p>

@@ -1,0 +1,34 @@
+application: profit [
+  documentation: "Scan one or more sequences with a simple frequency matrix"
+  groups: "Nucleic:Profiles, Protein:Profiles"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  infile: infile [
+    parameter: "Y"
+    information: "Profile or weight matrix file"
+    knowntype: "profile or matrix"
+  ]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "any"
+  ]
+
+endsection: input
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    parameter: "Y"
+    knowntype: "profit output"
+  ]
+
+endsection: output

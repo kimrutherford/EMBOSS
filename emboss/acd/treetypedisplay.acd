@@ -1,0 +1,15 @@
+application: treetypedisplay [
+  documentation: "Test of graphics"
+  groups: "Test"
+]
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  graph: graph [
+    standard: "Y"
+  ]
+
+endsection: output

@@ -1,0 +1,44 @@
+<b>Here is a sample session with compseq</b>
+<p>
+To count the frequencies of dinucleotides in a file: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>compseq tembl:x65923 -word 2 result3.comp </b>
+Calculate the composition of unique words in sequences
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+To count the frequencies of hexanucleotides, without outputting the results of hexanucleotides that do not occur in the sequence: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>compseq tembl:x65923 -word 6 result6.comp -nozero </b>
+Calculate the composition of unique words in sequences
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 3</b>
+<p>
+To count the frequencies of trinucleotides in frame 2 of a sequence and use a previously prepared compseq output to show the expected frequencies: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>compseq tembl:x65923 -word 3 result3.comp -frame 2 -in prev.comp </b>
+Calculate the composition of unique words in sequences
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.3">Go to the input files for this example</a><br><a href="#output.3">Go to the output files for this example</a><p><p>

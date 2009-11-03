@@ -1,0 +1,100 @@
+application: diffseq [
+  documentation: "Compare and report features of two similar sequences"
+  groups: "Alignment:Differences"
+  gui: "yes"
+  batch: "yes"
+  cpu: "medium"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  sequence: asequence [
+    parameter: "Y"
+    type: "any"
+    features: "Y"
+  ]
+
+  sequence: bsequence [
+    parameter: "Y"
+    type: "@($(acdprotein) ? stopprotein : nucleotide)"
+    features: "Y"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  integer: wordsize [
+    standard: "Y"
+    default: "10"
+    minimum: "2"
+    information: "Word size"
+    help: "The similar regions between the two sequences are found by
+           creating a hash table of 'wordsize'd subsequences. 10 is a
+           reasonable default. Making this value larger (20?) may speed up
+           the program slightly, but will mean that any two differences
+           within 'wordsize' of each other will be grouped as a single region
+           of difference. This value may be made smaller (4?) to improve the
+           resolution of nearby differences, but the program will go much
+           slower."
+  ]
+
+endsection: required
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  boolean: globaldifferences [
+    additional: "Y"
+    default: "N"
+    information: "Force reporting of differences at the start
+                  and end"
+    help: "Normally this program will find regions of identity that
+           are the length of the specified word-size or greater and will then
+           report the regions of difference between these matching regions.
+           This works well and is what most people want if they are working
+           with long overlapping nucleic acid sequences. You are usually not
+           interested in the non-overlapping ends of these sequences. If you
+           have protein sequences or short RNA sequences however, you will be
+           interested in differences at the very ends . It this option is
+           set to be true then the differences at the ends will also be
+           reported."
+  ]
+
+endsection: additional
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  report: outfile [
+    parameter: "Y"
+    rformat: "diffseq"
+    taglist: "int:start int:end int:length str:name str:sequence
+              str:first_feature str:second_feature"
+  ]
+
+  featout: aoutfeat [
+    parameter: "Y"
+    default: "$(asequence.name).diffgff"
+    help: "File for output of first sequence's features"
+    type: "@($(acdprotein) ? protein : nucleotide)"
+  ]
+
+  featout: boutfeat [
+    parameter: "Y"
+    default: "$(bsequence.name).diffgff"
+    help: "File for output of second sequence's features"
+    type: "@($(acdprotein) ? protein : nucleotide)"
+  ]
+
+endsection: output

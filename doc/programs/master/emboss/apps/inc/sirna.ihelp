@@ -1,0 +1,124 @@
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+  [-outfile]           report     [*.sirna] The output is a table of the
+                                  forward and reverse parts of the 21 base
+                                  siRNA duplex. Both the forward and reverse
+                                  sequences are written 5' to 3', ready to be
+                                  ordered. The last two bases have been
+                                  replaced by 'dTdT'. The starting position of
+                                  the 23 base region and the %GC content is
+                                  also given. If you wish to see the complete
+                                  23 base sequence, then either look at the
+                                  sequence in the other output file, or use
+                                  the qualifier '-context' which will display
+                                  the 23 bases of the forward sequence in this
+                                  report withthe first two bases in brackets.
+                                  These first two bases do not form part of
+                                  the siRNA probe to be ordered.
+  [-outseq]            seqoutall  [<sequence>.<format>] This is a file of the
+                                  sequences of the 23 base regions that the
+                                  siRNAs are selected from. You may use it to
+                                  do searches of mRNA databases (e.g. REFSEQ)
+                                  to confirm that the probes are unique to the
+                                  gene you wish to use it on.
+
+   Additional (Optional) qualifiers:
+   -poliii             boolean    [N] This option allows you to select only
+                                  the 21 base probes that start with a purine
+                                  and so can be expressed from Pol III
+                                  expression vectors. This is the NARN(17)YNN
+                                  pattern that has been suggested by Tuschl et
+                                  al.
+   -aa                 boolean    [N] This option allows you to select only
+                                  those 23 base regions that start with AA. If
+                                  this option is not selected then regions
+                                  that start with AA will be favoured by
+                                  giving them a higher score, but regions that
+                                  do not start with AA will also be reported.
+   -tt                 boolean    [N] This option allows you to select only
+                                  those 23 base regions that end with TT. If
+                                  this option is not selected then regions
+                                  that end with TT will be favoured by giving
+                                  them a higher score, but regions that do not
+                                  end with TT will also be reported.
+   -[no]polybase       boolean    [Y] If this option is FALSE then only those
+                                  23 base regions that have no repeat of 4 or
+                                  more of any bases in a row will be reported.
+                                  No regions will ever be reported that have
+                                  4 or more G's in a row.
+   -context            boolean    [N] The output report file gives the
+                                  sequences of the 21 base siRNA regions ready
+                                  to be ordered. This does not give you an
+                                  indication of the 2 bases before the 21
+                                  bases. It is often interesting to see which
+                                  of the suggested possible probe regions have
+                                  an 'AA' in front of them (i.e. it is useful
+                                  to see which of the 23 base regions start
+                                  with an 'AA'). This option displays the
+                                  whole 23 bases of the region with the first
+                                  two bases in brackets, e.g. '(AA)' to give
+                                  you some context for the probe region. YOU
+                                  SHOULD NOT INCLUDE THE TWO BASES IN BRACKETS
+                                  WHEN YOU PLACE AN ORDER FOR THE PROBES.
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -rformat2           string     Report format
+   -rname2             string     Base file name
+   -rextension2        string     File name extension
+   -rdirectory2        string     Output directory
+   -raccshow2          boolean    Show accession number in the report
+   -rdesshow2          boolean    Show description in the report
+   -rscoreshow2        boolean    Show the score in the report
+   -rstrandshow2       boolean    Show the nucleotide strand in the report
+   -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
+
+   "-outseq" associated qualifiers
+   -osformat3          string     Output seq format
+   -osextension3       string     File name extension
+   -osname3            string     Base file name
+   -osdirectory3       string     Output directory
+   -osdbname3          string     Database name to add
+   -ossingle3          boolean    Separate file for each entry
+   -oufo3              string     UFO features
+   -offormat3          string     Features format
+   -ofname3            string     Features file name
+   -ofdirectory3       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+

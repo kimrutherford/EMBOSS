@@ -1,0 +1,46 @@
+<b>Here is a sample session with cutseq</b>
+<p>
+To remove bases 10 to 12 from a database entry and write to the new sequence file 'gatta2.seq': 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>cutseq tembl:x13776 gatta2.seq -from=10 -to=12 </b>
+Removes a section from a sequence
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+To remove the first 20 bases from 'tembl:x13776' and write it to 'jsh.seq':  
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>cutseq tembl:x13776 -from=1 -to=20 -out=jsh.seq </b>
+Removes a section from a sequence
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 3</b>
+<p>
+If the default start and end positions are accepted, then all of the sequence is removed! 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>cutseq tembl:x13776 starta.seq -sbeg=-1000 -send=1290 </b>
+Removes a section from a sequence
+Start of region to delete [1168]: <b></b>
+End of region to delete [1290]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.3">Go to the output files for this example</a><p><p>

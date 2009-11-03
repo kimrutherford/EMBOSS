@@ -1,0 +1,83 @@
+application: oddcomp [
+  documentation: "Identify proteins with specified sequence word composition"
+  groups: "Protein:Motifs"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "Protein"
+  ]
+
+  infile: infile [
+    parameter: "Y"
+    information: "Program compseq output file"
+    help: "This is a file in the format of the output produced by
+           'compseq' that is used to set the minimum frequencies of words in
+           this analysis."
+    knowntype: "compseq output"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  toggle: fullwindow [
+    default: "N"
+    information: "Set window size to length of current protein"
+    help: "Set this option on (Y) if you want the window size to be
+           set to the length of the current protein. Otherwise, leave this
+           option unset, in which case you'll be prompted for a window size
+           to use."
+  ]
+
+  integer: window [
+    standard: "@(!$(fullwindow))"
+    minimum: "10"
+    default: "30"
+    information: "Window size to consider (e.g. 30 aa)"
+    help: "This is the size of window in which to count. \
+           Thus if you want to count frequencies in a 40 aa stretch you
+           should enter 40 here."
+  ]
+
+endsection: required
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  boolean: ignorebz [
+    default: "Y"
+    information: "Ignore the amino acids B and Z and just count
+                  them as 'Other'"
+    help: "The amino acid code B represents Asparagine or Aspartic
+           acid and the code Z represents Glutamine or Glutamic acid. \
+           These are not commonly used codes and you may wish not to count
+           words containing them, just noting them in the count of 'Other'
+           words."
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    parameter: "Y"
+    extension: "oddcomp"
+    help: "This is the results file."
+    knowntype: "oddcomp output"
+  ]
+
+endsection: output

@@ -1,0 +1,125 @@
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequences]<br>(Parameter 1)</td>
+<td>Sequence set filename and optional format, or reference (input USA)</td>
+<td>Readable set of sequences</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.edialign</td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 3)</td>
+<td>(Aligned) sequence set(s) filename and optional format (output USA)</td>
+<td>Writeable sequence(s)</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-nucmode</td>
+<td>Nucleic acid sequence alignment mode (simple, translated or mixed)</td>
+<td><table><tr><td>n</td> <td><i>(simple)</i></td></tr><tr><td>nt</td> <td><i>(translation)</i></td></tr><tr><td>ma</td> <td><i>(mixed alignments)</i></td></tr></table></td>
+<td>n</td>
+</tr>
+
+<tr>
+<td>-revcomp</td>
+<td>Also consider the reverse complement</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-overlapw</td>
+<td>By default overlap weights are used when Nseq =&lt;35 but you can set this to 'yes' or 'no'</td>
+<td>Choose from selection list of values</td>
+<td>default (when Nseq =< 35)</td>
+</tr>
+
+<tr>
+<td>-linkage</td>
+<td>Clustering method to construct sequence tree (UPGMA, minimum linkage or maximum linkage)</td>
+<td><table><tr><td>UPGMA</td> <td><i>(UPGMA)</i></td></tr><tr><td>max</td> <td><i>(maximum linkage)</i></td></tr><tr><td>min</td> <td><i>(minimum linkage)</i></td></tr></table></td>
+<td>UPGMA</td>
+</tr>
+
+<tr>
+<td>-maxfragl</td>
+<td>Maximum fragment length</td>
+<td>Integer 0 or more</td>
+<td>40</td>
+</tr>
+
+<tr>
+<td>-fragmat</td>
+<td>Consider only N-fragment pairs that start with two matches</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-fragsim</td>
+<td>Consider only P-fragment pairs if first amino acid or codon pair has similarity score of at least n</td>
+<td>Integer 0 or more</td>
+<td>4</td>
+</tr>
+
+<tr>
+<td>-itscore</td>
+<td>Use iterative score</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-threshold</td>
+<td>Threshold for considering diagonal for alignment</td>
+<td>Number 0.000 or more</td>
+<td>0.0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-mask</td>
+<td>Replace unaligned characters by stars '*' rather then putting them in lowercase</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-dostars</td>
+<td>Activate writing of stars instead of numbers</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-starnum</td>
+<td>Put up to n stars '*' instead of digits 0-9 to indicate level of conservation</td>
+<td>Integer 0 or more</td>
+<td>4</td>
+</tr>
+
+</table>

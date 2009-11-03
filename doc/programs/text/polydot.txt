@@ -1,0 +1,232 @@
+
+                                  polydot 
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Draw dotplots for all-against-all comparison of a sequence set
+
+Description
+
+   polydot generates a dotplot for each of an all-against-all comparison
+   of a set of sequences. The dotplots are rendered on a single diagram.
+   The dotplot is an intuitive graphical representation of the regions of
+   similarity between two sequences. All positions from the first input
+   sequence are compared with all positions from the second input
+   sequence searching for exact matches between sequence regions
+   ("words"). The two sequences are the axes of the rectangular dotplot.
+   Wherever there is "similarity" between a word from each sequences a
+   dot is plotted. The wordsize is specified by the user. Optionally,
+   information on the sequence and location of all the exact matching
+   regions may be written to file as a feature file.
+
+Algorithm
+
+   All sequence words of the specified size from the first input sequence
+   are compared with all words from the second input sequence and exact
+   matches identified. A line is plotted on the dotplot corresponding to
+   any exact matching words. Thus any local regions of identity
+   correspond to diagonals in the dotplot.
+
+Usage
+
+   Here is a sample session with polydot
+
+
+% polydot globins.fasta -gtitle='Polydot of globins.fasta' -graph cps 
+Draw dotplots for all-against-all comparison of a sequence set
+Word size [6]: 
+
+Created polydot.ps
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers (* if not always prompted):
+  [-sequences]         seqset     File containing a sequence alignment
+   -wordsize           integer    [6] Word size (Integer 2 or more)
+*  -outfeat            featout    [unknown.gff] Output features UFO
+   -graph              graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, das, xterm, png, gif)
+
+   Additional (Optional) qualifiers:
+   -[no]boxit          boolean    [Y] Draw a box around each dotplot
+   -dumpfeat           toggle     [N] Dump all matches as feature files
+
+   Advanced (Unprompted) qualifiers:
+   -gap                integer    [10] This specifies the size of the gap that
+                                  is used to separate the individual dotplots
+                                  in the display. The size is measured in
+                                  residues, as displayed in the output.
+                                  (Integer 0 or more)
+
+   Associated qualifiers:
+
+   "-sequences" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfeat" associated qualifiers
+   -offormat           string     Output feature format
+   -ofopenfile         string     Features file name
+   -ofextension        string     File name extension
+   -ofdirectory        string     Output directory
+   -ofname             string     Base file name
+   -ofsingle           boolean    Separate file for each entry
+
+   "-graph" associated qualifiers
+   -gprompt            boolean    Graph prompting
+   -gdesc              string     Graph description
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   polydot reads in a set of nucleic or protein sequences.
+
+   The sequences may or may not be aligned.
+
+  Input files for usage example
+
+  File: globins.fasta
+
+>HBB_HUMAN Sw:Hbb_Human => HBB_HUMAN
+VHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKV
+KAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFGK
+EFTPPVQAAYQKVVAGVANALAHKYH
+>HBB_HORSE Sw:Hbb_Horse => HBB_HORSE
+VQLSGEEKAAVLALWDKVNEEEVGGEALGRLLVVYPWTQRFFDSFGDLSNPGAVMGNPKV
+KAHGKKVLHSFGEGVHHLDNLKGTFAALSELHCDKLHVDPENFRLLGNVLVVVLARHFGK
+DFTPELQASYQKVVAGVANALAHKYH
+>HBA_HUMAN Sw:Hba_Human => HBA_HUMAN
+VLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHFDLSHGSAQVKGHGK
+KVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTPA
+VHASLDKFLASVSTVLTSKYR
+>HBA_HORSE Sw:Hba_Horse => HBA_HORSE
+VLSAADKTNVKAAWSKVGGHAGEYGAEALERMFLGFPTTKTYFPHFDLSHGSAQVKAHGK
+KVGDALTLAVGHLDDLPGALSNLSDLHAHKLRVDPVNFKLLSHCLLSTLAVHLPNDFTPA
+VHASLDKFLSSVSTVLTSKYR
+>MYG_PHYCA Sw:Myg_Phyca => MYG_PHYCA
+VLSEGEWQLVLHVWAKVEADVAGHGQDILIRLFKSHPETLEKFDRFKHLKTEAEMKASED
+LKKHGVTVLTALGAILKKKGHHEAELKPLAQSHATKHKIPIKYLEFISEAIIHVLHSRHP
+GDFGADAQGAMNKALELFRKDIAAKYKELGYQG
+>GLB5_PETMA Sw:Glb5_Petma => GLB5_PETMA
+PIVDTGSVAPLSAAEKTKIRSAWAPVYSTYETSGVDILVKFFTSTPAAQEFFPKFKGLTT
+ADQLKKSADVRWHAERIINAVNDAVASMDDTEKMSMKLRDLSGKHAKSFQVDPQYFKVLA
+AVIADTVAAGDAGFEKLMSMICILLRSAY
+>LGB2_LUPLU Sw:Lgb2_Luplu => LGB2_LUPLU
+GALTESQAALVKSSWEEFNANIPKHTHRFFILVLEIAPAAKDLFSFLKGTSEVPQNNPEL
+QAHAGKVFKLVYEAAIQLQVTGVVVTDATLKNLGSVHVSKGVADAHFPVVKEAILKTIKE
+VVGAKWSEELNSAWTIAYDELAIVIKKEMNDAA
+
+Output file format
+
+   A graphical image is displayed on the specified graphics device.
+
+  Output files for usage example
+
+  Graphics File: polydot.ps
+
+   [polydot results]
+
+Data files
+
+   None.
+
+Notes
+
+   Where the two sequences have substantial regions of identity, longer
+   diagonal lines appear in the plot. It is possible to see at a glance
+   such local regions of identity. It is also easy to see other features
+   such as repeats (which form parallel diagonal lines), and insertions
+   or deletions (which form breaks or discontinuities in the diagonal
+   lines).
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   0 if successful.
+
+Known bugs
+
+   None.
+
+See also
+
+                    Program name                        Description
+                    dotmatcher   Draw a threshold dotplot of two sequences
+                    dotpath      Draw a non-overlapping wordmatch dotplot of two sequences
+                    dottup       Displays a wordmatch dotplot of two sequences
+
+Author(s)
+
+   Ian              Longden (il © sanger.ac.uk)
+   Sanger           Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
+                    CB10 1SA, UK.
+
+History
+
+                    Completed 2nd June 1999.
+
+Target users
+
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
+
+Comments
+
+                    None

@@ -1,0 +1,385 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: distmat
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+distmat
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/distmat.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<p><b>distmat</b> calculates the evolutionary distance between every pair of sequences in a multiple sequence alignment. A variety of methods to estimate distance may be selected, and differ in how they correct the observed substitution rates to more accurately reflect the true evolutionary distance. An output file containing a distance matrix for the set of sequences is written. The distances are expressed in terms of the number of substitutions per 100 bases or amino acids.</p>
+
+<H2>
+    Algorithm
+</H2>
+
+<p>For more divergent sequences, the probability of there being multiple substitutions at an alignment site increases.  The distance will then be misestimate the true evolutionary distance between the sequences. A number of methods are available in <b>distmat</b> to correct the observed substitution rate to more accurately reflect the true evolutionary distance.</p>
+
+<h3>Uncorrected distances</h3>
+
+This method does not make any corrections for multiple substitutions.
+Therefore, the score will be an underestimate of the distance between
+the sequences. This will not be less significant for highly similar sets
+of sequences.
+
+<p>
+
+<pre>
+S = m/(npos + gaps*gap_penalty)                                  (1)
+
+m 	    - score of matches (1 for an exact match, a fraction for partial
+	      matches and 0 for no match)
+npos	    - number of positions included in m
+gaps        - number of gaps in the sequences
+gap_penalty - the score given to a gapped position
+</pre>
+
+<p>
+
+<pre>
+D = uncorrected distance = p-distance = 1-S          (2)
+</pre>
+
+<p>
+
+The score of match includes all exact matches. For nucleotides, if the
+flag "-ambiguous" is used then partial matches are included in the
+score. For example, a match of M (A or C) with A will increment m by 0.5
+(0.5*1.0). Gaps are not included in the calculation unless a non zero
+value is given with "-gapweight". It should be noted that end gaps and
+internal gaps will be weighted by the same amount. So it is recommended
+that this be used with "-sbegin"and "-send" to specify the start and end
+of the region to calculate the distance from.
+
+
+<h2>Multiple Substitution correction algorithms</h2>
+
+
+<h3>Jukes-Cantor</h3>
+
+
+This can be used for nucleotide and protein sequences.
+
+<p>
+
+<pre>
+distance = -b ln (1-D/b)
+
+D - uncorrected distance
+b - constant. b= 3/4 for nucleotides and 19/20 for proteins.
+</pre>
+
+<p>
+
+Partial matches and gap  positions can be taken into account in the
+calculation of D, by setting the "-ambiguous" and "-gapweight" flags
+(see "uncorrected distance" method).
+
+<p>
+
+
+Reference: 
+<br>
+"Phylogenetic Inference", Swofford, Olsen, Waddell, and
+Hillis, in Molecular Systematics, 2nd ed., Sinauer Ass., Inc., 1996, Ch. 11. 
+
+
+<h3>Tajima-Nei</h3>
+
+This method is only for nucleotide sequences. It uses the same equation
+as Jukes-Cantor, but the b-parameter is not constant. Also, only exact
+matches are considered in the calculation of the match score and gap
+positions are ignored.
+
+<p>
+
+<pre>
+A = 1, T = 2, C = 3, G = 4
+
+b = 0.5(1.- Sum(i=A,G)(fraction[i]^2  + D^2/h)
+
+h = Sum(i=A,C)Sum(k=T,G) (0.5 * pair_frequency[i,k]^2/(fraction[i]*fraction[k]))
+
+distance = -b ln(1.-D/b)
+
+pair_frequency[i,k]   - frequency of the i and k base pair at sites in
+			the alignement of the pair of sequences.
+fraction[i]           - average content of the base i in both sequences
+</pre>
+
+<p>
+
+Reference: 
+<br>
+F. Tajima and M. Nei, Mol. Biol. Evol. 1984, 1, 269.
+
+
+<h3>Kimura Two-Parameter distance</h3>
+
+This method is only for nucleotide sequences. This uses the principle
+that transition substitutions (purine-purine and pyrimidine-purine) are
+more likely than transversion substitutions (purine-pyprimidine). Purine
+being the nucleic acid constituent of A and G, and pyrimidine being the
+nucleic acid derivative of the bases C, T and U. Gaps are ignored and
+abiguous symbols other than R (purine) and Y (pyrimidine) are ingnored.
+
+<p>
+
+<pre>
+P = transitions/npos
+Q = transversions/npos
+
+npos - number of positions scored
+
+distance = -0.5 ln[ (1-2P-Q)*sqrt(1-2Q)]
+</pre>
+
+<p>
+
+Reference: 
+<br>
+M. kimura, J. Mol. Evol. 1980, 16, 111.
+
+
+<h3>Tamura</h3>
+
+
+This method is only for nucleotide sequences.  This method uses
+transition and transversion rates and takes into account the deviation
+of GC content from the expected value of 50 %. Gap and ambiguous
+positions are ignored.
+
+<p>
+
+<pre>
+P = transitions/npos
+Q = transversions/npos
+
+npos - number of positions scored
+
+GC1 = GC fraction in sequence 1
+GC2 = GC fraction in sequence 2
+C = GC1 + GC2 - 2*GC1*GC2
+
+distance = -C ln(1-P/C-Q) - 0.5(1-C) ln(1-2Q)
+</pre>
+
+<p>
+
+Reference:
+<br>
+K. Tamura, Mol. Biol. Evol. 1992, 9, 678.
+
+
+<h3>Jin-Nei Gamma distance</h3>
+
+This method applies to nucleotides only. This again uses transition and
+transversion rates. As with the Kimura two parameter method, gaps and
+ambiguous symbols other than R and Y are not oncluded in the score. The
+shape parameter, i.e. "a", is the square of the inverse of the
+coefficient of variation of the average substitution,
+
+<p>
+
+<pre>
+L = average substituition = transition_rate + 2 * transversion_rate
+a = (average L)^2/(variance of L)
+
+P = transitions/npos
+Q = transversions/npos
+
+npos - number of positions scored
+
+distance = 0.5 * a ((1-2P-Q)^(-1/a) + 0.5 (1-2Q)^(-1/a) -3/2)
+</pre>
+
+<p>
+
+It is suggested [Jin et al.], in general, that the distance be
+calculated with an a-value of 1. However, the user can specify their own
+value, using the "-parametera" option, or calculate for each pair of
+sequence, using "-calculatea".
+
+<p>
+
+Reference:
+<br>
+L. Jin and M. Nei, Mol. Biol. Evol. 1990, 7, 82.
+
+
+<h3>Kimura Protein distance</h3>
+
+This method is used for proteins only. Gaps are ignored and only exact
+matches and ambiguity codes contribute to the match score.
+
+<p>
+
+<pre>
+S = m/npos
+
+m  - exact match
+npos - number of positions scored
+
+D = 1-S
+distance = -ln(1 - D - 0.2D^2)
+</pre>
+
+<p>
+
+Reference:
+<br>
+M. Kimura, The Neutral Theory of Molecular Evolution, Camb. Uni. Press,
+Camb., 1983.
+
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/distmat.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/distmat.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/distmat.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+It reads in a normal multiple sequence alignment file.
+
+<p>
+
+The quality of the alignment is of paramount importance in obtaining
+meaningful information from this analysis. 
+
+<p>
+<!--#include file="inc/distmat.input" -->
+
+
+<H2>
+    Output file format
+</H2>
+
+The output from the program is a file containing a matrix of the
+calculated distances between each of the input aligned sequences.  The
+distances are expressed in terms of the number of substitutions per 100
+bases or amino acids. 
+
+<p>
+<!--#include file="inc/distmat.output" -->
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+<p>The input sequences must of course be aligned before running this program. The quality of the alignment is of paramount importance in obtaining meaningful information from this analysis.</p>
+
+<p>For nucleotides, the <tt>-position</tt> flag selects base positions to analyse in each codon, i.e. 123 (all bases), 12 (the first two bases), 1, 2, or 3 individual bases.</p>
+
+
+
+<H2>
+    References
+</H2>
+
+See the following for details of the methods used:
+
+<p>
+
+<ol>
+
+<li>"Phylogenetic Inference", Swofford, Olsen, Waddell, and Hillis, in
+Molecular Systematics, 2nd ed., Sinauer Ass., Inc., 1996, Ch. 11.
+
+<li>F. Tajima and M. Nei, Mol. Biol. Evol. 1984, 1, 269.
+
+<li>M. Kimura, J. Mol. Evol. 1980, 16, 111.
+
+<li>K. Tamura, Mol. Biol. Evol. 1992, 9, 678.
+
+<li>L. Jin and M. Nei, Mol. Biol. Evol. 1990, 7, 82.
+
+<li>M. Kimura, The Neutral Theory of Molecular Evolution,
+Camb. Uni. Press, Camb., 1983.
+
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+The quality of the alignment is of paramount importance in obtaining
+meaningful information from this analysis. 
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/distmat.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/tcarver.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/distmat.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/distmat.comment" -->
+
+
+</BODY>
+</HTML>
+

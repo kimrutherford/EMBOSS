@@ -1,0 +1,101 @@
+application: prettyseq [
+  documentation: "Write a nucleotide sequence and its translation to file"
+  groups: "Display, Nucleic:Translation"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  sequence: sequence [
+    parameter: "Y"
+    type: "DNA"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  range: range [
+    standard: "Y"
+    information: "Range(s) to translate"
+    default: "$(sequence.begin)-$(sequence.end)"
+    expected: "Whole sequence"
+  ]
+
+endsection: required
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  list: table [
+    additional: "Y"
+    default: "0"
+    minimum: "1"
+    maximum: "1"
+    header: "Genetic codes"
+    values: "0:Standard; 1:Standard (with alternative initiation
+             codons); 2:Vertebrate Mitochondrial; 3:Yeast Mitochondrial;
+             4:Mold, Protozoan, Coelenterate Mitochondrial and
+             Mycoplasma/Spiroplasma; 5:Invertebrate Mitochondrial; 6:Ciliate
+             Macronuclear and Dasycladacean; 9:Echinoderm Mitochondrial;
+             10:Euplotid Nuclear; 11:Bacterial; 12:Alternative Yeast Nuclear;
+             13:Ascidian Mitochondrial; 14:Flatworm Mitochondrial;
+             15:Blepharisma Macronuclear; 16:Chlorophycean Mitochondrial;
+             21:Trematode Mitochondrial; 22:Scenedesmus obliquus;
+             23:Thraustochytrium Mitochondrial"
+    delimiter: ";"
+    codedelimiter: ":"
+    information: "Genetic code to use"
+  ]
+
+  boolean: ruler [
+    additional: "Y"
+    default: "Y"
+    information: "Add a ruler"
+  ]
+
+  boolean: plabel [
+    additional: "Y"
+    default: "Y"
+    information: "Number translations"
+  ]
+
+  boolean: nlabel [
+    additional: "Y"
+    default: "Y"
+    information: "Number DNA sequence"
+  ]
+
+endsection: additional
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  integer: width [
+    minimum: "10"
+    default: "60"
+    information: "Width of screen"
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    parameter: "Y"
+    knowntype: "prettyseq output"
+  ]
+
+endsection: output

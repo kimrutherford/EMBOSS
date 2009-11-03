@@ -1,0 +1,434 @@
+
+                                makenucseq 
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Create random nucleotide sequences
+
+Description
+
+   makenucseq writes an output file with a set of random nucleotide
+   sequences. The sequence composition is defined from reading a codon
+   usage file: the sequences are created with triplet frequencies
+   matching those given in the file, with the end trimmed to be in the
+   correct reading frame. The number of sequences to create and length of
+   each sequence is specified. Optionally, a user-defined string may be
+   inserted into each output sequence at a specified position
+
+Algorithm
+
+Usage
+
+   Here is a sample session with makenucseq
+
+
+% makenucseq 
+Create random nucleotide sequences
+Codon usage file (optional): 
+Number of sequences created [100]: 
+Length of each sequence [100]: 
+nucleotide output sequence(s) [makeseq.fasta]: 
+
+   Go to the output files for this example
+
+   Example 2
+
+   Providing a codon usage file specifies the sequence composition. This
+   Pseudomonas aeruginosa file specifies a high GC content.
+
+
+% makenucseq 
+Create random nucleotide sequences
+Codon usage file (optional): Epseae.cut
+Number of sequences created [100]: 
+Length of each sequence [100]: 
+nucleotide output sequence(s) [makeseq.fasta]: 
+
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers (* if not always prompted):
+   -codonfile          codon      Optional codon usage file. Nucleotide
+                                  sequences will be created as triplets
+                                  matching the frequencies in the file, with
+                                  the end trimmed to be in the correct reading
+                                  frame.
+   -amount             integer    [100] Number of sequences created (Integer 1
+                                  or more)
+   -length             integer    [100] Length of each sequence (Integer 1 or
+                                  more)
+*  -insert             string     String that is inserted into sequence (Any
+                                  string is accepted)
+*  -start              integer    [1] Start point of inserted sequence
+                                  (Integer 1 or more)
+  [-outseq]            seqoutall  [.] Nucleotide sequence
+                                  set(s) filename and optional format (output
+                                  USA)
+
+   Additional (Optional) qualifiers:
+   -useinsert          toggle     [N] Do you want to make an insert
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-codonfile" associated qualifiers
+   -format             string     Data format
+
+   "-outseq" associated qualifiers
+   -osformat1          string     Output seq format
+   -osextension1       string     File name extension
+   -osname1            string     Base file name
+   -osdirectory1       string     Output directory
+   -osdbname1          string     Database name to add
+   -ossingle1          boolean    Separate file for each entry
+   -oufo1              string     UFO features
+   -offormat1          string     Features format
+   -ofname1            string     Features file name
+   -ofdirectory1       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   makenucseq reads any normal sequence USAs.
+
+Output file format
+
+   makenucseq writes a sequence file with the number of sequences
+   requested.
+
+  Output files for usage example
+
+  File: makeseq.fasta
+
+>EMBOSS_001
+ggtccgaggggtagcttgatcgcctcttttgggaacgcaagcgtggccggtatgataaaa
+taaaatgcgctccgctctggtaagacggacggtcgcccta
+>EMBOSS_002
+tttcaatccattaggagatccttccgggcttactcttttttggtaggaatacagacgaat
+gtgttgttgacactacaagtacgaactgtgatcgcaccct
+>EMBOSS_003
+aacggctgttagaccgcatcattttggcaggaaccttgggtcggttcatctcttgggtat
+gacagcacagggaggtttgagagctgcctcccggattttg
+>EMBOSS_004
+atcgaagagacgcattcctatagtatcaatccttgacgtcggcatggttcggatcttacg
+cgaagccctacgactccctaccggtattgtatcgttctag
+>EMBOSS_005
+agagttcgtctacacatgggcacccttactacttgagtgcttaccaaaagtacgatccac
+gaaacgtcgagcactggcatgcacacgctctccgacgtat
+>EMBOSS_006
+caatcctcattgcttacacggccacaacaggaagtgcctcaagctgtagagcataggcat
+gttctcaagatcgcgttaacagccattgctggagaatggc
+>EMBOSS_007
+actcggagttcaaccgccgctgtgggctgagctatccctaatgacccgcgcgtagagtgt
+taaaatctttcgacagtcacctgcacatcgttgtcttctg
+>EMBOSS_008
+cgagggtcattctaaatttgagggtaatgctcgcgccatgcgacttgtcgggaaagcggc
+cctttatgcgttgccggtcggcattgcccaaccctagtga
+>EMBOSS_009
+gttatcacgtccaattaggtgggccacaatacgtcggcagaatcaagtgcataacggaga
+ggtcactaggacgttactgtcattccctgccccgctatgt
+>EMBOSS_010
+tatgtttctcgtgctcagcttagaccggagagctccacccaataggccgcacacaagggg
+tctttaggatacccccccccttattaccccacagcaacag
+>EMBOSS_011
+agacgcgccgctcgtagtatgttacctcccttacctgaggacctgcgtggatggcggcaa
+cgtgcctcaaagcccgcagcgaatggaaagcaggttggtg
+>EMBOSS_012
+accctcgcgctgtcgtgtatatttctagcgatgagctagttcgtgcggccatggttctgg
+atgcatggctatggtttgttcagacggaatagtccgggac
+>EMBOSS_013
+accctgacagctcttaccctctatggacggacagggcatgaccgtgcatgacctggcaga
+gaacggcttcatattagggagcagcagaatcgtgtatcgt
+>EMBOSS_014
+tcctgccgggaattagagacaaaaagattgtgaccttcacagcctcctactttcttttgt
+tagtatggggcttgacactatacactgggacaatttagaa
+>EMBOSS_015
+ccgtagcaaggccacagttacgaaggtcatgttcccacccacagcgttgttcccttttac
+cgacccacgcctagaatttctcgaagaacagaaaccaccc
+>EMBOSS_016
+cttctcccgtaagaaccttcgtccaacatccaatcaatcacggtgggtacgaggtatacc
+tatctgtcacgaaatcctaagacatttctgcaaacagggg
+>EMBOSS_017
+cagtagttgatgcacgtaacatttactcattggacaacagcacagtagctcccatcacat
+
+
+  [Part of this file has been deleted for brevity]
+
+>EMBOSS_084
+ttaccatttaaacatgtccagatacggacaggtcgcactgtccttgggccacttttctgt
+tacgcgcgtgagcttatgatgacgaatcgcgggaagggat
+>EMBOSS_085
+cctcactctctcagaccccgaatcctaagtgatcaatacctctacgtcttggttttgccg
+ctgatatcatgatatacatgagtctagcacggtctcctac
+>EMBOSS_086
+aggcagggtatagtgctctagagtacaccccttgcgtgaaatcggcgtcctggtggtcga
+ttaccctcaagcacttttcctcagttcggggggtcacgat
+>EMBOSS_087
+ataagtctaccaatgaaacgatcgcgaatcggacgccactcgccagggtattcgcgcttc
+acattatatatagtccggaagcacgactctccatttggtt
+>EMBOSS_088
+tctatccgtgcctcccacgggtcagatatatgctctggacgtagtggtgccgcatctgtg
+tacatgactaaagctacgactttttcgcgtagccaatcca
+>EMBOSS_089
+ccgccgtaactttcccgggtagggggctaccgacgataatctagcgtttgatagcgtctg
+gcgcatgtgtcatagggtgctggtgtccttgggcagtaca
+>EMBOSS_090
+acgaatccccctttccacacgacaaaaacgagaccggtagctttgggcgagacgtacgct
+gactaagcaatcgaagcccttcaagtacgctgccagtcaa
+>EMBOSS_091
+gtgacctgagacttgagctactaatgcacttgtacgagggcttacaaaaagaacggatca
+aagcaagccctcgggatgtgtgacccaggcgtttgccgtg
+>EMBOSS_092
+accgttcgagagatctcacaactagcacatatacgccagaggtagtcacacagattaaga
+tggtgcgacagctcgcgcaaccacacggggatgacacgta
+>EMBOSS_093
+aaccctaaccgagggtttgtggctaacatcagccccactgtgcccgcaacgtcccaaatt
+gactctatctcgttccaacactttaaatgcttatgtatat
+>EMBOSS_094
+gtctggtacgttcagcgcgattagccgggcgctccggaccggatgtcctaccaggtacac
+ctatccagtaccacggcgcggtgtagccgtacctcaaagc
+>EMBOSS_095
+taggttggatagacgacggtctgtcaaggctcaccaagggttaatctgcctctgataagt
+gttggactatgggggcaacgcctcgaccagttgaacctgt
+>EMBOSS_096
+gaccgtggtgcattctagtacgtatgagcatccaaacatgcgccacatgtaccagggtga
+tgctggagtcgctgtggaacaagagcgttctaccccctcg
+>EMBOSS_097
+atcataggcccaagtcggatcatgtttatccgagtttaacaagttctgcagtggcagaaa
+agtgtctttttagcagctcccctattgccacggctgctac
+>EMBOSS_098
+taactagcagtttcgttatttaagagacttatgcgttaataaaatcttgttatggggcca
+ccagtccttattaatccgtaaggagacgagccgcctggag
+>EMBOSS_099
+tcgggatgggaactgtagtaagtaaatacagcagaacaagaccagctgtaggaccgcaag
+taattcgcatggggccttgctctctacaatcacggcagcc
+>EMBOSS_100
+taaatcggcatggtggagttatctttaagattgcaccatatgtggccgagccggaaaagc
+ttatggggtgccaggtttagcctcttgttacatagtgacg
+
+  Output files for usage example 2
+
+  File: makeseq.fasta
+
+>EMBOSS_001
+gggcgtctgggcgccgtcacggtcggccgctacctcgacccggcgttctccgtcaacttc
+gcgcggcagggcttcatctgactgctgttcggcgtgcgcg
+>EMBOSS_002
+gacgccggcgcgaccgagcggcaccgcttcgtccgaggaggcggcggcttcaccctcgtg
+gccttcgacgacagcaccctggaagagaaggactacccgg
+>EMBOSS_003
+cgcgccttcgccgccggtggcctgcactggggggttctgaccgagggcaggatcggccgc
+aggggcccggtgctgatcgtcgcccaccacctgaccctgc
+>EMBOSS_004
+ctgcagaaggacttaatgcacaccctgttcaagcggggtaaacccgagctgggcatcctg
+ttcggccagcgcgtgccggccttgtcgaccggctacggcc
+>EMBOSS_005
+ttcctctcctacctgcgctacctgaacgtgccagaagagtccagcggcgaacgcagcgcc
+ggcaccgacctgcgctcccccttcctgcggctgtgaggtg
+>EMBOSS_006
+gccgacgcgtgcgaccataccgaccgcctggacatccgcagcaccatgttccccctgcgc
+gagctcatccgcgcggaggcgatcatctacgacgagggcg
+>EMBOSS_007
+ccgcacctgcgcctgctgaccgtgaacgccattccggccaattggatcacctcgtgcctg
+ctggtgggcatcaagggcgggaccgaggccggcttcctgg
+>EMBOSS_008
+ggcggcctggcgcctcgctatcgtgccaactgcatcttcgcgctgctgcggcggccgctg
+gacctgccggatgcggaggtcgccgagagtgacccggttg
+>EMBOSS_009
+aagggcccgctgctctcagggaacgtcacgcgcgcgtacgtcggcgcggaagccgccgcg
+gttgtggccctgtcgctgctgcgggactatgccgtagaga
+>EMBOSS_010
+gtcgacggtaaggccgtggcgacctcgttccaggccctggaacttgagggctccacctcg
+ggaaaagagctgatgatccgttacgtaagcggccgccgtc
+>EMBOSS_011
+cggcgcgcggcactcccggtctcgttcgccccgcggaactggcacctgtggacgatccgc
+caagtcgagaagtaaggccacgccctcacgggccgcaaga
+>EMBOSS_012
+tatcaggcccagctcgagcaacaccatccgtgcagctgactcggccgtaattggcagcat
+ctttcgatcttggccccgaagggtaagcgcttgctggcgg
+>EMBOSS_013
+ctgatctacacccatgcccagaccctagtgggcccgcacaaggcgcaccaacgttgaact
+ggctgagaccagtgggaaccgaaacgctacgggggcctcc
+>EMBOSS_014
+gccatggccaccaacgaagatggctgcgccatccgcagcctccagcaggacgcgggcgag
+acggaccaaccgctgcacggcgacgtgatgaacattttcg
+>EMBOSS_015
+cgccagagctcgcgcggcgaggcgacccagggcgcgctgcagtggggacaggtcaacgcg
+ccgctggacttcgcgagcaacctgcagatgctcattgagc
+>EMBOSS_016
+ctgggcgcgtcgctggagggcgaccacggcgtggcgcagaaagctaatgccagtgatggt
+gtcgatacccgactgcctgcgatgtgggccgacaagccga
+>EMBOSS_017
+ctcggcttcagccccacccctgcgagcctggacgtgggcgctaagttcggcctctcgggc
+
+
+  [Part of this file has been deleted for brevity]
+
+>EMBOSS_084
+ctgcgccacctgcgcggggaaaacggcatcgccacgatgtcggagatcggtgagtacgcg
+agcaagcggggcatggaagccgaggccttcctgagcacac
+>EMBOSS_085
+cactactacatccgcctgctgctgcaggccaccatcttcctggtcagccgcacgcgcacc
+ggcgtattgattatctgtcgctttgagccggtgtttaaga
+>EMBOSS_086
+actgccgagatcaagcagtacggtgcgccgccggcaccgggtgacgccctcggcgaccgc
+gactgccgcggcgccgtgggtctgctgagccgccaatccg
+>EMBOSS_087
+cggaggaacaccagcgacatctatgaatggttcctgcagctggccaccgtgtcgctgatc
+gccgaggagctcatcaacttccgtaccggccagaatgccc
+>EMBOSS_088
+gggatcctggacgaagcggccgccttctcgaaggagaacagaagctactatccggacggc
+ctgtacacccacgtgtacaagcgcaacgagcaatggcgga
+>EMBOSS_089
+gcgctgctgcgcgcccgctcgaaatgggatcgctacgagaacatcgccaagtacctgatg
+aaggaggaggcagacgccgaccaggaacaggtcaccctcc
+>EMBOSS_090
+ccgatcgacggctacggtaccaacctgtacgccccgatgccgcatctgggcaggagcgac
+cccccgcgcgccctcgggcccccaattcaacagatcgctc
+>EMBOSS_091
+gcgaaccactcgaacgttctggtgatggcgcataccaattacaaccgcgacgccggccgt
+atcccctaccaaccgagtcgacacaccggcgaggccggcg
+>EMBOSS_092
+tccatcgagaaggccatcccgccggtccgtatcaaggggctggccggccgcccgtgcctc
+ctaggccgggcgagcctagcgaccatcgcctatgacgcca
+>EMBOSS_093
+attctgcccgacgaagacctctacgagatccgcggcttcatgcacaaggccgggcatgcg
+gacccgggcgacgaacatatcaccgtgccgctcaggcacc
+>EMBOSS_094
+cgcgtctacccgcgtcaggacgcgctgaccgccgtcctggtgaaccgccttgacaatttc
+ctgaccctgggcaaccagatgctggagctcaacgtccaat
+>EMBOSS_095
+gacctgatggagcatttcagctcgtacctgtccctggccggcggcctcttaggcataaag
+cgcaccgccccgctatcccgtatcgggacggccctggata
+>EMBOSS_096
+tgactggtcagctacggccgcttcctgctcatcgccccgctgggtctgcggacggagttc
+gaacagctgtccctgggcggcgagccgggcccggccgacc
+>EMBOSS_097
+gcccatcggggtcgctgcgtgaatccgtgcgttggagcgcggcgcgcctgcgaaaacctg
+ccgctgtcgccggcggtgctgctggaggtggtccgcagcg
+>EMBOSS_098
+cgcgcccctatggaacgcctgttcgcggcgttcgcgatcgccatcctggggatcatggtg
+ttcgccatgctggacatcagcatcgaagagcgtttcccgc
+>EMBOSS_099
+gcgaagtgccgcaccttcgtgggcagctacacgattcagagtttggacacccgggagacg
+aagcagaccgtcatcgatgaggagaccaagaccaaattga
+>EMBOSS_100
+ctcggccggcaactgcggcgcgaaccgatgccgccctacgcggccctgcgttagatggac
+ctcgcccccgcccgcgaccgagtcgcgctcgacacggtcg
+
+Data files
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name     Description
+   aligncopy        Reads and writes alignments
+   aligncopypair    Reads and writes pairs from alignments
+   biosed           Replace or delete sequence sections
+   codcopy          Copy and reformat a codon usage table
+   cutseq           Removes a section from a sequence
+   degapseq         Removes non-alphabetic (e.g. gap) characters from sequences
+   descseq          Alter the name or description of a sequence
+   entret           Retrieves sequence entries from flatfile databases and files
+   extractalign     Extract regions from a sequence alignment
+   extractfeat      Extract features from sequence(s)
+   extractseq       Extract regions from a sequence
+   featcopy         Reads and writes a feature table
+   featreport       Reads and writes a feature table
+   listor           Write a list file of the logical OR of two sets of sequences
+   makeprotseq      Create random protein sequences
+   maskambignuc     Masks all ambiguity characters in nucleotide sequences
+   with             N
+   maskambigprot    Masks all ambiguity characters in protein sequences with
+                    X
+   maskfeat         Write a sequence with masked features
+   maskseq          Write a sequence with masked regions
+   newseq           Create a sequence file from a typed-in sequence
+   nohtml           Remove mark-up (e.g. HTML tags) from an ASCII text file
+   noreturn         Remove carriage return from ASCII files
+   nospace          Remove all whitespace from an ASCII text file
+   notab            Replace tabs with spaces in an ASCII text file
+   notseq           Write to file a subset of an input stream of sequences
+   nthseq           Write to file a single sequence from an input stream of
+                    sequences
+   nthseqset        Reads and writes (returns) one set of sequences from many
+   pasteseq         Insert one sequence into another
+   revseq           Reverse and complement a nucleotide sequence
+   seqret           Reads and writes (returns) sequences
+   seqretsetall     Reads and writes (returns) many sets of sequences
+   seqretsplit      Reads sequences and writes them to individual files
+   sizeseq          Sort sequences by size
+   skipredundant    Remove redundant sequences from an input set
+   skipseq          Reads and writes (returns) sequences, skipping first few
+   splitsource      Split sequence(s) into original source sequences
+   splitter         Split sequence(s) into smaller sequences
+   trimest          Remove poly-A tails from nucleotide sequences
+   trimseq          Remove unwanted characters from start and end of sequence(s)
+   trimspace        Remove extra whitespace from an ASCII text file
+   union            Concatenate multiple sequences into a single sequence
+   vectorstrip      Removes vectors from the ends of nucleotide sequence(s)
+   yank             Add a sequence reference (a full USA) to a list file
+
+Author(s)
+
+   This application was contributed by Henrikki Almusa, Medicel,
+   Helsinki, Finland
+
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

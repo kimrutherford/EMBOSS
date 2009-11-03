@@ -1,0 +1,18 @@
+<b>Here is a sample session with pepnet</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>pepnet -sask </b>
+Draw a helical net for a protein sequence
+Input protein sequence: <b>tsw:gcn4_yeast</b>
+     Begin at position [start]: <b>253</b>
+       End at position [end]: <b>274</b>
+Graph type [x11]: <b>cps</b>
+
+Created pepnet.ps
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

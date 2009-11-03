@@ -1,0 +1,33 @@
+<b>Here is a sample session with makeprotseq</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>makeprotseq </b>
+Create random protein sequences
+Pepstats program output file (optional): <b></b>
+Number of sequences created [100]: <b></b>
+Length of each sequence [100]: <b></b>
+protein output sequence(s) [makeseq.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>makeprotseq </b>
+Create random protein sequences
+Pepstats program output file (optional): <b>../pepstats-keep/laci_ecoli.pepstats</b>
+Number of sequences created [100]: <b></b>
+Length of each sequence [100]: <b></b>
+protein output sequence(s) [makeseq.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.2">Go to the input files for this example</a><br><a href="#output.2">Go to the output files for this example</a><p><p>

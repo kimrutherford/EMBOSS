@@ -1,0 +1,272 @@
+
+                                  oddcomp 
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Identify proteins with specified sequence word composition
+
+Description
+
+   oddcomp reads one or more protein sequences, identifies proteins
+   containing regions with a specific sequence word composition, then
+   writes a list of sequence identifiers of those proteins to an output
+   file. The word composition is read from an input file which gives the
+   minimum word occurence for any number of sequence words. For an input
+   sequence to be listed in the output file, each word must be found at
+   least the stated number of times in any window over the input
+   sequence. The window size may be set to any value or the length of the
+   current protein (-fullwindow option).
+
+Algorithm
+
+   The input file of sequence word composition data is in the same format
+   as the output from compseq. Only one word size (of any length) can be
+   used and is specified at the top of the file. The search for words is
+   a boolean AND meaning all words given in the file must be found in a
+   sequence for it to be reported.
+
+   Each word must occur at least the stated number of times in a window
+   over an input sequence for the sequence to be reported. The word size
+   given in the input data file must be less than the specified window
+   size; you will not get any hits otherwise.
+
+Usage
+
+   Here is a sample session with oddcomp
+
+   To search for entries in swissprot with at least 1 SR AND at least 2
+   RS:
+
+
+% oddcomp 
+Identify proteins with specified sequence word composition
+Input protein sequence(s): tsw:*
+Program compseq output file: oddcomp.comp
+Window size to consider (e.g. 30 aa) [30]: 
+Output file [12s1_arath.oddcomp]: out.odd
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers (* if not always prompted):
+  [-sequence]          seqall     Protein sequence(s) filename and optional
+                                  format, or reference (input USA)
+  [-infile]            infile     This is a file in the format of the output
+                                  produced by 'compseq' that is used to set
+                                  the minimum frequencies of words in this
+                                  analysis.
+*  -window             integer    [30] This is the size of window in which to
+                                  count.
+                                  Thus if you want to count frequencies in a
+                                  40 aa stretch you should enter 40 here.
+                                  (Integer 10 or more)
+  [-outfile]           outfile    [*.oddcomp] This is the results file.
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -fullwindow         toggle     [N] Set this option on (Y) if you want the
+                                  window size to be set to the length of the
+                                  current protein. Otherwise, leave this
+                                  option unset, in which case you'll be
+                                  prompted for a window size to use.
+   -[no]ignorebz       boolean    [Y] The amino acid code B represents
+                                  Asparagine or Aspartic acid and the code Z
+                                  represents Glutamine or Glutamic acid.
+                                  These are not commonly used codes and you
+                                  may wish not to count words containing them,
+                                  just noting them in the count of 'Other'
+                                  words.
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory3        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+  Input files for usage example
+
+   'tsw:*' is a sequence entry in the example protein database 'tsw'
+
+  File: oddcomp.comp
+
+# Example input file for oddcomp
+Word size       2
+Total count     0
+
+#
+# Word  Obs Count       Obs Frequency   Exp Frequency   Obs/Exp Frequency
+#
+RS      2               0               0               0
+SR      1               0               0               0
+
+Other   0               0               0               0
+
+   The columns "Obs Frequency", "Exp Frequency" and "Obs/Exp Frequency"
+   are not required - they were simply included in this example to show
+   the similarity between this input file format and the output of the
+   program compseq. A compseq output file can be used as the input to
+   oddcomp - the extra columns are ignored by oddcomp.
+
+   A minimal composition input data file would look like this:
+     _________________________________________________________________
+
+Word size       2
+Total count     0
+RS      2
+SR      1
+     _________________________________________________________________
+
+   Blank lines and lines starting with '#' are ignored.
+
+   The first non-comment line should start with 'Word size' and will
+   specify the word size to use.
+
+   A line starting with the word 'Total' is required.
+
+   Anything after the line starting with the word 'Total' will be read as
+   word count data.
+
+   Word count data consists of a word to search for and the count of that
+   word to search for within the sliding window. The columns are
+   separated by one or more spaces or TAB characters. Anything after
+   these two columns will be ignored.
+
+Output file format
+
+   oddcomp writes a list of sequence name identifiers.
+
+  Output files for usage example
+
+  File: out.odd
+
+#
+# Output from 'oddcomp'
+#
+# The Expected frequencies are taken from the file: ../../data/oddcomp.comp
+#
+#       Word size: 2
+        CNR1B_FUGRU
+        CO9_FUGRU
+        FOS_FUGRU
+        RS7_FUGRU
+
+#       END     #
+
+Data files
+
+   None.
+
+Notes
+
+   oddcomp was originally written to identify proteins with SR/RS dimers,
+   for example, windows of forty amino acids containing at least 3 SR and
+   4 RS words. More generally, it will help answer questions of the type
+   'which proteins contain at least x occurrences of word X and y
+   occurences of word Y in regions of n residues'. For example, one could
+   search for serine rich or polyglutamine rich, collagen helix, or
+   similar proteins using this program.
+
+   oddcomp does not report the location of the word matches in the
+   sequence, merely the sequence ID. To search for a specific set of
+   words in a sequence, you should edit the input file of sequence word
+   composition data.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with a status of 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name     Description
+   antigenic        Finds antigenic sites in proteins
+   digest           Reports on protein proteolytic enzyme or reagent cleavage sites
+   epestfind        Finds PEST motifs as potential proteolytic cleavage sites
+   fuzzpro          Search for patterns in protein sequences
+   fuzztran         Search for patterns in protein sequences (translated)
+   helixturnhelix   Identify nucleic acid-binding motifs in protein
+                    sequences
+   patmatdb         Searches protein sequences with a sequence motif
+   patmatmotifs     Scan a protein sequence with motifs from the PROSITE
+                    database
+   pepcoil          Predicts coiled coil regions in protein sequences
+   preg             Regular expression search of protein sequence(s)
+   pscan            Scans protein sequence(s) with fingerprints from the PRINTS
+                    database
+   sigcleave        Reports on signal cleavage sites in a protein sequence
+
+Author(s)
+
+   David Martin (dmartin © rfcgr.mrc.ac.uk)
+
+History
+
+   Written (1999) - David Martin
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

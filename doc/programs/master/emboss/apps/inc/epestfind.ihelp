@@ -1,0 +1,83 @@
+   Standard (Mandatory) qualifiers:
+  [-sequence]          sequence   Protein sequence USA to be analysed.
+   -window             integer    [10] Minimal distance between positively
+                                  charged amino acids. (Integer 2 or more)
+   -order              selection  [score] Name of the output file which holds
+                                  the results of the analysis. Results may be
+                                  sorted by length, position and score.
+  [-outfile]           outfile    [*.epestfind] Name of file to which results
+                                  will be written.
+   -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, das, xterm, png, gif)
+
+   Additional (Optional) qualifiers:
+   -mwdata             datafile   [Emolwt.dat] Molecular weights data file
+   -threshold          float      [+5.0] Threshold value to discriminate weak
+                                  from potential PEST motifs. Valid PEST
+                                  motifs are discriminated into 'poor' and
+                                  'potential' motifs depending on this
+                                  threshold score. By default, the default
+                                  value is set to +5.0 based on experimental
+                                  data. Alterations are not recommended since
+                                  significance is a matter of biology, not
+                                  mathematics. (Number from -55.00 to 55.00)
+
+   Advanced (Unprompted) qualifiers:
+   -mono               boolean    [N] Use monoisotopic weights
+   -[no]potential      boolean    [Y] Decide whether potential PEST motifs
+                                  should be printed.
+   -[no]poor           boolean    [Y] Decide whether poor PEST motifs should
+                                  be printed.
+   -invalid            boolean    [N] Decide whether invalid PEST motifs
+                                  should be printed.
+   -[no]map            boolean    [Y] Decide whether PEST motifs should be
+                                  mapped to sequence.
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   "-graph" associated qualifiers
+   -gprompt            boolean    Graph prompting
+   -gdesc              string     Graph description
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+

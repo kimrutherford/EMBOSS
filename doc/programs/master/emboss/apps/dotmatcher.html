@@ -1,0 +1,153 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: dotmatcher
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+dotmatcher
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/dotmatcher.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<p><b>dotmatcher</b> generates a dotplot from two input sequences.  The dotplot is an intuitive graphical representation of the regions of similarity between two sequences.  All positions from the first input sequence are compared with all positions from the second input sequence using a specified substitution matrix.  The two sequences are the axes of the rectangular dotplot.  Wherever there is "similarity" between a position from each sequence a dot is plotted. The threshold conditions for "similarity" are defined by the user.</p>
+
+<H2>
+    Algorithm
+</H2>
+
+<p>All positions from the first input sequence are compared with all positions from the second input sequence and scored, using the specified substitution matrix. This produces a matrix of scores from which local regions of similarity (corresponding to diagonals in the dotplot) are identified. A window of user-specified length is moved along all possible diagonals. Each position in the window corresponds to a pair-wise score from the scoring matrix.  The score for the entire window is the sum of the scores for individual positions within it.  If the window score is above the user-defined threshold, then a line is plotted on the dotplot corresponding to the window.</p>
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/dotmatcher.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/dotmatcher.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/dotmatcher.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+Any 2 sequence USAs of the same type (DNA or protein).
+
+<p>
+<!--#include file="inc/dotmatcher.input" -->
+
+
+
+<H2>
+    Output file format
+</H2>
+
+
+An image is output to the requested graphics device.
+
+<p>
+<!--#include file="inc/dotmatcher.output" -->
+
+<H2>
+    Data files
+</H2>
+
+
+It uses the specified matrix substitution file to compare the two sequences.
+
+<p>
+
+For protein sequences EBLOSUM62 is used for the substitution
+matrix. For nucleotide sequence, EDNAFULL is used. Others can be
+specified.
+
+<p>
+<!--#include file="inc/localfiles.ihtml" -->
+
+<H2>
+    Notes
+</H2>
+
+<p>Where the two sequences have substantial regions of similarity, the dots line up to form diagonal lines. It is possible to see at a glance such local regions of similarity. It is also easy to see other features such as repeats (which form parallel diagonal lines), and insertions or deletions (which form breaks or discontinuities in the diagonal lines).</p>
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/dotmatcher.isee" -->
+
+<a href="dottup.html">dottup,</a> by comparison, has no threshold, using
+a wordmatch-style method.  <b>dottup</b> is less sensitive, but substantially
+faster than <b>dotmatcher</b>. 
+
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/ilongden.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/dotmatcher.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/dotmatcher.comment" -->
+
+</BODY>
+</HTML>
+

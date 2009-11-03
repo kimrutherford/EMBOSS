@@ -1,0 +1,33 @@
+application: codcopy [
+  documentation: "Copy and reformat a codon usage table"
+  groups: "Edit"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  codon: infile [
+    parameter: "Y"
+  ]
+
+endsection: input
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outcodon: outfile [
+    parameter: "Y"
+  ]
+
+endsection: output

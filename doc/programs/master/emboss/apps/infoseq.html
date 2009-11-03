@@ -1,0 +1,188 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: infoseq
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+infoseq
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/infoseq.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+<p><b>infoseq</b> displays on screen basic information about one or more input sequences.  This includes the Uniform Sequence Address (USA), name, accession number, type (nucleic or protein), length, percentage C+G and description.  Any combination of these records is easily selected or unselected for display. The same information may be written to an output file which (optionally) may be formatted in an HTML table.</p>
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/infoseq.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/infoseq.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/infoseq.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+
+<b>infoseq</b> reads any sequence USAs.
+
+<p>
+
+<!--#include file="inc/infoseq.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+
+	The output is displayed on the screen (stdout) by default.
+<p>
+	
+<!--#include file="inc/infoseq.output" -->
+
+<p>
+
+The first non-blank line is the heading.  This is followed by one line
+per sequence containing the following columns of data separated by one
+of more space or TAB characters:
+
+<ul>
+<li>The USA (Uniform Sequence Address) that EMBOSS can use to read in the
+	sequence. 
+<li>The name or ID of the sequence.  If this is not known then '-' is
+	output. 
+<li>The accession number. If this is not known then '-' is
+        output.
+<li>The type ('N' is nucleic, 'P' is protein).
+<li>The sequence length.
+<li>The description line of the sequence. This may be blank.
+</ul>
+
+<p>
+
+If qualifiers to inhibit various columns of information are used, then
+the remaining columns of information are output in the same order as
+shown above, so if '-nolength' is used, the order of output is: usa,
+name, accession, type, description. 
+
+<p>
+
+When the -html qualifier is specified, then the output will be wrapped
+in HTML tags, ready for inclusion in a Web page.  Note that tags such as
+&lt;HTML&gt; and &lt;BODY&gt; are not output by this program as the
+table of databases is expected to form only part of the contents of a
+web page - the rest of the web page must be supplier by the user. 
+
+<p>
+
+The lines of out information are guaranteed not to have trailing
+white-space at the end. 
+
+<H2>
+    Data files
+</H2>
+
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+
+<p>There are many qualifiers to control exactly what information on the sequence is output and how it is formatted.  If you only want a few fields in the output file, the command line may be shortended by preceding the appropriate qualifier with <tt>-only</tt>.  For example, instead of specifying <tt>-nohead -noname -noacc -notype -nopgc -nodesc</tt> to get only the length output, you can specify <tt>-only -length</tt>.</p>
+<p>By default, the output file starts each line with the USA of the sequence being described, so the output file is a list file that can be manually edited and read in by any other EMBOSS program that can read in one or more sequence to be analysed.</p>
+
+
+<H2>
+    References
+</H2>
+
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+
+It always exits with status 0
+
+<H2>
+    Known bugs
+</H2>
+
+
+None noted.
+
+<!--#include file="inc/infoseq.isee" -->
+<ul>
+
+<li><a href="geecee.html">geecee</a> - Calculates the fractional GC
+content of a nucleic acid sequence
+
+</ul>
+
+<H2>
+    Author(s)
+</H2>
+
+
+<!--#include file="inc/gwilliam.address" -->
+
+<H2>
+    History
+</H2>
+
+<!--#include file="inc/infoseq.history" -->
+
+<H2>
+    Target users
+</H2>
+
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/infoseq.comment" -->
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,110 @@
+application: complex [
+  documentation: "Find the linguistic complexity in
+                  nucleotide sequences"
+  groups: "Nucleic:Composition"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "dna"
+  ]
+
+  integer: lwin [
+    standard: "Y"
+    default: "100"
+    maximum: "$(sequence.length)"
+    information: "Window length"
+  ]
+
+  integer: step [
+    standard: "Y"
+    default: "5"
+    maximum: "$(lwin)"
+    information: "Step size"
+    help: "Displacement of the window over the sequence"
+  ]
+
+  integer: jmin [
+    standard: "Y"
+    default: "4"
+    minimum: "2"
+    maximum: "20"
+    information: "Minimum word length"
+    help: ""
+  ]
+
+  integer: jmax [
+    standard: "Y"
+    default: "6"
+    minimum: "2"
+    maximum: "50"
+    information: "Maximum word length"
+    help: ""
+  ]
+
+endsection: input
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  toggle: omnia [
+    default: "N"
+    information: "All sequences"
+    help: "Calculate over a set of sequences"
+  ]
+
+  integer: sim [
+    default: "0"
+    information: "Simulations"
+    help: "Calculate the linguistic complexity by comparison with a
+           number of simulations having a uniform distribution of bases"
+  ]
+
+  boolean: freq [
+    default: "N"
+    information: "Calculate frequency"
+    help: "Execute the simulation of a sequence based on the base
+           frequency of the original sequence"
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  boolean: print [
+    default: "N"
+    information: "Print to file"
+    help: "Generate a file named UjTable containing the values of Uj
+           for each word j in the real sequence(s) and in any simulated
+           sequences"
+  ]
+
+  outfile: outfile [
+    parameter: "Y"
+    knowntype: "complex output"
+  ]
+
+  outfile: ujtablefile [
+    default: "complex.ujtable"
+    information: "Program complex temporary output file"
+    knowntype: "complex temporary output"
+    help: ""
+    nullok: "Y"
+  ]
+
+  seqoutall: outseq [
+    standard: "$(omnia)"
+    nullok: "Y"
+  ]
+
+endsection: output

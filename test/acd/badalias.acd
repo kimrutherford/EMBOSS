@@ -1,0 +1,5 @@
+# ACD file for QA testing - missing the application definition
+#
+appl: badalias [ doc: "testing" group: "testing" ]
+
+outfile: outtest file2 [ param: Y odirectory: "$(outdir)" ]

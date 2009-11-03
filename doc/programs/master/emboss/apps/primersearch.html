@@ -1,0 +1,170 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+primersearch
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/primersearch.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+<p><b>primersearch</b> reads in primer pairs from an input file and searches them against DNA sequence(s) specified by the user. Each of the primers in a pair is searched against the sequence and potential amplimers are reported.  The output file is in the format of Whitehead <b>primer3_core</b> program.  The user can specify a maximum percent mismatch level; for example, 10% mismatch on a primer of length 20bp means that the program will classify a primer as matching a sequence if 18 of the 20 base pairs matches.  It will only report matches if both primers in the pair have a match in opposite orientations.</p>
+
+
+<H2>
+Algorithm
+</H2>
+
+<p>Each primer pair is specified in the input file by a name, followed by two primer sequences, primerA and primerB. The program first compares primerA to the forward strand and if it matches, primerB is compared to the reverse strand. The approach is then reversed, with the primerB being compared to the forward strand and primerA to the reverse. In this way all possible amplimers are reported.</p>
+
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/primersearch.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/primersearch.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/primersearch.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>primersearch</b> reads in any nucleic acid sequence USAs.
+
+<p>
+
+<!--#include file="inc/primersearch.input" -->
+
+<p>
+
+The input primer file has the following format:
+
+<p>
+Comment lines start with a '#'
+<br>
+Lines with primer information have three fields separated by spaces or TAB characters. The columns contain:
+<br>
+<ol>
+<li>The name of the primer pair - this is reported in the output.
+<li>The sequence of the first primer.
+<li>The sequence of the second primer.
+</ol>
+
+<p>
+
+Empty files will cause primersearch to note that no primers have 
+been found, and to exit.
+
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/primersearch.output" -->
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+
+<p>Every potential amplimer will be reported; if one primer matches the forward strand twice and the other matches the reverse strand only once, two potential amplimers are reported. If the reverse primer matches twice, four potential amplimers are reported.</p>
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+<p>This program is processor-intensive.  You should probably not use it, for example, to search the whole of EMBL or even the human section of EMBL. It will take longer with more primer pairs and if mismatches are allowed.</p>
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+"No suitable primers found - exiting" means that either the primers
+file was empty or there were no compilable primer pairs contained in it.
+
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/primersearch.isee" -->
+
+<p>
+
+<a href="stssearch.html">stssearch</a> does something similar, but doesn't
+allow you to find mismatches and will report any match in any
+orientation and doesn't require you to have both primers matching. 
+
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/vcurwen.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/primersearch.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/primersearch.comment" -->
+
+</BODY>
+</HTML>
+

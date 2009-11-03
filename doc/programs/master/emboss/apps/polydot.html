@@ -1,0 +1,151 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: polydot
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+polydot
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/polydot.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+<p><b>polydot</b> generates a dotplot for each of an all-against-all comparison of a set of sequences.  The dotplots are rendered on a single diagram. The dotplot is an intuitive graphical representation of the regions of similarity between two sequences.  All positions from the first input sequence are compared with all positions from the second input sequence searching for exact matches between sequence regions ("words").  The two sequences are the axes of the rectangular dotplot.  Wherever there is "similarity" between a word from each sequences a dot is plotted. The wordsize is specified by the user. Optionally, information on the sequence and location of all the exact matching regions may be written to file as a feature file.</p>
+
+
+
+<H2>
+Algorithm
+</H2>
+
+<p>All sequence words of the specified size from the first input sequence are compared with all words from the second input sequence and exact matches identified.  A line is plotted on the dotplot corresponding to any exact matching words.  Thus any local regions of identity correspond to diagonals in the dotplot.</p>
+
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/polydot.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/polydot.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/polydot.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>polydot</b> reads in a set of nucleic or protein sequences.
+
+<p>
+
+The sequences may or may not be aligned.
+
+<p>
+
+<!--#include file="inc/polydot.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+A graphical image is displayed on the specified graphics device.
+
+<p>
+
+<!--#include file="inc/polydot.output" -->
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+
+<H2>
+    Notes
+</H2>
+
+<p>Where the two sequences have substantial regions of identity, longer diagonal lines appear in the plot. It is possible to see at a glance such local regions of identity. It is also easy to see other features such as repeats (which form parallel diagonal lines), and insertions or deletions (which form breaks or discontinuities in the diagonal lines).</p>
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+0 if successful.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/polydot.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+
+<!--#include file="inc/ilongden.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/polydot.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/polydot.comment" -->
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,153 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: abiview
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+abiview
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/abiview.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<p><b>abiview</b> reads in an ABI sequencer trace file and graphically displays the data.  The probabilities of each of the 4 nucleotide bases along the sequencing run is plotted and the assigned nucleotide (<tt>G</tt>, <tt>A</tt>, <tt>T</tt>, <tt>C</tt> or <tt>N</tt>) from the ABI file is overlayed on the graphs.  The complete sequence is written to an output file.</p>
+
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/abiview.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/abiview.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/abiview.itable" -->
+
+
+
+<H2>
+    Input file format
+</H2>
+
+This reads in a standard ABI trace file.
+
+<p>
+
+<!--#include file="inc/abiview.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+It outputs a file holding a normal nucleotide sequence.
+
+<!--#include file="inc/abiview.output" -->
+<p>
+
+The horizontal scale of the output image labelled 'Residue Position' is
+only a very approximate indication of the spacing of residues in the
+image.  The real residue spacing is variable, as it relies on the speed
+with which the oligo-nucleotides are eluted in the ABI sequencer.  Do
+not be surprised to see the nucleotide signals spaced at a much greater
+distance than the horizontal scale might suggest. 
+
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+<p>An ABI file (<tt>*.abi</tt>) contains sequence trace data and base calls from a run of an ABI nucleotide sequencer machine.  A trace data file is what you get back from having some DNA sequenced, for example, by a 3730XL sequencer.  The files are in "binary" format and so cannot be viewed directly on screen.  To inspect the sequencing data you must use a trace viewer such as <b>abiview</b>.  Another good trace viewer is FinchTV (<a href="http://www.geospiza.com/finchtv/">http://www.geospiza.com/finchtv/</a>).  It is stand-alone program and is freely available.</p>
+
+<H2>
+    References
+</H2>
+
+None.
+
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+None.
+
+
+<!--#include file="inc/abiview.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+
+<!--#include file="inc/tcarver.address" -->
+
+
+
+<H2>
+    History
+</H2>
+
+
+<!--#include file="inc/abiview.history" -->
+
+
+<H2>
+    Target users
+</H2>
+
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+
+<!--#include file="inc/abiview.comment" -->
+
+</BODY>
+</HTML>
+

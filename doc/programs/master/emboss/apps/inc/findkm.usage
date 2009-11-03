@@ -1,0 +1,16 @@
+<b>Here is a sample session with findkm</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>findkm -graph cps </b>
+Calculate and plot enzyme reaction data
+Enzyme kinetics data (application-specific) file: <b>enztest.dat</b>
+Output file [enztest.findkm]: <b></b>
+
+Created findkm.ps
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

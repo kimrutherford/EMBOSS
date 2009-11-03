@@ -1,0 +1,264 @@
+
+                                 dbifasta 
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Index a fasta file database
+
+Description
+
+   dbifasta indexes a flat file database of one or more files, and builds
+   EMBL CD-ROM format index files. This format is used by the software on
+   the EMBL database CD-ROM distribution and by the Staden package in
+   addition to EMBOSS, and appears to be the most generally used and
+   publicly available index file format for these databases.
+
+Usage
+
+   Here is a sample session with dbifasta
+
+
+% dbifasta 
+Index a fasta file database
+Database name: EMROD
+              simple : >ID
+               idacc : >ID ACC
+  or >ID (ACC) gcgid : >db:ID
+            gcgidacc : >db:ID ACC
+                dbid : >db ID
+                ncbi : | formats
+ID line format [idacc]: idacc
+Database directory [.]: data
+Wildcard database filename [*.dat]: emrod
+Release number [0.0]: 
+Index date [00/00/00]: 
+General log output file [outfile.dbifasta]: 
+
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-dbname]            string     Database name (Any string from 2 to 19
+                                  characters, matching regular expression
+                                  /[A-z][A-z0-9_]+/)
+   -idformat           menu       [idacc] ID line format (Values: simple
+                                  (>ID); idacc (>ID ACC); or >ID (ACC) gcgid
+                                  (>db:ID); gcgidacc (>db:ID ACC); dbid (>db
+                                  ID); ncbi (| formats))
+   -directory          directory  [.] Database directory
+   -filenames          string     [*.dat] Wildcard database filename (Any
+                                  string is accepted)
+   -release            string     [0.0] Release number (Any string up to 9
+                                  characters)
+   -date               string     [00/00/00] Index date (Date string dd/mm/yy)
+   -outfile            outfile    [*.dbifasta] General log output file
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -fields             menu       [acc] Index fields (Values: acc (acnum
+                                  accession number index); sv (seqvn sequence
+                                  version and gi number index); des (des
+                                  description index))
+   -exclude            string     Wildcard filename(s) to exclude (Any string
+                                  is accepted)
+   -maxindex           integer    [0] Maximum index length (Integer 0 or more)
+   -sortoptions        string     [-T . -k 1,1] Sort options, typically '-T .'
+                                  to use current directory for work files and
+                                  '-k 1,1' to force GNU sort to use the first
+                                  field (Any string is accepted)
+   -[no]systemsort     boolean    [Y] Use system sort utility
+   -[no]cleanup        boolean    [Y] Clean up temporary files
+   -indexoutdir        outdir     [.] Index file output directory
+
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+Output file format
+
+  Output files for usage example
+
+  File: division.lkp
+
+   This file contains non-printing characters and so cannot be displayed
+   here.
+
+  File: entrynam.idx
+
+   This file contains non-printing characters and so cannot be displayed
+   here.
+
+  File: acnum.hit
+
+   This file contains non-printing characters and so cannot be displayed
+   here.
+
+  File: acnum.trg
+
+   This file contains non-printing characters and so cannot be displayed
+   here.
+
+  File: outfile.dbifasta
+
+########################################
+# Program: dbifasta
+# Rundate: Tue 15 Jul 2008 12:00:00
+# Dbname: EMROD
+# Release: 0.0
+# Date: 15/07/08
+# CurrentDirectory: /homes/user/test/qa/dbifasta-ex-keep/
+# IndexDirectory: ./
+# IndexDirectoryPath: /homes/user/test/qa/dbifasta-ex-keep/
+# Maxindex: 0
+# Fields: 2
+#   Field 1: id
+#   Field 2: acc
+# Directory: /homes/user/test/data/
+# DirectoryPath: /homes/user/test/data/
+# Filenames: emrod
+# Exclude:
+# Files: 1
+#   File 1: /homes/user/test/data/emrod
+########################################
+# Commandline: dbifasta
+#    -dbname EMROD
+#    -idformat idacc
+#    -directory ../../data
+#    -filenames emrod
+########################################
+
+filename: 'emrod'
+    id: 6
+   acc: 6
+
+Index acc: maxlen 6 items 6
+
+Total 1 files 6 entries (0 duplicates)
+
+   dbifasta creates four index files. All are binary but with a simple
+   format.
+
+     * division.lkp is the master index file, and has a 300 byte header
+       containing the database name and date plus information on the
+       record size. This header is followed by one record for each
+       database file, giving the full file name for the data file, and
+       optionally a second sequence file.
+     * entryname.idx is the entry name index. It has the same 300 byte
+       header, mainly used to store the record size which will depend on
+       the size of the longest entryname in the database. Each entry is
+       stored in sorted alphanumeric order so that a binary search can be
+       used to efficiently find any record. The record also holds the
+       file number from division.lkp and the offsets in the data and
+       sequence files for that entry.
+     * acnum.trg holds the accession number information. The file has the
+       usual 300 byte header, and a sorted list of record by accession
+       number. Each accession number record contains the first record
+       number in acnum.hit and the total number of records in acnum.hit
+       so that secondary (duplicated) accession numbers can be searched.
+     * acnum.hit is a very simple file. After the usual 300 byte header,
+       each record simply holds the record number in entryname.idx. An
+       accession number search will use acnum.trg to find a start
+       position and number of records to read in this file, and will then
+       simply read the entryname.idx records for each entry in turn.
+
+Data files
+
+   None.
+
+Notes
+
+   The indexing method depends on each entry having a unique entry name.
+   No allowance is made for two entries with the same name so it is not
+   possible to index EMBL and EMBLNEW together.
+
+   Having created the EMBOSS indices for this file, a database can then
+   be defined in the file emboss.defaults as something like:
+DB emrod [
+   type: N
+   format: fasta
+   method: emblcd
+   directory: /data/embl/fasta
+]
+
+  Fields Indexed
+
+   By default, dbifasta will index the ID name and the accession number
+   (if present).
+   If they are present in your database, you may also specify that
+   dbifasta should index the Sequence Version and GI number and the words
+   in the description by using the '-fields' qualifier with the
+   appropriate values.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   Exit status It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+                    Program name                     Description
+                    dbiblast     Index a BLAST database
+                    dbiflat      Index a flat file database
+                    dbigcg       Index a GCG formatted database
+                    dbxfasta     Index a fasta file database using b+tree indices
+                    dbxflat      Index a flat file database using b+tree indices
+                    dbxgcg       Index a GCG formatted database using b+tree indices
+
+Author(s)
+
+   Alan             Bleasby (ajb © ebi.ac.uk)
+   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton,         Cambridge CB10 1SD, UK
+
+History
+
+   Completed        August 2000
+
+Target users
+
+                    This program is intended to be used by administrators responsible for
+                    software and database installation and maintenance.
+
+Comments
+
+                    None

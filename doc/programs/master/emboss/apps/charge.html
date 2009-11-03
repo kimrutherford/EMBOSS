@@ -1,0 +1,154 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: charge
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+charge
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/charge.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<p><b>charge</b> reads a protein sequence and writes a file (or plots a graph) of the mean charge of the amino acids within a window of specified length as the window is moved along the sequence.</p>
+
+<H2>
+   Algorithm
+</H2>
+
+
+<p><b>charge</b> uses the column "charge" from a datafile (Eamino.dat) of amino acid properties. It gives the residues 'D' and 'E' a charge of -1, 'K' and 'R' a charge of +1, and the residue 'H' a charge of +0.5. Then it calculates the mean charge across the window, which by default is 5 residues.</p>
+
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/charge.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/charge.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/charge.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+<b>charge</b> reads in a protein sequence.
+
+<p>
+<!--#include file="inc/charge.input" -->
+
+
+<H2>
+    Output file format
+</H2>
+
+If the option '-plot' is specified then <b>charge</b> displays a graph
+of the charge along the sequence otherwise it writes out a file
+containing the charges within a window starting at each position along
+the sequence. 
+
+<p>
+
+The output file contains two columns separated by space or TAB
+characters.  The first column is the position of the start of the
+window.  The second column is the charge of the amino acids within that
+window. 
+
+<p>
+<!--#include file="inc/charge.output" -->
+
+<H2>
+    Data files
+</H2>
+
+<b>charge</b> reads the data file 'Eamino.dat' to find the charge of
+the amino acids in the protein.
+
+<p>
+<!--#include file="inc/localfiles.ihtml" -->
+
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/charge.isee" -->
+
+
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/ableasby.address" -->
+
+
+<H2>
+    History
+</H2>
+
+<!--#include file="inc/charge.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/charge.comment" -->
+
+</BODY>
+</HTML>
+

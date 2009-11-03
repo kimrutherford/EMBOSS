@@ -1,0 +1,18 @@
+ID   EMBL       standard; DNA; UNC; 100 BP.
+XX
+AC   E10002;
+XX
+SV   E10002.34
+XX
+DE   EMBL FORMAT DNA SEQUENCE
+XX
+KW   DNA binding protein; repressor.
+XX
+OS   Escherichia coli
+OC   Bacteria; Proteobacteria; gamma subdivision; Enterobacteriaceae;
+OC   Escherichia.
+XX
+SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;
+     acgtacgtac gtacgtacgt acgtacgtac gtacgtacgt acgtacgtac gtacgtacgt        60
+     acgtacgtac gtacgtacgt acgtacgtac gtacgtacgt                             100
+//

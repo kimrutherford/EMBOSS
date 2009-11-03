@@ -1,0 +1,139 @@
+application: restover [
+  documentation: "Find restriction enzymes producing a specific overhang"
+  groups: "Nucleic:Restriction"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "DNA"
+  ]
+
+  datafile: datafile [
+    default: ""
+    information: "Restriction enzyme data file (optional)"
+    nullok: "Y"
+    knowntype: "restriction enzyme data"
+  ]
+
+  datafile: mfile [
+    default: "Emethylsites.dat"
+    information: "Restriction enzyme data file (optional)"
+    knowntype: "restriction enzyme methylation data"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  string: seqcomp [
+    parameter: "Y"
+    information: "Overlap sequence"
+    knowntype: "nucleotide sequence"
+  ]
+
+endsection: required
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  integer: min [
+    minimum: "1"
+    maximum: "1000"
+    default: "1"
+    information: "Minimum cuts per RE"
+  ]
+
+  integer: max [
+    minimum: "$(min)"
+    maximum: "2000000000"
+    default: "2000000000"
+    information: "Maximum cuts per RE"
+  ]
+
+  boolean: single [
+    default: "N"
+    information: "Force single site only cuts"
+  ]
+
+  boolean: threeprime [
+    default: "N"
+    information: "Use 3' overhang e.g. BamHI has CTAG as a 5'
+                  overhang, and ApaI has CCGG as 3' overhang."
+  ]
+
+  boolean: blunt [
+    default: "Y"
+    information: "Allow blunt end cutters"
+  ]
+
+  boolean: sticky [
+    default: "Y"
+    information: "Allow sticky end cutters"
+  ]
+
+  boolean: ambiguity [
+    default: "Y"
+    information: "Allow ambiguous matches"
+  ]
+
+  boolean: plasmid [
+    default: "N"
+    information: "Allow circular DNA"
+  ]
+
+  boolean: methylation [
+    default: "N"
+    information: "Use methylation data"
+    help: "If this is set then RE recognition sites will not match
+           methylated bases."
+  ]
+
+  boolean: commercial [
+    default: "Y"
+    information: "Only enzymes with suppliers"
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  boolean: html [
+    default: "N"
+    information: "Create HTML output"
+    outputmodifier: "Y"
+  ]
+
+  boolean: limit [
+    default: "Y"
+    information: "Limits reports to one isoschizomer"
+  ]
+
+  boolean: alphabetic [
+    default: "N"
+    information: "Sort output alphabetically"
+  ]
+
+  boolean: fragments [
+    default: "N"
+    information: "Show fragment lengths"
+  ]
+
+  outfile: outfile [
+    parameter: "Y"
+    knowntype: "restover output"
+  ]
+
+endsection: output

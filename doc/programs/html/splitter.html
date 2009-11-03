@@ -1,0 +1,893 @@
+<HEAD>
+  <TITLE>
+  EMBOSS: splitter
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+splitter
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
+    Function
+</H2>
+Split sequence(s) into smaller sequences
+
+<H2>
+    Description
+</H2>
+
+<p><b>splitter</b> splits one or more input sequences into smaller,
+optionally overlapping, subsequences. The subsequence size and overlap
+(if any) may be specified. Optionally, feature information will be
+used.</p>
+
+
+
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with splitter</b>
+<p>
+Split a sequence into sub-sequences of 10,000 bases (the default size) with no overlap between the sub-sequences: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>splitter tembl:BA000025 ba000025.split </b>
+Split sequence(s) into smaller sequences
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+Split a sequence into sub-sequences of 50,000 bases with an overlap of 3,000 bases on each sub-sequence: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>splitter tembl:BA000025 ba000025.split -size=50000 -over=3000 </b>
+Split sequence(s) into smaller sequences
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Sequence(s) filename and optional format, or
+                                  reference (input USA)
+  [-outseq]            seqoutall  [<sequence>.<format>] Sequence set(s)
+                                  filename and optional format (output USA)
+
+   Additional (Optional) qualifiers:
+   -size               integer    [10000] Size to split at (Integer 1 or more)
+   -overlap            integer    [0] Overlap between split sequences (Integer
+                                  0 or more)
+
+   Advanced (Unprompted) qualifiers:
+   -feature            boolean    [N] Use feature information
+   -addoverlap         boolean    [N] Include overlap in output sequence size
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outseq" associated qualifiers
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 2)</td>
+<td>Sequence set(s) filename and optional format (output USA)</td>
+<td>Writeable sequence(s)</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-size</td>
+<td>Size to split at</td>
+<td>Integer 1 or more</td>
+<td>10000</td>
+</tr>
+
+<tr>
+<td>-overlap</td>
+<td>Overlap between split sequences</td>
+<td>Integer 0 or more</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-feature</td>
+<td>Use feature information</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-addoverlap</td>
+<td>Include overlap in output sequence size</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Input File Format
+</H2>
+
+
+<b>splitter</b>	reads one or more sequence USAs.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:BA000025' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:BA000025</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   BA000025; SV 2; linear; genomic DNA; STD; HUM; 2229817 BP.
+XX
+AC   BA000025; AP000502-AP000521;
+XX
+DT   09-DEC-2004 (Rel. 82, Created)
+DT   17-JUN-2008 (Rel. 96, Last updated, Version 5)
+XX
+DE   Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
+XX
+KW   .
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-2229817
+RA   Hirakawa M., Yamaguchi H., Imai K., Shimada J.;
+RT   ;
+RL   Submitted (21-AUG-2001) to the EMBL/GenBank/DDBJ databases.
+RL   Mika Hirakawa, Japan Science and Technology Corporation (JST), Advanced
+RL   Databases Department; 5-3, Yonbancho, Chiyoda-ku, Tokyo 102-0081, Japan
+RL   (E-mail:mika@tokyo.jst.go.jp, URL:http://www-alis.tokyo.jst.go.jp/,
+RL   Tel:81-3-5214-8491, Fax:81-3-5214-8470)
+XX
+RN   [2]
+RA   Shiina S., Tamiya G., Oka A., Inoko H.;
+RT   "Homo sapiens 2,229,817bp genomic DNA of 6p21.3 HLA class I region";
+RL   Unpublished.
+XX
+DR   EPD; EP11158; HS_TNF.
+DR   EPD; EP11159; HS_LTA.
+DR   EPD; EP73522; HS_HLA-B.
+DR   EPD; EP73908; HS_GTF2H4.
+DR   EPD; EP73940; HS_NEU1.
+DR   EPD; EP74013; HS_VARS2.
+DR   EPD; EP74203; HS_MRPS18B.
+DR   EPD; EP74346; HS_HLA-E.
+DR   EPD; EP74389; HS_BAT1.
+DR   EPD; EP74485; HS_IER3.
+DR   GDB; 11515913.
+DR   GOA; P59942.
+DR   HGNC; 20668; MCCD1.
+DR   IMGT/HLA; HLA02802; V*01010102.
+DR   RFAM; RF00994; mir-1255.
+DR   UniProtKB/Swiss-Prot; P59942; MCCD1_HUMAN.
+XX
+CC   This sequence is conducted by Tokai University as a JST sequencing
+CC   Team.
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+     ttggccccac cccagcatgt ctccaggttc ctctcagccc tggttccttt tggccctgca   2226900
+     gtcacaatgg gcaacactgt gacgcaccct gtcctgtgtc acagtgtcat acactcaggc   2226960
+     tcacattgcc cctaggccac ttgccagcca agggacatgg ccacattttg tgtcttctgc   2227020
+     acctcagcct tgctttcaag tgcaggtgat gatggcaccc acgcagaaca aatgttattt   2227080
+     gctatcttcg tcgagtttag tcatccaatt ttccaaccct cactgggcaa ggaagagtgt   2227140
+     ggtttccacc aagaaggcag gatgtcagca gtcacagggg caaccaacag ggaaagccgc   2227200
+     cggaaaatag accccacagg aagcacaggt gtccagtgga gatgggaacc ctgcagattt   2227260
+     gaccgtcttt aagcagatta gagagattac cgttactaac aacttagcca taaaagttta   2227320
+     ttagctattt tcaaaaagca taaaattatg taatataatt ttttttaaat ttccatcaat   2227380
+     acaaaactaa tctgggcact gcaacttccg gtgggcaact gggataggcg gcatcatcag   2227440
+     gaaggcgagc cctgccgtgc cccatgtgcc agtgccccag atggcggcag cctccccaga   2227500
+     agcaccttgt atctcccctg cacagggcca gggtcccagc ttcccataca ccttctcctg   2227560
+     ctttttcttt tctgtccttt cctttttcaa taaaccacct gcaaaaaggg aaaaccattc   2227620
+     tgaggacaag aaacatgtca atgggaaata cacagttgcc agagggtaaa aggccctgtt   2227680
+     cattctcatt gaaaagctca ggtatttctg ttaaagtctc tccttttact ttaggatgct   2227740
+     gactcctgcg tccatctcaa cctgggcatc gtgccaccac cttcaagaag agaaaaacta   2227800
+     agtagtgctt tgcaaagggg cagcagcatt tctcatttct gaccatgtca ggcacatggc   2227860
+     catgcagatg agcaggtggg ggacacaggt gagtctccag acctgctctc ctcccacagt   2227920
+     acattcttga gtctttttaa acagttgtga aaatgccaca gatgcaagca cctgtgggcc   2227980
+     actcccatgg ggaccgttgc acaaggcagt gccactcatt ctcagaacct cctaccatgg   2228040
+     gctatgctta gtgacccgag gccaagccaa ggaagacgcc agccacaggg tgccatcctc   2228100
+     aggggcatgc tgccagcagg ggcaaagtta tccctagcaa caagatacag aaagaaagaa   2228160
+     aaaaggaagg aaatgtagcc aatgggccgg ttcaggttct tgactttgcc acacaaaaga   2228220
+     atttgagagc aagtccaaag taaaagtcag caagagaatt tattgcaaag tgaaagtaca   2228280
+     ctctgacagc tgatcagagc agctgctcaa aagagagaca gtaccctccc ctcacgggag   2228340
+     tcttacatga ttattcatga ataggtggga aggggtattg ttttaagcat gttctgtggt   2228400
+     ctcttgaacg tgcatgcact gtggttgtac atatcagcac acacatctta cgtctcatta   2228460
+     gcatcttaac ttccctctca gagttgtgtt tgctactatt gtaatgagca taggtcagcc   2228520
+     caaggacact attcatgggt ttctgggctt cctcagatgt ggggatgcct cccttggctc   2228580
+     ttctacctct ttgctgcagg atgttctaac cacaagccca ggatatggtt tgcgcactgt   2228640
+     cgaacagctt gttctctcca tcaacctgac aagtctcttg tttcctttca agggaggctg   2228700
+     tgaacaccct atctcactga cctcagaagg acagtacagc agtagccacc atgaccaaaa   2228760
+     agatgattcc agaagtgcag gacaactccc tacccagagg ctgtggctgt gcagtaacac   2228820
+     accaagaggg gagtccagct ggctctcagg gtgctcacta ccctcatctg ggggcctgga   2228880
+     ggacgtcaat tcctgagaac gccacgttct agtgagtaga atgaactgag agatacacag   2228940
+     caaagctcca catacttttc cttttctttg tgcccgcagt gttcttcatc agtgtgctct   2229000
+     cgcttttcag ctactactgt tggctggctg gaaaaaatag aacaatagta aaaattagag   2229060
+     accagtcttt ggtgatgaag agaaatattg gctacttcca gtattttcta gctttggtta   2229120
+     tggttgcagt tttccagctc accttgtggg gatgaattca gaaaaaagtt acaaattgaa   2229180
+     atgaacatgc cagaagtatt ggctcaaatc aacgttgtcc tattaagcca cttagtgaat   2229240
+     caaaagaccg cttgttggac tgttaatctc ggtggccaga gaaaggagct gaagaaggtg   2229300
+     ttgccagatc aggaacaaat aattacagcg gcaatagaaa atggaagacc acttgttcat   2229360
+     aaccatttga ataagggcaa ggtgtatgga aacacattat gaactgatat tttcagtttt   2229420
+     gtttgcaaga aaatgattaa taaggtgaaa taattgaagt atcacggaag atacattaaa   2229480
+     aaaaaaaaaa gcctttgtac agtttgctgg agccacagat gtcctactcc agagcagaac   2229540
+     aatgcctgaa tcttcagggt ccatttctgc cgcattcact agcaaccaca aatgtgactt   2229600
+     aattttactt tggaaataat gcttacccat tgtgagatgc tgtaatatga accatcatta   2229660
+     catgttaaca tggcacatgg aattttgagt gtctaagtta catttttaga gttgtttctt   2229720
+     agtagccatg tgagtttcca ctccaaaaac acaagctaaa aacttgtttt gagtgaagga   2229780
+     catctagggc aaatggtggc tgaaagtgaa tgagatc                            2229817
+//
+</pre>
+</td></tr></table><p>
+
+<H2>
+    Output File Format
+</H2>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: ba000025.split</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;BA000025_1-10000 Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
+gatctccagagcactcttccctgcagggcaccctcccatcccagactccaggcacctggc
+atgggtggacatctttactttctgggccagcttcagcagagctatgtcatcaccatagaa
+ctccaggattccctggttctttttggcaaagacatcaaaccctggggagatcaccgcctt
+ctcaataaggaattctttgccccactgggatttggggtctcctggaaatgatacactaga
+ttaggctagaccagggctcctgcaggggccagaggctgggtgaggtggtaggatctgtgg
+cttcaggatcaggaggctggtgcatcccctgccttacccacattgaccctccacagggag
+tggtcgttgccatcgcggaagcaatgagctgctgtcaggacccattggtcggagatgagg
+gccccccggcaggtctcttggctcttgggctgcaggggaacaggtgattttcagagattg
+cagtatgtctggcccatggccgcttttacctctggaatccaagccctgcccctccttcct
+ggtaccttaatagtgacatgccagggtgtcctctcctggtcagaggcgtttgctgacatg
+ttccccaccccgcagatggtgtctgtgagcttggagacatctgtgggtgtgaggatcaga
+tggggaaggaggcaagtgaggggcactgtgtccaggttcccaacacgggcctctggcggg
+ctcctcaccatcctccccacaccaaggagggcaaagctcactcacccagcatatgttcaa
+agacctggtgcagagcctttgtgtcctgcagaatgaaggcatgcctctcaccatccttct
+tggaccctagctcattcagttctctccagtccacatccagcttgcccaccccgatggcat
+agatgtctggtggggaagagggaaatcaccagactcctgtggctttggggctaccccatg
+agacaggaggctgtcatctgaaactcactgtgtccaatcaagacctacatgagctggacc
+cctgcgtcctccccactgctacctgtctgccttcatttcctgccactccctgcccttcac
+tctcctgcagcacacagcctctttgaagttcctcaaatccataggcatggtcacacctca
+ggccctttgcccagctgtgcctctgcctagttcactcctcccccccagacttccacatgg
+ctcactttcgtacctttttaagtcttggctcaaatgtcaccttctcagtgaggccttccc
+tggtcttcctgtctaaaactgcaatgccccagacaaactttcatccccactttgggaggc
+aaggtgggaggatcccttgaagccagaagtttgagaccagcctgggcaacatggcaacac
+cccttagcttgtgtcacctaccacctgctgggttctatggttttcttatcctgtttattc
+cctgtaatggtggaattgtgtcccccagaaagatgtgttcgagtcctaatccccagtatc
+tgtgactttatttggaaaaagggtctttgcagatgtaatcaagttaagattaagtcatac
+tagattagggtgagctctaatccaatgactgaggtccttataagaagaggtaagccagag
+ccaggcgtggtggctcacacctgtaatcaccaggaggcggtggttgtggtgagccaagat
+cgcgccattgcactccagcctgggcaacaagagcaaaaccccgtctcaaaaaaaaaaaaa
+gaagaggtgagccgggcacggtggctcacacctgtaatcccagcactctgggaggctgag
+gcgggcagatcacgaggtcaggaattcaagaccagcctgaccaacatggtgaaaccctgt
+ctctactaaaaatacaaaaattagccagacatgctggcacacacctgtaatcccagctac
+tcaggaggctgaggcaggagaatcgcttgaaccgggaggcggatgttgcagtgagccgag
+attgcaccactgcactccagcctgggcaacagagcaagactccatctcaaaaaaaaaaaa
+aaaaaaaaaaagtgaactggctgggcatggtggtgactcatgcctgtaatcccggcagtt
+tttttgaggcgaaggcaggcagatcgccttgaggccaggagtttaagaccagcctagcca
+acatggcgagaccatgtctctactaaaaatacaaaaatttgccgggcatggtggcacatg
+cctgtaatcccagcttcttgggagactgaggcacgagaatcacctgaacccaggaggcag
+aggttacagtgagccgggatcccgccactgcactgcagcctgggcttctgggtgacagag
+cgagactctgtctcaaacaaatgaacagaaaaagaagaaaggaatttggacacaaagaca
+caggtagtgggtctcctatctatataagagaacagcatgtaatgacacagaggcacacac
+agaaaagaaggcgagttgaagacagaggcagagaatgggtttatgctgccgcaagccaag
+gttggagctgccggcagccggaaaaggcaggaaagaattcttcccaagagccttctgagg
+aagcacggccctgccaacaccttgatttcagacttctaacctccagaactgtaagaaaaa
+gaaattctgtgttctaagccacccaggtttgtggtagtttggtaagtacttttaaatgac
+tgaatgaatagaaagaactcagaacacaacatggaaactaaacctcagatctggtcttcc
+tctgtaaaaggtagcatctgggagaagggcctaaagccacgttttcccactggaggccct
+ggacccacacaacaggccgcgcctgtcctccgactgtggtgccagtcagaactgccctca
+gacagaccacagagtctactcctctcccagcctttgcaccccttgtggcccatttttgtt
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+cctcggtctgtctccaccaggccctgtgagggtgggtggaggctctctccaagccctcgt
+ttggccccaccccagcatgtctccaggttcctctcagccctggttccttttggccctgca
+gtcacaatgggcaacactgtgacgcaccctgtcctgtgtcacagtgtcatacactcaggc
+tcacattgcccctaggccacttgccagccaagggacatggccacattttgtgtcttctgc
+acctcagccttgctttcaagtgcaggtgatgatggcacccacgcagaacaaatgttattt
+gctatcttcgtcgagtttagtcatccaattttccaaccctcactgggcaaggaagagtgt
+ggtttccaccaagaaggcaggatgtcagcagtcacaggggcaaccaacagggaaagccgc
+cggaaaatagaccccacaggaagcacaggtgtccagtggagatgggaaccctgcagattt
+gaccgtctttaagcagattagagagattaccgttactaacaacttagccataaaagttta
+ttagctattttcaaaaagcataaaattatgtaatataattttttttaaatttccatcaat
+acaaaactaatctgggcactgcaacttccggtgggcaactgggataggcggcatcatcag
+gaaggcgagccctgccgtgccccatgtgccagtgccccagatggcggcagcctccccaga
+agcaccttgtatctcccctgcacagggccagggtcccagcttcccatacaccttctcctg
+ctttttcttttctgtcctttcctttttcaataaaccacctgcaaaaagggaaaaccattc
+tgaggacaagaaacatgtcaatgggaaatacacagttgccagagggtaaaaggccctgtt
+cattctcattgaaaagctcaggtatttctgttaaagtctctccttttactttaggatgct
+gactcctgcgtccatctcaacctgggcatcgtgccaccaccttcaagaagagaaaaacta
+agtagtgctttgcaaaggggcagcagcatttctcatttctgaccatgtcaggcacatggc
+catgcagatgagcaggtgggggacacaggtgagtctccagacctgctctcctcccacagt
+acattcttgagtctttttaaacagttgtgaaaatgccacagatgcaagcacctgtgggcc
+actcccatggggaccgttgcacaaggcagtgccactcattctcagaacctcctaccatgg
+gctatgcttagtgacccgaggccaagccaaggaagacgccagccacagggtgccatcctc
+aggggcatgctgccagcaggggcaaagttatccctagcaacaagatacagaaagaaagaa
+aaaaggaaggaaatgtagccaatgggccggttcaggttcttgactttgccacacaaaaga
+atttgagagcaagtccaaagtaaaagtcagcaagagaatttattgcaaagtgaaagtaca
+ctctgacagctgatcagagcagctgctcaaaagagagacagtaccctcccctcacgggag
+tcttacatgattattcatgaataggtgggaaggggtattgttttaagcatgttctgtggt
+ctcttgaacgtgcatgcactgtggttgtacatatcagcacacacatcttacgtctcatta
+gcatcttaacttccctctcagagttgtgtttgctactattgtaatgagcataggtcagcc
+caaggacactattcatgggtttctgggcttcctcagatgtggggatgcctcccttggctc
+ttctacctctttgctgcaggatgttctaaccacaagcccaggatatggtttgcgcactgt
+cgaacagcttgttctctccatcaacctgacaagtctcttgtttcctttcaagggaggctg
+tgaacaccctatctcactgacctcagaaggacagtacagcagtagccaccatgaccaaaa
+agatgattccagaagtgcaggacaactccctacccagaggctgtggctgtgcagtaacac
+accaagaggggagtccagctggctctcagggtgctcactaccctcatctgggggcctgga
+ggacgtcaattcctgagaacgccacgttctagtgagtagaatgaactgagagatacacag
+caaagctccacatacttttccttttctttgtgcccgcagtgttcttcatcagtgtgctct
+cgcttttcagctactactgttggctggctggaaaaaatagaacaatagtaaaaattagag
+accagtctttggtgatgaagagaaatattggctacttccagtattttctagctttggtta
+tggttgcagttttccagctcaccttgtggggatgaattcagaaaaaagttacaaattgaa
+atgaacatgccagaagtattggctcaaatcaacgttgtcctattaagccacttagtgaat
+caaaagaccgcttgttggactgttaatctcggtggccagagaaaggagctgaagaaggtg
+ttgccagatcaggaacaaataattacagcggcaatagaaaatggaagaccacttgttcat
+aaccatttgaataagggcaaggtgtatggaaacacattatgaactgatattttcagtttt
+gtttgcaagaaaatgattaataaggtgaaataattgaagtatcacggaagatacattaaa
+aaaaaaaaaagcctttgtacagtttgctggagccacagatgtcctactccagagcagaac
+aatgcctgaatcttcagggtccatttctgccgcattcactagcaaccacaaatgtgactt
+aattttactttggaaataatgcttacccattgtgagatgctgtaatatgaaccatcatta
+catgttaacatggcacatggaattttgagtgtctaagttacatttttagagttgtttctt
+agtagccatgtgagtttccactccaaaaacacaagctaaaaacttgttttgagtgaagga
+catctagggcaaatggtggctgaaagtgaatgagatc
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: ba000025.split</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;BA000025_1-50000 Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
+gatctccagagcactcttccctgcagggcaccctcccatcccagactccaggcacctggc
+atgggtggacatctttactttctgggccagcttcagcagagctatgtcatcaccatagaa
+ctccaggattccctggttctttttggcaaagacatcaaaccctggggagatcaccgcctt
+ctcaataaggaattctttgccccactgggatttggggtctcctggaaatgatacactaga
+ttaggctagaccagggctcctgcaggggccagaggctgggtgaggtggtaggatctgtgg
+cttcaggatcaggaggctggtgcatcccctgccttacccacattgaccctccacagggag
+tggtcgttgccatcgcggaagcaatgagctgctgtcaggacccattggtcggagatgagg
+gccccccggcaggtctcttggctcttgggctgcaggggaacaggtgattttcagagattg
+cagtatgtctggcccatggccgcttttacctctggaatccaagccctgcccctccttcct
+ggtaccttaatagtgacatgccagggtgtcctctcctggtcagaggcgtttgctgacatg
+ttccccaccccgcagatggtgtctgtgagcttggagacatctgtgggtgtgaggatcaga
+tggggaaggaggcaagtgaggggcactgtgtccaggttcccaacacgggcctctggcggg
+ctcctcaccatcctccccacaccaaggagggcaaagctcactcacccagcatatgttcaa
+agacctggtgcagagcctttgtgtcctgcagaatgaaggcatgcctctcaccatccttct
+tggaccctagctcattcagttctctccagtccacatccagcttgcccaccccgatggcat
+agatgtctggtggggaagagggaaatcaccagactcctgtggctttggggctaccccatg
+agacaggaggctgtcatctgaaactcactgtgtccaatcaagacctacatgagctggacc
+cctgcgtcctccccactgctacctgtctgccttcatttcctgccactccctgcccttcac
+tctcctgcagcacacagcctctttgaagttcctcaaatccataggcatggtcacacctca
+ggccctttgcccagctgtgcctctgcctagttcactcctcccccccagacttccacatgg
+ctcactttcgtacctttttaagtcttggctcaaatgtcaccttctcagtgaggccttccc
+tggtcttcctgtctaaaactgcaatgccccagacaaactttcatccccactttgggaggc
+aaggtgggaggatcccttgaagccagaagtttgagaccagcctgggcaacatggcaacac
+cccttagcttgtgtcacctaccacctgctgggttctatggttttcttatcctgtttattc
+cctgtaatggtggaattgtgtcccccagaaagatgtgttcgagtcctaatccccagtatc
+tgtgactttatttggaaaaagggtctttgcagatgtaatcaagttaagattaagtcatac
+tagattagggtgagctctaatccaatgactgaggtccttataagaagaggtaagccagag
+ccaggcgtggtggctcacacctgtaatcaccaggaggcggtggttgtggtgagccaagat
+cgcgccattgcactccagcctgggcaacaagagcaaaaccccgtctcaaaaaaaaaaaaa
+gaagaggtgagccgggcacggtggctcacacctgtaatcccagcactctgggaggctgag
+gcgggcagatcacgaggtcaggaattcaagaccagcctgaccaacatggtgaaaccctgt
+ctctactaaaaatacaaaaattagccagacatgctggcacacacctgtaatcccagctac
+tcaggaggctgaggcaggagaatcgcttgaaccgggaggcggatgttgcagtgagccgag
+attgcaccactgcactccagcctgggcaacagagcaagactccatctcaaaaaaaaaaaa
+aaaaaaaaaaagtgaactggctgggcatggtggtgactcatgcctgtaatcccggcagtt
+tttttgaggcgaaggcaggcagatcgccttgaggccaggagtttaagaccagcctagcca
+acatggcgagaccatgtctctactaaaaatacaaaaatttgccgggcatggtggcacatg
+cctgtaatcccagcttcttgggagactgaggcacgagaatcacctgaacccaggaggcag
+aggttacagtgagccgggatcccgccactgcactgcagcctgggcttctgggtgacagag
+cgagactctgtctcaaacaaatgaacagaaaaagaagaaaggaatttggacacaaagaca
+caggtagtgggtctcctatctatataagagaacagcatgtaatgacacagaggcacacac
+agaaaagaaggcgagttgaagacagaggcagagaatgggtttatgctgccgcaagccaag
+gttggagctgccggcagccggaaaaggcaggaaagaattcttcccaagagccttctgagg
+aagcacggccctgccaacaccttgatttcagacttctaacctccagaactgtaagaaaaa
+gaaattctgtgttctaagccacccaggtttgtggtagtttggtaagtacttttaaatgac
+tgaatgaatagaaagaactcagaacacaacatggaaactaaacctcagatctggtcttcc
+tctgtaaaaggtagcatctgggagaagggcctaaagccacgttttcccactggaggccct
+ggacccacacaacaggccgcgcctgtcctccgactgtggtgccagtcagaactgccctca
+gacagaccacagagtctactcctctcccagcctttgcaccccttgtggcccatttttgtt
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+ggagaggggcaggtgcccctcctcggtctgtctccaccaggccctgtgagggtgggtgga
+ggctctctccaagccctcgtttggccccaccccagcatgtctccaggttcctctcagccc
+tggttccttttggccctgcagtcacaatgggcaacactgtgacgcaccctgtcctgtgtc
+acagtgtcatacactcaggctcacattgcccctaggccacttgccagccaagggacatgg
+ccacattttgtgtcttctgcacctcagccttgctttcaagtgcaggtgatgatggcaccc
+acgcagaacaaatgttatttgctatcttcgtcgagtttagtcatccaattttccaaccct
+cactgggcaaggaagagtgtggtttccaccaagaaggcaggatgtcagcagtcacagggg
+caaccaacagggaaagccgccggaaaatagaccccacaggaagcacaggtgtccagtgga
+gatgggaaccctgcagatttgaccgtctttaagcagattagagagattaccgttactaac
+aacttagccataaaagtttattagctattttcaaaaagcataaaattatgtaatataatt
+ttttttaaatttccatcaatacaaaactaatctgggcactgcaacttccggtgggcaact
+gggataggcggcatcatcaggaaggcgagccctgccgtgccccatgtgccagtgccccag
+atggcggcagcctccccagaagcaccttgtatctcccctgcacagggccagggtcccagc
+ttcccatacaccttctcctgctttttcttttctgtcctttcctttttcaataaaccacct
+gcaaaaagggaaaaccattctgaggacaagaaacatgtcaatgggaaatacacagttgcc
+agagggtaaaaggccctgttcattctcattgaaaagctcaggtatttctgttaaagtctc
+tccttttactttaggatgctgactcctgcgtccatctcaacctgggcatcgtgccaccac
+cttcaagaagagaaaaactaagtagtgctttgcaaaggggcagcagcatttctcatttct
+gaccatgtcaggcacatggccatgcagatgagcaggtgggggacacaggtgagtctccag
+acctgctctcctcccacagtacattcttgagtctttttaaacagttgtgaaaatgccaca
+gatgcaagcacctgtgggccactcccatggggaccgttgcacaaggcagtgccactcatt
+ctcagaacctcctaccatgggctatgcttagtgacccgaggccaagccaaggaagacgcc
+agccacagggtgccatcctcaggggcatgctgccagcaggggcaaagttatccctagcaa
+caagatacagaaagaaagaaaaaaggaaggaaatgtagccaatgggccggttcaggttct
+tgactttgccacacaaaagaatttgagagcaagtccaaagtaaaagtcagcaagagaatt
+tattgcaaagtgaaagtacactctgacagctgatcagagcagctgctcaaaagagagaca
+gtaccctcccctcacgggagtcttacatgattattcatgaataggtgggaaggggtattg
+ttttaagcatgttctgtggtctcttgaacgtgcatgcactgtggttgtacatatcagcac
+acacatcttacgtctcattagcatcttaacttccctctcagagttgtgtttgctactatt
+gtaatgagcataggtcagcccaaggacactattcatgggtttctgggcttcctcagatgt
+ggggatgcctcccttggctcttctacctctttgctgcaggatgttctaaccacaagccca
+ggatatggtttgcgcactgtcgaacagcttgttctctccatcaacctgacaagtctcttg
+tttcctttcaagggaggctgtgaacaccctatctcactgacctcagaaggacagtacagc
+agtagccaccatgaccaaaaagatgattccagaagtgcaggacaactccctacccagagg
+ctgtggctgtgcagtaacacaccaagaggggagtccagctggctctcagggtgctcacta
+ccctcatctgggggcctggaggacgtcaattcctgagaacgccacgttctagtgagtaga
+atgaactgagagatacacagcaaagctccacatacttttccttttctttgtgcccgcagt
+gttcttcatcagtgtgctctcgcttttcagctactactgttggctggctggaaaaaatag
+aacaatagtaaaaattagagaccagtctttggtgatgaagagaaatattggctacttcca
+gtattttctagctttggttatggttgcagttttccagctcaccttgtggggatgaattca
+gaaaaaagttacaaattgaaatgaacatgccagaagtattggctcaaatcaacgttgtcc
+tattaagccacttagtgaatcaaaagaccgcttgttggactgttaatctcggtggccaga
+gaaaggagctgaagaaggtgttgccagatcaggaacaaataattacagcggcaatagaaa
+atggaagaccacttgttcataaccatttgaataagggcaaggtgtatggaaacacattat
+gaactgatattttcagttttgtttgcaagaaaatgattaataaggtgaaataattgaagt
+atcacggaagatacattaaaaaaaaaaaaagcctttgtacagtttgctggagccacagat
+gtcctactccagagcagaacaatgcctgaatcttcagggtccatttctgccgcattcact
+agcaaccacaaatgtgacttaattttactttggaaataatgcttacccattgtgagatgc
+tgtaatatgaaccatcattacatgttaacatggcacatggaattttgagtgtctaagtta
+catttttagagttgtttcttagtagccatgtgagtttccactccaaaaacacaagctaaa
+aacttgttttgagtgaaggacatctagggcaaatggtggctgaaagtgaatgagatc
+</pre>
+</td></tr></table><p>
+
+
+<p>
+The names of the sequences are the same as the original sequence, with
+'_start-end' appended, where 'start', and 'end' are the start and end
+positions of the sub-sequence. eg: The name U01317 would be changed in
+the sub-sequences to: U01317_1-50000 and U01317_50001-73308 if they were
+split at the size of 50000 with no overlap.
+
+<H2>
+    Data files
+</H2>
+
+
+None.	
+
+<H2>
+    Notes
+</H2>
+
+<p>Splitting a large sequence into smaller sub-sequences for analysis
+might be useful in cases where a particularly memory or CPU intensive
+application will not run quickly enough or at all on the full
+sequence.  This should seldom be necessary in EMBOSS.</p>
+
+<p>By default, <b>splitter</b> will write all the sub-sequences to a
+single file. In some cases, particularly where non-EMBOSS programs are
+used, it is necessary to have a single sequence per file.  To write
+the sub-sequences into separate files use the command-line
+switch <tt>-ossingle</tt>.</p>
+
+
+
+<H2>
+    References
+</H2>
+
+
+None
+
+<H2>
+    Warnings
+</H2>
+
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+
+It always exits with status 0
+
+<H2>
+    Known bugs
+</H2>
+
+
+None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="aligncopy.html">aligncopy</a></td>
+<td>Reads and writes alignments</td>
+</tr>
+
+<tr>
+<td><a href="aligncopypair.html">aligncopypair</a></td>
+<td>Reads and writes pairs from alignments</td>
+</tr>
+
+<tr>
+<td><a href="biosed.html">biosed</a></td>
+<td>Replace or delete sequence sections</td>
+</tr>
+
+<tr>
+<td><a href="codcopy.html">codcopy</a></td>
+<td>Copy and reformat a codon usage table</td>
+</tr>
+
+<tr>
+<td><a href="cutseq.html">cutseq</a></td>
+<td>Removes a section from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="degapseq.html">degapseq</a></td>
+<td>Removes non-alphabetic (e.g. gap) characters from sequences</td>
+</tr>
+
+<tr>
+<td><a href="descseq.html">descseq</a></td>
+<td>Alter the name or description of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="entret.html">entret</a></td>
+<td>Retrieves sequence entries from flatfile databases and files</td>
+</tr>
+
+<tr>
+<td><a href="extractalign.html">extractalign</a></td>
+<td>Extract regions from a sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="extractfeat.html">extractfeat</a></td>
+<td>Extract features from sequence(s)</td>
+</tr>
+
+<tr>
+<td><a href="extractseq.html">extractseq</a></td>
+<td>Extract regions from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="featcopy.html">featcopy</a></td>
+<td>Reads and writes a feature table</td>
+</tr>
+
+<tr>
+<td><a href="featreport.html">featreport</a></td>
+<td>Reads and writes a feature table</td>
+</tr>
+
+<tr>
+<td><a href="listor.html">listor</a></td>
+<td>Write a list file of the logical OR of two sets of sequences</td>
+</tr>
+
+<tr>
+<td><a href="makenucseq.html">makenucseq</a></td>
+<td>Create random nucleotide sequences</td>
+</tr>
+
+<tr>
+<td><a href="makeprotseq.html">makeprotseq</a></td>
+<td>Create random protein sequences</td>
+</tr>
+
+<tr>
+<td><a href="maskambignuc.html">maskambignuc</a></td>
+<td>Masks all ambiguity characters in nucleotide sequences with N</td>
+</tr>
+
+<tr>
+<td><a href="maskambigprot.html">maskambigprot</a></td>
+<td>Masks all ambiguity characters in protein sequences with X</td>
+</tr>
+
+<tr>
+<td><a href="maskfeat.html">maskfeat</a></td>
+<td>Write a sequence with masked features</td>
+</tr>
+
+<tr>
+<td><a href="maskseq.html">maskseq</a></td>
+<td>Write a sequence with masked regions</td>
+</tr>
+
+<tr>
+<td><a href="newseq.html">newseq</a></td>
+<td>Create a sequence file from a typed-in sequence</td>
+</tr>
+
+<tr>
+<td><a href="nohtml.html">nohtml</a></td>
+<td>Remove mark-up (e.g. HTML tags) from an ASCII text file</td>
+</tr>
+
+<tr>
+<td><a href="noreturn.html">noreturn</a></td>
+<td>Remove carriage return from ASCII files</td>
+</tr>
+
+<tr>
+<td><a href="nospace.html">nospace</a></td>
+<td>Remove all whitespace from an ASCII text file</td>
+</tr>
+
+<tr>
+<td><a href="notab.html">notab</a></td>
+<td>Replace tabs with spaces in an ASCII text file</td>
+</tr>
+
+<tr>
+<td><a href="notseq.html">notseq</a></td>
+<td>Write to file a subset of an input stream of sequences</td>
+</tr>
+
+<tr>
+<td><a href="nthseq.html">nthseq</a></td>
+<td>Write to file a single sequence from an input stream of sequences</td>
+</tr>
+
+<tr>
+<td><a href="nthseqset.html">nthseqset</a></td>
+<td>Reads and writes (returns) one set of sequences from many</td>
+</tr>
+
+<tr>
+<td><a href="pasteseq.html">pasteseq</a></td>
+<td>Insert one sequence into another</td>
+</tr>
+
+<tr>
+<td><a href="revseq.html">revseq</a></td>
+<td>Reverse and complement a nucleotide sequence</td>
+</tr>
+
+<tr>
+<td><a href="seqret.html">seqret</a></td>
+<td>Reads and writes (returns) sequences</td>
+</tr>
+
+<tr>
+<td><a href="seqretsetall.html">seqretsetall</a></td>
+<td>Reads and writes (returns) many sets of sequences</td>
+</tr>
+
+<tr>
+<td><a href="seqretsplit.html">seqretsplit</a></td>
+<td>Reads sequences and writes them to individual files</td>
+</tr>
+
+<tr>
+<td><a href="sizeseq.html">sizeseq</a></td>
+<td>Sort sequences by size</td>
+</tr>
+
+<tr>
+<td><a href="skipredundant.html">skipredundant</a></td>
+<td>Remove redundant sequences from an input set</td>
+</tr>
+
+<tr>
+<td><a href="skipseq.html">skipseq</a></td>
+<td>Reads and writes (returns) sequences, skipping first few</td>
+</tr>
+
+<tr>
+<td><a href="splitsource.html">splitsource</a></td>
+<td>Split sequence(s) into original source sequences</td>
+</tr>
+
+<tr>
+<td><a href="trimest.html">trimest</a></td>
+<td>Remove poly-A tails from nucleotide sequences</td>
+</tr>
+
+<tr>
+<td><a href="trimseq.html">trimseq</a></td>
+<td>Remove unwanted characters from start and end of sequence(s)</td>
+</tr>
+
+<tr>
+<td><a href="trimspace.html">trimspace</a></td>
+<td>Remove extra whitespace from an ASCII text file</td>
+</tr>
+
+<tr>
+<td><a href="union.html">union</a></td>
+<td>Concatenate multiple sequences into a single sequence</td>
+</tr>
+
+<tr>
+<td><a href="vectorstrip.html">vectorstrip</a></td>
+<td>Removes vectors from the ends of nucleotide sequence(s)</td>
+</tr>
+
+<tr>
+<td><a href="yank.html">yank</a></td>
+<td>Add a sequence reference (a full USA) to a list file</td>
+</tr>
+
+</table>
+
+<H2>
+    Author(s)
+</H2>
+Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+<br>
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+
+
+<H2>
+    History
+</H2>
+
+Completed 22 March 1999
+
+<H2>
+    Target users
+</H2>
+
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+<H2>
+    Comments
+</H2>
+None
+
+</BODY>
+</HTML>
+

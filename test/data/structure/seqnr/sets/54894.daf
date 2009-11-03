@@ -1,0 +1,21 @@
+# TY   SCOP
+# XX
+# CL   Alpha and beta proteins (a+b)
+# XX
+# FO   Ferredoxin-like
+# XX
+# SF   Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain
+# XX
+# FA   Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain
+# XX
+# SI   54894                                                                    
+# XX                                                                            
+#         Number               10        20        30        40        50    
+NEW333               0 VEAIESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSLPSKTQGSKDIIKIKGV-      0
+NEW444               0 VEAIEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEELPSKTQGSKDIIKIKG-C      0
+# Post_similar         111111111111111111111111111111111111111111-0-111111111111
+
+#         Number        60        70        80        90 
+NEW333               0 LDDKAADRLALFAPEAVVNTIDHFKVVQKRHLNLP                            0
+NEW444               0 LDDKAADRLALFAPEAVVNTIDHFKVVQKRHLNLP                            0
+# Post_similar         11111111111111111111111111111111111

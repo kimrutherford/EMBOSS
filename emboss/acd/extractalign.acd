@@ -1,0 +1,50 @@
+application: extractalign [
+  documentation: "Extract regions from a sequence alignment"
+  groups: "Edit"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqset: sequence [
+    parameter: "Y"
+    type: "gapany"
+    aligned: "Y"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  range: regions [
+    standard: "Y"
+    default: "$(sequence.begin)-$(sequence.end)"
+    information: "Regions to extract (eg: 4-57,78-94)"
+    help: "Regions to extract. \
+           A set of regions is specified by a set of pairs of positions. \
+           The positions are integers. \
+           They are separated by any non-digit, non-alpha character. \
+           Examples of region specifications are: \
+           24-45, 56-78 \
+           1:45, 67=99;765..888 \
+           1,5,8,10,23,45,57,99"
+    expected: "Whole sequence"
+  ]
+
+endsection: required
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  seqoutall: outseq [
+    parameter: "Y"
+  ]
+
+endsection: output

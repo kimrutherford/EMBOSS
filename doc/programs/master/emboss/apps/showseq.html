@@ -1,0 +1,445 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: showseq
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+showseq
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/showseq.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<p><b>showseq</b> displays one or more nucleic acid sequences, with
+features, in a style suitable for publication. The output is sent to
+screen by default but can be written to file. You may pick a format
+from a list, alternatively, use the many options to control what is
+output and in what format. Optionally, the sequence feature table can
+be displayed. The sequence can be translated, using the specified
+genetic code tables. Also recognition sites and/or cut sites of
+restriction enzymes from the REBASE database may be displayed.  There
+are various other options for controlling how the sequence is
+displayed and numbered and the output can be formatted for HTML.</p>
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/showseq.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/showseq.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/showseq.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>showseq</b> reads normal sequence USAs.
+
+<p>
+
+<!--#include file="inc/showseq.input" -->
+
+<p>
+
+You can specify a file of ranges to display in uppercase by giving
+the '-uppercase' qualifier the value '@' followed by the name of the
+file containing the ranges.  (eg: '-upper @myfile').
+
+<p>
+          
+The format of the range file is:
+
+<p>
+
+<ul>
+      <li>Comment lines start with '#' in the first column.
+      <li>Comment lines and blank lines are ignored.
+      <li>The line may start with white-space.
+      <li>There are two positive (integer) numbers per line separated by one
+                or more space or
+      <li>TAB characters.
+      <li>The second number must be greater or equal to the first number.  
+      <li>There can be optional text after the two numbers to annotate the line.
+      <li>White-space before or after the text is removed.
+</ul>
+
+<p>
+
+An example range file is:
+
+<p>
+
+<pre>          
+# this is my set of ranges
+12   23                           
+ 4   5       this is like 12-23, but smaller
+67   10348   interesting region
+</pre>
+
+<p>
+
+You can specify a file of ranges to highlight in a different colour
+when outputting in HTML format (using the '-html' qualifier) by giving
+the '-highlight' qualifier the value '@' followed by the name of the
+file containing the ranges.  (eg: '-highlight @myfile').
+
+<p>
+
+The format of this file is very similar to the format of the above
+uppercase range file, except that the text after the start and end
+positions is used as the HTML colour name.  This colour name is used 'as
+is' when specifying the colour in HTML in a '<FONT COLOR=xxx>'
+construct, (where 'xxx' is the name of the colour).
+
+<p>
+
+The standard names of HTML font colours are given in:
+
+<br>
+
+<A HREF="http://http://www.w3.org/TR/REC-html40/types.html">
+http://http://www.w3.org/TR/REC-html40/types.html</A>
+and
+<A HREF="http://www.ausmall.com.au/freegraf/ncolour2.htm">
+http://www.ausmall.com.au/freegraf/ncolour2.htm</A>
+and
+<A HREF="http://mindprod.com/htmlcolours.html">
+http://mindprod.com/htmlcolours.html</A>
+(amongst other places).
+
+
+<p>
+
+An example highlight range file is:
+
+<p>
+
+<pre>          
+# this is my set of ranges
+12   23         red
+ 4   5          darkturquoise
+67   10348      #FFE4E1
+</pre>
+
+<p>
+
+You can specify a file of ranges to annotate
+by giving
+the '-annotate' qualifier the value '@' followed by the name of the
+file containing the ranges.  (eg: '-annotate @myfile').
+
+<p>
+     
+The format of this file is very similar to the format of the above
+highlight range file, except that the text after the start and end
+positions is used as the displayed text of the annotated region.
+
+<p>
+
+An example annotation range file is:
+
+<p>
+   
+<pre>
+# this is my set of ranges
+12   23         exon 1
+ 4   5          CAP site
+67   10348      exon 2
+</pre>
+
+<p>
+
+
+You can specify a file of enzyme names to read in by giving the
+'-enzymes' qualifier the name of the file holding the enzyme names with
+a '@' character in front of it, for example, '@enz.list'.
+
+<p>
+
+Blank lines and lines starting with a '#' or '!' character are ignored
+and all other lines are concatenated together with a comma character ','
+and then treated as the list of enzymes to search for.
+
+<p>
+         
+An example of a file of enzyme names is:
+
+<p>
+
+<pre>      
+# my enzymes
+HincII, ppiI
+# other enzymes
+hindiii
+HinfI
+</pre>
+
+<p>            
+
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/showseq.output" -->
+
+<p>
+
+Most of the variants of the output format have already been described in
+the 'Description' and 'Usage' sections, but here is some more just to
+fill out this section ;-)
+
+<p>
+
+The output format is extremely variable and under the control of the 
+qualifiers used.
+
+<p>
+          
+The sequence can be formatted for HTML display by using the '-html'
+qualifier.  The top and tail html tags &lt;HEAD&gt;, &lt;BODY&gt; etc.  are not
+included as it is expected that the output of this program will be
+included in a more extensive HTML page and so these parts are left to
+the user to provide.
+
+<p>
+
+The name of the sequence is displayed, followed by the description of
+the sequence.  These can be turned off with the '-noname' and
+'-nodescription' qualifiers.
+
+<p>
+      
+Then the sequence is output, one line at a time.  Any associated
+information to be displayed is also output above and below the sequence
+line, as specified by the '-format' and or '-things' qualifiers.  (See
+the 'Description' section for detals).
+
+<p>
+          
+The margins around the sequence are specified by the use of the
+'-margin' qaulifier and any numbering of the sequence and its
+translations are placed in the margin.
+
+<p>
+
+A display of the restriction enzyme cut sites can be selected via
+'-format 6' option or the '-format 0 -thing b,r,s,-r' style of options.
+
+<p>
+
+The option '-format 7' will produce a formatted display of cut sites on
+the sequence, with the six-frame translation below it.  The cut sites
+are indicated by a slash character '\' that points to the poition
+between the nucleotides where the cuts occur.  Cuts by many enzymes at
+the same position are indicated by stacking the enzyme names on top of
+each other.
+
+<p>
+
+At the end the section header 'Enzymes that cut' is displayed followed
+by a list of the enzymes that cut the specified sequence and the number
+of times that they cut.
+
+<p>
+
+The '-flatreformat' qualifier changes the display to emphasise the
+recognition site of the restriction enzyme, which is indicated by a row
+of '=' characters.  The cut site if pointed to by a '>' or '<' character
+and if the cut site is not within or imemdiately adjacent to the
+recognition site, they are linked by a row or '.' characters.
+
+<p>
+
+The name of the enzyme is displayed above (or below when the reverse
+sense site if displayed) the recognition site.  The name of the enzyme
+is also displayed above the cut site if this occurs on a different
+display line to the recognition site (i.e.  if it wraps onto the next
+line of sequence).
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+<!--#include file="inc/localfiles.ihtml" -->
+
+
+<p>
+<!--#include file="inc/gcfiles.ihtml" -->
+
+<p>      
+<!--#include file="inc/refiles.ihtml" -->
+
+<H2>
+    Notes
+</H2>
+
+<p>One or more things may be selected for display from a menu
+(<tt>-things</tt> option).  The order of specified characters (upper
+or lower case) determines the order in the output:</p>
+<pre>
+s	Sequence
+b	Blank line
+1	Frame 1 translation
+2	Frame 2 translation
+3	Frame 3 translation
+-1	Frame -1 translation
+-2	Frame -2 translation
+-2	Frame -3 translation
+t	Ticks line
+n	Number ticks line
+c	Complement sequence
+f	Features (from the feature table or from a command line -ufo file)
+r	Restriction enzyme cut sites in the forward sense
+-r	Restriction enzyme cut sites in the reverse sense
+a	User Annotation
+</pre>
+
+<p>Alternatively, there is a selection of pre-defined formats to
+choose from. The codes from above used in the list of standard formats
+are:</p>
+<pre>
+Sequence only:                  S A
+Default sequence:               B N T S A F
+Pretty sequence:                B N T S A
+One frame translation:          B N T S B 1 A F
+Three frame translations:       B N T S B 1 2 3 A F
+Six frame translations:         B N T S B 1 2 3 T -3 -2 -1 A F
+Restriction enzyme map:         B R S N T C -R B 1 2 3 T -3 -2 -1 A
+Baroque:                        B 1 2 3 N T R S T C -R T -3 -2 -1 A F</pre>
+
+
+
+<p>The default standard format displays the following: for every new
+line that the sequence starts to write, the output display will
+contain first a blank line (<tt>b</tt>), then the position numbers of
+the ticks (<tt>n</tt>) then the ticks every 10 characters (<tt>t</tt>)
+then the sequence itself (<tt>s</tt>) then any user-supplied
+annotation (<tt>a</tt>) then the features from the feature table
+(<tt>f</tt>). Subsequent lines of the sequence output will repeat this
+format.</p>
+
+<p>The sequence can be translated, using the specified genetic code
+tables. The translation can be done in one, three or six frames. The
+translation can be displayed in one-letter or three-letter amino acid
+codes. The translation can optionally be displayed only when it is in
+open reading frames (ORFs) of a specified minimum size. One or more
+specified regions of the sequence can be individually translated.</p>
+
+<p>The output can be formatted for HTML. If the output is being
+formatted for HTML, then specified regions of the sequence can be
+displayed in any valid HTML colours.</p>
+
+<p>This program can use REBASE data to find the recognition sites
+and/or cut sites of restriction enzymes in a nucleic acid sequence.
+This program can display the cut sites on both strands.
+The <tt>-flatreformat</tt> option displays not only the cut sites
+which many other restriction cut-site programs will show, but also
+shows the recognition site.</p>
+
+<p>The Restriction Enzyme database (REBASE) is a collection of
+information about restriction enzymes and related proteins. It
+contains published and unpublished references, recognition and
+cleavage sites, isoschizomers, commercial availability, methylation
+sensitivity, crystal and sequence data. DNA methyltransferases, homing
+endonucleases, nicking enzymes, specificity subunits and control
+proteins are also included. Most recently, putative DNA
+methyltransferases and restriction enzymes, as predicted from analysis
+of genomic sequences, are also listed. The home page of REBASE
+is: <a href="http://rebase.neb.com/">http://rebase.neb.com/</a></p>
+
+<p>If the sequence is in EMBL, Genbank or SwissProt format, the
+feature table of the sequence can be displayed with the sequence. GFF
+file features can also be displayed if they are included on the
+command line using <tt>-ufo=file</tt>.</p>
+
+<p>
+Other display options include: The displayed sequence can be numbered
+either by numbering the start and ending positions, or by placing a
+ruler with ticks above or below the sequence. An initial position to
+start the numbering from can be set.  The width of a line, and width
+of a margin around the sequence reserved for numbering can be set.
+Specified regions of the sequence can be displayed in uppercase to
+highlight them.</p>
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None known.
+
+<!--#include file="inc/showseq.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/gwilliam.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/showseq.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/showseq.comment" -->
+
+</BODY>
+</HTML>
+

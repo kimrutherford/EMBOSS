@@ -1,0 +1,76 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: globins.aligncopy</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: aligncopy
+# Rundate: Tue 15 Jul 2008 12:00:00
+# Commandline: aligncopy
+#    -sequences ../../data/globins.msf
+# Align_format: simple
+# Report_file: globins.aligncopy
+########################################
+
+#=======================================
+#
+# Aligned_sequences: 7
+# 1: HBB_HUMAN
+# 2: HBB_HORSE
+# 3: HBA_HUMAN
+# 4: HBA_HORSE
+# 5: MYG_PHYCA
+# 6: GLB5_PETMA
+# 7: LGB2_LUPLU
+# Matrix: EBLOSUM62
+#
+# Length: 164
+# Identity:       1/164 ( 0.6%)
+# Similarity:    93/164 (56.7%)
+# Gaps:          31/164 (18.9%)
+# 
+#
+#=======================================
+
+HBB_HUMAN          1 --------VHLTPEEKSAVTALWGKVN-VDEVGGEALGR-LLVVYPWTQR     40
+HBB_HORSE          1 --------VQLSGEEKAAVLALWDKVN-EEEVGGEALGR-LLVVYPWTQR     40
+HBA_HUMAN          1 --------------VLSPADKTNVKAA-WGKVGAHAGEYGAEALERMFLS     35
+HBA_HORSE          1 --------------VLSAADKTNVKAA-WSKVGGHAGEYGAEALERMFLG     35
+MYG_PHYCA          1 -------VLSEGEWQLVLHVWAKVEAD-VAGHGQDILIR-LFKSHPETLE     41
+GLB5_PETMA         1 PIVDTGSVAPLSAAEKTKIRSAWAPVYSTYETSGVDILVKFFTSTPAAQE     50
+LGB2_LUPLU         1 --------GALTESQAALVKSSWEEFNANIPKHTHRFFILVLEIAPAAKD     42
+                               ::  : : :.: : : :   :::: ::   :  : :  : 
+
+HBB_HUMAN         41 FFESFGDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSE     90
+HBB_HORSE         41 FFDSFGDLSNPGAVMGNPKVKAHGKKVLHSFGEGVHHLDNLKGTFAALSE     90
+HBA_HUMAN         36 FPTTKTYFPHFDLSHGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSD     85
+HBA_HORSE         36 FPTTKTYFPHFDLSHGSAQVKAHGKKVGDALTLAVGHLDDLPGALSNLSD     85
+MYG_PHYCA         42 KFDRFKHLKTEAEMKASEDLKKHGVTVLTALGAILKKKGHHEAELKPLAQ     91
+GLB5_PETMA        51 FFPKFKGLTTADQLKKSADVRWHAERIINAVNDAVASMDDTEKMSMKLRD    100
+LGB2_LUPLU        43 LFSFLKGTSEVPQNNPELQAHAGKVFKLVYEAAIQLQVTGVVVTDATLKN     92
+                     :: ::  ::  : : :: ::: :::::: :: : : ::::::   : |::
+
+HBB_HUMAN         91 LHCDKLH--VDPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVA    138
+HBB_HORSE         91 LHCDKLH--VDPENFRLLGNVLVVVLARHFGKDFTPELQASYQKVVAGVA    138
+HBA_HUMAN         86 LHAHKLR--VDPVNFKLLSHCLLVTLAAHLPAEFTPAVHASLDKFLASVS    133
+HBA_HORSE         86 LHAHKLR--VDPVNFKLLSHCLLSTLAVHLPNDFTPAVHASLDKFLSSVS    133
+MYG_PHYCA         92 SHATKHK--IPIKYLEFISEAIIHVLHSRHPGDFGADAQGAMNKALELFR    139
+GLB5_PETMA       101 LSGKHAK--SFQVDPQYFKVLAAVIADTVAAGDAGFEKLMSMICILLRSA    148
+LGB2_LUPLU        93 LGSVHVSKGVADAHFPVVKEAILKTIKEVVGAKWSEELNSAWTIAYDELA    142
+                     ::: :::  ::: ::::: : :: ::: :   :::::: ::: : :: ::
+
+HBB_HUMAN        139 NALAHKYH------    146
+HBB_HORSE        139 NALAHKYH------    146
+HBA_HUMAN        134 TVLTSKYR------    141
+HBA_HORSE        134 TVLTSKYR------    141
+MYG_PHYCA        140 KDIAAKYKELGYQG    153
+GLB5_PETMA       149 Y-------------    149
+LGB2_LUPLU       143 IVIKKEMNDAA---    153
+                       :  ::       
+
+
+#---------------------------------------
+#---------------------------------------
+</pre>
+</td></tr></table><p>

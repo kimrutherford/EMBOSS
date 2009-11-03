@@ -1,0 +1,33 @@
+application: backtranseq [
+  documentation: "Back-translate a protein sequence to a nucleotide sequence"
+  groups: "Nucleic:Translation, Protein:Composition"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "gapstopprotein"
+  ]
+
+  codon: cfile [
+    additional: "Y"
+    default: "Ehuman.cut"
+  ]
+
+endsection: input
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  seqoutall: outfile [
+    parameter: "Y"
+    type: "gapnucleotide"
+  ]
+
+endsection: output

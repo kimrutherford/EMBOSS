@@ -1,0 +1,238 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: showalign
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+
+<!--#include file="header1.inc" -->
+showalign
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/showalign.ione" -->
+
+<H2>
+    Description
+</H2>
+
+
+<p><b>showalign</b> reads a set of aligned protein or a nucleic acid sequences, and writes them to file (or screen) in a style suitable for publication. Similarities and differences of each sequence to a reference sequence are highlighted for specified types of matches. The reference sequence can be the calculated consensus sequence (default) or one of the input set (specified by name or the ordinal number of that sequence in the file). The output sequences can be displayed in either the input order (the default), sorted in order of their similarity to the reference sequence, or sorted alphabetically by their names. There are many other options to control the content and format of the output.</p>
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/showalign.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/showalign.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/showalign.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+<b>showalign</b> reads in a set of aligned protein or nucleic sequences. 
+
+<p>
+
+<!--#include file="inc/showalign.input" -->
+
+<p>
+
+You can specifiy a file of ranges to display in uppercase by giving the
+'-uppercase' qualifier the value '@' followed by the name of the file
+containing the ranges.  (eg: '-upper @myfile').
+<p>
+          
+The format of the range file is:
+<p>
+<ul>
+      <li>Comment lines start with '#' in the first column.
+      <li>Comment lines and blank lines are ignored.
+      <li>The line may start with white-space.
+      <li>There are two positive (integer) numbers per line separated by one
+                or more space or
+      <li>TAB characters.
+      <li>The second number must be greater or equal to the first number.  
+      <li>There can be optional text after the two numbers to annotate the line.
+      <li>White-space before or after the text is removed.
+</ul>
+<p>
+An example range file is:
+<p>
+
+<pre>          
+# this is my set of ranges
+12   23                           
+ 4   5       this is like 12-23, but smaller
+67   10348   interesting region
+</pre>
+<p>
+
+You can specifiy a file of ranges to highlight in a different colour
+when outputting in HTML format (using the '-html' qualifier) by giving
+the '-highlight' qualifier the value '@' followed by the name of the
+file containing the ranges.  (eg: '-highlight @myfile').
+<p>
+
+The format of this file is very similar to the format of the above
+uppercase range file, except that the text after the start and end
+positions is used as the HTML colour name.  This colour name is used 'as
+is' when specifying the colour in HTML in a '<FONT COLOR=xxx>'
+construct, (where 'xxx' is the name of the colour).
+<p>
+
+The standard names of HTML font colours are given in:
+<br>
+
+<A HREF="http://http://www.w3.org/TR/REC-html40/types.html">
+http://http://www.w3.org/TR/REC-html40/types.html</A>
+and
+<A HREF="http://www.ausmall.com.au/freegraf/ncolour2.htm">
+http://www.ausmall.com.au/freegraf/ncolour2.htm</A>
+and
+<A HREF="http://mindprod.com/htmlcolours.html">
+http://mindprod.com/htmlcolours.html</A>
+(amongst other places).
+
+<p>
+
+An example highlight range file is:
+<p>
+
+<pre>          
+# this is my set of ranges
+12   23         red
+ 4   5          darkturquoise
+67   10348      #FFE4E1
+</pre>
+<p>
+
+<H2>
+    Output file format
+</H2>
+
+<b>showalign</b> writes out a text file, optionally formatted for HTML. 
+
+<p>
+
+<!--#include file="inc/showalign.output" -->
+
+<H2>
+    Data files
+</H2>
+
+<b>showalign</b> reads in scoring matrices to determine the consesnus
+sequence and to determine which matches are similar or not. 
+
+<p>
+
+<!--#include file="inc/localfiles.ihtml" -->
+
+<H2>
+    Notes
+</H2>
+
+<p><b>showalign</b> reads in a scoring matrix to determine the consesnus sequence and to determine which matches are similar or not.</p>
+
+<p>By using the <tt>-show</tt> option, the displayed sequences can be shown as:</p>
+<ul>
+    <li> complete (-show=All),
+    <li> only identical matches between the sequence and the reference sequence, all other positions being replaced by '.' characters (-show=Identities)
+    <li> non-identical matches, with identical matches being replaced by '.' characters, similar matches are shown in lower case (-show=Non-identities)
+    <li> similar matches, with non-similar matches being replaced by '.' characters, similar matches are shown in lower case (-show=Similarities)
+    <li> dissimilar matches, with identical or similar matches being replaced by '.' characters (-show=Dissimilarities) 
+</ul>
+<p>Changing the similar matches to lowercase can optionally be disable by using the option -nosimilarcase.</p>
+
+<p>A small table of the way these alignments are displayed illustrates this. If we have a reference protein sequence of "III" and a sequence aligned to this of "ILW", then we have an identical matching residue, then a similar one, then a dissimilar one. The different methods of display would give the following:
+<pre>Reference       III
+
+All             ILw
+Identical       I..
+Non-id          .lW
+Similar         Il.
+Dissimilar      ..W</pre>
+</p>
+
+<p>The consensus line can be displayed in a mixture of uppercase and lowercase symbols. Uppercase indicates a strong consensus and lowercase a weak one. The cutoff for setting the consensus case is set by the qualifier <tt>-setcase</tt>. If the number of residues at that position that match the consensus value is greater than this, then the symbol is in uppercase, otherwise the symbol is in lowercase. By default, the value of <tt>-setcase</tt> is set so that if there are more than 50% of residues identical to the consunsus at that position, then the consensus is in uppercase. To put all of the consensus symbols into uppercase or lowercase, make <tt>-setcase</tt> zero or very large (try 100000 ?). </p>
+
+<p>Other display options include 
+Sequence numbering ruler with ticks above the sequence.
+The width of a line can be set. The width of a margin to the left of the sequences that shows the sequence names can be set.
+Specified regions of the sequence can be displayed in uppercase to highlight them.</p>
+
+<p>The output can be formatted for HTML. If the output is being formatted for HTML, then specified regions of the sequence can be displayed in any valid HTML colours.</p>
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--
+<!--#include file="inc/showalign.isee" -->
+
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/gwilliam.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/showalign.history" -->
+
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/showalign.comment" -->
+
+</BODY>
+</HTML>
+

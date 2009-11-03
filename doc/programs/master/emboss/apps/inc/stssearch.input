@@ -1,0 +1,32 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: eclac.list</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+#Formerly ECLAC
+tembl:J01636
+
+#Formerly ECLACA
+tembl:X51872
+
+#Formerly ECLACI
+tembl:V00294
+
+#Formerly ECLACY
+tembl:V00295
+
+#Formerly ECLACZ
+tembl:V00296
+</pre>
+</td></tr></table><p>
+<p><h3>File: lac.primers</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+PrimA ACCAGACACCCATCAACAG    TATTTATGCCAGCCAGCCAG
+PrimB CGAAAGAATAAGAGCAGGCAAG GTAAGAGAAATAGACAGGCGG
+PrimC CGTCAGTATCCCCGTTTACAG  TATCGCCAAAATCACCGCC
+PrimD AATACGCAAACCGCCTCTCC   TTATCCGCTCACAATTCCACAC
+PrimE AATACGCAAACCGCCTCTCC   CACAACCCGCTCACAATTCCA
+</pre>
+</td></tr></table><p>

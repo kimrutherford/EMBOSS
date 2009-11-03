@@ -1,0 +1,3 @@
+# Empty resource definition
+
+resource empty [ ]

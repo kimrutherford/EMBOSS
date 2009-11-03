@@ -1,0 +1,54 @@
+{
+   pmr__strlen
+   Memcheck:Cond
+   fun:strlen
+   fun:_dl_init_paths
+   fun:dl_main
+   fun:_dl_sysdep_start
+   fun:_dl_start
+   obj:/lib/ld-2.6.so
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+}
+{
+   pmr__dl_relocate_object
+   Memcheck:Cond
+   fun:_dl_relocate_object
+   fun:dl_main
+   fun:_dl_sysdep_start
+   fun:_dl_start
+   obj:/lib/ld-2.6.so
+}
+{
+   pmr__getpwuid
+   Memcheck:Cond
+   fun:_dl_relocate_object
+   fun:dl_open_worker
+   fun:_dl_catch_error
+   fun:_dl_open
+   fun:do_dlopen
+   fun:_dl_catch_error
+   fun:__libc_dlopen_mode
+   fun:__nss_lookup_function
+   fun:__nss_lookup
+   fun:__nss_passwd_lookup
+   fun:getpwuid_r@@GLIBC_2.1.2
+   fun:getpwuid
+}
+{
+   pmr__gethostbyname
+   Memcheck:Cond
+   fun:_dl_relocate_object
+   fun:dl_open_worker
+   fun:_dl_catch_error
+   fun:_dl_open
+   fun:do_dlopen
+   fun:_dl_catch_error
+   fun:__libc_dlopen_mode
+   fun:__nss_lookup_function
+   fun:__nss_lookup
+   fun:__nss_hosts_lookup
+   fun:gethostbyname_r@@GLIBC_2.1.2
+}

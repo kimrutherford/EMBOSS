@@ -1,0 +1,729 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+vectorstrip
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
+    Function
+</H2>
+Removes vectors from the ends of nucleotide sequence(s)
+
+<H2>
+    Description
+</H2>
+
+<p><b>vectorstrip</b> reads one or more nucleotide sequences and writes them out again but with any of a specified set of vector sequences removed from the 5' and 3' termini. An output file with a summary of the results if also written. The vector sequences to strip out are (typically) provided in an input file.  The pair of 5' and 3' vector sequences are searched against each input sequence allowing a specified maximum level of mismatches. Each 5' hit is paired with each 3' hit and the resulting subsequences output.  By default only the best match between the vector patterns and each sequence are reported. Optionally, all matches up to the specified maximum mismatch level are reported.</p>
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with vectorstrip</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>vectorstrip @vecseqs.list </b>
+Removes vectors from the ends of nucleotide sequence(s)
+Are your vector sequences in a file? [Y]: <b></b>
+Cloning vector definition file (optional): <b>vectors</b>
+Max allowed % mismatch [10]: <b></b>
+Show only the best hits (minimise mismatches)? [Y]: <b></b>
+Output file [pbluescript.vectorstrip]: <b>vector.strip</b>
+output sequence(s) [pbluescript.fasta]: <b>vector.fasta</b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers (* if not always prompted):
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+  [-[no]readfile]      toggle     [Y] Are your vector sequences in a file?
+*  -vectorsfile        infile     Cloning vector definition file (optional)
+   -mismatch           integer    [10] Max allowed % mismatch (Any integer
+                                  value)
+   -[no]besthits       boolean    [Y] Show only the best hits (minimise
+                                  mismatches)?
+*  -alinker            string     The 5' sequence (Any string is accepted)
+*  -blinker            string     The 3' sequence (Any string is accepted)
+  [-outfile]           outfile    [*.vectorstrip] Output file name
+  [-outseq]            seqoutall  [<sequence>.<format>] Sequence set(s)
+                                  filename and optional format (output USA)
+
+   Additional (Optional) qualifiers:
+   -allsequences       boolean    [N] Show all sequences in output
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory3        string     Output directory
+
+   "-outseq" associated qualifiers
+   -osformat4          string     Output seq format
+   -osextension4       string     File name extension
+   -osname4            string     Base file name
+   -osdirectory4       string     Output directory
+   -osdbname4          string     Database name to add
+   -ossingle4          boolean    Separate file for each entry
+   -oufo4              string     UFO features
+   -offormat4          string     Features format
+   -ofname4            string     Features file name
+   -ofdirectory4       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Nucleotide sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-[no]readfile]<br>(Parameter 2)</td>
+<td>Are your vector sequences in a file?</td>
+<td>Toggle value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-vectorsfile</td>
+<td>Cloning vector definition file (optional)</td>
+<td>Input file</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-mismatch</td>
+<td>Max allowed % mismatch</td>
+<td>Any integer value</td>
+<td>10</td>
+</tr>
+
+<tr>
+<td>-[no]besthits</td>
+<td>Show only the best hits (minimise mismatches)?</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-alinker</td>
+<td>The 5' sequence</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr>
+<td>-blinker</td>
+<td>The 3' sequence</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 3)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.vectorstrip</td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 4)</td>
+<td>Sequence set(s) filename and optional format (output USA)</td>
+<td>Writeable sequence(s)</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-allsequences</td>
+<td>Show all sequences in output</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Input file format
+</H2>
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: vecseqs.list</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+../../data/bluescript.seq
+../../data/litmus.seq
+../../data/pTYB1.seq
+</pre>
+</td></tr></table><p>
+<p><h3>File: vectors</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+# Example vector file for use by vectorstrip
+
+# Vector	5'			3'
+
+pTYB1   GACGGCGGCCGCGAATTCC     TCGAGGGCTCTTCCTGC
+pBS_KS+ GGGTACCGGGCCCCCCC       TCGAGGTCGACGGTA         
+pLITMUS GATATCCTGCAGGAATTCC     TCGAGACCGTACGTGCG
+</pre>
+</td></tr></table><p>
+
+<p>
+
+The same fragment has been cloned into the XhoI site of the polylinker
+of each vector.  The cloned fragment is represented in lower case and
+the vector sequence in upper case so the sequence trimming can be
+readily seen. 
+
+<p>
+
+
+Each line of the vector file should contain the name of the vector, the
+5' pattern and the 3' pattern. 
+
+<br>
+
+Lines beginning with # are treated as comments and ignored.
+
+<br>
+
+If only one vector sequence is given in the it will be assumed that 
+this is the 5' pattern.
+
+<br>
+
+If a vector name is given but no pattern data, the vector will not 
+be used.
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: vector.strip</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+
+Sequence: pBlueScript 	 Vector: pTYB1	No match
+
+
+Sequence: pBlueScript 	 Vector: pBS_KS+
+5' sequence matches:
+	From 67 to 83 with 0 mismatches
+3' sequence matches:
+	From 205 to 219 with 0 mismatches
+Sequences output to file:
+	from 84 to 204
+		tcgagagccgtattgcgatatagcgcacatgcgttggacacagatgagca
+		cacagtgacatgagagacacagatatagagacagatagacgatagacaga
+		cagcatatatagacagatagc
+	sequence trimmed from 5' end:
+		GGAAACAGCTAATGACCATGATTACGCCAAGCGCGCAATTAACCCTCACT
+		AAAGGGAACAAAAGCTGGGTACCGGGCCCCCCC
+	sequence trimmed from 3' end:
+		TCGAGGTCGACGGTATCGATAAGCTTGATATCG
+
+
+Sequence: pBlueScript 	 Vector: pLITMUS	No match
+
+Sequence: litmus.seq 	 Vector: pTYB1	No match
+
+Sequence: litmus.seq 	 Vector: pBS_KS+	No match
+
+
+Sequence: litmus.seq 	 Vector: pLITMUS
+5' sequence matches:
+	From 43 to 61 with 0 mismatches
+3' sequence matches:
+	From 183 to 199 with 0 mismatches
+Sequences output to file:
+	from 62 to 182
+		tcgagagccgtattgcgatatagcgcacatgcgttggacacagatgagca
+		cacagtgacatgagagacacagatatagagacagatagacgatagacaga
+		cagcatatatagacagatagc
+	sequence trimmed from 5' end:
+		TCTAGAACCGGTGACGTCTCCCATGGTGAAGCTTGGATCCACGATATCCT
+		GCAGGAATTCC
+	sequence trimmed from 3' end:
+		TCGAGACCGTACGTGCGCGCGAATGCATCCAGATCTTCCCTCTAGTCAAG
+		GCCTTAAGTGAGTCGTATTACGGA
+
+
+
+Sequence: pTYB1.seq 	 Vector: pTYB1
+5' sequence matches:
+	From 40 to 58 with 0 mismatches
+3' sequence matches:
+	From 180 to 196 with 0 mismatches
+Sequences output to file:
+	from 59 to 179
+		tcgagagccgtattgcgatatagcgcacatgcgttggacacagatgagca
+		cacagtgacatgagagacacagatatagagacagatagacgatagacaga
+		cagcatatatagacagatagc
+	sequence trimmed from 5' end:
+		CTTTAAGAAGGAGATATACATATGGCTAGCTCGCGAGTCGACGGCGGCCG
+		CGAATTCC
+	sequence trimmed from 3' end:
+		TCGAGGGCTCTTCCTGCTTTGCCAAGGGTACCAATGTTTTAATGGCGGAT
+
+
+Sequence: pTYB1.seq 	 Vector: pBS_KS+	No match
+
+Sequence: pTYB1.seq 	 Vector: pLITMUS	No match
+</pre>
+</td></tr></table><p>
+<p><h3>File: vector.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;pBlueScript_from_84_to_204 KS+
+tcgagagccgtattgcgatatagcgcacatgcgttggacacagatgagcacacagtgaca
+tgagagacacagatatagagacagatagacgatagacagacagcatatatagacagatag
+c
+&gt;litmus.seq_from_62_to_182
+tcgagagccgtattgcgatatagcgcacatgcgttggacacagatgagcacacagtgaca
+tgagagacacagatatagagacagatagacgatagacagacagcatatatagacagatag
+c
+&gt;pTYB1.seq_from_59_to_179
+tcgagagccgtattgcgatatagcgcacatgcgttggacacagatgagcacacagtgaca
+tgagagacacagatatagagacagatagacgatagacagacagcatatatagacagatag
+c
+</pre>
+</td></tr></table><p>
+
+<p>
+
+Two types of output file are produced:
+<ol>
+
+<li>The sequence file(s) - contain the trimmed subsequence(s) produced
+by <b>vectorstrip</b> either all in one file, or in separate files if
+the command line flag <b>-ossingle</b> is used. 
+
+<li>Results summary file 
+</ol>
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+<p><b>vectorstrip</b> is intended for stripping vector sequence from the ends of sequences of interest. For example, if a fragment has been cloned into a vector and then sequenced, the sequence may contain vector data eg from the cloning polylinker at the 5' and 3' ends of the sequence. <b>vectorstrip</b> will remove these contaminating regions and output trimmed sequence ready for input into another application.</p>
+
+<p><b>vectorstrip</b> is suitable for use with low quality sequence data as it can allow for mismatches between the sequence and the vector patterns provided. You can specify the maximum level of mismatch expected.</p>
+
+<p>Vector data can either be provided in a file or interactively. If presented in a file, <b>vectorstrip</b> will search all input sequences with all vectors listed in that file. The intention is that the user can maintain a single file for use with <b>vectorstrip</b>, containing all the linker sequences commonly used in the laboratory.</p>
+
+<p>The two patterns for each vector are searched separately against the sequence. Once the search is completed, each of the hits of the 5' sequence is paired with each of the hits of the 3' sequence and the resulting subsequences are output. For example, if the 5' sequence matches the sequence from (a) position 30-60, and(b)position 70-100, and the 3' sequence matches from 150-175, then two subsequences will be output: from 61-149, and from 101-149. The lower the quality of the sequence, the more likely multiple hits become if nonzero mismatches are accepted.</p>
+
+<p>Default behaviour is to report only the best matches between the vector patterns and the sequence. This means that if you specify a maximum mismatch level of 10%, but the vector patterns match the sequence with zero mismatches, the search will stop and the program will output only these "best" matches. If there are no perfect matches, the program will try searching again allowing 1 mismatch, then 2, and so on until either the patterns match the sequence or the maximum specified mismatch level is exceeded. You can tell <b>vectorstrip</b> to show all possible matches up to your specified maximum level, as illustrated in the examples below.</p>
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<ol>
+
+<li><pre>No suitable vectors found - exiting</pre> indicates that the
+5' and 3' patterns for the vectors were blank - usually this is as a
+result of an empty vectorfile.
+
+<li><pre>Illegal pattern</pre> indicates that one of the vector
+patterns could not be compiled and therefore cannot be searched.
+
+<li><pre>5' and 3' sequence matches are identical; inconclusive</pre>
+indicates that the 5' and 3' patterns provided were identical, and
+that they only match the sequence once. Thus the program cannot
+determine which part of the sequence is vector and which is insert.
+
+</ol>
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+
+None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="aligncopy.html">aligncopy</a></td>
+<td>Reads and writes alignments</td>
+</tr>
+
+<tr>
+<td><a href="aligncopypair.html">aligncopypair</a></td>
+<td>Reads and writes pairs from alignments</td>
+</tr>
+
+<tr>
+<td><a href="biosed.html">biosed</a></td>
+<td>Replace or delete sequence sections</td>
+</tr>
+
+<tr>
+<td><a href="codcopy.html">codcopy</a></td>
+<td>Copy and reformat a codon usage table</td>
+</tr>
+
+<tr>
+<td><a href="cutseq.html">cutseq</a></td>
+<td>Removes a section from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="degapseq.html">degapseq</a></td>
+<td>Removes non-alphabetic (e.g. gap) characters from sequences</td>
+</tr>
+
+<tr>
+<td><a href="descseq.html">descseq</a></td>
+<td>Alter the name or description of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="entret.html">entret</a></td>
+<td>Retrieves sequence entries from flatfile databases and files</td>
+</tr>
+
+<tr>
+<td><a href="extractalign.html">extractalign</a></td>
+<td>Extract regions from a sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="extractfeat.html">extractfeat</a></td>
+<td>Extract features from sequence(s)</td>
+</tr>
+
+<tr>
+<td><a href="extractseq.html">extractseq</a></td>
+<td>Extract regions from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="featcopy.html">featcopy</a></td>
+<td>Reads and writes a feature table</td>
+</tr>
+
+<tr>
+<td><a href="featreport.html">featreport</a></td>
+<td>Reads and writes a feature table</td>
+</tr>
+
+<tr>
+<td><a href="listor.html">listor</a></td>
+<td>Write a list file of the logical OR of two sets of sequences</td>
+</tr>
+
+<tr>
+<td><a href="makenucseq.html">makenucseq</a></td>
+<td>Create random nucleotide sequences</td>
+</tr>
+
+<tr>
+<td><a href="makeprotseq.html">makeprotseq</a></td>
+<td>Create random protein sequences</td>
+</tr>
+
+<tr>
+<td><a href="maskambignuc.html">maskambignuc</a></td>
+<td>Masks all ambiguity characters in nucleotide sequences with N</td>
+</tr>
+
+<tr>
+<td><a href="maskambigprot.html">maskambigprot</a></td>
+<td>Masks all ambiguity characters in protein sequences with X</td>
+</tr>
+
+<tr>
+<td><a href="maskfeat.html">maskfeat</a></td>
+<td>Write a sequence with masked features</td>
+</tr>
+
+<tr>
+<td><a href="maskseq.html">maskseq</a></td>
+<td>Write a sequence with masked regions</td>
+</tr>
+
+<tr>
+<td><a href="newseq.html">newseq</a></td>
+<td>Create a sequence file from a typed-in sequence</td>
+</tr>
+
+<tr>
+<td><a href="nohtml.html">nohtml</a></td>
+<td>Remove mark-up (e.g. HTML tags) from an ASCII text file</td>
+</tr>
+
+<tr>
+<td><a href="noreturn.html">noreturn</a></td>
+<td>Remove carriage return from ASCII files</td>
+</tr>
+
+<tr>
+<td><a href="nospace.html">nospace</a></td>
+<td>Remove all whitespace from an ASCII text file</td>
+</tr>
+
+<tr>
+<td><a href="notab.html">notab</a></td>
+<td>Replace tabs with spaces in an ASCII text file</td>
+</tr>
+
+<tr>
+<td><a href="notseq.html">notseq</a></td>
+<td>Write to file a subset of an input stream of sequences</td>
+</tr>
+
+<tr>
+<td><a href="nthseq.html">nthseq</a></td>
+<td>Write to file a single sequence from an input stream of sequences</td>
+</tr>
+
+<tr>
+<td><a href="nthseqset.html">nthseqset</a></td>
+<td>Reads and writes (returns) one set of sequences from many</td>
+</tr>
+
+<tr>
+<td><a href="pasteseq.html">pasteseq</a></td>
+<td>Insert one sequence into another</td>
+</tr>
+
+<tr>
+<td><a href="revseq.html">revseq</a></td>
+<td>Reverse and complement a nucleotide sequence</td>
+</tr>
+
+<tr>
+<td><a href="seqret.html">seqret</a></td>
+<td>Reads and writes (returns) sequences</td>
+</tr>
+
+<tr>
+<td><a href="seqretsetall.html">seqretsetall</a></td>
+<td>Reads and writes (returns) many sets of sequences</td>
+</tr>
+
+<tr>
+<td><a href="seqretsplit.html">seqretsplit</a></td>
+<td>Reads sequences and writes them to individual files</td>
+</tr>
+
+<tr>
+<td><a href="sizeseq.html">sizeseq</a></td>
+<td>Sort sequences by size</td>
+</tr>
+
+<tr>
+<td><a href="skipredundant.html">skipredundant</a></td>
+<td>Remove redundant sequences from an input set</td>
+</tr>
+
+<tr>
+<td><a href="skipseq.html">skipseq</a></td>
+<td>Reads and writes (returns) sequences, skipping first few</td>
+</tr>
+
+<tr>
+<td><a href="splitsource.html">splitsource</a></td>
+<td>Split sequence(s) into original source sequences</td>
+</tr>
+
+<tr>
+<td><a href="splitter.html">splitter</a></td>
+<td>Split sequence(s) into smaller sequences</td>
+</tr>
+
+<tr>
+<td><a href="trimest.html">trimest</a></td>
+<td>Remove poly-A tails from nucleotide sequences</td>
+</tr>
+
+<tr>
+<td><a href="trimseq.html">trimseq</a></td>
+<td>Remove unwanted characters from start and end of sequence(s)</td>
+</tr>
+
+<tr>
+<td><a href="trimspace.html">trimspace</a></td>
+<td>Remove extra whitespace from an ASCII text file</td>
+</tr>
+
+<tr>
+<td><a href="union.html">union</a></td>
+<td>Concatenate multiple sequences into a single sequence</td>
+</tr>
+
+<tr>
+<td><a href="yank.html">yank</a></td>
+<td>Add a sequence reference (a full USA) to a list file</td>
+</tr>
+
+</table>
+
+<H2>
+    Author(s)
+</H2>
+<!--
+Val Curwen (vac&nbsp;&copy;&nbsp;sanger.ac.uk)
+<br>
+Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
+Cambridge, CB10 1SA, UK. 
+
+
+
+<H2>
+    History
+</H2>
+
+16 August 2000 - Val Curwen - Written.
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+<H2>
+    Comments
+</H2>
+None
+
+
+</BODY>
+</HTML>
+

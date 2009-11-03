@@ -1,0 +1,570 @@
+
+                                  diffseq 
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Compare and report features of two similar sequences
+
+Description
+
+   diffseq reads two sequences which typically are very similar or almost
+   identical. It finds regions of overlap between the two sequences and
+   reports on differences between the features of the two sequences
+   within these regions. The output is a standard EMBOSS report file. The
+   start and end positions of the regions of overlap are reported. Any
+   differences between the sequences, and any features (except the source
+   feature) that overlap those differences, are included in the output
+   report.
+
+   The differences are also reported for each input sequence as two
+   separate feature table output files.
+
+Algorithm
+
+   diffseq searches for identical matches between all sequence words from
+   both sequences. Identical sequence regions are found by creating a
+   hash table of subsequences of user-defined size (-wordsize option),
+   which is 10 by default. It then reduces the matches to a minimum set
+   of overlapping matches by sorting them in order of size (largest size
+   first). For each such match it removes any smaller matches that
+   overlap. The result is a set of the longest regions of identity
+   between the two sequences that do not overlap with each other. The
+   mismatched regions between these matches are reported.
+
+Usage
+
+   Here is a sample session with diffseq
+
+
+% diffseq tembl:x65923 tembl:ay411291 
+Compare and report features of two similar sequences
+Word size [10]: 
+Output report [x65923.diffseq]: 
+Features output [X65923.diffgff]: 
+Second features output [AY411291.diffgff]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-asequence]         sequence   Sequence filename and optional format, or
+                                  reference (input USA)
+  [-bsequence]         sequence   Sequence filename and optional format, or
+                                  reference (input USA)
+   -wordsize           integer    [10] The similar regions between the two
+                                  sequences are found by creating a hash table
+                                  of 'wordsize'd subsequences. 10 is a
+                                  reasonable default. Making this value larger
+                                  (20?) may speed up the program slightly,
+                                  but will mean that any two differences
+                                  within 'wordsize' of each other will be
+                                  grouped as a single region of difference.
+                                  This value may be made smaller (4?) to
+                                  improve the resolution of nearby
+                                  differences, but the program will go much
+                                  slower. (Integer 2 or more)
+  [-outfile]           report     [*.diffseq] Output report file name
+  [-aoutfeat]          featout    [$(asequence.name).diffgff] File for output
+                                  of first sequence's features
+  [-boutfeat]          featout    [$(bsequence.name).diffgff] File for output
+                                  of second sequence's features
+
+   Additional (Optional) qualifiers:
+   -globaldifferences  boolean    [N] Normally this program will find regions
+                                  of identity that are the length of the
+                                  specified word-size or greater and will then
+                                  report the regions of difference between
+                                  these matching regions. This works well and
+                                  is what most people want if they are working
+                                  with long overlapping nucleic acid
+                                  sequences. You are usually not interested in
+                                  the non-overlapping ends of these
+                                  sequences. If you have protein sequences or
+                                  short RNA sequences however, you will be
+                                  interested in differences at the very ends .
+                                  It this option is set to be true then the
+                                  differences at the ends will also be
+                                  reported.
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-asequence" associated qualifiers
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-bsequence" associated qualifiers
+   -sbegin2            integer    Start of the sequence to be used
+   -send2              integer    End of the sequence to be used
+   -sreverse2          boolean    Reverse (if DNA)
+   -sask2              boolean    Ask for begin/end/reverse
+   -snucleotide2       boolean    Sequence is nucleotide
+   -sprotein2          boolean    Sequence is protein
+   -slower2            boolean    Make lower case
+   -supper2            boolean    Make upper case
+   -sformat2           string     Input sequence format
+   -sdbname2           string     Database name
+   -sid2               string     Entryname
+   -ufo2               string     UFO features
+   -fformat2           string     Features format
+   -fopenfile2         string     Features file name
+
+   "-outfile" associated qualifiers
+   -rformat3           string     Report format
+   -rname3             string     Base file name
+   -rextension3        string     File name extension
+   -rdirectory3        string     Output directory
+   -raccshow3          boolean    Show accession number in the report
+   -rdesshow3          boolean    Show description in the report
+   -rscoreshow3        boolean    Show the score in the report
+   -rstrandshow3       boolean    Show the nucleotide strand in the report
+   -rusashow3          boolean    Show the full USA in the report
+   -rmaxall3           integer    Maximum total hits to report
+   -rmaxseq3           integer    Maximum hits to report for one sequence
+
+   "-aoutfeat" associated qualifiers
+   -offormat4          string     Output feature format
+   -ofopenfile4        string     Features file name
+   -ofextension4       string     File name extension
+   -ofdirectory4       string     Output directory
+   -ofname4            string     Base file name
+   -ofsingle4          boolean    Separate file for each entry
+
+   "-boutfeat" associated qualifiers
+   -offormat5          string     Output feature format
+   -ofopenfile5        string     Features file name
+   -ofextension5       string     File name extension
+   -ofdirectory5       string     Output directory
+   -ofname5            string     Base file name
+   -ofsingle5          boolean    Separate file for each entry
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   This program reads in two nucleic acid sequence USAs or two protein
+   sequence USAs.
+
+  Input files for usage example
+
+   'tembl:x65923' is a sequence entry in the example nucleic acid
+   database 'tembl'
+
+  Database entry: tembl:x65923
+
+ID   X65923; SV 1; linear; mRNA; STD; HUM; 518 BP.
+XX
+AC   X65923;
+XX
+DT   13-MAY-1992 (Rel. 31, Created)
+DT   18-APR-2005 (Rel. 83, Last updated, Version 11)
+XX
+DE   H.sapiens fau mRNA
+XX
+KW   fau gene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
+;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-518
+RA   Michiels L.M.R.;
+RT   ;
+RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   L.M.R. Michiels, University of Antwerp, Dept of Biochemistry,
+RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
+XX
+RN   [2]
+RP   1-518
+RX   PUBMED; 8395683.
+RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
+RT   "fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
+RT   an antisense sequence in the Finkel-Biskis-Reilly murine sarcoma virus";
+RL   Oncogene 8(9):2537-2546(1993).
+XX
+DR   H-InvDB; HIT000322806.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..518
+FT                   /organism="Homo sapiens"
+FT                   /chromosome="11q"
+FT                   /map="13"
+FT                   /mol_type="mRNA"
+FT                   /clone_lib="cDNA"
+FT                   /clone="pUIA 631"
+FT                   /tissue_type="placenta"
+FT                   /db_xref="taxon:9606"
+FT   misc_feature    57..278
+FT                   /note="ubiquitin like part"
+FT   CDS             57..458
+FT                   /gene="fau"
+FT                   /db_xref="GDB:135476"
+FT                   /db_xref="GOA:P62861"
+FT                   /db_xref="HGNC:3597"
+FT                   /db_xref="HSSP:1GJZ"
+FT                   /db_xref="InterPro:IPR006846"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
+FT                   /protein_id="CAA46716.1"
+FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLA
+G
+FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKT
+G
+FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
+FT   misc_feature    98..102
+FT                   /note="nucleolar localization signal"
+FT   misc_feature    279..458
+FT                   /note="S30 part"
+FT   polyA_signal    484..489
+FT   polyA_site      509
+XX
+SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
+     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        6
+0
+     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       12
+0
+     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       18
+0
+     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       24
+0
+     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       30
+0
+     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       36
+0
+     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       42
+0
+     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       48
+0
+     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               51
+8
+//
+
+  Database entry: tembl:ay411291
+
+ID   AY411291; SV 1; linear; genomic DNA; GSS; HUM; 402 BP.
+XX
+AC   AY411291;
+XX
+DT   13-DEC-2003 (Rel. 78, Created)
+DT   17-DEC-2003 (Rel. 78, Last updated, Version 2)
+XX
+DE   Homo sapiens FAU gene, VIRTUAL TRANSCRIPT, partial sequence, genomic surve
+y
+DE   sequence.
+XX
+KW   GSS.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
+;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-402
+RX   DOI; 10.1126/science.1088821.
+RX   PUBMED; 14671302.
+RA   Clark A.G., Glanowski S., Nielson R., Thomas P., Kejariwal A., Todd M.A.,
+RA   Tanenbaum D.M., Civello D.R., Lu F., Murphy B., Ferriera S., Wang G.,
+RA   Zheng X.H., White T.J., Sninsky J.J., Adams M.D., Cargill M.;
+RT   "Inferring nonneutral evolution from human-chimp-mouse orthologous gene
+RT   trios";
+RL   Science 302(5652):1960-1963(2003).
+XX
+RN   [2]
+RP   1-402
+RA   Clark A.G., Glanowski S., Nielson R., Thomas P., Kejariwal A., Todd M.A.,
+RA   Tanenbaum D.M., Civello D.R., Lu F., Murphy B., Ferriera S., Wang G.,
+RA   Zheng X.H., White T.J., Sninsky J.J., Adams M.D., Cargill M.;
+RT   ;
+RL   Submitted (16-NOV-2003) to the EMBL/GenBank/DDBJ databases.
+RL   Celera Genomics, 45 West Gude Drive, Rockville, MD 20850, USA
+XX
+CC   This sequence was made by sequencing genomic exons and ordering
+CC   them based on alignment.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..402
+FT                   /organism="Homo sapiens"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:9606"
+FT   gene            <1..>402
+FT                   /gene="FAU"
+FT                   /locus_tag="HCM4175"
+XX
+SQ   Sequence 402 BP; 95 A; 110 C; 129 G; 68 T; 0 other;
+     atgcagctct ttgtccgcgc ccaggagcta cacaccttcg aggtgaccgg ccaggaaacg        6
+0
+     gtcgcccaga tcaaggctca tgtagcctca ctggagggca ttgccccgga agatcaagtc       12
+0
+     gtgctcctgg caggcgcgcc cctggaggat gaggccactc tgggccagtg cggggtggag       18
+0
+     gccctgacta ccctggaagt agcaggccgc atgcttggag gtaaagtcca tggttccctg       24
+0
+     gcccgtgctg gaaaagtgag aggtcagact cctaaggtgg ccaaacagga gaagaagaag       30
+0
+     aagaagacag gtcgggctaa gcggcggatg cagtacaacc ggcgctttgt caacgttgtg       36
+0
+     cccacctttg gcaagaagaa gggccccaat gccaactctt aa                          40
+2
+//
+
+Output file format
+
+   The output is a standard EMBOSS report file.
+
+   The results can be output in one of several styles by using the
+   command-line qualifier -rformat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: embl,
+   genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+   feattable, motif, regions, seqtable, simple, srs, table, tagseq
+
+   See: http://emboss.sf.net/docs/themes/ReportFormats.html for further
+   information on report formats.
+
+   By default diffseq writes a 'diffseq' report file.
+
+  Output files for usage example
+
+  File: x65923.diffseq
+
+########################################
+# Program: diffseq
+# Rundate: Tue 15 Jul 2008 12:00:00
+# Commandline: diffseq
+#    [-asequence] tembl:x65923
+#    [-bsequence] tembl:ay411291
+# Report_format: diffseq
+# Report_file: x65923.diffseq
+# Additional_files: 2
+# 1: X65923.diffgff (Feature file for first sequence)
+# 2: AY411291.diffgff (Feature file for second sequence)
+########################################
+
+#=======================================
+#
+# Sequence: X65923     from: 1   to: 518
+# HitCount: 1
+#
+# Compare: AY411291     from: 1   to: 402
+#
+# X65923 overlap starts at 57
+# AY411291 overlap starts at 1
+#
+#
+#=======================================
+
+
+X65923 284-284 Length: 1
+Feature: CDS 57-458 gene='fau' db_xref='GDB:135476' db_xref='GOA:P62861' db_xre
+f='HGNC:3597' db_xref='HSSP:1GJZ' db_xref='InterPro:IPR006846' db_xref='UniProt
+KB/Swiss-Prot:P35544' protein_id='CAA46716.1'
+Feature: misc_feature 279-458 note='S30 part'
+Sequence: t
+Sequence: c
+Feature: gene 1-402 gene='FAU' locus_tag='HCM4175'
+AY411291 228-228 Length: 1
+
+#---------------------------------------
+#
+# Overlap_end: 458 in X65923
+# Overlap_end: 402 in AY411291
+#
+# SNP_count: 1
+# Transitions: 1
+# Transversions: 0
+#
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 2
+# Total_length: 920
+# Reported_sequences: 1
+# Reported_hitcount: 1
+#---------------------------------------
+
+  File: AY411291.diffgff
+
+##gff-version 3
+##sequence-region AY411291 1 402
+#!Date 2008-07-15
+#!Type DNA
+#!Source-version EMBOSS 6.1.0
+AY411291        diffseq sequence_conflict       228     228     1.000   +
+.       ID="AY411291.1";note="SNP in X65923";replace="t"
+
+  File: X65923.diffgff
+
+##gff-version 3
+##sequence-region X65923 1 518
+#!Date 2008-07-15
+#!Type DNA
+#!Source-version EMBOSS 6.1.0
+X65923  diffseq sequence_conflict       284     284     1.000   +       .
+ID="X65923.1";note="SNP in AY411291";replace="c"
+
+   The first line is the title giving the names of the sequences used.
+
+   The next two non-blank lines state the positions in each sequence
+   where the detected overlap between them starts.
+
+   There then follows a set of reports of the mismatches between the
+   sequences.
+   Each report consists of 4 or more lines.
+     * The first line has the name of the first sequence followed by the
+       start and end positions of the mismatched region in that sequence,
+       followed by the length of the mismatched region. If the mismatched
+       region is of zero length in this sequence, then only the position
+       of the last matching base before the mismatch is given.
+     * If a feature of the first sequence overlaps with this mismatch
+       region, then one or more lines starting with 'Feature:' comes next
+       with the type, position and tag field of the feature.
+     * Next is a line starting "Sequence:" giving the sequence of the
+       mismatch in the first sequence.
+
+   This is followed by the equivalent information for the second
+   sequence, but in the reverse order, namely 'Sequence:' line,
+   'Feature:' lines and line giving the position of the mismatch in the
+   second sequence.
+
+   At the end of the report are two non-blank lines giving the positions
+   in each sequence where the detected overlap between them ends.
+
+   The last three lines of the report gives the counts of SNPs (defined
+   as a change of one nucleotide to one other nucleotide, no deletions or
+   insertions are counted, no multi-base changes are counted).
+
+   If the input sequences are nucleic acid, The counts of transitions
+   (Pyrimide to Pyrimidine or Purine to Purine) and transversions
+   (Pyrimidine to Purine) are also given.
+
+   It should be noted that not all features are reported.
+
+   The 'source' feature found in all EMBL/Genbank feature table entries
+   is not reported as this covers all of the sequence and so overlaps
+   with any difference found in that sequence and so is uninformative and
+   irritating. It has therefore been removed from the output report.
+
+   The translation information of CDS features is often extremely long
+   and does not add useful information to the report. It has therefore
+   been removed from the output report.
+
+Data files
+
+   None
+
+Notes
+
+   diffseq is useful when looking for SNPs, differences between strains
+   of an organism and anything else that requires the differences between
+   two eseentially identical sequences to be highlighted.
+
+   Identical sequence regions are found by creating a hash table of
+   subsequences of user-defined size (-wordsize option, which is 10 by
+   default). Making this value larger (e.g. 20) may speed-up the program
+   slightly, but will mean that any two differences within wordsize bases
+   bases or residues of each other will be grouped as a single region of
+   difference. This value may be made smaller to improve the resolution
+   of nearby differences, but the program will go much slower.
+
+   The sequences can be very long; it should be possible to find
+   differences between sequences that are Mega-bases long. If, however,
+   you run out of memory, use a larger word size. This increases the
+   length between mismatches that will be reported as one event. Thus a
+   word size of 50 will report two single-base differences that are with
+   50 bases of each other as one mismatch.
+
+   By default, diffseq finds regions of identity that are at least as
+   long as the specified word-size. This is what is typically required
+   when working with long overlapping nucleic acid sequences, where the
+   non-overlapping sequence ends are less interesting. If however, you
+   have protein sequences or short RNA sequences then you may well be
+   interested in differences at the very ends. The -globaldifferences
+   option when set means the differences at the ends will also be
+   reported.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name     Description
+
+Author(s)
+
+   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+History
+
+   Written 15th Aug 2000 - Gary Williams.
+
+   18th Aug 2000 - Added writing out GFF files of the mismatched regions
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

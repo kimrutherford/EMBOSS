@@ -1,0 +1,19 @@
+<b>Here is a sample session with palindrome</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>palindrome </b>
+Finds inverted repeats in nucleotide sequence(s)
+Input nucleotide sequence(s): <b>tembl:d00596</b>
+Enter minimum length of palindrome [10]: <b>15</b>
+Enter maximum length of palindrome [100]: <b></b>
+Enter maximum gap between repeated regions [100]: <b></b>
+Number of mismatches allowed [0]: <b></b>
+Output file [d00596.pal]: <b></b>
+Report overlapping matches [Y]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

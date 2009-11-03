@@ -1,0 +1,78 @@
+EMBOSS database indexing
+
+The main index format is the named EMBLCD after its use in the CD-ROM
+distribution of the EMBL database. It is basically the Staden format,
+but we used an alternative name to allow some freedom to extend
+it. The intention was to keep compatibility with the Staden
+package. EMBOSS comes close to this, but no site seems to depend on
+using a common set of indices in both packages and there is no test
+plan so some small differences probably break this for now.
+
+All index files have a header block of 300 bytes. The first 44 bytes contain:
+int4 filesize
+int4 record count
+int2 record size
+ch20 database name
+ch10 database release
+int4 date
+
+This is followed, for no apparent reason, by 256 bytes of padding
+which EMBOSS fills with spaces. There is room here for any additional
+data EMBOSS may need.
+
+Note the "record size" header field, used to seek individual records
+in the index files. It requires all strings in the index to be padded
+to the length of the longest string - not a problem for ID or
+accession, but a big problem for a des index. May be worth
+investigating a different format which has a separate offset file,
+needing only to rename the "XXXXX.trg" file to "XXXXX.str" and to add
+an "XXXXX.bin" file which can be easily created from the "XXXXX.str"
+file with a list of (ajlong) offsets.
+
+For each database there is a "division lookup" file division.lkp which
+lists all the data files. Each division (think of EMBL or GenBank) can
+have up to 2 files (Staden's format allows for GCG databases, which
+use the NBRF format split into REF and SEQ files, as used for many
+years by the PIR database).
+
+All entries in the database must have a unique ID, which is stored in
+the "entryname.idx" file as the ID string, the file number, and the
+offsets in each of the two data files.
+
+Other index files (at present, only the accession numbers) have two
+files. The XXXXX.trg file lists the known values in sorted order, and
+has two numbers: the number of entries in the XXXXX.hit files, and the
+offset to the first entry in the XXXXX.hit file.
+
+The XXXXX.hit file has a simple list of offsets (record numbers) in
+the entryname.idx file.
+
+Building these files uses temporary output files with lists of all
+values (accessions) and their IDs. These are then sorted by value and
+by ID, and compared to the sorted list of IDs to build the index files.
+
+Naturally, a full index of descriptions could be rather large,
+especially if long words are allowed as each text string in the
+XXXXX.trg file must be padded out to the length of the longest string
+in the index. The natural solution for EMBOSS would be to limit the
+length of an index field for the description index, and possibly to
+restrict the maximum number of times a word can appear or at least to
+exclude certain common terms. Keywords are less of a problem because
+there are a limited number of them.
+
+To add further fields to database indexing, the indexing and query
+mechanisms for accession numbers needs to be made into discrete
+functions, and the simple accesion number structures need to be part
+of a general data structure for all fields. dbiflat (and the others)
+can have a new select list of the fields to be indexed, as all fields
+need to be defined in the AjPSeqin data structure. Empty indices
+should be allowed for compatibility between databases.
+
+Candidate fields for indexing are:
+
+SV
+DES
+KEY
+ORG (species or all levels of the taxonomy? could be a user choice)
+GI  (could be included in the SV index, though this is a little tricky)
+

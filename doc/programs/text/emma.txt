@@ -1,0 +1,1217 @@
+
+                                   emma 
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Multiple sequence alignment (ClustalW wrapper)
+
+Description
+
+   EMMA calculates the multiple alignment of nucleic acid or protein
+   sequences according to the method of Thompson, J.D., Higgins, D.G. and
+   Gibson, T.J. (1994).
+
+   This is an interface to the ClustalW distribution.
+
+Usage
+
+   Here is a sample session with emma
+
+
+% emma 
+Multiple sequence alignment (ClustalW wrapper)
+Input (gapped) sequence(s): globins.fasta
+(aligned) output sequence set [hbb_human.aln]: 
+Dendrogram (tree file) from clustalw output file [hbb_human.dnd]: 
+
+
+
+
+ CLUSTAL W (1.83) Multiple Sequence Alignments
+
+
+
+Sequence type explicitly set to Protein
+Sequence format is Pearson
+Sequence 1: HBB_HUMAN       146 aa
+Sequence 2: HBB_HORSE       146 aa
+Sequence 3: HBA_HUMAN       141 aa
+Sequence 4: HBA_HORSE       141 aa
+Sequence 5: MYG_PHYCA       153 aa
+Sequence 6: GLB5_PETMA      149 aa
+Sequence 7: LGB2_LUPLU      153 aa
+Start of Pairwise alignments
+Aligning...
+Sequences (1:2) Aligned. Score:  83
+Sequences (1:3) Aligned. Score:  43
+Sequences (1:4) Aligned. Score:  42
+Sequences (1:5) Aligned. Score:  24
+Sequences (1:6) Aligned. Score:  21
+Sequences (1:7) Aligned. Score:  14
+Sequences (2:3) Aligned. Score:  41
+Sequences (2:4) Aligned. Score:  43
+Sequences (2:5) Aligned. Score:  24
+Sequences (2:6) Aligned. Score:  19
+Sequences (2:7) Aligned. Score:  15
+Sequences (3:4) Aligned. Score:  87
+Sequences (3:5) Aligned. Score:  26
+Sequences (3:6) Aligned. Score:  29
+Sequences (3:7) Aligned. Score:  16
+Sequences (4:5) Aligned. Score:  26
+Sequences (4:6) Aligned. Score:  27
+Sequences (4:7) Aligned. Score:  12
+Sequences (5:6) Aligned. Score:  21
+Sequences (5:7) Aligned. Score:  7
+Sequences (6:7) Aligned. Score:  11
+Guide tree        file created:   [12345678A]
+Start of Multiple Alignment
+There are 6 groups
+Aligning...
+Group 1: Sequences:   2      Score:2194
+Group 2: Sequences:   2      Score:2165
+Group 3: Sequences:   4      Score:960
+Group 4:                     Delayed
+Group 5:                     Delayed
+Group 6:                     Delayed
+Sequence:5     Score:865
+Sequence:6     Score:797
+Sequence:7     Score:1044
+Alignment Score 4164
+GCG-Alignment file created      [12345678A]
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     (Gapped) sequence(s) filename and optional
+                                  format, or reference (input USA)
+  [-outseq]            seqoutset  [.] Sequence set filename
+                                  and optional format (output USA)
+  [-dendoutfile]       outfile    [*.emma] Dendrogram (tree file) from
+                                  clustalw output file
+
+   Additional (Optional) qualifiers (* if not always prompted):
+   -onlydend           toggle     [N] Only produce dendrogram file
+*  -dend               toggle     [N] Do alignment using an old dendrogram
+*  -dendfile           infile     Dendrogram (tree file) from clustalw file
+                                  (optional)
+*  -pwmatrix           menu       [b] The scoring table which describes the
+                                  similarity of each amino acid to each other.
+                                  There are three 'in-built' series of weight
+                                  matrices offered. Each consists of several
+                                  matrices which work differently at different
+                                  evolutionary distances. To see the exact
+                                  details, read the documentation. Crudely, we
+                                  store several matrices in memory, spanning
+                                  the full range of amino acid distance (from
+                                  almost identical sequences to highly
+                                  divergent ones). For very similar sequences,
+                                  it is best to use a strict weight matrix
+                                  which only gives a high score to identities
+                                  and the most favoured conservative
+                                  substitutions. For more divergent sequences,
+                                  it is appropriate to use 'softer' matrices
+                                  which give a high score to many other
+                                  frequent substitutions.
+                                  1) BLOSUM (Henikoff). These matrices appear
+                                  to be the best available for carrying out
+                                  data base similarity (homology searches).
+                                  The matrices used are: Blosum80, 62, 45 and
+                                  30.
+                                  2) PAM (Dayhoff). These have been extremely
+                                  widely used since the late '70s. We use the
+                                  PAM 120, 160, 250 and 350 matrices.
+                                  3) GONNET . These matrices were derived
+                                  using almost the same procedure as the
+                                  Dayhoff one (above) but are much more up to
+                                  date and are based on a far larger data set.
+                                  They appear to be more sensitive than the
+                                  Dayhoff series. We use the GONNET 40, 80,
+                                  120, 160, 250 and 350 matrices.
+                                  We also supply an identity matrix which
+                                  gives a score of 1.0 to two identical amino
+                                  acids and a score of zero otherwise. This
+                                  matrix is not very useful. (Values: b
+                                  (blosum); p (pam); g (gonnet); i (id); o
+                                  (own))
+*  -pwdnamatrix        menu       [i] The scoring table which describes the
+                                  scores assigned to matches and mismatches
+                                  (including IUB ambiguity codes). (Values: i
+                                  (iub); c (clustalw); o (own))
+*  -pairwisedatafile   infile     Comparison matrix file (optional)
+*  -matrix             menu       [b] This gives a menu where you are offered
+                                  a choice of weight matrices. The default for
+                                  proteins is the PAM series derived by
+                                  Gonnet and colleagues. Note, a series is
+                                  used! The actual matrix that is used depends
+                                  on how similar the sequences to be aligned
+                                  at this alignment step are. Different
+                                  matrices work differently at each
+                                  evolutionary distance.
+                                  There are three 'in-built' series of weight
+                                  matrices offered. Each consists of several
+                                  matrices which work differently at different
+                                  evolutionary distances. To see the exact
+                                  details, read the documentation. Crudely, we
+                                  store several matrices in memory, spanning
+                                  the full range of amino acid distance (from
+                                  almost identical sequences to highly
+                                  divergent ones). For very similar sequences,
+                                  it is best to use a strict weight matrix
+                                  which only gives a high score to identities
+                                  and the most favoured conservative
+                                  substitutions. For more divergent sequences,
+                                  it is appropriate to use 'softer' matrices
+                                  which give a high score to many other
+                                  frequent substitutions.
+                                  1) BLOSUM (Henikoff). These matrices appear
+                                  to be the best available for carrying out
+                                  data base similarity (homology searches).
+                                  The matrices used are: Blosum80, 62, 45 and
+                                  30.
+                                  2) PAM (Dayhoff). These have been extremely
+                                  widely used since the late '70s. We use the
+                                  PAM 120, 160, 250 and 350 matrices.
+                                  3) GONNET . These matrices were derived
+                                  using almost the same procedure as the
+                                  Dayhoff one (above) but are much more up to
+                                  date and are based on a far larger data set.
+                                  They appear to be more sensitive than the
+                                  Dayhoff series. We use the GONNET 40, 80,
+                                  120, 160, 250 and 350 matrices.
+                                  We also supply an identity matrix which
+                                  gives a score of 1.0 to two identical amino
+                                  acids and a score of zero otherwise. This
+                                  matrix is not very useful. Alternatively,
+                                  you can read in your own (just one matrix,
+                                  not a series). (Values: b (blosum); p (pam);
+                                  g (gonnet); i (id); o (own))
+*  -dnamatrix          menu       [i] This gives a menu where a single matrix
+                                  (not a series) can be selected. (Values: i
+                                  (iub); c (clustalw); o (own))
+*  -mamatrixfile       infile     Comparison matrix file (optional)'
+   -[no]slow           toggle     [Y] A distance is calculated between every
+                                  pair of sequences and these are used to
+                                  construct the dendrogram which guides the
+                                  final multiple alignment. The scores are
+                                  calculated from separate pairwise
+                                  alignments. These can be calculated using 2
+                                  methods: dynamic programming (slow but
+                                  accurate) or by the method of Wilbur and
+                                  Lipman (extremely fast but approximate).
+                                  The slow-accurate method is fine for short
+                                  sequences but will be VERY SLOW for many
+                                  (e.g. >100) long (e.g. >1000 residue)
+                                  sequences.
+*  -pwgapopen          float      [10.0] The penalty for opening a gap in the
+                                  pairwise alignments. (Number 0.000 or more)
+*  -pwgapextend        float      [0.1] The penalty for extending a gap by 1
+                                  residue in the pairwise alignments. (Number
+                                  0.000 or more)
+*  -ktup               integer    [1 for protein, 2 for nucleic] This is the
+                                  size of exactly matching fragment that is
+                                  used. INCREASE for speed (max= 2 for
+                                  proteins; 4 for DNA), DECREASE for
+                                  sensitivity. For longer sequences (e.g.
+                                  >1000 residues) you may need to increase the
+                                  default. (integer from 0 to 4)
+*  -gapw               integer    [3 for protein, 5 for nucleic] This is a
+                                  penalty for each gap in the fast alignments.
+                                  It has little affect on the speed or
+                                  sensitivity except for extreme values.
+                                  (Positive integer)
+*  -topdiags           integer    [5 for protein, 4 for nucleic] The number of
+                                  k-tuple matches on each diagonal (in an
+                                  imaginary dot-matrix plot) is calculated.
+                                  Only the best ones (with most matches) are
+                                  used in the alignment. This parameter
+                                  specifies how many. Decrease for speed;
+                                  increase for sensitivity. (Positive integer)
+*  -window             integer    [5 for protein, 4 for nucleic] This is the
+                                  number of diagonals around each of the
+                                  'best' diagonals that will be used. Decrease
+                                  for speed; increase for sensitivity.
+                                  (Positive integer)
+*  -nopercent          boolean    [N] Fast pairwise alignment: similarity
+                                  scores: suppresses percentage score
+   -gapopen            float      [10.0] The penalty for opening a gap in the
+                                  alignment. Increasing the gap opening
+                                  penalty will make gaps less frequent.
+                                  (Positive foating point number)
+   -gapextend          float      [5.0] The penalty for extending a gap by 1
+                                  residue. Increasing the gap extension
+                                  penalty will make gaps shorter. Terminal
+                                  gaps are not penalised. (Positive foating
+                                  point number)
+   -[no]endgaps        boolean    [Y] End gap separation: treats end gaps just
+                                  like internal gaps for the purposes of
+                                  avoiding gaps that are too close (set by
+                                  'gap separation distance'). If you turn this
+                                  off, end gaps will be ignored for this
+                                  purpose. This is useful when you wish to
+                                  align fragments where the end gaps are not
+                                  biologically meaningful.
+   -gapdist            integer    [8] Gap separation distance: tries to
+                                  decrease the chances of gaps being too close
+                                  to each other. Gaps that are less than this
+                                  distance apart are penalised more than
+                                  other gaps. This does not prevent close
+                                  gaps; it makes them less frequent, promoting
+                                  a block-like appearance of the alignment.
+                                  (Positive integer)
+*  -norgap             boolean    [N] Residue specific penalties: amino acid
+                                  specific gap penalties that reduce or
+                                  increase the gap opening penalties at each
+                                  position in the alignment or sequence. As an
+                                  example, positions that are rich in glycine
+                                  are more likely to have an adjacent gap
+                                  than positions that are rich in valine.
+*  -hgapres            string     [GPSNDQEKR] This is a set of the residues
+                                  'considered' to be hydrophilic. It is used
+                                  when introducing Hydrophilic gap penalties.
+                                  (Any string is accepted)
+*  -nohgap             boolean    [N] Hydrophilic gap penalties: used to
+                                  increase the chances of a gap within a run
+                                  (5 or more residues) of hydrophilic amino
+                                  acids; these are likely to be loop or random
+                                  coil regions where gaps are more common.
+                                  The residues that are 'considered' to be
+                                  hydrophilic are set by '-hgapres'.
+   -maxdiv             integer    [30] This switch, delays the alignment of
+                                  the most distantly related sequences until
+                                  after the most closely related sequences
+                                  have been aligned. The setting shows the
+                                  percent identity level required to delay the
+                                  addition of a sequence; sequences that are
+                                  less identical than this level to any other
+                                  sequences will be aligned later. (Integer
+                                  from 0 to 100)
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outseq" associated qualifiers
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
+
+   "-dendoutfile" associated qualifiers
+   -odirectory3        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   The input is two or more sequences.
+
+  Input files for usage example
+
+  File: globins.fasta
+
+>HBB_HUMAN Sw:Hbb_Human => HBB_HUMAN
+VHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKV
+KAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFGK
+EFTPPVQAAYQKVVAGVANALAHKYH
+>HBB_HORSE Sw:Hbb_Horse => HBB_HORSE
+VQLSGEEKAAVLALWDKVNEEEVGGEALGRLLVVYPWTQRFFDSFGDLSNPGAVMGNPKV
+KAHGKKVLHSFGEGVHHLDNLKGTFAALSELHCDKLHVDPENFRLLGNVLVVVLARHFGK
+DFTPELQASYQKVVAGVANALAHKYH
+>HBA_HUMAN Sw:Hba_Human => HBA_HUMAN
+VLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHFDLSHGSAQVKGHGK
+KVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTPA
+VHASLDKFLASVSTVLTSKYR
+>HBA_HORSE Sw:Hba_Horse => HBA_HORSE
+VLSAADKTNVKAAWSKVGGHAGEYGAEALERMFLGFPTTKTYFPHFDLSHGSAQVKAHGK
+KVGDALTLAVGHLDDLPGALSNLSDLHAHKLRVDPVNFKLLSHCLLSTLAVHLPNDFTPA
+VHASLDKFLSSVSTVLTSKYR
+>MYG_PHYCA Sw:Myg_Phyca => MYG_PHYCA
+VLSEGEWQLVLHVWAKVEADVAGHGQDILIRLFKSHPETLEKFDRFKHLKTEAEMKASED
+LKKHGVTVLTALGAILKKKGHHEAELKPLAQSHATKHKIPIKYLEFISEAIIHVLHSRHP
+GDFGADAQGAMNKALELFRKDIAAKYKELGYQG
+>GLB5_PETMA Sw:Glb5_Petma => GLB5_PETMA
+PIVDTGSVAPLSAAEKTKIRSAWAPVYSTYETSGVDILVKFFTSTPAAQEFFPKFKGLTT
+ADQLKKSADVRWHAERIINAVNDAVASMDDTEKMSMKLRDLSGKHAKSFQVDPQYFKVLA
+AVIADTVAAGDAGFEKLMSMICILLRSAY
+>LGB2_LUPLU Sw:Lgb2_Luplu => LGB2_LUPLU
+GALTESQAALVKSSWEEFNANIPKHTHRFFILVLEIAPAAKDLFSFLKGTSEVPQNNPEL
+QAHAGKVFKLVYEAAIQLQVTGVVVTDATLKNLGSVHVSKGVADAHFPVVKEAILKTIKE
+VVGAKWSEELNSAWTIAYDELAIVIKKEMNDAA
+
+   EMBOSS programs do not allow you to simply type the names of two or
+   more files or database entries - they try to interpret this as all one
+   file-name and complain that a file of that name does not exist.
+
+   In order to enter the sequences that you wish to align, you must group
+   them in one of three ways: either make a 'list file' or place several
+   sequences in a single sequence file or specify the sequences using
+   wildcards.
+
+  Making a List file
+
+   A list file is a text file that holds the names of database entries
+   and/or sequence files.
+
+   You should use a text editor such as pico or nedit to edit a file to
+   contain the names of the sequence files or database entries. There
+   must be one sequence per line.
+
+   An example is the file 'fred' which contains:
+  __________________________________________________________________________
+
+opsd_abyko.fasta
+sw:opsd_xenla
+sw:opsd_c*
+@another_list
+  __________________________________________________________________________
+
+   This List files contains:
+
+     * opsd_abyko.fasta - this is the name of a sequence file. The file
+       is read in from the current directory.
+     * sw:opsd_xenla - this is a reference to a specific sequence in the
+       SwissProt database
+     * sw:opsd_c* - this represents all the sequences in SwissProt whose
+       identifiers start with ``opsd_c''
+     * another_list - this is the name of a second list file. List files
+       can be nested!
+
+   Notice the @ in front of the last entry. This is the way you tell
+   EMBOSS that this file is a List file, not a regular sequence file.
+   That last line was put there both as an indication of the way you tell
+   EMBOSS that a file is a List file and to emphasise that List files can
+   contain other List files.
+
+   When emma asks for the sequences to align, you should type '@fred'.
+   The '@' character tells EMBOSS that this is the name of a List file.
+
+   An alternative to editing a file and laboriously typing in all of the
+   names you require is to make a list of a directory containing the
+   sequence files and then to edit the list file to remove the names of
+   the sequences files than you do not require.
+
+   To make a list of all the files in the current directory that end in
+   '.pep', type:
+
+   ls *.pep > listfile
+
+  Several sequences in one file
+
+   EMBOSS can read in a single file which contains many sequences.
+
+   Each of the sequences in the file must be in the same format - if the
+   first sequence is in EMBL format, then all the others must be in EMBL
+   format.
+
+   There are some sequence formats that cannot be used when placing many
+   sequences in the same file. These are sequence formats that have no
+   clear indication of where the sequence ends and the annotation of the
+   next sequence starts. These formats include: plain or text format (no
+   real format, just the sequence), staden, gcg.
+
+   If your sequences are not already in a single file, you can place them
+   in one using seqret. The following example takes all the files ending
+   in '.pep' and places them in the file 'mystuff' in Fasta format.
+
+   seqret "*.pep" mystuff
+
+   When emma asks for the sequences to align, you should type 'mystuff'.
+
+  Using wildcards
+
+   'Wildcard' characters are characters that are expanded to match all
+   possible matching files or entries in a database.
+
+   By far the most commonly used wildcard character is '*' which matches
+   any number (or zero) of possible characters at that position in the
+   name.
+
+   A less commonly used wildcard character is '?' which matches any one
+   character at that position.
+
+   For example, when emma asks for sequences to align, you could answer:
+   abc*.pep This would select any files whose name starts with 'abc' and
+   then ends in '.pep'; the centre of the name where there is a '*' can
+   be anything.
+
+   Both file names and database entry names can be wildcarded.
+
+   There is a slightly irritating problem that occurs when wildcards are
+   used one the Unix command line (This is the line that you type against
+   the 'Unix' prompt together with the program name.)
+
+   In this case the Unix session gets the command line first, runs the
+   program, expands the wildcards and passes the program parameters to
+   the program. When Unix expands the wildcards, two things go wrong. You
+   may have specified wildcarded database entries - the Unix system tries
+   to file files that match that specification, it fails and refuses to
+   run the program. Alternatively, you may have specified wildcarded
+   files - Unix fileds them and gives the name of each of them to the
+   program as a separate parameter - emma gets the wrong number of
+   parameters and refuses to run.
+
+   You get round this by quoting the wildcard. You can either put the
+   whole wildcarded name in quotes:
+   "abc*.pep"
+   or you can quote just the '*' using a '\' as:
+   abc\*.pep
+
+   This problem does not occur when you reply to the prompt from the
+   program for the input sequences, or when you are typing the wildcard
+   files name in a web browser of GUI (such as Jemboss or SPIN) field
+
+Output file format
+
+  Output files for usage example
+
+  File: hbb_human.aln
+
+>HBB_HUMAN
+--------VHLTPEEKSAVTALWGKVN--VDEVGGEALGRLLVVYPWTQRFFESFGDLST
+PDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDP----ENFRLL
+GNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKYH------
+>HBB_HORSE
+--------VQLSGEEKAAVLALWDKVN--EEEVGGEALGRLLVVYPWTQRFFDSFGDLSN
+PGAVMGNPKVKAHGKKVLHSFGEGVHHLDNLKGTFAALSELHCDKLHVDP----ENFRLL
+GNVLVVVLARHFGKDFTPELQASYQKVVAGVANALAHKYH------
+>HBA_HUMAN
+---------VLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-----
+-DLSHGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDP----VNFKLL
+SHCLLVTLAAHLPAEFTPAVHASLDKFLASVSTVLTSKYR------
+>HBA_HORSE
+---------VLSAADKTNVKAAWSKVGGHAGEYGAEALERMFLGFPTTKTYFPHF-----
+-DLSHGSAQVKAHGKKVGDALTLAVGHLDDLPGALSNLSDLHAHKLRVDP----VNFKLL
+SHCLLSTLAVHLPNDFTPAVHASLDKFLSSVSTVLTSKYR------
+>MYG_PHYCA
+---------VLSEGEWQLVLHVWAKVEADVAGHGQDILIRLFKSHPETLEKFDRFKHLKT
+EAEMKASEDLKKHGVTVLTALGAILKKKGHHEAELKPLAQSHATKHKIPI----KYLEFI
+SEAIIHVLHSRHPGDFGADAQGAMNKALELFRKDIAAKYKELGYQG
+>GLB5_PETMA
+PIVDTGSVAPLSAAEKTKIRSAWAPVYSTYETSGVDILVKFFTSTPAAQEFFPKFKGLTT
+ADQLKKSADVRWHAERIINAVNDAVASMDDTEKMSMKLRDLSGKHAKSFQ----VDPQYF
+KVLAAVIADTVAAGDAGFEKLMSMICILLRSAY-------------
+>LGB2_LUPLU
+--------GALTESQAALVKSSWEEFNANIPKHTHRFFILVLEIAPAAKDLFSFLKG--T
+SEVPQNNPELQAHAGKVFKLVYEAAIQLQVTGVVVTDATLKNLGSVHVSKGVADAHFPVV
+KEAILKTIKEVVGAKWSEELNSAWTIAYDELAIVIKKEMNDAA---
+
+  File: hbb_human.dnd
+
+(
+(
+(
+(
+HBB_HUMAN:0.08080,
+HBB_HORSE:0.08359)
+:0.21952,
+(
+HBA_HUMAN:0.05452,
+HBA_HORSE:0.06605)
+:0.21070)
+:0.06034,
+MYG_PHYCA:0.39882)
+:0.01490,
+GLB5_PETMA:0.38267,
+LGB2_LUPLU:0.50324);
+
+  Sequences
+
+   emma writes the aligned sequences and a dendrogram file showing how
+   the sequences were clustered during the progressive alignments.
+
+   The clustalw output sequences are reformatted into the default EMBOSS
+   output format instead of being left as Clustal-format '.aln' files.
+
+  Trees
+
+   Believe it or not, we now use the New Hampshire (nested parentheses)
+   format as default for our trees. This format is compatible with e.g.
+   the PHYLIP package. If you want to view a tree, you can use the RETREE
+   or DRAWGRAM/DRAWTREE programs of PHYLIP. This format is used for all
+   our trees, even the initial guide trees for deciding the order of
+   multiple alignment. The output trees from the phylogenetic tree menu
+   can also be requested in our old verbose/cryptic format. This may be
+   more useful if, for example, you wish to see the bootstrap figures.
+   The bootstrap trees in the default New Hampshire format give the
+   bootstrap figures as extra labels which can be viewed very easily
+   using TREETOOL which is available as part of the GDE package. TREETOOL
+   is available from the RDP project by ftp from rdp.life.uiuc.edu.
+
+   The New Hampshire format is only useful if you have software to
+   display or manipulate the trees. The PHYLIP package is highly
+   recommended if you intend to do much work with trees and includes
+   programs for doing this. WE DO NOT PROVIDE ANY DIRECT MEANS FOR
+   VIEWING TREES GRAPHICALLY.
+
+Data files
+
+   The comparison matrices available for clustalw are not EMBOSS matrix
+   files, as they are defined in the clustalw code. The matrices
+   available for carrying out a protein sequence alignment are:
+     * blosum
+     * pam
+     * gonnet
+     * id
+     * user defined
+
+   The comparison matrices available in clustalw for carrying out a
+   nucleotide sequence alignment are:
+     * iub
+     * clustalw
+     * user defined
+
+Notes
+
+  The basic alignment method
+
+   The basic multiple alignment algorithm consists of three main stages:
+   1) all pairs of sequences are aligned separately in order to calculate
+   a distance matrix giving the divergence of each pair of sequences; 2)
+   a guide tree is calculated from the distance matrix; 3) the sequences
+   are progressively aligned according to the branching order in the
+   guide tree. An example using 7 globin sequences of known tertiary
+   structure (25) is given in figure 1.
+
+    1) The distance matrix/pairwise alignments
+
+   In the original CLUSTAL programs, the pairwise distances were
+   calculated using a fast approximate method (22). This allows very
+   large numbers of sequences to be aligned, even on a microcomputer. The
+   scores are calculated as the number of k-tuple matches (runs of
+   identical residues, typically 1 or 2 long for proteins or 2 to 4 long
+   for nucleotide sequences) in the best alignment between two sequences
+   minus a fixed penalty for every gap. We now offer a choice between
+   this method and the slower but more accurate scores from full dynamic
+   programming alignments using two gap penalties (for opening or
+   extending gaps) and a full amino acid weight matrix. These scores are
+   calculated as the number of identities in the best alignment divided
+   by the number of residues compared (gap positions are excluded). Both
+   of these scores are initially calculated as percent identity scores
+   and are converted to distances by dividing by 100 and subtracting from
+   1.0 to give number of differences per site. We do not correct for
+   multiple substitutions in these initial distances. In figure 1 we give
+   the 7x7 distance matrix between the 7 globin sequences calculated
+   using the full dynamic programming method.
+
+    2) The guide tree
+
+   The trees used to guide the final multiple alignment process are
+   calculated from the distance matrix of step 1 using the
+   Neighbour-Joining method (21). This produces unrooted trees with
+   branch lengths proportional to estimated divergence along each branch.
+   The root is placed by a "mid-point" method (15) at a position where
+   the means of the branch lengths on either side of the root are equal.
+   These trees are also used to derive a weight for each sequence (15).
+   The weights are dependent upon the distance from the root of the tree
+   but sequences which have a common branch with other sequences share
+   the weight derived from the shared branch. In the example in figure 1,
+   the leghaemoglobin (Lgb2_Luplu) gets a weight of 0.442 which is equal
+   to the length of the branch from the root to it. The Human beta globin
+   (Hbb_Human) gets a weight consisting of the length of the branch
+   leading to it that is not shared with any other sequences (0.081) plus
+   half the length of the branch shared with the horse beta globin
+   (0.226/2) plus one quarter the length of the branch shared by all four
+   haemoglobins (0.061/4) plus one fifth the branch shared between the
+   haemoglobins and the myoglobin (0.015/5) plus one sixth the branch
+   leading to all the vertebrate globins (0.062). This sums to a total of
+   0.221. By contrast, in the normal progressive alignment algorithm, all
+   sequences would be equally weighted. The rooted tree with branch
+   lengths and sequence weights for the 7 globins is given in figure 1.
+
+    3) Progressive alignment
+
+   The basic procedure at this stage is to use a series of pairwise
+   alignments to align larger and larger groups of sequences, following
+   the branching order in the guide tree. You proceed from the tips of
+   the rooted tree towards the root.
+
+   In the globin example in figure 1 you align the sequences in the
+   following order: human vs. horse beta globin; human vs. horse alpha
+   globin; the 2 alpha globins vs. the 2 beta globins; the myoglobin vs.
+   the haemoglobins; the cyanohaemoglobin vs the haemoglobins plus
+   myoglobin; the leghaemoglobin vs. all the rest. At each stage a full
+   dynamic programming (26,27) algorithm is used with a residue weight
+   matrix and penalties for opening and extending gaps. Each step
+   consists of aligning two existing alignments or sequences. Gaps that
+   are present in older alignments remain fixed. In the basic algorithm,
+   new gaps that are introduced at each stage get full gap opening and
+   extension penalties, even if they are introduced inside old gap
+   positions (see the section on gap penalties below for modifications to
+   this rule). In order to calculate the score between a position from
+   one sequence or alignment and one from another, the average of all the
+   pairwise weight matrix scores from the amino acids in the two sets of
+   sequences is used i.e. if you align 2 alignments with 2 and 4
+   sequences respectively, the score at each position is the average of 8
+   (2x4) comparisons. This is illustrated in figure 2. If either set of
+   sequences contains one or more gaps in one of the positions being
+   considered, each gap versus a residue is scored as zero. The default
+   amino acid weight matrices we use are rescored to have only positive
+   values. Therefore, this treatment of gaps treats the score of a
+   residue versus a gap as having the worst possible score. When
+   sequences are weighted (see improvements to progressive alignment,
+   below), each weight matrix value is multiplied by the weights from the
+   2 sequences, as illustrated in figure 2.
+
+    Improvements to progressive alignment
+
+   All of the remaining modifications apply only to the final progressive
+   alignment stage. Sequence weighting is relatively straightforward and
+   is already widely used in profile searches (15,16). The treatment of
+   gap penalties is more complicated. Initial gap penalties are
+   calculated depending on the weight matrix, the similarity of the
+   sequences, and the length of the sequences. Then, an attempt is made
+   to derive sensible local gap opening penalties at every position in
+   each pre-aligned group of sequences that will vary as new sequences
+   are added. The use of different weight matrices as the alignment
+   progresses is novel and largely by-passes the problem of initial
+   choice of weight matrix. The final modification allows us to delay the
+   addition of very divergent sequences until the end of the alignment
+   process when all of the more closely related sequences have already
+   been aligned.
+
+  Sequence weighting
+
+   Sequence weights are calculated directly from the guide tree. The
+   weights are normalised such that the biggest one is set to 1.0 and the
+   rest are all less than one. Groups of closely related sequences
+   receive lowered weights because they contain much duplicated
+   information. Highly divergent sequences without any close relatives
+   receive high weights. These weights are used as simple multiplication
+   factors for scoring positions from different sequences or prealigned
+   groups of sequences. The method is illustrated in figure 2. In the
+   globin example in figure 1, the two alpha globins get downweighted
+   because they are almost duplicate sequences (as do the two beta
+   globins); they receive a combined weight of only slightly more than if
+   a single alpha globin was used.
+
+  Initial gap penalties
+
+   Initially, two gap penalties are used: a gap opening penalty (GOP)
+   which gives the cost of opening a new gap of any length and a gap
+   extension penalty (GEP) which gives the cost of every item in a gap.
+   Initial values can be set by the user from a menu. The software then
+   automatically attempts to choose appropriate gap penalties for each
+   sequence alignment, depending on the following factors.
+
+    1) Dependence on the weight matrix
+
+   It has been shown (16,28) that varying the gap penalties used with
+   different weight matrices can improve the accuracy of sequence
+   alignments. Here, we use the average score for two mismatched residues
+   (ie. off-diagonal values in the matrix) as a scaling factor for the
+   GOP.
+
+    2) Dependence on the similarity of the sequences
+
+   The percent identity of the two (groups of) sequences to be aligned is
+   used to increase the GOP for closely related sequences and decrease it
+   for more divergent sequences on a linear scale.
+
+    3) Dependence on the lengths of the sequences
+
+   The scores for both true and false sequence alignments grow with the
+   length of the sequences. We use the logarithm of the length of the
+   shorter sequence to increase the GOP with sequence length.
+
+   Using these three modifications, the initial GOP calculated by the
+   program is:
+
+   GOP->(GOP+log(MIN(N,M))) * (average residue mismatch score) * (percent
+   identity scaling factor)
+   where N, M are the lengths of the two sequences.
+
+    4) Dependence on the difference in the lengths of the sequences
+
+   The GEP is modified depending on the difference between the lengths of
+   the two sequences to be aligned. If one sequence is much shorter than
+   the other, the GEP is increased to inhibit too many long gaps in the
+   shorter sequence. The initial GEP calculated by the program is:
+
+   GEP -> GEP*(1.0+|log(N/M)|)
+   where N, M are the lengths of the two sequences.
+
+  Position-specific gap penalties
+
+   In most dynamic programming applications, the initial gap opening and
+   extension penalties are applied equally at every position in the
+   sequence, regardless of the location of a gap, except for terminal
+   gaps which are usually allowed at no cost. In CLUSTAL W, before any
+   pair of sequences or prealigned groups of sequences are aligned, we
+   generate a table of gap opening penalties for every position in the
+   two (sets of) sequences. An example is shown in figure 3. We
+   manipulate the initial gap opening penalty in a position specific
+   manner, in order to make gaps more or less likely at different
+   positions.
+
+   The local gap penalty modification rules are applied in a hierarchical
+   manner.
+
+   The exact details of each rule are given below. Firstly, if there is a
+   gap at a position, the gap opening and gap extension penalties are
+   lowered; the other rules do not apply. This makes gaps more likely at
+   positions where there are already gaps. If there is no gap at a
+   position, then the gap opening penalty is increased if the position is
+   within 8 residues of an existing gap. This discourages gaps that are
+   too close together. Finally, at any position within a run of
+   hydrophilic residues, the penalty is decreased. These runs usually
+   indicate loop regions in protein structures. If there is no run of
+   hydrophilic residues, the penalty is modified using a table of residue
+   specific gap propensities (12). These propensities were derived by
+   counting the frequency of each residue at either end of gaps in
+   alignments of proteins of known structure. An illustration of the
+   application of these rules from one part of the globin example, in
+   figure 1, is given in figure 3.
+
+    1) Lowered gap penalties at existing gaps
+
+   If there are already gaps at a position, then the GOP is reduced in
+   proportion to the number of sequences with a gap at this position and
+   the GEP is lowered by a half. The new gap opening penalty is
+   calculated as:
+
+   GOP -> GOP*0.3*(no. of sequences without a gap/no. of sequences).
+
+    2) Increased gap penalties near existing gaps
+
+   If a position does not have any gaps but is within 8 residues of an
+   existing gap, the GOP is increased by:
+
+   GOP -> GOP*(2+((8-distance from gap)*2)/8)
+
+    3) Reduced gap penalties in hydrophilic stretches
+
+   Any run of 5 hydrophilic residues is considered to be a hydrophilic
+   stretch. The residues that are to be considered hydrophilic may be set
+   by the user but are conservatively set to D, E, G, K, N, Q, P, R or S
+   by default. If, at any position, there are no gaps and any of the
+   sequences has such a stretch, the GOP is reduced by one third.
+
+    4) Residue specific penalties
+
+   If there is no hydrophilic stretch and the position does not contain
+   any gaps, then the GOP is multiplied by one of the 20 numbers in table
+   1, depending on the residue. If there is a mixture of residues at a
+   position, the multiplication factor is the average of all the
+   contributions from each sequence.
+
+  Weight matrices
+
+   Two main series of weight matrices are offered to the user: the
+   Dayhoff PAM series (3) and the BLOSUM series (4). The default is the
+   BLOSUM series. In each case, there is a choice of matrix ranging from
+   strict ones, useful for comparing very closely related sequences to
+   very "soft" ones that are useful for comparing very distantly related
+   sequences. Depending on the distance between the two sequences or
+   groups of sequences to be compared, we switch between 4 different
+   matrices. The distances are measured directly from the guide tree. The
+   ranges of distances and tables used with the PAM series of matrices
+   is: 80-100%:PAM20, 60-80%:PAM60, 40-60%:PAM120, 0-40%:PAM350. The
+   range used with the BLOSUM series is:80-100%:BLOSUM80,
+   60-80%:BLOSUM62, 30-60%:BLOSUM45, 0-30%:BLOSUM30.
+
+  Divergent sequences
+
+   The most divergent sequences (most different, on average from all of
+   the other sequences) are usually the most difficult to align
+   correctly. It is sometimes better to delay the incorporation of these
+   sequences until all of the more easily aligned sequences are merged
+   first. This may give a better chance of correctly placing the gaps and
+   matching weakly conserved positions against the rest of the sequences.
+   A choice is offered to set a cut off (default is 40% identity or less
+   with any other sequence) that will delay the alignment of the
+   divergent sequences until all of the rest have been aligned.
+
+Software and Algorithms
+
+  Dynamic Programming
+
+   The most demanding part of the multiple alignment strategy, in terms
+   of computer processing and memory usage, is the alignment of two
+   (groups of) sequences at each step in the final progressive alignment.
+   To make it possible to align very long sequences (e.g. dynein heavy
+   chains at ~ 5,000 residues) in a reasonable amount of memory, we use
+   the memory efficient dynamic programming algorithm of Myers and Miller
+   (26). This sacrifices some processing time but makes very large
+   alignments practical in very little memory. One disadvantage of this
+   algorithm is that it does not allow different gap opening and
+   extension penalties at each position. We have modified the algorithm
+   so as to allow this and the details are described in a separate paper
+   (27).
+
+  Alignment to an alignment
+
+   Profile alignment is used to align two existing alignments (either of
+   which may consist of just one sequence) or to add a series of new
+   sequences to an existing alignment. This is useful because one may
+   wish to build up a multiple alignment gradually, choosing different
+   parameters manually, or correcting intermediate errors as the
+   alignment proceeds. Often, just a few sequences cause misalignments in
+   the progressive algorithm and these can be removed from the process
+   and then added at the end by profile alignment. A second use is where
+   one has a high quality reference alignment and wishes to keep it fixed
+   while adding new sequences automatically.
+
+  Terminal Gaps
+
+   In the original Clustal V program, terminal gaps were penalised the
+   same as all other gaps. This caused some ugly side effects e.g.
+
+acgtacgtacgtacgt                              acgtacgtacgtacgt
+a----cgtacgtacgt  gets the same score as      ----acgtacgtacgt
+
+   NOW, terminal gaps are free. This is better on average and stops silly
+   effects like single residues jumping to the edge of the alignment.
+   However, it is not perfect. It does mean that if there should be a gap
+   near the end of the alignment, the program may be reluctant to insert
+   it i.e.
+
+cccccgggccccc                                              cccccgggccccc
+ccccc---ccccc  may be considered worse (lower score) than  cccccccccc---
+
+   In the right hand case above, the terminal gap is free and may score
+   higher than the laft hand alignment. This can be prevented by lowering
+   the gap opening and extension penalties. It is difficult to get this
+   right all the time. Please watch the ends of your alignments.
+
+  Speed of the initial (pairwise) alignments (fast approximate/slow accurate)
+
+   By default, the initial pairwise alignments are now carried out using
+   a full dynamic programming algorithm. This is more accurate than the
+   older hash/ k-tuple based alignments (Wilbur and Lipman) but is MUCH
+   slower. On a fast workstation you may not notice but on a slow box,
+   the difference is extreme. You can set the alignment method from the
+   menus easily to the older, faster method.
+
+  Delaying alignment of distant sequences
+
+   The user can set a cut off to delay the alignment of the most
+   divergent sequences in a data set until all other sequences have been
+   aligned. By default, this is set to 40% which means that if a sequence
+   is less than 40% identical to any other sequence, its alignment will
+   be delayed.
+
+  Iterative realignment/Reset gaps between alignments
+
+   By default, if you align a set of sequences a second time (e.g. with
+   changed gap penalties), the gaps from the first alignment are
+   discarded. You can set this from the menus so that older gaps will be
+   kept between alignments, This can sometimes give better alignments by
+   keeping the gaps (do not reset them) and doing the full multiple
+   alignment a second time. Sometimes, the alignment will converge on a
+   better solution; sometimes the new alignment will be the same as the
+   first. There can be a strange side effect: you can get columns of
+   nothing but gaps introduced.
+
+   Any gaps that are read in from the input file are always kept,
+   regardless of the setting of this switch. If you read in a full
+   multiple alignment, the "reset gaps" switch has no effect. The old
+   gaps will remain and if you carry out a multiple alignment, any new
+   gaps will be added in. If you wish to carry out a full new alignment
+   of a set of sequences that are already aligned in a file you must
+   input the sequences without gaps.
+
+  Profile alignment
+
+   By profile alignment, we simply mean the alignment of old
+   alignments/sequences. In this context, a profile is just an existing
+   alignment (or even a set of unaligned sequences; see below). This
+   allows you to read in an old alignment (in any of the allowed input
+   formats) and align one or more new sequences to it. From the profile
+   alignment menu, you are allowed to read in 2 profiles. Either profile
+   can be a full alignment OR a single sequence. In the simplest mode,
+   you simply align the two profiles to each other. This is useful if you
+   want to gradually build up a full multiple alignment.
+
+   A second option is to align the sequences from the second profile, one
+   at a time to the first profile. This is done, taking the underlying
+   tree between the sequences into account. This is useful if you have a
+   set of new sequences (not aligned) and you wish to add them all to an
+   older alignment.
+
+Changes to the phylogentic tree calculations and some hints
+
+  Improved distance calculations for protein trees
+
+   The phylogenetic trees in Clustal W (the real trees that you calculate
+   AFTER alignment; not the guide trees used to decide the branching
+   order for multiple alignment) use the Neighbor-Joining method of
+   Saitou and Nei based on a matrix of "distances" between all sequences.
+   These distances can be corrected for "multiple hits". This is normal
+   practice when accurate trees are needed. This correction stretches
+   distances (especially large ones) to try to correct for the fact that
+   OBSERVED distances (mean number of differences per site) greatly
+   underestimate the actual number that happened during evolution.
+
+   In Clustal V we used a simple formula to convert an observed distance
+   to one that is corrected for multiple hits. The observed distance is
+   the mean number of differences per site in an alignment (ignoring
+   sites with a gap) and is therefore always between 0.0 (for ientical
+   sequences) an 1.0 (no residues the same at any site). These distances
+   can be multiplied by 100 to give percent difference values. 100 minus
+   percent difference gives percent identity. The formula we use to
+   correct for multiple hits is from Motoo Kimura (Kimura, M. The neutral
+   Theory of Molecular Evolution, Camb.Univ.Press, 1983, page 75) and is:
+
+   K = -Ln(1 - D - (D.D)/5)
+   where D is the observed distance and K is corrected distance.
+
+   This formula gives mean number of estimated substitutions per site
+   and, in contrast to D (the observed number), can be greater than 1
+   i.e. more than one substitution per site, on average. For example, if
+   you observe 0.8 differences per site (80% difference; 20% identity),
+   then the above formula predicts that there have been 2.5 substitutions
+   per site over the course of evolution since the 2 sequences diverged.
+   This can also be expressed in PAM units by multiplying by 100 (mean
+   number of substitutions per 100 residues). The PAM scale of evolution
+   and its derivation/calculation comes from the work of Margaret Dayhoff
+   and co workers (the famous Dayhoff PAM series of weight matrices also
+   came from this work). Dayhoff et al constructed an elaborate model of
+   protein evolution based on observed frequencies of substitution
+   between very closely related proteins. Using this model, they derived
+   a table relating observed distances to predicted PAM distances.
+   Kimura's formula, above, is just a "curve fitting" approximation to
+   this table. It is very accurate in the range 0.75 > D > 0.0 but
+   becomes increasingly unaccurate at high D (>0.75) and fails completely
+   at around D = 0.85.
+
+   To circumvent this problem, we calculated all the values for K
+   corresponding to D above 0.75 directly using the Dayhoff model and
+   store these in an internal table, used by Clustal W. This table is
+   declared in the file dayhoff.h and gives values of K for all D between
+   0.75 and 0.93 in intervals of 0.001 i.e. for D = 0.750, 0.751, 0.752
+   ...... 0.929, 0.930. For any observed D higher than 0.930, we
+   arbitrarily set K to 10.0. This sounds drastic but with real
+   sequences, distances of 0.93 (less than 7% identity) are rare. If your
+   data set includes sequences with this degree of divergence, you will
+   have great difficulty getting accurate trees by ANY method; the
+   alignment itself will be very difficult (to construct and to
+   evaluate).
+
+   There are some important things to note. Firstly, this formula works
+   well if your sequences are of average amino acid composition and if
+   the amino acids substitute according to the original Dayhoff model. In
+   other cases, it may be misleading. Secondly, it is based only on
+   observed percent distance i.e. it does not DIRECTLY take conservative
+   substitutions into account. Thirdly, the error on the estimated PAM
+   distances may be VERY great for high distances; at very high distance
+   (e.g. over 85%) it may give largely arbitrary corrected distances. In
+   most cases, however, the correction is still worth using; the trees
+   will be more accurate and the branch lengths will be more realistic.
+
+   A far more sophisticated distance correction based on a full Dayhoff
+   model which DOES take conservative substitutions and actual amino acid
+   composition into account, may be found in the PROTDIST program of the
+   PHYLIP package. For serious tree makers, this program is highly
+   recommended.
+
+  TWO NOTES ON BOOTSTRAPPING...
+
+   When you use the BOOTSTRAP in Clustal W to estimate the reliability of
+   parts of a tree, many of the uncorrected distances may randomly exceed
+   the arbitrary cut off of 0.93 (sequences only 7% identical) if the
+   sequences are distantly related. This will happen randomly i.e. even
+   if none of the pairs of sequences are less than 7% identical, the
+   bootstrap samples may contain pairs of sequences that do exceed this
+   cut off. If this happens, you will be warned. In practice, this can
+   happen with many data sets. It is not a serious problem if it happens
+   rarely. If it does happen (you are warned when it happens and told how
+   often the problem occurs), you should consider removing the most
+   distantly related sequences and/or using the PHYLIP package instead.
+
+   A further problem arises in almost exactly the opposite situation:
+   when you bootstrap a data set which contains 3 or more sequences that
+   are identical or almost identical. Here, the sets of identical
+   sequences should be shown as a multifurcation (several sequences joing
+   at the same part of the tree). Because the Neighbor-Joining method
+   only gives strictly dichotomous trees (never more than 2 sequences
+   join at one time), this cannot be exactly represented. In practice,
+   this is NOT a problem as there will be some internal branches of zero
+   length seperating the sequences. If you display the tree with all
+   branch lengths, you will still see a multifurcation. However, when you
+   bootstrap the tree, only the branching orders are stored and counted.
+   In the case of multifurcations, the exact branching order is arbitrary
+   but the program will always get the same branching order, depending
+   only on the input order of the sequences. In practice, this is only a
+   problem in situations where you have a set of sequences where all of
+   them are VERY similar. In this case, you can find very high support
+   for some groupings which will disappear if you run the analysis with a
+   different input order. Again, the PHYLIP package deals with this by
+   offering a JUMBLE option to shuffle the input order of your sequences
+   between each bootstrap sample.
+
+References
+
+   The main reference for ClustalW is Thompson et al below.
+    1. Thompson, J.D., Higgins, D.G. and Gibson, T.J. (1994) "CLUSTAL W:
+       improving the sensitivity of progressive multiple sequence
+       alignment through sequence weighting, positions-specific gap
+       penalties and weight matrix choice." Nucleic Acids Research,
+       22:4673-4680.
+    2. Feng, D.-F. and Doolittle, R.F. (1987). J. Mol. Evol. 25, 351-360.
+    3. Needleman, S.B. and Wunsch, C.D. (1970). J. Mol. Biol. 48,
+       443-453.
+    4. Dayhoff, M.O., Schwartz, R.M. and Orcutt, B.C. (1978) in Atlas of
+       Protein Sequence and Structure, vol. 5, suppl. 3 (Dayhoff, M.O.,
+       ed.), pp 345-352, NBRF, Washington.
+    5. Henikoff, S. and Henikoff, J.G. (1992). Proc. Natl. Acad. Sci. USA
+       89, 10915-10919.
+    6. Lipman, D.J., Altschul, S.F. and Kececioglu, J.D. (1989). Proc.
+       Natl. Acad. Sci. USA 86, 4412-4415.
+    7. Barton, G.J. and Sternberg, M.J.E. (1987). J. Mol. Biol. 198,
+       327-337.
+    8. Gotoh, O. (1993). CABIOS 9, 361-370.
+    9. Altschul, S.F. (1989). J. Theor. Biol. 138, 297-309.
+   10. Lukashin, A.V., Engelbrecht, J. and Brunak, S. (1992). Nucl. Acids
+       Res. 20, 2511-2516.
+   11. Lawrence, C.E., Altschul, S.F., Boguski, M.S., Liu, J.S., Neuwald,
+       A.F. and Wooton, J.C. (1993). Science, 262, 208-214.
+   12. Vingron, M. and Waterman, M.S. (1993). J. Mol. Biol. 234, 1-12.
+   13. Pascarella, S. and Argos, P. (1992). J. Mol. Biol. 224, 461-471.
+   14. Collins, J.F. and Coulson, A.F.W. (1987). In Nucleic acid and
+       protein sequence analysis a practical approach, Bishop, M.J. and
+       Rawlings, C.J. ed., chapter 13, pp. 323-358.
+   15. Vingron, M. and Sibbald, P.R. (1993). Proc. Natl. Acad. Sci. USA,
+       90, 8777-8781.
+   16. Thompson, J.D., Higgins, D.G. and Gibson, T.J. (1994). CABIOS, 10,
+       19-29.
+   17. Lthy, R., Xenarios, I. and Bucher, P. (1994). Protein Science, 3,
+       139-146.
+   18. Higgins, D.G. and Sharp, P.M. (1988). Gene, 73, 237-244.
+   19. Higgins, D.G. and Sharp, P.M. (1989). CABIOS, 5, 151-153.
+   20. Higgins, D.G., Bleasby, A.J. and Fuchs, R. (1992). CABIOS, 8,
+       189-191.
+   21. Sneath, P.H.A. and Sokal, R.R. (1973). Numerical Taxonomy, W.H.
+       Freeman, San Francisco.
+   22. Saitou, N. and Nei, M. (1987). Mol. Biol. Evol. 4, 406-425.
+   23. Wilbur, W.J. and Lipman, D.J. (1983). Proc. Natl. Acad. Sci. USA,
+       80, 726-730.
+   24. Musacchio, A., Gibson, T., Lehto, V.-P. and Saraste, M. (1992).
+       FEBS Lett. 307, 55-61.
+   25. Musacchio, A., Noble, M., Pauptit, R., Wierenga, R. and Saraste,
+       M. (1992). Nature, 359, 851-855.
+   26. Bashford, D., Chothia, C. and Lesk, A.M. (1987). J. Mol. Biol.
+       196, 199-216.
+   27. Myers, E.W. and Miller, W. (1988). CABIOS, 4, 11-17.
+   28. Thompson, J.D. (1994). CABIOS, (Submitted).
+   29. Smith, T.F., Waterman, M.S. and Fitch, W.M. (1981). J. Mol. Evol.
+       18, 38-46.
+   30. Pearson, W.R. and Lipman, D.J. (1988). Proc. Natl. Acad. Sci. USA.
+       85, 2444-2448.
+   31. Devereux, J., Haeberli, P. and Smithies, O. (1984). Nucleic Acids
+       Res. 12, 387-395.
+   32. Felsenstein, J. (1989). Cladistics 5, 164-166.
+   33. Kimura, M. (1980). J. Mol. Evol. 16, 111-120.
+   34. Kimura, M. (1983). The Neutral Theory of Molecular Evolution.
+       Cambridge University Press, Cambridge.
+   35. Felsenstein, J. (1985). Evolution 39, 783-791.
+   36. Smith, R.F. and Smith, T.F. (1992) Protein Engineering 5, 35-41.
+   37. Krogh, A., Brown, M., Mian, S., Sjlander, K. and Haussler, D.
+       (1994) J. Mol. Biol. 235-1501-1531.
+   38. Jones, D.T., Taylor, W.R. and Thornton, J.M. (1994). FEBS Lett.
+       339, 269-275.
+   39. Bairoch, A. and Bckmann, B. (1992) Nucleic Acids Res., 20,
+       2019-2022.
+   40. Noble, M.E.M., Musacchio, A., Saraste, M., Courtneidge, S.A. and
+       Wierenga, R.K. (1993) EMBO J. 12, 2617-2624.
+   41. Kabsch, W. and Sander, C. (1983) Biopolymers, 22, 2577-2637.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   "cannot find program 'clustalw'" - means that the ClustalW program has
+   not been set up on your site or is not in your environment (i.e. is
+   not on your path). The solutions are to (1) install clustalw in the
+   path so that emma can find it with the command "clustalw", or (2)
+   define a variable (an environment variable of in emboss.defaults or
+   your .embossrc file) called EMBOSS_CLUSTALW containing the command
+   (program name or full path) to run clustalw if you have it elsewhere
+   on your system.
+
+Exit status
+
+   It exits with status 0 unless an error is reported
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name     Description
+   edialign         Local multiple alignment of sequences
+   infoalign        Display basic information about a multiple sequence
+                    alignment
+   plotcon          Plot conservation of a sequence alignment
+   prettyplot       Draw a sequence alignment with pretty formatting
+   showalign        Display a multiple sequence alignment in pretty format
+   tranalign        Generate an alignment of nucleic coding regions from aligned
+                    proteins
+
+Author(s)
+
+   Mark Faller (current e-mail address unknown)
+   while he was with:
+   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+
+History
+
+   Completed 18 February 1999
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

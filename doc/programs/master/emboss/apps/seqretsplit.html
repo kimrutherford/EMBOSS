@@ -1,0 +1,207 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: seqretsplit
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+
+<!--#include file="header1.inc" -->
+seqretsplit
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/seqretsplit.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<p><b>seqretsplit</b> is a variant of the standard program for reading
+and writing sequences, <b>seqret</b>.  It performs exactly the same
+function except that when it reads more than one sequence, it writes
+each sequence to an individual file. In all other
+respects, <b>skipseq</b> is the same as <b>seqret</b>.  Its main use
+is therefore to split a file containing multiple sequences into many
+files, each containing one sequence. There are many options built-in
+into EMBOSS for detailed specification of the input and output
+sequences, for example the sequence type and file format.  Optionally,
+feature information will be read and written.</p>
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/seqretsplit.usage" -->
+
+<p>
+
+The specification of the output file is not used in this case.
+<p>
+
+At some point this ought to change and you will not be prompted for the
+output file at all. 
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/seqretsplit.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/seqretsplit.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+<b>seqretsplit</b> reads a normal sequence USA.
+
+<p>
+
+<!--#include file="inc/seqretsplit.input" -->
+
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/seqretsplit.output" -->
+
+<p>
+
+One file for each input sequence is written out.
+
+<p>
+
+The names of the files it creates are derived from the ID name of the
+sequence, followed by an extension denoting the format of the sequence. 
+You have no control over the names of the files it writes out. 
+
+<p>
+
+For example, if the files <i>embl:hsfa11*</i> are read in and the
+output is specified as <i>wibble.seq</i>, then the following files are
+expected to be created:
+
+<p>
+
+<pre>
+hsfa110.fasta
+hsfa111.fasta
+hsfa112.fasta
+hsfa113.fasta
+hsfa114.fasta
+</pre>
+
+<p>
+
+(No file <i>wibble.seq</i> is created.)
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+<p>See the documentation for <b>seqret</b> to see the full range of
+things that you can do when reading and writing sequences.</p>
+
+<p>Some non-EMBOSS programs will accept only single sequences.  In
+such cases <b>seqretsplit</b> is useful for splitting a multiple
+sequence file into many individual files.  Some EMBOSS programs will
+also read only a single sequence, which may, however, be one of many
+in a file. You can specify the sequence using the USA
+filename:sequenceID.  Nonetheless, some people feel more comfortable
+handling one sequence per file, so <b>seqretsplit</b> will be useful
+to them too.</p>
+
+<p>One file for each input sequence is written.  The names of the
+files it creates are derived from the ID name of the sequence,
+followed by an extension denoting the format of the sequence. You have
+no control over the names of the files it writes out. For example, if
+the files <tt>embl:hsfa11*</tt> are read in and the output is
+specified as <tt>wibble.seq</tt>, then the following files are
+expected to be created:</p>
+
+<pre>
+hsfa110.fasta
+hsfa111.fasta
+hsfa112.fasta
+hsfa113.fasta
+hsfa114.fasta
+</pre>
+
+<p>(No file wibble.seq is created.)</p>
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+It shouldn't really prompt for the output filename.
+<p>
+This is a side effect of the way sequence output works in
+EMBOSS. Writing multiple sequences to separate files (the -ossingle
+qualifier) does this, and seqretsplit has set it automatically on.
+
+<!--#include file="inc/seqretsplit.isee" -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/price.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/seqretsplit.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/seqretsplit.comment" -->
+
+
+</BODY>
+</HTML>
+

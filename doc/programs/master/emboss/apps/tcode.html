@@ -1,0 +1,385 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: tcode
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+<!--#include file="header1.inc" -->
+tcode
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/tcode.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<p><b>tcode</b> identifies protein-coding regions in one or more DNA sequences using the fickett TESTCODE statistic.  This is based on simple and universal differences between protein-coding and noncoding DNA.  The TESTCODE statistic is calculated for windows of a specified size over each input sequence. The results can be output as a standard EMBOSS report file or displayed graphically.</p> 
+
+<p>The output reports each window as "Coding", "Noncoding" or "No opinion". Entries marked "No opinion" have a TESTCODE value that falls between the maximum and minimum values required to report a region as noncoding or coding. For the graphical plot, all points above a green horizontal line are determined to be coding regions. Those below a red line are determined to be noncoding. Points between the red and green lines are "no opinion" ones.</p>
+
+
+
+<H2>
+    Biological Relevance
+</H2>  
+
+The statistic reflects the fact that codons are used with unequal
+frequency and that oligonucleotides and nucleotides tend to be
+repeated with a periodicity of three.
+
+<p>
+
+This application can assist in determining the probability of a region of
+nucleic sequence encoding a functional protein.
+
+<H2>
+    Algorithm
+</H2>
+
+The Fickett (1982) algorithm is used (1).
+
+<p>
+
+A window of at least 200 bases is moved over the sequence in steps of 3 bases
+
+<p>
+
+Let:
+
+<p>
+
+<pre>
+  A1 = Number of A's in positions 1,4,7 ...
+  A2 = Number of A's in positions 2,5,8 ...
+  A3 = Number of A's in positions 3,6,9 ...
+</pre>
+
+<p>
+
+A position value is determined that reflects the degree to which
+each base is favoured in one codon position over another, i.e.
+
+<p>
+
+<pre>
+  Apos = MAX(A1,A2,A3) / MIN(A1,A2,A3)+1
+</pre>
+
+<p>
+
+This is done for all 4 bases. The percentage composition of each base
+is also determined. Eight values are therefore determined, four
+position values and four composition values. These are then converted
+to probabilities (p) of coding using a look-up table provided as the data
+file for the program. The values in this look-up table have been
+determined experimentally using known coding and noncoding sequences.
+
+<p>
+
+Each of the probabilities is multiplied by a weight (w) value
+(again from the look-up table) for the respective base. The weight value
+reflects the percentage of the time that each parameter alone successfully
+predicted coding or noncoding function for the sequences of known function.
+
+<p>
+
+The TESTCODE statistic is then:
+
+<p>
+
+<pre>
+  p1w1 + p2w2 + p3w3 + p4w4 + p5w5 + p6w6 + p7w7 + p8w8
+</pre>
+
+<p>
+
+A result of less than 0.74 is probably a non-coding region.
+
+<br>
+
+A result equal or greater than 0.95 is probably a coding region.
+
+<br>
+
+Anything in between these two values is uncertain.
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/tcode.usage" -->
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/tcode.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/tcode.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+<b>tcode</b> reads any normal sequence USAs.
+
+<p>
+
+The program will ignore ambiguity codes in the nucleic acid sequence and 
+just accept the four common bases. This is a function of the algorithm, 
+and the data tables. 
+
+<p>
+
+<!--#include file="inc/tcode.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/reportformats.ihtml" -->
+
+<p>
+
+<b>tcode</b> 
+outputs a report format file. The default format is 'table'.
+<p>
+
+The resulting report file will be given a name relating to the analysed
+sequence together with the .tcode suffix by default.  Should there be no
+sequence description, the default reverts to outfile.tcode. 
+
+<p>
+
+<b>tcode</b> optionally
+outputs a graph to the specified graphics device. 
+
+<p>
+
+The graphical display is output with the default file name tcode.1.  and
+then the name of the selected graphical display (e.g.  png; ps).
+
+<p>
+
+The graph indicates the threshold for probably being coding with a green
+horizontal line and the threshold for probably not being coding with a
+red horizontal line. 
+
+<p>
+
+<!--#include file="inc/tcode.output" -->
+
+
+<H2>
+    Data files
+</H2>
+
+<!--#include file="inc/localfiles.ihtml" -->
+
+<p>
+
+The default data file (look-up table) is Etcode.dat which contains the
+data from the original paper (1)
+
+<p>
+
+<pre>
+# Fickett TESTCODE data
+# Nuc. Acids Res. 10(17) 5303-5318
+#
+# Position parameter values (last value must be 0.0)
+1.9
+1.8
+1.7
+1.6
+1.5
+1.4
+1.3
+1.2
+1.1
+0.0
+#
+#
+# Content parameter values (last value must be 0.0)
+0.33
+0.31
+0.29
+0.27
+0.25
+0.23
+0.21
+0.17
+0.00
+#
+#
+# Position probabilities for A,C,G,T respectively
+0.94 0.80 0.90 0.97
+0.68 0.70 0.88 0.97
+0.84 0.70 0.74 0.91
+0.93 0.81 0.64 0.68
+0.58 0.66 0.53 0.69
+0.68 0.48 0.48 0.44
+0.45 0.51 0.27 0.54
+0.34 0.33 0.16 0.20
+0.20 0.30 0.08 0.09
+0.22 0.23 0.08 0.09
+#
+#
+# Content probabilities for A,C,G,T respectively
+0.28 0.82 0.40 0.28
+0.49 0.64 0.54 0.24
+0.44 0.51 0.47 0.39
+0.55 0.64 0.64 0.40
+0.62 0.59 0.64 0.55
+0.49 0.59 0.73 0.75
+0.67 0.43 0.41 0.56
+0.65 0.44 0.41 0.69
+0.81 0.39 0.33 0.51
+0.21 0.31 0.29 0.58
+#
+#
+# Weights for position
+0.26
+0.18
+0.31
+0.33
+#
+#
+# Weights for content
+0.11
+0.12
+0.15
+0.14
+</pre>
+
+<p>
+
+This file is retrievable using EMBOSSDATA.
+
+<p>
+
+Window size is set by default to 200.  The algorithm requires sufficient
+sequence to perform the statistic on.  The original paper suggests a
+minimum window size of 200. 
+
+<p>
+
+Window stepping increment is set by default to 3. This will ensure the resulting
+information remains in frame.
+
+
+<h3>
+    Alternative Data Files
+</h3>
+
+
+
+There are no alternative data files currently in the EMBOSS Data directory, but
+alternative values may be user defined. 
+
+
+
+<H2>
+    Notes
+</H2>
+<p>The TESTCODE statistic reflects the fact that codons are used with unequal frequency and that oligonucleotides and nucleotides tend to be repeated with a periodicity of three.  The original paper reports that the test had been thoroughly proven on 400,000 bases of sequence data: it misclassifies 5% of the regions tested and gives an answer of "No Opinion" one fifth of the time.</p>
+
+<p>
+In the GCG package, the current (version 10.3) TESTCODE application's apparent interpretation of the algorithm is:
+	MAX(A1,A2,A3) / MIN(A1,A2,A3)
+
+The EMBOSS <b>tcode</b> program uses the correct Fickett algorithm equation:
+	MAX(A1,A2,A3) / MIN(A1,A2,A3) + 1
+
+thus any plot using the GCG TESTCODE aplication will be slightly higher than the <b>tcode</b> equivalent.
+</p>
+
+
+
+
+<H2>
+    References
+</H2>
+
+<ol>
+
+<li>
+Fickett, J.W. (1982) Nucleic Acids Research 10(17) pp.5303-5318
+"Recognition of protein coding regions in DNA sequences" 
+
+</ol>
+
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<p>The program will ignore ambiguity codes in the nucleic acid sequence and just accept the four common bases. This is a function of the algorithm, and the data tables.</p>
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+Standard error messages are given for incorrect sequence input.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+
+<!--#include file="inc/tcode.isee" -->
+
+
+<h3>
+    See Elsewhere
+</h3>
+
+TESTCODE - GCG package, Accelrys Inc. Uses a different interpretation
+of the same algorithm. Source code unavailable.
+
+<p>
+
+SPIN - "Uneven positional base preferences" Staden software. 
+Free to academics, versions for both X and Windows platforms.
+
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/ableasby.address" -->
+
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/tcode.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/tcode.comment" -->
+
+</BODY>
+</HTML>
+

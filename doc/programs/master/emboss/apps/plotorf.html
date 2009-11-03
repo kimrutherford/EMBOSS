@@ -1,0 +1,147 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: plotorf
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+plotorf
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/plotorf.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+
+<p><b>plotorf</b> plots potential open reading frames (ORFs) for an input nucleotide sequence.  ORFs in this program are defined as being regions between the specified START and STOP codons.  A graphical representation of where the open reading frames are in all 6 reading frames is shown. The ORFs are displayed as blue boxes.</p>
+
+<H2>
+ Algorithm
+</H2>
+
+<p>ORFs in this program are defined as being regions between START and STOP codons. The default START codon is: <tt>ATG</tt>. The default STOP codons are: <tt>TAA</tt>,<tt>TAG</tt>,<tt>TGA</tt>. You can specify your own set of start and stop codons using the <tt>-start</tt> and <tt>-stop</tt> qualifiers.</p>
+
+
+<H2>
+    Usage
+</H2>
+
+
+<!--#include file="inc/plotorf.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/plotorf.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/plotorf.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+Any nucleic acid sequence.
+
+<!--#include file="inc/plotorf.input" -->
+
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/plotorf.output" -->
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+
+
+<p>
+
+Note that this definition of an ORF would miss those exons in eukaryotic
+genomic sequences which do not contain a START codon.  <b>plotorf</b> is
+only really useful when dealing with prokaryotic or mRNA eukaryotic
+sequences. 
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+<p>ORFs in this program are defined as being regions between START and STOP codons.  This definition would miss those exons in eukaryotic genomic sequences which do not contain a START codon. <b>plotorf</b> is therefore only really useful when dealing with prokaryotic or mRNA eukaryotic sequences.</p>
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/plotorf.isee" -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+<!--#include file="inc/ableasby.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/plotorf.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/plotorf.comment" -->
+
+</BODY>
+</HTML>
+

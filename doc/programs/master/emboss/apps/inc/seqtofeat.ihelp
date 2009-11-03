@@ -1,0 +1,7 @@
+   Mandatory qualifiers:
+  [-sequence]          sequence   Sequence USA
+  [-outfeat]           featout    Output features UFO
+   -pattern            string     Pattern to search for
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)

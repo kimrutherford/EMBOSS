@@ -1,0 +1,19 @@
+<b>Here is a sample session with newcpgreport</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>newcpgreport </b>
+Identify CpG islands in nucleotide sequence(s)
+Input nucleotide sequence(s): <b>tembl:u68037</b>
+Window size [100]: <b></b>
+Shift increment [1]: <b></b>
+Minimum Length [200]: <b></b>
+Minimum observed/expected [0.6]: <b></b>
+Minimum percentage [50.]: <b></b>
+Output file [u68037.newcpgreport]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

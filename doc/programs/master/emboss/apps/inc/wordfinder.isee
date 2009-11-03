@@ -1,0 +1,30 @@
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="matcher.html">matcher</a></td>
+<td>Waterman-Eggert local alignment of two sequences</td>
+</tr>
+
+<tr>
+<td><a href="seqmatchall.html">seqmatchall</a></td>
+<td>All-against-all word comparison of a sequence set</td>
+</tr>
+
+<tr>
+<td><a href="supermatcher.html">supermatcher</a></td>
+<td>Calculate approximate local pair-wise alignments of larger sequences</td>
+</tr>
+
+<tr>
+<td><a href="water.html">water</a></td>
+<td>Smith-Waterman local alignment of sequences</td>
+</tr>
+
+<tr>
+<td><a href="wordmatch.html">wordmatch</a></td>
+<td>Finds regions of identity (exact matches) of two sequences</td>
+</tr>
+
+</table>

@@ -1,0 +1,220 @@
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>(Gapped) protein sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-format</td>
+<td>Display format</td>
+<td><table><tr><td>0</td> <td><i>(Enter your own list of things to display)</i></td></tr><tr><td>1</td> <td><i>(Sequence only)</i></td></tr><tr><td>2</td> <td><i>(Default sequence with features)</i></td></tr><tr><td>3</td> <td><i>(Pretty sequence 4:Baroque)</i></td></tr></table></td>
+<td>2</td>
+</tr>
+
+<tr>
+<td>-things</td>
+<td>Specify a list of one or more code characters in the order in which you wish things to be displayed one above the other down the page. For example if you wish to see things displayed in the order: sequence, ticks line, blank line; then you should enter 'S,T,B'.</td>
+<td><table><tr><td>S</td> <td><i>(Sequence)</i></td></tr><tr><td>B</td> <td><i>(Blank line)</i></td></tr><tr><td>T</td> <td><i>(Ticks line)</i></td></tr><tr><td>N</td> <td><i>(Number ticks line)</i></td></tr><tr><td>F</td> <td><i>(Features)</i></td></tr><tr><td>A</td> <td><i>(Annotation)</i></td></tr></table></td>
+<td>B,N,T,S,A,F</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.showpep</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-uppercase</td>
+<td>Regions to put in uppercase.
+If this is left blank, then the sequence case is left alone.
+A set of regions is specified by a set of pairs of positions.
+The positions are integers.
+They are separated by any non-digit, non-alpha character.
+Examples of region specifications are:
+24-45, 56-78
+1:45, 67=99;765..888
+1,5,8,10,23,45,57,99</td>
+<td>Sequence range</td>
+<td>If this is left blank, then the sequence case is left alone.</td>
+</tr>
+
+<tr>
+<td>-highlight</td>
+<td>Regions to colour if formatting for HTML.
+If this is left blank, then the sequence is left alone.
+A set of regions is specified by a set of pairs of positions.
+The positions are integers.
+They are followed by any valid HTML font colour.
+Examples of region specifications are:
+24-45 blue 56-78 orange
+1-100 green 120-156 red
+A file of ranges to colour (one range per line) can be specified as '@filename'.</td>
+<td>Sequence range</td>
+<td><i>full sequence</i></td>
+</tr>
+
+<tr>
+<td>-annotation</td>
+<td>Regions to annotate by marking.
+If this is left blank, then no annotation is added.
+A set of regions is specified by a set of pairs of positions followed by optional text.
+The positions are integers.
+They are followed by any text (but not digits when on the command-line).
+Examples of region specifications are:
+24-45 new domain 56-78 match to Mouse
+1-100 First part 120-156 oligo
+A file of ranges to annotate (one range per line) can be specified as '@filename'.</td>
+<td>Sequence range</td>
+<td>If this is left blank, then no annotation is added.</td>
+</tr>
+
+<tr>
+<td>-sourcematch</td>
+<td>By default any feature source in the feature table is shown. You can set this to match any feature source you wish to show.
+The source name is usually either the name of the program that detected the feature or it is the feature table (eg: EMBL) that the feature came from.
+The source may be wildcarded by using '*'.
+If you wish to show more than one source, separate their names with the character '|', eg:
+gene* | embl</td>
+<td>Any string is accepted</td>
+<td>*</td>
+</tr>
+
+<tr>
+<td>-typematch</td>
+<td>By default any feature type in the feature table is shown. You can set this to match any feature type you wish to show.
+See http://www3.ebi.ac.uk/Services/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www.expasy.ch/txt/userman.txt for a list of the Swissprot feature types.
+The type may be wildcarded by using '*'.
+If you wish to show more than one type, separate their names with the character '|', eg:
+*UTR | intron</td>
+<td>Any string is accepted</td>
+<td>*</td>
+</tr>
+
+<tr>
+<td>-minscore</td>
+<td>Minimum score of feature to display (see also maxscore)</td>
+<td>Any numeric value</td>
+<td>0.0</td>
+</tr>
+
+<tr>
+<td>-maxscore</td>
+<td>Maximum score of feature to display.
+If both minscore and maxscore are zero (the default), then any score is ignored</td>
+<td>Any numeric value</td>
+<td>0.0</td>
+</tr>
+
+<tr>
+<td>-tagmatch</td>
+<td>Tags are the types of extra values that a feature may have. By default any feature tag in the feature table is shown. You can set this to match any feature tag you wish to show.
+The tag may be wildcarded by using '*'.
+If you wish to show more than one tag, separate their names with the character '|', eg:
+gene | label</td>
+<td>Any string is accepted</td>
+<td>*</td>
+</tr>
+
+<tr>
+<td>-valuematch</td>
+<td>Tag values are the values associated with a feature tag. Tags are the types of extra values that a feature may have. By default any feature tag value in the feature table is shown. You can set this to match any feature tag valueyou wish to show.
+The tag value may be wildcarded by using '*'.
+If you wish to show more than one tag value, separate their names with the character '|', eg:
+pax* | 10</td>
+<td>Any string is accepted</td>
+<td>*</td>
+</tr>
+
+<tr>
+<td>-stricttags</td>
+<td>By default if any tag/value pair in a feature matches the specified tag and value, then all the tags/value pairs of that feature will be displayed. If this is set to be true, then only those tag/value pairs in a feature that match the specified tag and value will be displayed.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-threeletter</td>
+<td>Display protein sequences in three-letter code</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-number</td>
+<td>Number the sequences</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-width</td>
+<td>Width of sequence to display</td>
+<td>Integer 1 or more</td>
+<td>60</td>
+</tr>
+
+<tr>
+<td>-length</td>
+<td>Line length of page (0 for indefinite)</td>
+<td>Integer 0 or more</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-margin</td>
+<td>Margin around sequence for numbering</td>
+<td>Integer 0 or more</td>
+<td>10</td>
+</tr>
+
+<tr>
+<td>-[no]name</td>
+<td>Set this to be false if you do not wish to display the ID name of the sequence</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]description</td>
+<td>Set this to be false if you do not wish to display the description of the sequence</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-offset</td>
+<td>Offset to start numbering the sequence from</td>
+<td>Any integer value</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-html</td>
+<td>Use HTML formatting</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+</table>

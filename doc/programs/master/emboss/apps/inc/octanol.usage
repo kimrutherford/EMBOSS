@@ -1,0 +1,16 @@
+<b>Here is a sample session with octanol</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>octanol </b>
+Draw a White-Wimley protein hydropathy plot
+Input protein sequence: <b>tsw:opsd_human</b>
+Graph type [x11]: <b>ps</b>
+
+Created octanol.ps
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

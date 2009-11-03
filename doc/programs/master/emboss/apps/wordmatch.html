@@ -1,0 +1,210 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: wordmatch
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+
+
+
+
+
+
+<!--#include file="header1.inc" -->
+wordmatch
+<!--#include file="header2.inc" -->
+
+
+
+
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+<!--#include file="inc/wordmatch.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+<p><b>wordmatch</b> finds all regions of identity (exact matches) of a specified minimum size of two input sequences.  These regions are reported in a standard EMBOSS alignment file and in standard EMBOSS sequence feature files.</p>
+
+
+
+
+<H2>
+    Usage
+</H2>
+
+
+<!--#include file="inc/wordmatch.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/wordmatch.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/wordmatch.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+
+<b>wordmatch</b> reads any two sequence USAs of the same type (DNA or protein).
+
+<p>
+
+<!--#include file="inc/wordmatch.input" -->
+
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/alignformats.ihtml" -->
+
+<p>
+
+<!--#include file="inc/wordmatch.output" -->
+
+<p>
+
+The normal 'report' header is output.  It contains the details of the
+program run and the input sequences. 
+
+<p>
+
+The data lines consist of five columns separated by spaces or TAB
+characters.  Each line contains the information on one identical region. 
+The first column is the length of the match.  The second column is the
+name of the first sequence.  The third column is the start and end
+position of the match.  The next two columns are the name and positions
+of the second sequence. 
+
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+<p>wormatch will only report identical regions that are at least as long as the specified wordsize.</p>
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+    0 if successful.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<!--#include file="inc/wordmatch.isee" -->
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+<!--#include file="inc/ilongden.address" -->
+
+
+<H2>
+    History
+</H2>
+
+Completed 27th November 1998.
+
+<!--
+<p>
+<!--#include file="inc/wordmatch.history" -->
+-->
+
+<H2>
+    Target users
+</H2>
+
+
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+
+
+<pre>
+
+</pre>
+
+
+</BODY>
+</HTML>
+

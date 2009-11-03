@@ -1,0 +1,75 @@
+application: makeprotseq [
+  documentation: "Create random protein sequences"
+  groups: "Edit"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  infile: pepstatsfile [
+    standard: "Y"
+    information: "Pepstats program output file (optional)"
+    help: "This file should be a pepstats output file. Protein
+           sequences will be created with the composition in the pepstats
+           output file."
+    nullok: "Y"
+    knowntype: "pepstats output"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  integer: amount [
+    standard: "Y"
+    default: "100"
+    minimum: "1"
+    information: "Number of sequences created"
+  ]
+
+  integer: length [
+    standard: "Y"
+    default: "100"
+    minimum: "1"
+    information: "Length of each sequence"
+  ]
+
+  toggle: useinsert [
+    additional: "Y"
+    information: "Do you want to make an insert"
+    default: "N"
+  ]
+
+  string: insert [
+    standard: "$(useinsert)"
+    information: "Inserted string"
+    help: "String that is inserted into sequence"
+    knowntype: "sequence"
+  ]
+
+  integer: start [
+    standard: "$(useinsert)"
+    information: "Start point of inserted sequence"
+    minimum: "1"
+    default: "1"
+  ]
+
+endsection: required
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  seqoutall: outseq [
+    parameter: "Y"
+    type: "protein"
+    name: "makeseq"
+  ]
+
+endsection: output

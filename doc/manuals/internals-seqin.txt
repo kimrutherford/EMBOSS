@@ -1,0 +1,266 @@
+Sequence Input in EMBOSS
+========================
+
+Introduction
+------------
+
+The core concept in sequence input for EMBOSS is the AjPSeqin object.
+
+This data structure hold the initial definition of an input sequence,
+and the data used during processing.
+
+The start for sequence input is the USA (Uniform Sequence Address)
+which is simply a string containing the specification of the input
+sequence. USAs can refer to a filename or to a database (defined
+through emboss.default). They can include a query by ID or accession
+(or, in principle, description but this is not yet implented). They
+can include the input sequence format for a file (for a database the
+format is part of the database definition).
+
+++USAs are to be extended to query by sequence version, at the request
+of EBI.
+
+USAs have been extended to include the sequence range and (for DNA
+sequences) reverse orientation. These extensions are not yet in
+general use by the user community.
+
+Sequence input can be of 3 types, all using the same USA mechanism.
+
+Sequence: A single sequence
+
+Seqall: One sequence at a time until all input is exhausted
+
+Seqset: All sequences loaded together, like Seqall but with everything
+saved. Intended for tasks such as multiple sequence alignment input.
+
+Access Methods
+--------------
+
+Sequence reading uses a variety of access methods, defined by the USA
+or by teh database definition. These are implemented in a set of
+functions defined in the seqAccess structure in ajseqdb.c
+
+The main method is seqAccessFile (reads a simple buffered file). For details on
+each one, see the appropriate function.
+
+Overview
+--------
+
+Sequence input starts in the ACD processing, where the USA is given as
+input.  See function acdSetSeq for the basic
+features. acdSetSeqall and acdSetSeqset are variants for the other
+input types.
+
+The user-specified USA is stored as the USA (ajSeqinUsa).
+
+Optional qualifiers can be provided by the user, and are stored as follows:
+
+sformat: FormatStr (format can also be part of the USA)
+
+sdbname: Db (only if needed specially for output, dbname is taken from
+the USA)
+
+sopenfile: Filename Rarely used. Should be simply the USA.
+
+sid: Entryname, used if the seuqnece input has no name to save inventing one.
+
+supper: Upper
+slower: Lower
+
+snucleotide: forces type to be nucleotide
+sprotein: forces type to be protein
+
+sbegin: Begin but the USA can provide this, and the user can be prompted
+send: End but the USA can provide this, and the user can be prompted
+sreverse: Rev but the USA can provide this, and the user can be prompted
+sask: Makes ACD processing prompt the user for begin, end (and rev)
+
+ufo: Ufo feature input specification if features are to be loaded
+fformat: FtQuery->Formatstr feature format if not in the Ufo or database
+fopenfile: Ftquery->Filename feature file, for example separate GFF file
+
+When all input is set, acdSetSeq calls ajSeqRead. This happens before
+any prompts for begin, end or reverse as these are applied to the
+sequence after it has been read.
+
+Function calls for sequence input
+---------------------------------
+
+The function calls are extensively traced by ajDebug calls, so runnign
+any application with -debug will trace the steps of sequence
+input. seqret is usually the method of choice (or seqretset for
+sequence set input), but as this uses ajSeqallRead an application that
+reads a single sequence may be preferred for some testing. With 'make
+check' there is an application seqretsingle for this, but any
+application with sequence as the input type will be suitable (as will
+acdc with a test .acd file)
+
+ajSeqAllRead
+------------
+
+Runs as ajSeqRead to read the first sequence. The sequence is stored
+in an AjPSeqall object which is used to read further sequences in
+function ajSeqallNext.
+
+Calls seqRead to read the next sequence. Db and Entryname are set if
+values are set in AjPSeqin.
+
+
+ajSeqsetRead
+------------
+
+Writes an AjPSeqset object by reading all sequence input until
+exhausted and storing the sequences in an AjPList, converted at the
+end into an array.
+
+The code is simple. seqUsaProcess analyses the USA. A loop calling
+ajSeqRead reads each sequence. After reading, each sequence can have
+its type, dbname set from the AjPSeqin saved values.
+
+ajSeqRead
+---------
+
+This is the key function in sequence reading.
+
+This function takes an AjPSeqin object as input, processes the USA and
+any other defined elements (format for example), generates internal
+data structures for database queries, opens some file for input, and
+reads the first sequence.
+
+ajSeqRead maintains the master list of known sequence input
+formats. If no format is specified, sequence raeding can iterate
+through this list until one is successful. This is stored in a static
+variable seqInFormat, which starts as a pointer to the static data
+structure, but can be reallocated and filled with a copy.
+
+There was be a good reason for cloning seqInFormat. It fixes any
+specified default format (EMBOSS_FORMAT variable) using
+seqSetInFormat. This requires write access to the data structure, and
+happens at the start of ajSeqRead.
+
+++ it appears this cloning should be a separate function, also called
+from ajSeqAllRead or in seqRead, if it is useful to both.
+
+ajSeqRead is designed to continue processing after the first sequence
+has been read:
+
+(a) If there is an open file (seqin->Filebuff->File)
+reading continues.
+
+(b) If there is a list of USAs (from an @list type USA) the next USA in
+the list is processed, ready for the next step.
+
+With an open file, a newly processed USA, or simply an unprocesses
+AjPSeqin, processing is passed to seqRead.
+
+The result, assuming success, has its type defined (and, if in
+AjPSeqin, the dbname and entryname) and is returned.
+
+If seqRead fails, the next item in an @list of USAs can be
+processed. Without an @list there was only one USA to process and we
+will simply return failure. A while loop takes care of this step.
+
+seqRead
+-------
+
+Called by ajSeqRead (and by ajSeqallRead).
+
+There are some tricky concepts in sequence reading to be covered here.
+See "Access Methods" above. Access functions are all in ajseqdb.c even
+if they read files rather than databases.
+
+Some access methods read one sequence at a time (seqin->Single is
+set). After the first sequence, seqRead calls the Access function
+again with the same AjPSeqin, for example to process the next sequence
+from a list of query results. The access function will leave AjPSeqin
+with the correct file open, at the correct offset, and with a format
+(if specified for a database) defined.
+
+If a format is specified, seqRead uses only that format, and returns
+sucecss (ajTrue)( if it works, but clears the AjPSeq and returns
+failure (ajFalse) if it fails.
+
+If no format is defined (usually only on the first call), seqRead will
+iterate through the internal format structure seqInFormatDef (cloned
+in ajSeqRead). Formats with Try set are used. The others are dangerous
+in that they could read nonsense input as valid, and are only used if
+specified by the user.
+
+Sequence reading uses seqReadFmt, which returns 4 status codes:
+
+FMT_OK: success, simply return ajTrue
+
+FMT_BADTYPE: Read something, but sequence type failed to match
+specification, for example from database definition. Return ajFalse.
+
+FMT_FAIL: failed to read. Probably a bad format.
+
+FMT_NOMATCH: Read something, but a query specification (usually id)
+failed to match. Can be caused by searching a file until the right
+entry is found. Has set the format, so after the switch block we break
+out of the format test but try again below.
+
+With no format, if the first attempt failed, a check is made on
+seqin->Search. If we are looking for a query match, we can try reading
+further with the same format until we find a match or exhaust the
+input. This simply uses a while loop with a call to seqReadFmt. On
+success, this simply returns ajTrue.
+
+If we are still in seqRead we have failed to find anything. A closing
+ajDebug call explains whether a format was defined, or if the search
+for a format failed.
+
+seqReadFmt
+----------
+
+++ I was afraid someone would ask about this one. Here are the mysteries.
+
+seqReadFmt uses the definitions already set to attempt to read a
+sequence. The function arguments include the sequence format, as an
+index number into the format definitions, which are also passed in as
+they can be the default set or the set rewritten in ajSeqRead.
+
+Most of this function is very simple ... a big if block of what to do
+if a sequence is read by the format-specific input function
+(seqReadXxxxxx) . On failure, the input buffer is reset and FMT_FAIL
+is returned.
+
+++ perhaps this could be reversed to have a small if block of
+processing failure. WOuld be easier to understand.
+
+The function starts by calling the input function for the format (see
+seqInFormatDef which applies even after rewriting of the data
+structure) For example, "fasta" format will be a call to seqReadFasta.
+
+After a sequence has been read, further processing is required (at
+least in some cases) to check whether it is the 'right' sequence. This
+is a call to seqQueryMatch which compares the sequence to the stored
+query data, for example an ID (dbname-id:id or filename:id as the USA)
+
+++ again, reversing the test to put the failure code in an easier
+place would help. This clears the AjPSeq and returns FMT_NOMATCH
+
+If this passes, the AjPSeqin is checked for a feature
+specification. If features are required, they are read using
+ajFeatUfoRead which is a whole new topic in itself. Features are often
+not available, so this is expected to fail silently (for now) if no
+features are found.
+
+A final check is made for the sequnece type (a call to seqTypeCheck),
+and if all is well the sequence begin, and and rev settings (if any)
+are copied from AjPSeqin to the new AjPSeq. If the type fails, this
+returns FMT_BADTYPE.
+
+++ This check should be before format reading
+
+
+
+
+
+
+
+
+
+
+
+

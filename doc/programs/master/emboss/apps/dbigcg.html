@@ -1,0 +1,206 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: dbigcg
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+dbigcg
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/dbigcg.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<b>dbigcg</b> indexes a GCG-format database 
+of one or more files, and builds EMBL CD-ROM format index files. 
+<p>
+
+A GCG-format database consists of *.seq and *.ref files - only the *.seq
+files are used.  The data in these is often compressed. 
+
+<p>
+
+The resulting index-file format is used by the software on
+the EMBL database CD-ROM distribution and by the Staden package in
+addition to EMBOSS, and appears to be the most generally used and
+publicly available index file format for these databases.
+
+                        
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/dbigcg.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/dbigcg.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/dbigcg.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+<b>dbigcg</b> reads in a GCG-format database.
+A GCG-format database consists of *.seq and *.ref files - only the *.seq
+files are used.  The data in these is often compressed. 
+<p>
+<!--#include file="inc/dbigcg.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/dbigcg.output" -->
+<p>
+
+<b>dbigcg</b> creates four index files.  All are binary but with a
+simple format. 
+
+<ul>
+
+<li>division.lkp is the master index file, and has a 300 byte header
+containing the database name and date plus information on the record
+size. This header is followed by one record for each database file,
+giving the full file names for the reference file and sequence file.
+
+<li>entryname.idx is the entry name index. It has the same 300 byte
+header, mainly used to store the record size which will depend on the
+size of the longest entryname in the database. Each entry is stored in
+sorted alphanumeric order so that a binary search can be used to
+efficiently find any record. The record also holds the file number
+from division.lkp and the offsets in the data and sequence files for
+that entry.
+
+<li>acnum.trg holds the accession number information. The file has the
+usual 300 byte header, and a sorted list of record by accession number.
+Each accession number record contains the first record number in acnum.hit
+and the total number of records in acnum.hit so that secondary (duplicated)
+accession numbers can be searched.
+
+<li>acnum.hit is a very simple file. After the usual 300 byte header,
+each record simply holds the record number in entryname.idx. An
+accession number search will use acnum.trg to find a start position
+and number of records to read in this file, and will then simply
+read the entryname.idx records for each entry in turn.
+
+</ul>
+
+<H2>
+    Data files
+</H2>
+
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+<p>
+
+Having created the EMBOSS indices for this file, a database can then be
+defined in the file <b>emboss.defaults</b> as something like:
+
+<p>
+
+<pre>
+DB embl [
+   type: N
+   format: embl
+   method: gcg
+   directory: /data/gcg/gcgembl
+]
+</pre>  
+
+
+
+<h3>Fields Indexed</H3>
+
+By default, <b>dbigcg</b> will index the ID name and the accession
+number (if present).
+
+<br>
+
+If they are present in your database, you may also specify that <b>dbiflat</b>
+should index the Sequence Version and GI number, the Keywords and
+Taxonomy names and the words in the description by using the '-fields'
+qualifier with the appropriate values. 
+
+<H2>
+    References
+</H2>
+
+None.
+
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+It exits with a status of 0 if no errors.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/dbigcg.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/price.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/dbigcg.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/targetadmin.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/dbigcg.comment" -->
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,69 @@
+# Kolaskar AS and Tongaonkar PC (1990) FEBS Letters 276:172-174
+# "A semi-emipirical method for prediction of antigenic determinants
+# on protein antigens"
+#
+# TABLE 1: Occurrence of amino acids in epitopes, proteins and on the surface,
+#         and their antigenic propensity, A(p), values
+#
+# 169 antigenic determinants experimentally determined. Selected those 156
+# which have less than 20 amino acids per determinant (total 2066 residues).
+# Calculated f(Ag) as frequency of occurrence of each residue in antigenic
+# determinants [f(Ag) = Epitope_occurrence/2066].
+#
+# Used Hydrophilicity, Accessibility and Flexibility of Parker JMR, Guo D,
+# Hodges, RS (1986) Biochemistry 25:5425-5432. In a given protein, calculated
+# average for each 7-mer and assigned values to central residue of 7-mer.
+# Residue considered to be on the surface if any of the 7-mer values was above
+# the average for the protein. Used these results to get f(s) frequency of
+# occurrence of amino acids at the surface.
+#
+# Original table covers the 20 naturally occurring amino acids.
+# Values for B, Z, X use weighted averages from Edayhoff.dat
+# and are ignored when calculating totals
+#
+# Antigenic propensity column A(p) = f(Ag)/f(s)
+#
+# f(s) values below were back-calculated from the table in the paper
+#
+# Prediction algorithm:
+#
+# 1. calculate average propensity <A(p)> for each overlapping 7-mer, assign to
+#    central residue (i+3)
+#
+# 2. calculate average for whole protein A(p)av
+#
+# 3. (a) if average for whole protein >= 1.0 then all residues having
+#        <A(p)> >= 1.0 are potentially antigenic.
+#    (b) if average for whole protein <  1.0 then all residues having
+#        <A(p)> > average for whole protein (??? paper has a mangled
+#        formula here :-) are potentially antigenic.
+#
+# 4. Find 6-mers where all residues are selected by step 3 above
+#
+#                                               Antigenic  Surface  Antigenic
+# Amino     -- Occurrence of amino acids in --   frequency frequency propensity
+# Acid       Epitopes      Surface     Protein   f(Ag)    f(s)      A(p)
+  A             135          328         524     0.065    0.061     1.064
+  B             107          334         410     0.052    0.062     0.827
+  C              53           97         186     0.026    0.018     1.412
+  D             118          352         414     0.057    0.066     0.866
+  E             132          401         499     0.064    0.075     0.851
+  F              76          180         365     0.037    0.034     1.091
+  G             116          343         487     0.056    0.064     0.874
+  H              59          138         191     0.029    0.026     1.105
+  I              86          193         437     0.042    0.036     1.152
+  K             158          439         523     0.076    0.082     0.930
+  L             149          308         684     0.072    0.058     1.250
+  M              23           72         152     0.011    0.013     0.826
+  N              94          313         407     0.045    0.058     0.776
+  P             135          328         411     0.065    0.061     1.064
+  Q              99          252         332     0.048    0.047     1.015
+  R             106          314         394     0.051    0.058     0.873
+  S             168          429         553     0.081    0.080     1.012
+  T             141          401         522     0.068    0.075     0.909
+  V             128          239         515     0.062    0.045     1.383
+  W              19           55         103     0.009    0.010     0.893
+  X             118          306         453     0.057    0.057     1.025
+  Y              71          158         245     0.034    0.029     1.161
+  Z             119          342         433     0.058    0.064     0.916
+Total          2066         5340        7944

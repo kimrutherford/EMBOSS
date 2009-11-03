@@ -1,0 +1,25 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: pax.distmat</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Distance Matrix
+---------------
+
+Using the Kimura correction method
+Gap weighting is 0.000000
+
+	    1	    2	    3	    4	    5	    6	    7	    8	    9	    10
+	  0.00	 96.15	137.48	128.72	161.14	160.37	157.55	154.23	164.32	152.68		PAX4_HUMAN 1
+		  0.00	111.86	109.96	156.25	149.70	143.75	135.71	150.60	146.87		PAX6_HUMAN 2
+			  0.00	 26.21	131.54	143.54	162.95	151.39	163.56	159.78		PAX3_HUMAN 3
+				  0.00	145.45	138.76	158.79	149.96	167.26	161.82		PAX7_HUMAN 4
+					  0.00	 44.29	120.84	123.00	131.69	130.22		PAX1_HUMAN 5
+						  0.00	123.56	130.21	131.64	130.17		PAX9_HUMAN 6
+							  0.00	 36.43	 53.12	 64.32		PAX2_HUMAN 7
+								  0.00	 60.88	 73.82		PAX5_HUMAN 8
+									  0.00	 20.37		PX8A_HUMAN 9
+										  0.00		PX8D_HUMAN 10
+</pre>
+</td></tr></table><p>

@@ -1,0 +1,17 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: tabfile.txt</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+abcdefghijklmnopqrstuvwxyz
+a	b	c	d
+ab	cd	ef	g
+abc	def	ghi	j
+abcd	efgh	ijkl	m
+abcde	fghij	klmno	p
+abcdef	ghijkl	mnopqr	s
+abcdefg	hijklmn	opqrstu	v
+abcdefgh	ijklmnop
+</pre>
+</td></tr></table><p>

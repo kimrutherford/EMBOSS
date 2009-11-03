@@ -1,0 +1,12 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: dnagap.fasta</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+&gt;FASTA F10002 FASTA FORMAT DNA SEQUENCE
+ACGT....ACGTACGTACGTACGTACGTACGTACGTACGT
+ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGT
+ACGTACGTACGTACGTACGT
+</pre>
+</td></tr></table><p>

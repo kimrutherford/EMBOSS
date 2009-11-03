@@ -1,0 +1,71 @@
+application: syco [
+  documentation: "Draw synonymous codon usage statictic plot for a
+                  nucleotide sequence"
+  groups: "Nucleic:Codon usage, Nucleic:Gene finding"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  sequence: sequence [
+    parameter: "Y"
+    type: "DNA"
+  ]
+
+  codon: cfile [
+    standard: "Y"
+    help: "Codon usage file"
+  ]
+
+endsection: input
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  integer: window [
+    default: "30"
+    information: "Averaging window"
+  ]
+
+  boolean: uncommon [
+    default: "N"
+    information: "Show common codon usage"
+  ]
+
+  float: minimum [
+    default: ".15"
+    minimum: "0.0"
+    maximum: ".99"
+    information: "Minimum value for a common codon"
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  toggle: plot [
+    information: "Produce plot"
+    default: "Y"
+  ]
+
+  xygraph: graph [
+    standard: "$(plot)"
+    multiple: "3"
+    gdesc: "Gribskov Codon Plot"
+  ]
+
+  outfile: outfile [
+    standard: "@(!$(plot))"
+    knowntype: "syco output"
+    nullok: "$(plot)"
+    nulldefault: "$(plot)"
+  ]
+
+endsection: output

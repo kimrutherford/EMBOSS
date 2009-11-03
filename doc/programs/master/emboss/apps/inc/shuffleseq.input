@@ -1,0 +1,59 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:L48662' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:L48662</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   L48662; SV 1; linear; mRNA; STD; MUS; 366 BP.
+XX
+AC   L48662;
+XX
+DT   04-NOV-1995 (Rel. 45, Created)
+DT   04-MAR-2000 (Rel. 63, Last updated, Version 4)
+XX
+DE   Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antibody heavy
+DE   chain mRNA.
+XX
+KW   .
+XX
+OS   Mus musculus (house mouse)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea;
+OC   Muridae; Murinae; Mus.
+XX
+RN   [1]
+RP   1-366
+RX   DOI; 10.1002/eji.1830260939.
+RX   PUBMED; 8814271.
+RA   Wloch M.K., Alexander A.L., Pippen A.M., Pisetsky D.S., Gilkeson G.S.;
+RT   "Differences in V kappa gene utilization and VH CDR3 sequence among
+RT   anti-DNA from C3H-lpr mice and lupus mice with nephritis";
+RL   Eur. J. Immunol. 26(9):2225-2233(1996).
+XX
+DR   IMGT/LIGM; L48662.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..366
+FT                   /organism="Mus musculus"
+FT                   /strain="C3H/HeJ-lpr/lpr"
+FT                   /mol_type="mRNA"
+FT                   /cell_line="C3H/F2-11"
+FT                   /cell_type="hybridoma"
+FT                   /tissue_type="spleen"
+FT                   /db_xref="taxon:10090"
+XX
+SQ   Sequence 366 BP; 100 A; 90 C; 85 G; 89 T; 2 other;
+     gagnnccagc tgcagcagtc tggacctgag ctggtaaagc ctggggcttc agtgaagatg        60
+     tcctgcaagg cttctggata cacattcact agctatgtta tgcactgggt gaatcagaag       120
+     cctgggcagg gccttgagtg gattggatat attaatcctt acaatgatgg tactaactac       180
+     aatgagaagt tcaaaggcaa ggccacactg acttcagaca aatcctccag cacagcctac       240
+     atggagttca gcagcctgac ctctgaggac tctgcggtct attactgtgc aagaaaaact       300
+     tcctactata gtaacctata ttactttgac tactggggcc aaggcaccac tctcacagtc       360
+     tcctca                                                                  366
+//
+</pre>
+</td></tr></table><p>

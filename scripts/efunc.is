@@ -1,0 +1,373 @@
+#!/bin/env icarus
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#    $RCSfile: efunc.is,v $
+#    $Revision: 1.6 $
+#    $Date: 2004/08/05 13:12:52 $
+#    $Author: rice $
+#
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+$col1 = '"#58081a"'
+
+$fn={
+  ID:id      TY:typ       MO:mod   LB:lib   DE:des
+  PN:par     PA:par       PD:par   PX:par
+  RT:ret     RD:ret       RX:ret
+  CA:cat     CT:cat       CD:cat       CX:cat
+  XX:rest    '//':rest   'other':rest
+}
+
+$code={
+	r:Read w:Write u:Update d:Delete f:Function v:Vararg
+}
+
+$codeb={
+	N:"Null value accepted"
+	E:"Empty value accepted"
+	P:"Pointer updated"
+	C:"Value checked at runtime"
+}
+
+$rules={
+
+# entry is from 'ID name' to '}' at start of line
+
+  entry:       ~ {$In:[file:text] $Out pre $Skip:0}
+             (/ID +/ {$Not} ln)* 
+             (/ID +([A-Za-z0-9_]+)/
+                {$Wrt $entryFip=$Fip $entryName=$1} 
+                ln {$App}
+              ( /ID +/ {$Not} ln{$App})+
+             )? ~
+
+  # fields
+  fields:    ~ {$In:entry $Out $Skip:1 } 
+               (/^[A-Z\/][A-Z\/]/
+                 { $t=$Ct
+                   if:$fn.$t.=="" {
+                      $dp:"+++ unknown: $t in $entryName +++"
+                      $t="other"
+                   }
+                   if:$fn.$t.==$prev $App else $Wrt:$fn.$t
+                   $prev=$fn.$t
+                 } ln {$App})+ (proto body)? ~
+  hdfields:    ~ {$In:entry $Out $Skip:1} 
+               (/^[A-Z\/][A-Z\/]/
+                 { $t=$Ct
+                   if:$fn.$t.=="" {
+                      $dp:"+++ unknown: $t in $entryName +++"
+                      $t="other"
+                   }
+                   if:$fn.$t.==$prev $App else $Wrt:$fn.$t
+                   $prev=$fn.$t
+                 } ln {$App})+~
+  clFields:  ~ {$In:hdfields $Out $Skip:1}
+               /.. */ ln {$Wrt:$Itc} (/.. */ ln {$App})* ~
+
+  proto:   ~ /[ \n\t]*/ /[^{]+/ {$Wrt:proto}~
+  body:	   ~ ln {$Wrt:body} (ln {$App})* ~
+
+  id:      ~ {$In:[fields c:id] $Out}
+             /../ nospace {$Wrt} ~
+  typ:     ~ {$In:[fields c:typ] $Out}
+            /../  nospace {$Wrt $typ=$Ct} ~
+  mod:     ~ {$In:[fields c:mod] $Out}
+             /../ nospace {$Wrt} ~
+  lib:     ~ {$In:[fields c:lib] $Out}
+             /../ nospace {$Wrt} ~
+  des:     ~ {$In:[clFields c:des] $Out}
+             (word {$Uniq} | noword)* ~
+
+#  hdes:    ~ {$In:[fields c:des] $Out}
+#             (/../ (/\n/ {$Wrt:[s:"<p>\n"]} | ln {$Wrt}) )* ~
+
+  par:     ~ {$In:[fields c:par] $Out} 
+             ('PN' ln
+             'PA' nospace {$Wrt:[icode]} nospace {$Wrt:[iname]}
+             (word {$Uniq:[itype]} | noword)* ln
+	     ('PD' (word {$Uniq:[idesc]} | noword)* ln)*
+              'PX' ln)*~
+#	     'PD' ln {$Wrt:[idesc]} ('PD' {$App:[idesc]})* 'PX' ln)*~
+  ret:     ~ {$In:[fields c:ret] $Out} 
+             /RT/ ln {$Wrt} (/RD/ (word {$Uniq} | noword)* ln )*~        
+#             /RT/ ln {$Wrt} (/RD/ ln {$App})* ~        
+  cat:     ~ {$In:[fields c:cat] $Out} 
+             (/CA/ ln {$Wrt} /CT/ ln {$Wrt} (/CD/ (word {$Uniq} | noword)* ln )*
+              'CX' ln)* 
+	   ~        
+
+  text:    ~ (/\n/)?
+             (ln {$App})* ~
+  endcc:   ~ /[^\n]*[\\*][\/][^\n]*\n/ ~
+
+  # indexing
+  btext:   ~ {$In:[fields c:body] $Out}
+             (/[a-zA-Z0-9_]+/ {$Uniq} | /./)+ ~
+  retType: ~ {$In:[fields c:proto] $Out}
+             /((struct|static)[ \t]+)?[a-zA-Z0-9_]+/ {$Wrt} ~
+
+  dlines: ~ x{$dtxt={}} (/../ ln {if:$Ct.trim:' \n\t' .=="" $dtxt.app:"<p>\n"
+                              else $dtxt.app:$Ct} )* ~
+  rlines: ~ x{$rtxt={}} (/RD/ ln {if:$Ct.trim:' \n\t' .=="" $rtxt.app:"<p>\n"
+                              else $rtxt.app:$Ct} )* 
+            /RX/ ln ~
+
+  # html display
+  
+  h_pnum: ~ {$In:[fields c:pnum t:html]}
+             /.*/ {$Rep:""} ~
+  h_lib: ~ {$In:[fields c:lib t:html]}
+             /.. +([^\n]*).*/ {$showlib = $1 $Rep:""}  ~
+  h_mod: ~ {$In:[fields c:mod t:html]}
+             /.. +([^\n]*).*/ {$showmod = $1 $Rep:""}  ~
+  h_typ: ~ {$In:[fields c:typ t:html]}
+             /.. +([^\n]*).*/ {$showtyp = $1 $Rep:""}  ~
+  h_rest: ~ {$In:[fields c:rest t:html]}
+             /.*/ {$Rep:""}  ~
+  h_id: ~ {$In:[fields c:id t:html]}
+             /.*/ {$Rep:
+                    |<TR>
+                    |<TD VALIGN=TOP bgcolor=$col1><FONT color="#FFFFFF">
+                    |<B>Name</B></TD><TD>
+                    |<B>($entry.name)</B>
+                    |($Alt:[$showtyp.=="static" t:" (Hidden function)"])
+                    |($Alt:[$showtyp.=="macro" t:" (Macro)"])
+                    |<P>
+                    |Source file: <B>$showlib/$showmod\.c</B>
+                  }
+           ~
+  h_des: ~ {$In:[fields c:des t:html]}
+               dlines   {$Rep:
+                    |<TR>
+                    |<TD VALIGN=TOP bgcolor=$col1><FONT color="#FFFFFF">
+                    |<B>Description</B></TD><TD width=500>
+                    |($Foreach:[$ds in:$dtxt s:@"$ds"])
+                    |</TD></TR>
+                  }
+           ~
+  params:  ~ x{$args={}}
+            ('PN' ln {$tmp={} } 
+             'PA' sp writecode {$tmp.write=$write} sp nospace {$tmp.name=$Ct}
+                  sp rest {$tmp.type=$Ct} /\n/ {$tmp.comment=""}
+            ('PD' ln {if:$Ct.=="" $StrApp:[$tmp.comment s:"<p>\n"]
+                      else $StrApp:[$tmp.comment s:$Ct]})*
+             'PX' ln {$args.app:$tmp} )* ~
+
+  categories:  ~ x{$cats={}}
+            ('CA' sp {$tmp={} } ln {$tmp.type=$Ct $tmp.comment=""}
+             'CT' sp ln {$tmp.data=$Ct}
+            ('CD' ln {if:$Ct.=="" $StrApp:[$tmp.comment s:"<p>\n"]
+                      else $StrApp:[$tmp.comment s:$Ct]})*
+             'CX' ln {$cats.app:$tmp} )* ~
+
+# Productions for links internally, and for links to EDATA.
+# These are for links, so we need to use $Uniq to avoid duplicate links.
+
+# The function references have at least one capital
+# (or we could try all words?)
+
+# We ignore macros for now - some of them translate to functions (AJNEW), some
+# are pure code (MAJSTRSTR for example) - neither makes sense for links,
+# but the code ones can count as missed links so be careful where there
+# is a macro for a function (ajFatal to ajMessSetErr for example).
+
+  ref_func:    ~ {$In:[fields c:body] $Out pre {$Request:typ} }
+		 (/([a-zA-Z0-9]*[A-Z_][a-zA-Z0-9_]+) *([,\}(])/
+		   {if:$typ.=="list" {if:$2.!="(" {$Uniq:[s:$1]} }
+		       else {if:$2.!="\}" {$Uniq:[s:$1]} } } |
+		     /[a-zA-Z0-9_]+/ | /./ )+
+	       ~
+#The datatype references start with a capital letter
+
+  ref_data:    ~ {$In:[fields c:{proto body}] $Out}
+		 (/[A-Z]+[a-zA-Z0-9_]+/  {$Uniq} |
+		   /[a-zA-Z0-9_]+/ | /./)+
+	       ~
+
+  writecode: ~ (/([wrdu])([A-Za-z]*)/ {$write=$code.$1
+                 if:$2!=""  $write.app:" ($codeb.$2)"}
+               | word {$write="$Ct"} ) ~
+  sp:  ~ /[ \t]*/ ~
+  h_input: ~ {$In:[fields c:par t:html]}
+             params {$Rep:
+                        |<TR>
+                        |<TD VALIGN=TOP bgcolor=$col1><FONT color="#FFFFFF">
+                        |<B>Input</B></TD><TD>
+                        |<TABLE BORDER CELLPADDING=4 BGCOLOR="#FFFFF0">
+                        | <TR BGCOLOR="#d3b5b5">
+                        |  <TH><FONT SIZE=-1>Type</TH>
+                        |  <TH><FONT SIZE=-1>Name</TH>
+                        |  <TH><FONT SIZE=-1>R/W</TH>
+                        |  <TH><FONT SIZE=-1>Comment</TH>
+              		|($Foreach:[$tmp in:$args s:@
+			     |<TR>
+			     | <TD VALIGN=TOP>($tmp.type)</TD>
+			     | <TD VALIGN=TOP>($tmp.name)</TD>
+			     | <TD VALIGN=TOP>($Alt:[$tmp.write.==""
+                                                t:'&nbsp;' f:$tmp.write])</TD>
+			     | <TD VALIGN=TOP>($Alt:[$tmp.comment.trim.==""
+                                               t:'&nbsp;' f:$tmp.comment])</TD>
+			     |</TR>
+			   ])
+                        |</TR>
+                        |</TABLE>
+                        |</TD></TR>
+                  }
+           ~
+  h_ret:   ~ {$In:[fields c:ret t:html]}
+             'RT' {$Rep:""}
+             ln {$Rep:
+                     |<TR>
+                     |<TD VALIGN=TOP bgcolor=$col1><FONT color="#FFFFFF">
+                     |<B>Returns</B></TD><TD>
+                     |<TABLE BORDER CELLPADDING=4 BGCOLOR="#FFFFF0">
+                     | <TR BGCOLOR="#d3b5b5">
+                     |  <TH><FONT SIZE=-1>Type</TH>
+                     |  <TH><FONT SIZE=-1>Comment</TH>
+                     |</TR><TR><TD>
+                     |<B>$Ct</B><P></TD><TD>
+                  }
+             rlines {$Rep:
+                     |($Foreach:[$rs in:$rtxt s:@"$rs"])
+                     |&nbsp;</TD></TR></TABLE>
+                  } ~
+  h_cat:   ~ {$In:[fields c:cat t:html]}
+             categories {$Rep:
+                        |<TR>
+                        |<TD VALIGN=TOP bgcolor=$col1><FONT color="#FFFFFF">
+                        |<B>Category</B></TD><TD>
+                        |<TABLE BORDER CELLPADDING=4 BGCOLOR="#FFFFF0">
+                        | <TR BGCOLOR="#d3b5b5">
+                        |  <TH><FONT SIZE=-1>Type</TH>
+                        |  <TH><FONT SIZE=-1>Data</TH>
+                        |  <TH><FONT SIZE=-1>Comment</TH>
+              		|($Foreach:[$tmp in:$cats s:@
+			     |<TR>
+			     | <TD VALIGN=TOP>($tmp.type)</TD>
+			     | <TD VALIGN=TOP>($tmp.data)</TD>
+			     | <TD VALIGN=TOP>($Alt:[$tmp.comment.trim.==""
+                                               t:'&nbsp;' f:$tmp.comment])</TD>
+			     |</TR>
+			   ])
+                        |</TR>
+                        |</TABLE>
+                        |</TD></TR>
+                  }
+           ~
+  h_called:~ {$In:[fields c:proto t:html]}
+             (/[a-zA-Z0-9]*[A-Z_][a-zA-Z0-9_]+/  {
+                $q=$Query:"[efunc-id:$Ct]"
+                if:$q.size>0 {	$sup="" $sdn=""  # we have a known function
+		   $qup = $Query:"[efunc-id:$Ct]>efunc_up"
+		   if:$qup.size>0 {$sup=
+		    |<A HREF="wgetz?($ParStr:userIdOpt)\
+		    |[efunc-id:$Ct]%3eefunc_up+-page+qResult">
+		    |<IMG BORDER=0 SRC=($ParStr:imgdir)/up.gif 
+		    |ALIGN=middle  ALT = "Up" WIDTH="16" HEIGHT="14"></A>  
+		   }
+		   $qdn = $Query:"[efunc-id:$Ct]>efunc_down"
+		   if:$qdn.size>0 {$sdn=
+		    | <A HREF="wgetz?($ParStr:userIdOpt)\
+		    |[efunc-id:$Ct]%3eefunc_down+-page+qResult">
+		    |<IMG BORDER=0 SRC=($ParStr:imgdir)/down.gif 
+		    |ALIGN=middle  ALT = "Down" WIDTH="16" HEIGHT="14"></A> 
+		   }
+		   $Rep:"$sup$Ct$sdn" #$Hlink:[efuncR p:$Ct]$sdn"
+		 }
+                else {$q=$Query:"[edata-alias:$Ct]"
+                if:$q.size>0 {$Rep:$Hlink:[edataR p:$Ct]}}
+              } | /./)+
+           ~
+  h_proto: ~ {$In:[fields c:proto t:html]}
+             /.*/ {$Rep:
+                     |<TR>
+                     |<TD VALIGN=TOP bgcolor=$col1><FONT color="#FFFFFF">
+                     |<B>Prototype</B></TD><TD>
+                     |<FONT SIZE=+1><tt>($Ct.trim);</tt></FONT>
+                     |</TD></TR>
+                  } ~
+  h_body:  ~ { $In:[fields c:body t:html] 
+               $Rep:
+                    |<TR>
+                    |<TD VALIGN=TOP bgcolor="#58081a"><FONT color="#FFFFFF">
+                    |<B>Body</B></TD><TD>
+                    |<TABLE BORDER=5 BGCOLOR="#FFFFF0"><TR><TD><PRE>
+                    |($Ct.trim:'\n')
+                    |</TD></TR></TABLE>
+                    |</TD></TR>
+             }
+             (/[^<>]+/ | '>' {$Rep:'&gt;'} | '<' {$Rep:'&lt;'})*
+           ~
+  h_bodycom: ~ { $In:[fields c:body t:html]}
+             (/[^\/"a-z<\n]+/ | tag | code | comment 
+              {$Rep:"<I><FONT COLOR=\"#107000\">$Ct</FONT></I>"} | 
+               /\n#[^\n]+/ {$Rep:"<FONT COLOR=\"#F04000\">$Ct</FONT>"} | 
+              /(return|else|while|for|switch|do|if|break|continue|case|default)([^a-zA-Z0-9_])/ 
+	      {$Rep:"<B><FONT COLOR=\"#FF0000\">$1</FONT></B>$2"} | 
+              /"([^"\\]+|\\\\.)*"/ 
+              {$Rep:"<i><FONT COLOR=\"#442200\">$Ct</FONT></I>"} |
+              /./)+
+           ~
+  rest:    ~ (/[^\n]*/)? ~
+  tag:     ~ /<[a-zA-Z][^>]+>/ ~
+  code:    ~ /&[a-z]+;/ ~
+  comment: ~ '/*' /([^*]+|\\*[^\/])*/ '*/' ~
+  h_desFunc:   ~ { $In:[fields c:{des} t:html]}
+             (comment | /[a-zA-Z0-9]*[A-Z_][a-zA-Z0-9_]+/  {
+                $q=$Query:"[efunc-id:$Ct]"
+                if:$q.size>0 {$Rep:$Hlink:[efuncR p:$Ct]}
+                else {$q=$Query:"[edata-alias:$Ct]"
+                if:$q.size>0 {$Rep:$Hlink:[edataR p:$Ct]}}
+# $q.delete
+              } | /./)+
+           ~
+           
+  h_desFunc2:   ~ { $In:[fields c:body t:html]}
+             (comment | /([a-zA-Z0-9]*[A-Z_][a-zA-Z0-9_]+)( *[(])/
+		      { $q=$Query:"[efunc-id:$1]"
+		      if:$q.size>0 {$Rep:"$Hlink:[efuncR p:$1]$2"} }
+		 | /[A-Z][a-zA-Z0-9_]+/
+		      { $q=$Query:"[edata-alias:$Ct]"
+		      if:$q.size>0 {$Rep:$Hlink:[edataR p:$Ct]}}
+# $q.delete
+               | /./)+
+           ~
+           
+  # other stuff
+  ln:      ~ /[^\n]*\n/ ~
+  word:      ~ /[^" ,;:()\/=\n.-]+/ ~
+  noword:      ~ /[" ,;:()\/=.-]+/ ~
+  space: ~ /[ \t\n]+/ ~
+  nospace:	~ /[^ \t\n]+/ ~
+}
+
+if:$TestMode {
+  $job = $Job:[prod:$rules skip:" \t"
+              fileName:'tfunc.dat']
+  while:$job.hasInput {
+#    $job.tokens:[entry print:y]
+#    $job.tokens:[fields print:y]
+#    $job.tokens:[clFields print:y]
+    $job.tokens:[id print:y]
+#    $job.tokens:[typ print:y]
+#    $job.tokens:[clFields print:y]
+#    $job.tokens:[fields code:des print:y]
+#    $job.tokens:[des print:y]
+#    $job.tokens:[fields code:par print:y]
+#    $job.tokens:[clFields code:par print:y]
+#    $job.tokens:[ret print:y]
+    $job.tokens:[fields code:proto print:y]
+    $job.tokens:[fields code:body print:y]
+#    $job.tokens:[parts print:y]
+##    $job.tokens:[parts code:proto print:y]
+##    $job.tokens:[parts code:body print:y]
+#    $job.tokens:[input print:y]
+#    $job.tokens:[ret print:y]
+#    $job.tokens:[fields code:endcc print:y]
+#    $job.tokens:[body print:y]
+#    $job.tokens:[par print:y]
+    $job.tokens:[ref_data print:y]
+    $job.tokens:[ref_func print:y]
+    $job.reset
+  }
+}

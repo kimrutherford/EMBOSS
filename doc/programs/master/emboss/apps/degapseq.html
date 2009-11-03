@@ -1,0 +1,145 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: degapseq
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+degapseq
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/degapseq.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<p><b>degapseq</b> reads one or more sequences and writes them out again but stripped of any non-alphabetic characters.  It's main purpose is to remove gap characters from aligned sequences, but it will also remove such things as the symbol for translation STOP ('*') in a protein sequence.</p>
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/degapseq.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/degapseq.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/degapseq.itable" -->
+
+<H2>
+    Input file format
+</H2>
+Any valid input sequence USA is allowed.
+
+<p>
+
+The input sequence can be nucleic or protein.
+
+<p>
+
+The input sequence can be gapped or ungapped.
+
+<p>
+<!--#include file="inc/degapseq.input" -->
+
+
+<H2>
+    Output file format
+</H2>
+
+The output is a sequence with no gaps.
+
+<p>
+<!--#include file="inc/degapseq.output" -->
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+<p>There are many different formats for storing molecular sequences in files. Some formats are specifically for aligned sequences, where gaps are inserted into the sequences for purposes of alignment. Gaps are indicated with different characters depending on the format in question, but commonly include '.', '-' and '~'.  Some formats use more than one type of character to indicate different types of gaps, for example gaps at the sequence ends, internal gaps, gaps inserted by a program and gaps inserted manually by a person editing the alignment may all be denoted with different characters.</p>
+
+<p>EMBOSS uses the dash character ('-') only to indicate gaps. When an EMBOSS program reads a sequence with gaps, all gap characters are changed internally to a dash ('-').  Thus any distinguishing characters for different gap types are convered to a '-' on output.</p>
+
+
+
+<H2>
+    References
+</H2>
+
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+It will remove '*' characters from protein sequences as well as removing
+the gap characters. 
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+
+<!--#include file="inc/degapseq.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/gwilliam.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/degapseq.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/degapseq.comment" -->
+
+
+</BODY>
+</HTML>
+

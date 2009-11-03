@@ -1,0 +1,47 @@
+application: noreturn [
+  documentation: "Remove carriage return from ASCII files"
+  groups: "Edit"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  infile: infile [
+    parameter: "Y"
+    knowntype: "ascii text"
+    information: "ASCII text file"
+  ]
+
+endsection: input
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  list: system [
+    information: "Target operating system for end-of-line
+                  format"
+    values: "unix:Unix/Linux systems;pc:Windows/DOS;mac:Apple
+             Macintosh"
+    default: "unix"
+    minimum: "1"
+    maximum: "1"
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    parameter: "Y"
+    knowntype: "ascii text"
+    information: "ASCII text output file"
+  ]
+
+endsection: output

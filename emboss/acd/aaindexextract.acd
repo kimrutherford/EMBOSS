@@ -1,0 +1,20 @@
+application: aaindexextract [
+  documentation: "Extract amino acid property data from AAINDEX"
+  groups: "Utils:Database creation"
+  gui: "no"
+  batch: "no"
+  cpu: "low"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  infile: infile [
+    information: "AAINDEX database file"
+    parameter: "Y"
+    knowntype: "aaindex database"
+  ]
+
+endsection: input

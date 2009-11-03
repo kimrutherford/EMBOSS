@@ -1,0 +1,28 @@
+application: cusp [
+  documentation: "Create a codon usage table from nucleotide sequence(s)"
+  groups: "Nucleic:Codon usage"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "DNA"
+  ]
+
+endsection: input
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    parameter: "Y"
+    knowntype: "cusp output"
+  ]
+
+endsection: output

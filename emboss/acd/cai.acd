@@ -1,0 +1,33 @@
+application: cai [
+  documentation: "Calculate codon adaptation index"
+  groups: "Nucleic:Codon usage"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: seqall [
+    parameter: "Y"
+    type: "DNA"
+  ]
+
+  codon: cfile [
+    standard: "Y"
+    default: "Eyeast_cai.cut"
+  ]
+
+endsection: input
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    parameter: "Y"
+    knowntype: "cai output"
+  ]
+
+endsection: output

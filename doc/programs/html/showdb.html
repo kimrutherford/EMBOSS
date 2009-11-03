@@ -1,0 +1,1087 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: showdb
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+showdb
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
+    Function
+</H2>
+Displays information on configured databases
+
+<H2>
+    Description
+</H2>
+
+<p><b>showdb</b> displays a table with the names, contents and access methods of the sequence databases configured for your EMBOSS installation.</p>
+
+
+
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with showdb</b>
+<p>
+Display information on the currently available databases: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showdb </b>
+Displays information on configured databases
+
+# Name           Type ID  Qry All Comment
+# ============== ==== ==  === === =======
+twp              P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM index
+qapblast         P    OK  OK  OK  BLAST swissnew
+qapblastall      P    OK  OK  OK  BLAST swissnew, all fields indexed
+qapblastsplit    P    OK  OK  OK  BLAST swissnew split in 5 files
+qapblastsplitexc P    OK  OK  OK  BLAST swissnew split in 5 files, not file 02
+qapblastsplitinc P    OK  OK  OK  BLAST swissnew split in 5 files, only file 02
+qapfasta         P    OK  OK  OK  FASTA file swissnew entries
+qapflat          P    OK  OK  OK  SpTrEmbl flatfile
+qapflatall       P    OK  OK  OK  SpTrEmbl flatfiles, all fields indexed
+qapir            P    OK  OK  OK  PIR
+qapirall         P    OK  OK  OK  PIR
+qapirinc         P    OK  OK  OK  PIR
+qapxfasta        P    OK  OK  OK  FASTA file swissnew entries
+qapxflat         P    OK  OK  OK  Swissnew flatfiles
+qaxpir           P    OK  OK  OK  PIR
+qaxpirall        P    OK  OK  OK  PIR
+qaxpirinc        P    OK  OK  OK  PIR
+tpir             P    OK  OK  OK  PIR using NBRF access for 4 files
+tsw              P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
+tswnew           P    OK  OK  OK  SpTrEmbl as 3 files in native format with EMBL CD-ROM index
+genbanksrs       N    OK  -   -   Genbank IDs
+qanfasta         N    OK  OK  OK  FASTA file EMBL rodents
+qanfastaall      N    OK  OK  OK  FASTA file EMBL rodents, all fields indexed
+qanflat          N    OK  OK  OK  EMBL flatfiles
+qanflatall       N    OK  OK  OK  EMBL flatfiles
+qanflatexc       N    OK  OK  OK  EMBL flatfiles, no rodent file
+qanflatinc       N    OK  OK  OK  EMBL flatfiles, only rodent file
+qangcg           N    OK  OK  OK  GCG format EMBL
+qangcgall        N    OK  OK  OK  GCG format EMBL
+qangcgexc        N    OK  OK  OK  GCG format EMBL without prokaryotes
+qangcginc        N    OK  OK  OK  GCG format EMBL only prokaryotes
+qanxfasta        N    OK  OK  OK  FASTA file EMBL rodents
+qanxfastaall     N    OK  OK  OK  FASTA file EMBL rodents, all fields indexed
+qanxflat         N    OK  OK  OK  EMBL flatfiles
+qanxflatall      N    OK  OK  OK  EMBL flatfiles, all fields indexed
+qanxflatexc      N    OK  OK  OK  EMBL flatfiles, no rodent file
+qanxflatinc      N    OK  OK  OK  EMBL flatfiles, only rodent file
+qanxgcg          N    OK  OK  OK  GCG format EMBL
+qanxgcgall       N    OK  OK  OK  GCG format EMBL
+qanxgcgexc       N    OK  OK  OK  GCG format EMBL without prokaryotes
+qanxgcginc       N    OK  OK  OK  GCG format EMBL only prokaryotes
+qapirexc         N    OK  OK  OK  PIR
+qasrswww         N    OK  -   -   Remote SRS web server
+qawfasta         N    OK  OK  OK  FASTA file wormpep entries
+qawxfasta        N    OK  OK  OK  FASTA file wormpep entries
+qaxpirexc        N    OK  OK  OK  PIR
+tembl            N    OK  OK  OK  EMBL in native format with EMBL CD-ROM index
+temblall         N    -   -   OK  EMBL in native format with EMBL CD-ROM index
+temblrest        N    -   -   OK  EMBL in native format with EMBL CD-ROM index
+temblvrt         N    -   -   OK  EMBL in native format with EMBL CD-ROM index
+testdb           N    OK  OK  OK  test sequence data
+tgb              N    OK  -   -   Genbank IDs
+tgenbank         N    OK  OK  OK  GenBank in native format with EMBL CD-ROM index
+
+</pre></td></tr></table><p>
+<p>
+<p>
+<p>
+<b>Example 2</b>
+<p>
+Write the results to a file: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showdb -outfile showdb.out </b>
+Displays information on configured databases
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 3</b>
+<p>
+Display information on one explicit database: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showdb -database tsw </b>
+Displays information on configured databases
+
+# Name         Type ID  Qry All Comment
+# ============ ==== ==  === === =======
+tsw            P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.3">Go to the input files for this example</a><br><p>
+<p>
+<b>Example 4</b>
+<p>
+Display information on the databases formatted in HTML: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showdb -html </b>
+Displays information on configured databases
+
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Name</th><th>Type</th><th>ID</th><th>Qry</th><th>All</th><th>Comment</th></tr>
+<tr><td>twp</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL new in native format with EMBL CD-ROM index</td></tr>
+<tr><td>qapblast</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>BLAST swissnew</td></tr>
+<tr><td>qapblastall</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>BLAST swissnew, all fields indexed</td></tr>
+<tr><td>qapblastsplit</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>BLAST swissnew split in 5 files</td></tr>
+<tr><td>qapblastsplitexc</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>BLAST swissnew split in 5 files, not file 02</td></tr>
+<tr><td>qapblastsplitinc</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>BLAST swissnew split in 5 files, only file 02</td></tr>
+<tr><td>qapfasta</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>FASTA file swissnew entries</td></tr>
+<tr><td>qapflat</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>SpTrEmbl flatfile</td></tr>
+<tr><td>qapflatall</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>SpTrEmbl flatfiles, all fields indexed</td></tr>
+<tr><td>qapir</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>PIR</td></tr>
+<tr><td>qapirall</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>PIR</td></tr>
+<tr><td>qapirinc</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>PIR</td></tr>
+<tr><td>qapxfasta</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>FASTA file swissnew entries</td></tr>
+<tr><td>qapxflat</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>Swissnew flatfiles</td></tr>
+<tr><td>qaxpir</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>PIR</td></tr>
+<tr><td>qaxpirall</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>PIR</td></tr>
+<tr><td>qaxpirinc</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>PIR</td></tr>
+<tr><td>tpir</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>PIR using NBRF access for 4 files</td></tr>
+<tr><td>tsw</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>Swissprot native format with EMBL CD-ROM index</td></tr>
+<tr><td>tswnew</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>SpTrEmbl as 3 files in native format with EMBL CD-ROM index</td></tr>
+<tr><td>genbanksrs</td><td>N</td><td>OK  </td><td>-   </td><td>-   </td><td>Genbank IDs</td></tr>
+<tr><td>qanfasta</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>FASTA file EMBL rodents</td></tr>
+<tr><td>qanfastaall</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>FASTA file EMBL rodents, all fields indexed</td></tr>
+<tr><td>qanflat</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL flatfiles</td></tr>
+<tr><td>qanflatall</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL flatfiles</td></tr>
+<tr><td>qanflatexc</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL flatfiles, no rodent file</td></tr>
+<tr><td>qanflatinc</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL flatfiles, only rodent file</td></tr>
+<tr><td>qangcg</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>GCG format EMBL</td></tr>
+<tr><td>qangcgall</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>GCG format EMBL</td></tr>
+<tr><td>qangcgexc</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>GCG format EMBL without prokaryotes</td></tr>
+<tr><td>qangcginc</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>GCG format EMBL only prokaryotes</td></tr>
+<tr><td>qanxfasta</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>FASTA file EMBL rodents</td></tr>
+<tr><td>qanxfastaall</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>FASTA file EMBL rodents, all fields indexed</td></tr>
+<tr><td>qanxflat</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL flatfiles</td></tr>
+<tr><td>qanxflatall</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL flatfiles, all fields indexed</td></tr>
+<tr><td>qanxflatexc</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL flatfiles, no rodent file</td></tr>
+<tr><td>qanxflatinc</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL flatfiles, only rodent file</td></tr>
+<tr><td>qanxgcg</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>GCG format EMBL</td></tr>
+<tr><td>qanxgcgall</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>GCG format EMBL</td></tr>
+<tr><td>qanxgcgexc</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>GCG format EMBL without prokaryotes</td></tr>
+<tr><td>qanxgcginc</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>GCG format EMBL only prokaryotes</td></tr>
+<tr><td>qapirexc</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>PIR</td></tr>
+<tr><td>qasrswww</td><td>N</td><td>OK  </td><td>-   </td><td>-   </td><td>Remote SRS web server</td></tr>
+<tr><td>qawfasta</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>FASTA file wormpep entries</td></tr>
+<tr><td>qawxfasta</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>FASTA file wormpep entries</td></tr>
+<tr><td>qaxpirexc</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>PIR</td></tr>
+<tr><td>tembl</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL in native format with EMBL CD-ROM index</td></tr>
+<tr><td>temblall</td><td>N</td><td>-   </td><td>-   </td><td>OK  </td><td>EMBL in native format with EMBL CD-ROM index</td></tr>
+<tr><td>temblrest</td><td>N</td><td>-   </td><td>-   </td><td>OK  </td><td>EMBL in native format with EMBL CD-ROM index</td></tr>
+<tr><td>temblvrt</td><td>N</td><td>-   </td><td>-   </td><td>OK  </td><td>EMBL in native format with EMBL CD-ROM index</td></tr>
+<tr><td>testdb</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>test sequence data</td></tr>
+<tr><td>tgb</td><td>N</td><td>OK  </td><td>-   </td><td>-   </td><td>Genbank IDs</td></tr>
+<tr><td>tgenbank</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>GenBank in native format with EMBL CD-ROM index</td></tr>
+</table>
+
+</pre></td></tr></table><p>
+<p>
+<p>
+<p>
+<b>Example 5</b>
+<p>
+Display protein databases only: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showdb -nonucleic </b>
+Displays information on configured databases
+
+# Name           Type ID  Qry All Comment
+# ============== ==== ==  === === =======
+twp              P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM index
+qapblast         P    OK  OK  OK  BLAST swissnew
+qapblastall      P    OK  OK  OK  BLAST swissnew, all fields indexed
+qapblastsplit    P    OK  OK  OK  BLAST swissnew split in 5 files
+qapblastsplitexc P    OK  OK  OK  BLAST swissnew split in 5 files, not file 02
+qapblastsplitinc P    OK  OK  OK  BLAST swissnew split in 5 files, only file 02
+qapfasta         P    OK  OK  OK  FASTA file swissnew entries
+qapflat          P    OK  OK  OK  SpTrEmbl flatfile
+qapflatall       P    OK  OK  OK  SpTrEmbl flatfiles, all fields indexed
+qapir            P    OK  OK  OK  PIR
+qapirall         P    OK  OK  OK  PIR
+qapirinc         P    OK  OK  OK  PIR
+qapxfasta        P    OK  OK  OK  FASTA file swissnew entries
+qapxflat         P    OK  OK  OK  Swissnew flatfiles
+qaxpir           P    OK  OK  OK  PIR
+qaxpirall        P    OK  OK  OK  PIR
+qaxpirinc        P    OK  OK  OK  PIR
+tpir             P    OK  OK  OK  PIR using NBRF access for 4 files
+tsw              P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
+tswnew           P    OK  OK  OK  SpTrEmbl as 3 files in native format with EMBL CD-ROM index
+
+</pre></td></tr></table><p>
+<p>
+<p>
+<p>
+<b>Example 6</b>
+<p>
+Display the information with no headings: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showdb -noheading </b>
+Displays information on configured databases
+
+twp              P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM index
+qapblast         P    OK  OK  OK  BLAST swissnew
+qapblastall      P    OK  OK  OK  BLAST swissnew, all fields indexed
+qapblastsplit    P    OK  OK  OK  BLAST swissnew split in 5 files
+qapblastsplitexc P    OK  OK  OK  BLAST swissnew split in 5 files, not file 02
+qapblastsplitinc P    OK  OK  OK  BLAST swissnew split in 5 files, only file 02
+qapfasta         P    OK  OK  OK  FASTA file swissnew entries
+qapflat          P    OK  OK  OK  SpTrEmbl flatfile
+qapflatall       P    OK  OK  OK  SpTrEmbl flatfiles, all fields indexed
+qapir            P    OK  OK  OK  PIR
+qapirall         P    OK  OK  OK  PIR
+qapirinc         P    OK  OK  OK  PIR
+qapxfasta        P    OK  OK  OK  FASTA file swissnew entries
+qapxflat         P    OK  OK  OK  Swissnew flatfiles
+qaxpir           P    OK  OK  OK  PIR
+qaxpirall        P    OK  OK  OK  PIR
+qaxpirinc        P    OK  OK  OK  PIR
+tpir             P    OK  OK  OK  PIR using NBRF access for 4 files
+tsw              P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
+tswnew           P    OK  OK  OK  SpTrEmbl as 3 files in native format with EMBL CD-ROM index
+genbanksrs       N    OK  -   -   Genbank IDs
+qanfasta         N    OK  OK  OK  FASTA file EMBL rodents
+qanfastaall      N    OK  OK  OK  FASTA file EMBL rodents, all fields indexed
+qanflat          N    OK  OK  OK  EMBL flatfiles
+qanflatall       N    OK  OK  OK  EMBL flatfiles
+qanflatexc       N    OK  OK  OK  EMBL flatfiles, no rodent file
+qanflatinc       N    OK  OK  OK  EMBL flatfiles, only rodent file
+qangcg           N    OK  OK  OK  GCG format EMBL
+qangcgall        N    OK  OK  OK  GCG format EMBL
+qangcgexc        N    OK  OK  OK  GCG format EMBL without prokaryotes
+qangcginc        N    OK  OK  OK  GCG format EMBL only prokaryotes
+qanxfasta        N    OK  OK  OK  FASTA file EMBL rodents
+qanxfastaall     N    OK  OK  OK  FASTA file EMBL rodents, all fields indexed
+qanxflat         N    OK  OK  OK  EMBL flatfiles
+qanxflatall      N    OK  OK  OK  EMBL flatfiles, all fields indexed
+qanxflatexc      N    OK  OK  OK  EMBL flatfiles, no rodent file
+qanxflatinc      N    OK  OK  OK  EMBL flatfiles, only rodent file
+qanxgcg          N    OK  OK  OK  GCG format EMBL
+qanxgcgall       N    OK  OK  OK  GCG format EMBL
+qanxgcgexc       N    OK  OK  OK  GCG format EMBL without prokaryotes
+qanxgcginc       N    OK  OK  OK  GCG format EMBL only prokaryotes
+qapirexc         N    OK  OK  OK  PIR
+qasrswww         N    OK  -   -   Remote SRS web server
+qawfasta         N    OK  OK  OK  FASTA file wormpep entries
+qawxfasta        N    OK  OK  OK  FASTA file wormpep entries
+qaxpirexc        N    OK  OK  OK  PIR
+tembl            N    OK  OK  OK  EMBL in native format with EMBL CD-ROM index
+temblall         N    -   -   OK  EMBL in native format with EMBL CD-ROM index
+temblrest        N    -   -   OK  EMBL in native format with EMBL CD-ROM index
+temblvrt         N    -   -   OK  EMBL in native format with EMBL CD-ROM index
+testdb           N    OK  OK  OK  test sequence data
+tgb              N    OK  -   -   Genbank IDs
+tgenbank         N    OK  OK  OK  GenBank in native format with EMBL CD-ROM index
+
+</pre></td></tr></table><p>
+<p>
+<p>
+<p>
+<b>Example 7</b>
+<p>
+Display just a list of the available database names: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showdb -noheading -notype -noid -noquery -noall -nocomment -auto </b>
+
+twp              
+qapblast         
+qapblastall      
+qapblastsplit    
+qapblastsplitexc 
+qapblastsplitinc 
+qapfasta         
+qapflat          
+qapflatall       
+qapir            
+qapirall         
+qapirinc         
+qapxfasta        
+qapxflat         
+qaxpir           
+qaxpirall        
+qaxpirinc        
+tpir             
+tsw              
+tswnew           
+genbanksrs       
+qanfasta         
+qanfastaall      
+qanflat          
+qanflatall       
+qanflatexc       
+qanflatinc       
+qangcg           
+qangcgall        
+qangcgexc        
+qangcginc        
+qanxfasta        
+qanxfastaall     
+qanxflat         
+qanxflatall      
+qanxflatexc      
+qanxflatinc      
+qanxgcg          
+qanxgcgall       
+qanxgcgexc       
+qanxgcginc       
+qapirexc         
+qasrswww         
+qawfasta         
+qawxfasta        
+qaxpirexc        
+tembl            
+temblall         
+temblrest        
+temblvrt         
+testdb           
+tgb              
+tgenbank         
+
+</pre></td></tr></table><p>
+<p>
+<p>
+<p>
+<b>Example 8</b>
+<p>
+Display only the names and types: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showdb -only -type </b>
+Displays information on configured databases
+
+twp              P    
+qapblast         P    
+qapblastall      P    
+qapblastsplit    P    
+qapblastsplitexc P    
+qapblastsplitinc P    
+qapfasta         P    
+qapflat          P    
+qapflatall       P    
+qapir            P    
+qapirall         P    
+qapirinc         P    
+qapxfasta        P    
+qapxflat         P    
+qaxpir           P    
+qaxpirall        P    
+qaxpirinc        P    
+tpir             P    
+tsw              P    
+tswnew           P    
+genbanksrs       N    
+qanfasta         N    
+qanfastaall      N    
+qanflat          N    
+qanflatall       N    
+qanflatexc       N    
+qanflatinc       N    
+qangcg           N    
+qangcgall        N    
+qangcgexc        N    
+qangcginc        N    
+qanxfasta        N    
+qanxfastaall     N    
+qanxflat         N    
+qanxflatall      N    
+qanxflatexc      N    
+qanxflatinc      N    
+qanxgcg          N    
+qanxgcgall       N    
+qanxgcgexc       N    
+qanxgcginc       N    
+qapirexc         N    
+qasrswww         N    
+qawfasta         N    
+qawxfasta        N    
+qaxpirexc        N    
+tembl            N    
+temblall         N    
+temblrest        N    
+temblvrt         N    
+testdb           N    
+tgb              N    
+tgenbank         N    
+
+</pre></td></tr></table><p>
+<p>
+<p>
+<p>
+<b>Example 9</b>
+<p>
+Display everything 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showdb -full </b>
+Displays information on configured databases
+
+# Name           Type ID  Qry All Method    Fields            Defined Release Comment
+# ============== ==== ==  === === ========= ================= ======= ======= =======
+twp              P    OK  OK  OK  emblcd    des               global  16      EMBL new in native format with EMBL CD-ROM index
+qapblast         P    OK  OK  OK  blast     -                 special         BLAST swissnew
+qapblastall      P    OK  OK  OK  blast     sv,des            special         BLAST swissnew, all fields indexed
+qapblastsplit    P    OK  OK  OK  blast     -                 special         BLAST swissnew split in 5 files
+qapblastsplitexc P    OK  OK  OK  blast     -                 special         BLAST swissnew split in 5 files, not file 02
+qapblastsplitinc P    OK  OK  OK  blast     -                 special         BLAST swissnew split in 5 files, only file 02
+qapfasta         P    OK  OK  OK  emblcd    -                 special         FASTA file swissnew entries
+qapflat          P    OK  OK  OK  emblcd    -                 special         SpTrEmbl flatfile
+qapflatall       P    OK  OK  OK  emblcd    sv,des,org,key    special         SpTrEmbl flatfiles, all fields indexed
+qapir            P    OK  OK  OK  gcg       -                 special         PIR
+qapirall         P    OK  OK  OK  gcg       des,org,key       special         PIR
+qapirinc         P    OK  OK  OK  gcg       -                 special         PIR
+qapxfasta        P    OK  OK  OK  emboss    -                 special         FASTA file swissnew entries
+qapxflat         P    OK  OK  OK  emboss    -                 special         Swissnew flatfiles
+qaxpir           P    OK  OK  OK  embossgcg -                 special         PIR
+qaxpirall        P    OK  OK  OK  embossgcg des,org,key       special         PIR
+qaxpirinc        P    OK  OK  OK  embossgcg -                 special         PIR
+tpir             P    OK  OK  OK  gcg       des,org,key       special         PIR using NBRF access for 4 files
+tsw              P    OK  OK  OK  emblcd    sv,des,org,key    special 36      Swissprot native format with EMBL CD-ROM index
+tswnew           P    OK  OK  OK  emblcd    sv,des,org,key    special 37      SpTrEmbl as 3 files in native format with EMBL CD-ROM index
+genbanksrs       N    OK  -   -   srswww    gi,sv,des,org,key global          Genbank IDs
+qanfasta         N    OK  OK  OK  emblcd    -                 special         FASTA file EMBL rodents
+qanfastaall      N    OK  OK  OK  emblcd    sv,des            special         FASTA file EMBL rodents, all fields indexed
+qanflat          N    OK  OK  OK  emblcd    -                 special         EMBL flatfiles
+qanflatall       N    OK  OK  OK  emblcd    -                 special         EMBL flatfiles
+qanflatexc       N    OK  OK  OK  emblcd    -                 special         EMBL flatfiles, no rodent file
+qanflatinc       N    OK  OK  OK  emblcd    -                 special         EMBL flatfiles, only rodent file
+qangcg           N    OK  OK  OK  gcg       -                 special         GCG format EMBL
+qangcgall        N    OK  OK  OK  gcg       sv,des,org,key    special         GCG format EMBL
+qangcgexc        N    OK  OK  OK  gcg       -                 special         GCG format EMBL without prokaryotes
+qangcginc        N    OK  OK  OK  gcg       -                 special         GCG format EMBL only prokaryotes
+qanxfasta        N    OK  OK  OK  emboss    -                 special         FASTA file EMBL rodents
+qanxfastaall     N    OK  OK  OK  emboss    sv,des            special         FASTA file EMBL rodents, all fields indexed
+qanxflat         N    OK  OK  OK  emboss    -                 special         EMBL flatfiles
+qanxflatall      N    OK  OK  OK  emboss    des,org,key       special         EMBL flatfiles, all fields indexed
+qanxflatexc      N    OK  OK  OK  emboss    -                 special         EMBL flatfiles, no rodent file
+qanxflatinc      N    OK  OK  OK  emboss    -                 special         EMBL flatfiles, only rodent file
+qanxgcg          N    OK  OK  OK  embossgcg -                 special         GCG format EMBL
+qanxgcgall       N    OK  OK  OK  embossgcg sv,des,org,key    special         GCG format EMBL
+qanxgcgexc       N    OK  OK  OK  embossgcg -                 special         GCG format EMBL without prokaryotes
+qanxgcginc       N    OK  OK  OK  embossgcg -                 special         GCG format EMBL only prokaryotes
+qapirexc         N    OK  OK  OK  gcg       -                 special         PIR
+qasrswww         N    OK  -   -   srswww    sv,des,org,key    special         Remote SRS web server
+qawfasta         N    OK  OK  OK  emblcd    -                 special         FASTA file wormpep entries
+qawxfasta        N    OK  OK  OK  emboss    -                 special         FASTA file wormpep entries
+qaxpirexc        N    OK  OK  OK  embossgcg -                 special         PIR
+tembl            N    OK  OK  OK  emblcd    sv,des,org,key    special 57      EMBL in native format with EMBL CD-ROM index
+temblall         N    -   -   OK  direct    sv,des,org,key    special 57      EMBL in native format with EMBL CD-ROM index
+temblrest        N    -   -   OK  direct    sv,des,org,key    special 57      EMBL in native format with EMBL CD-ROM index
+temblvrt         N    -   -   OK  direct    sv,des,org,key    special 57      EMBL in native format with EMBL CD-ROM index
+testdb           N    OK  OK  OK  emblcd    des               special 01      test sequence data
+tgb              N    OK  -   -   srswww    sv,des,org,key    special         Genbank IDs
+tgenbank         N    OK  OK  OK  emblcd    sv,des,org,key    special 01      GenBank in native format with EMBL CD-ROM index
+
+</pre></td></tr></table><p>
+<p>
+<p>
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers: (none)
+   Additional (Optional) qualifiers:
+   -database           string     Name of a single database to give
+                                  information on (Any string is accepted)
+   -html               boolean    [N] Format output as an HTML table
+   -[no]protein        boolean    [Y] Display protein databases
+   -[no]nucleic        boolean    [Y] Display nucleic acid databases
+   -full               boolean    [N] Display all columns
+   -methods            boolean    [$(full)] This displays the access methods
+                                  that can be used on this database, for all,
+                                  query or ID access
+   -fields             boolean    [$(full)] This displays the search fields
+                                  that can be used on this database, other
+                                  than the standard 'id' or 'acc' fields.
+   -defined            boolean    [$(full)] This displays a short name for the
+                                  file containing the database definition
+   -release            boolean    [$(full)] Display 'release' column
+   -outfile            outfile    [stdout] Output file name
+
+   Advanced (Unprompted) qualifiers:
+   -only               toggle     [N] This is a way of shortening the command
+                                  line if you only want a few standard columns
+                                  to be displayed. Instead of specifying:
+                                  '-nohead -notype -noid -noquery -noall'
+                                  to get only the comment output, you can
+                                  specify
+                                  '-only -comment'
+   -heading            boolean    [@(!$(only))] Display column headings
+   -type               boolean    [@(!$(only))] Display 'type' column
+   -id                 boolean    [@(!$(only))] Display 'id' column
+   -query              boolean    [@(!$(only))] Display 'qry' column
+   -all                boolean    [@(!$(only))] Display 'all' column
+   -comment            boolean    [@(!$(only))] Display 'comment' column
+
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-database</td>
+<td>Name of a single database to give information on</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr>
+<td>-html</td>
+<td>Format output as an HTML table</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]protein</td>
+<td>Display protein databases</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]nucleic</td>
+<td>Display nucleic acid databases</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-full</td>
+<td>Display all columns</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-methods</td>
+<td>This displays the access methods that can be used on this database, for all, query or ID access</td>
+<td>Boolean value Yes/No</td>
+<td>$(full)</td>
+</tr>
+
+<tr>
+<td>-fields</td>
+<td>This displays the search fields that can be used on this database, other than the standard 'id' or 'acc' fields.</td>
+<td>Boolean value Yes/No</td>
+<td>$(full)</td>
+</tr>
+
+<tr>
+<td>-defined</td>
+<td>This displays a short name for the file containing the database definition</td>
+<td>Boolean value Yes/No</td>
+<td>$(full)</td>
+</tr>
+
+<tr>
+<td>-release</td>
+<td>Display 'release' column</td>
+<td>Boolean value Yes/No</td>
+<td>$(full)</td>
+</tr>
+
+<tr>
+<td>-outfile</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td>stdout</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-only</td>
+<td>This is a way of shortening the command line if you only want a few standard columns to be displayed. Instead of specifying:
+'-nohead -notype -noid -noquery -noall'
+to get only the comment output, you can specify
+'-only -comment'</td>
+<td>Toggle value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-heading</td>
+<td>Display column headings</td>
+<td>Boolean value Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+<tr>
+<td>-type</td>
+<td>Display 'type' column</td>
+<td>Boolean value Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+<tr>
+<td>-id</td>
+<td>Display 'id' column</td>
+<td>Boolean value Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+<tr>
+<td>-query</td>
+<td>Display 'qry' column</td>
+<td>Boolean value Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+<tr>
+<td>-all</td>
+<td>Display 'all' column</td>
+<td>Boolean value Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+<tr>
+<td>-comment</td>
+<td>Display 'comment' column</td>
+<td>Boolean value Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Input file format
+</H2>
+
+    None.
+
+<p>
+
+
+<a name="input.3"></a>
+<h3>Input files for usage example 3</h3>
+
+'tsw' is a sequence entry in the example protein database 'tsw'
+<p>
+
+<H2>
+    Output file format
+</H2>
+
+
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: showdb.out</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+# Name           Type ID  Qry All Comment
+# ============== ==== ==  === === =======
+twp              P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM index
+qapblast         P    OK  OK  OK  BLAST swissnew
+qapblastall      P    OK  OK  OK  BLAST swissnew, all fields indexed
+qapblastsplit    P    OK  OK  OK  BLAST swissnew split in 5 files
+qapblastsplitexc P    OK  OK  OK  BLAST swissnew split in 5 files, not file 02
+qapblastsplitinc P    OK  OK  OK  BLAST swissnew split in 5 files, only file 02
+qapfasta         P    OK  OK  OK  FASTA file swissnew entries
+qapflat          P    OK  OK  OK  SpTrEmbl flatfile
+qapflatall       P    OK  OK  OK  SpTrEmbl flatfiles, all fields indexed
+qapir            P    OK  OK  OK  PIR
+qapirall         P    OK  OK  OK  PIR
+qapirinc         P    OK  OK  OK  PIR
+qapxfasta        P    OK  OK  OK  FASTA file swissnew entries
+qapxflat         P    OK  OK  OK  Swissnew flatfiles
+qaxpir           P    OK  OK  OK  PIR
+qaxpirall        P    OK  OK  OK  PIR
+qaxpirinc        P    OK  OK  OK  PIR
+tpir             P    OK  OK  OK  PIR using NBRF access for 4 files
+tsw              P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
+tswnew           P    OK  OK  OK  SpTrEmbl as 3 files in native format with EMBL CD-ROM index
+genbanksrs       N    OK  -   -   Genbank IDs
+qanfasta         N    OK  OK  OK  FASTA file EMBL rodents
+qanfastaall      N    OK  OK  OK  FASTA file EMBL rodents, all fields indexed
+qanflat          N    OK  OK  OK  EMBL flatfiles
+qanflatall       N    OK  OK  OK  EMBL flatfiles
+qanflatexc       N    OK  OK  OK  EMBL flatfiles, no rodent file
+qanflatinc       N    OK  OK  OK  EMBL flatfiles, only rodent file
+qangcg           N    OK  OK  OK  GCG format EMBL
+qangcgall        N    OK  OK  OK  GCG format EMBL
+qangcgexc        N    OK  OK  OK  GCG format EMBL without prokaryotes
+qangcginc        N    OK  OK  OK  GCG format EMBL only prokaryotes
+qanxfasta        N    OK  OK  OK  FASTA file EMBL rodents
+qanxfastaall     N    OK  OK  OK  FASTA file EMBL rodents, all fields indexed
+qanxflat         N    OK  OK  OK  EMBL flatfiles
+qanxflatall      N    OK  OK  OK  EMBL flatfiles, all fields indexed
+qanxflatexc      N    OK  OK  OK  EMBL flatfiles, no rodent file
+qanxflatinc      N    OK  OK  OK  EMBL flatfiles, only rodent file
+qanxgcg          N    OK  OK  OK  GCG format EMBL
+qanxgcgall       N    OK  OK  OK  GCG format EMBL
+qanxgcgexc       N    OK  OK  OK  GCG format EMBL without prokaryotes
+qanxgcginc       N    OK  OK  OK  GCG format EMBL only prokaryotes
+qapirexc         N    OK  OK  OK  PIR
+qasrswww         N    OK  -   -   Remote SRS web server
+qawfasta         N    OK  OK  OK  FASTA file wormpep entries
+qawxfasta        N    OK  OK  OK  FASTA file wormpep entries
+qaxpirexc        N    OK  OK  OK  PIR
+tembl            N    OK  OK  OK  EMBL in native format with EMBL CD-ROM index
+temblall         N    -   -   OK  EMBL in native format with EMBL CD-ROM index
+temblrest        N    -   -   OK  EMBL in native format with EMBL CD-ROM index
+temblvrt         N    -   -   OK  EMBL in native format with EMBL CD-ROM index
+testdb           N    OK  OK  OK  test sequence data
+tgb              N    OK  -   -   Genbank IDs
+tgenbank         N    OK  OK  OK  GenBank in native format with EMBL CD-ROM index
+</pre>
+</td></tr></table><p>
+
+<p>
+
+The output is a simple table.
+
+<p>
+
+Type 'P' indicates that this is a Protein database.
+
+<p>
+
+Type 'N' indicates that this is a Nucleic database.
+
+<p>
+
+'OK' under ID, Qry or All indicates that that access method can be
+used on this database.  A '-' indicates that you cannot access this
+database in that way.
+
+<p>
+
+Note that 'OK' does not mean that the database is working correctly.  It
+simply means that <b>showdb</b> has read the database definition
+correctly and that this method of access to the database should be
+possible. 
+
+<p>
+
+If you are setting up a new database, then you should check that it
+works correctly by extracting entries from it using <b>seqret</b>. 
+
+<p>
+
+When the -html qualifier is specified, then the output will be wrapped
+in HTML tags, ready for inclusion in a Web page.  Note that tags such
+as &lt;HTML&gt;, &lt;BODY&gt;, &lt;/BODY&gt; and &lt;/HTML&gt; are not
+output by this program as the table of databases is expected to form
+only part of the contents of a web page - the rest of the web page
+must be supplied by the user.
+
+
+<H2>
+    Data files
+</H2>
+
+
+The databases are specified in the files <i>"emboss.defaults"</i> for
+site wide definitions, and <i>"~/.embossrc"</i> for the user's own
+settings.
+	
+<H2>
+    Notes
+</H2>
+
+<p>EMBOSS provides excellent database support.  All the common sequence formats you are likely to come across are supported.  There are three basic levels of database query with different ways to search for and retrieve entries:
+
+<tt>entry</tt>  A single entry specified by database ID or accession number is retrieved.  For example "embl:x13776". 
+<tt>query</tt>  One or more entries matching a wildcard string in the USA are retrieved (this can be slow for some methods). For example you can specify all of the human PAX proteins in SWISS_PROT by: <tt>swissprot:pax*_human</tt>.
+<tt>all</tt>      All entries are read sequentially from a database. For example to specify all entries in the database use <tt>embl:*</tt>.</p>
+
+<p>One or more query levels may be available for a database depending on the database in question and how it has been setup and indexed.  Each database and access method must be configured for it to be available for use.  This involves editing one of the EMBOSS configuration files, either your own personal <tt>.embossrc</tt> or the installation-wide <tt>emboss.default</tt> file. The <tt>emboss.default</tt> file will typically contain the definitions of the test databases (<tt>tsw</tt>, <tt>tembl</tt>, <tt>tpir</tt>, etc) used in the usage examples for the application documentation and serve as example database definitions.  For more information, see the EMBOSS Administrators Manual.  You can run <b>showdb</b> to see the databases and access methods that have been configured successfully.</p>
+
+<H2>
+    References
+</H2>
+
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+<p>Where the string <tt>OK</tt> is given next to a database is listed in <b>showdb</b> output, this means <b>showdb</b> has read the database definition correctly and that this access method is in principle possible, in other words, the database has been configured correctly..  It does not mean that the database or access method are available or working correctly. You should check things are ok by running, for example, <b>seqret</b> to retrieve an entry.</p>
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+"The database 'xyz' does not exist" You have supplied the name of a
+database with the -database qualifier, but that database does not
+exist as far as EMBOSS is concerned.
+
+<H2>
+    Exit status
+</H2>
+
+
+It always exits with status 0, unless the above diagnostic message is
+displayed.
+
+<H2>
+    Known bugs
+</H2>
+
+
+None noted.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="abiview.html">abiview</a></td>
+<td>Display the trace in an ABI sequencer file</td>
+</tr>
+
+<tr>
+<td><a href="cirdna.html">cirdna</a></td>
+<td>Draws circular maps of DNA constructs</td>
+</tr>
+
+<tr>
+<td><a href="infoalign.html">infoalign</a></td>
+<td>Display basic information about a multiple sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="infobase.html">infobase</a></td>
+<td>Return information on a given nucleotide base</td>
+</tr>
+
+<tr>
+<td><a href="inforesidue.html">inforesidue</a></td>
+<td>Return information on a given amino acid residue</td>
+</tr>
+
+<tr>
+<td><a href="infoseq.html">infoseq</a></td>
+<td>Display basic information about sequences</td>
+</tr>
+
+<tr>
+<td><a href="lindna.html">lindna</a></td>
+<td>Draws linear maps of DNA constructs</td>
+</tr>
+
+<tr>
+<td><a href="pepnet.html">pepnet</a></td>
+<td>Draw a helical net for a protein sequence</td>
+</tr>
+
+<tr>
+<td><a href="pepwheel.html">pepwheel</a></td>
+<td>Draw a helical wheel diagram for a protein sequence</td>
+</tr>
+
+<tr>
+<td><a href="prettyplot.html">prettyplot</a></td>
+<td>Draw a sequence alignment with pretty formatting</td>
+</tr>
+
+<tr>
+<td><a href="prettyseq.html">prettyseq</a></td>
+<td>Write a nucleotide sequence and its translation to file</td>
+</tr>
+
+<tr>
+<td><a href="remap.html">remap</a></td>
+<td>Display restriction enzyme binding sites in a nucleotide sequence</td>
+</tr>
+
+<tr>
+<td><a href="seealso.html">seealso</a></td>
+<td>Finds programs with similar function to a specified program</td>
+</tr>
+
+<tr>
+<td><a href="showalign.html">showalign</a></td>
+<td>Display a multiple sequence alignment in pretty format</td>
+</tr>
+
+<tr>
+<td><a href="showfeat.html">showfeat</a></td>
+<td>Display features of a sequence in pretty format</td>
+</tr>
+
+<tr>
+<td><a href="showpep.html">showpep</a></td>
+<td>Displays protein sequences with features in pretty format</td>
+</tr>
+
+<tr>
+<td><a href="showseq.html">showseq</a></td>
+<td>Displays sequences with features in pretty format</td>
+</tr>
+
+<tr>
+<td><a href="sixpack.html">sixpack</a></td>
+<td>Display a DNA sequence with 6-frame translation and ORFs</td>
+</tr>
+
+<tr>
+<td><a href="textsearch.html">textsearch</a></td>
+<td>Search the textual description of sequence(s)</td>
+</tr>
+
+<tr>
+<td><a href="tfm.html">tfm</a></td>
+<td>Displays full documentation for an application</td>
+</tr>
+
+<tr>
+<td><a href="whichdb.html">whichdb</a></td>
+<td>Search all sequence databases for an entry and retrieve it</td>
+</tr>
+
+<tr>
+<td><a href="wossname.html">wossname</a></td>
+<td>Finds programs by keywords in their short description</td>
+</tr>
+
+</table>
+
+<H2>
+    Author(s)
+</H2>
+Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+<br>
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+
+
+<H2>
+    History
+</H2>
+
+Completed 6th August 1999.
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+None
+
+</BODY>
+</HTML>
+

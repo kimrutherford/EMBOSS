@@ -1,0 +1,158 @@
+>>>>L48662
+ 
+ID   L48662     standard; RNA; ROD; 366 BP.
+XX
+AC   L48662;
+XX
+SV   L48662.1
+XX
+DT   04-NOV-1995 (Rel. 45, Created)
+DT   08-JAN-1997 (Rel. 50, Last updated, Version 3)
+XX
+DE   Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antibody
+DE   heavy chain mRNA.
+XX
+KW   anti-DNA antibody.
+XX
+OS   Mus musculus (house mouse)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia; Eutheria;
+OC   Rodentia; Sciurognathi; Muridae; Murinae; Mus.
+XX
+RN   [1]
+RP   1-366
+RA   Wloch M.K., Alexander A.L., Pippen A.M., Pisetsky D.S., Gilkeson G.S.;
+RT   "Differences in V kappa gene utilization and VH CDR3 sequence among
+RT   anti-DNA from C3H-lpr mice and lupus mice with nephritis";
+RL   Eur. J. Immunol. 26:2225-2233(1996).
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1. .366
+FT                   /db_xref="taxon:10090"
+FT                   /organism="Mus musculus"
+FT                   /strain="C3H/HeJ-lpr/lpr"
+FT                   /cell_line="C3H/F2-11"
+FT                   /cell_type="hybridoma"
+FT                   /tissue_type="spleen"
+XX
+SQ   Sequence 366 BP; 100 A; 90 C; 85 G; 89 T; 2 other;
+>>>>Z46957
+ 
+ID   Z46957     standard; RNA; ROD; 1493 BP.
+XX
+AC   Z46957;
+XX
+NI   g603874
+XX
+DT   20-DEC-1994 (Rel. 42, Created)
+DT   27-AUG-1996 (Rel. 49, Last updated, Version 8)
+XX
+DE   R.norvegicus mRNA for rhodopsin.
+XX
+KW   rhodopsin.
+XX
+OS   Rattus norvegicus (Norway rat)
+OC   Eukaryota; Metazoa; Chordata; Vertebrata; Mammalia; Eutheria; Rodentia;
+OC   Sciurognathi; Muridae; Murinae; Rattus.
+XX
+RN   [1]
+RP   1-1493
+RA   Huber A., Sander P.H., Paulsen R.;
+RT   "Phosphorylation of the InaD gene product, a photoreceptor membrane
+RT   protein required for recovery of visual excitation";
+RL   J. Biol. Chem. 271:11710-11717(1996).
+XX
+RN   [2]
+RP   1-1493
+RA   Huber A.;
+RT   ;
+RL   Submitted (20-DEC-1994) to the EMBL/GenBank/DDBJ databases.
+RL   Huber A., Universitaet Karlsruhe, Zoologie I, Kornblumenstr. 13, 76128
+RL   Karlsruhe, Germany
+XX
+DR   SWISS-PROT; P51489; OPSD_RAT.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1. .1493
+FT                   /organism="Rattus norvegicus"
+FT                   /strain="Sprague-Dawley"
+FT                   /clone="pRO4"
+FT                   /dev_stage="adult"
+FT                   /tissue_type="retina"
+FT                   /cell_type="rod"
+FT                   /clone_lib="rat retinal library"
+FT   5'UTR           1. .83
+FT   CDS             84. .1130
+FT                   /citation=[1]
+FT                   /db_xref="PID:g603875"
+FT                   /db_xref="SWISS-PROT:P51489"
+FT                   /function="phototransduction"
+FT                   /product="rhodopsin"
+FT                   /translation="MNGTEGPNFYVPFSNITGVVRSPFEQPQYYLAEPWQFSMLAAYMF
+FT                   LLIVLGFPINFLTLYVTVQHKKLRTPLNYILLNLAVADLFMVFGGFTTTLYTSLHGYFV
+FT                   FGPTGCNLEGFFATLGGEIGLWSLVVLAIERYVVVCKPMSNFRFGENHAIMGVAFTWVM
+FT                   ALACAAPPLVGWSRYIPEGMQCSCGIDYYTLKPEVNNESFVIYMFVVHFTIPMIVIFFC
+FT                   YGQLVFTVKEAAAQQQESATTQKAEKEVTRMVIIMVIFFLICWLPYASVAMYIFTHQGS
+FT                   NFGPIFMTLPAFFAKTASIYNPIIYIMMNKQFRNCMLTTLCCGKNPLGDDEASATASKT
+FT                   ETSQVAPA"
+FT   3'UTR           1128. .1493
+XX
+SQ   Sequence 1493 BP; 309 A; 475 C; 365 G; 344 T; 0 other;
+>>>>U68037
+ 
+ID   U68037     standard; RNA; ROD; 1218 BP.
+XX
+AC   U68037;
+XX
+SV   U68037.1
+XX
+DT   23-SEP-1996 (Rel. 49, Created)
+DT   23-SEP-1996 (Rel. 49, Last updated, Version 1)
+XX
+DE   Rattus norvegicus EP1 prostanoid receptor mRNA, complete cds.
+XX
+KW   .
+XX
+OS   Rattus norvegicus (Norway rat)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia; Eutheria;
+OC   Rodentia; Sciurognathi; Muridae; Murinae; Rattus.
+XX
+RN   [1]
+RP   1-1218
+RA   Abramovitz M., Boie Y.;
+RT   "Cloning of the rat EP1 prostanoid receptor";
+RL   Unpublished.
+XX
+RN   [2]
+RP   1-1218
+RA   Abramovitz M., Boie Y.;
+RT   ;
+RL   Submitted (26-AUG-1996) to the EMBL/GenBank/DDBJ databases.
+RL   Biochemistry & Molecular Biology, Merck Frosst Center for Therapeutic
+RL   Research, P. O. Box 1005, Pointe Claire - Dorval, Quebec H9R 4P8, Canada
+XX
+DR   SWISS-PROT; P70597; PE21_RAT.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1. .1218
+FT                   /db_xref="taxon:10116"
+FT                   /organism="Rattus norvegicus"
+FT                   /strain="Sprague-Dawley"
+FT   CDS             1. .1218
+FT                   /codon_start=1
+FT                   /db_xref="SWISS-PROT:P70597"
+FT                   /note="family 1 G-protein coupled receptor"
+FT                   /product="EP1 prostanoid receptor"
+FT                   /protein_id="AAB07735.1"
+FT                   /translation="MSPYGLNLSLVDEATTCVTPRVPNTSVVLPTGGNGTSPALPIFSM
+FT                   TLGAVSNVLALALLAQVAGRLRRRRSTATFLLFVASLLAIDLAGHVIPGALVLRLYTAG
+FT                   RAPAGGACHFLGGCMVFFGLCPLLLGCGMAVERCVGVTQPLIHAARVSVARARLALALL
+FT                   AAMALAVALLPLVHVGHYELQYPGTWCFISLGPPGGWRQALLAGLFAGLGLAALLAALV
+FT                   CNTLSGLALLRARWRRRRSRRFRENAGPDDRRRWGSRGLRLASASSASSITSTTAALRS
+FT                   SRGGGSARRVHAHDVEMVGQLVGIMVVSCICWSPLLVLVVLAIGGWNSNSLQRPLFLAV
+FT                   RLASWNQILDPWVYILLRQAMLRQLLRLLPLRVSAKGGPTELSLTKSAWEASSLRSSRH
+FT                   SGFSHL"
+XX
+SQ   Sequence 1218 BP; 162 A; 397 C; 387 G; 272 T; 0 other;

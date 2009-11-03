@@ -1,0 +1,330 @@
+
+                                   tmap 
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Predict and plot transmembrane segments in protein sequences
+
+Description
+
+   tmap predicts transmembrane segments for an aligned set of protein
+   sequences, utilising the algorithm described in: "Persson, B. & Argos,
+   P. (1994) Prediction of transmembrane segments in proteins utilising
+   multiple sequence alignments J. Mol. Biol. 237, 182-192.". A plot of
+   the propensities to form the middle and the end of transmembrane
+   regions is output. Bars are displayed in the plot above the regions
+   predicted as being most likely to form transmembrane regions. The
+   transmembrane regions for the complete alignment are given first,
+   followed by the predictions for each individual sequence in the
+   alignment.
+
+Usage
+
+   Here is a sample session with tmap
+
+
+% tmap opsd.msf -out tmap.res -graph cps 
+Predict and plot transmembrane segments in protein sequences
+
+Created tmap.ps
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-sequences]         seqset     File containing a sequence alignment
+   -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, das, xterm, png, gif)
+  [-outfile]           report     [*.tmap] Output report file name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequences" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-graph" associated qualifiers
+   -gprompt            boolean    Graph prompting
+   -gdesc              string     Graph description
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
+
+   "-outfile" associated qualifiers
+   -rformat2           string     Report format
+   -rname2             string     Base file name
+   -rextension2        string     File name extension
+   -rdirectory2        string     Output directory
+   -raccshow2          boolean    Show accession number in the report
+   -rdesshow2          boolean    Show description in the report
+   -rscoreshow2        boolean    Show the score in the report
+   -rstrandshow2       boolean    Show the nucleotide strand in the report
+   -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   tmap reads a protein sequence USA for one or more aligned sequences.
+
+  Input files for usage example
+
+  File: opsd.msf
+
+!!AA_MULTIPLE_ALIGNMENT 1.0
+
+  opsd.msf MSF:  354 Type: P 15/07/06 CompCheck: 5414 ..
+
+  Name: OPSD_HUMAN Len: 354  Check: 2647 Weight: 50.00
+  Name: OPSD_XENLA Len: 354  Check: 2767 Weight: 50.00
+
+//
+
+           1                                               50
+OPSD_HUMAN MNGTEGPNFYVPFSNATGVVRSPFEYPQYYLAEPWQFSMLAAYMFLLIVL
+OPSD_XENLA MNGTEGPNFYVPMSNKTGVVRSPFDYPQYYLAEPWQYSALAAYMFLLILL
+
+           51                                             100
+OPSD_HUMAN GFPINFLTLYVTVQHKKLRTPLNYILLNLAVADLFMVLGGFTSTLYTSLH
+OPSD_XENLA GLPINFMTLFVTIQHKKLRTPLNYILLNLVFANHFMVLCGFTVTMYTSMH
+
+           101                                            150
+OPSD_HUMAN GYFVFGPTGCNLEGFFATLGGEIALWSLVVLAIERYVVVCKPMSNFRFGE
+OPSD_XENLA GYFIFGPTGCYIEGFFATLGGEVALWSLVVLAVERYIVVCKPMANFRFGE
+
+           151                                            200
+OPSD_HUMAN NHAIMGVAFTWVMALACAAPPLAGWSRYIPEGLQCSCGIDYYTLKPEVNN
+OPSD_XENLA NHAIMGVAFTWIMALSCAAPPLFGWSRYIPEGMQCSCGVDYYTLKPEVNN
+
+           201                                            250
+OPSD_HUMAN ESFVIYMFVVHFTIPMIIIFFCYGQLVFTVKEAAAQQQESATTQKAEKEV
+OPSD_XENLA ESFVIYMFIVHFTIPLIVIFFCYGRLLCTVKEAAAQQQESLTTQKAEKEV
+
+           251                                            300
+OPSD_HUMAN TRMVIIMVIAFLICWVPYASVAFYIFTHQGSNFGPIFMTIPAFFAKSAAI
+OPSD_XENLA TRMVVIMVVFFLICWVPYAYVAFYIFTHQGSNFGPVFMTVPAFFAKSSAI
+
+           301                                            350
+OPSD_HUMAN YNPVIYIMMNKQFRNCMLTTICCGKNPLGD.DEASATVSKTETSQVAPA~
+OPSD_XENLA YNPVIYIVLNKQFRNCLITTLCCGKNPFGDEDGSSAATSKTEASSVSSSQ
+
+           351
+OPSD_HUMAN ~~~~
+OPSD_XENLA VSPA
+
+Output file format
+
+  Output files for usage example
+
+  File: tmap.res
+
+########################################
+# Program: tmap
+# Rundate: Tue 15 Jul 2008 12:00:00
+# Commandline: tmap
+#    [-sequences] ../../data/opsd.msf
+#    -outfile tmap.res
+#    -graph cps
+# Report_format: seqtable
+# Report_file: tmap.res
+########################################
+
+#=======================================
+#
+# Sequence: Consensus     from: 1   to: 354
+# HitCount: 7
+#=======================================
+
+  Start     End TransMem Sequence
+     43      70        1 YMFLLIvLGxPINFlTLyVTvQHKKLRT
+     71      98        2 PLNYILLNLxxAdxFMVLxGFTxTlYTS
+    112     140        3 lEGFFATLGGEiALWSLVVLAiERYvVVC
+    148     176        4 FGENHAIMGVAFTWvMALaCAAPPLxGWS
+    201     229        5 ESFVIYMFvVHFTIPmIiIFFCYGqLvxT
+    256     276        6 IMVixFLICWVPYAxVAFYIF
+    285     305        7 PiFMTiPAFFAKSaAIYNPVI
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: OPSD_HUMAN     from: 1   to: 354
+# HitCount: 7
+#=======================================
+
+  Start     End TransMem Sequence
+     43      70        1 YMFLLIVLGFPINFLTLYVTVQHKKLRT
+     71      98        2 PLNYILLNLAVADLFMVLGGFTSTLYTS
+    112     140        3 LEGFFATLGGEIALWSLVVLAIERYVVVC
+    148     176        4 FGENHAIMGVAFTWVMALACAAPPLAGWS
+    201     229        5 ESFVIYMFVVHFTIPMIIIFFCYGQLVFT
+    256     276        6 IMVIAFLICWVPYASVAFYIF
+    285     305        7 PIFMTIPAFFAKSAAIYNPVI
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: OPSD_XENLA     from: 1   to: 354
+# HitCount: 7
+#=======================================
+
+  Start     End TransMem Sequence
+     43      70        1 YMFLLILLGLPINFMTLFVTIQHKKLRT
+     71      98        2 PLNYILLNLVFANHFMVLCGFTVTMYTS
+    112     140        3 IEGFFATLGGEVALWSLVVLAVERYIVVC
+    148     176        4 FGENHAIMGVAFTWIMALSCAAPPLFGWS
+    201     229        5 ESFVIYMFIVHFTIPLIVIFFCYGRLLCT
+    256     276        6 IMVVFFLICWVPYAYVAFYIF
+    285     305        7 PVFMTVPAFFAKSSAIYNPVI
+
+#---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 2
+# Total_length: 702
+# Reported_sequences: 3
+# Reported_hitcount: 21
+#---------------------------------------
+
+  Graphics File: tmap.ps
+
+   [tmap results]
+
+   A plot of the propensities to form the middle (solid line) and the end
+   (dashed line) of transmembrane regions is output.
+
+   Bars are displayed in the plot above the regions predicted as being
+   most likely to form transmembrane regions.
+
+   The text file (specified by the -outfile option) gives a summary of
+   these regions.
+
+   The transmembrane regions for the complete alignment are given first,
+   followed by the predictions for each individual sequence in the
+   alignment.
+
+Data files
+
+   None.
+
+Notes
+
+   Two sets of transmembrane propensity values are then used for the
+   calculations: one for the middle, hydrophobic portion and one for the
+   terminal regions of the transmembrane sequence spans. Average
+   propensity values are calculated for each position along the
+   alignment, with the contribution from each sequence weighted according
+   to its dissimilarity relative to the other aligned sequences.
+
+   Eight-residue segments are considered as potential cores of
+   transmembrane segments and elongated if thier middle propensity values
+   are above a threshold. End propensity values are also considered as
+   stop signals. Only helices with a length of 15 to 29 residues are
+   allowed and corrections for strictly conserved charged residues are
+   made.
+
+   The method is more successful than predictions based upon single
+   sequences alone.
+
+References
+
+    1. "Persson, B. & Argos, P. (1994) Prediction of transmembrane
+       segments in proteins utilsing multiple sequence alignments J. Mol.
+       Biol. 237, 182-192."
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   0 if successful.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name     Description
+   garnier          Predicts protein secondary structure using GOR method
+   helixturnhelix   Identify nucleic acid-binding motifs in protein
+                    sequences
+   hmoment          Calculate and plot hydrophobic moment for protein sequence(s)
+   pepcoil          Predicts coiled coil regions in protein sequences
+   pepnet           Draw a helical net for a protein sequence
+   pepwheel         Draw a helical wheel diagram for a protein sequence
+
+Author(s)
+
+   Original program by Bengt Persson and Patrick Argos.
+
+   This application was modified for inclusion in EMBOSS by Ian Longden
+   (il © sanger.ac.uk)
+   Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
+   CB10 1SA, UK.
+
+History
+
+   Completed 17th June 1999.
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   The graph y axis is not labelled. It is some kind of score, but we aer
+   not sure exactly how to describe it.

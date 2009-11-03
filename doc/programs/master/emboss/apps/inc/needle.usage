@@ -1,0 +1,15 @@
+<b>Here is a sample session with needle</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>needle tsw:hba_human tsw:hbb_human </b>
+Needleman-Wunsch global alignment of two sequences
+Gap opening penalty [10.0]: <b></b>
+Gap extension penalty [0.5]: <b></b>
+Output alignment [hba_human.needle]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

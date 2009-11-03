@@ -1,0 +1,216 @@
+application: restrict [
+  documentation: "Report restriction enzyme cleavage sites in
+                  a nucleotide sequence"
+  groups: "Nucleic:Restriction"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "DNA"
+  ]
+
+  datafile: datafile [
+    default: ""
+    information: "Restriction enzyme data file (optional)"
+    knowntype: "restriction enzyme data"
+    nullok: "Y"
+  ]
+
+  datafile: mfile [
+    default: "Emethylsites.dat"
+    information: "Restriction enzyme data file (optional)"
+    knowntype: "restriction enzyme methylation data"
+    nullok: "Y"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  integer: sitelen [
+    standard: "Y"
+    minimum: "2"
+    maximum: "20"
+    default: "4"
+    information: "Minimum recognition site length"
+    help: "This sets the minimum length of the restriction enzyme
+           recognition site. Any enzymes with sites shorter than this will be
+           ignored."
+  ]
+
+  string: enzymes [
+    standard: "Y"
+    default: "all"
+    information: "Comma separated enzyme list"
+    help: "The name 'all' reads in all enzyme names from the REBASE
+           database. You can specify enzymes by giving their names with
+           commas between then, such as: 'HincII,hinfI,ppiI,hindiii'. \
+           The case of the names is not important. You can specify a file of
+           enzyme names to read in by giving the name of the file holding the
+           enzyme names with a '@' character in front of it, for example,
+           '@enz.list'. \
+           Blank lines and lines starting with a hash character or '!' are
+           ignored and all other lines are concatenated together with a comma
+           character ',' and then treated as the list of enzymes to search
+           for. \
+           An example of a file of enzyme names is: \
+           ! my enzymes \
+           HincII, ppiII \
+           ! other enzymes \
+           hindiii \
+           HinfI \
+           PpiI"
+    knowntype: "enzyme list"
+  ]
+
+endsection: required
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  integer: min [
+    minimum: "1"
+    maximum: "1000"
+    default: "1"
+    information: "Minimum cuts per RE"
+    help: "This sets the minimum number of cuts for any restriction
+           enzyme that will be considered. Any enzymes that cut fewer times
+           than this will be ignored."
+  ]
+
+  integer: max [
+    minimum: "$(min)"
+    maximum: "2000000000"
+    default: "2000000000"
+    information: "Maximum cuts per RE"
+    help: "This sets the maximum number of cuts for any restriction
+           enzyme that will be considered. Any enzymes that cut more times
+           than this will be ignored."
+  ]
+
+  boolean: solofragment [
+    default: "N"
+    information: "List individual enzymes with their fragments"
+    help: "This gives the fragment lengths of the forward sense strand
+           produced by complete restriction by each restriction enzyme on
+           its own. Results are added to the tail section of the report."
+  ]
+
+  boolean: single [
+    default: "N"
+    information: "Force single site only cuts"
+    help: "If this is set then this forces the values of the mincuts
+           and maxcuts qualifiers to both be 1. Any other value you may have
+           set them to will be ignored."
+  ]
+
+  boolean: blunt [
+    default: "Y"
+    information: "Allow blunt end cutters"
+    help: "This allows those enzymes which cut at the same position on
+           the forward and reverse strands to be considered."
+  ]
+
+  boolean: sticky [
+    default: "Y"
+    information: "Allow sticky end cutters"
+    help: "This allows those enzymes which cut at different positions
+           on the forward and reverse strands, leaving an overhang, to be
+           considered."
+  ]
+
+  boolean: ambiguity [
+    default: "Y"
+    information: "Allow ambiguous matches"
+    help: "This allows those enzymes which have one or more 'N'
+           ambiguity codes in their pattern to be considered"
+  ]
+
+  boolean: plasmid [
+    default: "N"
+    information: "Allow circular DNA"
+    help: "If this is set then this allows searches for restriction
+           enzyme recognition site and cut postions that span the end of the
+           sequence to be considered."
+  ]
+
+  boolean: methylation [
+    default: "N"
+    information: "Use methylation data"
+    help: "If this is set then RE recognition sites will not match
+           methylated bases."
+  ]
+
+  boolean: commercial [
+    default: "Y"
+    information: "Only enzymes with suppliers"
+    help: "If this is set, then only those enzymes with a commercial
+           supplier will be searched for. This qualifier is ignored if you
+           have specified an explicit list of enzymes to search for, rather
+           than searching through 'all' the enzymes in the REBASE database.
+           It is assumed that, if you are asking for an explicit enzyme, then
+           you probably know where to get it from and so all enzymes names
+           that you have asked to be searched for, and which cut, will be
+           reported whether or not they have a commercial supplier."
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  boolean: limit [
+    default: "Y"
+    information: "Limits reports to one isoschizomer"
+    help: "This limits the reporting of enzymes to just one enzyme
+           from each group of isoschizomers. The enzyme chosen to represent
+           an isoschizomer group is the prototype indicated in the data file
+           'embossre.equ', which is created by the program 'rebaseextract'.
+           If you prefer different prototypes to be used, make a copy of
+           embossre.equ in your home directory and edit it. If this value is
+           set to be false then all of the input enzymes will be reported.
+           You might like to set this to false if you are supplying an
+           explicit set of enzymes rather than searching 'all' of them."
+  ]
+
+  boolean: alphabetic [
+    default: "N"
+    information: "Sort output alphabetically"
+  ]
+
+  boolean: fragments [
+    default: "N"
+    information: "Show fragment lengths"
+    help: "This gives the fragment lengths of the forward sense strand
+           produced by complete restriction using all of the input enzymes
+           together. Results are added to the tail section of the report."
+  ]
+
+  boolean: name [
+    default: "N"
+    information: "Show sequence name"
+  ]
+
+  report: outfile [
+    parameter: "Y"
+    rformat: "table"
+    rscoreshow: "N"
+    multiple: "Y"
+    taglist: "str:enzyme=Enzyme_name str:site=Restriction_site
+              int:5prime int:3prime int:5primerev int:3primerev"
+    precision: "0"
+  ]
+
+endsection: output

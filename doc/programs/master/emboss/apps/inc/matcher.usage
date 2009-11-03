@@ -1,0 +1,29 @@
+<b>Here is a sample session with matcher</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>matcher tsw:hba_human tsw:hbb_human </b>
+Waterman-Eggert local alignment of two sequences
+Output alignment [hba_human.matcher]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+To find the 10 best alignments: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>matcher tsw:hba_human tsw:hbb_human -alt 10 </b>
+Waterman-Eggert local alignment of two sequences
+Output alignment [hba_human.matcher]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>

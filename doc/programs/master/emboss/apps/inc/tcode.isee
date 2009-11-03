@@ -1,0 +1,40 @@
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="getorf.html">getorf</a></td>
+<td>Finds and extracts open reading frames (ORFs)</td>
+</tr>
+
+<tr>
+<td><a href="marscan.html">marscan</a></td>
+<td>Finds matrix/scaffold recognition (MRS) signatures in DNA sequences</td>
+</tr>
+
+<tr>
+<td><a href="plotorf.html">plotorf</a></td>
+<td>Plot potential open reading frames in a nucleotide sequence</td>
+</tr>
+
+<tr>
+<td><a href="showorf.html">showorf</a></td>
+<td>Display a nucleotide sequence and translation in pretty format</td>
+</tr>
+
+<tr>
+<td><a href="sixpack.html">sixpack</a></td>
+<td>Display a DNA sequence with 6-frame translation and ORFs</td>
+</tr>
+
+<tr>
+<td><a href="syco.html">syco</a></td>
+<td>Draw synonymous codon usage statictic plot for a nucleotide sequence</td>
+</tr>
+
+<tr>
+<td><a href="wobble.html">wobble</a></td>
+<td>Plot third base position variability in a nucleotide sequence</td>
+</tr>
+
+</table>

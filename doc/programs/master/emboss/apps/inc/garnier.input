@@ -1,0 +1,116 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tsw:amic_pseae' is a sequence entry in the example protein database 'tsw'
+<p>
+<p><h3>Database entry: tsw:amic_pseae</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   AMIC_PSEAE              Reviewed;         385 AA.
+AC   P27017;
+DT   01-AUG-1992, integrated into UniProtKB/Swiss-Prot.
+DT   23-JAN-2007, sequence version 5.
+DT   16-JUN-2009, entry version 68.
+DE   RecName: Full=Aliphatic amidase expression-regulating protein;
+GN   Name=amiC; OrderedLocusNames=PA3364;
+OS   Pseudomonas aeruginosa.
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadales;
+OC   Pseudomonadaceae; Pseudomonas.
+OX   NCBI_TaxID=287;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA], AND PROTEIN SEQUENCE OF 2-19.
+RC   STRAIN=PAC;
+RX   MEDLINE=91317707; PubMed=1907262;
+RA   Wilson S.A., Drew R.E.;
+RT   "Cloning and DNA sequence of amiC, a new gene regulating expression of
+RT   the Pseudomonas aeruginosa aliphatic amidase, and purification of the
+RT   amiC product.";
+RL   J. Bacteriol. 173:4914-4921(1991).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+RC   STRAIN=ATCC 15692 / PAO1 / 1C / PRS 101 / LMG 12228;
+RX   MEDLINE=20437337; PubMed=10984043; DOI=10.1038/35023079;
+RA   Stover C.K., Pham X.-Q.T., Erwin A.L., Mizoguchi S.D., Warrener P.,
+RA   Hickey M.J., Brinkman F.S.L., Hufnagle W.O., Kowalik D.J., Lagrou M.,
+RA   Garber R.L., Goltry L., Tolentino E., Westbrock-Wadman S., Yuan Y.,
+RA   Brody L.L., Coulter S.N., Folger K.R., Kas A., Larbig K., Lim R.M.,
+RA   Smith K.A., Spencer D.H., Wong G.K.-S., Wu Z., Paulsen I.T.,
+RA   Reizer J., Saier M.H. Jr., Hancock R.E.W., Lory S., Olson M.V.;
+RT   "Complete genome sequence of Pseudomonas aeruginosa PAO1, an
+RT   opportunistic pathogen.";
+RL   Nature 406:959-964(2000).
+RN   [3]
+RP   CRYSTALLIZATION.
+RX   MEDLINE=92106343; PubMed=1762155; DOI=10.1016/0022-2836(91)90579-U;
+RA   Wilson S.A., Chayen N.E., Hemmings A.M., Drew R.E., Pearl L.H.;
+RT   "Crystallization of and preliminary X-ray data for the negative
+RT   regulator (AmiC) of the amidase operon of Pseudomonas aeruginosa.";
+RL   J. Mol. Biol. 222:869-871(1991).
+RN   [4]
+RP   X-RAY CRYSTALLOGRAPHY (2.1 ANGSTROMS), AND SEQUENCE REVISION TO 27-28.
+RX   MEDLINE=95112789; PubMed=7813419;
+RA   Pearl L.H., O'Hara B.P., Drew R.E., Wilson S.A.;
+RT   "Crystal structure of AmiC: the controller of transcription
+RT   antitermination in the amidase operon of Pseudomonas aeruginosa.";
+RL   EMBO J. 13:5810-5817(1994).
+RN   [5]
+RP   X-RAY CRYSTALLOGRAPHY (2.25 ANGSTROMS) OF COMPLEX WITH AMIR.
+RC   STRAIN=PAC1;
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+FT   VARIANT     106    106       T -&gt; N (in strain: PAC181; butyramide
+FT                                inducible phenotype).
+FT   CONFLICT     27     28       QR -&gt; HA (in Ref. 1; CAA32024).
+FT   CONFLICT    186    186       V -&gt; L (in Ref. 1; CAA32024).
+FT   CONFLICT    263    263       A -&gt; P (in Ref. 1; CAA32024).
+FT   CONFLICT    305    305       S -&gt; N (in Ref. 1; CAA32024).
+FT   CONFLICT    319    319       C -&gt; D (in Ref. 1; CAA32024).
+FT   CONFLICT    383    383       A -&gt; P (in Ref. 1; CAA32024).
+FT   STRAND        9     13
+FT   STRAND       16     18
+FT   HELIX        21     39
+FT   TURN         40     43
+FT   STRAND       50     54
+FT   HELIX        60     72
+FT   STRAND       78     81
+FT   HELIX        85     97
+FT   STRAND      101    104
+FT   STRAND      117    119
+FT   HELIX       124    126
+FT   HELIX       128    136
+FT   TURN        137    139
+FT   STRAND      141    150
+FT   HELIX       151    166
+FT   STRAND      170    177
+FT   HELIX       183    196
+FT   STRAND      199    204
+FT   HELIX       209    221
+FT   STRAND      229    233
+FT   HELIX       236    239
+FT   HELIX       244    247
+FT   STRAND      251    255
+FT   HELIX       263    273
+FT   HELIX       284    303
+FT   HELIX       308    315
+FT   STRAND      320    322
+FT   STRAND      325    329
+FT   TURN        331    333
+FT   STRAND      336    338
+FT   STRAND      341    345
+FT   STRAND      351    356
+FT   HELIX       369    371
+FT   HELIX       376    378
+SQ   SEQUENCE   385 AA;  42807 MW;  33924B6C36017B79 CRC64;
+     MGSHQERPLI GLLFSETGVT ADIERSQRYG ALLAVEQLNR EGGVGGRPIE TLSQDPGGDP
+     DRYRLCAEDF IRNRGVRFLV GCYMSHTRKA VMPVVERADA LLCYPTPYEG FEYSPNIVYG
+     GPAPNQNSAP LAAYLIRHYG ERVVFIGSDY IYPRESNHVM RHLYRQHGGT VLEEIYIPLY
+     PSDDDVQRAV ERIYQARADV VFSTVVGTGT AELYRAIARR YGDGRRPPIA SLTTSEAEVA
+     KMESDVAEGQ VVVAPYFSSI DTAASRAFVQ ACHGFFPENA TITAWAEAAY WQTLLLGRAA
+     QAAGSWRVED VQRHLYDICI DAPQGPVRVE RQNNHSRLSS RIAEIDARGV FQVRWQSPEP
+     IRPDPYVVVH NLDDWSASMG GGALP
+//
+</pre>
+</td></tr></table><p>

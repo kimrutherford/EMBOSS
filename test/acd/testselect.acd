@@ -1,0 +1,17 @@
+# ACD file for QA testing - missing the application definition
+#
+
+appl: testselect [ doc: "testing" group: "testing" ]
+
+section: input [ info: "Input section" type: "page" ]
+
+select: stest [
+      standard: Y
+      values: "one;two;three;four;five"
+      info: "select value"
+      max: 3
+]
+
+integer: numtest [ min: 1 info: "Pick a number" ]
+
+endsection: input

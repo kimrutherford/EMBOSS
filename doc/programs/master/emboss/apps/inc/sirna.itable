@@ -1,0 +1,80 @@
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Nucleotide sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>The output is a table of the forward and reverse parts of the 21 base siRNA duplex. Both the forward and reverse sequences are written 5' to 3', ready to be ordered. The last two bases have been replaced by 'dTdT'. The starting position of the 23 base region and the %GC content is also given. If you wish to see the complete 23 base sequence, then either look at the sequence in the other output file, or use the qualifier '-context' which will display the 23 bases of the forward sequence in this report withthe first two bases in brackets. These first two bases do not form part of the siRNA probe to be ordered.</td>
+<td>Report output file</td>
+<td><i>&lt;*&gt;</i>.sirna</td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 3)</td>
+<td>This is a file of the sequences of the 23 base regions that the siRNAs are selected from. You may use it to do searches of mRNA databases (e.g. REFSEQ) to confirm that the probes are unique to the gene you wish to use it on.</td>
+<td>Writeable sequence(s)</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-poliii</td>
+<td>This option allows you to select only the 21 base probes that start with a purine and so can be expressed from Pol III expression vectors. This is the NARN(17)YNN pattern that has been suggested by Tuschl et al.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-aa</td>
+<td>This option allows you to select only those 23 base regions that start with AA. If this option is not selected then regions that start with AA will be favoured by giving them a higher score, but regions that do not start with AA will also be reported.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-tt</td>
+<td>This option allows you to select only those 23 base regions that end with TT. If this option is not selected then regions that end with TT will be favoured by giving them a higher score, but regions that do not end with TT will also be reported.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]polybase</td>
+<td>If this option is FALSE then only those 23 base regions that have no repeat of 4 or more of any bases in a row will be reported. No regions will ever be reported that have 4 or more G's in a row.</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-context</td>
+<td>The output report file gives the sequences of the 21 base siRNA regions ready to be ordered. This does not give you an indication of the 2 bases before the 21 bases. It is often interesting to see which of the suggested possible probe regions have an 'AA' in front of them (i.e. it is useful to see which of the 23 base regions start with an 'AA'). This option displays the whole 23 bases of the region with the first two bases in brackets, e.g. '(AA)' to give you some context for the probe region. YOU SHOULD NOT INCLUDE THE TWO BASES IN BRACKETS WHEN YOU PLACE AN ORDER FOR THE PROBES.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>

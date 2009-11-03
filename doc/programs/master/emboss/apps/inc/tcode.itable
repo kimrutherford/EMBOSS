@@ -1,0 +1,73 @@
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Nucleotide sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-window</td>
+<td>This is the number of nucleotide bases over which the TESTCODE statistic will be performed each time. The window will then slide along the sequence, covering the same number of bases each time.</td>
+<td>Integer 200 or more</td>
+<td>200</td>
+</tr>
+
+<tr>
+<td>-outfile</td>
+<td>Output report file name</td>
+<td>Report output file</td>
+<td><i>&lt;*&gt;</i>.tcode</td>
+</tr>
+
+<tr>
+<td>-graph</td>
+<td>Graph type</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, das, xterm, png, gif</td>
+<td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-datafile</td>
+<td>The default data file is Etcode.dat and contains coding probabilities for each base. The probabilities are for both positional and compositional information.</td>
+<td>Data file</td>
+<td>Etcode.dat</td>
+</tr>
+
+<tr>
+<td>-step</td>
+<td>The selected window will, by default, slide along the nucleotide sequence by three bases at a time, retaining the frame (although the algorithm is not frame sensitive). This may be altered to increase or decrease the increment of the slide.</td>
+<td>Integer 1 or more</td>
+<td>3</td>
+</tr>
+
+<tr>
+<td>-plot</td>
+<td>On selection a graph of the sequence (X axis) plotted against the coding score (Y axis) will be displayed. Sequence above the green line is coding, that below the red line is non-coding.</td>
+<td>Toggle value Yes/No</td>
+<td>No</td>
+</tr>
+
+</table>

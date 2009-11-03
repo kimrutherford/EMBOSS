@@ -1,0 +1,323 @@
+AC  R00077
+XX
+ID  HS$ALBU_01
+XX
+DT  20.06.90 (created); ewi.
+DT  24.08.95 (updated); hiwi.
+XX
+TY  D
+XX
+DE  albumin; Gene: G000188.
+XX
+SQ  tGGTTAGtaattactaa.
+XX
+SF  -363 
+ST  -338 
+XX
+BF  T00368; HNF-1A;Quality: 1; Species: human, Homo sapiens.
+BF  T00369; HNF-1;Quality: 1; Species: rat, Rattus norvegicus.
+BF  T01950; HNF-1B;Quality: 1; Species: human, Homo sapiens.
+BF  T01951; HNF-1C;Quality: 1; Species: human, Homo sapiens.
+XX
+OS  human, Homo sapiens
+OC  eukaryota; animalia; metazoa; chordata; vertebrata; 
+OC  tetrapoda; mammalia; eutheria; primates
+XX
+SO  0103; Hep3B
+SO  0289; rl
+XX
+MM  gel retardation
+MM  direct gel shift
+MM  DNase I footprinting
+MM  gel shift competition
+MM  affinity chromatography
+MM  methylation interference
+XX
+DR  EMBL: M13075; HSALBEX1(695:711).
+XX
+RN  [1]
+RA  Frain M., Swart G., Monaci P., Nicosia A., Staempfli 
+RA  S., Frank R., Cortese R.
+RT  The liver-specific transcription factor LF-B1 contains 
+RT  a highly diverged homeobox DNA binding domain
+RL  Cell 59:145-157 (1989).
+RN  [2]
+RA  Frain M., Hardon E., Ciliberto G., Sala-Trepat J. M.
+RT  Binding of a liver-specific factor to the human albumin 
+RT  gene promoter and enhancer
+RL  Mol. Cell. Biol. 10:991-999 (1990).
+XX
+//
+AC  R00078
+XX
+ID  HS$ALBU_02
+XX
+DT  20.06.90 (created); ewi.
+DT  24.08.95 (updated); hiwi.
+XX
+TY  D
+XX
+DE  albumin; Gene: G000188.
+XX
+SQ  TTGGCA.
+XX
+SF  -136 
+ST  -107 
+XX
+BF  T00599; NF-1/L;Quality: 6; Species: rat, Rattus norvegicus.
+XX
+OS  human, Homo sapiens
+OC  eukaryota; animalia; metazoa; chordata; vertebrata; 
+OC  tetrapoda; mammalia; eutheria; primates
+XX
+SO  0289; rl
+XX
+MM  gel retardation
+MM  DNase I footprinting
+XX
+DR  EMBL: M13075; HSALBEX1(927:932).
+XX
+RN  [1]
+RA  Paonessa G., Gounari F., Frank R., Cortese R.
+RT  Purification of a NF1-like DNA-binding protein from 
+RT  rat liver and cloning of the corresponding cDNA
+RL  EMBO J. 7:3115-3123 (1988).
+XX
+//
+AC  R00079
+XX
+ID  HS$ALBU_03
+XX
+DT  20.06.90 (created); ewi.
+DT  24.08.95 (updated); hiwi.
+XX
+TY  D
+XX
+DE  albumin; Gene: G000188.
+XX
+SQ  TGGCA.
+XX
+SF  -102 
+ST  -79 
+XX
+BF  T00599; NF-1/L;Quality: 6; Species: rat, Rattus norvegicus.
+XX
+OS  human, Homo sapiens
+OC  eukaryota; animalia; metazoa; chordata; vertebrata; 
+OC  tetrapoda; mammalia; eutheria; primates
+XX
+SO  0289; rl
+XX
+MM  gel retardation
+MM  DNase I footprinting
+XX
+DR  EMBL: M13075; HSALBEX1(959:963).
+DR  EPD: E16042; EP016042.
+XX
+RN  [1]
+RA  Paonessa G., Gounari F., Frank R., Cortese R.
+RT  Purification of a NF1-like DNA-binding protein from 
+RT  rat liver and cloning of the corresponding cDNA
+RL  EMBO J. 7:3115-3123 (1988).
+XX
+//
+AC  R00080
+XX
+ID  HS$ALBU_04
+XX
+DT  20.06.90 (created); ewi.
+DT  24.08.95 (updated); hiwi.
+XX
+TY  D
+XX
+DE  albumin; Gene: G000188.
+XX
+SQ  TTAATAAT.
+XX
+SF  -91 
+ST   17 
+XX
+BF  T00015; AFP1;Quality: 6; Species: human, Homo sapiens.
+XX
+OS  human, Homo sapiens
+OC  eukaryota; animalia; metazoa; chordata; vertebrata; 
+OC  tetrapoda; mammalia; eutheria; primates
+XX
+SO  0115; HuH-7
+XX
+MM  direct gel shift
+XX
+DR  EMBL: M13075; HSALBEX1(991:998).
+XX
+RN  [1]
+RA  Sawadaishi K., Morinaga T., Tamaoki T.
+RT  Interaction of a Hepatoma-Specific Nuclear Factor 
+RT  with Transcription-Regulatory Sequences of the Human 
+RT  alpha-Fetoprotein and Albumin Genes
+RL  Mol. Cell. Biol. 8:5179-5187 (1988).
+XX
+//
+AC  R00081
+XX
+ID  HS$ALBU_05
+XX
+DT  20.06.90 (created); ewi.
+DT  24.08.95 (updated); hiwi.
+XX
+TY  D
+XX
+DE  albumin; Gene: G000188.
+XX
+SQ  TCTAGTTAATAATCTACAAT.
+XX
+SF  -72 
+ST  -42 
+XX
+BF  T00369; HNF-1;Quality: 4; Species: rat, Rattus norvegicus.
+XX
+OS  human, Homo sapiens
+OC  eukaryota; animalia; metazoa; chordata; vertebrata; 
+OC  tetrapoda; mammalia; eutheria; primates
+XX
+SO  0289; rl
+XX
+MM  gel retardation
+MM  DNase I footprinting
+MM  gel shift competition
+MM  methylation interference
+XX
+DR  EMBL: M13075; HSALBEX1(986:1005).
+DR  EPD: E16042; EP016042.
+XX
+RN  [1]
+RA  Hardon E. M., Frain M., Paonessa G., Cortese R.
+RT  Two distinct factors interact with the promoter regions 
+RT  of several liver-specific genes
+RL  EMBO J. 7:1711-1719 (1988).
+RN  [2]
+RA  Toniatti C., Demartis A., Monaci P., Nocosia A., Ciliberto G.
+RT  Synergistic trans-activation of the human C-reactive 
+RT  protein promoter by transcription factor HNF-1 binding at two distinct sites
+RL  EMBO J. 9:4467-4475 (1990).
+XX
+//
+AC  R04140
+XX
+ID  Y$ADH1_02
+XX
+DT  12.04.95 (created); ewi.
+DT  03.01.96 (updated); hiwi.
+XX
+TY  D
+XX
+DE  ADH1 (alcohol dehydrogenase); Gene: G000870.
+XX
+SQ  ACAATATGGACTTCCTCTTTTCTGG.
+XX
+SF  -694 
+ST   0 
+XX
+BF  T00322; GCR1;Quality: 2; Species: yeast, Saccharomyces cerevisiae.
+XX
+OS  yeast, Saccharomyces cerevisiae
+OC  eukaryota; plantae; thallobionta; eumycota; hemiascomycetes; 
+OC  endomycetales; saccharomycetaceae
+XX
+SO  0324; rec(yeast-ret lys)
+XX
+MM  direct gel shift
+XX
+DR  EMBL: V01292; SCADHI(57:81).
+XX
+RN  [1]
+RA  Huie M. A., Scott E. W., Drazinic C. M., Lopez M. 
+RA  C., Hornstra I. K., Yang T. P., Baker H. V.
+RT  Characterization of the DNA-binding activity of GCR1: 
+RT  In vivo evidence for two GCR1-binding sites in the 
+RT  upstream activating sequence of TPI of Saccharomyces cerevisiae
+RL  Mol. Cell. Biol. 12:2690-2700 (1992).
+XX
+//
+AC  R04412
+XX
+ID  MOUSE$FCGR3A_01
+XX
+DT  14.05.97 (created); ewi.
+DT  14.05.97 (updated); ewi.
+XX
+TY  D
+XX
+DE  FcgammaRIIIA (low-affinity Fc receptor IIIA for IgG); Gene: G001014.
+XX
+SQ  GTCTGCTGACC.
+XX
+EL  MRR
+XX
+SF  -88 
+ST  -78 
+XX
+BF  T00811; TFE3;Quality: 2; Species: human, Homo sapiens.
+BF  T00874; USF;Quality: 2; Species: human, Homo sapiens.
+XX
+OS  mouse, Mus musculus
+OC  eukaryota; animalia; metazoa; chordata; vertebrata; 
+OC  tetrapoda; mammalia; eutheria; rodentia; myomorpha; muridae; murinae
+XX
+SO  0306; rec(human-E.coli)
+SO  0495; A20
+SO  0848; RAW264.7
+XX
+MM  direct gel shift
+MM  methylation interference
+XX
+DR  EMBL: U11854; MM11854(1931:1941).
+XX
+RN  [1]
+RA  Feinman R., Qiu W. Q., Pearse R. N., Nikolajczyk B. 
+RA  S., Sen R., Sheffery M., Ravetch J. V.
+RT  PU.1 and an HLH family member contribute to the myeloid-specific 
+RT  transcription of the FcgammaRIIIA promoter
+RL  EMBO J. 13:3852-3860 (1994).
+XX
+//
+AC  R04413
+XX
+ID  MOUSE$FCGR3A_02
+XX
+DT  14.05.97 (created); ewi.
+DT  14.05.97 (updated); ewi.
+XX
+TY  D
+XX
+DE  FcgammaRIIIA (low-affinity Fc receptor IIIA for IgG); Gene: G001014.
+XX
+SQ  TTCCTC.
+XX
+EL  MRR
+XX
+SF  -48 
+ST  -43 
+XX
+BF  T00702; PU.1;Quality: 3; Species: mouse, Mus musculus.
+XX
+OS  mouse, Mus musculus
+OC  eukaryota; animalia; metazoa; chordata; vertebrata; 
+OC  tetrapoda; mammalia; eutheria; rodentia; myomorpha; muridae; murinae
+XX
+SO  0495; A20
+SO  0848; RAW264.7
+XX
+MM  direct gel shift
+MM  methylation interference
+MM  supershift (antibody binding)
+XX
+DR  EMBL: U11854; MM11854(1971:1976).
+XX
+RN  [1]
+RA  Feinman R., Qiu W. Q., Pearse R. N., Nikolajczyk B. 
+RA  S., Sen R., Sheffery M., Ravetch J. V.
+RT  PU.1 and an HLH family member contribute to the myeloid-specific 
+RT  transcription of the FcgammaRIIIA promoter
+RL  EMBO J. 13:3852-3860 (1994).
+XX
+//

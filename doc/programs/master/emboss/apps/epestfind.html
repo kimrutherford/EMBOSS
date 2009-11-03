@@ -1,0 +1,325 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: epestfind
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+epestfind
+<!--#include file="header2.inc" -->
+<H2>
+    Function
+</H2>
+<!--#include file="inc/epestfind.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<p><b>epestfind</b> rapidly and objectively identifies PEST motifs in an input protein sequence. PEST motifs reduce the half-lives of proteins dramatically and hence, that they target proteins for proteolytic degradation.  <b>epestfind</b> writes an output file with putative PEST motifs and (optionally) the PEST scores are plotted for the whole sequence length.</p>
+
+<p>The <b>epestfind</b> output file includes poor and potential PEST motifs together with their PEST score, mass percent of DEPST and their hydrophobicity index.  'Valid' PEST motifs below the specified threshold score are considered as 'poor', while PEST scores above the threshold score are of real biological interest. The higher the PEST score, the more likely is degradation of proteins mediated via 'potential' PEST motifs in eukaryotic cells.</p>
+
+<H2>
+    Algorithm
+</H2>
+
+PEST motifs were defined as hydrophilic stretches of at least 12 amino
+acids length with a high local concentration of critical amino acids. 
+Remarkably, negatively charged amino acids are clustered within these
+motifs while positively charged amino acids, arginine (R), histidine (H)
+and lysine (K) are generally forbidden. 
+
+<p>
+
+The <b>epestfind</b> algorithm defines the last criterion even more
+stringently in that PEST motifs are required to be flanked by positively
+charged amino acids.  Though this implication greatly facilitates
+computer scanning, a few PEST sequences might be missed.  Especially
+sequences with a high local concentration of critical amino acids but
+with a long distance between positively charged amino acids are error
+prone.  Due to their length, these PEST motifs might become diluted,
+which results in scores apparently lower than initially expected. 
+Another side effect of scanning for positively charged amino acids is
+that very long PEST motifs are sub-divided into adjacent smaller ones. 
+However, identification of PEST motifs is achieved by an initial scan
+for positively charged amino acids arginine (R), histidine (H) and
+lysine (K) within the specified protein sequence.  All amino acids
+between the positively charged flanks are counted and only those motifs
+are considered further, which contain a number of amino acids equal to
+or higher than the window-size parameter.  Additionally, all 'valid'
+PEST regions are required to contain at least one proline (P), one
+aspartate (D) or glutamate (E) and at least one serine (S) or
+threonine(T).  Sequences that do not meet the above criteria are
+classified as 'invalid' PEST motifs and excluded from further analysis. 
+
+<p>
+
+The quality of 'valid' PEST motifs is refined by means of a scoring
+parameter based on the local enrichment of critical amino acids as well
+as the motif's hydrophobicity.  Enrichment of D, E, P, S and T is
+expressed in mass percent (w/w) and corrected for one equivalent of D or
+E, one of P and one of S or T.  Calculation of hydrophobicity follows in
+principle the method of J.  Kyte and R.F.  Doolittle [4].  For
+simplified calculations, Kyte-Doolittle hydropathy indices, which
+originally ranged from -4.5 for arginine to +4.5 for isoleucine, were
+converted to positive integers.  This was achieved by the following
+linear transformation, which yielded values from 0 for arginine to 90
+for isoleucine. 
+
+<p>
+
+      <center>Hydropathy index = 10 * Kyte-Doolittle hydropathy index + 45</center>
+
+<p>
+
+The motif's hydrophobicity is calculated as the sum over the products of
+mole percent and hydrophobicity index for each amino acid species.  The
+desired PEST score is obtained as combination of local enrichment term
+and hydrophobicity term as expressed by the following equation:
+
+<p>
+
+      <center>PEST score = 0.55 * DEPST - 0.5 * hydrophobicity index.</center>
+
+<p>
+
+Although, the formula above differs from the publication [1], it is in
+fact the correct one, which was also implemented in the original BASIC
+programme (personal communication).  In addition, the programme includes
+a correction for the hydropathy index of tyrosine, introduced by Robert
+H.  Stellwagen from the University of Southern California.  However,
+PEST scores can range from -45 for poly-isoleucine to about +50 for
+poly-aspartate plus one proline and one serine.  'Valid' PEST motifs
+below the threshold score (5.0) are considered as 'poor', while PEST
+scores above the threshold score are of real biological interest.  The
+higher the PEST score, the more likely is degradation of proteins
+mediated via 'potential' PEST motifs in eukaryotic cells. 
+
+<p>
+
+Presently, all modified Kyte-Doolittle hydropathy indices are
+hard-coded into the programme, which might change in future.
+
+<p>
+
+The array of linear transformed Kyte-Doolittle hydropathy
+indices (ltkdhi) is listed in alphabetical order below.
+(A-M and N-Z as well as N-terminus and C-terminus)
+
+<p>
+
+63, 10, 70, 10, 10, 72, 41, 13, 90,  0,  6, 82, 64,
+10,  0, 29, 10,  0, 36, 38,  0, 87, 36, 45, 58, 10,
+ 0,  0
+
+<p>
+
+The linear transformation was ltkdhi = 10 * kdhi + 45
+<br>
+All values range from Argine R = 0 to Isoleucine I = 90
+<br>
+B=(N|D)=10 since N=10 and D=10
+<br>
+Z=(Q|E)=10 since Q=10 and E=10
+<br>
+X=10*0+45=45
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/epestfind.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/epestfind.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/epestfind.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+<b>epestfind</b> reads any normal protein sequence USA.
+
+<p>
+<!--#include file="inc/epestfind.input" -->
+
+
+<H2>
+    Output file format
+</H2>
+
+<b>epestfind</b> 
+outputs a graph to the specified graphics device. 
+
+
+<p>
+<!--#include file="inc/epestfind.output" -->
+<p>
+
+The output from <b>epestfind</b> is a simple text one.  It reports poor
+and potential PEST motifs together with their PEST score, mass percent
+of DEPST and their hydrophobicity index. 
+
+<p>
+
+'Valid' PEST motifs below the threshold score (5.0) are considered as
+'poor', while PEST scores above the threshold score are of real
+biological interest.  The higher the PEST score, the more likely is
+degradation of proteins mediated via 'potential' PEST motifs in
+eukaryotic cells. 
+
+<p>
+
+
+<H2>
+    Data files
+</H2>
+
+The physico-chemical properties of the residues are read from the EMBOSS
+data file 'Eamino.dat'.  This file can be copied into your current
+directory and inspected or altered by using the application 'embossdata
+-fetch'.  Another file can be specified using the qualifier '-aadata'. 
+
+<p>
+
+<!--#include file="inc/localfiles.ihtml" -->
+
+<p>
+
+Here is the default Eamino.dat file:
+
+<p>
+
+<pre>
+# Molecular weights of amino acids
+# Also classified as:
+#  Tiny, Small, Aliphatic, Aromatic, Non-polar, Polar, Charge, +ve, -ve
+#
+A        71.0786         1 1 0 0 1 0 0   0 0
+B       114.5960         0 1 0 0 0 0 -.5 0 1
+C       103.1386         1 1 0 0 1 0 0   0 0
+D       115.0884         0 1 0 0 0 1 -1  0 1
+E       129.1152         0 0 0 0 0 1 -1  0 1
+F       147.1762         0 0 0 1 1 0 0   0 0
+G        57.0518         1 1 0 0 1 0 0   0 0
+H       137.1408         0 0 0 1 0 1 .5  1 0
+I       113.1590         0 0 1 0 1 0 0   0 0
+J         0.0            0 0 0 0 0 0 0   0 0
+K       128.1736         0 0 0 0 0 1 1   1 0
+L       113.1590         0 0 1 0 1 0 0   0 0
+# If met gets oxidised to the sulphoxide replace by 147.1926
+M       131.1926         0 0 0 0 1 0 0   0 0
+N       114.1036         0 1 0 0 0 1 0   0 0
+O         0.0            0 0 0 0 0 0 0   0 0
+P        97.1164         0 1 0 0 1 0 0   0 0
+Q       128.1304         0 0 0 0 0 1 0   0 0
+R       156.1870         0 0 0 0 0 1 1   1 0
+S        87.0780         1 1 0 0 0 1 0   0 0
+T       101.1048         1 1 0 0 0 1 0   0 0
+U         0.0            0 0 0 0 0 0 0   0 0
+V        99.1322         0 1 1 0 1 0 0   0 0
+W       186.2128         0 0 0 1 1 0 0   0 0
+X       144.0000         0 0 0 0 0 0 0   0 0
+Y       163.1756         0 0 0 1 1 0 0   0 0
+Z       128.6228         0 0 0 0 0 1 -.5 0 1
+</pre>
+
+
+<H2>
+    Notes
+</H2>
+
+<p>Briefly, the PEST hypothesis was based on a literature survey that combined both information on protein stability as well as protein primary sequence information. Initially, the study relied on 12 short-lived proteins with well-known properties [1], but was continually extended later [2,3]. The initial group of proteins included E1A, c-myc, p53, c-fos, v-myb, P730 phytochrome, heat shock protein 70 (HSP 70), HMG-CoA reductase, tyrosine aminotransferase (TAT), ornithine decarboxylase (ODC), alpha-Casein and beta-Casein. Although all these proteins exerted various different cellular functions it became apparent that they shared high local concentrations of amino acids proline (P), glutamic acid (E), serine (S), threonine (T) and to a lesser extent aspartic acid (D). From that it was concluded that PEST motifs reduce the half-lives of proteins dramatically and hence, that they target proteins for proteolytic degradation.</p>
+<p>PEST means Black Death in German, so that the name of this programme sounds a bit strange, at least in our ears.</p>
+
+
+<H2>
+    References
+</H2>
+
+<ol>
+
+<li>Rogers S.W., Wells R., Rechsteiner M.
+      Amino acid sequences common to rapidly degraded proteins:
+      The PEST hypothesis
+      Science 234, 364-368 (1986)
+
+<li>Rechsteiner M., Rogers S., Rote K.
+      Protein structure and intracellular stability
+      Trends Biochem. Sci. 12, 390-394 (1987)
+
+<li>Rechsteiner M. and Rogers S.W.
+      PEST sequences and regulation by proteolysis
+      Trends Biochem. Sci. 21, 267-271 (1996)
+
+<li>J. Kyte and R.F. Dootlittle
+      A simple method for displaying the hydropathic character of a protein
+      J. Mol. Biol. 157, 105 (1982)
+
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+
+<!--#include file="inc/epestfind.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/mgrabner.address" -->
+<p>
+
+Original program 'epestfind' by Scott Rogers and Martin Rechsteiner
+(C)1986. 
+
+<H2>
+    History
+</H2>
+
+<!--#include file="inc/epestfind.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/epestfind.comment" -->
+</BODY>
+</HTML>
+

@@ -1,0 +1,169 @@
+application: infoalign [
+  documentation: "Display basic information about a multiple sequence alignment"
+  groups: "Alignment:Multiple, Information"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqset: sequence [
+    parameter: "Y"
+    type: "gapany"
+    aligned: "Y"
+    help: "The sequence alignment to be displayed."
+  ]
+
+  matrix: matrix [
+    additional: "Y"
+    information: "Similarity scoring Matrix file"
+    protein: "$(acdprotein)"
+    help: "This is the scoring matrix file used when comparing
+           sequences. By default it is the file 'EBLOSUM62' (for proteins) or
+           the file 'EDNAFULL' (for nucleic sequences). These files are
+           found in the 'data' directory of the EMBOSS installation."
+  ]
+
+  string: refseq [
+    additional: "Y"
+    default: "0"
+    information: "The number or the name of the reference
+                  sequence"
+    help: "If you give the number in the alignment or the name of a
+           sequence, it will be taken to be the reference sequence. The
+           reference sequence is the one against which all the other
+           sequences are compared. If this is set to 0 then the consensus
+           sequence will be used as the reference sequence. By default the
+           consensus sequence is used as the reference sequence."
+    knowntype: "sequence id input"
+  ]
+
+endsection: input
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  float: plurality [
+    default: "50.0"
+    minimum: "0.0"
+    maximum: "100.0"
+    information: "Plurality check % for consensus"
+    help: "Set a cut-off for the % of positive scoring matches below
+           which there is no consensus. The default plurality is taken as 50%
+           of the total weight of all the sequences in the alignment."
+  ]
+
+  float: identity [
+    default: "0.0"
+    minimum: "0.0"
+    maximum: "100.0"
+    information: "Required % of identities at a position fro
+                  consensus"
+    help: "Provides the facility of setting the required number of
+           identities at a position for it to give a consensus. Therefore, if
+           this is set to 100% only columns of identities contribute to the
+           consensus."
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    parameter: "Y"
+    extension: "infoalign"
+    knowntype: "infoalign output"
+    help: "If you enter the name of a file here then this program will
+           write the sequence details into that file."
+  ]
+
+  boolean: html [
+    additional: "Y"
+    default: "N"
+    information: "Format output as an HTML table"
+    outputmodifier: "Y"
+  ]
+
+  boolean: only [
+    default: "N"
+    information: "Display the specified columns"
+    help: "This is a way of shortening the command line if you only
+           want a few things to be displayed. Instead of specifying: \
+           '-nohead -nousa -noname -noalign -nogaps -nogapcount -nosimcount
+           -noidcount -nodiffcount -noweight' \
+           to get only the sequence length output, you can specify \
+           '-only -seqlength'"
+  ]
+
+  boolean: heading [
+    default: "@(!$(only))"
+    information: "Display column headings"
+  ]
+
+  boolean: usa [
+    default: "@(!$(only))"
+    information: "Display the USA of the sequence"
+  ]
+
+  boolean: name [
+    default: "@(!$(only))"
+    information: "Display 'name' column"
+  ]
+
+  boolean: seqlength [
+    default: "@(!$(only))"
+    information: "Display 'seqlength' column"
+  ]
+
+  boolean: alignlength [
+    default: "@(!$(only))"
+    information: "Display 'alignlength' column"
+  ]
+
+  boolean: gaps [
+    default: "@(!$(only))"
+    information: "Display number of gaps"
+  ]
+
+  boolean: gapcount [
+    default: "@(!$(only))"
+    information: "Display number of gap positions"
+  ]
+
+  boolean: idcount [
+    default: "@(!$(only))"
+    information: "Display number of identical positions"
+  ]
+
+  boolean: simcount [
+    default: "@(!$(only))"
+    information: "Display number of similar positions"
+  ]
+
+  boolean: diffcount [
+    default: "@(!$(only))"
+    information: "Display number of different positions"
+  ]
+
+  boolean: change [
+    default: "@(!$(only))"
+    information: "Display % number of changed positions"
+  ]
+
+  boolean: weight [
+    default: "@(!$(only))"
+    information: "Display 'weight' column"
+  ]
+
+  boolean: description [
+    default: "@(!$(only))"
+    information: "Display 'description' column"
+  ]
+
+endsection: output

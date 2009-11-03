@@ -1,0 +1,30 @@
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#    
+#    $RCSfile: efunc.it,v $
+#    $Revision: 1.2 $
+#    $Date: 2002/08/06 10:07:21 $
+#    $Author: rice $
+#
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+$EFUNC_Res = $Resource:[
+  description:
+    |This is an index of the source code for the
+    |<a href="http://www.uk.embnet.org/Software/EMBOSS/">EMBOSS</a>
+    |suite of sequence analysis libraries and applications.
+  www:
+    |<A HREF="http://www.uk.embnet.org/Software/EMBOSS/">
+    |http://www.uk.embnet.org/Software/EMBOSS/</A>
+  citation:
+    |EMBOSS is developed by the
+    |<a href="http://www.uk.embnet.org/">HGMP-RC</a> in collaboration with
+    |other sites in <a href="http://www.embnet.org/">EMBnet</a>
+    |and around the world.
+  ftp:
+    |<a href="ftp://ftp.uk.embnet.org/pub/EMBOSS/">
+    |ftp://ftp.uk.embnet.org/pub/EMBOSS/</a><br>
+  date:
+    |04 Feb 2000
+  fields:{
+  }  
+]

@@ -1,0 +1,31 @@
+<b>Here is a sample session with maskfeat</b>
+<p>
+Mask out a feature whose type is "repeat_region" from position 2331 to 2356: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>maskfeat tembl:ab000360 </b>
+Write a sequence with masked features
+output sequence [ab000360.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+Change to lower-case a feature whose type is "repeat_region" from position 2331 to 2356. Note that '-supper' is used to make the whole sequence upper-case before the lower-case masking: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>maskfeat tembl:ab000360 -tolower -supper </b>
+Write a sequence with masked features
+output sequence [ab000360.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>

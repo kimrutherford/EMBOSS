@@ -1,0 +1,34 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: u68037.cpgplot</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+
+
+CPGPLOT islands of unusual CG composition
+U68037 from 1 to 1218
+
+     Observed/Expected ratio &gt; 0.60
+     Percent C + Percent G &gt; 50.00
+     Length &gt; 200
+
+ Length 406 (104..509)
+
+ Length 329 (596..924)
+</pre>
+</td></tr></table><p>
+<p><h3>File: u68037.gff</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+##gff-version 3
+##sequence-region U68037 1 924
+#!Date 2008-07-15
+#!Type DNA
+#!Source-version EMBOSS 6.1.0
+U68037	cpgplot	sequence_feature	104	509	0.000	+	.	ID="U68037.1"
+U68037	cpgplot	sequence_feature	596	924	0.000	+	.	ID="U68037.2"
+</pre>
+</td></tr></table><p>
+<p><h3>Graphics File: cpgplot.ps</h3>
+<p><img src="cpgplot.1.cpgplot.gif" alt="[cpgplot results]">

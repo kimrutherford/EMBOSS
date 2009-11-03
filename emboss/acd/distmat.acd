@@ -1,0 +1,120 @@
+application: distmat [
+  documentation: "Create a distance matrix from a multiple sequence alignment"
+  groups: "Phylogeny:Molecular sequence"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqset: sequence [
+    parameter: "Y"
+    type: "gapany"
+    aligned: "Y"
+    minseqs: "2"
+    help: "File containing a sequence alignment."
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  list: nucmethod [
+    standard: "@(!$(acdprotein))"
+    default: "0"
+    minimum: "1"
+    maximum: "1"
+    header: "Multiple substitution correction methods for
+             nucleotides"
+    values: "0:Uncorrected; 1:Jukes-Cantor; 2:Kimura; 3:Tamura;
+             4:Tajima-Nei; 5:Jin-Nei Gamma"
+    delimiter: ";"
+    codedelimiter: ":"
+    information: "Method to use"
+    help: "Multiple substitution correction methods for nucleotides."
+  ]
+
+  list: protmethod [
+    standard: "$(acdprotein)"
+    default: "0"
+    minimum: "1"
+    maximum: "1"
+    header: "Multiple substitution correction methods for proteins"
+    values: "0:Uncorrected; 1:Jukes-Cantor; 2:Kimura Protein;"
+    delimiter: ";"
+    codedelimiter: ":"
+    information: "Method to use"
+    help: "Multiple substitution correction methods for proteins."
+  ]
+
+endsection: required
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  boolean: ambiguous [
+    additional: "@(@(@(!$(acdprotein)) & @($(nucmethod)==1)) |
+                 @($(acdprotein) & @($(protmethod)!=2)))"
+    default: "N"
+    information: "Use the ambiguous codes in the calculation."
+    help: "Option to use the ambiguous codes in the calculation of the
+           Jukes-Cantor method or if the sequences are proteins."
+  ]
+
+  float: gapweight [
+    additional: "@(@(@($(nucmethod)<2) & @(!$(acdprotein))) |
+                 @($(acdprotein) & @($(protmethod)!=2)))"
+    information: "Weight given to gaps"
+    default: "0."
+    help: "Option to weight gaps in the uncorrected (nucleotide) and
+           Jukes-Cantor distance methods."
+  ]
+
+  integer: position [
+    additional: "@(@(!$(acdprotein)) & @($(nucmethod)!=4))"
+    default: "123"
+    information: "Base position to analyse"
+    help: "Choose base positions to analyse in each codon i.e. 123
+           (all bases), 12 (the first two bases), 1, 2, or 3 individual
+           bases."
+  ]
+
+  boolean: calculatea [
+    additional: "@(@(!$(acdprotein)) & @($(nucmethod)==5))"
+    default: "N"
+    information: "Calculate the nucleotide Jin-Nei parameter
+                  'a'"
+    help: "This will force the calculation of parameter 'a' in the
+           Jin-Nei Gamma distance calculation, otherwise the default is 1.0
+           (see -parametera option)."
+  ]
+
+  float: parametera [
+    additional: "@(@(!$(calculatea)) & @($(nucmethod)==5))"
+    default: "1.0"
+    information: "Nucleotide Jin-Nei parameter 'a'"
+    help: "User defined parameter 'a' to be use in the Jin-Nei Gamma
+           distance calculation. The suggested value to be used is 1.0 (Jin
+           et al.) and this is the default."
+  ]
+
+endsection: additional
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    parameter: "Y"
+    knowntype: "distance matrix"
+    information: "Phylip distance matrix output file"
+  ]
+
+endsection: output

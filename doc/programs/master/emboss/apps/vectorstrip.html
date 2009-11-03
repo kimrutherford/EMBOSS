@@ -1,0 +1,195 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+vectorstrip
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/vectorstrip.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+<p><b>vectorstrip</b> reads one or more nucleotide sequences and writes them out again but with any of a specified set of vector sequences removed from the 5' and 3' termini. An output file with a summary of the results if also written. The vector sequences to strip out are (typically) provided in an input file.  The pair of 5' and 3' vector sequences are searched against each input sequence allowing a specified maximum level of mismatches. Each 5' hit is paired with each 3' hit and the resulting subsequences output.  By default only the best match between the vector patterns and each sequence are reported. Optionally, all matches up to the specified maximum mismatch level are reported.</p>
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/vectorstrip.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/vectorstrip.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/vectorstrip.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+<!--#include file="inc/vectorstrip.input" -->
+
+<p>
+
+The same fragment has been cloned into the XhoI site of the polylinker
+of each vector.  The cloned fragment is represented in lower case and
+the vector sequence in upper case so the sequence trimming can be
+readily seen. 
+
+<p>
+
+
+Each line of the vector file should contain the name of the vector, the
+5' pattern and the 3' pattern. 
+
+<br>
+
+Lines beginning with # are treated as comments and ignored.
+
+<br>
+
+If only one vector sequence is given in the it will be assumed that 
+this is the 5' pattern.
+
+<br>
+
+If a vector name is given but no pattern data, the vector will not 
+be used.
+
+
+
+<H2>
+    Output file format
+</H2>
+<!--#include file="inc/vectorstrip.output" -->
+
+<p>
+
+Two types of output file are produced:
+<ol>
+
+<li>The sequence file(s) - contain the trimmed subsequence(s) produced
+by <b>vectorstrip</b> either all in one file, or in separate files if
+the command line flag <b>-ossingle</b> is used. 
+
+<li>Results summary file 
+</ol>
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+<p><b>vectorstrip</b> is intended for stripping vector sequence from the ends of sequences of interest. For example, if a fragment has been cloned into a vector and then sequenced, the sequence may contain vector data eg from the cloning polylinker at the 5' and 3' ends of the sequence. <b>vectorstrip</b> will remove these contaminating regions and output trimmed sequence ready for input into another application.</p>
+
+<p><b>vectorstrip</b> is suitable for use with low quality sequence data as it can allow for mismatches between the sequence and the vector patterns provided. You can specify the maximum level of mismatch expected.</p>
+
+<p>Vector data can either be provided in a file or interactively. If presented in a file, <b>vectorstrip</b> will search all input sequences with all vectors listed in that file. The intention is that the user can maintain a single file for use with <b>vectorstrip</b>, containing all the linker sequences commonly used in the laboratory.</p>
+
+<p>The two patterns for each vector are searched separately against the sequence. Once the search is completed, each of the hits of the 5' sequence is paired with each of the hits of the 3' sequence and the resulting subsequences are output. For example, if the 5' sequence matches the sequence from (a) position 30-60, and(b)position 70-100, and the 3' sequence matches from 150-175, then two subsequences will be output: from 61-149, and from 101-149. The lower the quality of the sequence, the more likely multiple hits become if nonzero mismatches are accepted.</p>
+
+<p>Default behaviour is to report only the best matches between the vector patterns and the sequence. This means that if you specify a maximum mismatch level of 10%, but the vector patterns match the sequence with zero mismatches, the search will stop and the program will output only these "best" matches. If there are no perfect matches, the program will try searching again allowing 1 mismatch, then 2, and so on until either the patterns match the sequence or the maximum specified mismatch level is exceeded. You can tell <b>vectorstrip</b> to show all possible matches up to your specified maximum level, as illustrated in the examples below.</p>
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<ol>
+
+<li><pre>No suitable vectors found - exiting</pre> indicates that the
+5' and 3' patterns for the vectors were blank - usually this is as a
+result of an empty vectorfile.
+
+<li><pre>Illegal pattern</pre> indicates that one of the vector
+patterns could not be compiled and therefore cannot be searched.
+
+<li><pre>5' and 3' sequence matches are identical; inconclusive</pre>
+indicates that the 5' and 3' patterns provided were identical, and
+that they only match the sequence once. Thus the program cannot
+determine which part of the sequence is vector and which is insert.
+
+</ol>
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+
+None.
+
+<!--#include file="inc/vectorstrip.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+<!--
+<!--#include file="inc/vcurwen.address" -->
+
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/vectorstrip.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/vectorstrip.comment" -->
+
+
+</BODY>
+</HTML>
+

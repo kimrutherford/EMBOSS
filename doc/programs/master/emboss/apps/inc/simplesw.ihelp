@@ -1,0 +1,9 @@
+   Mandatory qualifiers:
+  [-sequencea]         sequence   Sequence USA
+  [-sequenceb]         sequence   Sequence USA
+
+   Optional qualifiers:
+   -datafile           matrix     Matrix file
+   -showinternals      bool       Show internals of calculation
+
+   Advanced qualifiers: (none)

@@ -1,0 +1,593 @@
+
+                                  twofeat 
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Finds neighbouring pairs of features in sequence(s)
+
+Description
+
+   twofeat finds neighbouring pairs of specified features in one or more
+   input sequences. Each feature may be specified by type, name, sense,
+   score, tag/value pairs etc. Their relationship, e.g. their sequence
+   separation or overlap, relative sense and order may also be specified.
+   It writes a standard EMBOSS report file with any such feature pairs
+   identified. By default each pair is written as a single feature but
+   (optionally) they are written in their original form.
+
+Algorithm
+
+   For each of the pair of features, you can specify its type name, its
+   sense, its score and any tag/value pairs, amongst other things.
+
+   You can then specify the type of relationship that the two features
+   should have as follows:
+
+   Minimum and maximum distance between each feature.
+
+   Distance measurement (measure from the nearest ends of the two
+   features, from the left ends, from right ends, from the furthest
+   ends.)
+
+   Type of overlap (any type of overlap or no overlap is allowed, Overlap
+   required, No overlaps are allowed, Overlap required but one feature
+   must not be completely within the other, Feature A must be completely
+   enclosed within feature B, Feature B must be completely enclosed
+   within feature A).
+
+   Feature sense (any sense, in the same sense or in opposite senses)
+
+   Feature order (any order, Feature A then feature B, Feature B then
+   feature A)
+
+   The program proceeds as follows. For eachs sequence: Identify the
+   features that match the criteria for Feature A Identify the features
+   that match the criteria for Feature B Compare all pairs of features If
+   they satisfy the requirements output them to the report file
+
+   By default the resulting pairs of features found are then written to a
+   report file as a single feature from the first postion of the
+   left-most feature to the last position of the right-most feature. You
+   can modify the output to report the pairs of features with no changes
+   made to them.
+
+Usage
+
+   Here is a sample session with twofeat
+
+   Without the -twoout option the output report contains just one feature
+   for every pair of features found.
+
+
+% twofeat tembl:x65923 
+Finds neighbouring pairs of features in sequence(s)
+Type of first feature [*]: polyA_signal
+Type of second feature [*]: polyA_site
+The minimum distance between the features [0]: 10
+The maximum distance between the features [0]: 50
+Output report [x65923.twofeat]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+   Example 2
+
+   The -twoout option makes the output report give the pairs of features
+   found. The output report format type has been changed to display the
+   full original pairs of features in GFF format.
+
+
+% twofeat -twoout -rformat gff tembl:x65923 
+Finds neighbouring pairs of features in sequence(s)
+Type of first feature [*]: polyA_signal
+Type of second feature [*]: polyA_site
+The minimum distance between the features [0]: 10
+The maximum distance between the features [0]: 50
+Output report [x65923.twofeat]: 
+
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Sequence(s) filename and optional format, or
+                                  reference (input USA)
+   -atype              string     [*] By default every feature in the feature
+                                  table is allowed. You can set this to be any
+                                  feature type you wish to allow.
+                                  See http://www3.ebi.ac.uk/Services/WebFeat/
+                                  for a list of the EMBL feature types and see
+                                  Appendix A of the Swissprot user manual in
+                                  http://www.expasy.ch/txt/userman.txt for a
+                                  list of the Swissprot feature types.
+                                  The type may be wildcarded by using '*'.
+                                  If you wish to allow more than one type,
+                                  separate their names with the character '|',
+                                  eg:
+                                  *UTR | intron (Any string is accepted)
+   -btype              string     [*] By default every feature in the feature
+                                  table is allowed. You can set this to be any
+                                  feature type you wish to allow.
+                                  See http://www3.ebi.ac.uk/Services/WebFeat/
+                                  for a list of the EMBL feature types and see
+                                  Appendix A of the Swissprot user manual in
+                                  http://www.expasy.ch/txt/userman.txt for a
+                                  list of the Swissprot feature types.
+                                  The type may be wildcarded by using '*'.
+                                  If you wish to allow more than one type,
+                                  separate their names with the character '|',
+                                  eg:
+                                  *UTR | intron (Any string is accepted)
+   -minrange           integer    [0] If this is greater or equal to
+                                  'maxrange', then no min or max range is
+                                  specified (Any integer value)
+   -maxrange           integer    [0] If this is less than or equal to
+                                  'minrange', then no min or max range is
+                                  specified (Any integer value)
+  [-outfile]           report     [*.twofeat] Output report file name
+
+   Additional (Optional) qualifiers (* if not always prompted):
+   -asource            string     [*] By default any feature source in the
+                                  feature table is allowed. You can set this
+                                  to match any feature source you wish to
+                                  allow.
+                                  The source name is usually either the name
+                                  of the program that detected the feature or
+                                  it is the feature table (eg: EMBL) that the
+                                  feature came from.
+                                  The source may be wildcarded by using '*'.
+                                  If you wish to allow more than one source,
+                                  separate their names with the character '|',
+                                  eg:
+                                  gene* | embl (Any string is accepted)
+   -asense             menu       [0] By default any feature sense is allowed.
+                                  You can set this to match the required
+                                  sense. (Values: 0 (Any sense); + (Forward
+                                  sense); - (Reverse sense))
+   -aminscore          float      [0.0] If this is greater than or equal to
+                                  the maximum score, then any score is
+                                  allowed. (Any numeric value)
+   -amaxscore          float      [0.0] If this is less than or equal to the
+                                  maximum score, then any score is permitted.
+                                  (Any numeric value)
+   -atag               string     [*] Tags are the types of extra values that
+                                  a feature may have. For example in the EMBL
+                                  feature table, a 'CDS' type of feature may
+                                  have the tags '/codon', '/codon_start',
+                                  '/db_xref', '/EC_number', '/evidence',
+                                  '/exception', '/function', '/gene',
+                                  '/label', '/map', '/note', '/number',
+                                  '/partial', '/product', '/protein_id',
+                                  '/pseudo', '/standard_name', '/translation',
+                                  '/transl_except', '/transl_table', or
+                                  '/usedin'. Some of these tags also have
+                                  values, for example '/gene' can have the
+                                  value of the gene name.
+                                  By default any feature tag in the feature
+                                  table is allowed. You can set this to match
+                                  any feature tag you wish to allow.
+                                  The tag may be wildcarded by using '*'.
+                                  If you wish to allow more than one tag,
+                                  separate their names with the character '|',
+                                  eg:
+                                  gene | label (Any string is accepted)
+   -avalue             string     [*] Tag values are the values associated
+                                  with a feature tag. Tags are the types of
+                                  extra values that a feature may have. For
+                                  example in the EMBL feature table, a 'CDS'
+                                  type of feature may have the tags '/codon',
+                                  '/codon_start', '/db_xref', '/EC_number',
+                                  '/evidence', '/exception', '/function',
+                                  '/gene', '/label', '/map', '/note',
+                                  '/number', '/partial', '/product',
+                                  '/protein_id', '/pseudo', '/standard_name',
+                                  '/translation', '/transl_except',
+                                  '/transl_table', or '/usedin'. Only some of
+                                  these tags can have values, for example
+                                  '/gene' can have the value of the gene name.
+                                  By default any feature tag value in the
+                                  feature table is allowed. You can set this
+                                  to match any feature tag value you wish to
+                                  allow.
+                                  The tag value may be wildcarded by using
+                                  '*'.
+                                  If you wish to allow more than one tag
+                                  value, separate their names with the
+                                  character '|', eg:
+                                  pax* | 10 (Any string is accepted)
+   -bsource            string     [*] By default any feature source in the
+                                  feature table is allowed. You can set this
+                                  to match any feature source you wish to
+                                  allow.
+                                  The source name is usually either the name
+                                  of the program that detected the feature or
+                                  it is the feature table (eg: EMBL) that the
+                                  feature came from.
+                                  The source may be wildcarded by using '*'.
+                                  If you wish to allow more than one source,
+                                  separate their names with the character '|',
+                                  eg:
+                                  gene* | embl (Any string is accepted)
+   -bsense             menu       [0] By default any feature sense is allowed.
+                                  You can set this to match the required
+                                  sense. (Values: 0 (Any sense); + (Forward
+                                  sense); - (Reverse sense))
+   -bminscore          float      [0.0] If this is greater than or equal to
+                                  the maximum score, then any score is
+                                  allowed. (Any numeric value)
+   -bmaxscore          float      [0.0] If this is less than or equal to the
+                                  maximum score, then any score is permitted.
+                                  (Any numeric value)
+   -btag               string     [*] Tags are the types of extra values that
+                                  a feature may have. For example in the EMBL
+                                  feature table, a 'CDS' type of feature may
+                                  have the tags '/codon', '/codon_start',
+                                  '/db_xref', '/EC_number', '/evidence',
+                                  '/exception', '/function', '/gene',
+                                  '/label', '/map', '/note', '/number',
+                                  '/partial', '/product', '/protein_id',
+                                  '/pseudo', '/standard_name', '/translation',
+                                  '/transl_except', '/transl_table', or
+                                  '/usedin'. Some of these tags also have
+                                  values, for example '/gene' can have the
+                                  value of the gene name.
+                                  By default any feature tag in the feature
+                                  table is allowed. You can set this to match
+                                  any feature tag you wish to allow.
+                                  The tag may be wildcarded by using '*'.
+                                  If you wish to allow more than one tag,
+                                  separate their names with the character '|',
+                                  eg:
+                                  gene | label (Any string is accepted)
+   -bvalue             string     [*] Tag values are the values associated
+                                  with a feature tag. Tags are the types of
+                                  extra values that a feature may have. For
+                                  example in the EMBL feature table, a 'CDS'
+                                  type of feature may have the tags '/codon',
+                                  '/codon_start', '/db_xref', '/EC_number',
+                                  '/evidence', '/exception', '/function',
+                                  '/gene', '/label', '/map', '/note',
+                                  '/number', '/partial', '/product',
+                                  '/protein_id', '/pseudo', '/standard_name',
+                                  '/translation', '/transl_except',
+                                  '/transl_table', or '/usedin'. Only some of
+                                  these tags can have values, for example
+                                  '/gene' can have the value of the gene name.
+                                  By default any feature tag value in the
+                                  feature table is allowed. You can set this
+                                  to match any feature tag value you wish to
+                                  allow.
+                                  The tag value may be wildcarded by using
+                                  '*'.
+                                  If you wish to allow more than one tag
+                                  value, separate their names with the
+                                  character '|', eg:
+                                  pax* | 10 (Any string is accepted)
+   -overlap            menu       [A] This allows you to specify the allowed
+                                  overlaps of the features A and B.
+                                  You can allow any or no overlaps, specify
+                                  that they must or must not overlap, that one
+                                  must or must not be wholly enclosed within
+                                  another feature. (Values: A (Any); O
+                                  (Overlap required); NO (No overlaps are
+                                  allowed); NW (Overlap required but not
+                                  within); AW (A must be all within B); BW (B
+                                  must be all within A))
+   -rangetype          menu       [N] This allows you to specify the positions
+                                  from which the allowed minimum or maximum
+                                  distance between the features is measured
+                                  (Values: N (From nearest ends); L (From left
+                                  ends); R (From right ends); F (From
+                                  furthest ends))
+   -sense              menu       [A] This allows you to specify the required
+                                  sense that the two features must be on. This
+                                  is ignored (always 'Any') when looking at
+                                  protein sequence features. (Values: A (Any
+                                  sense); S (Same sense); O (Opposite sense))
+   -order              menu       [A] This allows you to specify the required
+                                  order of the two features. The order is
+                                  measured from the start positions of the
+                                  features. This criterion is always applied
+                                  despite the specified overlap type required.
+                                  (Values: A (Any); AB (Feature A then
+                                  feature B); BA (Feature B then feature A))
+   -twoout             toggle     [N] If you set this to be true, then the two
+                                  features themselves will be written out. If
+                                  it is left as false, then a single feature
+                                  will be written out covering the two
+                                  features you found.
+*  -typeout            string     [misc_feature] If you have specified that
+                                  the pairs of features that are found should
+                                  be reported as one feature in the ouput,
+                                  then you can specify the 'type' name of the
+                                  new feature here. By default every feature
+                                  in the feature table is allowed. See
+                                  http://www3.ebi.ac.uk/Services/WebFeat/ for
+                                  a list of the EMBL feature types and see
+                                  Appendix A of the Swissprot user manual in
+                                  http://www.expasy.ch/txt/userman.txt for a
+                                  list of the Swissprot feature types. If you
+                                  specify an invalid feature type name, then
+                                  the default name 'misc_feature' is used.
+                                  (Any string is accepted)
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -rformat2           string     Report format
+   -rname2             string     Base file name
+   -rextension2        string     File name extension
+   -rdirectory2        string     Output directory
+   -raccshow2          boolean    Show accession number in the report
+   -rdesshow2          boolean    Show description in the report
+   -rscoreshow2        boolean    Show the score in the report
+   -rstrandshow2       boolean    Show the nucleotide strand in the report
+   -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   twofeat reads any normal sequence USAs.
+
+  Input files for usage example
+
+   'tembl:x65923' is a sequence entry in the example nucleic acid
+   database 'tembl'
+
+  Database entry: tembl:x65923
+
+ID   X65923; SV 1; linear; mRNA; STD; HUM; 518 BP.
+XX
+AC   X65923;
+XX
+DT   13-MAY-1992 (Rel. 31, Created)
+DT   18-APR-2005 (Rel. 83, Last updated, Version 11)
+XX
+DE   H.sapiens fau mRNA
+XX
+KW   fau gene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
+;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-518
+RA   Michiels L.M.R.;
+RT   ;
+RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   L.M.R. Michiels, University of Antwerp, Dept of Biochemistry,
+RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
+XX
+RN   [2]
+RP   1-518
+RX   PUBMED; 8395683.
+RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
+RT   "fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
+RT   an antisense sequence in the Finkel-Biskis-Reilly murine sarcoma virus";
+RL   Oncogene 8(9):2537-2546(1993).
+XX
+DR   H-InvDB; HIT000322806.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..518
+FT                   /organism="Homo sapiens"
+FT                   /chromosome="11q"
+FT                   /map="13"
+FT                   /mol_type="mRNA"
+FT                   /clone_lib="cDNA"
+FT                   /clone="pUIA 631"
+FT                   /tissue_type="placenta"
+FT                   /db_xref="taxon:9606"
+FT   misc_feature    57..278
+FT                   /note="ubiquitin like part"
+FT   CDS             57..458
+FT                   /gene="fau"
+FT                   /db_xref="GDB:135476"
+FT                   /db_xref="GOA:P62861"
+FT                   /db_xref="HGNC:3597"
+FT                   /db_xref="HSSP:1GJZ"
+FT                   /db_xref="InterPro:IPR006846"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
+FT                   /protein_id="CAA46716.1"
+FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLA
+G
+FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKT
+G
+FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
+FT   misc_feature    98..102
+FT                   /note="nucleolar localization signal"
+FT   misc_feature    279..458
+FT                   /note="S30 part"
+FT   polyA_signal    484..489
+FT   polyA_site      509
+XX
+SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
+     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        6
+0
+     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       12
+0
+     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       18
+0
+     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       24
+0
+     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       30
+0
+     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       36
+0
+     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       42
+0
+     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       48
+0
+     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               51
+8
+//
+
+Output file format
+
+   The output is a standard EMBOSS report file.
+
+   The results can be output in one of several styles by using the
+   command-line qualifier -rformat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: embl,
+   genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+   feattable, motif, regions, seqtable, simple, srs, table, tagseq
+
+   See: http://emboss.sf.net/docs/themes/ReportFormats.html for further
+   information on report formats.
+
+   twofeat outputs a report format file. The default format is table
+
+  Output files for usage example
+
+  File: x65923.twofeat
+
+########################################
+# Program: twofeat
+# Rundate: Tue 15 Jul 2008 12:00:00
+# Commandline: twofeat
+#    [-sequence] tembl:x65923
+#    -atype polyA_signal
+#    -btype polyA_site
+#    -minrange 10
+#    -maxrange 50
+# Report_format: table
+# Report_file: x65923.twofeat
+########################################
+
+#=======================================
+#
+# Sequence: X65923     from: 1   to: 518
+# HitCount: 1
+#=======================================
+
+  Start     End  Strand   Score starta   enda startb   endb
+    484     509       +   0.000    484    489    509    509
+
+#---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_length: 518
+# Reported_sequences: 1
+# Reported_hitcount: 1
+#---------------------------------------
+
+  Output files for usage example 2
+
+  File: x65923.twofeat
+
+##gff-version 3
+##sequence-region X65923 1 518
+#!Date 2008-07-15
+#!Type DNA
+#!Source-version EMBOSS 6.1.0
+X65923  EMBL    polyA_signal_sequence   484     489     0.000   +       .
+ID="X65923.6"
+X65923  EMBL    polyA_site      509     509     0.000   +       .       ID="X65
+923.7";featflags="0x40"
+
+Data files
+
+   None.
+
+Notes
+
+   twofeat is intended for use as a simple data-mining tool to enable you
+   to look for instances of pairs of features that occur near to each
+   other in the same sequence entry.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   There is a slight memory leak that must be fixed at some time. This
+   does no affect the results.
+
+See also
+
+                    Program name                      Description
+                    coderet      Extract CDS, mRNA and translations from feature tables
+                    extractfeat  Extract features from sequence(s)
+                    maskfeat     Write a sequence with masked features
+                    showfeat     Display features of a sequence in pretty format
+
+Author(s)
+
+   Gary             Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC              Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome           Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+History
+
+                    Written (2002) - Gary Williams
+
+Target users
+
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
+
+Comments
+
+                    None

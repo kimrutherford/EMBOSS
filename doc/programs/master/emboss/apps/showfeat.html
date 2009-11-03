@@ -1,0 +1,150 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: showfeat
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+showfeat
+<!--#include file="header2.inc" -->
+<H2>
+    Function
+</H2>
+<!--#include file="inc/showfeat.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+<p><b>showfeat</b> reads one or more protein or nucleic sequences with associated feature tables, and writes the features to file (or screen) in a style suitable for publication.  There are many options for controlling the format of the output.</p>
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/showfeat.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/showfeat.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/showfeat.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+
+The feature input is the feature table lines from a normal sequence USA.
+
+<p>
+
+<!--#include file="inc/showfeat.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+
+The output is a text representation of the feature table.
+
+<p>
+
+<!--#include file="inc/showfeat.output" -->
+
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+<p>Sequence regions to annotate may be specified as a set or ranges. Optionally, forward and reverse sense features, and features of unspecified sense (for example, CG-rich regions), are displayed.  Optionally, features from the same source and of the same type and sense may all be printed on the same line, although this may make it hard to distinguish overlapping features.</p>
+
+<p>By default, any features in the feature table are displayed however there are options to <b>restrict</b> this by feature source, type, feature tag and feature tag value.</p>
+
+<p>Features may be sorted by Type, Start or Source, left unsorted (in which case the same order as the input is used), or features for the coding regions presented all together.</p>
+
+<p>Various options control what else is displayed, including the sequence ID, description, scale line, width of display, strand of the features, feature source, start and end positions, feature type, and feature tags and tag values.  By default if any tag/value pair in a feature matches the specified tag and value, then all the tags/value pairs of that feature will be displayed. If this is set to be true, then only those tag/value pairs in a feature that match the specified tag and value will be displayed.</p>
+
+<p>Optionally, output can be in HTML.</p>
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+
+<!--#include file="inc/showfeat.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/gwilliam.address" -->
+
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/showfeat.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/showfeat.comment" -->
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,18 @@
+<b>Here is a sample session with einverted</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>einverted tembl:d00596 </b>
+Finds inverted repeats in nucleotide sequences
+Gap penalty [12]: <b></b>
+Minimum score threshold [50]: <b></b>
+Match score [3]: <b></b>
+Mismatch score [-4]: <b></b>
+Sanger Centre program inverted output file [d00596.inv]: <b></b>
+File for sequence of regions of inverted repeats. [d00596.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

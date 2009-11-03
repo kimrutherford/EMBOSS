@@ -1,0 +1,40 @@
+   Standard (Mandatory) qualifiers:
+  [-directory]         dirlist    [.] Codon usage directories
+  [-outfile]           outfile    [*.cutgextract] General log output file
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -release            string     CUTG release (Any string is accepted)
+   -wildspec           string     [*.codon] Type of codon file (Any string is
+                                  accepted)
+   -species            string     [*] Species wildcard (Any string is
+                                  accepted)
+   -allrecords         boolean    [N] Include all records, including those
+                                  with warnings
+   -filename           string     Single output filename to override automatic
+                                  one file for each species. Leave blank to
+                                  generate the filenames. Specify a filename
+                                  to combine several species into one file.
+                                  (Any string is accepted)
+
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+

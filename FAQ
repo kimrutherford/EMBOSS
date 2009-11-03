@@ -1,0 +1,794 @@
+The EMBOSS Frequently Asked Questions list
+==========================================
+
+Last modified: 8th July 2009
+
+
+SECTION A - Help and Support
+============================
+
+Q) How do I report bugs?
+
+A) mail emboss-bug@emboss.open-bio.org
+
+
+Q) How do I contact the core development team?
+
+A) Rather than email their personal addresses, for EMBOSS matters we
+   request that you use the address:
+   
+   emboss-bug@emboss.open-bio.org
+
+   This will ensure that your email will be seen by the appropriate
+   developer and that it will get logged with our tracking system.
+
+
+Q) Are there any mailing lists about EMBOSS?
+
+A) emboss@emboss.open-bio.org 
+   is an open list (anyone can join) for general announcements and
+   discussions by users. 
+
+   emboss-dev@emboss.open-bio.org 
+   is a closed list (subscription requests have to be approved) for
+   discussions by developers using EMBOSS. 
+   
+   emboss-announce@emboss.open-bio.org 
+   is an open list for announcements of new releases. 
+   
+You can access the archives, subscribe/unsubscribe and alter
+the way email is sent to you (e.g. digests) by visiting:
+
+  http://emboss.open-bio.org/mailman/listinfo/emboss
+  http://emboss.open-bio.org/mailman/listinfo/emboss-dev
+  http://emboss.open-bio.org/mailman/listinfo/emboss-announce
+
+
+Q) Where's the documentation?
+   
+A) All the documentation can be found at the following web page
+   http://emboss.sourceforge.net/
+
+
+Q) Where's the application documentation?
+
+A) http://emboss.sourceforge.net/apps/
+
+   and in the EMBOSS distribution, installed under
+   share/EMBOSS/doc/programs/html (HTML files) and
+   share/EMBOSS/doc/programs/text (plain text, as used by the tfm program).
+
+   You can also use the EMBOSS application called tfm to display the plain
+   text documentation of another application e.g.:
+
+   % tfm seqret
+
+
+Q) Is there a tutorial?
+
+A) See the EMBOSS tutorial on the website:
+   http://emboss.sourceforge.net/docs/emboss_tutorial/
+
+
+Q) Is there a quick guide?
+
+A) There is a dated quick guide provided with the source code as
+   the file doc/manuals/emboss_qg.pdf. A postscript file is
+   also available. However, the primary source of up-to-date
+   information is the web site. The quick guide was not written by
+   the EMBOSS team and it is therefore not maintained by them.
+
+
+Q) Is there a table of substitutes for GCG programs?
+
+A) Several lists are available, but not maintained by the EMBOSS
+   team. For example:
+   http://www.biobind.com/faq/emboss/gcg-emboss.html
+
+
+Q) Citation: Is there a reference I can cite for EMBOSS?
+
+A) Rice,P. Longden,I. and Bleasby,A.
+   "EMBOSS: The European Molecular Biology Open Software Suite"
+   Trends in Genetics June 2000, vol 16, No 6. pp.276-277
+
+
+
+
+SECTION B - Installation & Compilation
+======================================
+
+Q) How do I compile EMBOSS?
+
+A) If this is the first time trying to compile all you need to do is:
+
+   ./configure
+   make
+ 
+   The above will produce the EMBOSS programs in the 'emboss'
+   subdirectory and you can set your PATH variable to point there.
+   This method is suitable for EMBOSS developers.
+
+   For system-wide installations we recommend installing the
+   EMBOSS programs into a different directory from the source
+   code (e.g. in the directory tree /usr/local/emboss). To do
+   this type (e.g.):
+
+      ./configure --prefix=/usr/local/emboss
+      make                    [to make sure there are no errors, then]
+      make install            [if there are no errors]
+
+   You should then add (e.g.) /usr/local/emboss/bin to your PATH
+   variable:
+      set path=(/usr/local/emboss/bin $path)        [csh/tcsh shells]
+      export PATH="$PATH:/usr/local/emboss/bin"     [sh/bash shells]
+
+
+If you wish to re-compile the code at any stage then you should type
+"make clean" and then configure and make source again as appropriate.
+
+
+Q) I have a Linux system and compilation ends prematurely saying that
+   it can't find the -lX11 libraries ... but I know I have X11
+   installed.
+
+A) This should not happen with versions of EMBOSS later than 6.0.1
+   as the configuration will inform you of missing files and
+   terminate at that stage.
+     
+   If you have a version of EMBOSS <= 6.0.1 then the problem
+   is that you probably have the X11 server installed but you haven't
+   installed the X11 development files. For example, on RPM distributions,
+   you need to install:
+     xorg-x11-proto-devel           (xorg-based X11 distros) or
+     XFree86-devel                  (XFree86-based X11 distros)
+
+   After installing those system files you will need to:
+     make clean
+   and re-perform the './configure' command from the top EMBOSS
+   source directory.
+
+
+Q) I'm trying to compile EMBOSS with PNG support
+
+A) Your system will need to have zlib (www.zlib.net: current version
+   is 1.2.3), libpng (www.libpng.org: current version is 1.2.35) and
+   gd (www.libgd.org: current version is 2.0.35).
+
+   The version of GD must be >= 2.0.28 if it is to be used with EMBOSS.
+
+   Note that the above packages often come with your operating system
+   distribution but may not be installed by default i.e. they
+   are optional packages which you can install at a later date.  
+
+   Also note that, as well as having the above system libraries installed,
+   you must also have installed their associated development files.
+   (these typically have 'devel' in the package names on Linux systems).
+   So, on Linux RPM systems you would need to make sure that
+   packages called names similar to "gd" and "gd-devel" are installed.
+
+   MacOSX users can often find the above packages available on the
+   MacPorts site (www.macports.org).
+
+   However, for some operating systems, there may be no freeware
+   sites where you can find pre-compiled versions of zlib/libpng/gd
+   and you may have to compile one or more of them from their
+   source distributions (URLs given above).
+
+   You can unpack the tar.gz or tar.bz2 files in any directory, and
+   install them in a common area.
+
+   By default everything (including EMBOSS) installs
+   in /usr/local.
+
+
+   To install, pick up the sources and then:
+
+   gunzip -c zlib-1.2.3.tar.gz   | tar xf -
+   gunzip -c libpng-1.2.35.tar.gz | tar xf -
+   gunzip -c gd-2.0.35.tar.gz     | tar xf -
+
+   cd zlib-1.2.3
+   ./configure
+   make
+   make install
+   ./configure --shared
+   make
+   make install
+   cd ..
+
+
+   cd libpng-1.2.35
+   ./configure
+   make
+   make install
+   cd ..
+
+
+   cd gd-2.0.35
+   ./configure --without-freetype --without-fontconfig
+   make
+   make install
+   cd ..
+
+   To compile with the local version your EMBOSS ./configure line should now
+   read:-
+   ./configure --with-pngdriver=/usr/local
+
+
+Q) When installing EMBOSS recently I get a load of errors due to
+   libraries not found.  The main problem is that I have an old version of
+   libz but no libgd in my system libraries and EMBOSS looks there first
+   to try to locate these libraries.  I have the correct versions installed
+   elsewhere. Are there any suggestions for setting the library search path
+   or am I missing something really obvious?
+
+A) There are the
+	   --without-pngdriver    
+   and
+           --with-pngdriver=dir
+   flags. Did you try them? If the libraries are in /opt/png/lib then
+   set "dir" to /opt/png i.e. one level above the "lib" directory.
+
+
+Q) Can I get the latest code via CVS ?
+
+A) Yes. Here is the information you will need:-
+
+   Make sure you have cvs on your system. Then log into the cvs server at
+   'open-bio.org' as: user 'cvs' with password 'cvs'. 
+
+   cvs -d :pserver:cvs@cvs.open-bio.org:/home/repository/emboss login
+   The password is 'cvs'
+
+   To checkout the EMBOSS source code tree, put yourself in a local directory
+   just above where you want to see the EMBOSS directory created. For example
+   if you wanted EMBOSS to be seen as /home/joe/src/emboss... then cd into
+   /home/joe/src then checkout the repository by typing: 
+
+   cvs -d :pserver:cvs@cvs.open-bio.org:/home/repository/emboss checkout emboss
+
+   Or if you want to update a previously checked-out source code tree:
+   cvs -d :pserver:cvs@cvs.open-bio.org:/home/repository/emboss update
+
+   You can logout from the CVS server with:
+   cvs -d :pserver:cvs@cvs.open-bio.org:/home/repository/emboss logout
+
+   (this is a read only server). 
+
+
+Q) How do I compile the CVS (developers) version?
+
+A) You will need automake, autoconf, (GNU) make and libtool for this.
+
+   The gcc compiler is recommended. The host cc compiler should work.
+   (Note that some non-gcc compilers may need '--include-deps' added to
+   the automake command line.)
+
+   If you have system versions of the GNU tools that, by chance, are
+   more recent than the GNU tools used in the EMBOSS source tree
+   then typing 'autoreconf -fiv' may be necessary before you start.
+
+   MacOSX CVS users should also use 'autoreconf -fiv' after
+   downloading the source.
+
+   Then type:
+
+   aclocal -I m4
+   autoconf
+   automake -a            #   --include-deps  # some non-gcc compilers
+   ./configure            # --enable-warnings is a useful developers' switch
+   make
+
+   For more info on the configurability of the build try 
+   ./configure --help
+  
+
+Q) Can you give an example of how to install an EMBASSY package?
+
+A) Here is how to install PHYLIP given the various ways you can install
+   the main EMBOSS package.
+
+   a) from the anonymous cvs code.
+    
+       1) Go to the phylip directory
+       cd embassy/phylipnew
+
+       2) make the configuration file
+       aclocal
+       autoconf
+       automake
+
+       3) configure and compile
+       ./configure (use same options as you used to compile emboss,
+                    especially the --prefix))
+       make
+       make install
+
+    b) from PHYLIP-3.6b.tar.gz 
+
+    available from our FTP server ftp://emboss.open-bio.org/pub/EMBOSS/
+    in file PHYLIP-3.6b.tar.gz 
+
+
+    If you have done a full installation of EMBOSS using a 'prefix'
+    e.g. you configured with ./configure --prefix=/usr/local/emboss
+    and followed this with a 'make install' (highly recommended) then:
+
+       1) gunzip and untar the file anywhere
+       gunzip PHYLIP-3.6b.tar.gz
+       tar xf PHYLIP-3.6b.tar
+
+       2) go into the phylip directory
+       cd PHYLIP-3.6b
+
+       3) configure and compile
+       ./configure (use same options as you used to compile emboss,
+                    especially the --prefix))
+       make
+       make install
+
+       N.B. If you configured without using a prefix but did do
+            a 'make install' (or specified a prefix of /usr/local,
+            which amounts to the same thing) then you must configure
+            using:
+            ./configure --prefix=/usr/local --enable-localforce
+
+    If, on the other hand, you did not do a 'make install' of EMBOSS
+    then:
+
+       1) Go to the emboss directory 
+       cd EMBOSS-6.0.1
+
+       2) make new directory embassy if it does not exist already.
+       mkdir embassy
+
+       3) Go into that directory
+       cd embassy
+
+       4) gunzip and untar the file
+       gunzip PHYLIP-3.6b.tar.gz
+       tar xvf PHYLIP-3.6b.tar
+
+       5) go into the phylip directory
+       cd PHYLIP-3.6b
+
+       6) configure and compile
+       ./configure (use same options as you used to compile emboss)
+       make
+
+       7) Set your PATH to include the full path of the 'src'
+          directory
+
+
+Q) Can I alter the location of the ACD files?
+
+A)  EMBOSS will find the acd files in the install directory or in the
+    original source directory (depending on how you configured it) so
+    there is usually no reason to change this. However,
+    should you wish to do so then it can either be done
+    in the emboss.default (or ~/.embossrc) file:
+
+      env emboss_acdroot /usr/local/share/EMBOSS/acd
+
+    or by setting an environment variable on the command line:
+
+      setenv EMBOSS_ACDROOT /usr/local/share/EMBOSS/acd
+
+
+Q) What benefits do I gain from using the associated (EMBASSY) versions of
+    software.
+
+A)  a) You can read any sequence type that EMBOSS can handle.
+
+    b) the associated software will use the EMBOSS acd files so the
+    naming of output/input files is taken care of and will check all
+    values before the program is run. Command line arguments are used
+    instead interactive menu based ones.
+
+
+Q) I have EMBOSS installed on our development server and I'm preparing a
+    dispatch which will send it out to about 20 remote sites. 
+
+    I ran the configure with the --prefix option to install to a private
+    directory.  I also collected all the data files (rebase, transfac etc.) to
+    another directory and extracted the information from them with the relevant
+    programs.
+
+    My intention was to simply transfer the EMBOSS install directory and the
+    Data directory to all sites, using symlinks where necessary so that the
+    directory paths corresponded.
+
+    However, when testing this I have found a couple of problems;
+
+    1) Although the EMBOSS programs work, I can't see any of the extracted
+    data.
+    For instance remap gives the error;
+
+               EMBOSS An error in remap.c at line 167:
+            Cannot locate enzyme file. Run REBASEEXTRACT
+
+    This is despite the fact that I have both the EMBOSS install and the Data
+    directories in the same place as on the development machine (which works).
+
+    2) The other major problem is that I can no longer see my databases defined
+    in emboss.default.  Again, the file exists, and is in the same place as on
+    the development machine, but the box it is transferred to gives an empty
+    list from showdb.
+
+    Does anyone know where EMBOSS stores the information about the location of
+    these files?  It can't have installed anything outside the original
+    installation directory (wasn't installed as root), so I'm guessing that the
+    problem stems from the program resolving symlinks at some point.
+
+A) It is inside the binaries ...
+
+    EMBOSS 'knows' the location of the files because it is picked up during the
+    configure, when you build your copy, and included in the binaries.
+
+    You can see it during compilation, especially of ajnam.c (where it is used):
+
+    -DAJAX_FIXED_ROOT=\"/full/source/path\" -DPREFIX=\"/install/prefix/path\" 
+
+    To copy binaries, you need to define environment variable(s) to
+    override the compile-time definitions, unless you can make the path
+    (e.g.  /usr/local) the same for the installations at each site. 
+
+    emboss.default can set environment variables too, but you need to tell
+    EMBOSS where to find that file. 
+         setenv EMBOSS_ROOT /dir/for/default/file
+
+    and then, in the emboss.default file you can set:
+         SET EMBOSS_ACDROOT /install/dir/share/EMBOSS/acd
+
+    or (this overrides it) you can use another environment variable:
+         setenv EMBOSS_ACDROOT /install/dir/share/EMBOSS/acd
+
+
+Q) I have downloaded the EMBOSS source and installed it for use at XYZ
+   University without any difficulty.  The administration guide has advice
+   on configuring the software using emboss.default, and has some examples for
+   allowing access to SRS indexes.  That appears to be done via the program
+   getz, which is not part of the EMBOSS package. 
+
+A) If you have SRS installed (so you have local SRS index files) you will
+   have a local copy of the getz program, which is part of SRS.
+
+   If you do not have SRS, you can build your own index files using dbxflat,
+   dbxgcg (if you have GCG), dbiblast (if you have blast) and dbxfasta. This is
+   the usual solution for sites that have no other database indexing in use.
+
+   You can also use SRS servers remotely, to get single entries, using their
+   URLs. No extra software is needed (EMBOSS just uses the HTTP protocol).
+
+   Of course, if you really need to build your own SRS indexes you
+   could install it. SRS is a commercial product, but academic licences are
+   available.
+
+
+Q) I am not getting full static files even when I configure with
+   --disable-shared
+
+A) This most often happens when using GNU LD. If both shared and
+   static versions of a library exist then GNU LD will take the
+   shared library as preferred. The root of this problem is libtool.
+   You can, however, force complete static images by adding a
+   definition to your "make" line: 
+
+   make "LDFLAGS=-Wl,-static"
+
+
+SECTION C - Graphics
+====================
+
+
+Q) What Graphics options are available?
+
+A) To see what graphics drivers are available type ? at the prompt for
+   the graph type and this will give you a list.
+
+   Here are some of those:-
+
+   ps      -> Postscript
+   cps     -> Colour Postscript
+   x11     -> X display. (also called xterm and xwindows)
+   hpgl    -> HP Laserjet III, HPGL emulation mode.
+   png     -> PNG (you will need libpng, zlib and gd for this)
+   gif     -> GIF (you will need libpng, zlib and gd for this)
+   tek     -> Tektronix Terminal
+   none    -> None.
+   data    -> Writes out points to a file for graphs.
+   meta    -> plplot meta file.
+
+
+Q) Plotters and pen colours.
+    
+A) The hp drivers presume the pens are loaded as:-
+
+    SP1 Red
+    SP2 Yellow
+    SP3 Green
+    SP4 Blue
+    SP5 Magenta
+    SP6 White/Off
+    SP7 Black
+    SP8 Cyan
+
+    Otherwise your output will have different colours.
+
+
+Q) Browsing the Gnu site I came across libplot, libxmi and plot utils. 
+   Would these be a suitable replacement for PLPLOT?
+
+A) So far they are still GPL licensed rather than LGPL.
+
+   Robert Maier promised a while back to LGPL them but has not yet. A pity 
+   ad it makes all the difference for linking in third party applications to
+   EMBOSS. 
+
+
+Q) I get error messages when I try to display X11 on my PC.
+   I am running the Hummingbird Exceed X11 emulator.
+
+A) This should only affect versions of EMBOSS pre-5.0.0
+   The Hummingbird Exceed X11 emulator (and maybe other systems) use the
+   'TrueColor' display by default. 
+   You should change the configuration settings so that it uses 'PseudoColor'.
+   In version 6.1 of Hummingbird Exceed, this is done by clicking on the
+   Exceed section of the Windows 98 tool bar at the bottom of the screen.
+   Select 'Tools', then 'Configuration', then Screen Definition.
+   A window will appear.
+   In the 'Server Visual' popup menu on the left, select 'PseudoColor'.
+   Click on 'OK'.
+
+
+SECTION D - Data Files
+======================
+
+
+Q) How do I use my own private data file?
+
+A) You may wish to amend one of the standard EMBOSS data files.  Some of
+  the data files you might wish to alter are the translation table files. 
+
+'transeq' has been written to only read in one of the standard
+translation files:
+
+  EGC.0
+  EGC.1
+  EGC.2
+  EGC.3
+  EGC.4
+  EGC.5
+  EGC.6
+  EGC.9
+  EGC.10
+  EGC.12
+  EGC.11
+  EGC.13
+  EGC.14
+  EGC.15
+
+These files are the only ones that you can specify to 'transeq'. 
+
+If you wish to create your own specialised translation table, then you
+should pick one of them to amend. 
+
+For instance you may decide that you will use the file EGC.15 as you
+would never want to otherwise use it. 
+
+Use the program 'embossdata' to get a copy of this file:
+
+% embossdata -fetch -filename EGC.15
+Finds or fetches the data files read in by the EMBOSS programs
+File '/fu/bar/emboss/data/EGC.15' has been copied successfully.
+
+Edit the file EGC.15 to suit your requirements.
+
+Specify '-table 15' when you run 'transeq' to use this altered file. 
+'transeq' will then look for the file 'EGC.15' and will find it in your
+current directory before it finds the default one in the EMBOSS_DATA
+directory. It will therefore use your local copy.
+
+You may get confused with many copies of changed files floating about. 
+To check which copy of a file is being used (the default EMBOSS_DATA
+one or a potential local copy) use 'embossdata':
+
+% embossdata -filename EGC.15
+Finds or fetches the data files read in by the EMBOSS programs
+# The following directories can contain EMBOSS data files.
+# They are searched in the following order until the file is found.
+# If the directory does not exist, then this is noted below.
+# '.' is the UNIX name for your current working directory.
+
+File ./EGC.15                                            Exists
+File .embossdata/EGC.15                                  Does not exist
+File /home/joe/EGC.15                                    Does not exist
+File /home/joe/.embossdata/EGC.15                        Does not exist
+File /usr/local/emboss/data/EGC.15                       Exists
+
+This shows that a copy of EGC.15 exists in your current directory and so
+will be used in preference to the default one in the EMBOSS_DATA
+directory. 
+
+
+SECTION E - Sequence Files and Formats
+======================================
+
+Q) How do you write sequences to different files instead of writing them
+   all to one file?
+
+A) EMBOSS is not good at writing multiple sequences to different files.
+   You could try using 'nthseq' to pull out one sequence at a time.
+
+   You should consider using the '-ossingle' qualifier.  This writes
+   sequences to separate FASTA files, but the file names depend on the
+   sequence ID.  This is rarely used.  It is there because -ossingle is the
+   default for GCG output format.  The output filename is currently ignored
+   when ossingle is used, and the filename depends on each individual
+   sequence.
+
+
+Q) What sequence formats are supported?
+
+A) Tens of them(e.g.):
+
+   gcg, embl, swissprot, fasta, ncbi, genbank, nbrf, codata, strider,
+   clustal, phylip, acedb, msf, ig, staden, text, raw, asis
+
+
+Q) What is the difference between TEXT and RAW formats?
+
+A) TEXT accepts everything in the sequence file as sequence.
+   RAW accepts only alphanumeric and whitespace characters and rejects
+   anything else. 
+
+
+Q) What is ASIS format?
+
+A) The "filename" is really the sequence.
+   This is a quick and easy way of reading in a short fragment of
+   sequence without having to enter it into a file. 
+
+   For example:
+   % program -seq asis::ATGGTGAGGAGAGTTGTGATGAGA
+
+
+
+
+Q) I have some very short protein sequences that EMBOSS thinks are
+   nucleic sequences.  How do I force EMBOSS to treat them as nucleic acid
+   sequences? 
+
+   For example:
+   > cat seq1
+   A
+   > cat seq2
+   I
+
+   % water seq1 seq2 -stdout -auto
+   Smith-Waterman local alignment.
+   An error has been found: Sequence is not nucleic
+
+   Here, 'water' automatically (and wrongly) thinks that A is adenosine
+   instead of alanine and fails when it reads in seq2 and expects to
+   find another nucleic acid sequence - but 'I' is not a valid base and
+   so it fails. 
+
+A) For many sequence formats there is no way to specify the sequence
+   type in the file, so EMBOSS has to guess.
+
+   There is a flag that can force EMBOSS programs to treat sequences as
+   nucleic or protein. 
+
+   'water -help -verbose'
+   shows the full list of sequence qualifiers.
+
+   If you follow the sequence USA with '-sprotein' EMBOSS will check
+   that it is a valid protein sequence and then treat it as such. 
+
+   If you need to force a sequence to be DNA, the qualifier is
+   '-snucleotide'
+
+   The qualifier must follow the sequence to apply to one sequence, or
+   can go at the start of the command line to refer to all sequences, for
+   example:
+
+   'water -sprotein seq4 seq3 -stdout -auto'
+
+   You can also use '-sprotein1' anywhere on the command line to refer
+   to the first sequence and '-sprotein2' to refer to the second sequence. 
+
+   Of course, like all EMBOSS qualifiers, you can shorten them so long
+   as they are still unique.  In this case, '-sp' and '-sn' will work
+   (or '-sp1' and '-sp2' if you need the numbers). 
+
+
+SECTION F - Limits and contraints
+=================================
+
+Q) Is there a maximum size for sequences?
+
+A) The maximum size for any program depends only on how much memory your
+   system has.
+
+   Of course, some programs (and some program options) can take up too
+   much memory, or simply run very slowly. 
+
+   You might have a constraint imposed on your usage of memory.
+   Try using the Unix command 'limit' to look at such constraints.
+   Try using the Unix command 'unlimit' or 'ulimit' to remove the constraints,
+   eg:
+     % unlimit stacksize
+     % unlimit vmemoryuse
+
+
+Q) GCG has a somewhat arbitrary fragment length limit of 2500 bp for gel*.
+   Is there a similar limit for MSE under EMBOSS?
+
+A) No. MSE has no limit, you are only limited by how much memory you
+   have. 
+
+
+SECTION G - Running under Web servers and from scripts
+======================================================
+
+
+Q) I am trying to write a web interface for an emboss program
+   and run apache. The program complains that there is no HOME
+   directory set.
+
+A) Just put these at the top after your 'use CGI' ( whatever) statements.
+
+   $ENV{HOME}=<web owner root>  i.e. /usr/local/apache
+   $ENV{EMBOSS_DATA}=<emboss data directory>
+
+   These two are important, but you can also pass other "constants". 
+
+
+SECTION H - Programs and options
+================================
+
+Q) Plotting with pepwheel gives interesting output.
+   pepwheel -turns=8 -send=30 sw:p77837 -auto
+   gives a helical wheel plot but the residues are plotted so every two
+   circles are sat on top of one another. 
+
+A) That is the correct answer.
+
+   Instead of 3.6 residues per turn, (5 turns in 18 steps) you seem to
+   have a helix with 8 turns in 18 steps (4 in 9).
+
+   Try -turns=4 -steps=9 ... but only if you are sure that is the 
+   way your helix goes.
+
+   We could play with checking for common factors in pepwheel,
+   but we don't know of any biologically meaningful setting that would
+   cause problems.
+
+
+Q) In prettyplot, how do you specify an output file name for the plot file?
+
+A) prettyplot -auto ~/wordtest/globin-nogap.msf -graph ps
+   Creates prettyplot.ps
+   The name is generated automatically.  To set this to something more
+   discriptive use -goutfile .i.e
+
+   prettyplot -auto ~/wordtest/globin-nogap.msf -graph ps -goutfile=hello
+   Creates hello.ps
+
+
+Q) I'm using the editor 'mse', but I don't know how to save my edited sequences
+   at the end of the editing session. 
+
+A) Use Control-Z to get into command mode.
+   Then use the SAVE command which will prompt for the file name.
+
+
+Q) I would like to know if EMBOSS can perform nucleotide contig assembly
+   similar to the function that GCG gelproject/gelview has.  And if yes, is
+   there any size restriction on the number of basepair and the number of
+   contigs? thank you. 
+
+A) EMBOSS does not cover the sort of contig assembly you describe. We
+   have provided an EMBOSS wrapper for the MIRA package.

@@ -1,0 +1,23 @@
+<b>Here is a sample session with dbigcg</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>dbigcg </b>
+Index a GCG formatted database
+Database name: <b>EMBL</b>
+      EMBL : EMBL
+     SWISS : Swiss-Prot, SpTrEMBL, TrEMBLnew
+   GENBANK : Genbank, DDBJ
+       PIR : NBRF
+Entry format [EMBL]: <b>EMBL</b>
+Database directory [.]: <b>embl</b>
+Wildcard database filename [*.seq]: <b></b>
+Release number [0.0]: <b></b>
+Index date [00/00/00]: <b></b>
+General log output file [outfile.dbigcg]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>

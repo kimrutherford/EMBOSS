@@ -1,0 +1,191 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: maskseq
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+maskseq
+<!--#include file="header2.inc" -->
+<H2>
+    Function
+</H2>
+<!--#include file="inc/maskseq.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+
+<p><b>maskseq</b> reads a sequence and writes a masked version of it to file. The sequence is masked in a specified set of regions such that characters in that region are (optionally) converted to lower case and / or (optionally) replaced with the specified mask character.</p>
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/maskseq.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/maskseq.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/maskseq.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+
+<b>maskseq</b> reads in a single sequence USA.
+
+<p>
+
+<!--#include file="inc/maskseq.input" -->
+
+<p>
+
+You can specify a file of ranges to mask out by giving the '-regions'
+qualifier the value '@' followed by the name of the file containing the
+ranges. (eg: '-regions @myfile').
+
+<p>
+
+The format of the range file is:
+
+<ul>
+<li>Comment lines start with '#' in the first column.
+<li>Comment lines and blank lines are ignored.
+<li>The line may start with white-space.
+<li>There are two positive (integer) numbers per line separated by one or
+	more space or TAB characters. 
+<li>The second number must be greater or equal to the first number.
+<li>There can be optional text after the two numbers to annotate the line. 
+<li>White-space before or after the text is removed.
+</ul>
+
+<p>
+
+An example range file is:
+
+<p>
+
+<hr>
+<pre>
+# this is my set of ranges
+12   23
+ 4   5       this is like 12-23, but smaller
+67   10348   interesting region
+</pre>
+<hr>
+
+<H2>
+    Output file format
+</H2>
+
+
+<b>maskseq</b> writes s single masked sequence file.
+
+<p>
+
+<!--#include file="inc/maskseq.output" -->
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+<p>It is common for database searches to mask out low-complexity or biased composition regions of a sequence so that spurious matches do not occur. It is possible that you have a program that has reported such biased regions but which has not masked the sequence itself. In that case, you can use this program to do the masking.</p>
+
+<p>There are other uses for it. For example, some non-EMBOSS programs (for example FASTA) are capable of treating lower-case regions as if they are masked. <b>maskseq</b> can mask a region to lower-case instead of replacing the sequence with <tt>N</tt>'s or <tt>X</tt>'s if you use the qualifier <tt>-tolower</tt> or use a space character as the masking character.</p>
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+
+You can mask out a complete sequence.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+Several warning messages about malformed region specifications:
+<p>
+
+<ul>
+	<li>Non-digit found in region ...
+	<li>Unpaired start of a region found in ...
+	<li>Non-digit found in region ...
+	<li>The start of a pair of region positions must be smaller than the
+		end in ... 
+</ul>
+
+<H2>
+    Exit status
+</H2>
+
+
+	It exits with status 0, unless a region is badly constructed.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/maskseq.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+
+<!--#include file="inc/gwilliam.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/maskseq.history" -->
+
+<H2>
+    Target users
+</H2>
+
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/maskseq.comment" -->
+
+
+</BODY>
+</HTML>
+

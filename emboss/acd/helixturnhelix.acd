@@ -1,0 +1,67 @@
+application: helixturnhelix [
+  documentation: "Identify nucleic acid-binding motifs in protein sequences"
+  groups: "Protein:2D Structure, Protein:Motifs"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "PureProtein"
+  ]
+
+endsection: input
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  float: mean [
+    additional: "Y"
+    minimum: "1."
+    maximum: "10000."
+    default: "238.71"
+    information: "Mean value"
+  ]
+
+  float: sd [
+    additional: "Y"
+    minimum: "1."
+    maximum: "10000."
+    default: "293.61"
+    information: "Standard Deviation value"
+  ]
+
+  float: minsd [
+    additional: "Y"
+    minimum: "0."
+    maximum: "100."
+    default: "2.5"
+    information: "Minimum SD"
+  ]
+
+  boolean: eightyseven [
+    additional: "Y"
+    information: "Use the old (1987) weight data"
+  ]
+
+endsection: additional
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  report: outfile [
+    parameter: "Y"
+    rformat: "motif"
+    rextension: "hth"
+    taglist: "int:pos=Maximum_score_at
+              float:sd=Standard_deviations"
+  ]
+
+endsection: output

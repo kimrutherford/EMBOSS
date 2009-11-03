@@ -1,0 +1,35 @@
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="aaindexextract.html">aaindexextract</a></td>
+<td>Extract amino acid property data from AAINDEX</td>
+</tr>
+
+<tr>
+<td><a href="cutgextract.html">cutgextract</a></td>
+<td>Extract codon usage tables from from CUTG database</td>
+</tr>
+
+<tr>
+<td><a href="jaspextract.html">jaspextract</a></td>
+<td>Extract data from JASPAR</td>
+</tr>
+
+<tr>
+<td><a href="printsextract.html">printsextract</a></td>
+<td>Extract data from PRINTS database for use by pscan</td>
+</tr>
+
+<tr>
+<td><a href="rebaseextract.html">rebaseextract</a></td>
+<td>Process the REBASE database for use by restriction enzyme applications</td>
+</tr>
+
+<tr>
+<td><a href="tfextract.html">tfextract</a></td>
+<td>Process TRANSFAC transcription factor database for use by tfscan</td>
+</tr>
+
+</table>

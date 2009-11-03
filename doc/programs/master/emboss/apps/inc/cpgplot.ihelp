@@ -1,0 +1,99 @@
+   Standard (Mandatory) qualifiers (* if not always prompted):
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -window             integer    [100] The percentage CG content and the
+                                  Observed frequency of CG is calculated
+                                  within a window whose size is set by this
+                                  parameter. The window is moved down the
+                                  sequence and these statistics are calculated
+                                  at each postition that the window is moved
+                                  to. (Integer 1 or more)
+   -minlen             integer    [200] This sets the minimum length that a
+                                  CpG island has to be before it is reported.
+                                  (Integer 1 or more)
+   -minoe              float      [0.6] This sets the minimum average observed
+                                  to expected ratio of C plus G to CpG in a
+                                  set of 10 windows that are required before a
+                                  CpG island is reported. (Number from 0.000
+                                  to 10.000)
+   -minpc              float      [50.] This sets the minimum average
+                                  percentage of G plus C a set of 10 windows
+                                  that are required before a CpG island is
+                                  reported. (Number from 0.000 to 100.000)
+  [-outfile]           outfile    [*.cpgplot] This sets the name of the file
+                                  holding the report of the input sequence
+                                  name, CpG island parameters and the output
+                                  details of any CpG islands that are found.
+*  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, das, xterm, png, gif)
+  [-outfeat]           featout    [unknown.gff] File for output features
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -[no]plot           toggle     [Y] Plot CpG island score
+   -[no]obsexp         boolean    [Y] If this is set to true then the graph of
+                                  the observed to expected ratio of C plus G
+                                  to CpG within a window is displayed.
+   -[no]cg             boolean    [Y] If this is set to true then the graph of
+                                  the regions which have been determined to
+                                  be CpG islands is displayed.
+   -[no]pc             boolean    [Y] If this is set to true then the graph of
+                                  the percentage C plus G within a window is
+                                  displayed.
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   "-graph" associated qualifiers
+   -gprompt            boolean    Graph prompting
+   -gdesc              string     Graph description
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
+
+   "-outfeat" associated qualifiers
+   -offormat3          string     Output feature format
+   -ofopenfile3        string     Features file name
+   -ofextension3       string     File name extension
+   -ofdirectory3       string     Output directory
+   -ofname3            string     Base file name
+   -ofsingle3          boolean    Separate file for each entry
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+

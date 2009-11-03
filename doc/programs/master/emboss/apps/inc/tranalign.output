@@ -1,0 +1,53 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: tranalign2.seq</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;HSFAU1
+cctctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgcag
+ctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcgcc
+cagatcaaggctcatgtagcctca---ctggagggcattgccccggaagatcaagtcgtg
+ctcctggcaggc---cccctggaggatgaggccactctgggccagtgcggggtggaggcc
+ctgactaccctggaagtagcaggccgcatgcttgga---ggtaaagttcatggttccctg
+gcccgtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaag
+aagaagacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtg
+cccacctttggcaagaagaagggccccaatgccaactct
+&gt;HSFAU2
+cctctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgcag
+ctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcgcc
+cagatcaaggctcatgtagcctca---ctggagggcattgccccggaagatcaagtcgtg
+ctcctggcaggcgcgcccctggaggatgcactctgggccagtgcggggtggaggccc---
+------------------------------------------------------------
+------------------------------------------------------------
+------------------------------------------------------------
+---------------------------------------
+&gt;HSFAU3
+cctctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgcag
+ctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcgcc
+cagatcaaggctcatgtagcctca---ctggagggcattgccccggaagatcaagtcgtg
+ctcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggcc
+ctgactaccctggaagtagcaggccgcatgcttgga---ggtaaagttcatggttccctg
+gcccgtgctggaaaagtgagaggtcagactcctaagggggccaaacaggagaagaagaag
+aagaagacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtg
+cccacctttggcaagaagaagggccccaatgccaactct
+&gt;HSFAU4
+cctctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgcag
+ctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcgcc
+cagatcaaggctcatgaaatagcctcactggagggcattgccccggaagatcaagtcgtg
+ctcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggcc
+ctgactaccctggaagtagcaggccgcatgcttgcccgaggtaaagttcatggttccctg
+gcccgtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaag
+aagaagacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtg
+cccacctttggcaagaagaagggccccaatgccaactct
+&gt;HSFAU5
+cctctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgcag
+ctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcgcc
+cagatcaaggctcatgtagcctca---ctggagggcattgccccggaagatcaagtcgtg
+ctcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggcc
+ctgactaccctggaagtaggccgcatgctttttgga---ggtaaagttcatggttccctg
+gcccgtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaag
+aagaagacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtg
+cccacctttggcaagaagaagggccccaatgccaactct
+</pre>
+</td></tr></table><p>

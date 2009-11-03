@@ -1,0 +1,88 @@
+Graph processing in EMBOSS
+==========================
+
+In the beginning there was plplot, and it was not ideal but would have
+to do.
+
+Graphs were divided into 2 kinds:
+
+xygraph:
+x axis is (usually) sequence coordinates
+y axis is data plotted against the sequence
+
+Supported by the "-graph data" type.
+Graph is built using graph calls, then plotted in a single call
+Separate XYDisplay call to display the graph
+
+Programs:
+
+abiview
+charge
+cpgplot
+dan
+dotmatcher (graph too)
+dottup (graph too)
+findkm
+freak
+hmoment
+iep
+isochore
+octanol
+pepinfo
+pepwindow
+pepwindowall
+pestfind
+plotcon
+plotorf
+syco
+tcode
+tmap
+wobble
+
+graph:
+any other graph, including histograms
+
+graph is drawn a component at a time
+May start again on a new page (e.g. prettyplot)
+Separate GOpen call to start the graph
+Ended by ajGraphClose or ajGraphCloseWin (both simply call GraphClose)
+But GraphxyGeneral also calls GraphClose so we should modify these separately.
+
+Programs:
+
+banana
+chaos
+dotmatcher
+dotpath
+dottup
+pepnet
+pepwheel
+polydot
+prettyplot
+
+For the Staden spin program, these are all ignored - they have a -data
+option which causes spin to use xwindows and skip the spin graph
+viewer.
+
+The challenge is to make data files that spin can use.
+
+Spin notes:
+
+lib/spin2_emboss/emboss_utils.tcl has:
+
+list_graph_types
+list_file_formats
+
+
+To change for spin2:
+
+edit lib/spin2_emboss/acd2tcl.tcl
+comment out the resetting of graph to xwindows
+run create_emboss_files
+
+then test a graph program (e.g. chaos)
+the distributed version would open an xwindow
+now it ... does nothing!
+
+For spin, we need a modified create_emboss_files_spin1 to change files
+in the spin_emboss/acdtcl directory instead.

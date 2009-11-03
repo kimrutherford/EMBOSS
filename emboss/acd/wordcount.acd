@@ -1,0 +1,56 @@
+application: wordcount [
+  documentation: "Count and extract unique words in DNA sequence(s)"
+  groups: "Nucleic:Composition,Protein:Composition"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "any"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  integer: wordsize [
+    standard: "Y"
+    default: "@($(acdprotein)? 2 : 4)"
+    minimum: "1"
+    information: "Word size"
+  ]
+
+endsection: required
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  integer: mincount [
+    additional: "Y"
+    default: "1"
+    minimum: "1"
+    information: "Minimum word count to report"
+  ]
+
+endsection: additional
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    parameter: "Y"
+    knowntype: "wordcount output"
+  ]
+
+endsection: output

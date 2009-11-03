@@ -1,0 +1,204 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: pepinfo
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+pepinfo
+<!--#include file="header2.inc" -->
+<H2>
+    Function
+</H2>
+<!--#include file="inc/pepinfo.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+
+<p><b>pepinfo</b> plots various amino acid properties in parallel for an input protein sequence.  The types of plot available are i. Hydrophobicity plots using the method of Kyte & Doolittle,  the optimal matching hydrophobicity scale (OHM) of Sweet & Eisenberg, or consensus parameters (Eisenberg et al).  ii. Histogram of the presence of residues with the physico-chemical properties: Tiny, Small, Aliphatic, Aromatic, Non-polar, Polar, Charged, Positive, Negative.  The data are also written out to an output file.</p>
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/pepinfo.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/pepinfo.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/pepinfo.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>pepinfo</b> reads a protein sequence USA.
+
+<p>
+
+<!--#include file="inc/pepinfo.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+Graphs are written to the selected graphics device.
+
+<p>
+
+<!--#include file="inc/pepinfo.output" -->
+
+<p>
+
+The output file 'pepinfo.out' contains the coordinates from the graphs.
+
+<p>
+
+For the first set of graphs, 9 sets of true/false values are written out.
+For the second set of graphs, 3 sets of hydrophobicity values are written.
+
+<H2>
+    Data files
+</H2>
+
+
+The physico-chemical properties of the residues are read from the EMBOSS
+data file 'Eaa_properties.dat'.  This file can be copied into your
+current directory and inspected ot altered by using the application
+'embossdata -fetch'.  Another file can be specified using the qualifier
+'-aaproperties'.
+
+<p>
+The hydropathy data of the residues are read from the EMBOSS data file
+'Eaa_hydropathy.dat'.  This file can be copied into your current
+directory and inspected ot altered by using the application 'embossdata
+-fetch'.  Another file can be specified using the qualifier
+'-aahydropathy'. 
+
+<p>
+EMBOSS data files are distributed with the application and stored
+in the standard EMBOSS data directory, which is defined
+by EMBOSS environment variable EMBOSS_DATA.
+
+<p>
+
+Users can provide their own data files in their own directories.
+Project specific files can be put in the current directory, or for
+tidier directory listings in a subdirectory called
+".embossdata". Files for all EMBOSS runs can be put in the user's home
+directory, or again in a subdirectory called ".embossdata".
+
+<p>
+The directories are searched in the following order:
+
+<ul>
+   <li> . (your current directory)
+   <li> .embossdata (under your current directory)
+   <li> ~/ (your home directory)
+   <li> ~/.embossdata
+</ul>
+
+<H2>
+    Notes
+</H2>
+
+<p>For calculating the hydrophobicity plots, hdrophobicity is calculated in windows of a specified size over the sequence.</p>
+<p>The optimal matching hydrophobicity scale (OHM) scale is based on the likelihood of a given amino acid to be replaced by another hydrophobic or "buried" amino acid.</p>
+
+<H2>
+    References
+</H2>
+
+
+<ol>
+
+<li>
+Kyte J, Doolittle RF 
+A simple method for displaying the hydropathic character of a protein. 
+J Mol Biol 1982 May 5;157(1):105-132
+
+<li>
+Sweet RM, Eisenberg D 
+Correlation of sequence hydrophobicities measures similarity in
+three-dimensional protein structure. 
+J Mol Biol 1983 Dec 25;171(4):479-488
+
+<li>
+Eisenberg D, Weiss RM, Terwilliger TC.
+The helical hydrophobic moment: a measure of the amphiphilicity of a
+helix. 
+Nature 1982 Sep 23;299(5881):371-4
+
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/pepinfo.isee" -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+<!--#include file="inc/mfaller.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/pepinfo.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+
+<H2>
+    Comments
+</H2>
+
+<!--#include file="inc/pepinfo.comment" -->
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,39 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: mw1.dat</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+20.0
+33.0
+67.0
+128.0
+415.0
+999.0
+</pre>
+</td></tr></table><p>
+<p><h3>File: mw2.dat</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+13.0
+41.0
+67.0
+415.0
+846.0
+781.0
+</pre>
+</td></tr></table><p>
+<p><h3>File: mw3.dat</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+3.0
+18.0
+67.0
+124.0
+197.0
+236.0
+415.0
+587.0
+632.0
+</pre>
+</td></tr></table><p>

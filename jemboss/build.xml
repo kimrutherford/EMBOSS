@@ -1,0 +1,126 @@
+<?xml version="1.0"?>
+
+<!--
+
+  Ant build file for Jemboss-MS
+
+-->
+
+<project default="package" basedir=".">
+
+  <target name="init">
+    <tstamp />
+    <property name="name" value="Jemboss-MS" />
+    <property name="version" value="live" />
+    <property name="build.compiler" value="modern" />
+    <property name="classpath" value="" />
+    <property name="src.dir" value="." />
+  	<property name="jemboss.dir" value="." />
+    <property name="emboss.data" value="../data" />
+  	<!-- EMBOSS installation directory -->
+  	<property name="emboss.prefix" value=".." />
+    <property name="docs.dir" value="docs" />
+
+    <property name="packages" value="org.*" />
+
+    <property name="build.dir" value="./build" />
+    <property name="jar.dir" value="./jar" />
+    <!-- Subdirectories for classes -->
+    <property name="build.classes" value="${build.dir}/classes" />
+
+  	
+    <!-- Compile classpath -->
+    <path id="compile.classpath">
+        <!-- Dependency classes -->
+        <fileset dir="${jemboss.dir}/lib">
+        	 <include name="**/*.jar" />
+        </fileset>
+    </path>
+  </target>
+
+  <!-- Prepares the build directory -->
+  <target name="prepare" depends="init">
+    <mkdir dir="${build.dir}" />
+  </target>
+
+  <!-- Prepares the source code -->
+  <target name="prepare-core" depends="init,prepare">
+
+    <!-- Creates directories -->
+    <mkdir dir="${build.classes}" />
+    <mkdir dir="${jar.dir}" />
+
+  </target>
+
+  <target name="prepare-src" depends="init,prepare-core" />
+
+  <!-- Compiles the source directory -->
+  <target name="compile" depends="init,prepare-src">
+
+    <javac
+      srcdir="${src.dir}"
+      destdir="${build.classes}"
+    	  excludes="resources/**,api/**,**/*Applet.java,./lib,./contrib,./CVS,README,LICENSE,runJemboss.sh"
+      deprecation="false"
+      depend="no"
+      target="1.4"
+      source="1.4"
+      debug="true"
+      >
+    	  <classpath refid="compile.classpath"/>
+    </javac>
+  </target>
+
+
+  <!-- packages matrix files needed by jemboss alignment viewer -->
+  <target name="package-matrixfiles" depends="init,compile">
+    <jar
+      jarfile="${jemboss.dir}/resources/resources.jar"
+      basedir="${emboss.data}"
+      includes="EPAM* EBLOSUM* ENUC*"
+    >
+    </jar>
+  </target>
+  	
+  <!-- copy resources needed by memboss -->
+  <target name="copyformemboss" depends="init,compile" unless="notformemboss">
+    <!-- Copies jars -->
+    <copy todir="${jar.dir}">
+      <fileset dir=".">
+        <include name="lib/grout.jar"/>
+        <include name="lib/jakarta-regexp-1.2.jar"/>
+        <include name="lib/JembossPrintAlignment.jar"/>
+        <include name="lib/jalview.jar"/>
+        <include name="resources/**"/>
+      	<include name="images/**"/>
+      </fileset>
+    </copy>
+  </target>
+	
+  <!-- Creates the jemboss client library -->
+  <target name="package" depends="init,compile,package-matrixfiles,copyformemboss">
+
+    <jar
+      jarfile="${jar.dir}/${name}.jar"
+      basedir="${build.classes}"
+      includes="**"
+      excludes="**/lib/** resources/** jar/** utils/**"
+    >
+      <manifest>
+          <attribute name="Built-By" value="EMBOSS TEAM"/>
+  	      <attribute name="Main-Class" value="org.emboss.jemboss.Jemboss"/>
+              <attribute name="Class-Path" 
+                         value="lib/grout.jar lib/jakarta-regexp-1.2.jar
+                                lib/JembossPrintAlignment.jar
+                                lib/jalview.jar ."/>
+      </manifest>
+  	</jar>
+  </target>
+
+
+  <!-- Cleans everything -->
+  <target name="clean" depends="init">
+    <delete dir="${build.dir}" />
+    <delete dir="${jar.dir}" />
+  </target>
+</project>

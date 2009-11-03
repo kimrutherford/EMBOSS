@@ -1,0 +1,1076 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: dreg
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+dreg
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/dreg.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<p><b>dreg</b> searches one or more sequences with the supplied
+regular expression and writes a report file with the matches.</p>
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/dreg.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/dreg.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/dreg.itable" -->
+
+<H2>
+    Input file format
+</H2>
+Any nucleic sequence.
+
+<p>
+<!--#include file="inc/dreg.input" -->
+
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/reportformats.ihtml" -->
+
+By default <b>dreg</b> writes a 'seqtable' report file.
+
+<p>
+<!--#include file="inc/dreg.output" -->
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+<p>
+A regular expression is a way of specifying an ambiguous pattern to
+search for.  Regular expressions are commonly used in some computer
+programming languages and may be more familiar to some users than to
+others. 
+
+<p>
+The following is a short guide to regular expressions in EMBOSS:
+
+
+<dl>
+<dt>^</dt><dd>
+use this at the start of a pattern to insist that the pattern can only
+match at the start of a sequence.  (eg.  '^AUG' matches a start codon at
+the start of the sequence)
+
+
+<dt>$</dt><dd>
+use this at the end of a pattern to insist that the pattern can only
+match at the end of a sequence (eg.  'A+$' matches a poly-A sequence at
+the end of the sequence)
+
+<dt>()</dt><dd>
+groups a pattern.  This is commonly used with '|' (eg.  '(AUG)|(ATG)'
+matches either the DNA or RNA form of the initiation codon )
+
+<dt>|</dt><dd>
+This is the OR operator to enable a match to be made to either one
+pattern OR another.  There is no AND operator in this version of regular
+expressions. 
+</dl>
+
+<p>
+
+The following quantifier characters specify the number of time that
+the character before (in this case 'x') matches:
+
+<dl>
+<dt>x?</dt><dd>
+matches 0 or 1 times (ie, '' or 'x')
+<dt>x*</dt><dd>
+matches 0 or more times (ie, '' or 'x' or 'xx' or 'xxx', etc)
+<dt>x+</dt><dd>
+matches 1 or more times (ie, 'x' or 'xx' or 'xxx', etc)
+
+<p>
+
+<dt>{min,max}</dt><dd>
+Braces can enclose the specification of the minimum and maximum number
+of matches. A match of 'x' of between 3 and 6 times is: 'x{3,6}'
+
+</dl> 
+
+<p>
+Quantifiers can follow any of the following types of character specification:
+
+<dl>
+<dt>x</dt><dd>
+any character (ie 'A')
+
+<dt>\x</dt><dd>
+the character after the backslash is used instead of its normal
+regular expression meaning.  This is commonly used to turn off the
+special meaning of the characters '^$()|?*+[]-.'.  It may be especially
+useful when searching for gap characters in a sequence (eg '\.' matches
+only a dot character '.')
+
+<dt>[xy]</dt><dd>
+match one of the characters 'x' or 'y'.  You may have one or more
+characters in this set. 
+
+<dt>[x-z]</dt><dd>
+match any one of the set of characters starting with 'x' and
+ending in 'y' in ASCII order (eg '[A-G]' matches any one of: 'A', 'B',
+'C', 'D', 'E', 'F', 'G')
+
+<dt>[^x-z]</dt><dd>
+matches anything except any one of the group of characters in
+ASCII order (eg '[^A-G]' matches anything EXCEPT any one of: 'A', 'B',
+'C', 'D', 'E', 'F', 'G')
+
+<dt>.</dt><dd>
+the dot character matches any other character (eg: 'A.G' matches
+'AAG', 'AaG', 'AZG', 'A-G' 'A G', etc.)
+</dl>
+
+Combining some of these features gives the example:
+
+<pre>
+'([AGC]+GGG)|(TTTGGG)'
+</pre>
+
+which matches one or more of any one of 'A' or
+'G' or 'C' followed by three 'G's or it matches just 'TTTGGG'. 
+
+<p>
+Regular expressions are case-sensitive.
+The pattern 'AAAA' will not match the sequence 'aaaa'.
+
+For this reason, both your pattern and the input sequences are
+converted to upper-case. 
+
+
+<H2>The syntax in detail</H2>
+
+
+EMBOSS uses the publicly available PCRE code library to do regular
+expressions. 
+
+<p>
+
+The full documentation of the PCRE system can be seen at 
+<a href="http://www.pcre.org/pcre.txt">http://www.pcre.org/pcre.txt</a>  
+
+<p>
+
+A condensed description of the syntax of PCRE follows, without features
+that are thought not to be required for searching for patterns in
+sequences (e.g.  matching non-printing characters, atomic grouping,
+back-references, assertion, conditional sub-patterns, recursive
+patterns, subpatterns as subroutines, callouts).  If you do neot see a
+required function described below, please see the full description on
+the <a href="http://www.pcre.org/pcre.txt">PCRE web site</a>. 
+
+<p>
+
+<H3>PCRE REGULAR EXPRESSION DETAILS</H3>
+
+     The syntax and semantics of  the  regular  expressions  supported  by PCRE are described below. Regular expressions are
+     also described in the Perl documentation and in a number  of
+     other  books,  some  of which have copious examples. Jeffrey
+     Friedl's  "Mastering  Regular  Expressions",  published   by
+     O'Reilly,  covers them in great detail. The description here
+     is intended as reference documentation.
+
+<p>
+
+
+     A regular expression is a pattern that is matched against  a
+     subject string from left to right. Most characters stand for
+     themselves in a pattern, and match the corresponding characters in the subject. As a trivial example, the pattern
+
+<p>
+
+
+       The quick brown fox
+<p>
+
+     matches a portion of a subject string that is  identical  to
+     itself.  The  power  of  regular  expressions comes from the
+     ability to include alternatives and repetitions in the  pattern.  These  are encoded in the pattern by the use of meta-characters, which do not stand for  themselves  but  instead
+     are interpreted in some special way.
+
+<p>
+
+     There are two different sets of meta-characters: those  that
+     are  recognized anywhere in the pattern except within square
+     brackets, and those that are recognized in square  brackets.
+     Outside square brackets, the meta-characters are as follows:
+
+<p>
+
+<pre>
+       \      general escape character with several uses
+       ^      assert start of string (or line, in multiline mode)
+       $      assert end of string (or line, in multiline mode)
+       .      match any character except newline (by default)
+       [      start character class definition
+       |      start of alternative branch
+       (      start subpattern
+       )      end subpattern
+       ?      extends the meaning of (
+              also 0 or 1 quantifier
+              also quantifier minimizer
+       *      0 or more quantifier
+       +      1 or more quantifier
+              also "possessive quantifier"
+       {      start min/max quantifier
+
+</pre>
+
+<p>
+
+     Part of a pattern that is in square  brackets  is  called  a
+     "character  class".  In  a  character  class  the only meta-characters are:
+
+<p>
+
+<pre>
+       \      general escape character
+       ^      negate the class, but only if the first character
+       -      indicates character range
+       [      POSIX character class (only if followed by POSIX
+                syntax)
+       ]      terminates the character class
+</pre>
+
+<p>
+
+     The following sections describe  the  use  of  each  of  the
+     meta-characters.
+
+
+<h4>BACKSLASH</H4>
+
+     The backslash character has several uses. Firstly, if it  is
+     followed  by  a  non-alphameric character, it takes away any
+     special  meaning  that  character  may  have.  This  use  of
+     backslash  as  an  escape  character applies both inside and
+     outside character classes.
+
+<p>
+
+     For example, if you want to match a * character,  you  write
+     \*  in the pattern.  This escaping action applies whether or
+     not the following character would otherwise  be  interpreted
+     as  a meta-character, so it is always safe to precede a nonalphameric with backslash to  specify  that  it  stands  for
+     itself. In particular, if you want to match a backslash, you
+     write \\.
+
+<p>
+
+     The third use of backslash is for specifying generic character types:
+
+<p>
+
+<pre>
+       \d     any decimal digit
+       \D     any character that is not a decimal digit
+       \s     any whitespace character
+       \S     any character that is not a whitespace character
+       \w     any "word" character
+       W     any "non-word" character
+</pre>
+
+<p>
+
+     Each pair of escape sequences partitions the complete set of
+     characters  into  two  disjoint  sets.  Any  given character
+     matches one, and only one, of each pair.
+
+<p>
+
+     A "word" character is any letter or digit or the  underscore
+     character,  that  is,  any  character which can be part of a
+     Perl "word". The definition of letters and  digits  is  controlled  by PCRE's character tables, and may vary if locale-
+     specific matching is taking place (see "Locale  support"  in
+     the pcreapi page). For example, in the "fr" (French) locale,
+     some character codes greater than 128 are used for  accented
+     letters, and these are matched by \w.
+
+<p>
+
+     These character type sequences can appear  both  inside  and
+     outside  character classes. They each match one character of
+     the appropriate type. If the current matching  point  is  at
+     the end of the subject string, all of them fail, since there
+     is no character to match.
+
+<p>
+
+     The fourth use of backslash is  for  certain  simple  assertions. An assertion specifies a condition that has to be met
+     at a particular point in  a  match,  without  consuming  any
+     characters  from  the subject string. The use of subpatterns
+     for more complicated  assertions  is  described  below.  The
+     backslashed assertions are
+
+<p>
+
+<pre>
+       \b     matches at a word boundary
+       \B     matches when not at a word boundary
+       \A     matches at start of subject
+       \Z     matches at end of subject or before newline at end
+       \z     matches at end of subject
+       \G     matches at first matching position in subject
+</pre>
+
+<p>
+
+     These assertions may not appear in  character  classes  (but
+     note  that  \b has a different meaning, namely the backspace
+     character, inside a character class).
+
+<p>
+
+     A word boundary is a position in the  subject  string  where
+     the current character and the previous character do not both
+     match \w or \W (i.e. one matches \w and  the  other  matches
+     \W),  or the start or end of the string if the first or last
+     character matches \w, respectively.
+     The \A, \Z, and \z assertions differ  from  the  traditional
+     circumflex  and  dollar  (described below) in that they only
+     ever match at the very start and end of the subject  string,
+     whatever options are set. Thus, they are independent of multiline mode.
+
+
+<H4>CIRCUMFLEX AND DOLLAR</H4>
+
+     Outside a character class, in the default matching mode, the
+     circumflex  character  is an assertion which is true only if
+     the current matching point is at the start  of  the  subject
+     string. Inside a character class, circumflex has an
+     entirely different meaning (see below).
+
+<p>
+
+     Circumflex need not be the first character of the pattern if
+     a  number of alternatives are involved, but it should be the
+     first thing in each alternative in which it appears  if  the
+     pattern is ever to match that branch. If all possible alternatives start with a circumflex, that is, if the pattern  is
+     constrained to match only at the start of the subject, it is
+     said to be an "anchored" pattern. (There are also other constructs that can cause a pattern to be anchored.)
+
+<p>
+
+     A dollar character is an assertion which is true only if the
+     current  matching point is at the end of the subject string,
+     or immediately before a newline character that is  the  last
+     character in the string (by default). Dollar need not be the
+     last character of the pattern if a  number  of  alternatives
+     are  involved,  but it should be the last item in any branch
+     in which it appears.  Dollar has no  special  meaning  in  a
+     character class.
+
+
+<H4>FULL STOP (PERIOD, DOT)</H4>
+
+     Outside a character class, a dot in the pattern matches  any
+     one character in the subject, including a non-printing character,
+but not (by default) newline.  The
+     handling of dot is entirely independent of the  handling  of
+     circumflex and dollar, the only relationship being that they
+     both involve newline characters. Dot has no special  meaning
+     in a character class.
+
+
+
+<H4>SQUARE BRACKETS</H4>
+
+     An opening square bracket introduces a character class, terminated
+by a closing square bracket.  A closing square
+     bracket on its own is not special.  If a closing square
+     bracket is required as a member of the class, it should be
+     the first data character in the class (after an initial circumflex,
+if present) or escaped with a backslash. 
+
+<p>
+
+     A character class matches a single character in the subject.
+     A matched character must be in the set of characters defined
+     by the class, unless the first character in the class definition is
+a circumflex, in which case the subject character
+     must not be in the set defined by the class. If a circumflex
+     is actually required as a member of the class, ensure it  is
+     not the first character, or escape it with a backslash.
+
+<p>
+
+     For example, the character class [aeiou] matches  any  lower
+     case vowel, while [^aeiou] matches any character that is not
+     a lower case vowel.  Note that a circumflex is just a convenient
+notation for specifying the characters which are in
+     the class by enumerating those that are not. It  is  not  an
+     assertion:  it  still  consumes a character from the subject
+     string, and fails if the current pointer is at  the  end  of
+     the string.
+
+<p>
+
+     When caseless matching  is  set,  any  letters  in  a  class
+     represent  both their upper case and lower case versions, so
+     for example, a caseless [aeiou] matches "A" as well as  "a",
+     and  a caseless [^aeiou] does not match "A", whereas a caseful version would. PCRE does not support the concept of case
+     for characters with values greater than 255.
+     A  class  such  as  [^a]  will
+     always match a newline.
+
+<p>
+
+     The minus (hyphen) character can be used to specify a  range
+     of  characters  in  a  character  class.  For example, [d-m]
+     matches any letter between d and m, inclusive.  If  a  minus
+     character  is required in a class, it must be escaped with a
+     backslash or appear in a position where it cannot be  interpreted as indicating a range, typically as the first or last
+     character in the class.
+
+<p>
+
+     It is not possible to have the literal character "]" as  the
+     end  character  of  a  range.  A  pattern such as [W-]46] is
+     interpreted as a class of two characters ("W" and "-")  followed by a literal string "46]", so it would match "W46]" or
+     "-46]". However, if the "]" is escaped with a  backslash  it
+     is  interpreted  as  the end of range, so [W-\]46] is interpreted as a single class containing a range followed by  two
+     separate characters. The octal or hexadecimal representation
+     of "]" can also be used to end a range.
+
+<p>
+
+     The character types \d, \D, \s, \S,  \w,  and  \W  may  also
+     appear  in  a  character  class, and add the characters that
+     they match to the class. For example, [\dABCDEF] matches any
+     hexadecimal  digit.  A  circumflex  can conveniently be used
+     with the upper case character types to specify a  more  restricted set of characters than the matching lower case type.
+     For example, the class [^\W_] matches any letter  or  digit,
+     but not underscore.
+
+<p>
+
+     All non-alphameric characters other than \,  -,  ^  (at  the
+     start)  and  the  terminating ] are non-special in character
+     classes, but it does no harm if they are escaped.
+
+
+<H4>VERTICAL BAR</H4>
+
+     Vertical bar characters are  used  to  separate  alternative
+     patterns. For example, the pattern
+
+<p>
+
+       gilbert|sullivan
+
+<p>
+
+     matches either "gilbert" or "sullivan". Any number of alternatives  may  appear,  and an empty alternative is permitted
+     (matching the empty string).   The  matching  process  tries
+     each  alternative in turn, from left to right, and the first
+     one that succeeds is used. If the alternatives are within  a
+     subpattern  (defined  below),  "succeeds" means matching the
+     rest of the main pattern as well as the alternative  in  the
+     subpattern.
+
+
+<H4>INTERNAL OPTION SETTING</H4>
+
+     The   settings   of   the   PCRE_CASELESS,   PCRE_MULTILINE,
+     PCRE_DOTALL,  and  PCRE_EXTENDED options can be changed from
+     within the pattern by a  sequence  of  Perl  option  letters
+     enclosed between "(?" and ")". The option letters are
+
+<p>
+<pre>
+       i  for PCRE_CASELESS
+       m  for PCRE_MULTILINE
+       s  for PCRE_DOTALL
+       x  for PCRE_EXTENDED
+</pre>
+
+<p>
+
+     For example, (?im) sets caseless, multiline matching. It  is
+     also possible to unset these options by preceding the letter
+     with a hyphen, and a combined setting and unsetting such  as
+     (?im-sx),  which sets PCRE_CASELESS and PCRE_MULTILINE while
+     unsetting PCRE_DOTALL and PCRE_EXTENDED, is also  permitted.
+     If  a  letter  appears both before and after the hyphen, the
+     option is unset.
+
+<p>
+
+     When an option change occurs at  top  level  (that  is,  not
+     inside  subpattern  parentheses),  the change applies to the
+     remainder of the pattern that follows.   If  the  change  is
+     placed  right  at  the  start of a pattern, PCRE extracts it
+     into the global options (and it will therefore  show  up  in
+     data extracted by the pcre_fullinfo() function).
+
+<p>
+
+     An option change within a subpattern affects only that  part
+     of the current pattern that follows it, so
+
+<p>
+
+       (a(?i)b)c
+
+<p>
+
+     matches  abc  and  aBc  and  no  other   strings   (assuming
+     PCRE_CASELESS  is  not used).  By this means, options can be
+     made to have different settings in different  parts  of  the
+     pattern.  Any  changes  made  in one alternative do carry on
+     into subsequent branches within  the  same  subpattern.  For
+     example,
+
+<p>
+
+       (a(?i)b|c)
+
+<p>
+
+     matches "ab", "aB", "c", and "C", even though when  matching
+     "C" the first branch is abandoned before the option setting.
+     This is because the effects of  option  settings  happen  at
+     compile  time. There would be some very weird behaviour otherwise.
+
+<p>
+
+     The PCRE-specific options PCRE_UNGREEDY and  PCRE_EXTRA  can
+     be changed in the same way as the Perl-compatible options by
+     using the characters U and X  respectively.  The  (?X)  flag
+     setting  is  special in that it must always occur earlier in
+     the pattern than any of the additional features it turns on,
+     even when it is at top level. It is best put at the start.
+
+
+<H4>SUBPATTERNS</H4>
+
+     Subpatterns are delimited by parentheses  (round  brackets),
+     which can be nested.  Marking part of a pattern as a subpattern
+does two things:
+
+<p>
+
+     1. It localizes a set of alternatives. For example, the pattern
+
+<p>
+
+       cat(aract|erpillar|)
+<p>
+
+     matches one of the words "cat",  "cataract",  or  "caterpillar".  Without  the  parentheses, it would match "cataract",
+     "erpillar" or the empty string.
+
+<p>
+
+     2. It sets up the subpattern as a capturing  subpattern  (as
+     defined  above).   When the whole pattern matches, that portion of the subject string that matched  the  subpattern  is
+     passed  back  to  the  caller  via  the  ovector argument of
+     pcre_exec(). Opening parentheses are counted  from  left  to
+     right (starting from 1) to obtain the numbers of the capturing subpatterns.
+
+<p>
+
+     For example, if the string "the red king" is matched against
+     the pattern
+
+<p>
+
+       the ((red|white) (king|queen))
+
+<p>
+
+     the captured substrings are "red king", "red",  and  "king",
+     and are numbered 1, 2, and 3, respectively.
+
+<p>
+
+     The fact that plain parentheses fulfil two functions is  not
+     always  helpful.  There are often times when a grouping subpattern is required without a capturing requirement.  If  an
+     opening  parenthesis  is  followed  by a question mark and a
+     colon, the subpattern does not do any capturing, and is  not
+     counted  when computing the number of any subsequent capturing subpatterns. For  example,  if  the  string  "the  white
+     queen" is matched against the pattern
+
+<p>
+
+       the ((?:red|white) (king|queen))
+
+<p>
+
+     the captured substrings are "white queen" and  "queen",  and
+     are  numbered  1 and 2. The maximum number of capturing subpatterns is 65535, and the maximum depth of nesting  of  all
+     subpatterns, both capturing and non-capturing, is 200.
+
+<p>
+
+     As a  convenient  shorthand,  if  any  option  settings  are
+     required  at  the  start  of a non-capturing subpattern, the
+     option letters may appear between the "?" and the ":".  Thus
+     the two patterns
+
+<p>
+<pre>
+       (?i:saturday|sunday)
+       (?:(?i)saturday|sunday)
+</pre>
+
+<p>
+
+     match exactly the same set of strings.  Because  alternative
+     branches  are  tried from left to right, and options are not
+     reset until the end of the subpattern is reached, an  option
+     setting  in  one  branch does affect subsequent branches, so
+     the above patterns match "SUNDAY" as well as "Saturday".
+
+
+<H4>REPETITION</H4>
+
+     Repetition is specified by quantifiers, which can follow any
+     of the following items:
+
+<p>
+
+<pre>
+       a literal data character
+       the . meta-character
+       the \C escape sequence
+       escapes such as \d that match single characters
+       a character class
+       a back reference (see next section)
+       a parenthesized subpattern (unless it is an assertion)
+</pre>
+
+<p>
+
+
+     The general repetition quantifier specifies  a  minimum  and
+     maximum  number  of  permitted  matches,  by  giving the two
+     numbers in curly brackets (braces), separated  by  a  comma.
+     The  numbers  must be less than 65536, and the first must be
+     less than or equal to the second. For example:
+
+<p>
+
+
+       z{2,4}
+
+
+<p>
+
+     matches "zz", "zzz", or "zzzz". A closing brace on  its  own
+     is not a special character. If the second number is omitted,
+     but the comma is present, there is no upper  limit;  if  the
+     second number and the comma are both omitted, the quantifier
+     specifies an exact number of required matches. Thus
+
+<p>
+
+
+       [aeiou]{3,}
+
+<p>
+
+
+     matches at least 3 successive vowels,  but  may  match  many
+     more, while
+
+<p>
+
+
+       \d{8}
+
+
+<p>
+
+     matches exactly 8 digits.  An  opening  curly  bracket  that
+     appears  in a position where a quantifier is not allowed, or
+     one that does not match the syntax of a quantifier, is taken
+     as  a literal character. For example, {,6} is not a quantifier, but a literal string of four characters.
+
+<p>
+
+
+     The quantifier {0} is permitted, causing the  expression  to
+     behave  as  if the previous item and the quantifier were not
+     present.
+
+<p>
+
+
+     For convenience (and  historical  compatibility)  the  three
+     most common quantifiers have single-character abbreviations:
+
+<p>
+
+<pre>
+       *    is equivalent to {0,}
+       +    is equivalent to {1,}
+       ?    is equivalent to {0,1}
+</pre>
+
+<p>
+
+
+     It is possible to construct infinite loops  by  following  a
+     subpattern  that  can  match no characters with a quantifier
+     that has no upper limit, for example:
+
+<p>
+
+
+       (a?)*
+
+<p>
+
+
+     Earlier versions of Perl and PCRE used to give an  error  at
+     compile  time  for such patterns. However, because there are
+     cases where this  can  be  useful,  such  patterns  are  now
+     accepted,  but  if  any repetition of the subpattern does in
+     fact match no characters, the loop is forcibly broken.
+
+<p>
+
+
+     By default, the quantifiers  are  "greedy",  that  is,  they
+     match  as much as possible (up to the maximum number of permitted times), without causing the rest of  the  pattern  to
+     fail. The classic example of where this gives problems is in
+     trying to match comments in C programs. These appear between
+     the  sequences /* and */ and within the sequence, individual
+     * and / characters may appear. An attempt to  match  C  comments by applying the pattern
+
+<p>
+
+
+       /\*.*\*/
+
+<p>
+
+
+     to the string
+
+<p>
+
+<pre>
+       /* first command */  not comment  /* second comment */
+</pre>
+
+<p>
+
+
+     fails, because it matches the entire  string  owing  to  the
+     greediness of the .*  item.
+
+<p>
+
+
+     However, if a quantifier is followed by a question mark,  it
+     ceases  to be greedy, and instead matches the minimum number
+     of times possible, so the pattern
+
+<p>
+
+
+       /\*.*?\*/
+
+<p>
+
+
+     does the right thing with the C comments. The meaning of the
+     various  quantifiers is not otherwise changed, just the preferred number of matches.  Do not confuse this use of  question  mark  with  its  use as a quantifier in its own right.
+     Because it has two uses, it can sometimes appear doubled, as
+     in
+
+<p>
+
+
+       \d??\d
+
+<p>
+
+
+     which matches one digit by preference, but can match two  if
+     that is the only way the rest of the pattern matches.
+
+<p>
+
+
+     If the PCRE_UNGREEDY option is set (an option which  is  not
+     available  in  Perl),  the  quantifiers  are  not  greedy by
+     default, but individual ones can be made greedy by following
+     them  with  a  question mark. In other words, it inverts the
+     default behaviour.
+
+<p>
+
+
+     When a parenthesized subpattern is quantified with a minimum
+     repeat  count  that is greater than 1 or with a limited maximum, more store is required for the  compiled  pattern,  in
+     proportion to the size of the minimum or maximum.
+     If a pattern starts with .* or  .{0,}  and  the  PCRE_DOTALL
+     option (equivalent to Perl's /s) is set, thus allowing the .
+     to match  newlines,  the  pattern  is  implicitly  anchored,
+     because whatever follows will be tried against every character position in the subject string, so there is no point  in
+     retrying  the overall match at any position after the first.
+     PCRE normally treats such a pattern as though it  were  preceded by \A.
+
+<p>
+
+
+     In cases where it is known that the subject string  contains
+     no  newlines,  it  is  worth setting PCRE_DOTALL in order to
+     obtain this optimization, or alternatively using ^ to  indicate anchoring explicitly.
+
+<p>
+
+
+     However, there is one situation where the optimization  cannot  be  used. When .*  is inside capturing parentheses that
+     are the subject of a backreference elsewhere in the pattern,
+     a match at the start may fail, and a later one succeed. Consider, for example:
+
+<p>
+
+
+       (.*)abc\1
+
+<p>
+
+
+     If the subject is "xyz123abc123"  the  match  point  is  the
+     fourth  character.  For  this  reason, such a pattern is not
+     implicitly anchored.
+
+<p>
+
+
+     When a capturing subpattern is repeated, the value  captured
+     is the substring that matched the final iteration. For example, after
+
+<p>
+
+
+       (tweedle[dume]{3}\s*)+
+
+<p>
+
+
+     has matched "tweedledum tweedledee" the value  of  the  captured  substring  is  "tweedledee".  However,  if  there are
+     nested capturing  subpatterns,  the  corresponding  captured
+     values  may  have been set in previous iterations. For example, after
+
+<p>
+
+<pre>
+       /(a|(b))+/
+</pre>
+
+<p>
+
+
+<H3>PCRE PERFORMANCE</H3>
+
+     Certain items that may appear in regular expression patterns
+     are  more efficient than others. It is more efficient to use
+     a character class like [aeiou] than a  set  of  alternatives
+     such  as  (a|e|i|o|u). In general, the simplest construction
+     that provides the required behaviour  is  usually  the  most
+     efficient.  Jeffrey  Friedl's book contains a lot of discussion about optimizing regular expressions for efficient performance.
+
+<p>
+
+
+     When a pattern begins with .*  not  in  parentheses,  or  in
+     parentheses that are not the subject of a backreference, and
+     the PCRE_DOTALL option is set,  the  pattern  is  implicitly
+     anchored  by PCRE, since it can match only at the start of a
+     subject string. However, if PCRE_DOTALL  is  not  set,  PCRE
+     cannot  make  this optimization, because the . meta-character
+     does not then match a newline, and  if  the  subject  string
+     contains  newlines, the pattern may match from the character
+     immediately following one of them instead of from  the  very
+     start. For example, the pattern
+
+<p>
+
+
+       .*second
+
+<p>
+
+
+     matches the subject "first\nand second" (where \n stands for
+     a newline character), with the match starting at the seventh
+     character. In order to do this, PCRE has to retry the  match
+     starting after every newline in the subject.
+
+
+<p>
+
+     If you are using such a pattern with subject strings that do
+     not  contain  newlines,  the best performance is obtained by
+     setting PCRE_DOTALL, or starting the  pattern  with  ^.*  to
+     indicate  explicit anchoring. That saves PCRE from having to
+     scan along the subject looking for a newline to restart at.
+
+
+<p>
+
+     Beware of patterns that contain nested  indefinite  repeats.
+     These  can  take a long time to run when applied to a string
+     that does not match. Consider the pattern fragment
+
+<p>
+
+
+       (a+)*
+
+<p>
+
+
+     This can match "aaaa" in 33 different ways, and this  number
+     increases  very  rapidly  as  the string gets longer. (The *
+     repeat can match 0, 1, 2, 3, or 4 times,  and  for  each  of
+     those  cases other than 0, the + repeats can match different
+     numbers of times.) When the remainder of the pattern is such
+     that  the entire match is going to fail, PCRE has in principle to try every possible variation, and this  can  take  an
+     extremely long time.
+     An optimization catches some of the more simple  cases  such
+     as
+
+<p>
+
+
+       (a+)*b
+
+
+<p>
+
+     where a literal character follows. Before embarking  on  the
+     standard matching procedure, PCRE checks that there is a "b"
+     later in the subject string, and if there is not,  it  fails
+     the  match  immediately. However, when there is no following
+     literal this optimization cannot be used. You  can  see  the
+     difference by comparing the behaviour of
+
+<p>
+
+
+       (a+)*\d
+
+<p>
+
+
+     with the pattern above. The former gives  a  failure  almost
+     instantly  when  applied  to a whole line of "a" characters,
+     whereas the latter takes an appreciable  time  with  strings
+     longer than about 20 characters.
+
+ 
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+Regular expressions are case-sensitive.
+The pattern 'AAAA' will not match the sequence 'aaaa'.
+For this reason, both your pattern and the input sequences are
+converted to upper-case. 
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+
+Always returns 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/dreg.isee" -->
+
+<p>
+Other EMBOSS programs allow you to search for simple patterns and may be
+easier for the user who has never used regular expressions before:
+
+<ul>
+<li><a href="fuzznuc.html">fuzznuc</a>  - Nucleic acid pattern search
+<li><a href="fuzzpro.html">fuzzpro</a>  - Protein pattern search
+<li><a href="fuzztran.html">fuzztran</a> - Protein pattern search after translation
+</ul>
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/price.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/dreg.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/dreg.comment" -->
+
+
+</BODY>
+</HTML>
+

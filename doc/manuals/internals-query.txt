@@ -1,0 +1,43 @@
+Sequence query internals
+========================
+
+Sequence queries are a key feature of the EMBOSS USA (Uniform Sequence
+Address). In USA processing (by function seqUsaProcess) the query is
+parsed and stored in the AjPSeqQuery data structure.
+
+Each query field has its own string in AjPSeqQuery. Strings which are
+only "*" will match everything, and are removed (probably several
+times, just to be safe).
+
+A function ajSeqQueryWild tests for 'wildcard' queries ... those which
+can return more than one entry. These can use a different access
+method. For example, a web server query may only expect to return a
+single entry. In most cases, a wildcard query is not a great overhead.
+
+Queries with no wildcard in the Id are assumed to be unique. Queries
+where the accession and id are the same (specified as dbname:id in the
+USA) are treated as unique unless the id has a wildcard. All other queries are assumed to return more than one entry.
+
+To add a new field to the query processing, follow these steps. Loook
+for "Key" of "Sv" to find the keyword and SeqVersion query code in
+ajax *.c and *.h files.
+
+1. Add the field to the AjPSeq data structure and its functions
+
+2. Add the field to the query data structure and its functions
+
+3. Index the field (where available) in dbi programs, using the
+   accession number mechanism. (not yet done for most fields)
+
+4. Read the field information in the appropriate formats (EMBL, Genbank, NCBI)
+
+5. Write the field information in the appropriate formats (EMBL, Genbank, NCBI)
+
+6. Check for -field in the USA and set the new field in the
+   AjPSeqQuery in seqUsaProcess
+
+7. Add the field to SRS and other access methods as appropriate.
+
+8. Add the field to a "fields:"  definition for the databases concerned.
+
+9. Test with seqret using USAs containing the new field.

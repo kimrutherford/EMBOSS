@@ -1,0 +1,12 @@
+org.emboss.jemboss
+org.emboss.jemboss.editor
+org.emboss.jemboss.gui
+org.emboss.jemboss.gui.filetree
+org.emboss.jemboss.gui.form
+org.emboss.jemboss.gui.sequenceChooser
+org.emboss.jemboss.gui.startup
+org.emboss.jemboss.parser
+org.emboss.jemboss.parser.acd
+org.emboss.jemboss.programs
+org.emboss.jemboss.server
+org.emboss.jemboss.soap

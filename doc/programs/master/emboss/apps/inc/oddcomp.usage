@@ -1,0 +1,18 @@
+<b>Here is a sample session with oddcomp</b>
+<p>
+To search for entries in swissprot with at least 1 SR AND at least 2 RS: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>oddcomp </b>
+Identify proteins with specified sequence word composition
+Input protein sequence(s): <b>tsw:*</b>
+Program compseq output file: <b>oddcomp.comp</b>
+Window size to consider (e.g. 30 aa) [30]: <b></b>
+Output file [12s1_arath.oddcomp]: <b>out.odd</b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

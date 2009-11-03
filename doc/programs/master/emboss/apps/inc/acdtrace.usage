@@ -1,0 +1,15 @@
+<b>Here is a sample session with acdtrace</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>acdtrace antigenic </b>
+Finds antigenic sites in proteins
+Input protein sequence(s): <b>tsw:actb1_fugru</b>
+Minimum length of antigenic region [6]: <b></b>
+Output report [actb1_fugru.antigenic]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

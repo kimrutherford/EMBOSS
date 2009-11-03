@@ -1,0 +1,17 @@
+<b>Here is a sample session with checktrans</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>checktrans </b>
+Reports STOP codons and ORF statistics of a protein
+Input protein sequence(s): <b>paamir.pep</b>
+Minimum ORF Length to report [100]: <b></b>
+Output file [paamir_1.checktrans]: <b></b>
+output sequence(s) [paamir_1.fasta]: <b></b>
+Features output [paamir_1.gff]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

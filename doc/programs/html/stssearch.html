@@ -1,0 +1,367 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: stssearch
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+stssearch
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
+    Function
+</H2>
+Search a DNA database for matches with a set of STS primers
+
+<H2>
+    Description
+</H2>
+
+<p><b>stssearch</b> searches one or more DNA sequences with a set of STS primers and reports expected matches.  The database to search, the input primer pairs file and an output file for matches are specified.  For each pair of primers, it looks for matches between the primers and the query sequence in either orientation.  Details of any matches are written to the output file. Only one primer need match for it to be reported.</p>
+
+
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with stssearch</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>stssearch </b>
+Search a DNA database for matches with a set of STS primers
+Input nucleotide sequence(s): <b>@eclac.list</b>
+Primer pairs file: <b>lac.primers</b>
+Output file [j01636.stssearch]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-seqall]            seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+  [-infile]            infile     Primer pairs file
+  [-outfile]           outfile    [*.stssearch] Output file name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-seqall" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory3        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-seqall]<br>(Parameter 1)</td>
+<td>Nucleotide sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-infile]<br>(Parameter 2)</td>
+<td>Primer pairs file</td>
+<td>Input file</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 3)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.stssearch</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Input file format
+</H2>
+
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: eclac.list</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+#Formerly ECLAC
+tembl:J01636
+
+#Formerly ECLACA
+tembl:X51872
+
+#Formerly ECLACI
+tembl:V00294
+
+#Formerly ECLACY
+tembl:V00295
+
+#Formerly ECLACZ
+tembl:V00296
+</pre>
+</td></tr></table><p>
+<p><h3>File: lac.primers</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+PrimA ACCAGACACCCATCAACAG    TATTTATGCCAGCCAGCCAG
+PrimB CGAAAGAATAAGAGCAGGCAAG GTAAGAGAAATAGACAGGCGG
+PrimC CGTCAGTATCCCCGTTTACAG  TATCGCCAAAATCACCGCC
+PrimD AATACGCAAACCGCCTCTCC   TTATCCGCTCACAATTCCACAC
+PrimE AATACGCAAACCGCCTCTCC   CACAACCCGCTCACAATTCCA
+</pre>
+</td></tr></table><p>
+
+<p>
+
+The primers file consists of three columns separated by tabs or spaces.
+
+<p>
+
+The first column is the name of the primer pair.
+<br>
+The second column is the sequence of the first primer.
+<br>
+The third column is the sequence of the second primer.
+
+
+<H2>
+    Output file format
+</H2>
+
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: j01636.stssearch</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+J01636: PrimA PrimerA matched at 532
+J01636: (rev) PrimA PrimerB matched at 689
+J01636: PrimB PrimerA matched at 5743
+J01636: (rev) PrimB PrimerB matched at 5942
+J01636: PrimC PrimerA matched at 2954
+J01636: (rev) PrimC PrimerB matched at 3069
+J01636: PrimD PrimerA matched at 1074
+J01636: (rev) PrimD PrimerB matched at 1261
+J01636: PrimE PrimerA matched at 1074
+X51872: PrimB PrimerA matched at 98
+X51872: (rev) PrimB PrimerB matched at 297
+V00294: PrimA PrimerA matched at 484
+V00294: (rev) PrimA PrimerB matched at 641
+V00294: PrimD PrimerA matched at 1026
+V00294: PrimE PrimerA matched at 1026
+V00295: PrimB PrimerA matched at 1439
+V00296: PrimC PrimerA matched at 1668
+V00296: (rev) PrimC PrimerB matched at 1783
+</pre>
+</td></tr></table><p>
+
+<p>
+
+The output file consists of one line per match. This consists of:
+
+<p>
+
+<ul>
+<li>The name of the sequence that the match is found in, followed by a ':'.
+<li>If the match is in the reverse sense, it has a '(rev)'.
+<li>The name of the primer pair.
+<li>'PrimerA' or 'PrimerB'.
+<li>'matched at' the start of the match position.
+</ul>
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+None.
+
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="eprimer3.html">eprimer3</a></td>
+<td>Picks PCR primers and hybridization oligos</td>
+</tr>
+
+<tr>
+<td><a href="primersearch.html">primersearch</a></td>
+<td>Search DNA sequences for matches with primer pairs</td>
+</tr>
+
+</table>
+<p>
+
+If you want something that only reports matches of both primer pairs and
+can find mismatches, use <A href="primersearch.html">primersearch</a>. 
+
+<H2>
+    Author(s)
+</H2>
+
+
+Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+
+<H2>
+    History
+</H2>
+
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+<H2>
+    Comments
+</H2>
+None
+
+</BODY>
+</HTML>
+

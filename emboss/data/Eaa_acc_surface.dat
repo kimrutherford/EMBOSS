@@ -1,0 +1,34 @@
+# EMBOSS DATA FILE
+#
+#
+#
+# ref
+#
+# Total ASA - S. Miller, J. Janin, A.M. Lesk, C. Chothia, J. Mol. Biol. 
+#             (1987), 196, 641 - 659
+#
+# AA volume in Angstom square - 'Protein Structure', N.J Darby, T.E. Creighton
+#                               (IRL press, 1993)
+#
+#		aa volume
+#	Total ASA
+A	113	 67
+C	140	 86
+D	151	 91
+E	183	109
+F	218	135
+G	 85	 48
+H	194	118
+I	182	124
+K	211	135
+L	180	124
+M	204	124
+N	158	 96
+P	143	 90
+Q	189	114
+R	241	148
+S	122	 73
+T	146	 93
+V	160	105
+W	259	163
+Y	229	141

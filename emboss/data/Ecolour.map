@@ -1,0 +1,253 @@
+# EMBOSS COLOUR MAPS
+#
+# The format of this file should be fairly self-explanatory.
+#
+# We want to make it possible for programs which display residues and
+# bases in colour to have a standard set of colours to plot in. 
+#
+# We also want the user to have the ability to select different colour
+# maps for different puposes or according to individual taste. 
+#
+# We want to make it easy for users to add to or amend the colour maps.
+#
+# We want to be able to set colours for both the PLPLOT (rather
+# restricted) set of colours and for HTML which has a much larger set of
+# available colours, even if we keep to the 'Safe PC/Mac WWW colours'
+#
+# Comment lines start with a '#'.
+#
+# Columns are separated by white space (one or more tabs and/or spaces)
+#
+# A colour map starts with the tag 'MAP' and is followed by the name of
+# that map. 
+#
+# The default colour to use in that map is specified by 'default:'
+# followed by the colour for PLPLOT. 
+#
+# The colours of the characters for the bases or residues are specified
+# as for the 'default:' tag.  The characters are case independent. 
+#
+# Any characters whose colour has not been specified will use the
+# default colour.
+#
+# The available PLPLOT plotting colours are:
+# "BLACK", "RED", "YELLOW", "GREEN", "AQUAMARINE", "PINK", "WHEAT",
+# "GREY", "BROWN", "BLUE", "BLUEVIOLET", "CYAN", "TURQUOISE", "MAGENTA",
+# "SALMON", "WHITE"
+
+
+# Define the colours as hexadecimal Red/Green/Blue values.
+# This doesn't affect plotting device colours, only HTML colours.
+#
+# These are the nearest Safe PC/Mac WWW colour to the Netscape colour
+# name.  They are all acceptable except for 'wheat' (F5E4C5).  I left it
+# as FFFFCC, which is more of a light-yellow than I would like, but it
+# will do as a default.
+# 
+# Useful colour palattes:
+# http://www.iconbazaar.com/color_tables/named_colors.php
+# http://www.hidaho.com/colorcenter/cc.html
+
+COLOUR	BLACK		000000
+COLOUR	RED		FF0000
+COLOUR	YELLOW		FFFF00
+COLOUR	GREEN		00FF00
+COLOUR	AQUAMARINE	99CCFF
+COLOUR	PINK		FFCCCC
+COLOUR	WHEAT		FFFFCC
+COLOUR	GREY		999999
+COLOUR	BROWN		993300
+COLOUR	BLUE		0000FF
+COLOUR	BLUEVIOLET	9933FF
+COLOUR	CYAN		00FFFF
+COLOUR	TURQUOISE	33FFCC
+COLOUR	MAGENTA		FF00FF
+COLOUR	SALMON		FF9966
+COLOUR	WHITE		FFFFFF
+
+
+
+# The null map - everything is black
+MAP none [
+	default:	BLACK
+]
+
+
+# These are the colours used in trace displays in many base-calling #
+# packages.  
+# I think this is the closest we come to standard base colours. 
+
+MAP nucleic [
+	default:	GREY
+	A:		GREEN
+	C:		BLUE
+	G:		BLACK
+	T:		RED
+]
+
+
+# EMBOSS Standard protein colours.
+#
+# [These are two possibilities for their origin.  Many years ago there
+# was a discussion on the bionet newsgroups about colours.  There was also
+# a suggested colour scheme from Toby Gibson (then at EMBL, Heidelberg). 
+# Toby is colour-blind so there may be some slightly unusual choices. 
+# - Peter Rice]
+
+MAP protein [
+	default:	BLACK
+	DE:		RED
+	HKR:		BLUE
+	G:		GREY
+	A:		BLACK
+	CMU:		YELLOW
+	ST:		CYAN
+	NQ:		GREEN
+	LVI:		BLACK
+	FWY:		WHEAT
+	P:		BLUEVIOLET
+]
+
+
+# Rasmol colours
+#
+# The following colour scheme is an approximation to the RasMol amino
+# colour scheme, colouring them according to traditional amino acid
+# properties.  The purpose of colouring is to identify amino acids in an
+# unusual or surprising environment. 
+#
+# The outer parts of a protein that are polar are visible colours and
+# non-polar residues are darker. 
+
+MAP rasmol [
+	default:	BLACK
+	DE:		RED
+	FY:		BLUE
+	KR:		BLUEVIOLET
+	G:		GREY	
+	A:		BROWN	
+	H:		AQUAMARINE
+	CMU:		YELLOW	
+	ST:		SALMON	
+	NQ:		CYAN	
+	LVI:		GREEN	
+	W:		PINK	
+	P:		WHEAT	
+]
+
+# GCG SeqLab colours
+# Some people like this for some reason...
+
+MAP gcg [
+	default:	BLACK
+	FYW:		RED	
+	HN:		BROWN	
+	IVLM:		MAGENTA	
+	CASTU:		YELLOW	
+	G:		SALMON	
+	BDEZ:		GREEN	
+	Q:		TURQUOISE
+	KR:		BLUE
+	P:		CYAN
+]
+
+
+# Acidic/Basic (Red=acidic, Blue=basic)
+
+MAP acidic [
+	default:	BLACK
+	DE:		RED
+	RKH:		BLUE
+]
+
+
+# Polar (Red=Polar)
+
+MAP polar [
+	default:	BLACK
+	RNDQEHKSTWY	RED
+]
+
+# Hydrophobic (Red=Hydrophobic)
+
+MAP hydrophobic [
+	default:	BLACK
+	ACGILMFPSTWYV:	RED
+]
+
+# Aromatic/Aliphatic (Red=Aromatic, Blue=Aliphatic)
+
+MAP aromatic [
+	default:	BLACK
+	HFWY:		RED
+	ILV:		BLUE
+]
+
+# Surface/Buried (Red=Surface, Blue=Buried)
+
+MAP buried [
+	default:	BLACK
+	RNDEQGHKPSTY:	RED
+	ACILMFWV:	BLUE
+]
+
+# Positive/Negative charge (Red=Positive, Blue=Negative)
+
+MAP charge [
+	default:	BLACK
+	RHK:		RED
+	DE:		BLUE
+]
+
+# Tiny/Small/Large (Red=Tiny, Green=Small, Blue=Large)
+
+MAP size [
+	default:	BLACK
+	AGS:		RED
+	NDCPTV:		GREEN
+	REQHILKMFWY:	BLUE
+]
+
+
+
+
+
+# Safe PC/Mac WWW colours
+# -----------------------
+# 
+# To be browser safe, for RGB you can use 0, 51, 102, 153, 204 or for
+# hexadecimal 255 or 00, 33, 66, 99, CC, and FF in any combination in the
+# three slots.  So 153 0 102 is the same as 990066 and produces a reddish
+# purple. 
+#
+#
+#Rasmol Amino Colours
+#--------------------
+#
+#The RasMol `amino' colour scheme colours amino acids according to
+#traditional amino acid properties. The purpose of colouring is to identify
+#amino acids in an unusual or surprising environment. The outer parts of a
+#protein that are polar are visible (bright) colours and non-polar residues
+#darker. Most colours are hallowed by tradition. This colour scheme is
+#similar to the `shapely' scheme.
+#
+#   ASP,GLU bright red [230,10,10]     CYS,MET     yellow [230,230,0]
+#   LYS,ARG blue       [20,90,255]     SER,THR     orange [250,150,0]
+#   PHE,TYR mid blue   [50,50,170]     ASN,GLN     cyan   [0,220,220]
+#   GLY     light grey [235,235,235]   LEU,VAL,ILE green  [15,130,15]
+#   ALA     dark grey  [200,200,200]   TRP         pink   [180,90,180]
+#   HIS     pale blue  [130,130,210]   PRO         flesh  [220,150,130] 
+#
+#
+#Rasmol Structure Colours
+#------------------------
+#    
+#The RasMol `structure' colour scheme colours the molecule by protein
+#secondary structure. Alpha helices are coloured magenta, [240,0,128], beta
+#sheets are coloured yellow, [255,255,0], turns are coloured pale blue,   
+#[96,128,255] and all other residues are coloured white. The secondary
+#structure is either read from the PDB file (HELIX and SHEET records), if
+#available, or determined using Kabsch and Sander's DSSP algorithm. The
+#RasMol `structure' command may be used to force DSSP's structure assignment
+#to be used.
+

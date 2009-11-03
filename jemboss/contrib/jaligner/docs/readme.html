@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head><title>JAligner: Pairwise Sequence Alignment</title></head>
+<body>
+<h1>JAligner: Pairwise Sequence Alignment</h1>
+<hr>
+<p>
+JAligner is a Java implementation of algorithms for pairwise alignment of biological sequences e.g. Smith-Waterman and Needleman-Wunsch.
+</p>
+<p>
+Currently, only Smith-Waterman algorithm is implemented, it is extended to support affine gap penalties with Gotoh improvement to maintain the O(n<sup>2</sup>) time complexity of the original Smith-Waterman algorithm.
+</p>
+
+<h3>Usage</h3>
+<code>java -classpath jaligner.jar:matrices.jar gnu.bioinformatics.jaligner.SW s1.fasta s2.fasta -m matrix -o open -e extend -a -f jaligner.out</code>
+<br><br>
+<em>where</em>
+<br><br>
+<table>
+<tr><td><strong><code>s1.fasta</code></strong></td>
+<td>the location of the 1<sup>st</sup> sequence in <a href="http://www.ncbi.nlm.nih.gov/BLAST/fasta.html">FASTA</a> format.</td></tr>
+<tr><td><strong><code>s2.fasta</code></strong></td>
+<td>the location of the 2<sup>nd</sup> sequence in <a href="http://www.ncbi.nlm.nih.gov/BLAST/fasta.html">FASTA</a> format.</td></tr>
+<tr><td><code>-m matrix</code></td><td>the name of the scoring matrix,
+			<br>
+			<em>optional</em>, the default value is <code>BLOSUM62</code></td></tr>
+<tr><td><code>-o open</code></td><td>the open gap penalty,
+			<br>
+			<em>optional</em>, the default value is <code>10.0</code></td></tr>
+<tr><td><code>-e extend</code></td><td>the extend gap penalty,
+			<br>
+			<em>optional</em>, the default value is <code>0.5</code></td></tr>
+<tr><td><code>-a</code></td><td>all the possible alignments with the same maximum score</td></tr>
+<tr><td><code>-f jaligner.out</code></td><td>the output file name
+			<br>
+			<em>optional</em>, the default is the standard output (the console)</td></tr>
+</table>
+
+<h3>Examples</h3>
+<small>(Command line)</small>
+<ul>
+<li><code>java -classpath jaligner.jar:matrices.jar gnu.bioinformatics.jaligner.SW s1.fasta s2.fasta -m BLOSUM90 -o 11 -e 1</code></li>
+<li><code>java -jar gnu.bioinformatics.jaligner.SW s1.fasta s2.fasta -m /home/ahmed/mymatrix</code></li>
+</ul>
+
+<h3>Formats</h3>
+<h4>Input</h4>
+<p>Currently, <a href="http://www.ncbi.nlm.nih.gov/BLAST/fasta.html">FASTA</a> is the only supported input format.</p>
+<h4>Output</h4>
+<p>Currently, <a href="http://www.hgmp.mrc.ac.uk/Software/EMBOSS/Themes/AlignExamples/align.pair">Pair</a> is the only supported output format.</p>
+
+<h3>Notes</h3>
+<ul>
+<li>
+<p>
+In the command line, if <code>-jar</code> is used (i.e. java -jar gnu.bioinformatics.jaligner.SW as in the 2<sup>nd</sup> example), all the user defined class paths will be disregarded by JVM (including matrices.jar), and in this case, the path to the scoring matrix has to be defined by the <code>-m</code> option.
+<p>
+</li>
+
+<li>
+<p>
+For large sequences e.g. 10KB, JVM needs to know that, to reserve more heap, by passing the -Xm options, for example <code>java -Xms2048m -Xmx2048m</code>
+</p>
+</li>
+
+<li>
+<p>
+To use a user-defined scoring matrix i.e. not included in <code>matrices.jar</code>, the matrix name in the arguments should be the full path to the user-defined scoring matrix e.g. <code>/home/ahmed/mymatrix</code>, then it is not required to include <code>matrices.jar</code> in the classpath.
+</p>
+</li>
+</ul>
+
+<h3>References</h3>
+<ul>
+<li><a href="http://poweredge.stanford.edu/BioinformaticsArchive/ClassicArticlesArchive/smithandwaterman1981.pdf">Identification of common molecular subsequences</a> (PDF)</li>
+<li><a href="http://www.sbc.su.se/~per/molbioinfo2001/dynprog/adv_dynamic.html">Advanced Dynamic Programming Tutorial</a></li>
+</ul>
+
+<h3>Author</h3>
+Ahmed Moustafa (ahmed at users dot sf dot net)
+<hr>
+</body>
+<html>

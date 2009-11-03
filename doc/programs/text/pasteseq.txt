@@ -1,0 +1,430 @@
+
+                                 pasteseq 
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Insert one sequence into another
+
+Description
+
+   pasteseq inserts one sequence into another at a specified position and
+   writes the new, combined sequence to an output file.
+
+Usage
+
+   Here is a sample session with pasteseq
+
+   To insert the sequence 'tsw:flav_nossm' after position 67 in sequence
+   'tsw:amir_pseae' and write the results to the file 'amir_pseae.fasta':
+
+
+% pasteseq tsw:amir_pseae tsw:flav_nossm -pos=67 
+Insert one sequence into another
+output sequence [amir_pseae.fasta]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+   Example 2
+
+   This does the same thing, but the output qualifier is explicitly used:
+
+
+% pasteseq tsw:amir_pseae tsw:flav_nossm -out=amirplus.seq -pos=67 
+Insert one sequence into another
+
+   Go to the output files for this example
+
+   Example 3
+
+   To insert the sequence 'tsw:flav_nossm' before the start of sequence
+   'tsw:amir_pseae' use -pos=0:
+
+
+% pasteseq tsw:amir_pseae tsw:flav_nossm -out=amirplus.seq -pos=0 
+Insert one sequence into another
+
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-asequence]         sequence   (Gapped) sequence filename and optional
+                                  format, or reference (input USA)
+  [-bsequence]         sequence   Sequence to insert
+   -pos                integer    [$(asequence.end)] The position in the main
+                                  input sequence to insert after.
+                                  To insert before the start use the position
+                                  0. (Integer 0 or more)
+  [-outseq]            seqout     [.] Sequence filename and
+                                  optional format (output USA)
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-asequence" associated qualifiers
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-bsequence" associated qualifiers
+   -sbegin2            integer    Start of the sequence to be used
+   -send2              integer    End of the sequence to be used
+   -sreverse2          boolean    Reverse (if DNA)
+   -sask2              boolean    Ask for begin/end/reverse
+   -snucleotide2       boolean    Sequence is nucleotide
+   -sprotein2          boolean    Sequence is protein
+   -slower2            boolean    Make lower case
+   -supper2            boolean    Make upper case
+   -sformat2           string     Input sequence format
+   -sdbname2           string     Database name
+   -sid2               string     Entryname
+   -ufo2               string     UFO features
+   -fformat2           string     Features format
+   -fopenfile2         string     Features file name
+
+   "-outseq" associated qualifiers
+   -osformat3          string     Output seq format
+   -osextension3       string     File name extension
+   -osname3            string     Base file name
+   -osdirectory3       string     Output directory
+   -osdbname3          string     Database name to add
+   -ossingle3          boolean    Separate file for each entry
+   -oufo3              string     UFO features
+   -offormat3          string     Features format
+   -ofname3            string     Features file name
+   -ofdirectory3       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   pasteseq reads 2 normal sequence USAs.
+
+  Input files for usage example
+
+   'tsw:amir_pseae' is a sequence entry in the example protein database
+   'tsw'
+
+  Database entry: tsw:amir_pseae
+
+ID   AMIR_PSEAE              Reviewed;         196 AA.
+AC   P10932;
+DT   01-JUL-1989, integrated into UniProtKB/Swiss-Prot.
+DT   08-DEC-2000, sequence version 2.
+DT   16-JUN-2009, entry version 72.
+DE   RecName: Full=Aliphatic amidase regulator;
+GN   Name=amiR; OrderedLocusNames=PA3363;
+OS   Pseudomonas aeruginosa.
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadales;
+OC   Pseudomonadaceae; Pseudomonas.
+OX   NCBI_TaxID=287;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RC   STRAIN=PAC433;
+RX   MEDLINE=89211409; PubMed=2495988; DOI=10.1016/0014-5793(89)80249-2;
+RA   Lowe N., Rice P.M., Drew R.E.;
+RT   "Nucleotide sequence of the aliphatic amidase regulator gene (amiR) of
+RT   Pseudomonas aeruginosa.";
+RL   FEBS Lett. 246:39-43(1989).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+RC   STRAIN=ATCC 15692 / PAO1 / 1C / PRS 101 / LMG 12228;
+RX   MEDLINE=20437337; PubMed=10984043; DOI=10.1038/35023079;
+RA   Stover C.K., Pham X.-Q.T., Erwin A.L., Mizoguchi S.D., Warrener P.,
+RA   Hickey M.J., Brinkman F.S.L., Hufnagle W.O., Kowalik D.J., Lagrou M.,
+RA   Garber R.L., Goltry L., Tolentino E., Westbrock-Wadman S., Yuan Y.,
+RA   Brody L.L., Coulter S.N., Folger K.R., Kas A., Larbig K., Lim R.M.,
+RA   Smith K.A., Spencer D.H., Wong G.K.-S., Wu Z., Paulsen I.T.,
+RA   Reizer J., Saier M.H. Jr., Hancock R.E.W., Lory S., Olson M.V.;
+RT   "Complete genome sequence of Pseudomonas aeruginosa PAO1, an
+RT   opportunistic pathogen.";
+RL   Nature 406:959-964(2000).
+RN   [3]
+RP   CHARACTERIZATION.
+RX   MEDLINE=95286483; PubMed=7539417;
+RA   Wilson S.A., Drew R.E.;
+RT   "Transcriptional analysis of the amidase operon from Pseudomonas
+RT   aeruginosa.";
+RL   J. Bacteriol. 177:3052-3057(1995).
+RN   [4]
+RP   X-RAY CRYSTALLOGRAPHY (2.25 ANGSTROMS) OF COMPLEX WITH AMIC.
+RC   STRAIN=PAC1;
+RX   MEDLINE=99437995; PubMed=10508151; DOI=10.1093/emboj/18.19.5175;
+RA   O'Hara B.P., Norman R.A., Wan P.T., Roe S.M., Barrett T.E., Drew R.E.,
+RA   Pearl L.H.;
+RT   "Crystal structure and induction mechanism of AmiC-AmiR: a ligand-
+RT   regulated transcription antitermination complex.";
+RL   EMBO J. 18:5175-5186(1999).
+CC   -!- FUNCTION: Positive controlling element of amiE, the gene for
+CC       aliphatic amidase. Acts as a transcriptional antitermination
+
+
+  [Part of this file has been deleted for brevity]
+
+DR   RefSeq; NP_252053.1; -.
+DR   PDB; 1QO0; X-ray; 2.25 A; D/E=1-196.
+DR   PDBsum; 1QO0; -.
+DR   GeneID; 880573; -.
+DR   GenomeReviews; AE004091_GR; PA3363.
+DR   KEGG; pae:PA3363; -.
+DR   PseudoCAP; PA3363; -.
+DR   HOGENOM; P10932; -.
+DR   OMA; P10932; QLQRIGC.
+DR   BioCyc; PAER208964:PA3363-MON; -.
+DR   GO; GO:0006350; P:transcription; IEA:UniProtKB-KW.
+DR   GO; GO:0031564; P:transcription antitermination; IEA:UniProtKB-KW.
+DR   InterPro; IPR005561; AmiR_NasR_reg.
+DR   InterPro; IPR008327; Sig_transdc_resp-reg_antiterm.
+DR   InterPro; IPR011991; Wing_hlx_DNA_bd.
+DR   Gene3D; G3DSA:1.10.10.10; Wing_hlx_DNA_bd; 1.
+DR   Pfam; PF03861; ANTAR; 1.
+DR   PIRSF; PIRSF036382; RR_antiterm; 1.
+DR   PROSITE; PS50921; ANTAR; 1.
+PE   1: Evidence at protein level;
+KW   3D-structure; Complete proteome; Transcription;
+KW   Transcription antitermination; Transcription regulation.
+FT   CHAIN         1    196       Aliphatic amidase regulator.
+FT                                /FTId=PRO_0000064582.
+FT   DOMAIN      129    190       ANTAR.
+FT   CONFLICT     48     48       S -> A (in Ref. 1; CAA32023).
+FT   CONFLICT     64     64       R -> G (in Ref. 1; CAA32023).
+FT   CONFLICT    141    141       E -> D (in Ref. 1; CAA32023).
+FT   CONFLICT    154    154       A -> V (in Ref. 1; CAA32023).
+FT   CONFLICT    170    170       Y -> H (in Ref. 1; CAA32023).
+FT   HELIX         3      8
+FT   HELIX         9     12
+FT   STRAND       14     19
+FT   HELIX        23     35
+FT   STRAND       38     42
+FT   STRAND       54     59
+FT   HELIX        65     75
+FT   STRAND       81     86
+FT   HELIX        91    100
+FT   STRAND      103    109
+FT   HELIX       112    114
+FT   HELIX       115    160
+FT   HELIX       164    175
+FT   TURN        176    179
+FT   HELIX       182    189
+SQ   SEQUENCE   196 AA;  21903 MW;  306A4F30E8E4C6C0 CRC64;
+     MSANSLLGSL RELQVLVLNP PGEVSDALVL QLIRIGCSVR QCWPPPESFD VPVDVVFTSI
+     FQNRHHDEIA ALLAAGTPRT TLVALVEYES PAVLSQIIEL ECHGVITQPL DAHRVLPVLV
+     SARRISEEMA KLKQKTEQLQ ERIAGQARIN QAKALLMQRH GWDEREAHQY LSREAMKRRE
+     PILKIAQELL GNEPSA
+//
+
+  Database entry: tsw:flav_nossm
+
+ID   FLAV_NOSSM              Reviewed;          35 AA.
+AC   P35707;
+DT   01-JUN-1994, integrated into UniProtKB/Swiss-Prot.
+DT   01-JUN-1994, sequence version 1.
+DT   25-NOV-2008, entry version 37.
+DE   RecName: Full=Flavodoxin;
+DE   Flags: Fragment;
+OS   Nostoc sp. (strain MAC).
+OC   Bacteria; Cyanobacteria; Nostocales; Nostocaceae; Nostoc.
+OX   NCBI_TaxID=35822;
+RN   [1]
+RP   PROTEIN SEQUENCE.
+RA   Takruri I.A.H., Boulter D., Fitzgerald M.P., Hutber G.N., Rogers L.J.;
+RT   "N-terminal amino acid sequences of flavodoxins from Chondrus crispus
+RT   and Nostoc strain MAC.";
+RL   Phytochemistry 25:2113-2115(1986).
+CC   -!- FUNCTION: Low-potential electron donor to a number of redox
+CC       enzymes.
+CC   -!- COFACTOR: FMN.
+CC   -!- SIMILARITY: Belongs to the flavodoxin family.
+CC   -!- SIMILARITY: Contains 1 flavodoxin-like domain.
+CC   -----------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution-NoDerivs License
+CC   -----------------------------------------------------------------------
+DR   HSSP; P11241; 1RCF.
+DR   GO; GO:0009055; F:electron carrier activity; IEA:InterPro.
+DR   GO; GO:0010181; F:FMN binding; IEA:InterPro.
+DR   GO; GO:0016491; F:oxidoreductase activity; IEA:InterPro.
+DR   GO; GO:0022900; P:electron transport chain; IEA:UniProtKB-KW.
+DR   GO; GO:0006810; P:transport; IEA:UniProtKB-KW.
+DR   InterPro; IPR008254; Flavodoxin/NO_synth.
+DR   InterPro; IPR001226; Flavodoxin_CS.
+DR   Pfam; PF00258; Flavodoxin_1; 1.
+DR   PROSITE; PS00201; FLAVODOXIN; 1.
+DR   PROSITE; PS50902; FLAVODOXIN_LIKE; 1.
+PE   1: Evidence at protein level;
+KW   Direct protein sequencing; Electron transport; Flavoprotein; FMN;
+KW   Transport.
+FT   CHAIN         1    >35       Flavodoxin.
+FT                                /FTId=PRO_0000171640.
+FT   DOMAIN        4    >35       Flavodoxin-like.
+FT   NON_TER      35     35
+SQ   SEQUENCE   35 AA;  3820 MW;  B6EEB5CA7A45DDA6 CRC64;
+     SKKIGLFYGT ZTGKTESVAE IIDEFGDEVV TLDID
+//
+
+Output file format
+
+   pasteseq writes a normal sequence file.
+
+  Output files for usage example
+
+  File: amir_pseae.fasta
+
+>AMIR_PSEAE Aliphatic amidase regulator
+MSANSLLGSLRELQVLVLNPPGEVSDALVLQLIRIGCSVRQCWPPPESFDVPVDVVFTSI
+FQNRHHDSKKIGLFYGTZTGKTESVAEIIDEFGDEVVTLDIDEIAALLAAGTPRTTLVAL
+VEYESPAVLSQIIELECHGVITQPLDAHRVLPVLVSARRISEEMAKLKQKTEQLQERIAG
+QARINQAKALLMQRHGWDEREAHQYLSREAMKRREPILKIAQELLGNEPSA
+
+  Output files for usage example 2
+
+  File: amirplus.seq
+
+>AMIR_PSEAE Aliphatic amidase regulator
+MSANSLLGSLRELQVLVLNPPGEVSDALVLQLIRIGCSVRQCWPPPESFDVPVDVVFTSI
+FQNRHHDSKKIGLFYGTZTGKTESVAEIIDEFGDEVVTLDIDEIAALLAAGTPRTTLVAL
+VEYESPAVLSQIIELECHGVITQPLDAHRVLPVLVSARRISEEMAKLKQKTEQLQERIAG
+QARINQAKALLMQRHGWDEREAHQYLSREAMKRREPILKIAQELLGNEPSA
+
+  Output files for usage example 3
+
+  File: amirplus.seq
+
+>AMIR_PSEAE Aliphatic amidase regulator
+SKKIGLFYGTZTGKTESVAEIIDEFGDEVVTLDIDMSANSLLGSLRELQVLVLNPPGEVS
+DALVLQLIRIGCSVRQCWPPPESFDVPVDVVFTSIFQNRHHDEIAALLAAGTPRTTLVAL
+VEYESPAVLSQIIELECHGVITQPLDAHRVLPVLVSARRISEEMAKLKQKTEQLQERIAG
+QARINQAKALLMQRHGWDEREAHQYLSREAMKRREPILKIAQELLGNEPSA
+
+Data files
+
+   None.
+
+Notes
+
+   This can be used as a simple sequence editor.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name     Description
+   aligncopy        Reads and writes alignments
+   aligncopypair    Reads and writes pairs from alignments
+   biosed           Replace or delete sequence sections
+   codcopy          Copy and reformat a codon usage table
+   cutseq           Removes a section from a sequence
+   degapseq         Removes non-alphabetic (e.g. gap) characters from sequences
+   descseq          Alter the name or description of a sequence
+   entret           Retrieves sequence entries from flatfile databases and files
+   extractalign     Extract regions from a sequence alignment
+   extractfeat      Extract features from sequence(s)
+   extractseq       Extract regions from a sequence
+   featcopy         Reads and writes a feature table
+   featreport       Reads and writes a feature table
+   listor           Write a list file of the logical OR of two sets of sequences
+   makenucseq       Create random nucleotide sequences
+   makeprotseq      Create random protein sequences
+   maskambignuc     Masks all ambiguity characters in nucleotide sequences
+   with             N
+   maskambigprot    Masks all ambiguity characters in protein sequences with
+                    X
+   maskfeat         Write a sequence with masked features
+   maskseq          Write a sequence with masked regions
+   newseq           Create a sequence file from a typed-in sequence
+   nohtml           Remove mark-up (e.g. HTML tags) from an ASCII text file
+   noreturn         Remove carriage return from ASCII files
+   nospace          Remove all whitespace from an ASCII text file
+   notab            Replace tabs with spaces in an ASCII text file
+   notseq           Write to file a subset of an input stream of sequences
+   nthseq           Write to file a single sequence from an input stream of
+                    sequences
+   nthseqset        Reads and writes (returns) one set of sequences from many
+   revseq           Reverse and complement a nucleotide sequence
+   seqret           Reads and writes (returns) sequences
+   seqretsetall     Reads and writes (returns) many sets of sequences
+   seqretsplit      Reads sequences and writes them to individual files
+   sizeseq          Sort sequences by size
+   skipredundant    Remove redundant sequences from an input set
+   skipseq          Reads and writes (returns) sequences, skipping first few
+   splitsource      Split sequence(s) into original source sequences
+   splitter         Split sequence(s) into smaller sequences
+   trimest          Remove poly-A tails from nucleotide sequences
+   trimseq          Remove unwanted characters from start and end of sequence(s)
+   trimspace        Remove extra whitespace from an ASCII text file
+   union            Concatenate multiple sequences into a single sequence
+   vectorstrip      Removes vectors from the ends of nucleotide sequence(s)
+   yank             Add a sequence reference (a full USA) to a list file
+
+Author(s)
+
+   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+History
+
+   Completed 26 Jan 1999
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

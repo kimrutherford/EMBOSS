@@ -1,0 +1,195 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:v00295' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:v00295</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   V00295; SV 1; linear; genomic DNA; STD; PRO; 1500 BP.
+XX
+AC   V00295;
+XX
+DT   09-JUN-1982 (Rel. 01, Created)
+DT   07-JUL-1995 (Rel. 44, Last updated, Version 4)
+XX
+DE   E. coli lacY gene (codes for lactose permease).
+XX
+KW   membrane protein.
+XX
+OS   Escherichia coli
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
+OC   Enterobacteriaceae; Escherichia.
+XX
+RN   [1]
+RP   1-1500
+RX   DOI; 10.1038/283541a0.
+RX   PUBMED; 6444453.
+RA   Buechel D.E., Gronenborn B., Mueller-Hill B.;
+RT   "Sequence of the lactose permease gene";
+RL   Nature 283(5747):541-545(1980).
+XX
+CC   lacZ is a beta-galactosidase and lacA is transacetylase.
+CC   KST ECO.LACY
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1500
+FT                   /organism="Escherichia coli"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:562"
+FT   CDS             &lt;1..54
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /note="reading frame (lacZ)"
+FT                   /db_xref="GOA:P00722"
+FT                   /db_xref="InterPro:IPR014718"
+FT                   /db_xref="PDB:3DYP"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P00722"
+FT                   /protein_id="CAA23570.1"
+FT                   /translation="FQLSAGRYHYQLVWCQK"
+FT   CDS             106..1359
+FT                   /transl_table=11
+FT                   /note="reading frame (lacY)"
+FT                   /db_xref="GOA:P02920"
+FT                   /db_xref="InterPro:IPR018457"
+FT                   /db_xref="PDB:2V8N"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P02920"
+FT                   /protein_id="CAA23571.1"
+FT                   /translation="MYYLKNTNFWMFGLFFFFYFFIMGAYFPFFPIWLHDINHISKSDT
+FT                   GIIFAAISLFSLLFQPLFGLLSDKLGLRKYLLWIITGMLVMFAPFFIFIFGPLLQYNIL
+FT                   VGSIVGGIYLGFCFNAGAPAVEAFIEKVSRRSNFEFGRARMFGCVGWALCASIVGIMFT
+FT                   INNQFVFWLGSGCALILAVLLFFAKTDAPSSATVANAVGANHSAFSLKLALELFRQPKL
+FT                   WFLSLYVIGVSCTYDVFDQQFANFFTSFFATGEQGTRVFGYVTTMGELLNASIMFFAPL
+FT                   IINRIGGKNALLLAGTIMSVRIIGSSFATSALEVVILKTLHMFEVPFLLVGCFKYITSQ
+FT                   FEVRFSATIYLVCFCFFKQLAMIFMSVLAGNMYESIGFQGAYLVLGLVALGFTLISVFT
+FT                   LSGPGPLSLLRRQVNEVA"
+FT   CDS             1423..&gt;1500
+FT                   /transl_table=11
+FT                   /note="reading frame (lacA)"
+FT                   /db_xref="GOA:P07464"
+FT                   /db_xref="InterPro:IPR018357"
+FT                   /db_xref="PDB:1KRV"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P07464"
+FT                   /protein_id="CAA23572.1"
+FT                   /translation="MNMPMTERIRAGKLFTDMCEGLPEKR"
+XX
+SQ   Sequence 1500 BP; 315 A; 342 C; 357 G; 486 T; 0 other;
+     ttccagctga gcgccggtcg ctaccattac cagttggtct ggtgtcaaaa ataataataa        60
+     ccgggcaggc catgtctgcc cgtatttcgc gtaaggaaat ccattatgta ctatttaaaa       120
+     aacacaaact tttggatgtt cggtttattc tttttctttt acttttttat catgggagcc       180
+     tacttcccgt ttttcccgat ttggctacat gacatcaacc atatcagcaa aagtgatacg       240
+     ggtattattt ttgccgctat ttctctgttc tcgctattat tccaaccgct gtttggtctg       300
+     ctttctgaca aactcgggct gcgcaaatac ctgctgtgga ttattaccgg catgttagtg       360
+     atgtttgcgc cgttctttat ttttatcttc gggccactgt tacaatacaa cattttagta       420
+     ggatcgattg ttggtggtat ttatctaggc ttttgtttta acgccggtgc gccagcagta       480
+     gaggcattta ttgagaaagt cagccgtcgc agtaatttcg aatttggtcg cgcgcggatg       540
+     tttggctgtg ttggctgggc gctgtgtgcc tcgattgtcg gcatcatgtt caccatcaat       600
+     aatcagtttg ttttctggct gggctctggc tgtgcactca tcctcgccgt tttactcttt       660
+     ttcgccaaaa cggatgcgcc ctcttctgcc acggttgcca atgcggtagg tgccaaccat       720
+     tcggcattta gccttaagct ggcactggaa ctgttcagac agccaaaact gtggtttttg       780
+     tcactgtatg ttattggcgt ttcctgcacc tacgatgttt ttgaccaaca gtttgctaat       840
+     ttctttactt cgttctttgc taccggtgaa cagggtacgc gggtatttgg ctacgtaacg       900
+     acaatgggcg aattacttaa cgcctcgatt atgttctttg cgccactgat cattaatcgc       960
+     atcggtggga aaaacgccct gctgctggct ggcactatta tgtctgtacg tattattggc      1020
+     tcatcgttcg ccacctcagc gctggaagtg gttattctga aaacgctgca tatgtttgaa      1080
+     gtaccgttcc tgctggtggg ctgctttaaa tatattacca gccagtttga agtgcgtttt      1140
+     tcagcgacga tttatctggt ctgtttctgc ttctttaagc aactggcgat gatttttatg      1200
+     tctgtactgg cgggcaatat gtatgaaagc atcggtttcc agggcgctta tctggtgctg      1260
+     ggtctggtgg cgctgggctt caccttaatt tccgtgttca cgcttagcgg ccccggcccg      1320
+     ctttccctgc tgcgtcgtca ggtgaatgaa gtcgcttaag caatcaatgt cggatgcggc      1380
+     gcgacgctta tccgaccaac atatcataac ggagtgatcg cattgaacat gccaatgacc      1440
+     gaaagaataa gagcaggcaa gctatttacc gatatgtgcg aaggcttacc ggaaaaaaga      1500
+//
+</pre>
+</td></tr></table><p>
+<p><h3>Database entry: tembl:x51872</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   X51872; SV 1; linear; genomic DNA; STD; PRO; 1832 BP.
+XX
+AC   X51872;
+XX
+DT   17-APR-1990 (Rel. 23, Created)
+DT   05-JUL-1999 (Rel. 60, Last updated, Version 5)
+XX
+DE   Escherichia coli lacA gene for thiogalactoside transacetylase
+XX
+KW   lac operon; lacA gene; lacY gene; thiogalactoside transacetylase.
+XX
+OS   Escherichia coli
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
+OC   Enterobacteriaceae; Escherichia.
+XX
+RN   [1]
+RC   (1-1832)
+RP   1-1832
+RX   DOI; 10.1073/pnas.82.19.6414.
+RX   PUBMED; 3901000.
+RA   Hediger M.A., Johnson D.F., Nierlich D.P., Zabin I.;
+RT   "DNA sequence of the lactose operon: the lacA gene and the transcriptional
+RT   termination region";
+RL   Proc. Natl. Acad. Sci. U.S.A. 82(19):6414-6418(1985).
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1832
+FT                   /organism="Escherichia coli"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:562"
+FT   CDS             &lt;1..18
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /product="lacY gene product"
+FT                   /protein_id="CAA36161.1"
+FT                   /translation="VNEVA"
+FT   CDS             82..693
+FT                   /transl_table=11
+FT                   /gene="lacA"
+FT                   /product="thiogalactoside transacetylase"
+FT                   /db_xref="GOA:P07464"
+FT                   /db_xref="InterPro:IPR018357"
+FT                   /db_xref="PDB:1KRV"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P07464"
+FT                   /protein_id="CAA36162.1"
+FT                   /translation="MNMPMTERIRAGKLFTDMCEGLPEKRLRGKTLMYEFNHSHPSEVE
+FT                   KRESLIKEMFATVGENAWVEPPVYFSYGSNIHIGRNFYANFNLTIVDDYTVTIGDNVLI
+FT                   APNVTLSVTGHPVHHELRKNGEMYSFPITIGNNVWIGSHVVINPGVTIGDNSVIGAGSI
+FT                   VTKDIPPNVVAAGVPCRVIREINDRDKHYYFKDYKVESSV"
+XX
+SQ   Sequence 1832 BP; 519 A; 510 C; 450 G; 353 T; 0 other;
+     gtgaatgaag tcgcttaagc aatcaatgtc ggatgcggcg cgacgcttat ccgaccaaca        60
+     tatcataacg gagtgatcgc attgaacatg ccaatgaccg aaagaataag agcaggcaag       120
+     ctatttaccg atatgtgcga aggcttaccg gaaaaaagac ttcgtgggaa aacgttaatg       180
+     tatgagttta atcactcgca tccatcagaa gttgaaaaaa gagaaagcct gattaaagaa       240
+     atgtttgcca cggtagggga aaacgcctgg gtagaaccgc ctgtctattt ctcttacggt       300
+     tccaacatcc atataggccg caatttttat gcaaatttca atttaaccat tgtcgatgac       360
+     tacacggtaa caatcggtga taacgtactg attgcaccca acgttactct ttccgttacg       420
+     ggacaccctg tacaccatga attgagaaaa aacggcgaga tgtactcttt tccgataacg       480
+     attggcaata acgtctggat cggaagtcat gtggttatta atccaggcgt caccatcggg       540
+     gataattctg ttattggcgc gggtagtatc gtcacaaaag acattccacc aaacgtcgtg       600
+     gcggctggcg ttccttgtcg ggttattcgc gaaataaacg accgggataa gcactattat       660
+     ttcaaagatt ataaagttga atcgtcagtt taaattataa aaattgcctg atacgctgcg       720
+     cttatcaggc ctacaagttc agcgatctac attagccgca tccggcatga acaaagcgca       780
+     ggaacaagcg tcgcatcatg cctctttgac ccacagctgc ggaaaacgta ctggtgcaaa       840
+     acgcagggtt atgatcatca gcccaacgac gcacagcgca tgaaatgccc agtccatcag       900
+     gtaattgccg ctgatactac gcagcacgcc agaaaaccac ggggcaagcc cggcgatgat       960
+     aaaaccgatt ccctgcataa acgccaccag cttgccagca atagccggtt gcacagagtg      1020
+     atcgagcgcc agcagcaaac agagcggaaa cgcgccgccc agacctaacc cacacaccat      1080
+     cgcccacaat accggcaatt gcatcggcag ccagataaag ccgcagaacc ccaccagttg      1140
+     taacaccagc gccagcatta acagtttgcg ccgatcctga tggcgagcca tagcaggcat      1200
+     cagcaaagct cctgcggctt gcccaagcgt catcaatgcc agtaaggaac cgctgtactg      1260
+     cgcgctggca ccaatctcaa tatagaaagc gggtaaccag gcaatcaggc tggcgtaacc      1320
+     gccgttaatc agaccgaagt aaacacccag cgtccacgcg cggggagtga ataccacgcg      1380
+     aaccggagtg gttgttgtct tgtgggaaga ggcgacctcg cgggcgcttt gccaccacca      1440
+     ggcaaagagc gcaacaacgg caggcagcgc caccaggcga gtgtttgata ccaggtttcg      1500
+     ctatgttgaa ctaaccaggg cgttatggcg gcaccaagcc caccgccgcc catcagagcc      1560
+     gcggaccaca gccccatcac cagtggcgtg cgctgctgaa accgccgttt aatcaccgaa      1620
+     gcatcaccgc ctgaatgatg ccgatcccca ccccaccaag cagtgcgctg ctaagcagca      1680
+     gcgcactttg cgggtaaagc tcacgcatca atgcaccgac ggcaatcagc aacagactga      1740
+     tggcgacact gcgacgttcg ctgacatgct gatgaagcca gcttccggcc agcgccagcc      1800
+     cgcccatggt aaccaccggc agagcggtcg ac                                    1832
+//
+</pre>
+</td></tr></table><p>

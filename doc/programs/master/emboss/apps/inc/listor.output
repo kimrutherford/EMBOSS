@@ -1,0 +1,41 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: file1.list</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+fasta::../../data/file1:one
+fasta::../../data/file1:two
+fasta::../../data/file1:three
+fasta::../../data/file2:four
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: file1.list</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+fasta::../../data/file1:two
+fasta::../../data/file1:three
+</pre>
+</td></tr></table><p>
+
+<a name="output.3"></a>
+<h3>Output files for usage example 3</h3>
+<p><h3>File: file1.list</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+fasta::../../data/file1:one
+fasta::../../data/file2:four
+</pre>
+</td></tr></table><p>
+
+<a name="output.4"></a>
+<h3>Output files for usage example 4</h3>
+<p><h3>File: file1.list</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+fasta::../../data/file1:one
+</pre>
+</td></tr></table><p>

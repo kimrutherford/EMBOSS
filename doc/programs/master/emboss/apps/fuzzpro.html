@@ -1,0 +1,211 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: fuzzpro
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+fuzzpro
+<!--#include file="header2.inc" -->
+<H2>
+    Function
+</H2>
+<!--#include file="inc/fuzzpro.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<p><b>fuzznuc</b> searches for a specified PROSITE-style pattern in protein sequences. Such patterns are specifications of a (typically short) length of sequence to be found. They can specify a search for an exact sequence or they can allow various ambiguities, matches to variable lengths of sequence and repeated subsections of the sequence. One or more protein sequences are read from file.  The output is a standard EMBOSS report file that includes data such as location and score of any matches.</p>
+
+<H2>
+Algorithm
+</H2>
+
+<p><b>fuzznuc</b> intelligently selects the optimum searching algorithm to use, depending on the complexity of the search pattern specified.</p>
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/fuzzpro.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/fuzzpro.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/fuzzpro.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>fuzzpro</b> reads in normal protein sequence USAs. 
+
+<p>
+<!--#include file="inc/fuzzpro.input" -->
+
+
+<h3>Pattern specification</h3>
+
+Patterns for fuzzpro are based on the format of pattern used in the
+PROSITE database, with the difference that the terminating dot '.' and
+the hyphens, '-', between the characters are optional. 
+
+<p>
+The PROSITE pattern definition from the PROSITE documentation follows. 
+
+<p>
+<ul>
+
+<li>The standard IUPAC one-letter codes for the amino acids are used.
+
+<li>The symbol `x' is used for a position where any amino acid is accepted.
+
+<li>Ambiguities are indicated by listing the acceptable amino acids for a
+given position, between square parentheses `[ ]'.  For example: [ALT]
+stands for Ala or Leu or Thr. 
+
+<li>Ambiguities are also indicated by listing between a pair of curly
+brackets `{ }' the amino acids that are not accepted at a given
+position.  For example: {AM} stands for any amino acid except Ala and
+Met. 
+
+<li>Each element in a pattern is separated from its neighbor by a `-'.
+(Optional in fuzzpro). 
+
+<li>Repetition of an element of the pattern can be indicated by following
+that element with a numerical value or a numerical range between
+parenthesis.  Examples: x(3) corresponds to x-x-x, x(2,4) corresponds to
+x-x or x-x-x or x-x-x-x. 
+
+<li>When a pattern is restricted to either the N- or C-terminal of a
+sequence, that pattern either starts with a `&lt;' symbol or respectively
+ends with a `&gt;' symbol. 
+
+<li>A period ends the pattern.  (Optional in fuzzpro). 
+
+<li>All other characters, including spaces are not allowed.
+
+</ul>
+
+<p>
+For example, in SWISSPROT entry 100K_RAT you can look for the pattern: 
+
+<pre>
+[DE](2)HS{P}X(2)PX(2,4)C
+</pre>
+
+<p>
+This means: Two Asps or Glus in any order followed by His, Ser, any
+residue other then Pro, then two of any residue followed by Pro followed
+by two to four of any residue followed by Cys. 
+
+<p>
+The search is case-independent, so 'AAA' matches 'aaa'. 
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/reportformats.ihtml" -->
+<p>
+
+By default <b>fuzzpro</b> writes a 'seqtable' report file.
+
+<p>
+<!--#include file="inc/fuzzpro.output" -->
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/fuzzpro.isee" -->
+
+<p>
+Other EMBOSS programs allow you to search for regular expression
+patterns but may be less easy for the user who has never used regular
+expressions before:
+
+<p>
+
+<ul>
+
+<li><a href="dreg.html">dreg</a> - Regular expression search of a
+nucleotide sequence
+
+<li><a href="preg.html">preg</a> - Regular expression search of a protein
+sequence
+
+</ul>
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/ableasby.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/fuzzpro.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/fuzzpro.comment" -->
+</BODY>
+</HTML>
+

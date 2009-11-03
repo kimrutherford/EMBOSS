@@ -1,0 +1,56 @@
+application: isochore [
+  documentation: "Plots isochores in DNA sequences"
+  groups: "Nucleic:Composition"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  sequence: sequence [
+    parameter: "Y"
+    type: "dna"
+  ]
+
+endsection: input
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  integer: window [
+    additional: "Y"
+    default: "1000"
+    minimum: "1"
+    maximum: "@($(sequence.end)/2)"
+    information: "Window size"
+  ]
+
+  integer: shift [
+    additional: "Y"
+    default: "100"
+    minimum: "1"
+    maximum: "@($(sequence.end)/10)"
+    information: "Shift increment"
+  ]
+
+endsection: additional
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    parameter: "Y"
+    extension: "iso"
+    knowntype: "isochore output"
+  ]
+
+  xygraph: graph [
+    standard: "Y"
+  ]
+
+endsection: output

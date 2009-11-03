@@ -1,0 +1,113 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: hba_human.prophet</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: prophet
+# Rundate: Tue 15 Jul 2008 12:00:00
+# Commandline: prophet
+#    -sequence "tsw:h*"
+#    -infile ../../data/globins.gribskov
+# Align_format: simple
+# Report_file: hba_human.prophet
+########################################
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: globins
+# 2: HBA_HUMAN
+# Matrix: EBLOSUM62
+#
+# Length: 144
+# Identity:      94/144 (65.3%)
+# Similarity:   104/144 (72.2%)
+# Gaps:           3/144 ( 2.1%)
+# Score: 161.14
+# 
+#
+#=======================================
+
+globins           15 ELSAVDKAWVKANSVAEVGGHALERGLFASEPMTLEFFDTFKYLSTFDLS     64
+                     .||..||..|||.. .:||.||.|.|..|.|.|.|.|..|..|...||||
+HBA_HUMAN          2 VLSPADKTNVKAAW-GKVGAHAGEYGAEALERMFLSFPTTKTYFPHFDLS     50
+
+globins           65 KGSADVKAHGKKVLDALGDAVAHLDDLEGTLAALSDLHAHKLKKGVDPVN    114
+                     .|||.||.|||||.|||.:||||:||:...|:||||||||||:  |||||
+HBA_HUMAN         51 HGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLR--VDPVN     98
+
+globins          115 FKLLSHCLLVVLASHLPGDFTPEVQASMDKFLASVATVLASKYR    158
+                     ||||||||||.||:|||.:|||.|.||:|||||||:|||.||||
+HBA_HUMAN         99 FKLLSHCLLVTLAAHLPAEFTPAVHASLDKFLASVSTVLTSKYR    142
+
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: globins
+# 2: HBA_PANPA
+# Matrix: EBLOSUM62
+#
+# Length: 144
+# Identity:      94/144 (65.3%)
+# Similarity:   104/144 (72.2%)
+# Gaps:           3/144 ( 2.1%)
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+                     :....| ..|| .|..:.........:.:......:....|...|....:
+HD_FUGRU        2289 LQQPCVWNKLSTPEYNTHTCSLIYCLHHIILAVAVSPGDQLLHPERKKTK   2338
+
+globins           51 FFDTFKYLSTFDLSKGSADVKAHGKKVLDALGDAVAHLDDLEGT-LAALS     99
+                     ...........|....:..::....:::..|.:.:..:..|... ..|..
+HD_FUGRU        2339 ALRHSDDEDQVDSVHDNHTLEWQACEIMAELVEGLQSVLSLGHHRNTAFP   2388
+
+globins          100 DLHAHKLKKGVDPVNFKLLSHCLLVVLASHLPGDFTPEVQASMDKFLASV    149
+                     ......|:..:..::...|.:....|........::|:........|..:
+HD_FUGRU        2389 AFLTPTLRNIIISLSRLPLVNSHTRVPPLVWKLGWSPQPGGEFGTTLPEI   2438
+
+globins          150 ATV-LASK--YRELGYQ    163
+                     ... |..|  :||..|:
+HD_FUGRU        2439 PVDFLQEKDVFREFLYR   2455
+
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: globins
+# 2: HIRA_FUGRU
+# Matrix: EBLOSUM62
+#
+# Length: 161
+# Identity:       8/161 ( 5.0%)
+# Similarity:    40/161 (24.8%)
+# Gaps:           2/161 ( 1.2%)
+# Score: 64.35
+# 
+#
+#=======================================
+
+globins            1 PIVDTGSVVSLSEE-ELSAVDKAWVKANSVAEVGGHALERGLFASEPMTL     49
+                     ......|...|:.. .............|..:....:.::....::.:..
+HIRA_FUGRU       574 ATAAIASSTGLTPSERPKESTPMQKDVKSKEDTSSDSEDKMATINKNLAF    623
+
+globins           50 EFFDTFKYLSTFDLSKGSADVKAHGKKVLDALGDAVAHLDDLEGTLAALS     99
+                     ........:...::.:.....:....|:..::...:...........:.:
+HIRA_FUGRU       624 NKRKPELLMDGAEVVEKRKKGRPRKDKMAASIAQPLTQTTSPAEREPSRA    673
+
+globins          100 DLHAHKLKKGVDPVNFKLLSHCLLVVLASHLPGDFTPEVQASMDKFLASV    149
+                     ................||.:..:.......:..|.:..::...:..:.:.
+HIRA_FUGRU       674 AAAGAGAAAPTAAAALKLPTPSIKKAFTLQVSMDPSVVLEVENEVSVVAG    723
+
+globins          150 ATVLASKY-RE    159
+                     :.:...:. |:
+HIRA_FUGRU       724 SRLSQLRCSRD    734
+
+
+#---------------------------------------
+#---------------------------------------
+</pre>
+</td></tr></table><p>

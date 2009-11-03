@@ -1,0 +1,53 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: outfile.dbxflat</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Processing directory: /homes/user/test/embl/
+Processing file: rod.dat entries: 6 (6) time: 0.0s (0.0s)
+Total time: 0.0s
+</pre>
+</td></tr></table><p>
+<p><h3>File: embl.ent</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+# Number of files: 1
+# Release: 0.0
+# Date:    00/00/00
+Single filename database
+rod.dat
+</pre>
+</td></tr></table><p>
+<p><h3>File: embl.pxac</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Order     71
+Fill      46
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    99
+Fill2     101
+Count     8
+Kwlimit   15
+</pre>
+</td></tr></table><p>
+<p><h3>File: embl.pxid</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Order     71
+Fill      46
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    99
+Fill2     101
+Count     5
+Kwlimit   15
+</pre>
+</td></tr></table><p>
+<p><h3>File: embl.xac</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: embl.xid</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.

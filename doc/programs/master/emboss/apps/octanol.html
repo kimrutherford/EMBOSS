@@ -1,0 +1,198 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: octanol
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+octanol
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/octanol.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+
+
+<p><b>octanol</b> draws a hydropathy plot for an input protein sequence.  This plots the free energy difference calculated for windows over the protein sequence, of the residues in water compared to two lipid environments: i. Octanol (equivalent to inside a lipid bilayer). ii. The interface of a synthetic lipid bilayer. Free energy differences are calculated for each position in a window of 19 residues by default, about the size of a membrane spanning alpha-helix. The energy values for each residue are summed to get two values for each window.  By default, the value plotted is the free energy difference between the interface and octanol environments, which is the best indicator of the location of probable transmembrane regions.  Command line options allow the display of the octanol and interface values, or hiding the difference values. The experimental free energy values for the water-interface and water-octanol transitions are read from a datafile (<tt>Ewhite-wimley.dat</tt>)</p>
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/octanol.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/octanol.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/octanol.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>octanol</b> reads any protein sequence USA.
+
+<p>
+
+<!--#include file="inc/octanol.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+<b>octanol</b> draws a graph showing the
+free energy calcuated over a sliding window.
+
+<p>
+
+<!--#include file="inc/octanol.output" -->
+
+<p>
+
+The line on the default plot is the difference between the interface
+and octanol free energy calculations. Command line options allow the
+display of the interface and octanol values, or hiding the difference
+values.
+
+<p>
+
+In the example, the human opsin protein has 7 transmembrane
+regions: 37-61, 74-98, 114-133, 153-176, 203-230, 253-276 and 285-309.
+Each is about 20 residues in length, which is also the gap between tick
+marks on the sequence axis. All have energetic preferences for being
+in the lipid (octanol) enviroment - shown as being above the zero
+line - or have at least no clear preference.
+
+<p>
+
+Running octanol with all three plots:
+
+<pre>
+
+% octanol -interface -octanol
+Input sequence: tsw:opsd_human
+   Graph type [x11]: 
+
+</pre>
+
+gives a graph with the water-interface and water-octanol plots.
+
+<p>
+
+For those regions where the diference plot is close to zero, both the
+other two plots are above the line, showing a preference for either
+the octanol or the interface membrane environments rather than water.
+
+
+
+<H2>
+    Data files
+</H2>
+
+File <b>Ewhite-wimley.dat</b> contains the experimental free energy values
+for the water-interface and water-octanol transitions.
+
+<!--#include file="inc/localfiles.ihtml" -->
+
+<H2>
+    Notes
+</H2>
+
+<p>Protein sequences that form transmembrane regions are assumed to have a thermodynamic preference for a hydrophobic environment (inside the membrane lipid bilayer), rather than an aqueous environment in water.  The free energy change for each amino acid residue between a lipid and a water environment can be measured experimentally, and the values for peptides can be shown to be additive (White and Wimley 1999).</p>
+
+<p>For each amino acid residue in the protein, the free energy difference of the residue in lipid and water environments is measured in two ways.  The first is the free energy difference between the protein in water and the protein associated with the interface (glycerol group) of a POPC (palmitoyloleoylphosphocholine) bilayer.  The second is the free energy difference of the protein in water and the protein in octanol, equivalent to the environment inside a lipid bilayer.</p>
+
+<p>Residues which can be buried inside a lipid bilayer must be in a region of the peptide where most residues show a free energy difference in favour of being in an octanol environment or at least being in the lipid/water interface region.  White and Wimley (1999) showed that a sliding window of either free energy difference will indicate the location of probable transmembrane regions, but that the best indicator is the difference between the two values, which is the free energy difference between the interface and octanol environments.</p>
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<ol>
+
+<li>
+White S.H. and Wimley W.C. (1999)
+"Membrane protein folding and stability: physical principles"
+Ann. Rev.Biophys. Biomol. Struct. 28:319-365.
+
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/octanol.isee" -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+<!--#include file="inc/ilongden.address" -->
+
+
+<H2>
+    History
+</H2>
+
+<!--#include file="inc/octanol.history" -->
+
+<H2>
+    Target users
+</H2>
+
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/octanol.comment" -->
+
+
+</BODY>
+</HTML>
+

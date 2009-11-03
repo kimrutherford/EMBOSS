@@ -1,0 +1,159 @@
+<HEAD>
+  <TITLE>
+  EMBOSS: splitter
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+splitter
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/splitter.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+<p><b>splitter</b> splits one or more input sequences into smaller,
+optionally overlapping, subsequences. The subsequence size and overlap
+(if any) may be specified. Optionally, feature information will be
+used.</p>
+
+
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/splitter.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/splitter.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/splitter.itable" -->
+
+
+<H2>
+    Input File Format
+</H2>
+
+
+<b>splitter</b>	reads one or more sequence USAs.
+
+<p>
+
+<!--#include file="inc/splitter.input" -->
+
+<H2>
+    Output File Format
+</H2>
+
+<!--#include file="inc/splitter.output" -->
+
+
+<p>
+The names of the sequences are the same as the original sequence, with
+'_start-end' appended, where 'start', and 'end' are the start and end
+positions of the sub-sequence. eg: The name U01317 would be changed in
+the sub-sequences to: U01317_1-50000 and U01317_50001-73308 if they were
+split at the size of 50000 with no overlap.
+
+<H2>
+    Data files
+</H2>
+
+
+None.	
+
+<H2>
+    Notes
+</H2>
+
+<p>Splitting a large sequence into smaller sub-sequences for analysis
+might be useful in cases where a particularly memory or CPU intensive
+application will not run quickly enough or at all on the full
+sequence.  This should seldom be necessary in EMBOSS.</p>
+
+<p>By default, <b>splitter</b> will write all the sub-sequences to a
+single file. In some cases, particularly where non-EMBOSS programs are
+used, it is necessary to have a single sequence per file.  To write
+the sub-sequences into separate files use the command-line
+switch <tt>-ossingle</tt>.</p>
+
+
+
+<H2>
+    References
+</H2>
+
+
+None
+
+<H2>
+    Warnings
+</H2>
+
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+
+It always exits with status 0
+
+<H2>
+    Known bugs
+</H2>
+
+
+None.
+
+<!--#include file="inc/splitter.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/gwilliam.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/splitter.history" -->
+
+<H2>
+    Target users
+</H2>
+
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/splitter.comment" -->
+
+</BODY>
+</HTML>
+

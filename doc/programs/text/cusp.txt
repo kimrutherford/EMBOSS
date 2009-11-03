@@ -1,0 +1,420 @@
+
+                                   cusp 
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Create a codon usage table from nucleotide sequence(s)
+
+Description
+
+   cusp calculates a codon usage table for one or more nucleotide coding
+   sequences and writes the table to file.
+
+   The codon usage table gives for each codon: i. Sequence of the codon.
+   ii. The encoded amino acid. iii. The proportion of usage of the codon
+   among its redundant set, i.e. the set of codons which code for this
+   codon's amino acid. iv. The expected number of codons, given the input
+   sequence(s), per 1000 bases. v. The observed number of codons in the
+   input sequences.
+
+Usage
+
+   Here is a sample session with cusp
+
+   This example uses only one input sequence. The normal use would be to
+   use a set of coding sequences as the input.
+
+
+% cusp -sbeg 135 -send 1292 
+Create a codon usage table from nucleotide sequence(s)
+Input nucleotide sequence(s): tembl:x13776
+Output file [x13776.cusp]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+  [-outfile]           outfile    [*.cusp] Output file name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+  Input files for usage example
+
+   'tembl:x13776' is a sequence entry in the example nucleic acid
+   database 'tembl'
+
+  Database entry: tembl:x13776
+
+ID   X13776; SV 1; linear; genomic DNA; STD; PRO; 2167 BP.
+XX
+AC   X13776; M43175;
+XX
+DT   19-APR-1989 (Rel. 19, Created)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 24)
+XX
+DE   Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+XX
+KW   aliphatic amidase regulator; amiC gene; amiR gene.
+XX
+OS   Pseudomonas aeruginosa
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadales;
+OC   Pseudomonadaceae; Pseudomonas.
+XX
+RN   [1]
+RP   1167-2167
+RA   Rice P.M.;
+RT   ;
+RL   Submitted (16-DEC-1988) to the EMBL/GenBank/DDBJ databases.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG
+.
+XX
+RN   [2]
+RP   1167-2167
+RX   DOI; 10.1016/0014-5793(89)80249-2.
+RX   PUBMED; 2495988.
+RA   Lowe N., Rice P.M., Drew R.E.;
+RT   "Nucleotide sequence of the aliphatic amidase regulator gene (amiR) of
+RT   Pseudomonas aeruginosa";
+RL   FEBS Lett. 246(1-2):39-43(1989).
+XX
+RN   [3]
+RP   1-1292
+RX   PUBMED; 1907262.
+RA   Wilson S., Drew R.;
+RT   "Cloning and DNA sequence of amiC, a new gene regulating expression of the
+RT   Pseudomonas aeruginosa aliphatic amidase, and purification of the amiC
+RT   product";
+RL   J. Bacteriol. 173(16):4914-4921(1991).
+XX
+RN   [4]
+RP   1-2167
+RA   Rice P.M.;
+RT   ;
+RL   Submitted (04-SEP-1991) to the EMBL/GenBank/DDBJ databases.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG
+.
+XX
+DR   GOA; Q51417.
+DR   InterPro; IPR003211; AmiSUreI_transpt.
+DR   UniProtKB/Swiss-Prot; Q51417; AMIS_PSEAE.
+
+
+  [Part of this file has been deleted for brevity]
+
+FT                   /replace=""
+FT                   /note="ClaI fragment deleted in pSW36,  constitutive
+FT                   phenotype"
+FT   misc_feature    1
+FT                   /note="last base of an XhoI site"
+FT   misc_feature    648..653
+FT                   /note="end of 658bp XhoI fragment, deletion in  pSW3 cause
+s
+FT                   constitutive expression of amiE"
+FT   conflict        1281
+FT                   /replace="g"
+FT                   /citation=[3]
+XX
+SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
+     ggtaccgctg gccgagcatc tgctcgatca ccaccagccg ggcgacggga actgcacgat        6
+0
+     ctacctggcg agcctggagc acgagcgggt tcgcttcgta cggcgctgag cgacagtcac       12
+0
+     aggagaggaa acggatggga tcgcaccagg agcggccgct gatcggcctg ctgttctccg       18
+0
+     aaaccggcgt caccgccgat atcgagcgct cgcacgcgta tggcgcattg ctcgcggtcg       24
+0
+     agcaactgaa ccgcgagggc ggcgtcggcg gtcgcccgat cgaaacgctg tcccaggacc       30
+0
+     ccggcggcga cccggaccgc tatcggctgt gcgccgagga cttcattcgc aaccgggggg       36
+0
+     tacggttcct cgtgggctgc tacatgtcgc acacgcgcaa ggcggtgatg ccggtggtcg       42
+0
+     agcgcgccga cgcgctgctc tgctacccga ccccctacga gggcttcgag tattcgccga       48
+0
+     acatcgtcta cggcggtccg gcgccgaacc agaacagtgc gccgctggcg gcgtacctga       54
+0
+     ttcgccacta cggcgagcgg gtggtgttca tcggctcgga ctacatctat ccgcgggaaa       60
+0
+     gcaaccatgt gatgcgccac ctgtatcgcc agcacggcgg cacggtgctc gaggaaatct       66
+0
+     acattccgct gtatccctcc gacgacgact tgcagcgcgc cgtcgagcgc atctaccagg       72
+0
+     cgcgcgccga cgtggtcttc tccaccgtgg tgggcaccgg caccgccgag ctgtatcgcg       78
+0
+     ccatcgcccg tcgctacggc gacggcaggc ggccgccgat cgccagcctg accaccagcg       84
+0
+     aggcggaggt ggcgaagatg gagagtgacg tggcagaggg gcaggtggtg gtcgcgcctt       90
+0
+     acttctccag catcgatacg cccgccagcc gggccttcgt ccaggcctgc catggtttct       96
+0
+     tcccggagaa cgcgaccatc accgcctggg ccgaggcggc ctactggcag accttgttgc      102
+0
+     tcggccgcgc cgcgcaggcc gcaggcaact ggcgggtgga agacgtgcag cggcacctgt      108
+0
+     acgacatcga catcgacgcg ccacaggggc cggtccgggt ggagcgccag aacaaccaca      114
+0
+     gccgcctgtc ttcgcgcatc gcggaaatcg atgcgcgcgg cgtgttccag gtccgctggc      120
+0
+     agtcgcccga accgattcgc cccgaccctt atgtcgtcgt gcataacctc gacgactggt      126
+0
+     ccgccagcat gggcggggga ccgctcccat gagcgccaac tcgctgctcg gcagcctgcg      132
+0
+     cgagttgcag gtgctggtcc tcaacccgcc gggggaggtc agcgacgccc tggtcttgca      138
+0
+     gctgatccgc atcggttgtt cggtgcgcca gtgctggccg ccgccggaag ccttcgacgt      144
+0
+     gccggtggac gtggtcttca ccagcatttt ccagaatggc caccacgacg agatcgctgc      150
+0
+     gctgctcgcc gccgggactc cgcgcactac cctggtggcg ctggtggagt acgaaagccc      156
+0
+     cgcggtgctc tcgcagatca tcgagctgga gtgccacggc gtgatcaccc agccgctcga      162
+0
+     tgcccaccgg gtgctgcctg tgctggtatc ggcgcggcgc atcagcgagg aaatggcgaa      168
+0
+     gctgaagcag aagaccgagc agctccagga ccgcatcgcc ggccaggccc ggatcaacca      174
+0
+     ggccaaggtg ttgctgatgc agcgccatgg ctgggacgag cgcgaggcgc accagcacct      180
+0
+     gtcgcgggaa gcgatgaagc ggcgcgagcc gatcctgaag atcgctcagg agttgctggg      186
+0
+     aaacgagccg tccgcctgag cgatccgggc cgaccagaac aataacaaga ggggtatcgt      192
+0
+     catcatgctg ggactggttc tgctgtacgt tggcgcggtg ctgtttctca atgccgtctg      198
+0
+     gttgctgggc aagatcagcg gtcgggaggt ggcggtgatc aacttcctgg tcggcgtgct      204
+0
+     gagcgcctgc gtcgcgttct acctgatctt ttccgcagca gccgggcagg gctcgctgaa      210
+0
+     ggccggagcg ctgaccctgc tattcgcttt tacctatctg tgggtggccg ccaaccagtt      216
+0
+     cctcgag                                                                216
+7
+//
+
+Output file format
+
+  Output files for usage example
+
+  File: x13776.cusp
+
+#CdsCount: 1
+
+#Coding GC 67.79%
+#1st letter GC 67.88%
+#2nd letter GC 46.89%
+#3rd letter GC 88.60%
+
+#Codon AA Fraction Frequency Number
+GCA    A     0.077     7.772      3
+GCC    A     0.462    46.632     18
+GCG    A     0.462    46.632     18
+GCT    A     0.000     0.000      0
+TGC    C     1.000    10.363      4
+TGT    C     0.000     0.000      0
+GAC    D     0.864    49.223     19
+GAT    D     0.136     7.772      3
+GAA    E     0.269    18.135      7
+GAG    E     0.731    49.223     19
+TTC    F     1.000    28.497     11
+TTT    F     0.000     0.000      0
+GGA    G     0.062     5.181      2
+GGC    G     0.719    59.585     23
+GGG    G     0.125    10.363      4
+GGT    G     0.094     7.772      3
+CAC    H     0.727    20.725      8
+CAT    H     0.273     7.772      3
+ATA    I     0.000     0.000      0
+ATC    I     0.800    41.451     16
+ATT    I     0.200    10.363      4
+AAA    K     0.000     0.000      0
+AAG    K     1.000     5.181      2
+CTA    L     0.000     0.000      0
+CTC    L     0.269    18.135      7
+CTG    L     0.577    38.860     15
+CTT    L     0.000     0.000      0
+TTA    L     0.000     0.000      0
+TTG    L     0.154    10.363      4
+ATG    M     1.000    15.544      6
+AAC    N     1.000    28.497     11
+AAT    N     0.000     0.000      0
+CCA    P     0.074     5.181      2
+CCC    P     0.222    15.544      6
+CCG    P     0.630    44.041     17
+CCT    P     0.074     5.181      2
+CAA    Q     0.062     2.591      1
+CAG    Q     0.938    38.860     15
+AGA    R     0.000     0.000      0
+AGG    R     0.029     2.591      1
+CGA    R     0.000     0.000      0
+CGC    R     0.629    56.995     22
+CGG    R     0.314    28.497     11
+CGT    R     0.029     2.591      1
+AGC    S     0.304    18.135      7
+AGT    S     0.087     5.181      2
+TCA    S     0.000     0.000      0
+TCC    S     0.261    15.544      6
+TCG    S     0.304    18.135      7
+TCT    S     0.043     2.591      1
+ACA    T     0.000     0.000      0
+ACC    T     0.733    28.497     11
+ACG    T     0.267    10.363      4
+ACT    T     0.000     0.000      0
+GTA    V     0.030     2.591      1
+GTC    V     0.394    33.679     13
+GTG    V     0.576    49.223     19
+GTT    V     0.000     0.000      0
+TGG    W     1.000    12.953      5
+TAC    Y     0.619    33.679     13
+TAT    Y     0.381    20.725      8
+TAA    *     0.000     0.000      0
+TAG    *     0.000     0.000      0
+TGA    *     1.000     2.591      1
+
+   The example shown reads a single CDS from Pseudomonas aeruginosa which
+   has a very high GC content ands a strong coding bias, as shown by the
+   codons for Alanine where those ending with G or C are used almost
+   exclusively.
+
+   The columns are as follows: i. "Codon" (sequence of the codon). ii.
+   "AA" (the encoded amino acid). iii. "Fraction" (the proportion of
+   usage of the codon among its redundant set, i.e. the set of codons
+   which code for this codon's amino acid). iv. "Frequency" (the expected
+   number of codons, given the input sequence(s), per 1000 bases). This
+   will be an extrapolation if the sequence is shorter than 1000 bases.
+   v. "Number" (the observed number of codons in the input sequences).
+
+   If multiple sequences are input then the statistics are given for all
+   of the sequences together, not individually.
+
+Data files
+
+   cusp reads a codon usage file as a template for it's output file. The
+   data in this table is ignored entirely. This functionality is
+   hard-coded and invisible to the user.
+
+   EMBOSS data files are distributed with the application and stored in
+   the standard EMBOSS data directory, which is defined by the EMBOSS
+   environment variable EMBOSS_DATA.
+
+   To see the available EMBOSS data files, run:
+
+% embossdata -showall
+
+   To fetch one of the data files (for example 'Exxx.dat') into your
+   current directory for you to inspect or modify, run:
+
+% embossdata -fetch -file Exxx.dat
+
+   Users can provide their own data files in their own directories.
+   Project specific files can be put in the current directory, or for
+   tidier directory listings in a subdirectory called ".embossdata".
+   Files for all EMBOSS runs can be put in the user's home directory, or
+   again in a subdirectory called ".embossdata".
+
+   The directories are searched in the following order:
+     * . (your current directory)
+     * .embossdata (under your current directory)
+     * ~/ (your home directory)
+     * ~/.embossdata
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   Always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name     Description
+   cai              Calculate codon adaptation index
+   chips            Calculates Nc codon usage statistic
+   codcmp           Codon usage table comparison
+   syco             Draw synonymous codon usage statictic plot for a nucleotide
+                    sequence
+
+Author(s)
+
+   Alan Bleasby (ajb © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
+
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

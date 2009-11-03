@@ -1,0 +1,300 @@
+Sequence Access Method Internals
+================================
+
+EMBOSS sequence reading always uses one of the defined "access
+methods" coded in ajax/ajseqdbc. By default, this is "file" access, to
+read an input file.
+
+Access methods are named at the to of ajseqdb.c, along with their
+access functions, in the seqAccess data structure array. No other
+definitions are needed in this array.
+
+Access methods are called only within seqUsaProcess (in ajseqread.c)
+for USAs with a database name, and in seqRead (in ajseqread.c) for
+general use, including reading more than one sequence from any USA.
+
+Specification for an Access Function
+------------------------------------
+
+The function of an access method is very simple. Given only the
+AjPSeqin data structure from USA processing, the function must open a
+file with the file pointer set for seqReadFormat.
+
+The file pointer provides the entry text. If the sequence is read in
+some other way (from another file for GCG, decoded from the blast
+database files for blast) it must also be read by the access function,
+and stored in the Inseq string in the AjPSeqin structure.
+
+Where the file cannot be read directly, the data can be stored in a
+buffer with no file pointer. The sequence reading functions will read
+this as a normal buffered input.
+
+The access functions fall into 2 classes. File access functions
+(ajSeqAccessFile, ajSeqAccessOffset and ajSeqAccessAsis) are called by
+seqUsaProcess. The others are defined as "method" in a database
+definition.
+
+
+File Access Functions in Detail
+===============================
+
+The file access functions are called from seqUsaProcess, and must
+therefore be global. Their names are all ajSeqAccess* to reflect this.
+
+file, function ajSeqAccessFile
+------------------------------
+
+reads a sequence from a named file. Called directly from seqUsaProcess.
+
+offset, function ajSeqAccessOffset
+---------------------------------
+
+reads a sequence from a named file, but first seeks to the offset
+specified as %nnn in the USA, and saved as Fpos in the AjPSeqin
+
+This is not used for databases, but is called directly from
+seqUsaProcess when the USA has the format filename%nnn
+
+Database Access Functions in Detail
+===================================
+
+The database access functions are defined in the SeqAccess list, and
+registered in the AjPSeqin structure by the ajSeqMethod function. They
+are static functions, and their names are all seqAccess* to reflect
+this.
+
+The current list of database access methods is:
+
+srs, function seqAccessSrs
+--------------------------
+
+builds a getz command line and reads the complete entry. Used where
+EMBOSS understands the entry format.
+
+Supports queries by id, acc, sv, key, org and des.
+
+Database definitions need to specify "methodall: direct" plus
+"directory:" and "file:" to read all entries directly. This is much
+faster than using getz to read and format all entries.
+
+srsfasta, function seqAccessSrsfasta
+------------------------------------
+
+builds a getz command line and reads the sequence in fasta
+format. Used where SRS does not understand the entry format (DBEST for
+example).
+
+Supports queries by id, acc, sv, key, org and des.
+
+Database definitions need to specify "methodall: direct" plus
+"directory:" and "file:" to read all entries directly. This is much
+faster than using getz to read and format all entries.
+
+srswww, function seqAccessSrswww
+--------------------------------
+
+builds a URL to query a remote SRS web server. There may be limits
+imposed by SRS on how many entries can be retrieved from a remote
+server. The remote server URL is provided by the database definition.
+
+Supports queries by id, acc, sv, key, org and des.
+
+Database definitions should define this as "methodentry" or
+"methodquery" to avoid returning the entire database. Failure to do so
+could lead to a request to return the entire database. Although an SRS
+web server can cope with this, EMBOSS will then have the entire web
+page in memory and will strip out HTML tags before trying to read the
+first entry.
+
+url, function seqAccessUrl
+--------------------------
+
+inserts the entry id in a URL and retrieves the results through a
+socket using the HTTP protocol.
+
+Database definition must include "url:" which must begin with "http://
+and a lower case host address.
+
+Requires an ID. Could use Acc instead (as for some other access
+methods) but there has been no user request so far, and validation to
+block "dbname-acc:XXX" USAs is a little tricky, though we could add
+booleans to the SeqAccess structure for Id and Acc support and then test.
+
+++ cmd, function seqAccessCmd
+++ --------------------------
+++ 
+++ Not implemented, though the function exists.
+++ 
+++ "app" is sufficient for all needs to date. This is reserved for cases
+++ where some other command string needs to be built, using a format to
+++ specify where the ID and database name appear.
+++ 
+++ Users appear to be happy using "seqAccessApp" with their own scripts
+++ for these cases.
+
+app, function seqAccessApp
+--------------------------
+
+calls an external application using a system call. The only argument
+passed to the application is the USA rewritten as dbname:entry. The id
+and accession are equivalent. Some applications (efetch in ACEDB for
+example) can use either ID and accession number (if there is no
+ID). 
+
+The database definition must have "app:" defined. This can of course
+be a site-written script.
+
+The application is stored in the AjPSeqQuery part of AjPSeqin by the
+ajNamDbData call in seqUsaProcess.
+
+
+external, function seqAccessApp
+------------------------------
+
+an alias for app for backwards compatibility with some old documentation.
+
+direct, function seqAccessDirect
+--------------------------------
+
+opens a named file, used by some access methods for "all" queries. The
+usual case is where queries will use "srs" or "srsfasta" which means
+the database must also be installed locally for SRS.
+
+The "file:" and "directory:" are specified in the database definition.
+
+Access methods using an EMBLCD index (indexed with the dbi* programs)
+can read all entries using the list of files in the EMBLCD indices.
+
+EMBLCD Index Access Methods
+===========================
+
+These functions use the EMBLCD indices to find and return entries.
+This is more complicated, because in most cases the seqAccess function
+will be performing the query, or searching through the files in the
+division lookup index "division.lkp" and opening the file as needed.
+
+All these methods support subsets of the database by specifying in the
+database definition "exclude:" or "file:" with wildcard filenames. The
+filenames can be the full path, or just the filename (from EMBOSS
+2.4). To exclude certain files, specify "exclude: *file*". To include
+certain files, use "file: *file*" but also use "exclude: *" to exclude
+the rest. Exclude is checked first.
+
+++ This behaviour in ajFileTestSkip could be changed in future.
+
+Internally, the functions maintain the SeqPCdQry data structure which
+holds file pointers, filenames, exclude and include lists, and
+anything else needed. Most of the attributes are for BLAST where many
+more fields are maintained, but others are commmon to all EMBLCD
+access.
+
+
+emblcd, function seqAccessEmblcd
+--------------------------------
+
+uses an EMBLCD index from dbiflat (flatfiles) or dbifasta (fasta
+format files). This can cope with all levels of access. Queries use
+the index files, reading all entries uses the list of files in the
+division.lkp file and opens each in turn.
+
+Reading all entries is a simple call to seqCdAll which lists the
+(non-excluded) files in division.lkp and opens the first one using
+ajFileBuffNewInList. This is simply the EMBOSS way to read a list of
+all the files in the database (or database subset).
+
+A query makes a binary search of the index files by ID or by
+accession, and builds a list of entries. Queries are of two types,
+defined by ajSeqQueryWild. A wildcard search for unique fields (id or
+sv), or any search for acc, des, org or key is type QRY_QUERY and
+returns a listof entries. A search for a single id or sv is of type
+QRY_ENTRY and will find the first match in the index and assume no
+other matches. The ID has to be unique in an EMBLCD database.
+
+QRY_ENTRY searches use seqCdQryEntry which searches by ID and then by
+accession number. The first entry is returned, as the only SeqPCdEntry
+structure in the SeqPCdQry List.
+
+QRY_QUERY searches use seqCdQryQuery which searches by ID and then by
+accession number. All matching entries are returned, as SeqPCdEntry
+structures in the SeqPCdQry List.
+
+All query searches continue with a call to seqCdNext to return the
+next node in the list. The query itself is only processed once. Later
+calls reuse the list until it is exhausted.
+
+A SeqPCdEntry structure includes the division (index in the file
+array), offset in the data file, and (for GCG and NBRF databases only)
+the offset in the sequence file.
+
+
+gcg, function seqAccessGcg
+--------------------------
+
+uses an EMBLCD index from dbigcg. This
+can cope with all levels of access. Queries use the index files,
+reading all entries uses the list of files in the division.lkp
+file and opens each in turn.
+
+See "emblcd" access for the basic details. Because two file pointers
+are needed, and sequence data must be loaded into the Inseq string,
+and some processing of the entry text as a buffer is needed to remove
+". ." gaps, there are separate functions compared to EMBLCD access.
+
+All entries uses seqGcgAll which does all the processing.
+
+Single entries use seqCdQryEntry (same as for EMBLCD) for the query.
+
+Queries use seqcdQryQuery (same as for EMBLCD) for the query.
+
+The entry is read into a closed filebuffer (text) and the AjPSeqin
+Inseq string (sequence) by function seqGcgLoadBuff, using the saved
+file offsets in the SeqPCdEntry.
+
+seqGcgLoadBuff is also used for reading all entries. It tyakes care of
+multiple entries where GCG splits long entries. This can handle up to
+99 subsequences. A further extension to 999 sequences is trivial to
+implement (look for _00 in the code).
+
+
+++ nbrf, function seqAccessNbrf
+++ ----------------------------
+++ 
+++ obsolete ... commented out
+++ 
+++ This is an obsolete access method that read the datafiles from an NBRF
+++ formatted database. These are now indexed with dbigcg and use the
+++ "gcg" access method.
+
+blast, function seqAccessBlast
+------------------------------
+
+uses an EMBLCD index from dbiblast. This can cope with all levels of
+access. Queries use the index files, reading all entries uses the list
+of files in the division.lkp file and opens each in turn. The blast
+database can be DNA or protein, produced by formatdb or setdb, with or
+without the original FASTA format file.
+
+Like GCG access, separate functions are provided for each query level.
+Data is loaded into a close buffer for the entry text (1 line in NCBI
+format of course) and the Inseq string for the sequence.
+
+Reading all entries calls seqBlastAll.
+
+Single entries use seqCdQryEntry (same as for EMBLCD) for the query.
+
+Queries use seqcdQryQuery (same as for EMBLCD) for the query.
+
+
+The entry is read into a closed filebuffer (text) and the AjPSeqin
+Inseq string (sequence) by function seqBlastLoadBuff, using the saved
+file offsets in the SeqPCdEntry.
+
+seqGcgLoadBuff is also used for reading all entries. It tyakes care of
+multiple entries where GCG splits long entries. This can handle up to
+99 subsequences. A further extension to 999 sequences is trivial to
+implement (look for _00 in the code).
+
+The file handling is complicated by the need to control up to 4 blast
+database files. The file pointers and filenames are in the SeqPCdQuery
+data structure, so they stay with the AjPSeqin and can be reused in
+later calls.

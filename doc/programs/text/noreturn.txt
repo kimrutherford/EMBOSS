@@ -1,0 +1,202 @@
+
+                                 noreturn 
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Remove carriage return from ASCII files
+
+Description
+
+   noreturn reads an input file of plain text containing unwanted
+   carriage returns on the end of lines, and writes an output file which
+   is identical to the input file, except that any trailing carriage
+   returns are removed.
+
+Usage
+
+   Here is a sample session with noreturn
+
+
+% noreturn abc.dat 
+Remove carriage return from ASCII files
+ASCII text output file [abc.noreturn]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-infile]            infile     ASCII text file
+  [-outfile]           outfile    [*.noreturn] ASCII text output file
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -system             menu       [unix] Target operating system for
+                                  end-of-line format (Values: unix (Unix/Linux
+                                  systems); pc (Windows/DOS); mac (Apple
+                                  Macintosh))
+
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   The input file is a text data file with unwanted trailing carriage
+   returns.
+
+  Input files for usage example
+
+  File: abc.dat
+
+>ABC Test sequence with PC carriage return format
+ACDEFGHIKLMNPQRSTVWY
+
+Output file format
+
+  Output files for usage example
+
+  File: abc.noreturn
+
+>ABC Test sequence with PC carriage return format
+ACDEFGHIKLMNPQRSTVWY
+
+   The output file is identical to the input file, except that any
+   trailing carriage returns have been removed. For most files this will
+   make no difference.
+
+Data files
+
+   None.
+
+Notes
+
+   Unix and PC operating systems store plain text files (which includes
+   sequence files) slightly differently. Unix files have a hidden
+   character called 'new line' at the end of every line whereas PC files
+   have a 'new line' and a 'carriage return' at the end of every line.
+   When files are transferred from a PC to a Unix machines, it is often
+   useful to convert the file from the PC format to the Unix format,
+   otherwise commands (such as 'more') and programs (such as text
+   editors) that display the file can become confused. noreturn removes
+   'carriage return' characters from such files, converting them from PC
+   format to Unix format text files.
+
+   EMBOSS programs can read in both PC and Unix text file formats, so it
+   is not necessary for you to use this utility all of the time.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with a status of 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name     Description
+   aligncopy        Reads and writes alignments
+   aligncopypair    Reads and writes pairs from alignments
+   biosed           Replace or delete sequence sections
+   codcopy          Copy and reformat a codon usage table
+   cutseq           Removes a section from a sequence
+   degapseq         Removes non-alphabetic (e.g. gap) characters from sequences
+   descseq          Alter the name or description of a sequence
+   entret           Retrieves sequence entries from flatfile databases and files
+   extractalign     Extract regions from a sequence alignment
+   extractfeat      Extract features from sequence(s)
+   extractseq       Extract regions from a sequence
+   featcopy         Reads and writes a feature table
+   featreport       Reads and writes a feature table
+   listor           Write a list file of the logical OR of two sets of sequences
+   makenucseq       Create random nucleotide sequences
+   makeprotseq      Create random protein sequences
+   maskambignuc     Masks all ambiguity characters in nucleotide sequences
+   with             N
+   maskambigprot    Masks all ambiguity characters in protein sequences with
+                    X
+   maskfeat         Write a sequence with masked features
+   maskseq          Write a sequence with masked regions
+   newseq           Create a sequence file from a typed-in sequence
+   nohtml           Remove mark-up (e.g. HTML tags) from an ASCII text file
+   nospace          Remove all whitespace from an ASCII text file
+   notab            Replace tabs with spaces in an ASCII text file
+   notseq           Write to file a subset of an input stream of sequences
+   nthseq           Write to file a single sequence from an input stream of
+                    sequences
+   nthseqset        Reads and writes (returns) one set of sequences from many
+   pasteseq         Insert one sequence into another
+   revseq           Reverse and complement a nucleotide sequence
+   seqret           Reads and writes (returns) sequences
+   seqretsetall     Reads and writes (returns) many sets of sequences
+   seqretsplit      Reads sequences and writes them to individual files
+   sizeseq          Sort sequences by size
+   skipredundant    Remove redundant sequences from an input set
+   skipseq          Reads and writes (returns) sequences, skipping first few
+   splitsource      Split sequence(s) into original source sequences
+   splitter         Split sequence(s) into smaller sequences
+   trimest          Remove poly-A tails from nucleotide sequences
+   trimseq          Remove unwanted characters from start and end of sequence(s)
+   trimspace        Remove extra whitespace from an ASCII text file
+   union            Concatenate multiple sequences into a single sequence
+   vectorstrip      Removes vectors from the ends of nucleotide sequence(s)
+   yank             Add a sequence reference (a full USA) to a list file
+
+Author(s)
+
+   Alan Bleasby (ajb © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
+
+History
+
+   Written (1999) - Alan Bleasby
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None
